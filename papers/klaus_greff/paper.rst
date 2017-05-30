@@ -27,36 +27,37 @@
 
 .. .:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------------------
-Sacred: How I Learned to Stop Worrying and Love the Research
-------------------------------------------------------------
+----------------------------------------------------
+The Sacred Infrastructure for Computational Research
+----------------------------------------------------
 
 .. class:: abstract
 
-In this talk we will present a toolchain for conducting and organizing computational experiments consisting of Sacred -- the core framework --  and two supporting tools: Labwatch and Sacredboard.
-These tools are agnostic of the methods and libraries used, and instead focus on solving the universal everyday problems of running computational experiments like reproducing results, bookkeeping, tuning hyperparameters, and organizing and analyzing the runs and results.
-Attendees will be introduced to the core features of these libraries, and learn how they can form the basis for an effective and efficient workflow for machine learning research.
+We present a toolchain for computational research consisting of Sacred and the two supporting tools Labwatch and Sacredboard.
+Sacred is an open source python framework which aims provide basic infrastructure for running computational experiments and independent of the methods and libraries used
+Instead it focusses on solving  universal everyday problems like managing configurations, reproducing results, and bookkeeping.
+It also aims to provide an extensible basis for other tools, two of which we present here: Labwatch helps with tuning hyperparameters, and Sacredboard provides a web-dashboard for organizing and analyzing runs and results.
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   reproducible research, python, machine learning, database, hyperparameter optimization
 
 Introduction
 ============
 
 A major part of machine learning research has become empirical and typically includes a large number of computational experiments run with many different hyperparameter settings.
-This process holds many practical challenges such as flexible exposition of hyperparameters, hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, and organizing and maintaining an overview over  the results.
+This process holds many practical challenges such as managing configurations, hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, and organizing and maintaining an overview over  the results.
 To make matters worse, experiments are often run on diverse and heterogeneous environments ranging from laptops to cloud computing nodes.
 Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructures.
-As a result, research code often evolves quickly and bad trade-offs are made that sacrifice important aspects like bookkeeping and reproducibility.
+As a result, research code often evolves quickly and makes bad trade-offs that sacrifice important aspects like bookkeeping and reproducibility.
 
 
 Many tools exist for tackling different aspects of this process like databases, version control systems, command-line interface generators, tools for automated hyperparameter optimization, spreadsheets, and so on.
-However, very few tools even attempt to integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
+However, very few tools integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
 Since there is no common basis to build a workflow, the tools people build will be tied to their particular setup.
-This impedes sharing and collaboration on a toolchain for important problems like optimizing hyperparameters, summarizing and analysing results, rerunning experiments, distributing runs.
+This impedes sharing and collaboration on tools for important problems like optimizing hyperparameters, summarizing and analysing results, rerunning experiments, distributing runs, etc..
 
-Sacred aims to fill this gap by providing the basic infrastructure for running computational experiments.
+Sacred aims to fill this gap by providing some basic infrastructure for running computational experiments.
 It is our hope that it will help researchers and foster the development of a rich collaborative ecosystem of shared tools.
 In the following we briefly introduce Sacred and two supporting tools:
 Labwatch integrates a convenient unified interface to many automated hyperparameter optimizers such as RoBO, SMAC, or random search.
@@ -66,31 +67,31 @@ Sacredboard offers a web-based interface to view runs and supports maintaining a
 
 Sacred
 ======
-Sacred is an open source Python framework that aims to bundle solutions for the most frequent challenges when conducting computational experiments.
+Sacred is an open source Python framework that aims to bundle solutions for some of the most frequent challenges of computational research.
 It does not enforce any particular workflow, and is independent of the choice of machine learning libraries.
 Sacred was designed to remain useful even under deadline pressure, and therefore tries to
 offer maximum convenience while minimizing boilerplate code.
-
-
-.. By combining these features into a unified but flexible workflow with minimum boilerplate, Sacred  enables its users to focus on research and still ensures that all the relevant information for each run are captured.
-   The standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
-   By storing the data in a central database comprehensive query and sorting functionality for bookeeping becomes available, thus enabling downstream analysis and allowing other tools such as Sacredboard to provide a powerful graphical user interface organizing runs and maintaining an overview.
+By combining these features into a unified but flexible workflow, Sacred  enables its users to focus on research and still ensures that all the relevant information for each run are captured.
+Its standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
+Through storage of run information in a central database comprehensive query and sorting functionality for bookeeping becomes available.
+This further enables downstream analysis and allows other tools such as Sacredboard to provide a powerful user interface for organizing results.
 
 
 Overview
 --------
-To adopt Sacred all that is required is to instantiate an ``Experiment`` and to decorate a main function that serves as entry-point:
+To adopt Sacred all that is required is to instantiate an ``Experiment`` (its central class) and to decorate a main function to serves as entry-point.
+A minimal example would thus look like this:
 
 .. code-block:: python
 
     from sacred import Experiment
     ex = Experiment()
-    ...
+
     @ex.automain
     def main():
-        ...
+        return 42
 
-.. The Experiment class represent the core abstraction of Sacred
+
 
 Hyperparameters can then be defined in native Python using special decorated functions, dictionaries or configuration files (see :ref:`configuration`).
 The experiment can be run through an automatically generated command-line interface, or from Python by calling ``ex.run()``.
