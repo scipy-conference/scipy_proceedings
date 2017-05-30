@@ -102,7 +102,11 @@ Usage example:
   eval_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
 
   # creation of Pipeliner object
-  pipeliner = Pipeliner(steps=steps, grid_cv=grid_cv, eval_cv=eval_cv, param_grid=param_grid)
+  pipeliner = Pipeliner(
+      steps=steps,
+      grid_cv=grid_cv,
+      eval_cv=eval_cv,
+      param_grid=param_grid)
   # launching experiment
   pipeliner.get_results(X, y, scoring=['roc_auc'])
 
