@@ -72,8 +72,8 @@ The most significant improvements in memory optimizations in Update 2 comes from
 
 Faster Machine Learning with Scikit-learn
 -----------------------------------------
-Scikit-learn is among the most popular Python machine learning packages. The initial release of Intel Distribution for Python provided Scikit-learn optimizations via respective NumPy and SciPy functions accelerated by Intel MKL. Update 2 optimizes selective key machine learning algorithms in Scikit-learn, accelerating them with the Intel |R| Data Analytics Acceleration Library (Intel |R| DAAL).
-Specifically, Update 2 optimizes Principal Component Analysis (PCA), Linear and Ridge Regressions, Correlation and Cosine Distances, and K-Means. Speedups may range from 1.5x to 160x.
+
+.. include:: sklearn.rst
 
 Numba vectorization
 -------------------
