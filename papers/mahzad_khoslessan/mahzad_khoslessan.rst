@@ -83,7 +83,7 @@ In particular, analysis with the Gromacs XTC format can show strong ideal scalin
 Our results show that there can be other challenges aside from the I/O bottleneck for achieving good speed-up.
 For instance, with numbers of processes matched to the available cores, contention on the network may slow down individual tasks and lead to poor load balancing and poor overall performance.
 In order to identify the performance bottlenecks for our Map-Reduce Job, we have tested and examined several other factors including striping, oversubscribing, and the Dask Scheduler.
-We also compared a subset of systems with an MPI-based implementation (using mpi4py) in order to better understand the effect of using a high-level approach such as the Dask parall library compared to a lower level one; in particular, we tried to identify possible underlying factors that may lead to low performance. 
+We also compared a subset of systems with an MPI-based implementation (using mpi4py) in order to better understand the effect of using a high-level approach such as the Dask parallel library compared to a lower level one; in particular, we tried to identify possible underlying factors that may lead to low performance. 
 In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 
@@ -158,9 +158,9 @@ This problem together with the others mentioned above further complicates any at
 Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
 This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 There is also variability in network latency, in addition to the variability in underlying hardware in each machine.
-Which causes the results to vary significantly across different machines.
+This causes the results to vary significantly across different machines.
 Because our Map-reduce job is pleasantly parallel, all of our processes have the same amount of work to do. 
-Therefore, observing these stragglers is unexpected and the following sections in the present study aim to find the reason for which we are seeing these stragglers.
+Therefore, observing these stragglers is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
 
 Performance Optimization
 ========================
@@ -192,7 +192,7 @@ In order for this we set the number of tasks to be three times the number of wor
 Striping is also activated and is set to three which is also equal to number of nodes.
 Figures [] and [] show the speed up and I/O time plots obtained for XTC file format (600X).
 As can be seen, we are still seeing these stragglers and the overal speed-up is not improved.
-In oredr to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about a task and to also validate our observationis obtained from web-interface. 
+In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about a task and to also validate our observationis obtained from web-interface. 
 The results from scheduler pluging is described in the following section.
 
 Scheduler Plugin Results
@@ -204,6 +204,10 @@ Examining Scheduler Throughput
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
 ======================================================================================
+Based on the results presented in previous sections, it turned out that the stragglers are not because of the network, shared resources or scheduler throughput.
+Lustre striping improves I/O time; however, the job computation is still delayed and as a result lead to poor speed-up when extended to multiple nodes.    
+In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using MPI-based implementation.
+This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or the environment itself.
 
 
 
@@ -221,10 +225,8 @@ References
 .. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
 .. citations
 
+
 .. _`SPIDAL library`: http://spidal.org
-
-
-
 .. _MDAnalysis: http://mdanalysis.org
 .. _Dask: http://dask.pydata.org
 .. _Distributed: https://distributed.readthedocs.io/
