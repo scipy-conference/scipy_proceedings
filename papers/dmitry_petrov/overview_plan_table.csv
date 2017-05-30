@@ -1,0 +1,5 @@
+,scaler,classifier
+0,standard,LR
+1,standard,SVC
+2,minmax,LR
+3,minmax,SVC

@@ -64,6 +64,106 @@ Main features of Reskit
 How Reskit works
 ----------------
 
+Пример использования:
+
+.. code-block:: python
+ :linenos:
+ :linenostart: 2
+  
+  from sklearn.datasets import make_classification
+  from reskit.core import Pipeliner
+
+  from sklearn.preprocessing import StandardScaler
+  from sklearn.preprocessing import MinMaxScaler
+
+  from sklearn.linear_model import LogisticRegression
+  from sklearn.svm import SVC
+  from sklearn.model_selection import StratifiedKFold
+
+  # specifing data
+  X, y = make_classification()
+
+  # setting steps
+  classifiers = [('LR', LogisticRegression()),
+                 ('SVC', SVC())]
+
+  scalers = [('standard', StandardScaler()),
+             ('minmax', MinMaxScaler())]
+
+  steps = [('scaler', scalers),
+           ('classifier', classifiers)]
+        
+  # setting grid search parameters
+  param_grid = {'LR': {'penalty': ['l1', 'l2']},
+                'SVC': {'kernel': ['linear', 'poly', 'rbf', 'sigmoid']}} 
+
+  # setting cross-validations for grid search and for evaluation
+  grid_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=0)
+  eval_cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=1)
+
+  # creation of Pipeliner object
+  pipeliner = Pipeliner(steps=steps, grid_cv=grid_cv, eval_cv=eval_cv, param_grid=param_grid)
+  # launching experiment
+  pipeliner.get_results(X, y, scoring=['roc_auc'])
+
+И вы типа получите следующее:
+  
+.. code-block:: bash
+
+  Line: 1/4
+  Line: 2/4
+  Line: 3/4
+  Line: 4/4
+
+
+.. csv-table::
+  :file: overview_results.csv
+
+Когда инициализируется объект Pipeliner создается датафрейм со всевозможными
+пайплайнами. Вы можете посмотреть на этот датафрейм
+
+.. code-block:: python
+
+  pipeliner.plan_table 
+
+.. csv-table::
+  :file: overview_plan_table.csv
+
+Когда вы запускаете метод get_results он идет по строкам этой таблицы и
+,если заданны шаги, которые нужно кэшировать, то кэширует их (здесь они не заданы).
+За это отвечает метод
+
+.. code-block:: python
+  transform_with_caching(self, X, y, row_keys):
+
+Он принимает делает нужные трансформации и сохраняет шаги последнего пайплайна
+в self._cached_X по ключам из row_keys, где row_keys это строковые идентификаторы,
+по которым вы можете получить объекты в self.named_steps, которые в свою очередь
+получены из steps, преобразованием их в словарь из листов тьюплов.
+
+Далее вызывается метод
+
+.. code-block:: python
+  get_grid_search_results(self, X, y, row_keys,scoring):
+
+Оставшиеся шаги (в нашем случае все шаги строки) подаются в этот метод, как row_keys.
+С их помощью составляется обычный scikit-learn пайплайн и ищутся лучшие параметры.
+Возвращается словарь с полями, 'grid_{}_mean', 'grid_{}_std', 'grid_{}_best_params', значения
+этих полей вписываются в результирующу таблицу по колонкам полей.
+
+Далее запускается
+
+.. code-block:: python
+  get_scores(self, X, y, row_keys, scoring):
+
+Здесь по аналогии в get_grid_search_results составляется пайплайн, но только уже
+получаются скоры по метрике scoring через cross_val_score для найденных лучших 
+параметров (которые сохранены в self.best_params по нужному ключю, но не знаю
+надо ли это писать, там ключ составляется из row_keys и scoring мерджа как
+строк). Метод возвращает эти скоры.
+
+В результате мы получаем заполненную таблицу, как мы видели выше.
+
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
 

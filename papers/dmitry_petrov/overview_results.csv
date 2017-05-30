@@ -1,0 +1,5 @@
+,scaler,classifier,grid_roc_auc_mean,grid_roc_auc_std,grid_roc_auc_best_params,eval_roc_auc_mean,eval_roc_auc_std,eval_roc_auc_scores
+0,standard,LR,0.956,0.0338230690506,{'penalty': 'l1'},0.968,0.0324961536185,[ 0.92  1.    1.    0.94  0.98]
+1,standard,SVC,0.962,0.0278567765544,{'kernel': 'poly'},0.976,0.0300665927567,[ 0.95  1.    1.    0.93  1.  ]
+2,minmax,LR,0.964,0.0412795348811,{'penalty': 'l1'},0.966,0.0377359245282,[ 0.92  1.    1.    0.92  0.99]
+3,minmax,SVC,0.958,0.0411825205639,{'kernel': 'rbf'},0.962,0.0401995024845,[ 0.93  1.    1.    0.9   0.98]
