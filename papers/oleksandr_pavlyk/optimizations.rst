@@ -46,11 +46,11 @@ Introduction
 
 Intel released new version of its Distribution.. [TBC]
 We suggest detailed report about optimization work we accomplished for Intel Distribution for Python,
- which might be interesting for developers of SciPy tools.
+which might be interesting for developers of SciPy tools.
 It already offered great performance improvements for NumPy*, SciPy*, and Scikit-learn*
- that you can see across a range of Intel processors,
- from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R| and Intel |R| Xeon Phi |TM| processors.
- Here is the list of what we did for update 2:
+that you can see across a range of Intel processors,
+from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R| and Intel |R| Xeon Phi |TM| processors.
+Here is the list of what we did for update 2:
 
 Fast Fourier Transforms
 -----------------------
