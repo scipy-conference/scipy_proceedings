@@ -418,13 +418,21 @@ setting they work and which they do not. For more details we refer to the corres
 
 - **Bayesian optimization**  fits a probabilistic model to capture the current believe of the objective function :cite:`shahriari-ieee16a, snoek-nips12a`.
   To select a new configuration, it uses a utility function that only depends on the
-  probabilistic model to trade off exploration and exploitation. Here we use a Gaussian process to model our objective
-  function, which works well in low (<10) dimensional continuous search spaces but does not work with categorical
-  hyperparameters. We used the RoBO (`https://github.com/automl/RoBO <https://github.com/automl/RoBO>`_) as an implementation which is based on the George GP library :cite:`hodlr`
+  probabilistic model to trade off exploration and exploitation.
+  There are different ways to model the objective function: 
+  
+  Probably the most common way is to use **Gaussian process** to model the objective
+  function, which tend to work well in low (<10) dimensional continuous search spaces but do not natively work with categorical
+  hyperparameters. Furthermore, due to the cubic complexity they do not scale well with the number of function evaluations. 
+  We used RoBO (`https://github.com/automl/RoBO <https://github.com/automl/RoBO>`_) as an implementation which is based on the George GP library :cite:`hodlr`
 
-- **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
-  the objective function :cite:`hutter-lion11a`. That allows it to work in high dimensional mixed continuous and discret input spaces but will
-  be probably outperformed by Gaussian process based Bayesian optimization in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
+  **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
+  the objective function :cite:`hutter-lion11a`. Random forest natively allow to work in high dimensional mixed continuous and discret input spaces but seem to work less efficient compared
+  to Gaussian processes in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
+ 
+  More recently Bayesian neural networks have been used for Bayesian optimization :cite:`springenberg-nips2016`.
+  Compared to Gaussian processes they scale very well with the number of function evaluation as well as number of
+  dimensions. Here we use the **Bohamiann** approach :cite:`springenberg-nips2016` which is also implemented in the RoBO framework. 
 
 
 
