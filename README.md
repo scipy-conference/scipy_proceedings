@@ -6,6 +6,7 @@
 - After reading the paper, you can start the review conversation by simply commenting
   on the paper, taking into consideration
   [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md).
+- Please submit your review by **June 21st.**
 - Authors will then respond to the comments and/or modify the paper to address the comments. 
 - This will begin an iterative review process where authors and reviewers can discuss the
   evolving submission.
@@ -13,7 +14,7 @@
   'unready' to flag the current state of the review process.
 - Only once a reviewer is satisfied that the review process is complete and the submission should
   be accepted to the proceedings, should they affix the 'ready' label. 
-- Reviewers should come to a final 'ready', 'unready' decision before **July 1st** at 18:00 PST.
+- Reviewers should come to a final 'ready', 'unready' decision before **July 7th** at 18:00 PST.
 
 ## Instructions for Authors
 
