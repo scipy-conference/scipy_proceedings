@@ -229,6 +229,17 @@ vector pointing to the equivalent inside point. This step depends only
 on the cell shape and the resolution of the discrete grid, and the
 results can be cached and used for other data files.
 
+.. figure:: figure1.pdf
+    :align: center
+    :figclass: h
+    :scale: 90%
+
+    Construction for a 2D geometry of (a) "cavity domain"
+    (yellow, cutoff radius :math:`r_{\rm C}`) and "surface-based cavity" (red),
+    (b) cavity center (X) and "center-based" cavity (red).
+    :label:`cav12`
+
+
 As shown in Fig. :refa:`cav12`, we now construct spheres centered on
 each atom with radii specified for each atom type (element). In earlier
 work on alloys of Ge/Sb/Te :cite:`AJ07,AJ12` and Ag/In/Sb/Te,
@@ -402,6 +413,16 @@ code is available via the public git repository:
 
 |noindent| `<http://github.com/sciapp/pyMolDyn>`_.
 
+.. figure:: figure2.pdf
+    :align: center
+    :figclass: h
+    :scale: 70%
+
+    The unit cells of the seven 3D Bravais lattices, together
+    with the parameters that define them.
+    :label:`bravais`
+
+
 The program supports unit cells of all seven 3D Bravais lattices:
 triclinic (TRI), monoclinic (MON), orthorhombic (ORT), tetragonal (TET),
 rhombohedral (RHO), hexagonal (HEX), and cubic (CUB). These cells and
@@ -474,9 +495,27 @@ with the command::
 The choice of file can be made after clicking "Open", after which
 "Calculate" leads to the window shown in Fig. :ref:`pymol1`.
 
+.. figure:: figure3.png
+    :align: center
+    :figclass: h
+    :scale: 8%
+
+    Window prior to setting parameters for calculation.
+    :label:`pymol1`
+
+
 The resolution and other quantities can then be changed as needed in the
 appropriate box, after which "OK" starts the calculation and leads to
 the screen shown in Fig. :ref:`pymol2`.
+
+.. figure:: figure4.png
+    :align: center
+    :figclass: wt
+    :scale: 15%
+
+    Visualization of structure of Ag/Ge/S (silver: Ag, green: Ge, yellow: S)
+    and surface-based cavities (blue).
+    :label:`pymol2`
 
 
 The program allows the generation of high-resolution images for
@@ -666,41 +705,3 @@ References
 .. [Aetal15] Akola, J., Beuneu, B., Jones, R. |_| O., Jóvári, P.,
              Kaban, I., Kolář, J., Voleská, I. and Wágner, T., *J.
              Phys.: Condens. Matter* **2015**, *27*, 485304.
-
-
-.. figure:: figure1.pdf
-    :align: center
-    :figclass: wp
-
-    Construction for a 2D geometry of (a) "cavity domain"
-    (yellow, cutoff radius :math:`r_{\rm C}`) and "surface-based cavity" (red),
-    (b) cavity center (X) and "center-based" cavity (red).
-    :label:`cav12`
-
-
-.. figure:: figure2.pdf
-    :align: center
-    :figclass: wp
-
-    The unit cells of the seven 3D Bravais lattices, together
-    with the parameters that define them.
-    :label:`bravais`
-
-
-.. figure:: figure3.png
-    :align: center
-    :figclass: wp
-    :scale: 10%
-
-    Window prior to setting parameters for calculation.
-    :label:`pymol1`
-
-
-.. figure:: figure4.png
-    :align: center
-    :figclass: wp
-    :scale: 15%
-
-    Visualization of structure of Ag/Ge/S (silver: Ag, green: Ge, yellow: S)
-    and surface-based cavities (blue).
-    :label:`pymol2`
