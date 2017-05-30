@@ -73,7 +73,7 @@ kernels from only a few lines of Python code, making Devito composable
 with existing open-source software.
 
 While Devito was originally developed for seismic imaging workflows,
-the automated generation and optimisation of stencil codes can be
+the automated generation and optimization of stencil codes can be
 utilised for a much broader set of computational problems. In this
 paper we will give a brief overview of the design concepts and
 Devito's key features before demonstrating the Devito API on a set of
@@ -86,14 +86,14 @@ achieved by the auto-generated and optimised code.
 Background
 ----------
 
-The attraction of using domain-specific languages (DSL) to generically
-solve PDEs via a high-level mathematical notation is by no means new
-and has lead to various purpose-built software packages and compilers
-dating back to 1962 [Iverson62]_, [Cardenas70]_ [Umetani85]_ [Cook88]_
+The attraction of using domain-specific languages (DSL) to solve PDEs
+via a high-level mathematical notation is by no means new and has led
+to various purpose-built software packages and compilers dating back
+to 1962 [Iverson62]_, [Cardenas70]_ [Umetani85]_ [Cook88]_
 [VanEngelen96]_. Following the emergence of Python as a widely used
 programming language in scientific research, embedded DSLs for more
 specialised domains came to the fore, most notably the FEniCS
-[Logg12]_ and Firedrake [Rathgeber16]_ frameworks that both implement
+[Logg12]_ and Firedrake [Rathgeber16]_ frameworks, which both implement
 the unified Form Language (UFL) [Alnaes14]_ for the symbolic
 definition of finite element problems in the weak form. The increased
 level of abstraction that such high-level languages provide decouples
@@ -102,14 +102,14 @@ scientists and mathematicians to focus on more advanced methods, such
 as the automation of adjoint models as demonstrated by Dolfin-Adjoint
 [Farrell13]_.
 
-The performance optimisation of stencil computation on regular
+The performance optimization of stencil computation on regular
 cartesian grids for high-performance computing applications has also
 received much attention in computer science research [Datta08]_
 [Brandvik10]_ [Zhang12]_ [Henretty13]_ [Yount15]_. The primary focus
-of most stencil compilers or DSLs, however, is on the optimisation of
+of most stencil compilers or DSLs, however, is the optimization of
 synthetic problems which often limits their applicability for
 practical scientific applications. The primary consideration here is
-that most realistic problems often requires more than just a fast and
+that most realistic problems often require more than just a fast and
 efficient PDE solver, which entails that symbolic DSLs embedded in
 Python can benefit greatly from native interoperability with the
 scientific Python ecosystem.
@@ -122,22 +122,22 @@ creation of highly optimised finite difference operators for use in a
 realistic scientific application context. As such, its design is
 centred around composability with the existing Python software stack
 to provide users with the tools to dynamically generate optimised
-stencil computation kernels, but also to enable access to the full
+stencil computation kernels and to enable access to the full
 scientific software ecosystem. In addition, to accommodate the needs
 of "real life" scientific applications, a secondary API is provided
 that enables users to inject custom expressions, such as boundary
 conditions or sparse point interpolation routines, into the generated
 kernels.
 
-Moreover, the use of SymPy as the driver for the symbolic generation
-of stencil expressions and the subsequent code-generation are at the
-heart of the Devito philosophy. While SymPy is fully capable of
-auto-generating low-level C code for pre-compiled execution from
-high-level symbolic expressions, Devito is designed to combine theses
-capabilities with automatic performance optimisation based on the
-latest advances in stencil compiler technology. The result is a
-framework that is capable of automatically generating and optimising
-complex stencil code from high-level symbolic definitions.
+The use of SymPy as the driver for the symbolic generation of stencil
+expressions and the subsequent code-generation are at the heart of the
+Devito philosophy. While SymPy is fully capable of auto-generating
+low-level C code for pre-compiled execution from high-level symbolic
+expressions, Devito is designed to combine theses capabilities with
+automatic performance optimization based on the latest advances in
+stencil compiler technology. The result is a framework that is capable
+of automatically generating and optimising complex stencil code from
+high-level symbolic definitions.
 
 The Devito API is based around two key concepts that allow users to
 express finite difference problems in a concise symbolic notation:
@@ -146,25 +146,25 @@ express finite difference problems in a concise symbolic notation:
   behave like :code:`sympy.Function` objects and provide a set of
   shorthand notations for generating derivative expressions, while
   also managing user data. The rationale for this duality is that many
-  stencil optimisation algorithms rely on data layout changes,
+  stencil optimization algorithms rely on data layout changes,
   mandating that Devito needs to be in control of data allocation and
   access.
 
 * **Operator:** An :code:`Operator` creates, compiles and executes a
   single executable kernel from a set of SymPy expressions. The code
-  generation and optimisation process involves various stages and
+  generation and optimization process involves various stages and
   accepts a mixture of high-level and low-level expressions to allow
   the injection of customised code.
 
 Fluid Dynamics Examples
 -----------------------
 
-In the following section we are going to demonstrate the use of the
-Devito API to implement two examples from classical fluid dynamics,
-before highlighting the role of Devito operators in a seismic
-inversion context.  Both CFD examples are based in part on tutorials
-from the introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_
-by the Lorena A. Barba group.
+In the following section we demonstrate the use of the Devito API to
+implement two examples from classical fluid dynamics, before
+highlighting the role of Devito operators in a seismic inversion
+context.  Both CFD examples are based in part on tutorials from the
+introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
+Lorena A. Barba group.
 
 .. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -196,13 +196,13 @@ space dimensions and the superscript :math:`n` denotes the index in
 time, while :math:`\Delta t`, :math:`\Delta x`, :math:`\Delta y`
 denote the spacing in time and space dimensions respectively.
 
-The first thing we need is a function object with which we can build
-a timestepping scheme. For this purpose Devito provides so-called
+The first thing we need is a function object with which we can build a
+timestepping scheme. For this purpose Devito provides so-called
 :code:`TimeData` objects that encapsulate functions that are
-differentiable in space and time. With this we can either derive
-symbolic expressions for the backward derivatives directly via the
-:code:`first_derivative` utility with the argument :code:`side=left`
-indicating backward differences, or use the shorthand notation
+differentiable in space and time. With this we can derive symbolic
+expressions for the backward derivatives in space directly via the
+:code:`u.dxl` and :code:`u.dyl` shorthand expressions (the :code:`l`
+indicates "left" or backward differences) and the shorthand notation
 :code:`u.dt` provided by :code:`TimeData` objects to derive the
 forward derivative in time.
 
@@ -213,10 +213,7 @@ forward derivative in time.
     c = 1.
     u = TimeData(name='u', shape=(nx, ny))
 
-    u_dx = first_derivative(u, dim=x, side=left)
-    u_dy = first_derivative(u, dim=y, side=left)
-
-    eq = Eq(u.dt + c * u_dx + c * u_dy)
+    eq = Eq(u.dt + c * u.dxl + c * u.dyl)
 
     [In] print eq
     [Out] Eq(-u(t, x, y)/s + u(t + s, x, y)/s
@@ -281,6 +278,10 @@ tutorial by initialising the data associated with the symbolic function
    2\ &\text{for}\ 0.5 \leq x, y \leq 1 \\
    1\ &\text{everywhere else}
 
+The initial condition and the final result after executing the operator
+for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
+:ref:`fig2dconvfinal` respectively.
+
 .. figure:: 2dconv_init.png
    :scale: 42%
    :figclass: hbt
@@ -294,10 +295,6 @@ tutorial by initialising the data associated with the symbolic function
 
    State of :code:`u.data` after 100 timesteps in convection
    example. :label:`fig2dconvfinal`
-
-The initial condition and the final result after executing the operator
-for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
-:ref:`fig2dconvfinal` respectively.
 
 
 Laplace equation
@@ -535,6 +532,7 @@ two additional terms into the forward modelling operator:
        stencil = solve(eqn, u.forward)[0]
        update_u = [Eq(u.forward, stencil)]
 
+
        # Add source injection and receiver interpolation
        src_term = src.inject(field=u,
                              expr=src * dt**2 / m)
@@ -651,7 +649,7 @@ the operators is still fully parameterisable.
 
 The adjoint test is the core definition of the adjoint of a linear
 operator. The mathematical correctness of the adjoint is required for
-mathematical adjoint-based optimisations methods that are only
+mathematical adjoint-based optimizations methods that are only
 guarantied to converged with the correct adjoint. The test can be
 written as:
 
@@ -671,25 +669,23 @@ Automated code generation
 The role of the :code:`Operator` in the previous examples is to
 generate semantically equivalent C code to the provided SymPy
 expressions, complete with loop constructs and annotations for
-performance optimisation, such as OpenMP pragmas. Unlike many other
+performance optimization, such as OpenMP pragmas. Unlike many other
 DSL-based frameworks, Devito employs actual compiler technology during
-the code generation and optimisation process. The symbolic
+the code generation and optimization process. The symbolic
 specification is progressively lowered to C code through a series of
 passes manipulating abstract syntax trees (AST), rather than working
 with rigid templates. This software engineering choice has an
 invaluable impact on maintainability, extensibility and composability.
 
-The code generation process consists of a sequence of compiler passes,
-which progressively lower the symbolic representation to C. Following
-the initial resolution of explicit grid indices into the low-level
-format, Devito is able to apply several types of automated performance
-optimisation throughout the code generation pipeline, which are grouped
-into two distinct sub-modules:
+Following the initial resolution of explicit grid indices into the
+low-level format, Devito is able to apply several types of automated
+performance optimization throughout the code generation pipeline,
+which are grouped into two distinct sub-modules:
 
-* **DSE - Devito Symbolic Engine:** The first set of optimisation
+* **DSE - Devito Symbolic Engine:** The first set of optimization
   passes consists of manipulating SymPy equations with the aim to
   decrease the number of floating-point operations performed when
-  evaluating a single grid point. This initial optimisation is
+  evaluating a single grid point. This initial optimization is
   performed following an initial analysis of the provided expressions
   and consists of sub-passes such as common sub-expressions
   elimination, detection and promotion of time-invariants, and
@@ -701,7 +697,7 @@ into two distinct sub-modules:
 * **DLE - Devito Loop Engine:** After the initial symbolic processing
   Devito schedules the optimised expressions in a set of loops by
   creating an Abstract Syntax Tree (AST). The loop engine (DLE) is now
-  able to perform typical loop-level optimisations in mutiple passes
+  able to perform typical loop-level optimizations in mutiple passes
   by manipulating this AST, including data alignment through array
   annotations and padding, SIMD vectorization through OpenMP pragmas
   and thread parallelism through OpenMP pragmas. On top of that, loop
@@ -714,7 +710,7 @@ into two distinct sub-modules:
 Performance Benchmark
 ~~~~~~~~~~~~~~~~~~~~~
 
-The effectiveness of the automated performance optimisation performed
+The effectiveness of the automated performance optimization performed
 by the Devito backend engines can be demonstrated using the forward
 operator constructed in the above example. The following performance
 benchmarks were run with for a three-dimensional grid of size
@@ -727,7 +723,7 @@ using the Stream Triad benchmark.
 
 The first set of benchmark results, shown in Figure :ref:`figperfdle`,
 demonstrates the performance gains achieved through loop-level
-optimisations. For these runs the symbolic optimisations were kept at
+optimizations. For these runs the symbolic optimizations were kept at
 a "basic" setting, where only common sub-expressions elimination is
 performed on the kernel expressions. Of particular interest are the
 performance gains achieved by increasing the loop engine mode from
@@ -735,7 +731,7 @@ performance gains achieved by increasing the loop engine mode from
 vectorization directives into the generated code. Due to the improved
 memory bandwidth utilization the performance increased to between
 52% and 74% of the achievable peak. It is also worth noting that more
-aggressive optimisation in the "speculative" DLE mode (directives for
+aggressive optimization in the "speculative" DLE mode (directives for
 non-temporal stores and row-wise data alignment through additional
 padding) did not yield any consistent improvements due to the low OI
 inherent to the acoustic formulation of the wave equation and the
@@ -745,25 +741,25 @@ subsequent memory bandwidth limitations of the kernel.
    :scale: 60%
 
    Performance benchmarks for loop-level
-   optimisations. :label:`figperfdle`
+   optimizations. :label:`figperfdle`
 
-On top of loop-level performance optimisations, Figure
+On top of loop-level performance optimizations, Figure
 :ref:`figmaxperf` shows the achieved performance with additional
-symbolic optimisations and flop reductions enabled. While the peak
-performance shows only small effects from this set of optimisations
+symbolic optimizations and flop reductions enabled. While the peak
+performance shows only small effects from this set of optimizations
 due to the inherent memory bandwidth limitations of the kernel, it is
-interesting to note a distinct reduction in operational intensity
-between equivalent stencil sizes in Figures :ref:`figperfdle` and
+interesting to note a reduction in operational intensity between
+equivalent stencil sizes in Figures :ref:`figperfdle` and
 :ref:`figmaxperf`. This entails that, despite only marginal runtime
 changes, the generated code is performing less flops per stencil
 point, which is of vital importance for compute-dominated kernels with
-large a OI [Louboutin17a]_.
+large OI [Louboutin17a]_.
 
 .. figure:: acoustic_maxperf.pdf
    :scale: 60%
 
    Performance benchmarks with full symbolic and loop-level
-   optimisations. :label:`figmaxperf`
+   optimizations. :label:`figmaxperf`
 
 
 Integration with YASK
@@ -824,7 +820,7 @@ Moreover, we demonstrate that Devito-generated kernels are capable of
 exploiting modern high performance computing architectures by
 achieving a significant percentage of machine peak. Devito's
 code-generation engines achieve this by automating well-known
-performance optimisations, as well as domain-specific optimisations,
+performance optimizations, as well as domain-specific optimizations,
 such as flop reduction techniques - all while maintaining full
 compatibility with the scientific software stack available through the
 open-source Python ecosystem.
@@ -833,11 +829,9 @@ Acknowledgements
 ----------------
 
 This work was financially supported in part by EPSRC grant
-EP/L000407/1, the Imperial College London Intel Parallel Computing
-Centre, British Gas, SENAI CIMATEC and the MCTI (Federal Govt of
-Brazil) scholarship MCTI/FINEP/CNPq 384214/2015-0. This research was
-carried out as part of the SINBAD project with the support of the
-member organizations of the SINBAD Consortium.
+EP/L000407/1 and the Imperial College London Intel Parallel Computing
+Centre. This research was carried out as part of the SINBAD project
+with the support of the member organizations of the SINBAD Consortium.
 
 
 References
