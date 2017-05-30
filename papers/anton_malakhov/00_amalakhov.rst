@@ -21,12 +21,11 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   **[TODO: rewrite]**
    Python is popular among numeric communities that value it for easy to use number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
-   This paper describes usage of Intel |R| Threading Building Blocks (Intel |R| TBB), an open-source cross-platform library for multi-core parallelism [TBB]_, as the composability layer for Python modules.
+   This paper describes and compares three approaches to such coordination for both multi-threading and multi-processing cases: using static affinity masks, OpenMP parallel region serialization and work stealing scheduler from  Intel |R| Threading Building Blocks (Intel |R| TBB) [TBB]_.
    It helps to unlock additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
@@ -120,12 +119,44 @@ Otherwise, these libraries will not be able or willing to switch their own threa
 
 Setting Affinity Masks
 ----------------------
-**[TODO: add description]**
+There are at least two ways to practically implemenent so called *optional parallelism* - by fixing standard Python mechanisms to write parallel code and by improving threading layers (like OpenMP or Intel |R| TBB).
+The first way looks simplier but works only with Python and the second one is much more common but much more tricky.  In this paper we will describe both of these approaches.
+
+Let's start with the first one. Since one of the common ways of making parallel code in Python is to employ pools (with threads or processes), an obvious idea is to fix them in such a way that each pool worker can use not the whole CPU but only some particular cores.
+E.g. if we have 8 core CPU and want to create 2 worker pool, we can limit number of threads per pool worker to 4. In case of using process pool the best way to do it is to set appropriate affinity mask for each worker process.
+E.g. for our example the first process will use cores from 0 to 3 and the second - cores from 4 to 7. Furthermore, since both OpenMP and Intel |R| TBB will use affinity masks while initialization, they limit number of threads per each process to 4.
+As a result we've got a simple way of sharing threads between pool workers without any over-subscription issues.
+
+In case of multi-threading the idea we use stays near the same, but instead of setting process affinity masks we just limit number of threads per each pool worker using threading runtime API (e.g. :code:`omp_set_num_threads()` function for OpenMP).
+
+To implement this approach we've created an additional Python module called *SMP.py*. It works with both thread and process pools from :code:`multiprocessing` and :code:`concurrent.futures` modules using *monkey patching* technique that allows to use this solution without any code modifications in customer script.
+To run it one should use the following command:
+
+.. code-block:: sh
+
+    python -m SMP -f <oversubscription_factor> scirpt.py
+
+Option :code:`-f <oversubscription_factor>` sets allowable over-subscription factor that will be used to compute number of threads per pool worker. By default it equals to 2. It means that in our example 8 threads will be used per process.
 
 
 Serialization of OpenMP Parallel Regions
 ----------------------------------------
-**[TODO: add description]**
+The second approach we'd like to describe here is more common and based on OpenMP runtime. Basic idea is to use the only thread pool and run different parallel regions on it sequentially, one by one.
+To implement serial region execution it's needed to have some lock that should be acquired before running the next parallel section. Futhermore this idea can be easily extended to the case of multiple processes.
+To do this the lock should be global like system-wide semaphore.
+
+This approach was implemented in Intel |R| OpenMP* runtime as a preview feature that can be enabled using the following option:
+
+.. code-block:: sh
+
+    KMP_COMPOSABILITY=mode=exclusive python script.py
+
+As a result, each OpenMP parallel region will be executed exclusively that allows to eliminate over-subscription issues as well.
+
+It's also needed to mention that in multi-processing case several thread pools will exist, one per process.
+Because of the global lock, only one of these pools will work at a time that may help to improve performance, but many co-existing threads may still cause resource exhaustion issues.
+
+.. [#] (*) Other names and brands may be claimed as the property of others.
 
 
 Cross-Process Work Stealing Task Scheduler for Intel |R| TBB
@@ -134,7 +165,24 @@ Cross-Process Work Stealing Task Scheduler for Intel |R| TBB
 
    Intel |R| Threading Building Blocks is used as a common runtime for different Python modules. :label:`components`
 
-**[TODO: add description]**
+The third approach is also based on using the only thread pool but from Intel |R| TBB. And this time the work stealing task scheduler is used to map the set of tasks to the set of threads.
+As it is shown on figure :ref:`components`, different components, that may be used in a script, work on top of the shared Intel |R| TBB pool. That allows one to dynamically balance the load across multiple tasks from multiple modules.
+In more details this approach for multi-threading case is described in our previous paper [SciPy16]_.
+
+Here we are presenting an extended approach that covers multi-processing case as well. It works in following way. In each separate process there is a thread pool.
+Before starting of any thread in any pool one should acquire system-wide semaphore with maximum value equals to number of CPU hardware threads.
+To acquire the semaphore greedy algorithm is used that may lead to a situation when some processes do not have pool workers.
+But according to the architecture of our solution, each process has at least one master thread to compute.
+Thus total number of working threads for all running processes doesn't exceed double number of CPU hardware threads in worse case (instead of quadratic over-subscripton case one could face with before).
+To make this solution truly dynamic an additional worker thread is added to each Intel |R| TBB thread pool which allows to acquire threads that become free in other processes to eliminate CPU underutilization.
+
+But from the point of view of simultaniously existing threads we still may face with resource exhaustion issues. Since we can't just move a thread from one process to another it may happen that there are too many threads alive at the same time.
+To eliminate such issues we've implemented an algorithm of killing unused threads in case of detection the lack of resources.
+
+This solution has a significant difference from an OpenMP with global lock approach - it allows to process several parallel regions simultaniously and futhermore provides an ability to do work balancing on the fly.
+Of course, such behaviour is more flexible but has bigger overhead due to truly dynamic scheduler.
+
+.. [SciPy16] Anton Malakhov, "Composable Multi-Threading for Python Libraries", Proc. of the 15th Python in Science Conf. (SCIPY 2016), July 11-17, 2016.
 
 
 Balanced QR Decomposition with Dask
@@ -189,7 +237,7 @@ Here is an example of running the benchmark program in five different modes:
 
    Execution times for balanced QR decomposition workload. :label:`sdask`
 
-Figure :ref:`sdask` shows performance results acquired on a 44-core (88-thread) machine with 128GB memory. The results presented here were acquired with cpython v3.5.2; however, there is no significant performance difference with cpython v2.7.12.
+Figure :ref:`sdask` shows performance results acquired on a 44-core (88-thread) machine with 128 GB memory. The results presented here were acquired with cpython v3.5.2; however, there is no significant performance difference with cpython v2.7.12.
 By default Dask will process a chunk in a separate thread so there will be 44 threads on the top level. Also each chunk will be computed in parallel with 44 OpenMP workers.
 Thus there will be 1936 threads in total which tries to acquire 44 cores that is not effective.
 
@@ -201,9 +249,9 @@ That's why another option here is KMP_BLOCKTIME that sets to zero. As one can se
 The third mode with *SMP.py* module in fact does the same optimizations but automatically and shows the same level of performance as the second one. Moreover it is more flexible and allows to work carefully with several thread/process pools in scope of one application even if they have different sizes.
 Thus we invite to use it as an advanced alternative to manual OpenMP tunning.
 
-The fourth and fifth modes represents our dynamic OpenMP and Intel |R| TBB based approaches. Both modes allows to improve default result but exclusive execution with OpenMP works faster.
+The fourth and fifth modes represents our dynamic OpenMP and Intel |R| TBB based approaches. Both modes allow to improve default result but exclusive execution with OpenMP works faster.
 As it was described above OpenMP based solution allows to process chunks one by one without any over-subscription. And since each separate chunk can utilize the whole CPU - such approach works fine here.
-In contrast work stealing task scheduler from  Intel |R| TBB is trully dynamic and tries to use the only thread pool to process all given tasks simultanioulsy. As a result one has worse cache utilization as well as bigger overhead of work balancing.
+In contrast work stealing task scheduler from  Intel |R| TBB is truly dynamic and tries to use the only thread pool to process all given tasks simultanioulsy. As a result one has worse cache utilization as well as bigger overhead of work balancing.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
@@ -328,7 +376,7 @@ And as for the mode with serialization of OpenMP parallel regions - it works sig
 Acceptable Level of Over-subscription
 -------------------------------------
 One more thing we'd like to discuss here is which level of over-subscription is acceptable from performance point of view.
-In other words starting from which size of top level thread or process pool we faced with performance issues due to over-subscription.
+In other words starting from which size of top level thread or process pool we face with performance issues due to over-subscription.
 To check it we run our balanced eigenvalues search workload with different pool sizes from 1 to 88 (since we have machine with 88-thread CPU).
 
 .. figure:: scalability_multithreading.png
@@ -336,14 +384,14 @@ To check it we run our balanced eigenvalues search workload with different pool 
    Multi-threading scalability of eigenvalues seach workload. :label:`smt`
 
 Figure :ref:`smt` shows scalability results for multi-threading case. Two modes are compared here: default one and OpenMP with *SMP.py* as the best approach for this benchmark.
-As one can see, visible difference in execution time between these two methods starts from 8 threads in top level pool and became larger while size of pool increases.
+As one can see, visible difference in execution time between these two methods starts from 8 threads in top level pool and becomes larger while size of pool increases.
 
 .. figure:: scalability_multiprocessing.png
 
    Multi-processing scalability of eigenvalues seach workload. :label:`smp`
 
 Multi-processing scalability results are shown on figure :ref:`smp`.
-They can be obtained from the same eigenvalues search workload if one just replaces :code:'ThreadPool' to :code:`Pool`.
+They can be obtained from the same eigenvalues search workload if one just replaces :code:`ThreadPool` to :code:`Pool`.
 And results here are very similar to multi-threading case - over-subscription effects become visible starting from 8 processes on top level of parallelization.
 
 
@@ -351,7 +399,7 @@ Solutions Applicability
 -----------------------
 Let's summarize all the results we obtained earlier.
 All three suggested approaches to fight with over-subscription issues are valuable and allow to obtain significant performance increase for both multi-threading and multi-processing cases.
-Moreover they are complements each over and have their own fields of applicability.
+Moreover they are complement each over and have their own fields of applicability.
 
 .. figure:: recommendation_table.png
 
@@ -369,7 +417,13 @@ To summarize all our conclusions we've prepared the table that should help to ch
 
 Limitations and Future Work
 ---------------------------
-**[TODO: rewrite]**
+All the solutions we described in this paper are preview features and should be seen as "Proof Of Concept".
+
+*SMP.py* module currently works only based on the pool size and doesn't take into account its real usage. We think it can be improved in future to trace task scheduling pool events and so to become more flexible.
+*SMP.py* module works only for Linux currently.
+
+OpenMP with global lock solution works fine with parallel regions with high CPU utilization but has significant performance gap in other cases, so can be improved. E.g. it can use semaphore instead of mutex to allow to run multiple parallel regions at the same time and thus to impove overall CPU utilization.
+
 Intel |R| TBB does not work well for blocking I/O operations because it limits the number of active threads.
 It is applicable only for tasks, which do not block in the operating system.
 If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop and so prevents other threads from being blocked.
@@ -378,37 +432,28 @@ The Python module for Intel |R| TBB is in an experimental stage and might be not
 In particular, it does not yet use the master thread efficiently as a regular TBB program is supposed to do.
 This reduces performance for small workloads and on systems with small numbers of hardware threads.
 
-As was discussed above, the TBB-based implementation of Intel |R| MKL threading layer is yet in its infancy and is therefore suboptimal.
+The TBB-based implementation of Intel |R| MKL threading layer is yet in its infancy and is therefore suboptimal.
 However, all these problems can be eliminated as more users will become interested in solving their composability issues and Intel |R| MKL and the TBB module are further developed.
 
 .. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
-Another limitation is that Intel |R| TBB only coordinates threads inside a single process while the most popular approach to parallelism in Python is multi-processing.
-Intel |R| TBB survives in an oversubscribed environment better than OpenMP because it does not rely on the particular number of threads participating in a parallel computation at any given moment, thus the threads preempted by the OS do not prevent the computation from making an overall progress.
-Nevertheless, it is possible to implement a cross-process mechanism to coordinate resources utilization and avoid over-subscription.
-
-A different approach is suggested by the observation that a moderate over-subscription, such as from two fully subscribed thread pools, does not significantly affect performance for most use cases.
-In this case, preventing quadratic over-subscription from the nested parallelism (in particular, with OpenMP) can be a practical alternative.
-Therefore, the solution for that can be as simple as "Global OpenMP Lock" (GOL) or a more elaborate inter-process semaphore that coordinates OpenMP parallel regions.
-
 
 Conclusion
 ----------
-**[TODO: rewrite]**
 This paper starts with substantiating the necessity of broader usage of nested parallelism for multi-core systems.
 Then, it defines threading composability and discusses the issues of Python programs and libraries which use nested parallelism with multi-core systems, such as GIL and over-subscription.
 These issues affect performance of Python programs that use libraries like NumPy, SciPy, Dask, and Numba.
 
-The suggested solution is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
-A Python module for Intel |R| TBB was introduced to substitute Python's ThreadPool implementation and switch Intel |R| MKL into TBB-based threading mode, which enables threading composability for mentioned Python libraries.
+Three approaches are described as potential solution. The first one is to statically limit number of threads created inside each pool worker. The second one is serialization of OpenMP parallel regions.
+And the third one is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 
 The examples referred in the paper show promising results, where, thanks to nested parallelism and threading composability, the best performance was achieved.
-In particular, QR decomposition example is faster by 46% comparing to the baseline implementation that uses parallelism only on the innermost level.
-This result was confirmed by the case study of a recommendation system where 59% increase was achieved for the similar base.
-And finally, Intel |R| TBB was proved as a mature multi-threading system by replacing threading runtime implemented in Numba and achieving more than 3 times speedup on several problem sizes.
+In particular, balanced QR decomposition and eigenvalues search examples are 3x faster comparing to the baseline implementation. Unbalanced versions of these benchmarks are by 34% and 35% faster than the baseline accordingly.
 
-Intel |R| TBB along with the Python module are available in open-source [TBB]_ for different platforms and architectures while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
+These improvements were achived due to different approaches. It demonstrates that all three described solutions are valuable and complement each other. We've compared suggested approaches and provided recommendations of when it makes sense to employ each of them.
+
+All described solutions are available in open-source while Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
 
 
 References
