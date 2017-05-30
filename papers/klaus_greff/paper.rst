@@ -122,71 +122,76 @@ Several built-in observers are available for databases, disk storage, or sending
 Configuration
 -------------
 An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we will call the configuration of the experiment.
-
-Defining a Configuration
-++++++++++++++++++++++++
-The main way to set up the configuration is through so called ConfigScopes.
-This means decorating a function with ``@ex.config`` which Sacred executes and adds to its local variables the configuration:
+The main way to set up the configuration is through functions decorated with ``@ex.config``:
 
 .. code-block:: python
 
     @ex.config
     def cfg():
-        variant = 'simple'
+        nr_hidden_units = 512
+        optimizer = 'sgd'
         learning_rate = 0.1
-        filename = 'stuff_{}.log'.format(a)
+        log_filename = 'NN_{}.log'.format(nr_hidden_units)
 
-This is syntactically convenient and allows using the full expressiveness of Python, which includes calling functions and variables that depend on others.
-For users that instead prefer plain dictionaries or external configuration files, those can also be used.
-All the entries of the configuration are enforced to be JSON-serializable, such that they can easily be stored and queried.
+When running an experiment, Sacred executes these functions and adds their local variables to the configuration.
+This syntactically convenient way of defining parameters leverages the full expressiveness of Python, including complex expressions, function calls, and interdependent variables.
+Alternatively plain dictionaries or external configuration files can also be used.
+
 
 .. Using Config Values
 
-To make all configuration entries easily accessible, Sacred employs the mechanism of *dependency injection*.
-That means, any function decorated by ``@ex.capture`` simply accept any configuration entry as a parameter.
-Whenever such a function is called Sacred will automatically fill in those parameters from the configuration.
+To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*.
+That means, any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
+Whenever such a function is called Sacred will automatically pass those parameters by name from the configuration.
 This allows for flexible and convenient use of the hyperparameters everywhere:
 
 .. code-block:: python
 
     @ex.capture
-    def do_stuff(variant, learning_rate=1.0):
-        ...
+    def setup_optimizer(optimizer, learning_rate):
+        OptClass = {'sgd': SGD, 'adam': ADAM}[optimizer]
+        opt = OptClass(learning_rate=learning_rate)
+        return opt
 
-    ...
+So when calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` argumentes can be omitted and will be filled in automatically.
+These injected config values can be mixed freely with normal parameters, and injection follows the priority: 1) explicitly passed arguments, 2) config values, 3) default values.
 
-    do_stuff()  # parameters are automatically filled
-    do_stuff('debug')  # manually set
-
-Injection follows the priority: 1. explicitly passed arguments, 2. config values, 3. default values.
-
-.. Main function and commands are automatically captured
-
-.. Updating Parameters
-
-Configuration values can be set (overridden) externally when running an experiment.
+The main benefit of config parameters is that they can be controlled externally, when running an experiment.
 This can happen both from the commandline
 
 .. code-block:: bash
 
-    >> python my_experiment.py with variant='complex'
+    >> python my_experiment.py with optimizer='adam'
+    ... learning_rate=0.001
 
 or from Python calls:
 
 .. code-block:: python
 
     from my_experiment import ex
-    ex.run(config_updates={'variant': 'complex'})
+    ex.run(config_updates={'learning_rate': 0.3,
+                           'nr_hidden_units': 64})
 
-Sacred treats these values as fixed and given when executing the ConfigScopes.
-In this way they influence dependent values as you would expect (so here: ``filename='stuff_complex'``).
+Sacred treats these values as fixed while executing the config functions.
+In this way they influence dependent values as you would expect leading to ``log_filename="NN_64.log"`` in our example.
 
-Sometimes a particular set of settings belongs together and should be saved.
-To collect them Sacred offers the concept of named configs.
-They are defined similar to configurations using ``@ex.named_config``, dictionaries, or from config files.
-They can be added en-block from the commandline and from Python, and are treated as a set of updates.
 
-.. example ??
+Sets of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
+They are defined similar to configurations using a function decorated by ``@ex.named_config``, or dictionaries / config files:
+
+.. code-block:: python
+
+    @ex.named_config
+    def adam():
+        optimizer = 'adam'
+        learning_rate = 0.001
+
+Named configs can be added en-block from the commandline and from Python, and are treated as a set of updates:
+
+.. code-block:: bash
+
+    >> python my_experiment.py with adam
+
 
 
 Reproducibility
