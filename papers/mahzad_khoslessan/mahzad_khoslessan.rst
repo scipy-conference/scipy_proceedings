@@ -17,12 +17,32 @@
 :institution: Arizona State University 
 :corresponding:
 
+:bibliography: ``mdanalysis``
+
+
+.. STYLE GUIDE
+.. ===========
+.. .
+.. Writing
+..  - use present tense
+.. .
+.. Formatting
+..  - restructured text
+..  - hard line breaks after complete sentences (after period)
+..  - paragraphs: empty line (two hard line breaks)
+.. .
+.. Workflow
+..  - use PRs (keep them small and manageable)
+
+.. definitions (like \newcommand)
+
+.. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 -------------------------------------------------------------------------
 
-Abstract
-========
+.. class:: abstract
 
 The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
 We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
@@ -46,7 +66,7 @@ Thus the amount of data to be analyzed is growing rapidly (into the terabyte ran
 Therefore, there is a need for high performance computing (HPC) approaches to increase the throughput.
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries are currently used to parallelize MDAnalysis-based code.
 Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library for task-graph based distributed computing on HPC and local computing resources.
-As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the C:math:`_\alpha` atoms.
+As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms.
 A range of commonly used MD file formats (CHARMM/NAMD DCD, Gromacs XTC, Amber NetCDF) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
 The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization. 
 Such a heterogeneous environment creates a challenging problem for developing high performance programs without the effort required to use low-level, architecture specific parallel programming models for our domain-specific problem. 
