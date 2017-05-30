@@ -827,13 +827,11 @@ open-source Python ecosystem.
 Acknowledgements
 ----------------
 
-This work was financially supported in part by the Natural Sciences
-and Engineering Research Council of Canada Collaborative Research and
-Development Grant DNOISE II (CDRP J 375142-08), EPSRC grant
+This work was financially supported in part by EPSRC grant
 EP/L000407/1, the Imperial College London Intel Parallel Computing
 Centre, British Gas, SENAI CIMATEC and the MCTI (Federal Govt of
 Brazil) scholarship MCTI/FINEP/CNPq 384214/2015-0. This research was
-carried out as part of the SINBAD II project with the support of the
+carried out as part of the SINBAD project with the support of the
 member organizations of the SINBAD Consortium.
 
 
