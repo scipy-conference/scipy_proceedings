@@ -107,7 +107,7 @@ In the previous minimal example the output would look like this:
 
 .. code-block:: bash
 
-    WARNING - my_example - No observers have been added to this run
+    WARNING - my_example - No observers have been added
     INFO - my_example - Running command 'main'
     INFO - my_example - Started
     INFO - my_example - Result: 42
@@ -122,71 +122,75 @@ Several built-in observers are available for databases, disk storage, or sending
 Configuration
 -------------
 An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we will call the configuration of the experiment.
-
-Defining a Configuration
-++++++++++++++++++++++++
-The main way to set up the configuration is through so called ConfigScopes.
-This means decorating a function with ``@ex.config`` which Sacred executes and adds to its local variables the configuration:
+The main way to set up the configuration is through functions decorated with ``@ex.config``:
 
 .. code-block:: python
 
     @ex.config
     def cfg():
-        variant = 'simple'
+        nr_hidden_units = 512
+        optimizer = 'sgd'
         learning_rate = 0.1
-        filename = 'stuff_{}.log'.format(a)
+        log_filename = 'NN{}.log'.format(nr_hidden_units)
 
-This is syntactically convenient and allows using the full expressiveness of Python, which includes calling functions and variables that depend on others.
-For users that instead prefer plain dictionaries or external configuration files, those can also be used.
-All the entries of the configuration are enforced to be JSON-serializable, such that they can easily be stored and queried.
+When running an experiment, Sacred executes these functions and adds their local variables to the configuration.
+This syntactically convenient way of defining parameters leverages the full expressiveness of Python, including complex expressions, function calls, and interdependent variables.
+Alternatively plain dictionaries or external configuration files can also be used.
+
 
 .. Using Config Values
 
-To make all configuration entries easily accessible, Sacred employs the mechanism of *dependency injection*.
-That means, any function decorated by ``@ex.capture`` simply accept any configuration entry as a parameter.
-Whenever such a function is called Sacred will automatically fill in those parameters from the configuration.
+To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*.
+That means, any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
+Whenever such a function is called Sacred will automatically pass those parameters by name from the configuration.
 This allows for flexible and convenient use of the hyperparameters everywhere:
 
 .. code-block:: python
 
     @ex.capture
-    def do_stuff(variant, learning_rate=1.0):
-        ...
+    def setup_optimizer(optimizer, learning_rate):
+        OptClass = {'sgd': SGD, 'adam': ADAM}[optimizer]
+        opt = OptClass(learning_rate=learning_rate)
+        return opt
 
-    ...
+So when calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` argumentes can be omitted and will be filled in automatically.
+These injected config values can be mixed freely with normal parameters, and injection follows the priority: 1) explicitly passed arguments, 2) config values, 3) default values.
 
-    do_stuff()  # parameters are automatically filled
-    do_stuff('debug')  # manually set
-
-Injection follows the priority: 1. explicitly passed arguments, 2. config values, 3. default values.
-
-.. Main function and commands are automatically captured
-
-.. Updating Parameters
-
-Configuration values can be set (overridden) externally when running an experiment.
+The main benefit of config parameters is that they can be controlled externally, when running an experiment.
 This can happen both from the commandline
 
 .. code-block:: bash
 
-    >> python my_experiment.py with variant='complex'
+    >> python my_experiment.py with optimizer='adam'
+    ... learning_rate=0.001
 
 or from Python calls:
 
 .. code-block:: python
 
     from my_experiment import ex
-    ex.run(config_updates={'variant': 'complex'})
+    ex.run(config_updates={'nr_hidden_units': 64})
 
-Sacred treats these values as fixed and given when executing the ConfigScopes.
-In this way they influence dependent values as you would expect (so here: ``filename='stuff_complex'``).
+Sacred treats these values as fixed while executing the config functions.
+In this way they influence dependent values as you would expect leading to ``log_filename="NN64.log"`` in our example.
 
-Sometimes a particular set of settings belongs together and should be saved.
-To collect them Sacred offers the concept of named configs.
-They are defined similar to configurations using ``@ex.named_config``, dictionaries, or from config files.
-They can be added en-block from the commandline and from Python, and are treated as a set of updates.
 
-.. example ??
+Sets of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
+They are defined similar to configurations using a function decorated by ``@ex.named_config``, or dictionaries / config files:
+
+.. code-block:: python
+
+    @ex.named_config
+    def adam():
+        optimizer = 'adam'
+        learning_rate = 0.001
+
+Named configs can be added en-block from the commandline and from Python, and are treated as a set of updates:
+
+.. code-block:: bash
+
+    >> python my_experiment.py with adam
+
 
 
 Reproducibility
@@ -194,25 +198,25 @@ Reproducibility
 An important goal of Sacred is to collect all the necessary information to make computational experiments reproducible.
 The result of such an experiment depends on many factors including: the source code, versions of the used packages, system libraries, data-files, the host system, and (pseudo-)randomness.
 Tools for reproducible research such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care` trace and package all datafiles and libraries used during a run at the system level.
-While these tools are the correct way to go to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
-Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information, while keeping the overhead and required manual work at a minimum.
-To that end it tackles four key areas individually: 1) source code, 2) package dependencies, 3) host system, 4) resources, and 5) randomness.
+While these tools are the right way to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
+Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information.
+By keeping the overhead and required manual work at a minimum, it becomes a feasible to use it *always*.
+Sacred tackles three key areas of this individually: 1) source code, 2) package dependencies, and  3) host system.
 
 
 The source code of an experiment is arguably the most important piece of information for reproducing any result.
 To manage the quickly evolving code, it is considered good practice to use a version control system such as Git.
 In practice however, research-code is often adapted too rapidly.
 A common pattern is to quickly change something and start a run, even before properly committing the changes.
-To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores source files alongside the run information.
-This very basic version control mechanism guarantees that the current version of the code is saved, by automatically detecting relevant source-files by inspection.
-Sacred also supports a more strict Git based workflow and can automatically collect the current commit and state of the repository for each run.
+To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores the source files alongside the run information.
+Relevant source-files are automatically detected through inspection, which guarantees that the current version of the code is saved along with any run.
+Alternatively Sacred also supports a more strict Git-based workflow and can automatically collect the current commit and state of the repository for each run.
 The optional ``--enforce-clean / -e`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be run.
 
 .. MENTION? though relevant files can also be added manually by ``ex.add_source_file(FILENAME)``.
 .. MENTION? removes duplication
 
 
-Python package dependencies too are handled automatically by Sacred.
 When an experiment is started Sacred detects imported packages and determines their version-numbers by inspection.
 This detection will catch all dependencies that are imported from the main file before the experiment was started and should cover most usecases.
 It might, however, miss certain nested imports, so further dependencies can be added manually using ``ex.add_package_dependency(NAME, VERSION)``.
@@ -221,14 +225,13 @@ It might, however, miss certain nested imports, so further dependencies can be a
 Sacred also collects a small set of information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
 Optionally it supports information about GPUs, and environment variables, and it can be easily extended to collect any custom information.
 
-
+Randomness
+----------
 Randomization is an important part of many machine learning algorithms, but it inherently conflicts with the goal of reproducibility.
 The solution of course is to use pseudo random number generators (PRNG) that take a seed and generate seemingly random numbers from that in a deterministic fashion.
 But if the seed is set to a fixed value as part of the code, then all runs will share the same randomness, which can be an undesired effect.
 Sacred solves this problems by always generating a seed for each experiment that is stored as part of the configuration.
 It can be accessed from the code in the same way as every other config entry.
-.. but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
-
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
 
 
@@ -238,7 +241,7 @@ Bookkeeping
 -----------
 
 Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
-The experiment publishes all the collected information in the form of events that zero or more observers can subscribe to.
+The experiment publishes all the collected information in the form of events, to which observers can subscribe.
 Observers can be added dynamically from the commandline or directly in code:
 
 .. code-block:: python
@@ -249,26 +252,21 @@ Observers can be added dynamically from the commandline or directly in code:
 
 
 Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
-This way information is available already during runtime, and partial data is captured even in case of failures. 
+This way information is available already during runtime, and partial data is captured even in case of failures.
+The most important events are:
 
-Sacred collects a lot of information about the experiment and the run. 
-Most importantly of course it will save the configuration and the result.
-Below is a summary of all the collected data:
-
-
-Configuration
-    configuration values used for this run
-Source Code
-    source code of all detected source files
-Dependencies
-    version numbers for all detected package dependencies
-Host
-    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other information like GPU or environment variables.
-Metadata
-    start and stop times, current status, result, and fail-trace (if needed)
-Live Information
-     Including captured stdout, extra files needed or created by the run that should be saved, custom information, and custom metrics about the experiment.
-
+Started Event
+    Fired when running an experiment, just before the main method is executed.
+    Contains configuration values, start time, package dependencies, host information, and some meta information.
+Heartbeat Event
+    Fired continuously every 10 seconds while the experiment is running.
+    Contains the beat time, captured stdout/stderr, custom information, and preliminary result.
+Completed Event
+    Fired once the experiment completes successfully.
+    Contains the stop time and the result.
+Failed Event
+    Fired if the experiment aborts due to an exception.
+    Contains the stop time and the stack trace.
 
 
 Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
@@ -280,25 +278,58 @@ MongoDB is a noSQL database, or more precisely a *Document Database*:
 It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
-In particular this feature has been very useful to perform large scale studies like the one in :cite:`greff2015`.
+This feature in particular has been very useful to perform large scale studies like the one in previous work :cite:`greff2015`.
+A slightly shortened example database entry corresponding to our minimal example from above could look like this:
 
 
+.. code-block:: json
 
+    {"_id": 1,
+     "captured_out": "[...]",
+     "status": "COMPLETED",
+     "start_time": "2017-05-30T20:34:38.855Z",
+     "experiment": {
+         "mainfile": "minimal.py",
+         "sources": [["minimal.py", "ObjectId([...])"]],
+         "repositories": [],
+         "name": "minimal",
+         "dependencies": ["numpy==1.11.0",
+                          "sacred==0.7.0"],
+         "base_dir": "/home/greff/examples"},
+     "result": 42,
+     "info": {},
+     "meta": {"command": "main",
+              "options": ["..."]},
+     "format": "MongoObserver-0.7.0",
+     "resources": [],
+     "host": {"os": "Linux-3.16.0-4-amd64-x86_64",
+              "cpu": "Intel(R) Core(TM) i5-4460  CPU",
+              "hostname": "zephyr",
+              "ENV": {},
+              "python_version": "3.4.2"},
+     "heartbeat": "2017-05-30T20:34:38.902Z",
+     "config": {"seed": 620395134},
+     "command": "main",
+     "artifacts": [],
+     "stop_time": "2017-05-30T20:34:38.901Z"
+     }
 
 
 Labwatch
 ========
 
 Finding the correct hyperparameter setting for machine learning algorithms is often done by trial and error even though it sometimes makes the difference between state-of-the-art performance or performance that is as good as random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users, instead of manual tuning, to define a searchspace and leave the search for good configurations to the optimizer.
+A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users to define a searchspace and leave the search for good configurations to the optimizer, instead resorting to manual tuning.
 However, in practice each optimizer often requires users to adapt their code to a certain interface.
-Labwatch supports a unified interface through Sacred to a variety of hyperparameter optimizers that allows for an easy integration of hyperparameter optimization into the daily workflow.
+Labwatch simplifies this process by integrating a unified interface to a variety of hyperparameter optimizers into Sacred.
+This allows for an easy integration of hyperparameter optimization into the daily workflow.
 
 
 LabAssistant
 ------------
 
-At the heart of Labwatch is the so called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space, simply dubbed searchspace and a hyperparameter optimizer through a database.
+At the heart of Labwatch is the so called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space (in short: *searchspace*) and a hyperparameter optimizer through a MongoDB database.
+When using Labwatch the required boilerplate code becomes:
 
 .. code-block:: python
 
@@ -317,7 +348,7 @@ At the heart of Labwatch is the so called LabAssistant, which connects the Sacre
 If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of this experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configuration is then used to run the experiment.
 
  
-For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g Fanova :cite:`hutter-icml14a`).
+For bookkeeping it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g. Fanova :cite:`hutter-icml14a`).
 
 
 
@@ -358,9 +389,9 @@ Labwatch triggers the optimizer to suggest a new configuration based on all conf
 
 
 Multiple search spaces
-++++++++++++++++++++++
+----------------------
 
-Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and only optimize a few other hyperparameters.
+Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep a set of hyperparameters fixed and only optimize a few others.
 Assume that we only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
@@ -380,7 +411,7 @@ We can run our experiment now in the same way but by calling it with this new se
 
 
 the optimizer will now only suggest a value for the learning rate and keeps all other hyperparameters, such as the batch size, fixed to the values that are defined in the config.
-Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies.
+
 
 Hyperparameter Optimizers
 -------------------------
@@ -409,8 +440,8 @@ Basically, optimizers need to implement only the ``suggest_configuration()`` met
 
 
 Even though the interface for all optimizer is the same, every optimizer has its own properties and might not work in all use cases.
-The following list gives a brief overview of optimizers that can be used with Labwatch and in which
-setting they work and which they do not. For more details we refer to the corresponding papers:
+The following list gives a brief overview of optimizers that can be used with Labwatch and the setting they do and do not work in.
+For more details we refer to the corresponding papers:
 
 - **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
   configurations randomly from the corresponding prior distributions. Due to its simplicity, random search works in discrete as well as continuous search
@@ -620,6 +651,7 @@ TODO: Mention funding
 This work has partly been supported by the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme under grant no. 716721, by the Euro-
 pean Commission under grant no. H2020-ICT-645403-ROBDREAM, and by the German Research Foundation (DFG) under Priority Programme Autonomous Learning (SPP 1527, grant HU 1900/3-1).
 
+This research was supported by the EU project ``INPUT`` (H2020-ICT-2015 grant no. 687795).
 Access to computing and storage facilities owned by parties and projects contributing to the Czech National Grid Infrastructure MetaCentrum provided under the programme “Projects of Large Research, Development, and Innovations Infrastructures” (CESNET LM2015042) is greatly appreciated.
 
 
