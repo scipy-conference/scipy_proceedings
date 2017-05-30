@@ -120,14 +120,47 @@ Also we anticipate that, heavy analyses that take lenger time, per frame traject
 Effect of File Format
 =====================
 
-Figures [] and [] show comparison of job execution time, total compute and I/O time averaged over all processes and the difference between these two times for 300X and 600X trajectories and for all file formats respectively.
-As can be seen, job execution time does not scale very well across parallelisms from 1 to 72 for all formats.
-XTC and NCDF file formats reveals much better scaling as compared to DCD file format. As shown in Figure [], the results from different machines lie on top of each other for total compute and IO time for XTC and NCDF file formats; however, this is not the case for job execution time. Unlike job execution time, total compute and I/O time averaged over all processes reveals a reasonable scaling. 
-The same behavior can be seen for other trajectory sizes as shown also in Figure []. Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes. This difference increases with increase in trajectory size for all file formats for all machines. 
-This time difference is much smaller for Comet and Stampede as compared to other machines. In order to find the underlying reasons for this difference, web interface of Dask is used to obtain information about the amount of time spent on the communication between workers, and different computations at the worker level in the Map-reduce job.
+Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively. According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
+This is due to the overlapping of the data access requests from different processes.
+XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for all trajectory sizes for all machines (multiprocessing scheduler) and Comet and Stampede (for distributed scheduler).
+The NCDF file format scales very well up to 8 cores for all trajectory sizes.
+For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
+Therefore, it was expected to achieve speed up, across parallelism up to 50 cores
+However, this amount is reduced to 20 cores as can also be observed in speed up plots.
+Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes.
+This difference increases with increase in trajectory size for all file formats for all machines (Not shown here).
+This time difference is much smaller for Comet and Stampede as compared to other machines.
+In order to find the underlying reasons for this difference, web interface of Dask is used to obtain information about the amount of time spent on the communication between workers, and different computations at the worker level in the Map-reduce job.
+Because Dask parallel computing library is too high level, it is really hard to obtain detail information about each task at different levels.
+The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
+In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
+This web interface is launched whenever Dask scheduler is launched.
+Table \ref{tab:time-comparison} summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
+As seen from the tests performed on ASU Saguaro, there is a very small difference between maximum total compute and I/O time and job execution time.
+This difference is mostly due to communications performed in the reduction process.
+In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
+As can be seen from the results, due to different reasons, some tasks (so-called `Stragglers') are considerably slower than the others, delaying the completion of the job.
 
 Challenges for Good HPC Performance
 ===================================
+There is a caveat needs to be added here that all results were obtained during normal, multi-user, production periods on all machines.
+In fact, the time the jobs take to run are affected by the other jobs on the system.  
+This is true even when the job is the only one using a particular node, which was the case in the present study.  
+There are shared resources such as network filesystems that all the nodes use.  
+The high speed interconnect that enables parallel jobs to run is also a shared resource.  
+The more jobs are running on the cluster, the more contention there is for these resources.  
+As a result, the same job runs at different times will take a different amount of time to complete.  
+In addition, remarkable fluctuations in I/O time across different processes is observed through monitoring network behavior using Dask web interface which kind of confirms this issue.  
+These fluctuations differ in each repeat and are dependent on the hardware and network. 
+Another caveat needs to be added here is that jobs may also be scheduled to run on different nodes at different times.
+For example, our local machine in Beckstein's lab has also a heterogenous environment. 
+This problem together with the others mentioned above further complicates any attempts at benchmarking. 
+Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
+This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
+There is also variability in network latency, in addition to the variability in underlying hardware in each machine.
+Which causes the results to vary significantly across different machines.
+Because our Map-reduce job is pleasantly parallel, all of our processes have the same amount of work to do. 
+Therefore, observing these stragglers was unexpected and the following sections in the present study aim to find why we are seeing these stragglers.
 
 Performance Optimization
 ========================
@@ -156,7 +189,7 @@ Acknowledgments
 
 MK and IP were supported by grant ACI-1443054 from the National Science Foundation.
 SJ and OB were supported in part by grant ACI-1443054 from the National Science Foundation.
-Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to JS).
+Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to SJ).
 
 
 References
