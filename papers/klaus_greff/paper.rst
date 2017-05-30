@@ -107,7 +107,7 @@ In the previous minimal example the output would look like this:
 
 .. code-block:: bash
 
-    WARNING - my_example - No observers have been added to this run
+    WARNING - my_example - No observers have been added
     INFO - my_example - Running command 'main'
     INFO - my_example - Started
     INFO - my_example - Result: 42
@@ -131,7 +131,7 @@ The main way to set up the configuration is through functions decorated with ``@
         nr_hidden_units = 512
         optimizer = 'sgd'
         learning_rate = 0.1
-        log_filename = 'NN_{}.log'.format(nr_hidden_units)
+        log_filename = 'NN{}.log'.format(nr_hidden_units)
 
 When running an experiment, Sacred executes these functions and adds their local variables to the configuration.
 This syntactically convenient way of defining parameters leverages the full expressiveness of Python, including complex expressions, function calls, and interdependent variables.
@@ -169,11 +169,10 @@ or from Python calls:
 .. code-block:: python
 
     from my_experiment import ex
-    ex.run(config_updates={'learning_rate': 0.3,
-                           'nr_hidden_units': 64})
+    ex.run(config_updates={'nr_hidden_units': 64})
 
 Sacred treats these values as fixed while executing the config functions.
-In this way they influence dependent values as you would expect leading to ``log_filename="NN_64.log"`` in our example.
+In this way they influence dependent values as you would expect leading to ``log_filename="NN64.log"`` in our example.
 
 
 Sets of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
@@ -199,25 +198,25 @@ Reproducibility
 An important goal of Sacred is to collect all the necessary information to make computational experiments reproducible.
 The result of such an experiment depends on many factors including: the source code, versions of the used packages, system libraries, data-files, the host system, and (pseudo-)randomness.
 Tools for reproducible research such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care` trace and package all datafiles and libraries used during a run at the system level.
-While these tools are the correct way to go to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
-Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information, while keeping the overhead and required manual work at a minimum.
-To that end it tackles four key areas individually: 1) source code, 2) package dependencies, 3) host system, 4) resources, and 5) randomness.
+While these tools are the right way to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
+Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information.
+By keeping the overhead and required manual work at a minimum, it becomes a feasible to use it *always*.
+Sacred tackles three key areas of this individually: 1) source code, 2) package dependencies, and  3) host system.
 
 
 The source code of an experiment is arguably the most important piece of information for reproducing any result.
 To manage the quickly evolving code, it is considered good practice to use a version control system such as Git.
 In practice however, research-code is often adapted too rapidly.
 A common pattern is to quickly change something and start a run, even before properly committing the changes.
-To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores source files alongside the run information.
-This very basic version control mechanism guarantees that the current version of the code is saved, by automatically detecting relevant source-files by inspection.
-Sacred also supports a more strict Git based workflow and can automatically collect the current commit and state of the repository for each run.
+To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores the source files alongside the run information.
+Relevant source-files are automatically detected through inspection, which guarantees that the current version of the code is saved along with any run.
+Alternatively Sacred also supports a more strict Git-based workflow and can automatically collect the current commit and state of the repository for each run.
 The optional ``--enforce-clean / -e`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be run.
 
 .. MENTION? though relevant files can also be added manually by ``ex.add_source_file(FILENAME)``.
 .. MENTION? removes duplication
 
 
-Python package dependencies too are handled automatically by Sacred.
 When an experiment is started Sacred detects imported packages and determines their version-numbers by inspection.
 This detection will catch all dependencies that are imported from the main file before the experiment was started and should cover most usecases.
 It might, however, miss certain nested imports, so further dependencies can be added manually using ``ex.add_package_dependency(NAME, VERSION)``.
@@ -226,14 +225,13 @@ It might, however, miss certain nested imports, so further dependencies can be a
 Sacred also collects a small set of information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
 Optionally it supports information about GPUs, and environment variables, and it can be easily extended to collect any custom information.
 
-
+Randomness
+----------
 Randomization is an important part of many machine learning algorithms, but it inherently conflicts with the goal of reproducibility.
 The solution of course is to use pseudo random number generators (PRNG) that take a seed and generate seemingly random numbers from that in a deterministic fashion.
 But if the seed is set to a fixed value as part of the code, then all runs will share the same randomness, which can be an undesired effect.
 Sacred solves this problems by always generating a seed for each experiment that is stored as part of the configuration.
 It can be accessed from the code in the same way as every other config entry.
-.. but Sacred can also automatically generate seeds and PRNGs that deterministically depend on that root seed for you.
-
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
 
 
