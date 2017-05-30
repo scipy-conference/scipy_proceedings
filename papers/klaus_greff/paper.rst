@@ -47,7 +47,7 @@ Introduction
 A major part of machine learning research has become empirical and typically includes a large number of computational experiments run with many different hyperparameter settings.
 This process holds many practical challenges such as flexible exposition of hyperparameters, hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, and organizing and maintaining an overview over  the results.
 To make matters worse, experiments are often run on diverse and heterogeneous environments ranging from laptops to cloud computing nodes.
-Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructure.
+Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructures.
 As a result, research code often evolves quickly and bad trade-offs are made that sacrifice important aspects like bookkeeping and reproducibility.
 
 
@@ -165,7 +165,7 @@ Sacred treats these values as fixed and given when executing the ConfigScopes.
 In this way they influence dependent values as you would expect (so here: ``filename='stuff_complex'``).
 
 Sometimes a particular set of settings belongs together and should be saved.
-To collect them sacred offers the concept of named configs.
+To collect them Sacred offers the concept of named configs.
 They are defined similar to configurations using ``@ex.named_config``, dictionaries, or from config files.
 They can be added en-block from the commandline and from Python, and are treated as a set of updates.
 
@@ -246,7 +246,7 @@ Source Code
 Dependencies
     version numbers for all detected package dependencies
 Host
-    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other informatino like GPU or environment variables.
+    information about the host that is running the experiment including CPU, OS, and Python version. Optionally also other information like GPU or environment variables.
 Metadata
     start and stop times, current status, result, and fail-trace (if needed)
 Live Information
@@ -255,7 +255,7 @@ Live Information
 
 
 Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
-Furthermore ther are two observers that can send notifications about runs via Telegram or Slack.
+Furthermore there are two observers that can send notifications about runs via Telegram or Slack.
 However, the observer interface is generic and supports easy addition of custom observers.
 
 The recommended observer is the ``MongoObserver`` that writes to a MongoDB :cite:`mongo`.
@@ -339,23 +339,12 @@ Now by executing the Experiment for instance through the command line:
 
 Labwatch triggers the optimizer to suggest a new configuration based on all configurations that are stored in the database and have been drawn from the same search space.
 
-Every hyperparameter optimization method, such as Bayesian optimization or random search, often needs to evaluate some configuration before it approaches a good region in the search space.
-This means that Labwatch needs to run the same experiment multiple times.
-Labwatch's Labassitant allows to easily do this from Python via:
-
-.. code-block:: python
-
-    a.run_suggestion(100)
-
-This runs the same experiment 100 times with different hyperparameter configurations and saves all results to a database.
-
-
 
 Multiple search spaces
 ++++++++++++++++++++++
 
 Since search spaces are named configurations, Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep single hyperparameters fixed and only optimize a few other hyperparameters.
-Assume that we now only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
+Assume that we only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
 
@@ -366,23 +355,42 @@ Assume that we now only want to optimize the learning rate and keep the batch si
                                      default=10e-2,
                                      log_scale=True)
 
-We can run our experiment now in the same way but calling it with this new search space: 
+We can run our experiment now in the same way but by calling it with this new search space: 
 
 .. code-block:: bash
 
     >> python my_experiment.py with small_search_space
 
 
-Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies. The optimizer will now only suggest a value for the learning rate. 
-All other hyperparameters, such as the batch size, are set to the values that are defined in the config.
-
-
+the optimizer will now only suggest a value for the learning rate and keeps all other hyperparameters, such as the batch size, fixed to the values that are defined in the config.
+Labwatch passes only entries of the database from the same search space to the optimizer in order to avoid inconsistencies.
 
 Hyperparameter Optimizers
 -------------------------
 
 
-Labwatch offers a simple but also flexible interface to a variety of state-of-the-art hyperparameter optimization methods.
+Labwatch offers a simple but also flexible interface to a variety of state-of-the-art hyperparameter optimization methods which also allows researcher to easily integrated their own hyperparameter optimization method into Labwatch.
+
+.. code-block:: python
+
+
+    class Optimizer(object):
+
+
+        def suggest_configuration(self):
+            # Run the optimizer and 
+            # return a single configuration
+            return config
+
+        def update(self, configs, costs, runs):
+            # Update the internal 
+            # state of the optimizer
+            pass
+           
+
+Basically, optimizers need to implement only the ``suggest_configuration()`` method which return a single configuration to Sacred and the ``update()`` method which gets all evaluated configuration and costs and updates the internal state of the optimizer.
+
+
 Even though the interface for all optimizer is the same, every optimizer has its own properties and might not work in all use cases.
 The following list gives a brief overview of optimizers that can be used with Labwatch and in which
 setting they work and which they do not. For more details we refer to the corresponding papers:
@@ -395,7 +403,7 @@ setting they work and which they do not. For more details we refer to the corres
   To select a new configuration, it uses a utility function that only depends on the
   probabilistic model to trade off exploration and exploitation. Here we use a Gaussian process to model our objective
   function, which works well in low (<10) dimensional continuous search spaces but does not work with categorical
-  hyperparameters.
+  hyperparameters. We used the RoBO (`https://github.com/automl/RoBO <https://github.com/automl/RoBO>`_) as an implementation which is based on the George GP library :cite:`hodlr`
 
 - **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
   the objective function :cite:`hutter-lion11a`. That allows it to work in high dimensional mixed continuous and discret input spaces but will
