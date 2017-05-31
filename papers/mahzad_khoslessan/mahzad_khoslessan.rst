@@ -133,7 +133,6 @@ Our study showed that SSD can be very helpful (especially for DCD file format) a
 Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
 .. figure:: figs/panels/IO-time-300x.pdf
-   :figclass: w
 
    Comparison of IO time between 300x trajectory sizes using dask multiprocessing on a *single node*.
    The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
@@ -142,7 +141,6 @@ Also we anticipate that, heavy analyses that take lenger time, per frame traject
 
 
 .. figure:: figs/panels/IO-time-600x.pdf
-   :figclass: w
 
    Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
    The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
@@ -175,7 +173,6 @@ In addition, maximum total compute and I/O time measured using the web interface
 As can be seen from the results, due to different reasons, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job.
 
 .. figure:: figs/panels/timing-XTC-600x.pdf
-   :figclass: w
 
    Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using dask distributed.
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
@@ -186,7 +183,6 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 
 
 .. figure:: figs/panels/speedup-600x.pdf
-   :figclass: w
 
    Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed.
    The dashed line shows the ideal limit of strong scaling.
