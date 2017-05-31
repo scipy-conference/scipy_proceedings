@@ -10,10 +10,10 @@ BespON:  Extensible config files with multiline strings, lossless round-tripping
 
 
 .. latex::
-   :usepackage: fvextra, amssymb
+   :usepackage: textcomp,upquote,amssymb
 
    % Packages:
-   %   fvextra - patches fancyvrb, makes single quotes non-curly in literal
+   %   textcomp, upquote - make single quotes non-curly in literal
    %             blocks (LaTeX Verbatim environment)
    %   amssymb - adds extra math symbols needed for examples
 
@@ -785,7 +785,7 @@ indentation-based dict mapping Hebrew letters to integers (valid BespON):
 
 .. raw:: latex
 
-   \begin{Verbatim}[commandchars=\\\{\}, mathescape]
+   \begin{Verbatim}[commandchars=\\\{\}, codes={\catcode`$=3\catcode`^=7\catcode`_=8}]
    $\aleph$ =
      1
    $\beth$ =
@@ -805,7 +805,7 @@ most text editors (now invalid BespON):
 
 .. raw:: latex
 
-   \begin{Verbatim}[commandchars=\\\{\}, mathescape]
+   \begin{Verbatim}[commandchars=\\\{\}, codes={\catcode`$=3\catcode`^=7\catcode`_=8}]
    \{2 = $\beth$ ,1 = $\aleph$\}
    \end{Verbatim}
    %This is the literal Unicode sequence:  {א = 1, ב = 2}
