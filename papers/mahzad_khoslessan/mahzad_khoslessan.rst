@@ -48,15 +48,6 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 
 .. class:: abstract
 
-<<<<<<< HEAD
-The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
-We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations `Gowers:2016aa, Michaud-Agrawal:2011fu`.
-We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
-We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
-However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
-Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
-In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
-=======
    The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
    We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
    We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
@@ -64,8 +55,6 @@ In summary, we show that, due to the focus on high interoperability in the scien
    However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
    Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
    In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
->>>>>>> b87fbe9d2063fe99d6d2d9f069130f930179f57f
-
 
 .. class:: Keywords
 
@@ -142,27 +131,29 @@ This is why DCD is showing a weak scaling by increasing parallelism whereas netC
 Our study showed that SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
 Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   | .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
-   |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-   |    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-   |    :align: left                         |   :align: center                        |   :align: right                          |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   |                                              .. image:: figs/legend1.png                                                     | 
-   |                                                 :scale: 50 %                                                                 |
-   |                                                 :align: center                                                               |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   | .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
-   |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-   |    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-   |    :align: left                         |   :align: center                        |   :align: right                          |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   |                                              .. image:: figs/legend2.png                                                     |
-   |                                                 :scale: 50 %                                                                 |
-   |                                                 :align: center                                                               |
-   +------------------------------------------------------------------------------------------------------------------------------+
-   |  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats    |                                   
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
+
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+| .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
+|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
+|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
+|    :align: left                         |   :align: center                        |   :align: right                          |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+|                                              .. image:: figs/legend1.png                                                     | 
+|                                                 :scale: 50 %                                                                 |
+|                                                 :align: center                                                               |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+| .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
+|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
+|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
+|    :align: left                         |   :align: center                        |   :align: right                          |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+|                                              .. image:: figs/legend2.png                                                     |
+|                                                 :scale: 50 %                                                                 |
+|                                                 :align: center                                                               |
++------------------------------------------------------------------------------------------------------------------------------+
+|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file format     |                       
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+
 
 Effect of File Format
 ---------------------
@@ -209,7 +200,9 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 +-------------------------------------------+--------------------------------------------+-------------------------------------------+
 
 
-.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`
+.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
+   :class: w
+
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
    | Resource   |  $N_{cores}$   |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
    |            |                |                                     |                                 |measured using web interface(s) |                    |
@@ -222,26 +215,9 @@ As can be seen from the results, due to different reasons, some tasks (so-called
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
    | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1       |
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-=======
+
+
 As can be seen from the results, due to different reasons, some tasks (so-called "stragglers") are considerably slower than the others, delaying the completion of the job.
-
-
-.. @mkhoshle: please expand the table. reST table syntax: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#tables
-.. or use raw latex tables (see example in papers/00_bibderwalt/00_bibderwalt.rst
-.. .
-.. I made the table full width and used reST replacements, defined at the beginning of the file in order
-.. to keep it readable.
-
-
-.. table:: Time comparison :label:`tab:time-comparison`
-   :class: w
-   
-   +------------+----------+-------------+-----------+
-   | trajectory | resource | |avg_tcomp| | |avg_tIO| |
-   +============+==========+=============+===========+
-   | XTC 600x   | comet    |  xxx        |  yyy      |
-   +------------+----------+-------------+-----------+
->>>>>>> b87fbe9d2063fe99d6d2d9f069130f930179f57f
 
 
 Challenges for Good HPC Performance
