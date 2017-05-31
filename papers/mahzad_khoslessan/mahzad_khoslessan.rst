@@ -71,7 +71,7 @@ Thus, the amount of data to be analyzed is growing rapidly (into the terabyte ra
 Therefore, there is a need for high performance computing (HPC) approaches to increase the throughput.
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries are currently used to parallelize MDAnalysis-based code.
 Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library for task-graph based distributed computing on HPC and local computing resources.
-As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the atoms.
+As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms.
 A range of commonly used MD file formats (CHARMM/NAMD DCD, Gromacs XTC, Amber NetCDF) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
 The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization. 
 Such a heterogeneous environment creates a challenging problem for developing high performance programs without the effort required to use low-level, architecture specific parallel programming models for our domain-specific problem. 
@@ -104,8 +104,9 @@ To allow the analysis of large trajectories, MDAnalysis only loads a single fram
 Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
 These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
 Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
+Figure `fig:pattern-formats` shows the I/O pattern compared between different file formats.
 
-.. figure:: figs/panels/trj-access-patterns.pdf
+.. figure:: figs/trj-access-patterns.pdf
 
    I/O pattern for reading frames in parallel from commonly used MD trajectory formats.
    **A** Gromacs XTC file format.
@@ -117,27 +118,28 @@ XTC file format takes advantage of in-built compression and as a result has smal
 In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
 This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
 When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
-As a result, the time it takes a process to load a frame into memory is short (Figure :ref:`fig:IO-300x` B and :ref:`fig:IO-600x` B). 
+As a result, the time it takes a process to load a frame into memory is short (Figure :ref:`fig:IO-multiprocessing` B and :ref:`fig:IO-distributed` B). 
 In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`fig:pattern-formats` A). 
 Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
 This happens while the first process is decompressing the loaded frame.
 As a result, the overlapping of the data requests for the same calculation will be less frequent.
 However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
 This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
-The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`fig:IO-300x` A, C).
+The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`fig:IO-multiprocessing` A, C).
 This is since netCDF has a more complicated file format. 
 Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
 In fact, netCDF has a very sophisticated format, while DCD has a very simple file format.
 This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
-Our study showed that SSD can be very helpful (especially for DCD file format) and can improve the performance due to speed up in access time (Figure :ref:`fig:IO-300x`).
-Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
+Figures `fig:IO-multiprocessing` and `fig:IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
+According to figure `fig:IO-multiprocessing`, SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
+Also we anticipate that, for heavier analyses that have higher compute time per frame, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
 .. figure:: figs/panels/IO-time-300x.pdf
 
    Comparison of IO time between 300x trajectory sizes using dask multiprocessing on a *single node*.
    The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
-   :label:`fig:IO-300x`
+   :label:`fig:IO-multiprocessing`
 
 
 .. figure:: figs/panels/IO-time-600x.pdf
@@ -145,7 +147,7 @@ Also we anticipate that, heavy analyses that take lenger time, per frame traject
    Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
    The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
-   :label:`fig:IO-600x`
+   :label:`fig:IO-distributed`
 
 
 
@@ -153,24 +155,30 @@ Effect of File Format
 ---------------------
 
 Figure :ref:`fig:speedup-600x`  shows speedups for 600x trajectories for the distributed scheduler as an example of using HPC resources for a big trajectory.
-According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
+The DCD file format does not scale at all by increasing parallelism across different cores (Figure :ref:`fig:speedup-600x` A).
 This is due to the overlapping of the data access requests from different processes.
-XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for all trajectory sizes for all machines (multiprocessing scheduler) and Comet and Stampede (for distributed scheduler).
+XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for distributed scheduler.
 The NCDF file format scales very well up to 8 cores for all trajectory sizes.
 For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
 Therefore, it was expected to achieve speed up, across parallelism up to 50 cores
-However, this amount is reduced to 20 cores as can also be observed in speed up plots.
+However, the XTC format only scales well up to 20 cores.
 Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes (Figure :ref:`fig:timing-XTC-600x`).
-This difference increases with increase in trajectory size for all file formats for all machines (Not shown here).
+This difference increases with increase in trajectory size for all file formats for all machines (not shown here).
 This time difference is much smaller for Comet and Stampede as compared to other machines.
 The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
+
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
 This web interface is launched whenever Dask scheduler is launched.
 Table :ref:`tab:time-comparison` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
-As seen from the tests performed on ASU Saguaro, there is a very small difference between maximum total compute and I/O time and job execution time.
+The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it
+ is considerable for the results obtained using distributed scheduler.
+As seen from the tests performed on our local machines, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
-As can be seen from the results, due to different reasons, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job.
+As seen in Figure `fig:task-stream-comet`, for SDSC Comet, there is a very small difference between maximum total compute and I/O time measured using the web interface and job execution time.
+However, there is a considerable difference between maximum total compute and I/O time measured using the web interface and our code.
+There is one process which is much slower as compared to others. 
+As can be seen from the results, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job and as a result affect the overal performance.
 
 .. figure:: figs/panels/timing-XTC-600x.pdf
 
@@ -212,42 +220,40 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 
 Challenges for Good HPC Performance
 -----------------------------------
-
-There is a caveat needs to be added here that all results were obtained during normal, multi-user, production periods on all machines.
+It should be noted that all the present results were obtained during normal, multi-user, production periods on all machines.
 In fact, the time the jobs take to run are affected by the other jobs on the system.  
 This is true even when the job is the only one using a particular node, which was the case in the present study.  
 There are shared resources such as network filesystems that all the nodes use.  
 The high speed interconnect that enables parallel jobs to run is also a shared resource.  
 The more jobs are running on the cluster, the more contention there is for these resources.  
 As a result, the same job runs at different times will take a different amount of time to complete.  
-In addition, remarkable fluctuations in I/O time across different processes is observed through monitoring network behavior using Dask web interface which kind of confirms this issue.  
+In addition, remarkable fluctuations in task completion time across different processes is observed through monitoring network behavior using Dask web interface.  
 These fluctuations differ in each repeat and are dependent on the hardware and network. 
-Another caveat needs to be added here is that jobs may also be scheduled to run on different nodes at different times.
-For example, our local machine in Beckstein's lab has also a heterogenous environment. 
-This problem together with the others mentioned above further complicates any attempts at benchmarking. 
+These factors further complicate any attempts at benchmarking. 
 Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
 This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 There is also variability in network latency, in addition to the variability in underlying hardware in each machine.
 This causes the results to vary significantly across different machines.
-Because our Map-reduce job is pleasantly parallel, all of our processes have the same amount of work to do. 
-Therefore, observing these stragglers is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
+Since our Map-reduce job is pleasantly parallel, all of our processes have the same amount of work to do and our Map-Reduce job is load balanced. 
+Therefore, observing these stragglers discussed in the previous section is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
 
 Performance Optimization
 ------------------------
 In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
-Lustre Striping, oversubscribingi, scheduler throughput are tested to examine their effect on the performance. In addition, scheduler plugin is used to validate our observation using web interface.
+Lustre striping, oversubscribing, scheduler throughput are tested to examine their effect on the performance. 
+In addition, scheduler plugin is used to validate our observation using web interface.
 In fact, we create a plugin that performs logging whenever a task changes state.
 Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
 
 Effect of Lustre Striping
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
-This is especially strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
+This is strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
-However, when extending to more than one node, even XTC files were affected by this as is also shown in the previous section.
+However, when extending to more than one node, even XTC files were affected by this as is also shown in the previous sections.
 In Lustre, a copy of the shared file can be in different physical storage devices (OSTs). 
 Single shared files can have a stripe count equal to the number of nodes or processes which access the file.
-In the present study we set the stripe count equal to three which is equal to number of nodes.
+In the present study we set the stripe count equal to three which is equal to the number of nodes used for our benchmark.
 This may be helpful to improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests will decrease.
 Figures [] and [] show the speed up and I/O time plots obtained for XTC file format (600X) when striping is activated. 
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for decresing IO time.
