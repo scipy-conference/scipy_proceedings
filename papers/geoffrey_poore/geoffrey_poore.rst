@@ -12,19 +12,21 @@ BespON:  Extensible config files with multiline strings, lossless round-tripping
 .. latex::
    :usepackage: fvextra, amssymb
 
-   % Packages:  fvextra - patches fancyvrb, makes single quotes non-curly
-   %            amssymb - adds extra math symbols for examples
+   % Packages:
+   %   fvextra - patches fancyvrb, makes single quotes non-curly in literal
+   %             blocks (LaTeX Verbatim environment)
+   %   amssymb - adds extra math symbols needed for examples
 
    % Patch Pygments style definition, to make single quotes non-curly
+   % in code-block directive
    \def\PYZsq{\textquotesingle}
 
    % Redefine handling of inline literal text, to make single quotes non-curly
+   \let\scipyoriginaltexttt\texttt
    \def\texttt#1{%
      \begingroup
-     \small
-	   \ttfamily
-	   \scantokens{\catcode`\'=\active\let'\textquotesingle#1\noexpand}%`
-	   \endgroup}
+	 \scantokens{\catcode`\'=\active\let'\textquotesingle\scipyoriginaltexttt{#1}\noexpand}%`
+	 \endgroup}
 
 ..
 
