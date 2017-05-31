@@ -321,9 +321,10 @@ Labwatch
 Finding the correct hyperparameter setting for machine learning algorithms is often done by trial and error even though it sometimes makes the difference between state-of-the-art performance and performance that is as bad as random guessing.
 A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users to define a searchspace and leave the search for good configurations to the optimizer, instead resorting to manual tuning.
 However, in practice each optimizer requires users to adapt their code to a certain interface.
-Labwatch simplifies this process by integrating a unified interface to a variety of hyperparameter optimizers into Sacred.
+Labwatch [#]_ simplifies this process by integrating a unified interface to a variety of hyperparameter optimizers into Sacred.
 This allows for an easy integration of hyperparameter optimization into the daily workflow.
 
+.. [#] https://github.com/automl/labwatch
 
 LabAssistant
 ------------
@@ -461,7 +462,7 @@ For more details we refer to the corresponding papers:
   the objective function :cite:`hutter-lion11a`. Random forest natively allow to work in high dimensional mixed continuous and discret input spaces but seem to work less efficient compared
   to Gaussian processes in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
  
-  More recently Bayesian neural networks have been used for Bayesian optimization :cite:`springenberg-nips2016`.
+  More recently Bayesian neural networks have been used for Bayesian optimization :cite:`snoek-icml15a, springenberg-nips2016`.
   Compared to Gaussian processes they scale very well with the number of function evaluation as well as number of
   dimensions. Here we use the **Bohamiann** approach :cite:`springenberg-nips2016` which is also implemented in the RoBO framework. 
 
