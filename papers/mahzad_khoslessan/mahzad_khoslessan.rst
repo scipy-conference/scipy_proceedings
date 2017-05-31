@@ -37,10 +37,11 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
-.. |tcomp| replace:: :math:`t_\text{compute}`
+.. |tcomp| replace:: :math:`t_\text{comp}`
 .. |tIO| replace:: :math:`t_\text{I/O}`
 .. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
+.. |Ncores| replace:: :math:`N_\text{cores}`
 
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
@@ -48,13 +49,13 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 
 .. class:: abstract
 
-The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
-We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
-We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
-We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
-However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
-Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
-In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
+   The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
+   We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
+   We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
+   We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
+   However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
+   Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
+   In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
 
 .. class:: Keywords
 
@@ -69,15 +70,16 @@ The size of these trajectories is growing as the simulation times is being exten
 Thus, the amount of data to be analyzed is growing rapidly (into the terabyte range) and analysis is increasingly becoming a bottleneck :cite:`Cheatham:2015qf`.
 Therefore, there is a need for high performance computing (HPC) approaches to increase the throughput.
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries are currently used to parallelize MDAnalysis-based code.
-Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library for task-graph based distributed computing on HPC and local computing resources.
+Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
 As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms.
-A range of commonly used MD file formats (CHARMM/NAMD DCD, Gromacs XTC, Amber NetCDF) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
+A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NetCDF :cite:`Case:2005uq`) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
 The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization. 
 Such a heterogeneous environment creates a challenging problem for developing high performance programs without the effort required to use low-level, architecture specific parallel programming models for our domain-specific problem. 
 Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), and the parallel Lustre file system (implemented on top of HDD) are also tested to examine effect of I/O on the performance. 
-The benchmarks are performed both on a single node and across multiple nodes using the multiprocessing and distributed schedulers in Dask library.
-A protein system of `N = 3341` atoms per frame but with different number of frames per trajectory was analyzed.
-We used different trajectory sizes of 50 GB, 150 GB, and 300 GB for Dask multiprocessing and 100 GB, 300 GB, 600 GB for Dask distributed.
+The benchmarks are performed both on a single node and across multiple nodes using the multiprocessing and distributed_ schedulers in Dask library.
+A protein system of :math:`N = 3341` atoms per frame but with different number of frames per trajectory was analyzed.
+We used different trajectory sizes of 50 GB, 150 GB, and 300 GB for Dask multiprocessing and 100 GB, 300 GB, 600 GB for Dask distributed; however, here we only present data for the 300 GB and 600 GB trajectory sizes, which represent typical medium and large size results.
+For an analysis of the full data set see the Technical Report :cite:`Khoshlessan:2017aa`.
 All results for Dask distributed are obtained across three nodes on different clusters.
 Results are compared across all file formats, trajectory sizes, and machines. 
 Our results show strong dependency on the storage system because a key problem is competition for access to the same file from multiple processes.
@@ -88,8 +90,16 @@ Our results show that there can be other challenges aside from the I/O bottlenec
 For instance, with numbers of processes matched to the available cores, contention on the network may slow down individual tasks and lead to poor load balancing and poor overall performance.
 In order to identify the performance bottlenecks for our Map-Reduce Job, we have tested and examined several other factors including striping, oversubscribing, and the Dask Scheduler.
 We also compared a subset of systems with an MPI-based implementation (using mpi4py) in order to better understand the effect of using a high-level approach such as the Dask parallel library compared to a lower level one; in particular, we tried to identify possible underlying factors that may lead to low performance. 
-In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
-We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
+
+Methods
+=======
+
+The data files consist of a topology file (in CHARMM PSF format) and a trajectory (DCD format); they are available from dropbox (`adk4AKE.psf`_ and `1ake_007-nowater-core-dt240ps.dcd`_). 
+Files in XTC and NetCDF formats are generated from the DCD on the fly.
+To avoid operating system caching, files are copied and only used once for each benchmark.
+We tested libraries in the following versions: MDAnalysis 0.15.0, Dask 0.12.0 (also 0.13.0), Distributed_ 1.14.3 (also 1.15.1), and NumPy 1.11.2 (also 1.12.0) :cite:`VanDerWalt2011`.
+As computational load we implement the calculation of the root mean square distance of the |Calpha| atoms of the protein adenylate kinase when it fitted to a reference structure using an optimal rigid body superposition, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`. The code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library .
+
 
 
 Results and Discussion
@@ -99,13 +109,13 @@ Effect of I/O Environment
 -------------------------
 
 In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
-To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time `Gowers:2016aa, Michaud-Agrawal:2011fu`.
+To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
 Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
 These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
 Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
 Figure `fig:pattern-formats` shows the I/O pattern compared between different file formats.
 
-.. figure:: figs/trj-access-patterns.pdf
+.. figure:: figs/panels/trj-access-patterns.pdf
 
    I/O pattern for reading frames in parallel from commonly used MD trajectory formats.
    **A** Gromacs XTC file format.
@@ -117,14 +127,14 @@ XTC file format takes advantage of in-built compression and as a result has smal
 In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
 This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
 When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
-As a result, the time it takes a process to load a frame into memory is short. 
+As a result, the time it takes a process to load a frame into memory is short (Figure :ref:`fig:IO-multiprocessing` B and :ref:`fig:IO-distributed` B). 
 In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`fig:pattern-formats` A). 
 Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
 This happens while the first process is decompressing the loaded frame.
 As a result, the overlapping of the data requests for the same calculation will be less frequent.
 However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
 This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
-The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size.
+The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`fig:IO-multiprocessing` A, C).
 This is since netCDF has a more complicated file format. 
 Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
 In fact, netCDF has a very sophisticated format, while DCD has a very simple file format.
@@ -133,7 +143,22 @@ Figures `fig:IO-multiprocessing` and `fig:IO-distributed` compare the difference
 According to figure `fig:IO-multiprocessing`, SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
 Also we anticipate that, for heavier analyses that have higher compute time per frame, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
+.. figure:: figs/panels/IO-time-300x.pdf
 
+   Comparison of IO time between 300x trajectory sizes using dask multiprocessing on a *single node*.
+   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
+   :label:`fig:IO-multiprocessing`
+
+
+.. figure:: figs/panels/IO-time-600x.pdf
+
+   Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
+   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   :label:`fig:IO-distributed`
+
+<<<<<<< HEAD
 +-----------------------------------------+-----------------------------------------+------------------------------------------+
 | .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
 |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
@@ -156,27 +181,30 @@ Also we anticipate that, for heavier analyses that have higher compute time per 
 +------------------------------------------------------------------------------------------------------------------------------+
 |  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file format     |                       
 +-----------------------------------------+-----------------------------------------+------------------------------------------+
+=======
+>>>>>>> afdf5bb79aa850e319d34da4def07661bdf1e5a7
 
 
 Effect of File Format
 ---------------------
 
-Figure `fig:job-exec-time` summarizes comparison of job execution time, total compute and I/O time averaged over all processes and the difference between these two times for 600X trajectory and XTC file format obtained using distributed scheduler.
-Figures `fig:speed-up` summarizes speed-up for 600X trajectories and all file formats obtained using distributed scheduler.
-According to Figure `fig:speed-up`, DCD file format does not scale at all by increasing parallelism across different cores.
+Figure :ref:`fig:speedup-600x`  shows speedups for 600x trajectories for the distributed scheduler as an example of using HPC resources for a big trajectory.
+The DCD file format does not scale at all by increasing parallelism across different cores (Figure :ref:`fig:speedup-600x` A).
 This is due to the overlapping of the data access requests from different processes.
 XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for distributed scheduler.
 The NCDF file format scales very well up to 8 cores for all trajectory sizes.
 For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
 Therefore, it was expected to achieve speed up, across parallelism up to 50 cores
-Looking at speed-up graphs, XTC file format scales only up to 20 cores.
-Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes.
-This difference increases with increase in trajectory size for all file formats for all machines (Not shown here).
+However, the XTC format only scales well up to 20 cores.
+Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes (Figure :ref:`fig:timing-XTC-600x`).
+This difference increases with increase in trajectory size for all file formats for all machines (not shown here).
+This time difference is much smaller for Comet and Stampede as compared to other machines.
+The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
+
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
 This web interface is launched whenever Dask scheduler is launched.
 Table :ref:`tab:time-comparison` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web interface and job execution time for each of the cases tested.
-The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it
- is considerable for the results obtained using distributed scheduler.
+The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
 As seen from the tests performed on our local machines, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
@@ -185,30 +213,32 @@ However, there is a considerable difference between maximum total compute and I/
 There is one process which is much slower as compared to others. 
 As can be seen from the results, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job and as a result affect the overal performance.
 
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/total-time-dist-XTC600.pdf|.. image:: figs/t_IO_plus_t_comp-XTC600.pdf |.. image:: figs/t-diff-dist-XTC600.pdf     |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/speed-up2-dist-DCD600.pdf |.. image:: figs/speed-up2-dist-XTC600.pdf   |.. image:: figs/speed-up2-dist-NCDF600.pdf |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                           |
-|                                                 :scale: 50 %                                                                       |
-|                                                 :align: center                                                                     |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|                           Comparison of speed-up and job execution time between 600x trajectory for all file formats               |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
+.. figure:: figs/panels/timing-XTC-600x.pdf
+
+   Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using dask distributed.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   **A** Total time to solution (wall clock), :math:`t_N` for :math:`N` trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
+   **B** Sum of the measured I/O time |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
+   **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
+   :label:`fig:timing-XTC-600x`
 
 
-.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
+.. figure:: figs/panels/speedup-600x.pdf
+
+   Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed.
+   The dashed line shows the ideal limit of strong scaling.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   **A** CHARMM/NAMD DCD.
+   **B** Gromacs XTC.
+   **C** Amber netCDF.
+   :label:`fig:speedup-600x`
+
+
+.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
    :class: w
 
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | Resource   |  $N_{cores}$   |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
+   | Resource   |  |Ncores|      |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
    |            |                |                                     |                                 |measured using web interface(s) |                    |
    +============+================+=====================================+=================================+================================+====================+
    | Local      |      24        |               93.83                 |               110.58            |              110.43            |        111.83      |
@@ -221,15 +251,9 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
 
 
-.. @mkhoshle: please expand the table. reST table syntax: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#tables
-.. or use raw latex tables (see example in papers/00_bibderwalt/00_bibderwalt.rst
-.. .
-.. I made the table full width and used reST replacements, defined at the beginning of the file in order
-.. to keep it readable.
-
-
 Challenges for Good HPC Performance
 -----------------------------------
+
 It should be noted that all the present results were obtained during normal, multi-user, production periods on all machines.
 In fact, the time the jobs take to run are affected by the other jobs on the system.  
 This is true even when the job is the only one using a particular node, which was the case in the present study.  
@@ -249,6 +273,7 @@ Therefore, observing these stragglers discussed in the previous section is unexp
 
 Performance Optimization
 ------------------------
+
 In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
 Lustre striping, oversubscribing, scheduler throughput are tested to examine their effect on the performance. 
 In addition, scheduler plugin is also used to validate our observation using web interface.
@@ -257,6 +282,7 @@ Through the scheduler plugin we will be able to get lots of information about a 
 
 Effect of Lustre Striping
 ~~~~~~~~~~~~~~~~~~~~~~~~~
+
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
 This is strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
@@ -269,18 +295,6 @@ Figures [] and [] show the speed up and I/O time plots obtained for XTC file for
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for decresing IO time.
 However, we are still seeing these stragglers and the overal speed-up is not improved.  
 
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/speed-up2-dist-DCD600.pdf |.. image:: figs/speed-up2-dist-XTC600.pdf   |.. image:: figs/speed-up2-dist-NCDF600.pdf |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                           |
-|                                                 :scale: 50 %                                                                       |
-|                                                 :align: center                                                                     |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats          |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
 
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -297,67 +311,63 @@ The results from scheduler pluging is described in the following section.
 Examining Scheduler Throughput
 ------------------------------
 
-An experiment were executed with Dask Schedulers (Multithreaded, Multiprocessing and Distributed) on Stampede. In each run a total of 100000 zero workload tasks were executed. Figure :ref:`daskThroughputvsScheduler` shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node. Each value is the mean throughput value of several runs for each Scheduler. 
+An experiment were executed with Dask Schedulers (Multithreaded, Multiprocessing and Distributed) on Stampede.
+In each run a total of 100000 zero workload tasks were executed.
+Figure :ref:`daskThroughputvsScheduler` shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
+Each value is the mean throughput value of several runs for each Scheduler. 
 
 .. figure:: figs/daskThroughputvsScheduler.pdf
-   :scale: 50%
-   :figclass: bht
 
-   Dask Throughput on a single node vs Scheduler type. X axis is time and Y axis is the number of tasks that were executed in a second :label:`daskThroughputvsScheduler`
+   Dask Throughput on a single node vs Scheduler type.
+   X axis is time and Y axis is the number of tasks that were executed in a second.
+   :label:`daskThroughputvsScheduler`
 
-Our understanding is that the most efficient Scheduler is the Distributed Scheduler, especially when there is one worker process for each available core. Also, the Distributed with just one worker process and a number of threads equal to the number of available cores is still able to schedule and execute these 100000 tasks. The Multiprocessing and Multithreading Schedulers have similar behavior again, but need significantly more time to finish compared to the Distributed.
+Our understanding is that the most efficient Scheduler is the Distributed Scheduler, especially when there is one worker process for each available core.
+Also, the Distributed with just one worker process and a number of threads equal to the number of available cores is still able to schedule and execute these 100000 tasks.
+The Multiprocessing and Multithreading Schedulers have similar behavior again, but need significantly more time to finish compared to the Distributed.
 
-Figure :ref:`daskThroughputvsNodes` shows the Distributed scheduler's throughput over time when the number of Nodes increases. Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
+Figure :ref:`daskThroughputvsNodes` shows the Distributed scheduler's throughput over time when the number of Nodes increases.
+Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
 
 .. figure:: figs/daskThroughputvsNodes.pdf
-   :scale: 50%
-   :figclass: bht
 
-   Dask Throughput vs Number of Nodes. X axis is time and Y axis is the number of tasks that were executed in a second. :label:`daskThroughputvsNodes`
+   Dask Throughput vs Number of Nodes.
+   X axis is time and Y axis is the number of tasks that were executed in a second.
+   :label:`daskThroughputvsNodes`
 
 By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
 Figure :ref:`daskThroughputvsNodes16proc` shows the same execution with the Dask Cluster being setup to have one worker process per core.
 
 .. figure:: figs/daskThroughputvsNodes16proc.pdf
-   :scale: 50%
-   :figclass: bht
 
-   Dask Throughput vs Number of Nodes. X axis is time and Y axis is the number of tasks that were executed in a second :label:`daskThroughputvsNodes16proc`
+   Dask Throughput vs Number of Nodes.
+   X axis is time and Y axis is the number of tasks that were executed in a second
+   :label:`daskThroughputvsNodes16proc`
 
-In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughputvsNodes`, thus it is not clear what is the effect of the extra nodes. Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
+In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughputvsNodes`, thus it is not clear what is the effect of the extra nodes.
+Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
 
  
 Scheduler Plugin Results
 ------------------------
 
-In addition to Dask's web interface, we implemented a Dask Scheduler Plugin. This plugin captures task execution events from the scheduler and their respective timestamps. These captured profiles were later use to analyze the execution of XTC 100x and XTC 300x on Stampede. Figures :ref:`XTC300x64coresStampede` and :ref:`XTC100x64coresStampede` show two characteristic executions.
-In Figure :ref:`XTC300x64coresStampede` we can see that the delay in execution, on the right subfigure, is because of the specific cores and not something that is part of the framework. This is eliminated in the left where there were 3 times the number of blocks as cores
+In addition to Dask's web interface, we implemented a Dask Scheduler Plugin.
+This plugin captures task execution events from the scheduler and their respective timestamps.
+These captured profiles were later use to analyze the execution of and XTC 300x on Stampede.
+Figure :ref:`XTC300x64coresStampede` shows characteristic executions.
+The delay in execution (Figure :ref:`XTC300x64coresStampede` A) is because of the specific cores and not something that is part of the framework.
+This is eliminated when cores are oversubscribed by a factor of three (i.e., three times as many blocks as cores (Figure :ref:`XTC300x64coresStampede` B).
 
-+--------------------------------------------+----------------------------------------------+
-| .. image:: figs/XTC300x64coresStampede.png |.. image:: figs/XTC300x64coresStampede192.png |
-|    :scale: 50 %                            |   :scale: 50 %                               |
-|    :alt: alternate text                    |   :alt: alternate text                       |
-+--------------------------------------------+----------------------------------------------+
-+--------------------------------------------+----------------------------------------------+
-|  Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with| 
-|  64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y    | 
-|  axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light |
-|  Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede`   |
-+--------------------------------------------+----------------------------------------------+
+.. figure:: figs/panels/scheduler-300x.pdf
+   :figclass: w
+   :scale: 100%
+      
+   Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
+   64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y     
+   axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light 
+   Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede`   
 
- In Figure :ref:`XTC100x32coresStampede`, the two subplots are not that different. This is mainly because the overall execution time of the tasks is not that big. Nonetheless, there is some small performance gain when there are 3 times more blocks than cores.
 
-+--------------------------------------------+----------------------------------------------+
-| .. image:: figs/XTC100x64coresStampede.png |.. image:: figs/XTC100x64coresStampede192.png |
-|    :scale: 50 %                            |   :scale: 50 %                               |
-|    :alt: alternate text                    |   :alt: alternate text                       |
-+--------------------------------------------+----------------------------------------------+
-+--------------------------------------------+----------------------------------------------+
-|  Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with| 
-|  64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y    | 
-|  axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light |
-|  Green are the Get Item tasks and Red is data transfer. :label:`XTC100x64coresStampede`   |
-+--------------------------------------------+----------------------------------------------+
 
 
 
@@ -372,6 +382,11 @@ This will let us figure out whether the stragglers observed in the present bench
 
 Conclusions
 ===========
+
+In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
+We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
+Nevertheless, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
+
 
 
 Acknowledgments
@@ -389,11 +404,9 @@ References
 .. citations
 
 
-.. _`SPIDAL library`: http://spidal.org
 .. _MDAnalysis: http://mdanalysis.org
 .. _Dask: http://dask.pydata.org
-.. _Distributed: https://distributed.readthedocs.io/
-.. _NumPy: http://numpy.scipy.org/
+.. _distributed: https://distributed.readthedocs.io/
 .. _`10.6084/m9.figshare.4695742`: https://doi.org/10.6084/m9.figshare.4695742
 .. _`adk4AKE.psf`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AAAL5eP1vrn0tK-67qVDnKeua/Trajectories/equilibrium/adk4AKE.psf
 .. _`1ake_007-nowater-core-dt240ps.dcd`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AABSaNJ0fRFgY1UfxIH_jWtka/Trajectories/equilibrium/1ake_007-nowater-core-dt240ps.dcd
