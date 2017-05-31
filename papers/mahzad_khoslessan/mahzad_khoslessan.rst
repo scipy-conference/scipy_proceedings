@@ -144,6 +144,7 @@ Also we anticipate that, for heavier analyses that have higher compute time per 
 |                                                 :scale: 50 %                                                                 |
 |                                                 :align: center                                                               |
 +-----------------------------------------+-----------------------------------------+------------------------------------------+
++-----------------------------------------+-----------------------------------------+------------------------------------------+
 | .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
 |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
 |    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
@@ -250,7 +251,7 @@ Performance Optimization
 ------------------------
 In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
 Lustre striping, oversubscribing, scheduler throughput are tested to examine their effect on the performance. 
-In addition, scheduler plugin is used to validate our observation using web interface.
+In addition, scheduler plugin is also used to validate our observation using web interface.
 In fact, we create a plugin that performs logging whenever a task changes state.
 Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
 
