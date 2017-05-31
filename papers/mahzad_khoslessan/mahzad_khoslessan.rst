@@ -259,18 +259,6 @@ Figures [] and [] show the speed up and I/O time plots obtained for XTC file for
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for decresing IO time.
 However, we are still seeing these stragglers and the overal speed-up is not improved.  
 
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/speed-up2-dist-DCD600.pdf |.. image:: figs/speed-up2-dist-XTC600.pdf   |.. image:: figs/speed-up2-dist-NCDF600.pdf |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                           |
-|                                                 :scale: 50 %                                                                       |
-|                                                 :align: center                                                                     |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats          |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
 
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
