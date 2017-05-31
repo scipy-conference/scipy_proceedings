@@ -37,10 +37,11 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
-.. |tcomp| replace:: :math:`t_\text{compute}`
+.. |tcomp| replace:: :math:`t_\text{comp}`
 .. |tIO| replace:: :math:`t_\text{I/O}`
 .. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
+.. |Ncores| replace:: :math:`N_\text{cores}`
 
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
@@ -116,49 +117,44 @@ XTC file format takes advantage of in-built compression and as a result has smal
 In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
 This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
 When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
-As a result, the time it takes a process to load a frame into memory is short. 
+As a result, the time it takes a process to load a frame into memory is short (Figure :ref:`fig:IO-300x` B and :ref:`fig:IO-600x` B). 
 In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`fig:pattern-formats` A). 
 Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
 This happens while the first process is decompressing the loaded frame.
 As a result, the overlapping of the data requests for the same calculation will be less frequent.
 However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
 This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
-The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size.
+The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`fig:IO-300x` A, C).
 This is since netCDF has a more complicated file format. 
 Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
 In fact, netCDF has a very sophisticated format, while DCD has a very simple file format.
 This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
-Our study showed that SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
+Our study showed that SSD can be very helpful (especially for DCD file format) and can improve the performance due to speed up in access time (Figure :ref:`fig:IO-300x`).
 Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
+.. figure:: figs/panels/IO-time-300x.pdf
+   :figclass: w
 
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-| .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
-|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-|    :align: left                         |   :align: center                        |   :align: right                          |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-|                                              .. image:: figs/legend1.png                                                     | 
-|                                                 :scale: 50 %                                                                 |
-|                                                 :align: center                                                               |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-| .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
-|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-|    :align: left                         |   :align: center                        |   :align: right                          |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                     |
-|                                                 :scale: 50 %                                                                 |
-|                                                 :align: center                                                               |
-+------------------------------------------------------------------------------------------------------------------------------+
-|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file format     |                       
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
+   Comparison of IO time between 300x trajectory sizes using dask multiprocessing on a *single node*.
+   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
+   :label:`fig:IO-300x`
+
+
+.. figure:: figs/panels/IO-time-600x.pdf
+   :figclass: w
+
+   Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
+   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   :label:`fig:IO-600x`
+
 
 
 Effect of File Format
 ---------------------
 
-Figures [] to [] summarizes speedups and parallel efficiencies for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively.
+Figure :ref:`fig:speedup-600x`  shows speedups for 600x trajectories for the distributed scheduler as an example of using HPC resources for a big trajectory.
 According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
 This is due to the overlapping of the data access requests from different processes.
 XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for all trajectory sizes for all machines (multiprocessing scheduler) and Comet and Stampede (for distributed scheduler).
@@ -166,11 +162,9 @@ The NCDF file format scales very well up to 8 cores for all trajectory sizes.
 For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
 Therefore, it was expected to achieve speed up, across parallelism up to 50 cores
 However, this amount is reduced to 20 cores as can also be observed in speed up plots.
-Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes.
+Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes (Figure :ref:`fig:timing-XTC-600x`).
 This difference increases with increase in trajectory size for all file formats for all machines (Not shown here).
 This time difference is much smaller for Comet and Stampede as compared to other machines.
-In order to find the underlying reasons for this difference, web interface of Dask is used to obtain information about the amount of time spent on the communication between workers, and different computations at the worker level in the Map-reduce job.
-Because Dask parallel computing library is too high level, it is really hard to obtain detail information about each task at different levels.
 The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web interface of the Dask library.
 This web interface is launched whenever Dask scheduler is launched.
@@ -178,33 +172,36 @@ Table :ref:`tab:time-comparison` summarizes the average and max total compute an
 As seen from the tests performed on ASU Saguaro, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
-<<<<<<< HEAD
 As can be seen from the results, due to different reasons, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job.
 
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/total-time-dist-XTC600.pdf|.. image:: figs/t_IO_plus_t_comp-XTC600.pdf |.. image:: figs/t-diff-dist-XTC600.pdf     |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-| .. image:: figs/speed-up2-dist-DCD600.pdf |.. image:: figs/speed-up2-dist-XTC600.pdf   |.. image:: figs/speed-up2-dist-NCDF600.pdf |
-|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
-|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
-|    :align: left                           |   :align: center                           |   :align: right                           |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                           |
-|                                                 :scale: 50 %                                                                       |
-|                                                 :align: center                                                                     |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
-|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats          |
-+-------------------------------------------+--------------------------------------------+-------------------------------------------+
+.. figure:: figs/panels/timing-XTC-600x.pdf
+   :figclass: w
+
+   Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using dask distributed.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   **A** Total time to solution (wall clock), :math:`t_N` for :math:`N` trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
+   **B** Sum of the measured I/O time |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
+   **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
+   :label:`fig:timing-XTC-600x`
 
 
-.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
+.. figure:: figs/panels/speedup-600x.pdf
+   :figclass: w
+
+   Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed.
+   The dashed line shows the ideal limit of strong scaling.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   **A** CHARMM/NAMD DCD.
+   **B** Gromacs XTC.
+   **C** Amber netCDF.
+   :label:`fig:speedup-600x`
+
+
+.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
    :class: w
 
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | Resource   |  $N_{cores}$   |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
+   | Resource   |  |Ncores|      |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
    |            |                |                                     |                                 |measured using web interface(s) |                    |
    +============+================+=====================================+=================================+================================+====================+
    | Local      |      24        |               93.83                 |               110.58            |              110.43            |        111.83      |
@@ -216,8 +213,6 @@ As can be seen from the results, due to different reasons, some tasks (so-called
    | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1       |
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
 
-
-As can be seen from the results, due to different reasons, some tasks (so-called "stragglers") are considerably slower than the others, delaying the completion of the job.
 
 
 Challenges for Good HPC Performance
