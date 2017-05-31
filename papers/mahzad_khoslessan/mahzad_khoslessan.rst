@@ -48,6 +48,7 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 
 .. class:: abstract
 
+<<<<<<< HEAD
 The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
 We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations `Gowers:2016aa, Michaud-Agrawal:2011fu`.
 We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
@@ -56,6 +57,15 @@ However, the choice of the data file format can mitigate the effect of the stora
 Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
 In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
 
+=======
+   The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
+   We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
+   We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
+   We found that the the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottle neck in the analysis work flow.
+   However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
+   Scaling was tested on single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
+   In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
+>>>>>>> fba70d6217ef8123a774e28f52d350c0450a8152
 
 .. class:: Keywords
 
@@ -93,26 +103,37 @@ In summary, Dask together with MDAnalysis makes it straightforward to implement 
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 
 
+Results and Discussion
+======================
+
 Effect of I/O Environment
-=========================
+-------------------------
 
 In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
 To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time `Gowers:2016aa, Michaud-Agrawal:2011fu`.
 Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
 These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
 Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
-Figure [] show the I/O pattern compared between different file formats.
+
+.. figure:: figs/panels/trj-access-patterns.pdf
+
+   I/O pattern for reading frames in parallel from commonly used MD trajectory formats.
+   **A** Gromacs XTC file format.
+   **B** CHARMM/NAMD DCD file format and Amber netCDF format.
+   :label:`fig:pattern-formats`
+
+
 XTC file format takes advantage of in-built compression and as a result has smaller file size as compared to the other formats. 
 In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
 This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
 When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
 As a result, the time it takes a process to load a frame into memory is short. 
-In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory. 
+In addition, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`fig:pattern-formats` A). 
 Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load another frame into memory.
 This happens while the first process is decompressing the loaded frame.
 As a result, the overlapping of the data requests for the same calculation will be less frequent.
 However, there is no in-built compression for DCD and netCDF file formats and as a result file sizes are larger.
-This will result in higher I/O time and therefore overlapping of per frame trajectory data access. 
+This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
 The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size.
 This is since netCDF has a more complicated file format. 
 Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
@@ -121,30 +142,32 @@ This is why DCD is showing a weak scaling by increasing parallelism whereas netC
 Our study showed that SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
 Also we anticipate that, heavy analyses that take lenger time, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   | .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
-   |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-   |    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-   |    :align: left                         |   :align: center                        |   :align: right                          |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   |                                              .. image:: figs/legend1.png                                                     | 
-   |                                                 :scale: 50 %                                                                 |
-   |                                                 :align: center                                                               |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   | .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
-   |    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-   |    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-   |    :align: left                         |   :align: center                        |   :align: right                          |
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
-   |                                              .. image:: figs/legend2.png                                                     |
-   |                                                 :scale: 50 %                                                                 |
-   |                                                 :align: center                                                               |
-   +------------------------------------------------------------------------------------------------------------------------------+
-   |  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats    |                                   
-   +-----------------------------------------+-----------------------------------------+------------------------------------------+
+
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+| .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
+|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
+|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
+|    :align: left                         |   :align: center                        |   :align: right                          |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+|                                              .. image:: figs/legend1.png                                                     | 
+|                                                 :scale: 50 %                                                                 |
+|                                                 :align: center                                                               |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+| .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
+|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
+|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
+|    :align: left                         |   :align: center                        |   :align: right                          |
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+|                                              .. image:: figs/legend2.png                                                     |
+|                                                 :scale: 50 %                                                                 |
+|                                                 :align: center                                                               |
++------------------------------------------------------------------------------------------------------------------------------+
+|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file format     |                       
++-----------------------------------------+-----------------------------------------+------------------------------------------+
+
 
 Effect of File Format
-=====================
+---------------------
 
 Figures [] to [] summarizes speed-up and job execution time for 300X and 600X trajectories and all file formats for multiprocessing and distributed scheduler respectively.
 According to Figures [] DCD file format does not scale at all by increasing parallelism across different cores.
@@ -187,7 +210,12 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 +-------------------------------------------+--------------------------------------------+-------------------------------------------+
 
 
+<<<<<<< HEAD
 .. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison` :class: w
+=======
+.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. $N_{cores}$ is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
+   :class: w
+>>>>>>> fba70d6217ef8123a774e28f52d350c0450a8152
 
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
    | Resource   |  $N_{cores}$   |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
@@ -201,6 +229,7 @@ As can be seen from the results, due to different reasons, some tasks (so-called
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
    | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1       |
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
+<<<<<<< HEAD
 
 
 .. @mkhoshle: please expand the table. reST table syntax: http://docutils.sourceforge.net/docs/ref/rst/restructuredtext.html#tables
@@ -210,8 +239,15 @@ As can be seen from the results, due to different reasons, some tasks (so-called
 .. to keep it readable.
 
 
+=======
+
+
+As can be seen from the results, due to different reasons, some tasks (so-called "stragglers") are considerably slower than the others, delaying the completion of the job.
+
+
+>>>>>>> fba70d6217ef8123a774e28f52d350c0450a8152
 Challenges for Good HPC Performance
-===================================
+-----------------------------------
 
 There is a caveat needs to be added here that all results were obtained during normal, multi-user, production periods on all machines.
 In fact, the time the jobs take to run are affected by the other jobs on the system.  
@@ -233,14 +269,14 @@ Because our Map-reduce job is pleasantly parallel, all of our processes have the
 Therefore, observing these stragglers is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
 
 Performance Optimization
-========================
+------------------------
 In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
 Lustre Striping, oversubscribingi, scheduler throughput are tested to examine their effect on the performance. In addition, scheduler plugin is used to validate our observation using web interface.
 In fact, we create a plugin that performs logging whenever a task changes state.
 Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
 
 Effect of Lustre Striping
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
 This is especially strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
@@ -267,7 +303,7 @@ However, we are still seeing these stragglers and the overal speed-up is not imp
 +-------------------------------------------+--------------------------------------------+-------------------------------------------+
 
 Effect of Oversubscribing
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One useful way to robust our code to uncertainty in computations is to submit many more tasks than the numer of cores. 
 This may allow Dask to load balance appropriately, and as a result avoiding the stragglers.
@@ -286,12 +322,16 @@ Examining Scheduler Throughput
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
-======================================================================================
+--------------------------------------------------------------------------------------
+
 Based on the results presented in previous sections, it turned out that the stragglers are not because of the network, shared resources or scheduler throughput.
 Lustre striping improves I/O time; however, the job computation is still delayed and as a result lead to poor speed-up when extended to multiple nodes.    
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using MPI-based implementation.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or the environment itself.
 
+
+Conclusions
+===========
 
 
 Acknowledgments
