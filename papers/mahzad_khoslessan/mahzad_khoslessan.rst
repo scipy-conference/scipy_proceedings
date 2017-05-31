@@ -70,15 +70,16 @@ The size of these trajectories is growing as the simulation times is being exten
 Thus, the amount of data to be analyzed is growing rapidly (into the terabyte range) and analysis is increasingly becoming a bottleneck :cite:`Cheatham:2015qf`.
 Therefore, there is a need for high performance computing (HPC) approaches to increase the throughput.
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries are currently used to parallelize MDAnalysis-based code.
-Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library for task-graph based distributed computing on HPC and local computing resources.
+Here we evaluate performance for parallel map-reduce type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
 As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms.
-A range of commonly used MD file formats (CHARMM/NAMD DCD, Gromacs XTC, Amber NetCDF) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
+A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NetCDF :cite:`Case:2005uq`) and different trajectory sizes are benchmarked on different HPC resources including national supercomputers (XSEDE TACC Stampede and SDSC Comet), university supercomputers (ASU Research computing center (Saguaro)), and local resources (Gigabit networked multi-core workstations). 
 The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization. 
 Such a heterogeneous environment creates a challenging problem for developing high performance programs without the effort required to use low-level, architecture specific parallel programming models for our domain-specific problem. 
 Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), and the parallel Lustre file system (implemented on top of HDD) are also tested to examine effect of I/O on the performance. 
-The benchmarks are performed both on a single node and across multiple nodes using the multiprocessing and distributed schedulers in Dask library.
-A protein system of `N = 3341` atoms per frame but with different number of frames per trajectory was analyzed.
-We used different trajectory sizes of 50 GB, 150 GB, and 300 GB for Dask multiprocessing and 100 GB, 300 GB, 600 GB for Dask distributed.
+The benchmarks are performed both on a single node and across multiple nodes using the multiprocessing and distributed_ schedulers in Dask library.
+A protein system of :math:`N = 3341` atoms per frame but with different number of frames per trajectory was analyzed.
+We used different trajectory sizes of 50 GB, 150 GB, and 300 GB for Dask multiprocessing and 100 GB, 300 GB, 600 GB for Dask distributed; however, here we only present data for the 300 GB and 600 GB trajectory sizes, which represent typical medium and large size results.
+For an analysis of the full data set see the Technical Report :cite:`Khoshlessan:2017aa`.
 All results for Dask distributed are obtained across three nodes on different clusters.
 Results are compared across all file formats, trajectory sizes, and machines. 
 Our results show strong dependency on the storage system because a key problem is competition for access to the same file from multiple processes.
@@ -91,6 +92,16 @@ In order to identify the performance bottlenecks for our Map-Reduce Job, we have
 We also compared a subset of systems with an MPI-based implementation (using mpi4py) in order to better understand the effect of using a high-level approach such as the Dask parallel library compared to a lower level one; in particular, we tried to identify possible underlying factors that may lead to low performance. 
 In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
+
+Methods
+=======
+
+The data files consist of a topology file (in CHARMM PSF format) and a trajectory (DCD format); they are available from dropbox (`adk4AKE.psf`_ and `1ake_007-nowater-core-dt240ps.dcd`_). 
+Files in XTC and NetCDF formats are generated from the DCD on the fly.
+To avoid operating system caching, files are copied and only used once for each benchmark.
+We tested libraries in the following versions: MDAnalysis 0.15.0, Dask 0.12.0 (also 0.13.0), Distributed_ 1.14.3 (also 1.15.1), and NumPy 1.11.2 (also 1.12.0) :cite:`VanDerWalt2011`.
+As computational load we implement the calculation of the root mean square distance of the |Calpha| atoms of the protein adenylate kinase when it fitted to a reference structure using an optimal rigid body superposition, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`. The code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library .
+
 
 
 Results and Discussion
@@ -365,11 +376,9 @@ References
 .. citations
 
 
-.. _`SPIDAL library`: http://spidal.org
 .. _MDAnalysis: http://mdanalysis.org
 .. _Dask: http://dask.pydata.org
-.. _Distributed: https://distributed.readthedocs.io/
-.. _NumPy: http://numpy.scipy.org/
+.. _distributed: https://distributed.readthedocs.io/
 .. _`10.6084/m9.figshare.4695742`: https://doi.org/10.6084/m9.figshare.4695742
 .. _`adk4AKE.psf`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AAAL5eP1vrn0tK-67qVDnKeua/Trajectories/equilibrium/adk4AKE.psf
 .. _`1ake_007-nowater-core-dt240ps.dcd`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AABSaNJ0fRFgY1UfxIH_jWtka/Trajectories/equilibrium/1ake_007-nowater-core-dt240ps.dcd
