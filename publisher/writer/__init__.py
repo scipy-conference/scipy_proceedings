@@ -61,10 +61,9 @@ class Translator(LaTeXTranslator):
         try:
             self.active_table.set_table_style('booktabs')
         except TypeError:
-            raise("You are running into an error because you are using docutils "
-                  "version {}, instead please install docutils version {}".format(
-                      dc.__version__, '0.12.0'
-                      )
+            raise TypeError(
+                  "You are running into an error because you are using docutils "
+                  "version {}, instead please install docutils version {}".format(dc.__version__, '0.12.0')
                   )
 
     def visit_docinfo(self, node):
