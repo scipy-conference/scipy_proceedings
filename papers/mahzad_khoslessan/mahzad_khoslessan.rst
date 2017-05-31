@@ -210,7 +210,6 @@ As can be seen from the results, due to different reasons, some tasks (so-called
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
 
 
-
 Challenges for Good HPC Performance
 -----------------------------------
 
@@ -254,6 +253,19 @@ Figures [] and [] show the speed up and I/O time plots obtained for XTC file for
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for decresing IO time.
 However, we are still seeing these stragglers and the overal speed-up is not improved.  
 
++-------------------------------------------+--------------------------------------------+-------------------------------------------+
+| .. image:: figs/speed-up2-dist-DCD600.pdf |.. image:: figs/speed-up2-dist-XTC600.pdf   |.. image:: figs/speed-up2-dist-NCDF600.pdf |
+|    :scale: 50 %                           |   :scale: 50 %                             |   :scale: 50 %                            |
+|    :alt: alternate text                   |   :alt: alternate text                     |   :alt: alternate text                    |
+|    :align: left                           |   :align: center                           |   :align: right                           |
++-------------------------------------------+--------------------------------------------+-------------------------------------------+
+|                                              .. image:: figs/legend2.png                                                           |
+|                                                 :scale: 50 %                                                                       |
+|                                                 :align: center                                                                     |
++-------------------------------------------+--------------------------------------------+-------------------------------------------+
+|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file formats          |
++-------------------------------------------+--------------------------------------------+-------------------------------------------+
+
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -266,11 +278,71 @@ As can be seen, we are still seeing these stragglers and the overal speed-up is 
 In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about a task and to also validate our observationis obtained from web-interface. 
 The results from scheduler pluging is described in the following section.
 
+Examining Scheduler Throughput
+------------------------------
+
+An experiment were executed with Dask Schedulers (Multithreaded, Multiprocessing and Distributed) on Stampede. In each run a total of 100000 zero workload tasks were executed. Figure :ref:`daskThroughputvsScheduler` shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node. Each value is the mean throughput value of several runs for each Scheduler. 
+
+.. figure:: figs/daskThroughputvsScheduler.pdf
+   :scale: 50%
+   :figclass: bht
+
+   Dask Throughput on a single node vs Scheduler type. X axis is time and Y axis is the number of tasks that were executed in a second :label:`daskThroughputvsScheduler`
+
+Our understanding is that the most efficient Scheduler is the Distributed Scheduler, especially when there is one worker process for each available core. Also, the Distributed with just one worker process and a number of threads equal to the number of available cores is still able to schedule and execute these 100000 tasks. The Multiprocessing and Multithreading Schedulers have similar behavior again, but need significantly more time to finish compared to the Distributed.
+
+Figure :ref:`daskThroughputvsNodes` shows the Distributed scheduler's throughput over time when the number of Nodes increases. Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
+
+.. figure:: figs/daskThroughputvsNodes.pdf
+   :scale: 50%
+   :figclass: bht
+
+   Dask Throughput vs Number of Nodes. X axis is time and Y axis is the number of tasks that were executed in a second. :label:`daskThroughputvsNodes`
+
+By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
+Figure :ref:`daskThroughputvsNodes16proc` shows the same execution with the Dask Cluster being setup to have one worker process per core.
+
+.. figure:: figs/daskThroughputvsNodes16proc.pdf
+   :scale: 50%
+   :figclass: bht
+
+   Dask Throughput vs Number of Nodes. X axis is time and Y axis is the number of tasks that were executed in a second :label:`daskThroughputvsNodes16proc`
+
+In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughputvsNodes`, thus it is not clear what is the effect of the extra nodes. Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
+
+ 
 Scheduler Plugin Results
 ------------------------
 
-Examining Scheduler Throughput
-------------------------------
+In addition to Dask's web interface, we implemented a Dask Scheduler Plugin. This plugin captures task execution events from the scheduler and their respective timestamps. These captured profiles were later use to analyze the execution of XTC 100x and XTC 300x on Stampede. Figures :ref:`XTC300x64coresStampede` and :ref:`XTC100x64coresStampede` show two characteristic executions.
+In Figure :ref:`XTC300x64coresStampede` we can see that the delay in execution, on the right subfigure, is because of the specific cores and not something that is part of the framework. This is eliminated in the left where there were 3 times the number of blocks as cores
+
++--------------------------------------------+----------------------------------------------+
+| .. image:: figs/XTC300x64coresStampede.png |.. image:: figs/XTC300x64coresStampede192.png |
+|    :scale: 50 %                            |   :scale: 50 %                               |
+|    :alt: alternate text                    |   :alt: alternate text                       |
++--------------------------------------------+----------------------------------------------+
++--------------------------------------------+----------------------------------------------+
+|  Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with| 
+|  64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y    | 
+|  axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light |
+|  Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede`   |
++--------------------------------------------+----------------------------------------------+
+
+ In Figure :ref:`XTC100x32coresStampede`, the two subplots are not that different. This is mainly because the overall execution time of the tasks is not that big. Nonetheless, there is some small performance gain when there are 3 times more blocks than cores.
+
++--------------------------------------------+----------------------------------------------+
+| .. image:: figs/XTC100x64coresStampede.png |.. image:: figs/XTC100x64coresStampede192.png |
+|    :scale: 50 %                            |   :scale: 50 %                               |
+|    :alt: alternate text                    |   :alt: alternate text                       |
++--------------------------------------------+----------------------------------------------+
++--------------------------------------------+----------------------------------------------+
+|  Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with| 
+|  64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y    | 
+|  axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light |
+|  Green are the Get Item tasks and Red is data transfer. :label:`XTC100x64coresStampede`   |
++--------------------------------------------+----------------------------------------------+
+
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
