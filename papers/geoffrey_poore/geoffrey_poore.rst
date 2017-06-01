@@ -67,14 +67,14 @@ scientific and technical computing.
 This paper introduces BespON [BespON]_, a new human-editable data format
 focused on scientific and technical features, and the ``bespon`` package
 for Python [pkg:bespon]_.  An overview of INI-style files, JSON, YAML, and
-TOML provides the motivation for the creation of BespON as well as context
+TOML provides the motivation for BespON as well as context
 for its particular feature set.
 
 
 INI-style formats
 =================
 
-Python's ``configparser`` package [py:configparser]_ supports a simple config
+Python's ``configparser`` module [py:configparser]_ supports a simple config
 format similar to Microsoft Windows INI files.  For example::
 
     [key]
@@ -88,19 +88,19 @@ trailing whitespace (including a final newline) is stripped, so storing
 precise chunks of text for tasks such as templating is difficult.  Another
 issue is that the format is not strictly specified, so that the Python 2 and
 Python 3 versions of the package are not fully compatible.  This was a primary
-reason for ``configparser`` being rejected as a possible format for storing
-Python build system requirements in PEP 518 [PEP518]_.
+reason for ``configparser`` being rejected in PEP 518 [PEP518]_ as a possible
+format for storing Python build system requirements.
 
 A more powerful and sophisticated INI-style format is provided by the
 ``configobj`` package [pkg:configobj]_.  All values are still strings as with
 ``configparser``, but the package also provides a validator that allows the
 required format of a config file to be specified, along with type conversions
 for each data element.  Multiline triple-quoted string literals are supported,
-though they are significantly limited since they lack backslash-escapes and
+though they are somewhat limited since they lack backslash-escapes and
 thus cannot contain triple-quoted strings or represent special characters
 using escape sequences.  One particularly nice feature of ``configobj`` is
 round-trip support.  Data can be loaded, modified, and saved, while preserving
-order and comments.
+the order of values and retaining comments.
 
 
 JSON
@@ -123,8 +123,9 @@ as verbose (for example, [PEP518]_).  For scientific and technical tasks, its
 lack of an integer type and of floating-point Infinity and NaN can be an
 issue.  In fact, Python's standard library JSON implementation [py:json]_
 explicitly does not comply with the JSON specification by adding extensions
-for integer, Infinity, and NaN support.  Another drawback is that a JSON
-string must be on a single line; there are no multiline string literals.
+for integer, Infinity, and NaN support, and enabling these by default.
+Another drawback is that a JSON string must be on a single line; there are no
+multiline string literals.
 
 JSON's simplicity and limitations are an advantage when it comes to
 round-tripping data.  Since there are no comments, a primary source of
@@ -150,11 +151,21 @@ marks or braces::
 
 ..
 
-YAML's powerful serialization capabilities can actually be a disadvantage by
+The serialization capabilities of YAML can actually be a disadvantage by
 blurring the distinction between data and executable code.  PyYAML
 [pkg:PyYAML]_, perhaps the most common Python YAML implementation, can execute
 arbitrary code during deserialization unless the special ``yaml.safe_load()``
-function is used.  YAML libraries in other languages can exhibit similar
+function is used.  For example, during YAML loading it is possible to run the
+default Python and include its ``--help`` output:
+
+.. code-block:: pycon
+
+   >>> yaml.load("""
+   help:  !!python/object/apply:subprocess.check_output
+          [['python', '--help']]
+   """)
+
+YAML libraries in other languages can exhibit similar
 behavior by default; YAML deserialization was the source of a major security
 vulnerability in Ruby on Rails in 2013 [RoR]_.
 
@@ -172,7 +183,7 @@ the treatment of ``Yes``, ``No``, ``On``, ``Off``, and their lowercase and
 titlecase variants as boolean values was removed.  However, since PyYAML is
 still based on the version 1.1 specification, the impact of version 1.2 for
 Python users has been minimal, at least until the ``ruamel.yaml`` package
-[pkg:ruamel.yaml]_ defaulted to version 1.2 in 2016.
+[pkg:ruamel.yaml]_ defaulted to the version 1.2 specification in 2016.
 
 YAML does provide multiline string literals.  For example::
 
@@ -182,8 +193,8 @@ YAML does provide multiline string literals.  For example::
 
 The multiline string begins on the line after the pipe ``|``, and contains all
 text indented relative to the parent node (``key`` in this case).  This is a
-simple and efficient approach with minimal syntax for short snippets of
-text, but it can become complex if whitespace or indentation are important.
+simple and efficient approach with minimal syntax for short snippets of text.
+It can become complex, however, if whitespace or indentation are important.
 Since the multiline string has no explicit ending delimiter, by default all
 trailing whitespace except for the final line break is stripped.  This may be
 customized by using ``|-`` (remove all trailing whitespace, including the last
@@ -194,11 +205,13 @@ by anything).  Similarly, there are complications if all lines of the string
 contain leading whitespace or if the first line of the string is indented
 relative to the subsequent lines.  In such cases, the pipe ``|`` must be
 followed immediately by an integer that specifies the indentation of the
-string relative to the parent node (``key`` in the example).  All line breaks
-are normalized to line feeds (``\n``).  Because backslash-escapes are not
-allowed in multiline strings, there is no way to wrap long lines, to specify
-other line break characters explicitly, or to use code points that are
-prohibited as literals in YAML files (for example, most control characters).
+string relative to the parent node (``key`` in the example).
+
+All line breaks in multiline strings are normalized to line feeds (``\n``).
+Because backslash-escapes are not allowed in multiline strings, there is no
+way to wrap long lines, to specify other line break characters explicitly, or
+to use code points that are prohibited as literals in YAML files (for example,
+most control characters).
 
 PyYAML provides no round-tripping support.  The ``ruamel.yaml`` package does
 provide round-trip features.  It can maintain comments, key ordering, and most
@@ -218,17 +231,17 @@ could be represented as::
     subkey = "value"
 
 TOML supports dicts (only with string keys), lists (only with all elements
-being of the same type), strings, floats, integers, and booleans, plus date
+of the same type), strings, floats, integers, and booleans, plus date
 and time data.  There are multiline string literals, both raw (delimited by
 ``'''``) and with backslash-escapes (delimited by ``"""``).  Though these are
 very similar to Python multiline strings, they do have the difference that
 a line feed (``\n``) *immediately* following the opening delimiter is
 stripped, while it is retained otherwise, even if only preceded by a space.
 
-String keys may be unquoted if they fit the pattern for an ASCII identifier,
+String keys may be unquoted if they match the pattern for an ASCII identifier,
 and sections support what might be called "key paths."  This allows nested
-data to be represented in a very compact manner without brackets and braces or
-significant indentation.  For example,
+data to be represented in a very compact manner without either brackets and
+braces or significant indentation.  For example:
 
 ::
 
@@ -255,7 +268,7 @@ strings cannot be indented for clarity, because any indentation becomes part
 of the literal string content.  There is no built-in support for any form of
 encoded binary data, and no extension mechanism for unsupported data types.
 These limitations may make sense in a format whose expanded acronym contains
-"obvious" and "minimal", but they do make TOML less appropriate for some
+"obvious" and "minimal," but they do make TOML less appropriate for some
 projects.
 
 In addition to these issues, some current features have the potential to be
@@ -265,11 +278,11 @@ confusing.  Inline dicts of the form
 
     {"key" = "value"}
 
-are supported, but they are not permitted to break over multiple lines, while
-inline lists *are* permitted to span multiple lines.  When unquoted ``true``
-appears as a dict key, it is a string, because only strings are allowed as
-keys.  However, when it appears as a value, it is boolean true.  Thus, ``true
-= true`` is a mapping of a string to a boolean.
+are supported, but they are not permitted to break over multiple lines.
+Meanwhile, inline lists *are* permitted to span multiple lines.  When unquoted
+``true`` appears as a dict key, it is a string, because only strings are
+allowed as keys.  However, when it appears as a value, it is boolean true.
+Thus, ``true = true`` is a mapping of a string to a boolean.
 
 Two of the more popular TOML implementations for Python are the ``toml``
 package [pkg:toml]_ and the ``pytoml`` package [pkg:pytoml]_, which is being
