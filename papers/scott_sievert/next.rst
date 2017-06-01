@@ -33,7 +33,7 @@ NEXT: A system for crowdsourcing active machine learning
 
 .. class:: abstract
 
-    At UW–Madison, we have created a new machine learning system called NEXT
+    We have created a new machine learning system called NEXT
     (http://nextml.org) that addresses the problems inherent in collecting
     crowdsoured data with "adaptive" collection algorithms. NEXT is routinely
     used to collect millions of responses from thousands of users in machine
@@ -53,30 +53,29 @@ NEXT: A system for crowdsourcing active machine learning
 Introduction
 -----------------
 
-The convergence of mobile electronics and the ubiquitousness of the Internet
-has enabled crowdsourcing which allows researchers to tap the collective "wisdom
-of the crowd" by asking many questions to a collection of people (i.e., a
-crowd). Data collection for crowdsourcing generally includes scenarios where
-fairly simple questions are asked. One common example might involve asking users to
-determine the locations in an image that contain a certain object (e.g., a car
-is present in the upper left) to protect against internet bots.
+The ubiquitousness of the Internet has enabled crowdsourcing, which gives fast
+access to unprecedented amounts of human judgment data.  Tapping into the
+"wisdom of the crowd" includes scenarios where questions are asked about simple
+cognitive tasks. For example, users may be asked to determine the locations in
+an image that contain a certain object (e.g., a car is present in the upper
+left) to protect against internet bots.
 
 Crowdsourcing enables the collection of a large amount of data, which
 necessitates new methods to manage, store and process these data. For example,
 new methods of recognizing objects in unseen images
-:cite:`krizhevsky2012imagenet` (e.g., recognizing cars in an unseen image) have
-been motivated in part by a popular dataset that contains many images with
-object locations and labels generated via crowdsourcing
+:cite:`krizhevsky2012imagenet` (e.g., recognizing whether an image contains a
+car) have been motivated in part by a popular dataset that contains many images
+with object locations and labels generated via crowdsourcing
 :cite:`deng2009imagenet`. New optimization methods to aid the generation of
 these object recognition methods have been generated and analyzed
 :cite:`bottou2010large`, as well as improved :cite:`recht2011hogwild`.
 
-The cost of collecting crowdsourcing responses has become significant, but data
-collection is often done without consideration to the cost of `how` the data
-are collected.  Human time costs money, and time is required to respond to a
-crowdsourcing query. Minimizing the number of queries required would have very
-practical benefits: higher quality results with fewer responses, and ultimately
-a shorter time to a particular result.
+The cost of collecting crowdsourcing responses can be significant – especially
+in problem domains where expert input is required. Minimizing the number of
+queries required has large practical benefits: higher quality results with
+fewer responses, and ultimately a shorter time to a particular result.  To
+obtain these benefits, a fundamental change in the method of data collection is
+required.
 
 At UW–Madison, we have developed a crowdsourcing data collection and analysis
 tool that efficiently collects crowdsourced data :cite:`jamieson2015next`. In
