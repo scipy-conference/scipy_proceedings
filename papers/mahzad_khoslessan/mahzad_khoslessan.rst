@@ -59,7 +59,7 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 
 .. class:: Keywords
 
-   MDAnalysis, High Performance Computing, Dask, Map-Reduce, MPI
+   MDAnalysis, High Performance Computing, Dask, Map-Reduce, MPI for Python
 
 
 Introduction
@@ -158,43 +158,18 @@ Also we anticipate that, for heavier analyses that have higher compute time per 
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
    :label:`fig:IO-distributed`
 
-<<<<<<< HEAD
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-| .. image:: figs/IO-time-DCD300.pdf      |.. image:: figs/IO-time-XTC300.pdf       |.. image:: figs/IO-time-NCDF300.pdf       |
-|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-|    :align: left                         |   :align: center                        |   :align: right                          |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-|                                              .. image:: figs/legend1.png                                                     | 
-|                                                 :scale: 50 %                                                                 |
-|                                                 :align: center                                                               |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-| .. image:: figs/IO-time-dist-DCD600.pdf |.. image:: figs/IO-time-dist-XTC600.pdf  |.. image:: figs/IO-time-dist-NCDF600.pdf  |
-|    :scale: 50 %                         |   :scale: 50 %                          |   :scale: 50 %                           |
-|    :alt: alternate text                 |   :alt: alternate text                  |   :alt: alternate text                   |
-|    :align: left                         |   :align: center                        |   :align: right                          |
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-|                                              .. image:: figs/legend2.png                                                     |
-|                                                 :scale: 50 %                                                                 |
-|                                                 :align: center                                                               |
-+------------------------------------------------------------------------------------------------------------------------------+
-|  Comparison of IO time between top) 300x (multiprocessing) and bottom) 600X (distributed) trajectory for all file format     |                       
-+-----------------------------------------+-----------------------------------------+------------------------------------------+
-=======
->>>>>>> afdf5bb79aa850e319d34da4def07661bdf1e5a7
-
 
 Effect of File Format
 ---------------------
 
-Figure :ref:`fig:speedup-600x`  shows speedups for 600x trajectories for the distributed scheduler as an example of using HPC resources for a big trajectory.
+Figure :ref:`fig:speedup-300x` and :ref:`fig:speedup-600x` shows speedups for 300x and 600x trajectories for the multiprocessing and distributed scheduler as an example of using HPC resources for a big trajectory.
 The DCD file format does not scale at all by increasing parallelism across different cores (Figure :ref:`fig:speedup-600x` A).
 This is due to the overlapping of the data access requests from different processes.
-XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for distributed scheduler.
+Our study showed that SSDs can be very helpful and can lead to better performance for all file formats especially DCD file format (Figure :ref:`fig:speedup-300x`).  
+XTC file format express reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for both multiprocessing and distributed scheduler.
 The NCDF file format scales very well up to 8 cores for all trajectory sizes.
 For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
-Therefore, it was expected to achieve speed up, across parallelism up to 50 cores
+Therefore, it is expected to achieve speed up, across parallelism up to 50 cores
 However, the XTC format only scales well up to 20 cores.
 Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes (Figure :ref:`fig:timing-XTC-600x`).
 This difference increases with increase in trajectory size for all file formats for all machines (not shown here).
@@ -208,7 +183,7 @@ The difference between job execution time and total compute and I/O time measure
 As seen from the tests performed on our local machines, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
-As seen in Figure `fig:task-stream-comet`, for SDSC Comet, there is a very small difference between maximum total compute and I/O time measured using the web interface and job execution time.
+As seen in Table :label:`tab:time-comparison` and Figure :ref:`fig:task-stream-comet`, for SDSC Comet (:math:`N_\text{cores} = 54`), there is a very small difference between maximum total compute and I/O time measured using the web interface and job execution time.
 However, there is a considerable difference between maximum total compute and I/O time measured using the web interface and our code.
 There is one process which is much slower as compared to others. 
 As can be seen from the results, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job and as a result affect the overal performance.
@@ -222,17 +197,31 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
    :label:`fig:timing-XTC-600x`
 
+.. figure:: figs/panels/speedup-300x.pdf
+
+   Speed-up for the analysis of the 300x trajectory on HPC resources using dask multiprocessing.
+   The dashed line shows the ideal limit of strong scaling.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and *local* workstations with NFS).
+   **A** CHARMM/NAMD DCD.
+   **B** Gromacs XTC.
+   **C** Amber netCDF.
+   :label:`fig:speedup-300x`
 
 .. figure:: figs/panels/speedup-600x.pdf
 
    Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed.
    The dashed line shows the ideal limit of strong scaling.
-   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and *local* workstations with NFS).
    **A** CHARMM/NAMD DCD.
    **B** Gromacs XTC.
    **C** Amber netCDF.
    :label:`fig:speedup-600x`
 
+
+.. figure:: figs/XTC600-54c-Web-In-Comet.png
+
+   Task stream plots showing the fraction of time spent on different computations by each worker obtained using dask web interface (tested on SDSC Comet using :math:`N_\text{cores} = 54` for 600X trajectory and XTC file format-Green bars represent time spent on RMSD calculations)
+   :label:`fig:task-stream-comet`
 
 .. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
    :class: w
@@ -284,29 +273,67 @@ Effect of Lustre Striping
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
-This is strongly affecting our results since our compute per frame is not heavy and as a result the overlapping of data requests is more frequent.
+This is strongly affecting our results since our compute per frame is not heavy and therefore the overlapping of data requests is more frequent.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
-However, when extending to more than one node, even XTC files were affected by this as is also shown in the previous sections.
+However, when extending to more than one node, even XTC files are affected by this, as is also shown in the previous sections.
 In Lustre, a copy of the shared file can be in different physical storage devices (OSTs). 
 Single shared files can have a stripe count equal to the number of nodes or processes which access the file.
-In the present study we set the stripe count equal to three which is equal to the number of nodes used for our benchmark.
+In the present study, we set the stripe count equal to three which is equal to the number of nodes used for our benchmark.
 This may be helpful to improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests will decrease.
-Figures [] and [] show the speed up and I/O time plots obtained for XTC file format (600X) when striping is activated. 
-As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for decresing IO time.
-However, we are still seeing these stragglers and the overal speed-up is not improved.  
+Figure :ref:`fig:speedup-IO-600x-striping` show the speed up and I/O time per frame plots obtained for XTC file format (600X) when striping is activated. 
+As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
+However, based on the timing plots shown in Figure :ref:`fig:timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as aresult the overal speed-up is not improved as compared to what we had in Figure :ref:`fig:speedup-600x`.  
+
+.. figure:: figs/panels/speed-up-IO-600x-striping.pdf
+
+   **A** Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed with strip count of three.
+   The dashed line shows the ideal limit of strong scaling.
+   **B** Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, all using Lustre with strip count of three as the parallel file system).
+   :label:`fig:speedup-IO-600x-striping`
+
+
+.. figure:: figs/panels/timing-XTC-600x-striping.pdf
+   
+   Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using dask distributed.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, all using Lustre with stripe count of three as the parallel file system and *local* workstations with NFS).
+   **A** Total time to solution (wall clock), :math:`t_N` for :math:`N` trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
+   **B** Sum of the measured I/O time |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
+   **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
+   :label:`fig:timing-600x-striping`
 
 
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 One useful way to robust our code to uncertainty in computations is to submit many more tasks than the numer of cores. 
-This may allow Dask to load balance appropriately, and as a result avoiding the stragglers.
-In order for this we set the number of tasks to be three times the number of workers. 
+This may allow Dask to load balance appropriately, and as a result cover the extra time when there are some stragglers.
+In order for this, we set the number of tasks to be three times the number of workers (:math:`N_\text{Blocks} = 3*N_\text{cores}`). 
 Striping is also activated and is set to three which is also equal to number of nodes.
-Figures [] and [] show the speed up and I/O time plots obtained for XTC file format (600X).
-As can be seen, we are still seeing these stragglers and the overal speed-up is not improved.
-In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about a task and to also validate our observationis obtained from web-interface. 
+Figures :ref:`fig:speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (600X).
+As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
+However, based on the timing plots shown in Figure :ref:`fig:timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as aresult the overal speed-up is not improved as compared to what we had in Figure :ref:`fig:speedup-600x`.
+In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about each task and to also validate our observationis from Dask web-interface. 
 The results from scheduler pluging is described in the following section.
+
+.. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
+
+   **A** Speed-up for the analysis of the 600x trajectory on HPC resources using dask distributed with strip count of three.
+   The dashed line shows the ideal limit of strong scaling.
+   **B** Comparison of IO time between 600x trajectory sizes using dask distributed on one to three nodes.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, and our local machines, all using Lustre with strip count of three as the parallel file system).
+   :math:`N` number of blocks is three times the number of processes :math:`N = 3*N_\text{cores}`
+   :label:`fig:speedup-IO-600x-oversubscribing`
+
+
+.. figure:: figs/panels/timing-XTC-600x-oversubscribing.pdf
+
+   Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using dask distributed. The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, and our local machines, all using Lustre with stripe count of three as the parallel file system and *local* workstations with NFS).
+   **A** Total time to solution (wall clock), :math:`t_N` for :math:`N` trajectory blocks using :math:`N = 3*N_\text{cores}` CPU cores.
+   **B** Sum of the measured I/O time |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
+   **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
+   :label:`fig:timing-600x-oversubscribing`
+
 
 Examining Scheduler Throughput
 ------------------------------
@@ -368,9 +395,6 @@ This is eliminated when cores are oversubscribed by a factor of three (i.e., thr
    Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede`   
 
 
-
-
-
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
 --------------------------------------------------------------------------------------
 
@@ -379,6 +403,9 @@ Lustre striping improves I/O time; however, the job computation is still delayed
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using MPI-based implementation.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or the environment itself.
 
+
+Performance of our Map-reduce job with a different task than RMSD calculation
+-----------------------------------------------------------------------------
 
 Conclusions
 ===========
