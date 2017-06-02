@@ -1,6 +1,6 @@
 :author: Jaime Arias
 :email: jaime.arias@inria.fr
-:institution: Inria, MISTIS, Grenoble University, LJK, Grenoble, France
+:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
 :corresponding:
 :equal-contributor:
 
@@ -12,28 +12,28 @@
 :author: Michel Dojat
 :email: michel.dojat@univ-grenoble-alpes.fr
 :institution: Inserm, U1216, F-38000 Grenoble, France
-:institution: Univ. Grenoble Alpes, Grenoble Institut des Neurosciences, GIN, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, GIN, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Florence Forbes
 :email: florence.forbes@inria.fr
-:institution: Inria, MISTIS, Grenoble University, LJK, Grenoble, France
+:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Aina Frau-Pascual
 :email: aina.frau-pascual@inria.fr
-:institution: Inria, MISTIS, Grenoble University, LJK, Grenoble, France
+:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Thomas Perret
 :email: thomas.perret@grenoble-inp.org
-:institution: Inria, MISTIS, Grenoble University, LJK, Grenoble, France
+:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
-:author: Jan Warnking
+:author: Jan M. Warnking
 :email: jan.warnking@univ-grenoble-alpes.fr
 :institution: Inserm, U1216, F-38000 Grenoble, France
-:institution: Univ. Grenoble Alpes, Grenoble Institut des Neurosciences, GIN, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, GIN, F-38000 Grenoble, France
 :equal-contributor:
 
 :bibliography: biblio
