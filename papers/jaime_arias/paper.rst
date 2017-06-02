@@ -292,6 +292,77 @@ and how to use PyHRF.
 Example of Use
 --------------
 
+To illustrate the use of PyHRF, we will describe each step needed for the
+analysis of BOLD data. A jupyter notebook containing the complete code is
+available at http://www.pyhrf.org/scipy2017_notebook.
+
+
+Getting fMRI BOLD Data
+~~~~~~~~~~~~~~~~~~~~~~
+
+First of all, we need to get BOLD data. In this example, we will analyze the
+dataset used in :cite:`Gorgolewski2013`. This dataset (``ds000114``) is open
+shared and it can be found at https://openfmri.org/dataset/ds000114/. For that,
+we implemented the method ``get_from_openfmri`` that uses the library
+``fetchopenfmri`` to download datasets from the site ``openfmri``.
+
+.. code-block:: python
+
+    >>> dataset_path = get_from_openfmri('114', '~/data')
+    Dataset ds000114 already exists
+    /home/jariasal/data/openfmri/ds000114_R2.0.1
+
+Briefly, in this dataset ten healthy subjects in their fifties were scanned
+twice using an identical protocol. This protocol consists of five task-related
+fMRI time series: finger, foot and lip movement; overt verb generation; covert
+verb generation; overt word repetition; and landmark tasks. For the sake of
+simplicity, we will focus only on motor tasks (*i.e.,* finger, foot and lip
+movement). Fig. :ref:`paradigm` shows the protocol containing only the three
+tasks mentioned above. As we can see, in the experimental paradigm the tasks do
+not overlap each other and the stimuli are presented to the subject during
+a certain time (*i.e.,* block paradigm).
+
+.. figure:: figures/paradigm.png
+   :align: center
+   :figclass: htb
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`paradigm`
+
+
+
+fMRI BOLD Preprocessing
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Once we have the BOLD volumes, we need to
+
+
+PyHRF Analysis
+~~~~~~~~~~~~~~
+
+
+.. figure:: figures/nipype_workflow.png
+   :align: center
+   :figclass: htb
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`nipype`
+
+
+.. figure:: figures/bold.png
+   :align: center
+   :figclass: htb
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`bold`
+
+
+.. figure:: figures/willard.png
+   :align: center
+   :figclass: htb
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`willard`
+
+
+
+
 
 Concluding Remarks
 ------------------
