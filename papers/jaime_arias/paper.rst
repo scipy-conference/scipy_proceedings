@@ -209,15 +209,16 @@ PyHRF
 
 
 PyHRF (http://www.pyhrf.org) is an open source tool implemented in Python that
-allows to jointly detect activation and estimate (JDE) the so called
-hemodynamic response function (HRF) :cite:`Makni08`, which gives the temporal
-changes in the BOLD effect after brain activity.  This estimation is not easy
-in a voxel-wise manner :cite:`Ciuciu03`, and a spatial structure was added to
-JDE :cite:`Vincent10` in order to have a more robust estimation. From this
-point, HRF estimation in JDE is parcel-wise and the input of a parcellation is
-needed.  However, this added a huge computational load to the method, and led
-to the development of a faster method to deal with the parameter estimation:
-a variational expectation maximization (VEM) solution :cite:`Chaari13`.
+allows to jointly detect activation and estimate (JDE) the hemodynamic response
+function (HRF) :cite:`Makni08`, which gives the temporal changes in the BOLD
+effect after brain activity.  This estimation is not easy in a *voxel-wise*
+manner :cite:`Ciuciu03`, and a spatial structure was added to JDE
+:cite:`Vincent10` in order to have a more robust estimation. In this regard,
+HRF estimation in JDE is *parcel-wise* and the input of a parcellation is
+needed.  However, this added a huge computational load to the method, leading
+to the development of a faster method to deal with the parameter estimation.
+Thus, a variational expectation maximization (VEM) solution :cite:`Chaari13`
+was implemented.
 
 
 .. In fact, PyHRF is composed of some C-extensions that handle computationally
@@ -234,7 +235,7 @@ a variational expectation maximization (VEM) solution :cite:`Chaari13`.
 .. .. [#] Nibabel official website: http://nipy.org/nibabel/
 
 
-Hence, JDE aims at improving activation detection through capturing the correct
+JDE aims at improving activation detection by capturing the correct
 hemodynamics, since using the wrong HRF function could hide existing
 activations. The use of a canonical HRF is usually sufficient for activation
 detection. However, HRF functions have been found to have different shapes in
@@ -246,18 +247,16 @@ a block-design setting with visual, auditory and motor experimental conditions.
 The parcels correspond to regions of the brain that are known to activate with
 these experimental conditions.
 
-Standard methods as GLM with the posterior classical statistics applied, give
+Standard methods, as GLM, with the posterior classical statistics applied, give
 statistical parametric maps (SPM) that describe the significance of the
 activation in each region. JDE is a probabilistic method and estimates, for
 each parameter, posterior probability functions. For this reason, we can
-compute posterior probability maps (PPM) from the outputs of PyHRF. These PPM
+compute posterior probability maps (PPMs) from the outputs of PyHRF. These PPMs
 are not directly comparable to the classical SPM maps, but give a similar
-measure of significance of activation.
-
-In Fig. :ref:`spmvsppm` we show the SPM and PPM maps for a visual experimental
-condition in the same data used for Fig. :ref:`hrfs`. Note that we are showing
-it in negative logarithmic scale. PyHRF uses the package Nilearn
-(http://nilearn.github.io) to generate the beautiful images presented in this
+measure of significance of activation. For instance, in Fig. :ref:`spmvsppm` we
+show the SPM and PPM maps for a visual experimental condition in the same data
+used for Fig. :ref:`hrfs`. We use the package Nilearn
+(http://nilearn.github.io) to generate the beautiful figures presented in this
 document.
 
 
@@ -275,11 +274,12 @@ document.
 
 
 In Fig. :ref:`pyhrf` we present the inputs and the outputs of PyHRF for the
-analyzing BOLD data. It needs as inputs the data volume (BOLD), the
+analysis of BOLD data. It needs as inputs the data volume (BOLD), the
 experimental paradigm, and a parcellation of the brain. After running the JDE
 algorithm, the outputs will consist of HRF functions per parcel, BOLD effect
-maps per experimental condition, and posterior probability maps PPM per
-condition.
+maps per experimental condition, and posterior probability maps (PPMs) per
+condition. In the next section, we will describe in more detail these elements
+and how to use PyHRF.
 
 .. figure:: figures/pyhrf4bold.pdf
    :align: center
@@ -287,6 +287,10 @@ condition.
    :figclass: w
 
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrf`
+
+
+Example of Use
+--------------
 
 
 Concluding Remarks
