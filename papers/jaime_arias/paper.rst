@@ -47,26 +47,19 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
    Functional Magnetic Resonance Imaging (fMRI) is a neuroimaging technique
    that allows the non-invasive study of brain functions. It is based on the
    hemodynamic changes induced by cerebral activity following sensory or
-   cognitive stimulation. The measured MR signal depends on the function of
-   blood oxygenation level (BOLD signal) which is related to brain activity:
+   cognitive stimulation. The measured signal depends on the function of blood
+   oxygenation level (BOLD signal) which is related to brain activity:
    a decrease in deoxyhemoglobin induces an increase in BOLD signal. In fact,
    this signal is convoluted by the Hemodynamic Response Function (HRF) whose
    exact form is unknown and depends on various parameters (age, brain region,
    physiological conditions).
 
-   Most used open source libraries for the analysis of fMRI data (*e.g.,* SPM,
-   FSL) consider a priori the HRF as constant in brain and the same for all
-   subjects. However, several studies show that the HRF changes across
-   different regions of the brain and between subjects. Assuming a constant HRF
-   can therefore be responsible for a large number of false negatives and
-   degrade the reliability of the results.
-
-   In this paper, we present PyHRF, a software to analyze fMRI data using
+   In this paper we present PyHRF, a software to analyze fMRI data using
    a joint detection-estimation (JDE) approach. It jointly detects cortical
    activation and estimates the HRF. In contrast to existing tools, PyHRF
-   estimates the HRF instead of considering it constant, improving thus the
-   reliability of the results. Here, we lay out the architecture, concept and
-   implementation of the package and present some use cases to show that PyHRF
+   estimates the HRF instead of considering it constant in brain, improving
+   thus the reliability of the results. Here, we present an overview of the
+   package and ilustrate its use with a real case in order to show that PyHRF
    is a tool suitable for non experts and clinicians.
 
 .. class:: keywords
@@ -88,10 +81,10 @@ BOLD :cite:`Ogawa:1990` reflects the changes in oxygen concentration in the
 blood. Briefly, when brain activity occurs, oxygen is locally consumed by
 neurons and its concentration in the blood decreases (see Fig.
 :ref:`boldchain`).  Therefore, an inflow of oxygenated blood is achieved to
-replenish the tissue, increasing blood oxygen concentration.  Deoxygenated
-blood causes locally magnetic distortions. Thus, BOLD signal is an indirect
-measure of cerebral activity based on physiological changes in oxygen
-consumption, cerebral blood flow and blood volume.
+replenish the tissue, increasing blood oxygen concentration. Deoxygenated blood
+causes locally magnetic distortions. Thus, BOLD signal is an indirect measure
+of cerebral activity based on physiological changes in oxygen consumption,
+cerebral blood flow and blood volume.
 
 .. figure:: figures/bold_chain.pdf
    :align: center
@@ -115,7 +108,7 @@ consumption, cerebral blood flow and blood volume.
 
 BOLD is non-invasive, non-ionizing, and gives access *in vivo* to brain
 activity with a relatively high spatial resolution. It is highly dependent of
-the hemodynamic response function (HRF) of the brain. It does not give access
+the hemodynamic response function (HRF) of the brain. BOLD does not give access
 to true physiological parameters such as cerebral blood flow or cerebral blood
 volume, but rather measures a mixture of these quantities that is difficult to
 untangle. In this regard, BOLD is a very interesting tool in neuroscience, but
@@ -127,7 +120,7 @@ states :cite:`Buxton:2013`, as it is the case of normal ageing
 :cite:`Cantin:2011` or Stroke :cite:`Attye:2014`.
 
 Most used open source libraries for the analysis of fMRI data (*e.g.,* SPM
-[#]_, FSL [#]_, AFNI [#]_) consider the HRF of the neuronal activity as
+[#]_, FSL [#]_) consider the HRF of the neuronal activity as
 a constant in all the brain and the same for all subjects. However, several
 works (see :cite:`Badillo13` for a survey) show that the HRF changes across
 different regions of the brain and other individuals, increasing thus the
@@ -141,8 +134,6 @@ above limitation by analyzing fMRI data using a joint detection-estimation
 
 .. [#] FSL official website: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/
 
-.. [#] AFNI official website: https://afni.nimh.nih.gov/download
-
 
 In the JDE approach, the detection of the cortical activation is achieved
 together with the estimation of the unknown HRF response by analyzing non
@@ -150,9 +141,14 @@ smoothed data.  This detection-estimation is calculated on different parcels of
 interest paving the cerebral volume.  Therefore, PyHRF allows to navigate the
 brain and to focus on the regions of interest during the experiment in order to
 visualize the activations and their temporal behavior through the estimated
-HRF. In the last years, efforts are made in terms of user-friendliness and
-usability of the PyHRF package to make it more easy to use by non experts and
-clinicians.
+HRF. In the last years, efforts have been made in terms of user-friendliness
+and usability of the PyHRF package to make it more easy to use by non experts
+and clinicians.
+
+Next, we present the PyHRF package. Then, we illustrate its use via a real
+example.  Finally, we conclude by discussing directions of current/future work.
+An online jupyter notebook containing the results presented here can be found
+at http://www.pyhrf.org/scipy2017_notebook.
 
 
 .. Background
