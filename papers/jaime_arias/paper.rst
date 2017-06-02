@@ -304,7 +304,8 @@ First of all, we need to get BOLD data. In this example, we will analyze the
 dataset used in :cite:`Gorgolewski2013`. This dataset (``ds000114``) is open
 shared and it can be found at https://openfmri.org/dataset/ds000114/. For that,
 we implemented the method ``get_from_openfmri`` that uses the library
-``fetchopenfmri`` to download datasets from the site ``openfmri``.
+``fetchopenfmri`` (https://github.com/wiheto/fetchopenfmri) to download
+datasets from the site ``openfmri``.
 
 .. code-block:: python
 
@@ -329,15 +330,27 @@ a certain time (*i.e.,* block paradigm).
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`paradigm`
 
 
-
 fMRI BOLD Preprocessing
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Once we have the BOLD volumes, we need to
+Once we have downloaded the BOLD volumes, we need to apply some transformations
+to the images in order to correct possible errors induced during the
+acquisition. For instance, a BOLD volume (*e.g.,* a whole brain) is usually not
+built at once but with a series of successively measured 2D slices. Each slice
+take some time to acquire, so slices are observed at different time points,
+leading to suboptimal statistical analysis.
 
-
-PyHRF Analysis
-~~~~~~~~~~~~~~
+We use the library ``Nipype`` (https://github.com/nipy/nipype) to define and
+apply our preprocessing pipeline. This library allows to use  robust tools,
+such as SPM and FSL, in a easy way. The proposed workflow (see Fig.
+:ref:`nipype`) starts by uncompressing the images since they are in
+a ``nii.gz`` format. After, it applies a *slice timing* in order to make appear
+that all voxels of the BOLD volume have been acquired at the same time. We then
+apply a *realignment* in order to correct head movements. Also, we apply
+a *coregistration* operation in order to have the anatomical image (high
+spatial resolution) in the same space as the BOLD images. Finally, we
+*normalize* our images in order to transform them into a standard space (a
+template).
 
 
 .. figure:: figures/nipype_workflow.png
@@ -345,6 +358,13 @@ PyHRF Analysis
    :figclass: htb
 
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`nipype`
+
+
+
+PyHRF Analysis
+~~~~~~~~~~~~~~
+
+
 
 
 .. figure:: figures/bold.png
