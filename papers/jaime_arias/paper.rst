@@ -360,6 +360,34 @@ template).
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`nipype`
 
 
+The pipeline described above is executed for the images of all subjects from
+the dataset (*i.e.,* 10 subjects). Our pipeline is executed on multiple
+processors since ``Nipype`` uses the library ``joblib``.
+
+.. code-block:: python
+
+    # Number of subjects
+    N_SUBJECTS = 10
+    SUBJECTS = ['sub-%02d' % i
+                for i in range(1,N_SUBJECTS+1)]
+
+
+We use the acquisition parameters in :cite:`Gorgolewski2013` to parameterize
+each preprocessing task. For instance, the number of slices for the volume, the
+time for acquiring all slices (TR), and the order in which they were acquired
+(*e.g.,* interleaved).
+
+
+.. code-block:: python
+
+    # Acquisition parameters
+    TR = 2.5
+    NUM_SLICES = 30
+    REF_SLICE = 1
+
+    # interleaved slice order
+    SLICE_ORDER = list(range(1, NUM_SLICES+1, 2) +
+                       range(2, NUM_SLICES+1, 2))
 
 PyHRF Analysis
 ~~~~~~~~~~~~~~
@@ -381,6 +409,13 @@ PyHRF Analysis
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`willard`
 
 
+.. figure:: figures/pyhrf_output.png
+   :align: center
+   :scale: 35%
+   :figclass: w
+
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`output`
 
 
 
