@@ -343,7 +343,7 @@ leading to suboptimal statistical analysis.
 We use the library ``Nipype`` (https://github.com/nipy/nipype) to define and
 apply our preprocessing pipeline. This library allows to use  robust tools,
 such as SPM and FSL, in a easy way. The proposed workflow (see Fig.
-:ref:`nipype`) starts by uncompressing the images since they are in
+:ref:`nipype`) starts by uncompressing (gunzip) the images since they are in
 a ``nii.gz`` format. After, it applies a *slice timing* in order to make appear
 that all voxels of the BOLD volume have been acquired at the same time. We then
 apply a *realignment* in order to correct head movements. Also, we apply
@@ -367,32 +367,51 @@ processors since ``Nipype`` uses the library ``joblib``.
 .. code-block:: python
 
     # Number of subjects
-    N_SUBJECTS = 10
-    SUBJECTS = ['sub-%02d' % i
-                for i in range(1,N_SUBJECTS+1)]
+    >>> N_SUBJECTS = 10
+    >>> SUBJECTS = ['sub-%02d' % i
+                    for i in range(1,N_SUBJECTS+1)]
 
 
 We use the acquisition parameters in :cite:`Gorgolewski2013` to parameterize
 each preprocessing task. For instance, the number of slices for the volume, the
 time for acquiring all slices (TR), and the order in which they were acquired
-(*e.g.,* interleaved).
+(*e.g.,* interleaved). In the following code, we show a snippet of how to
+define a slice timing task with ``Nipype``.
 
 
 .. code-block:: python
 
     # Acquisition parameters
-    TR = 2.5
-    NUM_SLICES = 30
-    REF_SLICE = 1
+    >>> TR = 2.5
+    >>> NUM_SLICES = 30
+    >>> TA = TR - (TR / NUM_SLICES)
+    >>> REF_SLICE = 1
 
     # interleaved slice order
-    SLICE_ORDER = list(range(1, NUM_SLICES+1, 2) +
-                       range(2, NUM_SLICES+1, 2))
+    >>> SLICE_ORDER = list(range(1, NUM_SLICES+1, 2) +
+                           range(2, NUM_SLICES+1, 2))
+
+    # slice timing
+    >>> slice_timing = Node(
+          spm.SliceTiming(num_slices=NUM_SLICES,
+                          time_repetition=TR,
+                          time_acquisition=TA,
+                          slice_order=SLICE_ORDER,
+                          ref_slice=REF_SLICE),
+          name='slice_timing_node')
 
 PyHRF Analysis
 ~~~~~~~~~~~~~~
 
+So far, we have prepared our functional and structural images for BOLD
+analysis. It is important to note that PyHRF receives as input *non-smoothed*
+images, thus we excluded this operation from our preprocessing pipeline.
 
+For the sake of simplicity, in this paper we only analyze the 4th subject from
+our dataset. Moreover, we use the package ``Nilearn``
+(http://nilearn.github.io/) to load and visualize neuroimaging volumes. Fig
+:ref:`bold` shows the mean of the functional images of this subject after
+preprocessing.
 
 
 .. figure:: figures/bold.png
@@ -402,6 +421,25 @@ PyHRF Analysis
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`bold`
 
 
+The JDE framework estimates HRF parcels-wide. This means that PyHRF needs
+a parcellation mask to compute the estimation-detection. The package provides
+a Willard atlas :cite:`Richiardi2015` which was created from the files
+distributed by Stanford (http://findlab.stanford.edu/functional_ROIs.html) with
+a voxel resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
+
+We use the method ``get_willard_mask`` to resize the original mask to match the
+shape of the BOLD images. Moreover, it saves the resampled mask in a specified
+path. For instance, Fig. :ref:`willard` shows the Willard parcellation resized
+to the shape of the functional image in Fig. :ref:`bold`.
+
+
+.. code-block:: python
+
+    >>> willard = get_willard_mask('~/pyhrf',
+                                   '~/data/bold.nii')
+    /home/jariasal/pyhrf/mask_parcellation/willard_2mm.nii
+
+
 .. figure:: figures/willard.png
    :align: center
    :figclass: htb
@@ -409,11 +447,123 @@ PyHRF Analysis
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`willard`
 
 
+PyHRF also needs the experimental paradigm as input. It must be a ``csv`` file
+following a specific convention which is described at
+https://pyhrf.github.io/manual/paradigm.html. For that, we use the method
+``convert_to_pyhrf_csv`` which reads the paradigm file provided by the dataset
+(a ``tsv`` file) and rewrites it using the PyHRF format. Since each dataset has
+its own organization, we give it as an input to the method.
+
+.. code-block:: python
+
+    >>> paradigm = convert_to_pyhrf_csv(
+          '~/data/paradigm.tsv', 0,
+          ['onset', 'duration', 'weight', 'trial_type'])
+    /tmp/tmpM3zBD5
+
+
+Table :ref:`csv` shows the paradigm experiment using the PyHRF format. Note
+that it only contains motor stimuli since we are only interested in motor tasks
+for our BOLD analysis. As we will show below, this paradigm is not optimized
+for the underlying model of PyHRF. This causes that some brain regions that are
+expected to be active, *e.g.,* the supplementary motor area (SMA), have not
+significant values in the PPMs generated by PyHRF.
+
+.. table:: This is the caption for the materials table. :label:`csv`
+
+    +---------+-----------+-------+----------+-----------+
+    | session | condition | onset | duration | amplitude |
+    +=========+===========+=======+==========+===========+
+    | 0       | Finger    | 10    | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Foot      | 40    | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Lips      | 70    | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Finger    | 100   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Foot      | 130   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Lips      | 160   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Finger    | 190   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Foot      | 220   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Lips      | 250   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Finger    | 280   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Foot      | 310   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Lips      | 340   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Finger    | 370   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Foot      | 400   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+    | 0       | Lips      | 430   | 15.0     | 1         |
+    +---------+-----------+-------+----------+-----------+
+
+
+
+PyHRF Analysis
+~~~~~~~~~~~~~~
+
+Now we are ready to start our BOLD analysis using PyHRF. For that, we need to
+specify some important parameters of the underlying JDE model. Moreover, we
+need to defined if we want to estimate the HRF signal or use, for example, its
+canonical form. The reader can found more details about the parameters in
+http://www.pyhrf.org.
+
+Once the parameters of the model have been defined, we run our analysis by
+using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. We
+can specify to execute this analysis using several processors since PyHRF uses
+the library ``joblib`` (https://github.com/joblib/joblib). For instance,
+
+
+.. code-block:: bash
+
+    pyhrf_jde_vem_analysis \
+      --dt 1.25 \
+      --hrf-duration 25.0 \
+      --output /home/jariasal/pyhrf \
+      --beta 1.0 \
+      --hrf-hyperprior 1000 \
+      --sigma-h 0.1 \
+      --estimate-hrf \
+      --zero-constraint \
+      --drifts-type cos \
+      --parallel \
+      --log-level WARNING \
+      2.5 \
+      {$HOME}/pyhrf/mask_parcellation/willard_2mm.nii \
+      /tmp/tmpM3zBD5
+      {$HOME}/data/bold.nii
+
+Fig. :ref:`output` shows the PPMs (upper left) and the estimated HRFs (right)
+generated by PyHRF for the motor task ``Finger``. Reading the description in
+:cite:`Gorgolewski2013`, this task corresponds to finger tapping. Recall that
+PyHRF estimates a HRF for each active parcel.
+
+We compared the output of PyHRF with the T-maps found on the site *Neuovault*
+(http://www.neurovault.org/images/307/) for the same dataset. As we can
+observe, at cut *z=60* both results (Fig. :ref:`output` and Fig.
+:ref:`neurovalt`) are quite similar, showing an activation in the
+*supplementary motor area* and the *left primary sensorimotor cortex*.
+
+
+.. figure:: figures/neurovault.png
+   :align: center
+   :figclass: htb
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`neurovalt`
+
+
 .. figure:: figures/pyhrf_output.png
    :align: center
    :scale: 35%
    :figclass: w
-
 
    Inputs and outputs of PyHRF when analyzing BOLD data. :label:`output`
 
