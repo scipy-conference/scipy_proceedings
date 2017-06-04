@@ -1,17 +1,43 @@
 import numpy as np
 import matplotlib.pyplot as plt
-#  plt.style.use('ggplot')
+
+def textbook(**kwargs):
+    plt.tick_params(width=0)
+    plt.xticks([])
+    plt.yticks([])
 
 t = np.linspace(0, 1, num=1000)
 slow = 1 - np.exp(-2*t)
-fast = 1 - np.exp(-6*t)
+fast = 1 - np.exp(-8*t)
 
-plt.figure(figsize=(5, 5))
-plt.plot(slow, label='Passive')
-plt.plot(fast, label='Adaptive')
-plt.xlabel('Number of examples')
-plt.ylabel('Quality')
+n = np.arange(20) + 1
+n = np.linspace(0, 7.5, num=1000) + 1
+passive = n - 1
+adaptive = np.log(n)
+
+width = 4
+ratio = 8 / 5
+ratio = 1
+plt.figure(figsize=(width, width * ratio))
+
+#  plt.subplot(2, 1, 1)
+textbook()
+plt.plot(n, passive, label='Passive')
+plt.plot(n, adaptive, label='Adaptive')
+plt.xlabel('Model complexity →')
+plt.ylabel('Number of responses required →')
+plt.title('Collection cost for different models')
 plt.legend(loc='best')
-#  plt.grid()
+
+#  plt.subplot(2, 1, 2)
+#  textbook()
+#  plt.plot(slow, label='Passive')
+#  plt.plot(fast, label='Adaptive')
+#  plt.xlabel('Number of responses →')
+#  plt.ylabel('Prediction accuracy →')
+#  plt.title("One model's quality")
+#  plt.legend(loc='best')
+
+plt.tight_layout()
 plt.savefig('figures/adaptive-gains.png')
 plt.show()

@@ -22,27 +22,80 @@
 :email: XXX@TODO.org
 :institution: University of Wisconsin–Madison
 
+:author: Robert Mankoff
+:email: XXX@TODO.org
+:institution: The New Yorker
+
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 :bibliography: refs
 
---------------------------------------------------------
-NEXT: A system for crowdsourcing active machine learning
---------------------------------------------------------
+.. next paper outline
+    * Problem statement
+        * active learning adjusts on previously collected data
+        * adaptive data collection poses challenges
+        * adaptively collecting large-scale datasets is difficult and time
+          consuming
+        * To do this, we have build NEXT which addresses 2 audiences, ML and
+          practicioners
+        * "Arguably, some of the deepest insights and greatest innovations have
+          come through experimentation."
+    * Solution
+    * Example applications
+        * cardinal bandits (with New Yorker)
+        * dueling bandits (with New Yorker again)
+        * triplets, with psycology studies
 
+
+---------------------------------------------------------------------------
+NEXT: A system to easily connect crowdsourcing and adaptive data collection
+---------------------------------------------------------------------------
+
+.. comment
+    - Notes from lalit
+    - Stress adaptive data collection, not machine learning
+    - For example, have fun getting all the labels to ImageNet (Lalit is sending
+        slide)
+    - general system: NEXT is the sum of two components (connecting math +
+      systems). Do active algorithms work? There's a ton of theory but
+      question if actually work
+    - Can't do this without Flask + Celery + AWS
+    - Extremely
+    - Drop the word "design pattern".
+    - Sell the algorithms harder
+    - emphasize the tooling we've used
+    - Where does Bob's stuff come into this?
+    - Say "why don't implement active algorithms? It's hard to do."
+    - Wax philosphically "we'd like to be the scikit-learn of active learning"
+    - It could be better
+    - Ask Sumeet "what's a good active algorithm to show people?"
+    - Keep the audience in mind -- engineers, not mathematicians
+    - what's the story you can tell the community
+    - I'm not going to talk about machine learning
+    - There's a first step. This addresses that. That's what active learning is
+      there for.
+    - Ask Rob for slides on ImageNet cost
+    - Lalit slides Chicago data science conference
+    - Another way: look, active learning has humans in the loop. What does that
+      mean, and compare with
+    - Talk with Devin/AmFam about this
+    - Slide1: sklearn story. Go down imagenet root. Slide2: the next story.
+      introduce adaptive. Next box starts expanding (celery, docker, javascript
+      for frontend).
+    - sklearn is Jupyter notebook, active learning requires NEXT.
 
 
 .. class:: abstract
 
-    We have created a new machine learning system called NEXT
-    (http://nextml.org) that addresses the problems inherent in collecting
-    crowdsoured data with "adaptive" collection algorithms. NEXT is routinely
-    used to collect millions of responses from thousands of users in machine
-    learning applications like The New Yorker Magazine Cartoon Caption Contest
-    (http://www.newyorker.com/cartoons/vote). Adaptive sampling uses previous
-    responses to collect data and produces accurate results with minimal
-    samples. Collecting crowdsourced data with adaptive sampling methods
-    presents practical gains but also has many systems challenges. We will
-    explain what NEXT is, how to use it, system goals, features and API.
+    We have created a data collection tool called NEXT (http://nextml.org) that
+    addresses the problems inherent collecting crowdsoured data with "adaptive"
+    collection algorithms. Adaptive sampling uses previous responses to collect
+    data and produces accurate results with minimal samples. Collecting
+    crowdsourced data with adaptive sampling methods presents practical gains
+    but also has many systems challenges. NEXT is routinely used to collect
+    millions of responses from thousands of users in machine learning
+    applications like The New Yorker Magazine Cartoon Caption Contest
+    (http://www.newyorker.com/cartoons/vote).  We will explain what NEXT is,
+    how to use it, system goals, features and API.
 
 .. class:: keywords
 
@@ -60,19 +113,17 @@ cognitive tasks. For example, users may be asked to determine the locations in
 an image that contain a certain object (e.g., a car is present in the upper
 left) to protect against internet bots.
 
-Crowdsourcing enables the collection of a large amount of data, which
-necessitates new methods to manage, store and process these data. For example,
-new methods of recognizing objects in unseen images
-:cite:`krizhevsky2012imagenet` (e.g., recognizing whether an image contains a
-car) have been motivated in part by a popular dataset that contains many images
-with object locations and labels generated via crowdsourcing
-:cite:`deng2009imagenet`. New optimization methods to aid the generation of
-these object recognition methods have been generated and analyzed
-:cite:`bottou2010large`, as well as improved :cite:`recht2011hogwild`.
+Crowdsourcing enables the collection of a large amount of data, which is
+necessary when complex results are extracted from the simple cognitive
+judgments humans can provide. One such example finds how similar two different
+shoes are, but uses a complex model that requires a large number of
+responses given simple crowdsourcing judgments :cite:`heim2015active`. This
+example only uses a small fraction of the available shoes (less than 0.2%) and
+far more responses are required as the number of shoes grow.
 
 The cost of collecting crowdsourcing responses can be significant – especially
 in problem domains where expert input is required. Minimizing the number of
-queries required has large practical benefits: higher quality results with
+queries required has large practical benefits: higher accuracy with
 fewer responses, and ultimately a shorter time to a particular result.  To
 obtain these benefits, a fundamental change in the method of data collection is
 required.
@@ -85,89 +136,118 @@ easily accessible and readily available to researchers.
 Problem statement
 -----------------
 
-.. comment
-    Collection of crowdsourced data is often expensive. In a popular crowdsourcing
-    service provided by Amazon called Mechanical Turk, humans are paid $1.50 per
-    hour (on average) :cite:`paolacci2010running` which is a significant cost when
-    many responses are needed and the uncertainty in the responses is considered.
-    Even in cases when participants are not paid for responses, there is still a
-    significant cost in developing a relationship with participants (e.g., through
-    social media campaigns) that encourages response in crowdsourcing tasks .
+.. outline
+    * Basic def of standard ML
+        * give imagenet example
+    * This process does not adapt
+        * No human in the loop
+        * never looks at previously collected responses
+    * Adaptive data collection
+        * There are benefits to adapting (cite papers)
+    * Adaptive data collection is difficult
+        * existing tools (PsiTurk, Mechanical Turk, Crowd Flower) can't be used
+          (no computational backend)
+        * these are fundamentally `passive`: they decide which queries to
+          present in advance
+    * To resolve this, most data collection done by simulation with passively
+      collected datasets
+    * "Arguably, some of the deepest insights and greatest innovations have
+          come through experimentation."
+        * To enable these breakthroughts, we need to design a system that is
+          easy to use by (list)
+    * The solution to this problem necessitates
 
-Crowdsourcing tasks can involve an overwhelming number of possible queries.
-Naive collection methods do not pose queries aimed at achieving a particular
-goal and tend to ask uninformative questions. In practice, these naive methods
-cannot be used. In many cases, they fail to yield useful results given the
-number of responses that can be collected.
 
-A technique to pose informative queries is called `adaptive sampling` where
-future queries are selected using previous responses and can be applied to
-simple crowdsourcing queries.  Adaptive sampling depends on an objective goal
-(e.g., classification accuracy) and selects queries to present that will help
-achieve a given goal quickly. This benefit has been theoretically shown to
-exist :cite:`castro2005faster` and is practically useful by requiring fewer
-data.
+.. figure:: figures/adaptive-gains.png
+    :scale: 70%
+
+    As model complexity grows, fewer samples (e.g., labeled images) are needed
+    in adaptive algorithms to reach a particular quality (e.g., classification
+    accuracy). :label:`adaptive-gains`
+
+The standard machine learning workflow obtains human labels before producing a
+model that predicts labels. An example of this workflow is with the popular
+ImageNet dataset :cite:`deng2009imagenet`: humans have provided millions of
+image labels, and there have been dozens of models to predict labels for unseen
+images :cite:`szegedy2015going, he2015delving, simonyan2014very`.
+
+This process is `passive`: any selection on which queries to present is done
+prior to any labeling. Query selection during labeling to aid a given goal
+(e.g., classification accuracy) could reduce the number of responses needed,
+and is available through `adaptive` sampling algorithms. These algorithms
+incorporate human feedback by using previous responses to select new queries
+for labeling.
+
+The benefits of adaptive sampling algorithms are that they require fewer
+labeled examples than passive sampling algorithms, especially as model
+complexity grows. Human provided labels generate complex models  because human
+attention span limits the label complexity. This means that adaptive algorithm
+do not require more responses than passive algorithms :cite:`castro2005faster`
+as model complexity grows :cite:`hanneke2007bound`. A clearer depiction of
+these gains is shown in Figure :ref:`adaptive-gains`.
+
+These adaptive sampling algorithms depend on previous examples, meaning they
+must be able to
+
+1. receive and store previous responses
+2. deliver and select queries to be labeled
+3. update some internal model (which selects queries to be presented)
+
+The requirements are difficult to meet in crowdsourcing. Crowdsourcing is a
+general purpose tool that only asks many humans questions; there's nothing
+inherently adaptive in gathering responses through crowdsourcing. The
+requirements dictate that some computational backend be present, and how
+participants should interact with the adaptive algorithm as shown in Figure
+:ref:`data-flow`.
+
+A system that can connect crowdsourcing and adaptive sampling presents a
+variety of challenges in mathematics, systems and software development. These
+challenges stem from the storage and connection of responses to the adaptive
+sampling algorithm. Any such system needs to process, store and receive
+crowdsourcing responses, and this has served as barrier to developing such a
+system.
+
+The problem that ultimately needs to be solved is to provide a system that
+connects arbitrary adaptive sampling algorithms with crowdsourcing.
 
 .. figure:: figures/data-flow.png
     :scale: 50%
 
-    The data flow required to adaptively collect crowdsourcing data. :label:`data-flow`
+    The data flow required to adaptively collect crowdsourcing data. The
+    computational backend is needed for processing the response, which may be
+    involved. :label:`data-flow`
 
-However, using adaptive sampling in a crowdsourcing setting is difficult.
-Crowdsourcing is a general purpose tool that only asks many humans questions;
-there’s nothing inherently adaptive in gathering responses through
-crowdsourcing. Adaptive sampling requires a feedback loop that uses previous
-responses to determine the next query. Pairing crowdsourcing and adaptive
-sampling present many challenges in both systems and mathematics stemming from
-the fact that adaptive algorithms require tight integration with the human
-responses, as shown in Figure :ref:`data-flow`.
+General solution
+----------------
 
-Then, the problem that ultimately needs to be solved is to find a means to
-productively and efficiently gather crowdsourced data. Being able to ask
-informative questions provides means to find an answer quickly and efficiently,
-optimizing both cost and time.
+The most general solution would be a system that enables evaluation of many
+different adaptive sampling algorithms, which in practice requires a simple
+implementation algorithm scheme.
 
-General system
---------------
+This system would enable feedback that would allow adaptive algorithms to be
+improved and, in turn, require fewer crowdsourcing responses for
+experimentalists. Completing this feedback loop requires a low barrier to entry
+for experimentalists.
 
-The most general solution would connect a single adaptive algorithm with
-crowdsourcing responses in real time.
-
-Such a system would be accessible by any service whether it is involved in
+Such a system should be accessible by any service whether it is involved in
 crowdsourcing or not. It could respond to any number of interactions; for
 example, this system could respond to user clicks on different advertisements.
 This would only require implementing an API that makes Figure :ref:`data-flow`
 possible.
 
-This system would lower the cost of collection for crowdsourced data, which is
-proportional to the number of responses received. This means that fewer samples
-would be required to reach the same objective quality measure, or equivalently,
-a higher quality is achieved with the same number of samples. A clearer
-description is shown in Figure :ref:`adaptive-gains`.
-
-.. figure:: figures/adaptive-gains.png
-
-    Fewer examples are needed to reach a particular quality, the main gain in
-    adaptive algorithms. In this example, to reach a particular quality the
-    passive algorithm needs 3 examples for every example the adaptive algorithm
-    has. :label:`adaptive-gains`
-
-.. comment TODO describe these systems
-
-Other systems that address this challenge include LUIS :cite:`LUIS` (based on
-ICE :cite:`simard2014ice`) and the Microsoft Decision Service
-:cite:`agarwal2016multiworld`. These systems connect crowdsourcing and adaptive
-sampling but have different design decisions, including working with exactly
-one problem formulation and working well at very large scales (i.e., use in
-Bing). While these systems achieve their goals they do not provide a
-easy-of-use interface and can not handle more than one problem formulation.
+One other system that addresses this challenge is the Microsoft Decision
+Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
+collection of crowdsourced data with different adaptive algorithms. However,
+this system has different design goals including working with exactly one
+problem formulation and working well at very large scales. While this system
+achieve it's goals it can not handle more than one problem formulation.
 
 Our system
 ----------
 
 The system we have developed at the UW–Madison is called NEXT [#]_ [#]_ which
 provides adaptive crowdsourcing data collection by selecting which query to
-present `next`. NEXT also provides
+present `next`. NEXT provides
 
 .. [#] Homepage at http://nextml.org
 .. [#] Source available at https://github.com/nextml/NEXT
@@ -177,6 +257,8 @@ present `next`. NEXT also provides
 * live experiment monitoring dashboards that update as responses are received
 * easy implementation, selection, and evaluation of different adaptive
   algorithms
+* a web interface for crowdsourcing participants, though it is also accessible
+  via other interactions through HTTP requests
 
 These goals have been successfully addressed.  Mathematicians have implemented
 new algorithms :cite:`jun2016anytime` and UW–Madison psychologists have
@@ -189,53 +271,65 @@ millions of responses from thousands of participants, at least with fast and
 simple algorithms.  This is illustrated by the problem below, though it also
 illustrates other features.
 
-Example application of NEXT
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Example use of NEXT
+^^^^^^^^^^^^^^^^^^^
+
+.. figure:: example_query.png
+
+    An example query shown in The New Yorker Caption Contest
+    :label:`example-query`
 
 Each week, The New Yorker draws a cartoon and asks readers for funny captions.
 They receive about 5,000 captions, of which they have to find the funniest.
 NEXT runs this contest each week. The interface NEXT provides is visible at
 http://www.newyorker.com/cartoons/vote and in Figure :ref:`example-query`.
 
-.. figure:: example_query.png
-
-    An example query shown in the Caption Contest :label:`example-query`
-
 The interface is presented every time a query is generated, either on the first
 visit to this webpage or after responding to another query. One caption is
 presented below the comic with buttons to rate the caption as "unfunny",
 "somewhat funny" or "funny". Every time one of these buttons is pressed, the
-adaptive algorithm processes the response and generates a new query. Each week,
-we collect and record [#]_ up to a million ratings and from over 10,000 users.
+adaptive algorithm processes the response and generates a new query.
+
+Each week, we collect and record up to a million ratings and from over
+10,000 users. All told, this dataset [#]_ includes over TODO ratings on over TODO
+different captions. This humor dataset has been of practical use in improving
+adaptive sampling algorithms :cite:`jun2016anytime`.
 
 .. [#] https://github.com/nextml/caption-contest-data
 
 The New Yorker’s goal is to find the funniest caption from this set of 5,000
-captions. To achieve this goal, both algorithms of choice
-(:cite:`jamieson2014lil` and KL-UCB at :cite:`kaufmann2013information`) only
-sample captions that can possibly be the funniest. If a caption has received
-only "unfunny" ratings, it is probably not the funniest caption and should not
-be further sampled. For the cartoon shown in Figure :ref:`example-query`, the
-top three captions were "Like you've never taken anything from a hotel room",
-"Like I'm the first person who's tried sleeping their way to the top" and "And
-yet you embraced the standing desk".
+captions. To achieve this goal, the algorithms of choice only sample captions
+that can possibly be the funniest. If a caption has received only "unfunny"
+ratings, it is probably not the funniest caption and should not be further
+sampled. For the cartoon shown in Figure :ref:`example-query`, the top three
+captions were "Like you've never taken anything from a hotel room", "Like I'm
+the first person who's tried sleeping their way to the top" and "And yet you
+embraced the standing desk".
 
+This system has enabled evaluation and improvement in algorithm implementation.
+In initial contests, we verified that one adaptive algorithm
+:cite:`jamieson2014lil` saw gains over a random algorithm. Later, we
+implemented an improved adaptive algorithm (KL-UCB at
+:cite:`kaufmann2013information`) and saw adaptive gains as expected.
 
 NEXT Architecture
 -----------------
 
-The design goals of NEXT are
+The design goals of NEXT are to provide
 
-* easy experimentalist use, both in system launch and in experiment launch
 * convenient default `applications` (which serve different types of queries;
   e.g., one application involves the rating of exactly one object)
 * straightforward and modular algorithm implementation
 * live experiment monitoring tools via a dashboard, which must update as
   responses are received and provide some sort of offline access
+* easy experimentalist use, both in system launch and in experiment launch
 
 These different system components and their data flow is shown in Figure
-:ref:`block-diagram`. Complete system documentation can be found at
-https://github.com/nextml/NEXT/wiki.
+:ref:`block-diagram`. Complete system documentation is available and addresses
+use cases seen by both algorithm developers and experimentalists [#]_.
+
+.. [#] Documentation can be found at https://github.com/nextml/NEXT/wiki
 
 .. figure:: figures/block-diagram.png
 
@@ -250,14 +344,21 @@ NEXT internal `applications` present different queries for users to consider.
 There are three internal applications specifically geared to three different
 types of judgments a user can make. These are
 
-* Cardinal bandits, which asks participants to rate one object as shown in
-  Figure :ref:`example-query`.
-* Dueling bandits, which asks participants to select one of two objects as
-  shown in Figure :ref:`dueling-interface`.
+* Cardinal bandits, which asks participants to rate one object
+  :cite:`gabillon2012best` as shown in Figure :ref:`example-query`.
+* Dueling bandits, which asks participants to select one of two objects
+  :cite:`yue2012k` as shown in Figure :ref:`dueling-interface`.
 * Triplets, which displays three objects and asks for `triplet responses` of
   the form "object :math:`i` is more similar to object :math:`j` than object
-  :math:`k`.", as shown in Figure :ref:`triplet-interface`.
+  :math:`k`." :cite:`jain2016finite`, as shown in Figure
+  :ref:`triplet-interface`.
 
+
+.. figure:: figures/dueling-interface.png
+    :scale: 20%
+
+    The dueling bandits interface, where two items are compared and the
+    "better" item is selected :label:`dueling-interface`
 
 The included applications have algorithms included by default. These algorithms
 have theoretic `sample complexity bounds` which relate the result accuracy to
@@ -282,17 +383,182 @@ some sense). In this problem, objects are embedding into a similarity space
 where objects are similar if and only if they are close. This embedding can be
 found from the triplet responses shown in Figure :ref:`triplet-interface`.
 
-.. figure:: figures/dueling-interface.png
-    :scale: 20%
-
-    The dueling bandits interface, where two items are compared and the
-    "better" item is selected :label:`dueling-interface`
-
 .. figure:: figures/triplet-interface.png
     :scale: 15%
 
     An interface that asks the user to select the most similar bottom object in
     relation to the top object. :label:`triplet-interface`
+
+
+Algorithm implementation
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+Required functions
+""""""""""""""""""
+
+A sampling algorithm needs four functions for the features we want to provide
+as shown in Figure :ref:`block-diagram`. These functions are
+
+1. ``initExp``, which initializes the algorithm when the experiment is launched
+2. ``getQuery``, which generates a query to show one participant
+3. ``processAnswer``, which processes the human's answer
+4. ``getModel``, which gets the results and is shown on the dashboard
+
+Arguments and returns
+"""""""""""""""""""""
+
+These algorithms handle various objects to displayed in each query (e.g., the
+New Yorker displays one text object in every query for a rating). By default,
+these objects are abstracted to an integer identifier (though the other
+information is still accessible). That means these algorithms mirror the
+implementation in academic papers where a particular objects is referred to as
+object :math:`i` to an integer.
+
+The arguments and return values for all algorithm functions are specified
+exactly. Every algorithm has to create a mapping from the specified inputs to
+the specified outputs. This allows treating an algorithm like a black-box.
+
+
+The YAML file ``Algs.yaml`` (e.g., in ``apps/[application]/algs/Algs.yaml``)
+contains four root level keys for each of ``initExp``, ``getQuery``, ``processAnswer``
+and ``getModel``. Each one of these sections describes the
+input arguments and returns values by ``args`` and ``rets`` respectively. These
+sections are filled with type specifications that describe the name and type of
+the various keyword arguments.
+For example, an integer parameter given with the keyword argument ``foo``
+is characterized in ``Algs.yaml`` by
+
+.. code-block:: yaml
+
+    foo:
+      type: num
+      description: bar
+
+in the appropriate section. Types can be defined recursively through a ``values`` key:
+
+.. code-block:: yaml
+
+    foo:
+      type: dict
+      description: A dictionary
+      values:
+        bar:
+          type: num
+          description: A number
+
+More complete documentation on these parameter specifications can be found  in
+the documentation.
+
+Database access
+"""""""""""""""
+
+:label:`butler`
+
+We provide a simple database wrapper, as algorithms need to store different
+values (e.g., the number of targets, a list of target scores). We do provide a
+variety of atomic database operations in any "collection" including
+
+- ``set`` and ``get``, which can set and get all objects (scalars,
+  dictionaries, NumPy arrays, etc).
+- ``get_many`` and ``set_many`` which is atomic even with many different values
+- ``append`` and ``pop`` which mirror the Python equivalents, but ``append``
+  returns the modified list.
+- ``increment``, which increments a variable by some value and returns
+
+This wrapper or ``butler`` is a set of collections, and the primary collection
+algorithms use is ``butler.algorithms`` which allows algorithms to be evaluated
+independently. The first argument to an algorithm after ``self`` is always ``butler``.
+
+Example
+"""""""
+
+An algorithm that performs randomly sampling is given below, and follows the
+naming convention
+
+.. code-block:: python
+
+    import numpy as np
+
+    def choose_target(butler):
+        """ butler provides interface to store
+            and save data """
+        # Adaptive sampling hidden for brevity
+        n = butler.algorithms.choose(key='n')
+        return np.random.choice(n)
+
+    class MyAlg:
+        def initExp(self, butler, n):
+            butler.algorithm.set(key='n', value=n)
+            scores = {'score' + str(i): 0
+                      for i in range(n)]
+            pulls = {'pulls' + str(i): 0
+                      for i in range(n)]
+            butler.algorithms.set_many(
+                key_value_dict=scores
+            )
+            butler.algorithms.set_many(
+                key_value_dict=pulls
+            )
+
+        def getQuery(self, butler):
+            return choose_target(butler)
+
+        def processAnswer(self, butler,
+                          target_id, reward):
+            butler.algorithms.increment(
+                key='score' + str(target_id),
+                value=reward
+            )
+            butler.algorithms.increment(
+                key='pulls' + str(target_id),
+                value=1
+            )
+
+        def getModel(self, butler):
+            n = butler.algorithms.get(key='n')
+            scores = [butler.alrogithms.get(
+                        'score' + str(i))
+                      for i in range(n)]
+            pulls = [butler.alrogithms.get(
+                        'pulls' + str(i))
+                      for i in range(n)]
+            mean_scores = [s/p if p != 0 else float('nan')
+                           for s, p in zip(scores, pulls)]
+            return mean_scores
+
+The ``Algs.yaml`` file for this algorithm would be
+
+.. code-block:: yaml
+
+    initExp:
+      args:
+        n:
+          description: Number of targets
+          type: num
+    getQuery:
+      rets:
+        type: num
+        description: The target to show
+                     the user
+    processAnswer:
+      args:
+        target_id:
+          description: The target_id that was shown
+                       to the user
+          type: num
+        reward:
+          description: The reward the user gave
+                       the target
+          values: [1, 2, 3]
+          type: num
+    getModel:
+      rets:
+        type: list
+        description: The scores for each target ordered
+                     by target_id.
+        values:
+          description: The score for a particular target
+          type: num
 
 Experiment dashboards
 ^^^^^^^^^^^^^^^^^^^^^
@@ -398,168 +664,6 @@ We support saving and restoring experiments on the experiment list at ``/dashboa
 This allows experiment persistence even when
 Amazon EC2 machines are terminated.
 
-Algorithm implementation
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-Required functions
-""""""""""""""""""
-
-A sampling algorithm needs four functions for the features we want to provide
-as shown in Figure :ref:`block-diagram`. These functions are
-
-1. ``initExp``, which initializes the algorithm when the experiment is launched
-2. ``getQuery``, which generates a query to show one participant
-3. ``processAnswer``, which processes the human's answer
-4. ``getModel``, which gets the results and is shown on the dashboard
-
-Arguments and returns
-"""""""""""""""""""""
-
-These algorithms handle various objects to displayed in each query (e.g., the
-New Yorker displays one text object in every query for a rating). By default,
-these objects are abstracted to an integer identifier (though the other
-information is still accessible). That means these algorithms mirror the
-implementation in academic papers where a particular objects is referred to as
-object :math:`i` to an integer.
-
-The arguments and return values for all algorithm functions are specified
-exactly. Every algorithm has to create a mapping from the specified inputs to
-the specified outputs. This allows treating an algorithm like a black-box.
-
-
-The YAML file ``Algs.yaml`` (e.g., in ``apps/[application]/algs/Algs.yaml``)
-contains four root level keys for each of ``initExp``, ``getQuery``, ``processAnswer``
-and ``getModel``. Each one of these sections describes the
-input arguments and returns values by ``args`` and ``rets`` respectively. These
-sections are filled with type specifications that describe the name and type of
-the various keyword arguments.
-For example, an integer parameter given with the keyword argument ``foo``
-is characterized in ``Algs.yaml`` by
-
-.. code-block:: yaml
-
-    foo:
-      type: num
-      description: bar
-
-in the appropriate section. Types can be defined recursively through a ``values`` key:
-
-.. code-block:: yaml
-
-    foo:
-      type: dict
-      description: A dictionary
-      values:
-        bar:
-          type: num
-          description: A number
-
-More complete documentation on these parameter specifications can be found  in
-the documentation.
-
-Database access
-"""""""""""""""
-
-:label:`butler`
-
-We provide a simple database wrapper, as algorithms need to store different
-values (e.g., the number of targets, a list of target scores). We do provide a
-variety of atomic database operations in any "collection" including
-
-- ``set`` and ``get``, which can set and get all objects (scalars,
-  dictionaries, NumPy arrays, etc).
-- ``get_many`` and ``set_many`` which is atomic even with many different values
-- ``append`` and ``pop`` which mirror the Python equivalents, but ``append``
-  returns the modified list.
-- ``increment``, which increments a variable by some value and returns
-
-This wrapper or ``butler`` is a set of collections, and the primary collection
-algorithms use is ``butler.algorithms`` which allows algorithms to be evaluated
-independently. The first argument to an algorithm after ``self`` is always ``butler``.
-
-Example
-"""""""
-
-An algorithm that performs randomly sampling is given below:
-
-.. code-block:: python
-
-    import numpy as np
-
-    class MyAlg:
-        def initExp(self, butler, n):
-            butler.algorithm.set(key='n', value=n)
-            scores = {'score' + str(i): 0
-                      for i in range(n)]
-            pulls = {'pulls' + str(i): 0
-                      for i in range(n)]
-            butler.algorithms.set_many(
-                key_value_dict=scores
-            )
-            butler.algorithms.set_many(
-                key_value_dict=pulls
-            )
-
-        def getQuery(self, butler):
-            n = butler.algorithms.get(key='n')
-            return np.random.choice(n)
-
-        def processAnswer(self, butler,
-                          target_id, reward):
-            butler.algorithms.increment(
-                key='score' + str(target_id),
-                value=reward
-            )
-            butler.algorithms.increment(
-                key='pulls' + str(target_id),
-                value=1
-            )
-
-        def getModel(self, butler):
-            n = butler.algorithms.get(key='n')
-            scores = [butler.alrogithms.get(
-                        'score' + str(i))
-                      for i in range(n)]
-            pulls = [butler.alrogithms.get(
-                        'pulls' + str(i))
-                      for i in range(n)]
-            mean_scores = [s/p if p != 0 else float('nan')
-                           for s, p in zip(scores, pulls)]
-            return mean_scores
-
-The ``Algs.yaml`` file for this algorithm would be
-
-.. code-block:: yaml
-
-    initExp:
-      args:
-        n:
-          description: Number of targets
-          type: num
-    getQuery:
-      rets:
-        type: num
-        description: The target to show
-                     the user
-    processAnswer:
-      args:
-        target_id:
-          description: The target_id that was shown
-                       to the user
-          type: num
-        reward:
-          description: The reward the user gave
-                       the target
-          values: [1, 2, 3]
-          type: num
-    getModel:
-      rets:
-        type: list
-        description: The scores for each target ordered
-                     by target_id.
-        values:
-          description: The score for a particular target
-          type: num
 
 Conclusion
 ----------
