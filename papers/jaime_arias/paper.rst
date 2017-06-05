@@ -292,7 +292,7 @@ and how to use PyHRF.
 Example of Use
 --------------
 
-To illustrate the use of PyHRF, we will describe each step needed for the
+To illustrate the use of PyHRF, we will describe the steps needed for the
 analysis of BOLD data. A jupyter notebook containing the complete code is
 available at http://www.pyhrf.org/scipy2017_notebook.
 
@@ -300,12 +300,13 @@ available at http://www.pyhrf.org/scipy2017_notebook.
 Getting fMRI BOLD Data
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First of all, we need to get BOLD data. In this example, we will analyze the
-dataset used in :cite:`Gorgolewski2013`. This dataset (``ds000114``) is open
-shared and it can be found at https://openfmri.org/dataset/ds000114/. For that,
-we implemented the method ``get_from_openfmri`` that uses the library
-``fetchopenfmri`` (https://github.com/wiheto/fetchopenfmri) to download
-datasets from the site ``openfmri``.
+First of all, we need to get our fMRI BOLD data. In this running example, we
+will analyze the dataset used in :cite:`Gorgolewski2013`. This dataset
+(``ds000114``) is open shared and it can be downloaded from
+https://openfmri.org/dataset/ds000114/. For convenience, we implemented the
+method ``get_from_openfmri`` that uses the library ``fetchopenfmri``
+(https://github.com/wiheto/fetchopenfmri) to download datasets from the site
+``openfmri``.
 
 .. code-block:: python
 
@@ -314,39 +315,41 @@ datasets from the site ``openfmri``.
     /home/jariasal/data/openfmri/ds000114_R2.0.1
 
 Briefly, in this dataset ten healthy subjects in their fifties were scanned
-twice using an identical protocol. This protocol consists of five task-related
-fMRI time series: finger, foot and lip movement; overt verb generation; covert
-verb generation; overt word repetition; and landmark tasks. For the sake of
-simplicity, we will focus only on motor tasks (*i.e.,* finger, foot and lip
-movement). Fig. :ref:`paradigm` shows the protocol containing only the three
-tasks mentioned above. As we can see, in the experimental paradigm the tasks do
-not overlap each other and the stimuli are presented to the subject during
-a certain time (*i.e.,* block paradigm).
+twice using an identical experimental paradigm. This paradigm consists of five
+task-related fMRI time series: finger, foot and lip movement; overt verb
+generation; covert verb generation; overt word repetition; and landmark tasks.
+For the sake of simplicity, we will focus our analysis only on motor tasks
+(*i.e.,* finger, foot and lips movement). Fig. :ref:`paradigm` shows the
+paradigm containing only the three tasks mentioned above. As we can see, in the
+experimental paradigm tasks do not overlap each other and stimuli are presented
+to the subject during a certain time (*i.e.,* block paradigm).
 
 .. figure:: figures/paradigm.png
    :align: center
    :figclass: htb
 
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`paradigm`
+   Experimental paradigm of the dataset ``ds000114``. We show only the motor
+   tasks of the dataset (finger, foot and lips movement). :label:`paradigm`
 
 
 fMRI BOLD Preprocessing
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-Once we have downloaded the BOLD volumes, we need to apply some transformations
-to the images in order to correct possible errors induced during the
-acquisition. For instance, a BOLD volume (*e.g.,* a whole brain) is usually not
-built at once but with a series of successively measured 2D slices. Each slice
-take some time to acquire, so slices are observed at different time points,
-leading to suboptimal statistical analysis.
+Once we have the BOLD volumes, we need to apply some transformations to the
+images in order to correct possible errors occurred during their acquisition.
+For instance, a BOLD volume (*e.g.,* a whole brain) is usually not built at
+once but with a series of successively measured 2D slices. Each slice take some
+time to acquire, so slices are observed at different time points, leading to
+suboptimal statistical analysis.
 
 We use the library ``Nipype`` (https://github.com/nipy/nipype) to define and
 apply our preprocessing pipeline. This library allows to use  robust tools,
-such as SPM and FSL, in a easy way. The proposed workflow (see Fig.
-:ref:`nipype`) starts by uncompressing (gunzip) the images since they are in
-a ``nii.gz`` format. After, it applies a *slice timing* in order to make appear
-that all voxels of the BOLD volume have been acquired at the same time. We then
-apply a *realignment* in order to correct head movements. Also, we apply
+such as SPM and FSL, in an easy manner. The proposed workflow (see Fig.
+:ref:`nipype`) starts by uncompressing the images since they are in
+a ``nii.gz`` format (``gunzip_func`` and ``gunzip_anat`` nodes). After, it
+applies a *slice timing* operation in order to make appear that all voxels of
+the BOLD volume have been acquired at the same time. We then apply
+a *realignment* in order to correct head movements. Moreover, we apply
 a *coregistration* operation in order to have the anatomical image (high
 spatial resolution) in the same space as the BOLD images. Finally, we
 *normalize* our images in order to transform them into a standard space (a
@@ -372,11 +375,11 @@ processors since ``Nipype`` uses the library ``joblib``.
                     for i in range(1,N_SUBJECTS+1)]
 
 
-We use the acquisition parameters in :cite:`Gorgolewski2013` to parameterize
-each preprocessing task. For instance, the number of slices for the volume, the
-time for acquiring all slices (TR), and the order in which they were acquired
-(*e.g.,* interleaved). In the following code, we show a snippet of how to
-define a slice timing task with ``Nipype``.
+We use the acquisition parameters presented in :cite:`Gorgolewski2013` to
+parameterize each preprocessing operation. For instance, the number of slices
+for the volume, the time for acquiring all slices (TR), and the order in which
+they were acquired (*e.g.,* interleaved). In the following snippet, we show
+a portion of the code to define the slice timing task with ``Nipype``.
 
 
 .. code-block:: python
@@ -391,7 +394,7 @@ define a slice timing task with ``Nipype``.
     >>> SLICE_ORDER = list(range(1, NUM_SLICES+1, 2) +
                            range(2, NUM_SLICES+1, 2))
 
-    # slice timing
+    # slice timing with SPM
     >>> slice_timing = Node(
           spm.SliceTiming(num_slices=NUM_SLICES,
                           time_repetition=TR,
@@ -400,17 +403,18 @@ define a slice timing task with ``Nipype``.
                           ref_slice=REF_SLICE),
           name='slice_timing_node')
 
+
 PyHRF Analysis
 ~~~~~~~~~~~~~~
 
 So far, we have prepared our functional and structural images for BOLD
-analysis. It is important to note that PyHRF receives as input *non-smoothed*
-images, thus we excluded this operation from our preprocessing pipeline.
+analysis. It is important to note that PyHRF receives *non-smoothed* images as
+input, thus we exclude this operation from our preprocessing pipeline.
 
-For the sake of simplicity, in this paper we only analyze the 4th subject from
-our dataset. Moreover, we use the package ``Nilearn``
-(http://nilearn.github.io/) to load and visualize neuroimaging volumes. Fig
-:ref:`bold` shows the mean of the functional images of this subject after
+For the sake of simplicity, in our running example we only analyze the 4th
+subject from our dataset. Additionally, we will use the package ``Nilearn``
+(http://nilearn.github.io/) to load and visualize neuroimaging volumes. Fig.
+:ref:`bold` shows the mean of the functional images of the 4th subject after
 preprocessing.
 
 
@@ -418,41 +422,43 @@ preprocessing.
    :align: center
    :figclass: htb
 
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`bold`
+   Mean of all preprocessed functional images (over time) of the 4th subject of
+   the dataset ``ds000114``. :label:`bold`
 
 
-The JDE framework estimates HRF parcels-wide. This means that PyHRF needs
-a parcellation mask to compute the estimation-detection. The package provides
-a Willard atlas :cite:`Richiardi2015` which was created from the files
-distributed by Stanford (http://findlab.stanford.edu/functional_ROIs.html) with
-a voxel resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
-
-We use the method ``get_willard_mask`` to resize the original mask to match the
-shape of the BOLD images. Moreover, it saves the resampled mask in a specified
-path. For instance, Fig. :ref:`willard` shows the Willard parcellation resized
-to the shape of the functional image in Fig. :ref:`bold`.
-
-
-.. code-block:: python
-
-    >>> willard = get_willard_mask('~/pyhrf',
-                                   '~/data/bold.nii')
-    /home/jariasal/pyhrf/mask_parcellation/willard_2mm.nii
-
+As we explained before, the JDE framework estimates HRF parcels-wide. This
+means that PyHRF needs a parcellation mask to compute the estimation-detection.
+The package provides a Willard atlas :cite:`Richiardi2015` (see Fig.
+:ref:`willard`) created from the files distributed by Stanford
+(http://findlab.stanford.edu/functional_ROIs.html). This atlas has a voxel
+resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
 
 .. figure:: figures/willard.png
    :align: center
    :figclass: htb
 
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`willard`
+   Willard atlas :cite:`Richiardi2015`. :label:`willard`
+
+We use the method ``get_willard_mask`` to resize the original atlas to match
+the shape of the BOLD images to be analyzed. In addition, this method saves the
+resampled mask in a specified path. For instance, Fig. :ref:`willard` shows the
+Willard atlas resized to the shape of the functional image in Fig.
+:ref:`bold`.
+
+.. code-block:: python
+
+    >>> willard = get_willard_mask('~/pyhrf',
+                                   '~/data/bold.nii')
+    /home/jariasal/pyhrf/mask_parcellation/willard_3mm.nii
 
 
-PyHRF also needs the experimental paradigm as input. It must be a ``csv`` file
-following a specific convention which is described at
-https://pyhrf.github.io/manual/paradigm.html. For that, we use the method
-``convert_to_pyhrf_csv`` which reads the paradigm file provided by the dataset
-(a ``tsv`` file) and rewrites it using the PyHRF format. Since each dataset has
-its own organization, we give it as an input to the method.
+PyHRF also needs the experimental paradigm as input. It must be given as
+a ``csv`` file following the convention described in the documentation
+(https://pyhrf.github.io/manual/paradigm.html). For convenience, we use the
+method ``convert_to_pyhrf_csv`` to read the paradigm file provided by the
+dataset (a ``tsv`` file) and rewrite it using the PyHRF format. Since each
+dataset has its own format for the paradigm, we give it as an input to our
+method.
 
 .. code-block:: python
 
@@ -462,14 +468,16 @@ its own organization, we give it as an input to the method.
     /tmp/tmpM3zBD5
 
 
-Table :ref:`csv` shows the paradigm experiment using the PyHRF format. Note
-that it only contains motor stimuli since we are only interested in motor tasks
-for our BOLD analysis. As we will show below, this paradigm is not optimized
-for the underlying model of PyHRF. This causes that some brain regions that are
-expected to be active, *e.g.,* the supplementary motor area (SMA), have not
-significant values in the PPMs generated by PyHRF.
+Table :ref:`csv` shows the experimental paradigm of the dataset ``ds000114``
+wrote using the PyHRF format.  Note that it only contains motor stimuli since
+we are only interested in them for our BOLD analysis. As we will see below,
+this paradigm is not optimized for the JDE model of PyHRF. This causes that
+some brain areas that are expected to be active, *e.g.,* the supplementary
+motor area (SMA), have not significant values in the PPMs generated by PyHRF.
 
-.. table:: This is the caption for the materials table. :label:`csv`
+.. table:: Experimental paradigm of the dataset ``ds000114`` containing only
+           motor stimuli. The column organization of the file follows the
+           PyHRF format. :label:`csv`
 
     +---------+-----------+-------+----------+-----------+
     | session | condition | onset | duration | amplitude |
