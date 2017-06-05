@@ -131,7 +131,7 @@ The main way to set up the configuration is through functions decorated with ``@
         nr_hidden_units = 512
         optimizer = 'sgd'
         learning_rate = 0.1
-        log_filename = 'NN{}.log'.format(nr_hidden_units)
+        log_dir = 'log/NN{}'.format(nr_hidden_units)
 
 When running an experiment, Sacred executes these functions and adds their local variables to the configuration.
 This syntactically convenient way of defining parameters leverages the full expressiveness of Python, including complex expressions, function calls, and interdependent variables.
@@ -172,7 +172,7 @@ or from Python calls:
     ex.run(config_updates={'nr_hidden_units': 64})
 
 Sacred treats these values as fixed while executing the config functions.
-In this way they influence dependent values as you would expect leading to ``log_filename="NN64.log"`` in our example.
+In this way they influence dependent values as you would expect leading to ``log_filename="log/NN64"`` in our example.
 
 
 Sets of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
@@ -544,56 +544,153 @@ to add support for other backends too.
 
 Example
 =======
+In this section we put it all together for the machine-learning-equivalent of a hello world program: MNIST classification.
+For this example we use the Tensorflow and Keras libraries.
+The shown model is very basic and some parts of this example already served as code-illustrations earlier.
+
+
+Header
+------
+First we import the required packages and functions.
+Then an ``Experiment`` and a ``LabAssistant`` are instantiated:
 
 .. code-block:: python
 
     import tensorflow as tf
+    from tensorflow import placeholder
+    from tensorflow.examples.tutorials.mnist import \
+        input_data
+
+    from keras import backend as K
+    from keras.layers import Dense
+    from keras.objectives import categorical_crossentropy
+    from keras.metrics import categorical_accuracy
+
     import sacred
-    from model import Model
-    from tensorflow.examples.tutorials.mnist\
-        import input_data
+    import labwatch
+    from labwatch.optimizers import RandomSearch
+
+    ex = sacred.Experiment()
+    la = labwatch.LabAssistant(ex, optimizer=RandomSearch)
 
 
-    ex = sacred.Experiment("MNIST")
+Configuration and Searchspace
+-----------------------------
+Now we can define the configuration of the experiment.
+Note that we specify six parameters, and that the ``log_dir`` depends on the ``hidden_units``:
+
+
+.. code-block:: python
 
     @ex.config
-    def config():
-        steps = 500
-        learning_rate = 0.5
-        minibatch_size = 100
-        log_dir = "./log/default"
+    def cfg():
+        hidden_units = 512
+        batch_size = 32
+        nr_epochs = 100
+        optimizer = 'sgd'
+        learning_rate = 0.1
+        log_dir = 'log/NN{}'.format(hidden_units)
 
+
+We also make use of a ``named_config`` to group together the adam optimizer with a reduced learning rate.
+This way we can start the experiment by specifying ``with adam`` and have both parameters changed.
+
+.. code-block:: python
+
+    @ex.named_config
+    def adam():
+        optimizer = 'adam'
+        learning_rate = 0.001
+
+Finally we define a searchspace over ``learning_rate`` and ``hidden_units``, naturally treated in log-space.
+With this we can run our experiment using ``with search_space`` and have these two parameters set to suggestions by our hyperparameter optimizer (here ``RandomSearch``).
+
+.. code-block:: python
+
+    @la.searchspace
+    def search_space():
+        learning_rate = UniformFloat(0.001, 1.0,
+                                     log_scale=True)
+        hidden_units = UniformInt(32, 512,
+                                  log_scale=True)
+
+
+Captured Functions
+------------------
+Sacreds config injection allows us to use the configuration parameters in any captured function.
+So here we use this feature to define two helper functions that set up our neural network model and our optimizer.
+Note that the ``set_up_optimizer`` function also takes the loss, which is not part of the configuration and has therefore to be passed normally:
+
+.. code-block:: python
+
+    @ex.capture
+    def build_model(hidden_units):
+        img = placeholder(tf.float32, shape=(None, 784))
+        label = placeholder(tf.float32, shape=(None, 10))
+
+        h = Dense(hidden_units, activation='relu')(img)
+        preds = Dense(10, activation='softmax')(h)
+
+        loss = tf.reduce_mean(
+            categorical_crossentropy(label, preds))
+        accuracy = tf.reduce_mean(
+            categorical_accuracy(label, preds))
+
+        return img, label, loss, accuracy
+
+
+    @ex.capture
+    def set_up_optimizer(loss, optimizer, learning_rate):
+        OptClass = {
+            'sgd': tf.train.GradientDescentOptimizer,
+            'adam': tf.train.AdamOptimizer}[optimizer]
+        opt = OptClass(learning_rate=learning_rate)
+        return opt.minimize(loss)
+
+
+Main Method
+-----------
+Finally in the main method we put put everything together.
+We've decorated it with ``@sacred.stflow.LogFileWriter(ex)`` to automatically capture the log directory used for the ``FileWriter`` in the appropriate format for Sacredboard.
+The main method is also automatically a captured function, and takes three of the configuration values as parameters.
+It also accepts a special parameters ``_run`` which grants access to the current ``Run`` object.
+Note that we call the other captured functions without passing any of the configuration values, since they will be filled in automatically.
+
+.. code-block:: python
 
     @ex.automain
     @sacred.stflow.LogFileWriter(ex)
-    def experiment(_run, steps, learning_rate,
-                    minibatch_size, log_dir):
-        mnist = input_data.read_data_sets("MNIST_data/",
+    def main(batch_size, nr_epochs, log_dir, _run):
+        # initialize tensorflow and load data
+        sess = tf.Session()
+        K.set_session(sess)
+        mnist = input_data.read_data_sets('MNIST_data',
                                           one_hot=True)
-        sess = tf.InteractiveSession()
-        nn_model = Model(learning_rate, mnist, sess)
-        summary_writer = tf.summary.FileWriter(log_dir)
-        test_summary = tf.summary.merge(
-                        [nn_model.test_sum_cross_entropy,
-                        nn_model.test_sum_acc])
-        for _ in range(steps):
-            nn_model.train(minibatch_size)
-            # evaluate on test
-            summary, val_crentr, val_acc = \
-                sess.run((test_summary,
-                          nn_model.cross_entropy,
-                          nn_model.accuracy),
-                         feed_dict=
-                         {nn_model.x: mnist.test.images,
-                          nn_model.y_: mnist.test.labels})
-            summary_writer.add_summary(summary, steps)
-            _run.log_scalar("test.cross_entropy",
-                            float(val_crentr))
-            # We can also specify the step number directly
-            _run.log_scalar("test.accuracy",
-                            float(val_acc), steps)
 
-        return float(val_acc)
+        # call captured functions for model and optimizer
+        img, label, loss, acc = build_model()
+        train_step = set_up_optimizer(loss)
+
+        # set up FileWriter for later use of Tensorboard
+        summary_writer = tf.summary.FileWriter(log_dir)
+        summary_writer.add_graph(tf.get_default_graph())
+
+        # initialize variables and main loop
+        sess.run(tf.global_variables_initializer())
+        for epoch in range(nr_epochs):
+            batch = mnist.train.next_batch(batch_size)
+            _, l, a = sess.run([train_step, loss, acc],
+                               feed_dict={label: batch[1],
+                                          img: batch[0]})
+
+            # add loss and accuracy as metrics
+            _run.log_scalar("train.cross_entropy", l)
+            _run.log_scalar("train.accuracy", a, epoch)
+
+        # return test accuracy as final result
+        return sess.run(acc, feed_dict={
+                             img: mnist.test.images,
+                             label: mnist.test.labels})
 
 Related Work
 ============
@@ -648,10 +745,8 @@ This way Sacred could offer basic support for distributing computations.
 
 Acknowledgements
 ================
-TODO: Mention funding
 This work has partly been supported by the European Research Council (ERC) under the European Union’s Horizon 2020 research and innovation programme under grant no. 716721, by the Euro-
 pean Commission under grant no. H2020-ICT-645403-ROBDREAM, and by the German Research Foundation (DFG) under Priority Programme Autonomous Learning (SPP 1527, grant HU 1900/3-1).
-
 This research was supported by the EU project ``INPUT`` (H2020-ICT-2015 grant no. 687795).
 Access to computing and storage facilities owned by parties and projects contributing to the Czech National Grid Infrastructure MetaCentrum provided under the programme “Projects of Large Research, Development, and Innovations Infrastructures” (CESNET LM2015042) is greatly appreciated.
 

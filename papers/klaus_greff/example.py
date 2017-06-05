@@ -46,32 +46,3 @@ def experiment(_run, steps, learning_rate,
 
     return float(val_acc)
 
-
-{"_id": 1,
- "captured_out": "...",
- "status": "COMPLETED",
- "start_time": "2017-05-30T20:34:38.855Z",
- "experiment": {
-     "mainfile": "minimal.py",
-     "sources": [["minimal.py", ObjectId("592dd75e779f8a25ffadd409")]],
-     "repositories": [],
-     "name": "minimal",
-     "dependencies": ["numpy==1.11.0", "sacred==0.7.0"],
-     "base_dir": "/home/greff/Programming/sacred/examples"},
- "result": 42,
- "info": {},
- "meta": {"command": "main",
-          "options": {...}},
- "format": "MongoObserver-0.7.0",
- "resources": [],
- "host": {"os": ["Linux", "Linux-3.16.0-4-amd64-x86_64-with-debian-8.6"],
-          "cpu": "Intel(R) Core(TM) i5-4460  CPU @ 3.20GHz",
-          "hostname": "zephyr",
-          "ENV": {},
-          "python_version": "3.4.2"},
- "heartbeat": "2017-05-30T20:34:38.902Z",
- "config": {"seed": 620395134},
- "command": "main",
- "artifacts": [],
- "stop_time": "2017-05-30T20:34:38.901Z"
- }
