@@ -321,7 +321,7 @@ The ``bespon`` package for Python [pkg:bespon]_ was first released in April
 Like Python's ``json`` module [py:json]_, ``bespon`` provides ``load()`` and
 ``loads()`` functions for loading data from file-like objects or strings, and
 ``dump()`` and ``dumps()`` functions for dumping data to file-like objects or
-strings.  ``bespon`` is compatible with Python 2.7 and 3.3+
+strings.  ``bespon`` is compatible with Python 2.7 and 3.3+.
 
 
 
@@ -786,6 +786,10 @@ Immutability, confusability, and other considerations
 BespON and the ``bespon`` package contain several features designed to enhance
 usability and prevent confusion.
 
+Nested collections more than 100 levels deep are prohibited by default.  In
+such cases, the ``bespon`` package raises a nesting depth error.  This reduces
+the potential for runaway parsing.
+
 BespON requires that dict keys be unique; keys are never overwritten.
 Similarly, there is no way to set and then modify list elements.  In contrast,
 the JSON specification only specifies that keys "SHOULD be unique" [JSON]_.
@@ -795,10 +799,6 @@ unique, in practice PyYaml [pkg:PyYAML]_ and ``ruamel.yaml``
 [pkg:ruamel.yaml]_ allow duplicate keys, with later keys overwriting earlier
 ones.  TOML [TOML]_ also specifies unique keys, and this is enforced by the
 ``toml`` [pkg:toml]_ and ``pytoml`` [pkg:pytoml]_ packages.
-
-Nested collections more than 100 levels deep are prohibited by default.  In
-such cases, the ``bespon`` package raises a nesting depth error.  This reduces
-the potential for runaway parsing.
 
 When the last line of an inline or unquoted string contains one or more
 Unicode code points with ``Bidi_Class`` R or AL (right-to-left languages)
@@ -914,6 +914,72 @@ all relevant comments.
 
 
 
+Performance
+-----------
+
+Since the beginning, performance has been a concern for BespON.  The
+``bespon`` package is pure Python.  YAML's history suggested that this could
+be a significant obstacle to performance.  PyYAML [pkg:PyYAML]_ can be much
+slower than Python's ``json`` module [py:json]_ for loading equivalent data,
+in part because the JSON module is implemented in C while the default PyYAML
+is pure Python.  PyYAML can be distributed with LibYAML [LibYAML]_, a C
+implementation of YAML 1.1, which provides a significant performance
+improvement.
+
+So far, ``bespon`` performance is promising.  The package uses ``__slots__``
+and avoids global variables extensively, but otherwise optimizations are
+purely algorithmic.  In spite of this, it can be only about 50% slower than
+PyYAML with LibYAML under CPython, and within an order of magnitude of
+``json``'s speed under PyPy [PyPy]_, the alternative Python implementation
+with a Just-in-Time (JIT) compiler.
+
+An example of performance in loading data is shown in Figure :ref:`benchmark`.
+This was generated with the BespON Python benchmarking code
+[bespon:benchmark]_.  A sample BespON data set was assembled using the
+template below (whitespace reformatted to fit column width), substituting the
+template field ``{num}`` for integers in ``range(1000)`` and then
+concatenating the results.
+
+::
+
+    key{num} =
+      first_subkey{num} =
+        "Some text that goes on for a while {num}"
+      second_subkey{num} =
+        "Some more text that also goes on and on {num}"
+      third_subkey{num} =
+        * "first list item {num}"
+        * "second list item {num}"
+        * "third list item {num}"
+
+Analogous data sets were generated for JSON, YAML, and TOML, using the closest
+available syntax.  Python's ``json`` module and the PyYAML, ``toml``,
+``pytoml``, and ``bespon`` packages were then used to load their corresponding
+data 10 times.  Load times were measured with Python's ``timeit`` module
+[py:timeit]_, and the minimum time for each package was recorded and plotted
+in the figure.
+
+
+
+.. figure:: benchmark.pdf
+   :align: center
+   :scale: 100%
+
+   :label:`benchmark`
+   Performance of Python's ``json`` module and the PyYAML, ``toml``,
+   ``pytoml``, and ``bespon`` packages in loading sample data.  All tests were
+   performed under Ubuntu 16.04.  All tests used Anaconda Python 3.6.1
+   (64-bit) except those designated with "PyPy," which used PyPy3.5 5.7.1
+   (64-bit).  PyYAML was tested with its C library implementation (CLoader)
+   when available.
+
+
+
+
+
+
+
+
 Conclusion
 ----------
 
@@ -927,15 +993,26 @@ rational numbers.
 
 The primary focus of future ``bespon`` development will be on improving
 round-tripping capabilities.  Eventually, it will also be possible to enable
-optional user-defined types with the tag syntax. The current goal is a version
-1.0 by the end of summer 2017.
+optional user-defined data types with the tag syntax. The current goal is a
+version 1.0 by the end of summer 2017.
 
 BespON as a configuration format will primarily be refined in the future
 through the creation of a more formal specification.  The Python
 implementation is written in such a way that a significant portion of the
-grammar is actually already defined in a usable format, from which it is
-converted into regular expressions.  A more formal specification will bring
-the possibility of implementations in additional languages.
+grammar already exists in the form of Python template strings, from which it
+is converted into functions and regular expressions.  A more formal
+specification will bring the possibility of implementations in additional
+languages.
+
+Working with BespON will also be improved through additional revision of the
+programming language-agnostic test suite [bespon:test]_ and the syntax
+highlighting extension for Microsoft Visual Studio Code [bespon:vscode]_.  The
+language-agnostic test suite is a set of BespON data files containing hundreds
+of snippets of BespON that is designed to test implementations for
+conformance.  It is used for testing the Python implementation before each
+release.  The VS Code syntax highlighting extension provides a TextMate
+grammar [TextMate]_ for BespON, so it can provide a basis for BespON support
+in other text editors in the future.
 
 
 
@@ -946,6 +1023,18 @@ References
             "BespON – Bespoken Object Notation,"
             https://bespon.org/.
 
+.. [bespon:benchmark] G. Poore.
+                      "Benchmark BespON in Python,"
+                      https://github.com/bespon/bespon_python_benchmark
+
+.. [bespon:test] G. Poore.
+                 "Language-agnostic tests for BespON,"
+                 https://github.com/bespon/bespon_tests.
+
+.. [bespon:vscode] G. Poore.
+                   "BespON syntax highlighting for VS Code,"
+                   https://github.com/bespon/bespon_vscode.
+
 .. [Cargo] "CARGO: packages for Rust,"
            https://crates.io/.
 
@@ -955,6 +1044,9 @@ References
 .. [JSON] T. Bray.
           "The JavaScript Object Notation (JSON) Data Interchange Format,"
           https://tools.ietf.org/html/rfc7159.
+
+.. [LibYAML] "LibYAML,"
+             http://pyyaml.org/wiki/LibYAML.
 
 .. [Markdown] J. Gruber.
               "Markdown: Syntax,"
@@ -1014,6 +1106,14 @@ References
                  "Built-in Types," May 16, 2017,
                  https://docs.python.org/3/library/stdtypes.html.
 
+.. [py:timeit] Python Software Foundation.
+               "``timeit`` — Measure execution time of small code snippets,"
+               Mar 26, 2017,
+               https://docs.python.org/3/library/timeit.html.
+
+.. [PyPy] "Welcome to PyPy,"
+          http://pypy.org/.
+
 .. [rb:literals] "Literals,"
                  https://ruby-doc.org/core-2.4.1/doc/syntax/literals_rdoc.html.
 
@@ -1025,6 +1125,10 @@ References
 .. [rs:tokens] The Rust Project Developers.
                "Tokens,"
                https://doc.rust-lang.org/reference/tokens.html.
+
+.. [TextMate] MacroMates Ltd.
+              "Language Grammars,"
+              https://manual.macromates.com/en/language_grammars.
 
 .. [TOML] T. Preston-Werner.
           "TOML: Tom's Obvious, Minimal Language, v0.4.0,"
