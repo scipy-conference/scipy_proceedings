@@ -63,7 +63,7 @@ Nearly all astrophysical observations are done through *remote sensing*. Light a
    | :cite:`young_chianti_2016`          | 8       |
    +-------------------------------------+---------+
 
-The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). Though it predates many of the software tools used in open-source scientific computing today, ChiantiPy has embraced modern development practices and is hosted on `GitHub <https://github.com/chianti-atomic/ChiantiPy>`_, maintains up-to-date `documentation on Read the Docs <http://chiantipy.readthedocs.io/en/latest/>`_, and `runs several tests on Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_ at each check-in.
+The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). 
 
 Give history of CHIANTI/ChiantiPy, where the data comes from, who uses it, why.
 
@@ -244,9 +244,13 @@ Equations, what are they used for, code example
 
 Documentation, Testing, and Infrastructure
 ------------------------------------------
-Details about documentation hosting and testing as well as the status of tests, documentation quality, code coverage, etc.
+The ChiantiPy project has made an effort to embrace modern development practices when it comes to developing, documenting and releasing the ChiantiPy codebase. Like many open source started in the late 2000s, ChiantiPy was originally hosted on SourceForge, but has now moved its development entirely to `GitHub <https://github.com/chianti-atomic/ChiantiPy>`_. The SVN commit history is in the process of being migrated to GitHub as well. The move to GitHub has provided increased development transparency, ease of contribution, and better integration with third-party services.
 
-Also some details about our developer community, how bugs are reported, how pull requests are merged, governance, interaction with other packages (e.g. SunPy, Astropy, OpenAstronomy)
+An integral part of producing quality scientific code, particularly that meant for a large user base, is continually testing said code and as improvements are made and features are added. For each merge into master as well as each pull request, a series of tests is run on `Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_, a continuous integration service and that provides free and automated builds configured through GitHub webhooks. This allows each contribution to the codebase to be tested to ensure that these changes do not break the codebase in unexpected ways. Currently, ChiantiPy is tested on Python 2.7, 3.4, and 3.5, with full 3.6 support expected soon. Currently, the ChiantiPy package is installed in each of these environments and minimal set of tests of each core module is run along with documentation builds to ensure that Sphinx can generate the documentation. The actual module tests are currently quite sparse though one of the most pressing goals of the project is to increase test coverage of the core modules.
+
+One of the most important parts of any codebase is the documentation. The ChiantiPy documentation is built using Sphinx and is `hosted on Read the Docs <http://chiantipy.readthedocs.io/en/latest/>`_. At each merge into the master branch, a new Read the Docs build is kicked off, ensuring that the ChiantiPy API documentation is never out of date with the most recent check in. In addition to the standard API documentation, the ChiantiPy Read the Docs page also provides a tutorial for using the various modules in ChiantiPy as well as a guid for those switching from the IDL version. 
+
+Stuff about astropy helpers...
 
 Future Work: Towards ChiantiPy v1.0
 -----------------------------------
