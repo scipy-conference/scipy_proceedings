@@ -124,8 +124,8 @@ lack of an integer type and of floating-point Infinity and NaN can be an
 issue.  In fact, Python's standard library JSON implementation [py:json]_
 explicitly does not comply with the JSON specification by adding extensions
 for integer, Infinity, and NaN support, and enabling these by default.
-Another drawback is that a JSON string must be on a single line; there are no
-multiline string literals.
+Another drawback is that a string in JSON must be on a single line; there are
+no multiline string literals.
 
 JSON's simplicity and limitations are an advantage when it comes to
 round-tripping data.  Since there are no comments, a primary source of
@@ -301,16 +301,15 @@ several other programming languages to be embedded within LaTeX documents.
 Future PythonTeX-related software will need a LaTeX-style ``key=value`` syntax
 for configuration.  Because PythonTeX involves a significant amount of
 templating with Python code, a config format with multiline strings with
-obvious indentation would also be very useful.
-
-Later, BespON was influenced by some of my other software projects and by my
-work as a physics professor.  This resulted in a focus on features related
-to scientific and technical computing.
+obvious indentation would also be very useful.  Later, BespON was influenced
+by some of my other software projects and by my work as a physics professor.
+This resulted in a focus on features related to scientific and technical
+computing.
 
 *  Integers, with binary, octal, and hexadecimal integers in addition to
    decimal integers.
 *  Full floating-point support including Infinity and NaN, and support
-   for hexedecimal floating point numbers.
+   for hexedecimal floating-point numbers.
 *  Multiline strings designed with templating and similar tasks in mind.
 *  A binary data type.
 *  Support for lossless round-tripping including comment preservation, at
@@ -318,11 +317,11 @@ to scientific and technical computing.
 *  An extensible design that can allow for user-defined data types.
 
 The ``bespon`` package for Python [pkg:bespon]_ was first released in April
-2017, after over a year of development.  It is used in all examples.  Like
-Python's ``json`` module [py:json]_, ``bespon`` provides ``load()`` and
+2017, after over a year of development.  It is used in all examples below.
+Like Python's ``json`` module [py:json]_, ``bespon`` provides ``load()`` and
 ``loads()`` functions for loading data from file-like objects or strings, and
 ``dump()`` and ``dumps()`` functions for dumping data to file-like objects or
-strings.
+strings.  ``bespon`` is compatible with Python 2.7 and 3.3+
 
 
 
@@ -348,9 +347,9 @@ Integers
 ========
 
 BespON supports binary, octal, decimal, and hexadecimal integers.  Non-decimal
-integers use ``0b``, ``0o``, and ``0x`` base prefixes.  Like numbers in
-Python 3.6+ [PEP515]_, underscores are allowed between adjacent digits and
-after the base prefix.  For example:
+integers use ``0b``, ``0o``, and ``0x`` base prefixes.  Underscores are
+allowed between adjacent digits and after a base prefix, as in numbers in
+Python 3.6+ [PEP515]_.  For example:
 
 .. code-block:: pycon
 
@@ -392,14 +391,14 @@ BespON provides both inline strings, which do not preserve literal line
 breaks, and multiline strings, which do.
 
 Raw and escaped versions of both are provided.  Raw strings preserve all
-content exactly, with the limitations noted below.  Escaped strings allow code
-points to be represented with backslash-escapes.  BespON supports Python-style
-``\xhh``, ``\uhhhh``, and ``\Uhhhhhhhh`` escapes using hex digits ``h``, as
-well as standard escapes like ``\r`` and ``\n``.  It also supports escapes of
-the form ``\u{h...h}`` containing 1 to 6 hex digits, as used in Rust
-[rs:tokens]_ and some other languages.
+content exactly.  Escaped strings allow code points to be represented with
+backslash-escapes.  BespON supports Python-style ``\xhh``, ``\uhhhh``, and
+``\Uhhhhhhhh`` escapes using hex digits ``h``, as well as standard escapes
+like ``\r`` and ``\n``.  It also supports escapes of the form ``\u{h...h}``
+containing 1 to 6 hex digits, as used in Rust [rs:tokens]_ and some other
+languages.
 
-In addition, identifier-style strings are allowed unquoted.
+In addition, single-word identifier-style strings are allowed unquoted.
 
 
 Inline strings
@@ -407,7 +406,7 @@ Inline strings
 
 Raw inline strings are delimited by a single backtick `````, triple backticks
 `````\ `````\ `````, or a longer sequence that is a multiple of three.  This
-syntax is inspired by [Markdown]_; the limited case of single backticks is
+syntax is inspired by [Markdown]_; the case of single backticks is
 similar to Go's raw strings [Go]_.  A raw inline string may contain any
 sequence of backticks that is either longer or shorter than its delimiters.
 If the first non-space character in a raw string is a backtick, then the first
@@ -418,14 +417,15 @@ then the last space is stripped.  This allows, for example, the sequence
 
 The overall result is a raw string syntax that can enclose essentially
 arbitrary content while only requiring string modification (adding a leading
-or trailing space) in one edge case.  Other common raw string syntaxes either
-cannot enclose arbitrary content or require multiple different delimiting
-characters.  For example, Python does not allow ``r"\"``.  Python does allow
-``r"""\"""``, but this is not a complete string representing the backslash;
-rather, it is the start of a raw string that will contain the literal sequence
-``\"""`` and requires ``"""`` as a closing delimiter [py:lexical]_.
-Meanwhile, Rust represents the literal backslash as ``r#"\"#`` in raw string
-syntax, while ``\#`` would require ``r##"\#"##`` [rs:tokens]_.
+or trailing space) in one edge case.  Other common raw string syntaxes avoid
+any string modification, but either cannot enclose arbitrary content or
+require multiple different delimiting characters.  For example, Python does
+not allow ``r"\"``.  Python does allow ``r"""\"""``, but this is not a
+complete string representing the backslash; rather, it is the start of a raw
+string that will contain the literal sequence ``\"""`` and requires ``"""`` as
+a closing delimiter [py:lexical]_.  Meanwhile, Rust represents the literal
+backslash as ``r#"\"#`` in raw string syntax, while literal ``\#`` would
+require ``r##"\#"##`` [rs:tokens]_.
 
 Escaped inline strings are delimited by single quotation characters, either a
 single quote ``'`` or double quote ``"``.  These end at the first unescaped
@@ -433,12 +433,12 @@ delimiting character.  Escaped inline strings may also be delimited by triple
 quotation mark sequences ``'''`` or ``"""``, or longer sequences that are a
 multiple of three.  In these cases, any shorter or longer sequence of the
 delimiting character is allowed unescaped.  This is similar to the raw string
-case with backslash-escapes.
+case, but with backslash-escapes.
 
 Inline strings may be wrapped over multiple lines, in a manner similar to
 YAML.  This allows BespON data containing long, single-line strings to be
 embedded within a LaTeX, Markdown, or other document without requiring either
-lines longer than 80 characters or the use of multiline strings with with
+lines longer than 80 characters or the use of multiline strings with
 newline escapes.  When an inline string is wrapped over multiple line, each
 line break is replaced with a space unless it is preceded by a code point with
 the Unicode ``White_Space`` property [UAX44]_ or is backslash-escaped; in both
@@ -458,18 +458,18 @@ Multiline strings
 =================
 
 Multiline strings also come in raw and escaped forms.  Syntax is influenced by
-heredocs in shells and languages like Ruby [rb:literals]_.  The contents of a
-multiline string begin on the line *after* the opening delimiter, and end on
-the line *before* the closing delimiter.  All line breaks are preserved as a
-line feed (``\n``); even if BespON data is loaded from a file using Windows
-line endings ``\r\n``, newlines are always normalized to ``\n``.  The opening
-delimiter consists of a pipe ``|`` followed immediately by a sequence of
-single quotes ``'``, double quotes ``"``, or backticks ````` whose length is a
-multiple of three.  Any longer or shorter sequence of quote/backtick
+heredocs in shells and languages like Ruby [rb:literals]_.  The content of a
+multiline string begins on the line *after* the opening delimiter, and ends on
+the line *before* the closing delimiter.  All line breaks are preserved as
+literal line feeds (``\n``); even if BespON data is loaded from a file using
+Windows line endings ``\r\n``, newlines are always normalized to ``\n``.  The
+opening delimiter consists of a pipe ``|`` followed immediately by a sequence
+of single quotes ``'``, double quotes ``"``, or backticks ````` whose length
+is a multiple of three.  Any longer or shorter sequence of quote/backtick
 characters is allowed to appear literally within the string without escaping.
-The the quote/backtick determines whether backslash-escapes are enabled,
-following the rules for inline strings.  The closing delimiter is the same as
-the opening delimiter with a slash ``/`` appended to the end.  This enables
+The quote/backtick determines whether backslash-escapes are enabled, following
+the rules for inline strings.  The closing delimiter is the same as the
+opening delimiter with a slash ``/`` appended to the end.  This enables
 opening and closing delimiters to be distinguished easily even in the absence
 of syntax highlighting, which is convenient when working with long multiline
 strings.
@@ -501,7 +501,7 @@ Unquoted strings
 BespON also allows unquoted strings.  By default, only ASCII identifier-style
 strings are allowed.  These must match the regular expression::
 
-   _*[A-Za-z][0-9A-Z\\_a-z]*
+   _*[A-Za-z][0-9A-Z_a-z]*
 
 There is the additional restriction that no unquoted string may match a
 keyword (``none``, ``true``, ``false``, ``inf``, ``nan``) when lowercased.
@@ -591,7 +591,9 @@ demonstrated with a multiline string:
    """)
    {'key': ' first line\n  second line\n'}
 
-..
+Because the multiline string starts on the same line as ``key``, the opening
+and closing delimiters are not required to have the same indentation, and
+the indentation of the string content is relative to the closing deliter.
 
 In a brace-delimited inline dict, the dict is delimited by curly braces
 ``{}``, and key-value pairs are separated by commas:
@@ -618,7 +620,7 @@ Key paths and sections
 
 The indentation-based syntax for dicts involves increasing levels
 of indentation, while the inline syntax involves accumulating layers of
-braces.  BespON also provides a key path syntax that allows
+braces.  BespON provides a key-path syntax that allows
 this to be avoided in some cases.  A nested dict can be created with
 a series of unquoted, period-separated keys.  For example:
 
@@ -632,11 +634,9 @@ a series of unquoted, period-separated keys.  For example:
 ..
 
 Key path are scoped, so that once the indentation or brace level of the top of
-the key path is closed, no dicts created by the key path can be modified.  In
-the case below, key paths starting with ``subkey`` can be used multiple times
-at the level where ``subkey`` is first used.  However, returning to the
-indentation level of ``key`` and attempting to use ``key.subkey.c`` would
-result in a scope error.
+the key path is closed, no dicts created by the key path can be modified.
+Consider a nested dict three levels deep, with the lowest level accessed via
+key paths:
 
 .. code-block:: pycon
 
@@ -647,6 +647,10 @@ result in a scope error.
    """)
    {'key': {'subkey': {'a': 'value1', 'b': 'value2'}}}
 
+In this case, key paths starting with ``subkey`` can be used multiple times at
+the indentation level where ``subkey`` is first used.  Using ``subkey.c`` at
+this level would be valid.  However, returning to the indentation level of
+``key`` and attempting to use ``key.subkey.c`` would result in a scope error.
 Scoping ensures that all data defined via key paths with common nodes remains
 relatively localized, rather than being spread throughout an entire config
 file.
@@ -665,6 +669,10 @@ section key path.  For example:
    """)
    {'key': {'subkey': {'subsubkey': 'value'}}}
 
+This allows both indentation and layers of braces to be avoided, while not
+requiring the constant repetition of the complete path to the data that
+is being defined (``key.subkey`` in this case).
+
 Instead of ending a section by starting a new section, it is also possible to
 return to the top level of the data structure using an end delimiter
 of the form ``|===/`` (with the same number of equals signs as the opening
@@ -676,9 +684,9 @@ Tags
 ----
 
 All of the data types discussed so far are implicitly typed; there is no
-explicit type declaration.  BespON provides a syntax that allows for explicit
-typing and some other features.  This may be illustrated with the ``bytes``
-type, which can be applied to strings to create byte strings (Python
+explicit type declaration.  BespON provides a tag syntax that allows for
+explicit typing and some other features.  This may be illustrated with the
+``bytes`` type, which can be applied to strings to create byte strings (Python
 ``bytes``):
 
 .. code-block:: pycon
@@ -701,13 +709,15 @@ Similarly, there is a ``base16`` type and a ``base64`` type:
    """)
    b'Some Base64 text'
 
-When applied to strings, tags also support keyword arguments ``indent``
-and ``newline``.  ``indent`` is used to specify a combination of spaces
-and tabs by which all lines in a string should be indented to produce the
-final string.  ``newline`` take any code point sequence considered a newline
-in the Unicode standard [UnicodeNL], as well as the empty string, and allows
-newlines other than the default ``\n`` to be used.  When ``newline`` is
-applied to a byte string, only newline sequences in the ASCII range are
+..
+
+When applied to strings, tags also support keyword arguments ``indent`` and
+``newline``.  ``indent`` is used to specify a combination of spaces and tabs
+by which all lines in a string should be indented to produce the final string.
+``newline`` takes any code point sequence considered a newline in the Unicode
+standard [UnicodeNL]_, as well as the empty string, and simplifies the use of
+literal newlines other than the default line feed (``\n``).  When ``newline``
+is applied to a byte string, only newline sequences in the ASCII range are
 permitted.
 
 .. code-block:: pycon
@@ -729,14 +739,16 @@ For configuration purposes, it would be convenient to have some form of
 inheritance, so that settings do not need to be duplicated in multiple dicts.
 The tag ``label`` keyword argument allows lists, list elements, dicts, and
 dict values to be labeled.  Then they can be referenced later using aliases,
-which consist of a dollar sign ``$`` followed by the label name.
+which consist of a dollar sign ``$`` followed by the label name.  Aliases
+form the basis for inheritance.
 
-Dicts support two keywords for inheritance.  ``init`` is used to specify
-one or more dicts with which to initialize a new dict.  The keys supplied by
-these dicts may not be overwritten by the keys put in the new dict directly.
+Dicts support two keywords for inheritance.  ``init`` is used to specify one
+or more dicts with which to initialize a new dict.  The keys supplied by these
+dicts must not be overwritten by the keys put in the new dict directly.
 Meanwhile, ``default`` is used to specify one or more dicts whose keys are
 added to the new dict after ``init`` and after values that are added directly.
-``default`` keys are only added if they do not exist.
+``default`` keys are only added if they do not exist; they are fallback
+values.
 
 .. code-block:: pycon
 
@@ -775,8 +787,8 @@ BespON and the ``bespon`` package contain several features designed to enhance
 usability and prevent confusion.
 
 BespON requires that dict keys be unique; keys are never overwritten.
-Similarly, there is no way to set and then modify list elements  In contrast,
-the JSON specification [JSON]_ only specifies that keys "SHOULD be unique."
+Similarly, there is no way to set and then modify list elements.  In contrast,
+the JSON specification only specifies that keys "SHOULD be unique" [JSON]_.
 Python's JSON module [py:json]_ allows duplicate keys, with later keys
 overwriting earlier ones.  Although YAML [YAML]_ specifies that keys are
 unique, in practice PyYaml [pkg:PyYAML]_ and ``ruamel.yaml``
@@ -788,13 +800,14 @@ Nested collections more than 100 levels deep are prohibited by default.  In
 such cases, the ``bespon`` package raises a nesting depth error.  This reduces
 the potential for runaway parsing.
 
-When the last line of a string contains one or more Unicode code points with
-``Bidi_Class`` R or AL (right-to-left languages) [UAX9]_, by default no
-other data objects or comments are allowed on that line.  This prevents
-a right-to-left code point from interacting with following code points to
-produce ambiguous layout as a result of the Unicode bidirectional algorithm
-[UAX9]_ that is implemented in much text editing software.  Consider an
-indentation-based dict mapping Hebrew letters to integers (valid BespON):
+When the last line of an inline or unquoted string contains one or more
+Unicode code points with ``Bidi_Class`` R or AL (right-to-left languages)
+[UAX9]_, by default no other data objects or comments are allowed on the line
+on which the string ends.  This prevents a right-to-left code point from
+interacting with following code points to produce ambiguous visual layout as a
+result of the Unicode bidirectional algorithm [UAX9]_ that is implemented in
+much text editing software.  Consider an indentation-based dict mapping Hebrew
+letters to integers (valid BespON):
 
 .. raw:: latex
 
@@ -805,7 +818,7 @@ indentation-based dict mapping Hebrew letters to integers (valid BespON):
      2
    \end{Verbatim}
 
-There is no ambiguity in this case.  Now consider the same data, but
+There is no ambiguity in that case.  Now consider the same data, but
 represented with an inline dict (still valid BespON):
 
 ::
@@ -827,10 +840,10 @@ Because the integers, comma, and equals signs have no strong right-to-left
 directionality, everything between the curly braces is visually layed out from
 right to left.  When the data is loaded, though, it will produce the correct
 mapping, since loading depends on the logical order of the code points rather
-than their visual rendering.  Because BespON by default requires line breaks
-after strings whose last line contains one or more right-to-left code points,
-it prevents the potential for confusion as a result of this logical-visual
-mismatch.
+than their visual rendering.  By default, BespON prevents the potential for
+confusion as a result of this logical-visual mismatch, by prohibiting data
+objects or comments from immediately following an inline or unquoted string
+with one or more right-to-left code points in its last line.
 
 
 
@@ -873,15 +886,16 @@ This illustrates several features of the round-trip capabilities.
 In the future, the ``bespon`` package will add additional round-trip
 capabilities beyond replacing keys and values.  One of the challenges in
 round-tripping data is dealing with comments.  BespON supports standard line
-comments of the form ``#comment...``.  While these can survive round-tripping
+comments of the form ``#comment``.  While these can survive round-tripping
 when data is added or deleted, dealing with them in those cases is difficult,
 because line comments are not uniquely associated with individual data
 objects.  To provide an alternative, BespON defines a doc comment type that is
-uniquely associated with individual data elements.  The syntax is inspired by
-string and section syntax, involving three hash symbols (or a multiple of
-three).  Both inline and multiline doc comments are defined, and must come
-immediately before the data with which they are associate (or immediately
-before its tag, for tagged data):
+uniquely associated with individual data objects.  Each data object may have
+at most a single doc comment.  The syntax is inspired by string and section
+syntax, involving three hash symbols (or a multiple of three).  Both inline
+and multiline doc comments are defined, and must come immediately before the
+data with which they are associated (or immediately before its tag, for tagged
+data):
 
 ::
 
@@ -905,15 +919,24 @@ Conclusion
 
 BespON and the ``bespon`` package remain under development.
 
-The ``bespon`` package will add additional round-tripping capabilities, and
-there will also be improvements to the encoding capabilities.  Eventually, it
-will be possible to support user-defined types with the tag syntax.  The
-current goal is a version 1.0 by the end of summer 2017.
+The ``bespon`` package is largely complete as far as loading and dumping data
+are concerned.  The standard, default data types discussed above are fully
+supported, and it is already possible to enable a limited selection of
+optional types, including sets, ordered dicts, tuples, complex numbers, and
+rational numbers.
+
+The primary focus of future ``bespon`` development will be on improving
+round-tripping capabilities.  Eventually, it will also be possible to enable
+optional user-defined types with the tag syntax. The current goal is a version
+1.0 by the end of summer 2017.
 
 BespON as a configuration format will primarily be refined in the future
 through the creation of a more formal specification.  The Python
-implementation is written in such a way that much of the grammar is actually
-already defined in a usable format.
+implementation is written in such a way that a significant portion of the
+grammar is actually already defined in a usable format, from which it is
+converted into regular expressions.  A more formal specification will bring
+the possibility of implementations in additional languages.
+
 
 
 References
