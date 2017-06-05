@@ -591,7 +591,7 @@ the *left primary sensorimotor cortex*.
 
 .. figure:: figures/pyhrf_output.png
    :align: center
-   :scale: 35%
+   :scale: 27%
    :figclass: w
 
    PPMs (upper left), active parcels (lower left) and estimated HRFs (right),
@@ -613,7 +613,7 @@ the reliability of the results.
 
 PyHRF is an open source software, which has allowed it to evolve rapidly over
 the last few years. As we showed, it allows to generate posteriori probability
-maps (PPM) to describe the significance of the activation in each region of the
+maps (PPMs) to describe the significance of the activation in each region of the
 brain. Moreover, PyHRF uses efficient estimation methods in order to provide
 a fast and reliable tool. In fact, in 2013, a similar solution based on the
 BOLD JDE was developed in PyHRF for the Functional Arterial Spin Labelling
