@@ -312,8 +312,8 @@ In order for this, we set the number of tasks to be three times the number of wo
 Striping is also activated and is set to three which is also equal to number of nodes.
 Figures :ref:`fig:speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (600X).
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
-However, based on the timing plots shown in Figure :ref:`fig:timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as aresult the overal speed-up is not improved as compared to what we had in Figure :ref:`fig:speedup-600x`.
-In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about each task and to also validate our observationis from Dask web-interface. 
+However, based on the timing plots shown in Figure :ref:`fig:timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`fig:speedup-600x`.
+In order to see if the calculation is load balanced and the same amount of load is assigned to each worker by the scheduler, scheduler pluging is used to get detailed information about each task and to also validate our observations from Dask web-interface. 
 The results from scheduler pluging is described in the following section.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
@@ -380,10 +380,8 @@ Scheduler Plugin Results
 
 In addition to Dask's web interface, we implemented a Dask Scheduler Plugin.
 This plugin captures task execution events from the scheduler and their respective timestamps.
-These captured profiles were later use to analyze the execution of and XTC 300x on Stampede.
-Figure :ref:`XTC300x64coresStampede` shows characteristic executions.
-The delay in execution (Figure :ref:`XTC300x64coresStampede` A) is because of the specific cores and not something that is part of the framework.
-This is eliminated when cores are oversubscribed by a factor of three (i.e., three times as many blocks as cores (Figure :ref:`XTC300x64coresStampede` B).
+These captured profiles were later use to analyze the execution of XTC 300x on Stampede.
+Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the left (Figure :ref:`XTC300x64coresStampede` A) is an execution where the number of RMSD blocks is equal to the number of cores and on the right (Figure :ref:`XTC300x64coresStampede` B) an execution where the number of blocks is three times the number of cores. 
 
 .. figure:: figs/panels/scheduler-300x.pdf
    :figclass: w
@@ -392,7 +390,37 @@ This is eliminated when cores are oversubscribed by a factor of three (i.e., thr
    Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
    64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y     
    axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light 
-   Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede`   
+   Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede` 
+
+
+In addition we were able to measure how many tasks are submitted per worker process.
+Table :ref:`tab:process-subm` summarizes the results and Figure :ref:`fig:task-histograms` shows in detail how RMSD blocks were submitted per worker process in each run.
+As it is shown the execution is not balanced between worker processes. Although most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
+As a result, oversubscription does not lead necessarily to a balanced execution, adding additional execution time.
+
+
+.. table:: Summary of the number of worker processes per submitted RMSD blocks. Each column shows the total number of Worker process that executed a number of RMSD blocks per run. Executed on TACC Stampede utilizing 64 cores :label:`tab:process-subm` 
+
+
+   +------------+-------+-------+-------+-------+-------+
+   |RMSD Blocks | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
+   +============+=======+=======+=======+=======+=======+
+   |    1       |   0   |   0   |   1   |   0   |   0   |
+   +------------+-------+-------+-------+-------+-------+
+   |    2       |   8   |   5   |   7   |   7   |   2   |
+   +------------+-------+-------+-------+-------+-------+
+   |    3       |  48   |  54   |  56   |  50   |  60   |
+   +------------+-------+-------+-------+-------+-------+
+   |    4       |   8   |   5   |   0   |   7   |   2   |
+   +------------+-------+-------+-------+-------+-------+
+
+.. figure:: figs/x300TaskHistograms.pdf
+   :figclass: w
+   :scale: 50%
+      
+   Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
+   192 blocks. Each histogram is a different run of the same execution. The X axis is worker process ID and the Y     
+   axis the number of tasks submitted to that procces. :label:`fig:task-histograms`
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
