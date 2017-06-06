@@ -359,7 +359,7 @@ preprocessing.
    the dataset ``ds000114``. :label:`bold`
 
 
-As we explained before, the JDE framework estimates HRF parcels-wide. This
+As we explained before, the JDE framework estimates HRF parcels-wise. This
 means that PyHRF needs a parcellation mask to compute the estimation-detection.
 The package provides a Willard atlas :cite:`Richiardi2015` (see Fig.
 :ref:`willard`) created from the files distributed by Stanford
@@ -458,7 +458,7 @@ Moreover, we need to specify if we want to estimate the HRF response  or use,
 for example, its canonical form.  In our running example, we will estimate the
 HRF (``--estimate-hrf``) with a time resolution (``--dt``) of 1.25 s,
 a duration (``--hrf-duration``) of 25.0 s, and we force to zero the beginning
-of the response (``--zero-constraint``).
+and ending of the response (``--zero-constraint``).
 
 Once the parameters of the model have been defined, we run our analysis by
 using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. The
