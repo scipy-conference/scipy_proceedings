@@ -281,7 +281,7 @@ Failed Event
 
 
 Sacred ships with observers that store all the information from these events in a MongoDB, SQL database, or locally on disk.
-Furthermore there are two observers that can send notifications about runs via Telegram :cite:`telegram` or Slack :cite:`slack`.
+Furthermore there are two observers that can send notifications about runs via Telegram :cite:`telegram` or Slack :cite:`slack` respectively.
 Moreover, the observer interface is generic and supports easy addition of custom observers.
 
 The recommended observer is the ``MongoObserver``, which writes to a MongoDB :cite:`mongo`.
@@ -329,11 +329,11 @@ A slightly shortened example database entry corresponding to our minimal example
 Labwatch
 ========
 
-Finding the correct hyperparameter setting for machine learning algorithms is often done by trial and error even though it sometimes makes the difference between state-of-the-art performance and performance that is as bad as random guessing.
-A growing number of tools that can automate the optimization of hyperparameters have recently emerged, allowing users to define a searchspace and leave the search for good configurations to the optimizer, instead resorting to manual tuning.
-However, in practice each optimizer requires users to adapt their code to a certain interface.
-Labwatch [#]_ simplifies this process by integrating a unified interface to a variety of hyperparameter optimizers into Sacred.
-This allows for an easy integration of hyperparameter optimization into the daily workflow.
+Finding the correct hyperparameter for machine learning algorithms can sometimes makes the difference between state-of-the-art performance and performance that is as bad as random guessing.
+It often done by trial and error, despite a growing number of tools that can automate the optimization of hyperparameters.
+Their adoption is hampered by the fact that each optimizer requires the user to adapt their code to a certain interface.
+Labwatch [#]_ simplifies this process by integrating an interface to a variety of hyperparameter optimizers into Sacred.
+This allows for easy access to hyperparameter optimization in daily research.
 
 .. [#] https://github.com/automl/labwatch
 
@@ -341,6 +341,7 @@ LabAssistant
 ------------
 
 At the heart of Labwatch is the so-called LabAssistant, which connects the Sacred experiment with a hyperparameter configuration search space (in short: *searchspace*) and a hyperparameter optimizer through a MongoDB database.
+For bookkeeping, it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g. fANOVA :cite:`hutter-icml14a`).
 When using Labwatch the required boilerplate code becomes:
 
 .. code-block:: python
@@ -357,20 +358,14 @@ When using Labwatch the required boilerplate code becomes:
 
 .. Labwatch provides a simple way for defining searchspaces that is well integrated into the Sacred workflow, and integrates hyperparameter optimizers such as various Bayesian optimization methods (e.g `RoBO <https://github.com/automl/RoBO/>`_ , `SMAC <https://github.com/automl/SMAC3/>`_) random search, or bandit strategies  (Hyperband [4])
 
-If the experiment is now called with a searchspace rather than a configuration, Labwatch will pass all entries of the experiment in the database to the hyperparameter optimizer and let it suggest a configuration. This configuration is then used to run the experiment.
-
- 
-For bookkeeping, it leverages the database storage of evaluated hyperparameter configurations, which allows parallel distributed optimization and also enables the use of post hoc tools for assessing hyperparameter importance (e.g. fANOVA :cite:`hutter-icml14a`).
-
-
 
 Search Spaces
 -------------
 
 In general Labwatch distinguishes between *categorical* hyperparameters that can have only discrete choices, and *numerical* hyperparameters that can have either integer or float values.
-For each hyperparameter the search space defines a prior distribution (e.g. uniform or Gaussian) as well as its type and its scale (e.g. log scale, linear scale) and a default value.
+For each hyperparameter the search space defines a prior distribution (e.g. uniform or Gaussian) as well as its type, scale (e.g. log scale, linear scale) and default value.
 
-Search spaces follow the same interface as Sacred's named configs:
+Search spaces follow the same interface as Sacred's named configurations:
 
 .. code-block:: python
 
@@ -391,19 +386,19 @@ Search spaces follow the same interface as Sacred's named configs:
                                    type=int,
                                    log_scale=True)
 
-Now by executing the Experiment for instance through the command line:
+This ``search_space`` can likewise be specified when executing the Experiment through the command line :
 
 .. code-block:: bash
 
     >> python my_experiment.py with search_space
 
-Labwatch triggers the optimizer to suggest a new configuration based on all configurations that are stored in the database and have been drawn from the same search space.
+Labwatch then triggers the optimizer to suggest a new configuration based on all configurations that are stored in the database and have been drawn from the same search space.
 
 
-Multiple search spaces
+Multiple Search Spaces
 ----------------------
 
-Labwatch also allows to have multiple search spaces, which is very convenient if one wants to keep a set of hyperparameters fixed and only optimize a few others.
+Labwatch also supports multiple search spaces, which is convenient if one wants to switch between optimizing different sets of hyperparameters.
 Assume that we only want to optimize the learning rate and keep the batch size fixed, we can create a second smaller search space:
 
 .. code-block:: python
@@ -415,21 +410,44 @@ Assume that we only want to optimize the learning rate and keep the batch size f
                                      default=10e-2,
                                      log_scale=True)
 
-We can run our experiment now in the same way but by calling it with this new search space: 
+This can be run in the same way as before, by just swapping out the name of the searchspace:
 
 .. code-block:: bash
 
     >> python my_experiment.py with small_search_space
 
 
-The optimizer will now only suggest a value for the learning rate and keeps all other hyperparameters, such as the batch size, fixed to the values that are defined in the config.
+The optimizer will now only suggest a value for the learning rate and leaves all other hyperparameters, such as the batch size, untouched.
 
 
 Hyperparameter Optimizers
 -------------------------
 
 
-Labwatch offers a simple but also flexible interface to a variety of state-of-the-art hyperparameter optimization methods which also allows researchers to easily integrate their own hyperparameter optimization method into Labwatch.
+Labwatch offers a simple and flexible interface to a variety of state-of-the-art hyperparameter optimization methods, including:
+- **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
+  configurations randomly from the corresponding prior distributions. It can be used in discrete as well as continuous search spaces and can easily be run in parallel.
+
+- **Bayesian optimization**  fits a probabilistic model to capture the current belief of the objective function :cite:`shahriari-ieee16a, snoek-nips12a`.
+  To select a new configuration, it uses a utility function that only depends on the probabilistic model to trade off exploration and exploitation.
+  There are different ways to model the objective function: 
+  
+  Probably the most common way is to use **Gaussian process** to model the objective function, which tend to work well in low (<10) dimensional continuous search spaces but do not natively work with categorical hyperparameters.
+  Furthermore, due to their cubic complexity they do not scale well with the number of function evaluations.
+  We used RoBO [#]_ as an implementation which is based on the George GP library :cite:`hodlr`.
+
+  **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
+  the objective function :cite:`hutter-lion11a`. Random forest natively allow to work in high dimensional mixed continuous and discret input spaces but seem to work less efficient compared
+  to Gaussian processes in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
+ 
+  More recently Bayesian neural networks have been used for Bayesian optimization :cite:`snoek-icml15a, springenberg-nips2016`.
+  Compared to Gaussian processes they scale very well in the number of function evaluation as well as in the number of dimensions.
+  Here we use the **Bohamiann** approach :cite:`springenberg-nips2016` which is also implemented in the RoBO framework.
+
+
+.. [#] https://github.com/automl/RoBO
+
+For each of these optimizers Labwatch provides an adapter, that integrates them into a common interface:
 
 .. code-block:: python
 
@@ -438,66 +456,40 @@ Labwatch offers a simple but also flexible interface to a variety of state-of-th
 
 
         def suggest_configuration(self):
-            # Run the optimizer and 
+            # Run the optimizer and
             # return a single configuration
             return config
 
         def update(self, configs, costs, runs):
-            # Update the internal 
+            # Update the internal
             # state of the optimizer
             pass
-           
 
-Basically, optimizers need to implement only the ``suggest_configuration()`` method which return a single configuration to Sacred and the ``update()`` method which gets all evaluated configuration and costs and updates the internal state of the optimizer.
+This allows researchers to easily integrate their own hyperparameter optimization method into Labwatch.
+They only need to implement an adapter that provides the ``suggest_configuration()`` method which return a single configuration to Sacred and the ``update()`` method which gets all evaluated configuration and costs and updates the internal state of the optimizer.
 
-
-Even though the interface for all optimizers is the same, every optimizer has its own properties and might not work in all use cases.
-The following list gives a brief overview of optimizers that can be used with Labwatch and the setting they work.
-For more details we refer to the corresponding papers:
-
-- **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
-  configurations randomly from the corresponding prior distributions. Due to its simplicity, random search works in discrete as well as continuous search
-  spaces and can be easily run in parallel.
-
-- **Bayesian optimization**  fits a probabilistic model to capture the current believe of the objective function :cite:`shahriari-ieee16a, snoek-nips12a`.
-  To select a new configuration, it uses a utility function that only depends on the
-  probabilistic model to trade off exploration and exploitation.
-  There are different ways to model the objective function: 
-  
-  Probably the most common way is to use **Gaussian process** to model the objective
-  function, which tend to work well in low (<10) dimensional continuous search spaces but do not natively work with categorical
-  hyperparameters. Furthermore, due to the cubic complexity they do not scale well with the number of function evaluations. 
-  We used RoBO (`https://github.com/automl/RoBO <https://github.com/automl/RoBO>`_) as an implementation which is based on the George GP library :cite:`hodlr`
-
-  **SMAC** is also a Bayesian optimization method but uses random forest instead of Gaussian processes to model
-  the objective function :cite:`hutter-lion11a`. Random forest natively allow to work in high dimensional mixed continuous and discret input spaces but seem to work less efficient compared
-  to Gaussian processes in low dimensional continuous search spaces :cite:`eggensperger-bayesopt13`.
- 
-  More recently Bayesian neural networks have been used for Bayesian optimization :cite:`snoek-icml15a, springenberg-nips2016`.
-  Compared to Gaussian processes they scale very well with the number of function evaluation as well as number of
-  dimensions. Here we use the **Bohamiann** approach :cite:`springenberg-nips2016` which is also implemented in the RoBO framework. 
 
 
 
 Sacredboard
 ===========
 Sacredboard provides a convenient way for browsing runs of experiments stored in a Sacred MongoDB database.
-It comes as a Python package installable to the researcher's computer or on a server.
-Users may access it via their web browser to get a list of both running and finished experiments that gets automatically updated as the experiment is running.
-It shows the current state and results, and can also show detailed information about individual experiments, including their configuration and standard output.
-As of now, Sacredboard only supports the MongoDB backend of Sacred.
-However, there are already attempts both from from the community and the developers to add support for other backends too.
+It consists of a lightweight ``flask``-based webserver that can be run on any machine with access to the database.
+The hosted web-interface shows a table view of both running and finished experiments which are automatically updated.
+Sacredboard shows the current state and results, and offers a detail view that includes configuration, host-information, and standard output of each run.
+At the moment it relies exclusively on the MongoDB backend of Sacred, but in the future we hope to support other options for bookeeping as well.
+
 
 Filtering
 ---------
 Experiments can be filtered by status to, for example, quickly remove failed experiments from the overview.
-Sacredboard also supports filtering by config values, where the user specifies a property name and a condition.
-By default this name refers to a variable from the experiment configuration, but by prepending a dot (``.``) it can refer to arbitrary stored properties of the experiment.
+Sacredboard also supports filtering by config values, in which case the user specifies a property name and a condition.
+By default the name refers to a variable from the experiment configuration, but by prepending a dot (``.``) it can refer to arbitrary stored properties of the experiment.
 Possible conditions include numerical comparisons (:math:`=, \neq, <, >, \ge, \le`) as well as regular expressions.
-Querying elements of dictionaries can be done using the dot notation (e.g. ``.info.my_dict.my_key``) and the same applies for array indices.
+Querying elements of dictionaries or arrays can be done using the dot notation (e.g. ``.info.my_dict.my_key``).
 A few useful properties to filter on include: the standard output (``.captured_out``), experiment name (``.experiment.name``),
 the info dictionary content (``.info.custom_key``), hostname (``.host.hostname``) and the value returned from the experiment's main function (``.result``).
-These filters can be freely combined and multiple can be applied at once.
+These filters can be freely combined.
 
 
 .. figure:: sacredboard.png
@@ -507,10 +499,10 @@ These filters can be freely combined and multiple can be applied at once.
     Sacredboard user interface
 
 
-Detail View
------------
+The Details View
+----------------
 
-Clicking on any of the displayed runs expands the row to a detail view that shows the hyperparameters used, information about the machine and environment where the experiment was run, and the standard output produced by the experiment.
+Clicking on any of the displayed runs expands the row to a details-view that shows the hyperparameters used, information about the machine, the environment where the experiment was run, and the standard output produced by the experiment.
 The view is organised as a collapsible table, allowing dictionaries and arrays to be easily browsed.
 
 .. figure:: sacredboard_detail.png
@@ -524,20 +516,19 @@ Connecting to TensorBoard
 ­­­
 Sacredboard offers an experimental integration with TensorBoard — the web-dashboard for the popular TensorFlow library :cite:`tensorflow`.
 Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run, it is possible launch TensorBoard directly from the Run detail view.
-This works as long as the paath to the TensorFlow log did not change and is accessible from the computer where Sacredboard is running.
+
+.. This works as long as the paath to the TensorFlow log did not change and is accessible from the computer where Sacredboard is running.
 If TensorBoard fails to start, it is necessary to check that it is installed in the same Python environment as Sacredboard, and that no other TensorBoard instances are running.
 Terminating all TensorBoard instances started from Sacredboard can be done by navigating to a special URL:
-
     http://localhost:5000/tensorboard/stop
-
 We are working to overcome this limitation.
 
 
 Plotting Metrics
 ----------------
-Sacredboard can visualize metrics such as accuracy or the loss, if they are tracked using Sacreds metrics interface.
+Sacredboard can visualize metrics such as accuracy or loss, if they are tracked using Sacreds metrics interface.
 Metrics can be tracked through the Run object which is accessible by adding the special ``_run`` variable to a captured function.
-This object provides a ``log_scalar`` method than can be called with an  arbitrary metric name, its value, and, optionally, the corresponding iteration number:
+This object provides a ``log_scalar`` method than can be called with an  arbitrary metric name, its value, and (optionally) the corresponding iteration number:
 
 .. code-block:: python
 
@@ -546,7 +537,7 @@ This object provides a ``log_scalar`` method than can be called with an  arbitra
 The values for each metric are aggregated into a list of step index and values, where the last step number is autoincremented if the ``step`` parameter is omitted.
 Sacredboard can [#]_ display metrics collected in this form as plots in the details view.
 
-.. [#] Work in progress, expected to be done in July.
+.. [#] Work in progress.
 
 
 
@@ -554,10 +545,8 @@ Sacredboard can [#]_ display metrics collected in this form as plots in the deta
 
 Example
 =======
-In this section we put it all together for the machine-learning-equivalent of a hello world program: MNIST classification.
-For this example we use the current development version of Sacred, and the Tensorflow and Keras libraries.
-The shown model is very basic and some parts of this example already served as code-illustrations earlier.
-
+In this section we combine everything for the machine-learning-equivalent of a hello world program: MNIST classification.
+Here we use the current development version of Sacred, and the Tensorflow and Keras libraries.
 
 Header
 ------
@@ -603,7 +592,7 @@ Note that we specify six parameters, and that the ``log_dir`` depends on the ``h
 
 
 We also make use of a ``named_config`` to group together the adam optimizer with a reduced learning rate.
-This way we can start the experiment by specifying ``with adam`` and have both parameters changed.
+In this way we can start the experiment by specifying ``with adam`` and have both parameters changed.
 
 .. code-block:: python
 
@@ -660,7 +649,7 @@ Note that the ``set_up_optimizer`` function also takes the loss, which is not pa
 
 Main Method
 -----------
-Finally in the main method we put put everything together.
+Finally the main method combines everything and serves as the entry point for execution.
 We've decorated it with ``@sacred.stflow.LogFileWriter(ex)`` to automatically capture the log directory used for the ``FileWriter`` in the appropriate format for Sacredboard.
 The main method is also automatically a captured function, and takes three of the configuration values as parameters.
 It also accepts a special parameters ``_run`` which grants access to the current ``Run`` object.
