@@ -161,8 +161,8 @@ Problem statement
 .. figure:: figures/adaptive-gains.png
     :scale: 70%
 
-    As model complexity grows, fewer samples (e.g., labeled images) are needed
-    in adaptive algorithms to reach a particular quality (e.g., classification
+    As problem size grows, fewer samples (e.g., labeled images) are needed in
+    adaptive algorithms to reach a particular quality (e.g., classification
     accuracy). :label:`adaptive-gains`
 
 The standard machine learning workflow obtains human labels before producing a
@@ -171,44 +171,70 @@ ImageNet dataset :cite:`deng2009imagenet`: humans have provided millions of
 image labels, and there have been dozens of models to predict labels for unseen
 images :cite:`szegedy2015going, he2015delving, simonyan2014very`.
 
-This process is `passive`: any selection on which queries to present is done
-prior to any labeling. Query selection during labeling to aid a given goal
-(e.g., classification accuracy) could reduce the number of responses needed,
-and is available through `adaptive` sampling algorithms. These algorithms
-incorporate human feedback by using previous responses to select new queries
-for labeling.
+The collection of these data is `passive` and does not `adapt` to previous
+responses: it makes no selection on which queries to present for labeling given
+previous responses. Adaptive data collection is a process which selects the most
+useful data as quickly as possible to help achieve some goal (e.g.,
+classification accuracy).
 
-The benefits of adaptive sampling algorithms are that they require fewer
-labeled examples than passive sampling algorithms, especially as model
-complexity grows. Human provided labels generate complex models  because human
-attention span limits the label complexity. This means that adaptive algorithm
-do not require more responses than passive algorithms :cite:`castro2005faster`
-as model complexity grows :cite:`hanneke2007bound`. A clearer depiction of
-these gains is shown in Figure :ref:`adaptive-gains`.
+Adaptive data collection naturally require fewer responses to produce the
+same model as passive data collection: it's adapting to previous responses by
+choosing which query to present next. This is most useful as the problem size
+increases, or when there are many data to label (e.g., different sorting
+algorithms). Adaptive algorithms do not require more responses than passive
+algorithms :cite:`castro2005faster`. A clearer depiction of these gains is
+shown in Figure :ref:`adaptive-gains`.
 
-These adaptive sampling algorithms depend on previous examples, meaning they
-must be able to
+Adaptively collecting large-scale datasets is challenging and time-consuming.
+Large datasets such as ImageNet are collected `passively` using existing
+crowdsourcing system and require millions of human responses
+:cite:`deng2009imagenet`. As such, most experiments on adaptive sampling
+algorithms are simulations that use these passively collected datasets. These
+simulations do not address the practical issues faced in crowdsourcing:
+adaptive algorithm response time, human fatigue and differing label quality
+among humans.
 
-1. receive and store previous responses
-2. deliver and select queries to be labeled
-3. update some internal model (which selects queries to be presented)
+Arguably, some of the deepest insights and greatest innovations have come
+through experimentation. This is only possible if adaptive data
+collection is easily accessible by both
 
-The requirements are difficult to meet in crowdsourcing. Crowdsourcing is a
-general purpose tool that only asks many humans questions; there's nothing
-inherently adaptive in gathering responses through crowdsourcing. The
-requirements dictate that some computational backend be present, and how
-participants should interact with the adaptive algorithm as shown in Figure
-:ref:`data-flow`.
+1. Machine learning researchers, to test and deploy adaptive algorithms
+2. Experimentalists, to use and test adaptive algorithms in real-world applications
 
-A system that can connect crowdsourcing and adaptive sampling presents a
-variety of challenges in mathematics, systems and software development. These
-challenges stem from the storage and connection of responses to the adaptive
-sampling algorithm. Any such system needs to process, store and receive
-crowdsourcing responses, and this has served as barrier to developing such a
-system.
+Easy use by both groups will enable feedback between experimentalists and
+machine learning researchers to improve adaptive data collection through
+crowdsourcing.
 
-The problem that ultimately needs to be solved is to provide a system that
-connects arbitrary adaptive sampling algorithms with crowdsourcing.
+
+General Solution
+----------------
+
+The general solution connects arbitrary adaptive algorithms with crowdsourcing.
+
+Adaptive data collection is not possible without access to previous responses,
+a fundamental change to data collection. This introduces human feedback: the
+most useful queries are selected by using the existing human labels. If a
+particular query has shown to be of little use, it doesn't make much sense to
+label the same query again.
+
+Adaptive algorithms use previous responses to ask questions, which means that
+they require
+
+* receiving and storing previous responses.
+* delivering and selecting queries to be labeled.
+* updating some internal model (which selects queries to be presented).
+
+These requirements are not met in general crowdsourcing tools (e.g., Mechanical
+Turk, PsiTurk, Crowd Flower). These systems were not designed with these
+requirements in mind, and adaptive data collection represents a fundamental
+shift in their data collection model. Adaptive data collection requires the
+interactions show in Figure :ref:`data-flow`.
+
+This general system presents a variety of challenges in mathematics, systems
+and software development. These challenges stem from the storage and connection
+of responses to the adaptive sampling algorithm. Any such system needs to
+process, store and receive crowdsourcing responses, and this has served as
+barrier to developing such a system.
 
 .. figure:: figures/data-flow.png
     :scale: 50%
@@ -216,24 +242,6 @@ connects arbitrary adaptive sampling algorithms with crowdsourcing.
     The data flow required to adaptively collect crowdsourcing data. The
     computational backend is needed for processing the response, which may be
     involved. :label:`data-flow`
-
-General solution
-----------------
-
-The most general solution would be a system that enables evaluation of many
-different adaptive sampling algorithms, which in practice requires a simple
-implementation algorithm scheme.
-
-This system would enable feedback that would allow adaptive algorithms to be
-improved and, in turn, require fewer crowdsourcing responses for
-experimentalists. Completing this feedback loop requires a low barrier to entry
-for experimentalists.
-
-Such a system should be accessible by any service whether it is involved in
-crowdsourcing or not. It could respond to any number of interactions; for
-example, this system could respond to user clicks on different advertisements.
-This would only require implementing an API that makes Figure :ref:`data-flow`
-possible.
 
 One other system that addresses this challenge is the Microsoft Decision
 Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
@@ -252,13 +260,13 @@ present `next`. NEXT provides
 .. [#] Homepage at http://nextml.org
 .. [#] Source available at https://github.com/nextml/NEXT
 
-* easy use and configuration by experimentalists, which is applicable to a wide
-  variety of fields and disciplines
-* live experiment monitoring dashboards that update as responses are received
 * easy implementation, selection, and evaluation of different adaptive
   algorithms
 * a web interface for crowdsourcing participants, though it is also accessible
   via other interactions through HTTP requests
+* live experiment monitoring dashboards that update as responses are received
+* easy use and configuration by experimentalists, which is applicable to a wide
+  variety of fields and disciplines
 
 These goals have been successfully addressed.  Mathematicians have implemented
 new algorithms :cite:`jun2016anytime` and UW–Madison psychologists have
@@ -271,9 +279,23 @@ millions of responses from thousands of participants, at least with fast and
 simple algorithms.  This is illustrated by the problem below, though it also
 illustrates other features.
 
+Applications of NEXT
+--------------------
+NEXT internal `applications` present different queries for users to consider.
+There are three internal applications specifically geared to three different
+types of judgments a user can make. These are
 
-Example use of NEXT
-^^^^^^^^^^^^^^^^^^^
+* Cardinal bandits, which asks participants to rate one object
+  :cite:`gabillon2012best` as shown in Figure :ref:`example-query`.
+* Dueling bandits, which asks participants to select one of two objects
+  :cite:`yue2012k` as shown in Figure :ref:`dueling-interface`.
+* Triplets, which displays three objects and asks for `triplet responses` of
+  the form "object :math:`i` is more similar to object :math:`j` than object
+  :math:`k`." :cite:`jain2016finite`, as shown in Figure
+  :ref:`triplet-interface`.
+
+Cardinal bandits
+^^^^^^^^^^^^^^^^
 
 .. figure:: example_query.png
 
@@ -291,10 +313,10 @@ presented below the comic with buttons to rate the caption as "unfunny",
 "somewhat funny" or "funny". Every time one of these buttons is pressed, the
 adaptive algorithm processes the response and generates a new query.
 
-Each week, we collect and record up to a million ratings and from over
-10,000 users. All told, this dataset [#]_ includes over TODO ratings on over TODO
-different captions. This humor dataset has been of practical use in improving
-adaptive sampling algorithms :cite:`jun2016anytime`.
+Each week, we collect and record up to a million ratings and from over 10,000
+users. All told, this dataset [#]_ includes over 20 million ratings on over
+363,000 different captions. This humor dataset has been of practical use in
+improving adaptive sampling algorithms :cite:`jun2016anytime`.
 
 .. [#] https://github.com/nextml/caption-contest-data
 
@@ -312,6 +334,52 @@ In initial contests, we verified that one adaptive algorithm
 :cite:`jamieson2014lil` saw gains over a random algorithm. Later, we
 implemented an improved adaptive algorithm (KL-UCB at
 :cite:`kaufmann2013information`) and saw adaptive gains as expected.
+
+This is a large part of why we designed NEXT: to easily evaluate adaptive
+algorithms in real-world applications.
+
+Dueling bandits
+^^^^^^^^^^^^^^^
+
+.. figure:: figures/dueling-interface.png
+    :scale: 20%
+
+    The dueling bandits interface, where two items are compared and the
+    "better" item is selected :label:`dueling-interface`
+
+We also support asking the crowdsourcing participants to chose the "best" of
+two items, which we did during the first several caption contests we launched
+for The New Yorker. This interface asks participants to select the funnier of
+two captions, and is shown in Figure :ref:`dueling-interface`. This problem
+formulation has theoretic guarantees on finding the best item in a set
+:cite:`audibert2010best`, but can also be applied to ranking different objects
+:cite:`chen2013pairwise`.
+
+The early evaluation of dueling bandits in the Caption Contest is again part of
+why we developed NEXT. After trying dueling bandits for several contests, we
+decided using cardinal bandits is preferable. Cardinal bandits works better at
+scale, and requires less work by The New Yorker.
+
+Triplets
+^^^^^^^^
+
+.. figure:: figures/triplet-interface.png
+    :scale: 15%
+
+    An interface that asks the user to select the most similar bottom object in
+    relation to the top object. :label:`triplet-interface`
+
+Finding a similarity measure between different objects is the goal of this
+problem formulation. For example, it may be desired to find the similarity
+between different facial expressions. Happy and excited faces may be similar
+but are probably different from sad faces.
+
+Human attention span can not handle the naive number of comparisons, about
+:math:`n^2` with :math:`n` items. Instead, we ask the crowdsourcing participant
+to make a pairwise similarity judgement, or a triplet response as shown in
+Figure :ref:`triplet-interface`. There are theoretic guarantees on finding some
+similarity measure given these responses :cite:`jain2016finite` and have been
+used in practice with NEXT to compare different molecules :cite:`rau2016model`.
 
 NEXT Architecture
 -----------------
@@ -336,58 +404,6 @@ use cases seen by both algorithm developers and experimentalists [#]_.
     When and how different users interact with NEXT. Arrows represent some form
     of communication between different system components.
     :label:`block-diagram`.
-
-Default NEXT applications
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-NEXT internal `applications` present different queries for users to consider.
-There are three internal applications specifically geared to three different
-types of judgments a user can make. These are
-
-* Cardinal bandits, which asks participants to rate one object
-  :cite:`gabillon2012best` as shown in Figure :ref:`example-query`.
-* Dueling bandits, which asks participants to select one of two objects
-  :cite:`yue2012k` as shown in Figure :ref:`dueling-interface`.
-* Triplets, which displays three objects and asks for `triplet responses` of
-  the form "object :math:`i` is more similar to object :math:`j` than object
-  :math:`k`." :cite:`jain2016finite`, as shown in Figure
-  :ref:`triplet-interface`.
-
-
-.. figure:: figures/dueling-interface.png
-    :scale: 20%
-
-    The dueling bandits interface, where two items are compared and the
-    "better" item is selected :label:`dueling-interface`
-
-The included applications have algorithms included by default. These algorithms
-have theoretic `sample complexity bounds` which relate the result accuracy to
-the number of responses received and are listed below:
-
-- Both cardinal and dueling bandit algorithms have guarantees on finding the
-  best item in a set :cite:`kaufmann2015complexity` :cite:`audibert2010best`.
-- Triplet algorithms have guarantees on finding some similarity measure between
-  objects given triplet responses :cite:`jain2016finite`.
-
-An example of both cardinal and dueling bandits is in the formulation of the
-New Yorker Cartoon Caption Contest. In this case, the goal of the experiment is
-to find the funniest caption and both cardinal and dueling bandits support
-this, by respectively finding how "funny" one caption is and finding the
-"funnier" of two captions. Both cases are of interest to the magazine.
-Cardinal bandits are used in practice as the New Yorker has many captions and
-cardinal bandits is less computationally intense.
-
-An example of the triplets application is finding a similarity measure of
-different facial expressions (e.g., a laughing and smiling face are similar in
-some sense). In this problem, objects are embedding into a similarity space
-where objects are similar if and only if they are close. This embedding can be
-found from the triplet responses shown in Figure :ref:`triplet-interface`.
-
-.. figure:: figures/triplet-interface.png
-    :scale: 15%
-
-    An interface that asks the user to select the most similar bottom object in
-    relation to the top object. :label:`triplet-interface`
 
 
 Algorithm implementation

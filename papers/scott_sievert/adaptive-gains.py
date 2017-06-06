@@ -10,10 +10,13 @@ t = np.linspace(0, 1, num=1000)
 slow = 1 - np.exp(-2*t)
 fast = 1 - np.exp(-8*t)
 
-n = np.arange(20) + 1
 n = np.linspace(0, 7.5, num=1000) + 1
 passive = n - 1
 adaptive = np.log(n)
+
+#  n = np.arange(80) + 1
+#  passive = n**2
+#  adaptive = n * np.log(n)
 
 width = 4
 ratio = 8 / 5
@@ -24,9 +27,9 @@ plt.figure(figsize=(width, width * ratio))
 textbook()
 plt.plot(n, passive, label='Passive')
 plt.plot(n, adaptive, label='Adaptive')
-plt.xlabel('Model complexity →')
+plt.xlabel('Problem size →')
 plt.ylabel('Number of responses required →')
-plt.title('Collection cost for different models')
+#  plt.title('Collection cost for different ')
 plt.legend(loc='best')
 
 #  plt.subplot(2, 1, 2)
