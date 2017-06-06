@@ -29,39 +29,39 @@ Nearly all astrophysical observations are done through *remote sensing*. Light a
 
 .. table:: All publications describing the data and capabilities of the CHIANTI atomic database and the associated version of the database. :label:`chiantipapers`
 
-   +-------------------------------------+---------+
-   |Paper                                | Version |
-   +=====================================+=========+
-   | :cite:`dere_chianti_1997`           | 1       |
-   +-------------------------------------+---------+
-   | :cite:`young_chianti:_1998`         | 1       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chianti_1999`          | 2       |
-   +-------------------------------------+---------+
-   | :cite:`dere_chianti-atomic_2001`    | 3       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chianti-atomic_2002`   | 3       |
-   +-------------------------------------+---------+
-   | :cite:`young_chianti-atomic_2003`   | 4       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chianti-atomic_2006`   | 5       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chianti-atomic_2006-1` | 5       |
-   +-------------------------------------+---------+
-   | :cite:`dere_chianti_2009`           | 6       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chiantiatomic_2009`    | 6       |
-   +-------------------------------------+---------+
-   | :cite:`young_chiantiatomic_2009`    | 6       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chiantiatomic_2012-1`  | 7       |
-   +-------------------------------------+---------+
-   | :cite:`landi_chiantiatomic_2013`    | 7.1     |
-   +-------------------------------------+---------+
-   | :cite:`del_zanna_chianti_2015`      | 8       |
-   +-------------------------------------+---------+
-   | :cite:`young_chianti_2016`          | 8       |
-   +-------------------------------------+---------+
+   +-------------------------------------+---------+-----------+
+   |Paper                                | Version | Citations |
+   +=====================================+=========+===========+
+   | :cite:`dere_chianti_1997`           | 1       | 1167      |
+   +-------------------------------------+---------+-----------+
+   | :cite:`young_chianti:_1998`         | 1       | 105       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chianti_1999`          | 2       | 94        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`dere_chianti-atomic_2001`    | 3       | 156       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chianti-atomic_2002`   | 3       | 86        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`young_chianti-atomic_2003`   | 4       | 250       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chianti-atomic_2006`   | 5       | 373       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chianti-atomic_2006-1` | 5       | 25        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`dere_chianti_2009`           | 6       | 301       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chiantiatomic_2009`    | 6       | 25        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`young_chiantiatomic_2009`    | 6       | 22        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chiantiatomic_2012-1`  | 7       | 174       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`landi_chiantiatomic_2013`    | 7.1     | 227       |
+   +-------------------------------------+---------+-----------+
+   | :cite:`del_zanna_chianti_2015`      | 8       | 60        |
+   +-------------------------------------+---------+-----------+
+   | :cite:`young_chianti_2016`          | 8       | 1         |
+   +-------------------------------------+---------+-----------+
 
 The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). 
 
@@ -78,22 +78,21 @@ The structure of the CHIANTI database is such that each top level directory repr
    :figclass: w
    :scale: 55%   
 
-   All ions available in the CHIANTI atomic database. The color and number in each square indicate the number of available levels in the database.
-   Adapted from Fig. 1 of :cite:`young_chianti_2016`. :label:`linelist` 
+   All ions available in the latest version (v8.0.6) of the CHIANTI atomic database. The color and number in each square indicate the number of available levels in the database. Adapted from Fig. 1 of :cite:`young_chianti_2016`. :label:`linelist` 
 
 .. table:: Some of the filetypes available for each ion in the CHIANTI database. Adapted from Table 1 of :cite:`young_chianti_2016`. :label:`dbstructure`
 
-   +-----------------+------------------------------------------------------------------------------+
-   | Filetype        | Description                                                                  |
-   +=================+==============================================================================+
-   | ELVLC           | Index and energy for each level                                              |
-   +-----------------+------------------------------------------------------------------------------+
-   | WGFA            | Wavelength, Einstein "A" values, and oscillator strengths for each transiton |
-   +-----------------+------------------------------------------------------------------------------+
-   | SCUPS           | Scaled effective collision strengths for each transition                     |
-   +-----------------+------------------------------------------------------------------------------+
-   | FBLVL           | Energy levels for free-bound continuum calculation                           |
-   +-----------------+------------------------------------------------------------------------------+
+   +----------+------------------------------------------------------------------------------+
+   | Filetype | Description                                                                  |
+   +==========+==============================================================================+
+   | ELVLC    | Index and energy for each level                                              |
+   +----------+------------------------------------------------------------------------------+
+   | WGFA     | Wavelength, Einstein "A" values, and oscillator strengths for each transiton |
+   +----------+------------------------------------------------------------------------------+
+   | SCUPS    | Scaled effective collision strengths for each transition                     |
+   +----------+------------------------------------------------------------------------------+
+   | FBLVL    | Energy levels for free-bound continuum calculation                           |
+   +----------+------------------------------------------------------------------------------+
 
 ChiantiPy provides several low-level functions for reading raw data directly from the CHIANTI database. For example, to find the energy of the emitted photon for each transition for Fe V (i.e. the fifth ionization state of iron), you would first read in level information for each transition for a given ion,
 
@@ -127,13 +126,13 @@ As with the other CHIANTI data files, the abundance values are typically read in
 
 Default values for the abundance and ionization equilibrium files as well as the units for wavelength (cm, :math:`\mathrm{\mathring{A}}`, or eV) and energy (ergs or photons) can be set in the users :code:`chiantirc` file, located in :code:`~/.chianti/chiantirc`. These settings are stored in :code:`ChiantiPy.tools.data.Defaults` and can be changed at anytime. 
 
-Unless otherwise noted, all units are in cgs, with the exception of wavelength which is recorded in angstroms (:math:`\mathrm{\mathring{A}}`). As discussed above, some energies in the CHIANTI atomic database, particularly those pertaining to levels in an atom, may be stored in :math:`\mathrm{cm}^{-1}` for convenience (i.e. with :math:`h=c=1`, a common convention in atomic physics). Results of any calculation in ChiantiPy will always be returned in cgs (unless explicitly stated in the :code:`chiantirc` file, e.g. photons instead of ergs).
+Unless otherwise noted, all quantities are expressed in the cgs unit system, with the exception of wavelengths which are recorded in angstroms (:math:`\mathrm{\mathring{A}}`). As discussed above, some energies in the CHIANTI atomic database, particularly those pertaining to levels in an atom, may be stored in :math:`\mathrm{cm}^{-1}` for convenience (i.e. with :math:`h=c=1`, a common convention in atomic physics). Results of any calculation in ChiantiPy will always be returned in cgs (unless explicitly stated in the :code:`chiantirc` file, e.g. photons instead of ergs).
 
 Common Calculations and API
 ---------------------------
-ChiantiPy contains several core objects for interacting with the data in the CHIANTI atomic database and performing many common calculations with these data. A summary of these objects can be found in Table :ref:`chiantipyapi`. These core objects can be roughly divided into two categories: those that deal with information and calculations about individual ions and those that aggregate information over a range of ions in order to perform some calculation. The :code:`ion` and :code:`Continuum` objects calculate emissivity information related to specific ions while the :code:`ioneq`, :code:`spectrum`, and :code:`radLoss` require information from multiple ions and/or elements. 
+The majority of the ChiantiPy codebase is divided into two modules: :code:`tools` and :code:`core`. The former contains utility and helper functions that are mostly for internal use. The latter contains the primary objects for interacting with the data in the CHIANTI atomic database and performing many common calculations with these data. A summary of the objects in :code:`core` can be found in Table :ref:`chiantipyapi`. These objects can be roughly divided into two categories: those that deal with information and calculations about individual ions and those that aggregate information over a range of ions in order to perform some calculation. The :code:`ion` and :code:`Continuum` objects calculate emissivity information related to specific ions while the :code:`ioneq`, :code:`spectrum`, and :code:`radLoss` require information from multiple ions and/or elements. 
 
-.. table:: The public API of ChiantiPy. :label:`chiantipyapi`
+.. table:: The primary objects in the public API of ChiantiPy. :label:`chiantipyapi`
 
    +-------------------+-----------------------------------------------------------------------+
    | Object Name       | Description                                                           |
@@ -151,7 +150,7 @@ ChiantiPy contains several core objects for interacting with the data in the CHI
 
 Line Emission
 #############
-The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object. 
+The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object which provides an interface to the data and associated calculations for each ion in the database. 
 
 Continuum Emission
 ##################
@@ -244,13 +243,13 @@ Equations, what are they used for, code example
 
 Documentation, Testing, and Infrastructure
 ------------------------------------------
-The ChiantiPy project has made an effort to embrace modern development practices when it comes to developing, documenting and releasing the ChiantiPy codebase. Like many open source started in the late 2000s, ChiantiPy was originally hosted on SourceForge, but has now moved its development entirely to `GitHub <https://github.com/chianti-atomic/ChiantiPy>`_. The SVN commit history is in the process of being migrated to GitHub as well. The move to GitHub has provided increased development transparency, ease of contribution, and better integration with third-party services.
+The ChiantiPy project has made an effort to embrace modern development practices when it comes to developing, documenting and releasing the ChiantiPy codebase. Like many open source projects started in the late 2000s, ChiantiPy was originally hosted on SourceForge, but has now moved its development entirely to `GitHub <https://github.com/chianti-atomic/ChiantiPy>`_. The SVN commit history is in the process of being migrated to GitHub as well. The move to GitHub has provided increased development transparency, ease of contribution, and better integration with third-party services.
 
-An integral part of producing quality scientific code, particularly that meant for a large user base, is continually testing said code and as improvements are made and features are added. For each merge into master as well as each pull request, a series of tests is run on `Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_, a continuous integration service and that provides free and automated builds configured through GitHub webhooks. This allows each contribution to the codebase to be tested to ensure that these changes do not break the codebase in unexpected ways. Currently, ChiantiPy is tested on Python 2.7, 3.4, and 3.5, with full 3.6 support expected soon. Currently, the ChiantiPy package is installed in each of these environments and minimal set of tests of each core module is run along with documentation builds to ensure that Sphinx can generate the documentation. The actual module tests are currently quite sparse though one of the most pressing goals of the project is to increase test coverage of the core modules.
+An integral part of producing quality scientific code, particularly that meant for a large user base, is continually testing said code and as improvements are made and features are added. For each merge into master as well as each pull request, a series of tests is run on `Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_, a continuous integration service and that provides free and automated builds configured through GitHub webhooks. This allows each contribution to the codebase to be tested to ensure that these changes do not break the codebase in unexpected ways. Currently, ChiantiPy is tested on Python 2.7, 3.4, and 3.5, with full 3.6 support expected soon. Currently, the ChiantiPy package is installed in each of these environments and minimal set of tests of each core module is run along with documentation builds to ensure that Sphinx can generate the documentation. The actual module tests are currently quite sparse though one of the more pressing goals of the project is to increase test coverage of the core modules.
 
-One of the most important parts of any codebase is the documentation. The ChiantiPy documentation is built using Sphinx and is `hosted on Read the Docs <http://chiantipy.readthedocs.io/en/latest/>`_. At each merge into the master branch, a new Read the Docs build is kicked off, ensuring that the ChiantiPy API documentation is never out of date with the most recent check in. In addition to the standard API documentation, the ChiantiPy Read the Docs page also provides a tutorial for using the various modules in ChiantiPy as well as a guid for those switching from the IDL version. 
+One of the most important parts of any codebase is the documentation. The ChiantiPy documentation is built using Sphinx and is `hosted on Read the Docs <http://chiantipy.readthedocs.io/en/latest/>`_. At each merge into the master branch, a new Read the Docs build is kicked off, ensuring that the ChiantiPy API documentation is never out of date with the most recent check in. In addition to the standard API documentation, the ChiantiPy Read the Docs page also provides a tutorial for using the various modules in ChiantiPy as well as a guide for those switching from the IDL version. 
 
-Stuff about astropy helpers...
+ChiantiPy has benefited greatly from the `astropy-helpers package template <https://github.com/astropy/astropy-helpers>`_ provided by the Astropy collaboration :cite:`astropy_collaboration_astropy:_2013`. asropy-helpers provides boilerplate code for setting up documentation and testing frameworks which has allowed the package to adopt modern testing and documentation practices with little effort. 
 
 Future Work: Towards ChiantiPy v1.0
 -----------------------------------
