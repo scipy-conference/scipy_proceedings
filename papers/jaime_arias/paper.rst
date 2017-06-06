@@ -1,6 +1,6 @@
 :author: Jaime Arias
 :email: jaime.arias@inria.fr
-:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, Inria, MISTIS, LJK, F-38000 Grenoble, France
 :corresponding:
 :equal-contributor:
 
@@ -17,17 +17,17 @@
 
 :author: Florence Forbes
 :email: florence.forbes@inria.fr
-:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, Inria, MISTIS, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Aina Frau-Pascual
 :email: aina.frau-pascual@inria.fr
-:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, Inria, MISTIS, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Thomas Perret
 :email: thomas.perret@grenoble-inp.org
-:institution: Inria, MISTIS, Univ. Grenoble Alpes, LJK, F-38000 Grenoble, France
+:institution: Univ. Grenoble Alpes, Inria, MISTIS, LJK, F-38000 Grenoble, France
 :equal-contributor:
 
 :author: Jan M. Warnking
@@ -182,14 +182,14 @@ motor experimental conditions.  The parcels correspond to regions of the brain
 that are known induce evoked activity in response to these experimental
 conditions. Observe that the HRF estimated in the visual and motor regions
 (first and third figure from left to right ) are well approximated by the
-canonical HRF whereas in the auditory ares (second figure from left to right),
+canonical HRF whereas in the auditory area (second figure from left to right),
 the recovered hemodynamic profiles peak earlier than the canonical shape.
 
 Standard methods (*e.g.,* GLM), with the posterior classical statistics
 applied, give statistical parametric maps (SPM) that describe the significance
 of the activation in each region. JDE is a Bayesian approach and estimates, for
 each parameter, posterior probability functions. For this reason, we can
-compute posterior probability maps (PPMs) from the outputs of PyHRF. These PPMs
+compute posterior probability maps (PPMs) from the output of PyHRF. These PPMs
 are not directly comparable to the classical SPM maps, but give a similar
 measure of significance of activation. For instance, in Fig. :ref:`spmvsppm` we
 show the SPM and PPM maps for a visual experimental condition in the same data
@@ -214,7 +214,7 @@ document.
 In Fig. :ref:`pyhrf` we present the inputs and the outputs of PyHRF for the
 analysis of BOLD data. It needs as inputs the data volume (BOLD), the
 experimental paradigm, and a parcellation of the brain. After running the JDE
-algorithm, the outputs will consist of HRF functions per parcel, BOLD effect
+algorithm, the output will consist of HRF functions per parcel, BOLD effect
 maps per experimental condition, and posterior probability maps (PPMs) per
 condition. In the next section, we will describe in more details these elements
 and how to use PyHRF.
@@ -359,9 +359,9 @@ preprocessing.
    the dataset ``ds000114``. :label:`bold`
 
 
-As we explained before, the JDE framework estimates HRF parcels-wise. This
-means that PyHRF needs a parcellation mask to compute the estimation-detection.
-The package provides a Willard atlas :cite:`Richiardi2015` (see Fig.
+As we explained before, the JDE framework estimates HRF parcel-wise. This means
+that PyHRF needs a parcellation mask to perform the estimation-detection.  The
+package provides a Willard atlas :cite:`Richiardi2015` (see Fig.
 :ref:`willard`) created from the files distributed by Stanford
 (http://findlab.stanford.edu/functional_ROIs.html). This atlas has a voxel
 resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
@@ -540,24 +540,23 @@ Concluding Remarks
 ------------------
 
 In this paper we presented PyHRF, a software to analyze fMRI data using a joint
-detection-estimation (JDE) approach of the cerebral activity. Roughly, it
-jointly detects cortical activation and estimates the hemodynamic response
-function (HRF). In contrast to existing tools, PyHRF estimates the HRF instead
-of considering it as constant in all the brain and for all subjects, improving
-thus the reliability of the results.
+detection-estimation (JDE) approach of the cerebral activity. It jointly
+detects cortical activation and estimates the hemodynamic response function
+(HRF), in contrast to existing tools, that consider the HRF as constant over
+the brain and over subjects, improving thus the reliability of the results.
 
-PyHRF is an open source software, which has allowed it to evolve rapidly over
-the last few years. As we showed, it allows to generate posterior probability
-maps (PPMs) to describe the significance of the activation in each region of
-the brain. Moreover, PyHRF uses efficient estimation methods in order to
-provide a fast and reliable tool.
+PyHRF is an open source software that has evolved rapidly over the last few
+years.  As we showed, it allows to generate posterior probability maps (PPMs)
+to describe the significance of the activation in each region of the brain.
+Moreover, PyHRF uses efficient estimation methods in order to provide a fast
+and reliable tool.
 
 Since 2013, PyHRF has started to evolve to deal with Functional Arterial Spin
 Labelling (fASL) :cite:`Vincent13` data, including a physiological prior to
 make the perfusion estimation more robust :cite:`Frau14b` :cite:`Frau15a`.
 A fast solution for fASL based on VEM was proposed in :cite:`Frau15b`, with
-similar results to the classical solution based on stochastic simulation
-techniques :cite:`Frau15c`.
+similar results than the solution based on stochastic simulation techniques
+:cite:`Frau15c`.
 
 Since the last years, many efforts have been made in terms of image processing,
 user-friendliness and usability of the PyHRF tool to make it more easy to use
