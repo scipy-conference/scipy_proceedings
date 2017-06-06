@@ -50,17 +50,17 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
    cognitive stimulation. The measured signal depends on the function of blood
    oxygenation level (BOLD signal) which is related to brain activity:
    a decrease in deoxyhemoglobin induces an increase in BOLD signal. In fact,
-   this signal is convoluted by the Hemodynamic Response Function (HRF) whose
-   exact form is unknown and depends on various parameters (age, brain region,
-   physiological conditions).
+   the signal is convoluted by the Hemodynamic Response Function (HRF) whose
+   exact form is unknown and depends on various parameters such as age, brain
+   region or physiological conditions.
 
    In this paper we present PyHRF, a software to analyze fMRI data using
    a joint detection-estimation (JDE) approach. It jointly detects cortical
    activation and estimates the HRF. In contrast to existing tools, PyHRF
-   estimates the HRF instead of considering it constant in brain, improving
-   thus the reliability of the results. Here, we present an overview of the
-   package and ilustrate its use with a real case in order to show that PyHRF
-   is a tool suitable for non experts and clinicians.
+   estimates the HRF instead of considering it as constant in the entire brain,
+   improving thus the reliability of the results. Here, we present an overview
+   of the package and illustrate its use with a real case in order to show that
+   PyHRF is a tool suitable for clinical applications.
 
 .. class:: keywords
 
@@ -77,14 +77,15 @@ cerebral activity following sensory or cognitive stimulation. For more than
 technique most used by clinicians and neuroscientists to map the main
 functional regions of the brain.
 
-BOLD :cite:`Ogawa:1990` reflects the changes in oxygen concentration in the
-blood. Briefly, when brain activity occurs, oxygen is locally consumed by
+BOLD signal :cite:`Ogawa:1990` reflects the changes in oxygen concentration in
+the blood. Briefly, when brain activity occurs, oxygen is locally consumed by
 neurons and its concentration in the blood decreases (see Fig.
-:ref:`boldchain`).  Therefore, an inflow of oxygenated blood is achieved to
-replenish the tissue, increasing blood oxygen concentration. Deoxygenated blood
-causes locally magnetic distortions. Thus, BOLD signal is an indirect measure
-of cerebral activity based on physiological changes in oxygen consumption,
-cerebral blood flow and blood volume.
+:ref:`boldchain`). Therefore, an inflow of oxygenated blood is achieved to
+replenish the tissue, increasing local blood oxygen concentration in veins and
+capillaries, and then BOLD signal diminution. Oxygenated and deoxygenated
+bloods have different magnetic properties. Thus, BOLD signal is an indirect
+measure of cerebral activity based on physiological changes in oxygen
+consumption, cerebral blood flow and blood volume.
 
 .. figure:: figures/bold_chain.pdf
    :align: center
@@ -103,7 +104,8 @@ cerebral blood flow and blood volume.
    :figclass: wt
 
    HRF computed using PyHRF from BOLD data in several parcels belonging to
-   visual, auditory and motor regions. :label:`hrfs`
+   visual, auditory and motor regions, respectively from left to right.
+   :label:`hrfs`
 
 
 BOLD is non-invasive, non-ionizing, and gives access *in vivo* to brain
@@ -113,21 +115,20 @@ to true physiological parameters such as cerebral blood flow or cerebral blood
 volume, but rather measures a mixture of these quantities that is difficult to
 untangle. In this regard, BOLD is a very interesting tool in neuroscience, but
 in general it is not widely used for clinical applications because the impact
-of physiological situation on HRF is unknown, hampering the BOLD signal
+of physiopathological situation on HRF is unknown, hampering the BOLD signal
 interpretation. For instance, it cannot detect chronic changes in the baseline
 states :cite:`Buxton:2013`, as it is the case of normal ageing
 :cite:`Fabiani:2014` and pathologies like Alzheimer's disease
 :cite:`Cantin:2011` or Stroke :cite:`Attye:2014`.
 
 Most used open source libraries for the analysis of fMRI data (*e.g.,* SPM
-[#]_, FSL [#]_) consider the HRF of the neuronal activity as
-a constant in all the brain and the same for all subjects. However, several
-works (see :cite:`Badillo13` for a survey) show that the HRF changes across
-different regions of the brain and other individuals, increasing thus the
-possibility of obtaining false negatives and decreasing the reliability of the
-results. The software PyHRF :cite:`Vincent:2014` was developed to overcome the
-above limitation by analyzing fMRI data using a joint detection-estimation
-(JDE) approach.
+[#]_, FSL [#]_) consider the HRF as constant in all the brain and the same for
+all subjects. However, several works (see :cite:`Badillo13` for a survey) show
+that the HRF changes across different regions of the brain and across
+individuals, increasing thus the possibility of obtaining false negatives and
+decreasing the reliability of the results. The software PyHRF
+:cite:`Vincent:2014` was developed to overcome the above limitation by
+analyzing fMRI data using a joint detection-estimation (JDE) approach.
 
 
 .. [#] SPM official website: http://www.fil.ion.ucl.ac.uk/spm/software/
@@ -141,68 +142,15 @@ smoothed data.  This detection-estimation is calculated on different parcels of
 interest paving the cerebral volume.  Therefore, PyHRF allows to navigate the
 brain and to focus on the regions of interest during the experiment in order to
 visualize the activations and their temporal behavior through the estimated
-HRF. In the last years, efforts have been made in terms of user-friendliness
-and usability of the PyHRF package to make it more easy to use by non experts
-and clinicians.
+HRF. In the last years, efforts have been made in terms of image processing,
+user-friendliness and usability of the PyHRF package to make it more easy to
+use by non experts and clinicians.
 
 Next, we present the PyHRF package. Then, we illustrate its use via a real
 example.  Finally, we conclude by discussing directions of current/future work.
 An online jupyter notebook containing the results presented here can be found
 at http://www.pyhrf.org/scipy2017_notebook.
 
-
-.. Background
-.. ----------
-..
-.. The development of neuroimaging techniques have allowed neuroscientifics to
-.. study brain function *in vivo*, in the healthy and pathological conditions.
-.. Since brain function is related to blood oxygen supply, the access to blood
-.. perfusion (the arrival of blood supply to a tissue) with neuroimaging is also
-.. an important tool for brain research. Different imaging techniques have been
-.. developed following different principles. Next, we briefly introduce fMRI and
-.. BOLD modality.
-..
-.. Functional Magnetic Resonance Imaging (fMRI)
-.. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-..
-.. Magnetic Resonance Imaging (MRI) uses nuclear magnetic resonance (NMR):
-.. physical phenomenon in which protons inside a magnetic field align their spin
-.. with the magnetic field vector and can absorb and re-emit electromagnetic
-.. radiation. In MRI, a large cylindrical magnet creates a magnetic field around
-.. the subject, that is place inside (see Figure :ref:`irm3t`). Then, radio waves
-.. are sent and their echo signals are collected and used to construct an image.
-..
-.. .. figure:: figures/irm_3t_neurospin.jpg
-..    :align: center
-..    :figclass: bht
-..
-..    3T MRI scanner at Neurospin for clinical research. :label:`irm3t`
-..
-..
-.. Blood-Oxygen-Level-Dependent (BOLD) fMRI
-.. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-..
-.. In 1990 a Japanese scientist called S. Ogawa :cite:`Ogawa:1990` discovered that
-.. the scanner can "see" where the blood goes after brain activity happens. This
-.. is due to the fact that hemoglobin works as a natural contrast agent: changes
-.. in the local oxygenation of the blood cause magnetic distortions that the
-.. scanner can detect. These changes in local oxygenation of the blood happen with
-.. brain activity, since oxygen is consumed and a subsequent blood supply causes
-.. an over-oxygenation of the local blood. This effect is called the Blood Oxygen
-.. Level Dependent (BOLD) effect and it is a popular measure in fMRI because there
-.. is no need for the invasive injection of other contrast agents (see Figure
-.. :ref:`boldchain`). With the BOLD signal, we can measure the effect of brain
-.. activity after a stimulus is given or a specific task is performed.
-..
-.. .. figure:: figures/bold_chain.pdf
-..    :align: center
-..    :scale: 50%
-..    :figclass: w
-..
-..    fMRI BOLD signal :cite:`Ogawa:1990`. The BOLD signal measures the local
-..    changes in blood oxygenation. This ratio changes during brain activity.
-..    :label:`boldchain`
-..
 
 PyHRF
 -----
@@ -220,32 +168,17 @@ to the development of a faster method to deal with the parameter estimation.
 Thus, a variational expectation maximization (VEM) solution :cite:`Chaari13`
 was implemented.
 
-
-.. In fact, PyHRF is composed of some C-extensions that handle computationally
-.. intensive parts of the algorithms. The package relies on robust scientific
-.. libraries such as Numpy [#]_, Scipy [#]_, Nipy [#]_ as well as Nibabel [#]_ to
-.. handle data reading/writing in the NIFTI format. Its source code is hosted on
-.. Github (https://github.com/pyhrf/pyhrf) and it can be easily installed from the
-.. PyPi repository (https://pypi.python.org/pypi/pyhrf). The reader can found the
-.. documentation of PyHRF and all the related information at http://www.pyhrf.org.
-..
-.. .. [#] Numpy official website: http://www.numpy.org/
-.. .. [#] Scipy official website: https://www.scipy.org/
-.. .. [#] Nipy official website: http://nipy.org/nipy/
-.. .. [#] Nibabel official website: http://nipy.org/nibabel/
-
-
 JDE aims at improving activation detection by capturing the correct
 hemodynamics, since using the wrong HRF function could hide existing
 activations. The use of a canonical HRF is usually sufficient for activation
 detection. However, HRF functions have been found to have different shapes in
 different regions :cite:`Handwerker04`, and to have different delays in
-specific populations :cite:`Badillo13`. They are also believed to change in
-some pathologies as stenosis. Fig. :ref:`hrfs` shows some HRF functions
-estimated using PyHRF from BOLD data of a healthy adult acquired in
-a block-design setting with visual, auditory and motor experimental conditions.
-The parcels correspond to regions of the brain that are known to activate with
-these experimental conditions.
+specific populations :cite:`Badillo13`. They change depending on pathologies
+such as stenosis. Fig. :ref:`hrfs` shows some HRF functions estimated using
+PyHRF from BOLD data from a healthy adult acquired in a block-design setting
+with visual, auditory and motor experimental conditions.  The parcels
+correspond to regions of the brain that are known to be activated with these
+experimental conditions.
 
 Standard methods, as GLM, with the posterior classical statistics applied, give
 statistical parametric maps (SPM) that describe the significance of the
@@ -256,8 +189,7 @@ are not directly comparable to the classical SPM maps, but give a similar
 measure of significance of activation. For instance, in Fig. :ref:`spmvsppm` we
 show the SPM and PPM maps for a visual experimental condition in the same data
 used for Fig. :ref:`hrfs`. We use the package Nilearn
-(http://nilearn.github.io) to generate the beautiful figures presented in this
-document.
+(http://nilearn.github.io) to generate the figures presented in this document.
 
 
 .. INFO: I use raw latex to display two subfigures
@@ -278,7 +210,7 @@ analysis of BOLD data. It needs as inputs the data volume (BOLD), the
 experimental paradigm, and a parcellation of the brain. After running the JDE
 algorithm, the outputs will consist of HRF functions per parcel, BOLD effect
 maps per experimental condition, and posterior probability maps (PPMs) per
-condition. In the next section, we will describe in more detail these elements
+condition. In the next section, we will describe in more details these elements
 and how to use PyHRF.
 
 .. figure:: figures/pyhrf4bold.pdf
@@ -472,9 +404,10 @@ method.
 Table :ref:`csv` shows the experimental paradigm of the dataset ``ds000114``
 wrote using the PyHRF format.  Note that it only contains motor stimuli since
 we are only interested in them for our BOLD analysis. As we will see below,
-this paradigm is not optimized for the JDE model of PyHRF. This causes that
-some brain areas that are expected to be active, *e.g.,* the supplementary
-motor area (SMA), have not significant values in the PPMs generated by PyHRF.
+while the paradigm is not optimized for JDE (standard block paradigm are not
+ideal to estimate different points of the HRF course), we obtained similar
+results to standard statistical analysis additionally providing the form of the
+HRF.
 
 .. table:: Experimental paradigm of the dataset ``ds000114`` containing only
            motor stimuli. The column organization of the file follows the
@@ -623,7 +556,8 @@ A fast solution for fASL based on VEM was proposed in :cite:`Frau15b`, with
 similar results to the classical solution based on stochastic simulation
 techniques :cite:`Frau15c`.
 
-In the last years, many efforts are made in terms of user-friendliness and
-usability of the PyHRF tool to make it more easy to use by non experts and
-clinicians.  Moreover, since PyHRF is able to analyze both BOLD and ASL data,
-it has begun to emerge as a tool suitable for use in a clinical environment.
+In the last years, many efforts are made in terms of image processing,
+user-friendliness and usability of the PyHRF tool to make it more easy to use
+by non experts and clinicians.  Moreover, since PyHRF is able to analyze both
+BOLD and ASL data, it has begun to emerge as a tool suitable for use in
+a clinical environment.
