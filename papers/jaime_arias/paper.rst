@@ -104,8 +104,9 @@ consumption, cerebral blood flow and blood volume.
    :figclass: wt
 
    HRF computed using PyHRF from BOLD data in several parcels belonging to
-   visual, auditory and motor regions, respectively from left to right.
-   :label:`hrfs`
+   visual (yellow, dark blue and green parcels), auditory (cyan and light green
+   parcels) and motor (red and purple parcels) regions, respectively from left
+   to right.  :label:`hrfs`
 
 
 BOLD is non-invasive, non-ionizing, and gives access *in vivo* to brain
@@ -174,11 +175,16 @@ activations. The use of a canonical HRF is usually sufficient for activation
 detection. However, HRF functions have been found to have different shapes in
 different regions :cite:`Handwerker04`, and to have different delays in
 specific populations :cite:`Badillo13`. They change depending on pathologies
-such as stenosis. Fig. :ref:`hrfs` shows some HRF functions estimated using
-PyHRF from BOLD data on a healthy adult acquired in a block-design setting with
-visual, auditory and motor experimental conditions.  The parcels correspond to
-regions of the brain that are known induce evoked activity in response to these
-experimental conditions.
+such as stenosis.
+
+Fig. :ref:`hrfs` shows some HRF functions estimated using PyHRF from BOLD data
+on a healthy adult acquired in a block-design setting with visual, auditory and
+motor experimental conditions.  The parcels correspond to regions of the brain
+that are known induce evoked activity in response to these experimental
+conditions. Observe that the HRF estimates in the visual and motor regions (two
+first figures from left to right ) are well approximated by the canonical HRF
+whereas in the auditory ares (third figure from left to right), the recovered
+hemodynamic profiles peak earlier than the canonical shape.
 
 Standard methods (*e.g.,* GLM), with the posterior classical statistics
 applied, give statistical parametric maps (SPM) that describe the significance
@@ -353,6 +359,7 @@ preprocessing.
 
 .. figure:: figures/bold.png
    :align: center
+   :scale: 49%
    :figclass: htb
 
    Mean of all preprocessed functional images (over time) of the 4th subject of
@@ -368,6 +375,7 @@ resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
 
 .. figure:: figures/willard.png
    :align: center
+   :scale: 49%
    :figclass: htb
 
    Willard atlas :cite:`Richiardi2015`. :label:`willard`
@@ -513,6 +521,7 @@ the *left primary sensorimotor cortex*.
 
 .. figure:: figures/neurovault.png
    :align: center
+   :scale: 18%
    :figclass: htb
 
    Unthresholded statistical maps shared on the site ``Neurovault`` for the
@@ -523,7 +532,7 @@ the *left primary sensorimotor cortex*.
 
 .. figure:: figures/pyhrf_output.png
    :align: center
-   :scale: 27%
+   :scale: 40%
    :figclass: w
 
    PPMs (upper left), active parcels (lower left) and estimated HRFs (right),
