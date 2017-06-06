@@ -602,7 +602,7 @@ In this way we can start the experiment by specifying ``with adam`` and have bot
         learning_rate = 0.001
 
 Finally we define a searchspace over ``learning_rate`` and ``hidden_units``, naturally treated in log-space.
-With this we can run our experiment using ``with search_space`` and have these two parameters set to suggestions by our hyperparameter optimizer (here ``RandomSearch``).
+Now we can run our experiment using ``with search_space`` and have these two parameters set to suggestions by our hyperparameter optimizer (here ``RandomSearch``).
 
 .. code-block:: python
 
@@ -693,19 +693,19 @@ Note that we call the other captured functions without passing any of the config
 
 Related Work
 ============
-We are aware only of a few projects that have a focus similarly broad as Sacred, the closest one being Sumatra :cite:`davison2012`.
+We are aware of only a few projects that have a focus similarly broad as Sacred, the closest one being Sumatra :cite:`davison2012`.
 It comes as a command-line tool and web-interface that can operate also with non-Python experiments, and uses a SQL database to store all the runs.
-The main drawback of Sumatra, that it enforces a specific workflow including initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
+But it enforces a specific workflow including initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
 
-Some projects including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus mainly on providing a dashboard.
+Some projects including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus on providing a dashboard.
 :cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
-Several projects exist with a focus on reproducible experiments, like ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
+Several projects exist with a focus on reproducible experiments, such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
 They trace dependencies and help in packaging everything that is needed to rerun an experiment exactly.
 
 
 Experiment databases :cite:`vanschoren2012, smith2014, empirical` make an effort to unify the process and storage of machine learning problems and experiments by expressing them in a common language.
 By standardizing that language, they improve comparability and communicability of the results.
-The most wellknown example of might be the OpenML project :cite:`vanschoren2014`.
+The most wellknown example might be the OpenML project :cite:`vanschoren2014`.
 This standardization has benefits, but also imposes certain restrictions on the conducted experiments.
 To keep Sacred as general as possible, we therefore chose not to build it ontop of an experiment database.
 That being said, we believe there is a lot of value in adding (optional) interfaces to experiment databases to Sacred.
@@ -713,7 +713,7 @@ That being said, we believe there is a lot of value in adding (optional) interfa
 
 Conclusion
 ==========
-Sacred is an open source python framework which aims to provide infrastructure for computational experiments, with minimal boilerplate and maximum convenience.
+Sacred is an open source python framework which aims to provide infrastructure for computational experiments, with minimal boilerplate code and maximum convenience.
 This paper presented its key features and demonstrated how they interact to tackle some of the basic problems of computational experimentation, like managing parameters, bookkeeping and reproducibility.
 We hope that through convenience and modularity, Sacred will help building a rich ecosystem of tools.
 Two such supporting tools are Labwatch and Sacredboard.
@@ -725,11 +725,11 @@ Sacredboard on the other hand provides a web-based interface to view recorded ru
 Future Work
 ===========
 Sacred has been useful for a many researchers already, but there are still many possible improvements on our roadmap.
-For one we'd like to support more complex experimental setups, like having separate training and evaluation scripts as is common with large Tensorflow models.
-Similarly interesting would be to offer support and a clear workflow for continuation of aborted runs
+This includes support for more complex experimental setups, like having separate training and evaluation scripts as is common with large Tensorflow models.
+Similarly it would be interesting to offer support and a clear workflow for continuation of aborted runs
 
-While Sacred helps with capturing relevant information about experiments, it doesn't offer much support for organizing and analysing the results.
-To tackle this issue we plan to provide a unified interface for querying the records created by different observers.
+While Sacred helps capturing relevant information about experiments, it does not offer much support for organizing and analysing results.
+To tackle this we plan to provide a unified interface for querying the records created by different observers.
 This semi-standardized format will enable the creation of general analysis tools, and extend the applicability of existing tools like Sacredboard.
 
 Another important direction is to simplify the process of actually reproducing Sacred experiments.
