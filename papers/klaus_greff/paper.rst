@@ -33,10 +33,10 @@ The Sacred Infrastructure for Computational Research
 
 .. class:: abstract
 
-We present a toolchain for computational research consisting of Sacred and the two supporting tools Labwatch and Sacredboard.
-Sacred is an open source python framework which aims provide basic infrastructure for running computational experiments and independent of the methods and libraries used.
+We present a toolchain for computational research consisting of Sacred and two supporting tools.
+Sacred is an open source python framework which aims to provide basic infrastructure for running computational experiments independent of the methods and libraries used.
 Instead it focusses on solving  universal everyday problems such as managing configurations, reproducing results, and bookkeeping.
-It also aims to provide an extensible basis for other tools, two of which we present here: Labwatch helps with tuning hyperparameters, and Sacredboard provides a web-dashboard for organizing and analyzing runs and results.
+Moreover it provides an extensible basis for other tools, two of which we present here: Labwatch helps with tuning hyperparameters, and Sacredboard provides a web-dashboard for organizing and analyzing runs and results.
 
 .. class:: keywords
 
@@ -45,34 +45,34 @@ It also aims to provide an extensible basis for other tools, two of which we pre
 Introduction
 ============
 
-A major part of machine learning research has become empirical and typically includes a large number of computational experiments run with many different hyperparameter settings.
-This process holds many practical challenges, such as managing configurations, hyperparameter tuning, ensuring reproducibility, bookkeeping of the runs, and organizing and maintaining an overview over  the results.
+A major part of machine learning research typically involves a large number of computational experiments run with many different hyperparameter settings.
+This process holds many practical challenges, such as bookkeeping and maintaining reproducibility.
 To make matters worse, experiments are often run on diverse and heterogeneous environments ranging from laptops to cloud computing nodes.
 Due to deadline pressure and the inherently unpredictable nature of research there is usually little incentive for researchers to build robust infrastructures.
-As a result, research code often evolves quickly and makes bad trade-offs that sacrifice important aspects like bookkeeping and reproducibility.
+As a result, research code often evolves quickly and compromises important aspects like bookkeeping and reproducibility.
 
 
 Many tools exist for tackling different aspects of this process, including databases, version control systems, command-line interface generators, tools for automated hyperparameter optimization, spreadsheets, and so on.
-However, very few tools integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
+Few, however, integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
 Since there is no common basis to build a workflow, the tools people build will be tied to their particular setup.
 This impedes sharing and collaboration on tools for important problems like optimizing hyperparameters, summarizing and analysing results, rerunning experiments, distributing runs, etc..
 
-Sacred aims to fill this gap by providing some basic infrastructure for running computational experiments.
-It is our hope that it will help researchers and foster the development of a rich collaborative ecosystem of shared tools.
+Sacred aims to fill this gap by providing basic infrastructure for running computational experiments.
+We hope that it will help researchers and foster the development of a rich collaborative ecosystem of shared tools.
 In the following, we briefly introduce Sacred and two supporting tools:
-Labwatch integrates a convenient unified interface to several automated hyperparameter optimizers such as random search, RoBO and SMAC.
-Sacredboard offers a web-based interface to view runs and supports maintaining an overview and organizing results.
+*Labwatch* integrates a convenient unified interface to several automated hyperparameter optimizers such as random search, RoBO and SMAC.
+*Sacredboard* offers a web-based interface to view runs and organize results.
 
 
 
 Sacred
 ======
-Sacred [#]_ is an open source Python framework that aims to bundle solutions for some of the most frequent challenges of computational research.
-It does not enforce any particular workflow, and it is independent of the choice of machine learning libraries.
-Sacred was designed to remain useful even under deadline pressure, and therefore tries to
+Sacred [#]_ is an open source Python framework that bundles solutions for some of the most frequent challenges of computational research.
+It does not enforce any particular workflow and is independent of the choice of machine learning libraries.
+Designed to remain useful even under deadline pressure, Sacred aims to
 offer maximum convenience while minimizing boilerplate code.
 By combining these features into a unified but flexible workflow, Sacred  enables its users to focus on research and still ensures that all the relevant information for each run are captured.
-Its standardized configuration process allows streamlined integration with other tools such as Labwatch, for hyperparameter optimization.
+Its standardized configuration process allows streamlined integration with other tools, such as Labwatch for hyperparameter optimization.
 Through storage of run information in a central database comprehensive query and sorting functionality for bookeeping becomes available.
 This further enables downstream analysis and allows other tools such as Sacredboard to provide a powerful user interface for organizing results.
 
@@ -83,8 +83,10 @@ This further enables downstream analysis and allows other tools such as Sacredbo
 
 Overview
 --------
-To adopt Sacred all that is required is to instantiate an ``Experiment`` (its central class) and to decorate a main function to serves as entry-point.
-A minimal example would thus look like this:
+The core abstraction of Sacred is the ``Experiment`` class that needs to be instantiated for each computational experiment.
+It serves as the central hub for defining configuration, functions, and for accessing the other features.
+To adopt Sacred all that is required is to instantiate an ``Experiment`` and to decorate a main function to serves as entry-point.
+A minimal example could look like this:
 
 .. code-block:: python
 
@@ -93,11 +95,12 @@ A minimal example would thus look like this:
 
     @ex.automain
     def main():
+        ...  # <= experiment code here
         return 42
 
 
 This experiment is ready to be run and would return a *result* of 42.
-It already features an automatically generated commandline interface, collects relevant information about dependencies and the host system, and can do bookkeeping if any observers are added (e.g. through the commandline).
+It already features an automatically generated commandline interface, collects relevant information about dependencies and the host system, and can do bookkeeping.
 The experiment can be extended in several ways to define (hyper-) parameters that can later be changed externally.
 
 The experiment can be run through its command-line interface, or directly from Python by calling ``ex.run()``.
@@ -113,15 +116,15 @@ In the previous minimal example the output would look like this:
     INFO - my_example - Result: 42
     INFO - my_example - Completed after 0:00:00
 
-For each run, relevant information such as parameters, package dependencies, host information, source code, and results are automatically captured and saved regularly by optional observers.
-The Run also captures the stdout, custom information and fires events at regular intervals that observed for bookkeeping.
+For each run, relevant information such as parameters, package dependencies, host information, source code, and results are automatically captured.
+The Run also captures the stdout, custom information and fires events at regular intervals that can be observed for bookkeeping, by optional *observers*.
 Several built-in observers are available for databases, disk storage, or sending out notifications.
 
 
 
 Configuration
 -------------
-An important goal of Sacred is to make it convenient to define, expose and use hyperparameters, which we will call the configuration of the experiment.
+An important goal of Sacred is to make it convenient to define, update and use hyperparameters, which we will call the *configuration* of the experiment.
 The main way to set up the configuration is through functions decorated with ``@ex.config``:
 
 .. code-block:: python
@@ -140,23 +143,26 @@ Alternatively plain dictionaries or external configuration files can also be use
 
 .. Using Config Values
 
-To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*.
-That means, any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
+To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*:
+Any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
 Whenever such a function is called Sacred will automatically pass those parameters by name from the configuration.
-This allows for flexible and convenient use of the hyperparameters everywhere:
+This allows for flexible and convenient use of the hyperparameters throughout the experiment code:
 
 .. code-block:: python
 
     @ex.capture
-    def setup_optimizer(optimizer, learning_rate):
-        OptClass = {'sgd': SGD, 'adam': ADAM}[optimizer]
+    def set_up_optimizer(loss, optimizer, learning_rate):
+        OptClass = {
+            'sgd': tf.train.GradientDescentOptimizer,
+            'adam': tf.train.AdamOptimizer}[optimizer]
         opt = OptClass(learning_rate=learning_rate)
-        return opt
+        return opt.minimize(loss)
 
-So when calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` argumentes can be omitted and will be filled in automatically.
-These injected config values can be mixed freely with normal parameters, and injection follows the priority: 1) explicitly passed arguments, 2) config values, 3) default values.
+When calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` arguments can be omitted.
+They will then be filled in automatically from the configuration.
+These injected values can be mixed freely with normal parameters, and injection follows the priority: 1) explicitly passed arguments 2) configuration values 3) default values.
 
-The main benefit of config parameters is that they can be controlled externally, when running an experiment.
+The main benefit of config parameters is that they can be controlled externally when running an experiment.
 This can happen both from the commandline
 
 .. code-block:: bash
@@ -172,11 +178,12 @@ or from Python calls:
     ex.run(config_updates={'nr_hidden_units': 64})
 
 Sacred treats these values as fixed while executing the config functions.
-In this way they influence dependent values as you would expect leading to ``log_filename="log/NN64"`` in our example.
+In this way they influence dependent values as you would expect.
+Thus in our example ``log_filename`` would be set to ``"log/NN64"`` .
 
 
-Sets of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
-They are defined similar to configurations using a function decorated by ``@ex.named_config``, or dictionaries / config files:
+Groups of config values, that should be saved, or always be set together can be collected in so called *named configurations*.
+These are defined analogous to configurations using a function decorated by ``@ex.named_config`` (or dictionaries / config files):
 
 .. code-block:: python
 
@@ -185,7 +192,7 @@ They are defined similar to configurations using a function decorated by ``@ex.n
         optimizer = 'adam'
         learning_rate = 0.001
 
-Named configs can be added en-block from the commandline and from Python, and are treated as a set of updates:
+Named configs can be added both from the commandline and from Python, after which they are treated as a set of updates:
 
 .. code-block:: bash
 
@@ -195,42 +202,46 @@ Named configs can be added en-block from the commandline and from Python, and ar
 
 Reproducibility
 ---------------
-An important goal of Sacred is to collect all the necessary information to make computational experiments reproducible.
-The result of such an experiment depends on many factors including: the source code, versions of the used packages, system libraries, data-files, the host system, and (pseudo-)randomness.
+An important goal of Sacred is to collect all necessary information to make computational experiments reproducible.
+The result of an experiment depends on many factors including: the source code, versions of the used packages, system libraries, data-files, the host system, and (pseudo-)randomness.
 Tools for reproducible research, such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care` trace and package all datafiles and libraries used during a run at the system level.
-While these tools are the right way to *ensure* reproducibility, they come with a significant overhead in terms of time and space.
-Sacred in contrast aims to provide a practical *default option*, that captures *most* relevant information.
-By keeping the overhead and required manual work at a minimum, it becomes a feasible to use it *always*.
-Sacred tackles three key areas of this individually: 1) source code, 2) package dependencies, and  3) host system.
+While these tools *ensure* reproducibility, they come with a significant overhead in terms of time and space.
+Sacred, in contrast, aims to provide a practical *default option*, that captures *most* of the relevant information.
+By keeping the overhead and required manual work at a minimum, it becomes a feasible to *always* use it.
+Sacred tackles three key aspects individually: 1) source code, 2) package dependencies, and  3) host system.
 
 
 The source code of an experiment is arguably the most important piece of information for reproducing any result.
-To manage the quickly evolving code, it is considered good practice to use a version control system such as Git.
+To manage rapidly evolving code, it is considered good practice to use a version control system such as Git.
 In practice however, research-code is often adapted too rapidly.
 A common pattern is to quickly change something and start a run, even before properly committing the changes.
-To ensure reproducibility even with such an unstructured and spontaneous implementation workflow, Sacred always stores the source files alongside the run information.
-Relevant source-files are automatically detected through inspection, which guarantees that the current version of the code is saved along with any run.
+To ensure reproducibility given such an unstructured implementation workflow, Sacred always stores the source files alongside the run information.
+Relevant source-files are automatically detected through inspection, which guarantees that the current version of the code is saved along with the run.
 Alternatively Sacred also supports a more strict Git-based workflow and can automatically collect the current commit and state of the repository for each run.
-The optional ``--enforce-clean / -e`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be run.
+The optional ``--enforce-clean`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be started.
 
 .. MENTION? though relevant files can also be added manually by ``ex.add_source_file(FILENAME)``.
 .. MENTION? removes duplication
 
 
 When an experiment is started Sacred detects imported packages and determines their version-numbers by inspection.
-This detection will catch all dependencies that are imported from the main file before the experiment was started and should cover most usecases.
-It might, however, miss certain nested imports, so further dependencies can be added manually using ``ex.add_package_dependency(NAME, VERSION)``.
+This detection will catch all dependencies that are imported from the main file before the experiment was started and covers most usecases.
+It might, however, miss certain nested imports, so further dependencies can be added manually using
+
+.. code-block:: python
+
+    ex.add_package_dependency(NAME, VERSION)
 
 
-Sacred also collects a small set of information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
-Optionally it supports information about GPU, and environment variables, and it can be easily extended to collect any custom information.
+Sacred also collects information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
+Optionally it supports information about GPU, environment variables, and it can be easily extended to collect custom information.
 
 Randomness
 ----------
 Randomization is an important part of many machine learning algorithms, but it inherently conflicts with the goal of reproducibility.
-The solution of course is to use pseudo random number generators (PRNG) that take a seed and generate seemingly random numbers from that in a deterministic fashion.
-But if the seed is set to a fixed value as part of the code, then all runs will share the same randomness, which can be an undesired effect.
-Sacred solves this problems by always generating a seed for each experiment that is stored as part of the configuration.
+The solution of course is to use pseudo random number generators (PRNG) that take a seed and generate seemingly random numbers in a deterministic fashion.
+However, if the seed is set to a fixed value as part of the code, then all runs will be deterministic, which can be an undesired effect.
+Sacred solves this problem by generating a new seed that is stored as part of the configuration for each run.
 It can be accessed from the code in the same way as every other config entry.
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
 
@@ -251,8 +262,8 @@ Observers can be added dynamically from the commandline or directly in code:
 
 
 
-Events are fired when a run is started, every couple of seconds while it is running (heartbeat), and once it stops, (either successfully or by failing).
-This way information is available already during runtime, and partial data is captured even in case of failures.
+Events are fired when a run is started, every couple of seconds during a run (heartbeat), and once it stops (either successfully or by failing).
+The information is thus already available during runtime, and partial data is captured even in case of failures.
 The most important events are:
 
 Started Event
@@ -269,16 +280,16 @@ Failed Event
     Contains the stop time and the stack trace.
 
 
-Sacred ships with observers that stores all the information from these events in a MongoDB, SQL database, or locally on disk.
-Furthermore there are two observers that can send notifications about runs via Telegram or Slack.
-However, the observer interface is generic and supports easy addition of custom observers.
+Sacred ships with observers that store all the information from these events in a MongoDB, SQL database, or locally on disk.
+Furthermore there are two observers that can send notifications about runs via Telegram :cite:`telegram` or Slack :cite:`slack`.
+Moreover, the observer interface is generic and supports easy addition of custom observers.
 
-The recommended observer is the ``MongoObserver`` that writes to a MongoDB :cite:`mongo`.
+The recommended observer is the ``MongoObserver``, which writes to a MongoDB :cite:`mongo`.
 MongoDB is a noSQL database, or more precisely a *Document Database*:
-It allows the storage of arbitrary JSON documents without the need for a schema like in a SQL database.
+It allows the storage of arbitrary JSON documents without the need for a schema as in a SQL database.
 These database entries can be queried based on their content and structure.
-This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration for each experiment that can still be queried and filtered later on.
-This feature in particular has been very useful to perform large scale studies like the one in previous work :cite:`greff2015`.
+This flexibility makes it a good fit for Sacred, because it permits arbitrary configuration of each experiment that can still be queried and filtered later on.
+This feature in particular has been very useful in performing large scale studies such as the one in previous work :cite:`greff2015`.
 A slightly shortened example database entry corresponding to our minimal example from above could look like this:
 
 
