@@ -212,7 +212,7 @@ The code below is a simple program using Dask that validates QR decomposition by
         t0 = time.time()
         q, r = da.linalg.qr(x)
         test = da.all(da.isclose(x, q.dot(r)))
-        test.compute(num_workers=44)
+        test.compute()
         print(time.time() - t0)
 
 Here, Dask splits the array into 44 chunks and processes them in parallel using multiple threads.
@@ -225,26 +225,26 @@ Here is an example of running the benchmark program in five different modes:
 .. code-block:: sh
     :linenos:
 
-    python bench.py         # Default OpenMP mode
-    KMP_BLOCKTIME=0 OMP_NUM_THREADS=4 \
-        python bench.py     # Tunned OpenMP mode
-    python -m SMP bench.py  # OpenMP + SMP mode
+    python bench.py             # Default OpenMP mode
+    KMP_BLOCKTIME=0 OMP_NUM_THREADS=1 \
+        python bench.py         # Tunned OpenMP mode
+    python -m SMP -f 1 bench.py # OpenMP + SMP mode
     KMP_COMPOSABILITY=mode=exclusive \
-        python bench.py     # Composable OpenMP mode
-    python -m TBB bench.py  # Composable TBB mode
+        python bench.py         # Composable OpenMP mode
+    python -m TBB bench.py      # Composable TBB mode
 
 .. figure:: dask_static.png
 
    Execution times for balanced QR decomposition workload. :label:`sdask`
 
 Figure :ref:`sdask` shows performance results acquired on a 44-core (88-thread) machine with 128 GB memory. The results presented here were acquired with cpython v3.5.2; however, there is no significant performance difference with cpython v2.7.12.
-By default Dask will process a chunk in a separate thread so there will be 44 threads on the top level. Also each chunk will be computed in parallel with 44 OpenMP workers.
+By default Dask will process a chunk in a separate thread so there will be 44 threads on the top level (note that by default Dask will create a thread pool with 88 workers but only half of them will be really used since there are only 44 chunks). Also each chunk will be computed in parallel with 44 OpenMP workers.
 Thus there will be 1936 threads in total which tries to acquire 44 cores that is not effective.
 
 An obvious way to improve performance is to tune OpenMP runtime using environment variables. First of all it's needed to limit total number of threads.
-Let's set 2x over-subsctiption instead of quadratic as our target. Since we work on 88-thread machine, to archive it we should set number of threads per parallel region to 4 ((88 CPU threads / 44 top level threads) * 2x over-subscription).
+Let's set 1x over-subsctiption instead of quadratic as our target. Since we work on 88-thread machine, to archive it we should set number of threads per parallel region to 1 ((88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
 Also we noticed that reducing period of time after which OpenMP worker will go to sleep helps to improve performance in such workloads with over-subscription (it works best for multi-processing case but helps for multi-threading as well).
-That's why another option here is KMP_BLOCKTIME that sets to zero. As one can see such simple optimizations allows to reduce computational time to more than 3x.
+That's why another option here is KMP_BLOCKTIME that sets to zero. As one can see such simple optimizations allows to reduce computational time to 2.8x.
 
 The third mode with *SMP.py* module in fact does the same optimizations but automatically and shows the same level of performance as the second one. Moreover it is more flexible and allows to work carefully with several thread/process pools in scope of one application even if they have different sizes.
 Thus we invite to use it as an advanced alternative to manual OpenMP tunning.
@@ -266,7 +266,7 @@ The code below performs an algorithm of eigenvalues and right eigenvectors searc
     import time, numpy as np
     from multiprocessing.pool import ThreadPool
     x = np.random.random((256, 256))
-    p = ThreadPool(44)
+    p = ThreadPool(88)
     for j in range(3):
         t0 = time.time()
         p.map(np.linalg.eig, [x for i in range(1024)])
@@ -281,7 +281,7 @@ But this code has a distinctive feature - in spite of parallel execution of eige
    Execution time for balanced eignevalues search workload. :label:`snumpy`
 
 Figure :ref:`snumpy` shows benchmark execution time in the same five modes as we used for QR decomposition.
-As previously the best choice here is to limit number of threads statically eigher using manual settings or *SMP.py* module. Such approach allows to obtain more than 3x speed-up.
+As previously the best choice here is to limit number of threads statically either using manual settings or *SMP.py* module. Such approach allows to obtain more than 7x speed-up.
 But this time Intel |R| TBB based approach looks much better than serialization of OpenMP parallel regions. And the reason is low CPU utilization in each separate chunk.
 In fact exclusive OpenMP mode leads to serial matrix processing, one by one, so significant part of the CPU stays unsed.
 As a result, execution time in this case becomes even larger than by default.
@@ -449,7 +449,7 @@ Three approaches are described as potential solution. The first one is to static
 And the third one is to use a common threading runtime library such as Intel |R| TBB which limits the number of threads in order to prevent over-subscription and coordinates parallel execution of independent program modules.
 
 The examples referred in the paper show promising results, where, thanks to nested parallelism and threading composability, the best performance was achieved.
-In particular, balanced QR decomposition and eigenvalues search examples are 3x faster comparing to the baseline implementation. Unbalanced versions of these benchmarks are by 34% and 35% faster than the baseline accordingly.
+In particular, balanced QR decomposition and eigenvalues search examples are 2.8x and 7x faster comparing to the baseline implementation. Unbalanced versions of these benchmarks are by 34% and 35% faster than the baseline accordingly.
 
 These improvements were achived due to different approaches. It demonstrates that all three described solutions are valuable and complement each other. We've compared suggested approaches and provided recommendations of when it makes sense to employ each of them.
 
