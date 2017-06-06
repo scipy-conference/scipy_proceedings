@@ -82,18 +82,17 @@ the blood. Briefly, when brain activity occurs, oxygen is locally consumed by
 neurons and its concentration in the blood decreases (see Fig.
 :ref:`boldchain`). Therefore, an inflow of oxygenated blood is achieved to
 replenish the tissue, increasing local blood oxygen concentration in veins and
-capillaries, and then BOLD signal diminution. Oxygenated and deoxygenated
-bloods have different magnetic properties. Thus, BOLD signal is an indirect
-measure of cerebral activity based on physiological changes in oxygen
-consumption, cerebral blood flow and blood volume.
+capillaries. Oxygenated and deoxygenated bloods have different magnetic
+properties, thus the above causes a BOLD signal diminution. Then, BOLD signal
+is an indirect measure of cerebral activity based on physiological changes in
+oxygen consumption, cerebral blood flow and blood volume.
 
 .. figure:: figures/bold_chain.pdf
    :align: center
    :figclass: htb
 
    fMRI BOLD signal :cite:`Ogawa:1990`. The BOLD signal measures the local
-   changes in blood oxygenation. This ratio changes during brain activity.
-   :label:`boldchain`
+   changes in blood oxygenation ocurring during brain activity.  :label:`boldchain`
 
 
 .. INFO: I put the figure here in order to display it on the top of the second page.
@@ -103,10 +102,10 @@ consumption, cerebral blood flow and blood volume.
    :scale: 25%
    :figclass: wt
 
-   HRF computed using PyHRF from BOLD data in several parcels belonging to
-   visual (yellow, dark blue and green parcels), auditory (cyan and light green
-   parcels) and motor (red and purple parcels) regions, respectively from left
-   to right.  :label:`hrfs`
+   HRF computed using PyHRF from BOLD data in several parcels belonging,
+   respectively from left to right, to visual (yellow, dark blue and green
+   parcels), auditory (cyan and light green parcels) and motor (red and purple
+   parcels) regions, .  :label:`hrfs`
 
 
 BOLD is non-invasive, non-ionizing, and gives access *in vivo* to brain
@@ -181,10 +180,10 @@ Fig. :ref:`hrfs` shows some HRF functions estimated using PyHRF from BOLD data
 on a healthy adult acquired in a block-design setting with visual, auditory and
 motor experimental conditions.  The parcels correspond to regions of the brain
 that are known induce evoked activity in response to these experimental
-conditions. Observe that the HRF estimates in the visual and motor regions (two
-first figures from left to right ) are well approximated by the canonical HRF
-whereas in the auditory ares (third figure from left to right), the recovered
-hemodynamic profiles peak earlier than the canonical shape.
+conditions. Observe that the HRF estimated in the visual and motor regions
+(first and third figure from left to right ) are well approximated by the
+canonical HRF whereas in the auditory ares (second figure from left to right),
+the recovered hemodynamic profiles peak earlier than the canonical shape.
 
 Standard methods (*e.g.,* GLM), with the posterior classical statistics
 applied, give statistical parametric maps (SPM) that describe the significance
@@ -299,26 +298,20 @@ template).
    :align: center
    :figclass: htb
 
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`nipype`
+   Preprocessing pipeline defined with ``Nipype`` and used in our running
+   example. :label:`nipype`
 
 
 The pipeline described above was run for the images of all subjects from the
 dataset (*i.e.,* 10 subjects) on multiple processors, since ``Nipype`` uses the
-library ``joblib`` (https://github.com/joblib/joblib).
+library ``joblib`` (https://github.com/joblib/joblib). We use the acquisition
+parameters presented in :cite:`Gorgolewski2013` to parameterize each
+preprocessing operation. For instance, the number of slices for the volume, the
+time for acquiring all slices (TR), and the order in which they were acquired
+(*e.g.,* interleaved).
 
-.. code-block:: python
-
-    # Number of subjects
-    >>> N_SUBJECTS = 10
-    >>> SUBJECTS = ['sub-%02d' % i
-                    for i in range(1,N_SUBJECTS+1)]
-
-
-We use the acquisition parameters presented in :cite:`Gorgolewski2013` to
-parameterize each preprocessing operation. For instance, the number of slices
-for the volume, the time for acquiring all slices (TR), and the order in which
-they were acquired (*e.g.,* interleaved). In the following snippet, we show
-a portion of the code to define the slice timing task with ``Nipype``.
+In the following snippet, we show a portion of the code to define the slice
+timing task with ``Nipype``.
 
 
 .. code-block:: python
@@ -411,10 +404,8 @@ method.
 
 Table :ref:`csv` shows the experimental paradigm of the dataset ``ds000114``
 written using the PyHRF format.  Note that it only contains motor stimuli since
-we are only interested in them for our BOLD analysis. While the paradigm is not
-optimized for JDE (standard block paradigm are not ideal to estimate different
-points of the HRF course), we obtained similar results to standard statistical
-analysis additionally providing the form of the HRF.
+we are only interested in them for our BOLD analysis.
+
 
 .. table:: Experimental paradigm of the dataset ``ds000114`` containing only
            motor stimuli. The column organization of the file follows the
@@ -513,15 +504,18 @@ Reading the description given in :cite:`Gorgolewski2013`, this task corresponds
 to finger tapping. We compared the output of PyHRF with the unthresholded
 statistical maps shared on the site *Neurovault*
 (http://www.neurovault.org/images/307/) for the same dataset (see Fig.
-:ref:`neurovault`) and same task (*i.e.,* finger tapping).  As we can observe,
-at cut *z=60* both results (Fig.  :ref:`output` and Fig.  :ref:`neurovault`)
-are quite similar, showing an activation in the *supplementary motor area* and
-the *left primary sensorimotor cortex*.
+:ref:`neurovault`) and same task (*i.e.,* finger tapping). While the
+experimental paradigm is not optimized for JDE (standard block paradigm are not
+ideal to estimate different points of the HRF course), we obtained similar
+results to standard statistical analysis additionally providing the form of the
+HRF. As we can observe, at cut *z=60* both results (Fig.  :ref:`output` and
+Fig.  :ref:`neurovault`) are quite similar, showing an activation in the
+*supplementary motor area* and the *left primary sensorimotor cortex*.
 
 
 .. figure:: figures/neurovault.png
    :align: center
-   :scale: 18%
+   :scale: 14%
    :figclass: htb
 
    Unthresholded statistical maps shared on the site ``Neurovault`` for the
@@ -549,7 +543,7 @@ In this paper we presented PyHRF, a software to analyze fMRI data using a joint
 detection-estimation (JDE) approach of the cerebral activity. Roughly, it
 jointly detects cortical activation and estimates the hemodynamic response
 function (HRF). In contrast to existing tools, PyHRF estimates the HRF instead
-of considering it constant in all the brain and for all subjects, improving
+of considering it as constant in all the brain and for all subjects, improving
 thus the reliability of the results.
 
 PyHRF is an open source software, which has allowed it to evolve rapidly over
