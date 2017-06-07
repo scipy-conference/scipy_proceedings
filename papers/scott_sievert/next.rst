@@ -373,13 +373,13 @@ problem formulation. For example, it may be desired to find the similarity
 between different facial expressions. Happy and excited faces may be similar
 but are probably different from sad faces.
 
-Human attention span cannot handle the naive number of comparisons (about
-:math:`n^2` with :math:`n` items). Instead, we ask the crowdsourcing
-participant to make a pairwise similarity judgement, or a triplet response as
-shown in Figure :ref:`triplet-interface`. There are theoretic guarantees on
-finding some similarity measure given these responses :cite:`jain2016finite`
-and have been used in practice with NEXT to compare visual representations of
-different molecules :cite:`rau2016model`.
+Human attention span cannot handle the naive number of comparisons (which is
+proportional to :math:`n^2` with :math:`n` items). Instead, we ask the
+crowdsourcing participant to make a pairwise similarity judgement, or a triplet
+response as shown in Figure :ref:`triplet-interface`. There are theoretic
+guarantees on finding some similarity measure given these responses
+:cite:`jain2016finite` and have been used in practice with NEXT to compare
+visual representations of different molecules :cite:`rau2016model`.
 
 NEXT Architecture
 -----------------
