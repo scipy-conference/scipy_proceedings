@@ -17,7 +17,7 @@ ChiantiPy: a Python package for Astrophysical Spectroscopy
 
 .. class:: abstract
 
-   ChiantiPy is an interface to the CHIANTI atomic database for astrophysical spectroscopy. The highly-cited CHIANTI project, now in its 20th year, is an invaluable resource to the solar physics community. The ChiantiPy project brings the power of the scientific Python stack to the CHIANTI database, allowing solar physicists and astronomers to easily make use of this atomic data and calculate commonly used quantities from it such as radiative loss rates and emissivities for particular atomic transitions. In this talk, we will briefly discuss the history of the CHIANTI database and the ChiantiPy project as well as the current state of the project and its place in the solar physics community. We will demonstrate some of the capabilities of the ChiantiPy code and show examples of how ChiantiPy can be used in both modeling and observational studies. Finally, we'll discuss how ChiantiPy helps to bring the power of the CHIANTIC atomic database to the growing set of astronomy-related tools in Python.
+   ChiantiPy is an interface to the CHIANTI atomic database for astrophysical spectroscopy. The highly-cited CHIANTI project, now in its 20th year, is an invaluable resource to the solar physics community. The ChiantiPy project brings the power of the scientific Python stack to the CHIANTI database, allowing solar physicists and astronomers to easily make use of this atomic data and calculate commonly used quantities from it such as radiative loss rates and emissivities for particular atomic transitions. This paper will discuss the capabilities of the CHIANTI database and the ChiantiPy project as well as the current state of the project and its place in the solar physics community. We will demonstrate how the core modules in ChiantiPy can be used to study emission from optically thin transitions and the continuum in the x ray and EUV wavelengths. Additionally, we will discuss some of the infrastructure around the ChiantiPy project and some of the goals for the near future.
 
 .. class:: keywords
 
@@ -25,9 +25,9 @@ ChiantiPy: a Python package for Astrophysical Spectroscopy
 
 Introduction
 ------------
-Nearly all astrophysical observations are done through *remote sensing*. Light at various wavelengths is collected by instruments, either ground- or space-based, in an attempt to understand physical processes happening in distant astrophysical objects. However, in order to translate these detector measurements to meaningful physical insight, it is necessary to understand what physical conditions give rise to different spectral lines and continuum emission. Started in 1996 by researchers at the Naval Research Laboratory, the University of Cambridge, and Arcetri Astrophysical Observatory in Florence for the purpose of analyzing solar spectra, the `CHIANTI atomic database <http://www.chiantidatabase.org/>`_ provides a set of up-to-date atomic data for ions of hydrogen through zinc as well as a suite of tools, written in the proprietary Interactive Data Language (IDL), for analyzing this data. Described in `a series of 14 papers from 1997 to 2015 <http://www.chiantidatabase.org/chianti_papers.html>`_, including :cite:`young_chianti_2016` and :cite:`dere_chianti_1997`, that have been `cited collectively over 3000 times <http://www.chiantidatabase.org/chianti_ADS.html>`_, the CHIANTI database is an invaluable resource to the solar physics community.
+Nearly all astrophysical observations are done through *remote sensing*. Light at various wavelengths is collected by instruments, either ground- or space-based, in an attempt to understand physical processes happening in distant astrophysical objects. However, in order to translate these detector measurements to meaningful physical insight, it is necessary to understand what physical conditions give rise to different spectral lines and continuum emission. Started in 1996 by researchers at the Naval Research Laboratory, the University of Cambridge, and Arcetri Astrophysical Observatory in Florence for the purpose of analyzing solar spectra, the CHIANTI atomic database provides a set of up-to-date atomic data for ions of hydrogen through zinc as well as a suite of tools, written in the proprietary Interactive Data Language (IDL), for analyzing this data. Described in a series of 15 papers from 1997 to 2016 (see Table :ref:`chiantipapers`) that have been cited collectively over 3000 times, the CHIANTI database is an invaluable resource to the solar physics community.
 
-.. table:: All publications describing the data and capabilities of the CHIANTI atomic database and the associated version of the database. :label:`chiantipapers`
+.. table:: All publications describing the data and capabilities of the CHIANTI atomic database, the associated version of the database, and the number of citations as reported by the NASA Astrophysics Data System. :label:`chiantipapers`
 
    +-------------------------------------+---------+-----------+
    |Paper                                | Version | Citations |
@@ -62,10 +62,18 @@ Nearly all astrophysical observations are done through *remote sensing*. Light a
    +-------------------------------------+---------+-----------+
    | :cite:`young_chianti_2016`          | 8       | 1         |
    +-------------------------------------+---------+-----------+
+   |                                     |         | **Total** |
+   +-------------------------------------+---------+-----------+
+   |                                     |         | 3066      |
+   +-------------------------------------+---------+-----------+
 
-The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). 
+The CHIANTI database provides 
 
 Give history of CHIANTI/ChiantiPy, where the data comes from, who uses it, why.
+
+
+The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). Need some more details here.... 
+
 
 Database
 --------
@@ -150,7 +158,55 @@ The majority of the ChiantiPy codebase is divided into two modules: :code:`tools
 
 Line Emission
 #############
-The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object which provides an interface to the data and associated calculations for each ion in the database. 
+The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object which provides an interface to the data and associated calculations for each ion in the database. The :code:`ion` object is initialized with an ion name, a temperature range, and a density [1]_,
+
+.. code-block:: python
+
+   import ChiantiPy.core as ch
+   import numpy as np
+   T = np.logspace(4,6,100)
+   n = 1e9
+   fe_5 = ch.ion('fe_5',temperature=T,eDensity=n)
+
+In this example, we've initialized an :code:`ion` object for Fe V over a temperature range  of :math:`T=10^4-10^6` K at a constant electron density of :math:`n_e=10^9` :math:`\mathrm{cm}^{-3}`. All of the data discussed in the previous section are available as attributes of the :code:`ion` object (e.g. :code:`.Elvlc` and :code:`.Wgfa` are dictionaries holding the various fields available in the corresponding filetypes listed in Table :ref:`chiantipyapi`). In general, ChiantiPy objects follow the convention that methods are lowercase and return their value(s) to attributes with corresponding uppercase names [2]_. For example, the abundance value of Fe is stored in :code:`fe_5.Abundance` and the ionization equilibrium is calculated using the method :code:`fe_5.ioneqOne()` with the value being returned to the attribute :code:`fe_5.IoneqOne`.
+
+One of the most often used calculations in CHIANTI and ChiantiPy is the energy level populations as a function of temperature. When calculating the energy level populations in a low density, high temperature optically-thin plasma,  collisional excitation and subsequent decay often occur much more quickly than ionization and recombination, allowing these two processes to be decoupled. Furthermore, it is assumed that all transitions occur between the excited state and the ground state. These two assumptions make up what is commonly known as the *coronal model approximation*. Thus, the level balance equation can be written as,
+
+.. math::
+
+   \sum_{k>j}N_kA_{kj} + n_e\sum_{i=j}N_jC_{ij} - \left(\sum_{i<j}N_jA{ji} + n_e\sum_{k=j}N_jC_{jk}\right) = 0,
+
+where :math:`A_{kj}` is the radiative decay rate, :math:`C_{jk}` is the collisional excitation coefficient, and :math:`N_j` is the number of electrons in excited state :math:`j` :cite:`young_chianti_2016`. Since :math:`A` and :math:`C` are given by the CHIANTI database, this expression can be solved iteratively to find :math:`n_j=N_j/\sum_jN_j`, the fraction of electrons in excited state :math:`j` or the level population fraction.
+
+To method :code:`fe_5.populate()` can then be used to calculate the level populations for Fe V. This method populates the :code:`fe_5.Population` attribute and a :math:`100\times34` array (i.e. number of temperatures by number of energy levels) is stored in :code:`fe_5.Population['population']`. ChiantiPy also provides the convenience method :code:`fe_5.popPlot()` which provides a quick visualization of level population as a function of temperature for several of the most populated levels. Note that this calculation can be quite expensive for large temperature/density arrays and for ions with many transitions. The left panel of Fig. :ref:`popplusspectrum` shows the level population as a function of temperature, :math:`n_j(T)`, for all of the energy levels of Fe V in the CHIANTI database.
+
+.. figure:: figures/pop_and_spectrum.pdf
+   :align: center
+   :figclass: w
+   :scale: 55%
+
+   Level populations as a function of temperature (left) and intensity as a function of wavelength (right) for Fe V. The various curves in the left panel represent the multiple energy levels of the Fe V ion. The right panel shows the intensity at the discrete wavelength values (black) as well as the spectra folded through a Gaussian filter with :math:`\sigma=5\,\,\mathrm{\mathring{A}}` and a Lorentzian filter with :math:`\gamma=5\,\,\mathrm{\mathring{A}}`. :label:`popplusspectrum`
+
+When dealing with spectral line emission, we are often most interested in the line *intensity*, that is, the power per unit volume as a function of temperature (and density). For a particular transition :math:`\lambda_{ij}`, the line intensity can be written as,
+
+.. math::
+   
+   I_{ij} = \frac{1}{4\pi}\frac{hc}{\lambda}\mathrm{Ab}(X)X_kA_{ij}n_jn_e^{-1}
+
+where :math:`\mathrm{Ab}(X)` is the abundance and :math:`X_k` is the ionization equilibrium. To calculate the intensity for each transition in CHIANTI for Fe V, we can use the method :code:`fe_5.intensity()` which returns a :math:`100\times219` array (i.e. dimension of temperature by the number of available transitions). The convenience methods :code:`fe_5.intensityPlot()` and :code:`fe_5.intensityList()` can also be used to quickly visualize and enumerate the most intense lines produced by the ion. 
+
+Finally, to simulate an observed spectrum, the intensity can be convolved with a filter to calculate the intensity as a *continuous* function of wavelength to produce a *spectrum*. For a single ion this is done using the :code:`fe_5.spectrum()` method (see later sections for creating multi-ion spectra). To create a spectrum for Fe V between 2600 :math:`\mathrm{\mathring{A}}` and 2900 :math:`\mathrm{\mathring{A}}`,
+
+.. code-block:: python
+
+   wavelength = np.arange(2.6e3,2.9e3,0.1)
+   fe_5.spectrum(wavelength)
+
+This method also accepts an optional keyword argument for specifying a filter with which to convolve the intensity. The default filter is a Gaussian though :code:`ChiantiPy.tools.filters` includes several different filters including Lorentzian and Boxcar filters. The right panel of Fig. :ref:`popplusspectrum` shows the Fe V intensity (black) and spectrum folded through a Gaussian (blue) and Lorentzian (green) filter at the temperature at which the ionization fraction is maximized, :math:`T\approx8.5\times10^4` K. Similar to the :code:`fe_5.populate()` and :code:`fe_5.intensity()`, ChiantiPy also provides the convenience method :code:`fe_5.spectrumPlot()` for quickly visualizing a spectrum.
+
+.. [1] A single temperature and an array of densities is also valid. The only requirement is that if one or the other is not of length 1, both arrays must have the same length. The ion object can also be initialized without any temperature or density information if only the ion data is needed.
+
+.. [2] This convention is likely to change in the near future as the ChiantiPy codebase is brought into compliance with the `PEP 8 Style Guide for Python code <https://www.python.org/dev/peps/pep-0008/>`_.
 
 Continuum Emission
 ##################
@@ -193,7 +249,7 @@ To calculate the free-free and free-bound emission with ChiantiPy,
    cont_fe18.calculate_free_free_emission(wavelength)
    cont_fe18.calculate_free_bound_emission(wavelength)
 
-The :code:`Continuum.calculate_free_free_emission()` (:code:`Continuum.calculate_free_bound_emission()`) method stores the :math:`N_T` by :math:`N_{\lambda}` array (e.g. in the above example, :math:`100\times100`) in the :code:`Continuum.free_free_emission` (:code:`Continuum.free_bound_emission`) attribute. The :code:`Continuum` object also provides methods for calculating the free-free and free-bound radiative losses (i.e. the wavelength-integrated emission). These methods are primarily used by the :code:`radiativeLoss` module.
+The :code:`Continuum.calculate_free_free_emission()` (:code:`Continuum.calculate_free_bound_emission()`) method stores the :math:`N_T` by :math:`N_{\lambda}` array (e.g. in the above example, :math:`100\times100`) in the :code:`Continuum.free_free_emission` (:code:`Continuum.free_bound_emission`) attribute. The :code:`Continuum` object also provides methods for calculating the free-free and free-bound radiative losses (i.e. the wavelength-integrated emission). These methods are primarily used by the :code:`radiativeLoss` module. The :code:`Continuum` module has recently been completely refactored and validated against the corresponding IDL results.
 
 A contribution from the two-photon continuum can also be calculated with ChiantiPy though this is included in the :code:`ion` object through the method :code:`ion.twoPhoton()`. The two-photon continuum calculation is included in the :code:`ion` object and not the :code:`Continuum` object because the level populations are required when calculating the two-photon emissivity. See Eq. 11 of :cite:`young_chianti-atomic_2003`.
 
@@ -239,7 +295,7 @@ Examples of how to calculate spectra for a single ion and for all ions over a ra
 
 Radiative Losses
 #################
-Equations, what are they used for, code example
+The radiative loss rate 
 
 Documentation, Testing, and Infrastructure
 ------------------------------------------
