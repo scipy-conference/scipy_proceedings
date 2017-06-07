@@ -56,9 +56,9 @@ synergy is necessary when creating the complex software stack needed
 to solve leading edge scientific problems, since domain specialists as
 well as high performance computing experts are required to fully
 leverage modern computing architectures. Based on this philosophy we
-introduce Devito, an open-source domain-specific framework for solving
-partial differential equations (PDE) from symbolic problem definitions
-by the finite difference method.
+introduce Devito [Lange17]_, an open-source domain-specific framework
+for solving partial differential equations (PDE) from symbolic problem
+definitions by the finite difference method.
 
 Symbolic computation, where optimized numerical code is automatically
 derived from a high-level problem definition, is a powerful technique
@@ -882,6 +882,11 @@ References
                 http://doi.acm.org/10.1145/2464996.2467268
 
 .. [Iverson62] Iverson, K.: A Programming Language, Wiley, 1962.
+
+.. [Lange17] Lange, M., Luporini, F., Louboutin, M., Kukreja, N., Pandolfo,
+             V., Kazakas, P., Velesko, P., Zhang, S., Peng, P., and Gorman, G.
+             Dylan McCormick. 2017, June 7. opesci/devito: Devito-3.0.1.
+             Zenodo. http://doi.org/10.5281/zenodo.803626
 
 .. [Logg12] Logg, A., Mardal, K.-A., Wells, G. N., et al.: Automated
             Solution of Differential Equations by the Finite Element
