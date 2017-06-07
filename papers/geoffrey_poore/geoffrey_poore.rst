@@ -40,7 +40,7 @@ BespON:  Extensible config files with multiline strings, lossless round-tripping
    multiple levels of either brackets or significant whitespace.  The
    open-source Python implementation of BespON can modify data values while
    otherwise perfectly preserving config file layout, including comments.
-   BespON also provides a doc comment type that can be preserved through
+   BespON also provides doc comments that can be preserved through
    arbitrary data modification.  Additional features include integers (binary,
    octal, decimal, and hex), floats (decimal and hex, including Infinity and
    NaN), multiline string literals that only preserve indentation relative to
@@ -176,8 +176,8 @@ allowed unquoted, but in a context-dependent manner.  When YAML loads
 "``a#comment``", it returns the string ``a#comment``, but add a space before
 the ``#``, and this becomes the string ``a`` followed by a line comment.
 Similarly, Python's ``None`` may be represented as ``null``, ``Null``,
-``NULL``, ``~``, or as an empty value (for example, ``k:`` is identical to
-``k: null``). Some YAML issues were resolved in the transition from the
+``NULL``, ``~``, or as an empty value (for example, "``k:``" is identical to
+"``k: null``"). Some YAML issues were resolved in the transition from the
 version 1.1 specification (2005) to version 1.2 (2009).  Among other things,
 the treatment of ``Yes``, ``No``, ``On``, ``Off``, and their lowercase and
 titlecase variants as boolean values was removed.  However, since PyYAML is
@@ -203,7 +203,7 @@ line break) or ``|+`` (keep all trailing whitespace).  Unfortunately, the
 the next data element (or the end of the file, if the string is not followed
 by anything).  Similarly, there are complications if all lines of the string
 contain leading whitespace or if the first line of the string is indented
-relative to the subsequent lines.  In such cases, the pipe ``|`` must be
+relative to the subsequent lines.  In such cases, the pipe must be
 followed immediately by an integer that specifies the indentation of the
 string relative to the parent node (``key`` in the example).
 
@@ -224,7 +224,7 @@ TOML
 ====
 
 TOML [TOML]_ is a more recent INI-inspired format with support for multiple
-levels of nesting and for date and time data.  In TOML, the example data
+levels of nesting and for date and time literals.  In TOML, the example data
 could be represented as::
 
     [key]
@@ -295,7 +295,7 @@ Introducing BespON
 
 "BespON" is short for *Bespoken*, or custom-made, *Object Notation*.  It
 originally grew out of a need for a config format with a ``key=value`` syntax
-that also offers excellent multiline string support for templating.  I am the
+that also offers excellent multiline string support.  I am the
 creator of PythonTeX [PythonTeX]_, which allows executable code in Python and
 several other programming languages to be embedded within LaTeX documents.
 Future PythonTeX-related software will need a LaTeX-style ``key=value`` syntax
@@ -393,10 +393,10 @@ breaks, and multiline strings, which do.
 Raw and escaped versions of both are provided.  Raw strings preserve all
 content exactly.  Escaped strings allow code points to be represented with
 backslash-escapes.  BespON supports Python-style ``\xhh``, ``\uhhhh``, and
-``\Uhhhhhhhh`` escapes using hex digits ``h``, as well as standard escapes
-like ``\r`` and ``\n``.  It also supports escapes of the form ``\u{h...h}``
-containing 1 to 6 hex digits, as used in Rust [rs:tokens]_ and some other
-languages.
+``\Uhhhhhhhh`` escapes using hex digits ``h``, as well as standard shorthand
+escapes like ``\r`` and ``\n``.  It also supports escapes of the form
+``\u{h...h}`` containing 1 to 6 hex digits, as used in Rust [rs:tokens]_ and
+some other languages.
 
 In addition, single-word identifier-style strings are allowed unquoted.
 
@@ -441,8 +441,8 @@ embedded within a LaTeX, Markdown, or other document without requiring either
 lines longer than 80 characters or the use of multiline strings with
 newline escapes.  When an inline string is wrapped over multiple line, each
 line break is replaced with a space unless it is preceded by a code point with
-the Unicode ``White_Space`` property [UAX44]_ or is backslash-escaped; in both
-of those cases, it is stripped.  For example:
+the Unicode ``White_Space`` property [UAX44]_, in which case it is stripped.
+For example:
 
 .. code-block:: pycon
 
@@ -452,6 +452,8 @@ of those cases, it is stripped.  For example:
    """)
    'inline value that wraps'
 
+When an inline string is wrapped, the second line and all subsequent lines
+must have the same indentation.
 
 
 Multiline strings
@@ -480,18 +482,19 @@ indentation is only kept relative to the delimiters.  For example:
 .. code-block:: pycon
 
    >>> bespon.loads("""
-     |```
+     |'''
       first line
        second line
-     |```/
+     |'''/
    """)
    ' first line\n  second line\n'
 
 This allows the overall multiline string to be indented for clarity, without
 the indentation becoming part of the literal string content.  Of all the
-formats discussed earlier, that would only be possible with YAML, and
-only by explicitly specifying with an integer value the relative indentation
-of the string content relative to ``key``.
+formats discussed earlier, that would only be possible with YAML, which would
+require the relative indentation of the string content to be specified
+explicitly with an integer in the case of indentation or a first line
+indented relative to subsequent lines.
 
 
 
@@ -504,9 +507,9 @@ strings are allowed.  These must match the regular expression::
    _*[A-Za-z][0-9A-Z_a-z]*
 
 There is the additional restriction that no unquoted string may match a
-keyword (``none``, ``true``, ``false``, ``inf``, ``nan``) when lowercased.
-This prevents an unintentional miscapitalization like ``FALSE`` from becoming
-a string and then yielding true in a boolean test.
+keyword (``none``, ``true``, ``false``, ``inf``, ``nan``) or related reserved
+word when lowercased.  This prevents an unintentional miscapitalization like
+``FALSE`` from becoming a string and then yielding true in a boolean test.
 
 Unquoted strings that match a Unicode identifier pattern essentially the same
 as that in Python 3.0+ [PEP3131]_ may optionally be enabled.  These are not
@@ -537,7 +540,7 @@ followed by the element content.  For example:
    """)
    ['first', 'second', 'third']
 
-Any indentation before and after the asterisk may use spaces or tabs, although
+Any indentation before or after the asterisk may use spaces or tabs, although
 spaces are preferred.  In determining indentation levels and comparing
 indentation levels, a tab is never treated as identical to some number of
 spaces.  An object that is indented relative to its parent object must share
@@ -715,19 +718,20 @@ When applied to strings, tags also support keyword arguments ``indent`` and
 ``newline``.  ``indent`` is used to specify a combination of spaces and tabs
 by which all lines in a string should be indented to produce the final string.
 ``newline`` takes any code point sequence considered a newline in the Unicode
-standard [UnicodeNL]_, as well as the empty string, and simplifies the use of
-literal newlines other than the default line feed (``\n``).  When ``newline``
-is applied to a byte string, only newline sequences in the ASCII range are
+standard [UnicodeNL]_, or the empty string, and replaces all literal
+line breaks with the specified sequence.  This simplifies the use of literal
+newlines other than the default line feed (``\n``).  When ``newline`` is
+applied to a byte string, only newline sequences in the ASCII range are
 permitted.
 
 .. code-block:: pycon
 
    >>> bespon.loads(r"""
    (bytes, indent=' ', newline='\r\n')>
-   |```
+   |'''
    A string in binary
    with a break
-   |```/
+   |'''/
    """)
    b' A string in binary\r\n with a break\r\n'
 
@@ -744,7 +748,7 @@ form the basis for inheritance.
 
 Dicts support two keywords for inheritance.  ``init`` is used to specify one
 or more dicts with which to initialize a new dict.  The keys supplied by these
-dicts must not be overwritten by the keys put in the new dict directly.
+dicts must not be overwritten by the keys put into the new dict directly.
 Meanwhile, ``default`` is used to specify one or more dicts whose keys are
 added to the new dict after ``init`` and after values that are added directly.
 ``default`` keys are only added if they do not exist; they are fallback
@@ -843,7 +847,10 @@ mapping, since loading depends on the logical order of the code points rather
 than their visual rendering.  By default, BespON prevents the potential for
 confusion as a result of this logical-visual mismatch, by prohibiting data
 objects or comments from immediately following an inline or unquoted string
-with one or more right-to-left code points in its last line.
+with one or more right-to-left code points in its last line.  For the same
+reason, code points with the property ``Bidi_Control`` [UAX9]_ are prohibited
+from appearing literally in BespON data; they can only be produced via
+backslash-escapes.
 
 
 
@@ -889,7 +896,7 @@ round-tripping data is dealing with comments.  BespON supports standard line
 comments of the form ``#comment``.  While these can survive round-tripping
 when data is added or deleted, dealing with them in those cases is difficult,
 because line comments are not uniquely associated with individual data
-objects.  To provide an alternative, BespON defines a doc comment type that is
+objects.  To provide an alternative, BespON defines a doc comment that is
 uniquely associated with individual data objects.  Each data object may have
 at most a single doc comment.  The syntax is inspired by string and section
 syntax, involving three hash symbols (or a multiple of three).  Both inline
@@ -928,12 +935,12 @@ improvement.
 
 So far, ``bespon`` performance is promising.  The package uses ``__slots__``
 and avoids global variables extensively, but otherwise optimizations are
-purely algorithmic.  In spite of this, it can be only about 50% slower than
-PyYAML with LibYAML under CPython, and within an order of magnitude of
-``json``'s speed under PyPy [PyPy]_, the alternative Python implementation
-with a Just-in-Time (JIT) compiler.
+purely algorithmic.  In spite of this, under CPython it can be only about 50%
+slower than PyYAML with LibYAML.  Under PyPy [PyPy]_, the alternative Python
+implementation with a Just-in-Time (JIT) compiler, ``bespon`` can be within an
+order of magnitude of ``json``'s CPython speed.
 
-An example of performance in loading data is shown in Figure :ref:`benchmark`.
+Figure :ref:`benchmark` shows an example of performance in loading data.
 This was generated with the BespON Python benchmarking code
 [bespon:benchmark]_.  A sample BespON data set was assembled using the
 template below (whitespace reformatted to fit column width), substituting the
@@ -955,9 +962,9 @@ concatenating the results.
 Analogous data sets were generated for JSON, YAML, and TOML, using the closest
 available syntax.  Python's ``json`` module and the PyYAML, ``toml``,
 ``pytoml``, and ``bespon`` packages were then used to load their corresponding
-data 10 times.  Load times were measured with Python's ``timeit`` module
-[py:timeit]_, and the minimum time for each package was recorded and plotted
-in the figure.
+data from strings 10 times.  Load times were measured with Python's ``timeit``
+module [py:timeit]_, and the minimum time for each package was recorded and
+plotted in the figure.
 
 
 
@@ -972,11 +979,6 @@ in the figure.
    (64-bit) except those designated with "PyPy," which used PyPy3.5 5.7.1
    (64-bit).  PyYAML was tested with its C library implementation (CLoader)
    when available.
-
-
-
-
-
 
 
 
@@ -1025,7 +1027,7 @@ References
 
 .. [bespon:benchmark] G. Poore.
                       "Benchmark BespON in Python,"
-                      https://github.com/bespon/bespon_python_benchmark
+                      https://github.com/bespon/bespon_python_benchmark.
 
 .. [bespon:test] G. Poore.
                  "Language-agnostic tests for BespON,"
