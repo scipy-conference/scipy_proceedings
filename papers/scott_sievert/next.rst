@@ -176,7 +176,7 @@ responses: previous responses does not effect which queries are presented.
 Adaptive data collection is a process which selects the most useful data as
 quickly as possible to help achieve some goal (e.g., classification accuracy).
 
-Adaptive data collection naturally require fewer responses to produce the
+Adaptive data collection naturally requires fewer responses to produce the
 same model as passive data collection: it's adapting to previous responses by
 choosing which query to present next. This is most useful as the problem size
 increases, or when there are many data to label (e.g., different sorting
@@ -185,13 +185,10 @@ algorithms :cite:`castro2005faster`. A clearer depiction of these gains is
 shown in Figure :ref:`adaptive-gains`.
 
 Adaptively collecting large-scale datasets is challenging and time-consuming.
-Large datasets such as ImageNet are collected `passively` using existing
-crowdsourcing systems and require millions of human responses
-:cite:`deng2009imagenet`. As such, most experiments on adaptive sampling
-algorithms are simulations that use these passively collected datasets. These
-simulations do not address the practical issues faced in crowdsourcing:
-adaptive algorithm response time, human fatigue and differing label quality
-among humans.
+As such, most experiments on adaptive sampling algorithms are simulations that
+use these passively collected datasets. These simulations do not address the
+practical issues faced in crowdsourcing: adaptive algorithm response time,
+human fatigue and differing label quality among humans.
 
 Arguably, some of the deepest insights and greatest innovations have come
 through experimentation. This is only possible if adaptive data
@@ -205,10 +202,8 @@ machine learning researchers to improve adaptive data collection through
 crowdsourcing.
 
 
-General Solution
-----------------
-
-The general solution connects arbitrary adaptive algorithms with crowdsourcing.
+Challenges
+^^^^^^^^^^
 
 Adaptive data collection is not possible without access to previous responses,
 a fundamental change to data collection. This introduces human feedback: the
@@ -228,11 +223,11 @@ were not designed with these requirements in mind. Adaptive data collection
 requires a fundamentally different interaction flow as show in Figure
 :ref:`data-flow`.
 
-This general system presents a variety of challenges in mathematics, systems
-and software development. These challenges stem from the storage and connection
-of responses to the adaptive sampling algorithm. Any such system needs to
-process, store and receive crowdsourcing responses, and this has served as
-a barrier to developing such a system.
+Crowdsourcing adaptive data collection presents a variety of challenges in
+mathematics, systems and software development. These challenges stem from the
+storage and connection of responses to the adaptive sampling algorithm. Any
+such system needs to process, store and receive crowdsourcing responses, and
+this has served as a barrier to developing such a system.
 
 .. figure:: figures/data-flow.png
     :scale: 50%
@@ -265,7 +260,7 @@ present `next`. NEXT provides
 * easy use and configuration by experimentalists in a wide variety of fields
   and disciplines
 
-Our initial goal have been successfully addressed; mathematicians have
+Our initial goals have been successfully addressed; mathematicians have
 implemented new algorithms :cite:`jun2016anytime` and UW–Madison psychologists
 have independently used our system. NEXT has been used by the New Yorker and in
 the insurance industry. Various adaptive algorithms have been evaluated in the
@@ -498,9 +493,9 @@ Example
     class MyAlg:
         def initExp(self, butler, n):
             butler.algorithm.set(key='n', value=n)
-            scores = {'score' + str(i): 0
+            scores = [{'score' + str(i): 0}
                       for i in range(n)]
-            pulls = {'pulls' + str(i): 0
+            pulls = [{'pulls' + str(i): 0}
                       for i in range(n)]
             butler.algorithms.set_many(
                 key_value_dict=scores
@@ -520,7 +515,6 @@ Example
             )
             butler.algorithms.increment(
                 key='pulls' + str(target_id),
-                value=1
             )
 
         def getModel(self, butler):
