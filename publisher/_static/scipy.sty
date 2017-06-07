@@ -19,6 +19,7 @@
 % Provide AMS mathematical commands such as "align"
 \usepackage{amsmath}
 \usepackage{amsfonts}
+\usepackage{amssymb}
 \usepackage{bm}
 
 % Define colours for hyperref
@@ -64,4 +65,21 @@
 \setlength{\tablewidth}{\linewidth}
 
 % Packages required for code highlighting
+% textcomp and upquote make single quotes non-curly in literal blocks
+\usepackage{textcomp}
+\usepackage{upquote}
 \usepackage{fancyvrb}
+
+% Make single quotes non-curly in inline literal text (\texttt)
+% and in code-block directives (which use Pygments; patch Pygments macro)
+\AtBeginDocument{%
+  \let\scipyoriginaltexttt\texttt
+  \def\texttt#1{%
+    \begingroup
+    \scantokens{%
+	  \catcode`\'=\active
+	  \let'\textquotesingle
+	  \scipyoriginaltexttt{#1}\noexpand}%
+    \endgroup}%
+  \def\PYZsq{\textquotesingle}%
+}
