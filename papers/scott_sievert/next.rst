@@ -472,9 +472,11 @@ variety of atomic database operations through a thin wrapper to PyMongo. Each
 several other atomic database operations (``{get, set}_many``, ``append``,
 ``pop``, ``increment``).
 
-An interface called ``butler`` contains multiple collections (e.g.,
-``butler.algorithms``). The first argument to an algorithm after ``self`` is
-always ``butler``.
+An interface called ``butler`` contains multiple collections. The primary
+collection used by algorithms (``butler.algorithms``) is specific to each
+algorithm and allows for independent evaulation of different algorithms (though
+other collections are available). The arguments to an algorithm function are
+``butler`` followed by the values in the schema.
 
 Example
 """""""
@@ -493,10 +495,8 @@ Example
     class MyAlg:
         def initExp(self, butler, n):
             butler.algorithm.set(key='n', value=n)
-            scores = [{'score' + str(i): 0}
-                      for i in range(n)]
-            pulls = [{'pulls' + str(i): 0}
-                      for i in range(n)]
+            scores = {'score' + str(i): 0 for i in range(n)}
+            pulls = {'pulls' + str(i): 0 for i in range(n)}
             butler.algorithms.set_many(
                 key_value_dict=scores
             )
