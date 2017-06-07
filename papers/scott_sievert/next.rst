@@ -10,20 +10,20 @@
 :equal-contributor:
 
 :author: Lalit Jain
-:email: XXX@TODO.org
+:email: lalitkumarj@gmail.com
 :institution: University of Michigan, Ann Arbor
 :equal-contributor:
 
 :author: Kevin Jamieson
-:email: XXX@TODO.org
+:email: kevin.g.jamieson@gmail.com
 :institution: University of California, Berkeley
 
 :author: Rob Nowak
-:email: XXX@TODO.org
+:email: rdnowak@wisc.edu
 :institution: University of Wisconsin–Madison
 
 :author: Robert Mankoff
-:email: XXX@TODO.org
+:email: Bob_Mankoff@newyorker.com
 :institution: The New Yorker
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
@@ -87,9 +87,9 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
 .. class:: abstract
 
     We have created a data collection tool called NEXT (http://nextml.org) that
-    addresses the problems inherent collecting crowdsoured data with "adaptive"
-    collection algorithms. Adaptive sampling uses previous responses to collect
-    data and produces accurate results with minimal samples. Collecting
+    addresses the inherent problems in collecting crowdsoured data with
+    "adaptive" algorithms. Adaptive sampling uses previous responses to collect
+    data and produces accurate results with minimal samples.  Collecting
     crowdsourced data with adaptive sampling methods presents practical gains
     but also has many systems challenges. NEXT is routinely used to collect
     millions of responses from thousands of users in machine learning
@@ -110,16 +110,16 @@ The ubiquitousness of the Internet has enabled crowdsourcing, which gives fast
 access to unprecedented amounts of human judgment data.  Tapping into the
 "wisdom of the crowd" includes scenarios where questions are asked about simple
 cognitive tasks. For example, users may be asked to determine the locations in
-an image that contain a certain object (e.g., a car is present in the upper
-left) to protect against internet bots.
+an image that contain a certain object (e.g., "select all image locations that
+contain buildings") to protect against internet bots.
 
 Crowdsourcing enables the collection of a large amount of data, which is
-necessary when complex results are extracted from the simple cognitive
-judgments humans can provide. One such example finds how similar two different
-shoes are, but uses a complex model that requires a large number of
-responses given simple crowdsourcing judgments :cite:`heim2015active`. This
-example only uses a small fraction of the available shoes (less than 0.2%) and
-far more responses are required as the number of shoes grow.
+necessary to extract complex results from simple human judgments.  One such
+example finds how similar two different shoes are, but uses a complex model
+that requires a large number of responses given simple crowdsourcing judgments
+:cite:`heim2015active`. This example only uses a small fraction of the
+available shoes (less than 0.2%) and far more responses are required as the
+number of shoes grow.
 
 The cost of collecting crowdsourcing responses can be significant – especially
 in problem domains where expert input is required. Minimizing the number of
@@ -130,7 +130,7 @@ required.
 
 At UW–Madison, we have developed a crowdsourcing data collection and analysis
 tool that efficiently collects crowdsourced data :cite:`jamieson2015next`. In
-this paper, we will explain the system architecture and use, and how it is
+this paper, we will explain the system architecture and usage, and how it is
 easily accessible and readily available to researchers.
 
 Problem statement
@@ -172,10 +172,9 @@ image labels, and there have been dozens of models to predict labels for unseen
 images :cite:`szegedy2015going, he2015delving, simonyan2014very`.
 
 The collection of these data is `passive` and does not `adapt` to previous
-responses: it makes no selection on which queries to present for labeling given
-previous responses. Adaptive data collection is a process which selects the most
-useful data as quickly as possible to help achieve some goal (e.g.,
-classification accuracy).
+responses: previous responses does not effect which queries are presented.
+Adaptive data collection is a process which selects the most useful data as
+quickly as possible to help achieve some goal (e.g., classification accuracy).
 
 Adaptive data collection naturally require fewer responses to produce the
 same model as passive data collection: it's adapting to previous responses by
@@ -187,7 +186,7 @@ shown in Figure :ref:`adaptive-gains`.
 
 Adaptively collecting large-scale datasets is challenging and time-consuming.
 Large datasets such as ImageNet are collected `passively` using existing
-crowdsourcing system and require millions of human responses
+crowdsourcing systems and require millions of human responses
 :cite:`deng2009imagenet`. As such, most experiments on adaptive sampling
 algorithms are simulations that use these passively collected datasets. These
 simulations do not address the practical issues faced in crowdsourcing:
@@ -224,17 +223,16 @@ they require
 * delivering and selecting queries to be labeled.
 * updating some internal model (which selects queries to be presented).
 
-These requirements are not met in general crowdsourcing tools (e.g., Mechanical
-Turk, PsiTurk, Crowd Flower). These systems were not designed with these
-requirements in mind, and adaptive data collection represents a fundamental
-shift in their data collection model. Adaptive data collection requires the
-interactions show in Figure :ref:`data-flow`.
+General crowdsourcing systems (e.g., Mechanical Turk, PsiTurk, Crowd Flower)
+were not designed with these requirements in mind. Adaptive data collection
+requires a fundamentally different interaction flow as show in Figure
+:ref:`data-flow`.
 
 This general system presents a variety of challenges in mathematics, systems
 and software development. These challenges stem from the storage and connection
 of responses to the adaptive sampling algorithm. Any such system needs to
 process, store and receive crowdsourcing responses, and this has served as
-barrier to developing such a system.
+a barrier to developing such a system.
 
 .. figure:: figures/data-flow.png
     :scale: 50%
@@ -246,15 +244,14 @@ barrier to developing such a system.
 One other system that addresses this challenge is the Microsoft Decision
 Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
 collection of crowdsourced data with different adaptive algorithms. However,
-this system has different design goals including working with exactly one
-problem formulation and working well at very large scales. While this system
-achieve it's goals it can not handle more than one problem formulation.
+design of this system involved different goals, including working with exactly
+one problem formulation and working well at very large scales.
 
 Our system
 ----------
 
-The system we have developed at the UW–Madison is called NEXT [#]_ [#]_ which
-provides adaptive crowdsourcing data collection by selecting which query to
+The system we have developed at the UW–Madison is called NEXT [#]_ [#]_. It
+provides adaptive, crowdsourced data collection by selecting which query to
 present `next`. NEXT provides
 
 .. [#] Homepage at http://nextml.org
@@ -262,28 +259,30 @@ present `next`. NEXT provides
 
 * easy implementation, selection, and evaluation of different adaptive
   algorithms
-* a web interface for crowdsourcing participants, though it is also accessible
-  via other interactions through HTTP requests
+* a web interface for crowdsourced experiment participation
+* an HTTP-based API for experiment access (and for use in other contexts)
 * live experiment monitoring dashboards that update as responses are received
-* easy use and configuration by experimentalists, which is applicable to a wide
-  variety of fields and disciplines
+* easy use and configuration by experimentalists in a wide variety of fields
+  and disciplines
 
-These goals have been successfully addressed.  Mathematicians have implemented
-new algorithms :cite:`jun2016anytime` and UW–Madison psychologists have
-independently used our system. We have seen use with the New Yorker and in
-the insurance industry. Different adaptive algorithms have been evaluated with
-crowdsourcing in the real world, and we have seen gains as expected.
+Our initial goal have been successfully addressed; mathematicians have
+implemented new algorithms :cite:`jun2016anytime` and UW–Madison psychologists
+have independently used our system. NEXT has been used by the New Yorker and in
+the insurance industry. Various adaptive algorithms have been evaluated in the
+real world, verifying expected efficiency gains.
 
-The system is responsive to crowdsourcing participants even after receiving
-millions of responses from thousands of participants, at least with fast and
-simple algorithms.  This is illustrated by the problem below, though it also
-illustrates other features.
+In our usage, the system remains responsive to participants even after
+receiving millions of responses from thousands of participants, at least with
+fast and simple algorithms. This is illustrated by the problem below, though
+it also illustrates other features.
 
 Applications of NEXT
 --------------------
-NEXT internal `applications` present different queries for users to consider.
-There are three internal applications specifically geared to three different
-types of judgments a user can make. These are
+
+NEXT `applications` control the presentation of queries for users to consider.
+
+Three are three "built-in" applications shipped with NEXT, geared to three
+different types of judgments a user can make. These applications are
 
 * Cardinal bandits, which asks participants to rate one object
   :cite:`gabillon2012best` as shown in Figure :ref:`example-query`.
@@ -307,27 +306,27 @@ They receive about 5,000 captions, of which they have to find the funniest.
 NEXT runs this contest each week. The interface NEXT provides is visible at
 http://www.newyorker.com/cartoons/vote and in Figure :ref:`example-query`.
 
-The interface is presented every time a query is generated, either on the first
-visit to this webpage or after responding to another query. One caption is
+The interface is presented every time a query is generated. One caption is
 presented below the comic with buttons to rate the caption as "unfunny",
 "somewhat funny" or "funny". Every time one of these buttons is pressed, the
 adaptive algorithm processes the response and generates a new query.
 
-Each week, we collect and record up to a million ratings and from over 10,000
+Each week, we collect and record up to a million ratings from over 10,000
 users. All told, this dataset [#]_ includes over 20 million ratings on over
-363,000 different captions. This humor dataset has been of practical use in
+363,000 different captions. This dataset has been of practical use in
 improving adaptive sampling algorithms :cite:`jun2016anytime`.
 
 .. [#] https://github.com/nextml/caption-contest-data
 
 The New Yorker’s goal is to find the funniest caption from this set of 5,000
-captions. To achieve this goal, the algorithms of choice only sample captions
+captions [#]_. To achieve this, the algorithms of choice only sample captions
 that can possibly be the funniest. If a caption has received only "unfunny"
 ratings, it is probably not the funniest caption and should not be further
-sampled. For the cartoon shown in Figure :ref:`example-query`, the top three
-captions were "Like you've never taken anything from a hotel room", "Like I'm
-the first person who's tried sleeping their way to the top" and "And yet you
-embraced the standing desk".
+sampled.
+
+.. [#] The top caption for the comic in Figure :ref:`example-query` was "Like you've never taken anything from a hotel room"
+
+.. comment "Like I'm the first person who's tried sleeping their way to the top" and "And yet you embraced the standing desk".
 
 This system has enabled evaluation and improvement in algorithm implementation.
 In initial contests, we verified that one adaptive algorithm
@@ -335,8 +334,8 @@ In initial contests, we verified that one adaptive algorithm
 implemented an improved adaptive algorithm (KL-UCB at
 :cite:`kaufmann2013information`) and saw adaptive gains as expected.
 
-This is a large part of why we designed NEXT: to easily evaluate adaptive
-algorithms in real-world applications.
+This was one of the motivations for NEXT: enabling easy evaluation of adaptive
+algorithms.
 
 Dueling bandits
 ^^^^^^^^^^^^^^^
@@ -348,10 +347,10 @@ Dueling bandits
     "better" item is selected :label:`dueling-interface`
 
 We also support asking the crowdsourcing participants to chose the "best" of
-two items, which we did during the first several caption contests we launched
-for The New Yorker. This interface asks participants to select the funnier of
-two captions, and is shown in Figure :ref:`dueling-interface`. This problem
-formulation has theoretic guarantees on finding the best item in a set
+two items. We tried this method during the first several caption contests we
+launched for The New Yorker. This interface asks participants to select the
+funnier of two captions, and is shown in Figure :ref:`dueling-interface`. This
+problem formulation has theoretic guarantees on finding the best item in a set
 :cite:`audibert2010best`, but can also be applied to ranking different objects
 :cite:`chen2013pairwise`.
 
@@ -374,12 +373,13 @@ problem formulation. For example, it may be desired to find the similarity
 between different facial expressions. Happy and excited faces may be similar
 but are probably different from sad faces.
 
-Human attention span can not handle the naive number of comparisons, about
-:math:`n^2` with :math:`n` items. Instead, we ask the crowdsourcing participant
-to make a pairwise similarity judgement, or a triplet response as shown in
-Figure :ref:`triplet-interface`. There are theoretic guarantees on finding some
-similarity measure given these responses :cite:`jain2016finite` and have been
-used in practice with NEXT to compare different molecules :cite:`rau2016model`.
+Human attention span cannot handle the naive number of comparisons (about
+:math:`n^2` with :math:`n` items). Instead, we ask the crowdsourcing
+participant to make a pairwise similarity judgement, or a triplet response as
+shown in Figure :ref:`triplet-interface`. There are theoretic guarantees on
+finding some similarity measure given these responses :cite:`jain2016finite`
+and have been used in practice with NEXT to compare visual representations of
+different molecules :cite:`rau2016model`.
 
 NEXT Architecture
 -----------------
@@ -412,8 +412,8 @@ Algorithm implementation
 Required functions
 """"""""""""""""""
 
-A sampling algorithm needs four functions for the features we want to provide
-as shown in Figure :ref:`block-diagram`. These functions are
+To implement Figure :ref:`block-diagram`, we must implement four functions for
+each algorithm:
 
 1. ``initExp``, which initializes the algorithm when the experiment is launched
 2. ``getQuery``, which generates a query to show one participant
@@ -427,22 +427,22 @@ These algorithms handle various objects to displayed in each query (e.g., the
 New Yorker displays one text object in every query for a rating). By default,
 these objects are abstracted to an integer identifier (though the other
 information is still accessible). That means these algorithms mirror the
-implementation in academic papers where a particular objects is referred to as
-object :math:`i` to an integer.
+implementation in academic papers: objects are referred to by an integer index
+(i.e., object :math:`i`).
 
 The arguments and return values for all algorithm functions are specified
-exactly. Every algorithm has to create a mapping from the specified inputs to
-the specified outputs. This allows treating an algorithm like a black-box.
+exactly, in a YAML-based schema. Every algorithm has to create a mapping from
+the specified inputs to the specified outputs. This allows treating an
+algorithm like a black-box.
 
-
-The YAML file ``Algs.yaml`` (e.g., in ``apps/[application]/algs/Algs.yaml``)
-contains four root level keys for each of ``initExp``, ``getQuery``, ``processAnswer``
-and ``getModel``. Each one of these sections describes the
-input arguments and returns values by ``args`` and ``rets`` respectively. These
-sections are filled with type specifications that describe the name and type of
-the various keyword arguments.
-For example, an integer parameter given with the keyword argument ``foo``
-is characterized in ``Algs.yaml`` by
+This schema depends on ``Algs.yaml`` (e.g., in
+``apps/[application]/algs/Algs.yaml``) and contains four root level keys for
+each of ``initExp``, ``getQuery``, ``processAnswer`` and ``getModel``. Each one
+of these sections describes the input arguments and returns values by ``args``
+and ``rets`` respectively. These sections are filled with type specifications
+that describe the name and type of the various keyword arguments.  For example,
+an integer parameter given with the keyword argument ``foo`` is characterized
+in ``Algs.yaml`` by
 
 .. code-block:: yaml
 
@@ -471,25 +471,18 @@ Database access
 :label:`butler`
 
 We provide a simple database wrapper, as algorithms need to store different
-values (e.g., the number of targets, a list of target scores). We do provide a
-variety of atomic database operations in any "collection" including
+values (e.g., the number of targets, a list of target scores). We provide a
+variety of atomic database operations through a thin wrapper to PyMongo. Each
+"collection" in this wrapper mirrors a Python dictionary and has
+several other atomic database operations (``{get, set}_many``, ``append``,
+``pop``, ``increment``).
 
-- ``set`` and ``get``, which can set and get all objects (scalars,
-  dictionaries, NumPy arrays, etc).
-- ``get_many`` and ``set_many`` which is atomic even with many different values
-- ``append`` and ``pop`` which mirror the Python equivalents, but ``append``
-  returns the modified list.
-- ``increment``, which increments a variable by some value and returns
-
-This wrapper or ``butler`` is a set of collections, and the primary collection
-algorithms use is ``butler.algorithms`` which allows algorithms to be evaluated
-independently. The first argument to an algorithm after ``self`` is always ``butler``.
+An interface called ``butler`` contains multiple collections (e.g.,
+``butler.algorithms``). The first argument to an algorithm after ``self`` is
+always ``butler``.
 
 Example
 """""""
-
-An algorithm that performs randomly sampling is given below, and follows the
-naming convention
 
 .. code-block:: python
 
@@ -532,10 +525,10 @@ naming convention
 
         def getModel(self, butler):
             n = butler.algorithms.get(key='n')
-            scores = [butler.alrogithms.get(
+            scores = [butler.algorithms.get(
                         'score' + str(i))
                       for i in range(n)]
-            pulls = [butler.alrogithms.get(
+            pulls = [butler.algorithms.get(
                         'pulls' + str(i))
                       for i in range(n)]
             mean_scores = [s/p if p != 0 else float('nan')
@@ -579,47 +572,45 @@ The ``Algs.yaml`` file for this algorithm would be
 Experiment dashboards
 ^^^^^^^^^^^^^^^^^^^^^
 
-NEXT experiments can be monitored in real time via experiment dashboards. For
-each experiment, we provide a dashboard which includes
+NEXT can be monitored in real-time via dashboards for each experiment, which
+include:
 
+* experiment logs
+* basic information (launch date, number of received responses, etc)
 * the results, with current responses received (example in Figure
   :ref:`dashboard-results`)
 * client- and server-side timing information
 * download links to the responses and the live results (which allows processing
   of these data offline).
 
-These dashboards provide a host of other features, including experiment logs and
-basic experiment information (launch date, responses received, etc).
-
 .. figure:: figures/alg-results.png
 
    The dashboard display of results from different algorithms for the example in Figure :ref:`dueling-interface`. :label:`dashboard-results`
 
 The dashboards include histograms for both human response time and network
-delay (which is time taken for NEXT computation) and is a measure of system
-responsiveness. An example is shown in Figure
-:ref:`histograms`. These dashboards also include timing information on
-different algorithm functions, which is a useful debugging tool for the
-algorithm developer.
+delay (time taken for NEXT to respond to request), a measure of system
+responsiveness. An example is shown in Figure :ref:`histograms`. These
+dashboards also include timing information for algorithm functions, a useful
+debugging tool for the algorithm developer.
 
 .. figure:: figures/histograms.png
 
-    The client side timing. Network delay represents the total time NEXT took
-    to respond. :label:`histograms`
+    Timing histograms (measured client-side). Network delay represents the
+    total time NEXT took to respond. :label:`histograms`
 
 Experimentalist use
 ^^^^^^^^^^^^^^^^^^^
 
 Below, we will refer to different NEXT features which are available through
-different API endpoints. After NEXT is launched, these are available by
-appending to ``[next-url]:8000`` where ``[next-url]`` is the IP address where
-NEXT is available, typically one of either ``localhost`` or the Amazon EC2
-public DNS (e.g., ``ec2-...-amazonaws.com``).
+different API endpoints. After NEXT has launched, these are available via HTTP
+on port ``8000`` on the hosting machine. In practice, this means the API
+endpoint ``/home`` (for example) is available at ``[next-url]:8000/home`` when
+``[next-url]`` is one of ``ec2-...-amazonaws.com`` or ``localhost``.
 
 Launching NEXT
 """"""""""""""
 
-Perhaps the easiest way to launch NEXT is through Amazon EC2 (which can provide
+The easiest way to launch NEXT is through Amazon EC2 (which can provide
 the interface required for crowdsourcing) and their AMI service. After launch,
 the main NEXT interface is available at the API endpoint ``/home`` which
 provides links to the list of dashboards, an experiment launching interface and
@@ -628,22 +619,22 @@ the associated documentation.
 Launching can be done by selecting the "Launch instance" button on Amazon EC2
 and choosing the AMI "NEXT_AMI", ``ami-36a00c56`` which is available in the
 Oregon region. We recommend that production experiments be run on the EC2
-instance-type ``c4.8xlarge`` which is a large computer that provides the
-necessary memory and compute power. A complete guide can be found in the
-documentation at https://github.com/nextml/NEXT/wiki.
+instance-type ``c4.8xlarge``, a server large enough to provide the necessary
+memory and compute power.  A complete guide can be found in the documentation
+at https://github.com/nextml/NEXT/wiki.
 
 Experiment launch
 """""""""""""""""
 
 Experiments are launched by providing two files to NEXT, either via a web
-interface or an API endpoint. An experiment description file is required.
-The other optional file contains the objects being compared, or targets. These
-two files can be uploaded through the interface available at ``/assistant/init``.
+interface or an API endpoint. An experiment description file is required.  The
+other (optional) file enumerate the objects under consideration ("target").
+These two files can be uploaded through the interface available at
+``/assistant/init``.
 
 The experiment description contains the information required to launch and
-configure the experiment. An example experiment description that can be used to
-launch the experiment behind the query page shown in Figure
-:ref:`example-query`:
+configure the experiment. The following experiment description was used to
+generate the image in Figure :ref:`dueling-interface`:
 
 .. code-block:: yaml
 
@@ -665,8 +656,10 @@ launch the experiment behind the query page shown in Figure
         - {label: somewhat funny, reward: 2}
         - {label: funny, reward: 3}
 
-The documentation for these parameters in this YAML file are documented at ``/assistant/doc/[application-id]/pretty``
-under the heading "initExp".
+
+These parameters are defined in schemes, and are documented at
+the API endpoint ``/assistant/doc/[application-id]/pretty``
+in the "initExp" section.
 
 The other file necessary for experiment launch is a ZIP file of targets (e.g.,
 the images involved in each query). We support several different formats for
@@ -685,13 +678,12 @@ Conclusion
 ----------
 
 At UW–Madison, we have created a system that is connecting useful adaptive
-algorithms with crowdsourced data collection. This system can be and has been
-widely used by experimentalists in a wide variety of disciplines from the
-social sciences to engineering to more efficiently collect data using
-crowdsourcing; in effect, accelerating research by decreasing the time to
-obtain results. The development of this system is modular: sampling algorithms
-are treated as black boxes, and this system is accessible with other
-interfaces. NEXT provides useful experiment monitoring tools that update as
-responses are received. This system has been show to be cost effective in
-brining new decision making tools to new applications in both private and
-public sectors.
+algorithms with crowdsourced data collection. This system has been widely used
+by experimentalists in a wide variety of disciplines from the social sciences
+to engineering to efficiently collect crowdsourced data; in effect,
+accelerating research by decreasing the time to obtain results. The development
+of this system is modular: sampling algorithms are treated as black boxes, and
+this system is accessible with other interfaces. NEXT provides useful
+experiment monitoring tools that update as responses are received. This system
+has shown to be cost effective in bringing decision making tools to new
+applications in both the private and public sectors.
