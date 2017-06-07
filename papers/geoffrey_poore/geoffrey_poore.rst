@@ -25,7 +25,9 @@ BespON:  Extensible config files with multiline strings, lossless round-tripping
    \let\scipyoriginaltexttt\texttt
    \def\texttt#1{%
      \begingroup
-	 \scantokens{\catcode`\'=\active\let'\textquotesingle\scipyoriginaltexttt{#1}\noexpand}%`
+	 \scantokens{%
+       \catcode`\'=\active\catcode`\`=\active\let'\textquotesingle\let`\textasciigrave
+       \scipyoriginaltexttt{#1}\noexpand}%
 	 \endgroup}
 
 ..
