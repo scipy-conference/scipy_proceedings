@@ -71,14 +71,17 @@
 \usepackage{fancyvrb}
 
 % Make single quotes non-curly in inline literal text (\texttt)
-% and in code-block directives (which use Pygments; patch Pygments macro)
+% and in code-block directives (which use Pygments; patch Pygments macro).
+% Also fix backtick in inline literal text.
 \AtBeginDocument{%
   \let\scipyoriginaltexttt\texttt
   \def\texttt#1{%
     \begingroup
     \scantokens{%
 	  \catcode`\'=\active
+	  \catcode`\`=\active
 	  \let'\textquotesingle
+	  \let`\textasciigrave
 	  \scipyoriginaltexttt{#1}\noexpand}%
     \endgroup}%
   \def\PYZsq{\textquotesingle}%
