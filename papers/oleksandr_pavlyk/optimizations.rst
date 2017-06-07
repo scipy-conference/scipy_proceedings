@@ -56,13 +56,12 @@ Fast Fourier Transforms
 -----------------------
 In addition to initial Fast Fourier Transforms (FFT) optimizations offered in previous releases, Update 2 brings widespread optimizations for NumPy and SciPy FFT. It offers a layered interface for the Intel |R| Math Kernel Library (Intel |R| MKL) that allows efficient access to native FFT optimizations from a range of NumPy and SciPy functions. The optimizations include real and complex data types, both single and double precision. Update 2 covers both one-dimensional and multi-dimensional data, as well as in place and out of place modes of operation. As a result, performance may improve up to 60x over Update 1 and is now close to performance of native C/Intel MKL.
 
-.. include:: fft_optimizations/fft.rst
+.. include:: papers/oleksandr_pavlyk/fft/fft.rst
 
 Arithmetic and transcendental expressions
 -----------------------------------------
 
-.. include:: umath_optimizations/umath_optimizations.rst
-
+.. include:: papers/oleksandr_pavlyk/umath/umath.rst
 
 
 Memory management optimizations
@@ -74,7 +73,7 @@ The most significant improvements in memory optimizations in Update 2 comes from
 Faster Machine Learning with Scikit-learn
 -----------------------------------------
 
-.. include:: sklearn.rst
+.. include:: papers/oleksandr_pavlyk/sklearn/sklearn.rst
 
 Numba vectorization
 -------------------

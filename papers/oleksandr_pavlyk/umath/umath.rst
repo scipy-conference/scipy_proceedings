@@ -1,15 +1,15 @@
 One of the great benefits found in our Intel |R| Distribution for Python is the performance boost
-gained from leveraging SIMD and multithreading in (select) NumPy’s UMath arithmetic and
+gained from leveraging SIMD and multithreading in (select) NumPy's UMath arithmetic and
 transcendental operations, on a range of Intel CPUs, from Intel |R| Core |TM| to Intel |R| Xeon
 |TM| & Intel |R| Xeon Phi |TM|. With stock python
 as our baseline, we demonstrate the scalability of Intel |R| Distribution for Python by using
 functions that are intensively used in financial math applications and machine learning:
 
-.. figure:: speedup1.png
+.. figure:: umath/speedup1.png
 
-.. figure:: speedup2.png
+.. figure:: umath/speedup2.png
 
-.. figure:: speedup3.png
+.. figure:: umath/speedup3.png
 
 
 One can see that stock Python (pip-installed NumPy from PyPI) on Intel |R| Core |TM| i5 performs
@@ -18,15 +18,15 @@ but not on Intel |R| Xeon |TM| and Intel |R| Xeon Phi |TM|, where Intel Python a
 another 10x speedup. This can be explained by the fact that basic arithmetic operations in stock
 NumPy are hard-coded AVX intrinsics (and thus already leverage SIMD, but do not scale to other ISA,
 e.g. AVX-512). These operations in stock Python also do not leverage multiple cores (i.e. no
-multi-threading of loops under the hood of NumPy exist with such operations). Intel Python’s
+multi-threading of loops under the hood of NumPy exist with such operations). Intel Python's
 implementation allows for this scalability by utilizing the following: respective Intel |R| MKL VML
 primitives, which are CPU-dispatched (to leverage appropriate ISA) and multi-threaded (leverage
 multiple cores) under the hood, and Intel |R| SVML intrinsics, a compiler-provided short vector
 math library that vectorizes math functions for both IA-32 and Intel |R| 64-bit architectures on
 supported operating systems. Depending on the problem size, NumPy will choose one of the two
-approaches. On much smaller array sizes, Intel |R| SVML outperforms VML due to VML’s inherent cost
+approaches. On much smaller array sizes, Intel |R| SVML outperforms VML due to VML's inherent cost
 of setting up the environment to multi-thread loops. For any other problem size, VML outperforms
-SVML and this is thanks to VML’s ability to both vectorize math functions and multi-thread loops.
+SVML and this is thanks to VML's ability to both vectorize math functions and multi-thread loops.
 
 
 Specifically, on Intel |R| Core |R| i5 Intel Python delivers greater performance on transcendentals
@@ -42,9 +42,9 @@ The following charts provide another view of Intel Python performance versus sto
 arithmetic and transcendental vector operations in NumPy by measuring how close UMath performance
 is to respective native MKL call:
 
-.. figure:: native_c_comp1.png
+.. figure:: umath/native_c_comp1.png
 
-.. figure:: native_c_comp2.png
+.. figure:: umath/native_c_comp2.png
 
   
 Again on Intel |R| Core |TM| i5 the stock Python performs well on basic operations (due to
@@ -60,11 +60,11 @@ chose to use the Black Scholes model, often used to estimate the price of financ
 like stock options. A Python implementation of the Black Scholes formula gives an idea of how NumPy
 UMath optimizations can be noticed on the application level:
 
-.. figure:: black_scholes1.png
+.. figure:: umath/black_scholes1.png
 
-.. figure:: black_scholes2.png
+.. figure:: umath/black_scholes2.png
 
-.. figure:: black_scholes3.png
+.. figure:: umath/black_scholes3.png
 
 
 
