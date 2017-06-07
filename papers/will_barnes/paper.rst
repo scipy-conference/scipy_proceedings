@@ -191,7 +191,7 @@ When dealing with spectral line emission, we are often most interested in the li
 
 .. math::
    
-   I_{ij} = \frac{1}{4\pi}\frac{hc}{\lambda}\mathrm{Ab}(X)X_kA_{ij}n_jn_e^{-1}
+   I_{ij} = \frac{1}{4\pi}\frac{hc}{\lambda}\mathrm{Ab}(X)X_kA_{ij}n_jn_e^{-1},\quad [\mathrm{erg}\,\mathrm{cm}^3\mathrm{s}^{-1}\mathrm{str}^{-1}]
 
 where :math:`\mathrm{Ab}(X)` is the abundance and :math:`X_k` is the ionization equilibrium. To calculate the intensity for each transition in CHIANTI for Fe V, we can use the method :code:`fe_5.intensity()` which returns a :math:`100\times219` array (i.e. dimension of temperature by the number of available transitions). The convenience methods :code:`fe_5.intensityPlot()` and :code:`fe_5.intensityList()` can also be used to quickly visualize and enumerate the most intense lines produced by the ion. 
 
@@ -210,21 +210,23 @@ This method also accepts an optional keyword argument for specifying a filter wi
 
 Continuum Emission
 ##################
-In addition to calculating emissivities for individual spectral lines, ChiantiPy also calculates the free-free and free-bound continuua as a function of wavelength and temperature for each ion through the :code:`Continuum` object. Free-free emission (or *bremsstrahlung*) is produced by collisions between free electrons and positively charged ions. The free-free emissivity (in units of erg :math:`\mathrm{cm}^3\,\mathrm{s}^{-1}\,\mathrm{\mathring{A}}^{-1}\,\mathrm{str}^{-1}`) is given by,
+In addition to calculating emissivities for individual spectral lines, ChiantiPy also calculates the free-free and free-bound continuua as a function of wavelength and temperature for each ion through the :code:`Continuum` object. Free-free emission (or *bremsstrahlung*) is produced by collisions between free electrons and positively charged ions. The free-free emissivity is given by,
 
 .. math::
    :type: align
 
    \frac{dW}{dtdVd\lambda} =& \frac{c}{3m_e}\left(\frac{\alpha h}{\pi}\right)^3\left(\frac{2\pi}{3m_ek_B}\right)^{1/2}\frac{Z^2}{\lambda^2T^{1/2}}\bar{g}_{ff} \\
-   &\times\exp{\left(-\frac{hc}{\lambda k_BT}\right)},
+   &\times\exp{\left(-\frac{hc}{\lambda k_BT}\right)},\quad [\mathrm{erg}\,\mathrm{cm}^3\,\mathrm{s}^{-1}\,\mathrm{\mathring{A}}^{-1}\,\mathrm{str}^{-1}]
 
 where :math:`\alpha` is the fine structure constant, :math:`Z` is the nuclear charge, :math:`T` is the electron temperature, and :math:`\bar{g}_{ff}` is the velocity-averaged Gaunt factor :cite:`rybicki_radiative_1979`. :math:`\bar{g}_{ff}` is calculated using the methods of :cite:`itoh_relativistic_2000` (:code:`Continuum.itoh_gaunt_factor()`) and :cite:`sutherland_accurate_1998` (:code:`Continuum.sutherland_gaunt_factor()`), depending on the temperature range. 
 
 Similarly, free-bound emission is produced when a free electron collides with a positively-charged ion and the previously-free electron is captured into an excited state of the ion. Because this process (unlike free-free emission) involves the details of the energy level structure of the ion, its formulation is necessarily quantum mechanical though a semi-classical treatment is possible (see Section 4.7.2 of :cite:`phillips_ultraviolet_2008` and Section 10.5 of :cite:`rybicki_radiative_1979`). From :cite:`young_chianti-atomic_2003`, the free-bound emission can be calculated as,
 
 .. math::
+   :type: align
 
-   \frac{dW}{dtdVd\lambda} = \frac{1}{4\pi}\frac{2}{hk_Bc^3m_e\sqrt{2\pi k_Bm_e}}\frac{E^5}{T^{3/2}}\sum_i\frac{\omega_i}{\omega_0}\sigma_i^{bf}\exp\left(-\frac{E - I_i}{k_BT}\right),
+   \frac{dW}{dtdVd\lambda} =& \frac{1}{4\pi}\frac{2}{hk_Bc^3m_e\sqrt{2\pi k_Bm_e}}\frac{E^5}{T^{3/2}}\sum_i\frac{\omega_i}{\omega_0}\sigma_i^{bf} \\
+   &\times\exp\left(-\frac{E - I_i}{k_BT}\right),\quad [\mathrm{erg}\,\mathrm{cm}^3\,\mathrm{s}^{-1}\,\mathrm{\mathring{A}}^{-1}\,\mathrm{str}^{-1}]
 
 where :math:`E=hc/\lambda` is the photon energy, :math:`\omega_i` and :math:`\omega_0` are the statistical weights of the :math:`i^{\mathrm{th}}` level of the recombined ion and the ground level of the recombing ion, respectively, :math:`\sigma_i^{bf}` is the photoionization cross-section, and :math:`I_i` is the ionization potential of level :math:`i`. The cross-sections are calculated using the methods of :cite:`verner_analytic_1995` (for the ground state, i.e. :math:`i=0`) and :cite:`karzas_electron_1961` (for :math:`i\neq0`). An optional :code:`use_verner` keyword argument (:code:`True` by default) is included in the :code:`Continuum.calclulate_free_bound_emission()` so that users can choose to only use the method of :cite:`karzas_electron_1961` in the photoionization cross-section calculation.
 
@@ -295,7 +297,22 @@ Examples of how to calculate spectra for a single ion and for all ions over a ra
 
 Radiative Losses
 #################
-The radiative loss rate 
+The radiative loss rate is an important quantity for calculating the energy loss in coronal plasmas, particularly in hydrodynamic simulations of coronal loops. The total radiative loss rate is given by,
+
+.. math:: 
+   \Lambda = \Lambda_{continuum} + \Lambda_{line}, \quad [\mathrm{erg}\,\mathrm{cm}^{3}\,\mathrm{s}^{-1}]
+
+where 
+
+.. math::
+   :type: align 
+
+   \Lambda_{line} =& \sum_{X}\Lambda_X = \sum_{X,k}\Lambda_{X_k} = \sum_{X,k,\lambda_{ij}}\Lambda_{X_{k,\lambda_{ij}}} \\
+   =& \sum_{X,k,\lambda_{ij}}\mathrm{Ab}(X)X_k\frac{hc}{\lambda}A_{ij}n_jn_e^{-1},
+
+is the contribution to the radiative losses summed over every element (:math:`X`), ion (:math:`X_k`) and transition (:math:`\lambda_{ij}`), and :math:`\Lambda_{continuum}` includes the free-free, free-bound, and two-photon continuum contributions to the radiative loss.
+
+In ChiantiPy, the radiative loss rate can be calculated using the :code:`radLoss` module for a particular temperature and density range. 
 
 Documentation, Testing, and Infrastructure
 ------------------------------------------
@@ -310,6 +327,10 @@ ChiantiPy has benefited greatly from the `astropy-helpers package template <http
 Future Work: Towards ChiantiPy v1.0
 -----------------------------------
 Goals, new features, fixes, refactoring, big projects, etc
+
+Improved test coverage, integration with astropy units, releases on conda
+
+This section is optional, could cut it if we are short on space...
 
 References
 ----------
