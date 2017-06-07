@@ -25,7 +25,7 @@ ChiantiPy: a Python package for Astrophysical Spectroscopy
 
 Introduction
 ------------
-Nearly all astrophysical observations are done through *remote sensing*. Light at various wavelengths is collected by instruments, either ground- or space-based, in an attempt to understand physical processes happening in distant astrophysical objects. However, in order to translate these detector measurements to meaningful physical insight, it is necessary to understand what physical conditions give rise to different spectral lines and continuum emission. Started in 1996 by researchers at the Naval Research Laboratory, the University of Cambridge, and Arcetri Astrophysical Observatory in Florence for the purpose of analyzing solar spectra, the CHIANTI atomic database provides a set of up-to-date atomic data for ions of hydrogen through zinc as well as a suite of tools, written in the proprietary Interactive Data Language (IDL), for analyzing this data. Described in a series of 15 papers from 1997 to 2016 (see Table :ref:`chiantipapers`) that have been cited collectively over 3000 times, the CHIANTI database is an invaluable resource to the solar physics community.
+Nearly all astrophysical observations are done through *remote sensing*. Light at various wavelengths is collected by instruments, either ground- or space-based, in an attempt to understand physical processes happening in distant astrophysical objects. However, in order to translate these detector measurements to meaningful physical insight, it is necessary to understand what physical conditions give rise to different spectral lines and continuum emission. Started in 1996 by researchers at the Naval Research Laboratory, the University of Cambridge, and Arcetri Astrophysical Observatory in Florence for the purpose of analyzing solar spectra, the CHIANTI atomic database provides a set of up-to-date atomic data for ions of hydrogen through zinc as well as a suite of tools, written in the proprietary Interactive Data Language (IDL), for analyzing this data. Described in a series of 15 papers from 1997 to 2016 that have been cited collectively over 3000 times (see Table :ref:`chiantipapers`), the CHIANTI database is an invaluable resource to the solar physics community.
 
 .. table:: All publications describing the data and capabilities of the CHIANTI atomic database, the associated version of the database, and the number of citations as reported by the NASA Astrophysics Data System. :label:`chiantipapers`
 
@@ -67,10 +67,9 @@ Nearly all astrophysical observations are done through *remote sensing*. Light a
    |                                     |         | 3066      |
    +-------------------------------------+---------+-----------+
 
-The CHIANTI database provides 
+The CHIANTI database provides atomic data for optically-thin transitions primarily in the x ray and extreme ultraviolet (EUV) spectral range for ions of 30 different elements, H (:math:`Z=1`) through Zn (:math:`Z=30`). 
 
 Give history of CHIANTI/ChiantiPy, where the data comes from, who uses it, why.
-
 
 The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). Need some more details here.... 
 
@@ -165,8 +164,7 @@ The most essential and actively developed portion of the ChiantiPy package is th
    import ChiantiPy.core as ch
    import numpy as np
    T = np.logspace(4,6,100)
-   n = 1e9
-   fe_5 = ch.ion('fe_5',temperature=T,eDensity=n)
+   fe_5 = ch.ion('fe_5',temperature=T,eDensity=1e9)
 
 In this example, we've initialized an :code:`ion` object for Fe V over a temperature range  of :math:`T=10^4-10^6` K at a constant electron density of :math:`n_e=10^9` :math:`\mathrm{cm}^{-3}`. All of the data discussed in the previous section are available as attributes of the :code:`ion` object (e.g. :code:`.Elvlc` and :code:`.Wgfa` are dictionaries holding the various fields available in the corresponding filetypes listed in Table :ref:`chiantipyapi`). In general, ChiantiPy objects follow the convention that methods are lowercase and return their value(s) to attributes with corresponding uppercase names [2]_. For example, the abundance value of Fe is stored in :code:`fe_5.Abundance` and the ionization equilibrium is calculated using the method :code:`fe_5.ioneqOne()` with the value being returned to the attribute :code:`fe_5.IoneqOne`.
 
@@ -312,7 +310,21 @@ where
 
 is the contribution to the radiative losses summed over every element (:math:`X`), ion (:math:`X_k`) and transition (:math:`\lambda_{ij}`), and :math:`\Lambda_{continuum}` includes the free-free, free-bound, and two-photon continuum contributions to the radiative loss.
 
-In ChiantiPy, the radiative loss rate can be calculated using the :code:`radLoss` module for a particular temperature and density range. 
+In ChiantiPy, the radiative loss rate can be calculated using the :code:`radLoss` module for a particular temperature and density range. To calculate the total radiative loss rate for all ions with an abundance greater than :math:`10^{-4}`,
+
+.. code-block:: python
+
+   import numpy as np
+   import ChiantiPy.core as ch
+   temperature = np.logspace(4,8,100)
+   rl = ch.radLoss(temperature, 1e9, minAbund=1e-4)
+
+Instantiating the :code:`radLoss` object automatically calculates the radiative loss rate and stores the total loss rate in :code:`rl.RadLoss['rate']`, in this case an array of length 100. If the continuum contributions are included (:code:`doContinuum` is :code:`True` by default), the free-free, free-bound, and two-photon components are stored in :code:`rl.FreeFreeLoss`, :code:`rl.FreeBoundLoss`, and :code:`rl.TwoPhotonLoss`, respectively. Ions with low abundances can be excluded with the :code:`minAbund` keyword argument which can speed up the calculation. A custom abundance dataset can also be set with the :code:`abundance` keyword. Note that the above calculation takes approximately 11 minutes on modern hardware. Fig. :ref:`radloss` shows the total radiative losses using the coronal abundances of :cite:`feldman_potential_1992` (solid) and the photospheric abundances of :cite:`asplund_chemical_2009` (dashed). The coronal abundance case is also broken down into the line emission, free-free, free-bound, and two-photon continuum components.
+
+.. figure:: figures/rad_loss.pdf
+
+   Combined radiative losses for all ions in the CHIANTI database for coronal abundances (solid) and photospheric abundances (dashed). The coronal abundance case is also broken down into the line emission and free-free, free-bound, and two-photon continuum components. In the coronal case, the minimum abundance for elements to be included in the calculation is :math:`10^{-4}` and :math:`10^{-6}` for the photospheric case. :label:`radloss`
+
 
 Documentation, Testing, and Infrastructure
 ------------------------------------------
