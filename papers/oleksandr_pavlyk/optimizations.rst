@@ -82,7 +82,8 @@ We worked with Continuum Analytics to make Numba to vectorize math code with tra
 
 Numba Parallelism
 -----------------
-Intel Labs contributed Parallel Accelerator to Numba
+
+.. include:: papers/oleksandr_pavlyk/parallel/parallel.rst
 
 
 Summary
