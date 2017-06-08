@@ -83,7 +83,7 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
-    with io.open(rst, mode='r') as f:
+    with io.open(rst, mode='r', encoding='utf-8') as f:
         content = header + f.read()
     
     tex = dc.publish_string(source=content, writer=writer,

@@ -26,10 +26,10 @@ class TeXTemplate(tempita.Template):
 def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
     if use_html:
-        with io.open(tmpl, mode='r') as f:
+        with io.open(tmpl, mode='r', encoding='utf-8') as f:
             template = tempita.HTMLTemplate(f.read())
     else:
-        with io.open(tmpl, mode='r') as f:
+        with io.open(tmpl, mode='r', encoding='utf-8') as f:
             template = TeXTemplate(f.read())
     return template.substitute(config)
 
@@ -40,7 +40,7 @@ def from_template(tmpl_basename, config, dest_fn):
     outfile = _from_template(tmpl_basename, config, use_html=use_html)
     outname = os.path.join(build_dir, extension, dest_fn)
 
-    with io.open(outname, mode='w') as f:
+    with io.open(outname, mode='w', encoding='utf-8') as f:
         f.write(outfile)
 
 def bib_from_tmpl(bib_type, config, target):
@@ -66,7 +66,7 @@ def html_from_tmpl(src, config, target):
     dest_fn = os.path.join(html_dir, target + '.html')
     extension = os.path.splitext(dest_fn)[1][1:]
     outname = os.path.join(build_dir, extension, dest_fn)
-    with io.open(outname, mode='w') as f:
+    with io.open(outname, mode='w', encoding='utf-8') as f:
         f.write(outfile)
 
 if __name__ == "__main__":

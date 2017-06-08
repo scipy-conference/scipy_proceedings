@@ -33,7 +33,7 @@ def paper_stats(paper_id, start):
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
 
-    with io.open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w') as f:
+    with io.open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w', encoding='utf-8') as f:
         f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents
