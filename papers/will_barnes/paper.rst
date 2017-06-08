@@ -157,16 +157,17 @@ The majority of the ChiantiPy codebase is divided into two modules: :code:`tools
 
 Line Emission
 #############
-The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object which provides an interface to the data and associated calculations for each ion in the database. The :code:`ion` object is initialized with an ion name, a temperature range, and a density [1]_,
+The most essential and actively developed portion of the ChiantiPy package is the :code:`ion` object which provides an interface to the data and associated calculations for each ion in the database. The :code:`ion` object is initialized with an ion name, a temperature range, and a density [#]_,
 
 .. code-block:: python
 
    import ChiantiPy.core as ch
    import numpy as np
-   T = np.logspace(4,6,100)
-   fe_5 = ch.ion('fe_5',temperature=T,eDensity=1e9)
+   temperature = np.logspace(4,6,100)
+   density = 1e9
+   fe_5 = ch.ion('fe_5',temperature,density)
 
-In this example, we've initialized an :code:`ion` object for Fe V over a temperature range  of :math:`T=10^4-10^6` K at a constant electron density of :math:`n_e=10^9` :math:`\mathrm{cm}^{-3}`. All of the data discussed in the previous section are available as attributes of the :code:`ion` object (e.g. :code:`.Elvlc` and :code:`.Wgfa` are dictionaries holding the various fields available in the corresponding filetypes listed in Table :ref:`chiantipyapi`). In general, ChiantiPy objects follow the convention that methods are lowercase and return their value(s) to attributes with corresponding uppercase names [2]_. For example, the abundance value of Fe is stored in :code:`fe_5.Abundance` and the ionization equilibrium is calculated using the method :code:`fe_5.ioneqOne()` with the value being returned to the attribute :code:`fe_5.IoneqOne`.
+In this example, we've initialized an :code:`ion` object for Fe V over a temperature range  of :math:`T=10^4-10^6` K at a constant electron density of :math:`n_e=10^9` :math:`\mathrm{cm}^{-3}`. All of the data discussed in the previous section are available as attributes of the :code:`ion` object (e.g. :code:`.Elvlc` and :code:`.Wgfa` are dictionaries holding the various fields available in the corresponding filetypes listed in Table :ref:`chiantipyapi`). In general, ChiantiPy objects follow the convention that methods are lowercase and return their value(s) to attributes with corresponding uppercase names [#]_. For example, the abundance value of Fe is stored in :code:`fe_5.Abundance` and the ionization equilibrium is calculated using the method :code:`fe_5.ioneqOne()` with the value being returned to the attribute :code:`fe_5.IoneqOne`.
 
 One of the most often used calculations in CHIANTI and ChiantiPy is the energy level populations as a function of temperature. When calculating the energy level populations in a low density, high temperature optically-thin plasma,  collisional excitation and subsequent decay often occur much more quickly than ionization and recombination, allowing these two processes to be decoupled. Furthermore, it is assumed that all transitions occur between the excited state and the ground state. These two assumptions make up what is commonly known as the *coronal model approximation*. Thus, the level balance equation can be written as,
 
@@ -202,9 +203,9 @@ Finally, to simulate an observed spectrum, the intensity can be convolved with a
 
 This method also accepts an optional keyword argument for specifying a filter with which to convolve the intensity. The default filter is a Gaussian though :code:`ChiantiPy.tools.filters` includes several different filters including Lorentzian and Boxcar filters. The right panel of Fig. :ref:`popplusspectrum` shows the Fe V intensity (black) and spectrum folded through a Gaussian (blue) and Lorentzian (green) filter at the temperature at which the ionization fraction is maximized, :math:`T\approx8.5\times10^4` K. Similar to the :code:`fe_5.populate()` and :code:`fe_5.intensity()`, ChiantiPy also provides the convenience method :code:`fe_5.spectrumPlot()` for quickly visualizing a spectrum.
 
-.. [1] A single temperature and an array of densities is also valid. The only requirement is that if one or the other is not of length 1, both arrays must have the same length. The ion object can also be initialized without any temperature or density information if only the ion data is needed.
+.. [#] A single temperature and an array of densities is also valid. The only requirement is that if one or the other is not of length 1, both arrays must have the same length. The ion object can also be initialized without any temperature or density information if only the ion data is needed.
 
-.. [2] This convention is likely to change in the near future as the ChiantiPy codebase is brought into compliance with the `PEP 8 Style Guide for Python code <https://www.python.org/dev/peps/pep-0008/>`_.
+.. [#] This convention is likely to change in the near future as the ChiantiPy codebase is brought into compliance with the `PEP 8 Style Guide for Python code <https://www.python.org/dev/peps/pep-0008/>`_.
 
 Continuum Emission
 ##################
@@ -291,7 +292,31 @@ This will populate the :code:`fe_ioneq.Temperature` and :code:`fe_ioneq.Ioneq` a
 
 Spectra
 ##################
-Examples of how to calculate spectra for a single ion and for all ions over a range of temperature and density
+In addition to being able to calculate spectra for single ions, ChiantiPy also provides a wrapper for calculating composite spectra for a range of ions, including continuum contributions. This is handled through the :code:`spectrum` object. To calculate a composite spectrum in ChiantiPy,
+
+.. code-block:: python
+   
+   import numpy as np
+   import ChiantiPy.core as ch
+   temperature = np.array([1e+6,4e+6,1e+7])
+   density = 1e9
+   wavelength = np.linspace(10,100,1000)
+   min_abund = 1e-4
+   spec = ch.spectrum(temperature, density, 
+                      wavelength, minAbund=min_abund)
+
+The spectrum as a continuous function of wavelength can then be accessed in the :code:`spec.Spectrum['intensity']` attribute as a :math:`N_T\times N_{\lambda}` array (i.e. :math:`3\times1000` in the above example. Most of the keywords that can be passed to :code:`ion.spectrum()` can also be passed to :code:`ChiantiPy.spectrum()` and the attributes that available following the calculation are largely the same. Fig. :ref:`totalspec` shows the integrated spectrum as calculated above with several of the included transitions labeled.
+
+.. figure:: figures/total_spectrum.pdf
+   :align: center
+   :figclass: w
+   :scale: 55%
+
+   Total spectrum for all ions with an abundance greater than :math:`10^{-4}`, including the continuum, integrated over three temperatures, :math:`T=10^6,4\times10^6,10^7` K and at a constant density of :math:`n=10^9` :math:`\mathrm{cm}^{-3}`. A few of the transitions included in the spectrum are indicated by the respective ion and wavelength. :label:`totalspec`
+
+Because of the need to perform calculations and aggregate data over a large range of ions, running :code:`ChiantiPy.spectrum()` can be very time consuming, particularly for large temperature/density ranges. The above code snippet takes approximately five minutes to execute on a modern desktop. To help mitigate this difficulty, ChiantiPy provides a parallelized version of the :code:`ChiantiPy.spectrum` module called :code:`ChiantiPy.mspectrum` [#]_ which takes advantage the :code:`multiprocessing` package and can help to speed up the calculation, particularly on machines with many cores. The interface to the parallelized code is largely the same as the serial version. 
+
+.. [#] ChiantiPy provides an additional module :code:`ChiantiPy.ipymspectrum` to support parallelized spectrum calculations inside the Jupyter notebook.
 
 Radiative Losses
 #################
@@ -330,19 +355,19 @@ Documentation, Testing, and Infrastructure
 ------------------------------------------
 The ChiantiPy project has made an effort to embrace modern development practices when it comes to developing, documenting and releasing the ChiantiPy codebase. Like many open source projects started in the late 2000s, ChiantiPy was originally hosted on SourceForge, but has now moved its development entirely to `GitHub <https://github.com/chianti-atomic/ChiantiPy>`_. The SVN commit history is in the process of being migrated to GitHub as well. The move to GitHub has provided increased development transparency, ease of contribution, and better integration with third-party services.
 
-An integral part of producing quality scientific code, particularly that meant for a large user base, is continually testing said code and as improvements are made and features are added. For each merge into master as well as each pull request, a series of tests is run on `Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_, a continuous integration service and that provides free and automated builds configured through GitHub webhooks. This allows each contribution to the codebase to be tested to ensure that these changes do not break the codebase in unexpected ways. Currently, ChiantiPy is tested on Python 2.7, 3.4, and 3.5, with full 3.6 support expected soon. Currently, the ChiantiPy package is installed in each of these environments and minimal set of tests of each core module is run along with documentation builds to ensure that Sphinx can generate the documentation. The actual module tests are currently quite sparse though one of the more pressing goals of the project is to increase test coverage of the core modules.
+An integral part of producing quality scientific code, particularly that meant for a large user base, is continually testing said code as improvements are made and features are added. For each merge into master as well as each pull request, a series of tests is run on `Travis CI <https://travis-ci.org/chianti-atomic/ChiantiPy>`_, a continuous integration service and that provides free and automated builds configured through GitHub webhooks. This allows each contribution to the codebase to be tested to ensure that these changes do not break the codebase in unexpected ways. Currently, ChiantiPy is tested on Python 2.7, 3.4, and 3.5, with full 3.6 support expected soon. Currently, the ChiantiPy package is installed in each of these environments and minimal set of tests of each core module is run along with documentation builds to ensure that Sphinx can generate the documentation. The actual module tests are currently quite sparse though one of the more pressing goals of the project is to increase test coverage of the core modules.
 
 One of the most important parts of any codebase is the documentation. The ChiantiPy documentation is built using Sphinx and is `hosted on Read the Docs <http://chiantipy.readthedocs.io/en/latest/>`_. At each merge into the master branch, a new Read the Docs build is kicked off, ensuring that the ChiantiPy API documentation is never out of date with the most recent check in. In addition to the standard API documentation, the ChiantiPy Read the Docs page also provides a tutorial for using the various modules in ChiantiPy as well as a guide for those switching from the IDL version. 
 
 ChiantiPy has benefited greatly from the `astropy-helpers package template <https://github.com/astropy/astropy-helpers>`_ provided by the Astropy collaboration :cite:`astropy_collaboration_astropy:_2013`. asropy-helpers provides boilerplate code for setting up documentation and testing frameworks which has allowed the package to adopt modern testing and documentation practices with little effort. 
 
-Future Work: Towards ChiantiPy v1.0
+Conclusion
 -----------------------------------
+Some brief conclusions
+
+Maybe discuss some goals/future work too...
 Goals, new features, fixes, refactoring, big projects, etc
-
 Improved test coverage, integration with astropy units, releases on conda
-
-This section is optional, could cut it if we are short on space...
 
 References
 ----------
