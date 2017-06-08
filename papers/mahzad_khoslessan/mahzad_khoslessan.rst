@@ -480,6 +480,8 @@ As seen the overall performance is affected when extended to multiple nodes (mor
    Five repeats are run for each block size to collect statistics.
    :label:`MPI-Speed-up`
 
+Based on the results from MPI for python the reason for stragglers is not the Dask scheduler overhead and our concluison here is that this might be due to environment or the baseline code for RMSD calculations. 
+For the future studies, other tasks than RMSD calculation using the Map-reduce approach can be tested to see if there can be any improvement in overall performance when extended to multiple nodes.
 
 Conclusions
 ===========
@@ -487,7 +489,6 @@ Conclusions
 In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 Nevertheless, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
-
 
 
 Acknowledgments
