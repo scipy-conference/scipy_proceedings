@@ -87,7 +87,7 @@ properties, thus the above causes a BOLD signal diminution. Then, BOLD signal
 is an indirect measure of cerebral activity based on physiological changes in
 oxygen consumption, cerebral blood flow and blood volume.
 
-.. figure:: figures/bold_chain.pdf
+.. figure:: figures/bold_chain.png
    :align: center
    :figclass: htb
 
@@ -97,7 +97,7 @@ oxygen consumption, cerebral blood flow and blood volume.
 
 .. INFO: I put the figure here in order to display it on the top of the second page.
 
-.. figure:: figures/rois_hrfs.pdf
+.. figure:: figures/rois_hrfs.png
    :align: center
    :scale: 25%
    :figclass: wt
@@ -198,17 +198,12 @@ used for Fig. :ref:`hrfs`. We use the package Nilearn
 document.
 
 
-.. INFO: I use raw latex to display two subfigures
+.. figure:: figures/visual_ppm_pvalues.png
+   :align: center
+   :scale: 50%
+   :figclass: htb
 
-.. raw:: latex
-
-   \begin{figure}[!htb]
-   \centering
-   \hspace{-12mm} (a) \hspace{36mm} (b) \\[3mm]
-   \includegraphics[width=0.2\textwidth]{figures/visual_ppm.pdf}\hspace{5mm}
-   \includegraphics[width=0.2\textwidth]{figures/visual_pvalue.pdf}
-   \caption{PPM (a) and SPM (b) maps computed with JDE and GLM, respectively. Scale is logarithmic.} \DUrole{label}{spmvsppm}
-   \end{figure}
+   PPM (a) and SPM (b) maps computed with JDE and GLM, respectively. Scale is logarithmic. :label:`spmvsppm`
 
 
 In Fig. :ref:`pyhrf` we present the inputs and the outputs of PyHRF for the
@@ -219,7 +214,7 @@ maps per experimental condition, and posterior probability maps (PPMs) per
 condition. In the next section, we will describe in more details these elements
 and how to use PyHRF.
 
-.. figure:: figures/pyhrf4bold.pdf
+.. figure:: figures/pyhrf4bold.png
    :align: center
    :scale: 50%
    :figclass: w
