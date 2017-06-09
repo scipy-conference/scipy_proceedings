@@ -110,7 +110,7 @@ JSON
 
 JSON [JSON]_ was designed as a lightweight interchange format, so it has the
 advantage of broad cross-language support and simple syntax amenable to fast
-parsing.  With JSON syntax, the earlier data example becomes::
+parsing.  With JSON syntax, the earlier example data becomes::
 
     {"key": {"subkey": "value"}}
 
@@ -225,8 +225,7 @@ for renaming dict keys.
 TOML
 ====
 
-TOML [TOML]_ is a more recent INI-inspired format with support for multiple
-levels of nesting and for date and time literals.  In TOML, the example data
+TOML [TOML]_ is a more recent INI-inspired format.  In TOML, the example data
 could be represented as::
 
     [key]
@@ -288,7 +287,7 @@ Thus, ``true = true`` is a mapping of a string to a boolean.
 
 Two of the more popular TOML implementations for Python are the ``toml``
 package [pkg:toml]_ and the ``pytoml`` package [pkg:pytoml]_, which is being
-used in PEP 518.  Neither provides any round-trip support.
+used in PEP 518.  Currently, neither provides any round-trip support.
 
 
 
@@ -406,7 +405,8 @@ In addition, single-word identifier-style strings are allowed unquoted.
 Inline strings
 ==============
 
-Raw inline strings are delimited by a single backtick `````, triple backticks
+Raw inline strings are delimited by a single backtick `````, double backticks
+`````\ `````, triple backticks
 `````\ `````\ `````, or a longer sequence that is a multiple of three.  This
 syntax is inspired by [Markdown]_; the case of single backticks is
 similar to Go's raw strings [Go]_.  A raw inline string may contain any
@@ -422,7 +422,7 @@ arbitrary content while only requiring string modification (adding a leading
 or trailing space) in one edge case.  Other common raw string syntaxes avoid
 any string modification, but either cannot enclose arbitrary content or
 require multiple different delimiting characters.  For example, Python does
-not allow ``r"\"``.  Python does allow ``r"""\"""``, but this is not a
+not allow ``r"\"``.  It does allow ``r"""\"""``, but this is not a
 complete string representing the backslash; rather, it is the start of a raw
 string that will contain the literal sequence ``\"""`` and requires ``"""`` as
 a closing delimiter [py:lexical]_.  Meanwhile, Rust represents the literal
@@ -492,11 +492,7 @@ indentation is only kept relative to the delimiters.  For example:
    ' first line\n  second line\n'
 
 This allows the overall multiline string to be indented for clarity, without
-the indentation becoming part of the literal string content.  Of all the
-formats discussed earlier, that would only be possible with YAML, which would
-require the relative indentation of the string content to be specified
-explicitly with an integer in the case of indentation or a first line
-indented relative to subsequent lines.
+the indentation becoming part of the literal string content.
 
 
 
@@ -549,9 +545,9 @@ spaces.  An object that is indented relative to its parent object must share
 its parent object's indentation exactly.  This guarantees that in the event
 that tabs and spaces are mixed, relative indentation will always be preserved.
 
-In a bracket-delimited inline list, the list is delimited by square brackets
-``[]``, and list elements are separated by commas.  A comma is permitted
-after the last list element (dangling comma), unlike JSON:
+In an inline list, the list is delimited by square brackets ``[]``, and list
+elements are separated by commas.  A comma is permitted after the last list
+element (dangling comma), unlike JSON:
 
 .. code-block:: pycon
 
@@ -600,7 +596,7 @@ Because the multiline string starts on the same line as ``key``, the opening
 and closing delimiters are not required to have the same indentation, and
 the indentation of the string content is relative to the closing deliter.
 
-In a brace-delimited inline dict, the dict is delimited by curly braces
+In an inline dict, the dict is delimited by curly braces
 ``{}``, and key-value pairs are separated by commas:
 
 .. code-block:: pycon
@@ -652,13 +648,12 @@ key paths:
    """)
    {'key': {'subkey': {'a': 'value1', 'b': 'value2'}}}
 
-In this case, key paths starting with ``subkey`` can be used multiple times at
+Key paths starting with ``subkey`` can be used multiple times at
 the indentation level where ``subkey`` is first used.  Using ``subkey.c`` at
 this level would be valid.  However, returning to the indentation level of
 ``key`` and attempting to use ``key.subkey.c`` would result in a scope error.
 Scoping ensures that all data defined via key paths with common nodes remains
-relatively localized, rather than being spread throughout an entire config
-file.
+relatively localized.
 
 Key paths can also be used in sections similar to INI-style formats and TOML.
 A section consists of a pipe followed immediately by three equals signs
@@ -801,10 +796,10 @@ Similarly, there is no way to set and then modify list elements.  In contrast,
 the JSON specification only specifies that keys "SHOULD be unique" [JSON]_.
 Python's JSON module [py:json]_ allows duplicate keys, with later keys
 overwriting earlier ones.  Although YAML [YAML]_ specifies that keys are
-unique, in practice PyYaml [pkg:PyYAML]_ and ``ruamel.yaml``
-[pkg:ruamel.yaml]_ allow duplicate keys, with later keys overwriting earlier
-ones.  TOML [TOML]_ also specifies unique keys, and this is enforced by the
-``toml`` [pkg:toml]_ and ``pytoml`` [pkg:pytoml]_ packages.
+unique, in practice PyYaml [pkg:PyYAML]_ allows duplicate keys, with later
+keys overwriting earlier ones.  TOML [TOML]_ also specifies unique keys, and
+this is enforced by the ``toml`` [pkg:toml]_ and ``pytoml`` [pkg:pytoml]_
+packages.
 
 When the last line of an inline or unquoted string contains one or more
 Unicode code points with ``Bidi_Class`` R or AL (right-to-left languages)
@@ -832,7 +827,7 @@ represented with an inline dict (still valid BespON):
    {'\u05D0' = 1, '\u05D1' = 2}
 
 There is still no ambiguity, but the meaning is less clear due to the Unicode
-escapes.  If the literal letters are substituted, this is the result in
+escapes.  If the literal letters are substituted, this is the rendering in
 most text editors (now invalid BespON):
 
 .. raw:: latex
@@ -888,7 +883,7 @@ This illustrates several features of the round-trip capabilities.
 *  When a number is modified, the new value is expressed in the same base as
    the old value by default.
 *  When a quoted string is modified, the new value is quoted in the same style
-   as the old value (at least to the extent that this is practical).
+   as the old value (at least when practical).
 *  As soon as a key is modified, the new key must be used for further
    modifications. The old key is invalid.
 
@@ -918,8 +913,8 @@ data):
           value2
 
 Because doc comments are uniquely associated with individual data elements,
-they allow for essentially arbitrary manipulation of data while retaining
-all relevant comments.
+they will make possible essentially arbitrary manipulation of data while
+retaining all relevant comments.
 
 
 
@@ -992,13 +987,11 @@ BespON and the ``bespon`` package remain under development.
 The ``bespon`` package is largely complete as far as loading and dumping data
 are concerned.  The standard, default data types discussed above are fully
 supported, and it is already possible to enable a limited selection of
-optional types, including sets, ordered dicts, tuples, complex numbers, and
-rational numbers.
+optional types.
 
 The primary focus of future ``bespon`` development will be on improving
 round-tripping capabilities.  Eventually, it will also be possible to enable
-optional user-defined data types with the tag syntax. The current goal is a
-version 1.0 by the end of summer 2017.
+optional user-defined data types with the tag syntax.
 
 BespON as a configuration format will primarily be refined in the future
 through the creation of a more formal specification.  The Python
