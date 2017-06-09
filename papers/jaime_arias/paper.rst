@@ -87,6 +87,7 @@ properties, thus the above causes a BOLD signal diminution. Then, BOLD signal
 is an indirect measure of cerebral activity based on physiological changes in
 oxygen consumption, cerebral blood flow and blood volume.
 
+
 .. figure:: figures/bold_chain.png
    :align: center
    :figclass: htb
@@ -446,13 +447,13 @@ PyHRF Analysis (Run)
 Now we are ready to start our BOLD analysis with PyHRF. For that, we need to
 define some important parameters of the underlying JDE model (*e.g.,* ``beta``,
 ``hrf-hyperprior``, ``sigma-h``, ``drifts-type``) and a folder to save the
-output (``--output``).
+output (``output``).
 
 Moreover, we need to specify if we want to estimate the HRF response  or use,
 for example, its canonical form.  In our running example, we will estimate the
-HRF (``--estimate-hrf``) with a time resolution (``--dt``) of 1.25 s,
-a duration (``--hrf-duration``) of 25.0 s, and we force to zero the beginning
-and ending of the response (``--zero-constraint``).
+HRF (``estimate-hrf``) with a time resolution (``dt``) of 1.25 s,
+a duration (``hrf-duration``) of 25.0 s, and we force to zero the beginning
+and ending of the response (``zero-constraint``).
 
 Once the parameters of the model have been defined, we run our analysis by
 using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. The
@@ -485,7 +486,7 @@ http://www.pyhrf.org.
       {$HOME}/data/bold.nii
 
 Observe that we can execute this analysis using several processors
-(``--parallel``) because PyHRF uses the library ``joblib``.
+(``parallel``) because PyHRF uses the library ``joblib``.
 
 
 PyHRF Analysis (Output)
