@@ -80,8 +80,8 @@ Numba vectorization
 We worked with Continuum Analytics to make Numba to vectorize math code with transcedential functions using Intel SVML library.
 
 
-Numba Parallelism
------------------
+Auto-parallelization for Numba
+------------------------------
 
 .. include:: papers/oleksandr_pavlyk/parallel/parallel.rst
 

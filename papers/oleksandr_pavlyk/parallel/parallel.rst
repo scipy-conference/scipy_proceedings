@@ -1,7 +1,7 @@
 In this section, we introduce a new feature in Numba that automatically parallelizes NumPy programs.
 Achieving high performance with Python on modern multi-core CPUs is challenging since Python implementations are generally interpreted and prohibit parallelism.
 To speed up sequential execution, Python functions can be compiled to fast native code using Numba, which in turns uses the LLVM JIT compiler. 
-All a programmer has to do to use Numba is to annotate their functions with Numba's `@jit` decorator.
+All a programmer has to do to use Numba is to annotate their functions with Numba's ``@jit`` decorator.
 However, the Numba JIT will not parallelize NumPy functions, even though the majority of them are known to have parallel semantics, and thus cannot make use of multiple cores.
 Furthermore, even if individual NumPy functions were parallelized, a program containing many such functions would likely have lackluster performance due to poor cache behavior. 
 Numba's existing solution is to allow users to write scalar kernels in OpenCL style, which can be executed in parallel. 
@@ -16,11 +16,11 @@ Our implementation supports the following parallel operations:
 1. Common arithmetic functions between NumPy arrays, and between arrays and scalars, as well as NumPy ufuncs. 
    They are often called `element-wise` or `point-wise` array operations:
 
-    * unary operators: ``+`` ``-`` ``~``
-    * binary operators: ``+`` ``-`` ``*`` ``/`` ``/?`` ``%`` ``|`` ``>>`` ``^`` ``<<`` ``&`` ``**`` ``//``
-    * comparison operators: ``==`` ``!=`` ``<`` ``<=`` ``>`` ``>=``
-    * NumPy ufuncs that are supported in Numba's nopython mode.
-    * User defined `DUFunc` through `numba.vectorize`.
+  * unary operators: ``+`` ``-`` ``~``
+  * binary operators: ``+`` ``-`` ``*`` ``/`` ``/?`` ``%`` ``|`` ``>>`` ``^`` ``<<`` ``&`` ``**`` ``//``
+  * comparison operators: ``==`` ``!=`` ``<`` ``<=`` ``>`` ``>=``
+  * NumPy ufuncs that are supported in Numba's nopython mode.
+  * User defined `DUFunc` through ``@vectorize``.
 
 2. NumPy reduction functions ``sum`` and ``prod``. Note that they have to be
    written as ``numpy.sum(a)`` instead of ``a.sum()``.
@@ -31,6 +31,9 @@ Our implementation supports the following parallel operations:
 4. Multi-dimensional arrays are also supported for the above operations when operands have matching dimension and size. 
    The full semantics of NumPy broadcast between arrays with mixed dimensionality or size is not supported, nor is the reduction across a selected dimension.
 
+5. NumPy `array` created from list comprehension is turned into direct array allocation and initialization without intermediate list.
+
+6. Explicit parallelization via `prange` that turns a for-loop into a parallel loop.
 
 As an example, a Logistic Regression function is given below:
 
@@ -58,14 +61,16 @@ We will not discuss details of the algorithm, but instead focus on how this prog
 
 6. The outer ``dot`` operation produces a result array of different dimension, and is not fused with the above kernel.
 
-Here, the only thing required to take advantage of parallel hardware is to set the `parallel=True` option for `@jit`, with no modifications to the ``logistic_regression`` function itself.  
-If we were to give an equivalent parallel implementation using Numba's `@guvectorize` decorator, it would require a pervasive change that rewrites the code to extract kernel computation that can be parallelized, which is both tedious and challenging.
+Here, the only thing required to take advantage of parallel hardware is to set the ``parallel=True`` option for ``@jit``, with no modifications to the ``logistic_regression`` function itself.  
+If we were to give an equivalent parallel implementation using Numba's ``@guvectorize`` decorator, it would require a pervasive change that rewrites the code to extract kernel computation that can be parallelized, which is both tedious and challenging.
 
-We measure the performance of automatic parallelization over three workloads, comparing auto-parallelization with Numba's sequential JIT, in relative speed to the default Python implementation.
+We measure the performance of automatic parallelization over three workloads, comparing auto-parallelization with Numba's sequential JIT and Python 3.6, normalized to the sequential (1-thread) speed of Numba. 
 
 .. figure:: parallel/parallel_benchmarks.jpg
 
-(Some discussion on benchmarks)
+Auto-parallelization proves to be an effective optimization for these benchmarks, achieving speedups from 5.9x to 11.8x over sequential Numba on 12-core Xeon X5680 @3.33GHz with 64GB RAM. The benchmarks are available as part of Numba's source distribution [numba]_. 
 
-(Some discussion on implementation)
+Our future plan is to support array range selection, enable auto-parallelization of more NumPy functions, as well as adding new features such as iterative stencils. We also plan to implement more optimizations that help make parallel programs run fast, improving both performance and productivity for Python programmers in the scientific domain.
+
+.. [numba] https://github.com/numba/numba
 
