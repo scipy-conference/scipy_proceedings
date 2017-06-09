@@ -192,7 +192,7 @@ The difference between job execution time and total compute and I/O time measure
 As seen from the tests performed on our local machines, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web interface and our code are very close.
-As seen in Table :label:`tab:time-comparison` and Figure :ref:`fig:task-stream-comet`, for SDSC Comet (:math:`N_\text{cores} = 54`), there is a very small difference between maximum total compute and I/O time measured using the web interface and job execution time.
+As seen in Table :ref:`tab:time-comparison` and Figure :ref:`fig:task-stream-comet`, for SDSC Comet (:math:`N_\text{cores} = 54`), there is a very small difference between maximum total compute and I/O time measured using the web interface and job execution time.
 However, there is a considerable difference between maximum total compute and I/O time measured using the web interface and our code.
 There is one process which is much slower as compared to others. 
 As can be seen from the results, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job and as a result affect the overal performance.
@@ -232,7 +232,8 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    Task stream plots showing the fraction of time spent on different computations by each worker obtained using dask web interface (tested on SDSC Comet using :math:`N_\text{cores} = 54` for 600X trajectory and XTC file format-Green bars represent time spent on RMSD calculations)
    :label:`fig:task-stream-comet`
 
-.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. :label:`tab:time-comparison`   
+.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web interface is the I/O plus compute time for all frames for the slowest process measured through web interface. 
+   :label:`tab:time-comparison`   
    :class: w
 
    +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
@@ -353,7 +354,7 @@ Figure :ref:`daskThroughputvsScheduler` shows the Throughput of each Scheduler o
 Each value is the mean throughput value of several runs for each Scheduler. 
 
 .. figure:: figs/daskThroughputvsScheduler.pdf
-
+   
    Dask Throughput on a single node vs Scheduler type.
    X axis is time and Y axis is the number of tasks that were executed in a second.
    :label:`daskThroughputvsScheduler`
@@ -394,12 +395,12 @@ Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the lef
 
 .. figure:: figs/panels/scheduler-300x.pdf
    :figclass: w
-   :scale: 100%
+   :scale: 30%
       
    Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
    64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y     
    axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light 
-   Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede` 
+   Green are the Get Item tasks and Red is data transfer. :label:`fig:XTC300x64coresStampede` 
 
 
 In addition we were able to measure how many tasks are submitted per worker process.
@@ -438,11 +439,58 @@ Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Fram
 Based on the results presented in previous sections, it turned out that the stragglers are not because of the network, shared resources or scheduler throughput.
 Lustre striping improves I/O time; however, the job computation is still delayed and as a result lead to poor speed-up when extended to multiple nodes.    
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using MPI-based implementation.
-This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or the environment itself.
+This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel libray are as a result of scheduler overhead or any other factor.
+The compariosn is performed on XTC 600x using SDSC Comet. 
+Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the clculations. Bars are subdivided into the contribution of total time, communication time and RMSD calculation across parallelism from 1 to 72.
+Computation time is the time spent on RMSD tasks, and commuication time is the time spent for gathering RMSD arrays calculated by each processor rank.
+Total time is the summation of communication time, computation time and the overhead in the calculations
+As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculation is small up to 24 cores (Single node).
+Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small and only a small fraction of total time is spent on communications.
+However, when extending to multiple nodes compuation time also increases.
+We believe that this is caused due to stragglers.
+In addition, the difference between total time and communication time plus computation time also increases as calculations extend to multiple nodes which reveals that there are other overheads impacting the overall performance.
 
+.. figure:: figs/MPItimestackedcomparison.pdf
 
-Performance of our Map-reduce job with a different task than RMSD calculation
------------------------------------------------------------------------------
+   Time comparison on different parts of the clculations. In this aggregate view, the time spent on diffrent
+   parts of the calculation are combined for different number of processes tested.
+   The bars are subdivided into the contributions of each time spent on different parts.
+   Computation time is the time spent on RMSD tasks, and commuication time is the time spent for gathering RMSD arrays calculated by each processor rank.
+   Total time is the summation of communication time, computation time and the overhead in the calculations that
+   might had been caused due to different reasons :label:`MPItimestackedcomparison`
+
+Figure :ref:`MPI-total-time-boxplot` shows job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72.
+Again, from Figure :ref:`MPI-total-time-boxplot` job execution time reveals a decent decrease up to 24 cores(Single node).
+However, when extended to multiple nodes the uncertainties in measured job execution time across different repeats increases and as a result job execution time increases as well.
+
+.. figure:: figs/MPI-total-time-boxplot.pdf
+
+   Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72
+   :label:`MPI-total-time-boxplot`
+
+Figure :ref:`MPI-total-time-rank-comparison` shows compariosn of job execution time across all ranks tested with 72 cores.
+As seen in Figure :ref:`MPI-total-time-rank-comparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overal performance. 
+These stragglers are observed in all cases when number of cores is more than 24 (extended to multiple cores).
+However, they are only shown for :math:`N = 72` CPU cores for the sake of brevity. 
+ 
+.. figure:: figs/MPI-total-time-rank-comparison.pdf
+
+   Comparison of job execution time across processor ranks for 72 cores. 
+   There are several stragglers which slow down the whole process.
+   :label:`MPI-total-time-rank-comparison`
+
+Overall speed-up along with the efficiency plots are shown in Figure :ref:`MPI-Speed-up`.
+As seen the overall performance is affected when extended to multiple nodes (more than 24 CPU cores).
+ 
+
+.. figure:: figs/panels/MPI-Speed-up.pdf
+
+   **A** Speed-up and **B** efficiency plots for benchmark performed on XTC 600x on SDSC Comet across parallelism from 1 to 72 using MPI for python.
+   Five repeats are run for each block size to collect statistics.
+   :label:`MPI-Speed-up`
+
+Based on the results from MPI for python the reason for stragglers is not the Dask scheduler overhead and our concluison here is that this might be due to environment or the baseline code for RMSD calculations. 
+For the future studies, other tasks than RMSD calculation using the Map-reduce approach can be tested to see if there can be any improvement in overall performance when extended to multiple nodes.
 
 Conclusions
 ===========
@@ -450,7 +498,6 @@ Conclusions
 In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 Nevertheless, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
-
 
 
 Acknowledgments
