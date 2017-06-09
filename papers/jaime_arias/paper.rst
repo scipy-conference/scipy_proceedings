@@ -207,7 +207,7 @@ document.
    PPM (a) and SPM (b) maps computed with JDE and GLM, respectively. Scale is logarithmic. :label:`spmvsppm`
 
 
-In Fig. :ref:`pyhrf` we present the inputs and the outputs of PyHRF for the
+In Fig. :ref:`pyhrfbold` we present the inputs and the outputs of PyHRF for the
 analysis of BOLD data. It needs as inputs the data volume (BOLD), the
 experimental paradigm, and a parcellation of the brain. After running the JDE
 algorithm, the output will consist of HRF functions per parcel, BOLD effect
@@ -220,7 +220,7 @@ and how to use PyHRF.
    :scale: 50%
    :figclass: w
 
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrf`
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrfbold`
 
 
 Example of Use
@@ -451,14 +451,13 @@ output (``output``).
 
 Moreover, we need to specify if we want to estimate the HRF response  or use,
 for example, its canonical form.  In our running example, we will estimate the
-HRF (``estimate-hrf``) with a time resolution (``dt``) of 1.25 s,
-a duration (``hrf-duration``) of 25.0 s, and we force to zero the beginning
-and ending of the response (``zero-constraint``).
+HRF (``estimate-hrf``) with a time resolution (``dt``) of 1.25 s, a duration
+(``hrf-duration``) of 25.0 s, and we force to zero the beginning and ending of
+the response (``zero-constraint``).
 
 Once the parameters of the model have been defined, we run our analysis by
 using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. The
-reader can found more details about this command and its parameters in
-http://www.pyhrf.org.
+reader can found more details about this command and its parameters in http://www.pyhrf.org.
 
 
 .. code-block:: bash
