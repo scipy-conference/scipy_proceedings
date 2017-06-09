@@ -6,7 +6,7 @@
 :equal-contributor:
 
 :author: Alexander Ivanov
-:email: alexander.radievich@@gmail.com
+:email: alexander.radievich@gmail.com
 :institution: The Institute for Information Transmission Problems, Moscow, Russia
 :institution: Skoltech Institute of Science and Technology, Moscow, Russia
 :equal-contributor:
@@ -72,11 +72,244 @@ How Reskit works
 Pipeliner class
 ---------------
 
+.. csv-table:: A plan of the experiment we set in our example.
+  :file: papers/dmitry_petrov/plan_table.csv
+  :widths: 1 10 15 15
+
+Heart of Reskit — an object which allows you to test different data
+preprocessing pipelines and prediction models at once. You will need to specify
+a name of each preprocessing and prediction step and possible objects
+performing each step. Then Pipeliner will combine these steps to different
+pipelines, excluding forbidden combinations; perform experiments according to
+these steps and present results in convenient csv table. For example, for each
+pipeline’s classifier, Pipeliner will grid search on cross-validation to find
+the best classifier’s parameters and report metric mean and std for each tested
+pipeline. Pipeliner also allows you to cache interim calculations to avoid
+unnecessary recalculations.
+
+
+``Pipeliner`` initializes with following parameters.
+
+* ``steps`` : list of tuples 
+
+  List of `(step_name, transformers)` tuples, where `transformers` is a
+  list of tuples `(step_transformer_name, transformer)`. Pipeliner will
+  create ``plan_table`` from this ``steps``, combining all possible
+  combinations of transformers, switching transformers on each step.
+
+* ``eval_cv`` : int, cross-validation generator or an iterable, optional
+
+  Determines the evaluation cross-validation splitting strategy.
+
+* ``grid_cv`` : int, cross-validation generator or an iterable, optional
+
+  Determines the grid search cross-validation splitting strategy.
+
+* ``param_grid`` : dict of dictionaries
+
+  Dictionary with classifiers names (string) as keys. The keys are possible
+  classifiers names in steps. Each key corresponds to grid search parameters.
+
+* ``banned_combos`` : list of tuples
+
+  List of `(transformer_name_1, transformer_name_2)` tuples. Each row with
+  both transformers will be removed from plan_table.
+
+.. csv-table:: Grid Search results in our example in 'results' variable.
+  :file: papers/dmitry_petrov/results_grid_search.csv
+  :widths: 1 20 17 45
+
+An example of Pipeliner usage.
+
+.. code-block:: python
+
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.preprocessing import MinMaxScaler
+
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.linear_model import SGDClassifier
+    from sklearn.svm import SVC
+    from sklearn.decomposition import PCA
+    from sklearn.decomposition import KernelPCA
+
+    from sklearn.model_selection import StratifiedKFold
+    from sklearn.datasets import make_classification
+
+    from reskit.core import Pipeliner
+
+.. code-block:: python
+
+    # Setting variants for steps by lists of tuples
+    scalers = [('standard', StandardScaler()),
+               ('minmax', MinMaxScaler())]
+    dim_reduction = [('pca', PCA()),
+                     ('k_pca', KernelPCA())]
+
+    # Setting models
+    classifiers = [('LR', LogisticRegression()),
+                   ('SVC', SVC()),
+                   ('SGD', SGDClassifier())]
+
+    # Reskit needs to define steps in this manner
+    steps = [('scaler', scalers),
+             ('dim_reduction', dim_reduction),
+             ('classifier', classifiers)]
+
+    # Grid search parameters for our models
+    param_grid = {'LR': {'penalty': ['l1', 'l2']},
+                  'SVC': {'kernel': ['linear', 'poly', 
+                                     'rbf', 'sigmoid']},
+                  'SGD': {'penalty': ['elasticnet'],
+                          'l1_ratio': [0.1, 0.2, 0.3]}}
+
+    # Setting a quality metric that we want to optimize
+    scoring='roc_auc'
+
+    # Setting cross-validations
+    grid_cv = StratifiedKFold(n_splits=5, 
+                              shuffle=True, 
+                              random_state=0)
+    eval_cv = StratifiedKFold(n_splits=5, 
+                              shuffle=True, 
+                              random_state=1)
+
+    banned_combos = [('minmax', 'k_pca')]
+    pipe = Pipeliner(steps=steps, 
+                     grid_cv=grid_cv, 
+                     eval_cv=eval_cv, 
+                     param_grid=param_grid, 
+                     banned_combos=banned_combos)
+
+
+Now we set needed parameters and you can view ``plan_table`` (Table 1) to
+check it. Reskit made all possible combinations of steps and writed it to
+``plan_table``. Reskit will use this ``plan_table`` for further calculations.
+
+To start calculations use ``get_results`` method of ``Pipeliner``:
+
+.. code-block:: python
+
+    X, y = make_classification(random_state=0)
+    results = pipe.get_results(X, y, scoring=scoring)
+
+After we started calculations ``Pipeliner`` passes through ``plan_table`` rows and
+runs three methods.
+
+Firstly, ``Pipeliner`` runs its ``transform_with_caching(self, X, y, row_keys)``
+method. If ``caching_steps`` isn't set how in our example, it just returns ``X``
+and ``y``, otherwise it make all transformations with caching temporary results in
+``_cached_X`` parameter of ``Pipeliner``. This results are stored there till next
+``plan_table`` running of this method to a pipeline created from another
+``plan_table`` row and already calculated results won't be recalculated.
+
+Secondly, ``Pipeliner`` runs its ``get_grid_search_results(self, X, y, row_keys,
+scoring)`` method. It creates usual `scikit-learn` pipeline and makes grid
+search to find best parameters. This method returns ``mean`` and ``std`` on ``grid_cv``
+cross-validation. Also it returns best parameters for the pipeline.
+
+Thirdly, ``Pipeliner`` runs its ``get_scores(self, X, y, row_keys, scoring)``
+method. Again, it creates usual `scikit-learn` pipeline and validate
+found above parameters on ``eval_cv`` cross-validation. This method returns 
+validation scores.
+
+Thus, in ``results`` variable we have grid search and validation results as a
+table. This table includes tables 1, 2 and 3.
+
+.. csv-table:: Validation results in 'results' variable.
+  :file: papers/dmitry_petrov/results_evaluation.csv
+  :widths: 1 18 18 30
+
 DataTransformer class
 ---------------------
+ 
+For convenience of the researchers we added ``DataTransformer`` class — a simple 
+class which allows researcher to make sklearn-like transformers through usual
+functions. 
+
+Here is example of normalizing by mean of three matrices.
+
+.. code-block:: python
+
+    import numpy as np
+
+    from reskit.normalizations import mean_norm
+    from reskit.core import DataTransformer
+
+    matrix_0 = np.random.rand(5, 5)
+    matrix_1 = np.random.rand(5, 5)
+    matrix_2 = np.random.rand(5, 5)
+    y = np.array([0, 0, 1])
+
+    X = np.array([matrix_0,
+                  matrix_1,
+                  matrix_2])
+
+    output = np.array([mean_norm(matrix_0),
+                       mean_norm(matrix_1),
+                       mean_norm(matrix_2)])
+
+    def mean_norm_trans(X):
+        X = X.copy()
+        N = len(X)
+        for i in range(N):
+            X[i] = mean_norm(X[i])
+        return X
+
+    result = DataTransformer(
+                func=mean_norm_trans).fit_transform(X)
+
+    (output == result).all()
+
+.. code-block:: bash
+
+    True
 
 MatrixTransformer class
 -----------------------
+
+Particular case of ``DataTransformer`` is a ``MatrixTransformer``.
+
+Here is the same example, but for ``MatrixTransformer`` usage. Input ``X`` for transformation
+with ``MatrixTransformer`` should be a 3 dimensional array (array of matrices). So,
+``MatrixTransformer`` just transforms each matrix in ``X``.
+
+.. code-block:: python
+
+    from reskit.core import DataTransformer
+
+    result = MatrixTransformer(
+                func=mean_norm).fit_transform(X)
+
+    (output == result).all()
+
+.. code-block:: bash
+
+    True
+
+Brain Connectivity Toolbox functions wrapper
+--------------------------------------------
+
+We provide some basic graph metrics in Reskit. To access most state of the art
+graph metrics you can use Brain Connectivity Toolbox. You should install it via
+pip:
+
+.. code-block:: bash
+
+    pip install bctpy
+
+We can simply calculate `Pagerank` for previous matrices ``X``.
+
+.. code-block:: python
+
+    from bct.algorithms.centrality import pagerank_centrality
+
+
+    featured_X = MatrixTransformer(
+        d=0.85,
+        func=pagerank_centrality).fit_transform(X)
+
+So, using ``Pipeliner`` with `Brain Connectivity Toolbox` provides you
+convenient functionality for your research.
 
 Applications
 ------------
