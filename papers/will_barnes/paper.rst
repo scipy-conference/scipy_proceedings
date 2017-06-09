@@ -27,7 +27,7 @@ Introduction
 ------------
 Nearly all astrophysical observations are done through *remote sensing*. Light at various wavelengths is collected by instruments, either ground- or space-based, in an attempt to understand physical processes happening in distant astrophysical objects. However, in order to translate these detector measurements to meaningful physical insight, it is necessary to understand what physical conditions give rise to different spectral lines and continuum emission. Started in 1996 by researchers at the Naval Research Laboratory, the University of Cambridge, and Arcetri Astrophysical Observatory in Florence for the purpose of analyzing solar spectra, the CHIANTI atomic database provides a set of up-to-date atomic data for ions of hydrogen through zinc as well as a suite of tools, written in the proprietary Interactive Data Language (IDL), for analyzing this data. Described in a series of 15 papers from 1997 to 2016 that have been cited collectively over 3000 times (see Table :ref:`chiantipapers`), the CHIANTI database is an invaluable resource to the solar physics community.
 
-.. table:: All publications describing the data and capabilities of the CHIANTI atomic database, the associated version of the database, and the number of citations as reported by the NASA Astrophysics Data System. :label:`chiantipapers`
+.. table:: All publications describing the data and capabilities of the CHIANTI atomic database, the associated version of the database, and the number of citations as reported by the NASA Astrophysics Data System at the time of writing. :label:`chiantipapers`
 
    +-------------------------------------+---------+-----------+
    |Paper                                | Version | Citations |
@@ -67,16 +67,16 @@ Nearly all astrophysical observations are done through *remote sensing*. Light a
    |                                     |         | 3066      |
    +-------------------------------------+---------+-----------+
 
-The CHIANTI database provides atomic data for optically-thin transitions primarily in the x ray and extreme ultraviolet (EUV) spectral range for ions of 30 different elements, H (:math:`Z=1`) through Zn (:math:`Z=30`). 
+The CHIANTI project is comprised of two main parts: the database containing the actual atomic data and the IDL software libraries for accessing the data and calculating useful quantities from them. The database provides atomic data for optically-thin transitions, primarily in the x-ray and extreme ultraviolet (EUV) wavelengths, for ions of 30 different elements, H (:math:`Z=1`) through Zn (:math:`Z=30`). The CHIANTI project stemmed largely from the need for a consolidated database of spectral lines for interpreting data from spectroscopic and narrow-band solar observing instruments. 
 
-Give history of CHIANTI/ChiantiPy, where the data comes from, who uses it, why.
+While IDL has been the lingua franca of solar physics for over twenty years, Python is gaining moment in the community and is the language of choice for many younger researchers. This is largely due to the success of Python in general astronomy (e.g. Astropy), the advent of SunPy, a stable and well-supported Python package for solar data analysis :cite:`sunpy_community_sunpypython_2015`, and the adoption of Python as the language of choice by the Daniel K. Inouye Solar Telescope (DKIST), an instrument expected to be the world's largest solar telescope with an estimated data output of 11 TB per day :cite:`watson_calibration_2016`.
 
-The ChiantiPy project, started in 2009, provides a Python interface to the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). Need some more details here.... 
-
+Given the growing popularity of Python in the solar community and the importance of CHIANTI to solar observers and modelers alike, a well-supported Python interface to this database is critical. The ChiantiPy project, started in 2009 by Ken Dere, provides a Python package for interacting with the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). ChiantiPy provides an easy to use API to the raw atomic data in the CHIANTI database as well as Python versions of all the primary calculations performed by the original IDL software, including the level balance equation and the ionization equilibrium calculation. This paper will give a brief overview of the CHIANTI database and demonstrate the core capabilities of the ChiantiPy package. We will also discuss the infrastructure of the package and plans for the future of the package. 
 
 Database
 --------
-The CHIANTI database is collection of directories and ASCII files that can be downloaded as a tarball from the CHIANTI database website or as part of the SolarSoftware (or SolarSoft) IDL package :cite:`freeland_data_1998`. The solar physics community has typically relied on the latter as SolarSoft has served as the main hub for solar data analysis software for the last several decades.
+The CHIANTI database is organized as a collection of directories and ASCII files that can be downloaded as a tarball from the CHIANTI database website or as part of the SolarSoftware (or SolarSoft) IDL package :cite:`freeland_data_1998`. The solar physics community has typically relied on the latter as SolarSoft has served as the main hub for solar data analysis software for the last several decades. SolarSoft provides routines for updating software packages automatically
+and so traditionally CHIANTI users have updated their distributions, including both the software and the database, in this manner.
 
 The structure of the CHIANTI database is such that each top level directory represents an element and each subdirectory is an ion of that element. Files in each of the subdirectories contain pieces of information attached to each ion. The database generally follows the structure :code:`{el}/{el}_{ion}/{el}_{ion}.{filetype}`. A few of these filetypes are summarized in Table :ref:`dbstructure`. For a complete description of all of the different filetypes available, see Table 1 of :cite:`young_chianti_2016` and the `CHIANTI user guide <http://www.chiantidatabase.org/cug.pdf>`_. Fig. :ref:`linelist` shows all of the available ions in the CHIANTI database as well as the number of levels available for each ion.
 
@@ -363,11 +363,7 @@ ChiantiPy has benefited greatly from the `astropy-helpers package template <http
 
 Conclusion
 -----------------------------------
-Some brief conclusions
-
-Maybe discuss some goals/future work too...
-Goals, new features, fixes, refactoring, big projects, etc
-Improved test coverage, integration with astropy units, releases on conda
+In this paper, we have described the main capabilities of ChiantiPy, a package for astrophysical spectroscopy and an interface to the widely used and highly cited CHIANTI atomic database. ChiantiPy provides basic functions for reading the raw data as well as higher-level abstractions (e.g. the :code:`ion` class) for exploring the data and performing common calculations with them. ChiantiPy also provides modules for calculating continuum emission, synthesizing spectra, and calculating radiative loss curves. The project has recently made significant infrastructure improvements by moving development to GitHub, adding automatic documentation builds, and implementing a minimal test suite. Future improvements include the addition of unitful quantities throughout the codebase (e.g. the Astropy unit system) and increased test coverage.
 
 References
 ----------
