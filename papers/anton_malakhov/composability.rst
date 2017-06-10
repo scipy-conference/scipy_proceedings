@@ -140,7 +140,7 @@ Option :code:`-f <oversubscription_factor>` sets allowable oversubscription fact
 
 
 Limiting Simultaneous OpenMP Parallel Regions
-----------------------------------------
+---------------------------------------------
 The second approach we will describe here is more common and based on the OpenMP runtime. The basic idea is to use a single thread pool and run different parallel regions on it sequentially, one after the other.
 To implement this, we need to have a lock that is acquired before running the next parallel region. This idea can be easily extended to the case of multiple processes.
 To do this, we use a global lock such as a system-wide semaphore.
