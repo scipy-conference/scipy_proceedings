@@ -155,7 +155,7 @@ When quickly prototyping analysis and figures, it is easy to lose track of when 
                                  save_traceback=True,
                                  notes=notes[group])
 
-In the future, we plan to expand the traceback capability by optionally linking the traceback to a github page so that when a FigureFirst generated SVG file is shared, other viewers can quickly find the code and data used to generate the figure. This option would directly and automatically link the scientific publication with the data and software, thereby facilitating open science with minimal user overhead.     
+In the future, we plan to expand the traceback capability by optionally linking the traceback to a github page so that when a FigureFirst generated SVG file is shared, other viewers can quickly find the code and data used to generate the figure. This option would directly and automatically link the scientific publication with the data and software, thereby facilitating open science with minimal user overhead. Alternatively, for simple and stand alone python scripts, it would be possible to embed the scripts directly into the xml.
 
 
 Architecture
