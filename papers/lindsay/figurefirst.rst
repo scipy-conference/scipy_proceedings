@@ -113,8 +113,8 @@ To illustrate the template feature, consider the task of making a more complex f
          mpl_axis.plot(x_data, y_data,
                        color=colors[group])
 
-      layout.append_figure_to_layer(layout.figures[group], 
-                                    group)
+      layout.append_figure_to_layer(
+         layout.figures[group], group)
 
     layout.write_svg(output_filename)
 
