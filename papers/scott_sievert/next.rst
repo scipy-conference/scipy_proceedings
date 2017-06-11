@@ -29,6 +29,7 @@
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 :bibliography: refs
 
+
 .. next paper outline
     * Problem statement
         * active learning adjusts on previously collected data
@@ -83,19 +84,19 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
       for frontend).
     - sklearn is Jupyter notebook, active learning requires NEXT.
 
-
 .. class:: abstract
 
-    We have created a data collection tool called NEXT (http://nextml.org) that
-    addresses the inherent problems in collecting crowdsoured data with
-    "adaptive" algorithms. Adaptive sampling uses previous responses to collect
-    data and produces accurate results with minimal samples.  Collecting
-    crowdsourced data with adaptive sampling methods presents practical gains
-    but also has many systems challenges. NEXT is routinely used to collect
-    millions of responses from thousands of users in machine learning
-    applications like The New Yorker Magazine Cartoon Caption Contest
-    (http://www.newyorker.com/cartoons/vote).  We will explain what NEXT is,
-    how to use it, system goals, features and API.
+    Crowdsourcing has enabled collection of many human judgements. In practice,
+    obtaining useful results requires more responses than can be collected. The
+    number of responses required can be reduced through techniques that `adapt`
+    to received responses via "adaptive sampling" algorithms. However, these
+    algorithms fundamentally present a variety of challenges stemming from
+    their adaptive nature. At UW–Madison, we have built a crowdsourcing data
+    collection tool, NEXT (http://nextml.org) which provides means to use
+    arbitrary adaptive algorithms with crowdsourcing. Each week, our system is
+    used by The New Yorker to run their Cartoon Caption contest
+    (http://www.newyorker.com/cartoons/vote). In this paper, we will explain
+    what NEXT is, system goals, features and API.
 
 .. class:: keywords
 
@@ -132,6 +133,7 @@ At UW–Madison, we have developed a crowdsourcing data collection and analysis
 tool that efficiently collects crowdsourced data :cite:`jamieson2015next`. In
 this paper, we will explain the system architecture and usage, and how it is
 easily accessible and readily available to researchers.
+NEXT, which include experiment monitoring and being accessible to researchers.
 
 Problem statement
 -----------------
