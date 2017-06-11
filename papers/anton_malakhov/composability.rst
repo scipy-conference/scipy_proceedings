@@ -25,7 +25,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
-   This paper continues the work started in [Malakh16] by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
+   This paper continues the work started in [AMala16]_ by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
    using static affinity masks, limiting the number of simultaneously active OpenMP parallel regions, and work stealing scheduler from  Intel |R| Threading Building Blocks (Intel |R| TBB) [TBB]_.
    These approaches help to unlock additional performance for numeric applications on multi-core systems.
 
@@ -33,7 +33,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
    Multi-threading, Multi-processing, Oversubscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, TBB, OpenMP
 
-.. [Malakh16] Anton Malakhov, "Composable Multi-Threading for Python Libraries", Proc. of the 15th Python in Science Conf. (SCIPY 2016), July 11-17, 2016.
+.. [AMala16] Anton Malakhov, "Composable Multi-Threading for Python Libraries", Proc. of the 15th Python in Science Conf. (SCIPY 2016), July 11-17, 2016.
 .. [NumPy] NumPy, http://www.numpy.org/
 .. [SciPy] SciPy, https://www.scipy.org/
 .. [Dask]  Dask, http://dask.pydata.org/
@@ -206,7 +206,7 @@ The third approach is also based on using a single thread pool but through Intel
 In this case, the work stealing task scheduler is used to map the set of tasks to the set of threads.
 As shown in figure :ref:`components`, different components, that may be used in a script, work on top of the shared Intel |R| TBB pool.
 That allows one to dynamically balance the load across multiple tasks from multiple modules.
-This approach for the multi-threading case is described in more detail in our previous paper [Malakh16]_.
+This approach for the multi-threading case is described in more detail in our previous paper [AMala16]_.
 
 Here we are presenting an extended approach that covers the multi-processing case as well.
 The approach works in following way.
