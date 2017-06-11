@@ -91,10 +91,10 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
     number of responses required can be reduced through techniques that `adapt`
     to received responses via "adaptive sampling" algorithms. However, these
     algorithms fundamentally present a variety of challenges stemming from
-    their adaptive nature. At UW–Madison, we have built a crowdsourcing data
-    collection tool, NEXT (http://nextml.org) which provides means to use
-    arbitrary adaptive algorithms with crowdsourcing. Each week, our system is
-    used by The New Yorker to run their Cartoon Caption contest
+    their adaptive nature. At UW–Madison we have built NEXT
+    (http://nextml.org), a crowdsourcing data collection tool that can be used
+    with arbitrary adaptive algorithms. Each week, our system is used by The
+    New Yorker to run their Cartoon Caption contest
     (http://www.newyorker.com/cartoons/vote). In this paper, we will explain
     what NEXT is, system goals, features and API.
 
@@ -112,15 +112,15 @@ access to unprecedented amounts of human judgment data.  Tapping into the
 "wisdom of the crowd" includes scenarios where questions are asked about simple
 cognitive tasks. For example, users may be asked to determine the locations in
 an image that contain a certain object (e.g., "select all image locations that
-contain buildings") to protect against internet bots.
+contain buildings") to protect against internet bots. This task is trivial for
+a human but difficult a computer (or internet bots).
 
 Crowdsourcing enables the collection of a large amount of data, which is
-necessary to extract complex results from simple human judgments.  One such
-example finds how similar two different shoes are, but uses a complex model
-that requires a large number of responses given simple crowdsourcing judgments
-:cite:`heim2015active`. This example only uses a small fraction of the
-available shoes (less than 0.2%) and far more responses are required as the
-number of shoes grow.
+necessary to extract complex results from simple human judgments. One such
+example finds some measure of shoe similarity between different shoes
+:cite:`heim2015active`. A complex model is required given a low working memory
+constraint. Many responses are needed for this complex model, even though a
+small fraction of the available shoes are used (less that 0.2%).
 
 The cost of collecting crowdsourcing responses can be significant – especially
 in problem domains where expert input is required. Minimizing the number of
@@ -131,9 +131,10 @@ required.
 
 At UW–Madison, we have developed a crowdsourcing data collection and analysis
 tool that efficiently collects crowdsourced data :cite:`jamieson2015next`. In
-this paper, we will explain the system architecture and usage, and how it is
-easily accessible and readily available to researchers.
-NEXT, which include experiment monitoring and being accessible to researchers.
+this paper, we will explain the fundamental challenges that this system
+addresses before explaining the system usage and API. We will mention primary
+design goals of NEXT, which include experiment monitoring and being accessible
+to researchers.
 
 Problem statement
 -----------------
@@ -167,11 +168,12 @@ Problem statement
     adaptive algorithms to reach a particular quality (e.g., classification
     accuracy). :label:`adaptive-gains`
 
-The standard machine learning workflow obtains human labels before producing a
-model that predicts labels. An example of this workflow is with the popular
-ImageNet dataset :cite:`deng2009imagenet`: humans have provided millions of
-image labels, and there have been dozens of models to predict labels for unseen
-images :cite:`szegedy2015going, he2015delving, simonyan2014very`.
+The standard machine learning workflow is to obtain human labels, then to
+produce a model that predicts labels. An example of this workflow is with the
+popular ImageNet dataset :cite:`deng2009imagenet`: humans have provided
+millions of image labels, and there have been dozens of models to predict
+labels for unseen images :cite:`szegedy2015going, he2015delving,
+simonyan2014very`.
 
 The collection of these data is `passive` and does not `adapt` to previous
 responses: previous responses does not effect which queries are presented.
@@ -266,7 +268,9 @@ Our initial goals have been successfully addressed; mathematicians have
 implemented new algorithms :cite:`jun2016anytime` and UW–Madison psychologists
 have independently used our system. NEXT has been used by the New Yorker and in
 the insurance industry. Various adaptive algorithms have been evaluated in the
-real world, verifying expected efficiency gains.
+real world, and have shown gains as expected [#]_.
+
+.. [#] With contest 559 of The New Yorker Cartoon Caption contest
 
 In our usage, the system remains responsive to participants even after
 receiving millions of responses from thousands of participants, at least with
@@ -289,6 +293,8 @@ different types of judgments a user can make. These applications are
   the form "object :math:`i` is more similar to object :math:`j` than object
   :math:`k`." :cite:`jain2016finite`, as shown in Figure
   :ref:`triplet-interface`.
+
+We will now describe each application in more detail.
 
 Cardinal bandits
 ^^^^^^^^^^^^^^^^
@@ -400,7 +406,7 @@ use cases seen by both algorithm developers and experimentalists [#]_.
 
     When and how different users interact with NEXT. Arrows represent some form
     of communication between different system components.
-    :label:`block-diagram`.
+    :label:`block-diagram`
 
 
 Algorithm implementation
@@ -428,39 +434,41 @@ implementation in academic papers: objects are referred to by an integer index
 (i.e., object :math:`i`).
 
 The arguments and return values for all algorithm functions are specified
-exactly, in a YAML-based schema. Every algorithm has to create a mapping from
+exactly in a YAML-based schema. Every algorithm has to create a mapping from
 the specified inputs to the specified outputs. This allows treating an
 algorithm like a black-box.
 
 This schema depends on ``Algs.yaml`` (e.g., in
 ``apps/[application]/algs/Algs.yaml``) and contains four root level keys for
-each of ``initExp``, ``getQuery``, ``processAnswer`` and ``getModel``. Each one
+each of ``initExp``, ``getQuery``, ``processAnswer``, and ``getModel``. Each one
 of these sections describes the input arguments and returns values by ``args``
 and ``rets`` respectively. These sections are filled with type specifications
-that describe the name and type of the various keyword arguments.  For example,
-an integer parameter given with the keyword argument ``foo`` is characterized
-in ``Algs.yaml`` by
+that describe the name and type of the various keyword arguments.
+
+For example, a particular ``Algs.yaml`` may include
 
 .. code-block:: yaml
 
-    foo:
-      type: num
-      description: bar
+    getQuery:
+      args:
+        participant_uid:
+          type: string
+          description: ID of the participant answering the query
+      rets:
+        description: The index of the target to ask about
+        type: num
 
-in the appropriate section. Types can be defined recursively through a ``values`` key:
+The keyword argument ``participant_uid`` is specified in the ``args`` key, and
+the return value must be a number. The corresponding ``getQuery``
+implementation would be
 
-.. code-block:: yaml
+.. code-block:: python
 
-    foo:
-      type: dict
-      description: A dictionary
-      values:
-        bar:
-          type: num
-          description: A number
+    def getQuery(butler, participant_uid):
+        return 0  # for example
 
-More complete documentation on these parameter specifications can be found  in
-the documentation.
+More complete documentation on these parameter specifications, which can be
+found at the API endpoint ``assistant/doc/[application-name]/pretty``.
 
 Database access
 """""""""""""""
@@ -469,15 +477,24 @@ Database access
 
 We provide a simple database wrapper, as algorithms need to store different
 values (e.g., the number of targets, a list of target scores). We provide a
-variety of atomic database operations through a thin wrapper to PyMongo. Each
-"collection" in this wrapper mirrors a Python dictionary and has
-several other atomic database operations (``{get, set}_many``, ``append``,
-``pop``, ``increment``).
+variety of atomic database operations through a thin wrappers to PyMongo [#]_
+and Redis [#]_.  Each "collection" in this wrapper mirrors a Python dictionary and
+has several other atomic database operations. We provide
 
-An interface called ``butler`` contains multiple collections. The primary
-collection used by algorithms (``butler.algorithms``) is specific to each
-algorithm and allows for independent evaulation of different algorithms (though
-other collections are available). The arguments to an algorithm function are
+.. [#] http://api.mongodb.com/python/current
+.. [#] https://redis.io/
+
+* ``get``, ``set`` and ``{get, set}_many`` which provide atomic operations to
+  store values in the database
+* ``append`` and ``pop``, which atomically modify list values, and return the
+  result
+* ``increment``, which atomically increments a stored value by a given amount
+
+All these operations are atomic, and can be accessed through an interface
+called ``butler`` which contains multiple collections. The primary collection
+used by algorithms (``butler.algorithms``) is specific to each algorithm and
+allows for independent evaulation of different algorithms (though other
+collections are available). The arguments to an algorithm function are
 ``butler`` followed by the values in the schema.
 
 Example
@@ -491,13 +508,13 @@ Example
         """ butler provides interface to store
             and save data """
         # Adaptive sampling hidden for brevity
-        n = butler.algorithms.choose(key='n')
+        n = butler.algorithms.get(key='n')
         return np.random.choice(n)
 
     class MyAlg:
         def initExp(self, butler, n):
-            butler.algorithm.set(key='n', value=n)
-            scores = {'score' + str(i): 0 for i in range(n)}
+            butler.algorithms.set(key='n', value=n)
+            scores = {'score'+ str(i): 0 for i in range(n)}
             pulls = {'pulls' + str(i): 0 for i in range(n)}
             butler.algorithms.set_many(
                 key_value_dict=scores
