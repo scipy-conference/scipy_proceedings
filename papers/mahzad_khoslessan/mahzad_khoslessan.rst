@@ -125,7 +125,7 @@ To allow the analysis of large trajectories, MDAnalysis only loads a single fram
 Some file systems are designed to run on a single CPU while others like Network File System (NFS) which is among distributed file systems are designed to let different processes on multiple computers access a common set of files.
 These file systems guarantees sequential consistency which means that it prevents any process from reading a file while another process is reading the file. 
 Distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however it is very important to have a parallel I/O library; otherwise the file system will process the I/O requests it gets serially, yielding no real benefit from doing parallel I/O.
-Figure `fig:pattern-formats` shows the I/O pattern compared between different file formats.
+Figure :ref:`fig:pattern-formats` shows the I/O pattern compared between different file formats.
 
 .. figure:: figs/panels/trj-access-patterns.pdf
 
@@ -148,11 +148,11 @@ However, there is no in-built compression for DCD and netCDF file formats and as
 This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`fig:pattern-formats` B). 
 The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`fig:IO-multiprocessing` A, C).
 This is since netCDF has a more complicated file format. 
-Reading an existing netCDF dataset involves opening the dataset; inquiring about dimensions, variables, and attributes; reading variable data; and closing the dataset [ref].
-In fact, netCDF has a very sophisticated format, while DCD has a very simple file format.
-This is why DCD is showing a weak scaling by increasing parallelism whereas netCDF file format is being scaled reasonably well by increasing parallelism across many cores.
-Figures `fig:IO-multiprocessing` and `fig:IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
-According to figure `fig:IO-multiprocessing`, SSD can be very helpful (especially for dcd file format) and can improve the performance due to speed up in access time.
+Reading an existing netCDF dataset involves opening the dataset, inquiring about dimensions, variables and attributes, reading variable data, and closing the dataset.
+The netCDF format is more sophisticated than the DCD format, which might contribute to the better scaling of parallel access to netCDF files than to DCD files.
+
+Figures :ref:`fig:IO-multiprocessing` and :ref:`fig:IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
+According to figure :ref:`fig:IO-multiprocessing`, SSD can be very helpful (especially for DCD) and can improve the performance due to speed up in access time.
 Also we anticipate that, for heavier analyses that have higher compute time per frame, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
 
 .. figure:: figs/panels/IO-time-300x.pdf
