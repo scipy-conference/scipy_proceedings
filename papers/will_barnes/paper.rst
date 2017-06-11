@@ -5,7 +5,7 @@
 
 :author: Kenneth P. Dere
 :email: kdere@gmu.edu
-:institution: College of Science, George Mason University, Fairfax, VA, USA
+:institution: Department of Physics and Astronomy, George Mason University, Fairfax, VA, USA
 
 :bibliography: references
 
@@ -71,7 +71,7 @@ The CHIANTI project is comprised of two main parts: the database containing the 
 
 While IDL has been the lingua franca of solar physics for over twenty years, Python is gaining moment in the community and is the language of choice for many younger researchers. This is largely due to the success of Python in general astronomy (e.g. Astropy), the advent of SunPy, a stable and well-supported Python package for solar data analysis :cite:`sunpy_community_sunpypython_2015`, and the adoption of Python as the language of choice by the Daniel K. Inouye Solar Telescope (DKIST), an instrument expected to be the world's largest solar telescope with an estimated data output of 11 TB per day :cite:`watson_calibration_2016`.
 
-Given the growing popularity of Python in the solar community and the importance of CHIANTI to solar observers and modelers alike, a well-supported Python interface to this database is critical. The ChiantiPy project, started in 2009 by Ken Dere, provides a Python package for interacting with the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). ChiantiPy provides an easy to use API to the raw atomic data in the CHIANTI database as well as Python versions of all the primary calculations performed by the original IDL software, including the level balance equation and the ionization equilibrium calculation. This paper will give a brief overview of the CHIANTI database and demonstrate the core capabilities of the ChiantiPy package. We will also discuss the infrastructure of the package and plans for the future of the package. 
+Given the growing popularity of Python in the solar community and the importance of CHIANTI to solar observers and modelers alike, a well-supported Python interface to this database is critical. The ChiantiPy project, started in 2003 by Ken Dere, provides a Python package for interacting with the CHIANTI database and an alternative to the IDL tools. ChiantiPy is not a direct translation of its IDL counterpart, but instead provides an intuitive object oriented interface to the database (compared to the more functional approach in IDL). ChiantiPy provides an easy to use API to the raw atomic data in the CHIANTI database as well as Python versions of all the primary calculations performed by the original IDL software, including the level balance equation and the ionization equilibrium calculation. This paper will give a brief overview of the CHIANTI database and demonstrate the core capabilities of the ChiantiPy package. We will also discuss the infrastructure of the package and plans for the future of the package. 
 
 Database
 --------
@@ -131,9 +131,9 @@ In addition to each of the files associated with each ion, CHIANTI also provides
 
 As with the other CHIANTI data files, the abundance values are typically read internally and then exposed to the user through more abstract objects like the :code:`ion` class so reading them in this way is not necessary. Similarly, the ionization equilibrium of each ion of each element is available as a function of temperature and various sets of ionization equilibria data can be used. More details about the ionization equilibrium can be found in later sections. 
 
-Default values for the abundance and ionization equilibrium files as well as the units for wavelength (cm, :math:`\mathrm{\mathring{A}}`, or eV) and energy (ergs or photons) can be set in the users :code:`chiantirc` file, located in :code:`~/.chianti/chiantirc`. These settings are stored in :code:`ChiantiPy.tools.data.Defaults` and can be changed at anytime. 
+Default values for the abundance and ionization equilibrium files as well as the units for wavelength (nm, :math:`\mathrm{\mathring{A}}`, or eV) and energy (ergs or photons) can be set in the users :code:`chiantirc` file, located in :code:`~/.chianti/chiantirc`. These settings are stored in :code:`ChiantiPy.tools.data.Defaults` and can be changed at anytime. 
 
-Unless otherwise noted, all quantities are expressed in the cgs unit system, with the exception of wavelengths which are recorded in angstroms (:math:`\mathrm{\mathring{A}}`). As discussed above, some energies in the CHIANTI atomic database, particularly those pertaining to levels in an atom, may be stored in :math:`\mathrm{cm}^{-1}` for convenience (i.e. with :math:`h=c=1`, a common convention in atomic physics). Results of any calculation in ChiantiPy will always be returned in cgs (unless explicitly stated in the :code:`chiantirc` file, e.g. photons instead of ergs).
+Unless otherwise noted, all quantities are expressed in the cgs unit system, with the exception of wavelengths which are recorded in angstroms (:math:`\mathrm{\mathring{A}}`). As discussed above, some energies in the CHIANTI atomic database, particularly those pertaining to levels in an atom, are be stored in :math:`\mathrm{cm}^{-1}` for convenience (i.e. with :math:`h=c=1`, a common convention in atomic physics). Results of any calculation in ChiantiPy will always be returned in cgs (unless explicitly stated in the :code:`chiantirc` file, e.g. photons instead of ergs).
 
 Common Calculations and API
 ---------------------------
@@ -281,7 +281,7 @@ The :code:`ioneq.calculate()` method sets the :code:`Ioneq` attribute, an array 
    Population fractions as a function of temperature for (clockwise from upper left) H, Na, Fe, and S calculated using ionization and recombination data
    from CHIANTI and assuming ionization equilibrium. :label:`ioneq`
 
-The :code:`ioneq` module also allows the user to load a predefined set of ionization equilibria via the :code:`ioneq.load()` method. Though CHIANTI includes several ionization equilibrium datasets from other workers, it is recommended to use the most up to data as supplied by CHIANTI (see :cite:`dere_chianti_2009` for more details). To load the ionization equilibrium data for Fe,
+The :code:`ioneq` module also allows the user to load a predefined set of ionization equilibria via the :code:`ioneq.load()` method. Though CHIANTI includes several ionization equilibrium datasets from other workers, it is recommended to use the most up to date version supplied by CHIANTI (see :cite:`dere_chianti_2009` for more details). To load the ionization equilibrium data for Fe,
 
 .. code-block:: python
    
@@ -316,7 +316,7 @@ The spectrum as a continuous function of wavelength can then be accessed in the 
 
 Because of the need to perform calculations and aggregate data over a large range of ions, running :code:`ChiantiPy.spectrum()` can be very time consuming, particularly for large temperature/density ranges. The above code snippet takes approximately five minutes to execute on a modern desktop. To help mitigate this difficulty, ChiantiPy provides a parallelized version of the :code:`ChiantiPy.spectrum` module called :code:`ChiantiPy.mspectrum` [#]_ which takes advantage the :code:`multiprocessing` package and can help to speed up the calculation, particularly on machines with many cores. The interface to the parallelized code is largely the same as the serial version. 
 
-.. [#] ChiantiPy provides an additional module :code:`ChiantiPy.ipymspectrum` to support parallelized spectrum calculations inside the Jupyter notebook.
+.. [#] ChiantiPy provides an additional module :code:`ChiantiPy.ipymspectrum` to support parallelized spectrum calculations inside the Jupyter notebook and qtconsole.
 
 Radiative Losses
 #################
