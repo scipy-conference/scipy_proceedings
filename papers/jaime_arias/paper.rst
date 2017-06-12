@@ -457,7 +457,8 @@ the response (``zero-constraint``).
 
 Once the parameters of the model have been defined, we run our analysis by
 using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. The
-reader can found more details about this command and its parameters in http://www.pyhrf.org.
+reader can found more details about this command and its parameters in the
+PyHRF documentation.
 
 
 .. code-block:: bash
