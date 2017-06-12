@@ -19,6 +19,21 @@
 :equal-contributor:
 :supervising-contributor:
 
+:author: Hai Liu
+:email: hai.liu@intel.com
+:institution: Intel Corporation
+:equal-contributor:
+
+:author: Ehsan Totoni
+:email: ehsan.totoni@intel.com
+:institution: Intel Corporation
+:equal-contributor:
+
+:author: Todd A. Anderson
+:email: todd.a.anderson@intel.com
+:institution: Intel Corporation
+:equal-contributor:
+
 :year: 2017
 
 :video: http://www.youtube.com/watch?v=
@@ -29,17 +44,17 @@ Accelerating Scientific Python with Intel Optimizations
 
 .. class:: abstract
 
-    It is well known that the performance difference between python and basic C code can be 200x.
+    It is well known that the performance difference between Python and basic C code can be 200x.
     Did you know that for numerically intensive code there is another 240x or more speedup possible?
-    The performance comes from software’s ability to take advantage of your CPU's multiple cores,
+    The performance comes from software's ability to take advantage of your CPU's multiple cores,
     SIMD instructions, and high performance caches.
-    This talk is for python programmers who want to get the most out of their hardware
-    but do not have time or expertise to re-code their applications using native extensions,
-    Cython, or Just-In-Time compilers that generate native code.
+    This talk is for Python programmers who want to get the most out of their hardware
+    but do not have time or expertise to re-code their applications using techniques such as native 
+    extensions or Cython.
 
 .. class:: keywords
 
-   numpy,scipy,sk-learn,numba,simd,parall,optimization,performance
+   numpy,scipy,sk-learn,numba,simd,parallel,optimization,performance
 
 Introduction
 ------------

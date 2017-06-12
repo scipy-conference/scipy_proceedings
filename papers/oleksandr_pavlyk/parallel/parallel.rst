@@ -1,6 +1,6 @@
 In this section, we introduce a new feature in Numba that automatically parallelizes NumPy programs.
 Achieving high performance with Python on modern multi-core CPUs is challenging since Python implementations are generally interpreted and prohibit parallelism.
-To speed up sequential execution, Python functions can be compiled to fast native code using Numba, which in turns uses the LLVM JIT compiler. 
+To speed up sequential execution, Python functions can be compiled to fast native code using Numba, which in turn uses the LLVM JIT compiler. 
 All a programmer has to do to use Numba is to annotate their functions with Numba's ``@jit`` decorator.
 However, the Numba JIT will not parallelize NumPy functions, even though the majority of them are known to have parallel semantics, and thus cannot make use of multiple cores.
 Furthermore, even if individual NumPy functions were parallelized, a program containing many such functions would likely have lackluster performance due to poor cache behavior. 
