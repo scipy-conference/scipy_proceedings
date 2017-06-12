@@ -173,7 +173,7 @@ In the following example, we use anonymous wildcards which have no name and are 
 .. code-block:: pycon
 
     >>> x_sums_to_5 = CustomConstraint(
-    ...                         lambda x: sum(x) = 5)
+    ...                         lambda x: sum(x) == 5)
     >>> pattern = Pattern([___, x__, ___], x_sums_to_5)
     >>> list(match([1, 2, 3, 1, 1, 2], pattern))
     [{'x': (2, 3)}, {'x': (3, 1, 1)}]
