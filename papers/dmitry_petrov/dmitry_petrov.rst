@@ -387,18 +387,33 @@ Applications
 Reskit was originally developed for a brain network classification task. We
 have successfully applied it in our own research several times [PRNI2016,
 ISBI2017, MICCAI2017]. Code from two of these projects can be found at
-[PRNI_code] and [ISBI_code]. In these projects, Reskit was used mainly for
-figuring out an influence of preprocessing steps on classification task
-accuracy and interactions between different steps in pipelines, for example,
-how specific normalizing affects some type of generated features.
+[PRNI_code] and [ISBI_code].
 
-We also used Reskit in [MICCAI2017] for pairwise classification of given
-objects and for calculation a specific metric for each object without using
-models at the end of pipelines.
+In first one we proposed a combination of geometric network normalization by
+squared Euclidean distance between zones and topological normalization by the
+geometric mean of adjacent nodes' weighted degrees. Reskit helped us to try
+needed normalizations and figure out how these normalizations boost network
+classification.
 
-In these researches, Reskit saved us a lot of time because of caching support
-and clear structure of the code, that we reused a lot of time with little
-changes.
+In second work we studied the extent to which brain networks and topological
+derivative measures are unique to individual changes within human brains. To do
+so, we classify brain networks pairs as either belonging to the same individual
+or not. Here, we used Reskit already for pairwise classification task and we
+reach it with ease through using ``DataTransformer`` with implemented
+especially for this task functions.
+
+There is no consensus on how to construct brain networks. How variations in
+pre-processing steps affect network reliability and its ability to distinguish
+subjects remains opaque. In third work, we address this issue by comparing 35
+structural connectome-building pipelines. Again, we classify network pairs as
+either belonging to the same individual or not. We also compare pariwise
+classification results to a commonly used parametric test-retest measure.
+Intraclass Correlation Coefficient (ICC). Thus, except pairwise classification,
+we also just calculated ICC for each pipeline. To solve this two type of tasks
+we used Reskit caching feature and clean code structure, that we a lot of time
+with little changes. Finally, we presented a straight-forward method for
+evaluating brain connectivity construction pipelines that may be useful in
+identifying overall trends in brain network usefulness.
 
 We believe the library is general enough to be useful in a variety of data
 science contexts, and we hope that other researchers will find this library
