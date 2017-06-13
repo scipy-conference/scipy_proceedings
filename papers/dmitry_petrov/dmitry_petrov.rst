@@ -67,7 +67,7 @@ this can become complicated quickly. On the other hand, many of these
 combinations share substeps, and re-running such shared steps amounts to a loss
 of compute time.
 
-Reskit [1] is a Python library that helps researchers manage this problem.
+Reskit [reskit]_ is a Python library that helps researchers manage this problem.
 Specifically, it automates the process of choosing the best pipeline, i.e.
 choosing the best set of data transformations and classifiers/regressors. The
 researcher specifies the possible processing steps and the scikit objects
@@ -118,7 +118,7 @@ Main features of Reskit
   includes a number of operations for network data. In particular, it allows  a
   variety of normalization choices for adjacency matrices, as well as built in
   local graph metric calculations. These were implemented using DataTransformer
-  and in some cases the BCTpy (the Brain Connectivity Toolbox python version)
+  and in some cases the BCTpy (the Brain Connectivity Toolbox python version [bct]_)
 
 .. csv-table:: A plan of the experiment we set in our example.
   :file: papers/dmitry_petrov/plan_table.csv
@@ -358,7 +358,7 @@ Brain Connectivity Toolbox functions wrapper
 --------------------------------------------
 
 We provide some basic graph metrics in Reskit. To access most state of the art
-graph metrics you can use Brain Connectivity Toolbox. You should install it via
+graph metrics you can use Brain Connectivity Toolbox [bct]_. You should install it via
 pip in terminal:
 
 .. code-block:: bash
@@ -385,15 +385,15 @@ Applications
 ------------
 
 Reskit was originally developed for a brain network classification task. We
-have successfully applied it in our own research several times [PRNI2016,
-ISBI2017]. Code from two of these projects can be found at [PRNI_code] and
-[ISBI_code].
+have successfully applied it in our own research several times [PRNI2016]_,
+[ISBI2017]_. Code from two of these projects can be found at [PRNI_code]_ and
+[ISBI_code]_.
 
-In first one we proposed a combination of network normalizations and Reskit
+In PRNI work [PRNI2016]_ we proposed a combination of network normalizations and Reskit
 helped us to try these normalizations and figure out how these normalizations
 boost network classification.
 
-In second work we studied the extent to which brain networks and derivative
+In next our research [ISBI2017]_ we studied the extent to which brain networks and derivative
 measures are unique to individual changes within human brains. To do so, we
 classify brain networks pairs as either belonging to the same individual or
 not. Here, we used Reskit for pairwise classification task and we reach it with
@@ -419,11 +419,11 @@ Dependencies
 ------------
 
 - Python 3.4 and higher.
-- Scikit-learn [scikit] 0.18.1 and its dependencies. Our library was heavily
+- Scikit-learn [scikit]_ 0.18.1 and its dependencies. Our library was heavily
   inspired by scikit-learn Pipeline class and overall architecture of this
   library. One can think of Reskit as an extension of  scikit-learn pipelines.
-- Pandas [pandas].
-- SciPy [scipy], Python-Igraph [igraph] and NetworkX [networkx] for machine learning on networks.
+- Pandas [pandas]_.
+- SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine learning on networks.
 
 Future plans
 ------------
