@@ -148,7 +148,7 @@ However, there is no in-built compression for DCD and netCDF file formats and as
 This will result in higher I/O time and therefore overlapping of per frame trajectory data access (Figure :ref:`pattern-formats` B). 
 The I/O time is larger for netCDF file format as compared to DCD file format due to larger file size (Figure :ref:`IO-multiprocessing` A, C).
 This is since netCDF has a more complicated file format. 
-Reading an existing netCDF dataset involves opening the dataset, inquiring about dimensions, variables and attributes, reading variable data, and closing the dataset.
+Reading an existing netCDF data set involves opening the data set, inquiring about dimensions, variables and attributes, reading variable data, and closing the data set.
 The netCDF format is more sophisticated than the DCD format, which might contribute to the better scaling of parallel access to netCDF files than to DCD files.
 
 Figures :ref:`IO-multiprocessing` and :ref:`IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
@@ -239,18 +239,18 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    :label:`time-comparison`   
    :class: w
 
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | Resource   |  |Ncores|      |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job executio time(s)|
-   |            |                |                                     |                                 |measured using web-interface(s) |                    |
-   +============+================+=====================================+=================================+================================+====================+
-   | Local      |      24        |               93.83                 |               110.58            |              110.43            |        111.83      |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | Local      |      28        |               86.54                 |               111.54            |              111.24            |        112.81      |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | SDSC Comet |      30        |               37.79                 |               41.11             |              41.12             |        42.23       |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
-   | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1       |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+--------------------+
+   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
+   | Resource   |  |Ncores|      |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job execution time(s)|
+   |            |                |                                     |                                 |measured using web-interface(s) |                     |
+   +============+================+=====================================+=================================+================================+=====================+
+   | Local      |      24        |               93.83                 |               110.58            |              110.43            |        111.83       |
+   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
+   | Local      |      28        |               86.54                 |               111.54            |              111.24            |        112.81       |
+   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
+   | SDSC Comet |      30        |               37.79                 |               41.11             |              41.12             |        42.23        |
+   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
+   | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1        |
+   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
 
 
 Challenges for Good HPC Performance
@@ -259,7 +259,7 @@ Challenges for Good HPC Performance
 It should be noted that all the present results were obtained during normal, multi-user, production periods on all machines.
 In fact, the time the jobs take to run is affected by the other jobs on the system.  
 This is true even when the job is the only one using a particular node, which was the case in the present study.  
-There are shared resources such as network filesystems that all the nodes use.  
+There are shared resources such as network file systems that all the nodes use.  
 The high speed interconnect that enables parallel jobs to run is also a shared resource.  
 The more jobs are running on the cluster, the more contention there is for these resources.  
 As a result, the same job runs at different times will take a different amount of time to complete.  
@@ -295,7 +295,7 @@ In the present study, we set the stripe count equal to three which is equal to t
 This may be helpful to improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests will decrease.
 Figure :ref:`speedup-IO-600x-striping` show the speed up and I/O time per frame plots obtained for XTC file format (600X) when striping is activated. 
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
-However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as a aresult the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.  
+However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.  
 
 .. figure:: figs/panels/speed-up-IO-600x-striping.pdf
 
@@ -319,14 +319,14 @@ However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, 
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-One useful way to robust our code to uncertainty in computations is to submit much more tasks than the numer of cores. 
+One useful way to robust our code to uncertainty in computations is to submit much more tasks than the number of cores. 
 This may allow Dask to load balance appropriately, and as a result cover the extra time when there are some stragglers.
 In order for this, we set the number of tasks to be three times the number of workers (:math:`N_\text{Blocks} = 3*N_\text{cores}`). 
 Striping is also activated and is set to three which is also equal to number of nodes.
 Figures :ref:`speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (600X).
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
 However, based on the timing plots shown in Figure :ref:`timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.
-The results from scheduler pluging is described in the following section.
+The results from scheduler plugin is described in the following section.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
 
@@ -408,7 +408,7 @@ Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the lef
 In addition we were able to measure how many tasks are submitted per worker process.
 Table :ref:`process-subm` summarizes the results and Figure :ref:`task-histograms` shows in detail how RMSD blocks were submitted per worker process in each run.
 As it is shown the execution is not balanced between worker processes. Although most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
-As a result, oversubscription does not lead necessarily to a balanced execution, adding additional execution time.
+As a result, over-subscription does not lead necessarily to a balanced execution, adding additional execution time.
 
 
 .. table:: Summary of the number of worker processes per submitted RMSD blocks. Each column shows the total number of Worker process that executed a number of RMSD blocks per run. Executed on TACC Stampede utilizing 64 cores :label:`process-subm` 
@@ -431,7 +431,7 @@ As a result, oversubscription does not lead necessarily to a balanced execution,
       
    Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
    192 blocks. Each histogram is a different run of the same execution. The X axis is worker process ID and the Y     
-   axis the number of tasks submitted to that procces. :label:`task-histograms`
+   axis the number of tasks submitted to that process. :label:`task-histograms`
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
@@ -441,22 +441,22 @@ Based on the results presented in previous sections, it turned out that the stra
 Lustre striping improves I/O time; however, the job computation is still delayed due to stragglers and as a result performance was not improved.    
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using an MPI-based implementation, which makes use of mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel library are as a result of scheduler overhead or any other factor than scheduler.
-The compariosn is performed on XTC 600x using SDSC Comet. 
-Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the clculations. Bars are subdivided into the contribution of total time, communication time and RMSD calculation across parallelism from 1 to 72.
-Computation time is the time spent on RMSD tasks, and commuication time is the time spent for gathering RMSD arrays calculated by each processor rank.
+The comparison is performed on XTC 600x using SDSC Comet. 
+Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations. Bars are subdivided into the contribution of total time, communication time and RMSD calculation across parallelism from 1 to 72.
+Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
 Total time is the summation of communication time, computation time and the overhead in the calculations.
 As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculation is small up to 24 cores (Single node).
 Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small and only a small fraction of total time is spent on communications.
-However, when extending to multiple nodes compuation time also increases.
+However, when extending to multiple nodes computation time also increases.
 We believe that this is caused due to stragglers.
 In addition, the difference between total time and communication time plus computation time also increases as calculations extend to multiple nodes which reveals that there are other overheads impacting the overall performance.
 
 .. figure:: figs/MPItimestackedcomparison.pdf
 
-   Time comparison on different parts of the clculations. In this aggregate view, the time spent on diffrent
+   Time comparison on different parts of the calculations. In this aggregate view, the time spent on different
    parts of the calculation are combined for different number of processes tested.
    The bars are subdivided into the contributions of each time spent on different parts.
-   Computation time is the time spent on RMSD tasks, and commuication time is the time spent for gathering RMSD arrays calculated by each processor rank.
+   Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
    Total time is the summation of communication time, computation time and the overhead in the calculations that
    might had been caused due to different reasons.
    Reported values are the mean values across 5 repeats. :label:`MPItimestackedcomparison`
@@ -471,8 +471,8 @@ However, when extended to multiple nodes the uncertainties in measured job execu
    The calculations are performed on XTC 600x using SDSC Comet.
    :label:`MPI-total-time-boxplot`
 
-Figure :ref:`MPI-total-time-rank-comparison` shows compariosn of job execution time across all ranks tested with 72 cores.
-As seen in Figure :ref:`MPI-total-time-rank-comparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overal performance. 
+Figure :ref:`MPI-total-time-rank-comparison` shows comparison of job execution time across all ranks tested with 72 cores.
+As seen in Figure :ref:`MPI-total-time-rank-comparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
 These stragglers are observed in all cases when number of cores is more than 24 (extended to multiple cores).
 However, they are only shown for :math:`N = 72` CPU cores for the sake of brevity. 
  
@@ -510,7 +510,7 @@ Acknowledgments
 
 MK and IP were supported by grant ACI-1443054 from the National Science Foundation.
 SJ and OB were supported in part by grant ACI-1443054 from the National Science Foundation.
-Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to SJ) and by Arizona State University Research Commputing.
+Computational resources were in part provided by the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB and allocation TG-MCB090174 to SJ) and by Arizona State University Research Computing.
 
 
 
