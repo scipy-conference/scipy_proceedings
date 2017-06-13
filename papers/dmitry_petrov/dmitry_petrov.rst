@@ -423,17 +423,37 @@ Dependencies
   inspired by scikit-learn Pipeline class and overall architecture of this
   library. One can think of Reskit as an extension of  scikit-learn pipelines.
 - Pandas [pandas]_.
-- SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine learning on networks.
+- SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine
+  learning on networks.
 
 Future plans
 ------------
 
-- Ability to merge  multiple experiment plans.
-- Distributed computing for calculation on computing clusters.
-- Ability to calculate different quality metrics after one optimization.
-- Public repository of DataTransformers for various purposes.
-- Option to save best models/pipelines according to external criteria.
-- Support for Python 2.7
+- Ability to merge multiple experiment plans. There are cases when we need to
+  make calculations for not only one dataset. And pipelines steps for each
+  datset can vary. This is the very intuitive feature that would get making
+  experiments more convenient flexible to manage for researchers.
+
+- Distributed computing for calculation on computing clusters. Including this
+  feature will speed up calculations and these, of course, very important for
+  reasearchers.
+
+- Ability to calculate different quality metrics after one optimization. Now in
+  Reskit, you can use only the same quality metrics both for optimization of
+  parameters and for validating these parameters. Avoiding these restriction
+  would bring us more flexibility.
+
+- Public repositories of DataTransformers for various purposes. Each library
+  should do one thing and do it well. ``Pipeliner`` provides you convinient
+  management of pipelines. So, writing a separate library for each field seems
+  to be wise.
+
+- Option to save best models/pipelines according to external criteria. Now
+  ``Pipeliner`` saves to a table of results only parameters of best models. It
+  would be convenient to have other opportunities to choose.
+
+- Support for Python 2.7. There are many people using this version of Python,
+  so we cannot ignore Python 2.
 
 Conclusion
 ----------
