@@ -431,29 +431,30 @@ Future plans
 
 - Ability to merge multiple experiment plans. There are cases when we need to
   make calculations for not only one dataset. And pipelines steps for each
-  datset can vary. This is the very intuitive feature that would get making
-  experiments more convenient flexible to manage for researchers.
+  dataset can vary. So, this feature provides more accurate management of
+  experiments.
 
 - Distributed computing for calculation on computing clusters. Including this
   feature will speed up calculations and these, of course, very important for
-  reasearchers.
+  researchers.
 
 - Ability to calculate different quality metrics after one optimization. Now in
   Reskit, you can use only the same quality metrics both for optimization of
-  parameters and for validating these parameters. Avoiding these restriction
-  would bring us more flexibility.
+  parameters and for validating these parameters. There are cases when you
+  optimize one metric and test parameters on another metrics and we are going
+  to provide this feature.
 
 - Public repositories of DataTransformers for various purposes. Each library
   should do one thing and do it well. ``Pipeliner`` provides you convinient
-  management of pipelines. So, writing a separate library for each field seems
-  to be wise.
+  management of pipelines and DataTransformers allow you to make field oriented
+  research.
 
 - Option to save best models/pipelines according to external criteria. Now
   ``Pipeliner`` saves to a table of results only parameters of best models. It
   would be convenient to have other opportunities to choose.
 
-- Support for Python 2.7. There are many people using this version of Python,
-  so we cannot ignore Python 2.
+- Support for Python 2.7. We use Python 3, but if Python 2 will be on demand,
+  we will write Python 2 versions too.
 
 Conclusion
 ----------
