@@ -2,7 +2,7 @@
 
 :author: Mahzad Khoshlessan
 :email: mkhoshle@asu.edu
-:institution: Arizona State University
+:institution: Arizona State University, Department of Physics, Tempe, AZ 85287, USA
 
 :author: Ioannis Paraskevakos
 :email: i.paraskev@rutgers.edu
@@ -14,7 +14,7 @@
 
 :author: Oliver Beckstein
 :email: obeckste@asu.edu 
-:institution: Arizona State University 
+:institution: Arizona State University, Department of Physics, Tempe, AZ 85287, USA 
 :corresponding:
 
 :bibliography: ``mdanalysis``
