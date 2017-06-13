@@ -404,11 +404,11 @@ In work accepted to MICCAI 2017 conference, we compared 35 brain network
 building pipelines for figuring out how pre-processing steps affect network
 reliability and reproducibility. To do so, we classify network pairs as either
 belonging to the same individual or not.  Also, we calculate parametric
-reliabilty measure, Intraclass Correlation Coefficient (ICC). Thus, except
+reliability measure, Intraclass Correlation Coefficient (ICC). Thus, except
 pairwise classification, we also calculated ICC for each pipeline. To make
 these calculations we used Reskit caching feature and clean code structure,
-that allows us to reuse almost the same code with a little changes a lot of
-times. As a reasult we achived method that's useful in indentifying overall
+that allows us to reuse almost the same code with little changes a lot of
+times. As a result, we achieved method that's useful in identifying overall
 trends in brain network usefulness.
 
 We believe the library is general enough to be useful in a variety of data
