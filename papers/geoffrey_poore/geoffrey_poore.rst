@@ -9,30 +9,6 @@ BespON:  Extensible config files with multiline strings, lossless round-tripping
 ------------------------------------------------------------------------------------------------
 
 
-.. latex::
-   :usepackage: textcomp,upquote,amssymb
-
-   % Packages:
-   %   textcomp, upquote - make single quotes non-curly in literal
-   %             blocks (LaTeX Verbatim environment)
-   %   amssymb - adds extra math symbols needed for examples
-
-   % Patch Pygments style definition, to make single quotes non-curly
-   % in code-block directive
-   \def\PYZsq{\textquotesingle}
-
-   % Redefine handling of inline literal text, to make single quotes non-curly
-   \let\scipyoriginaltexttt\texttt
-   \def\texttt#1{%
-     \begingroup
-	 \scantokens{%
-       \catcode`\'=\active\catcode`\`=\active\let'\textquotesingle\let`\textasciigrave
-       \scipyoriginaltexttt{#1}\noexpand}%
-	 \endgroup}
-
-..
-
-
 
 .. class:: abstract
 
