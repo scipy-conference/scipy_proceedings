@@ -31,7 +31,15 @@ Reskit: a library for creating and curating reproducible pipelines for scientifi
 
 .. class:: abstract
 
-In this work we introduce Reskit (researcher’s kit), a library for creating and curating reproducible pipelines for scientific machine learning. A natural extension of the Scikit Pipelines to general classes of pipelines, Reskit allows for the efficient and transparent optimization of each pipeline step. Its main features include data caching, compatibility with most of the scikit-learn objects, optimization constraints such as forbidden combinations, and table generation for quality metrics. Reskit’s design will be especially useful for researchers requiring pipeline versioning and reproducibility, while running large volumes of experiments.
+In this work we introduce Reskit (researcher’s kit), a library for creating and
+curating reproducible pipelines for scientific machine learning. A natural
+extension of the Scikit-learn Pipelines to general classes of pipelines, Reskit
+allows for the efficient and transparent optimization of each pipeline step.
+Its main features include data caching, compatibility with most of the
+scikit-learn objects, optimization constraints such as forbidden combinations,
+and table generation for quality metrics. Reskit’s design will be especially
+useful for researchers requiring pipeline versioning and reproducibility, while
+running large volumes of experiments.
 
 .. class:: keywords
 
@@ -40,95 +48,101 @@ In this work we introduce Reskit (researcher’s kit), a library for creating an
 Introduction
 ------------
 
-A central task in machine learning and data science is the comparison and selection of models. The evaluation of a single model is very simple, and can be carried out in a reproducible fashion using the standard scikit pipeline. Organizing the evaluation of a large number of models is tricky; while there are no real theory problems present, the logistics and coordination can be tedious. Evaluating a continuously growing zoo of models is thus an even more painful task. Unfortunately, this last case is also quite common.
+A central task in machine learning and data science is the comparison and
+selection of models. The evaluation of a single model is very simple, and can
+be carried out in a reproducible fashion using the standard scikit pipeline.
+Organizing the evaluation of a large number of models is tricky; while there
+are no real theory problems present, the logistics and coordination can be
+tedious. Evaluating a continuously growing zoo of models is thus an even more
+painful task. Unfortunately, this last case is also quite common.
 
-The task is simple: find the best combination of pre-processing steps and predictive models with respect to an objective criterion. Logistically this can be problematic: a small example might involve three classification models, and two data preprocessing steps with two possible variations for each — overall 12 combinations. For each of these combinations we would like to perform a grid search of predefined hyperparameters on a fixed cross-validation dataset, computing performance metrics for each option (for example ROC AUC). Clearly this can become complicated quickly. On the other hand, many of these combinations share substeps, and re-running such shared steps amounts to a loss of compute time.
+The task is simple: find the best combination of pre-processing steps and
+predictive models with respect to an objective criterion. Logistically this can
+be problematic: a small example might involve three classification models, and
+two data preprocessing steps with two possible variations for each — overall 12
+combinations. For each of these combinations we would like to perform a grid
+search of predefined hyperparameters on a fixed cross-validation dataset,
+computing performance metrics for each option (for example ROC AUC). Clearly
+this can become complicated quickly. On the other hand, many of these
+combinations share substeps, and re-running such shared steps amounts to a loss
+of compute time.
 
-Reskit [1] is a Python library that helps researchers manage this problem. Specifically, it automates the process of choosing the best pipeline, i.e. choosing the best set of data transformations and classifiers/regressors. The researcher specifies the possible processing steps and the scikit objects involved, then Reskit expands these steps to each possible pipeline, excluding forbidden combinations. Reskit represents these pipelines in a convenient pandas dataframe, so the researcher can directly visualize and manipulate the experiments.
+Reskit [1] is a Python library that helps researchers manage this problem.
+Specifically, it automates the process of choosing the best pipeline, i.e.
+choosing the best set of data transformations and classifiers/regressors. The
+researcher specifies the possible processing steps and the scikit objects
+involved, then Reskit expands these steps to each possible pipeline, excluding
+forbidden combinations. Reskit represents these pipelines in a convenient
+pandas dataframe, so the researcher can directly visualize and manipulate the
+experiments.
 
-Reskit then runs each experiment and presents results which are provided to the user through a pandas dataframe. For example, for each pipeline’s classifier, Reskit could  grid search on cross-validation to find the best classifier’s parameters and report metric mean and standard deviation for each tested pipeline. Reskit also allows you to cache interim calculations to avoid unnecessary recalculations.
+Reskit then runs each experiment and presents results which are provided to the
+user through a pandas dataframe. For example, for each pipeline’s classifier,
+Reskit could  grid search on cross-validation to find the best classifier’s
+parameters and report metric mean and standard deviation for each tested
+pipeline. Reskit also allows you to cache interim calculations to avoid
+unnecessary recalculations.
 
 Main features of Reskit
 -----------------------
 
-- En masse experiments with combinatorial expansion of step options, running each option and returning results in a convenient format for human consumption (Pandas dataframe).
+- En masse experiments with combinatorial expansion of step options, running
+  each option and returning results in a convenient format for human
+  consumption (Pandas dataframe).
 
-- Step caching. Standard SciKit-learn pipelines cannot cache temporary steps. Reskit includes the option  to save fixed steps, so in next pipeline specified steps won’t be recalculated.
+- Step caching. Standard SciKit-learn pipelines cannot cache temporary steps.
+  Reskit includes the option to save fixed steps, so in next pipeline
+  specified steps won’t be recalculated.
 
-- Forbidden combination constraints. Not all possible combinations of pipelines are viable or meaningfully different. For example, in a classification task comparing the performance of  logistic regression and decision trees the former requires feature scaling while the latter may not. In this case you can block the unnecessary pair. Reskit supports general tuple blocking as well.
+- Forbidden combination constraints. Not all possible combinations of pipelines
+  are viable or meaningfully different. For example, in a classification task
+  comparing the performance of logistic regression and decision trees the
+  former requires feature scaling while the latter may not. In this case you
+  can block the unnecessary pair. Reskit supports general tuple blocking as
+  well.
 
-- Full compatibility with scikit-learn objects. Reskit can use any scikit-learn data transforming object and/or predictive model, and many other libraries that uses the scikit template.
+- Full compatibility with scikit-learn objects. Reskit can use any scikit-learn
+  data transforming object and/or predictive model, and many other libraries
+  that uses the scikit template.
 
-- Evaluation of multiple performance metrics simultaneously. Evaluation is simply another step in the pipeline, so we can specify a number of possible evaluation metrics and Reskit will expand out the computations for each metric for each pipeline.
+- Evaluation of multiple performance metrics simultaneously. Evaluation is
+  simply another step in the pipeline, so we can specify a number of possible
+  evaluation metrics and Reskit will expand out the computations for each
+  metric for each pipeline.
 
-- The DataTransformer class, which is Reskit’s simplfied interface for specifying fit/transform methods in pipeline steps. A DataTransformer subclass need only specify one function.
+- The DataTransformer class, which is Reskit’s simplfied interface for
+  specifying fit/transform methods in pipeline steps. A DataTransformer
+  subclass need only specify one function.
 
-- Tools for learning on graphs. Due to our original motivations, Reskit includes a number of operations for network data. In particular, it allows  a variety of normalization choices for adjacency matrices, as well as built in  local graph metric calculations. These were implemented using DataTransformer and in some cases the BCTpy (the Brain Connectivity Toolbox python version)
-
-
-How Reskit works
-----------------
-
-Pipeliner class
----------------
+- Tools for learning on graphs. Due to our original motivations, Reskit
+  includes a number of operations for network data. In particular, it allows  a
+  variety of normalization choices for adjacency matrices, as well as built in
+  local graph metric calculations. These were implemented using DataTransformer
+  and in some cases the BCTpy (the Brain Connectivity Toolbox python version)
 
 .. csv-table:: A plan of the experiment we set in our example.
   :file: papers/dmitry_petrov/plan_table.csv
   :widths: 1 10 15 15
 
-Heart of Reskit — an object which allows you to test different data
-preprocessing pipelines and prediction models at once. You will need to specify
-a name of each preprocessing and prediction step and possible objects
-performing each step. Then Pipeliner will combine these steps to different
-pipelines, excluding forbidden combinations; perform experiments according to
-these steps and present results in convenient csv table. For example, for each
-pipeline’s classifier, Pipeliner will grid search on cross-validation to find
-the best classifier’s parameters and report metric mean and std for each tested
-pipeline. Pipeliner also allows you to cache interim calculations to avoid
-unnecessary recalculations.
+How Reskit works
+----------------
 
-
-``Pipeliner`` initializes with following parameters.
-
-* ``steps`` : list of tuples 
-
-  List of `(step_name, transformers)` tuples, where `transformers` is a
-  list of tuples `(step_transformer_name, transformer)`. Pipeliner will
-  create ``plan_table`` from this ``steps``, combining all possible
-  combinations of transformers, switching transformers on each step.
-
-* ``eval_cv`` : int, cross-validation generator or an iterable, optional
-
-  Determines the evaluation cross-validation splitting strategy.
-
-* ``grid_cv`` : int, cross-validation generator or an iterable, optional
-
-  Determines the grid search cross-validation splitting strategy.
-
-* ``param_grid`` : dict of dictionaries
-
-  Dictionary with classifiers names (string) as keys. The keys are possible
-  classifiers names in steps. Each key corresponds to grid search parameters.
-
-* ``banned_combos`` : list of tuples
-
-  List of `(transformer_name_1, transformer_name_2)` tuples. Each row with
-  both transformers will be removed from plan_table.
-
-.. csv-table:: Grid Search results in our example in 'results' variable.
-  :file: papers/dmitry_petrov/results_grid_search.csv
-  :widths: 1 20 17 45
-
-An example of Pipeliner usage.
+Let's consider an example of Reskit usage in a classification problem. Let's
+say we want to try two scalers, two dimension reduction techniques and three
+classifiers for our classification problem. We want to make grid search of
+models parameters on stratified 5-fold cross-validation and validate found best
+parameters on another stratified 5-fold cross-validation. Also, we don't want
+to use ``MinMaxScaler`` for ``KernelPCA`` in our pipelines. Using Reskit for
+this task the code has the clear structure and looks as follows:
 
 .. code-block:: python
 
     from sklearn.preprocessing import StandardScaler
     from sklearn.preprocessing import MinMaxScaler
 
+    from sklearn.svm import SVC
     from sklearn.linear_model import LogisticRegression
     from sklearn.linear_model import SGDClassifier
-    from sklearn.svm import SVC
     from sklearn.decomposition import PCA
     from sklearn.decomposition import KernelPCA
 
@@ -180,40 +194,86 @@ An example of Pipeliner usage.
                      param_grid=param_grid, 
                      banned_combos=banned_combos)
 
+.. csv-table:: Grid Search results in our example in 'results' variable.
+  :file: papers/dmitry_petrov/results_grid_search.csv
+  :widths: 1 20 17 45
 
-Now we set needed parameters and you can view ``plan_table`` (Table 1) to
-check it. Reskit made all possible combinations of steps and writed it to
-``plan_table``. Reskit will use this ``plan_table`` for further calculations.
+We specified needed parameters, ``Pipeliner`` combined possible steps to
+different pipelines and wrote it to self ``plan_table`` parameter as `pandas
+DataFrame`. You can view it (`Table 1`) to check further calculation plan.
 
-To start calculations use ``get_results`` method of ``Pipeliner``:
+To start calculations run ``get_results`` method of ``Pipeliner``:
 
 .. code-block:: python
 
     X, y = make_classification(random_state=0)
     results = pipe.get_results(X, y, scoring=scoring)
 
-After we started calculations ``Pipeliner`` passes through ``plan_table`` rows and
-runs three methods.
+Thus, in ``results`` variable we have grid search (`Table 2`) and validation
+(`Table 3`) results in a table. This table includes `Tables 1, 2 and 3`.  
 
-Firstly, ``Pipeliner`` runs its ``transform_with_caching(self, X, y, row_keys)``
-method. If ``caching_steps`` isn't set how in our example, it just returns ``X``
-and ``y``, otherwise it make all transformations with caching temporary results in
-``_cached_X`` parameter of ``Pipeliner``. This results are stored there till next
-``plan_table`` running of this method to a pipeline created from another
-``plan_table`` row and already calculated results won't be recalculated.
+For curating pipelines we used ``Pipeliner`` class. The following section describes
+this class in details.
 
-Secondly, ``Pipeliner`` runs its ``get_grid_search_results(self, X, y, row_keys,
-scoring)`` method. It creates usual `scikit-learn` pipeline and makes grid
-search to find best parameters. This method returns ``mean`` and ``std`` on ``grid_cv``
-cross-validation. Also it returns best parameters for the pipeline.
+.. figure:: figure1.png
 
-Thirdly, ``Pipeliner`` runs its ``get_scores(self, X, y, row_keys, scoring)``
-method. Again, it creates usual `scikit-learn` pipeline and validate
-found above parameters on ``eval_cv`` cross-validation. This method returns 
-validation scores.
+   A tree of caching temporary results. Let's say each branch is a pipeline
+   labelled by a number.  Then after the first pipeline is calculated (red
+   colour)  you need to recalculate in the second pipeline only last step (blue
+   colour). And in the third pipeline, you already need to recalculate two
+   steps (green colour).
 
-Thus, in ``results`` variable we have grid search and validation results as a
-table. This table includes tables 1, 2 and 3.
+Pipeliner class
+---------------
+
+Heart of Reskit — an object which allows you to test different data
+preprocessing pipelines and prediction models at once. You will need to specify
+a name of each preprocessing and prediction step and possible objects
+performing each step as in the example above. Then ``Pipeliner`` will combine
+these steps to different pipelines, excluding forbidden combinations; perform
+experiments according to these steps and present results in convenient CSV
+table. For example, for each pipeline’s classifier, ``Pipeliner`` will grid
+search on cross-validation to find the best classifier’s parameters and report
+metric mean and std for each tested pipeline. ``Pipeliner`` also allows you to
+cache interim calculations to avoid unnecessary recalculations.
+
+``Pipeliner`` initializes with following parameters:
+
+``steps`` is a list of `(step_name, transformers)` tuples, where `transformers`
+is a list of tuples `(step_transformer_name, transformer)`. ``Pipeliner`` will
+create ``plan_table`` from this ``steps``, combining all possible combinations
+of transformers, switching transformers on each step.
+
+``eval_cv`` and ``grid_cv`` determine the grid search and the evaluation
+cross-validation splitting strategies.
+
+``param_grid`` is a dictionary with classifiers names (string) as keys. The keys are
+possible classifiers names in steps. Each key corresponds to grid search
+parameters.
+
+``banned_combos`` is a list of `(transformer_name_1, transformer_name_2)` tuples.
+Each row with both transformers will be removed from plan_table.
+
+The main method of ``Pipeliner`` that starts all calculations is ``get_results``.
+After we ran calculations through this method ``Pipeliner`` passes through
+``plan_table`` and makes three steps for each row.
+
+Firstly, ``Pipeliner`` makes transformations according to specified
+``caching_steps``.  If ``caching_steps`` isn't set , it just returns ``X`` and
+``y``, otherwise it makes all transformations with caching temporary results in
+``_cached_X`` parameter of ``Pipeliner``. The process of caching temporary
+results may be considered on a tree example (look at `Fig.  1`), where the same
+parts of previous and current branches won't be recalculated (red colour), but
+different --- will be recalculated (blue and green colour).
+
+Secondly, ``Pipeliner`` creates usual `scikit-learn` pipeline and makes grid
+search to find best parameters. The mean and standard deviation with found best
+parameters on defined ``grid_cv`` cross-validation are written to the table of
+results (`Table 2`). Best parameters also are written to the table of results.
+
+Thirdly, ``Pipeliner`` evaluates found in previous step best parameters on
+another ``eval_cv`` cross-validation. It writes mean, standard deviation and
+scores of quality metric on ``eval_cv`` to the table of results (`Table 3`).
 
 .. csv-table:: Validation results in 'results' variable.
   :file: papers/dmitry_petrov/results_evaluation.csv
@@ -258,11 +318,17 @@ Here is example of normalizing by mean of three matrices.
     result = DataTransformer(
                 func=mean_norm_trans).fit_transform(X)
 
-    (output == result).all()
+    prin((output == result).all())
+
+And the output will be:
 
 .. code-block:: bash
 
     True
+
+With the support of ``DataTransformer``, you can implement a needed to you
+transformation and use it general ``Pipeliner`` workflow, that give more
+flexibility in calculation methods.
 
 MatrixTransformer class
 -----------------------
@@ -280,7 +346,9 @@ with ``MatrixTransformer`` should be a 3 dimensional array (array of matrices). 
     result = MatrixTransformer(
                 func=mean_norm).fit_transform(X)
 
-    (output == result).all()
+    print((output == result).all())
+
+Answer:
 
 .. code-block:: bash
 
@@ -291,22 +359,24 @@ Brain Connectivity Toolbox functions wrapper
 
 We provide some basic graph metrics in Reskit. To access most state of the art
 graph metrics you can use Brain Connectivity Toolbox. You should install it via
-pip:
+pip in terminal:
 
 .. code-block:: bash
 
-    pip install bctpy
+    pip3 install bctpy
 
-We can simply calculate `Pagerank` for previous matrices ``X``.
+With support of ``bctpy`` we can simply calculate `Pagerank` for previous
+matrices ``X``.
 
 .. code-block:: python
 
-    from bct.algorithms.centrality import pagerank_centrality
+    from bct.algorithms import centrality
 
 
+    pagerank = centrality.pagerank_centrality
     featured_X = MatrixTransformer(
-        d=0.85,
-        func=pagerank_centrality).fit_transform(X)
+            d=0.85,
+            func=pagerank).fit_transform(X)
 
 So, using ``Pipeliner`` with `Brain Connectivity Toolbox` provides you
 convenient functionality for your research.
@@ -314,15 +384,35 @@ convenient functionality for your research.
 Applications
 ------------
 
-Reskit was originally developed for a brain network classification task. We have successfully applied it in our own research several times [8,9]. Code from two of these projects can be found at [10] and [11].  We believe the library is general enough to be useful in a variety of data science contexts, and we hope that other researchers will find this library useful in their studies.
+Reskit was originally developed for a brain network classification task. We
+have successfully applied it in our own research several times [PRNI2016,
+ISBI2017, MICCAI2017]. Code from two of these projects can be found at
+[PRNI_code] and [ISBI_code]. In these projects, Reskit was used mainly for
+figuring out an influence of preprocessing steps on classification task
+accuracy and interactions between different steps in pipelines, for example,
+how specific normalizing affects some type of generated features.
+
+We also used Reskit in [MICCAI2017] for pairwise classification of given
+objects and for calculation a specific metric for each object without using
+models at the end of pipelines.
+
+In these researches, Reskit saved us a lot of time because of caching support
+and clear structure of the code, that we reused a lot of time with little
+changes.
+
+We believe the library is general enough to be useful in a variety of data
+science contexts, and we hope that other researchers will find this library
+useful in their studies.
 
 Dependencies
 ------------
 
 - Python 3.4 and higher.
-- Scikit-learn [2] 0.18.1 and its dependencies. Our library was heavily inspired by scikit-learn Pipeline class and overall architecture of this library. One can think of Reskit as an extension of  scikit-learn pipelines.
-- Pandas [4].
-- SciPy [5], Python-Igraph [6] and NetworkX [7] for machine learning on networks.
+- Scikit-learn [scikit] 0.18.1 and its dependencies. Our library was heavily
+  inspired by scikit-learn Pipeline class and overall architecture of this
+  library. One can think of Reskit as an extension of  scikit-learn pipelines.
+- Pandas [pandas].
+- SciPy [scipy], Python-Igraph [igraph] and NetworkX [networkx] for machine learning on networks.
 
 Future plans
 ------------
@@ -337,8 +427,13 @@ Future plans
 Conclusion
 ----------
 
-In this abstract we introduced Reskit, a library for creating and curating reproducible pipelines for scientific machine learning. Reskit allows for the efficient and transparent optimization of each pipeline step. Its main features include data caching, compatibility with most of the scikit-learn objects, optimization constraints, and table generation for quality metrics. Reskit’s design will be especially useful for researchers requiring pipeline versioning and reproducibility, while running large volumes of experiments.
-
+In this abstract we introduced Reskit, a library for creating and curating
+reproducible pipelines for scientific machine learning. Reskit allows for the
+efficient and transparent optimization of each pipeline step. Its main features
+include data caching, compatibility with most of the scikit-learn objects,
+optimization constraints, and table generation for quality metrics. Reskit’s
+design will be especially useful for researchers requiring pipeline versioning
+and reproducibility, while running large volumes of experiments.
 
 References
 ----------
