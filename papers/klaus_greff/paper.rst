@@ -425,6 +425,7 @@ Hyperparameter Optimizers
 
 
 Labwatch offers a simple and flexible interface to a variety of state-of-the-art hyperparameter optimization methods, including:
+
 - **Random search** is probably the simplest hyperparameter optimization method :cite:`bergstra-jmlr12a`. It just samples hyperparameter
   configurations randomly from the corresponding prior distributions. It can be used in discrete as well as continuous search spaces and can easily be run in parallel.
 
@@ -516,12 +517,6 @@ Connecting to TensorBoard
 ­­­
 Sacredboard offers an experimental integration with TensorBoard — the web-dashboard for the popular TensorFlow library :cite:`tensorflow`.
 Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run, it is possible launch TensorBoard directly from the Run detail view.
-
-.. This works as long as the paath to the TensorFlow log did not change and is accessible from the computer where Sacredboard is running.
-If TensorBoard fails to start, it is necessary to check that it is installed in the same Python environment as Sacredboard, and that no other TensorBoard instances are running.
-Terminating all TensorBoard instances started from Sacredboard can be done by navigating to a special URL:
-    http://localhost:5000/tensorboard/stop
-We are working to overcome this limitation.
 
 
 Plotting Metrics
