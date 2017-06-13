@@ -389,33 +389,27 @@ have successfully applied it in our own research several times [PRNI2016,
 ISBI2017]. Code from two of these projects can be found at [PRNI_code] and
 [ISBI_code].
 
-In first one we proposed a combination of geometric network normalization by
-squared Euclidean distance between zones and topological normalization by the
-geometric mean of adjacent nodes' weighted degrees. Reskit helped us to try
-needed normalizations and figure out how these normalizations boost network
-classification.
+In first one we proposed a combination of network normalizations and Reskit
+helped us to try these normalizations and figure out how these normalizations
+boost network classification.
 
-In second work we studied the extent to which brain networks and topological
-derivative measures are unique to individual changes within human brains. To do
-so, we classify brain networks pairs as either belonging to the same individual
-or not. Here, we used Reskit for pairwise classification task and we reach it
-with ease through using ``DataTransformer`` with implemented especially for
-this task functions.
+In second work we studied the extent to which brain networks and derivative
+measures are unique to individual changes within human brains. To do so, we
+classify brain networks pairs as either belonging to the same individual or
+not. Here, we used Reskit for pairwise classification task and we reach it with
+ease through using ``DataTransformer`` with implemented especially for this
+task functions.
 
-There is no consensus on how to construct brain networks. How variations in
-pre-processing steps affect network reliability and its ability to distinguish
-subjects remains opaque. In accepted (but not yet published) to MICCAI 2017
-conference work, we address this issue by comparing 35 structural
-connectome-building pipelines. Again, we classify network pairs as either
-belonging to the same individual or not. We also compare pariwise
-classification results to a commonly used parametric test-retest measure,
-Intraclass Correlation Coefficient (ICC). Thus, except pairwise classification,
-we also calculated ICC for each pipeline. To solve this two type of tasks we
-used Reskit caching feature and clean code structure, that allows us to reuse
-almost the same code with little changes a lot of times. Finally, we presented
-a straight-forward method for evaluating brain connectivity construction
-pipelines that may be useful in identifying overall trends in brain network
-usefulness.
+In work accepted to MICCAI 2017 conference, we compared 35 brain network
+building pipelines for figuring out how pre-processing steps affect network
+reliability and reproducibility. To do so, we classify network pairs as either
+belonging to the same individual or not.  Also, we calculate parametric
+reliabilty measure, Intraclass Correlation Coefficient (ICC). Thus, except
+pairwise classification, we also calculated ICC for each pipeline. To make
+these calculations we used Reskit caching feature and clean code structure,
+that allows us to reuse almost the same code with a little changes a lot of
+times. As a reasult we achived method that's useful in indentifying overall
+trends in brain network usefulness.
 
 We believe the library is general enough to be useful in a variety of data
 science contexts, and we hope that other researchers will find this library
