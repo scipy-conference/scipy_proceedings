@@ -24,7 +24,8 @@
 .. ===========
 .. .
 .. Writing
-..  - use present tense
+..  - use past tense to report results
+..  - use present tense for intro/general conclusions
 .. .
 .. Formatting
 ..  - restructured text
@@ -50,7 +51,7 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
 .. class:: abstract
 
    The analysis of biomolecular computer simulations has become a challenge because the amount of output data is now routinely in the terabyte range.
-   We evaluate if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
+   We evaluated if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
    We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
    We found that the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottleneck in the analysis work flow.
    However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
@@ -69,49 +70,114 @@ MDAnalysis_ is a Python library that provides users with access to raw simulatio
 MD trajectories are time series of positions (and sometimes also velocities) of the simulated atoms or particles; using statistical mechanics one can calculate experimental observables from these time series :cite:`FrenkelSmit02,Mura:2014kx`.
 The size of these trajectories is growing as the simulation times are being extended beyond micro-seconds and larger systems with increasing numbers of atoms are simulated.
 The amount of data to be analyzed is growing rapidly into the terabyte range and analysis is increasingly becoming a bottleneck in MD workflows :cite:`Cheatham:2015qf`.
-Therefore, there is a need for high performance computing (HPC) approaches for the analysis of MD trajectory data.
+Therefore, there is a need for high performance computing (HPC) approaches for the analysis of MD trajectory data :cite:`Tu:2008dq, Roe:2013zr`.
 
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries such as Python multiprocessing_, joblib_, and mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa` are currently used to parallelize MDAnalysis-based code on a case-by-case basis.
-Here we evaluate performance for parallel map-reduce :cite:`Dean:2008aa` type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
+Here we evaluated performance for parallel map-reduce :cite:`Dean:2008aa` type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
 Although Dask is able to implement much more complex computations than map-reduce, we chose Dask for this task because of its ease of use and because we envisage using this approach for more complicated analysis applications whose parallelization cannot easily be expressed as a simple map-reduce algorithm.
 
-As the computational task we perform an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms :cite:`Mura:2014kx`.
-A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NetCDF classic format version 3.6.0 :cite:`Case:2005uq`) and different trajectory sizes are benchmarked.
+As the computational task we performed an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms :cite:`Mura:2014kx`.
+A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NetCDF classic format version 3.6.0 :cite:`Case:2005uq`) and different trajectory sizes were benchmarked.
 
 We looked at different HPC resources including national supercomputers (XSEDE TACC *Stampede* and SDSC *Comet*), university supercomputers (Arizona State University Research Computing *Saguaro*), and local resources (Gigabit networked multi-core workstations). 
-The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization. 
-Such a heterogeneous environment creates a challenging problem for developing high performance programs without the effort required to use low-level, architecture specific parallel programming models for our domain-specific problem. 
+The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization.
+Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), and the parallel Lustre file system (implemented on top of HDD) were tested to examine the effect of I/O on the performance. 
+The benchmarks were performed both on a single node and across multiple nodes using the multiprocessing and distributed_ schedulers in the Dask library.
 
-Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), and the parallel Lustre file system (implemented on top of HDD) are also tested to examine the effect of I/O on the performance. 
-The benchmarks are performed both on a single node and across multiple nodes using the multiprocessing and distributed_ schedulers in the Dask library.
-A protein system of :math:`N = 3341` atoms per frame but with different number of frames per trajectory was analyzed.
-We used different trajectory sizes of 50 GB, 150 GB, and 300 GB for Dask multiprocessing and 100 GB, 300 GB, 600 GB for Dask distributed; however, here we only present data for the 300 GB and 600 GB trajectory sizes, which represent typical medium and large size results.
-For an analysis of the full data set see the Technical Report :cite:`Khoshlessan:2017aa`.
-All results for Dask distributed are obtained across three nodes on different clusters.
-Results are compared across all file formats, trajectory sizes, and machines. 
+Our results showed strong dependency on the storage system because competition for access to the same file from multiple processes emerged as a key problem.
+But because the trajectory file format dictates the data access pattern, the overall performance depends critically on the storage system *and* the actual data format, with some formats being more robust against storage system specifics than others.
 
-Our results show strong dependency on the storage system because a key problem is competition for access to the same file from multiple processes.
-However, the exact data access pattern depends on the trajectory file format and a strong dependence on the actual data format arises.
-Some trajectory formats are more robust against storage system specifics than others.
-In particular, analysis with the Gromacs XTC format can show strong ideal scaling over multiple nodes because this highly compressed format effectively reduces (global) I/O at the expense of increasing (local) per-core work for decompression.
-Our results show that there can be other challenges aside from the I/O bottleneck for achieving good speed-up.
-For instance, with numbers of processes matched to the available cores, contention on the network may slow down individual tasks and lead to poor load balancing and poor overall performance.
+Overall, good performance and strong scaling with the number of CPU cores was found on a single node but robust across-node performance remained challenging.
+In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, oversubscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
+From these tests we tentatively conclude that poor across-nodes performance is rooted in contention on the shared network that may slow down individual tasks and lead to poor load balancing.
+Nevertheless, Dask with MDAnalysis appears to be a promising approach for high-level parallelization for analysis of MD trajectories, especially at moderate CPU core numbers.
 
-In order to identify performance bottlenecks for our map-reduce implementation, we tested and examined several other factors including the effect of striping in the parallel Lustre file system, oversubscribing, and the performance of the Dask scheduler itself.
-
-We also compared a subset of systems with an MPI-based implementation (using mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`) in order to better understand the effect of using a high-level approach such as the Dask parallel library compared to a lower level one; in particular, we tried to identify possible underlying factors that may lead to low performance. 
 
 
 Methods
 =======
 
-The data files consist of a topology file (in CHARMM PSF format) and a trajectory (DCD format); they are available from dropbox (`adk4AKE.psf`_ and `1ake_007-nowater-core-dt240ps.dcd`_). 
-Files in XTC and NetCDF formats are generated from the DCD on the fly.
-To avoid operating system caching, files are copied and only used once for each benchmark.
+We implemented a simple map-reduce scheme to parallelize processing of trajectories over contiguous blocks.
 We tested libraries in the following versions: MDAnalysis 0.15.0, Dask 0.12.0 (also 0.13.0), Distributed_ 1.14.3 (also 1.15.1), and NumPy 1.11.2 (also 1.12.0) :cite:`VanDerWalt2011`.
 
-As computational load we implement the calculation of the root mean square distance of the |Calpha| atoms of the protein adenylate kinase :cite:`Seyler:2014il` when it fitted to a reference structure using an optimal rigid body superposition :cite:`Mura:2014kx`, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`. The code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library .
+.. code-block:: python
 
+   import numpy as np
+   import MDAnalysis as mda
+   from MDAnalysis.analysis.rms import rmsd
+
+The trajectory is split into ``n_blocks`` blocks with inital frame ``start`` and final frame ``stop``  set for each block.
+The calculation on each block (function ``block_rmsd()``, corresponding to the *map* step) is *delayed* with the ``delayed()`` function in Dask:
+
+.. code-block:: python
+
+   from dask.delayed import delayed
+
+   def analyze_rmsd(ag, n_blocks):
+       """RMSD of AtomGroup ag, parallelized n_blocks"""
+       ref0 = ag.positions.copy()
+       bsize = int(np.ceil(
+                   ag.universe.trajectory.n_frames \
+                   / float(n_blocks)))
+       blocks = []
+       for iblock in range(n_blocks):
+	   start, stop = iblock*bsize, (iblock+1)*bsize
+	   out = delayed(block_rmsd, pure=True)(
+	           ag.indices, ag.universe.filename,
+		   ag.universe.trajectory.filename,
+		   ref0, start, stop)   
+	   blocks.append(out)
+   return delayed(np.vstack)(blocks)
+
+In the *reduce* step, the partial time series from each block are concatenated in the correct order (``np.vstack``, see Figure :ref:`rmsd-dask` A); because results from delayed objects are used, this step also has to be delayed.
+
+
+.. figure:: figs/panels/rmsd_dask.pdf
+
+   rmsd calculation via map-reduce with Dask.
+   **A** rmsd as a function of time, with partial time series colored by trajectory block.   
+   **B** Dask task graph for splitting the rmsd calculation into three trajectory blocks.
+   :label:`rmsd-dask`
+
+As computational load we implement the calculation of the root mean square distance (rmsd) of the |Calpha| atoms of the protein adenylate kinase :cite:`Seyler:2014il` when fitted to a reference structure using an optimal rigid body superposition :cite:`Mura:2014kx`, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`.
+The rmsd is calculated for each trajectory frame in each block by iterating over ``u.trajectory[start:stop]``:
+
+.. code-block:: python
+
+   def block_rmsd(index, topology, trajectory, ref0,
+                  start, stop):
+       u = mda.Universe(topology, trajectory)
+       ag = u.atoms[index]
+       out = np.zeros([stop-start, 2])
+       for i, ts in enumerate(
+               u.trajectory[start:stop]):
+	   out[i, :] = ts.time, rmsd(ag.positions, ref0,
+	                 center=True, superposition=True)
+       return out
+
+Dask produces a task graph (Figure :ref:`rmsd-dask` B) and the computation of the graph is executed in parallel through a Dask scheduler such as ``dask.multiprocessing`` (or ``dask.distributed``):
+
+.. code-block:: python
+
+   from dask.multiprocessing import get
+
+   u = mda.Universe(PSF, DCD)
+   ag = u.select_atoms("protein and name CA")
+   result = delayed(analyze_rmsd)(ag, n_blocks)
+   result.compute(get=get)
+
+
+The complete code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library under the MIT License.
+
+The data files consist of a topology file (in CHARMM PSF format; :math:`N = 3341` atoms) and a trajectory (DCD format) of length 1.004 µs with 4187 frames; they are available from dropbox (`adk4AKE.psf`_ and `1ake_007-nowater-core-dt240ps.dcd`_)  
+Files in XTC and NetCDF formats are generated from the DCD on the fly.
+To avoid operating system caching, files were copied and only used once for each benchmark.
+
+Trajectories with different number of frames per trajectory were analyzed to assess the effect of trajectory file size.
+These trajectories were generated by concatenating the base trajectory 50, 100, 300, and 600 times and are referred to as, e.g., "DCD300x" or "XTC600x".
+For Dask multiprocessing we investigated 50x, 100x, 300x and 100x, 300x, and 600x for Dask distributed; however, here we only present data for the 300x and 600x trajectory sizes, which represent typical medium size results.
+The DCD file format is just a binary representation and the DCD300x trajectory has a file size of 47 GB (DCD600x is twice as much); XTC is a lossy compressed format and XTC300x is only 15 GB; NetCDF is about the same size as DCD.
+For an analysis of the full data set see the Technical Report :cite:`Khoshlessan:2017aa`.
 
 
 Results and Discussion
@@ -151,7 +217,7 @@ This is since netCDF has a more complicated file format.
 Reading an existing netCDF data set involves opening the data set, inquiring about dimensions, variables and attributes, reading variable data, and closing the data set.
 The netCDF format is more sophisticated than the DCD format, which might contribute to the better scaling of parallel access to netCDF files than to DCD files.
 
-Figures :ref:`IO-multiprocessing` and :ref:`IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
+Figures :ref:`IO-multiprocessing` and :ref:`IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively; all results for Dask distributed were obtained across three nodes on different clusters.
 According to figure :ref:`IO-multiprocessing`, SSD can be very helpful (especially for DCD) and can improve the performance due to speed up in access time.
 Figure :ref:`time-multiprocessing` compares job execution time between different file format for 300x trajectory sizes using Dask multiprocessing scheduler.
 According to figure :ref:`time-multiprocessing`, DCD files which are single precision binary FORTRAN files and have a simpler format as compared to XTC and NCDF are faster and have less execution time especially using SSDs.
