@@ -163,8 +163,8 @@ Dask produces a task graph (Figure :ref:`rmsd-dask` B) and the computation of th
 
    u = mda.Universe(PSF, DCD)
    ag = u.select_atoms("protein and name CA")
-   result = delayed(analyze_rmsd)(ag, n_blocks)
-   result.compute(get=get)
+   result = analyze_rmsd(ag, n_blocks)
+   timeseries = result.compute(get=get)
 
 
 The complete code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library under the MIT License.
