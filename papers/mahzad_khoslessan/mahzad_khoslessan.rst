@@ -454,14 +454,16 @@ Lustre striping improves I/O time; however, the job computation is still delayed
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using an MPI-based implementation, which makes use of mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel library are as a result of scheduler overhead or any other factor than scheduler.
 The comparison is performed on XTC 600x using SDSC Comet. 
-Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations. Bars are subdivided into the contribution of total time, communication time and RMSD calculation across parallelism from 1 to 72.
+Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations. Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
 Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
 Total time is the summation of communication time, computation time and the overhead in the calculations.
-As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculation is small up to 24 cores (Single node).
-Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small and only a small fraction of total time is spent on communications.
+As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculations is small up to 24 cores (Single node).
+Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small up to a single node and increases as the calculations are extended to multiple nodes. 
+Overall, only a small fraction of total time is spent on communications.
+Overhead in the calculations is also very small.
+The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases for a sigle node.
 However, when extending to multiple nodes computation time also increases.
-We believe that this is caused due to stragglers.
-In addition, the difference between total time and communication time plus computation time also increases as calculations extend to multiple nodes which reveals that there are other overheads impacting the overall performance.
+We believe that this is caused due to stragglers which is also confirmed based on figure :ref:`MPI-total-time-rank-comparison`.
 
 .. figure:: figs/MPItimestackedcomparison.pdf
 
