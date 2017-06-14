@@ -153,22 +153,34 @@ The netCDF format is more sophisticated than the DCD format, which might contrib
 
 Figures :ref:`IO-multiprocessing` and :ref:`IO-distributed` compare the difference in I/O time for different file formats for 300X and 600X trajectories for multiprocessing and distributed scheduler respectively.
 According to figure :ref:`IO-multiprocessing`, SSD can be very helpful (especially for DCD) and can improve the performance due to speed up in access time.
-Also we anticipate that, for heavier analyses that have higher compute time per frame, per frame trajectory data access happens less often and accession times gradually become staggered across CPUs which can be considered for future studies.
+Figure :ref:`time-multiprocessing` compares job execution time between different file format for 300x trajectory sizes using Dask multiprocessing scheduler.
+According to figure :ref:`time-multiprocessing`, DCD files which are single precision binary FORTRAN files and have a simpler format as compared to XTC and NCDF are faster and have less execution time especially using SSDs.
+XTC and NCDF have comparable execution time and have rather more complex file formats than DCDs.
+DCD file formats using SSDs show a very good scaling on a single node. 
+Based on the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
+In fact, very good speed up is achievable using SSDs for DCD format in much shorter time as compared to XTC and NCDF file formats.  
 
 .. figure:: figs/panels/IO-time-300x.pdf
 
-   Comparison of IO time between 300x trajectory sizes using Dask multiprocessing on a *single node*.
-   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
+   Comparison of IO time between different file formats for 300x trajectory sizes using Dask multiprocessing on a *single node*.
+   The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
    :label:`IO-multiprocessing`
 
 
 .. figure:: figs/panels/IO-time-600x.pdf
 
-   Comparison of IO time between 600x trajectory sizes using Dask distributed on one to three nodes.
-   The trajectory was split into :math:`N`  blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
+   Comparison of IO time between different file formats for 600x trajectory sizes using Dask distributed on one to three nodes.
+   The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
    :label:`IO-distributed`
+
+.. figure:: figs/panels/timing-300x-multiprocessing.pdf
+
+   Comparison of job execution time between 300x trajectory sizes using Dask multiprocessing on a *single node*.
+   The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
+   :label:`time-multiprocessing`
 
 
 Effect of File Format
@@ -453,7 +465,7 @@ In addition, the difference between total time and communication time plus compu
 
 .. figure:: figs/MPItimestackedcomparison.pdf
 
-   Time comparison on different parts of the calculations. In this aggregate view, the time spent on different
+   Time comparison on different parts of the calculations obtained using MPI for python. In this aggregate view, the time spent on different
    parts of the calculation are combined for different number of processes tested.
    The bars are subdivided into the contributions of each time spent on different parts.
    Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
@@ -467,7 +479,7 @@ However, when extended to multiple nodes the uncertainties in measured job execu
 
 .. figure:: figs/MPI-total-time-boxplot.pdf
 
-   Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72.
+   Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72 obtained using MPI for python.
    The calculations are performed on XTC 600x using SDSC Comet.
    :label:`MPI-total-time-boxplot`
 
@@ -478,7 +490,7 @@ However, they are only shown for :math:`N = 72` CPU cores for the sake of brevit
  
 .. figure:: figs/MPI-total-time-rank-comparison.pdf
 
-   Comparison of job execution time across processor ranks for 72 CPU cores. 
+   Comparison of job execution time across processor ranks for 72 CPU cores obtained using MPI for python. 
    There are several stragglers which slow down the whole process.
    :label:`MPI-total-time-rank-comparison`
 
