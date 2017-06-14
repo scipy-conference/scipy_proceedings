@@ -169,8 +169,8 @@ Dask produces a task graph (Figure :ref:`rmsd-dask` B) and the computation of th
 
 The complete code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library under the MIT License.
 
-The data files consist of a topology file (in CHARMM PSF format; :math:`N = 3341` atoms) and a trajectory (DCD format) of length 1.004 µs with 4187 frames; they are available from dropbox (`adk4AKE.psf`_ and `1ake_007-nowater-core-dt240ps.dcd`_)  
-Files in XTC and NetCDF formats are generated from the DCD on the fly.
+The data files consist of a topology file ``adk4AKE.psf`` (in CHARMM PSF format; :math:`N = 3341` atoms) and a trajectory ``1ake_007-nowater-core-dt240ps.dcd`` (DCD format) of length 1.004 µs with 4187 frames; both are freely available from figshare at DOI `10.6084/m9.figshare.5108170`_  :cite:`Seyler:2017aa`.
+Files in XTC and NetCDF formats are generated from the DCD on the fly using MDAnalysis.
 To avoid operating system caching, files were copied and only used once for each benchmark.
 
 Trajectories with different number of frames per trajectory were analyzed to assess the effect of trajectory file size.
@@ -608,6 +608,4 @@ References
 .. _mpi4py: https://mpi4py.scipy.org/
 .. _Dask: http://dask.pydata.org
 .. _distributed: https://distributed.readthedocs.io/
-.. _`10.6084/m9.figshare.4695742`: https://doi.org/10.6084/m9.figshare.4695742
-.. _`adk4AKE.psf`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AAAL5eP1vrn0tK-67qVDnKeua/Trajectories/equilibrium/adk4AKE.psf
-.. _`1ake_007-nowater-core-dt240ps.dcd`: https://www.dropbox.com/sh/ln0klc9j7mhvxkg/AABSaNJ0fRFgY1UfxIH_jWtka/Trajectories/equilibrium/1ake_007-nowater-core-dt240ps.dcd
+.. _10.6084/m9.figshare.5108170: https://doi.org/10.6084/m9.figshare.5108170
