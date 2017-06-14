@@ -76,7 +76,15 @@ MDAnalysis does not yet provide a standard interface for parallel analysis; inst
 Here we evaluated performance for parallel map-reduce :cite:`Dean:2008aa` type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
 Although Dask is able to implement much more complex computations than map-reduce, we chose Dask for this task because of its ease of use and because we envisage using this approach for more complicated analysis applications whose parallelization cannot easily be expressed as a simple map-reduce algorithm.
 
-As the computational task we performed an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms :cite:`Mura:2014kx`.
+.. figure:: figs/panels/rmsd_dask.pdf
+   :figclass: b
+
+   rmsd calculation via map-reduce with Dask.
+   **A** rmsd as a function of time, with partial time series colored by trajectory block.   
+   **B** Dask task graph for splitting the rmsd calculation into three trajectory blocks.
+   :label:`rmsd-dask`
+
+As the computational task we performed an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms :cite:`Mura:2014kx` (Figure :ref:`rmsd-dask`).
 A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NetCDF classic format version 3.6.0 :cite:`Case:2005uq`) and different trajectory sizes were benchmarked.
 
 We looked at different HPC resources including national supercomputers (XSEDE TACC *Stampede* and SDSC *Comet*), university supercomputers (Arizona State University Research Computing *Saguaro*), and local resources (Gigabit networked multi-core workstations). 
@@ -91,7 +99,6 @@ Overall, good performance and strong scaling with the number of CPU cores was fo
 In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, oversubscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
 From these tests we tentatively conclude that poor across-nodes performance is rooted in contention on the shared network that may slow down individual tasks and lead to poor load balancing.
 Nevertheless, Dask with MDAnalysis appears to be a promising approach for high-level parallelization for analysis of MD trajectories, especially at moderate CPU core numbers.
-
 
 
 Methods
@@ -130,14 +137,6 @@ The calculation on each block (function ``block_rmsd()``, corresponding to the *
    return delayed(np.vstack)(blocks)
 
 In the *reduce* step, the partial time series from each block are concatenated in the correct order (``np.vstack``, see Figure :ref:`rmsd-dask` A); because results from delayed objects are used, this step also has to be delayed.
-
-
-.. figure:: figs/panels/rmsd_dask.pdf
-
-   rmsd calculation via map-reduce with Dask.
-   **A** rmsd as a function of time, with partial time series colored by trajectory block.   
-   **B** Dask task graph for splitting the rmsd calculation into three trajectory blocks.
-   :label:`rmsd-dask`
 
 As computational load we implement the calculation of the root mean square distance (rmsd) of the |Calpha| atoms of the protein adenylate kinase :cite:`Seyler:2014il` when fitted to a reference structure using an optimal rigid body superposition :cite:`Mura:2014kx`, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`.
 The rmsd is calculated for each trajectory frame in each block by iterating over ``u.trajectory[start:stop]``:
@@ -474,11 +473,10 @@ These captured profiles were later used to analyze the execution of XTC 300x on 
 Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the left (Figure :ref:`XTC300x64coresStampede` A) is an execution where the number of RMSD blocks is equal to the number of cores and on the right (Figure :ref:`XTC300x64coresStampede` B) an execution where the number of blocks is three times the number of cores. 
 
 .. figure:: figs/panels/scheduler-300x.pdf
-   :figclass: w
-   :scale: 30%
+   :scale: 90%
       
    Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
-   64 blocks (right) and 192 blocks (left). The X axis is time in milliseconds and the Y     
+   **A** 64 blocks and **B** 192 blocks. The X axis is time in milliseconds and the Y     
    axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light 
    Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede` 
 
