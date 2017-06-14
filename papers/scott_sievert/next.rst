@@ -110,31 +110,32 @@ Introduction
 The ubiquitousness of the Internet has enabled crowdsourcing, which gives fast
 access to unprecedented amounts of human judgment data.  Tapping into the
 "wisdom of the crowd" includes scenarios where questions are asked about simple
-cognitive tasks. For example, users may be asked to determine the locations in
-an image that contain a certain object (e.g., "select all image locations that
-contain buildings") to protect against internet bots. This task is trivial for
-a human but difficult a computer (or internet bots).
+cognitive tasks, and crowdsourcing has enabled the collection of many such
+judgments. For example, crowdsourcing participants have been asked to
+determine the locations in an image that contain a certain object (e.g.,
+"select all image locations that contain buildings") on many different images
+:cite:`deng2009imagenet`.
 
-Crowdsourcing enables the collection of a large amount of data, which is
-necessary to extract complex results from simple human judgments. One such
-example finds some measure of shoe similarity between different shoes
-:cite:`heim2015active`. A complex model is required given a low working memory
-constraint. Many responses are needed for this complex model, even though a
-small fraction of the available shoes are used (less that 0.2%).
+.. comment
+    Crowdsourcing enables the collection of many simple human judgments. Uses
+    include finding the best item in some set :cite:`audibert2010best` or finding
+    some measure of similarity between different objects :cite:`heim2015active`.
+    Typically, many responses are required as judgments must be simple for humans
+    to answer.
 
 The cost of collecting crowdsourcing responses can be significant – especially
 in problem domains where expert input is required. Minimizing the number of
-queries required has large practical benefits: higher accuracy with
-fewer responses, and ultimately a shorter time to a particular result.  To
-obtain these benefits, a fundamental change in the method of data collection is
+queries required has large practical benefits: higher accuracy with fewer
+responses, and ultimately a shorter time to a particular result.  To obtain
+these benefits, a fundamental change in the method of data collection is
 required.
 
-At UW–Madison, we have developed a crowdsourcing data collection and analysis
-tool that efficiently collects crowdsourced data :cite:`jamieson2015next`. In
-this paper, we will explain the fundamental challenges that this system
-addresses before explaining the system usage and API. We will mention primary
-design goals of NEXT, which include experiment monitoring and being accessible
-to researchers.
+At UW–Madison, we have developed a crowdsourcing data collection tool that
+efficiently collects crowdsourced data via "adaptive" sampling algorithms
+:cite:`jamieson2015next`. In this paper, we will focus on the use of NEXT
+rather than the applications of NEXT and their results. We will address the
+interface NEXT presents to the experimentalist and algorithm designer, after
+mentioning the fundamental problem NEXT addresses and it's applications.
 
 Problem statement
 -----------------
@@ -168,35 +169,48 @@ Problem statement
     adaptive algorithms to reach a particular quality (e.g., classification
     accuracy). :label:`adaptive-gains`
 
-The standard machine learning workflow is to obtain human labels, then to
-produce a model that predicts labels. An example of this workflow is with the
-popular ImageNet dataset :cite:`deng2009imagenet`: humans have provided
-millions of image labels, and there have been dozens of models to predict
-labels for unseen images :cite:`szegedy2015going, he2015delving,
+Supervised machine learning relies on human labels to help produce a model that
+predicts labels :cite:`kotsiantis2007supervised`. One example of this workflow
+is with the popular ImageNet dataset :cite:`deng2009imagenet`: humans have
+provided millions of image labels, and there have been dozens of models to
+predict labels for unseen images :cite:`szegedy2015going, he2015delving,
 simonyan2014very`.
 
 The collection of these data is `passive` and does not `adapt` to previous
 responses: previous responses does not effect which queries are presented.
-Adaptive data collection is a process which selects the most useful data as
-quickly as possible to help achieve some goal (e.g., classification accuracy).
+Adaptive data collection is a process which selects the most useful data (in
+some sense) as quickly as possible to help achieve some goal (e.g.,
+classification accuracy) :cite:`holland1992adaptation`.  Adaptive data
+collection is done by an adaptive sampling algorithm that chooses the next
+query to be labeled.
 
-Adaptive data collection naturally requires fewer responses to produce the
-same model as passive data collection: it's adapting to previous responses by
-choosing which query to present next. This is most useful as the problem size
-increases, or when there are many data to label (e.g., different sorting
-algorithms). Adaptive algorithms do not require more responses than passive
-algorithms :cite:`castro2005faster`. A clearer depiction of these gains is
-shown in Figure :ref:`adaptive-gains`.
+Adaptive data collection naturally requires fewer responses to produce the same
+model as passive data collection: it's adapting to previous responses by
+choosing which query to present next. This is most useful when many labels are
+needed, or as problem size increases. Adaptive algorithms do not require more
+responses than passive algorithms :cite:`castro2005faster`. A clearer depiction
+of these gains is shown in Figure :ref:`adaptive-gains`.
 
-Adaptively collecting large-scale datasets is challenging and time-consuming.
-As such, most experiments on adaptive sampling algorithms are simulations that
-use these passively collected datasets. These simulations do not address the
-practical issues faced in crowdsourcing: adaptive algorithm response time,
-human fatigue and differing label quality among humans.
+Applying adaptive data collection to crowdsourcing will reduce the number of
+samples required. The simple judgments humans can provide require many
+responses. A simple example is with using comparisons of two items to sort a
+list of :math:`n` items. An adaptive algorithm require :math:`O(n\log n)`
+comparisons on average while passive algorithms require :math:`O(n^2)`
+comparisons :cite:`hoare1962quicksort`.
 
+Adaptively collecting large-scale datasets is challenging and time-consuming,
+as mentioned below.  As such, most experiments on adaptive sampling algorithms
+are simulations that use these passively collected datasets. These simulations
+do not address the practical issues faced in crowdsourcing: adaptive algorithm
+response time, human fatigue and differing label quality among humans.
+
+The problem that needs to be solved is to allow arbitrary adaptive algorithms
+to collect crowdsourced data.
+
+An additional problem is the use of adaptive algorithms by experimentalists.
 Arguably, some of the deepest insights and greatest innovations have come
-through experimentation. This is only possible if adaptive data
-collection is easily accessible by both
+through experimentation. This is only possible if adaptive data collection is
+easily accessible by both
 
 1. Machine learning researchers, to test and deploy adaptive algorithms
 2. Experimentalists, to use and test adaptive algorithms in real-world applications
@@ -205,20 +219,19 @@ Easy use by both groups will enable feedback between experimentalists and
 machine learning researchers to improve adaptive data collection through
 crowdsourcing.
 
-
 Challenges
 ^^^^^^^^^^
 
 Adaptive data collection is not possible without access to previous responses,
 a fundamental change to data collection. This introduces human feedback: the
-most useful queries are selected by using the existing human labels. If a
-particular query has shown to be of little use, it doesn't make much sense to
-label the same query again.
+most useful queries are selected using previously recorded human labels by some
+adaptive algorithm. If a particular query has shown to be of little use, it
+doesn't make much sense to label the same query again.
 
 Adaptive algorithms use previous responses to ask questions, which means that
 they require
 
-* receiving and storing previous responses.
+* receiving and storing responses, and access to these stored responses.
 * delivering and selecting queries to be labeled.
 * updating some internal model (which selects queries to be presented).
 
@@ -230,15 +243,17 @@ requires a fundamentally different interaction flow as show in Figure
 Crowdsourcing adaptive data collection presents a variety of challenges in
 mathematics, systems and software development. These challenges stem from the
 storage and connection of responses to the adaptive sampling algorithm. Any
-such system needs to process, store and receive crowdsourcing responses, and
-this has served as a barrier to developing such a system.
+such system needs to process, store and receive crowdsourcing responses and
+work crowdsourcing scale, meaning the development and maintenance of such a
+system is involved. This has served as a barrier to developing such a system
+for mathematicians, and lack of knowledge on adaptive methods have hindered
+experimentalists.
 
 .. figure:: figures/data-flow.png
-    :scale: 50%
 
-    The data flow required to adaptively collect crowdsourcing data. The
-    computational backend is needed for processing the response, which may be
-    involved. :label:`data-flow`
+    The data flows required to collect crowdsourcing data both passively and
+    adaptively. The primary difference is adaptive data collection requires
+    using previous responses in some way. :label:`data-flow`
 
 One other system that addresses this challenge is the Microsoft Decision
 Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
@@ -264,18 +279,32 @@ present `next`. NEXT provides
 * easy use and configuration by experimentalists in a wide variety of fields
   and disciplines
 
-Our initial goals have been successfully addressed; mathematicians have
-implemented new algorithms :cite:`jun2016anytime` and UW–Madison psychologists
-have independently used our system. NEXT has been used by the New Yorker and in
-the insurance industry. Various adaptive algorithms have been evaluated in the
-real world, and have shown gains as expected [#]_.
+Our design goals necessitate that NEXT be an end-to-end system that is easily
+accessible. It is a web interface that can be accessed by both experimentalists
+and crowdsourcing participants, and a Python interface for the algorithm
+developer. We explain use by experimentalists and algorithm developers in the
+following sections. A block diagram representation of our system is in Figure
+:ref:`block-diagram`.
 
+In use of NEXT, mathematicians have implemented new algorithms
+:cite:`jun2016anytime` and UW–Madison psychologists have independently used our
+system [#]_. NEXT has been used by the New Yorker and in the insurance
+industry. In at least one case, two adaptive algorithms have been evaluated in
+the real world and one required fewer samples as expected [#]_.
+
+.. [#] See http://concepts.psych.wisc.edu/index.php/next-tutorial/
 .. [#] With contest 559 of The New Yorker Cartoon Caption contest
 
 In our usage, the system remains responsive to participants even after
 receiving millions of responses from thousands of participants, at least with
 fast and simple algorithms. This is illustrated by the problem below, though
 it also illustrates other features.
+
+.. figure:: figures/block-diagram.png
+
+    When and how different users interact with NEXT. Arrows represent some form
+    of communication between different system components.
+    :label:`block-diagram`
 
 Applications of NEXT
 --------------------
@@ -389,8 +418,9 @@ NEXT Architecture
 
 The design goals of NEXT are to provide
 
-* convenient default `applications` (which serve different types of queries;
-  e.g., one application involves the rating of exactly one object)
+* convenient default `applications` (which handle different problem
+  formulations by serving different types of queries; e.g., one application
+  involves the rating of exactly one object)
 * straightforward and modular algorithm implementation
 * live experiment monitoring tools via a dashboard, which must update as
   responses are received and provide some sort of offline access
@@ -402,11 +432,6 @@ use cases seen by both algorithm developers and experimentalists [#]_.
 
 .. [#] Documentation can be found at https://github.com/nextml/NEXT/wiki
 
-.. figure:: figures/block-diagram.png
-
-    When and how different users interact with NEXT. Arrows represent some form
-    of communication between different system components.
-    :label:`block-diagram`
 
 
 Algorithm implementation
@@ -423,27 +448,38 @@ each algorithm:
 3. ``processAnswer``, which processes the human's answer
 4. ``getModel``, which gets the results and is shown on the dashboard
 
+These function handle various objects to displayed in each query (e.g., the
+New Yorker displays one text object in every query for a rating). By default,
+these objects or `target` are abstracted to an integer index (though the other
+information is still accessible). This means that a particular target is
+referred to only by index (e.g., the user is seeing target :math:`i`, not
+``foo.png``).
+
+All these functions are implemented in Python, and we provide easy access other
+tasks needed for adaptive algorithms (database access, background jobs).
+
 Arguments and returns
 """""""""""""""""""""
 
-These algorithms handle various objects to displayed in each query (e.g., the
-New Yorker displays one text object in every query for a rating). By default,
-these objects are abstracted to an integer identifier (though the other
-information is still accessible). That means these algorithms mirror the
-implementation in academic papers: objects are referred to by an integer index
-(i.e., object :math:`i`).
+We treat each algorithm as a black box -- NEXT only needs each algorithm
+function to accept and return specific values. These arguments and return
+values for all algorithm functions are specified exactly in a YAML-based
+schema. Every algorithm has to create a mapping from the specified inputs to
+the specified outputs.
 
-The arguments and return values for all algorithm functions are specified
-exactly in a YAML-based schema. Every algorithm has to create a mapping from
-the specified inputs to the specified outputs. This allows treating an
-algorithm like a black-box.
+NEXT verifies the inputs and output to/from algorithms and can also include a
+description of each parameter. This means that YAML schema is always up to date
+and is self-documenting. Changing this schema means different arguments are
+passed to every algorithm, and we offer flexibility by allowing arguments of
+any type to be passed (via ``type: any``).
 
 This schema depends on ``Algs.yaml`` (e.g., in
 ``apps/[application]/algs/Algs.yaml``) and contains four root level keys for
-each of ``initExp``, ``getQuery``, ``processAnswer``, and ``getModel``. Each one
-of these sections describes the input arguments and returns values by ``args``
-and ``rets`` respectively. These sections are filled with type specifications
-that describe the name and type of the various keyword arguments.
+each of ``initExp``, ``getQuery``, ``processAnswer``, and ``getModel``. Each
+one of these sections describes the input arguments and returns values by
+``args`` and ``rets`` respectively. These sections are filled with type
+specifications that describe the name and type of the various keyword
+arguments.
 
 For example, a particular ``Algs.yaml`` may include
 
@@ -478,11 +514,13 @@ Database access
 We provide a simple database wrapper, as algorithms need to store different
 values (e.g., the number of targets, a list of target scores). We provide a
 variety of atomic database operations through a thin wrappers to PyMongo [#]_
-and Redis [#]_.  Each "collection" in this wrapper mirrors a Python dictionary and
-has several other atomic database operations. We provide
+and Redis [#]_, though we can support arbitrary databases [#]_.  Each "collection"
+in this wrapper mirrors a Python dictionary and has several other atomic
+database operations. We provide
 
 .. [#] http://api.mongodb.com/python/current
 .. [#] https://redis.io/
+.. [#] Which requires implementation of the Collection API found in ``next.apps.Butler``
 
 * ``get``, ``set`` and ``{get, set}_many`` which provide atomic operations to
   store values in the database
@@ -493,20 +531,23 @@ has several other atomic database operations. We provide
 All these operations are atomic, and can be accessed through an interface
 called ``butler`` which contains multiple collections. The primary collection
 used by algorithms (``butler.algorithms``) is specific to each algorithm and
-allows for independent evaulation of different algorithms (though other
+allows for independent evaluation of different algorithms (though other
 collections are available). The arguments to an algorithm function are
 ``butler`` followed by the values in the schema.
 
 Example
 """""""
 
+This example illustrates the interface we have created for the algorithm
+developer. It provides an example of algorithm implementation. After
+implementation, this algorithm can receive crowdsourcing responses through the
+web interface.
+
 .. code-block:: python
 
     import numpy as np
 
     def choose_target(butler):
-        """ butler provides interface to store
-            and save data """
         # Adaptive sampling hidden for brevity
         n = butler.algorithms.get(key='n')
         return np.random.choice(n)
@@ -579,7 +620,7 @@ The ``Algs.yaml`` file for this algorithm would be
         description: The scores for each target ordered
                      by target_id.
         values:
-          description: The score for a particular target
+          description: The mean score for a particular target
           type: num
 
 Experiment dashboards
@@ -605,6 +646,9 @@ delay (time taken for NEXT to respond to request), a measure of system
 responsiveness. An example is shown in Figure :ref:`histograms`. These
 dashboards also include timing information for algorithm functions, a useful
 debugging tool for the algorithm developer.
+
+From the dashboard, we support the download of both experiment results and
+participant response information.
 
 .. figure:: figures/histograms.png
 
@@ -679,11 +723,19 @@ the images involved in each query). We support several different formats for
 this ZIP file so images, text and arbitrary URLs can be supported. If images
 are included in this ZIP file, we upload all images to Amazon S3.
 
+Experimentalist use with crowdsourcing
+""""""""""""""""""""""""""""""""""""""
+
+After experiment launch, a link to the experiment dashboard and query page is
+presented. We recommend distributing this query page link to crowdsourcing
+participants, which typically happens via Mechanical Turk or email.
+
+
 Experiment persistence
 """"""""""""""""""""""
 
-We support saving and restoring experiments on the experiment list at ``/dashboard/experiment_list``.
-This allows experiment persistence even when
+We support saving and restoring experiments on the experiment list at
+``/dashboard/experiment_list``.  This allows experiment persistence even when
 Amazon EC2 machines are terminated.
 
 
@@ -691,12 +743,13 @@ Conclusion
 ----------
 
 At UW–Madison, we have created a system that is connecting useful adaptive
-algorithms with crowdsourced data collection. This system has been widely used
-by experimentalists in a wide variety of disciplines from the social sciences
-to engineering to efficiently collect crowdsourced data; in effect,
-accelerating research by decreasing the time to obtain results. The development
-of this system is modular: sampling algorithms are treated as black boxes, and
-this system is accessible with other interfaces. NEXT provides useful
-experiment monitoring tools that update as responses are received. This system
-has shown to be cost effective in bringing decision making tools to new
+algorithms with crowdsourced data collection. This system has been successfully
+used by experimentalists in a wide variety of disciplines from the social
+sciences to engineering to efficiently collect crowdsourced data; in effect,
+accelerating research by decreasing the time to obtain results.
+
+The development of this system is modular: sampling algorithms are treated as
+black boxes, and this system is accessible with other interfaces. NEXT provides
+useful experiment monitoring tools that update as responses are received. This
+system has shown to be cost effective in bringing decision making tools to new
 applications in both the private and public sectors.
