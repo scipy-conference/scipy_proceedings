@@ -86,22 +86,18 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
 
 .. class:: abstract
 
-    Crowdsourcing has enabled collection of many human judgements. In practice,
-    obtaining useful results requires more responses than can be collected. The
-    number of responses required can be reduced through techniques that `adapt`
-    to received responses via "adaptive sampling" algorithms. However, these
-    algorithms fundamentally present a variety of challenges stemming from
-    their adaptive nature. At UW–Madison we have built NEXT
-    (http://nextml.org), a crowdsourcing data collection tool that can be used
-    with arbitrary adaptive algorithms. Each week, our system is used by The
-    New Yorker to run their Cartoon Caption contest
-    (http://www.newyorker.com/cartoons/vote). In this paper, we will explain
-    what NEXT is, system goals, features and API.
+    Obtaining useful crowdsourcing results often requires more responses than
+    can be collected. Trying to `adapt` to previous crowdsourcing responses
+    with "adaptive" sampling algorithms presents a fundamental challenge. At
+    UW–Madison we have built NEXT (http://nextml.org), a crowdsourcing data
+    collection tool that can be used with arbitrary adaptive algorithms. Each
+    week, our system is used by The New Yorker to run their Cartoon Caption
+    contest (http://www.newyorker.com/cartoons/vote). In this paper, we will
+    explain what NEXT is, system goals, features and API.
 
 .. class:: keywords
 
    crowdsourcing, adaptive sampling, system
-
 
 
 Introduction
