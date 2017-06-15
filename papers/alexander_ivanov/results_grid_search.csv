@@ -1,4 +1,4 @@
-,grid_roc_auc_mean,grid_roc_auc_std,grid_roc_auc_best_params
+a,N,grid_roc_auc_mean,grid_roc_auc_std,grid_roc_auc_best_params
 0,0.914,0.075,{'penalty': 'l1'}
 1,0.924,0.051,{'kernel': 'sigmoid'}
 2,0.904,0.084,"{'l1_ratio': 0.1, 'penalty': 'elasticnet'}"

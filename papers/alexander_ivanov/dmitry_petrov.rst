@@ -1,14 +1,14 @@
+:author: Alexander Ivanov
+:email: alexander.radievich@gmail.com
+:institution: The Institute for Information Transmission Problems, Moscow, Russia
+:institution: Skoltech Institute of Science and Technology, Moscow, Russia
+:equal-contributor:
+
 :author: Dmitry Petrov
 :email: to.dmitry.petrov@gmail.com
 :institution: Imaging Genetics Center, University of Southern California, Los Angeles, USA
 :institution: The Institute for Information Transmission Problems, Moscow, Russia
 :corresponding:
-:equal-contributor:
-
-:author: Alexander Ivanov
-:email: alexander.radievich@gmail.com
-:institution: The Institute for Information Transmission Problems, Moscow, Russia
-:institution: Skoltech Institute of Science and Technology, Moscow, Russia
 :equal-contributor:
 
 :author: Daniel Moyer
@@ -120,17 +120,29 @@ Main features of Reskit
   local graph metric calculations. These were implemented using DataTransformer
   and in some cases the BCTpy (the Brain Connectivity Toolbox python version [bct]_)
 
-.. csv-table:: A plan of the experiment we set in our example.
-  :file: papers/dmitry_petrov/plan_table.csv
+.. csv-table:: A plan of the experiment we set for our example on the scikit-learn generated classification task with fixed `random_state`.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/plan_table.csv
   :widths: 1 10 15 15
+
+Dependencies
+------------
+
+- Python 3.4 and higher.
+- Scikit-learn [scikit]_ 0.18.1 and its dependencies. Our library was heavily
+  inspired by scikit-learn Pipeline class and overall architecture of this
+  library. One can think of Reskit as an extension of  scikit-learn pipelines.
+- Pandas [pandas]_.
+- SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine
+  learning on networks.
 
 How Reskit works
 ----------------
 
-Let's consider an example of Reskit usage in a classification problem. Let's
-say we want to try two scalers, two dimension reduction techniques and three
-classifiers for our classification problem. We want to make grid search of
-models parameters on stratified 5-fold cross-validation and validate found best
+Let's consider an example of Reskit usage in a classification problem.  We want
+to try two scalers, two dimension reduction techniques and three classifiers
+for our classification problem. It's required to make grid search of models
+parameters on stratified 5-fold cross-validation and validate found best
 parameters on another stratified 5-fold cross-validation. Also, we don't want
 to use ``MinMaxScaler`` for ``KernelPCA`` in our pipelines. Using Reskit for
 this task the code has the clear structure and looks as follows:
@@ -151,7 +163,6 @@ this task the code has the clear structure and looks as follows:
 
     from reskit.core import Pipeliner
 
-.. code-block:: python
 
     # Setting variants for steps by lists of tuples
     scalers = [('standard', StandardScaler()),
@@ -194,13 +205,19 @@ this task the code has the clear structure and looks as follows:
                      param_grid=param_grid, 
                      banned_combos=banned_combos)
 
-.. csv-table:: Grid Search results in our example in 'results' variable.
-  :file: papers/dmitry_petrov/results_grid_search.csv
-  :widths: 1 20 17 45
+.. csv-table:: Grid Search results in 'results' variable for our example on the scikit-learn generated classification task with fixed `random_state`.
+  :file: papers/alexander_ivanov/results_grid_search.csv
+  :header-rows: 1
+  :widths: 1 250 200 512 1
+
+.. figure:: results.png
+
+    ``results`` consist of three tables: 1, 2 and 3.
 
 We specified needed parameters, ``Pipeliner`` combined possible steps to
 different pipelines and wrote it to self ``plan_table`` parameter as `pandas
-DataFrame`. You can view it (`Table 1`) to check further calculation plan.
+DataFrame`. You can view it (`Table 1`) to check further calculation plan or
+fix it.
 
 To start calculations run ``get_results`` method of ``Pipeliner``:
 
@@ -209,11 +226,11 @@ To start calculations run ``get_results`` method of ``Pipeliner``:
     X, y = make_classification(random_state=0)
     results = pipe.get_results(X, y, scoring=scoring)
 
-Thus, in ``results`` variable we have grid search (`Table 2`) and validation
-(`Table 3`) results in a table. This table includes `Tables 1, 2 and 3`.  
+Thus, in ``results`` variable we have experiment plan (`Table 1`), grid search
+(`Table 2`) and validation (`Table 3`) results (`Fig. 1`).
 
-For curating pipelines we used ``Pipeliner`` class. The following section describes
-this class in details.
+For curating pipelines we used ``Pipeliner`` class. The following section
+describes this class in details.
 
 .. figure:: figure1.png
 
@@ -248,11 +265,11 @@ of transformers, switching transformers on each step.
 cross-validation splitting strategies.
 
 ``param_grid`` is a dictionary with classifiers names (string) as keys. The keys are
-possible classifiers names in steps. Each key corresponds to grid search
-parameters.
+possible classifiers names in steps. Each value corresponds to grid search
+parameters for usual scikit-learn ``GridSearchCV`` object.
 
-``banned_combos`` is a list of `(transformer_name_1, transformer_name_2)` tuples.
-Each row with both transformers will be removed from plan_table.
+``banned_combos`` is a list of `(transformer_name_1, ..., transformer_name_n)` tuples.
+Each row with all these transformers will be removed from plan_table.
 
 The main method of ``Pipeliner`` that starts all calculations is ``get_results``.
 After we ran calculations through this method ``Pipeliner`` passes through
@@ -262,9 +279,9 @@ Firstly, ``Pipeliner`` makes transformations according to specified
 ``caching_steps``.  If ``caching_steps`` isn't set , it just returns ``X`` and
 ``y``, otherwise it makes all transformations with caching temporary results in
 ``_cached_X`` parameter of ``Pipeliner``. The process of caching temporary
-results may be considered on a tree example (look at `Fig.  1`), where the same
+results may be considered on a tree example ( `Fig. 2`), where the same
 parts of previous and current branches won't be recalculated (red colour), but
-different --- will be recalculated (blue and green colour).
+different - will be recalculated (blue and green colour).
 
 Secondly, ``Pipeliner`` creates usual `scikit-learn` pipeline and makes grid
 search to find best parameters. The mean and standard deviation with found best
@@ -273,10 +290,11 @@ results (`Table 2`). Best parameters also are written to the table of results.
 
 Thirdly, ``Pipeliner`` evaluates found in previous step best parameters on
 another ``eval_cv`` cross-validation. It writes mean, standard deviation and
-scores of quality metric on ``eval_cv`` to the table of results (`Table 3`).
+scores of a quality metric on ``eval_cv`` to the table of results (`Table 3`).
 
-.. csv-table:: Validation results in 'results' variable.
-  :file: papers/dmitry_petrov/results_evaluation.csv
+.. csv-table:: Validation results in 'results' variable for our example on the scikit-learn generated classification task with fixed `random_state`.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/results_evaluation.csv
   :widths: 1 18 18 30
 
 DataTransformer class
@@ -294,6 +312,7 @@ Here is example of normalizing by mean of three matrices.
 
     from reskit.normalizations import mean_norm
     from reskit.core import DataTransformer
+
 
     matrix_0 = np.random.rand(5, 5)
     matrix_1 = np.random.rand(5, 5)
@@ -318,68 +337,157 @@ Here is example of normalizing by mean of three matrices.
     result = DataTransformer(
                 func=mean_norm_trans).fit_transform(X)
 
-    prin((output == result).all())
-
-And the output will be:
+    print((output == result).all())
 
 .. code-block:: bash
 
-    True
+    $ True
 
 With the support of ``DataTransformer``, you can implement a needed to you
-transformation and use it general ``Pipeliner`` workflow, that give more
-flexibility in calculation methods.
+transformation and use it in ``Pipeliner`` workflow.
 
 MatrixTransformer class
 -----------------------
 
 Particular case of ``DataTransformer`` is a ``MatrixTransformer``.
 
-Here is the same example, but for ``MatrixTransformer`` usage. Input ``X`` for transformation
-with ``MatrixTransformer`` should be a 3 dimensional array (array of matrices). So,
-``MatrixTransformer`` just transforms each matrix in ``X``.
+Here is the same example, but for ``MatrixTransformer`` usage. Input ``X`` for
+transformation with ``MatrixTransformer`` should be a 3 dimensional array
+(array of matrices). ``MatrixTransformer`` just transforms each matrix in
+``X``.
 
 .. code-block:: python
 
     from reskit.core import DataTransformer
+
 
     result = MatrixTransformer(
                 func=mean_norm).fit_transform(X)
 
     print((output == result).all())
 
-Answer:
-
 .. code-block:: bash
 
-    True
+    $ True
 
 Brain Connectivity Toolbox functions wrapper
 --------------------------------------------
 
-We provide some basic graph metrics in Reskit. To access most state of the art
-graph metrics you can use Brain Connectivity Toolbox [bct]_. You should install it via
-pip in terminal:
+.. csv-table:: A plan of the experiment we set for our example on the UCLA dataset.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/ucla_plan.csv
+  :widths: 1 10 15 15
+
+Brain Connectivity Toolbox [bct]_ is a popular tool in brain network research,
+so many researchers familiar with its functions.  It provides you measures
+that describe different structural and functional properties of brain networks.
+
+We provide you only some basic graph metrics in Reskit, but BCT let you access
+to most state of the art graph metrics that well known in this field. You can
+install it via pip in terminal:
 
 .. code-block:: bash
 
-    pip3 install bctpy
+    $ pip3 install bctpy
 
-With support of ``bctpy`` we can simply calculate `Pagerank` for previous
-matrices ``X``.
+With the support of ``bctpy`` we can, for instance, simply calculate
+`Pagerank`. Here we use UCLA autism dataset publicly available at the UCLA
+Multimodal Connectivity Database.  Data includes connectivity matrices of 51
+high-functioning ASD (Autism Spectrum Disorders) subjects and 43 TD (Typically
+Developing) subjects.
 
 .. code-block:: python
 
     from bct.algorithms import centrality
+    from reskit.datasets import load_UCLA_data
 
+
+    X, y = load_UCLA_data()
+    X = X['matrices']
 
     pagerank = centrality.pagerank_centrality
     featured_X = MatrixTransformer(
             d=0.85,
             func=pagerank).fit_transform(X)
 
-So, using ``Pipeliner`` with `Brain Connectivity Toolbox` provides you
-convenient functionality for your research.
+
+Here is an example of using ``Pipeliner`` with BCTpy on UCLA dataset:
+
+.. csv-table:: Grid Search results in 'results' variable for the UCLA dataset.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/ucla_grid_search.csv
+  :widths: 1 250 200 512
+
+.. code-block:: python
+
+    from sklearn.svm import SVC
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.linear_model import SGDClassifier
+
+    from sklearn.model_selection import StratifiedKFold
+
+    from reskit.core import Pipeliner
+    from reskit.core import MatrixTransformer
+    from reskit.datasets import load_UCLA_data
+
+    import bct.algorithms as bct
+
+
+    X, y = load_UCLA_data()
+    X = X['matrices']
+
+    pagerank = bct.centrality.pagerank_centrality
+    degrees = bct.degree.degrees_und
+
+    # Feature extraction step variants (1st step)
+    featurizers = [('pagerank', MatrixTransformer(
+                                    d=0.85,
+                                    func=pagerank)),
+                   ('degrees', MatrixTransformer(
+                                    func=degrees))]
+
+    # Models (2rd step)
+    classifiers = [('LR', LogisticRegression()),
+                   ('SVC', SVC()),
+                   ('SGD', SGDClassifier())]
+
+    # Reskit needs to define steps in this manner
+    steps = [('featurizer', featurizers),
+             ('classifier', classifiers)]
+
+    # Grid search parameters for our models
+    param_grid = {'LR': {'penalty': ['l1', 'l2']},
+                  'SVC': {'kernel': ['linear', 'poly', 
+                                     'rbf', 'sigmoid']},
+                  'SGD': {'penalty': ['elasticnet'],
+                          'l1_ratio': [0.1, 0.2, 0.3]}}
+
+    # Quality metric that we want to optimize
+    scoring='roc_auc'
+
+    # Setting cross-validations
+    grid_cv = StratifiedKFold(n_splits=5, 
+                              shuffle=True, 
+                              random_state=0)
+    eval_cv = StratifiedKFold(n_splits=5, 
+                              shuffle=True, 
+                              random_state=1)
+
+    pipe = Pipeliner(steps=steps, 
+                     grid_cv=grid_cv, 
+                     eval_cv=eval_cv, 
+                     param_grid=param_grid)
+    results = pipe.get_results(X, y, 
+                               scoring=scoring, 
+                               caching_steps=['featurizer'])
+
+``results`` variable consist of Table 4, 5 and 6.
+
+
+.. csv-table:: Validation results in 'results' variable for the UCLA dataset.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/ucla_evaluation.csv
+  :widths: 1 20 17 30
 
 Applications
 ------------
@@ -389,53 +497,154 @@ have successfully applied it in our own research several times [PRNI2016]_,
 [ISBI2017]_. Code from two of these projects can be found at [PRNI_code]_ and
 [ISBI_code]_.
 
-In PRNI work [PRNI2016]_ we proposed a combination of network normalizations and Reskit
-helped us to try these normalizations and figure out how these normalizations
-boost network classification.
+In PRNI work [PRNI2016]_ we proposed a combination of network normalizations
+and Reskit helped us to try these normalizations and to figure out how these
+normalizations boost network classification. Firstly, we wrote all code in
+usual scripts with saving temporary calculations on a disk. So, we decided to
+build a library that automates this stuff and called it Reskit. The rewritten
+version have similar with previous our UCLA example code structure, but with a
+bigger amount of normalizations and features.
 
-In next our research [ISBI2017]_ we studied the extent to which brain networks and derivative
-measures are unique to individual changes within human brains. To do so, we
-classify brain networks pairs as either belonging to the same individual or
-not. Here, we used Reskit for pairwise classification task and we reach it with
-ease through using ``DataTransformer`` with implemented especially for this
-task functions.
+In next our paper [ISBI2017]_ we studied the extent to which brain networks
+and derivative measures are unique to individual changes within human brains.
+To do so, we classified brain networks pairs as either belonging to the same
+individual or not. Here, we used Reskit for pairwise classification task and we
+reached it with ease through using ``DataTransformer`` with implemented
+especially for this task functions. 
 
-In work accepted to MICCAI 2017 conference, we compared 35 brain network
-building pipelines for figuring out how pre-processing steps affect network
-reliability and reproducibility. To do so, we classify network pairs as either
-belonging to the same individual or not.  Also, we calculate parametric
-reliability measure, Intraclass Correlation Coefficient (ICC). Thus, except
-pairwise classification, we also calculated ICC for each pipeline. To make
-these calculations we used Reskit caching feature and clean code structure,
-that allows us to reuse almost the same code with little changes a lot of
-times. As a result, we achieved method that's useful in identifying overall
-trends in brain network usefulness.
+To implement specific `Transformer` we need next template:
 
-We believe the library is general enough to be useful in a variety of data
-science contexts, and we hope that other researchers will find this library
-useful in their studies.
+.. code-block:: python
 
-Dependencies
-------------
+    from sklearn.base import TransformerMixin
+    from sklearn.base import BaseEstimator
 
-- Python 3.4 and higher.
-- Scikit-learn [scikit]_ 0.18.1 and its dependencies. Our library was heavily
-  inspired by scikit-learn Pipeline class and overall architecture of this
-  library. One can think of Reskit as an extension of  scikit-learn pipelines.
-- Pandas [pandas]_.
-- SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine
-  learning on networks.
+
+    class MyTransformer(BaseEstimator, TransformerMixin):
+
+        def __init__(self):
+            #
+            # Write here need parameters
+            # Otherwise write `pass`
+            #
+
+        def fit(self, X, y=None, **fit_params):
+            #
+            # Write here the code if transformer need
+            # to learn anything from data.
+            # Usually nothing should be here,
+            # just return self.
+            #
+            return self
+
+        def transform(self, X):
+            #
+            # Write here your transformation
+            #
+            return X
+
+Here is an element of code for normalization transformer:
+
+.. code-block:: python
+
+    class MatrixNormalizer(BaseEstimator, 
+                           TransformerMixin):
+
+        def __init__(self, norm):
+            self.norm    = norm
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            X_transformed = {}
+
+            for key in X['matrices'].keys():
+                X_transformed[key] = self.norm(
+                                        X['matrices'][key])
+
+            return {'pairs_data': X['pairs_data'],
+                    'matrices': X_transformed}
+
+Input ``X`` is a dictionary in format:
+
+.. code-block:: python
+
+    {'pairs_data': pairs_data,
+     'matrices': matrices},
+
+where ``pairs_data`` has a format like in `Table 7` and represents indices for
+pairs of connectivity matrices. It's stored for generating pairwise features in
+next transformer. In ``matrices`` stored a dictionary of brain connectivity
+matrices that you can access by the same ID as in `Table 7`. Next, you just go
+through each matrix and apply defined normalization to it. In the same manner,
+we implemented the rest of transformers.
+
+In MICCAI work [MICCAI2017]_, we compared 35 brain network building pipelines,
+for figuring out how pre-processing steps affect network reliability and
+reproducibility. In addition to 35 building pipelines, there was 4 various
+normalizations and 9 graph metrics (in total 36 pipelines of features
+extraction for each building pipeline). Again, we classified network pairs as
+either belonging to the same individual or not. As an additional validation of
+our pipeline, we perform gender classification using the same combinations of
+building brain networks and Reskit helped us to make it too fast to include it
+to paper. 
+
+Each building pipeline was computed by special pre-processing neuroimaging
+tools and stored to disk. After, we picked up appropriate brain network from
+the disk and applied normalization, feature extraction and classification steps
+to it. For loading needed brain network we wrote a loader that takes parameters
+such as dataset path, tractography, reconstruction model etc. and gives needed
+data from created path to files according to taken parameters. Next, we applied
+normalizations, feature extraction and classified brain network pairs at the
+end of a pipeline. Of course, it would be more naturally to implement own
+transformers and just use them in usual ``Pipeliner`` workflow. To make
+inconvenient usage of such transformers is a challenge that we going to solve.
+
+To compute it faster we made all calculations on a cluster. There were
+different input parameters for our script (dataset path, tractography,
+reconstraction model etc.) and we created a grid of all possible combinations
+for these parameters. We ran each steps combination on a separate cluster node.
+``Pipeliner`` workflow can be easily distributed on different nodes by
+separating ``plan_table`` on equal parts according to a number of cluster
+nodes. And this is another task we are planning to do in the feature.
+
+Our another goal was to calculate parametric reliability measure, Intraclass
+Correlation Coefficient (ICC). Thus, except pairwise classification, we also
+calculated ICC for each pipeline. To make these calculations we used Reskit
+caching feature and clean code structure, that allowed us to reuse almost the
+same code with little changes a lot of times.  To make these calculations, we
+rewrote Reskit core for only ICC calculation without grid search and
+evaluation. This is a common use case and this isn't included in stable release
+now. We are going to implement this functionality in near feature.
+
+As a result, we achieved the method that's useful in identifying overall trends
+in brain network usefulness.
+
+.. csv-table:: A table of pairwise indeces of dataset matrices.
+  :header-rows: 1
+  :file: papers/alexander_ivanov/adni_pairs_data_with_dx_group_without_isolated_nodes.csv
+  :widths: 12, 14, 13, 14, 7
+
 
 Future plans
 ------------
 
+We believe the library is general enough to be useful in a variety of data
+science contexts, and we hope that other researchers will find this library
+useful in their studies. And as future plans we choose next goals:
+
+- Calculation of metrics without applying models and the end (grid search and
+  evaluation steps). More detailed motivation was described above in
+  application section.
+
 - Ability to merge multiple experiment plans. There are cases when we need to
   make calculations for not only one dataset. And pipelines steps for each
-  dataset can vary. So, this feature provides more accurate management of
+  dataset can vary. This feature provides more accurate management of
   experiments.
 
 - Distributed computing for calculation on computing clusters. Including this
-  feature will speed up calculations and these, of course, very important for
+  feature will speed up calculations and these, of course, important for
   researchers.
 
 - Ability to calculate different quality metrics after one optimization. Now in
@@ -455,6 +664,10 @@ Future plans
 
 - Support for Python 2.7. We use Python 3, but if Python 2 will be on demand,
   we will write Python 2 versions too.
+
+- Backwards compatibility. We rewrote Reskit a few times and some code isn't
+  compatible with our latest version. We are going to fix it and keep backward
+  compatibility in feature.
 
 Conclusion
 ----------
@@ -489,6 +702,12 @@ References
 
 .. [ISBI2017]  https://arxiv.org/abs/1701.07847
 
+.. [MICCAI2017] link to paper
+
 .. [PRNI_code] https://github.com/neuro-ml/PRNI2016
 
 .. [ISBI_code] https://github.com/neuro-ml/structural-connectome-validation-pairwise
+
+.. [MICCAI_code]  link to code
+
+.. [UCLA] Brown, Jesse A., et al. The UCLA multimodal connectivity database: a web-based platform for brain connectivity matrix sharing and analysis., Frontiers in neuroinformatics 6 (2012): 28.

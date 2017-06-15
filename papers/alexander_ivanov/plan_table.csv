@@ -1,4 +1,4 @@
-,scaler,dim_reduction,classifier
+N,scaler,dim_reduction,classifier
 0,standard,pca,LR
 1,standard,pca,SVC
 2,standard,pca,SGD

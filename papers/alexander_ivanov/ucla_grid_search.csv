@@ -1,0 +1,7 @@
+N,grid_roc_auc_mean,grid_roc_auc_std,grid_roc_auc_best_params
+0,0.584,0.094,{'penalty': 'l2'}
+1,0.605,0.145,{'kernel': 'linear'}
+2,0.618,0.145,"{'l1_ratio': 0.1, 'penalty': 'elasticnet'}"
+3,0.623,0.097,{'penalty': 'l1'}
+4,0.573,0.041,{'kernel': 'poly'}
+5,0.577,0.090,"{'l1_ratio': 0.2, 'penalty': 'elasticnet'}"
