@@ -92,8 +92,8 @@ Faster Machine Learning with Scikit-learn
 
 Numba vectorization
 -------------------
-We worked with Continuum Analytics to make Numba to vectorize math code with transcedential functions using Intel SVML library.
 
+.. include:: papers/oleksandr_pavlyk/numba/svml.rst
 
 Auto-parallelization for Numba
 ------------------------------
