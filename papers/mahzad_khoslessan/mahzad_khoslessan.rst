@@ -429,38 +429,28 @@ Examining Scheduler Throughput
 
 An experiment were executed with Dask Schedulers (Multithreaded, Multiprocessing and Distributed) on Stampede.
 In each run a total of 100000 zero workload tasks were executed.
-Figure :ref:`daskThroughputvsScheduler` shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
+Figure :ref:`daskThroughput` A shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
 Each value is the mean throughput value of several runs for each Scheduler. 
 
-.. figure:: figs/daskThroughputvsScheduler.pdf
-   
-   Dask Throughput on a single node vs Scheduler type.
-   X axis is time and Y axis is the number of tasks that were executed in a second.
-   :label:`daskThroughputvsScheduler`
+.. figure:: figs/panels/dask-throughput.pdf
+
+   Benchmark of Dask scheduler throughput on TACC *Stampede*.
+   Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
+   The scheduler had to lauch 100,000 tasks and the run ended when all tasks had been run.
+   **A** single node with different schedulers; multithreading and multiprocessing are almost indistinguishable from each other.
+   **B** multiple nodes with the distributed scheduler and 1 worker process per node.
+   **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
+   :label:`daskThroughput`
 
 Our understanding is that the most efficient Scheduler is the Distributed Scheduler, especially when there is one worker process for each available core.
-Also, the Distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100000 tasks.
+Also, the Distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100,000 tasks.
 The Multiprocessing and Multithreading Schedulers have similar behavior again, but need significantly more time to finish compared to the Distributed.
 
-Figure :ref:`daskThroughputvsNodes` shows the Distributed scheduler's throughput over time when the number of Nodes increases.
+Figure :ref:`daskThroughput` B shows the Distributed scheduler's throughput over time when the number of Nodes increases.
 Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
-
-.. figure:: figs/daskThroughputvsNodes.pdf
-
-   Dask Throughput vs Number of Nodes.
-   X axis is time and Y axis is the number of tasks that were executed in a second.
-   :label:`daskThroughputvsNodes`
-
 By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
-Figure :ref:`daskThroughputvsNodes16proc` shows the same execution with the Dask Cluster being setup to have one worker process per core.
-
-.. figure:: figs/daskThroughputvsNodes16proc.pdf
-
-   Dask Throughput vs Number of Nodes.
-   X axis is time and Y axis is the number of tasks that were executed in a second
-   :label:`daskThroughputvsNodes16proc`
-
-In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughputvsNodes`, thus it is not clear what is the effect of the extra nodes.
+Figure :ref:`daskThroughput` C shows the same execution with the Dask Cluster being setup to have one worker process per core.
+In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughput` B, thus it is not clear what is the effect of the extra nodes.
 Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
 
  
