@@ -403,6 +403,12 @@ Striping is also activated and is set to three which is also equal to number of 
 Figures :ref:`speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (600X).
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
 However, based on the timing plots shown in Figure :ref:`timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.
+Figure :ref:`Dask-time-stacked-comparison` shows time comparison on different parts of the calculations. 
+Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
+RMSD calculation is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
+As can be seen in Figure :ref:`Dask-time-stacked-comparison`, the overhead in the calculations is small up to 24 cores (Single node).
+The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases from 1 to 72.
+However, when extending to multiple nodes the time due to overhead and communication increases which affects the overall performance.
 The results from scheduler plugin is described in the following section.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
@@ -414,7 +420,6 @@ The results from scheduler plugin is described in the following section.
    :math:`N` number of blocks is three times the number of processes :math:`N = 3*N_\text{cores}`
    :label:`speedup-IO-600x-oversubscribing`
 
-
 .. figure:: figs/panels/timing-XTC-600x-oversubscribing.pdf
 
    Timings for various parts of the computation for the 600x XTC trajectory on HPC resources using Dask distributed. The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, and our local machines, all using Lustre with stripe count of three as the parallel file system and *local* workstations with NFS).
@@ -423,6 +428,16 @@ The results from scheduler plugin is described in the following section.
    **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
    :label:`timing-600x-oversubscribing`
 
+.. figure:: figs/Dask-time_stacked_comparison.pdf
+
+   Time comparison on different parts of the calculations obtained using Dask distributed with strip count of three.
+   In this aggregate view, the time spent on different
+   parts of the calculation are combined for different number of processes tested.
+   The bars are subdivided into the contributions of each time spent on different parts.
+   RMSD calculation is the time spent on RMSD task, and communication time and overhead is the time spent for gathering RMSD arrays calculated by each processor rank.
+   and the overhead in the calculations that might had been caused due to different reasons.
+   :math:`N` number of blocks is three times the number of processes :math:`N = 3*N_\text{cores}` and the results are for SDSC *Comet*.
+   Reported values are the mean values across 5 repeats. :label:`Dask-time-stacked-comparison`
 
 Examining Scheduler Throughput
 ------------------------------
@@ -508,7 +523,8 @@ Lustre striping improves I/O time; however, the job computation is still delayed
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using an MPI-based implementation, which makes use of mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel library are as a result of scheduler overhead or any other factor than scheduler.
 The comparison is performed on XTC 600x using SDSC Comet. 
-Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations. Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
+Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations.
+Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
 Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
 Total time is the summation of communication time, computation time and the overhead in the calculations.
 As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculations is small up to 24 cores (Single node).
