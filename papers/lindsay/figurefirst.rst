@@ -35,7 +35,12 @@ Visualization has long been a critical element in the iterative process of scien
 
 Although new web-enabled media formats are emerging to provide alternative mechanisms for scientific communication, the static printed publication remains the centerpiece of scientific discourse. A well designed sequence of data-rich figures makes it easy for other researchers across disciplines to follow the narrative, assess the quality of the data, criticize the work, and remember the conclusions. In fact, the importance of the narrative in organizing and structuring the logic of research has led some to propose that writing the manuscript should be a more integral part of the original design and execution of experiments [Whitesides04]_. According to this view, the researcher should create a text outline, as well as a visual story-board, long before all of the data have been collected and analyzed. As new results come to light, the story-board is updated with new data and new experiments.  
 
-.. figure:: workflow.png
+.. figure:: figure1/comparison.png
+   :scale: 100%
+   :align: center
+   :figclass: w
+
+.. figure:: figure2/workflow.png
    :scale: 100%
    :align: center
    :figclass: w
@@ -87,7 +92,7 @@ Groups And Templates
 
 Because the :code:`figurefirst:name` attribute of the tagged :code:`<rect>` will be used as the key in the layout.axes dictionary in Python, each panel in this example must be given a unique name. Generating these names can be a cumbersome requirement because scientific data often have a nested or hierarchical structure. Moreover, we found that when generating the code to plot a figure, it is useful if the organization of the layout document refects the organization of the underlying data. Thus, we have provided two mechanisms to allow a hierarchical structure in the labels associated with a layout: groups and templates. Though the interfaces for working with these objects differ, they both generate a nested structure in the :code:`layout.axes` dictionary. 
 
-.. figure:: simple_dialogue_xml_editor.png
+.. figure:: figure3/simple_dialogue_xml_editor.png
    :scale: 80%
    :align: center
 
@@ -118,7 +123,7 @@ To illustrate the template feature, consider the task of making a more complex f
 
     layout.write_svg(output_filename)
 
-.. figure:: example_templates.png
+.. figure:: figure4/example_templates.png
    :scale: 100%
    :align: center
    :figclass: w
@@ -135,7 +140,7 @@ The axis methods feature allows the user to include Python code in the layout do
 
 In keeping with the notion that vector editing software is better suited for designing the visual landscape of a figure than code, we created the :code:`<figurefirst:pathspec>` or :code:`<figurefirst:patchspec>` tag to create a way for users to generate a pallet of line and patch styles within the layout document and pass these to plotting functions in Python. Using this tool a user can explore different stroke widths, colors and transparencies in inkscape and then quickly pass these styles  as keyword arguments to Matplotlib plotting functions. 
 
-.. figure:: additional_features.png
+.. figure:: figure5/additional_features.png
    :scale: 100%
    :align: center
    :figclass: w
