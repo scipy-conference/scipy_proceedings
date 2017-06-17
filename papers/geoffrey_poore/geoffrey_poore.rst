@@ -789,10 +789,10 @@ letters to integers (valid BespON):
 .. raw:: latex
 
    \begin{Verbatim}[commandchars=\\\{\}, codes={\catcode`$=3\catcode`^=7\catcode`_=8}]
-   $\aleph$ =
-     1
-   $\beth$ =
-     2
+   "$\aleph$" =
+       1
+   "$\beth$" =
+       2
    \end{Verbatim}
 
 There is no ambiguity in that case.  Now consider the same data, but
@@ -800,7 +800,7 @@ represented with an inline dict (still valid BespON):
 
 ::
 
-   {'\u05D0' = 1, '\u05D1' = 2}
+   {"\u05D0" = 1, "\u05D1" = 2}
 
 There is still no ambiguity, but the meaning is less clear due to the Unicode
 escapes.  If the literal letters are substituted, this is the rendering in
@@ -809,21 +809,21 @@ most text editors (now invalid BespON):
 .. raw:: latex
 
    \begin{Verbatim}[commandchars=\\\{\}, codes={\catcode`$=3\catcode`^=7\catcode`_=8}]
-   \{2 = $\beth$ ,1 = $\aleph$\}
+   \{"2 = "$\beth$" ,1 = "$\aleph$\}
    \end{Verbatim}
-   %This is the literal Unicode sequence:  {א = 1, ב = 2}
+   %This is the literal Unicode sequence:  {"א" = 1, "ב" = 2}
 
-Because the integers, comma, and equals signs have no strong right-to-left
-directionality, everything between the curly braces is visually layed out from
-right to left.  When the data is loaded, though, it will produce the correct
-mapping, since loading depends on the logical order of the code points rather
-than their visual rendering.  By default, BespON prevents the potential for
-confusion as a result of this logical-visual mismatch, by prohibiting data
-objects or comments from immediately following an inline or unquoted string
-with one or more right-to-left code points in its last line.  For the same
-reason, code points with the property ``Bidi_Control`` [UAX9]_ are prohibited
-from appearing literally in BespON data; they can only be produced via
-backslash-escapes.
+Because the quotation marks, integers, comma, and equals signs have no strong
+left-to-right directionality, everything after the first quotation mark until
+the final curly brace is visually layed out from right to left.  When the data
+is loaded, though, it will produce the correct mapping, since loading depends
+on the logical order of the code points rather than their visual rendering.
+By default, BespON prevents the potential for confusion as a result of this
+logical-visual mismatch, by prohibiting data objects or comments from
+immediately following an inline or unquoted string with one or more
+right-to-left code points in its last line.  For the same reason, code points
+with the property ``Bidi_Control`` [UAX9]_ are prohibited from appearing
+literally in BespON data; they can only be produced via backslash-escapes.
 
 
 
