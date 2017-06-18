@@ -42,7 +42,7 @@ Let's see how it works:
     
     # IR generated
 
-.. code-block:: Assembly
+.. code-block:: Asm
     
     # generated code
 
