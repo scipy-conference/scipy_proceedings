@@ -33,7 +33,7 @@ Reskit: a library for creating and curating reproducible pipelines for scientifi
 
 In this work we introduce Reskit (researcher’s kit), a library for creating and
 curating reproducible pipelines for scientific machine learning. A natural
-extension of the Scikit-learn Pipelines to general classes of pipelines, Reskit
+extension of the scikit-learn Pipelines to general classes of pipelines, Reskit
 allows for the efficient and transparent optimization of each pipeline step.
 Its main features include data caching, compatibility with most of the
 scikit-learn objects, optimization constraints such as forbidden combinations,
@@ -50,7 +50,7 @@ Introduction
 
 A central task in machine learning and data science is the comparison and
 selection of models. The evaluation of a single model is very simple, and can
-be carried out in a reproducible fashion using the standard scikit pipeline.
+be carried out in a reproducible fashion using the standard scikit-learn pipeline.
 Organizing the evaluation of a large number of models is tricky; while there
 are no real theory problems present, the logistics and coordination can be
 tedious. Evaluating a continuously growing zoo of models is thus an even more
@@ -88,9 +88,9 @@ Main features of Reskit
 
 - En masse experiments with combinatorial expansion of step options, running
   each option and returning results in a convenient format for human
-  consumption (Pandas dataframe).
+  consumption (pandas dataframe).
 
-- Step caching. Standard SciKit-learn pipelines cannot cache temporary steps.
+- Step caching. Standard scikit-learn pipelines cannot cache temporary steps.
   Reskit includes the option to save fixed steps, so in next pipeline
   specified steps won’t be recalculated.
 
@@ -129,10 +129,10 @@ Dependencies
 ------------
 
 - Python 3.4 and higher.
-- Scikit-learn [scikit]_ 0.18.1 and its dependencies. Our library was heavily
+- scikit-learn [scikit]_ 0.18.1 and its dependencies. Our library was heavily
   inspired by scikit-learn Pipeline class and overall architecture of this
   library. One can think of Reskit as an extension of  scikit-learn pipelines.
-- Pandas [pandas]_.
+- pandas [pandas]_.
 - SciPy [scipy]_, Python-Igraph [igraph]_ and NetworkX [networkx]_ for machine
   learning on networks.
 
@@ -182,7 +182,7 @@ this task the code has the clear structure and looks as follows:
 
     # Grid search parameters for our models
     param_grid = {'LR': {'penalty': ['l1', 'l2']},
-                  'SVC': {'kernel': ['linear', 'poly', 
+                  'SVC': {'kernel': ['linear', 'poly',
                                      'rbf', 'sigmoid']},
                   'SGD': {'penalty': ['elasticnet'],
                           'l1_ratio': [0.1, 0.2, 0.3]}}
@@ -191,18 +191,18 @@ this task the code has the clear structure and looks as follows:
     scoring='roc_auc'
 
     # Setting cross-validations
-    grid_cv = StratifiedKFold(n_splits=5, 
-                              shuffle=True, 
+    grid_cv = StratifiedKFold(n_splits=5,
+                              shuffle=True,
                               random_state=0)
-    eval_cv = StratifiedKFold(n_splits=5, 
-                              shuffle=True, 
+    eval_cv = StratifiedKFold(n_splits=5,
+                              shuffle=True,
                               random_state=1)
 
     banned_combos = [('minmax', 'k_pca')]
-    pipe = Pipeliner(steps=steps, 
-                     grid_cv=grid_cv, 
-                     eval_cv=eval_cv, 
-                     param_grid=param_grid, 
+    pipe = Pipeliner(steps=steps,
+                     grid_cv=grid_cv,
+                     eval_cv=eval_cv,
+                     param_grid=param_grid,
                      banned_combos=banned_combos)
 
 .. csv-table:: Grid Search results in 'results' variable for our example on the scikit-learn generated classification task with fixed `random_state`.
@@ -299,10 +299,10 @@ scores of a quality metric on ``eval_cv`` to the table of results (`Table 3`).
 
 DataTransformer class
 ---------------------
- 
-For convenience of the researchers we added ``DataTransformer`` class — a simple 
+
+For convenience of the researchers we added ``DataTransformer`` class — a simple
 class which allows researcher to make sklearn-like transformers through usual
-functions. 
+functions.
 
 Here is example of normalizing by mean of three matrices.
 
@@ -457,7 +457,7 @@ Here is an example of using ``Pipeliner`` with BCTpy on UCLA dataset:
 
     # Grid search parameters for our models
     param_grid = {'LR': {'penalty': ['l1', 'l2']},
-                  'SVC': {'kernel': ['linear', 'poly', 
+                  'SVC': {'kernel': ['linear', 'poly',
                                      'rbf', 'sigmoid']},
                   'SGD': {'penalty': ['elasticnet'],
                           'l1_ratio': [0.1, 0.2, 0.3]}}
@@ -466,19 +466,19 @@ Here is an example of using ``Pipeliner`` with BCTpy on UCLA dataset:
     scoring='roc_auc'
 
     # Setting cross-validations
-    grid_cv = StratifiedKFold(n_splits=5, 
-                              shuffle=True, 
+    grid_cv = StratifiedKFold(n_splits=5,
+                              shuffle=True,
                               random_state=0)
-    eval_cv = StratifiedKFold(n_splits=5, 
-                              shuffle=True, 
+    eval_cv = StratifiedKFold(n_splits=5,
+                              shuffle=True,
                               random_state=1)
 
-    pipe = Pipeliner(steps=steps, 
-                     grid_cv=grid_cv, 
-                     eval_cv=eval_cv, 
+    pipe = Pipeliner(steps=steps,
+                     grid_cv=grid_cv,
+                     eval_cv=eval_cv,
                      param_grid=param_grid)
-    results = pipe.get_results(X, y, 
-                               scoring=scoring, 
+    results = pipe.get_results(X, y,
+                               scoring=scoring,
                                caching_steps=['featurizer'])
 
 ``results`` variable consist of Table 4, 5 and 6.
@@ -510,7 +510,7 @@ and derivative measures are unique to individual changes within human brains.
 To do so, we classified brain networks pairs as either belonging to the same
 individual or not. Here, we used Reskit for pairwise classification task and we
 reached it with ease through using ``DataTransformer`` with implemented
-especially for this task functions. 
+especially for this task functions.
 
 To implement specific `Transformer` we need next template:
 
@@ -547,7 +547,7 @@ Here is an element of code for normalization transformer:
 
 .. code-block:: python
 
-    class MatrixNormalizer(BaseEstimator, 
+    class MatrixNormalizer(BaseEstimator,
                            TransformerMixin):
 
         def __init__(self, norm):
@@ -588,7 +588,7 @@ extraction for each building pipeline). Again, we classified network pairs as
 either belonging to the same individual or not. As an additional validation of
 our pipeline, we perform gender classification using the same combinations of
 building brain networks and Reskit helped us to make it too fast to include it
-to paper. 
+to paper.
 
 Each building pipeline was computed by special pre-processing neuroimaging
 tools and stored to disk. After, we picked up appropriate brain network from
