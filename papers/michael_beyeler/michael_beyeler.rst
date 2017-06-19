@@ -110,16 +110,18 @@ from the broader Python community.
 Based on the detailed specification of a patient's implant configuration,
 and given a desired electrical stimulus,
 the model predicts the perceptual distortions experienced
-by "virtual patients" over both space and time.
+by 'virtual patients' over both space and time.
 
 We hope that this library will contribute substantially to the field of medicine
 by providing a tool to accelerate the development of visual prostheses.
-For researchers this tool can be used to improve stimulation protocols 
-for existing devices, and provide a design-tool for future devices.
-For government agencies such as the FDA and Medicare this tool 
-can help guide reimbursement decisions. 
-For patients and doctors it can help guide patients and doctors in their decision 
-as to when or whether to be implanted, and which device to select.
+Researchers may use this tool to improve stimulation protocols of existing
+implants or to aid development of future devices.
+In addition, this tool might guide government agencies,
+such as the FDA and Medicare,
+in making reimbursement decisions.
+Furthermore, this tool can be used to guide patients and doctors 
+in their decision as to when or whether to be implanted,
+and which device to select.
 
 The remainder of this paper is organized as follows:
 We start by introducing the neuroscience background necessary to understand the interactions between implant electronics and
@@ -154,15 +156,15 @@ via a long axon fiber that passes from the ganglion cell body
 to the optic nerve and on to the brain.
 
 Diseases such as RP and AMD are characterized by a
-progressive degeneration of photoreceptors.
-As these diseases progress
-all layers of the retina are affected
+progressive degeneration of photoreceptors,
+gradually affecting other layers of the retina
 :cite:`Humayun1999,Mazzoni2008`.
-In severe end-stage RP, approximately 95% of photoreceptors,
+In severe end-stage RP, roughly 95% of photoreceptors,
 20% of bipolar cells,
-and 70% of ganglion cells degenerate,  :cite:`Santos1997`.
-As well as being reduced in number, these remaining cells also undergo corruptive re-modeling in late stages of the disease :cite:`Marc2003a,Marc2003b`. In the later stages of AMD and RP, little or no useful vision is retained.
-
+and 70% of ganglion cells degenerate :cite:`Santos1997`.
+In addition, the remaining cells undergo corruptive re-modeling 
+in late stages of the disease :cite:`Marc2003a,Marc2003b`,
+so that little or no useful vision is retained.
 
 Microelectronic retinal prostheses have been developed in an effort to 
 restore sight to individuals suffering from RP or AMD.
@@ -177,7 +179,7 @@ This bypasses the natural presynaptic neurotransmitter excitation
 and causes the activated neurons to stimulate their postsynaptic targets.
 Therefore, selective spatiotemporal modulation of retinal neurons 
 with an array of electrodes should allow a prosthesis to 
-coordinate retinal activity in lieu
+coordinate retinal activity in place
 of natural photoreceptor input :cite:`Weiland2016`.
 
 Several types of retinal prostheses are currently in development.
@@ -185,7 +187,7 @@ These vary in their user interface, light-detection method, signal processing,
 and microelectrode placement within the retina
 (for a recent review see :cite:`Weiland2016`).
 As far as our model is concerned, the critical factor is the placement
-of the microelectrodes (Fig. :ref:`figretina`).
+of the microelectrodes on the retina(Fig. :ref:`figretina`).
 The three main locations for microelectrode implant placement are 
 `epiretinal` (i.e., on top of the retinal surface, above the ganglion cells),
 `subretinal` (i.e., next to the bipolar cells in the space of the missing photoreceptors),
@@ -243,10 +245,10 @@ Interactions between implant electronics and
 the underlying neurophysiology cause nontrivial perceptual distortions
 in both space and time :cite:`FineBoynton2015,Beyeler2017`
 that severely limit the quality of the generated visual experience.
-For example, stimulating a single electrode rarely produces the experience of a 'dot' of light.
-Instead, stimulating a single electrode leads to percepts
-that vary dramatically in shape, varying in description from 'blobs',
-to 'streaks' and 'half-moons'.
+For example, stimulating a single electrode rarely produces 
+the experience of a 'dot' of light,
+instead leading to percepts that vary drastically in shape,
+varying in description from 'blobs', to 'streaks' and 'half-moons'.
 The percept produced by stimulating a single electrode
 with a continuous pulse train also fades over time,
 usually disappearing over a course of seconds.
@@ -255,11 +257,12 @@ One patient describes it as like :cite:`PioneerPress2015`:
 *"... looking at the night sky where you have millions of twinkly lights
 that almost look like chaos"*.
 
-Previous work by our group has developed computational models to describe 
+Previous work by our group has focused on development of
+computational models to describe 
 some of these distortions for a small number of behavioral observations
 in either space :cite:`Nanduri2012` or time :cite:`Horsager2009`.
 Here we present a model that can describe spatial distortions,
-temporal nonlinearities and spatiotemporal interactions 
+temporal nonlinearities, and spatiotemporal interactions 
 reported across a wide range of conditions, devices, and patients.
 
 .. Our goal was to develop a simulation framework
@@ -326,10 +329,9 @@ Here we provide a brief overview of the model cascade.
 
 The full model cascade for an Argus I epiretinal prosthesis is illustrated in
 Fig. :ref:`figmodel`. 
-However, as described above, this model was designed to generalize to other epiretinal
-and subretinal configurations.
-
-The Argus I device simulated here consists of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
+.. However, as described above, this model was designed to generalize to other epiretinal
+.. and subretinal configurations.
+The Argus I device simulated here consisted of electrodes of 260 :math:`\mu m` and 520 :math:`\mu m`
 diameter, arranged in a checkerboard pattern (Fig. :ref:`figmodel` A).
 In this example, input to the model was a pair of simulated pulse
 trains phase-shifted by :math:`\delta` ms,
@@ -429,7 +431,7 @@ The output of this convolution was scaled by a factor
    r_2(t) = r_1(t) - \epsilon_1\big( c(t) * \delta(t, 1, \tau_2) \big).
 
 The response :math:`r_2(t)` was then passed through a stationary
-nonlinearity (:ref:`figmodel` E) to model the nonlinear input-output
+nonlinearity (Fig. :ref:`figmodel` E) to model the nonlinear input-output
 relationship of ganglion cell spike generation:
 
 .. math::
@@ -446,7 +448,7 @@ Finally, the response :math:`r_3(t)` was convolved with another low-pass
 filter described as a three-stage gamma function
 (:math:`n = 3`, :math:`\tau_3 = 26.3` ms)
 intended to model slower perceptual processes in the brain
-(:ref:`figmodel` F):
+(Fig. :ref:`figmodel` F):
 
 .. math::
    :label: eqslow
@@ -454,11 +456,12 @@ intended to model slower perceptual processes in the brain
    r_4(t) = \epsilon_2 r_3(t) * \delta(t, 3, \tau_3),
 
 where :math:`\epsilon_2 = 1000` was a scaling factor used to
-scale the output to subjective brightness values in a range of [0, 100].
+scale the output to subjective brightness values in the range [0, 100].
 
 The output of the model was thus a movie of brightness values that corresponded
 to the predicted perceptual experience of the patient.
-An example percept generated is shown on the right-hand side of :ref:`figmodel`
+An example percept generated is shown 
+on the right-hand side of Fig. :ref:`figmodel`
 ('predicted percept', brightest frame in the movie).
 Parameters of the model were fit to psychophysical data by
 comparing predicted percepts to behavioral data from Argus I and II patients.
@@ -504,22 +507,21 @@ and ease of use. To facilitate ease of use, the simulations in *pulse2percept*
 are organized as a standard Python package, consisting of the following primary
 modules:
 
-- :code:`api`: Provides a top-level Application Programming Interface.
-- :code:`implants`: Provides implementations of the details of different retinal
+- :code:`api`: a top-level Application Programming Interface.
+- :code:`implants`: implementations of the details of different retinal
   prosthetic implants. This includes Second Sight's Argus I and Argus II implants,
   but can easily be extended to feature custom implants (see Section Extensibility).
-- :code:`retina`: Includes implementation of a model of the retinal distribution 
+- :code:`retina`: implementation of a model of the retinal distribution 
   of nerve fibers, based on :cite:`Jansonius2009`, and an implementation of the 
   temporal cascade of events described in Eqs. 2-6.
   Again, this can easily be extended to custom temporal models (see Section Extensibility).
-- :code:`stimuli`: Includes implementations of commonly used electrical stimulation
+- :code:`stimuli`: implementations of commonly used electrical stimulation
   protocols, including methods for translating images and movies into simulated
   electrical pulse trains.
   Again, this can easily be extended to custom stimulation protocols 
   (see Section Extensibility).
-- :code:`files`: Includes a simple means to load and store data as images
-  and videos.
-- :code:`utils`: Includes various utility and helper functions.
+- :code:`files`: a means to load/store data as images and videos.
+- :code:`utils`: various utility and helper functions.
 
 
 Basic Usage
@@ -654,14 +656,14 @@ It's also possible to specify your own (custom) model, see the section on extens
 :code:`p2p.stimuli`
 ...................
 
-Finally, a stimulation protocol can be specified by assigning
+A stimulation protocol can be specified by assigning
 stimuli from the :code:`p2p.stimuli` module to specific
 electrodes.
 An example is to set up a pulse train of particular stimulation
 frequency, current amplitude and duration. 
 Because of safety considerations, all real-world stimuli must be 
 balanced biphasic pulse trains 
-(meaning they must have a positive and negative phase of equal area,
+(i.e., they must have a positive and negative phase of equal area,
 so that the net current delivered to the tissue sums to zero).
 
 It is possible to specify a pulse train for each electrode in the implant as follows:
@@ -670,14 +672,14 @@ It is possible to specify a pulse train for each electrode in the implant as fol
    :linenos:
    :linenostart: 16
 
-   # Stimulate two electrodes, other electrodes all set to zero
+   # Stimulate two electrodes, others set to zero
    stim = []
    for elec in implant:
        if elec.name == 'C1' or elec.name == 'B3':
            # 50 Hz, 20 uA, 0.5 sec duration
            pt = p2p.stimuli.PulseTrain(tsample,
-                                       freq=50,
-                                       amp=20,
+                                       freq=50.0,
+                                       amp=20.0,
                                        dur=0.5)
        else:
            pt = p2p.stimuli.PulseTrain(tsample, freq=0)
@@ -694,10 +696,10 @@ via a dictionary:
    :linenostart: 28
 
    stim = {
-       'C1': p2p.stimuli.PulseTrain(tsample, freq=50,
-                                    amp=20, dur=0.5)
-       'B3': p2p.stimuli.PulseTrain(tsample, freq=50,
-                                    amp=20, dur=0.5)
+       'C1': p2p.stimuli.PulseTrain(tsample, freq=50.0,
+                                    amp=20.0, dur=0.5)
+       'B3': p2p.stimuli.PulseTrain(tsample, freq=50.0,
+                                    amp=20.0, dur=0.5)
    }
 
 
@@ -716,21 +718,19 @@ The output can be seen in Fig. :ref:`figinputoutput` A.
 Finally, the created stimulus serves as input to
 :code:`sim.pulse2percept`, which is used to convert the
 pulse trains into a percept.
-
-Using this model it is possible to generate simulations of the predicted percepts 
-for simple input stimuli, such as a pair of electrodes. 
-It is also possible to generate simulations of what a patient with a prosthetic implant 
-might experience with more complex stimulation patterns, 
-such as stimulation of a grid of electrodes in the shape of the letter E.
+This allows users to simulate the predicted percepts for simple input stimuli,
+such as stimulating a pair of electrodes,
+or more complex stimuli,
+such as stimulating a grid of electrodes in the shape of the letter A.
 
 At this stage in the model it is possible to consider which retinal layers 
 are included in the temporal model,
 by selecting from the following list
 (see Fig. :ref:`figretina` for a schematic of the anatomy):
 
-* :code:`'OFL'`: optic fiber layer (OFL), where ganglion cell axons reside
-* :code:`'GCL'`: ganglion cell layer (GCL), where ganglion cell bodies reside
-* :code:`'INL'`: inner nuclear layer (INL), where bipolar cells reside
+* :code:`'OFL'`: optic fiber layer (OFL), where ganglion cell axons reside,
+* :code:`'GCL'`: ganglion cell layer (GCL), where ganglion cell bodies reside, and
+* :code:`'INL'`: inner nuclear layer (INL), where bipolar cells reside.
 
 A list of retinal layers to be included in the simulation is then passed
 to the :code:`pulse2percept` method:
@@ -750,12 +750,13 @@ omitting :code:`'OFL'` from the list.
 By default, all three supported layers are included.
 
 Here, the output :code:`percept` is a :code:`p2p.utils.TimeSeries`
-object that contains the timeseries data in its :code:`data`
+object that contains the time series data in its :code:`data`
 container.
-This timeseries consists of brightness values (arbitrary units)
+This time series consists of brightness values (arbitrary units in [0, 100])
 for every pixel in the percept image.
 
-Alternatively, it is possible to retrieve the brightest (mean over all pixels) frame of the timeseries:
+Alternatively, it is possible to retrieve the brightest (mean over all pixels)
+frame of the time series:
 
 .. code-block:: python
    :linenos:
@@ -763,15 +764,14 @@ Alternatively, it is possible to retrieve the brightest (mean over all pixels) f
 
    frame = p2p.get_brightest_frame(percept)
 
-Then we can plot it with the help of Matplotlib:
+Then we can plot it with the help of Matplotlib
+(Fig. :ref:`figinputoutput` B):
 
 .. code-block:: python
    :linenos:
    :linenostart: 41
 
    plt.imshow(frame, cmap='gray')
-
-The output is shown in Fig. :ref:`figinputoutput` B.
 
 
 :code:`p2p.files`
@@ -791,7 +791,7 @@ For example, a percept can be stored to an MP4 file as follows:
    p2p.files.save_video(percept, 'mypercept.mp4',
                         fps=15)
 
-For convenience, *pulse2percept* also provides a function to load
+For convenience, *pulse2percept* provides a function to load
 a video file and convert it to the :code:`p2p.utils.TimeSeries`
 format:
 
@@ -799,8 +799,8 @@ format:
    :linenos:
    :linenostart: 45
 
-   # Load video as (M x N x T), M: height,
-   # N: width, T: number of frames
+   # Load video as (M x N x T), M: height, N: width,
+   # T: number of frames
    video = p2p.files.load_video('mypercept.mp4')
 
 
@@ -828,8 +828,7 @@ Extensibility
 ~~~~~~~~~~~~~
 
 As described above, this simulation was designed to allow users 
-to generate their own implants, retinal models, and pulse trains. 
-
+to generate their own implants, retinal models, and pulse trains.
 Extensibility is provided through class inheritance.
 
 
@@ -837,7 +836,7 @@ Retinal Implants
 ................
 
 Creating a new implant involves inheriting from
-:code:`pulse2percept.implants.ElectrodeArray`
+:code:`p2p.implants.ElectrodeArray`
 and providing a property :code:`etype`,
 which is the electrode type
 (e.g., :code:`'epiretinal'`, :code:`'subretinal'`):
@@ -860,13 +859,15 @@ which is the electrode type
                'subretinal'}
            """
            self.etype = etype
+           self.num_electrodes = 0
+           self.electrodes = []
 
 Then new electrodes can be added by utilizing the
 :code:`add_electrodes` method of the base class:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 65
+   :linenostart: 68
 
    myimplant = MyImplant('epiretinal')
    x, y = 10, 20  # distance from fovea (um)
@@ -888,35 +889,40 @@ a single-pixel percept over time:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 70
+   :linenostart: 73
 
-   class MyGanglionCellModel(TemporalModel):
-       def model_cascade(self, in_arr, pt_list, layers):
+   class MyGanglionCellModel(p2p.retina.TemporalModel):
+       def model_cascade(self, in_arr, pt_list, layers,
+                         dojit):
            """Custom ganglion cell model
 
            Parameters
            ----------
            in_arr : array_like
-               An array containing the electrical
-               input current at a particular pixel
-               location.
+               2D array <#layers x #time points> of
+               effective current values at a single
+               pixel location.
            pt_list : list
                List of pulse train `data` containers.
-               Dimensions: <#electrodes x #time points>
            layers : list
                List of retinal layers to simulate.
                Choose from:
                - 'OFL': optic fiber layer
                - 'GCL': ganglion cell layer
                - 'INL': inner nuclear layer
+           dojit : bool
+               If True, applies just-in-time (JIT)
+               compilation to expensive computations
+               for additional speedup (requires Numba)
            """
-           return in_arr
+           return p2p.utils.TimeSeries(self.tsample,
+                                       in_arr[0, :])
 
 This method can then be passed to the simulation framework:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 91
+   :linenostart: 99
 
    mymodel = MyGanglionCellModel()
    sim.set_ganglion_cell_layer(mymodel)
@@ -934,7 +940,7 @@ or negative current (cathodic),
 which can be created via :code:`p2p.stimuli.MonophasicPulse`.
 However, as described above,
 any real-world stimulus must consist of
-biphasic pulses whose net current sums to zero.
+biphasic pulses with zero net current.
 A single biphasic pulse can be created via 
 :code:`p2p.stimuli.BiphasicPulse`.
 A train of such pulses can be created via
@@ -951,7 +957,9 @@ pulses as follows:
 
 .. code-block:: python
    :linenos:
-   :linenostart: 93
+   :linenostart: 101
+
+   from pulse2percept.stimuli import MonophasicPulse
 
    class MyBiphasicPulse(p2p.utils.TimeSeries):
 
@@ -964,8 +972,7 @@ pulses as follows:
            tsample : float
                Sampling time step in seconds.
            pdur : float
-               Duration of single (positive or negative)
-               pulse phase in seconds.
+               Single-pulse phase duration (seconds).
            """
            on = MonophasicPulse('anodic', pdur, tsample,
                                 0, pdur)
@@ -1009,7 +1016,7 @@ scale that last over several seconds.
  
 Like the brain, we solved this problem through parallelization. 
 Spatial interactions were confined to an initial stage of processing
-(Boxes A and B in Fig. :ref:`figmodel`),
+(Fig. :ref:`figmodel` A, B),
 after which all spatial computations could be parallelized
 using two back ends (Joblib :cite:`Joblib2016` and Dask :cite:`Dask2016`), 
 with both multithreading and multiprocessing options. 
@@ -1046,8 +1053,8 @@ Computational Performance
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 We measured computational performance of the model for 
-both spatial and temporal processing.
-All simulations were run on a 12-core Intel Core i7-5930K
+both spatial and temporal processing
+using a 12-core Intel Core i7-5930K 
 operating at 3.50 GHz (64GB of RAM).
 
 The initial stages of the model scaled as a function of the number
@@ -1068,11 +1075,10 @@ leading to a decrease in speedup.
 Due to the current design constraints (see Discussion),
 the software is better suited for rapid prototyping rather than real-time execution.
 At its best, simulating typical stimulation of an Argus II over a timecourse of
-500 milliseconds
-(at 50 microns spatial resolution and 10 microseconds temporal resolution)
+500 ms (at 50 microns spatial resolution and 10 ms temporal resolution)
 required 79 seconds of execution time.
 Line profiling revealed that most of the time was spent executing the
-slow convolutions of Boxes D and F (see Fig. :ref:`figmodel`),
+slow convolutions (Fig. :ref:`figmodel` D, F),
 thus heavily relying on the computational performance of the SciPy implementation
 of the Fast Fourier Transform.
 
@@ -1100,7 +1106,7 @@ All code presented in this paper is current as of the v0.2 release.
 Discussion
 ----------
 
-We present here an open-source, Python-based framework for modeling
+We presented here an open-source, Python-based framework for modeling
 the visual processing in retinal prosthesis patients. 
 This software generates a simulation of the perceptual experience 
 of individual prosthetic users - a 'virtual patient'. 
