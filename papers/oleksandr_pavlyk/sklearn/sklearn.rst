@@ -120,7 +120,7 @@ P below means amount of CPU cores used.
 We compared the similar runs for other algorithms and normalized results by results obtained with DAAL in C++ without python to estimate overhead from python wrapping.
 
 
-.. figure:: sklearn_perf.jpg 
+.. figure:: sklearn/sklearn_perf.jpg
 
 
 You can find some benchmarks [sklearn_benches]_

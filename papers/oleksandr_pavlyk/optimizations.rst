@@ -69,7 +69,8 @@ Here is the list of what we did for update 2:
 
 Fast Fourier Transforms
 -----------------------
-In addition to initial Fast Fourier Transforms (FFT) optimizations offered in previous releases, Update 2 brings widespread optimizations for NumPy and SciPy FFT. It offers a layered interface for the Intel |R| Math Kernel Library (Intel |R| MKL) that allows efficient access to native FFT optimizations from a range of NumPy and SciPy functions. The optimizations include real and complex data types, both single and double precision. Update 2 covers both one-dimensional and multi-dimensional data, as well as in place and out of place modes of operation. As a result, performance may improve up to 60x over Update 1 and is now close to performance of native C/Intel MKL.
+In addition to initial optimizations of Fast Fourier Transform (FFT) offered in previous releases, Update 2 brings widespread optimizations for NumPy and SciPy FFT. It offers a think layered interface for the Intel |R| Math Kernel Library (Intel |R| MKL) that allows efficient access to native FFT optimizations from a range of NumPy and SciPy functions. The optimizations are provided for real and complex data types in both single and double precision. Update 2 improves performance of both one-dimensional and multi-dimensional transforms, for in-place and out-of-place modes of operation. As a result, performance may improve up to 60x over Update 1 and is now close to performance of native C/Intel MKL.
+
 
 .. include:: papers/oleksandr_pavlyk/fft/fft.rst
 

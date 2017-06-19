@@ -1,15 +1,9 @@
-Thin wrapper exposing Intel |R| MKL's FFT functionality directly on NumPy arrays was used to optimize FFT support in both NumPy and SciPy.
-It allows FFT-based Python programs to approach performance of equivalent C implementations.
-
-.. provide charts of Python code performance in terms of percent of native performance [ reuse charts for Haswell from release notes ]
 .. figure:: fft/FFT_perf_percent_native_u2.png
 
 Thanks to Intel |R| MKL's flexibility in its supports for arbitrarily strided input and output arrays [1]_ both one-dimensional and
 multi-dimensional complex Fast Fourier Transforms along distinct axes can be performed directly, without the need to copy the input
-into a contiguous array first. Input strides can be arbitrary, including negative or zero, as long strides remain an integer multiple
-of array's item size.
-
-.. provide charts of computing FFT along axis, FFT of transposed array, FFT of stack of images, etc.
+into a contiguous array first. Input strides can be arbitrary, including negative or zero, as long strides remain an 
+integer multiple of array's item size.
 
 .. table:: Table of times of repeted executions of FFT computations over an array of complex doubles in different Python distributions on Intel (R) Xeon (R) E5-2698 v3 @ 2.30GHz with 64GB of RAM.
 
@@ -22,16 +16,16 @@ of array's item size.
    +--------------+-------------------+---------------------------+--------------------+----------------------------+
    | repetitions  |  16               |  16                       |  8                 | 8                          |
    +--------------+-------------------+---------------------------+--------------------+----------------------------+
-   | IDP 2017.0.3 | 0.162 |+-| 0.01   |  0.113 |+-| 0.01          |  8.869 |+-| 0.085  | 0.863 |+-| 0.011           |
+   | IDP 2017.0.3 | 0.162 |+-| 0.01   |  0.113 |+-| 0.01          |  8.87 |+-| 0.08    | 0.86  |+-| 0.01            |
    +--------------+-------------------+---------------------------+--------------------+----------------------------+
-   | IDP 2017.0.1 | 0.187 |+-| 0.06   |  1.046 |+-| 0.03          |  10.301 |+-| 0.098 | 12.382 |+-| 0.027          |
+   | IDP 2017.0.1 | 0.187 |+-| 0.06   |  1.046 |+-| 0.03          |  10.3   |+-| 0.1   | 12.38  |+-| 0.03           |
    +--------------+-------------------+---------------------------+--------------------+----------------------------+
-   | pip numpy    | 2.333 |+-| 0.01   |  1.769 |+-| 0.02          |  29.941 |+-| 0.029 | 34.455 |+-| 0.007          |
+   | pip numpy    | 2.333 |+-| 0.01   |  1.769 |+-| 0.02          |  29.94  |+-| 0.03  | 34.455 |+-| 0.007          |
    +--------------+-------------------+---------------------------+--------------------+----------------------------+
 
 
-The wrapper supports both in-place and out-of-place modes, enabling it to efficiently power both `numpy.fft` and `scipy.fftpack` submodules.
-In-place operations are only performed where possible.
+The wrapper supports both in-place and out-of-place modes, enabling it to efficiently power both `numpy.fft` and 
+`scipy.fftpack` submodules. In-place operations are only performed where possible.
 
 .. provide charts comparing timings of in-place and out-of-place FFT computations
 .. provide charts comparing timings of in-place operations in update 2|3 vs. update 1
@@ -59,16 +53,18 @@ In-place operations are only performed where possible.
    +-------------+--+-----------------+-----------------+-----------------+-----------------+-------------------+------------------+
 
 
-Direct support for multivariate transforms along distinct array axis. Even when multivariate transform ends up being computed as iterations
-of one-dimensional transforms, all subsequent iterations are performed in place for efficiency.
+Direct support for multivariate transforms along distinct array axis. Even when multivariate transform 
+ends up being computed as iterations of one-dimensional transforms, all subsequent iterations are performed 
+in place for efficiency.
 
-The update also provides dedicated support for complex FFTs on real inputs, such as `np.fft.fft(real_array)`, by leveraging corresponding
-functionality in MKL [2]_.
+The update also provides dedicated support for complex FFTs on real inputs, such as `np.fft.fft(real_array)`,
+by leveraging corresponding functionality in MKL [2]_.
 
 .. Illustrate the point that this became faster
 
-Dedicated support for specialized real FFTs, which only store independent complex harmonics. Both `numpy.fft.rfft` and `scipy.fftpack.rfft`
-storage  modes are natively supported via Intel MKL.
+Dedicated support for specialized real FFTs, which only store independent complex harmonics.
+Both `numpy.fft.rfft` and `scipy.fftpack.rfft` storage  modes are natively supported via
+Intel |R| MKL.
 
 .. show rfft is faster in update 2 relative to update 1
 
