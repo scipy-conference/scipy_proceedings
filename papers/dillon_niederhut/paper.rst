@@ -18,7 +18,7 @@ Software Transactional Memory in Pure Python
 Introduction
 ------------
 
-Methods for sharing resources between multiple processes have been of academic interest for quite some time [Lamport_1978]_. Recently, the need for handling coincident events in client-server interactions and the increasing scale of easily available data, especially in combination with the reduced momentum in increasing the clock speed of CPUs, have promoted discussions of concurrent software architecture [Lamport_et_al_1997]_. The essential problem with shared data in a concurrent system is that when procedures can no longer depend on a strict linear ordering of events, they also lose the gaurantee of consistency in their data. To see how this might become a problem, consider the example below, in which several Python threads are attempting to increment a global counter[#]_.
+Methods for sharing resources between multiple processes have been of academic interest for quite some time [Lamport_1978]_. Recently, the need for handling coincident events in client-server interactions and the increasing scale of easily available data, especially in combination with the reduced momentum in increasing the clock speed of CPUs, have promoted discussions of concurrent software architecture [Lamport_et_al_1997]_. The essential problem with shared data in a concurrent system is that when procedures can no longer depend on a strict linear ordering of events, they also lose the guarantee of consistency in their data. To see how this might become a problem, consider the example below, in which several Python threads are attempting to increment a global counter[#]_.
 
 .. code-block:: python
 
