@@ -214,7 +214,7 @@ As an algorithm for threadsafe objects, TL2 itself has two major limitations. Th
 
 The second major limitation is that attaching versions to objects works fine for *updating* data, but not for *deleting* the object. In garbage collected languages like Java and Python, we can rely on the runtime to keep track of whether those objects are still needed, and can remove them only after their last reference. Any implementation in a language which without automated memory management will need its own solution to the deletion of versioned data to avoid memory leaks.
 
-.. [#] Code has been modified from the original to avoid overfull hbox
+.. [#] Code has been modified from the original to avoid overfull hbox per the proceedings requirements
 .. [#] The order of magnitude for the wait time was chosen by experimentation to produce results between 3 and 7 on a 2.7GHz Intel Core i5.
 .. [#] Available at https://github.com/deniederhut/tram
 
