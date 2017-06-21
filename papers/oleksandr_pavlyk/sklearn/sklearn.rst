@@ -1,21 +1,20 @@
-Scikit-learn is well know library that provides a log of algorithms for many areas of machine learning.
+Scikit-learn is well know library that provides a lot of algorithms for many areas of machine learning.
 Having limited developer resources this project prefers universal solutions and proven algorithms.
-For performance improvement scikit-learn uses Cython and underling (through SciPy and Numpy) BLAS/LAPACK libraries.
+For performance improvement scikit-learn uses Cython and underlying BLAS/LAPACK libraries through SciPy and Numpy.
 OpenBLAS and MKL uses threaded based parallelism to utilize multicores of modern CPUs.
 Unfortunately  BLAS/LAPACK’s functions are too low level primitives and their usage is often not very efficient comparing to possible high-level parallelism.
 For high-level parallelism scikit-learn uses multiprocessing approach that is not very efficient from technical point of view.
-On the other hand Intel provides Intel |R| Data Analytics Acceleration Library (Intel(R) DAAL) that helps speed up big data analysis by providing highly optimized algorithmic building blocks for all stages of data analytics (preprocessing, transformation, analysis, modeling, validation, and decision making) in batch, online, and distributed processing modes of computation.
+On the other hand Intel provides Intel |R| Data Analytics Acceleration Library (Intel |R| DAAL) that helps speed up big data analysis by providing highly optimized algorithmic building blocks for all stages of data analytics (preprocessing, transformation, analysis, modeling, validation, and decision making) in batch, online, and distributed processing modes of computation.
 It is originally written in C++ and provides Java and Python bindings.
-In spite of the fact that DAAL is heavily optimized for all Intel Architectures including Xeon Phi it’s very questionable how to use DAAL binding from Python.
-DAAL bindings for python are generated automatically and reflects original C++ API very close that makes its usage quite complicated because of not native for python programmers idioms and chary documentation.
+DAAL is heavily optimized for all Intel |R| Architectures including Intel |R| Xeon Phi |TM|, but it is not at all clear how to use DAAL binding from Python.
+DAAL bindings for python are generated automatically and reflects original C++ API very closely. This makes its usage quite complicated because of its use of non pythonic idioms and scarce documentation.
 
-To mix the power of well optimized for HW native code with familiar ML API Intel Python Distribuition started efforts on scikit-learn optimization.
-Therefore, beginning from 2017 U2 IDP includes scikit-learn with daal4sklearn module.
-Specifically, Update 2 optimizes Principal Component Analysis (PCA), Linear and Ridge Regressions, Correlation and Cosine Distances, and K-Means. Speedups may range from 1.5x to 160x.
+In order to combine the power of well optimized native code with the familiar to machine learning community API the Intel Distribution for Python includes fruits of efforts of scikit-learn optimization. Thus beginning with version 2017.0.2 the Intel Distribution for Python includes scikit-learn with daal4sklearn sub-module.
+Specifically, daal4sklearn optimizes Principal Component Analysis (PCA), Linear and Ridge Regressions, Correlation and Cosine Distances, and K-Means in scikit-learn using Intel |R| DAAL. Speedups may range from 1.5x to 160x.
 
-There are no exact matching between sklearn and DAAL API and they aren’t fully compatible for all inputs so for the cases when daal4sklearn detects incompatibility it fallbacks to original sklearn’s implementation.
+There is no direct matching between scikit-learn's and Intel |R| DAAL's APIs. Moreover, they aren’t fully compatible for all inputs, therefore in those cases where daal4sklearn detects incompatibility it falls back to original sklearn’s implementation.
 
-Daal4sklearn is enabled by default but provides simple API that allows disabling its functionality:
+Daal4sklearn is enabled by default and provides a simple API to toggle these optimizations:
 
 .. code-block:: python
 
@@ -23,38 +22,38 @@ Daal4sklearn is enabled by default but provides simple API that allows disabling
         dispatcher.disable()
         dispatcher.enable()
 
-We prepared several benchmarks to demonstrate performance that can be achieved with DAAL.
+We prepared several benchmarks to demonstrate performance that can be achieved with Intel |R| DAAL.
 
 .. code-block:: python
 
         from __future__ import print_function
-        import numpy as np
         import timeit
         from numpy.random import rand
         from sklearn.cluster import KMeans
 
         import argparse
-        argParser = argparse.ArgumentParser(prog="pairwise_distances.py",
-                                            description="sklearn pairwise_distances benchmark",
-                                            formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        argParser = argparse.ArgumentParser(
+            prog="kmeans_bench.py",
+            description="K-means benchmark")
 
-        argParser.add_argument('-i', '--iteration', default='10', help="iteration", type=int)
-        argParser.add_argument('-p', '--proc', default=-1, help="n_jobs for algorithm", type=int)
+        argParser.add_argument('-i', '--iteration',
+              help="iteration", type=int, default=10)
+        argParser.add_argument('-p', '--proc', default=-1,
+              help="n_jobs for algorithm", type=int)
         args = argParser.parse_args()
-
-        REP = args.iteration 
 
         try:
             from daal.services import Environment
-            nThreadsInit = Environment.getInstance().getNumberOfThreads()
-            Environment.getInstance().setNumberOfThreads(args.proc)
+            env_inst = Environment.getInstance()
+            nThreadsInit = env_inst.getNumberOfThreads()
+            env_inst.setNumberOfThreads(args.proc)
         except:
             pass
 
         def st_time(func):
             def st_func(*args, **keyArgs):
                 times = []
-                for n in range(REP):
+                for n in range(args.iteration):
                     t1 = timeit.default_timer()
                     r = func(*args, **keyArgs)
                     t2 = timeit.default_timer()
@@ -64,22 +63,17 @@ We prepared several benchmarks to demonstrate performance that can be achieved w
             return st_func
 
         problem_sizes = [
-                (10000,   2),
-                (10000,   25),
-                (10000,   50),
-                (50000,   2),
-                (50000,   25),
-                (50000,   50),
-                (100000,  2),
-                (100000,  25),
-                (100000,  50)]
-
+                (10000,  2),  (10000,  25),
+                (10000,  50), (50000,  2),
+                (50000,  25), (50000,  50),
+                (100000, 2),  (100000, 25),
+                (100000, 50)]
         X={}
         for p, n in problem_sizes:
             X[(p,n)] = rand(p,n)
 
-
         kmeans = KMeans(n_clusters=10, n_jobs=args.proc)
+
         @st_time
         def train(X):
             kmeans.fit(X)
@@ -90,10 +84,11 @@ We prepared several benchmarks to demonstrate performance that can be achieved w
             train(X_local)
             print('')
 
-Using all 32 cores of Xeon E5-2698v3 IDP’s KMeans can be faster more than 50 times comparing with python available on Ubuntu 14.04.
-P below means amount of CPU cores used.
+Using all 32 cores of Intel |R| Xeon |R| processor E5-2698 v3 IDP’s K-Means can be more than 50 times faster than the python included with Ubuntu 14.04.
+P below means the number of CPU cores used.
 
 .. table:: 
+   :class: w
 
    +--------+------+-----------+------------+--------------+---------------+---------------+----------------+
    | rows   | cols | IDP,s P=1 | IDP,s P=32 | System,s P=1 | System,s P=32 | Vs System,P=1 | Vs System,P=32 | 
