@@ -38,7 +38,7 @@ With reproducible and affordable science in mind, some ephys laboratories have r
 
 In this paper, we describe a completely open-source, Python-based hardware and software setup that we are currently using to study the role of gustatory (taste) cortex in taste-related learning and behavior in rats. We use a Raspberry Pi based system to coordinate the various stimulus control needs of our experiments. This includes the delivery of precise amounts of taste solutions to the animals :cite:`katz2002taste` and the optogenetic perturbation of the firing of neurons in the taste cortex with laser sources :cite:`li2016sensory` :cite:`pastrana2011optogenetics`. To handle the ephys signals, we use chips from Intan_ Technologies and a home-grown HDF5 and Python-based software setup for spike sorting :cite:`lewicki1998review` and analysis.
 
-.. _Intan: http://intantech.com
+.. _Intan: http://intantech.com/RHD2000_evaluation_system.html
 
 In addition to describing the physical system, below we describe the computations involved at every step of our spike sorting toolchain, highlighting software principles that make such an analysis setup: 1) scale with increased channel counts and longer recordings; and 2) easily parallelized on computing environments. We demonstrate the use of this system to record and analyze ephys data from 64 electrodes simultaneously in the taste cortex of rats and mice. Finally, we compare and contrast our approach to the traditional ephys and spike sorting toolchain and point out future directions of improvement keeping the modern ephys experiment in mind.
 
@@ -50,7 +50,9 @@ We use adult, female Long-Evans rats (300-325g) and adult mice (15-20g) in our e
 Raspberry Pi based behavior control system
 ------------------------------------------
 
-We use a Raspberry Pi running Ubuntu MATE (ubuntu-mate.org/raspberry-pi) to weave together the various behavioral paradigms of our experiments. This includes 1) delivering precise amounts of taste solutions to the animals via pressurized solenoid valves, 2) measuring the animals’ licking responses with an analog-to-digital converter (ADC) circuit and 3) controlling laser sources for optogenetic perturbation. Most of these steps involve controlling the digital I/O pins (DIO) of the Pi – the Rpi.GPIO package provides convenient functions:
+We use a Raspberry Pi running Ubuntu-MATE_ to weave together the various behavioral paradigms of our experiments. This includes 1) delivering precise amounts of taste solutions to the animals via pressurized solenoid valves, 2) measuring the animals’ licking responses with an analog-to-digital converter (ADC) circuit and 3) controlling laser sources for optogenetic perturbation. Most of these steps involve controlling the digital I/O pins (DIO) of the Pi – the Rpi.GPIO package provides convenient functions:
+
+.. _Ubuntu-MATE: http://ubuntu-mate.org/raspberry-pi
 
 .. code-block:: python
     
@@ -72,7 +74,7 @@ We build *opto-trode* bundles with 32 nichrome-formvar microwires (0.0015 inch d
 Electrophysiology hardware
 --------------------------
 
-We use an open-source ephys recording system from Intan Technologies for neural recordings (http://intantech.com/RHD2000_evaluation_system.html). The RHD2000 series headstages connect to electrode bundles implanted in the animal’s brain and contain 32-128 amplifiers and ADCs. The Intan data acquisition system offers an open-source C++ based graphical interface that can record up to 512 electrodes (4 headstages) simultaneously at sampling rates of up to 30kHz/channel. This recording system is relatively robust to AC noise, because the electrode signals are digitized right on the headstage itself, but we additionally encase the animal’s behavior and recording chamber in a Faraday cage constructed with standard aluminum insect netting.
+We use an open-source ephys recording system from Intan_ Technologies for neural recordings. The RHD2000 series ephys recording headstages connect to electrode bundles implanted in the animal’s brain and contain 32-128 amplifiers and ADCs. The Intan data acquisition system offers an open-source C++ based graphical interface that can record up to 512 electrodes (4 headstages) simultaneously at sampling rates of up to 30kHz/channel. This recording system is relatively robust to AC noise, because the electrode signals are digitized right on the headstage itself, but we additionally encase the animal’s behavior and recording chamber in a Faraday cage constructed with standard aluminum insect netting.
 
 Scientific Python stack for data analysis – spike sorting
 ---------------------------------------------------------
@@ -81,16 +83,16 @@ The recent push in ephys experiments towards increased channel counts and longer
 
 The Hierarchical Data Format (HDF5) is ideal for dealing with such big numerical datasets. We use the Pytables package (http://www.pytables.org/) to build, structure and modify HDF5 files at every point in our spike sorting and analysis toolchain. Pytables allows data to be stored and extracted from HDF5 files in the convenient form of numpy arrays (https://docs.scipy.org/doc/numpy-1.12.0/reference/generated/numpy.array.html).  We decided to use individual electrodes as storage and computation splits, storing the voltage recording from each electrode as a separate array in the HDF5 file with its analysis assigned to a separate process.
 
-We adopted a semi-supervised approach to spike sorting, starting with a (parallelized) set of automated filtering and clustering steps that can be fine-tuned by the experimenter (who presumably comes equipped with expert knowledge about action potential shapes actually observed in the brain). Our setup therefore involves 3 distinct steps (all the code is available on Github at https://github.com/narendramukherjee/blech_clust):
+We adopt a semi-supervised approach to spike sorting, starting with a (parallelized) set of automated filtering and clustering steps that can be fine-tuned by the experimenter (who presumably comes equipped with expert knowledge about action potential shapes actually observed in the brain). Our setup therefore involves 3 distinct steps (all the code is available on Github at https://github.com/narendramukherjee/blech_clust):
 
-1. Pre-processing (**blech_clust.py**) – Constructs a HDF5 file with the raw binary data recorded by the Intan system, acquires the clustering parameters from the user and creates a shell file that runs the actual processing step in parallel.
+1. Pre-processing (**blech_clust.py**) – Constructs a HDF5 file post-experiment with the raw binary data recorded by the Intan system, acquires the clustering parameters from the user and creates a shell file that runs the actual processing step in parallel.
 2. Processing (**blech_process.py**) – Runs filtering and clustering steps on the voltage data from every electrode and plots out the results.
 3. Post-processing (**blech_post_process.py**) – Removes raw recordings from the HDF5 file and compresses it, and then allows the user to sieve out real spikes from the putative spikes plotted in step 2.
 
 Pre-processing
 --------------
 
-The pre-processing starts by building a HDF5 file for the ephys dataset with separate nodes for raw (neural and EMG) electrodes, digital inputs and outputs. This structuring of different aspects of the data into separate nodes is a recurrent feature of our toolchain, a reliability that we hope will make collaboration and data-sharing easier. The Pytables library provides a convenient set of functions for this purpose:
+The pre-processing starts by building a HDF5 file for the ephys dataset with separate nodes for raw neural electrodes, digital inputs and outputs. This structuring of different aspects of the data into separate nodes is a recurrent feature of our toolchain. The Pytables library provides a convenient set of functions for this purpose:
 
 .. code-block:: python
 
@@ -99,7 +101,12 @@ The pre-processing starts by building a HDF5 file for the ephys dataset with sep
     # Create hdf5 file, and make group for raw data
     hf5 = tables.open_file(hdf5_name[-1]+'.h5', 'w',
               title = hdf5_name[-1])
+    # Node for raw electrode data
     hf5.create_group('/', 'raw')
+    # Node for digital inputs 
+    hf5.create_group('/', 'digital_in')
+    #Node for digital outputs
+    hf5.create_group('/', 'digital_out')
     hf5.close()
     
 We have set up Pytables *extendable arrays* (EArrays) to read the electrode and digital input data saved by the Intan system. Extendable arrays are akin to standard Python lists in the sense that their size can be ‘extended’ as data is appended to them – unlike lists, however, they are a homogeneous data class and cannot store different types together. The Intan system saves all the data as integers in binary files and therefore, EArrays of type int (defined by IntAtom in Pytables) are perfect for this purpose. These EArrays can be constructed and filled as follows:
@@ -109,8 +116,8 @@ We have set up Pytables *extendable arrays* (EArrays) to read the electrode and 
     # Modified from create_hdf_arrays() in read_file.py
     # Open HDF5 file with read and write permissions - r+
     hf5 = tables.open_file(file_name, 'r+')
-    # 2 headstages each with 32 electrodes
-    # in our experiments
+    # 2 ports/headstages each with 32 
+    # electrodes in our experiments
     n_electrodes = len(ports)*32
     # All the data is stored as integers
     atom = tables.IntAtom()
@@ -123,21 +130,27 @@ We have set up Pytables *extendable arrays* (EArrays) to read the electrode and 
     
     # Modified from read_files() in read_file.py
     # Open HDF5 file with read and write permissions - r+
-    hf5 = tables.open_file(hdf5_name, 'r+')
+    hf5 = tables.open_file(file_name, 'r+')
     # Fill data from electrode 1 on port A
     # Electrode data are stored in binary files
     # as 16 bit signed integers
+    # Filenames of binary files as defined
+    # by the Intan system
     data = np.fromfile('amp-A-001.dat', 
                        dtype = np.dtype('int16')) 
     hf5.flush()
     hf5.close()
     
-To facilitate the spike sorting process, we use the easygui package (http://easygui.readthedocs.io/en/master/) to integrate user inputs through a simple graphical interface. Finally, we use GNU Parallel :cite:`Tange2011a` to run filtering and clustering on every electrode in the dataset in a separate process. GNU Parallel is a great parallelization tool on .nix systems, and allows us to: 1) assign a minimum amount of RAM to every process and 2) resume failed processes by reading from a log file.
+To facilitate the spike sorting process, we use the easygui_ package to integrate user inputs through a simple graphical interface. Finally, we use GNU Parallel :cite:`Tange2011a` to run filtering and clustering on every electrode in the dataset in a separate process. GNU Parallel is a great parallelization tool on .nix systems, and allows us to: 1) assign a minimum amount of RAM to every process and 2) resume failed processes by reading from a log file.
+
+.. _easygui: http://easygui.readthedocs.io/en/master/
 
 Processing
 ----------
 
-The voltage data from the electrodes are stored as signed integers in the HDF5 file in the pre-processing step – they need to be converted into actual voltage values (in microvolts) as floats. The datasheet of the Intan RHD2000 system (http://intantech.com/files/Intan_RHD2000_series_datasheet.pdf) gives the transformation as:
+The voltage data from the electrodes are stored as signed integers in the HDF5 file in the pre-processing step – they need to be converted into actual voltage values (in microvolts) as floats. The datasheet of the Intan RHD2000_ system gives the transformation as:
+
+.. _RHD2000: http://intantech.com/files/Intan_RHD2000_series_datasheet.pdf
 
 .. math::
    
@@ -163,11 +176,15 @@ Depending on the position of the electrode in relation to neurons in the brain, 
     # Modified from extract_waveforms() in clustering.py
     m = np.mean(filt_el)
     th = 5.0*np.median(np.abs(filt_el)/0.6745)
-    pos = np.where(filt_el <= m–th)[0]
+    pos = np.where(filt_el <= m - th)[0]
 
-We treat each of these segments as a ‘*putative spike*’. We locate the minimum of each segment and slice out 1.5ms (0.5ms before the minimum, 1ms after = 45 samples at 30kHz) of data around it. Even at the relatively high sampling rates that we use in our experiments, it is possible that these segments are significantly ‘jittered’ in time and their shapes do not line up exactly. In addition, we pick up a large number of segments that have multiple troughs (or minima) and are unlikely to be action potentials. To deal with these issues, we ‘dejitter’ the set of potential spikes by interpolating their shapes (using scipy.interpolate.interp1d), up-sampling them 10-fold using the interpolation, and finally picking just the segments that can be lined up by their unique minimum. These 450-dimensional putative spikes will now be clustered by fitting a Gaussian Mixture Model (GMM) :cite:`lewicki1998review`. The user eventually picks the best solution with their expert knowledge in the manual part of our semi-automated spike sorting toolchain (which is potentially time cosuming for recordings with large numbers of electrodes, see *Discussion* for more details).
+We treat each of these segments as a ‘*putative spike*’. We locate the minimum of each segment and slice out 1.5ms (0.5ms before the minimum, 1ms after = 45 samples at 30kHz) of data around it. These segments, having been recorded digitally, are eventually approximations of the actual analog signal with repeated samples. Even at the relatively high sampling rates that we use in our experiments, it is possible that these segments are significantly ‘jittered’ in time and their shapes do not line up exactly at their minima due to sampling approximation. In addition, due to a variety of electrical noise that seeps into such a recording, we pick up a large number of segments that have multiple troughs (or minima) and are unlikely to be action potentials. To deal with these issues, we ‘dejitter’ the set of potential spikes by interpolating their shapes (using scipy.interpolate.interp1d), up-sampling them 10-fold using the interpolation, and finally picking just the segments that can be lined up by their unique minimum. 
 
-Each putative spike waveform picked by the procedure above consists of 450 samples after interpolation – there can be more than a million such waveforms in a 2 hour recording from each electrode. We therefore reduce the dimensionality of the dataset by picking the first 3 components produced through principal component analysis (PCA) :cite:`bro2014principal` using the scikit-learn package :cite:`scikit-learn`. These principal components, however, are known to depend mostly on the amplitude-induced variance in shapes of recorded action potential waveforms – to address this possibility, we scale each waveform by its energy (modified from :cite:`Fee1996175`), defined as follows, before performing the PCA:
+This set of 450-dimensional putative spikes now needs to be sorted into two main groups: one that consists of actual action potentials recorded extracellularly and the other that consists of noise. In addition, an electrode can record action potentials from multiple neurons - the group consisting of real spikes, therefore, needs to be further sorted into one or more groups depending upon the number of neurons that were recorded on the electrode. We start this process by first splitting up the set of putative spikes into several *clusters* by fitting a Gaussian Mixture Model (GMM) :cite:`lewicki1998review`. GMM is an unsupervised clustering technique that assumes that the data originate from several different groups, each defined by a Gaussian distribution (in our case over the 450 dimensions of the putative spikes). Classifying the clusters that the GMM picks as noise or real spikes is eventually a subjective decision (explained in the post-processing section). The user picks the best solution with their expert knowledge in the manual part of our semi-automated spike sorting toolchain (which is potentially time cosuming for recordings with large numbers of electrodes, see *Discussion* for more details).    
+
+Each putative spike waveform picked by the procedure above consists of 450 samples after interpolation – there can be more than a million such waveforms in a 2 hour recording from each electrode. Fitting a GMM in such a high dimensional space is both processor time and memory consuming (and can potentially run into the curse-of-dimensionality_). We therefore reduce the dimensionality of the dataset by picking the first 3 components produced through principal component analysis (PCA) :cite:`bro2014principal` using the scikit-learn package :cite:`scikit-learn`. These principal components, however, are known to depend mostly on the amplitude-induced variance in shapes of recorded action potential waveforms – to address this possibility, we scale each waveform by its energy (modified from :cite:`Fee1996175`), defined as follows, before performing the PCA:
+
+.. _curse-of-dimensionality: https://en.wikipedia.org/wiki/Curse_of_dimensionality
     
 .. math::
     	
@@ -177,13 +194,17 @@ where :math:`X_i = i^{th}` component of the waveform
 
 Finally, we feed in the energy and maximal amplitude of each waveform as features into the GMM in addition to the first 3 principal components. Using scikit-learn’s GMM API, we fit GMMs with cluster numbers varying from 2 to a user-specified maximum number (usually 7 or 8). Each of these models is fit to the data several times (usually 10) and the best fit is chosen according to the Bayesian Information Criterion (BIC) :cite:`bhat2010derivation`. 
 
-The clustering results need to be plotted for the user to be able to pick action potentials from the ‘noise’ in the post-processing step. The most important in these sets of plots are the actual waveforms of the spikes clustered together by the GMM and the distribution of their inter-spike-intervals (ISIs) (more details in the post-processing step). Plotting the waveforms of the putative spikes in every cluster produced by the GMM together, however, is the most memory-expensive step of our toolchain. For a 2 hour recording with 64 electrodes, the plotting step with matplotlib :cite:`Hunter:2007` can consume upto 6GB of memory although the PNG files that are saved to disk are only of the order of 100KB. High memory consumption during plotting also limits the possibility of applying this spike sorting framework to recordings that are several hours long – as a potential substitute, we have preliminarily set up a live plotting toolchain using Bokeh (http://bokeh.pydata.org/en/latest/docs/dev_guide.html) that can be used during the post-processing step. We are currently trying to work out a more memory-efficient plotting framework, and any suggestions to that end are welcome.
+The clustering results need to be plotted for the user to be able to pick action potentials from the ‘noise’ in the post-processing step. The most important in these sets of plots are the actual waveforms of the spikes clustered together by the GMM and the distribution of their inter-spike-intervals (ISIs) (more details in the post-processing step). Plotting the waveforms of the putative spikes in every cluster produced by the GMM together, however, is the most memory-expensive step of our toolchain. Each putative spike is 1.5ms (or 45 samples) long, and there can be tens of thousands of spikes in every cluster (see Figures :ref:`fig1`, :ref:`fig2`, :ref:`fig3`, :ref:`fig4`). For a 2 hour recording with 64 electrodes, the plotting step with matplotlib :cite:`Hunter:2007` can consume upto 6GB of memory although the PNG files that are saved to disk are only of the order of 100KB. High memory consumption during plotting also limits the possibility of applying this spike sorting framework to recordings that are several hours long – as a potential substitute, we have preliminarily set up a live plotting toolchain using Bokeh_ that can be used during the post-processing step. We are currently trying to work out a more memory-efficient plotting framework, and any suggestions to that end are welcome.
+
+.. _Bokeh: http://bokeh.pydata.org/en/latest/docs/dev_guide.html
 
 Post-processing
 ---------------
 
-Once the parallelized processing step outlined above is over, we start the post-processing step by first deleting the raw electrode recordings (under the ‘raw’ node) and compressing the HDF5 file using ptrepack (http://www.pytables.org/usersguide/utilities.html) as follows:
+Once the parallelized processing step outlined above is over, we start the post-processing step by first deleting the raw electrode recordings (under the ‘raw’ node) and compressing the HDF5 file using ptrepack_ as follows:
 
+.. _ptrepack: http://www.pytables.org/usersguide/utilities.html
+ 
 .. code-block:: python
 
     # Modified from blech_post_process.py 
@@ -206,14 +227,14 @@ The logic of the post-processing step revolves around allowing the user to look 
    :figclass: w
    :scale: 50%
    
-   **Right:** A regular spiking unit (RSU) - 45 samples (1.5ms) on the time/x axis. Note the 2 inflection points as the spikes go back to baseline from their minimum. RSUs represent the activity of excitatory cortical pyramidal neurons on ephys records - these spikes are slow and take about 1ms (20-30 samples) to go back up to baseline from their minimum. **Left:** Peri-stimulus time histogram (PSTH) - Plot of the activity of the RSU around the time of stimulus (taste) delivery (0 on the time/x axis). Note the dramatic increase in firing rate (spikes/second) that follows taste delivery. 0.1M Sodium Chloride (NaCl), 0.15M Sucrose, 1mM Quinine-HCl and a mixture of NaCl and Sucrose were used as the taste stimuli. :label:`fig2`
+   **Right:** A regular spiking unit (RSU) - 45 samples (1.5ms) on the time/x axis. Note the 2 inflection points as the spikes go back to baseline from their minimum - this is characteristic of the shape of RSUs. RSUs represent the activity of excitatory cortical pyramidal neurons on ephys records - these spikes are slow and take about 1ms (20-30 samples) to go back up to baseline from their minimum. **Left:** Peri-stimulus time histogram (PSTH) - Plot of the activity of the RSU around the time of stimulus (taste) delivery (0 on the time/x axis). Note the dramatic increase in firing rate (spikes/second) that follows taste delivery. 0.1M Sodium Chloride (NaCl), 0.15M Sucrose, 1mM Quinine-HCl and a 50:50 mixture of 0.1M NaCl and 0.15M Sucrose were used as the taste stimuli. :label:`fig2`
    
 .. figure:: Unit18.png
    :align: center
    :figclass: w
    :scale: 50%
 
-   **Right:** A fast spiking unit (FS) - 45 samples (1.5ms) on the time/x axis. Compare to Figure :ref:`fig2` and note that this unit has narrower/faster spikes that take only 5-10 samples (1/3 ms) to go back up to baseline from their minimum. FSs represent the activity of (usually inhibitory) cortical interneurons on ephys records. **Left:** Peri-stimulus time histogram (PSTH) of the FS. Note the dramatic increase in firing rate (spikes/second) that follows taste delivery. Also compare to Figure :ref:`fig2` and note that the FS has a much higher firing rate (more spikes) than the RSU. 0.1M Sodium Chloride (NaCl), 0.15M Sucrose, 1mM Quinine-HCl and a mixture of NaCl and Sucrose were used as the taste stimuli. :label:`fig3`
+   **Right:** A fast spiking unit (FS) - 45 samples (1.5ms) on the time/x axis. Compare to Figure :ref:`fig2` and note that this unit has narrower/faster spikes that take only 5-10 samples (1/3 ms) to go back up to baseline from their minimum. FSs represent the activity of (usually inhibitory) cortical interneurons on ephys records. **Left:** Peri-stimulus time histogram (PSTH) of the FS. Note the dramatic increase in firing rate (spikes/second) that follows taste delivery. Also compare to Figure :ref:`fig2` and note that the FS has a much higher firing rate (more spikes) than the RSU. 0.1M Sodium Chloride (NaCl), 0.15M Sucrose, 1mM Quinine-HCl and a 50:50 mixture of 0.1M NaCl and 0.15M Sucrose were used as the taste stimuli. :label:`fig3`
    
 .. figure:: Cluster4_waveforms.png
    :figclass: bht
@@ -228,7 +249,7 @@ HDF5, once again, provides a convenient format to store the single and multi uni
     # Define a unit_descriptor class to be used 
     # to add things (anything!) about the sorted
     # units to a pytables table
-    class unit_descriptor(tables.IsDescription):
+    class UnitDescriptor(tables.IsDescription):
     	electrode_number = tables.Int32Col()
     	single_unit = tables.Int32Col()
     	regular_spiking = tables.Int32Col()
@@ -238,11 +259,11 @@ HDF5, once again, provides a convenient format to store the single and multi uni
     # If unit_descriptor already exists, just open it up
     try:
     	table = hf5.create_table('/', 'unit_descriptor', 
-    	                    description = unit_descriptor)
-    except:
+    	                    description = UnitDescriptor)
+    except Exception:
     	table = hf5.root.unit_descriptor
     
-Cortical neurons (including gustatory cortical neurons that we record from in our experiments) fall into two major categories – 1) excitatory pyramidal cells that define cortical layers and have long range connections across brain regions, and 2) inhibitory interneurons that have short range connections. In ephys records, pyramidal cells produce relatively large and slow action potentials at rates ranging from 5-20 Hz (spikes/s) (Figure :ref:`fig2`). Interneurons, on the other hand, have much higher spiking rates (upto 50-70 Hz) and much faster (and hence, narrower) action potentials (Figure :ref:`fig3`). Therefore, in the unit_descriptor table, we save the type of cortical neuron that the unit corresponds to in addition to the electrode number it was located on and whether its a single unit. In keeping with classical ephys terminology, we refer to putative pyramidal neuron units as ‘regular spiking units (RSU)’ and interneuron units as ‘fast spiking units (FS)’ :cite:`mccormick1985comparative` :cite:`hengen2013firing`. In addition, anatomically, pyramidal cells are much larger and more abundant than interneurons in cortical regions :cite:`yokota2011functional` :cite:`adachi2013anatomical` :cite:`peng2017layer` – expectedly, in a typical gustatory cortex recording, 60-70% of the units we isolate are RSUs. This classification of units is in no way restrictive – new descriptions can simply be added to the unit_descriptor class to account for recordings in a sub-cortical region that contains a different electrophysiological unit.
+Cortical neurons (including gustatory cortical neurons that we record from in our experiments) fall into two major categories – 1) excitatory pyramidal cells that define cortical layers and have long range connections across brain regions, and 2) inhibitory interneurons that have short range connections. In ephys records, pyramidal cells produce relatively large and slow action potentials at rates ranging from 5-20 Hz (spikes/s) (Figure :ref:`fig2`). Interneurons, on the other hand, have much higher spiking rates (usually from 30-50Hz, and sometimes upto 70 Hz) and much faster (and hence, narrower) action potentials (Figure :ref:`fig3`). Therefore, in the unit_descriptor table, we save the type of cortical neuron that the unit corresponds to in addition to the electrode number it was located on and whether its a single unit. In keeping with classical ephys terminology, we refer to putative pyramidal neuron units as ‘regular spiking units (RSU)’ and interneuron units as ‘fast spiking units (FS)’ :cite:`mccormick1985comparative` :cite:`hengen2013firing`. In addition, anatomically, pyramidal cells are much larger and more abundant than interneurons in cortical regions :cite:`yokota2011functional` :cite:`adachi2013anatomical` :cite:`peng2017layer` – expectedly, in a typical gustatory cortex recording, 60-70% of the units we isolate are RSUs. This classification of units is in no way restrictive – new descriptions can simply be added to the unit_descriptor class to account for recordings in a sub-cortical region that contains a different electrophysiological unit.
 
 Apart from the shape of the spikes (look at Figures :ref:`fig1`, :ref:`fig2`, :ref:`fig3`, :ref:`fig4` to compare spikes and typical noise) in a cluster, the distribution of their inter-spike-intervals (ISIs) (plotted in the processing step) is another important factor in differentiating single units from multi units or noise. Due to electrochemical constraints, after every action potential, neurons enter a ‘*refractory period*’ - most neurons cannot produce another spike for about 2ms. We, therefore, advise a relatively conservative ISI threshold while classifying single units – in our recordings, we designate a cluster as a single unit only if <0.01% (<1 in 10000) spikes fall within 2ms of another spike.
 
@@ -272,9 +293,9 @@ In-vivo extracellular electrophysiology in awake, behaving animals provides a un
 
 Our approach uses the HDF5 data format at its heart that allows us to organize all of the data (and their associated metadata) under specific nodes in the same file. This approach has several advantages over traditional practices of organizing ephys data. Firstly, HDF5 is a widely used cross-platform data format that has convenient APIs in all major programming languages. Secondly, having all the data from an experimental session in the same file (that can be easily compressed – we use ptrepack in the post-processing step) makes data sharing and collaboration easier. Thirdly, HDF5 files allow quick access to desired parts of the data during analysis – as a consequence, larger than memory workflows can easily be supported without worrying about the I/O overhead involved. Lastly, in our setup, we splice the storage and processing of the data by individual electrodes – this allows us to run the processing step in parallel on several electrodes together bringing down processing time significantly.
 
-Our semi-automated approach to spike sorting is faster and more principled than the standard approach of picking units *via* arbitrary, user-defined amplitude threshold on spike waveforms during ephys recordings and/or manually-drawn polygons around spikes from a putative unit in principal component (PC) space. We automate both these steps of the traditional spike sorting toolchain by using an amplitude threshold that depends on the median voltage recorded on an electrode and clustering putative spikes with a Gaussian Mixture Model (GMM). The user’s expertise only enters the process in the last step of our workflow — they label the clusters picked out by the GMM as noise, single unit or multi unit based on the shapes of the spike waveforms and their ISI distributions. As the number of electrodes in an electrophysiological recording is already starting to run into the hundreds and thousands, there is a need to automate this last manual step as well – this can be achieved by fitting supervised classifiers to the units (and their types) picked out manually in a few training datasets. As the waveforms of spikes can depend upon the brain region being recorded from, such an approach would likely have to applied to every brain region separately.
+The standard approach of picking units in ephys studies involves arbitrary, user-defined amplitude threshold on spike waveforms during ephys recordings and manually drawing polygons around spikes from a putative unit in principal component (PC) space. This process is very time consuming for the experimenter and is prone to human errors. Our semi-automated approach to spike sorting is faster and more principled than the standard approach - we automate both these steps of the traditional spike sorting toolchain by using an amplitude threshold that depends on the median voltage recorded on an electrode and clustering putative spikes with a Gaussian Mixture Model (GMM). The user’s expertise only enters the process in the last step of our workflow — they label the clusters picked out by the GMM as noise, single unit or multi unit based on the shapes of the spike waveforms and their ISI distributions. As the number of electrodes in an electrophysiological recording is already starting to run into the hundreds and thousands, there is a need to automate this last manual step as well – this can be achieved by fitting supervised classifiers to the units (and their types) picked out manually in a few training datasets. As the waveforms of spikes can depend upon the brain region being recorded from, such an approach would likely have to applied to every brain region separately.
 
-During the pre-processing step, we restrict our setup to pick only ‘*negative*’ spikes – those in which the voltage deflection goes ‘*below*’ a certain threshold. While most extracellular spikes will appear as negative voltage deflections (due to the fact that they are being mostly recorded from outside the axons of neurons), sometimes an electrode, depending on the brain region, ends up being close enough to the cell body of a neuron to record positive spikes. Our pre-processing step requires only trivial modifications to include positive deflections ‘*above*’ a threshold as spikes as well.
+During the pre-processing step, we restrict our setup to pick only *negative* spikes – those in which the voltage deflection goes *below* a certain threshold. While most extracellular spikes will appear as negative voltage deflections (due to the fact that they are being mostly recorded from outside the axons of neurons), sometimes an electrode, depending on the brain region, ends up being close enough to the cell body of a neuron to record positive spikes. Our pre-processing step requires only trivial modifications to include positive deflections ‘*above*’ a threshold as spikes as well.
 
 The use of the HDF5 format and the ease of supporting larger-than-memory workflows allows our toolchain to scale to longer recordings and increased electrode counts. However, as explained previously, plotting all the spike waveforms in a cluster together during the processing step using matplotlib is a major memory bottleneck in our workflow. We are working on still more efficient workarounds, and have devised a live plotting setup with Bokeh (that plots 50 waveforms at a time) that can be used during post processing instead. In addition, recordings running for several hours (or days) have to account for the change in spike waveforms induced by ‘*electrode drift*’ - the electrode moves around in the fluid medium of the brain with time. The live plotting module is potentially useful in such longer recordings as well – it can be used to look at spikes recorded in small windows of time (30 minutes say) to see if their shapes change with time.
 
@@ -286,6 +307,11 @@ Acknowledgements
 This work was supported by National Institutes of Health (NIH) grants R01 DC006666-00 and R01 DC007703-06 to DBK. NM was supported by the Howard Hughes Medical Institute (HHMI) International Graduate Fellowship through the duration of this work. The National Science Foundation's (NSF) Extreme Science and Engineering Discovery Environment (XSEDE) supported the computational needs for this work through grant IBN170002 to DBK and NM.   
 
 We would like to thank Dr. Francesco Pontiggia for helping us solidify many of our data handling and computing ideas and Dr. Jian-You Lin for being the first independent tester of our toolchain. NM would additionally like to thank Shrabastee Banerjee for providing many hours of insights on statistical and programming ideas and pushing for this work to be written up in the first place. 
+
+Declaration of interest
+-----------------------
+
+The authors declare no competing financial interests.
    	
 References
 ----------
