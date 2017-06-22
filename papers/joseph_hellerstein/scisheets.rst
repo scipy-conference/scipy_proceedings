@@ -304,7 +304,9 @@ has the familiar tabular structure of a spreadsheet.
 However, unlike existing spreadsheets, SciSheets knows about the
 **elements of a scisheet**:
 tables, columns, rows, and cells.
-Column names are Python variables that can be referenced in formulas.
+In SciSheets, there are two types of columns.
+Data columns contain data values; subtable columns contain a table.
+The name of a data column is a Python variable that can be referenced in formulas.
 These **column variables**
 are ``numpy Arrays``. 
 This means that formulas can be written using column names
@@ -390,6 +392,15 @@ of the calculation, and an epilogue formula
 that writes results at the end of the calculation.
 Prologue and epilogue formulas are modified through the scisheet popup menu.
 
+At present, variable names have a global scope within the scisheet.
+This is often a desirable feature.
+For example, in
+Fig. :ref:`fig-complexformula`, values computed in one column formula
+are assigned to another column.
+However, as discussed in Section 5, there are some interesting use cases
+for having subtable name scoping, 
+a feature that we are implementing.
+
 3.3. Function Export
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -407,6 +418,16 @@ and/or external programs.
 The export feature also addresses the performance requirement
 since executing standalone code eliminates
 many overheads.
+
+At first glance, it may seem that being able to export
+a scisheet as a function is in conflict with
+an appealing feature of spreadsheets--that
+data are closely associated with the calculations that produce the data.
+It is a central concern of SciSheets to preserve this
+feature of spreadsheets.
+Thus, users specify formulas for columns and/or for table prologues and epilogues
+without regard to how code might be exported.
+SciSheets automatically structures code for export.
 
 Fig. :ref:`fig-export` displays the scisheet popup menu for
 function export.
@@ -834,7 +855,7 @@ difficult to reproduce a spreadsheet due to the presence of errors.
 We refer to this as the **reproducibility requirement**.
 Version control is an integral part of reproducibility.
 Today, a spreadsheet file as a whole can be version controlled,
-but this granularity is too course.
+but this granularity is too coarse.
 More detailed version control can be done manually.
 However, this is error prone, especially
 in a collaborative environment.

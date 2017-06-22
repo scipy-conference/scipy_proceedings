@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.2.25)  20 JUN 2017 12:44
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2016.2.25)  21 JUN 2017 18:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,257 +981,260 @@ Package pdftex.def Info: ColumnPopup.png used on input line 472.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 503.
+               Default added (so using `tbp') on input line 505.
 
 <SimpleFormula.png, id=110, 217.81375pt x 95.35625pt>
 File: SimpleFormula.png Graphic file (type png)
  <use SimpleFormula.png>
-Package pdftex.def Info: SimpleFormula.png used on input line 503.
+Package pdftex.def Info: SimpleFormula.png used on input line 505.
 (pdftex.def)             Requested size: 108.9066pt x 47.678pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 515.
+               Default added (so using `tbp') on input line 517.
 
 <ComplexFormula.png, id=113, 631.35875pt x 184.69pt>
 File: ComplexFormula.png Graphic file (type png)
  <use ComplexFormula.png>
-Package pdftex.def Info: ComplexFormula.png used on input line 515.
+Package pdftex.def Info: ComplexFormula.png used on input line 517.
 (pdftex.def)             Requested size: 252.0pt x 73.71686pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 520.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 522.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 520.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 522.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 520.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 522.
 
 [3 <./ColumnPopup.png> <./SimpleFormula.png> <./ComplexFormula.png>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 570.
+               Default added (so using `tbp') on input line 581.
 
-<FunctionExport.png, id=125, 667.49374pt x 447.6725pt>
+<FunctionExport.png, id=126, 667.49374pt x 447.6725pt>
 File: FunctionExport.png Graphic file (type png)
 
 <use FunctionExport.png>
-Package pdftex.def Info: FunctionExport.png used on input line 570.
+Package pdftex.def Info: FunctionExport.png used on input line 581.
 (pdftex.def)             Requested size: 252.0pt x 169.0107pt.
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <8> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 616.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 637.
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <8> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 617.
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 638.
 
-Underfull \hbox (badness 10000) in paragraph at lines 636--646
+Underfull \hbox (badness 10000) in paragraph at lines 657--667
 \T1/ptm/m/n/10 In the above code, the im-ported pack-age
  []
 
 
-Underfull \hbox (badness 1769) in paragraph at lines 647--664
+Underfull \hbox (badness 1769) in paragraph at lines 668--685
 \T1/ptm/m/n/10 has a pro-logue for-mula with over fifty state-ments. As
  []
 
 
-Underfull \hbox (badness 3439) in paragraph at lines 647--664
+Underfull \hbox (badness 3439) in paragraph at lines 668--685
 \T1/ptm/m/n/10 such, it is es-sen-tial that syn-tax and ex-e-cu-tion er-rors
  []
 
 
-Underfull \hbox (badness 1789) in paragraph at lines 647--664
+Underfull \hbox (badness 1789) in paragraph at lines 668--685
 \T1/ptm/m/n/10 are lo-cal-ized to a line within the script. We re-fer to
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 647--664
+Underfull \hbox (badness 10000) in paragraph at lines 668--685
 \T1/pcr/m/n/10 s.controller.startBlock('Prologue') \T1/ptm/m/n/10 and
  []
 
 [4 <./FunctionExport.png>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 731.
+               Default added (so using `tbp') on input line 752.
 
-<ProcessFiles.png, id=134, 307.1475pt x 102.3825pt>
+<ProcessFiles.png, id=135, 307.1475pt x 102.3825pt>
 File: ProcessFiles.png Graphic file (type png)
  <use ProcessFiles.png>
-Package pdftex.def Info: ProcessFiles.png used on input line 731.
+Package pdftex.def Info: ProcessFiles.png used on input line 752.
 (pdftex.def)             Requested size: 153.57336pt x 51.19112pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 733.
+               Default added (so using `tbp') on input line 754.
 
-<ProcessFilesScript.png, id=135, 547.04375pt x 256.96pt>
+<ProcessFilesScript.png, id=136, 547.04375pt x 256.96pt>
 File: ProcessFilesScript.png Graphic file (type png)
 
 <use ProcessFilesScript.png>
-Package pdftex.def Info: ProcessFilesScript.png used on input line 733.
+Package pdftex.def Info: ProcessFilesScript.png used on input line 754.
 (pdftex.def)             Requested size: 252.0pt x 118.37163pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 768.
+               Default added (so using `tbp') on input line 789.
 
-<Multitable.png, id=142, 745.78625pt x 258.9675pt>
+<Multitable.png, id=143, 745.78625pt x 258.9675pt>
 File: Multitable.png Graphic file (type png)
  <use Multitable.png>
-Package pdftex.def Info: Multitable.png used on input line 768.
+Package pdftex.def Info: Multitable.png used on input line 789.
 (pdftex.def)             Requested size: 252.0pt x 87.50246pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 785.
+               Default added (so using `tbp') on input line 806.
 
-<PopupForHierarchicalRowInsert.png, id=145, 589.20125pt x 211.79124pt>
+<PopupForHierarchicalRowInsert.png, id=146, 589.20125pt x 211.79124pt>
 File: PopupForHierarchicalRowInsert.png Graphic file (type png)
 
 <use PopupForHierarchicalRowInsert.png>
-Package pdftex.def Info: PopupForHierarchicalRowInsert.png used on input line 7
-85.
+Package pdftex.def Info: PopupForHierarchicalRowInsert.png used on input line 8
+06.
 (pdftex.def)             Requested size: 252.0pt x 90.58371pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 790.
+               Default added (so using `tbp') on input line 811.
 
-<AfterHierarchicalRowInsert.png, id=146, 589.20125pt x 222.8325pt>
+<AfterHierarchicalRowInsert.png, id=147, 589.20125pt x 222.8325pt>
 File: AfterHierarchicalRowInsert.png Graphic file (type png)
 
 <use AfterHierarchicalRowInsert.png>
-Package pdftex.def Info: AfterHierarchicalRowInsert.png used on input line 790.
+Package pdftex.def Info: AfterHierarchicalRowInsert.png used on input line 811.
 
 (pdftex.def)             Requested size: 252.0pt x 95.30608pt.
-
+ [5 <./ProcessFiles.png> <./ProcessFilesScript.png>]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 829.
+               Default added (so using `tbp') on input line 850.
 
-<SciSheetsCoreClasses.png, id=149, 564.1075pt x 515.9275pt>
+<SciSheetsCoreClasses.png, id=158, 564.1075pt x 515.9275pt>
 File: SciSheetsCoreClasses.png Graphic file (type png)
 
 <use SciSheetsCoreClasses.png>
-Package pdftex.def Info: SciSheetsCoreClasses.png used on input line 829.
+Package pdftex.def Info: SciSheetsCoreClasses.png used on input line 850.
 (pdftex.def)             Requested size: 169.23355pt x 154.77943pt.
- [5 <./ProcessFiles.png> <./ProcessFilesScript.png> <./Multitable.png> <./Popup
-ForHierarchicalRowInsert.png> <./AfterHierarchicalRowInsert.png>]
-Underfull \hbox (badness 2384) in paragraph at lines 873--883
+
+Underfull \hbox (badness 2384) in paragraph at lines 894--904
 []\T1/ptm/m/n/10 The classes \T1/pcr/m/n/10 NameSpace \T1/ptm/m/n/10 (a Python 
 names-pace) and
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 975--982
+[6 <./Multitable.png> <./PopupForHierarchicalRowInsert.png> <./AfterHierarchica
+lRowInsert.png> <./SciSheetsCoreClasses.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 996--1003
 []\T1/ptm/m/n/10 Create the for-mula \T1/pcr/m/n/10 np.mean(GPA) \T1/ptm/m/n/10
  in
  []
 
 
-Underfull \hbox (badness 1990) in paragraph at lines 975--982
+Underfull \hbox (badness 1990) in paragraph at lines 996--1003
 \T1/pcr/m/n/10 TypicalGPA\T1/ptm/m/n/10 . This for-mula will com-pute the
  []
 
 
-Underfull \hbox (badness 2556) in paragraph at lines 983--987
+Underfull \hbox (badness 2556) in paragraph at lines 1004--1008
 []\T1/ptm/m/n/10 Copy the col-umn \T1/pcr/m/n/10 TypicalGPA \T1/ptm/m/n/10 to s
 ub-table
  []
 
-[6 <./SciSheetsCoreClasses.png>]
-Underfull \hbox (badness 2600) in paragraph at lines 1001--1006
+
+Underfull \hbox (badness 2600) in paragraph at lines 1022--1027
 []\T1/ptm/m/n/10 The user ed-its the for-mula for the col-umn
  []
 
 
-Underfull \hbox (badness 1622) in paragraph at lines 1012--1013
+Underfull \hbox (badness 1622) in paragraph at lines 1033--1034
 []\T1/ptm/m/n/10 The user an-swers "yes", and the for-mula is
  []
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1060.
+               Default added (so using `tbp') on input line 1081.
 
-<spreadsheet_branch.png, id=178, 462.72874pt x 338.26375pt>
+<spreadsheet_branch.png, id=175, 462.72874pt x 338.26375pt>
 File: spreadsheet_branch.png Graphic file (type png)
 
 <use spreadsheet_branch.png>
-Package pdftex.def Info: spreadsheet_branch.png used on input line 1060.
+Package pdftex.def Info: spreadsheet_branch.png used on input line 1081.
 (pdftex.def)             Requested size: 252.0pt x 184.21846pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1077.
+               Default added (so using `tbp') on input line 1098.
 
-<spreadsheet_merge.png, id=180, 470.75874pt x 227.85126pt>
+<spreadsheet_merge.png, id=177, 470.75874pt x 227.85126pt>
 File: spreadsheet_merge.png Graphic file (type png)
 
 <use spreadsheet_merge.png>
-Package pdftex.def Info: spreadsheet_merge.png used on input line 1077.
+Package pdftex.def Info: spreadsheet_merge.png used on input line 1098.
 (pdftex.def)             Requested size: 252.0pt x 121.97049pt.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 1089.
+               Default added (so using `tbp') on input line 1110.
 
-<spreadsheet_history.png, id=182, 417.56pt x 224.84pt>
+<spreadsheet_history.png, id=179, 417.56pt x 224.84pt>
 File: spreadsheet_history.png Graphic file (type png)
 
 <use spreadsheet_history.png>
-Package pdftex.def Info: spreadsheet_history.png used on input line 1089.
+Package pdftex.def Info: spreadsheet_history.png used on input line 1110.
 (pdftex.def)             Requested size: 252.0pt x 135.6941pt.
- [7 <./spreadsheet_branch.png> <./spreadsheet_merge.png> <./spreadsheet_history
-.png>]
+ [7]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1121.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1142.
 
-Underfull \hbox (badness 3229) in paragraph at lines 1187--1189
+Underfull \hbox (badness 3229) in paragraph at lines 1208--1210
 []\T1/ptm/m/it/8 Conditional static de-
  []
 
 
-Underfull \hbox (badness 3977) in paragraph at lines 1201--1202
+Underfull \hbox (badness 3977) in paragraph at lines 1222--1223
 []\T1/ptm/m/it/8 Embed bokeh com-po-
  []
 
+[8 <./spreadsheet_branch.png> <./spreadsheet_merge.png> <./spreadsheet_history.
+png>]
 LaTeX Font Info:    Font shape `T1/phv/m/n' will be
-(Font)              scaled to size 10.79993pt on input line 1294.
+(Font)              scaled to size 10.79993pt on input line 1315.
 LaTeX Font Info:    Font shape `T1/phv/bx/n' in size <12> not available
-(Font)              Font shape `T1/phv/b/n' tried instead on input line 1294.
+(Font)              Font shape `T1/phv/b/n' tried instead on input line 1315.
 LaTeX Font Info:    Font shape `T1/phv/b/n' will be
-(Font)              scaled to size 10.79993pt on input line 1294.
+(Font)              scaled to size 10.79993pt on input line 1315.
 LaTeX Font Info:    Font shape `T1/phv/bx/sc' in size <12> not available
-(Font)              Font shape `T1/phv/b/sc' tried instead on input line 1294.
+(Font)              Font shape `T1/phv/b/sc' tried instead on input line 1315.
 LaTeX Font Info:    Font shape `T1/phv/b/sc' will be
-(Font)              scaled to size 10.79993pt on input line 1294.
+(Font)              scaled to size 10.79993pt on input line 1315.
 
-Underfull \hbox (badness 10000) in paragraph at lines 1332--1334
+Underfull \hbox (badness 10000) in paragraph at lines 1353--1355
 []\T1/ptm/m/n/8 Microsoft Cor-po-ra-tion. \T1/ptm/m/it/8 Overview of Ex-cel ta-
 bles\T1/ptm/m/n/8 ,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1332--1334
+Underfull \hbox (badness 10000) in paragraph at lines 1353--1355
 [][]$\T1/ptm/m/n/8 https : / / support . o^^^ce . com / en -[] us / article / O
 verview -[] of -[] Excel -[]
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1365.
-[8]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1365.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1386.
+[9
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1386.
  (./paper.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1365.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1365.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1386.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1386.
 
 Package rerunfilecheck Info: File `paper.out' has not changed.
 (rerunfilecheck)             Checksum: 4A4DC325080E829E7C100888F3816DBA;833.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1365.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1386.
  ) 
 Here is how much of TeX's memory you used:
- 9612 strings out of 495028
- 144665 string characters out of 6181497
- 233576 words of memory out of 5000000
+ 9613 strings out of 495028
+ 144671 string characters out of 6181497
+ 230576 words of memory out of 5000000
  12389 multiletter control sequences out of 15000+600000
  178161 words of font info for 240 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 48i,12n,38p,525b,393s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 48i,12n,38p,525b,404s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist
@@ -1245,10 +1248,10 @@ fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw
 /times/utmbi8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/urw/zapfding/uzdr.pfb>
-Output written on paper.pdf (8 pages, 1584349 bytes).
+Output written on paper.pdf (9 pages, 1585618 bytes).
 PDF statistics:
- 299 PDF objects out of 1000 (max. 8388607)
- 233 compressed objects within 3 object streams
- 67 named destinations out of 1000 (max. 500000)
+ 304 PDF objects out of 1000 (max. 8388607)
+ 237 compressed objects within 3 object streams
+ 68 named destinations out of 1000 (max. 500000)
  213 words of extra memory for PDF output out of 10000 (max. 10000000)
 
