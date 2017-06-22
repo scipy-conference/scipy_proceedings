@@ -72,7 +72,7 @@ We build *opto-trode* bundles with 32 nichrome-formvar microwires (0.0015 inch d
 Electrophysiology hardware
 --------------------------
 
-We use an open-source ephys recording system from Intan Technologies for neural recordings (https://intantech.com/RHD2000_evaluation_system.html). The RHD2000 series headstages connect to electrode bundles implanted in the animal’s brain and contain 32-128 amplifiers and ADCs. The Intan data acquisition system offers an open-source C++ based graphical interface that can record up to 512 electrodes (4 headstages) simultaneously at sampling rates of up to 30kHz/channel. This recording system is relatively robust to AC noise, because the electrode signals are digitized right on the headstage itself, but we additionally encase the animal’s behavior and recording chamber in a Faraday cage constructed with standard aluminum insect netting.
+We use an open-source ephys recording system from Intan Technologies for neural recordings (http://intantech.com/RHD2000_evaluation_system.html). The RHD2000 series headstages connect to electrode bundles implanted in the animal’s brain and contain 32-128 amplifiers and ADCs. The Intan data acquisition system offers an open-source C++ based graphical interface that can record up to 512 electrodes (4 headstages) simultaneously at sampling rates of up to 30kHz/channel. This recording system is relatively robust to AC noise, because the electrode signals are digitized right on the headstage itself, but we additionally encase the animal’s behavior and recording chamber in a Faraday cage constructed with standard aluminum insect netting.
 
 Scientific Python stack for data analysis – spike sorting
 ---------------------------------------------------------
@@ -171,7 +171,9 @@ Each putative spike waveform picked by the procedure above consists of 450 sampl
     
 .. math::
     	
-    Energy = \frac{1}{n} \sqrt{\sum_{i=1}^{450} X_i^{2}}\ where\ X_i\ =\ i^{th}\ component\ of\ the\ waveform
+    Energy = \frac{1}{n} \sqrt{\sum_{i=1}^{450} X_i^{2}}
+
+where :math:`X_i = i^{th}` component of the waveform
 
 Finally, we feed in the energy and maximal amplitude of each waveform as features into the GMM in addition to the first 3 principal components. Using scikit-learn’s GMM API, we fit GMMs with cluster numbers varying from 2 to a user-specified maximum number (usually 7 or 8). Each of these models is fit to the data several times (usually 10) and the best fit is chosen according to the Bayesian Information Criterion (BIC) :cite:`bhat2010derivation`. 
 
@@ -194,7 +196,7 @@ Once the parallelized processing step outlined above is over, we start the post-
     
 The logic of the post-processing step revolves around allowing the user to look at the GMM solutions for the putative spikes from every electrode, pick the solution that best splits the noise and spike clusters, and choose the cluster numbers that corresponds to spikes. The GMM clustering step, being unsupervised in nature, can sometimes put spikes from two (or more) separate neurons (with very similar energy-scaled shapes, but different amplitudes) in the same cluster or split the spikes from a single neuron across several clusters. In addition, the actual action potential waveform observed on a electrode depends on the timing of the activity of the neurons in its vicinity – co-active neurons near an electrode can additively produce spike waveforms that have smaller amplitude and are noisier (called ‘multi’ units) (Figure :ref:`fig1`) than single, isolated neurons (called ‘single’ units, Figures :ref:`fig2` and :ref:`fig3`). Therefore, we set up utilities to merge and split clusters in the post-processing step – users can choose to merge clusters when the spikes from a single neuron have been distributed across clusters or split (with a GMM clustering using the same features as in the processing step) a single cluster if it contains spikes from separate neurons. 
 
-.. figure:: Unit13.png
+.. figure:: Unit12.png
    :figclass: bht
 
    A multi unit - 45 samples (1.5ms) on the time/x axis. Compare to the single units in Figures :ref:`fig2` and :ref:`fig3` and note that these spikes have smaller amplitudes and are noisier. Multi units are produced by the co-activity of multiple neurons near the electrode. :label:`fig1`
