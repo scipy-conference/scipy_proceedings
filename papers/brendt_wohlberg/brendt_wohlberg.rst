@@ -11,7 +11,7 @@ SPORCO: A Python package for standard and convolutional sparse representations
 
 .. class:: abstract
 
-   SParse Optimization Research COde (SPORCO) is an open-source Python package for solving optimisation problems with sparsity-inducing regularisation, consisting primarily of sparse coding and dictionary learning, for both standard and convolutional forms of sparse representation. In the current version, all optimization problems are solved within the Alternating Direction Method of Multipliers (ADMM) framework. SPORCO was developed for applications in signal and image processing, but is also expected to be useful for problems in computer vision, statistics, and machine learning.
+   SParse Optimization Research COde (SPORCO) is an open-source Python package for solving optimization problems with sparsity-inducing regularization, consisting primarily of sparse coding and dictionary learning, for both standard and convolutional forms of sparse representation. In the current version, all optimization problems are solved within the Alternating Direction Method of Multipliers (ADMM) framework. SPORCO was developed for applications in signal and image processing, but is also expected to be useful for problems in computer vision, statistics, and machine learning.
 
 .. class:: keywords
 
@@ -83,7 +83,7 @@ which can be derived from the feasibility conditions, provide a convenient measu
 
      \mathbf{u}^{(j+1)} = \mathbf{u}^{(j)} + \mathbf{r}^{(j+1)} \;.
 
-It is often preferable to use normalised versions of these residuals :cite:`wohlberg-2015-adaptive`, obtained by dividing the definitions above by their corresponding normalisation factors
+It is often preferable to use normalized versions of these residuals :cite:`wohlberg-2015-adaptive`, obtained by dividing the definitions above by their corresponding normalization factors
 
 .. math::
     :type: align
@@ -102,9 +102,9 @@ SPORCO provides a flexible set of classes for solving problems within the ADMM f
 
 These residuals are also used within the heuristic scheme, referred to above for, automatically setting the penalty parameter. This scheme is controlled by the ``AutoRho`` entry in the algorithm options dictionary object that is used to specify algorithm options and parameters. For example, to enable or disable it, set :code:`opt['AutoRho', 'Enabled']` to ``True`` or ``False`` respectively, where ``opt`` is an instance of ``admm.admm.ADMM.Options`` or one of its derived classes. It should be emphasized that this method is not always successful, and can result in oscillations or divergence of the optimization. The scheme is enabled by default for classes for which it is expected to give reasonable performance, and disabled for those for which it is not, but these default settings should not be considered to be particularly reliable, and the user is advised to explicitly select whether the method is enabled to disabled.
 
-Additional class attributes and methods can be defined to customize the calculation of diagnostic information, such as the functional value, at each iteration. The SPORCO documentation includes a `detailed description <http://sporco.rtfd.io/en/latest/admm/admm.html>`_ of the required and optional methods to be overridden in defining a class for solving a specific optimisation problem.
+Additional class attributes and methods can be defined to customize the calculation of diagnostic information, such as the functional value, at each iteration. The SPORCO documentation includes a `detailed description <http://sporco.rtfd.io/en/latest/admm/admm.html>`_ of the required and optional methods to be overridden in defining a class for solving a specific optimization problem.
 
-The ``admm.admm`` module also includes classes that are derived from ``admm.admm.ADMM`` to specialise to less general cases; for example, class ``admm.admm.ADMMEqual`` assumes that :math:`A = I`, :math:`B = -I`, and :math:`\mathbf{c} = \mathbf{0}`, which is a very frequently occurring case, allowing derived classes to avoid overriding methods that specify the constraint. The most complex partial specialisation is ``admm.admm.ADMMTwoBlockCnstrnt``, which implements the commonly-occurring ADMM problem form with a block-structured :math:`\mathbf{y}` variable,
+The ``admm.admm`` module also includes classes that are derived from ``admm.admm.ADMM`` to specialize to less general cases; for example, class ``admm.admm.ADMMEqual`` assumes that :math:`A = I`, :math:`B = -I`, and :math:`\mathbf{c} = \mathbf{0}`, which is a very frequently occurring case, allowing derived classes to avoid overriding methods that specify the constraint. The most complex partial specialization is ``admm.admm.ADMMTwoBlockCnstrnt``, which implements the commonly-occurring ADMM problem form with a block-structured :math:`\mathbf{y}` variable,
 
 .. math::
    :type: align
@@ -126,7 +126,7 @@ for solving problems that have the form
 prior to variable splitting. The block components of the :math:`\mathbf{y}` variable are concatenated into a single NumPy array, with access to the individual components provided by methods ``block_sep0`` and ``block_sep1``.
 
 
-Defining new classes derived from ``admm.admm.ADMM`` or one of its partial specialisations provides complete flexibility in constructing a new ADMM algorithm, while reducing the amount of code that has to be written compared with implementing the entire ADMM algorithm from scratch. When a new ADMM algorithm is closely related to an existing algorithm, it is often much easier to derived the new class from that of the existing algorithm, as described in the section *Extending SPORCO*.
+Defining new classes derived from ``admm.admm.ADMM`` or one of its partial specializations provides complete flexibility in constructing a new ADMM algorithm, while reducing the amount of code that has to be written compared with implementing the entire ADMM algorithm from scratch. When a new ADMM algorithm is closely related to an existing algorithm, it is often much easier to derived the new class from that of the existing algorithm, as described in the section *Extending SPORCO*.
 
 
 Sparse Coding
@@ -150,7 +150,7 @@ This algorithm is effective because the :math:`Y` step can be solved in closed f
 .. math::
    (D^T D + \rho I) X = D^T S + \rho (Y - U) \;\;.
 
-SPORCO solves this system efficiently by pre-computing an LU factorisation of :math:`(D^T D + \rho I)` which enables a rapid direct-method solution at every iteration (see Sec. 4.2.3 in :cite:`boyd-2010-distributed`). In addition, if :math:`(D D^T + \rho I)` is smaller than :math:`(D^T D + \rho I)`, the matrix inversion lemma is used to reduce the size of the system that is actually solved (see Sec. 4.2.4 in :cite:`boyd-2010-distributed`).
+SPORCO solves this system efficiently by pre-computing an LU factorization of :math:`(D^T D + \rho I)` which enables a rapid direct-method solution at every iteration (see Sec. 4.2.3 in :cite:`boyd-2010-distributed`). In addition, if :math:`(D D^T + \rho I)` is smaller than :math:`(D^T D + \rho I)`, the matrix inversion lemma is used to reduce the size of the system that is actually solved (see Sec. 4.2.4 in :cite:`boyd-2010-distributed`).
 
 
 
@@ -191,7 +191,7 @@ which is implemented by class ``admm.cbpdn.ConvBPDN``. Module ``admm.cbpdn`` als
    \frac{1}{2} \left \|  W \left( \sum_m \mathbf{d}_m * \mathbf{x}_m -
    \mathbf{s} \right) \right \|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;\;.
 
-SPORCO also supports two different methods for convolutional sparse coding of multi-channel (e.g. colour) images :cite:`wohlberg-2016-convolutional`. The one represents a multi-channel input with channels :math:`\mathbf{s}_c` with single-channel dictionary filters :math:`\mathbf{d}_m` and multi-channel coefficient maps :math:`\mathbf{x}_{c,m}`,
+SPORCO also supports two different methods for convolutional sparse coding of multi-channel (e.g. color) images :cite:`wohlberg-2016-convolutional`. The one represents a multi-channel input with channels :math:`\mathbf{s}_c` with single-channel dictionary filters :math:`\mathbf{d}_m` and multi-channel coefficient maps :math:`\mathbf{x}_{c,m}`,
 
 .. math::
    \mathrm{argmin}_\mathbf{x} \;
@@ -215,7 +215,7 @@ An important issue that has received surprisingly little attention in the litera
    \right\|_2^2 + \frac{\lambda}{2} \sum_i \| G_i \mathbf{x} \|_2^2 \;\;,
 
 where :math:`G_i` is an operator computing the derivative along axis :math:`i` of the array represented as vector :math:`\mathbf{x}`, and :math:`\lambda` is a parameter controlling the amount of smoothing.
-In some cases it is not feasible to handle the lowpass component via such a pre-processing strategy, making it necessary to include the lowpass component in the CSC optimization problem itself. The simplest approach to doing so is to append an impulse filter to the dictionary and include a gradient regularisation term on corresponding coefficient map in the functional (Sec. 3) :cite:`wohlberg-2016-convolutional2`. This approach is supported by class ``admm.cbpdn.ConvBPDNGradReg``, the use of which is demonstrated in section *Removal of Impulse Noise via CSC*.
+In some cases it is not feasible to handle the lowpass component via such a pre-processing strategy, making it necessary to include the lowpass component in the CSC optimization problem itself. The simplest approach to doing so is to append an impulse filter to the dictionary and include a gradient regularization term on corresponding coefficient map in the functional (Sec. 3) :cite:`wohlberg-2016-convolutional2`. This approach is supported by class ``admm.cbpdn.ConvBPDNGradReg``, the use of which is demonstrated in section *Removal of Impulse Noise via CSC*.
 
 
 Convolutional Dictionary Learning
@@ -374,7 +374,7 @@ create an object representing the desired algorithm options
 			   'MaxMainIter' : 500,
 			   'RelStopTol' : 1e-6})
 
-then initialise the solver object
+then initialize the solver object
 
 .. code-block:: python
 
@@ -393,7 +393,7 @@ leaving the result in NumPy array ``x``. Since the optimizer objects retain algo
 Removal of Impulse Noise via CSC
 ================================
 
-We now consider a more detailed and realistic usage example, based on using CSC to remove impulse noise from a colour image. First we need to import some modules, including ``print_function`` for Python 2/3 compatibility, numpy, and a number of modules from SPORCO:
+We now consider a more detailed and realistic usage example, based on using CSC to remove impulse noise from a color image. First we need to import some modules, including ``print_function`` for Python 2/3 compatibility, numpy, and a number of modules from SPORCO:
 
 .. code-block:: python
 
@@ -437,7 +437,7 @@ Now we load a reference image (see the discussion on the script for downloading 
    imgn = util.spnoise(img, 0.33)
 
 
-We use a colour dictionary, as described in :cite:`wohlberg-2016-convolutional`. The impulse denoising problem is solved by appending some additional filters to the learned dictionary ``D0``, which is one of those distributed with SPORCO. The first of these additional components is a set of three impulse filters, one per colour channel, that will represent the impulse noise, and the second is an identical set of impulse filters that will represent the low frequency image components when used together with a gradient penalty on the coefficient maps, as discussed below.
+We use a color dictionary, as described in :cite:`wohlberg-2016-convolutional`. The impulse denoising problem is solved by appending some additional filters to the learned dictionary ``D0``, which is one of those distributed with SPORCO. The first of these additional components is a set of three impulse filters, one per color channel, that will represent the impulse noise, and the second is an identical set of impulse filters that will represent the low frequency image components when used together with a gradient penalty on the coefficient maps, as discussed below.
 
 .. code-block:: python
 
@@ -456,7 +456,7 @@ The problem is solved using class ``admm.cbpdn.ConvBPDNGradReg``, which implemen
    \right \|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 +
    \frac{\mu}{2} \sum_i \sum_m \| G_i \mathbf{x}_m \|_2^2
 
-where :math:`G_i` is an operator computing the derivative along index :math:`i`, as described in :cite:`wohlberg-2016-convolutional2`. The regularization parameters for the :math:`\ell_1` and gradient terms are ``lmbda`` and ``mu`` respectively. Setting correct weighting arrays for these regularization terms is critical to obtaining good performance. For the :math:`\ell_1` norm, the weights on the filters that are intended to represent the impulse noise are tuned to an appropriate value for the impulse noise density (this value sets the relative cost of representing an image feature by one of the impulses or by one of the filters in the learned dictionary), the weights on the filters that are intended to represent low frequency components are set to zero (we only want them penalised by the gradient term), and the weights of the remaining filters are set to zero. For the gradient penalty, all weights are set to zero except for those corresponding to the filters intended to represent low frequency components, which are set to unity.
+where :math:`G_i` is an operator computing the derivative along index :math:`i`, as described in :cite:`wohlberg-2016-convolutional2`. The regularization parameters for the :math:`\ell_1` and gradient terms are ``lmbda`` and ``mu`` respectively. Setting correct weighting arrays for these regularization terms is critical to obtaining good performance. For the :math:`\ell_1` norm, the weights on the filters that are intended to represent the impulse noise are tuned to an appropriate value for the impulse noise density (this value sets the relative cost of representing an image feature by one of the impulses or by one of the filters in the learned dictionary), the weights on the filters that are intended to represent low frequency components are set to zero (we only want them penalized by the gradient term), and the weights of the remaining filters are set to zero. For the gradient penalty, all weights are set to zero except for those corresponding to the filters intended to represent low frequency components, which are set to unity.
 
 .. code-block:: python
 
@@ -472,7 +472,7 @@ where :math:`G_i` is an operator computing the derivative along index :math:`i`,
 	  'RelStopTol': 5e-3, 'AuxVarObj': False,
 	  'L1Weight': w1, 'GradWeight': wg})
 
-Now we initialise the ``cbpdn.ConvBPDNGradReg`` object and call the ``solve`` method.
+Now we initialize the ``cbpdn.ConvBPDNGradReg`` object and call the ``solve`` method.
 
 .. code-block:: python
 
@@ -657,7 +657,7 @@ To solve the impulse denoising problem we load the reference image and dictionar
    imglp = np.load('implslpc.npz')['imglp']
 
 
-Now we initialise an instance of our new class, solve, and reconstruct the denoised estimate
+Now we initialize an instance of our new class, solve, and reconstruct the denoised estimate
 
 .. code-block:: python
 
@@ -687,15 +687,15 @@ In addition to the main set of classes for solving inverse problems,
 SPORCO provides a number of supporting functions and classes, within
 the following modules:
 
-* ``util``: Various utility functions and classes, including a parallel-processing grid search for parameter optimisation, access to a set of pre-learned convolutional dictionaries, and access to a set of example images.
+* ``util``: Various utility functions and classes, including a parallel-processing grid search for parameter optimization, access to a set of pre-learned convolutional dictionaries, and access to a set of example images.
 
-* ``plot``: Functions for plotting graphs or 3D surfaces and visualising images, providing simplified access to matplotlib functionality.
+* ``plot``: Functions for plotting graphs or 3D surfaces and visualizing images, providing simplified access to matplotlib functionality.
 
 * ``linalg``: Linear algebra and related functions, including solvers for specific forms of linear system and filters for computing image gradients.
 
 * ``metric``: Image quality metrics including standard metrics such as MSE, SNR, and PSNR.
 
-* ``cdict``: A constrained dictionary class that constrains the allowed dict keys, and also initialises the dict with default content on instantiation. All of the inverse problem algorithm options classes are derived from this class.
+* ``cdict``: A constrained dictionary class that constrains the allowed dict keys, and also initializes the dict with default content on instantiation. All of the inverse problem algorithm options classes are derived from this class.
 
 
 Conclusion
@@ -705,7 +705,7 @@ SPORCO is an actively maintained and thoroughly documented open source Python pa
 
 
 
-Acknowledgement
+Acknowledgment
 ---------------
 
 Development of SPORCO was supported by the U.S. Department of Energy through the LANL/LDRD Program.
