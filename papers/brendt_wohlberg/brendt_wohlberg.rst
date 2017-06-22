@@ -23,7 +23,7 @@ Introduction
 
 SPORCO is an open-source Python package for solving inverse problems with sparsity-inducing regularization :cite:`mairal-2014-sparse`. It was developed for applications in signal and image processing, but is also expected to be useful for problems in computer vision, statistics, and machine learning.
 
-SPORCO was initially a Matlab library, but the implementation language was switched to Python for a number of reasons, including (i) the substantial cost of Matlab licenses within an environment that does not qualify for an academic discount, and the difficulty of running large scale experiments on multiple hosts with a limited supply of toolbox licenses, (ii) the greater maintainability and flexibility of the object-oriented design possible in Python, (iii) the flexibility provided by NumPy in indexing arrays of arbitrary numbers of dimensions (essentially impossible in Matlab), and (iv) the vast superiority of Python as a general-purpose programming language.
+SPORCO was initially a Matlab library, but the implementation language was switched to Python for a number of reasons, including (i) the substantial cost of Matlab licenses (particularly in an environment that does not qualify for an academic discount), and the difficulty of running large scale experiments on multiple hosts with a limited supply of toolbox licenses, (ii) the greater maintainability and flexibility of the object-oriented design possible in Python, (iii) the flexibility provided by NumPy in indexing arrays of arbitrary numbers of dimensions (essentially impossible in Matlab), and (iv) the  superiority of Python as a general-purpose programming language.
 
 SPORCO supports a variety of inverse problems, including Total Variation :cite:`rudin-1992-nonlinear` :cite:`alliney-1992-digital` denoising and deconvolution, and Robust PCA :cite:`cai-2010-singular`, but the primary focus is on sparse coding and dictionary learning, for solving problems with sparse representations :cite:`mairal-2014-sparse`. Both standard and convolutional forms of sparse representations are supported. In the standard form the dictionary is a matrix, which limits the sizes of signals, images, etc. that can be directly represented; the usual strategy is to compute independent representations for a set of overlapping blocks. In the convolutional form :cite:`zeiler-2010-deconvolutional`:cite:`wohlberg-2016-efficient`, which is more recent, the dictionary is a set of linear filters, making it feasible to directly represent an entire signal or image. The support for the convolutional form is one of the major strengths of SPORCO since it is the only Python package to provide such a breadth of options for convolutional sparse coding and dictionary learning. Some features are not available in any other open-source package, including support for representation of multi-channel images (e.g. RGB color images) :cite:`wohlberg-2016-convolutional`, and representation of arrays of arbitrary numbers of dimensions, allowing application to one-dimensional signals, images, and video and volumetric data.
 
@@ -122,7 +122,7 @@ for solving problems that have the form
 prior to variable splitting. The block components of the :math:`\mathbf{y}` variable are concatenated into a single NumPy array, with access to the individual components provided by methods ``block_sep0`` and ``block_sep1``.
 
 
-Defining new classes derived from ``admm.admm.ADMM`` or one of its partial specialisations provides complete flexibility in constructing a new ADMM algorithm, while reducing the amount of code that has to be written compared with implementing the entire ADMM algorithm from scratch. When a new ADMM algorithm to be implemented is closely related to an existing algorithm, it is often much easier to derived the new class from that of the existing algorithm, as described in the section *Extending SPORCO*.
+Defining new classes derived from ``admm.admm.ADMM`` or one of its partial specialisations provides complete flexibility in constructing a new ADMM algorithm, while reducing the amount of code that has to be written compared with implementing the entire ADMM algorithm from scratch. When a new ADMM algorithm is closely related to an existing algorithm, it is often much easier to derived the new class from that of the existing algorithm, as described in the section *Extending SPORCO*.
 
 
 Sparse Coding
@@ -257,12 +257,7 @@ SPORCO convolutional representations are stored within NumPy arrays of ``dimN`` 
 Sparse Coding
 =============
 
-For the convenience of the user, the ``D`` (dictionary) and ``S`` (signal) arrays provided to the convolutional sparse coding classes need not follow this strict format, but they are internally reshaped to this format for computational efficiency. This internal reshaping is largely transparent to the user, but must be taken into account when passing weighting arrays to optimization classes (e.g. option ``L1Weight`` for class ``admm.cbpdn.ConvBPDN``). When performing the reshaping into internal array layout, it is necessary to infer the intended roles of the axes of the input arrays, which is performed by class ``admm.cbpdn.ConvRepIndexing`` (note that this class is expected to be moved to a different module in a future version of SPORCO). The inference rules are relatively complex, depending on both the number of dimensions in the ``D`` and ``S`` arrays, and on parameters ``dimK`` and ``dimN``. The most fundamental parameter is ``dimN``, which should be common to *input* ``S`` and ``D``, and is also common to *internal* ``S``, ``D``, and ``X`` (convolutional representation). The remaining dimensions of input ``S`` can correspond to multiple channels (e.g. for RGB images) and/or multiple signals (e.g. the array contains multiple independent images). If input ``S`` contains two dimensions in addition to the ``dimN`` spatial dimensions, then those are considered to correspond, in order, to channel and signal indices. If there is only a single additional dimension, then determination whether it represents a channel or signal index is more complicated. The rule for making this determination is as follows:
-
-* if ``dimK`` is set to 0 or 1 instead of the default ``None``, then that value is taken as the number of signal indices in input `S` and any remaining indices are taken as channel indices (i.e. if ``dimK`` = 0 then ``dimC`` = 1 and if ``dimK`` = 1 then ``dimC`` = 0).
-* if ``dimK`` is ``None`` then the number of channel dimensions is determined from the number of dimensions in the input dictionary ``D``. Input ``D`` should have at least ``dimN`` + 1 dimensions, with the final dimension indexing dictionary filters. If it has exactly ``dimN`` + 1 dimensions then it is a single-channel dictionary, and input ``S`` is also assumed to be single-channel, with the additional index in ``S`` assigned as a signal index (i.e. ``dimK`` = 1).  Conversely, if input ``D`` has ``dimN`` + 2 dimensions it is a multi-channel dictionary, and the additional index in ``S`` is assigned as a channel index (i.e. ``dimC`` = 1).
-
-It is an error to specify ``dimK`` = 1 if input ``S`` has ``dimN`` + 1 dimensions and input ``D`` has ``dimN`` + 2 dimensions since a multi-channel dictionary requires a multi-channel signal. (The converse is not true: a multi-channel signal can be decomposed using a single-channel dictionary.)
+For the convenience of the user, the ``D`` (dictionary) and ``S`` (signal) arrays provided to the convolutional sparse coding classes need not follow this strict format, but they are internally reshaped to this format for computational efficiency. This internal reshaping is largely transparent to the user, but must be taken into account when passing weighting arrays to optimization classes (e.g. option ``L1Weight`` for class ``admm.cbpdn.ConvBPDN``). When performing the reshaping into internal array layout, it is necessary to infer the intended roles of the axes of the input arrays, which is performed by class ``admm.cbpdn.ConvRepIndexing`` (note that this class is expected to be moved to a different module in a future version of SPORCO). The inference rules, which are described in detail in the documentation for class ``admm.cbpdn.ConvRepIndexing``, are relatively complex, depending on both the number of dimensions in the ``D`` and ``S`` arrays, and on parameters ``dimK`` and ``dimN``.
 
 
 Dictionary Update
@@ -294,7 +289,7 @@ To install the development version from `GitHub
 
 ::
 
-    git clone git://github.com/bwohlberg/sporco.git
+    git clone https://github.com/bwohlberg/sporco.git
 
 followed by
 
@@ -302,6 +297,7 @@ followed by
 
    cd sporco
    python setup.py build
+   python setup.py test
    python setup.py install
 
 The install command will usually have to be performed with root
