@@ -42,7 +42,9 @@ As an example, a Logistic Regression function is given below:
     @jit(parallel=True)
     def logistic_regression(Y, X, w, iterations):
         for i in range(iterations):
-            w -= np.dot(((1.0 / (1.0 + np.exp(-Y * np.dot(X, w))) - 1.0) * Y), X)
+            w += np.dot(
+                   Y / (1.0 + np.exp(Y * np.dot(X, w))),
+                   X )
         return w
 
 We will not discuss details of the algorithm, but instead focus on how this program behaves with auto-parallelization:
@@ -68,7 +70,7 @@ We measure the performance of automatic parallelization over three workloads, co
 
 .. figure:: parallel/parallel_benchmarks.jpg
 
-Auto-parallelization proves to be an effective optimization for these benchmarks, achieving speedups from 5.9x to 11.8x over sequential Numba on 12-core Xeon X5680 @3.33GHz with 64GB RAM. The benchmarks are available as part of Numba's source distribution [numba]_. 
+Auto-parallelization proves to be an effective optimization for these benchmarks, achieving speedups from 5.9x to 11.8x over sequential Numba on 12-core Intel |R| Xeon |R| X5680 @3.33GHz with 64GB RAM. The benchmarks are available as part of Numba's source distribution [numba]_.
 
 Our future plan is to support array range selection, enable auto-parallelization of more NumPy functions, as well as adding new features such as iterative stencils. We also plan to implement more optimizations that help make parallel programs run fast, improving both performance and productivity for Python programmers in the scientific domain.
 

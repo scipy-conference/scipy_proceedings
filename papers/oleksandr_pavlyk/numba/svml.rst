@@ -12,20 +12,20 @@ where a computer program is converted from a scalar implementation, which proces
 to a vector implementation, which processes one operation on multiple pairs of operands at once.
 
 According Numba's project page Numba is an Open Source NumPy-aware optimizing compiler for Python. 
-It uses the remarkable LLVM compiler infrastructure to compile Python syntax to machine code. And it quite expected that NUMBA tries 
+It uses the remarkable LLVM compiler infrastructure to compile Python syntax to machine code. And it quite expected that Numba tries
 to use all this features to improve performance especially for scientific applications. 
 
 
 LLVM implemented autovectorization for simple cases several years ago but there was quite sigificant problem with math functions.
 For proper vectorization it's needed to have special vectorized implementation of math fucntions as sin, cos, exp... 
 
-The Intel® C++ Compiler provides short vector math library (SVML) intrinsics to compute vector math functions. 
+The Intel |R| C++ Compiler provides short vector math library (SVML) intrinsics to compute vector math functions.
 These intrinsics are available for IA-32 and Intel® 64 architectures running on supported operating systems.
 
-The SVML intrinsics are vector variants of corresponding scalar math operations using __m128, __m128d, __m256, __m256d, and __m256i data types.
+The SVML intrinsics are vector variants of corresponding scalar math operations using ``__m128``, ``__m128d``, ``__m256``, ``__m256d``, and ``__m256i`` data types.
 They take packed vector arguments, perform the operation on each element of the packed vector argument, and return a packed vector result.
 
-For example, the argument to the _mm_sin_ps intrinsic is a packed 128-bit vector of four 32-bit precision floating point numbers. The intrinsic computes the sine of each of these four numbers and returns the four results in a packed 128-bit vector.
+For example, the argument to the ``_mm_sin_ps`` intrinsic is a packed 128-bit vector of four 32-bit precision floating point numbers. The intrinsic computes the sine of each of these four numbers and returns the four results in a packed 128-bit vector.
 
 Using SVML intrinsics is faster than repeatedly calling the scalar math functions. However, the intrinsics differ from the scalar functions in accuracy.
 
