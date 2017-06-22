@@ -178,7 +178,7 @@ This approach is implemented by class ``admm.bpdndl.DictLearn``. An unusual feat
 Convolutional Sparse Coding
 ---------------------------
 
-Convolutional sparse coding (CSC) is based on a convolutional form of BPDN, which we will be referred to as Convolutional BPDN (CBPDN) :cite:`wohlberg-2016-efficient`
+Convolutional sparse coding (CSC) is based on a convolutional form of BPDN, which will be referred to as Convolutional BPDN (CBPDN) :cite:`wohlberg-2016-efficient`
 
 .. math::
    \mathrm{argmin}_\mathbf{x} \;
