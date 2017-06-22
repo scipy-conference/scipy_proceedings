@@ -371,25 +371,36 @@ Each optimization algorithm is implemented as a separate class. Solving a proble
    \mathrm{argmin}_{\mathbf{x}} \;
    (1/2) \| D \mathbf{x} - \mathbf{s} \|_F^2 + \lambda \| \mathbf{x} \|_1
 
-for a given dictionary :math:`D` and signal vector :math:`\mathbf{s}`, represented by NumPy arrays ``D`` and ``s`` respectively. After importing the appropriate module
+for a given dictionary :math:`D` and signal vector :math:`\mathbf{s}`, represented by NumPy arrays ``D`` and ``s`` respectively. After importing the appropriate modules
 
 .. code-block:: python
 
+   import numpy as np
    from sporco.admm import bpdn
 
-create an object representing the desired algorithm options
+we construct a synthetic problem consisting of a random dictionary and a test signal that is generated so that it has a very sparse representation, ``x0``, on that dictionary
 
 .. code-block:: python
 
-  opt = bpdn.BPDN.Options({'Verbose' : True,
+   np.random.seed(12345)
+   D = np.random.randn(8, 16)
+   x0 = np.zeros((16, 1))
+   x0[[3,11]] = np.random.randn(2,1)
+   s = D.dot(x0)
+
+Now we create an object representing the desired algorithm options
+
+.. code-block:: python
+
+   opt = bpdn.BPDN.Options({'Verbose' : True,
 			   'MaxMainIter' : 500,
 			   'RelStopTol' : 1e-6})
 
-then initialize the solver object
+initialize the solver object
 
 .. code-block:: python
 
-  lmbda = 25.0
+  lmbda = 1e-2
   b = bpdn.BPDN(D, s, lmbda, opt)
 
 and call the ``solve`` method
