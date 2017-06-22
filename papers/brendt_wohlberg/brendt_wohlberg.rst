@@ -138,7 +138,7 @@ Sparse coding in SPORCO is based on the Basis Pursuit DeNoising (BPDN) problem :
    \mathrm{argmin}_X \;
    (1/2) \| D X - S \|_F^2 + \lambda \| X \|_1 \;,
 
-which is implemented by class ``admm.bpdn.BPDN``. A number of variations on this problem are supported by other classes in module ``admm.bpdn``. BPDN is solved via the equivalent ADMM problem
+were :math:`D` is the dictionary, :math:`S` is the signal to be represented, :math:`X` is the sparse representation, and :math:`\lambda` is the regularization parameter controlling the sparsity of the solution. BPDN is solved via the equivalent ADMM problem
 
 .. math::
    \mathrm{argmin}_X \;
@@ -152,6 +152,7 @@ This algorithm is effective because the :math:`Y` step can be solved in closed f
 
 SPORCO solves this system efficiently by pre-computing an LU factorization of :math:`(D^T D + \rho I)` which enables a rapid direct-method solution at every iteration (see Sec. 4.2.3 in :cite:`boyd-2010-distributed`). In addition, if :math:`(D D^T + \rho I)` is smaller than :math:`(D^T D + \rho I)`, the matrix inversion lemma is used to reduce the size of the system that is actually solved (see Sec. 4.2.4 in :cite:`boyd-2010-distributed`).
 
+The solution of the BPDN problem is implemented by class ``admm.bpdn.BPDN``. A number of variations on this problem are supported by other classes in module ``admm.bpdn``.
 
 
 Dictionary Learning
@@ -269,6 +270,13 @@ Dictionary Update
 
 The handling of convolutional representations by the dictionary update classes in module ``admm.ccmod`` are similar to those for sparse coding, the primary difference being the the dictionary update classes expect that the sparse representation inputs ``X`` are already in the standard layout as described above since they are usually obtained as the output of one of the sparse coding classes, and therefore already have the required layout. The inference of internal dimensions for these classes is handled by class ``admm.ccmod.ConvRepIndexing`` (which is also expected to be moved to a different module in a future version of SPORCO).
 
+
+Problem Parameters
+------------------
+
+Most of the inverse problems supported by SPORCO have at least one problem parameter (e.g. regularization parameter :math:`\lambda` in the BPDN  and CBPDN problems) that determines the balance between the different terms in the functional to be minimized. Of these, the only problem that has a relatively reliable default value for its parameter is RPCA (see class ``admm.rpca.RobustPCA``). Most of the classes implementing BPDN and CBPDN problems do have default values for regularization parameter :math:`\lambda`, but these defaults should not be expected to provide even close to optimal performance for specific applications, and may be removed in future versions.
+
+SPORCO does not support any statistical parameter estimation techniques such as GCV :cite:`golub-1979-generalized` or SURE :cite:`stein-1981-estimation`, but the grid search function ``util.grid_search`` can be very helpful in selecting problem parameters when a suitable data set with ground truth is available. This function efficiently evaluates a user-specified performance measure, in parallel, over a single- or multi-dimensional grid sampling the parameter space. Usage of this function is illustrated in the example scripts ``examples/stdsparse/demo_bpdn.py`` and ``examples/stdsparse/demo_bpdnjnt.py``, which "cheat" by evaluating performance by using the ground truth for the actual problem being solved. In a more realistic setting, one would optimize the parameters using the ground truth for a seperate set of data with the same properties as those of the data for the test problem.
 
 
 Installing SPORCO
