@@ -21,7 +21,7 @@ SPORCO: A Python package for standard and convolutional sparse representations
 Introduction
 ------------
 
-SPORCO is an open-source Python package for solving inverse problems with sparsity-inducing regularization :cite:`mairal-2014-sparse`. It was developed for applications in signal and image processing, but is also expected to be useful for problems in computer vision, statistics, and machine learning.
+SPORCO is an open-source Python package for solving inverse problems with sparsity-inducing regularization :cite:`mairal-2014-sparse`. This type of regularization has become one of the leading techniques in signal and image processing, with applications including image denoising, inpainting, deconvolution, superresolution, and compressed sensing, to name only a few. It is also a prominent method in machine learning and computer vision, with applications including image classification, video background modeling, collaborative filtering, and genomic data analysis, and is widely used in statistics as a regression technique.
 
 SPORCO was initially a Matlab library, but the implementation language was switched to Python for a number of reasons, including (i) the substantial cost of Matlab licenses (particularly in an environment that does not qualify for an academic discount), and the difficulty of running large scale experiments on multiple hosts with a limited supply of toolbox licenses, (ii) the greater maintainability and flexibility of the object-oriented design possible in Python, (iii) the flexibility provided by NumPy in indexing arrays of arbitrary numbers of dimensions (essentially impossible in Matlab), and (iv) the  superiority of Python as a general-purpose programming language.
 
