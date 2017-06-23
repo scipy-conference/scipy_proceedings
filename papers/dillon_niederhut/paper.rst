@@ -9,7 +9,7 @@ Software Transactional Memory in Pure Python
 
 .. class:: abstract
 
-   There has been a growing interest in programming models for concurrency.  Strategies for dealing with shared data amongst parallel threads of execution include immutable (as in Erlang) and locked (as in Python) data structures. A third option exists, called transactional memory (as in Haskell), which includes thread-local journaling for operations on objects which are both mutable and globally shared. Here, we present a pure Python implementation of the TL2 algorithm for software transactional memory.
+   There has been a growing interest in programming models for concurrency.  Strategies for dealing with shared data amongst parallel threads of execution include immutable (as in Erlang) and locked (as in Python) data structures. A third option exists, called transactional memory (as in Haskell), which includes thread-local journaling for operations on objects which are both mutable and globally shared. Here, we present TraM, a pure Python implementation of the TL2 algorithm for software transactional memory.
 
 .. class:: keywords
 
@@ -80,9 +80,9 @@ Under work loads that are predominantly read operations, TL2 outperforms lock-ba
 The Python Implementation
 --------------------------
 
-This Python implementation of TL2 attempts to recreate the algorithm pythonically, and is not a one-for-one translation of the Java library[#]_. The chief difference is that we are not using a global counter whose state is maintained by primitives in the language, but are instead using the system clock. This comes with the additional cost of making system calls, but prevents us from the necessity of building a concurrency strategy inside our concurrency strategy, since the clock needs to be shared across all threads.
+The TraM package attempts to recreate the TL2 algorithm for transactional memory pythonically, and is not a one-for-one transliteration of the original Java implementation[#]_. The chief difference is that it does not use a global counter whose state is maintained by primitives in the language, but is instead using the system clock. This comes with the additional cost of making system calls, but prevents us from the necessity of building a concurrency strategy inside our concurrency strategy, since the clock state must be shared across all threads.
 
-It starts by entering a retry loop, that will attempt to conduct the transaction a limited number of times before raising an exception. Ideally, this number is large enough that the retry limit would only be reached in the event of a system failure.
+The algorithm starts by entering a retry loop, that will attempt to conduct the transaction a limited number of times before raising an exception. Ideally, this number is large enough that the retry limit would only be reached in the event of a system failure.
 
 .. code-block:: python
 
