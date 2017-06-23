@@ -45,9 +45,9 @@ In this paper, we present a pattern matching library for Python and the underlyi
 
 The goal of pattern matching is to find a match substitution given a subject term and a pattern which is a term with placeholders :cite:`Baader1998`.
 The substitution maps placeholders in the pattern to replacement terms.
-A match is a substitution that can be applied to the pattern with the result being the original subject.
+A match is a substitution that can be applied to the pattern yielding the original subject.
 As an example consider the subject :math:`f(a)` and the pattern :math:`f(x)` where :math:`x` is a placeholder.
-Then the substitution :math:`\{ x \mapsto a \}` is a match.
+Then the substitution :math:`\sigma = \{ x \mapsto a \}` is a match because :math:`\sigma(f(x)) = f(a)`.
 This form of pattern matching without any special properties of function symbols is called syntactic matching.
 For syntactic patterns, the match is unique if it exists.
 
@@ -89,7 +89,7 @@ Finally, we draw some conclusions from the experiments and propose future work o
 Usage Overview
 --------------
 
-MatchPy can be installed using ``pip install matchpy`` and all necessary classes can be imported with :py:`from matchpy import *`.
+MatchPy can be installed using ``pip`` and all necessary classes can be imported from the toplevel module ``matchpy import``.
 Expressions in MatchPy consist of constant symbols and operations.
 For patterns, wildcards can also be used as placeholders.
 We use `Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for wildcards,
@@ -109,6 +109,7 @@ We use `next` because we only want to use the first (and in this case only) matc
 In addition to regular (dot) variables, MatchPy also supports sequence wildcards.
 They can match a sequence of arguments and we denote them with two or three trailing underscores for plus and star wildcards, respectively.
 Star wildcards can match an empty sequence, while plus wildcards require at least one argument to match.
+The terminology is borrowed from regular expressions where `*`, `+` and `.` are used for similar concepts.
 
 .. code-block:: pycon
 
@@ -151,6 +152,8 @@ We can use the ``CustomConstraint`` class to create a constraint that checks whe
 
     a_lt_b = CustomConstraint(lambda a, b: a < b)
 
+The lambda function gets called with the variable substitutions based on their name.
+The order of arguments is not important and it is possible to only use a subset of the variables in the pattern.
 With this constraint we can define a replacement rule that basically describes bubble sort:
 
 .. code-block:: pycon
@@ -159,6 +162,7 @@ With this constraint we can define a replacement rule that basically describes b
     >>> rule = ReplacementRule(pattern,
                     lambda a, b, h, t: [*h, a, b, *t])
 
+The replacement function gets called with all matched variables as keyword arguments and needs to return the replacement.
 This replacement rule can be used to sort a list when applied repeatedly with ``replace_all``:
 
 .. code-block:: pycon
