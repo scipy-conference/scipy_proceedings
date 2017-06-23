@@ -34,6 +34,11 @@
 :institution: Intel Corporation
 :equal-contributor:
 
+:author: Sergey Maidanov
+:email: sergey.maidanov@intel.com
+:institution: Intel Corporation
+:equal-contributor:
+
 :year: 2017
 
 :video: http://www.youtube.com/watch?v=
@@ -54,16 +59,16 @@ Accelerating Scientific Python with Intel Optimizations
 
 .. class:: keywords
 
-   numpy,scipy,sk-learn,numba,simd,parallel,optimization,performance
+   numpy,scipy,scikit-learn,numba,simd,parallel,optimization,performance
 
 Introduction
 ------------
 
-Intel released new version of its Distribution [IDP-Release]_. We suggest
-detailed report about optimization work we accomplished for Intel |R|
-Distribution for Python*, which might be interesting for developers of
-SciPy tools. It already offered great performance improvements for
-NumPy*, SciPy*, and Scikit-learn* that you can see across a range of
+Intel recently released a new version of its Distribution [IDP-Release]_. 
+This paper offers a detailed report about optimization that went into the 
+Intel |R| Distribution for Python*, which might be interesting for 
+developers of SciPy tools. It already offered great performance improvements 
+for NumPy*, SciPy*, and Scikit-learn* that you can see across a range of
 Intel processors, from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R|
 and Intel |R| Xeon Phi |TM| processors.
 
