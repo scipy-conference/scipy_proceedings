@@ -88,7 +88,7 @@ Finally, we draw some conclusions from the experiments and propose future work o
 Usage Overview
 --------------
 
-MatchPy can be installed using ``pip`` and all necessary classes can be imported from the toplevel module ``matchpy import``.
+MatchPy can be installed using ``pip`` and all necessary classes can be imported from the toplevel module ``matchpy``.
 Expressions in MatchPy consist of constant symbols and operations.
 For patterns, wildcards can also be used as placeholders.
 We use `Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for wildcards,
