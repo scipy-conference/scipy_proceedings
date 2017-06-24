@@ -28,7 +28,7 @@ MatchPy: A Pattern Matching Library
 
    Pattern matching is a powerful tool for symbolic computations, based on the well-defined theory of term rewriting systems.
    Application domains include algebraic expressions, abstract syntax trees, and XML and JSON data.
-   Unfortunately, no implementation of pattern matching as general and flexible as in Mathematica exists for Python.
+   Unfortunately, no lightweight implementation of pattern matching as general and flexible as in Mathematica exists for Python :cite:`Mathics,MacroPy,patterns,PyPatt`.
    Therefore, we created the open source module MatchPy_ which offers similar pattern matching functionality in Python using
    a novel algorithm which finds matches for large pattern sets more efficiently by exploiting similarities between patterns.
 
@@ -53,6 +53,7 @@ For syntactic patterns, the match is unique if it exists.
 
 Among the existing systems, Mathematica :cite:`Mathematica` arguably offers the most expressive pattern matching.
 Its pattern matching offers similar expressiveness as Python's regular expressions, but for symbolic tree structures instead of strings.
+While pattern matching can handle nested expressions up to arbitrary depth, regular expressions cannot properly handle such nesting.
 Patterns are used widely in Mathematica, e.g. in function definitions or for manipulating terms.
 It is possible to define custom function symbols which can be associative and/or commutative.
 Mathematica also offers sequence variables which can match a sequence of terms instead of a single one.
@@ -612,6 +613,7 @@ Alternatively, adapting part of the code to Cython could be another option to in
 Furthermore, generating source code for a pattern set similar to parser generators for formal grammars could improve matching performance.
 While code generation for syntactic pattern matching has been the subject of various works :cite:`Augustsson1985,Fessant2001,Maranget2008,Moreau2003`,
 its application with the extended feature set of MatchPy is another potential area of future research.
+Also, additonal research on the viability of pattern matching with increasingly complex and large subjects or patterns is desirable.
 
 Functional pattern matching
 ...........................
@@ -629,10 +631,7 @@ The following is an example of what such a syntax could look like:
            ....
 
 There are already several libraries for Python which implement such a functionality for syntactic
-patterns and native data structures (e.g. MacroPy_, patterns_ or PyPatt_).
+patterns and native data structures (e.g. MacroPy :cite:`MacroPy`, patterns :cite:`patterns` or PyPatt :cite:`PyPatt`).
 However, the usefulness of this feature needs further evaluation.
 
 .. _MatchPy: https://github.com/HPAC/matchpy
-.. _MacroPy: https://github.com/lihaoyi/macropy#pattern-matching
-.. _patterns: https://github.com/Suor/patterns
-.. _PyPatt: https://pypi.python.org/pypi/pypatt
