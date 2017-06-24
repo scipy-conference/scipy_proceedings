@@ -43,10 +43,20 @@ strengths, they also have some significant weaknesses when it comes to
 scientific and technical computing.
 
 This paper introduces BespON [BespON]_, a new human-editable data format
-focused on scientific and technical features, and the ``bespon`` package
-for Python [pkg:bespon]_.  An overview of INI-style files, JSON, YAML, and
-TOML provides the motivation for BespON as well as context
-for its particular feature set.
+focused on scientific and technical features, and the ``bespon`` package for
+Python [pkg:bespon]_.  An overview of INI-style files, JSON, YAML, and TOML
+provides the motivation for BespON as well as context for its particular
+feature set.
+
+Though this overview focuses on the features of each format, it also considers
+Python support for round-tripping—for loading data, potentially modifying it,
+and then saving it.  While round-tripping will not lose data, it will
+typically lose comments and fail to preserve data ordering and formatting.
+Since comments and layout can be important in the context of configuration,
+some libraries provide special support for preserving them under
+round-tripping.  That allows manual editing to be avoided while still
+minimizing the differences introduced by modifying data.
+
 
 
 INI-style formats
@@ -139,8 +149,8 @@ default Python and include its ``--help`` output:
 .. code-block:: pycon
 
    >>> yaml.load("""
-   help:  !!python/object/apply:subprocess.check_output
-          [['python', '--help']]
+   help: !!python/object/apply:subprocess.check_output
+         [['python', '--help']]
    """)
 
 YAML libraries in other languages can exhibit similar
@@ -181,7 +191,7 @@ line break) or ``|+`` (keep all trailing whitespace).  Unfortunately, the
 the next data element (or the end of the file, if the string is not followed
 by anything).  Similarly, there are complications if all lines of the string
 contain leading whitespace or if the first line of the string is indented
-relative to the subsequent lines.  In such cases, the pipe must be
+relative to subsequent lines.  In such cases, the pipe must be
 followed immediately by an integer that specifies the indentation of the
 string relative to the parent node (``key`` in the example).
 
@@ -532,7 +542,8 @@ element (dangling comma), unlike JSON:
 
 An inline list may span multiple lines, as long as everything it contains
 and the closing bracket are indented at least as much as the line on which
-the list begins.
+the list begins.  When inline lists are nested, the required indentation for
+all of the lists is simply that of the outermost list.
 
 
 Dicts
@@ -584,7 +595,8 @@ In an inline dict, the dict is delimited by curly braces
 
 As with inline lists, a dangling comma is permitted, as is spanning multiple
 lines so long as all content is indented at least as much as the line on which
-the dict begins.
+the dict begins.  When inline dicts are nested, the required indentation for
+all of the dicts is simply that of the outermost dict.
 
 Dicts support ``none``, ``true``, ``false``, integers, and strings as keys.
 Floats are not supported as keys by default, since this could produce
@@ -815,7 +827,7 @@ most text editors (now invalid BespON):
 
 Because the quotation marks, integers, comma, and equals signs have no strong
 left-to-right directionality, everything after the first quotation mark until
-the final curly brace is visually layed out from right to left.  When the data
+the final curly brace is visually laid out from right to left.  When the data
 is loaded, though, it will produce the correct mapping, since loading depends
 on the logical order of the code points rather than their visual rendering.
 By default, BespON prevents the potential for confusion as a result of this
@@ -910,7 +922,7 @@ So far, ``bespon`` performance is promising.  The package uses ``__slots__``
 and avoids global variables extensively, but otherwise optimizations are
 purely algorithmic.  In spite of this, under CPython it can be only about 50%
 slower than PyYAML with LibYAML.  Under PyPy [PyPy]_, the alternative Python
-implementation with a Just-in-Time (JIT) compiler, ``bespon`` can be within an
+implementation with a just-in-time (JIT) compiler, ``bespon`` can be within an
 order of magnitude of ``json``'s CPython speed.
 
 Figure :ref:`benchmark` shows an example of performance in loading data.
@@ -952,6 +964,89 @@ plotted in the figure.
    (64-bit) except those designated with "PyPy," which used PyPy3.5 5.7.1
    (64-bit).  PyYAML was tested with its C library implementation (CLoader)
    when available.
+
+
+
+An extended example
+-------------------
+
+All examples shown so far have been short snippets loaded from Python strings
+using ``bespon.loads()``.  Any of those examples could instead have been saved
+in a text file, say ``data.bespon``, and loaded as
+
+.. code:: python
+
+   with open('data.bespon', encoding='utf8') as f:
+       data = bespon.load(f)
+
+A longer example of a BespON file that could be loaded in this manner is
+shown below.  It illustrates most BespON features.
+
+.. raw:: latex
+
+   \begingroup
+
+   \definecolor{color0}{RGB}{0,128,0}
+   \definecolor{color1}{RGB}{163,21,21}
+   \definecolor{color2}{RGB}{0,0,0}
+   %\definecolor{color3}{RGB}{9,136,90}
+   \definecolor{color3}{RGB}{75,0,130}
+   \definecolor{color4}{RGB}{0,0,255}
+   \footnotesize
+
+   \begin{Verbatim}[commandchars=\\\{\}]
+   \textcolor{color0}{# Line comments can be round-tripped if data}
+   \textcolor{color0}{# elements are only modified, not added or removed.}
+
+   \textcolor{color0}{### A doc comment can always be round-tripped. ###}
+   \textcolor{color0}{# Only one doc comment is allowed per data element.}
+   \textcolor{color0}{# This doc comment belongs to the key below.}
+   \textcolor{color1}{"key (\textbackslash{}x5C escapes)"}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{'value (\textbackslash{}u\{5C\} escapes)'}
+
+   \textcolor{color1}{`key (no \textbackslash{} escapes)`}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{``value (no `\textbackslash{}` escapes)``}
+
+   \textcolor{color0}{# Unquoted ASCII identifier-style strings.}
+   \textcolor{color1}{unquoted_key}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{unquoted_value}
+
+   \textcolor{color0}{# Trailing commas are fine.}
+   \textcolor{color1}{inline_dict}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{\{}\textcolor{color1}{key1}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value1}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color1}{key2}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value2}\textcolor{color2}{,\}}
+
+   \textcolor{color0}{# Decimal, hex, octal, and binary integers.}
+   \textcolor{color1}{inline_list_of_ints}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{[}\textcolor{color3}{1}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0x}\textcolor{color3}{12}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0o}\textcolor{color3}{755}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0b}\textcolor{color3}{1010}\textcolor{color2}{]}
+
+   \textcolor{color1}{list_of_floats}\textcolor{color2}{ }\textcolor{color2}{=}
+   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color3}{1.2e3}
+   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color3}{-inf}\textcolor{color2}{  }\textcolor{color0}{# Infinity and NaN are supported.}
+   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color4}{0x}\textcolor{color3}{4.3p2}\textcolor{color2}{  }\textcolor{color0}{# Hex floats to avoid rounding.}
+
+   \textcolor{color1}{wrapped_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{"""String with no whitespace}
+   \textcolor{color1}{    lines, with line breaks converted to spaces,}
+   \textcolor{color1}{    and "quotes" allowed by delimiters."""}
+
+   \textcolor{color1}{multiline_raw_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{|```}
+   \textcolor{color1}{        Linebreaks are kept (as '\textbackslash{}n') and}
+   \textcolor{color1}{        leading indentation is preserved}
+   \textcolor{color1}{        relative to delimiters.}
+   \textcolor{color1}{    |```/}
+
+   \textcolor{color1}{multiline_escaped_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{|"""}
+   \textcolor{color1}{    The same idea as the raw multiline string,}
+   \textcolor{color1}{    but with backslash-escapes.}
+   \textcolor{color1}{    |"""/}
+
+   \textcolor{color1}{typed_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{(}\textcolor{color4}{bytes}\textcolor{color2}{)>}\textcolor{color2}{ }\textcolor{color1}{"byte string"}
+
+   \textcolor{color0}{# Key path style; same as "key1 = \{key2 = true\}"}
+   \textcolor{color1}{key1}\textcolor{color2}{.}\textcolor{color1}{key2}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color4}{true}
+
+   \textcolor{color0}{# Same as "section = \{subsection = \{key = value\}\}"}
+   \textcolor{color2}{|===}\textcolor{color2}{ }\textcolor{color1}{section}\textcolor{color2}{.}\textcolor{color1}{subsection}
+   \textcolor{color1}{key}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value}
+   \textcolor{color2}{|===/}\textcolor{color2}{  }\textcolor{color0}{# Back to root level.  Can be omitted}
+   \textcolor{color2}{       }\textcolor{color0}{# if sections never return to root.}
+   \end{Verbatim}
+
+   \endgroup
 
 
 
