@@ -28,7 +28,7 @@ MatchPy: A Pattern Matching Library
 
    Pattern matching is a powerful tool for symbolic computations, based on the well-defined theory of term rewriting systems.
    Application domains include algebraic expressions, abstract syntax trees, and XML and JSON data.
-   Unfortunately, no lightweight implementation of pattern matching as general and flexible as in Mathematica exists for Python :cite:`Mathics,MacroPy,patterns,PyPatt`.
+   Unfortunately, no lightweight implementation of pattern matching as general and flexible as Mathematica exists for Python :cite:`Mathics,MacroPy,patterns,PyPatt`.
    Therefore, we created the open source module MatchPy_ which offers similar pattern matching functionality in Python using
    a novel algorithm which finds matches for large pattern sets more efficiently by exploiting similarities between patterns.
 
@@ -41,7 +41,7 @@ Introduction
 
 Pattern matching is a powerful tool which is part of many functional programming languages as well as computer algebra systems such as Mathematica.
 It is useful for many applications including symbolic computation, term simplification, term rewriting systems, automated theorem proving, and model checking.
-In this paper, we present a pattern matching library for Python and the underlying algorithms.
+In this paper, we present a Python-based pattern matching library and its underlying algorithms.
 
 The goal of pattern matching is to find a match substitution given a subject term and a pattern which is a term with placeholders :cite:`Baader1998`.
 The substitution maps placeholders in the pattern to replacement terms.
@@ -95,7 +95,7 @@ For patterns, wildcards can also be used as placeholders.
 We use `Mathematica's notation <https://reference.wolfram.com/language/guide/Patterns.html>`_ for wildcards,
 i.e. we append underscores to wildcard names to distinguish them from symbols.
 
-MatchPy can be used with native Python types such as lists and ints.
+MatchPy can be used with native Python types such as ``list`` and ``int``.
 The following is an example of how the subject ``[0, 1]`` can be matched against the pattern ``[x_, 1]``.
 The expected match here is the replacement ``0`` for ``x_``.
 We use `next` because we only want to use the first (and in this case only) match of the pattern:
@@ -273,11 +273,11 @@ As can be seen in the output, a total of three matches are found.
 
 .. _`?TRMM`: https://software.intel.com/en-us/node/468494
 
-Challenges
-----------
+Design Considerations
+---------------------
 
-While there are plenty of implementations of syntactic matching and the algorithms are well known,
-pattern matching in MatchPy is challenging since it comprises several NP-complete problems.
+There are plenty of implementations of syntactic matching and the algorithms are well known.
+Implementing pattern matching for MatchPy poses some challenges such as associativity and commutativity.
 
 Associativity/Sequence variables
 ................................
@@ -566,7 +566,7 @@ Overall, if applicable, discrimination nets offer better performance than a many
 Which pattern matching algorithm is the fastest for a given application depends on many factors.
 Hence, it is not possible to give a general recommendation.
 Yet, the more subjects are matched against the same pattern set, the more likely it is that many-to-one matching pays off.
-A higher number of patterns seems to increase the speedup of the many-to-one matching.
+In the experiments, a higher number of patterns lead to an increase of the speedup of many-to-one matching.
 In terms of the size of the many-to-one matcher, the growth of the net seems to be sublinear in practice.
 The efficiency of using many-to-one matching also heavily depends on the actual pattern set, i.e. the degree of similarity and overlap between the patterns.
 
@@ -614,6 +614,7 @@ Furthermore, generating source code for a pattern set similar to parser generato
 While code generation for syntactic pattern matching has been the subject of various works :cite:`Augustsson1985,Fessant2001,Maranget2008,Moreau2003`,
 its application with the extended feature set of MatchPy is another potential area of future research.
 Also, additonal research on the viability of pattern matching with increasingly complex and large subjects or patterns is desirable.
+Parallelizing many-to-one matching is also a possibility to increase the overall speed which is worth exploring.
 
 Functional pattern matching
 ...........................
