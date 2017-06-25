@@ -131,7 +131,7 @@ efficiently collects crowdsourced data via "adaptive" sampling algorithms
 :cite:`jamieson2015next`. In this paper, we will focus on the use of NEXT
 rather than the applications of NEXT and their results. We will address the
 interface NEXT presents to the experimentalist and algorithm designer, after
-mentioning the fundamental problem NEXT addresses and it's applications.
+mentioning the fundamental problem NEXT addresses and its applications.
 
 Problem statement
 -----------------
@@ -234,7 +234,8 @@ they require
 General crowdsourcing systems (e.g., Mechanical Turk, PsiTurk, Crowd Flower)
 were not designed with these requirements in mind. Adaptive data collection
 requires a fundamentally different interaction flow as show in Figure
-:ref:`data-flow`.
+:ref:`data-flow`, which requires the data flow in Figure
+:ref:`crowdsourcing-data-flow` when applied to crowdsourcing.
 
 Crowdsourcing adaptive data collection presents a variety of challenges in
 mathematics, systems and software development. These challenges stem from the
@@ -250,6 +251,11 @@ experimentalists.
     The data flows required to collect crowdsourcing data both passively and
     adaptively. The primary difference is adaptive data collection requires
     using previous responses in some way. :label:`data-flow`
+
+.. figure:: figures/crowdsourcing-data-flow.png
+
+    Brining adaptive algorithms to crowdsourcing requires the data flow in
+    Figure :ref:`data-flow`.  :label:`crowdsourcing-data-flow`
 
 One other system that addresses this challenge is the Microsoft Decision
 Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
@@ -326,8 +332,9 @@ Cardinal bandits
 
 .. figure:: example_query.png
 
-    An example query shown in The New Yorker Caption Contest
-    :label:`example-query`
+    An example query shown in The New Yorker Caption Contest (cartoon drawn by
+    P. C. Vey) :label:`example-query`
+
 
 Each week, The New Yorker draws a cartoon and asks readers for funny captions.
 They receive about 5,000 captions, of which they have to find the funniest.
@@ -372,7 +379,8 @@ Dueling bandits
     :scale: 20%
 
     The dueling bandits interface, where two items are compared and the
-    "better" item is selected :label:`dueling-interface`
+    "better" item is selected (cartoon drawn for The New Yorker Caption Contest
+    by Shannon Wheeler) :label:`dueling-interface`
 
 We also support asking the crowdsourcing participants to chose the "best" of
 two items. We tried this method during the first several caption contests we
@@ -646,10 +654,12 @@ debugging tool for the algorithm developer.
 From the dashboard, we support the download of both experiment results and
 participant response information.
 
-.. figure:: figures/histograms.png
+.. figure:: figures/573-timing.png
+    :scale: 50%
 
-    Timing histograms (measured client-side). Network delay represents the
-    total time NEXT took to respond. :label:`histograms`
+    Timing histograms measured client-side in seconds for cartoon caption
+    contest 573. Network delay represents the total time NEXT took to respond
+    and response time measures human resposne time. :label:`histograms`
 
 Experimentalist use
 ^^^^^^^^^^^^^^^^^^^
