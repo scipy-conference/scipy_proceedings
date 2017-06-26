@@ -1,8 +1,6 @@
 :author: Theodore Lindsay
 :email: thlindsay1@gmail.com
-:institution: Caltech
-:department: Devision of biology and biological engineering
-
+:institution: Caltech Division of Biology and Biological Engineering
 :author: Peter T. Weir
 :email: peter.weir@gmail.com
 :institution: Yelp
