@@ -60,10 +60,9 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
    a joint detection-estimation (JDE) approach. It jointly detects cortical
    activation and estimates the HRF. In contrast to existing tools, PyHRF
    estimates the HRF instead of considering it as a given constant in the
-   entire brain, improving thus the reliability of the results. Here, we
-   present an overview of the package and showcase its performance with a real
-   case in order to demonstrate that PyHRF is a suitable tool for clinical
-   applications.
+   entire brain. Here, we present an overview of the package and showcase its
+   performance with a real case in order to demonstrate that PyHRF is
+   a suitable tool for clinical applications.
 
 .. class:: keywords
 
@@ -111,7 +110,7 @@ flow and cerebral blood volume.
    HRF computed using PyHRF from BOLD data in several parcels belonging,
    respectively from left to right, to visual (yellow, dark blue and green
    parcels), auditory (cyan and light green parcels) and motor (red and purple
-   parcels) regions, .  :label:`hrfs`
+   parcels) regions.  :label:`hrfs`
 
 
 fMRI data is acquired by repeated imaging of the brain while the subject or
@@ -131,7 +130,7 @@ physiological parameters such as cerebral blood flow or cerebral blood volume,
 but rather measures a mixture of these quantities that is difficult to
 untangle. In this regard, BOLD is a very interesting tool in neuroscience, but
 in general it is not widely used for clinical applications because the impact
-of physiopathological situation on the HRF and the response amplitude is
+of physiopathological situation on the HRF and the response amplitude are
 unknown, hampering the BOLD signal interpretation. For instance, the vascular
 response giving rise to the BOLD signal is altered in normal ageing
 :cite:`Fabiani:2014` and pathologies like Alzheimer's disease
@@ -216,7 +215,7 @@ compute posterior probability maps (PPMs) from the output of PyHRF. These PPMs
 are not directly comparable to the classical SPM maps, but give a similar
 measure of significance of activation. For instance, in Fig. :ref:`spmvsppm` we
 show the SPM and PPM maps for a visual experimental condition in the same data
-used for Fig. :ref:`hrfs`. We use the package Nilearn
+used for Fig. :ref:`hrfs`. We used the package Nilearn
 (http://nilearn.github.io) to generate the brain maps presented in this
 document.
 
@@ -270,9 +269,9 @@ task-related fMRI time series: finger, foot and lip movement; overt verb
 generation; covert verb generation; overt word repetition; and landmark tasks.
 For the sake of simplicity, we will focus our analysis only on motor tasks
 (*i.e.,* finger, foot and lips movement). Fig. :ref:`paradigm` shows the
-paradigm containing only the three tasks mentioned above. As we can see, in the
-experimental paradigm tasks do not overlap each other and stimuli are presented
-to the subject during a certain time (*i.e.,* block paradigm).
+paradigm containing only the three tasks mentioned above. As we can see in the
+experimental paradigm, tasks do not overlap each other and stimuli are
+presented to the subject during a certain time (*i.e.,* block paradigm).
 
 .. figure:: figures/paradigm.png
    :align: center
@@ -290,10 +289,10 @@ Once we have the BOLD volumes, we need to apply some transformations to the
 images in order to correct for possible errors that may occur along the
 acquisition.  For instance, a BOLD volume (*e.g.,* a whole brain) is usually
 not built at once but using a series of successively measured 2D slices. Each
-slice take some time to acquire, so slices are observed at different time
+slice takes some time to acquire, so slices are observed at different time
 points, leading to suboptimal statistical analysis.
 
-We use the library ``Nipype`` (https://github.com/nipy/nipype) to define and
+We used the library ``Nipype`` (https://github.com/nipy/nipype) to define and
 apply our preprocessing pipeline. This library allows to use  robust tools,
 such as SPM and FSL, in an easy manner. The proposed workflow (see Fig.
 :ref:`nipype`) starts by uncompressing the images since they are in
@@ -317,7 +316,7 @@ template).
 
 The pipeline described above was run for the images of all subjects from the
 dataset (*i.e.,* 10 subjects) on multiple processors, since ``Nipype`` uses the
-library ``joblib`` (https://github.com/joblib/joblib). We use the acquisition
+library ``joblib`` (https://github.com/joblib/joblib). We used the acquisition
 parameters presented in :cite:`Gorgolewski2013` to parameterize each
 preprocessing operation. For instance, the number of slices for the volume, the
 time for acquiring all slices (TR), and the order in which they were acquired
@@ -357,13 +356,12 @@ PyHRF Analysis (Inputs)
 
 So far, we have prepared our functional and structural images for BOLD
 analysis. It is important to note that PyHRF receives *non-smoothed* images as
-input, thus we exclude this operation from our preprocessing pipeline.
+input, thus we excluded this operation from our preprocessing pipeline.
 
 For the sake of simplicity, in our running example we only analyze the 4th
-subject from our dataset. Additionally, we will use the package ``Nilearn``
-(http://nilearn.github.io/) to load and visualize neuroimaging volumes. Fig.
-:ref:`bold` shows the mean of the functional images of the 4th subject after
-preprocessing.
+subject from our dataset. Additionally, we use the package ``Nilearn`` to load
+and visualize neuroimaging volumes. Fig.  :ref:`bold` shows the mean of the
+functional images of the 4th subject after preprocessing.
 
 
 .. figure:: figures/bold.png
@@ -380,7 +378,7 @@ that PyHRF needs a parcellation mask to perform the estimation-detection.  The
 package provides a Willard atlas :cite:`Richiardi2015` (see Fig.
 :ref:`willard`) created from the files distributed by Stanford
 (http://findlab.stanford.edu/functional_ROIs.html). This atlas has a voxel
-resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
+resolution of 3x3x3 mm and a volume shape of 53x63x52 voxels.
 
 .. figure:: figures/willard.png
    :align: center
@@ -389,13 +387,13 @@ resolution of 3x3x3mm and a volume shape of 53x63x52 voxels.
 
    Willard atlas :cite:`Richiardi2015`. :label:`willard`
 
-We use the method ``get_willard_mask`` to resize the original atlas to match
+We used the method ``get_willard_mask`` to resize the original atlas to match
 the shape of the BOLD images to be analyzed. In addition, this method saves the
 resampled mask in a specified path. For instance, Fig. :ref:`willard` shows the
 Willard atlas resized to the shape of the functional image in Fig.
-:ref:`bold`. The following code resizes the Willard atlas provided by PyHRF to
-match the shape of the image ``~/data/bold.nii`` and saves it in the folder
-``~/pyhrf``.
+:ref:`bold`. The following code illustrates how to resize the Willard atlas
+provided by PyHRF to match the shape of the image ``~/data/bold.nii``, and
+saves it in the folder ``~/pyhrf``.
 
 .. code-block:: python
 
@@ -407,7 +405,7 @@ match the shape of the image ``~/data/bold.nii`` and saves it in the folder
 PyHRF also needs the experimental paradigm as input. It must be given as
 a ``csv`` file following the convention described in the documentation
 (https://pyhrf.github.io/manual/paradigm.html). For the sake of convenience, we
-use the method ``convert_to_pyhrf_csv`` to read the paradigm file provided by
+used the method ``convert_to_pyhrf_csv`` to read the paradigm file provided by
 the dataset (a ``tsv`` file) and rewrite it using the PyHRF format. Since each
 dataset has its own format for the paradigm, we give it as an input to our
 method.
@@ -476,15 +474,16 @@ define some important parameters of the underlying JDE model (*e.g.,* ``beta``,
 output (``output``).
 
 Moreover, we need to specify if we want to estimate the HRF response  or use,
-for example, its canonical form.  In our running example, we will estimate the
-HRF (``estimate-hrf``) with a time resolution (``dt``) of 1.25 s, a duration
+for example, its canonical form.  In our running example, we estimate the HRF
+(``estimate-hrf``) with a time resolution (``dt``) of 1.25 s, a duration
 (``hrf-duration``) of 25.0 s, and we force to zero the beginning and ending of
 the response (``zero-constraint``).
 
 Once the parameters of the model have been defined, we run our analysis by
-using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. The
-reader can found more details about this command and its parameters in the
-PyHRF documentation.
+using the command-line tool ``pyhrf_jde_vem_analysis`` provided by PyHRF. We
+can execute the analysis using several processors (``parallel``) because PyHRF
+uses the library ``joblib``. The reader can found more details about this
+command and its parameters in the PyHRF documentation.
 
 
 .. code-block:: bash
@@ -511,28 +510,26 @@ PyHRF documentation.
       /tmp/tmpM3zBD5
       {$HOME}/data/bold.nii
 
-Observe that we can execute this analysis using several processors
-(``parallel``) because PyHRF uses the library ``joblib``.
 
 
 PyHRF Analysis (Output)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 We show in Fig. :ref:`output` the active parcels (A), the PPMs (B), and the
-estimated HRFs (C), generated by PyHRF, for the motor task ``Finger``. Recall
-that PyHRF estimates a HRF for each parcel.
+estimated HRFs (C) generated by PyHRF, for the motor task ``Finger``. Reading
+the description given in :cite:`Gorgolewski2013`, this task corresponds to
+finger tapping. Recall that PyHRF estimates a HRF for each parcel and generates
+a PPM for each condition.
 
-Reading the description given in :cite:`Gorgolewski2013`, this task corresponds
-to finger tapping. We compared the output of PyHRF with the unthresholded
-statistical maps shared on the site *Neurovault*
-(http://www.neurovault.org/images/307/) for the same dataset (see Fig.
-:ref:`output` D) and same task (*i.e.,* finger tapping). While the
-experimental paradigm is not optimized for JDE (standard block paradigm are not
-ideal to estimate different points of the HRF course), we obtained similar
-results to standard statistical analysis additionally providing the form of the
-HRF. As we can observe, at cut *z=60* both results (Fig. :ref:`output` B and
-Fig. :ref:`output` D) are quite similar, showing an activation in the
-*supplementary motor area* and the *left primary sensorimotor cortex*.
+We compared the output of PyHRF with the unthresholded statistical maps shared
+on the site *Neurovault* (http://www.neurovault.org/images/307/) for the same
+dataset and same task (see Fig. :ref:`output` D).  While the experimental
+paradigm is not optimized for JDE (standard block paradigm is not ideal to
+estimate different points of the HRF course), we obtained similar results to
+standard statistical analysis additionally providing the form of the HRF. As we
+can observe, at cut *z=60* both results (Fig. :ref:`output` B and D) are quite
+similar, showing an activation in the *supplementary motor area* and the *left
+primary sensorimotor cortex*.
 
 
 .. figure:: figures/pyhrf_neurovault.png
