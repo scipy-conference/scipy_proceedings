@@ -38,29 +38,32 @@
 
 :bibliography: biblio
 
-----------------------------------------------------------------------------------------------------------------
-PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation of Hemodynamic Response Function
-----------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------
+PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation of the Hemodynamic Response Function
+--------------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
    Functional Magnetic Resonance Imaging (fMRI) is a neuroimaging technique
    that allows the non-invasive study of brain function. It is based on the
-   hemodynamic changes induced by cerebral activity following sensory or
-   cognitive stimulation. The measured signal depends on the variation of blood
-   oxygenation level (BOLD signal) which is related to brain activity:
-   a decrease in deoxyhemoglobin induces an increase in BOLD signal. In fact,
-   the signal is convoluted by the Hemodynamic Response Function (HRF) whose
-   exact form is unknown and fluctuates with various parameters such as age,
-   brain region or physiological conditions.
+   hemodynamic changes induced by changes in cerebral synaptic activity
+   following sensory or cognitive stimulation. The measured signal depends on
+   the variation of blood oxygenation level (BOLD signal) which is related to
+   brain activity: a decrease in deoxyhemoglobin concentration induces an
+   increase in BOLD signal.  The BOLD signal is delayed with respect to changes
+   in synaptic activity, which can be modeled as a convolution with the
+   Hemodynamic Response Function (HRF) whose exact form is unknown and
+   fluctuates with various parameters such as age, brain region or
+   physiological conditions.
 
    In this paper we present PyHRF, a software to analyze fMRI data using
    a joint detection-estimation (JDE) approach. It jointly detects cortical
    activation and estimates the HRF. In contrast to existing tools, PyHRF
-   estimates the HRF instead of considering it as constant in the entire brain,
-   improving thus the reliability of the results. Here, we present an overview
-   of the package and showcase its performance with a real case in order to
-   demonstrate that PyHRF is a suitable tool for clinical applications.
+   estimates the HRF instead of considering it as a given constant in the
+   entire brain, improving thus the reliability of the results. Here, we
+   present an overview of the package and showcase its performance with a real
+   case in order to demonstrate that PyHRF is a suitable tool for clinical
+   applications.
 
 .. class:: keywords
 
@@ -537,23 +540,22 @@ In this paper we presented PyHRF, a software to analyze fMRI data using a joint
 detection-estimation (JDE) approach of the cerebral activity. It jointly
 detects cortical activation and estimates the hemodynamic response function
 (HRF), in contrast to existing tools, that consider the HRF as constant over
-the brain and over subjects, improving thus the reliability of the results.
+the brain and over subjects, thus aiming to improve the reliability of the
+results.
 
 PyHRF is an open source software that has evolved rapidly over the last few
 years.  As we showed, it allows to generate posterior probability maps (PPMs)
 to describe the significance of the activation in each region of the brain.
 Moreover, PyHRF uses efficient estimation methods in order to provide a fast
-and reliable tool.
+tool.
 
 Since 2013, PyHRF has started to evolve to deal with Functional Arterial Spin
 Labelling (fASL) :cite:`Vincent13` data, including a physiological prior to
 make the perfusion estimation more robust :cite:`Frau14b` :cite:`Frau15a`.
 A fast solution for fASL based on VEM was proposed in :cite:`Frau15b`, with
-similar results than the solution based on stochastic simulation techniques
+similar results to the solution based on stochastic simulation techniques
 :cite:`Frau15c`.
 
 Since the last years, many efforts have been made in terms of image processing,
 user-friendliness and usability of the PyHRF tool to make it more easy to use
-by non experts and clinicians.  Moreover, since PyHRF is able to analyze both
-BOLD and ASL data, it has begun to emerge as a tool suitable for use in
-a clinical environment.
+by non experts and clinicians.
