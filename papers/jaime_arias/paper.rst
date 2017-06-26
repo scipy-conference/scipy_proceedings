@@ -171,6 +171,13 @@ at http://www.pyhrf.org/scipy2017_notebook.
 PyHRF
 -----
 
+.. figure:: figures/pyhrf4bold.png
+   :align: center
+   :scale: 50%
+   :figclass: w
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrfbold`
+
 
 PyHRF (http://www.pyhrf.org) is an open source tool implemented in Python that
 allows to jointly detect activation and estimate (JDE) the hemodynamic response
@@ -219,7 +226,7 @@ document.
    :scale: 50%
    :figclass: htb
 
-   PPM (a) and SPM (b) maps computed with JDE and GLM, respectively. Scale is logarithmic. :label:`spmvsppm`
+   PPM (A) and SPM (B) maps computed with JDE and GLM, respectively. Scale is logarithmic. :label:`spmvsppm`
 
 
 In Fig. :ref:`pyhrfbold` we present the inputs and the outputs of PyHRF for the
@@ -229,13 +236,6 @@ algorithm, the output will consist of HRF functions per parcel, BOLD effect
 maps per experimental condition, and posterior probability maps (PPMs) per
 condition. In the next section, we will describe in more details these elements
 and how to use PyHRF.
-
-.. figure:: figures/pyhrf4bold.png
-   :align: center
-   :scale: 50%
-   :figclass: w
-
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrfbold`
 
 
 Example of Use
@@ -276,10 +276,11 @@ to the subject during a certain time (*i.e.,* block paradigm).
 
 .. figure:: figures/paradigm.png
    :align: center
-   :figclass: htb
+   :figclass: h
 
    Experimental paradigm of the dataset ``ds000114``. We show only the motor
    tasks of the dataset (finger, foot and lips movement). :label:`paradigm`
+
 
 
 fMRI BOLD Preprocessing
@@ -463,6 +464,8 @@ we are only interested in them for our BOLD analysis.
     +---------+-----------+-------+----------+-----------+
     | 0       | Lips      | 430   | 15.0     | 1         |
     +---------+-----------+-------+----------+-----------+
+
+
 
 PyHRF Analysis (Run)
 ~~~~~~~~~~~~~~~~~~~~
