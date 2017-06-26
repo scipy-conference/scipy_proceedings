@@ -442,7 +442,7 @@ The results from scheduler plugin is described in the following section.
 Examining Scheduler Throughput
 ------------------------------
 
-An experiment were executed with Dask Schedulers (Multithreaded, Multiprocessing and Distributed) on Stampede.
+An experiment were executed with Dask Schedulers (multithreaded, multiprocessing and distributed) on Stampede.
 In each run a total of 100000 zero workload tasks were executed.
 Figure :ref:`daskThroughput` A shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
 Each value is the mean throughput value of several runs for each Scheduler. 
@@ -457,11 +457,11 @@ Each value is the mean throughput value of several runs for each Scheduler.
    **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
    :label:`daskThroughput`
 
-Our understanding is that the most efficient Scheduler is the Distributed Scheduler, especially when there is one worker process for each available core.
-Also, the Distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100,000 tasks.
-The Multiprocessing and Multithreading Schedulers have similar behavior again, but need significantly more time to finish compared to the Distributed.
+Our understanding is that the most efficient Scheduler is the distributed scheduler, especially when there is one worker process for each available core.
+Also, the distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100,000 tasks.
+The multiprocessing and multithreading schedulers have similar behavior again, but need significantly more time to finish compared to the distributed.
 
-Figure :ref:`daskThroughput` B shows the Distributed scheduler's throughput over time when the number of Nodes increases.
+Figure :ref:`daskThroughput` B shows the distributed scheduler's throughput over time when the number of Nodes increases.
 Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
 By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
 Figure :ref:`daskThroughput` C shows the same execution with the Dask Cluster being setup to have one worker process per core.
@@ -472,7 +472,7 @@ Another interesting aspect is that when a worker process is assigned to each cor
 Scheduler Plugin Results
 ------------------------
 
-In addition to Dask web-interface, we implemented a Dask Scheduler Plugin_.
+In addition to Dask web-interface, we implemented a Dask scheduler plugin_.
 This plugin captures task execution events from the scheduler and their respective timestamps.
 These captured profiles were later used to analyze the execution of XTC 300x on Stampede.
 Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the left (Figure :ref:`XTC300x64coresStampede` A) is an execution where the number of RMSD blocks is equal to the number of cores and on the right (Figure :ref:`XTC300x64coresStampede` B) an execution where the number of blocks is three times the number of cores. 
@@ -613,4 +613,4 @@ References
 .. _Dask: http://dask.pydata.org
 .. _distributed: https://distributed.readthedocs.io/
 .. _10.6084/m9.figshare.5108170: https://doi.org/10.6084/m9.figshare.5108170
-.. _Plugin: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
+.. _plugin: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
