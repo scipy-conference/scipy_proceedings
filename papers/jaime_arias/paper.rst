@@ -73,22 +73,24 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
 Introduction
 ------------
 
-Neuroimaging techniques, as functional Magnetic Resonance Imaging (fMRI), allow
-the *in vivo* study of brain function by measuring the changes induced by
-cerebral activity following sensory or cognitive stimulation. For more than
-20 years, the blood-oxygen-level-dependent (BOLD) fMRI modality has being the
-technique most used by neuroscientists to map the main functional regions of
-the brain.
+Neuroimaging techniques, such as functional Magnetic Resonance Imaging (fMRI),
+allow the *in vivo* study of brain function by measuring the cerebral response
+to sensory or cognitive stimulation. For more than 20 years, the
+blood-oxygen-level-dependent (BOLD) fMRI modality has being the technique most
+used by neuroscientists to map the main functional regions and their links in
+the healthy and diseased brain.
 
-BOLD signal :cite:`Ogawa:1990` reflects the changes in oxygen concentration in
-the blood. Briefly, when brain activity occurs, oxygen is locally consumed by
-neurons and its concentration in the blood decreases (see Fig.
-:ref:`boldchain`). Therefore, an inflow of oxygenated blood is achieved to
-replenish the tissue, increasing local blood oxygen concentration in veins and
-capillaries. Oxygenated and deoxygenated bloods have different magnetic
-properties, thus the above causes a BOLD signal diminution. Then, BOLD signal
-is an indirect measure of cerebral activity based on physiological changes in
-oxygen consumption, cerebral blood flow and blood volume.
+The BOLD signal :cite:`Ogawa:1990` reflects the changes in deoxyhemoglobin
+concentration in the brain. Briefly, when brain activity increases, local
+oxygen consumption in brain tissue increases, slightly increasing the
+concentration of deoxyhemoglobin in blood (see Fig. :ref:`boldchain`).
+Subsequently, cerebral blood flow is strongly upregulated locally by arteriolar
+vasodilation to replenish the tissue, increasing local blood oxygen saturation
+in veins and capillaries  above the initial level.  Oxygenated and deoxygenated
+blood has different magnetic properties. As a result, the above causes a BOLD
+signal increase. Thus, the BOLD signal is an indirect measure of cerebral
+activity based on physiological changes in oxygen consumption, cerebral blood
+flow and cerebral blood volume.
 
 
 .. figure:: figures/bold_chain.png
@@ -112,16 +114,26 @@ oxygen consumption, cerebral blood flow and blood volume.
    parcels) regions, .  :label:`hrfs`
 
 
-BOLD is non-invasive, non-ionizing, and gives access *in vivo* to brain
-activity with a relatively high spatial resolution. It is highly dependent of
-the hemodynamic response function (HRF) of the brain. BOLD does not give access
-to true physiological parameters such as cerebral blood flow or cerebral blood
-volume, but rather measures a mixture of these quantities that is difficult to
+fMRI data is acquired by repeated imaging of the brain while the subject or
+patient executes a task or receives a sensory stimulus during repeated epochs
+separated by periods of rest. This data is analyzed by correlating the measured
+time-varying BOLD signal in each image location with a predicted BOLD signal,
+obtained by convolving the known function representing the stimulus with
+a hemodynamic response function (HRF) modeling the delay in the vascular
+response. Locations in the brain where this correlation is statistically
+significant are considered to exhibit a neuronal response to the task or
+stimulus, and thus to be involved in its cognitive processing.
+
+BOLD fMRI is non-invasive, non-ionizing, and gives access *in vivo* to brain
+activity with a relatively high spatial resolution. It is however highly
+dependent of the HRF of the brain. The BOLD signal does not give access to true
+physiological parameters such as cerebral blood flow or cerebral blood volume,
+but rather measures a mixture of these quantities that is difficult to
 untangle. In this regard, BOLD is a very interesting tool in neuroscience, but
 in general it is not widely used for clinical applications because the impact
-of physiopathological situation on HRF is unknown, hampering the BOLD signal
-interpretation. For instance, it cannot detect chronic changes in the baseline
-states :cite:`Buxton:2013`, as it is the case of normal ageing
+of physiopathological situation on the HRF and the response amplitude is
+unknown, hampering the BOLD signal interpretation. For instance, the vascular
+response giving rise to the BOLD signal is altered in normal ageing
 :cite:`Fabiani:2014` and pathologies like Alzheimer's disease
 :cite:`Cantin:2011` or Stroke :cite:`Attye:2014`.
 
