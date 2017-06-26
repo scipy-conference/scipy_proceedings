@@ -472,7 +472,7 @@ Another interesting aspect is that when a worker process is assigned to each cor
 Scheduler Plugin Results
 ------------------------
 
-In addition to Dask web-interface, we implemented a Dask Scheduler Plugin.
+In addition to Dask web-interface, we implemented a Dask Scheduler Plugin_.
 This plugin captures task execution events from the scheduler and their respective timestamps.
 These captured profiles were later used to analyze the execution of XTC 300x on Stampede.
 Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the left (Figure :ref:`XTC300x64coresStampede` A) is an execution where the number of RMSD blocks is equal to the number of cores and on the right (Figure :ref:`XTC300x64coresStampede` B) an execution where the number of blocks is three times the number of cores. 
@@ -613,3 +613,4 @@ References
 .. _Dask: http://dask.pydata.org
 .. _distributed: https://distributed.readthedocs.io/
 .. _10.6084/m9.figshare.5108170: https://doi.org/10.6084/m9.figshare.5108170
+.. _Plugin: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
