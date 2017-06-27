@@ -225,7 +225,8 @@ document.
    :scale: 50%
    :figclass: htb
 
-   PPM (A) and SPM (B) maps computed with JDE and GLM, respectively. Scale is logarithmic. :label:`spmvsppm`
+   A) PPM and B) SPM maps computed with JDE and GLM, respectively. Scale is
+   logarithmic. :label:`spmvsppm`
 
 
 In Fig. :ref:`pyhrfbold` we present the inputs and the outputs of PyHRF for the
@@ -559,15 +560,29 @@ PyHRF is an open source software that has evolved rapidly over the last few
 years.  As we showed, it allows to generate posterior probability maps (PPMs)
 to describe the significance of the activation in each region of the brain.
 Moreover, PyHRF uses efficient estimation methods in order to provide a fast
-tool.
+tool. Currently, the package does not provide a finely tuned initialization of
+the parameters of the JDE model, which may be a cumbersome process for the
+user.
+
 
 Since 2013, PyHRF has started to evolve to deal with Functional Arterial Spin
 Labelling (fASL) :cite:`Vincent13` data, including a physiological prior to
 make the perfusion estimation more robust :cite:`Frau14b` :cite:`Frau15a`.
 A fast solution for fASL based on VEM was proposed in :cite:`Frau15b`, with
 similar results to the solution based on stochastic simulation techniques
-:cite:`Frau15c`.
+:cite:`Frau15c`. Moreover, many efforts have been made in terms of image
+processing, user-friendliness and usability of the PyHRF tool to make it more
+easy to use by non experts and clinicians.
 
-Since the last years, many efforts have been made in terms of image processing,
-user-friendliness and usability of the PyHRF tool to make it more easy to use
-by non experts and clinicians.
+In the years to come, we plan to reduce the computation time by identifying
+a relevant parcellation of the brain from data instead of entering
+a parcellation of the whole brain which may not ensure reliable HRF estimation
+and detection performance. For that, we envisage to integrate the join
+parcellation detection estimation (JPDE) model presented in
+:cite:`Albughdadi2016`. The proposed approach consists in performing an online
+parcellation during the detection estimation step of JDE through the selection
+of sets of voxels that share the same HRF pattern.
+
+Finally, we plan to develop a light viewer to explore the results of PyHRF
+interactively. Moreover, we aspire to make the package compatible with Python
+3 and extend its use to the analysis of fMRI data on small animals.
