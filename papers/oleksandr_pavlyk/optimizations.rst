@@ -49,8 +49,8 @@ Accelerating Scientific Python with Intel Optimizations
 
 .. class:: abstract
 
-    It is well known that the performance difference between Python and basic C code can be 200x.
-    Did you know that for numerically intensive code there is another 240x or more speedup possible?
+    It is well known that the performance difference between Python and basic C code can be up 200x,
+    but for numerically intensive code another speed-up factor of 240x or even greater is possible.
     The performance comes from software's ability to take advantage of your CPU's multiple cores,
     single instruction multiple data (SIMD) instructions, and high performance caches.
     This talk is for Python programmers who want to get the most out of their hardware
@@ -64,28 +64,30 @@ Accelerating Scientific Python with Intel Optimizations
 Introduction
 ------------
 
-Intel recently released a new version of its Distribution [IDP-Release]_. 
+Scientific software is usually algorthmically rich and compute intensive.
+The expressiveness of Python language as well as abundance of quality packages 
+offering implementations of advanced algorithms allow scientists and engineers 
+alike to code their software in Python. The ability of this software to solve
+realistic problems in a reasonable time is aften hampered by inefficient use of 
+hardware resources. Intel Distribution for Python [IDP]_ attempts to enable 
+computation Python community with optimized computational packages,
+such as NumPy*, SciPy*, Scikit-learn*, Numba* and PyDAAL across a range of Intel |R| processors,
+from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R| and Intel |R| Xeon Phi |TM| processors.
 This paper offers a detailed report about optimization that went into the 
-Intel |R| Distribution for Python*, which might be interesting for 
-developers of SciPy tools. It already offered great performance improvements 
-for NumPy*, SciPy*, and Scikit-learn* that you can see across a range of
-Intel processors, from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R|
-and Intel |R| Xeon Phi |TM| processors.
+Intel |R| Distribution for Python*, which might be interesting for developers of SciPy tools.
 
 
 Fast Fourier Transforms
 -----------------------
 
-In addition to initial optimizations of Fast Fourier Transform (FFT)
-offered in previous releases, Update 2 brings widespread optimizations
-for NumPy and SciPy FFT. It offers a think layered interface for the
+Intel |R| Distribution for Python* offers a thin layered interface for the
 Intel |R| Math Kernel Library (Intel |R| MKL) that allows efficient
 access to native FFT optimizations from a range of NumPy and SciPy
 functions. The optimizations are provided for real and complex data
 types in both single and double precision. Update 2 improves
 performance of both one-dimensional and multi-dimensional transforms,
 for in-place and out-of-place modes of operation. As a result,
-performance may improve up to 60x over Update 1 and is now close to
+Python performance may improve up to 60x over Update 1 and is now close to
 performance of native C/Intel MKL.
 
 
@@ -100,7 +102,7 @@ Arithmetic and transcendental expressions
 Memory management optimizations
 -------------------------------
 
-Update 2 introduces widespread optimizations in NumPy memory
+Update 2 introduces extensive optimizations in NumPy memory
 management operations. As a dynamic language, Python manages memory
 for the user. Memory operations, such as allocation, de-allocation,
 copy, and move, affect performance of essentially all Python programs.
@@ -110,9 +112,9 @@ functions can benefit from respective aligned versions of SIMD memory
 access instructions. This is especially relevant for Intel |R| Xeon
 Phi |TM| processors.  The most significant improvements in memory
 optimizations in Update 2 comes from replacing original memory copy
-and move operations with optimized implementations from Intel MKL. The
-result: improved performance because these Intel MKL routines are
-optimized for both a range of Intel CPUs and multiple CPU cores.
+and move operations with optimized implementations from Intel |R| MKL. The
+result: improved performance because these Intel |R| MKL routines are
+optimized for both a range of Intel |R| CPUs and multiple CPU cores.
 
 Faster Machine Learning with Scikit-learn
 -----------------------------------------
@@ -133,13 +135,13 @@ Auto-parallelization for Numba
 Summary
 -------
 
-The Intel Distribution for Python is powered by Anaconda* and conda
+The Intel |R| Distribution for Python is powered by Anaconda* and conda
 build infrastructures that give all Python users the benefit of
 interoperability within these two environments and access to the
-optimized packages through a simple conda install command.
-Intel Distribution for Python 2017 Update 2 delivers significant
+optimized packages through a simple ``conda install`` command.
+Intel |R| Distribution for Python* delivers significant
 performance optimizations for many core algorithms and Python
-packages, while maintaining the ease of download and install.
+packages, while maintaining the ease of downloading and installation.
 
 
 References
@@ -153,4 +155,4 @@ References
 .. |TM| unicode:: 0x2122 .. trade mark sign
    :ltrim:
 
-.. [IDP-Release] `Intel Distribution for Python 2017 Update 3 README <https://software.intel.com/en-us/articles/intel-distribution-for-python-2017-update-3-readme>`_
+.. [IDP] `Intel |R| Distribution for Python* <http://software.intel.com/en-us/distribution-for-python>`_
