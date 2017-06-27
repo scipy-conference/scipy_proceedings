@@ -74,14 +74,19 @@ with existing open-source software.
 
 While Devito was originally developed for seismic imaging workflows,
 the automated generation and optimization of stencil codes can be
-utilised for a much broader set of computational problems. In this
-paper we will give a brief overview of the design concepts and
-Devito's key features before demonstrating the Devito API on a set of
-classic examples from computational fluid dynamics (CFD). Based on
-this, we will then highlight the use of Devito in an example of a
-complex seismic inversion algorithms to demonstrate its use in
-practical scientific applications and to showcase the performance
-achieved by the auto-generated and optimised code.
+utilised for a much broader set of computational problems. Matrix-free
+stencil operators based on explicit finite difference schemes are
+widely used in industrial and academic research, although they merely
+represent one of many approaches to solving PDEs [Baba16]_, [Liu09]_,
+[Rai91]_. In this paper we therefore limit our discussion of numerical
+methods to a minium and instead focus on the ease which these
+operators can be created symbolically. We give a brief overview of the
+design concepts and Devito's key features and demonstrate the Devito
+API using a set of classic examples from computational fluid dynamics
+(CFD). Based on this, we will then highlight the use of Devito in an
+example of a complex seismic inversion algorithms to demonstrate its
+use in practical scientific applications and to showcase the
+performance achieved by the auto-generated and optimised code.
 
 Background
 ----------
@@ -162,9 +167,13 @@ Fluid Dynamics Examples
 In the following section we demonstrate the use of the Devito API to
 implement two examples from classical fluid dynamics, before
 highlighting the role of Devito operators in a seismic inversion
-context.  Both CFD examples are based in part on tutorials from the
+context. Both CFD examples are based in part on tutorials from the
 introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
-Lorena A. Barba group.
+Lorena A. Barba group. It is important to note that the examples used
+in this section have been chosen for their relative simplicity in
+order to concisely demonstrate the capabilities and API features of
+Devito. For a more complete discussion on numerical methods for fluid
+flows please refer to [Peiro05]_.
 
 .. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -278,9 +287,13 @@ tutorial by initialising the data associated with the symbolic function
    2\ &\text{for}\ 0.5 \leq x, y \leq 1 \\
    1\ &\text{everywhere else}
 
-The initial condition and the final result after executing the operator
-for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
-:ref:`fig2dconvfinal` respectively.
+The initial condition and the final result after executing the
+operator for 100 timesteps are depicted in Figures :ref:`fig2dconv`
+and :ref:`fig2dconvfinal` respectively. It should be noted that, while
+the results show good agreement with the original tutorial, they do
+exhibit significant numerical errors. This indicates that a high-order
+scheme, as well as more coupled formulation of the advection equation,
+might be preferred to achieve more realistic results.
 
 .. figure:: 2dconv_init.png
    :scale: 42%
@@ -300,19 +313,27 @@ for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
 Laplace equation
 ~~~~~~~~~~~~~~~~
 
-The above example showed how Devito can be used to create finite
+The above example shows how Devito can be used to create finite
 difference stencil operators from only a few lines of high-level
-symbolic code. For more complex examples, boundary conditions are
-required though, which are not currently provided through the symbolic
-high-level API. However, for exactly this reason, Devito provides a
-low-level, or "indexed" API, where custom SymPy expressions can be
-created with explicitly resolved grid accesses to manually inject
-custom code into the auto-generation toolchain.
+symbolic code. However, the previous example only required a single
+variable to be updated, while more complex operators might need to
+execute multiple expressions simultaneously to solve coupled PDEs or
+apply boundary conditions as part of the time loop. For this reason
+:code:`devito.Operator` objects can be constructed from multiple
+update expressions and allow mutiple expression formats as input.
 
-To demonstrate this, we will use the Laplace example from the original
-CFD tutorials (step 9), which implements the steady-state heat equation
-with Dirichlet and Neuman boundary conditions. The governing equation
-for this problem is
+Nevertheless, boundary conditions are currently not provided as part
+of the symbolic high-level API. For exactly this reason,
+Devito provides a low-level, or "indexed" API, where custom SymPy
+expressions can be created with explicitly resolved grid accesses to
+manually inject custom code into the auto-generation toolchain. This
+entails that future extensions to capture different types of boundary
+conditions can easily be added at a later stage.
+
+To demonstrate the use of the low-level API, we will use the Laplace
+example from the original CFD tutorials (step 9), which implements the
+steady-state heat equation with Dirichlet and Neuman boundary
+conditions. The governing equation for this problem is
 
 .. math::
    :label: 2dlaplace
@@ -402,18 +423,21 @@ object.
                  subs={h: dx, a: 1.})
 
 After building the operator, we can now use it in a time-independent
-convergence loop. However, in this example we need to make sure to
-explicitly exchange the role of the buffers :code:`p` and :code:`pn`.
-This can be achieved by supplying symbolic data objects via keyword
-arguments when invoking the operator, where the name of the argument
-is matched against the name of the original symbol used to create the
-operator. The according initial condition and the resulting
-steady-state solution are depicted in Figures :ref:`fig2dlaplace` and
-:ref:`fig2dlaplacefinal` respectively.
+convergence loop that minimizes the :math:`L^1` norm of
+:math:`p`. However, in this example we need to make sure to explicitly
+exchange the role of the buffers :code:`p` and :code:`pn`.  This can
+be achieved by supplying symbolic data objects via keyword arguments
+when invoking the operator, where the name of the argument is matched
+against the name of the original symbol used to create the operator.
 
-.. raw:: latex
-
-   \pagebreak
+The convergence criterion for this example was chosen to be
+:math:`\Vert p \Vert ^{1} < 10^{-4}`. The according initial condition
+and the resulting steady-state solution, depicted in Figures
+:ref:`fig2dlaplace` and :ref:`fig2dlaplacefinal` respectively, agree
+with the original tutorial implementation. It should again be noted
+that the chosen numerical scheme might not be optimal to solve
+steady-state problems of this type, since often implicit methods are
+preferrable.
 
 .. code-block:: python
 
@@ -844,6 +868,12 @@ References
               Mathematical Software (TOMS), vol. 40,
               no. 2, p. 9, 2014.
 
+.. [Baba16] Y. Baba and V. Rakov, "The Finite-Difference Time Domain
+            Method for Solving Maxwell's Equations". In
+            "Electromagnetic Computation Methods for Lightning Surge
+            Protection Studies", 2016, pp. 43–72, Wiley, ISBN 9781118275658.
+            http://dx.doi.org/10.1002/9781118275658.ch3
+
 .. [Brandvik10] T. Brandvik and G. Pullan, “Sblock: A framework for efficient
                 stencil-based pde solvers on multi-core platforms,” in Proceedings
                 of the 2010 10th IEEE International Conference on Computer and
@@ -888,6 +918,10 @@ References
              Dylan McCormick. 2017, June 7. opesci/devito: Devito-3.0.1.
              Zenodo. http://doi.org/10.5281/zenodo.803626
 
+.. [Liu09] Y. Liu and M. K. Sen, “Advanced Finite-Difference Method
+           for Seismic Modeling,” Geohorizons, Vol. 14, No. 2, 2009,
+           pp. 5-16.
+
 .. [Logg12] Logg, A., Mardal, K.-A., Wells, G. N., et al.: Automated
             Solution of Differential Equations by the Finite Element
             Method, Springer, doi:10.1007/978-3-642-23099-8, 2012.
@@ -912,6 +946,17 @@ References
              Cimrman R, Scopatz A. (2017) SymPy: symbolic computing in
              Python. PeerJ Computer Science 3:e103
              https://doi.org/10.7717/peerj-cs.103
+
+.. [Peiro05] J. Peiró, S. Sherwin, "Finite Difference, Finite Element
+             and Finite Volume Methods for Partial Differential
+             Equations". In "Handbook of Materials Modeling,
+             pp. 2415--2446, ISBN 978-1-4020-3286-8, 2005.
+             http://dx.doi.org/10.1007/978-1-4020-3286-8_127.
+
+.. [Rai91] M. M. Rai and P. Moin. 1991. Direct simulations of
+           turbulent flow using finite-difference
+           schemes. J. Comput. Phys. 96, 1 (October 1991),
+           15-53. http://dx.doi.org/10.1016/0021-9991(91)90264-L
 
 .. [Rathgeber16] Rathgeber, F., Ham, D. A., Mitchell, L., Lange, M.,
                  Luporini, F., McRae, A. T. T., Bercea, G.,
