@@ -19,6 +19,10 @@
 :email: chuck.yount@intel.com
 :institution: Intel Corporation
 
+:author: Jan Hückelheim
+:email: j.hueckelheim@imperial.ac.uk
+:institution: Imperial College London
+
 :author: Gerard J. Gorman
 :email: g.gorman@imperial.ac.uk
 :institution: Imperial College London
