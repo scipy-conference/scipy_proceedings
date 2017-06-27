@@ -565,9 +565,9 @@ Overall, if applicable, discrimination nets offer better performance than a many
 
 Which pattern matching algorithm is the fastest for a given application depends on many factors.
 Hence, it is not possible to give a general recommendation.
-Yet, the more subjects are matched against the same pattern set, the more likely it is that many-to-one matching pays off.
+Yet, the more subjects are matched against the same pattern set, the more likely it is that many-to-one outperforms one-to-one matching.
 In the experiments, a higher number of patterns lead to an increase of the speedup of many-to-one matching.
-In terms of the size of the many-to-one matcher, the growth of the net seems to be sublinear in practice.
+In terms of the size of the many-to-one matcher, the growth of the net was sublinear in our experiments and still feasible for large pattern sets.
 The efficiency of using many-to-one matching also heavily depends on the actual pattern set, i.e. the degree of similarity and overlap between the patterns.
 
 Future Work
