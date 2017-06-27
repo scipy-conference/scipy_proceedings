@@ -46,7 +46,7 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
 
    Functional Magnetic Resonance Imaging (fMRI) is a neuroimaging technique
    that allows the non-invasive study of brain function. It is based on the
-   hemodynamic changes induced by changes in cerebral synaptic activity
+   hemodynamic variations induced by changes in cerebral synaptic activity
    following sensory or cognitive stimulation. The measured signal depends on
    the variation of blood oxygenation level (BOLD signal) which is related to
    brain activity: a decrease in deoxyhemoglobin concentration induces an
@@ -57,7 +57,7 @@ PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation 
    physiological conditions.
 
    In this paper we present PyHRF, a software to analyze fMRI data using
-   a joint detection-estimation (JDE) approach. It jointly detects cortical
+   a Joint Detection-Estimation (JDE) approach. It jointly detects cortical
    activation and estimates the HRF. In contrast to existing tools, PyHRF
    estimates the HRF instead of considering it as a given constant in the
    entire brain. Here, we present an overview of the package and showcase its
@@ -75,7 +75,7 @@ Introduction
 Neuroimaging techniques, such as functional Magnetic Resonance Imaging (fMRI),
 allow the *in vivo* study of brain function by measuring the cerebral response
 to sensory or cognitive stimulation. For more than 20 years, the
-blood-oxygen-level-dependent (BOLD) fMRI modality has being the technique most
+Blood-Oxygen-Level-Dependent (BOLD) fMRI modality has being the technique most
 used by neuroscientists to map the main functional regions and their links in
 the healthy and diseased brain.
 
@@ -118,13 +118,13 @@ patient executes a task or receives a sensory stimulus during repeated epochs
 separated by periods of rest. This data is analyzed by correlating the measured
 time-varying BOLD signal in each image location with a predicted BOLD signal,
 obtained by convolving the known function representing the stimulus with
-a hemodynamic response function (HRF) modeling the delay in the vascular
+a Hemodynamic Response Function (HRF) modeling the delay in the vascular
 response. Locations in the brain where this correlation is statistically
 significant are considered to exhibit a neuronal response to the task or
 stimulus, and thus to be involved in its cognitive processing.
 
 BOLD fMRI is non-invasive, non-ionizing, and gives access *in vivo* to brain
-activity with a relatively high spatial resolution. It is however highly
+activity with a relatively high spatial resolution. However, it is highly
 dependent of the HRF of the brain. The BOLD signal does not give access to true
 physiological parameters such as cerebral blood flow or cerebral blood volume,
 but rather measures a mixture of these quantities that is difficult to
@@ -143,7 +143,7 @@ that the HRF changes across different regions of the brain and across
 individuals, increasing thus the possibility of obtaining false negatives and
 decreasing the reliability of the results. The software PyHRF
 :cite:`Vincent:2014` was developed to overcome the above limitation by
-analyzing fMRI data using a joint detection-estimation (JDE) approach.
+analyzing fMRI data using a Joint Detection-Estimation (JDE) approach.
 
 
 .. [#] SPM official website: http://www.fil.ion.ucl.ac.uk/spm/software/
@@ -170,13 +170,6 @@ at http://www.pyhrf.org/scipy2017_notebook.
 PyHRF
 -----
 
-.. figure:: figures/pyhrf4bold.png
-   :align: center
-   :scale: 50%
-   :figclass: w
-
-   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrfbold`
-
 
 PyHRF (http://www.pyhrf.org) is an open source tool implemented in Python that
 allows to jointly detect activation and estimate (JDE) the hemodynamic response
@@ -187,8 +180,8 @@ JDE :cite:`Vincent10` in order to get reliable estimates. In this regard, HRF
 estimation in JDE is *parcel-wise* and an input parcellation is required.
 However, the use of the Markov Chain Monte Carlo (MCMC) method for estimation
 added a huge computational load to the solution, leading to the development of
-a faster method to deal with the parameter estimation.  Thus, a variational
-expectation maximization (VEM) solution :cite:`Chaari13` was implemented.
+a faster method to deal with the parameter estimation.  Thus, a Variational
+Expectation Maximization (VEM) solution :cite:`Chaari13` was implemented.
 
 JDE aims at improving activation detection by capturing the correct
 hemodynamics, since using the wrong HRF function could hide existing
@@ -198,20 +191,31 @@ different regions :cite:`Handwerker04`, and to have different delays in
 specific populations :cite:`Badillo13`. They change depending on pathologies
 such as stenosis.
 
-Fig. :ref:`hrfs` shows some HRF functions estimated using PyHRF from BOLD data
-on a healthy adult acquired in a block-design setting with visual, auditory and
-motor experimental conditions.  The parcels correspond to regions of the brain
-that are known induce evoked activity in response to these experimental
-conditions. Observe that the HRF estimated in the visual and motor regions
-(first and third figure from left to right ) are well approximated by the
-canonical HRF whereas in the auditory area (second figure from left to right),
-the recovered hemodynamic profiles peak earlier than the canonical shape.
+
+
+Fig. :ref:`hrfs` shows some HRF functions estimated by PyHRF from BOLD data on
+a healthy adult. This data was acquired in a block-design setting with visual,
+auditory and motor experimental conditions.  The parcels correspond to regions
+of the brain that are known induce evoked activity in response to these
+experimental conditions. Observe that the HRF estimated in the visual and motor
+regions (first and third figure from left to right ) are well approximated by
+the canonical HRF whereas in the auditory area (second figure from left to
+right), the recovered hemodynamic profiles peak earlier than the canonical
+shape.
+
+.. figure:: figures/pyhrf4bold.png
+   :align: center
+   :scale: 50%
+   :figclass: w
+
+   Inputs and outputs of PyHRF when analyzing BOLD data. :label:`pyhrfbold`
+
 
 Standard methods (*e.g.,* GLM), with the posterior classical statistics
-applied, give statistical parametric maps (SPM) that describe the significance
+applied, give Statistical Parametric Maps (SPM) that describe the significance
 of the activation in each region. JDE is a Bayesian approach and estimates, for
 each parameter, posterior probability functions. For this reason, we can
-compute posterior probability maps (PPMs) from the output of PyHRF. These PPMs
+compute Posterior Probability Maps (PPMs) from the output of PyHRF. These PPMs
 are not directly comparable to the classical SPM maps, but give a similar
 measure of significance of activation. For instance, in Fig. :ref:`spmvsppm` we
 show the SPM and PPM maps for a visual experimental condition in the same data
@@ -223,7 +227,7 @@ document.
 .. figure:: figures/visual_ppm_pvalues.png
    :align: center
    :scale: 50%
-   :figclass: htb
+   :figclass: h
 
    A) PPM and B) SPM maps computed with JDE and GLM, respectively. Scale is
    logarithmic. :label:`spmvsppm`
@@ -233,23 +237,22 @@ In Fig. :ref:`pyhrfbold` we present the inputs and the outputs of PyHRF for the
 analysis of BOLD data. It needs as inputs the data volume (BOLD), the
 experimental paradigm, and a parcellation of the brain. After running the JDE
 algorithm, the output will consist of HRF functions per parcel, BOLD effect
-maps per experimental condition, and posterior probability maps (PPMs) per
-condition. In the next section, we will describe in more details these elements
-and how to use PyHRF.
+maps per experimental condition, and PPMs per condition. In the next section,
+we will describe in more details these elements and how to use PyHRF.
 
 
 Example of Use
 --------------
 
-To illustrate the use of PyHRF, we will describe the steps needed for the
-analysis of BOLD data. A Jupyter notebook containing the complete code is
-available at http://www.pyhrf.org/scipy2017_notebook.
+To illustrate the use of PyHRF, we will describe the steps for the analysis of
+BOLD data. A Jupyter notebook containing the complete code is available at
+http://www.pyhrf.org/scipy2017_notebook.
 
 
 Getting fMRI BOLD Data
 ~~~~~~~~~~~~~~~~~~~~~~
 
-First of all, we need to get our fMRI BOLD data. In this running example, we
+First of all, we need to get our fMRI BOLD data. In our running example, we
 will analyze the dataset used in :cite:`Gorgolewski2013`. This dataset
 (``ds000114``) is open shared and it can be downloaded from
 https://openfmri.org/dataset/ds000114/. For convenience, we implemented the
@@ -287,7 +290,7 @@ fMRI BOLD Preprocessing
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Once we have the BOLD volumes, we need to apply some transformations to the
-images in order to correct for possible errors that may occur along the
+images in order to correct for possible errors that may have occurred along the
 acquisition.  For instance, a BOLD volume (*e.g.,* a whole brain) is usually
 not built at once but using a series of successively measured 2D slices. Each
 slice takes some time to acquire, so slices are observed at different time
@@ -475,8 +478,8 @@ define some important parameters of the underlying JDE model (*e.g.,* ``beta``,
 output (``output``).
 
 Moreover, we need to specify if we want to estimate the HRF response  or use,
-for example, its canonical form.  In our running example, we estimate the HRF
-(``estimate-hrf``) with a time resolution (``dt``) of 1.25 s, a duration
+for example, its canonical form.  In our running example, we will estimate the
+HRF (``estimate-hrf``) with a time resolution (``dt``) of 1.25 s, a duration
 (``hrf-duration``) of 25.0 s, and we force to zero the beginning and ending of
 the response (``zero-constraint``).
 
@@ -517,14 +520,14 @@ PyHRF Analysis (Output)
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 We show in Fig. :ref:`output` the active parcels (A), the PPMs (B), and the
-estimated HRFs (C) generated by PyHRF, for the motor task ``Finger``. Reading
+estimated HRFs (C) generated by PyHRF for the motor task ``Finger``. Reading
 the description given in :cite:`Gorgolewski2013`, this task corresponds to
 finger tapping. Recall that PyHRF estimates a HRF for each parcel and generates
 a PPM for each condition.
 
 We compared the output of PyHRF with the unthresholded statistical maps shared
 on the site *Neurovault* (http://www.neurovault.org/images/307/) for the same
-dataset and same task (see Fig. :ref:`output` D).  While the experimental
+dataset and same task (see Fig. :ref:`output`).  While the experimental
 paradigm is not optimized for JDE (standard block paradigm is not ideal to
 estimate different points of the HRF course), we obtained similar results to
 standard statistical analysis additionally providing the form of the HRF. As we
@@ -538,34 +541,32 @@ primary sensorimotor cortex*.
    :scale: 40%
    :figclass: w
 
-   A) Active parcels, B) posterior probability maps (PPMs), and C) estimated
-   HRFs generated by PyHRF for the dataset ``ds000114`` and the finger tapping
-   task. D) Shows the unthresholded statistical maps shared on the
-   site ``Neurovault`` for the same dataset and task. The cut z=60 shows a high
-   activation in the *supplementary motor area* and the *left primary
-   sensorimotor cortex*. :label:`output`
+   A) Active parcels, B) PPMs, and C) estimated HRFs generated by PyHRF for the
+   dataset ``ds000114`` and the finger tapping task. D) Shows the unthresholded
+   statistical maps shared on the site ``Neurovault`` for the same dataset and
+   task. The cut z=60 shows a high activation in the *supplementary motor area*
+   and the *left primary sensorimotor cortex*. :label:`output`
 
 
 Concluding Remarks
 ------------------
 
-In this paper we presented PyHRF, a software to analyze fMRI data using a joint
-detection-estimation (JDE) approach of the cerebral activity. It jointly
-detects cortical activation and estimates the hemodynamic response function
+In this paper we presented PyHRF, a software to analyze fMRI data using a Joint
+Detection-Estimation (JDE) approach of the cerebral activity. It jointly
+detects cortical activation and estimates the Hemodynamic Response Function
 (HRF), in contrast to existing tools, that consider the HRF as constant over
 the brain and over subjects, thus aiming to improve the reliability of the
 results.
 
 PyHRF is an open source software that has evolved rapidly over the last few
-years.  As we showed, it allows to generate posterior probability maps (PPMs)
+years.  As we showed, it allows to generate Posterior Probability Maps (PPMs)
 to describe the significance of the activation in each region of the brain.
 Moreover, PyHRF uses efficient estimation methods in order to provide a fast
-tool. Currently, the package does not provide a finely tuned initialization of
-the parameters of the JDE model, which may be a cumbersome process for the
-user.
+tool. Currently, the package does not provide finely tuned values for the
+parameters of the JDE model, leaving the user the cumbersome task of finding
+the best values for the estimation.
 
-
-Since 2013, PyHRF has started to evolve to deal with Functional Arterial Spin
+Since 2013, PyHRF has started to evolve to deal with functional Arterial Spin
 Labelling (fASL) :cite:`Vincent13` data, including a physiological prior to
 make the perfusion estimation more robust :cite:`Frau14b` :cite:`Frau15a`.
 A fast solution for fASL based on VEM was proposed in :cite:`Frau15b`, with
@@ -577,8 +578,8 @@ easy to use by non experts and clinicians.
 In the years to come, we plan to reduce the computation time by identifying
 a relevant parcellation of the brain from data instead of entering
 a parcellation of the whole brain which may not ensure reliable HRF estimation
-and detection performance. For that, we envisage to integrate the join
-parcellation detection estimation (JPDE) model presented in
+and detection performance. For that, we envisage to integrate the Join
+Parcellation Detection Estimation (JPDE) model presented in
 :cite:`Albughdadi2016`. The proposed approach consists in performing an online
 parcellation during the detection estimation step of JDE through the selection
 of sets of voxels that share the same HRF pattern.
