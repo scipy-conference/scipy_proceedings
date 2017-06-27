@@ -27,7 +27,7 @@ approaches. On small array sizes, Intel |R| SVML outperforms VML due to high lib
 larger problem sizes, VML's ability to both vectorize math functions and multi-thread loops offsets the overhead.
 
 
-Specifically, on Intel |R| Core |TMP| i5 processor the Intel |R| Distribution for Python delivers greater performance in 
+Specifically, on Intel |R| Core |TM| i5 processor the Intel |R| Distribution for Python delivers greater performance in 
 numerical evaluation of transcendental functions (log, exp, erf, etc.) due to utilization of both SIMD and multi-threading. 
 We do not see any visible benefit of multi-threading basic operations (as shown on the graph) unless NumPy arrays are very
 large (not shown on the graph). On Intel |R| Xeon |TM| processor, the 10x-1000x boost is explained by leveraging both

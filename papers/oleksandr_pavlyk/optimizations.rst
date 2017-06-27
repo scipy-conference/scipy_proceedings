@@ -49,7 +49,7 @@ Accelerating Scientific Python with Intel Optimizations
 
 .. class:: abstract
 
-    It is well known that the performance difference between Python and basic C code can be up 200x,
+    It is well-known that the performance difference between Python and basic C code can be up 200x,
     but for numerically intensive code another speed-up factor of 240x or even greater is possible.
     The performance comes from software's ability to take advantage of your CPU's multiple cores,
     single instruction multiple data (SIMD) instructions, and high performance caches.
@@ -68,9 +68,9 @@ Scientific software is usually algorthmically rich and compute intensive.
 The expressiveness of Python language as well as abundance of quality packages 
 offering implementations of advanced algorithms allow scientists and engineers 
 alike to code their software in Python. The ability of this software to solve
-realistic problems in a reasonable time is aften hampered by inefficient use of 
+realistic problems in a reasonable time is often hampered by inefficient use of 
 hardware resources. Intel Distribution for Python [IDP]_ attempts to enable 
-computation Python community with optimized computational packages,
+scientific Python community with optimized computational packages,
 such as NumPy*, SciPy*, Scikit-learn*, Numba* and PyDAAL across a range of Intel |R| processors,
 from Intel |R| Core |TM| CPUs to Intel |R| Xeon |R| and Intel |R| Xeon Phi |TM| processors.
 This paper offers a detailed report about optimization that went into the 
