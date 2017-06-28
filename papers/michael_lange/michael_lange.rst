@@ -833,7 +833,7 @@ Discussion
 ----------
 
 In this paper we present the finite difference DSL Devito and
-demonstrate its high-level API to generate two fluid dynamics
+demonstrate its high-level API to generate two simple fluid dynamics
 operators and a full seismic inversion example. We highlight the
 relative ease with which to create complex operators from only a few
 lines of high-level Python code while utilising highly optimised
@@ -852,6 +852,36 @@ performance optimizations, as well as domain-specific optimizations,
 such as flop reduction techniques - all while maintaining full
 compatibility with the scientific software stack available through the
 open-source Python ecosystem.
+
+Limitations and Future Work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The examples used in this paper have been chosen for their relative
+simplicity in order to concisely demonstrate the current features of
+the Devito API. Different numerical methods may be used to solve the
+presented examples with greater accuracy or achieve more realistic
+results. Nevertheless, finite difference methods play an important
+role and are widely used in academic and industrial research due to
+the relative ease of implementation and high computational
+efficiency, which is of particular importance for inversion methods
+that require fast and robust high-order PDE solvers.
+
+The high-level interfaces provided by Devito are intended to create
+high-performance operators with relative ease and thus increase user
+productivity. Several future extensions are planned to enhance the
+high-level API to further ease the construction of more complex
+operators, including explicit abstractions for symbolic boundary
+conditions, perfectly matched layer (PML) methods and staggered grids.
+Devito's secondary low-level API and use of several intermediate
+representations are intended to ease the gradual addition of new
+high-level features.
+
+Moreover, the addition of YASK as an alternative backend will not only
+provide more advanced performance optimisation, but also an MPI
+infrastructure to allow Devito to utilise distribute computing
+environments. Further plans also exist for integration with linear
+and non-linear solver libraries, such as PETSc, to enable Devito to
+handle implicit formulations.
 
 Acknowledgements
 ----------------
