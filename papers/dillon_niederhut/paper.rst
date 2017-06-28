@@ -169,7 +169,7 @@ If not, a lock is acquired only long enough to accomplish two instructions: poin
 
 If the read log is not validated, the entire operation is aborted and restarted. This suggests that the worst case scenario for TL2 is when several threads are attempting to write to a single object, as the invalidated threads will waste resources cycling through the retry loop.
 
-Using a similar safety test, we can see that the TraM Int object correctly handles separate threads attempting to update its internal data, even when the actions performed by each thread cannot be gauranteed to be atomic themselves.
+Using a similar safety test, we can see that the TraM Int object correctly handles separate threads attempting to update its internal data, even when the actions performed by each thread cannot be guaranteed to be atomic themselves.
 
 .. code-block:: python
 
@@ -194,11 +194,11 @@ Using a similar safety test, we can see that the TraM Int object correctly handl
 
 .. code-block:: sh
 
-    $ pyton run_test.py
+    $ python run_test.py
     $ 10
-    $ pyton run_test.py
+    $ python run_test.py
     $ 10
-    $ pyton run_test.py
+    $ python run_test.py
     $ 10
 
 Future Directions
