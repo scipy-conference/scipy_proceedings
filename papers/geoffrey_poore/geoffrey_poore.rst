@@ -94,9 +94,10 @@ the order of values and retaining comments.
 JSON
 ====
 
-JSON [JSON]_ was designed as a lightweight interchange format, so it has the
-advantage of broad cross-language support and simple syntax amenable to fast
-parsing.  With JSON syntax, the earlier example data becomes::
+JSON [JSON]_ was designed as a lightweight interchange format.  Its focus on a
+small number of common data types has enabled broad cross-language support,
+while its simple syntax is amenable to fast parsing.  With JSON syntax, the
+earlier example data becomes::
 
     {"key": {"subkey": "value"}}
 
@@ -105,15 +106,17 @@ are supported, so binary data and other unsupported types must be dealt with
 in an ad-hoc manner.  As in the INI-style formats, dict keys can only be
 strings.
 
-For configuration purposes, JSON's lack of comments is less than
-ideal, and its brackets, braces, and quotation marks are sometimes criticized
-as verbose (for example, [PEP518]_).  For scientific and technical tasks, its
-lack of an integer type and of floating-point Infinity and NaN can be an
-issue.  In fact, Python's standard library JSON implementation [py:json]_
-explicitly does not comply with the JSON specification by adding extensions
-for integer, Infinity, and NaN support, and enabling these by default.
-Another drawback is that a string in JSON must be on a single line; there are
-no multiline string literals.
+For configuration purposes, JSON has disadvantages.  It lacks comments.
+Comments are not necessary in the common case of exchanging JSON data between
+machines, but in human-edited configuration data, they can be very useful.
+Similarly, JSON's brackets, braces, and quotation marks are sometimes
+criticized as verbose for human editing (for example, [PEP518]_).  For
+scientific and technical tasks, JSON's lack of an integer type and of
+floating-point Infinity and NaN can be an issue.  In fact, Python's standard
+library JSON implementation [py:json]_ explicitly does not comply with the
+JSON specification by adding extensions for integer, Infinity, and NaN
+support, and enabling these by default.  Another drawback is that a string in
+JSON must be on a single line; there are no multiline string literals.
 
 JSON's simplicity and limitations are an advantage when it comes to
 round-tripping data.  Since there are no comments, a primary source of
@@ -126,13 +129,14 @@ exact manner in which numerical values are represented.
 YAML
 ====
 
-YAML [YAML]_ was designed as a serialization format.  As a result, it supports
-integers (decimal, octal, hex), Infinity and NaN floating-point values,
-Base64-encoded binary data, and a variety of other data types.  It also
-supports non-string dict keys.  Its use of significant whitespace to avoid
-JSON's brackets and braces is reminiscent of Python's own avoidance of braces.
-In YAML syntax, the example data could be represented without quotation
-marks or braces::
+YAML [YAML]_ was designed as a general serialization format.  It can create a
+text-based representation of essentially arbitrary data structures, including
+some programming language-specific types.  As a result, it supports integers
+(decimal, octal, hex), Infinity and NaN floating-point values, Base64-encoded
+binary data, and a variety of other data types.  It also allows non-string
+dict keys.  Its use of significant whitespace to avoid JSON's brackets and
+braces is reminiscent of Python's own avoidance of braces.  In YAML syntax,
+the example data could be represented without quotation marks or braces::
 
     key:
         subkey: value
