@@ -1,6 +1,6 @@
 :author: Brendt Wohlberg
 :email: brendt@ieee.org
-:institution: Los Alamos National Laboratory
+:institution: Theoretical Division, Los Alamos National Laboratory
 :corresponding:
 
 :bibliography: references
@@ -25,7 +25,21 @@ SPORCO is an open-source Python package for solving inverse problems with sparsi
 
 SPORCO was initially a Matlab library, but the implementation language was switched to Python for a number of reasons, including (i) the substantial cost of Matlab licenses (particularly in an environment that does not qualify for an academic discount), and the difficulty of running large scale experiments on multiple hosts with a limited supply of toolbox licenses, (ii) the greater maintainability and flexibility of the object-oriented design possible in Python, (iii) the flexibility provided by NumPy in indexing arrays of arbitrary numbers of dimensions (essentially impossible in Matlab), and (iv) the  superiority of Python as a general-purpose programming language.
 
-SPORCO supports a variety of inverse problems, including Total Variation :cite:`rudin-1992-nonlinear` :cite:`alliney-1992-digital` denoising and deconvolution, and Robust PCA :cite:`cai-2010-singular`, but the primary focus is on sparse coding and dictionary learning, for solving problems with sparse representations :cite:`mairal-2014-sparse`. Both standard and convolutional forms of sparse representations are supported. In the standard form the dictionary is a matrix, which limits the sizes of signals, images, etc. that can be directly represented; the usual strategy is to compute independent representations for a set of overlapping blocks. In the convolutional form :cite:`zeiler-2010-deconvolutional`:cite:`wohlberg-2016-efficient`, which is more recent, the dictionary is a set of linear filters, making it feasible to directly represent an entire signal or image. The support for the convolutional form is one of the major strengths of SPORCO since it is the only Python package to provide such a breadth of options for convolutional sparse coding and dictionary learning. Some features are not available in any other open-source package, including support for representation of multi-channel images (e.g. RGB color images) :cite:`wohlberg-2016-convolutional`, and representation of arrays of arbitrary numbers of dimensions, allowing application to one-dimensional signals, images, and video and volumetric data.
+.. figure:: blcksc2.eps
+   :scale: 83%
+   :align: center
+
+   Independent sparse coding of overlapping blocks :label:`fig:blksc`
+
+
+.. figure:: convsc.eps
+   :scale: 83%
+   :align: center
+
+   Convolutional sparse coding of entire signal :label:`fig:cnvsc`
+
+
+SPORCO supports a variety of inverse problems, including Total Variation :cite:`rudin-1992-nonlinear` :cite:`alliney-1992-digital` denoising and deconvolution, and Robust PCA :cite:`cai-2010-singular`, but the primary focus is on sparse coding and dictionary learning, for solving problems with sparse representations :cite:`mairal-2014-sparse`. Both standard and convolutional forms of sparse representations are supported. In the standard form the dictionary is a matrix, which limits the sizes of signals, images, etc. that can be directly represented; the usual strategy is to compute independent representations for a set of overlapping blocks, as illustrated in Figure :ref:`fig:blksc`. In the convolutional form :cite:`zeiler-2010-deconvolutional`:cite:`wohlberg-2016-efficient`, which is more recent, the dictionary is a set of linear filters, making it feasible to directly represent an entire signal or image. The convolutional form is equivalent to sparse coding with a structured dictionary constructed from translations of a smaller generating dictionary, as illustrated in Figure :ref:`fig:cnvsc`. The support for the convolutional form is one of the major strengths of SPORCO since it is the only Python package to provide such a breadth of options for convolutional sparse coding and dictionary learning. Some features are not available in any other open-source package, including support for representation of multi-channel images (e.g. RGB color images) :cite:`wohlberg-2016-convolutional`, and representation of arrays of arbitrary numbers of dimensions, allowing application to one-dimensional signals, images, and video and volumetric data.
 
 In the current version, all optimization problems are solved within the Alternating Direction Method of Multipliers (ADMM) :cite:`boyd-2010-distributed` framework, which is implemented as flexible class hierarchy designed to minimize the additional code that has to be written to solve a specific problem. This design also simplifies the process of deriving algorithms for solving variants of existing problems, in some cases only requiring overriding one or two methods, involving a few additional lines of code.
 
