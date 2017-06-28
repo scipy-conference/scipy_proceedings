@@ -80,7 +80,7 @@ Under work loads that are predominantly read operations, TL2 outperforms lock-ba
 The Python Implementation
 --------------------------
 
-The TraM package attempts to recreate the TL2 algorithm for transactional memory pythonically, and is not a one-for-one transliteration of the original Java implementation [#]_ . The chief difference is that it does not use a global counter whose state is maintained by primitives in the language, but is instead using the system clock. This comes with the additional cost of making system calls, but prevents us from the necessity of building a concurrency strategy inside our concurrency strategy, since the clock state must be shared across all threads.
+The TraM package (available at https://github.com/deniederhut/tram) attempts to recreate the TL2 algorithm for transactional memory pythonically, and is not a one-for-one transliteration of the original Java implementation. The chief difference is that it does not use a global counter whose state is maintained by primitives in the language, but is instead using the system clock. This comes with the additional cost of making system calls, but prevents us from the necessity of building a concurrency strategy inside our concurrency strategy, since the clock state must be shared across all threads.
 
 The algorithm starts by entering a retry loop, that will attempt to conduct the transaction a limited number of times before raising an exception. Ideally, this number is large enough that the retry limit would only be reached in the event of a system failure.
 
@@ -216,7 +216,6 @@ The second major limitation is that attaching versions to objects works fine for
 
 .. [#] Code has been modified from the original to avoid overfull hbox per the proceedings requirements
 .. [#] The order of magnitude for the wait time was chosen by experimentation to produce results between 3 and 7 on a 2.7GHz Intel Core i5.
-.. [#] Available at https://github.com/deniederhut/tram
 
 
 References
