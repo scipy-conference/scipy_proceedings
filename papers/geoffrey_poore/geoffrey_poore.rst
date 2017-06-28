@@ -999,38 +999,38 @@ shown below.  It illustrates most BespON features.
    \footnotesize
 
    \begin{Verbatim}[commandchars=\\\{\}]
-   \textcolor{color0}{# Line comments can be round-tripped if data}
-   \textcolor{color0}{# elements are only modified, not added or removed.}
+   \textit{\textcolor{color0}{# Line comments can be round-tripped if data}}
+   \textit{\textcolor{color0}{# elements are only modified, not added or removed.}}
 
-   \textcolor{color0}{### A doc comment can always be round-tripped. ###}
-   \textcolor{color0}{# Only one doc comment is allowed per data element.}
-   \textcolor{color0}{# This doc comment belongs to the key below.}
+   \textit{\textcolor{color0}{### This doc comment can always be round-tripped.###}}
+   \textit{\textcolor{color0}{# Only one doc comment is allowed per data element.}}
+   \textit{\textcolor{color0}{# The doc comment above belongs to the key below.}}
    \textcolor{color1}{"key (\textbackslash{}x5C escapes)"}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{'value (\textbackslash{}u\{5C\} escapes)'}
 
    \textcolor{color1}{`key (no \textbackslash{} escapes)`}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{``value (no `\textbackslash{}` escapes)``}
 
-   \textcolor{color0}{# Unquoted ASCII identifier-style strings.}
+   \textit{\textcolor{color0}{# Unquoted ASCII identifier-style strings.}}
    \textcolor{color1}{unquoted_key}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{unquoted_value}
 
-   \textcolor{color0}{# Trailing commas are fine.}
+   \textit{\textcolor{color0}{# Trailing commas are fine.}}
    \textcolor{color1}{inline_dict}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{\{}\textcolor{color1}{key1}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value1}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color1}{key2}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value2}\textcolor{color2}{,\}}
 
-   \textcolor{color0}{# Decimal, hex, octal, and binary integers.}
+   \textit{\textcolor{color0}{# Decimal, hex, octal, and binary integers.}}
    \textcolor{color1}{inline_list_of_ints}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{[}\textcolor{color3}{1}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0x}\textcolor{color3}{12}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0o}\textcolor{color3}{755}\textcolor{color2}{,}\textcolor{color2}{ }\textcolor{color4}{0b}\textcolor{color3}{1010}\textcolor{color2}{]}
 
    \textcolor{color1}{list_of_floats}\textcolor{color2}{ }\textcolor{color2}{=}
    \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color3}{1.2e3}
-   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color3}{-inf}\textcolor{color2}{  }\textcolor{color0}{# Infinity and NaN are supported.}
-   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color4}{0x}\textcolor{color3}{4.3p2}\textcolor{color2}{  }\textcolor{color0}{# Hex floats to avoid rounding.}
+   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color3}{-inf}\textcolor{color2}{     }\textit{\textcolor{color0}{# Infinity and NaN are supported.}}
+   \textcolor{color2}{    *}\textcolor{color2}{ }\textcolor{color4}{0x}\textcolor{color3}{4.3p2}\textcolor{color2}{  }\textit{\textcolor{color0}{# Hex floats to avoid rounding.}}
 
    \textcolor{color1}{wrapped_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{"""String with no whitespace}
    \textcolor{color1}{    lines, with line breaks converted to spaces,}
    \textcolor{color1}{    and "quotes" allowed by delimiters."""}
 
    \textcolor{color1}{multiline_raw_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{|```}
-   \textcolor{color1}{        Linebreaks are kept (as '\textbackslash{}n') and}
-   \textcolor{color1}{        leading indentation is preserved}
-   \textcolor{color1}{        relative to delimiters.}
+   \textcolor{color1}{      Linebreaks are kept (as '\textbackslash{}n') and leading}
+   \textcolor{color1}{      indentation is preserved relative to}
+   \textcolor{color1}{      delimiters (which are on lines by themselves).}
    \textcolor{color1}{    |```/}
 
    \textcolor{color1}{multiline_escaped_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{|"""}
@@ -1040,14 +1040,14 @@ shown below.  It illustrates most BespON features.
 
    \textcolor{color1}{typed_string}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color2}{(}\textcolor{color4}{bytes}\textcolor{color2}{)>}\textcolor{color2}{ }\textcolor{color1}{"byte string"}
 
-   \textcolor{color0}{# Key path style; same as "key1 = \{key2 = true\}"}
+   \textit{\textcolor{color0}{# Key-path style; same as "key1 = \{key2 = true\}"}}
    \textcolor{color1}{key1}\textcolor{color2}{.}\textcolor{color1}{key2}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color4}{true}
 
-   \textcolor{color0}{# Same as "section = \{subsection = \{key = value\}\}"}
+   \textit{\textcolor{color0}{# Same as "section = \{subsection = \{key = value\}\}"}}
    \textcolor{color2}{|===}\textcolor{color2}{ }\textcolor{color1}{section}\textcolor{color2}{.}\textcolor{color1}{subsection}
    \textcolor{color1}{key}\textcolor{color2}{ }\textcolor{color2}{=}\textcolor{color2}{ }\textcolor{color1}{value}
-   \textcolor{color2}{|===/}\textcolor{color2}{  }\textcolor{color0}{# Back to root level.  Can be omitted}
-   \textcolor{color2}{       }\textcolor{color0}{# if sections never return to root.}
+   \textcolor{color2}{|===/}\textcolor{color2}{  }\textit{\textcolor{color0}{# Back to root level.  Can be omitted}}
+   \textcolor{color2}{       }\textit{\textcolor{color0}{# if sections never return to root.}}
    \end{Verbatim}
 
    \endgroup
