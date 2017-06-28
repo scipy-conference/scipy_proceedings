@@ -142,7 +142,7 @@ The use of SymPy as the driver for the symbolic generation of stencil
 expressions and the subsequent code-generation are at the heart of the
 Devito philosophy. While SymPy is fully capable of auto-generating
 low-level C code for pre-compiled execution from high-level symbolic
-expressions, Devito is designed to combine theses capabilities with
+expressions, Devito is designed to combine these capabilities with
 automatic performance optimization based on the latest advances in
 stencil compiler technology. The result is a framework that is capable
 of automatically generating and optimising complex stencil code from
@@ -400,14 +400,14 @@ problem dimensions and cause the expression to be executed over the
 entire data dimension, similar to Python's :code:`:` operator.
 
 The Dirichlet BCs in the Laplace example can thus be implemented by
-creating a :code:`sympy.Eq` object that assign either fixed values or
-a prescribed function, such as the utility symbol :code:`bc_right` in or
-example, along the left and right boundary of our domain. To implement
-the Neumann BCs we again follow the original tutorial by assigning the
-second grid row from the top and bottom boundaries the value of the
-outermost row. The resulting SymPy expressions can then be used
-alongside the state update expression to create our :code:`Operator`
-object.
+creating a :code:`sympy.Eq` object that assigns either fixed values or
+a prescribed function, such as the utility symbol :code:`bc_right` in
+our example, along the left and right boundary of our domain. To
+implement the Neumann BCs we again follow the original tutorial by
+assigning the second grid row from the top and bottom boundaries the
+value of the outermost row. The resulting SymPy expressions can then
+be used alongside the state update expression to create our
+:code:`Operator` object.
 
 .. code-block:: python
 
@@ -747,7 +747,7 @@ resulting in different stencil sizes with increasing operational
 intensity (OI). The benchmark runs were performed on on a Intel(R)
 Xeon E5-2620 v4 2.1Ghz "Broadwell" CPU with a single memory socket and
 8 cores per socket and the slope of the roofline models was derived
-using the Stream Triad benchmark.
+using the Stream Triad benchmark [McCalpin95]_.
 
 The first set of benchmark results, shown in Figure :ref:`figperfdle`,
 demonstrates the performance gains achieved through loop-level
@@ -766,10 +766,12 @@ inherent to the acoustic formulation of the wave equation and the
 subsequent memory bandwidth limitations of the kernel.
 
 .. figure:: acoustic_dle.pdf
-   :scale: 60%
+   :scale: 70%
 
-   Performance benchmarks for loop-level
-   optimizations. :label:`figperfdle`
+   Performance benchmarks for loop-level optimizations with different
+   spatial orders (SO). The symbolic optimisations (DSE) have been
+   kept at level 'basic', while loop optimisation levels (DLE)
+   vary. :label:`figperfdle`
 
 On top of loop-level performance optimizations, Figure
 :ref:`figmaxperf` shows the achieved performance with additional
@@ -784,10 +786,11 @@ point, which is of vital importance for compute-dominated kernels with
 large OI [Louboutin17a]_.
 
 .. figure:: acoustic_maxperf.pdf
-   :scale: 60%
+   :scale: 70%
 
    Performance benchmarks with full symbolic and loop-level
-   optimizations. :label:`figmaxperf`
+   optimizations for different spatial orders
+   (SO). :label:`figmaxperf`
 
 
 Integration with YASK
@@ -968,6 +971,11 @@ References
                   symbolic finite-difference for geophysical
                   exploration. In preparation for Geoscientific Model
                   Development (GMD), 2017.
+
+.. [McCalpin95] McCalpin, J. D., "Memory Bandwidth and Machine Balance
+                in Current High Performance Computers", IEEE Computer
+                Society Technical Committee on Computer Architecture
+                (TCCA) Newsletter, December 1995.
 
 .. [Meurer17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB,
              Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S,
