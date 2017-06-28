@@ -144,7 +144,7 @@ Alternatively, plain dictionaries or external configuration files can also be us
 .. Using Config Values
 
 To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*:
-Any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
+any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
 Whenever such a function is called, Sacred will automatically pass those parameters by name from the configuration.
 This allows for flexible and convenient use of the hyperparameters throughout the experiment code:
 
@@ -286,7 +286,7 @@ Moreover, the observer interface is generic and supports easy addition of custom
 
 The recommended observer is the ``MongoObserver``, which writes to a MongoDB :cite:`mongo`.
 MongoDB is a noSQL database, or more precisely a *Document Database*:
-It allows the storage of arbitrary JSON documents without the need for a schema as in a SQL database.
+it allows the storage of arbitrary JSON documents without the need for a schema as in a SQL database.
 These database entries can be queried based on their content and structure.
 This flexibility makes it a good fit for Sacred because it permits arbitrary configuration of each experiment that can still be queried and filtered later on.
 This feature in particular has been very useful in performing large scale studies such as the one in previous work :cite:`greff2015`.
@@ -516,7 +516,7 @@ Connecting to TensorBoard
 -------------------------
 ­­­
 Sacredboard offers an experimental integration with TensorBoard — the web-dashboard for the popular TensorFlow library :cite:`tensorflow`.
-Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run, it is possible launch TensorBoard directly from the Run detail view.
+Provided that the experiment was annotated with ``@sacred.stflow.LogFileWriter(ex)`` as in our example below and a TensorFlow log has been created during the run, it is possible to launch TensorBoard directly from the Run detail view.
 
 
 Plotting Metrics
