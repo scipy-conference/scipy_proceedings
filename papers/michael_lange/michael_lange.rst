@@ -868,24 +868,23 @@ References
 .. [Alnaes14] M. S. Alnæs, A. Logg, K. B. Ølgaard, M. E. Rognes,
               and G. N.  Wells, “Unified Form Language: a
               domain-specific language for weak formulations of
-              partial differential equations,” ACM Transactions on
-              Mathematical Software (TOMS), vol. 40,
-              no. 2, p. 9, 2014.
+              partial differential equations”, ACM Transactions on
+              Mathematical Software (TOMS), vol. 40, no. 2, p. 9, 2014.
+              https://dx.doi.org/10.1145/2566630
 
 .. [Baba16] Y. Baba and V. Rakov, "The Finite-Difference Time Domain
-            Method for Solving Maxwell's Equations". In
+            Method for Solving Maxwell's Equations", in
             "Electromagnetic Computation Methods for Lightning Surge
             Protection Studies", 2016, pp. 43–72, Wiley, ISBN 9781118275658.
             http://dx.doi.org/10.1002/9781118275658.ch3
 
 .. [Brandvik10] T. Brandvik and G. Pullan, “Sblock: A framework for efficient
-                stencil-based pde solvers on multi-core platforms,” in Proceedings
+                stencil-based pde solvers on multi-core platforms”, in "Proceedings
                 of the 2010 10th IEEE International Conference on Computer and
-                Information Technology, ser. CIT ’10. Washington, DC, USA:
-                IEEE Computer Society, 2010, pp. 1181–1188. [Online]. Available:
+                Information Technology", IEEE Computer Society, 2010, pp. 1181–1188.
                 http://dx.doi.org/10.1109/CIT.2010.214
 
-.. [Cardenas70] Cárdenas, A. F. and Karplus, W. J.: PDEL -- a language
+.. [Cardenas70] Cárdenas, A. F. and Karplus, W. J.: PDEL — a language
                 for partial differential equations, Communications of
                 the ACM, 13, 184–191, 1970.
 
@@ -895,24 +894,22 @@ References
 
 .. [Datta08] K. Datta, M. Murphy, V. Volkov, S. Williams, J. Carter, L. Oliker,
              D. Patterson, J. Shalf, and K. Yelick, “Stencil computation optimization
-             and auto-tuning on state-of-the-art multicore architectures,” in
+             and auto-tuning on state-of-the-art multicore architectures”, in
              Proceedings of the 2008 ACM/IEEE Conference on Supercomputing,
-             SC ’08. Piscataway, NJ, USA: IEEE Press, 2008, pp. 4:1–4:12.
-             [Online]. Available: http://dl.acm.org/citation.cfm?id=1413370.1413375
+             IEEE Press, 2008, pp. 4:1–4:12.
+             http://dl.acm.org/citation.cfm?id=1413370.1413375
 
 .. [Farrell13] Farrell, P. E., Ham, D. A., Funke, S. W., and
                Rognes, M. E.: Automated Derivation of the Adjoint of
                High-Level Transient Finite Element Programs, SIAM
-               Journal on Scientific Computing, 35, C369–C393,
-               doi:10.1137/120873558,
-               http://dx.doi.org/10.1137/120873558, 2013.
+               Journal on Scientific Computing, 35, C369–C393, 2013.
+               http://dx.doi.org/10.1137/120873558
 
 .. [Henretty13] T. Henretty, R. Veras, F. Franchetti, L.-N. Pouchet, J. Ramanujam, and
                 P. Sadayappan, “A stencil compiler for short-vector simd
                 architectures,” in Proceedings of the 27th
                 International ACM Conference on International
-                Conference on Supercomputing, ser. ICS ’13. New York,
-                NY, USA: ACM, 2013, pp. 13–24. [Online]. Available:
+                Conference on Supercomputing, ACM, 2013, pp. 13–24.
                 http://doi.acm.org/10.1145/2464996.2467268
 
 .. [Iverson62] Iverson, K.: A Programming Language, Wiley, 1962.
@@ -933,7 +930,7 @@ References
 .. [Louboutin17a] Louboutin, M., Lange, M., Herrmann, F. J., Kukreja,
                   N., and Gorman, G.: Performance prediction of
                   finite-difference solvers for different computer
-                  architectures, Computers Geosciences, 105, 148--157,
+                  architectures, Computers Geosciences, 105, 148—157,
                   https://doi.org/10.1016/j.cageo.2017.04.014, 2017.
 
 .. [Louboutin17b] M. Louboutin, M. Lange, F. Luporini, N. Kukreja, F. Herrmann,
@@ -953,23 +950,22 @@ References
 
 .. [Peiro05] J. Peiró, S. Sherwin, "Finite Difference, Finite Element
              and Finite Volume Methods for Partial Differential
-             Equations". In "Handbook of Materials Modeling,
-             pp. 2415--2446, ISBN 978-1-4020-3286-8, 2005.
+             Equations", in "Handbook of Materials Modeling,
+             pp. 2415—2446, ISBN 978-1-4020-3286-8, 2005.
              http://dx.doi.org/10.1007/978-1-4020-3286-8_127.
 
-.. [Rai91] M. M. Rai and P. Moin. 1991. Direct simulations of
-           turbulent flow using finite-difference
-           schemes. J. Comput. Phys. 96, 1 (October 1991),
-           15-53. http://dx.doi.org/10.1016/0021-9991(91)90264-L
+.. [Rai91] M. M. Rai and P. Moin. 1991. "Direct simulations of
+           turbulent flow using finite-difference schemes",
+           J. Comput. Phys. 96, 1 (October 1991), 15-53.
+           http://dx.doi.org/10.1016/0021-9991(91)90264-L
 
 .. [Rathgeber16] Rathgeber, F., Ham, D. A., Mitchell, L., Lange, M.,
                  Luporini, F., McRae, A. T. T., Bercea, G.,
-                 Markall, G. R., and Kelly, P. H. J.: Firedrake:
+                 Markall, G. R., and Kelly, P. H. J.: "Firedrake:
                  automating the finite element method by composing
-                 abstractions. ACM Trans. Math. Softw.,
-                 43(3):24:1–24:27, 2016. URL:
-                 http://arxiv.org/abs/1501.01809, arXiv:1501.01809,
-                 doi:10.1145/2998441.
+                 abstractions",  ACM Trans. Math. Softw.,
+                 43(3):24:1–24:27, 2016.
+                 http://dx.doi.org/10.1145/2998441.
 
 .. [Umetani85] Umetani, Y.: DEQSOL A numerical Simulation Language for
                Vector/Parallel Processors, Proc. IFIP TC2/WG22, 1985, 5,
@@ -990,7 +986,7 @@ References
              and Systems, New York, NY, 2015, pp. 865-870.
              https://doi.org/10.1109/HPCC-CSS-ICESS.2015.27
 
-.. [Yount16] C. Yount, J. Tobin, A. Breuer and A. Duran, "YASK—Yet
+.. [Yount16] C. Yount, J. Tobin, A. Breuer and A. Duran, "YASK — Yet
              Another Stencil Kernel: A Framework for HPC Stencil
              Code-Generation and Tuning," 2016 Sixth International
              Workshop on Domain-Specific Languages and High-Level
@@ -1000,6 +996,5 @@ References
 
 .. [Zhang12] Y. Zhang and F. Mueller, “Auto-generation and auto-tuning of 3d
              stencil codes on gpu clusters,” in Proceedings of the Tenth International
-             Symposium on Code Generation and Optimization, ser. CGO ’12.
-             New York, NY, USA: ACM, 2012, pp. 155–164. [Online]. Available:
+             Symposium on Code Generation and Optimization, ACM, 2012, pp. 155–164.
              http://doi.acm.org/10.1145/2259016.2259037
