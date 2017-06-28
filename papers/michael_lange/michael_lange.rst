@@ -488,10 +488,17 @@ efficiently define rigorous forward modelling and adjoint operators
 from high-level symbolic definitions also implies that domain
 scientists are able to quickly adjust the numerical method and
 discretisation to the individual problem and hardware architecture
-[Louboutin17a]_. In the following example we will demonstrate the
-generation of forward and adjoint operators for the acoustic wave
-equation to implement the so-called adjoint test. The governing
-equation is defined as
+[Louboutin17a]_.
+
+In the following example we will demonstrate the generation of forward
+and adjoint operators for the acoustic wave equation and verify their
+correctness using the so-called *adjoint test*. This test, also knwon
+as *dot product test*, verifies that the implementation of an adjoint
+operator indeed computes the conjugate transpose of the forward
+operator. Conceptually this amounts to verifying that the adjoint
+operator reverses the information flow of the forward operator.
+
+The governing wave equation for the forward oeprator is defined as
 
 .. math::
     m \frac{\partial^2 u}{\partial t^2}
