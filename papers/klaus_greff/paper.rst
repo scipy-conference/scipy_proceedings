@@ -530,9 +530,8 @@ This object provides a ``log_scalar`` method than can be called with an arbitrar
     _run.log_scalar("test.accuracy", 35.25, step=50)
 
 The values for each metric are aggregated into a list of step index and values, where the last step number is autoincremented if the ``step`` parameter is omitted.
-Sacredboard can [#]_ display metrics collected in this form as plots in the details view.
+Sacredboard will display metrics collected in this form as plots in the details view.
 
-.. [#] Work in progress.
 
 
 
