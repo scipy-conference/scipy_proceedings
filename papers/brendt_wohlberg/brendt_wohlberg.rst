@@ -15,7 +15,7 @@ SPORCO: A Python package for standard and convolutional sparse representations
 
 .. class:: keywords
 
-   sparse representations, convolutional sparse representations, sparse coding, convolutional sparse coding, dictionary learning, convolutional dictionary learning, alternating direction method of multipliers, convex optimization
+   sparse representations, convolutional sparse representations, sparse coding, convolutional sparse coding, dictionary learning, convolutional dictionary learning, alternating direction method of multipliers
 
 
 Introduction
@@ -36,10 +36,10 @@ SPORCO was initially a Matlab library, but the implementation language was switc
    :scale: 83%
    :align: center
 
-   Convolutional sparse coding of entire signal :label:`fig:cnvsc`
+   Convolutional sparse coding of an entire signal :label:`fig:cnvsc`
 
 
-SPORCO supports a variety of inverse problems, including Total Variation :cite:`rudin-1992-nonlinear` :cite:`alliney-1992-digital` denoising and deconvolution, and Robust PCA :cite:`cai-2010-singular`, but the primary focus is on sparse coding and dictionary learning, for solving problems with sparse representations :cite:`mairal-2014-sparse`. Both standard and convolutional forms of sparse representations are supported. In the standard form the dictionary is a matrix, which limits the sizes of signals, images, etc. that can be directly represented; the usual strategy is to compute independent representations for a set of overlapping blocks, as illustrated in Figure :ref:`fig:blksc`. In the convolutional form :cite:`zeiler-2010-deconvolutional`:cite:`wohlberg-2016-efficient`, which is more recent, the dictionary is a set of linear filters, making it feasible to directly represent an entire signal or image. The convolutional form is equivalent to sparse coding with a structured dictionary constructed from translations of a smaller generating dictionary, as illustrated in Figure :ref:`fig:cnvsc`. The support for the convolutional form is one of the major strengths of SPORCO since it is the only Python package to provide such a breadth of options for convolutional sparse coding and dictionary learning. Some features are not available in any other open-source package, including support for representation of multi-channel images (e.g. RGB color images) :cite:`wohlberg-2016-convolutional`, and representation of arrays of arbitrary numbers of dimensions, allowing application to one-dimensional signals, images, and video and volumetric data.
+SPORCO supports a variety of inverse problems, including Total Variation :cite:`rudin-1992-nonlinear` :cite:`alliney-1992-digital` denoising and deconvolution, and Robust PCA :cite:`cai-2010-singular`, but the primary focus is on sparse coding and dictionary learning, for solving problems with sparse representations :cite:`mairal-2014-sparse`. Both standard and convolutional forms of sparse representations are supported. In the standard form the dictionary is a matrix, which limits the sizes of signals, images, etc. that can be directly represented; the usual strategy is to compute independent representations for a set of overlapping blocks, as illustrated in Figure :ref:`fig:blksc`. In the convolutional form :cite:`lewicki-1999-coding`:cite:`zeiler-2010-deconvolutional`:cite:`wohlberg-2016-efficient` the dictionary is a set of linear filters, making it feasible to directly represent an entire signal or image. The convolutional form is equivalent to sparse coding with a structured dictionary constructed from translations of a smaller generating dictionary, as illustrated in Figure :ref:`fig:cnvsc`. The support for the convolutional form is one of the major strengths of SPORCO since it is the only Python package to provide such a breadth of options for convolutional sparse coding and dictionary learning. Some features are not available in any other open-source package, including support for representation of multi-channel images (e.g. RGB color images) :cite:`wohlberg-2016-convolutional`, and representation of arrays of arbitrary numbers of dimensions, allowing application to one-dimensional signals, images, and video and volumetric data.
 
 In the current version, all optimization problems are solved within the Alternating Direction Method of Multipliers (ADMM) :cite:`boyd-2010-distributed` framework, which is implemented as flexible class hierarchy designed to minimize the additional code that has to be written to solve a specific problem. This design also simplifies the process of deriving algorithms for solving variants of existing problems, in some cases only requiring overriding one or two methods, involving a few additional lines of code.
 
@@ -50,7 +50,7 @@ The remainder of this paper provides a more detailed overview of the SPORCO libr
 ADMM
 ----
 
-The ADMM :cite:`boyd-2010-distributed` framework addresses problems of the form
+The ADMM :cite:`boyd-2010-distributed` framework addresses optimization problems of the form
 
 .. math::
    :label: eq:admmform
@@ -86,7 +86,7 @@ The feasibility conditions (see Sec. 3.3 :cite:`boyd-2010-distributed`) for the 
      & 0 \in \partial f(\mathbf{x}^*) + \rho^{-1} A^T \mathbf{u}^* \\
      & 0 \in \partial g(\mathbf{u}^*) + \rho^{-1} B^T \mathbf{u}^* \;\;,
 
-where :math:`\partial` denotes the subdifferential operator. It can be shown that the last feasibility condition is always satisfied by the solution of the :math:`\mathbf{y}` step. The primal and dual residuals :cite:`boyd-2010-distributed`
+where :math:`\partial` denotes the subdifferential operator. It can be shown that the last feasibility condition above is always satisfied by the solution of the :math:`\mathbf{y}` step. The primal and dual residuals :cite:`boyd-2010-distributed`
 
 .. math::
     :type: align
@@ -155,7 +155,7 @@ Sparse coding in SPORCO is based on the Basis Pursuit DeNoising (BPDN) problem :
    \mathrm{argmin}_X \;
    (1/2) \| D X - S \|_F^2 + \lambda \| X \|_1 \;,
 
-were :math:`D` is the dictionary, :math:`S` is the signal to be represented, :math:`X` is the sparse representation, and :math:`\lambda` is the regularization parameter controlling the sparsity of the solution. BPDN is solved via the equivalent ADMM problem
+were :math:`D` is the dictionary, :math:`S` is the signal matrix, each column of which is a distinct signal, :math:`X` is the sparse representation, and :math:`\lambda` is the regularization parameter controlling the sparsity of the solution. BPDN is solved via the equivalent ADMM problem
 
 .. math::
    \mathrm{argmin}_X \;
@@ -195,33 +195,33 @@ This approach is implemented by class ``admm.bpdndl.DictLearn``. An unusual feat
 Convolutional Sparse Coding
 ---------------------------
 
-Convolutional sparse coding (CSC) is based on a convolutional form of BPDN, which will be referred to as Convolutional BPDN (CBPDN) :cite:`wohlberg-2016-efficient`
+Convolutional sparse coding (CSC) is based on a convolutional form of BPDN, referred to as Convolutional BPDN (CBPDN) :cite:`wohlberg-2016-efficient`
 
 .. math::
-   \mathrm{argmin}_\mathbf{x} \;
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
    \frac{1}{2} \left \|  \sum_m \mathbf{d}_m * \mathbf{x}_m - \mathbf{s}
    \right \|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;\;,
 
 which is implemented by class ``admm.cbpdn.ConvBPDN``. Module ``admm.cbpdn`` also contains a number of other classes implementing variations on this basic form. As in the case of standard BPDN, the main computational cost of this algorithm is in solving the :math:`\mathbf{x}` step, which can be solved very efficiently by exploiting the Sherman-Morrison formula :cite:`wohlberg-2014-efficient`. SPORCO provides support for solving the basic form above, as well as a number of variants, including one with a gradient penalty, and two different approaches for solving a variant with a spatial mask :math:`W` :cite:`heide-2015-fast`:cite:`wohlberg-2016-boundary`
 
 .. math::
-   \mathrm{argmin}_\mathbf{x} \;
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
    \frac{1}{2} \left \|  W \left( \sum_m \mathbf{d}_m * \mathbf{x}_m -
    \mathbf{s} \right) \right \|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;\;.
 
 SPORCO also supports two different methods for convolutional sparse coding of multi-channel (e.g. color) images :cite:`wohlberg-2016-convolutional`. The one represents a multi-channel input with channels :math:`\mathbf{s}_c` with single-channel dictionary filters :math:`\mathbf{d}_m` and multi-channel coefficient maps :math:`\mathbf{x}_{c,m}`,
 
 .. math::
-   \mathrm{argmin}_\mathbf{x} \;
-   (1/2) \sum_c \left\| \sum_m \mathbf{d}_m * \mathbf{x}_{c,m} -
+   \mathrm{argmin}_{\{\mathbf{x}_{c,m}\}} \;
+   \frac{1}{2} \sum_c \left\| \sum_m \mathbf{d}_m * \mathbf{x}_{c,m} -
    \mathbf{s}_c \right\|_2^2 +
    \lambda \sum_c \sum_m \| \mathbf{x}_{c,m} \|_1 \;\;,
 
 and the other uses multi-channel dictionary filters :math:`\mathbf{d}_{c,m}` and single-channel coefficient maps :math:`\mathbf{x}_m`,
 
 .. math::
-   \mathrm{argmin}_\mathbf{x} \;
-   (1/2) \sum_c \left\| \sum_m \mathbf{d}_{c,m} * \mathbf{x}_m -
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
+   \frac{1}{2} \sum_c \left\| \sum_m \mathbf{d}_{c,m} * \mathbf{x}_m -
    \mathbf{s}_c \right\|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;\;.
 
 In the former case the representation of each channel is completely independent unless they are coupled via an :math:`\ell_{2,1}` norm term :cite:`wohlberg-2016-convolutional`, which is supported by class ``admm.cbpdn.ConvBPDNJoint``.
@@ -229,8 +229,8 @@ In the former case the representation of each channel is completely independent 
 An important issue that has received surprisingly little attention in the literature is the need to explicitly consider the representation of the smooth/low frequency image component when constructing convolutional sparse representations. If this component is not properly taken into account, convolutional sparse representations tend to give poor results. As briefly mentioned in :cite:`wohlberg-2016-efficient` (Sec. I), the simplest approach is to lowpass filter the image to be represented, computing the sparse representation on the highpass residual. In this approach the lowpass component forms part of the complete image representation, and should, of course, be added to the reconstruction from the sparse representation in order to reconstruct the image being represented. SPORCO supports this separation of an image into lowpass/highpass components via the function ``util.tikhonov_filter``, which computes the lowpass component of :math:`\mathbf{s}` as the solution of the problem
 
 .. math::
-   \mathrm{argmin}_\mathbf{x} \; \frac{1}{2} \left\|\mathbf{x} - \mathbf{s}
-   \right\|_2^2 + \frac{\lambda}{2} \sum_i \| G_i \mathbf{x} \|_2^2 \;\;,
+   \mathrm{argmin}_\mathbf{x} \; (1/2) \left\|\mathbf{x} - \mathbf{s}
+   \right\|_2^2 + (\lambda / 2) \sum_i \| G_i \mathbf{x} \|_2^2 \;\;,
 
 where :math:`G_i` is an operator computing the derivative along axis :math:`i` of the array represented as vector :math:`\mathbf{x}`, and :math:`\lambda` is a parameter controlling the amount of smoothing.
 In some cases it is not feasible to handle the lowpass component via such a pre-processing strategy, making it necessary to include the lowpass component in the CSC optimization problem itself. The simplest approach to doing so is to append an impulse filter to the dictionary and include a gradient regularization term on corresponding coefficient map in the functional (Sec. 3) :cite:`wohlberg-2016-convolutional2`. This approach is supported by class ``admm.cbpdn.ConvBPDNGradReg``, the use of which is demonstrated in section *Removal of Impulse Noise via CSC*.
@@ -244,7 +244,7 @@ Convolutional dictionary learning is based on the problem
 .. math::
    :type: align
 
-   \mathrm{argmin}_{\mathbf{d}, \mathbf{x}} \; &
+   \mathrm{argmin}_{\{\mathbf{d}_m\}, \{\mathbf{x}_{k,m}\}} \; &
    \frac{1}{2} \sum_k \left \|  \sum_m \mathbf{d}_m * \mathbf{x}_{k,m} -
    \mathbf{s}_k \right \|_2^2 + \lambda \sum_k \sum_m \| \mathbf{x}_{k,m} \|_1
    \\ & \; \text{ s.t } \; \mathbf{d}_m \in C \;\;,
@@ -252,7 +252,7 @@ Convolutional dictionary learning is based on the problem
 which is solved by alternating between a convolutional sparse coding stage, as above, and a constrained dictionary update obtained by solving the problem
 
 .. math::
-   \mathrm{argmin}_\mathbf{d} \;
+   \mathrm{argmin}_{\{\mathbf{d}_m\}} \;
    \frac{1}{2} \sum_k \left \| \sum_m \mathbf{d}_m * \mathbf{x}_{k,m} -
    \mathbf{s}_k \right \|_2^2 \; \text{ s.t. } \; \mathbf{d}_m
    \in C \;\;,
@@ -262,7 +262,7 @@ where :math:`\iota_C(\cdot)` is the indicator function of feasible set :math:`C`
 .. math::
    :type: align
 
-   \mathrm{argmin}_{\mathbf{d}, \mathbf{x}} \; &
+   \mathrm{argmin}_{\{\mathbf{d}_m\}, \{\mathbf{x}_{k,m}\}} \; &
    \frac{1}{2} \sum_k \left \|  W \left(\sum_m \mathbf{d}_m * \mathbf{x}_{k,m} -
    \mathbf{s}_k \right) \right \|_2^2 + \lambda \sum_k \sum_m \|
    \mathbf{x}_{k,m} \|_1 \\ & \; \text{ s.t } \; \mathbf{d}_m \in C
@@ -487,7 +487,7 @@ The problem is solved using class ``admm.cbpdn.ConvBPDNGradReg``, which implemen
 
 .. math::
 
-   \mathrm{argmin}_\mathbf{x} \;
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
    \frac{1}{2} \left \| \sum_m \mathbf{d}_m * \mathbf{x}_m - \mathbf{s}
    \right \|_2^2 + \lambda \sum_m \| \mathbf{x}_m \|_1 +
    \frac{\mu}{2} \sum_i \sum_m \| G_i \mathbf{x}_m \|_2^2
@@ -580,7 +580,7 @@ We illustrate the ease of extending or modifying existing algorithms in SPORCO b
 .. math::
    :label: eq:l1cbpdn
 
-   \mathrm{argmin}_\mathbf{x} \;
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
    \left \|  \sum_m \mathbf{d}_m * \mathbf{x}_m - \mathbf{s}
    \right \|_1 + \lambda \sum_m \| \mathbf{x}_m \|_1 \;.
 
@@ -591,8 +591,8 @@ An algorithm for the problem in Equation (:ref:`eq:l1cbpdn`) is not included in 
 .. math::
    :label: eq:mskdcpl
 
-   \mathrm{argmin}_\mathbf{x} \;
-   (1/2) \left\|  W \left(\sum_m \mathbf{d}_m * \mathbf{x}_m -
+   \mathrm{argmin}_{\{\mathbf{x}_m\}} \;
+   \frac{1}{2} \left\|  W \left(\sum_m \mathbf{d}_m * \mathbf{x}_m -
    \mathbf{s}\right) \right\|_2^2 + \lambda \sum_m
    \| \mathbf{x}_m \|_1 \;\;,
 
