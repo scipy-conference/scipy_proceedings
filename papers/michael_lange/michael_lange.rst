@@ -296,7 +296,7 @@ operator for 100 timesteps are depicted in Figures :ref:`fig2dconv`
 and :ref:`fig2dconvfinal` respectively. It should be noted that, while
 the results show good agreement with the original tutorial, they do
 exhibit significant numerical errors. This indicates that a high-order
-scheme, as well as more coupled formulation of the advection equation,
+scheme, as well as a coupled formulation of the advection equation,
 might be preferred to achieve more realistic results.
 
 .. figure:: 2dconv_init.png
@@ -843,7 +843,7 @@ Discussion
 ----------
 
 In this paper we present the finite difference DSL Devito and
-demonstrate its high-level API to generate two simple fluid dynamics
+demonstrate its high-level API to generate two fluid dynamics
 operators and a full seismic inversion example. We highlight the
 relative ease with which to create complex operators from only a few
 lines of high-level Python code while utilising highly optimised
