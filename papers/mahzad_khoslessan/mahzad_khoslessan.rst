@@ -447,13 +447,8 @@ In each run a total of 100000 zero workload tasks were executed.
 Figure :ref:`daskThroughput` A shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
 Each value is the mean throughput value of several runs for each Scheduler. 
 
-<<<<<<< HEAD
-.. figure:: figs/panels/daskthroughputpanel.pdf
-   :scale: 40%
-=======
 .. figure:: figs/panels/daskThroughputPanel.pdf
    :scale: 30%
->>>>>>> 154abe8da7e40781343366c942777a0f09b02b28
 
    Benchmark of Dask scheduler throughput on TACC *Stampede*.
    Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
@@ -481,22 +476,15 @@ Scheduler Plugin Results
 In addition to Dask web-interface, we implemented a Dask scheduler plugin_.
 This plugin captures task execution events from the scheduler and their respective timestamps.
 These captured profiles were later used to analyze the execution of XTC 300x on Stampede.
-Figure :ref:`XTC300x64coresStampede` shows characteristic executions. On the left (Figure :ref:`XTC300x64coresStampede` A) is an execution where the number of RMSD blocks is equal to the number of cores and on the right (Figure :ref:`XTC300x64coresStampede` B) an execution where the number of blocks is three times the number of cores. 
-
-.. figure:: figs/panels/scheduler-300x.pdf
-   :scale: 90%
-      
-   Task Stream of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
-   **A** 64 blocks and **B** 192 blocks. The X axis is time in milliseconds and the Y     
-   axis Worker process ID. Dark Green is the computation of RMSD for each data chunk, Light 
-   Green are the Get Item tasks and Red is data transfer. :label:`XTC300x64coresStampede` 
-
-
-In addition we were able to measure how many tasks are submitted per worker process.
+In all the previous benchmarks in the present study, number of blocks is equal to the number of processes (:math:`N = N_\text{cores}`). 
+However, when extended to multiple nodes the whole calculation is delayed due to the stragglers and as a result the overall performance was affected.
+In the present section, we repeated the benchmark where the number of blocks is three times the number of processes (:math:`N =3*N_\text{cores}`).
+We were able to measure how many tasks are submitted per worker process.
+This exexutions are performed to see why oversubscribing introduced in the previous section was not helpful.
 Table :ref:`process-subm` summarizes the results and Figure :ref:`task-histograms` shows in detail how RMSD blocks were submitted per worker process in each run.
-As it is shown the execution is not balanced between worker processes. Although most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
-As a result, over-subscription does not lead necessarily to a balanced execution, adding additional execution time.
-
+As it is shown the execution is not balanced between worker processes.
+Although, most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
+Therefore, we can conclude that over-subscription does not necessarily lead to a balanced execution, adding additional execution time.
 
 .. table:: Summary of the number of worker processes per submitted RMSD blocks. Each column shows the total number of Worker process that executed a number of RMSD blocks per run. Executed on TACC Stampede utilizing 64 cores :label:`process-subm` 
 
