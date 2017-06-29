@@ -86,14 +86,16 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
 
 .. class:: abstract
 
-    Obtaining useful crowdsourcing results often requires more responses than
-    can be collected. Trying to `adapt` to previous crowdsourcing responses
-    with "adaptive" sampling algorithms presents a fundamental challenge. At
-    UW–Madison we have built NEXT (http://nextml.org), a crowdsourcing data
-    collection tool that can be used with arbitrary adaptive algorithms. Each
-    week, our system is used by The New Yorker to run their Cartoon Caption
-    contest (http://www.newyorker.com/cartoons/vote). In this paper, we will
-    explain what NEXT is, system goals, features and API.
+    Crowdsourcing is widely used, but obtaining useful crowdsourcing results
+    often requires more responses than can be collected. Reducing the number of
+    responses required can be done by `adapting` to previous responses with
+    "adaptive" sampling algorithms, but these algorithms present a fundamental
+    challenge when paired with crowdsourcing. At UW–Madison, we have built a
+    crowdsourcing data collection tool that can be used with arbitrary adaptive
+    algorithms called NEXT (http://nextml.org). Each week, our system is used
+    by The New Yorker to run their Cartoon Caption contest
+    (http://www.newyorker.com/cartoons/vote). In this paper, we will explain
+    what NEXT is and it's applications, architecture and experimentalist use.
 
 .. class:: keywords
 
@@ -227,9 +229,9 @@ doesn't make much sense to label the same query again.
 Adaptive algorithms use previous responses to ask questions, which means that
 they require
 
-* receiving and storing responses, and access to these stored responses.
-* delivering and selecting queries to be labeled.
-* updating some internal model (which selects queries to be presented).
+* receiving, storing and accessing responses
+* delivering and selecting queries to be labeled
+* updating some internal model which selects queries to be presented.
 
 General crowdsourcing systems (e.g., Mechanical Turk, PsiTurk, Crowd Flower)
 were not designed with these requirements in mind. Adaptive data collection
@@ -254,8 +256,8 @@ experimentalists.
 
 .. figure:: figures/crowdsourcing-data-flow.png
 
-    Brining adaptive algorithms to crowdsourcing requires the data flow in
-    Figure :ref:`data-flow`.  :label:`crowdsourcing-data-flow`
+    The system required to use adaptive algorithm with crowdsourcing.
+    :label:`crowdsourcing-data-flow`
 
 One other system that addresses this challenge is the Microsoft Decision
 Service :cite:`agarwal2016multiworld`, which can effectively evaluate the
@@ -313,7 +315,7 @@ Applications of NEXT
 
 NEXT `applications` control the presentation of queries for users to consider.
 
-Three are three "built-in" applications shipped with NEXT, geared to three
+There are three "built-in" applications shipped with NEXT, geared to three
 different types of judgments a user can make. These applications are
 
 * Cardinal bandits, which asks participants to rate one object
@@ -465,7 +467,7 @@ tasks needed for adaptive algorithms (database access, background jobs).
 Arguments and returns
 """""""""""""""""""""
 
-We treat each algorithm as a black box -- NEXT only needs each algorithm
+We treat each algorithm as a black box – NEXT only needs each algorithm
 function to accept and return specific values. These arguments and return
 values for all algorithm functions are specified exactly in a YAML-based
 schema. Every algorithm has to create a mapping from the specified inputs to
@@ -475,7 +477,7 @@ NEXT verifies the inputs and output to/from algorithms and can also include a
 description of each parameter. This means that YAML schema is always up to date
 and is self-documenting. Changing this schema means different arguments are
 passed to every algorithm, and we offer flexibility by allowing arguments of
-any type to be passed (via ``type: any``).
+any type to be passed.
 
 This schema depends on ``Algs.yaml`` (e.g., in
 ``apps/[application]/algs/Algs.yaml``) and contains four root level keys for
@@ -543,7 +545,7 @@ Example
 """""""
 
 This example illustrates the interface we have created for the algorithm
-developer. It provides an example of algorithm implementation. After
+developer and provides an example of algorithm implementation. After
 implementation, this algorithm can receive crowdsourcing responses through the
 web interface.
 
