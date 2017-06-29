@@ -687,8 +687,14 @@ Note that we call the other captured functions without passing any of the config
 Related Work
 ============
 We are aware of only a few projects that have a focus similarly broad as Sacred, the closest one being Sumatra :cite:`davison2012`.
-It comes as a command-line tool and web-interface that can operate also with non-Python experiments, and uses a SQL database to store all the runs.
-But it enforces a specific workflow including initializing a project directory, the parameters need to be in a separate file and the experiment must be an executable that takes the name of a config-file as a command-line parameter.
+Both projects are very similar in that they collect and store information about sources, dependencies, configurations, and host information.
+Their main difference is that Sumatra comes as a command line tool for running experiments "from the outside", while Sacred was designed as a Python package to be used from within the experiment script.
+So while Sacred is limited to Python scripts, Sumatra can track any executable as long as its command line interface matches a certain structure.
+This, on the other hand, allows sacred to provide many conveniences like the flexible configuration system with configuration injection, automatic seeding of random number generators, support for live updated custom information, and integration with 3rd party libraries like Tensorflow.
+It also means that Sacred scripts are self-sufficient, while Sumatra relies on a separate outside project-configuration stored in a hidden `.smt` directory.
+Another subtle but important difference is that Sumatra relies mainly on SQL for storing run information, while Sacred favors MongoDB.
+The use of this schema-free database enables querying Sacred runs based on dynamic structure such as configuration entries (even nested ones) and custom information.
+
 
 Some projects, including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus on providing a dashboard.
 Jobman :cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
