@@ -696,11 +696,18 @@ Another subtle but important difference is that Sumatra relies mainly on SQL for
 The use of this schema-free database enables querying Sacred runs based on dynamic structure such as configuration entries (even nested ones) and custom information.
 
 
-Some projects, including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus on providing a dashboard.
-Jobman :cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
-Several projects exist with a focus on reproducible experiments, such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
-They trace dependencies and help in packaging everything that is needed to rerun an experiment exactly.
+Workflow management systems such as Taverna :cite:`wolstencroft2013taverna`, Kepler :cite:`altintas2004kepler`, Vistrails :cite:`bavoil2005vistrails`, and Galaxy :cite:`giardine2005galaxy` can also capture provenance information and ensure reproducibility.
+They let the user define a workflow based on standardized components, often through a graphical user interface without any direct programming.
+Implementing a custom component is usually difficult, which restricts their usefulness to the supported ones and thus to their intended domain.
+The line between workflow management and free-form programming blurs with tools like Reskit :cite:`reskit` and FBLearner Flow :cite:`fblearner_flow`.
+Sacred, however, is targeted at general machine learning audience, and therefore works with arbitrary python instead of some set of standardized components.
 
+
+Some other projects, including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus on providing a dashboard.
+Jobman :cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
+Several projects exist with a focus on capturing the entire environment of an experiment to ensure its reproducibility.
+They include tools such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
+They trace dependencies on an operating system  level and help in packaging everything that is needed to rerun an experiment exactly.
 
 Experiment databases :cite:`vanschoren2012, smith2014, empirical` make an effort to unify the process and storage of machine learning problems and experiments by expressing them in a common language.
 By standardizing that language, they improve comparability and communicability of the results.
