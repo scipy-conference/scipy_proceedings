@@ -702,19 +702,23 @@ Implementing a custom component is usually difficult, which restricts their usef
 The line between workflow management and free-form programming blurs with tools like Reskit :cite:`reskit` and FBLearner Flow :cite:`fblearner_flow`.
 Sacred, however, is targeted at general machine learning audience, and therefore works with arbitrary python instead of some set of standardized components.
 
+Experiment databases :cite:`vanschoren2012, smith2014, empirical` represent a related bodey of work by making an effort to unify the process and storage of machine learning problems and experiments by expressing them in a common language.
+By standardizing that language, they improve comparability and communicability of the results.
+The most well-known example might be the OpenML project :cite:`vanschoren2014`.
+This standardization has benefits, but also imposes certain restrictions on the conducted experiments.
+Therefore, to keep Sacred as general as possible, we chose not to build it ontop of an experiment database.
+That being said, we believe there is a lot of value in adding (optional) interfaces to experiment databases to Sacred.
+
+
+There are several tools such as noWorkflow :cite:`pimentel2015collecting`, ProvenanceCurious :cite:`huq2013provenance`, and others :cite:`bochner2008python` to extract fine-grained provenance information from python scripts.
+Whereas Sacred treats the executed code mostly as a black box, these tools use inspection and tracing techniques to extract function call graphs and data flow.
+This information is then often stored in the form of the Open Provenance Model in a relational database and enables in-depth analysis of the performed computations.
 
 Some other projects, including FGLab :cite:`fglab`, the proprietary Aetros :cite:`aetros`, and Neptune :cite:`neptune`, focus on providing a dashboard.
 Jobman :cite:`jobman` is a Python library for scheduling lots of machine learning experiments which also  helps in organizing hyperparameter searches and bookkeeping.
 Several projects exist with a focus on capturing the entire environment of an experiment to ensure its reproducibility.
 They include tools such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using`, CARE :cite:`janin2014care`.
 They trace dependencies on an operating system  level and help in packaging everything that is needed to rerun an experiment exactly.
-
-Experiment databases :cite:`vanschoren2012, smith2014, empirical` make an effort to unify the process and storage of machine learning problems and experiments by expressing them in a common language.
-By standardizing that language, they improve comparability and communicability of the results.
-The most well-known example might be the OpenML project :cite:`vanschoren2014`.
-This standardization has benefits, but also imposes certain restrictions on the conducted experiments.
-Therefore, to keep Sacred as general as possible, we chose not to build it ontop of an experiment database.
-That being said, we believe there is a lot of value in adding (optional) interfaces to experiment databases to Sacred.
 
 
 Conclusion
