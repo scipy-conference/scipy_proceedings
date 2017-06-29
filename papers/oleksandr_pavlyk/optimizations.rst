@@ -107,8 +107,8 @@ management operations. As a dynamic language, Python manages memory
 for the user. Memory operations, such as allocation, de-allocation,
 copy, and move, affect performance of essentially all Python programs.
 Specifically, Update 2 ensures NumPy allocates arrays that are
-properly aligned in memory on Linux, so that NumPy and SciPy compute
-functions can benefit from respective aligned versions of SIMD memory
+properly aligned in memory (their address is a multiple of a specific factor, usually 64) on Linux, 
+so that NumPy and SciPy compute functions can benefit from respective aligned versions of SIMD memory
 access instructions. This is especially relevant for Intel |R| Xeon
 Phi |TM| processors.  The most significant improvements in memory
 optimizations in Update 2 comes from replacing original memory copy

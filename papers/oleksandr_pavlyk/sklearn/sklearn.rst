@@ -1,4 +1,4 @@
-Scikit-learn is well know library that provides a lot of algorithms for many areas of machine learning.
+Scikit-learn is well-known library that provides a lot of algorithms for many areas of machine learning.
 Having limited developer resources this project prefers universal solutions and proven algorithms.
 For performance improvement scikit-learn uses Cython and underlying BLAS/LAPACK libraries through SciPy and Numpy.
 OpenBLAS and MKL uses threaded based parallelism to utilize multicores of modern CPUs.
