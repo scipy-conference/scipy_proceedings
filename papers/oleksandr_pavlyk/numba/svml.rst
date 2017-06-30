@@ -23,9 +23,10 @@ The Intel |R| C++ Compiler provides short vector math library (SVML) intrinsics 
 These intrinsics are available for IA-32 and Intel |R| 64 architectures running on supported operating systems.
 
 The SVML intrinsics are vector variants of corresponding scalar math operations using ``__m128``, ``__m128d``, ``__m256``, ``__m256d``, and ``__m256i`` data types.
-They take packed vector arguments, perform the operation on each element of the packed vector argument, and return a packed vector result.
+They take packed vector arguments, simultaneously perform the operation on each element of the packed vector argument, and return a packed vector result. Due to low overhead
+of the packing for aligned contiguously laid out data, vector operations may offer speed-ups over scalar operations which are proportional to the width of the vector register.
 
-For example, the argument to the ``_mm_sin_ps`` intrinsic is a packed 128-bit vector of four 32-bit precision floating point numbers. The intrinsic computes the sine of each of these four numbers and returns the four results in a packed 128-bit vector.
+For example, the argument to the ``_mm_sin_ps`` intrinsic is a packed 128-bit vector of four 32-bit precision floating point numbers. The intrinsic simultaneously computes values of the sine function for each of these four numbers and returns the four results in a packed 128-bit vector, all within about the time of scalar evaluation of only one argument. 
 
 Using SVML intrinsics is faster than repeatedly calling the scalar math functions. However, the intrinsics may differ from the corresponding scalar functions in accuracy of their results.
 
@@ -46,40 +47,52 @@ Let's see how it works with a small example:
             y[i] = math.sin(x[i])
     foo_compiled = njit(foo)
 
-Inspite of the fact that numba generates call for usual ``sin`` function:
+Inspite of the fact that numba generates call for usual ``sin`` function, as seen in the following excerpt from the generated LLVM code:
 
-.. code-block:: LLVM
+.. code-block:: text
     
     label 16:
-        $16.2 = iternext(value=$phi16.1)         ['$16.2', '$phi16.1']
-        $16.3 = pair_first(value=$16.2)          ['$16.2', '$16.3']
-        $16.4 = pair_second(value=$16.2)         ['$16.2', '$16.4']
-        del $16.2                                []
-        $phi19.1 = $16.3                         ['$16.3', '$phi19.1']
-        del $16.3                                []
-        branch $16.4, 19, 48                     ['$16.4']
+        $16.2 = iternext(value=$phi16.1)    ['$16.2',
+                                             '$phi16.1']
+        $16.3 = pair_first(value=$16.2)     ['$16.2', 
+                                             '$16.3']
+        $16.4 = pair_second(value=$16.2)    ['$16.2', 
+                                             '$16.4']
+        del $16.2                           []
+        $phi19.1 = $16.3                    ['$16.3', 
+                                             '$phi19.1']
+        del $16.3                           []
+        branch $16.4, 19, 48                ['$16.4']
     label 19:
-        del $16.4                                []
-        i = $phi19.1                             ['$phi19.1', 'i']
-        del $phi19.1                             []
-        $19.2 = global(math: <module 'math' from '/path_stripped/lib-dynload/math.cpython-35m-x86_64-linux-gnu.so'>) ['$
-    19.2']
-        $19.3 = getattr(attr=sin, value=$19.2)   ['$19.2', '$19.3']
-        del $19.2                                []
-        $19.6 = getitem(index=i, value=x)        ['$19.6', 'i', 'x']
-        $19.7 = call $19.3($19.6)                ['$19.3', '$19.6', '$19.7']
-        del $19.6                                []
-        del $19.3                                []
-        y[i] = $19.7                             ['$19.7', 'i', 'y']
-        del i                                    []
-        del $19.7                                []
-        jump 16                                  []
+        del $16.4                           []
+        i = $phi19.1                        ['$phi19.1', 
+                                             'i']
+        del $phi19.1                        []
+        $19.2 = global(math: <module 'math'\
+         from '/path_stripped/lib-dynload/\
+         math.cpython-35m-x86_64-...,.so'>) ['$ 19.2']
+        $19.3 = getattr(attr=sin, 
+                        value=$19.2)        ['$19.2',
+                                             '$19.3']
+        del $19.2                           []
+        $19.6 = getitem(index=i, value=x)   ['$19.6',
+                                             'i', 'x']
+        $19.7 = call $19.3($19.6)           ['$19.3',
+                                             '$19.6',
+                                             '$19.7']
+        del $19.6                           []
+        del $19.3                           []
+        y[i] = $19.7                        ['$19.7',
+                                             'i', 'y']
+        del i                               []
+        del $19.7                           []
+        jump 16                             []
 
     
 We can see direct use of the SVML-provided vector implementation of sine function:
 
 .. code-block:: Asm
-    
+
             movq    %rdi, 8(%rsp)
             movq    %r13, 16(%rsp)
             movq    %r15, 24(%rsp)

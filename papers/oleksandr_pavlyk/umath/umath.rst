@@ -1,7 +1,7 @@
-One of the great benefits found in our Intel |R| Distribution for Python* is the performance boost
+One of the great benefits of the Intel |R| Distribution for Python* is the performance boost
 gained from leveraging SIMD and multithreading in (select) NumPy's UMath arithmetic and
-transcendental operations, on a range of Intel |R| CPUs, from Intel |R| Core |TM| to Intel |R| Xeon
-|TM| & Intel |R| Xeon Phi |TM|. With stock python as our baseline, we demonstrate the scalability of 
+transcendental operations across the range of Intel |R| CPUs, from Intel |R| Core |TM| to Intel |R| Xeon
+|TM| & Intel |R| Xeon Phi |TM|. With stock Python as our baseline, we demonstrate the scalability of 
 Intel |R| Distribution for Python* by using functions that are intensively used in financial math 
 applications and machine learning:
 

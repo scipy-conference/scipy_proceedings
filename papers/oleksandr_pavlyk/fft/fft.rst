@@ -2,8 +2,10 @@
 
 Thanks to Intel |R| MKL's flexibility in its supports for arbitrarily strided input and output arrays [1]_ both one-dimensional and
 multi-dimensional complex Fast Fourier Transforms along distinct axes can be performed directly, without the need to copy the input
-into a contiguous array first. Input strides can be arbitrary, including negative or zero, as long strides remain an 
-integer multiple of array's item size.
+into a contiguous array first (the cost of copying, whose complexity is :math:`\mathcal{O}(n)`, is not negligible compared to the cost 
+of computing the transform, whose complexity is :math:`\mathcal{O}\left(n \log n\right)`, and copying, being memory bound, does not 
+scale well with the number of available cores). Furthermore, input strides can be arbitrary, including negative or zero, as long strides 
+remain an  integer multiple of array's item size, otherwise a copy will be made.
 
 .. raw:: latex
 
