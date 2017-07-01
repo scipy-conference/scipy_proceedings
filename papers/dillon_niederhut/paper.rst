@@ -57,11 +57,11 @@ In this particular example, we are forcing Python to behave asynchronously by in
 
 .. code-block:: sh
 
-    $ pyton run_test.py
+    $ python run_test.py
     $ 5
-    $ pyton run_test.py
+    $ python run_test.py
     $ 4
-    $ pyton run_test.py
+    $ python run_test.py
     $ 6
 
 
