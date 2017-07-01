@@ -221,14 +221,14 @@ The second major limitation is that attaching versions to objects works fine for
 References
 ----------
 .. [Dice_et_al_2006] Dice, D., Shalev, O., & Shavit, N. (2006). Transactional locking II.
-    In *International Symposium on Distributed Computing* (pp. 194-208). Springer Berlin Heidelberg.
+    In *International Symposium on Distributed Computing* (pp. 194-208). Springer Berlin Heidelberg. https://doi.org/10.1007/11864219_14.
 .. [Lamport_1978] Lamport, L. (1978). Time, clocks and the ordering of events in a   distributed system.
     In *Communications of the ACM, 21.* (pp. 558-565).
-.. [Le_et_al_2016] Le, M., Yates, R., & Fluet, M. (2016). Revisiting software transactional memory in Haskell.
+.. [Le_et_al_2016] Le, M., Yates, R., & Fluet, M. (2016). Revisiting software transactional memory in Haskell. https://doi.org/10.1145/2976002.2976020.
     In *Proceedings of the 9th International Symposium on Haskell* (pp. 105-113). ACM.
 .. [Meier_et_al_2014] Meier, R., & Rigo, A. (2014). A way forward in parallelising dynamic languages.
-    In *Proceedings of the 9th International Workshop on Implementation, Compilation, Optimization of Object-Oriented Languages, Programs and Systems PLE*. ACM.
+    In *Proceedings of the 9th International Workshop on Implementation, Compilation, Optimization of Object-Oriented Languages, Programs and Systems PLE*. ACM. https://doi.org/10.1145/2633301.2633305.
 .. [Peyton_2002] Peyton Jones, S. (2002). Tackling the awkward squad: monadic input/output, concurrency, exceptions, and foreign-language calls in Haskell.
     In *Engineering theories of software construction* (pp. 47-96).
 .. [Lamport_et_al_1997] Shavit, N. & Touitou, D. (1997). Software transactional memory.
-    *Distributed Computing, 10.* (pp. 99-116).
+    *Distributed Computing, 10.* (pp. 99-116). http://doi.org/10.1007/s004460050028.
