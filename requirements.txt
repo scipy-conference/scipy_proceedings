@@ -2,6 +2,8 @@
 ##### scipy_proceedings requirements file for 2017
 #
 ##### requirements without version specifiers
+lxml
+nameparser
 pygments
 pytest
 testpath

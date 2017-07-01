@@ -1,5 +1,11 @@
 {
   "proceedings": {
+     "xref": {
+         "prefix" : "10.25080",
+         "depositor_name" : "Dillon Niederhut",
+         "depositor_email": "dniederhut@enthought.com",
+         "registrant" : "Crossref"
+     },
      "citation_key": "proc-scipy-2017",
      "title": {
        "acronym": "SciPy",
@@ -36,7 +42,7 @@
                  "org": "Enthought, Inc."}
                 ]
         },
-  
+
         {
             "name": "Program Chairs",
             "members": [
@@ -56,5 +62,3 @@
       }
   ]
 }
-
-
