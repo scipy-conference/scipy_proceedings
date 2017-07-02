@@ -327,8 +327,9 @@ Therefore, this makes it really hard to optimize codes, since it is hard to dete
 This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 There is also variability in network latency, in addition to the variability in underlying hardware in each machine.
 This causes the results to vary significantly across different machines.
-Since our Map-reduce job is pleasantly parallel, all of our processes have the same amount of work to do and our Map-Reduce job is load balanced. 
-Therefore, observing these stragglers discussed in the previous section is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
+Since our Map-reduce job is pleasantly parallel, each or a subset of computations can be executed independently on each process. 
+Also, the claculations are load balanced which means that all of our processes have the same amount of work to do (One block per process). 
+Therefore, observing these stragglers shown in Figure :ref:`task-stream-comet` A is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
 
 Performance Optimization
 ------------------------
