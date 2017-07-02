@@ -225,22 +225,14 @@ DCD file formats using SSDs show a very good scaling on a single node.
 Based on the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
 In fact, very good speed up is achievable using SSDs for DCD format in much shorter time as compared to XTC and NCDF file formats.  
 
-.. figure:: figs/panels/IO-time-300x.pdf
+.. figure:: figs/panels/IO-time-comparison.pdf
 
    Comparison of IO time between different file formats for 300x trajectory sizes using Dask multiprocessing on a *single node*.
    The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
-   :label:`IO-multiprocessing`
+   :label:`IO-comparison`
 
-
-.. figure:: figs/panels/IO-time-600x.pdf
-
-   Comparison of IO time between different file formats for 600x trajectory sizes using Dask distributed on one to three nodes.
-   The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.   
-   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and  *local* workstations with NFS).
-   :label:`IO-distributed`
-
-.. figure:: figs/panels/timing-300x-multiprocessing.pdf
+.. figure:: figs/panels/timing-comparison.pdf
 
    Comparison of job execution time between 300x trajectory sizes using Dask multiprocessing on a *single node*.
    The trajectory was split into :math:`N` blocks and computations were performed using :math:`N_\text{cores} = N` CPU cores.
@@ -267,12 +259,12 @@ The difference between job execution time and total compute and I/O time measure
 
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order be able to see where this difference originates from we have used the web-interface of the Dask library.
 This web-interface is launched whenever Dask scheduler is launched.
-Table :ref:`time-comparison` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web-interface and job execution time for each of the cases tested.
+Figure :ref:`task-stream-comet` summarizes the average and max total compute and I/O time measured through our code, max total compute and I/O time measured using the web-interface and job execution time for each of the cases tested.
 The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
 As seen from the tests performed on our local machines, there is a very small difference between maximum total compute and I/O time and job execution time.
 This difference is mostly due to communications performed in the reduction process.
 In addition, maximum total compute and I/O time measured using the web-interface and our code are very close.
-As seen in Table :ref:`time-comparison` and Figure :ref:`task-stream-comet`, for SDSC Comet (:math:`N_\text{cores} = 54`), there is a very small difference between maximum total compute and I/O time measured using the web-interface and job execution time.
+As seen in Figure :ref:`task-stream-comet`, for SDSC Comet (:math:`N_\text{cores} = 54`), there is a very small difference between maximum total compute and I/O time measured using the web-interface and job execution time.
 However, there is a considerable difference between maximum total compute and I/O time measured using the web-interface and our code.
 There is one process which is much slower as compared to others. 
 As can be seen from the results, some tasks (so-called Stragglers) are considerably slower than the others, delaying the completion of the job and as a result affect the overall performance.
@@ -286,7 +278,7 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    **C** Difference :math:`t_N - (t_\text{I/O} + t_\text{comp})`, accounting for other load that is not directly measured.
    :label:`timing-XTC-600x`
 
-.. figure:: figs/panels/speedup-300x.pdf
+.. figure:: figs/panels/speedup-comparison.pdf
 
    Speed-up for the analysis of the 300x trajectory on HPC resources using Dask multiprocessing.
    The dashed line shows the ideal limit of strong scaling.
@@ -296,38 +288,11 @@ As can be seen from the results, some tasks (so-called Stragglers) are considera
    **C** Amber netCDF.
    :label:`speedup-300x`
 
-.. figure:: figs/panels/speedup-600x.pdf
 
-   Speed-up for the analysis of the 600x trajectory on HPC resources using Dask distributed.
-   The dashed line shows the ideal limit of strong scaling.
-   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, all using Lustre with a single stripe as the parallel file system and *local* workstations with NFS).
-   **A** CHARMM/NAMD DCD.
-   **B** Gromacs XTC.
-   **C** Amber netCDF.
-   :label:`speedup-600x`
-
-
-.. figure:: figs/XTC600-54c-Web-In-Comet.png
+.. figure:: figs/XTC600-54c-Web-In-Comet.pdf
 
    Task stream plots showing the fraction of time spent on different computations by each worker obtained using Dask web-interface (tested on SDSC Comet using :math:`N_\text{cores} = 54` for 600X trajectory and XTC file format-Green bars represent time spent on RMSD calculations)
    :label:`task-stream-comet`
-
-.. table:: Summary of the measured times for different calculations, tested on different machines for 600X trajectory and XTC file format. |Ncores| is the number of cores used in each test, average total compute and I/O time is the I/O plus compute time for all frames per process averaged across all processes, max total compute and I/O time is the I/O plus compute time for all frames for the slowest process measured through the code, max total compute and I/O time measured using web-interface is the I/O plus compute time for all frames for the slowest process measured through web-interface. 
-   :label:`time-comparison`   
-   :class: w
-
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
-   | Resource   |  |Ncores|      |Average total compute and I/O time(s)|Max total compute and I/O time(s)|Max total compute and I/O time  |Job execution time(s)|
-   |            |                |                                     |                                 |measured using web-interface(s) |                     |
-   +============+================+=====================================+=================================+================================+=====================+
-   | Local      |      24        |               93.83                 |               110.58            |              110.43            |        111.83       |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
-   | Local      |      28        |               86.54                 |               111.54            |              111.24            |        112.81       |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
-   | SDSC Comet |      30        |               37.79                 |               41.11             |              41.12             |        42.23        |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
-   | SDSC Comet |      54        |               36.15                 |               43.58             |              104.25            |        105.1        |
-   +------------+----------------+-------------------------------------+---------------------------------+--------------------------------+---------------------+
 
 
 Challenges for Good HPC Performance
@@ -537,29 +502,20 @@ We believe that this is caused due to stragglers which is also confirmed based o
    Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
    Total time is the summation of communication time, computation time and the overhead in the calculations that
    might had been caused due to different reasons.
-   Reported values are the mean values across 5 repeats. :label:`MPItimestackedcomparison`
-
-Figure :ref:`MPI-total-time-boxplot` shows job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72.
-Again, from Figure :ref:`MPI-total-time-boxplot` job execution time reveals a decent decrease up to 24 cores (Single node).
-However, when extended to multiple nodes the uncertainties in measured job execution time across different repeats increases and as a result job execution time increases as well.
-
-.. figure:: figs/MPI-total-time-boxplot.pdf
-
+   Reported values are the mean values across 5 repeats. 
    Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72 obtained using MPI for python.
    The calculations are performed on XTC 600x using SDSC Comet.
-   :label:`MPI-total-time-boxplot`
+   :label:`MPItimestackedcomparison`
 
-Figure :ref:`MPI-total-time-rank-comparison` shows comparison of job execution time across all ranks tested with 72 cores.
-As seen in Figure :ref:`MPI-total-time-rank-comparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
+Figure :ref:`MPItimestackedcomparison` shows job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72.
+Again, from Figure :ref:`MPItimestackedcomparison` job execution time reveals a decent decrease up to 24 cores (Single node).
+However, when extended to multiple nodes the uncertainties in measured job execution time across different repeats increases and as a result job execution time increases as well.
+
+Figure :ref:`MPItimestackedcomparison` shows comparison of job execution time across all ranks tested with 72 cores.
+As seen in Figure :ref:`MPItimestackedcomparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
 These stragglers are observed in all cases when number of cores is more than 24 (extended to multiple cores).
 However, they are only shown for :math:`N = 72` CPU cores for the sake of brevity. 
  
-.. figure:: figs/MPI-total-time-rank-comparison.pdf
-
-   Comparison of job execution time across processor ranks for 72 CPU cores obtained using MPI for python. 
-   There are several stragglers which slow down the whole process.
-   :label:`MPI-total-time-rank-comparison`
-
 Overall speed-up along with the efficiency plots are shown in Figure :ref:`MPI-Speed-up`.
 As seen the overall performance is affected when extended to multiple nodes (more than 24 CPU cores). 
 
