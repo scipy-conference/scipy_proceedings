@@ -80,17 +80,17 @@ While Devito was originally developed for seismic imaging workflows,
 the automated generation and optimization of stencil codes can be
 utilised for a much broader set of computational problems. Matrix-free
 stencil operators based on explicit finite difference schemes are
-widely used in industrial and academic research, although they merely
+widely used in industry and academic research, although they merely
 represent one of many approaches to solving PDEs [Baba16]_, [Liu09]_,
 [Rai91]_. In this paper we therefore limit our discussion of numerical
-methods to a minium and instead focus on the ease which these
-operators can be created symbolically. We give a brief overview of the
-design concepts and Devito's key features and demonstrate the Devito
-API using a set of classic examples from computational fluid dynamics
-(CFD). Based on this, we will then highlight the use of Devito in an
-example of a complex seismic inversion algorithms to demonstrate its
-use in practical scientific applications and to showcase the
-performance achieved by the auto-generated and optimised code.
+methods and instead focus on the ease with which these operators can be
+created symbolically. We give a brief overview of the design concepts
+and key features of Devito and demonstrate its API using a set of
+classic examples from computational fluid dynamics (CFD). Then we will
+discuss the use of Devito in an example of a complex seismic inversion
+algorithm to illustrate its use in practical scientific applications
+and to showcase the performance achieved by the auto-generated and
+optimised code.
 
 Background
 ----------
@@ -173,11 +173,10 @@ implement two examples from classical fluid dynamics, before
 highlighting the role of Devito operators in a seismic inversion
 context. Both CFD examples are based in part on tutorials from the
 introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
-Lorena A. Barba group. It is important to note that the examples used
-in this section have been chosen for their relative simplicity in
-order to concisely demonstrate the capabilities and API features of
-Devito. For a more complete discussion on numerical methods for fluid
-flows please refer to [Peiro05]_.
+Lorena A. Barba group. We have chosen the examples in this section for
+their relative simplicity to concisely illustrate the capabilities
+and API features of Devito. For a more complete discussion on
+numerical methods for fluid flows please refer to [Peiro05]_.
 
 .. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -295,9 +294,11 @@ The initial condition and the final result after executing the
 operator for 100 timesteps are depicted in Figures :ref:`fig2dconv`
 and :ref:`fig2dconvfinal` respectively. It should be noted that, while
 the results show good agreement with the original tutorial, they do
-exhibit significant numerical errors. This indicates that a high-order
-scheme, as well as a coupled formulation of the advection equation,
-might be preferred to achieve more realistic results.
+not represent an accurate solution to the linear convection
+equation. In particular, the low order spatial discretisation
+introduces numerical diffusion that changes the shape of the hat into
+a smooth bump. This is a well-known issue that could be addressed with
+more sophisticated solver schemes as discussed in [LeVeque92]_.
 
 .. figure:: 2dconv_init.png
    :scale: 42%
@@ -321,10 +322,11 @@ The above example shows how Devito can be used to create finite
 difference stencil operators from only a few lines of high-level
 symbolic code. However, the previous example only required a single
 variable to be updated, while more complex operators might need to
-execute multiple expressions simultaneously to solve coupled PDEs or
-apply boundary conditions as part of the time loop. For this reason
-:code:`devito.Operator` objects can be constructed from multiple
-update expressions and allow mutiple expression formats as input.
+execute multiple expressions simultaneously, for example to solve
+coupled PDEs or apply boundary conditions as part of the time
+loop. For this reason :code:`devito.Operator` objects can be
+constructed from multiple update expressions and allow mutiple
+expression formats as input.
 
 Nevertheless, boundary conditions are currently not provided as part
 of the symbolic high-level API. For exactly this reason,
@@ -334,7 +336,7 @@ manually inject custom code into the auto-generation toolchain. This
 entails that future extensions to capture different types of boundary
 conditions can easily be added at a later stage.
 
-To demonstrate the use of the low-level API, we will use the Laplace
+To illustrate the use of the low-level API, we will use the Laplace
 example from the original CFD tutorials (step 9), which implements the
 steady-state heat equation with Dirichlet and Neuman boundary
 conditions. The governing equation for this problem is
@@ -402,7 +404,7 @@ entire data dimension, similar to Python's :code:`:` operator.
 The Dirichlet BCs in the Laplace example can thus be implemented by
 creating a :code:`sympy.Eq` object that assigns either fixed values or
 a prescribed function, such as the utility symbol :code:`bc_right` in
-our example, along the left and right boundary of our domain. To
+our example, along the left and right boundary of the domain. To
 implement the Neumann BCs we again follow the original tutorial by
 assigning the second grid row from the top and bottom boundaries the
 value of the outermost row. The resulting SymPy expressions can then
@@ -434,14 +436,14 @@ be achieved by supplying symbolic data objects via keyword arguments
 when invoking the operator, where the name of the argument is matched
 against the name of the original symbol used to create the operator.
 
-The convergence criterion for this example was chosen to be
-:math:`\Vert p \Vert ^{1} < 10^{-4}`. The according initial condition
-and the resulting steady-state solution, depicted in Figures
-:ref:`fig2dlaplace` and :ref:`fig2dlaplacefinal` respectively, agree
-with the original tutorial implementation. It should again be noted
-that the chosen numerical scheme might not be optimal to solve
-steady-state problems of this type, since often implicit methods are
-preferrable.
+The convergence criterion for this example is defined as the relative
+error between two iterations and set to :math:`\Vert p \Vert ^{1} <
+10^{-4}`. The according initial condition and the resulting
+steady-state solution, depicted in Figures :ref:`fig2dlaplace` and
+:ref:`fig2dlaplacefinal` respectively, agree with the original
+tutorial implementation. It should again be noted that the chosen
+numerical scheme might not be optimal to solve steady-state problems
+of this type, since often implicit methods are preferrable.
 
 .. code-block:: python
 
@@ -490,8 +492,8 @@ scientists are able to quickly adjust the numerical method and
 discretisation to the individual problem and hardware architecture
 [Louboutin17a]_.
 
-In the following example we will demonstrate the generation of forward
-and adjoint operators for the acoustic wave equation and verify their
+In the following example we will show the generation of forward and
+adjoint operators for the acoustic wave equation and verify their
 correctness using the so-called *adjoint test*. This test, also knwon
 as *dot product test*, verifies that the implementation of an adjoint
 operator indeed computes the conjugate transpose of the forward
@@ -757,7 +759,7 @@ Xeon E5-2620 v4 2.1Ghz "Broadwell" CPU with a single memory socket and
 using the Stream Triad benchmark [McCalpin95]_.
 
 The first set of benchmark results, shown in Figure :ref:`figperfdle`,
-demonstrates the performance gains achieved through loop-level
+highlights the performance gains achieved through loop-level
 optimizations. For these runs the symbolic optimizations were kept at
 a "basic" setting, where only common sub-expressions elimination is
 performed on the kernel expressions. Of particular interest are the
@@ -848,11 +850,11 @@ operators and a full seismic inversion example. We highlight the
 relative ease with which to create complex operators from only a few
 lines of high-level Python code while utilising highly optimised
 auto-generated C kernels via JIT compilation. On top of purely
-symbolic top-level API based on SymPy, we demonstrate how to utilise
-Devito's secondary API to inject custom expressions into the code
-generation toolchain to implement Dirichlet and Neumann boundary
-conditions, as well as the sparse-point interpolation routines
-required by seismic inversion operators.
+symbolic top-level API based on SymPy, we show how to utilise Devito's
+secondary API to inject custom expressions into the code generation
+toolchain to implement Dirichlet and Neumann boundary conditions, as
+well as the sparse-point interpolation routines required by seismic
+inversion operators.
 
 Moreover, we demonstrate that Devito-generated kernels are capable of
 exploiting modern high performance computing architectures by
@@ -872,11 +874,11 @@ the Devito API. Different numerical methods may be used to solve the
 presented examples with greater accuracy or achieve more realistic
 results. Nevertheless, finite difference methods play an important
 role and are widely used in academic and industrial research due to
-the relative ease of implementation and high computational
-efficiency, which is of particular importance for inversion methods
-that require fast and robust high-order PDE solvers.
+the relative ease of implementation, verification/validation and high
+computational efficiency, which is of particular importance for
+inversion methods that require fast and robust high-order PDE solvers.
 
-The high-level interfaces provided by Devito are intended to create
+The interfaces provided by Devito are intended to create
 high-performance operators with relative ease and thus increase user
 productivity. Several future extensions are planned to enhance the
 high-level API to further ease the construction of more complex
@@ -958,6 +960,9 @@ References
              V., Kazakas, P., Velesko, P., Zhang, S., Peng, P., and Gorman, G.
              Dylan McCormick. 2017, June 7. opesci/devito: Devito-3.0.1.
              Zenodo. http://doi.org/10.5281/zenodo.803626
+
+.. [LeVeque92] LeVeque, R. J., "Numerical Methods for Conservation
+               Laws", Birkhauser-Verlag (1992).
 
 .. [Liu09] Y. Liu and M. K. Sen, “Advanced Finite-Difference Method
            for Seismic Modeling,” Geohorizons, Vol. 14, No. 2, 2009,
