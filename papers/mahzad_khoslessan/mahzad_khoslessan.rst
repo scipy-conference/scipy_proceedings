@@ -109,7 +109,7 @@ Methods
 =======
 
 We implemented a simple map-reduce scheme to parallelize processing of trajectories over contiguous blocks.
-We tested libraries in the following versions: MDAnalysis 0.15.0, Dask 0.12.0 (also 0.13.0), Distributed_ 1.14.3 (also 1.15.1), and NumPy 1.11.2 (also 1.12.0) :cite:`VanDerWalt2011`.
+We tested libraries in the following versions: MDAnalysis 0.15.0, Dask 0.12.0 (also 0.13.0), distributed_ 1.14.3 (also 1.15.1), and NumPy 1.11.2 (also 1.12.0) :cite:`VanDerWalt2011`.
 
 .. code-block:: python
 
@@ -346,14 +346,14 @@ Effect of Lustre Striping
 As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
 This is strongly affecting our results since our compute per frame is not heavy and therefore the overlapping of data requests will be more frequent depending on the file format.
 The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
-However, when extending to more than one node, even XTC files are affected by this, as is also shown in the previous sections.
+However, when extending to multiple nodes, even XTC files are affected by this, as is also shown in Figure :ref:`IO-comparison` B, E.
 In Lustre, a copy of the shared file can be in different physical storage devices (OSTs). 
 Single shared files can have a stripe count equal to the number of nodes or processes which access the file.
-In the present study, we set the stripe count equal to three which is equal to the number of nodes used for our benchmark.
+In the present study, we set the stripe count equal to three which is equal to the number of nodes used for our benchmark using distributed scheduler.
 This may be helpful to improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests will decrease.
 Figure :ref:`speedup-IO-600x-striping` show the speed up and I/O time per frame plots obtained for XTC file format (600X) when striping is activated. 
 As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
-However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.  
+However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as a result the overall speed-up is not improved.  
 
 .. figure:: figs/panels/speed-up-IO-600x-striping.pdf
 
@@ -382,8 +382,8 @@ This may allow Dask to load balance appropriately, and as a result cover the ext
 In order for this, we set the number of tasks to be three times the number of workers (:math:`N_\text{Blocks} = 3*N_\text{cores}`). 
 Striping is also activated and is set to three which is also equal to number of nodes.
 Figures :ref:`speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (600X).
-As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
-However, based on the timing plots shown in Figure :ref:`timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved as compared to what we had in Figure :ref:`speedup-600x`.
+As can be seen, IO time is level across parallelism up to 72 cores because of striping.
+However, based on the timing plots shown in Figure :ref:`timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved.
 Figure :ref:`Dask-time-stacked-comparison` shows time comparison on different parts of the calculations. 
 Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
 RMSD calculation is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
@@ -423,10 +423,10 @@ The results from scheduler plugin is described in the following section.
 Examining Scheduler Throughput
 ------------------------------
 
-An experiment were executed with Dask Schedulers (multithreaded, multiprocessing and distributed) on Stampede.
+An experiment were executed with Dask schedulers (multithreaded, multiprocessing and distributed) on Stampede.
 In each run a total of 100000 zero workload tasks were executed.
-Figure :ref:`daskThroughput` A shows the Throughput of each Scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
-Each value is the mean throughput value of several runs for each Scheduler. 
+Figure :ref:`daskThroughput` A shows the Throughput of each scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
+Each value is the mean throughput value of several runs for each scheduler. 
 
 .. figure:: figs/panels/daskThroughputPanel.pdf
    :scale: 30%
@@ -439,15 +439,15 @@ Each value is the mean throughput value of several runs for each Scheduler.
    **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
    :label:`daskThroughput`
 
-Our understanding is that the most efficient Scheduler is the distributed scheduler, especially when there is one worker process for each available core.
+Our understanding is that the most efficient scheduler is the distributed scheduler, especially when there is one worker process for each available core.
 Also, the distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100,000 tasks.
 The multiprocessing and multithreading schedulers have similar behavior again, but need significantly more time to finish compared to the distributed.
 
 Figure :ref:`daskThroughput` B shows the distributed scheduler's throughput over time when the number of Nodes increases.
 Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
 By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
-Figure :ref:`daskThroughput` C shows the same execution with the Dask Cluster being setup to have one worker process per core.
-In this figure, the Scheduler does not reach its steady throughput state, compared to :ref:`daskThroughput` B, thus it is not clear what is the effect of the extra nodes.
+Figure :ref:`daskThroughput` C shows the same execution with the Dask cluster being setup to have one worker process per core.
+In this figure, the scheduler does not reach its steady throughput state, compared to :ref:`daskThroughput` B, thus it is not clear what is the effect of the extra nodes.
 Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
 
  
@@ -494,41 +494,35 @@ Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Fram
 --------------------------------------------------------------------------------------
 
 Based on the results presented in previous sections, it turned out that the stragglers are not because of the scheduler throughput.
-Lustre striping improves I/O time; however, the job computation is still delayed due to stragglers and as a result performance was not improved.    
+Lustre striping improves I/O time; however, the job computation is still delayed due to stragglers and as a result performance is not improved.    
 In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using an MPI-based implementation, which makes use of mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`.
 This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel library are as a result of scheduler overhead or any other factor than scheduler.
 The comparison is performed on XTC 600x using SDSC Comet. 
-Figure :ref:`MPItimestackedcomparison` shows time comparison on different parts of the calculations.
+Figure :ref:`MPItimestackedcomparison` A  shows time comparison on different parts of the calculations.
 Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
 Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
 Total time is the summation of communication time, computation time and the overhead in the calculations.
-As can be seen in Figure :ref:`MPItimestackedcomparison`, the overhead in the calculations is small up to 24 cores (Single node).
+As can be seen in Figure :ref:`MPItimestackedcomparison` A, the overhead in the calculations is small up to 24 cores (Single node).
 Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small up to a single node and increases as the calculations are extended to multiple nodes. 
 Overall, only a small fraction of total time is spent on communications.
 Overhead in the calculations is also very small.
 The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases for a sigle node.
 However, when extending to multiple nodes computation time also increases.
-We believe that this is caused due to stragglers which is also confirmed based on Figure :ref:`MPI-total-time-rank-comparison`.
+We believe that this is caused due to stragglers which is also confirmed based on Figure :ref:`MPItimestackedcomparison` A.
 
 .. figure:: figs/MPItimestackedcomparison.pdf
 
-   Time comparison on different parts of the calculations obtained using MPI for python. In this aggregate view, the time spent on different
+   **A** Time comparison on different parts of the calculations obtained using MPI for python. In this aggregate view, the time spent on different
    parts of the calculation are combined for different number of processes tested.
    The bars are subdivided into the contributions of each time spent on different parts.
-   Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
-   Total time is the summation of communication time, computation time and the overhead in the calculations that
-   might had been caused due to different reasons.
    Reported values are the mean values across 5 repeats. 
-   Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72 obtained using MPI for python.
+   **A inset** Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72 obtained using MPI for python.
    The calculations are performed on XTC 600x using SDSC Comet.
+   **B** Comparison of job execution time across processor ranks for 72 CPU cores obtained using MPI for python. There are several stragglers which slow down the whole process.
    :label:`MPItimestackedcomparison`
 
-Figure :ref:`MPItimestackedcomparison` shows job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72.
-Again, from Figure :ref:`MPItimestackedcomparison` job execution time reveals a decent decrease up to 24 cores (Single node).
-However, when extended to multiple nodes the uncertainties in measured job execution time across different repeats increases and as a result job execution time increases as well.
-
-Figure :ref:`MPItimestackedcomparison` shows comparison of job execution time across all ranks tested with 72 cores.
-As seen in Figure :ref:`MPItimestackedcomparison` there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
+Figure :ref:`MPItimestackedcomparison` B, shows comparison of job execution time across all ranks tested with 72 cores.
+As seen in Figure :ref:`MPItimestackedcomparison` B, there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
 These stragglers are observed in all cases when number of cores is more than 24 (extended to multiple cores).
 However, they are only shown for :math:`N = 72` CPU cores for the sake of brevity. 
  
