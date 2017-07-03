@@ -230,7 +230,7 @@ For a broader overview, LabbookDB can join tables from the database in order to 
 Storing information in a well-formed relational structure allows for versatile and complex reporting formats.
 In the following model, for instance, the “responsive functional measurements” column is computed automatically from the number of fMRI measurements and the number of occurrences of the ``"ICA failed to indicate response to stimulus"`` irregularity on these measurements.
 
-Contingent on the presence of LabbokDB and the example database, the following lines of code should generate a dataframe formatted in the same fashion as Table :ref:`reporttab`, and return it directly in the terminal, or save it in ``.html`` format, respectively:
+Contingent on the presence of LabbookDB and the example database, the following lines of code should generate a dataframe formatted in the same fashion as Table :ref:`reporttab`, and return it directly in the terminal, or save it in ``.html`` format, respectively:
 
 .. code:: console
 
@@ -282,7 +282,7 @@ This should create a ``DNAExtractionProtocol_EPDqEP.pdf`` file identical to `the
 Introspection
 ~~~~~~~~~~~~~
 
-Labbookdb ships with a module which generates graphical representations of the complex relational structures implemented in the package.
+LabbookDB ships with a module which generates graphical representations of the complex relational structures implemented in the package.
 The feature is provided by the ``labbookdb.introspection.schema`` module.
 The following code should be executable locally, contingent on LabbookDB availability:
 
