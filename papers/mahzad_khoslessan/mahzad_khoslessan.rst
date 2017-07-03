@@ -428,8 +428,8 @@ In each run a total of 100000 zero workload tasks were executed.
 Figure :ref:`daskThroughput` A shows the Throughput of each scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
 Each value is the mean throughput value of several runs for each scheduler. 
 
-.. figure:: figs/panels/daskThroughputPanel.pdf
-   :scale: 30%
+.. figure:: figs/panels/dask-throughput.pdf
+   :scale: 66%
 
    Benchmark of Dask scheduler throughput on TACC *Stampede*.
    Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
