@@ -35,7 +35,7 @@ Introduction
 
 The laboratory notebook (more commonly, lab book) is a long-standing multi-purpose record -
 serving as a primary data trace, as a calendar, diary, legal document, memory aid, organizer, timetable, and also proposed as a rapid science communication medium :cite:`Bradley2007`.
-It is of notable popularity in the natural sciences, especially in the life sciences - where research largely consists of “wet work” (i.e. real-world manipulation), which generally leaves no data trace unless explicitly recorded.
+It is of notable popularity in the natural sciences, especially in the life sciences |---| where research largely consists of “wet work” (i.e. real-world manipulation), which generally leaves no data trace unless explicitly recorded.
 With the advent of electronic data acquisition and storage, however, the lab book has increasingly lost significance as a repository for actual data, and has transformed into a metadata record.
 Notably, the modern lab book has become a general repository of information, for which simple array formats (e.g. tables, spreadsheets, or data matrices) do not provide an adequate input and/or storage format.
 
@@ -80,14 +80,14 @@ Record Keeping and Structure Migration
 
 We use version tracking via Git to provide both a verifiable primary input record, and the possibility to correct entries (e.g. typos) in order to facilitate later database usage in analysis.
 Version tracking of databases, however, is rendered difficult by their binary format.
-To mitigate this issue, as well as the aforementioned continuous structure update requirement, we track modular Python function calls which use the LabbookDB input application programming interface (API) to generate a database - instead of the database itself.
+To mitigate this issue, as well as the aforementioned continuous structure update requirement, we track modular Python function calls which use the LabbookDB input application programming interface (API) to generate a database |---| instead of the database itself.
 We refer to this repository of Python function calls as the “source code” of the database.
 
 Input Design
 ~~~~~~~~~~~~
 
 The LabbookDB input API consists of Python functions which interface with SQLAlchemy, and accept dictionary and string parameters for new entry specification and existing entry identification, respectively.
-These Python functions are wrapped for command line availability via ``argh`` - as sub-commands under the master command ``LDB`` in order to conserve executable namespace.
+These Python functions are wrapped for command line availability via ``argh`` |---| as sub-commands under the master command ``LDB`` in order to conserve executable namespace.
 Dictionaries are passed to the command line surrounded by simple quotes, and a LabbookDB-specific syntax was developed to make entry identification considerably shorter than standard SQL (though only arguably more readable).
 
 Output Design
@@ -111,7 +111,7 @@ Capabilities
 ------------
 
 To demonstrate the capabilities of this first LabbookDB release in a concise fashion, we provide example database source code in a separate repository, Demolog :cite:`demolog`.
-Contingent on the presence of LabbookDB ``0.0.1`` and its dependencies on the system, the example database can be built - and correspondingly described subsequent entries can be executed locally.
+Contingent on the presence of LabbookDB ``0.0.1`` and its dependencies on the system, the example database can be built |---| and correspondingly described subsequent entries can be executed locally.
 To set up the example database, the following should be run from the terminal:
 
 .. code-block:: console
@@ -185,7 +185,7 @@ Consider the string used to identify the entry to be updated in the previous cod
 
 Under the custom LabbookDB syntax, the selection string always starts with the entry's object name (in the string at hand, ``Animal``).
 The object name is separated from the name of the attribute to be matched by a colon, and the attribute name is separated from the value identifying the existing entry by a period.
-The value can be either a string, or - if the string contains a colon - it is presumed to be another object (which is then selected by using the same syntax).
+The value can be either a string, or |---| if the string contains a colon |---| it is presumed to be another object (which is then selected by using the same syntax).
 Multiple matching constraints can be specified, by separating them via double ampersands.
 Inserting one or multiple hashtags in between the ampersands indicates at what level the additional constraint is to be applied.
 In the current example, two ampersands separated by one hashtag mean that an ``AnimalExternalIdentifier`` object is matched contingent on a ``database`` attribute value of ``"ETH/AIC"`` and an ``identifier`` attribute value of ``"5682"``.
@@ -322,19 +322,19 @@ Atomized Relationships
 ~~~~~~~~~~~~~~~~~~~~~~
 
 We use the expression “atomized relationships” to refer to the finest grained representation of a relationship which can feasibly be observed in the real world.
-In more common relational model terms, higher atomization would correspond to higher normal forms - though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook to more automated wet work tracking.
+In more common relational model terms, higher atomization would correspond to higher normal forms |---| though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook to more automated wet work tracking.
 Similarly to higher normal forms, increasingly atomized relationships give rise to an increasingly complex relational structure of objects with decreasing numbers of attributes.
 LabbookDB embraces the complexity thus generated and the flexibility and exploratory power it facilitates.
 Database interaction in LabbookDB is by design programmatic, an thus ease of human readability of the raw relational structure is only of subordinate concern to reporting flexibility.
 
 An example of relationship atomization is showcased in Figure :ref:`cagestays`.
 Here the commonplace one-to-many association between ``Cage`` and ``Animal`` objects is replaced by a ``CageStay`` junction table highlighting the fact that the relationship between ``Cage`` and ``Animal`` is bounded by time, and that while it is many-to-one at any one time point, in the overarching record it is, in fact, many-to-many.
-This structure allows animals to share a cage for a given time frame, and to be moved across cages independently - reflecting the physical reality in animal housing facilities.
+This structure allows animals to share a cage for a given time frame, and to be moved across cages independently |---| reflecting the physical reality in animal housing facilities.
 This complexity is seamlessly handled by LabbookDB reporting functions, as seen e.g. in the command line reporting example previously presented.
 
 Conversely, atomization can result in a somewhat simpler schema, as higher level phenomena may turn out to be special cases of atomized interactions.
 By design (and in contrast to `the MouseDB implementation <https://github.com/davebridges/mousedb/blob/49b0a2c4eb7008fb8ed663d6a05a96d52d2a6d6d/mousedb/animal/models.py#L276>`_), we would not track breeding cages as a separate entity, as the housing relationships are not distinct from those tracked by the ``CageStay`` Object.
-A separate object may rather be introduced for breeding events - which need not overlap perfectly with breeding cages.
+A separate object may rather be introduced for breeding events |---| which need not overlap perfectly with breeding cages.
 
 
 .. figure:: cagestay_schema.pdf
@@ -398,7 +398,7 @@ Finally, the data is cast into a consistent and easily readable dataframe (forma
 
 .. figure:: fst.pdf
 
-    Timecourse plot of the forced swim test performed on mice in different treatment groups - automatically generated by LabbookDB, using plotting bindings from BehavioPy. :label:`fst`
+    Timecourse plot of the forced swim test performed on mice in different treatment groups |---| automatically generated by LabbookDB, using plotting bindings from BehavioPy. :label:`fst`
 
 .. figure:: fst_schema.pdf
     :figclass: w
@@ -414,7 +414,7 @@ Record Keeping
 
 Version tracking of database generation source code adequately addresses the main record keeping challenges at this stage of the project.
 Additionally, it has a number of secondary benefits, such as providing comprehensive and up-to-date usage examples.
-Not least of all, this method provides a very robust backup - as the database can always be rebuilt from scratch.
+Not least of all, this method provides a very robust backup |---| as the database can always be rebuilt from scratch.
 A very significant drawback of this approach, however, is poor scalability.
 
 As the amount of metadata reposited in a LabbookDB database increases, the time needed for database re-generation may reach unacceptable levels.
@@ -426,7 +426,7 @@ Structure Migration
 
 The long-term unsustainability of database source code tracking also means that a more automated means of structure migration should be developed, so that LabbookDB databases can be re-cast from older relational structures into improved and extended newer structures -
 instead of relying on source code editing and regeneration from scratch.
-Possibly, this could be handled by shipping an update script with every release - though it would be preferable if this could be done in a more dynamic, rolling release fashion.
+Possibly, this could be handled by shipping an update script with every release |---| though it would be preferable if this could be done in a more dynamic, rolling release fashion.
 
 Data Input
 ~~~~~~~~~~
