@@ -3,6 +3,10 @@
 :institution: Institute for Biomedical Engineering, ETH and University of Zurich
 :corresponding:
 
+:author: Bechara John Saab
+:email: bechara.saab@uzh.ch
+:institution: Preclinical Laboratory for Translational Research into Affective Disorders, DPPP, Psychiatric Hospital, University of Zurich
+
 :author: Markus Rudin
 :email: rudin@biomed.ee.ethz.ch
 :institution: Institute for Biomedical Engineering, ETH and University of Zurich
