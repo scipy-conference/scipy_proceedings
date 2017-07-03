@@ -52,19 +52,23 @@ Python suffers from several issues which make it suboptimal for parallel process
 .. [WTichy]  Walter Tichy, "The Multicore Transformation", Ubiquity, Volume 2014 Issue May, May 2014. DOI: 10.1145/2618393.
              http://ubiquity.acm.org/article.cfm?id=2618393
 
-The parallelism with multiple isolated processes is popular and widely used in Python since it allows to avoid the issues with the Python infamous global interpreter lock [GIL]_,
-but it is prone to inefficiency due to memory-related overhead.
-On the other hand, multi-threaded parallelism is known to be more efficient but has all the limitations of the GIL,
-which prevents scaling of Python programs effectively serializing them.
-However, when it comes to numeric computations, most of the time is spent in native code where the GIL can easily be released and programs can scale.
-Thus both multi-processing and multi-threading approaches are valuable for Python users and have its own areas of applicability.
+In particular, Python infamous global interpreter lock [GIL]_ makes it hard to scale an interpreter-dependent code
+using multiple threads, effectively serializing them.
+Thus the parallelism with multiple isolated processes is popular and widely used in Python
+since it allows to avoid the issues with GIL but it is prone to inefficiency due to memory-related overhead.
+However, when it comes to numeric computations with libraries like Numpy,
+most of the time is spent in C extensions whithout accessing Python data structures.
+It allows to release the GIL during computations and which enables scaling of compute-intensive applications.
+Thus, both multi-processing and multi-threading approaches are valuable for Python users and have its own areas of applicability.
 
 .. [GIL] David Beazley, "Understanding the Python GIL", PyCON Python Conference, Atlanta, Georgia, 2010.
          http://www.dabeaz.com/python/UnderstandingGIL.pdf
 
-Scaling parallel programs is not an easy thing.
-There are two fundamental laws which mathematically describe and predict scalability of a program: Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
-According to Amdahl's Law, speedup is limited by the serial portion of the work, which effectively puts a limit on scalability of parallel processing for a fixed-size job.
+Indeed, scaling parallel programs is not an easy thing.
+There are two fundamental laws which mathematically describe and predict scalability of a program:
+Amdahl's Law and Gustafson-Barsis' Law [AGlaws]_.
+According to Amdahl's Law, speedup is limited by the serial portion of the work,
+which effectively puts a limit on scalability of parallel processing for a fixed-size job.
 Python is especially vulnerable to this because it makes the serial part of the same code much slower
 compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
@@ -75,19 +79,20 @@ Moreover, the GIL makes things serial often where they potentially can be parall
 Gustafson-Barsis' law offers some hope stating that if the problem-size grows along with the number of parallel processors,
 while the serial portion grows slowly or remains fixed, speedup grows as processors are added.
 This might relax the concerns regarding Python as a language for parallel computing
-since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like NumPy and SciPy which are written in other languages.
+since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like NumPy and SciPy.
 Nevertheless, a larger problem size demands more operational memory to be used for processing it, but memory is a limited resource.
-Thus, even working with "Big Data", it must be processed by chunks that fit into memory, which puts a limit for the growth of the problem-size.
-As a result, the best strategy to efficiently load a multi-core system is to avoid serial regions and synchronization.
+Even working wth "Big Data"-scale problem-sizes, they are processed by chunks that fit into memory.
+Overall, the limitted growth of the problem-size leaves us with the boundaries expressed by Amdahl's Law anyway.
+As a result, the best strategy to efficiently load a multi-core system is still to avoid serial regions and synchronization.
 
 
 Nested Parallelism
 ------------------
 One way to avoid serial regions is to expose parallelism on all the possible levels of an application, for example,
-by making outermost loops parallel or exploring functional or pipeline types of parallelism on the application level.
+by making outermost loops parallel or exploring functional, flow graph, or pipeline types of parallelism on the application level.
 Python libraries that help to achieve this are Dask [Dask]_, Joblib [Joblib]_, and the built-in :code:`multiprocessing` and :code:`concurrent.futures` modules.
 On the innermost level, data-parallelism can be delivered by Python modules like NumPy [NumPy]_ and SciPy [SciPy]_.
-These modules can be accelerated with an optimized math library like Intel |R| Math Kernel Library (Intel |R| MKL) [MKL]_,
+These modules can be accelerated with an optimized math libraries like Intel |R| Math Kernel Library (Intel |R| MKL) [MKL]_,
 which is multi-threaded internally using OpenMP [OpenMP]_ (with default settings).
 
 .. [Joblib] Joblib, http://pythonhosted.org/joblib/
@@ -102,20 +107,21 @@ It is an efficient way for hiding serial regions which are an inevitable part of
 Issues of Oversubscription
 ---------------------------
 Nevertheless, the libraries named above do not coordinate the creation or pooling of threads, which may lead to *oversubscription*,
-where there are more active software threads than available hardware resources.
-It can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
+where there are much more active software threads than available hardware resources.
+For sufficiently big machines, it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
 and finally to a load imbalance when some threads have finished their work but others are stuck, thus halting the overall progress.
 
-For example, OpenMP (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
+For example, Intel OpenMP (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
 Usually, this is a useful approach to reduce work distribution overhead.
-However, with another active thread pool in the application, it impairs performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops,
+However, with another active thread pool in the application,
+it impairs performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops,
 the other parallel work cannot start until OpenMP threads stop spinning or are preempted by the OS.
 
 Because overhead from linear oversubscription (e.g. 2x) is not always visible on the application level (especially for small systems),
 it can be tolerated in many cases when the work for parallel regions is big enough.
 However, in the worst case a program starts multiple parallel tasks and each of these tasks ends up executing an OpenMP parallel region.
 This results in quadratic oversubscription (with default settings) which ruins multi-threaded performance on systems with a significant number of threads.
-In some big systems, it may not even be possible to create as many software threads as the number of hardware threads multiplied by itself due to insufficient resources.
+Within some big systems like Intel |R| Xeon Phi |TM|, it may not be even possible to create as many software threads as the number of hardware threads multiplied by itself due to insufficient resources.
 
 
 Threading Composability
