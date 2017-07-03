@@ -308,9 +308,9 @@ Therefore, because some tasks (so-called Stragglers) are considerably slower tha
    
    Evidence for uneven distribution of task execution times, shown for the XTC600x trajectory on SDSC *Comet* on the Lustre file system.
    **A** Task stream plot showing the fraction of time spent on different parts of the task by each worker, obtained using the Dask web-interface. (54 tasks for 54 workers that used :math:`N = 54` cores).
-   Green bars represent time spent on RMSD calculations, red bars show data transfer.
+   Green bars ("Compute") represent time spent on RMSD calculations, including trajectory I/O, red bars show data transfer.
    A "straggler" task (#32) takes much longer than any other task and thus determines the total execution time.
-   **B** Comparison between timing measurements from instrumentation inside the Python code (average :math:`n_\text{frames}/N (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]`, and :math:`t_N`) and Dask web-interface for :math:`N = 30` and :math:`N = 54` cores.
+   **B** Comparison between timing measurements from instrumentation inside the Python code (average compute and I/O time per task :math:`n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})]`, and :math:`t_N`) and Dask web-interface for :math:`N = 30` and :math:`N = 54` cores.
    :label:`task-stream-comet`
 
 
