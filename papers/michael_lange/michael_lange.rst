@@ -494,13 +494,12 @@ discretisation to the individual problem and hardware architecture
 
 In the following example we will show the generation of forward and
 adjoint operators for the acoustic wave equation and verify their
-correctness using the so-called *adjoint test*. This test, also knwon
-as *dot product test*, verifies that the implementation of an adjoint
-operator indeed computes the conjugate transpose of the forward
-operator. Conceptually this amounts to verifying that the adjoint
-operator reverses the information flow of the forward operator.
+correctness using the so-called *adjoint test* [Virieux09]_. This
+test, also knwon as *dot product test*, verifies that the
+implementation of an adjoint operator indeed computes the conjugate
+transpose of the forward operator.
 
-The governing wave equation for the forward oeprator is defined as
+The governing wave equation for the forward operator is defined as
 
 .. math::
     m \frac{\partial^2 u}{\partial t^2}
@@ -1026,6 +1025,11 @@ References
                   for pde-based scientific applications,” in
                   Proceedings of the 10th international conference on
                   Supercomputing. ACM, 1996, pp. 86–93.
+
+.. [Virieux09] Virieux, J. and Operto, S., "An overview of
+               full-waveform inversion in exploration geophysics",
+               GEOPHYSICS, 74, WCC1–WCC26, 2009.
+               http://dx.doi.org/10.1190/1.3238367
 
 .. [Yount15] C. Yount, "Vector Folding: Improving Stencil Performance
              via Multi-dimensional SIMD-vector Representation," 2015
