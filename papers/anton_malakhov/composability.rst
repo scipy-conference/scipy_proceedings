@@ -13,7 +13,7 @@
 :institution: Intel Corporation
 
 :year: 2017
-:video: Unknown
+:video: Unknown yet
 
 ---------------------------------------------------------------------
 Composable Multi-Threading and Multi-Processing for Numeric Libraries
@@ -21,12 +21,12 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   Python is popular among numeric communities that value it for easy to use number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
+   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
-   Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application.
+   Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
    This paper continues the work started in [AMala16]_ by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
-   using static affinity masks, limiting the number of simultaneously active OpenMP parallel regions, and work stealing scheduler from  Intel |R| Threading Building Blocks (Intel |R| TBB) [TBB]_.
+   using static settings, limiting the number of simultaneously active OpenMP parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| TBB) [TBB]_.
    These approaches help to unlock additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
