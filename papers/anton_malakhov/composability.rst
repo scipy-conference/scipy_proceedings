@@ -144,6 +144,7 @@ which is usually accomplished through setting environment variables controlling 
 (example: :code:`OMP_NUM_THREADS=1`).
 We are not discouraging from using this approach as it might be good enough to solve the problems in majority of use cases.
 However, it has few deficiencies, which one might want to keep in mind on the way for better performance:
+
 #. There might be not enough parallelism on the application level thus blindly disabling data parallelism can result in underutilization and so in slower execution.
 #. Global settings provided once and for all cannot take into account different parts or stages of the application, which can have opposite requirements for better performance.
 #. Setting right values might require from regular users deep enough understanding of the issue, architecture of the application, and the system it uses.
