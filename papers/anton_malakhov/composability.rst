@@ -31,7 +31,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: keywords
 
-   Multi-threading, Multi-processing, Oversubscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, TBB, OpenMP [*]_
+   Multi-threading, Multi-processing, Oversubscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, TBB, OpenMP
 
 .. [AMala16] Anton Malakhov, "Composable Multi-Threading for Python Libraries", Proc. of the 15th Python in Science Conf. (SCIPY 2016), July 11-17, 2016.
 .. [NumPy] NumPy, http://www.numpy.org/
@@ -74,7 +74,6 @@ Python is especially vulnerable to this because it makes the serial part of the 
 compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
 
-.. [*] Other names and brands may be claimed as the property of others.
 .. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
             http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
 
@@ -93,8 +92,8 @@ Nested Parallelism
 One way to avoid serial regions is to expose parallelism on all the possible levels of an application, for example,
 by making outermost loops parallel or exploring functional, flow graph, or pipeline types of parallelism on the application level.
 Python libraries that help to achieve this are Dask, Joblib, and the built-in :code:`multiprocessing` and :code:`concurrent.futures` modules.
-On the innermost level, data-parallelism can be delivered by Python modules like NumPy [NumPy]_ and SciPy [SciPy]_.
-These modules can be accelerated with an optimized math libraries like Intel |R| Math Kernel Library (Intel |R| MKL) [MKL]_,
+On the innermost level, data-parallelism can be delivered by Python modules like [NumPy]_ and [SciPy]_.
+These modules can be accelerated with an optimized math libraries like Intel |R| Math Kernel Library (Intel |R| [MKL]_),
 which is multi-threaded internally using OpenMP (with default settings).
 
 .. [MKL]    Intel(R) MKL, https://software.intel.com/intel-mkl
@@ -112,11 +111,13 @@ where there are much more active software threads than available hardware resour
 For sufficiently big machines, it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
 and finally to a load imbalance when some threads have finished their work but others are stuck, thus halting the overall progress.
 
-For example, Intel OpenMP runtime library (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
+For example, Intel OpenMP [*]_ runtime library (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
 Usually, this is a useful approach to reduce work distribution overhead.
 However, with another active thread pool in the application,
 it impairs performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops,
 the other parallel work cannot start until OpenMP threads stop spinning or are preempted by the OS.
+
+.. [*] Other names and brands may be claimed as the property of others.
 
 Because overhead from linear oversubscription (e.g. 2x) is not always visible on the application level (especially for small systems),
 it can be tolerated in many cases when the work for parallel regions is big enough.
@@ -131,25 +132,26 @@ Altogether, the co-existing issues of multi-threaded components define *threadin
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
 The first aspect of building a composable threading system is to avoid creation of an excessive number of software threads, preventing oversubscription.
 That effectively means that a component and especially a parallel region cannot dictate how many threads it needs for execution (*mandatory parallelism*).
-Instead, it should expose available parallelism to a run-time library, which provides contol to user over the number of threads (example: :code:`OMP_NUM_THREADS=1`) or
+Instead, it should expose available parallelism to a run-time library, which provides contol over the number of threads or
 which automatically coordinates tasks between components and parallel regions and map them onto available software threads (*optional parallelism*).
 
 
 OMP_NUM_THREADS=1
 -----------------
-The most common way in the industry to solve the issues of oversubscription is to disable the nested level of parallelism or carefully adjust it according to the number of application threads,
-which is usually accomplished through setting environment variables controlling OpenMP run-time library.
+The most common way in the industry to solve the issues of oversubscription is to disable the nested level of parallelism
+or carefully adjust it according to the number of application threads,
+which is usually accomplished through setting environment variables controlling OpenMP run-time library
+(example: :code:`OMP_NUM_THREADS=1`).
 We are not discouraging from using this approach as it might be good enough to solve the problems in majority of use cases.
 However, it has few deficiencies, which one might want to keep in mind on the way for better performance:
+#. There might be not enough parallelism on the application level thus blindly disabling data parallelism can result in underutilization and so in slower execution.
+#. Global settings provided once and for all cannot take into account different parts or stages of the application, which can have opposite requirements for better performance.
+#. Setting right values might require from regular users deep enough understanding of the issue, architecture of the application, and the system it uses.
+#. There are more settinggs to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
+#. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
 
- #. There might be not enough parallelism on the application level thus blindly disabling data parallelism can result in underutilization and so in slower execution.
- #. Global settings provided once and for all cannot take into account different parts or stages of the application, which can have opposite requirements for better performance.
- #. Setting right values might require from regular users deep enough understanding of the issue, architecture of the application, and the system it uses.
- #. There are more settinggs to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
- #. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
-
-There are at least two ways to practically implemenent threading composability without offloading too many decisions on the users shoulders:
-by fixing standard Python mechanisms to write parallel code and by improving threading layers (like OpenMP* or Intel |R| TBB).
+There are at least two ways to practically implemenent threading composability without offloading too many decisions on the user's shoulders:
+by fixing standard Python mechanisms to write parallel code and by improving threading layers (like OpenMP or Intel |R| TBB).
 The first way looks simpler but works only with Python and the second one is much more common but much more trickier.
 In this paper we will describe both of these approaches.
 
