@@ -115,6 +115,13 @@ The scope thus extends to maximally a few users, which trust each other with ful
 This is an appropriate scope for most research groups.
 Aditionally, this design choice allows single researchers or clusters of computationally inclined researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without the need for a larger institutional commitment.
 
+Development Model
+~~~~~~~~~~~~~~~~~
+
+The database schema draws from ongoing input, testing, and the wet work experience of many researchers associated with the Institute of Biomedical Engineering and the Animal Imaging Center at the ETH and University of Zurich.
+The development team consists of one programmer (corresponding author), who will maintain and actively develop LabbookDB at least until 2019 |---| independently of community involvement.
+Beyond that time point development may become contingent on the established impact of the project, including number of contributors, academic recognition of the metadata management system, adoption in the scientific Python or biomedical community, or the prospect of developing commercial tools to leverage the open source schema and API.
+
 Capabilities
 ------------
 
