@@ -81,9 +81,9 @@ Gustafson-Barsis' law offers some hope stating that if the problem-size grows al
 while the serial portion grows slowly or remains fixed, speedup grows as processors are added.
 This might relax the concerns regarding Python as a language for parallel computing
 since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like NumPy and SciPy.
-Nevertheless, a larger problem size demands more operational memory to be used for processing it, but memory is a limited resource.
-Even working wth "Big Data"-scale problem-sizes, they are processed by chunks that fit into memory.
-Overall, the limitted growth of the problem-size leaves us with the boundaries expressed by Amdahl's Law anyway.
+Nevertheless, a larger problem-size demands more operational memory to be used for processing it, but memory is a limited resource.
+Thus, even if problem-size is nearly unlimited, like for "Big Data", it has to be processed by chunks that fit into memory.
+Overall, the limitted growth of the problem-size on a single node leaves us with the scalability defined by Amdahl's Law anyway.
 As a result, the best strategy to efficiently load a multi-core system is still to avoid serial regions and synchronization.
 
 
@@ -99,7 +99,8 @@ which is multi-threaded internally using OpenMP (with default settings).
 .. [MKL]    Intel(R) MKL, https://software.intel.com/intel-mkl
 .. [Joblib] Joblib, http://pythonhosted.org/joblib/
 
-When everything is combined together, it results in a construction where code from one parallel region calls a function with another parallel region inside.
+When everything is combined together,
+it results in a construction where code from one parallel region calls a function with another parallel region inside.
 This is called *nested parallelism*.
 It is an efficient way for hiding serial regions which are an inevitable part of regular NumPy/SciPy programs.
 
@@ -111,7 +112,8 @@ where there are much more active software threads than available hardware resour
 For sufficiently big machines, it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
 and finally to a load imbalance when some threads have finished their work but others are stuck, thus halting the overall progress.
 
-For example, Intel OpenMP [*]_ runtime library (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
+For example, Intel OpenMP [*]_ runtime library (used by NumPy/SciPy)
+may keep its threads active for some time to start subsequent parallel regions quickly.
 Usually, this is a useful approach to reduce work distribution overhead.
 However, with another active thread pool in the application,
 it impairs performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops,
@@ -156,8 +158,8 @@ by fixing standard Python mechanisms to write parallel code and by improving thr
 The first way looks simpler but works only with Python and the second one is much more common but much more trickier.
 In this paper we will describe both of these approaches.
 
-Setting Affinity Masks
-----------------------
+Static Settings
+---------------
 We will start with the first one.
 Since one of the common ways of making parallel code in Python is to employ pools (with threads or processes),
 an obvious idea is to fix them in such a way that each pool worker can use not the whole CPU but only some particular cores.
