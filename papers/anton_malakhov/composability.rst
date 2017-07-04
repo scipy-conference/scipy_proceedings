@@ -26,7 +26,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
    This paper continues the work started in [AMala16]_ by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
-   using static settings, limiting the number of simultaneously active OpenMP parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| TBB) [TBB]_.
+   using static settings, limiting the number of simultaneously active [OpenMP]_* parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| [TBB]_).
    These approaches help to unlock additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
@@ -39,6 +39,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 .. [Dask]  Dask, http://dask.pydata.org/
 .. [Numba] Numba, http://numba.pydata.org/
 .. [TBB]   Intel(R) TBB open-source site, https://www.threadingbuildingblocks.org/
+.. [OpenMP] The OpenMP(R) API specification for parallel programming, http://openmp.org/
 
 
 Motivation
@@ -73,6 +74,7 @@ Python is especially vulnerable to this because it makes the serial part of the 
 compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
 
+.. [#] (*) Other names and brands may be claimed as the property of others.
 .. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
             http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
 
@@ -90,14 +92,13 @@ Nested Parallelism
 ------------------
 One way to avoid serial regions is to expose parallelism on all the possible levels of an application, for example,
 by making outermost loops parallel or exploring functional, flow graph, or pipeline types of parallelism on the application level.
-Python libraries that help to achieve this are Dask [Dask]_, Joblib [Joblib]_, and the built-in :code:`multiprocessing` and :code:`concurrent.futures` modules.
+Python libraries that help to achieve this are Dask, Joblib, and the built-in :code:`multiprocessing` and :code:`concurrent.futures` modules.
 On the innermost level, data-parallelism can be delivered by Python modules like NumPy [NumPy]_ and SciPy [SciPy]_.
 These modules can be accelerated with an optimized math libraries like Intel |R| Math Kernel Library (Intel |R| MKL) [MKL]_,
-which is multi-threaded internally using OpenMP [OpenMP]_ (with default settings).
+which is multi-threaded internally using OpenMP (with default settings).
 
-.. [Joblib] Joblib, http://pythonhosted.org/joblib/
-.. [OpenMP] The OpenMP(R) API specification for parallel programming, http://openmp.org/
 .. [MKL]    Intel(R) MKL, https://software.intel.com/intel-mkl
+.. [Joblib] Joblib, http://pythonhosted.org/joblib/
 
 When everything is combined together, it results in a construction where code from one parallel region calls a function with another parallel region inside.
 This is called *nested parallelism*.
@@ -111,7 +112,7 @@ where there are much more active software threads than available hardware resour
 For sufficiently big machines, it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
 and finally to a load imbalance when some threads have finished their work but others are stuck, thus halting the overall progress.
 
-For example, Intel OpenMP (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
+For example, Intel OpenMP runtime library (used by NumPy/SciPy) may keep its threads active for some time to start subsequent parallel regions quickly.
 Usually, this is a useful approach to reduce work distribution overhead.
 However, with another active thread pool in the application,
 it impairs performance because while OpenMP worker threads keep consuming CPU time in busy-waiting loops,
@@ -198,8 +199,6 @@ As a result, each OpenMP parallel region will be executed exclusively, eliminati
 In the multi-processing case, one thread pool per process will exist.
 Because of the global lock, only one of these pools will work at a time, which may help to improve performance by preventing oversubscription,
 but the many co-existing threads may still cause resource exhaustion issues.
-
-.. [#] (*) Other names and brands may be claimed as the property of others.
 
 
 Cross-Process Work Stealing Task Scheduler for Intel |R| TBB
