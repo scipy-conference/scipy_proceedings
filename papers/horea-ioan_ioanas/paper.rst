@@ -197,6 +197,10 @@ In this example an existing entry is selected in a compact fashion using custom 
 Compact Syntax for Entry Selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+In order to identifiy related entries in a compact function for data input, we have developed a custom LabbookDB syntax.
+This syntax is automatically parsed by the ``labbookdb.db.add.get_related_ids()`` function, which is called internatlly by input functions.
+Notably, understanding of this syntax is not required in order to use reporting functions, and plenty of examples of its usage for input can be seen in Demolog.
+
 Custom LabbookDB syntax is not written as a wrapper for SQL, but rather specifically designed to satisfy LabbookDB entry selection use cases in a minimum number of characters.
 This is primarily provided to facilitate database manipulation from the command line, though it also aids in making database source code more clearly laid out
 
