@@ -115,18 +115,27 @@ The scope thus extends to maximally a few users, which trust each other with ful
 This is an appropriate scope for most research groups.
 Aditionally, this design choice allows single researchers or clusters of computationally inclined researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without the need for a larger institutional commitment.
 
+Quality Control
+~~~~~~~~~~~~~~~
+
+LabbookDB provides an outline for unit testing which ships in the form of a submodule.
+Currently this is populated with a small number of simple example tests for low-level functionality, and is intended to grow as individual code units become more hardened.
+Additionally, we provide extensive integration testing which assures that the higher-level functionality of LabbookDB remains consistent, and databases can be regenerated from updated source code whenever needed.
+The ever-growing data required for extensive integration testing is distributed independently of LabbookDB and PIP, in a separate Git repository named Demolog :cite:`demolog`.
+Both unit and integration tests are currently run continuously with TravisCI.
+
 Development Model
 ~~~~~~~~~~~~~~~~~
 
 The database schema draws from ongoing input, testing, and the wet work experience of many researchers associated with the Institute of Biomedical Engineering and the Animal Imaging Center at the ETH and University of Zurich.
-The development team consists of one programmer (corresponding author), who will maintain and actively develop LabbookDB at least until 2019 |---| independently of community involvement.
+The development team currently consists of one programmer (corresponding author), who will maintain and actively develop LabbookDB at least until 2019 |---| independently of community involvement.
 Beyond that time point development may become contingent on the established impact of the project, including number of contributors, academic recognition of the metadata management system, adoption in the scientific Python or biomedical community, or the prospect of developing commercial tools to leverage the open source schema and API.
 
 Capabilities
 ------------
 
-To demonstrate the capabilities of this first LabbookDB release in a concise fashion, we provide example database source code in a separate repository, Demolog :cite:`demolog`.
-Contingent on the presence of LabbookDB ``0.0.1`` and its dependencies on the system, the example database can be built |---| and correspondingly described subsequent entries can be executed locally.
+The aforementioned integration testing data reposited as Demolog :cite:`demolog` can also serve to demonstrate the capabilities of this first LabbookDB release in a concise fashion.
+Contingent on the presence of LabbookDB ``0.0.1`` and its dependencies on the system, an example database can be built |---| and correspondingly described subsequent entries can be executed locally.
 To set up the example database, the following should be run from the terminal:
 
 .. code-block:: console
