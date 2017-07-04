@@ -55,7 +55,7 @@ The temptation also arises in such cases to truncate the data input to only the 
 This runs the risk of omitting information which may have been easily recorded (even automatically) given a proper data structure, and which may become crucial for closer ex-post deliberation of results.
 
 The crux of the issue, which neither of these approaches adequately addresses, is to store experimental metadata in a fashion which befits its relationship-rich nature, while providing array-formatted data output for analysis, and spreadsheet-formatted data for human inspection.
-Solutions which provide such functionality for a comprehensive experimental environment are few, and commonly proprietary and enterprise oriented (e.g. iRATS).
+Solutions which provide such functionality for a comprehensive experimental environment are few, and commonly proprietary and enterprise oriented (e.g. iRATS, REDCap :cite:`Harris2009`).
 One notable exception is MouseDB :cite:`mousedb`, a database application framework built around mouse tracking.
 This package is considerably more mature than our present endeavour, yet more closely intended as a lab management tool rather than a general lab book replacement.
 It makes a number of differing structure choices, but given the permissive license (BSD :cite:`bsd`) of both projects, it is conceivable for functionalities from one to be merged into another in the future.
@@ -66,6 +66,13 @@ This makes a well-formed open source relational schema of object interactions ac
 
 Methods
 -------
+
+Database Management System
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In order to cast complex laboratory metadata into tractable relationships with high enough entry numbers for statistical analysis, as well as to reduce data redundancy and the risk of introducing anomalies, we opt for a relational database management system, as interfaced with via SQLAlchemy.
+The scalability and flexibility advantages of flat data stores are not pertinent to the content at hand, as experimental metadata is comparatively smaller, more reliable, and more slowly obtained than data from other use cases which these systems were built to adress.
+With an easily extendable but robust schema design we set out to reposit data in such a way that encourages standardization in reporting and comparability across experiments.
 
 Database Schema Design
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -102,10 +109,11 @@ Contingent on the availability of object-specific formatting guidelines, an inte
 Scope
 ~~~~~
 
-To accommodate for a developing schema, reduce dependencies, and reduce usage difficulty, we opt to showcase LabbookDB as a personal database system.
+To accommodate for a developing schema, reduce dependencies, and reduce usage difficulty, we opt to showcase LabbookDB as a personal database system, using SQLite as an engine.
 As such, the database is stored locally, managed without a client-server model, and accessed without the need for authentication.
 The scope thus extends to maximally a few users, which trust each other with full access.
 This is an appropriate scope for most research groups.
+Aditionally, this design choice allows single researchers or clusters of computationally inclined researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without the need for a larger institutional commitment.
 
 Capabilities
 ------------
