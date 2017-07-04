@@ -280,34 +280,39 @@ substitution map argument :code:`subs`.
 
    op(u=u, time=100)  # Apply for 100 timesteps
 
-Using this operator we can now re-create the example from the original
-tutorial by initialising the data associated with the symbolic function
-:math:`u`, :code:`u.data`,  with a "hat function" according to
+Using this operator we can now create a similar example to the one
+presented in the original tutorial by initialising the data associated
+with the symbolic function :math:`u`, :code:`u.data` with an initial
+flow field. However, to avoid numerical errors due to the
+discontinuities at the boundary of the original "hat function", we use
+the following smooth initial condition provided by [Krakos12]_, as
+depicted in Figure :ref:`fig2dconv`.
 
 .. math::
-   :type: eqnarray
 
-   2\ &\text{for}\ 0.5 \leq x, y \leq 1 \\
-   1\ &\text{everywhere else}
+   u_0(x,y)=1+u\left(\frac{2}{3}x\right)*u\left(\frac{2}{3}y\right)
 
-The initial condition and the final result after executing the
-operator for 100 timesteps are depicted in Figures :ref:`fig2dconv`
-and :ref:`fig2dconvfinal` respectively. It should be noted that, while
-the results show good agreement with the original tutorial, they do
-not represent an accurate solution to the linear convection
-equation. In particular, the low order spatial discretisation
-introduces numerical diffusion that changes the shape of the hat into
-a smooth bump. This is a well-known issue that could be addressed with
-more sophisticated solver schemes as discussed in [LeVeque92]_.
+The final result after executing the operator for :math:`5s` (100
+timesteps) is depicted in Figure :ref:`fig2dconvfinal`. The result
+shows the expected displacement of the initial shape, in accordance
+with the prescribed velocity (:math:`c = 1.0`), closely mirroring the
+displacement of the "hat function" in the original tutorial. It should
+also be noted that, while the results show good agreement with
+expectations by visual inspection, they do not represent an accurate
+solution to the linear convection equation. In particular, the low
+order spatial discretisation introduces numerical diffusion that
+causes a decrease in the peak velocity. This is a well-known issue
+that could be addressed with more sophisticated solver schemes as
+discussed in [LeVeque92]_.
 
-.. figure:: 2dconv_init.png
+.. figure:: 2dconv_init_smooth.png
    :scale: 42%
    :figclass: hbt
 
    Initial condition of :code:`u.data` in the 2D convection
    example. :label:`fig2dconv`
 
-.. figure:: 2dconv_final.png
+.. figure:: 2dconv_final_smooth.png
    :scale: 42%
    :figclass: hbt
 
@@ -954,6 +959,10 @@ References
                 http://doi.acm.org/10.1145/2464996.2467268
 
 .. [Iverson62] Iverson, K.: A Programming Language, Wiley, 1962.
+
+.. [Krakos12] J.A. Krakos, "Unsteady Adjoint Analysis for Output
+              Sensitivity and Mesh Adaptation", PhD thesis, 2012.
+              https://dspace.mit.edu/handle/1721.1/77133
 
 .. [Lange17] Lange, M., Luporini, F., Louboutin, M., Kukreja, N., Pandolfo,
              V., Kazakas, P., Velesko, P., Zhang, S., Peng, P., and Gorman, G.
