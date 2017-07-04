@@ -554,3 +554,5 @@ References
    :ltrim:
 .. |R| unicode:: 0xAE .. registered sign
    :ltrim:
+.. |TM| unicode:: 0x2122 .. trade mark sign
+   :ltrim:
