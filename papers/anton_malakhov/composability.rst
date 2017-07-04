@@ -26,12 +26,12 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
    This paper continues the work started in [AMala16]_ by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
-   using static settings, limiting the number of simultaneously active [OpenMP]_* parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| [TBB]_).
+   using static settings, limiting the number of simultaneously active [OpenMP]_ parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| [TBB]_).
    These approaches help to unlock additional performance for numeric applications on multi-core systems.
 
 .. class:: keywords
 
-   Multi-threading, Multi-processing, Oversubscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, TBB, OpenMP
+   Multi-threading, Multi-processing, Oversubscription, Parallel Computations, Nested Parallelism, Multi-core, Python, GIL, Dask, Joblib, NumPy, SciPy, TBB, OpenMP [*]_
 
 .. [AMala16] Anton Malakhov, "Composable Multi-Threading for Python Libraries", Proc. of the 15th Python in Science Conf. (SCIPY 2016), July 11-17, 2016.
 .. [NumPy] NumPy, http://www.numpy.org/
@@ -74,7 +74,7 @@ Python is especially vulnerable to this because it makes the serial part of the 
 compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
 Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
 
-.. [#] (*) Other names and brands may be claimed as the property of others.
+.. [*] Other names and brands may be claimed as the property of others.
 .. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
             http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
 
