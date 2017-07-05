@@ -3,7 +3,7 @@
 :institution: Caltech Division of Biology and Biological Engineering
 :author: Peter T. Weir
 :email: peter.weir@gmail.com
-:institution: Yelp
+:institution: Data Science at Yelp
 
 :author: Floris van Breugel
 :email: florisvb@gmail.com
