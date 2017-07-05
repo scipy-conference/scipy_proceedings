@@ -40,7 +40,7 @@ Moreover, it provides an extensible basis for other tools, two of which we prese
 
 .. class:: keywords
 
-   reproducible research, python, machine learning, database, hyperparameter optimization
+   reproducible research, Python, machine learning, database, hyperparameter optimization
 
 Introduction
 ============
@@ -741,8 +741,9 @@ While Sacred helps to capture relevant information about experiments, it does no
 To tackle this we plan to provide a unified interface for querying the records created by different observers.
 This semi-standardized format will enable the creation of general analysis tools, and extend the applicability of existing tools like Sacredboard.
 
-Another important direction is to simplify the process of actually reproducing Sacred experiments.
-An integration with tools like Docker or ReproZip could allow for completely automated re-running of experiments.
+Another important direction is to automate the process of actually reproducing Sacred experiments.
+As of now the researcher has to manually reconstruct the environment, copy the stored source files and run with the saved configuration parameters.
+An integration with environment capturing tools ReproZip could allow for creating packages that can be rerun on any system in a completely automated fashion.
 
 Finally, we plan on improving the support of Sacred for scheduling and distributing runs.
 It already supports "queueing up" experiments, which only creates a database entry containing the sources, desired configuration, and the status ``QUEUED``.
