@@ -42,7 +42,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 .. [OpenMP] The OpenMP(R) API specification for parallel programming, http://openmp.org/
 
 
-#. Motivation
+1. Motivation
 -------------
 The fundamental shift toward parallelism was loudly declared more than 11 years ago [HSutter]_ and multi-core processors have become ubiquitous nowadays [WTichy]_.
 However, the adoption of multi-core parallelism in the software world has been slow and Python along with its computing ecosystem is not an exception.
@@ -87,7 +87,7 @@ Overall, the limitted growth of the problem-size on a single node leaves us with
 As a result, the best strategy to efficiently load a multi-core system is still to avoid serial regions and synchronization.
 
 
-#.#. Nested Parallelism
+1.1. Nested Parallelism
 -----------------------
 One way to avoid serial regions is to expose parallelism on all the possible levels of an application, for example,
 by making outermost loops parallel or exploring functional, flow graph, or pipeline types of parallelism on the application level.
@@ -128,7 +128,7 @@ This results in quadratic oversubscription (with default settings) which ruins m
 Within some big systems like Intel |R| Xeon Phi |TM|, it may not be even possible to create as many software threads as the number of hardware threads multiplied by itself due to insufficient resources.
 
 
-#.#. Threading Composability
+1.2. Threading Composability
 ----------------------------
 Altogether, the co-existing issues of multi-threaded components define *threading composability* of a program module or a component.
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
@@ -138,7 +138,7 @@ Instead, it should expose available parallelism to a run-time library, which pro
 which automatically coordinates tasks between components and parallel regions and map them onto available software threads (*optional parallelism*).
 
 
-#.#. OMP_NUM_THREADS=1
+1.3. OMP_NUM_THREADS=1
 ----------------------
 The most common way in the industry to solve the issues of oversubscription is to disable the nested level of parallelism
 or carefully adjust it according to the number of application threads,
@@ -154,7 +154,7 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 #. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
 
 
-#. New approaches
+2. New approaches
 -----------------
 Our goal is to provide alternative solutions for composing multiple levels of parallelism across multiple threading libraries
 with better or at least the same performance comparing to usual approaches
@@ -162,7 +162,7 @@ while simplifying interface and requiring less knowledge and decisions from end-
 We prepared and evaluted few approaches which we now discuss in this paper.
 
 
-#.#. Static Settings
+2.1. Static Settings
 --------------------
 One of the common ways of making parallel code in Python is to employ process or threads *pools* (or *executors*)
 provided thtough standard library.
@@ -206,7 +206,7 @@ will overwheight the overheads incurred by it.
 Though, for particular examples we show in this paper, the best performance is achieved with :code:`-f 1` specified on the command line.
 
 
-#.#. Limiting Simultaneous OpenMP Parallel Regions
+2.2. Limiting Simultaneous OpenMP Parallel Regions
 --------------------------------------------------
 The second approach we will describe here is more common and based on the OpenMP runtime.
 The basic idea is to use a single thread pool and run different parallel regions on it sequentially, one after the other.
@@ -227,7 +227,7 @@ Because of the global lock, only one of these pools will work at a time, which m
 but the many co-existing threads may still cause resource exhaustion issues.
 
 
-#.#. Coordinated Task Scheduler with Intel |R| TBB
+2.3. Coordinated Task Scheduler with Intel |R| TBB
 --------------------------------------------------
 .. figure:: components.png
 
@@ -259,11 +259,8 @@ This solution is different from the approach that uses an OpenMP runtime with gl
 it allows the processing of several parallel regions simultaneously and provides the ability to do work balancing on the fly.
 Even a more flexible locking mechanism in OpenMP would need to wait for all the requested threads to become available while Intel |R| TBB allows threads joining when the work is ongoing.
 
-#. Evaluation
+3. Evaluation
 -------------
-
-#.#. Balanced QR Decomposition with Dask
-----------------------------------------
 For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the Dask [Dask]_ library which simplifies parallelism with Python.
 
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
@@ -277,6 +274,9 @@ For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be 
     # install Dask
     conda install dask
 
+
+3.1. Balanced QR Decomposition with Dask
+----------------------------------------
 The code below is a simple program using Dask that validates QR decomposition by multiplying computed components and comparing the result against the original input.
 
 .. code-block:: python
@@ -344,7 +344,7 @@ As a result, it has worse cache utilization, and higher overhead for work balanc
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
-#.#. Balanced Eignevalues Search with NumPy
+3.2. Balanced Eignevalues Search with NumPy
 -------------------------------------------
 The code below performs an algorithm of eigenvalues and right eigenvectors search in a square matrix using Numpy:
 
@@ -379,7 +379,7 @@ And the reason is low CPU utilization in each separate chunk.
 In fact exclusive OpenMP mode leads to serial matrix processing, one by one, so significant part of the CPU stays unsed.
 As a result, execution time in this case becomes even larger than by default.
 
-#.#. Unbalanced QR Decomposition with Dask
+3.3. Unbalanced QR Decomposition with Dask
 ------------------------------------------
 In previous sections we looked into balanced workloads where amount of work per thread on top level is near the same.
 It's rather expected that for such cases the best solution is static one.
@@ -437,7 +437,7 @@ Since there is sufficient work to do in each parallel region,
 allowing ech chunk to be calculated one after the other avoids oversubscription and gets the best performance - nearly a 34% speed-up.
 
 
-#.#. Unbalanced Eigenvalues Search with NumPy
+3.4. Unbalanced Eigenvalues Search with NumPy
 ---------------------------------------------
 The second dynamic exapmle we'd like to discuss is based on eigenvalues search algorithm from NumPy:
 
@@ -477,7 +477,7 @@ From figure :ref:`dnumpy` one can see that the best solution for this workload i
 And as for the mode with serialization of OpenMP parallel regions, it works significantly slower than default version since there is no enough work for each parallel region that leads to CPU underutilization.
 
 
-#.#. Acceptable Level of Oversubscription
+3.5. Acceptable Level of Oversubscription
 -----------------------------------------
 We did some experiments to determine what level of oversubscription has acceptable performance.
 We started with various sizes for the top level thread or process pool,
@@ -500,7 +500,7 @@ They can be obtained from the same eigenvalues search workload by replacing :cod
 The results are very similar to the multi-threading case: oversubscription effects become visible starting from 8 processes at the top level of parallelization.
 
 
-#. Solutions Applicability
+4. Solutions Applicability
 --------------------------
 In summary, all three suggested approaches to avoid oversubscription are valuable and can obtain significant performance increases for both multi-threading and multi-processing cases.
 Moreover, the approaches complement each other and have their own fields of applicability.
@@ -522,7 +522,7 @@ when innermost parallel regions cannot fully utilize the whole CPU and have vary
 To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case (see figure :ref:`rtable`).
 
 
-#. Limitations and Future Work
+5. Limitations and Future Work
 ------------------------------
 *smp* module currently works only based on the pool size and does not take into account its real usage.
 We think it can be improved in future to trace task scheduling pool events and so to become more flexible.
@@ -547,7 +547,7 @@ However, all these problems can be eliminated as more users will become interest
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
-#. Conclusion
+6. Conclusion
 -------------
 This paper starts by substantiating the necessity of broader usage of nested parallelism for multi-core systems.
 Then, it defines threading composability and discusses the issues of Python programs and libraries which use nested parallelism with multi-core systems, such as GIL and oversubscription.
@@ -570,8 +570,8 @@ All described solutions are available as open source software,
 and the Intel |R| Distribution for Python accelerated with Intel |R| MKL is available for free as a stand-alone package [IntelPy]_ and on anaconda.org/intel channel.
 
 
-References
-----------
+7. References
+-------------
 
 .. figure:: opt-notice-en_080411.png
    :figclass: b
