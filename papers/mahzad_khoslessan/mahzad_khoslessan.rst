@@ -284,12 +284,13 @@ The difference between job execution time and total compute and I/O time measure
 
 In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order to be able to see where this difference originates from we have used the web-interface of the Dask library.
 This web-interface is launched whenever Dask scheduler is launched.
-Figure :ref:`task-stream-comet` B, summarizes the measured |tcomptIO| averaged over all processes, max |tcomptIO|, and Job execution time for XTC600x on SDSC Comet for two different CPU cores. 
-For :math:`N_\text{cores} = 54`, the measured max |tcomptIO| through our infrasturacture and web-interface show two different values. 
-The max |tcomptIO| measured using Dask web-interface is closer to the measured job execution time. 
-The reason why max |tcomptIO| measured using Dask web-interface and our infrastructure is open to question.
-Based on Figure :ref:`task-stream-comet` A, there is one process which is much slower as compared to others. 
-Therefore, because some tasks (so-called Stragglers) are considerably slower than the others, the job is delayed and as a result the overall performance is affected.
+Figure :ref:`task-stream-comet` B, shows the comparison between timing measurements from instrumentation inside the Python code and Dask web-interface (average :math:`n_\text{frames}/N (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]`, and :math:`t_N`) for XTC600x on SDSC Comet for two different CPU cores (:math:`N_\text{cores} = 30`, :math:`N_\text{cores} = 54`). 
+For :math:`N_\text{cores} = 54`, the measured :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` through our instrumentation inside the Python code and web-interface shows two different values. 
+:math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` measured using Dask web-interface is closer to the measured job execution time. 
+The reason why :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` measured using Dask web-interface and our instrumentation are different is open to question.
+Based on task stream plot shown in Figure :ref:`task-stream-comet` A, the "straggler" task (#32) is much slower as compared to others and as a result slows down the whole process. 
+But, the reason why the "straggler" task (#32) is delayed is not clear.
+The next sections in the present study aim to find the reason for which we are seeing these delayed tasks (so called "stragglers"). 
 
 .. figure:: figs/panels/speedup-comparison.pdf
 
@@ -398,7 +399,6 @@ RMSD calculation is the time spent on RMSD tasks, and communication time is the 
 As can be seen in Figure :ref:`Dask-time-stacked-comparison`, the overhead in the calculations is small up to 24 cores (Single node).
 The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases from 1 to 72.
 However, when extending to multiple nodes the time due to overhead and communication increases which affects the overall performance.
-The results from scheduler plugin is described in the following section.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
 
