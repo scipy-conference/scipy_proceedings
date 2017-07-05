@@ -201,39 +201,38 @@ Named configs can be added both from the command line and from Python, after whi
 
 Reproducibility
 ---------------
-An important goal of Sacred is to collect all necessary information to make computational experiments reproducible.
-The result of an experiment depends on many factors including the source code, versions of the used packages, system libraries, data files, the host system, and (pseudo-)randomness.
-Tools for reproducible research such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care` trace and package all data files and libraries used during a run at the system level.
-While these tools *ensure* reproducibility, they come with a significant overhead in terms of time and space.
-Sacred, in contrast, aims to provide a practical *default option*, which captures *most* of the relevant information.
-By keeping the overhead and required manual work at a minimum, it becomes a feasible to *always* use it.
-Sacred tackles three key aspects individually: 1) source code, 2) package dependencies, and  3) host system.
-
+An important goal of Sacred is to collect all necessary information to make computational experiments reproducible while remaining lightweight enough to be used for each run, even during development.
+In this respect it differs from environment capturing tools such as ReproZip :cite:`chirigati2016reprozip`, CDE :cite:`guo2012`, PTU :cite:`pham2013using` and CARE :cite:`janin2014care`.
+These tools *ensure* reproducibility by tracking and storing all data files and libraries used during a run at the system level.
+Sacred in contrast uses heuristics to capture the source code and for determining versions of used packages, collects limited but customizable information about the host system, and offers support for manually adding relevant data files.
+It explicitly excludes system libraries that are not python packages, data files that are not specifically added by the user, and hardware other than the CPU and GPU.
+This trade-off allows Sacred to run efficiently regarding computational overhead and required storage capacity at the expense of reproducibility on systems that differ too much from the original host.
+The focus is on the ability of the researcher to reproduce their results.
+For distributing the code, we advise the use of one of the above-mentioned environment capturing tools.
 
 The source code of an experiment is arguably the most important piece of information for reproducing any result.
-To manage rapidly evolving code, it is considered good practice to use a version control system, such as Git.
-In practice, however, research code is often adapted too rapidly.
-A common pattern is to quickly change something and start a run, even before properly committing the changes.
-To ensure reproducibility given such an unstructured implementation workflow, Sacred always stores the source files alongside the run information.
-Relevant source files are automatically detected through inspection, which guarantees that the current version of the code is saved along with the run.
-Alternatively, Sacred also supports a more strict Git-based workflow and can automatically collect the current commit and state of the repository for each run.
+Unfortunately, research code often has to be rapidly adapted under deadline pressure.
+A typical pattern in practice is, therefore, to quickly change something and start a run, without properly committing the changes into a VCS system.
+To deal with such an unstructured implementation workflow, Sacred doesn't rely on any VCS system (In contrast to Sumatra :cite:`davison2012`) and instead automatically detects and stores the source files alongside the run information [#]_.
+Source files are gathered by inspecting all imported modules and keeping those defined within the (sub-)directories of the main script.
+This heuristic works well for flat use-cases that consist only of a few sources but fails to detect files that are imported deeper in the dependency tree.
+For cases of more complex source code structure Sacred also supports a stricter Git-based workflow and can automatically collect the current commit and state of the repository for each run.
 The optional ``--enforce-clean`` flag forces the repository to be clean (not contain any uncommitted changes) before the experiment can be started.
+Relevant dependencies can also always be added manually by calling ``ex.add_source_file(FILENAME)``.
 
-.. MENTION? though relevant files can also be added manually by ``ex.add_source_file(FILENAME)``.
-.. MENTION? removes duplication
+.. [#] It does, however, avoid duplicating files that remain unchanged to reduce storage requirements.
 
-
-When an experiment is started, Sacred detects imported packages and determines their version numbers by inspection.
-This detection will catch all dependencies that are imported from the main file before the experiment was started and covers most use cases.
-It might, however, miss certain nested imports, so further dependencies can be added manually using
-
-.. code-block:: python
-
-    ex.add_package_dependency(NAME, VERSION)
+Similarly, Sacred collects information about the package dependencies, by inspecting the imported modules.
+For all modules that are do not correspond to local source files or builtins, it uses several heuristics to determine the version number.
+First, it checks the ``__version__`` property and variations thereof.
+If that fails it uses the (much slower) Python package resource API to
+This detection will catch all dependencies imported from the main file of the experiment but will miss dependencies deeper down the dependency graph and any dynamic imports that happen only during runtime.
+Here again, further dependencies can be added manually using ``ex.add_package_dependency(NAME, VERSION)``
 
 
 Sacred also collects information about the host system including the hostname, type and version of the operating system, Python version, and the CPU.
-Optionally, it supports information about GPU, environment variables, and it can be easily extended to collect custom information.
+Optionally, it supports information about GPU, environment variables, and can be easily extended to collect custom information.
+
 
 Randomness
 ----------
