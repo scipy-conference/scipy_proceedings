@@ -153,36 +153,53 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 #. There are more settinggs to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
 #. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
 
-There are at least two ways to practically implemenent threading composability without offloading too many decisions on the user's shoulders:
-by fixing standard Python mechanisms to write parallel code and by improving threading layers (like OpenMP or Intel |R| TBB).
-The first way looks simpler but works only with Python and the second one is much more common but much more trickier.
-In this paper we will describe both of these approaches.
+Our goal is to provide alternative solutions for composing multiple levels of parallelism across multiple threading libraries
+with better or at least the same performance comparing to usual approaches
+while simplifying interface and requiring less knowledge and decisions from end-users.
+We prepared and evaluted few approaches which we now discuss in this paper.
 
 Static Settings
 ---------------
-We will start with the first one.
-Since one of the common ways of making parallel code in Python is to employ pools (with threads or processes),
-an obvious idea is to fix them in such a way that each pool worker can use not the whole CPU but only some particular cores.
-For example, if we have an eight core CPU and want to create a pool of two workers, we can limit the number of threads per pool worker to four.
-When using a process pool, the best way to do it is to set an appropriate affinity mask for each worker process.
+One of the common ways of making parallel code in Python is to employ process or threads *pools* (or *executors*)
+provided thtough standard library.
+These pools are also used by other Python libraries implementing parallel computations like Dask and Joblib.
+We suggest to fix them in such a way that each pool worker being used to call nested parallel computation
+can use only some particular number of processor cores.
+
+For example, if we have an eight core CPU and want to create a pool of two workers,
+we can limit the number of threads per pool worker to four.
+When using a process pool, the best way to do so is to set thread affinity mask accordingly for each worker process
+thus limitting any threads created within this process to operte only on specified processor cores.
 In our example, the first process will use cores 0 through 3 and the second process will use cores 4 through 7.
-Furthermore, since both OpenMP and Intel |R| TBB will respect the incoming affinty mask during initialization, they limit the number of threads per each process to four.
+Furthermore, since both OpenMP and Intel |R| TBB respect the incoming affinty mask during initialization,
+they limit the number of threads per each process to four.
 As a result, we have a simple way of sharing threads between pool workers without any oversubscription issues.
 
-In case of multi-threading the idea we use stays near the same,
-but instead of setting process affinity masks we just limit number of threads per each pool worker using threading runtime API (e.g. :code:`omp_set_num_threads()` function for OpenMP).
+In case of a multi-threading pool being used for application-level parallelism, the idea is the same,
+just instead of setting process affinity masks, we limit number of threads per each pool worker using threading runtime API.
+For example, we use :code:`omp_set_num_threads()` function for specifying number of threads for OpenMP.
+This approach is pretty much the same as when :code:`OMP_NUM_THREADS` environment variable is specified for entire application.
+The difference is that we use knowledge of how many outermost workers are requested by application and
+how much hardware parallelism is available on the machine,
+then making the necessary calculation automatically and applying them for specific instance of pool.
+It is more flexible approach for applications which might use pools of different sizes within the same run.
 
-To implement this approach we have created an additional Python module called *smp* (comes from static or simultaneous multi-processing).
+To implement this approach we have created Python module called *smp* (coming from static or symmetric multi-processing).
 It works with both thread and process pools from :code:`multiprocessing` and :code:`concurrent.futures` modules
-using *monkey patching* technique that allows to use this solution without any code modifications in customer script.
-To run it one should use the following command:
+using *monkey patching* technique that allows to use this solution without any code modifications in user applications.
+To run it, one should use one of the following commands:
 
 .. code-block:: sh
 
+    python -m smp script.py
     python -m smp -f <oversubscription_factor> script.py
 
-Option :code:`-f <oversubscription_factor>` sets allowable oversubscription factor that will be used to compute number of threads per pool worker.
+Optional argument :code:`-f <oversubscription_factor>` sets oversubscription factor that will be used
+to compute number of threads per pool worker.
 By default it equals to 2, which means that in our example, 8 threads will be used per process.
+Allowing this limited degree of oversubscription by default, we hope that for most applications benefits from load balancing
+will overwheight the overheads incurred by it.
+Though, for particular examples we show in this paper, the best performance is achieved with :code:`-f 1` specified on the command line.
 
 
 Limiting Simultaneous OpenMP Parallel Regions
