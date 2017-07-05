@@ -185,7 +185,9 @@ Linear Convection
 
 We will demonstrate a basic Devito operator definition based on a
 linear two-dimensional convection flow (step 5 in the original
-tutorials). The governing equation we are implementing here is:
+tutorials) [#]_. The governing equation we are implementing here is:
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/cfd/test_01_convection_revisited.ipynb
 
 .. math::
    :label: 2dconvection
@@ -344,7 +346,9 @@ conditions can easily be added at a later stage.
 To illustrate the use of the low-level API, we will use the Laplace
 example from the original CFD tutorials (step 9), which implements the
 steady-state heat equation with Dirichlet and Neuman boundary
-conditions. The governing equation for this problem is
+conditions [#]_. The governing equation for this problem is
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/cfd/test_05_laplace.ipynb
 
 .. math::
    :label: 2dlaplace
@@ -436,19 +440,19 @@ be used alongside the state update expression to create our
 After building the operator, we can now use it in a time-independent
 convergence loop that minimizes the :math:`L^1` norm of
 :math:`p`. However, in this example we need to make sure to explicitly
-exchange the role of the buffers :code:`p` and :code:`pn`.  This can
+exchange the role of the buffers :code:`p` and :code:`pn`. This can
 be achieved by supplying symbolic data objects via keyword arguments
 when invoking the operator, where the name of the argument is matched
 against the name of the original symbol used to create the operator.
 
 The convergence criterion for this example is defined as the relative
 error between two iterations and set to :math:`\Vert p \Vert ^{1} <
-10^{-4}`. The according initial condition and the resulting
+10^{-4}`. The corresponding initial condition and the resulting
 steady-state solution, depicted in Figures :ref:`fig2dlaplace` and
 :ref:`fig2dlaplacefinal` respectively, agree with the original
 tutorial implementation. It should again be noted that the chosen
 numerical scheme might not be optimal to solve steady-state problems
-of this type, since often implicit methods are preferrable.
+of this type, since implicit methods are often preferred.
 
 .. code-block:: python
 
@@ -497,12 +501,14 @@ scientists are able to quickly adjust the numerical method and
 discretisation to the individual problem and hardware architecture
 [Louboutin17a]_.
 
-In the following example we will show the generation of forward and
+In the following example  we will show the generation of forward and
 adjoint operators for the acoustic wave equation and verify their
-correctness using the so-called *adjoint test* [Virieux09]_. This
-test, also knwon as *dot product test*, verifies that the
+correctness using the so-called *adjoint test* [Virieux09]_ [#]_. This
+test, also known as *dot product test*, verifies that the
 implementation of an adjoint operator indeed computes the conjugate
 transpose of the forward operator.
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/seismic/tutorials/test_01_modelling.ipynb
 
 The governing wave equation for the forward operator is defined as
 
@@ -667,6 +673,8 @@ the operators is still fully parameterisable.
                  space_order=order)
    m.data[:] = model  # Set m from model data
 
+
+
    # Create dampening term from model
    eta = DenseData(name='eta', shape=shape,
                    space_order=order)
@@ -682,12 +690,6 @@ the operators is still fully parameterisable.
    adjoint_test(src.data, srca.data)
 
 
-.. figure:: shot_record.png
-   :scale: 50%
-
-   Shot record of the measured point values in :code:`rec.data` after
-   the forward run. :label:`figshotrecord`
-
 The adjoint test is the core definition of the adjoint of a linear
 operator. The mathematical correctness of the adjoint is required for
 mathematical adjoint-based optimizations methods that are only
@@ -701,6 +703,13 @@ propagation and adjoint operators and has been shown to agree for 2D
 and 3D implementations [Louboutin17b]_. The shot record of the data
 measured at the receiver locations after the forward run is shown in
 Figure :ref:`figshotrecord`.
+
+.. figure:: shot_record.png
+   :scale: 50%
+
+   Shot record of the measured point values in :code:`rec.data` after
+   the forward run. :label:`figshotrecord`
+
 
 .. _`code generation section`:
 
@@ -967,7 +976,7 @@ References
 .. [Lange17] Lange, M., Luporini, F., Louboutin, M., Kukreja, N., Pandolfo,
              V., Kazakas, P., Velesko, P., Zhang, S., Peng, P., and Gorman, G.
              Dylan McCormick. 2017, June 7. opesci/devito: Devito-3.0.1.
-             Zenodo. http://doi.org/10.5281/zenodo.803626
+             Zenodo. https://doi.org/10.5281/zenodo.823172
 
 .. [LeVeque92] LeVeque, R. J., "Numerical Methods for Conservation
                Laws", Birkhauser-Verlag (1992).
