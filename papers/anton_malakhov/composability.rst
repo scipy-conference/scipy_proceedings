@@ -105,7 +105,7 @@ This is called *nested parallelism*.
 It is an efficient way for hiding serial regions which are an inevitable part of regular NumPy/SciPy programs.
 
 
-#.#. Issues of Oversubscription
+1.2. Issues of Oversubscription
 -------------------------------
 Nevertheless, the libraries named above do not coordinate the creation or pooling of threads, which may lead to *oversubscription*,
 where there are much more active software threads than available hardware resources.
@@ -128,7 +128,7 @@ This results in quadratic oversubscription (with default settings) which ruins m
 Within some big systems like Intel |R| Xeon Phi |TM|, it may not be even possible to create as many software threads as the number of hardware threads multiplied by itself due to insufficient resources.
 
 
-1.2. Threading Composability
+1.3. Threading Composability
 ----------------------------
 Altogether, the co-existing issues of multi-threaded components define *threading composability* of a program module or a component.
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
@@ -138,7 +138,7 @@ Instead, it should expose available parallelism to a run-time library, which pro
 which automatically coordinates tasks between components and parallel regions and map them onto available software threads (*optional parallelism*).
 
 
-1.3. OMP_NUM_THREADS=1
+1.4. OMP_NUM_THREADS=1
 ----------------------
 The most common way in the industry to solve the issues of oversubscription is to disable the nested level of parallelism
 or carefully adjust it according to the number of application threads,
