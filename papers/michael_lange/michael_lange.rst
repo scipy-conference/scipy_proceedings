@@ -19,6 +19,10 @@
 :email: chuck.yount@intel.com
 :institution: Intel Corporation
 
+:author: Jan Hückelheim
+:email: j.hueckelheim@imperial.ac.uk
+:institution: Imperial College London
+
 :author: Gerard J. Gorman
 :email: g.gorman@imperial.ac.uk
 :institution: Imperial College London
@@ -74,14 +78,19 @@ with existing open-source software.
 
 While Devito was originally developed for seismic imaging workflows,
 the automated generation and optimization of stencil codes can be
-utilised for a much broader set of computational problems. In this
-paper we will give a brief overview of the design concepts and
-Devito's key features before demonstrating the Devito API on a set of
-classic examples from computational fluid dynamics (CFD). Based on
-this, we will then highlight the use of Devito in an example of a
-complex seismic inversion algorithms to demonstrate its use in
-practical scientific applications and to showcase the performance
-achieved by the auto-generated and optimised code.
+utilised for a much broader set of computational problems. Matrix-free
+stencil operators based on explicit finite difference schemes are
+widely used in industry and academic research, although they merely
+represent one of many approaches to solving PDEs [Baba16]_, [Liu09]_,
+[Rai91]_. In this paper we therefore limit our discussion of numerical
+methods and instead focus on the ease with which these operators can be
+created symbolically. We give a brief overview of the design concepts
+and key features of Devito and demonstrate its API using a set of
+classic examples from computational fluid dynamics (CFD). Then we will
+discuss the use of Devito in an example of a complex seismic inversion
+algorithm to illustrate its use in practical scientific applications
+and to showcase the performance achieved by the auto-generated and
+optimised code.
 
 Background
 ----------
@@ -133,7 +142,7 @@ The use of SymPy as the driver for the symbolic generation of stencil
 expressions and the subsequent code-generation are at the heart of the
 Devito philosophy. While SymPy is fully capable of auto-generating
 low-level C code for pre-compiled execution from high-level symbolic
-expressions, Devito is designed to combine theses capabilities with
+expressions, Devito is designed to combine these capabilities with
 automatic performance optimization based on the latest advances in
 stencil compiler technology. The result is a framework that is capable
 of automatically generating and optimising complex stencil code from
@@ -162,9 +171,12 @@ Fluid Dynamics Examples
 In the following section we demonstrate the use of the Devito API to
 implement two examples from classical fluid dynamics, before
 highlighting the role of Devito operators in a seismic inversion
-context.  Both CFD examples are based in part on tutorials from the
+context. Both CFD examples are based in part on tutorials from the
 introductory blog "CFD Python: 12 steps to Navier-Stokes"[#]_ by the
-Lorena A. Barba group.
+Lorena A. Barba group. We have chosen the examples in this section for
+their relative simplicity to concisely illustrate the capabilities
+and API features of Devito. For a more complete discussion on
+numerical methods for fluid flows please refer to [Peiro05]_.
 
 .. [#] http://lorenabarba.com/blog/cfd-python-12-steps-to-navier-stokes/
 
@@ -173,7 +185,9 @@ Linear Convection
 
 We will demonstrate a basic Devito operator definition based on a
 linear two-dimensional convection flow (step 5 in the original
-tutorials). The governing equation we are implementing here is:
+tutorials) [#]_. The governing equation we are implementing here is:
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/cfd/test_01_convection_revisited.ipynb
 
 .. math::
    :label: 2dconvection
@@ -268,28 +282,39 @@ substitution map argument :code:`subs`.
 
    op(u=u, time=100)  # Apply for 100 timesteps
 
-Using this operator we can now re-create the example from the original
-tutorial by initialising the data associated with the symbolic function
-:math:`u`, :code:`u.data`,  with a "hat function" according to
+Using this operator we can now create a similar example to the one
+presented in the original tutorial by initialising the data associated
+with the symbolic function :math:`u`, :code:`u.data` with an initial
+flow field. However, to avoid numerical errors due to the
+discontinuities at the boundary of the original "hat function", we use
+the following smooth initial condition provided by [Krakos12]_, as
+depicted in Figure :ref:`fig2dconv`.
 
 .. math::
-   :type: eqnarray
 
-   2\ &\text{for}\ 0.5 \leq x, y \leq 1 \\
-   1\ &\text{everywhere else}
+   u_0(x,y)=1+u\left(\frac{2}{3}x\right)*u\left(\frac{2}{3}y\right)
 
-The initial condition and the final result after executing the operator
-for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
-:ref:`fig2dconvfinal` respectively.
+The final result after executing the operator for :math:`5s` (100
+timesteps) is depicted in Figure :ref:`fig2dconvfinal`. The result
+shows the expected displacement of the initial shape, in accordance
+with the prescribed velocity (:math:`c = 1.0`), closely mirroring the
+displacement of the "hat function" in the original tutorial. It should
+also be noted that, while the results show good agreement with
+expectations by visual inspection, they do not represent an accurate
+solution to the linear convection equation. In particular, the low
+order spatial discretisation introduces numerical diffusion that
+causes a decrease in the peak velocity. This is a well-known issue
+that could be addressed with more sophisticated solver schemes as
+discussed in [LeVeque92]_.
 
-.. figure:: 2dconv_init.png
+.. figure:: 2dconv_init_smooth.png
    :scale: 42%
    :figclass: hbt
 
    Initial condition of :code:`u.data` in the 2D convection
    example. :label:`fig2dconv`
 
-.. figure:: 2dconv_final.png
+.. figure:: 2dconv_final_smooth.png
    :scale: 42%
    :figclass: hbt
 
@@ -300,19 +325,30 @@ for 100 timesteps are depicted in Figures :ref:`fig2dconv` and
 Laplace equation
 ~~~~~~~~~~~~~~~~
 
-The above example showed how Devito can be used to create finite
+The above example shows how Devito can be used to create finite
 difference stencil operators from only a few lines of high-level
-symbolic code. For more complex examples, boundary conditions are
-required though, which are not currently provided through the symbolic
-high-level API. However, for exactly this reason, Devito provides a
-low-level, or "indexed" API, where custom SymPy expressions can be
-created with explicitly resolved grid accesses to manually inject
-custom code into the auto-generation toolchain.
+symbolic code. However, the previous example only required a single
+variable to be updated, while more complex operators might need to
+execute multiple expressions simultaneously, for example to solve
+coupled PDEs or apply boundary conditions as part of the time
+loop. For this reason :code:`devito.Operator` objects can be
+constructed from multiple update expressions and allow mutiple
+expression formats as input.
 
-To demonstrate this, we will use the Laplace example from the original
-CFD tutorials (step 9), which implements the steady-state heat equation
-with Dirichlet and Neuman boundary conditions. The governing equation
-for this problem is
+Nevertheless, boundary conditions are currently not provided as part
+of the symbolic high-level API. For exactly this reason,
+Devito provides a low-level, or "indexed" API, where custom SymPy
+expressions can be created with explicitly resolved grid accesses to
+manually inject custom code into the auto-generation toolchain. This
+entails that future extensions to capture different types of boundary
+conditions can easily be added at a later stage.
+
+To illustrate the use of the low-level API, we will use the Laplace
+example from the original CFD tutorials (step 9), which implements the
+steady-state heat equation with Dirichlet and Neuman boundary
+conditions [#]_. The governing equation for this problem is
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/cfd/test_05_laplace.ipynb
 
 .. math::
    :label: 2dlaplace
@@ -375,14 +411,14 @@ problem dimensions and cause the expression to be executed over the
 entire data dimension, similar to Python's :code:`:` operator.
 
 The Dirichlet BCs in the Laplace example can thus be implemented by
-creating a :code:`sympy.Eq` object that assign either fixed values or
-a prescribed function, such as the utility symbol :code:`bc_right` in or
-example, along the left and right boundary of our domain. To implement
-the Neumann BCs we again follow the original tutorial by assigning the
-second grid row from the top and bottom boundaries the value of the
-outermost row. The resulting SymPy expressions can then be used
-alongside the state update expression to create our :code:`Operator`
-object.
+creating a :code:`sympy.Eq` object that assigns either fixed values or
+a prescribed function, such as the utility symbol :code:`bc_right` in
+our example, along the left and right boundary of the domain. To
+implement the Neumann BCs we again follow the original tutorial by
+assigning the second grid row from the top and bottom boundaries the
+value of the outermost row. The resulting SymPy expressions can then
+be used alongside the state update expression to create our
+:code:`Operator` object.
 
 .. code-block:: python
 
@@ -402,18 +438,21 @@ object.
                  subs={h: dx, a: 1.})
 
 After building the operator, we can now use it in a time-independent
-convergence loop. However, in this example we need to make sure to
-explicitly exchange the role of the buffers :code:`p` and :code:`pn`.
-This can be achieved by supplying symbolic data objects via keyword
-arguments when invoking the operator, where the name of the argument
-is matched against the name of the original symbol used to create the
-operator. The according initial condition and the resulting
-steady-state solution are depicted in Figures :ref:`fig2dlaplace` and
-:ref:`fig2dlaplacefinal` respectively.
+convergence loop that minimizes the :math:`L^1` norm of
+:math:`p`. However, in this example we need to make sure to explicitly
+exchange the role of the buffers :code:`p` and :code:`pn`. This can
+be achieved by supplying symbolic data objects via keyword arguments
+when invoking the operator, where the name of the argument is matched
+against the name of the original symbol used to create the operator.
 
-.. raw:: latex
-
-   \pagebreak
+The convergence criterion for this example is defined as the relative
+error between two iterations and set to :math:`\Vert p \Vert ^{1} <
+10^{-4}`. The corresponding initial condition and the resulting
+steady-state solution, depicted in Figures :ref:`fig2dlaplace` and
+:ref:`fig2dlaplacefinal` respectively, agree with the original
+tutorial implementation. It should again be noted that the chosen
+numerical scheme might not be optimal to solve steady-state problems
+of this type, since implicit methods are often preferred.
 
 .. code-block:: python
 
@@ -460,10 +499,18 @@ efficiently define rigorous forward modelling and adjoint operators
 from high-level symbolic definitions also implies that domain
 scientists are able to quickly adjust the numerical method and
 discretisation to the individual problem and hardware architecture
-[Louboutin17a]_. In the following example we will demonstrate the
-generation of forward and adjoint operators for the acoustic wave
-equation to implement the so-called adjoint test. The governing
-equation is defined as
+[Louboutin17a]_.
+
+In the following example  we will show the generation of forward and
+adjoint operators for the acoustic wave equation and verify their
+correctness using the so-called *adjoint test* [Virieux09]_ [#]_. This
+test, also known as *dot product test*, verifies that the
+implementation of an adjoint operator indeed computes the conjugate
+transpose of the forward operator.
+
+.. [#] http://nbviewer.jupyter.org/github/opesci/devito/blob/master/examples/seismic/tutorials/test_01_modelling.ipynb
+
+The governing wave equation for the forward operator is defined as
 
 .. math::
     m \frac{\partial^2 u}{\partial t^2}
@@ -626,6 +673,8 @@ the operators is still fully parameterisable.
                  space_order=order)
    m.data[:] = model  # Set m from model data
 
+
+
    # Create dampening term from model
    eta = DenseData(name='eta', shape=shape,
                    space_order=order)
@@ -641,12 +690,6 @@ the operators is still fully parameterisable.
    adjoint_test(src.data, srca.data)
 
 
-.. figure:: shot_record.png
-   :scale: 50%
-
-   Shot record of the measured point values in :code:`rec.data` after
-   the forward run. :label:`figshotrecord`
-
 The adjoint test is the core definition of the adjoint of a linear
 operator. The mathematical correctness of the adjoint is required for
 mathematical adjoint-based optimizations methods that are only
@@ -660,6 +703,13 @@ propagation and adjoint operators and has been shown to agree for 2D
 and 3D implementations [Louboutin17b]_. The shot record of the data
 measured at the receiver locations after the forward run is shown in
 Figure :ref:`figshotrecord`.
+
+.. figure:: shot_record.png
+   :scale: 50%
+
+   Shot record of the measured point values in :code:`rec.data` after
+   the forward run. :label:`figshotrecord`
+
 
 .. _`code generation section`:
 
@@ -719,10 +769,10 @@ resulting in different stencil sizes with increasing operational
 intensity (OI). The benchmark runs were performed on on a Intel(R)
 Xeon E5-2620 v4 2.1Ghz "Broadwell" CPU with a single memory socket and
 8 cores per socket and the slope of the roofline models was derived
-using the Stream Triad benchmark.
+using the Stream Triad benchmark [McCalpin95]_.
 
 The first set of benchmark results, shown in Figure :ref:`figperfdle`,
-demonstrates the performance gains achieved through loop-level
+highlights the performance gains achieved through loop-level
 optimizations. For these runs the symbolic optimizations were kept at
 a "basic" setting, where only common sub-expressions elimination is
 performed on the kernel expressions. Of particular interest are the
@@ -738,10 +788,12 @@ inherent to the acoustic formulation of the wave equation and the
 subsequent memory bandwidth limitations of the kernel.
 
 .. figure:: acoustic_dle.pdf
-   :scale: 60%
+   :scale: 70%
 
-   Performance benchmarks for loop-level
-   optimizations. :label:`figperfdle`
+   Performance benchmarks for loop-level optimizations with different
+   spatial orders (SO). The symbolic optimisations (DSE) have been
+   kept at level 'basic', while loop optimisation levels (DLE)
+   vary. :label:`figperfdle`
 
 On top of loop-level performance optimizations, Figure
 :ref:`figmaxperf` shows the achieved performance with additional
@@ -756,10 +808,11 @@ point, which is of vital importance for compute-dominated kernels with
 large OI [Louboutin17a]_.
 
 .. figure:: acoustic_maxperf.pdf
-   :scale: 60%
+   :scale: 70%
 
    Performance benchmarks with full symbolic and loop-level
-   optimizations. :label:`figmaxperf`
+   optimizations for different spatial orders
+   (SO). :label:`figmaxperf`
 
 
 Integration with YASK
@@ -810,11 +863,11 @@ operators and a full seismic inversion example. We highlight the
 relative ease with which to create complex operators from only a few
 lines of high-level Python code while utilising highly optimised
 auto-generated C kernels via JIT compilation. On top of purely
-symbolic top-level API based on SymPy, we demonstrate how to utilise
-Devito's secondary API to inject custom expressions into the code
-generation toolchain to implement Dirichlet and Neumann boundary
-conditions, as well as the sparse-point interpolation routines
-required by seismic inversion operators.
+symbolic top-level API based on SymPy, we show how to utilise Devito's
+secondary API to inject custom expressions into the code generation
+toolchain to implement Dirichlet and Neumann boundary conditions, as
+well as the sparse-point interpolation routines required by seismic
+inversion operators.
 
 Moreover, we demonstrate that Devito-generated kernels are capable of
 exploiting modern high performance computing architectures by
@@ -824,6 +877,36 @@ performance optimizations, as well as domain-specific optimizations,
 such as flop reduction techniques - all while maintaining full
 compatibility with the scientific software stack available through the
 open-source Python ecosystem.
+
+Limitations and Future Work
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The examples used in this paper have been chosen for their relative
+simplicity in order to concisely demonstrate the current features of
+the Devito API. Different numerical methods may be used to solve the
+presented examples with greater accuracy or achieve more realistic
+results. Nevertheless, finite difference methods play an important
+role and are widely used in academic and industrial research due to
+the relative ease of implementation, verification/validation and high
+computational efficiency, which is of particular importance for
+inversion methods that require fast and robust high-order PDE solvers.
+
+The interfaces provided by Devito are intended to create
+high-performance operators with relative ease and thus increase user
+productivity. Several future extensions are planned to enhance the
+high-level API to further ease the construction of more complex
+operators, including explicit abstractions for symbolic boundary
+conditions, perfectly matched layer (PML) methods and staggered grids.
+Devito's secondary low-level API and use of several intermediate
+representations are intended to ease the gradual addition of new
+high-level features.
+
+Moreover, the addition of YASK as an alternative backend will not only
+provide more advanced performance optimisation, but also an MPI
+infrastructure to allow Devito to utilise distribute computing
+environments. Further plans also exist for integration with linear
+and non-linear solver libraries, such as PETSc, to enable Devito to
+handle implicit formulations.
 
 Acknowledgements
 ----------------
@@ -840,18 +923,23 @@ References
 .. [Alnaes14] M. S. Alnæs, A. Logg, K. B. Ølgaard, M. E. Rognes,
               and G. N.  Wells, “Unified Form Language: a
               domain-specific language for weak formulations of
-              partial differential equations,” ACM Transactions on
-              Mathematical Software (TOMS), vol. 40,
-              no. 2, p. 9, 2014.
+              partial differential equations”, ACM Transactions on
+              Mathematical Software (TOMS), vol. 40, no. 2, p. 9, 2014.
+              https://dx.doi.org/10.1145/2566630
+
+.. [Baba16] Y. Baba and V. Rakov, "The Finite-Difference Time Domain
+            Method for Solving Maxwell's Equations", in
+            "Electromagnetic Computation Methods for Lightning Surge
+            Protection Studies", 2016, pp. 43–72, Wiley, ISBN 9781118275658.
+            http://dx.doi.org/10.1002/9781118275658.ch3
 
 .. [Brandvik10] T. Brandvik and G. Pullan, “Sblock: A framework for efficient
-                stencil-based pde solvers on multi-core platforms,” in Proceedings
+                stencil-based pde solvers on multi-core platforms”, in "Proceedings
                 of the 2010 10th IEEE International Conference on Computer and
-                Information Technology, ser. CIT ’10. Washington, DC, USA:
-                IEEE Computer Society, 2010, pp. 1181–1188. [Online]. Available:
+                Information Technology", IEEE Computer Society, 2010, pp. 1181–1188.
                 http://dx.doi.org/10.1109/CIT.2010.214
 
-.. [Cardenas70] Cárdenas, A. F. and Karplus, W. J.: PDEL -- a language
+.. [Cardenas70] Cárdenas, A. F. and Karplus, W. J.: PDEL — a language
                 for partial differential equations, Communications of
                 the ACM, 13, 184–191, 1970.
 
@@ -861,32 +949,41 @@ References
 
 .. [Datta08] K. Datta, M. Murphy, V. Volkov, S. Williams, J. Carter, L. Oliker,
              D. Patterson, J. Shalf, and K. Yelick, “Stencil computation optimization
-             and auto-tuning on state-of-the-art multicore architectures,” in
+             and auto-tuning on state-of-the-art multicore architectures”, in
              Proceedings of the 2008 ACM/IEEE Conference on Supercomputing,
-             SC ’08. Piscataway, NJ, USA: IEEE Press, 2008, pp. 4:1–4:12.
-             [Online]. Available: http://dl.acm.org/citation.cfm?id=1413370.1413375
+             IEEE Press, 2008, pp. 4:1–4:12.
+             http://dl.acm.org/citation.cfm?id=1413370.1413375
 
 .. [Farrell13] Farrell, P. E., Ham, D. A., Funke, S. W., and
                Rognes, M. E.: Automated Derivation of the Adjoint of
                High-Level Transient Finite Element Programs, SIAM
-               Journal on Scientific Computing, 35, C369–C393,
-               doi:10.1137/120873558,
-               http://dx.doi.org/10.1137/120873558, 2013.
+               Journal on Scientific Computing, 35, C369–C393, 2013.
+               http://dx.doi.org/10.1137/120873558
 
 .. [Henretty13] T. Henretty, R. Veras, F. Franchetti, L.-N. Pouchet, J. Ramanujam, and
                 P. Sadayappan, “A stencil compiler for short-vector simd
                 architectures,” in Proceedings of the 27th
                 International ACM Conference on International
-                Conference on Supercomputing, ser. ICS ’13. New York,
-                NY, USA: ACM, 2013, pp. 13–24. [Online]. Available:
+                Conference on Supercomputing, ACM, 2013, pp. 13–24.
                 http://doi.acm.org/10.1145/2464996.2467268
 
 .. [Iverson62] Iverson, K.: A Programming Language, Wiley, 1962.
 
+.. [Krakos12] J.A. Krakos, "Unsteady Adjoint Analysis for Output
+              Sensitivity and Mesh Adaptation", PhD thesis, 2012.
+              https://dspace.mit.edu/handle/1721.1/77133
+
 .. [Lange17] Lange, M., Luporini, F., Louboutin, M., Kukreja, N., Pandolfo,
              V., Kazakas, P., Velesko, P., Zhang, S., Peng, P., and Gorman, G.
              Dylan McCormick. 2017, June 7. opesci/devito: Devito-3.0.1.
-             Zenodo. http://doi.org/10.5281/zenodo.803626
+             Zenodo. https://doi.org/10.5281/zenodo.823172
+
+.. [LeVeque92] LeVeque, R. J., "Numerical Methods for Conservation
+               Laws", Birkhauser-Verlag (1992).
+
+.. [Liu09] Y. Liu and M. K. Sen, “Advanced Finite-Difference Method
+           for Seismic Modeling,” Geohorizons, Vol. 14, No. 2, 2009,
+           pp. 5-16.
 
 .. [Logg12] Logg, A., Mardal, K.-A., Wells, G. N., et al.: Automated
             Solution of Differential Equations by the Finite Element
@@ -895,7 +992,7 @@ References
 .. [Louboutin17a] Louboutin, M., Lange, M., Herrmann, F. J., Kukreja,
                   N., and Gorman, G.: Performance prediction of
                   finite-difference solvers for different computer
-                  architectures, Computers Geosciences, 105, 148--157,
+                  architectures, Computers Geosciences, 105, 148—157,
                   https://doi.org/10.1016/j.cageo.2017.04.014, 2017.
 
 .. [Louboutin17b] M. Louboutin, M. Lange, F. Luporini, N. Kukreja, F. Herrmann,
@@ -903,6 +1000,11 @@ References
                   symbolic finite-difference for geophysical
                   exploration. In preparation for Geoscientific Model
                   Development (GMD), 2017.
+
+.. [McCalpin95] McCalpin, J. D., "Memory Bandwidth and Machine Balance
+                in Current High Performance Computers", IEEE Computer
+                Society Technical Committee on Computer Architecture
+                (TCCA) Newsletter, December 1995.
 
 .. [Meurer17] Meurer A, Smith CP, Paprocki M, Čertík O, Kirpichev SB,
              Rocklin M, Kumar A, Ivanov S, Moore JK, Singh S,
@@ -913,14 +1015,24 @@ References
              Python. PeerJ Computer Science 3:e103
              https://doi.org/10.7717/peerj-cs.103
 
+.. [Peiro05] J. Peiró, S. Sherwin, "Finite Difference, Finite Element
+             and Finite Volume Methods for Partial Differential
+             Equations", in "Handbook of Materials Modeling,
+             pp. 2415—2446, ISBN 978-1-4020-3286-8, 2005.
+             http://dx.doi.org/10.1007/978-1-4020-3286-8_127.
+
+.. [Rai91] M. M. Rai and P. Moin. 1991. "Direct simulations of
+           turbulent flow using finite-difference schemes",
+           J. Comput. Phys. 96, 1 (October 1991), 15-53.
+           http://dx.doi.org/10.1016/0021-9991(91)90264-L
+
 .. [Rathgeber16] Rathgeber, F., Ham, D. A., Mitchell, L., Lange, M.,
                  Luporini, F., McRae, A. T. T., Bercea, G.,
-                 Markall, G. R., and Kelly, P. H. J.: Firedrake:
+                 Markall, G. R., and Kelly, P. H. J.: "Firedrake:
                  automating the finite element method by composing
-                 abstractions. ACM Trans. Math. Softw.,
-                 43(3):24:1–24:27, 2016. URL:
-                 http://arxiv.org/abs/1501.01809, arXiv:1501.01809,
-                 doi:10.1145/2998441.
+                 abstractions",  ACM Trans. Math. Softw.,
+                 43(3):24:1–24:27, 2016.
+                 http://dx.doi.org/10.1145/2998441.
 
 .. [Umetani85] Umetani, Y.: DEQSOL A numerical Simulation Language for
                Vector/Parallel Processors, Proc. IFIP TC2/WG22, 1985, 5,
@@ -932,6 +1044,11 @@ References
                   Proceedings of the 10th international conference on
                   Supercomputing. ACM, 1996, pp. 86–93.
 
+.. [Virieux09] Virieux, J. and Operto, S., "An overview of
+               full-waveform inversion in exploration geophysics",
+               GEOPHYSICS, 74, WCC1–WCC26, 2009.
+               http://dx.doi.org/10.1190/1.3238367
+
 .. [Yount15] C. Yount, "Vector Folding: Improving Stencil Performance
              via Multi-dimensional SIMD-vector Representation," 2015
              IEEE 17th International Conference on High Performance
@@ -941,7 +1058,7 @@ References
              and Systems, New York, NY, 2015, pp. 865-870.
              https://doi.org/10.1109/HPCC-CSS-ICESS.2015.27
 
-.. [Yount16] C. Yount, J. Tobin, A. Breuer and A. Duran, "YASK—Yet
+.. [Yount16] C. Yount, J. Tobin, A. Breuer and A. Duran, "YASK — Yet
              Another Stencil Kernel: A Framework for HPC Stencil
              Code-Generation and Tuning," 2016 Sixth International
              Workshop on Domain-Specific Languages and High-Level
@@ -951,6 +1068,5 @@ References
 
 .. [Zhang12] Y. Zhang and F. Mueller, “Auto-generation and auto-tuning of 3d
              stencil codes on gpu clusters,” in Proceedings of the Tenth International
-             Symposium on Code Generation and Optimization, ser. CGO ’12.
-             New York, NY, USA: ACM, 2012, pp. 155–164. [Online]. Available:
+             Symposium on Code Generation and Optimization, ACM, 2012, pp. 155–164.
              http://doi.acm.org/10.1145/2259016.2259037
