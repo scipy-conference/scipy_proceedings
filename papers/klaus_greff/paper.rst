@@ -45,24 +45,23 @@ Moreover, it provides an extensible basis for other tools, two of which we prese
 Introduction
 ============
 
-A major part of machine learning research typically involves a large number of computational experiments run with many different hyperparameter settings.
+A major part of machine learning research typically involves a significant number of computational experiments run with many different hyperparameter settings.
 This process holds many practical challenges, such as bookkeeping and maintaining reproducibility.
-To make matters worse, experiments are often run on diverse and heterogeneous environments, ranging from laptops to cloud computing nodes.
+To make matters worse, experiments often run on diverse and heterogeneous environments, ranging from laptops to cloud computing nodes.
 Due to deadline pressure and the inherently unpredictable nature of research, there is usually little incentive for researchers to build robust infrastructures.
-As a result, research code often evolves quickly and compromises important aspects like bookkeeping and reproducibility.
+As a result, research code often evolves quickly and compromises essential aspects like bookkeeping and reproducibility.
 
 
 Many tools exist for tackling different aspects of this process, including databases, version control systems, command-line interface generators, tools for automated hyperparameter optimization, spreadsheets, and so on.
-Few, however, integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its own overhead.
-Since there is no common basis to build a workflow, the tools people build will be tied to their particular setup.
-This impedes sharing and collaboration on tools for important problems like optimizing hyperparameters, summarizing and analyzing results, rerunning experiments, distributing runs, etc..
+Few, however, integrate these aspects into a unified system, so each tool has to be learned and used separately, each incurring its overhead.
+Since there is no common basis to build a workflow, the tools people create will be tied to their particular setup.
+This impedes sharing and collaboration on tools for major problems like optimizing hyperparameters, summarizing and analyzing results, rerunning experiments, distributing runs, etc..
 
-Sacred aims to fill this gap by providing basic infrastructure for running computational experiments.
+Sacred aims to fill this gap by providing central infrastructure for running computational experiments.
 We hope that it will help researchers and foster the development of a rich collaborative ecosystem of shared tools.
 In the following, we briefly introduce Sacred and two supporting tools:
 *Labwatch* integrates a convenient unified interface to several automated hyperparameter optimizers, such as random search, RoBO, and SMAC.
 *Sacredboard* offers a web-based interface to view runs and organize results.
-
 
 
 Sacred
@@ -71,8 +70,8 @@ Sacred [#]_ is an open source Python framework that bundles solutions for some o
 It does not enforce any particular workflow and is independent of the choice of machine learning libraries.
 Designed to remain useful even under deadline pressure, Sacred aims to
 offer maximum convenience while minimizing boilerplate code.
-By combining these features into a unified but flexible workflow, Sacred enables its users to focus on research, and still ensures that all the relevant information for each run are captured.
-Its standardized configuration process allows streamlined integration with other tools, such as Labwatch for hyperparameter optimization.
+By combining these features into a unified but flexible workflow, Sacred enables its users to focus on research, and still capture all the relevant information for each run.
+Its standardized configuration process allows smooth integration with other tools, such as Labwatch for hyperparameter optimization.
 Through storage of run information in a central database, comprehensive query and sorting functionality for bookkeeping becomes available.
 This further enables downstream analysis and allows other tools, such as Sacredboard, to provide a powerful user interface for organizing results.
 
@@ -99,8 +98,8 @@ A minimal example could look like this:
 
 
 This experiment is ready to be run and would return a *result* of 42.
-It already features an automatically generated commandline interface, collects relevant information about dependencies and the host system, and can do bookkeeping.
-The experiment can be extended in several ways to define (hyper-) parameters that can later be changed externally.
+It already features an automatically generated command line interface, collects relevant information about dependencies and the host system, and can do bookkeeping.
+The experiment is extendable in several ways to define (hyper-) parameters that can later be externally changed.
 
 The experiment can be run through its command-line interface, or directly from Python by calling ``ex.run()``.
 Both modes offer the same ways for passing options, setting parameters, and adding observers.
@@ -116,7 +115,7 @@ In the previous minimal example the output would look like this:
     INFO - my_example - Completed after 0:00:00
 
 For each run, relevant information such as parameters, package dependencies, host information, source code, and results are automatically captured.
-The Run also captures the stdout, custom information and fires events at regular intervals that can be observed for bookkeeping, by optional *observers*.
+The Run also captures the stdout, custom information, and fires events at regular intervals that can be monitored for bookkeeping, by optional *observers*.
 Several built-in observers are available for databases, disk storage, or sending out notifications.
 
 
@@ -142,8 +141,8 @@ Alternatively, plain dictionaries or external configuration files can also be us
 
 .. Using Config Values
 
-To make parameters easily accessible throughout the code, Sacred employs the technique of *dependency injection*:
-any function decorated by ``@ex.capture`` can simply accept any configuration entry as a parameter.
+To make parameters readily available throughout the code, Sacred employs the technique of *dependency injection*:
+any function decorated by ``@ex.capture`` can directly accept any configuration entry as a parameter.
 Whenever such a function is called, Sacred will automatically pass those parameters by name from the configuration.
 This allows for the flexible and convenient use of the hyperparameters throughout the experiment code:
 
@@ -157,9 +156,9 @@ This allows for the flexible and convenient use of the hyperparameters throughou
         opt = OptClass(learning_rate=learning_rate)
         return opt.minimize(loss)
 
-When calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` arguments can be omitted.
-They will then be filled in automatically from the configuration.
-These injected values can be mixed freely with normal parameters, and injection follows the priority: 1) explicitly passed arguments 2) configuration values 3) default values.
+When calling the ``setup_optimizer`` function, both the ``optimizer`` and the ``learning_rate`` arguments are optional.
+If omitted, they will be filled in automatically from the configuration.
+These injected values can be mixed freely with standard parameters, and injection follows the priority: 1) explicitly passed arguments 2) configuration values 3) default values.
 
 The main benefit of config parameters is that they can be controlled externally when running an experiment.
 This can happen both from the command line
@@ -181,8 +180,8 @@ In this way, they influence dependent values as you would expect.
 Thus in our example ``log_dir`` would be set to ``"log/NN64"`` .
 
 
-Groups of config values that should be saved or always be set together can be collected in so called *named configurations*.
-These are defined analogous to configurations using a function decorated by ``@ex.named_config`` (or dictionaries / config files):
+Groups of config values that should be saved or set together can be collected in so-called *named configurations*.
+These are defined analogously to configurations using a function decorated by ``@ex.named_config`` (or dictionaries/config files):
 
 .. code-block:: python
 
@@ -238,7 +237,7 @@ Randomness
 ----------
 Randomization is an important part of many machine learning algorithms, but it inherently conflicts with the goal of reproducibility.
 The solution, of course, is to use pseudo-random number generators (PRNG) that take a seed and generate seemingly random numbers in a deterministic fashion.
-However, if the seed is set to a fixed value as part of the code, then all runs will be deterministic, which can be an undesired effect.
+However, setting the seed to a fixed value as part of the code makes all the runs deterministic, which can be an undesired effect.
 Sacred solves this problem by generating a new seed that is stored as part of the configuration for each run.
 It can be accessed from the code in the same way as every other config entry.
 Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and ``numpy`` modules when starting an experiment, thus making most sources of randomization reproducible without any intervention from the user.
@@ -249,7 +248,7 @@ Furthermore, Sacred automatically seeds the global PRNGs of the ``random`` and `
 Bookkeeping
 -----------
 
-Bookkeeping in Sacred is accomplished by implementing the observer pattern :cite:`gamma1994`:
+Sacred accomplishes bookkeeping through the observer pattern :cite:`gamma1994`:
 The experiment publishes all the collected information in the form of events, to which observers can subscribe.
 Observers can be added dynamically from the command line or directly in code:
 
