@@ -165,7 +165,7 @@ We prepared and evaluted few approaches which we now discuss in this paper.
 2.1. Static Settings
 --------------------
 One of the common ways of making parallel code in Python is to employ process or threads *pools* (or *executors*)
-provided thtough standard library.
+provided through standard library.
 These pools are also used by other Python libraries implementing parallel computations like Dask and Joblib.
 We suggest to fix them in such a way that each pool worker being used to call nested parallel computation
 can use only some particular number of processor cores.
@@ -202,7 +202,7 @@ Optional argument :code:`-f <oversubscription_factor>` sets oversubscription fac
 to compute number of threads per pool worker.
 By default it equals to 2, which means that in our example, 8 threads will be used per process.
 Allowing this limited degree of oversubscription by default, we hope that for most applications benefits from load balancing
-will overwheight the overheads incurred by it.
+will overwheight the overheads incurred by it, as discussed in details in p3.5.
 Though, for particular examples we show in this paper, the best performance is achieved with :code:`-f 1` specified on the command line.
 
 
