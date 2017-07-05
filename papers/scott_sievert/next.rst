@@ -101,11 +101,10 @@ simonyan2014very`.
 
 The collection of these data is `passive` and does not `adapt` to previous
 responses: previous responses do not effect which queries are presented.
-Adaptive data collection is a process which selects the most useful data (in
-some sense) as quickly as possible to help achieve some goal (e.g.,
-classification accuracy) :cite:`holland1992adaptation`.  Adaptive data
-collection is done by an adaptive sampling algorithm that chooses the next
-query to be labeled.
+Adaptive data collection is a process which selects the most useful data as
+quickly as possible to help achieve some goal (e.g., classification accuracy)
+:cite:`holland1992adaptation`.  Adaptive data collection is done by an adaptive
+sampling algorithm that chooses the next query to be labeled.
 
 Adaptive data collection naturally requires fewer responses to produce the same
 model as passive data collection: it's adapting to previous responses by
@@ -114,12 +113,12 @@ needed, or as problem size increases. Adaptive algorithms do not require more
 responses than passive algorithms :cite:`castro2005faster`. A clearer depiction
 of these gains is shown in Figure :ref:`adaptive-gains`.
 
-Applying adaptive data collection to crowdsourcing will reduce the number of
-samples required. The simple judgments humans can provide require many
-responses. A simple example is with using comparisons of two items to sort a
-list of :math:`n` items. An adaptive algorithm require :math:`O(n\log n)`
-comparisons on average while passive algorithms require :math:`O(n^2)`
-comparisons :cite:`hoare1962quicksort`.
+Applying adaptive data collection to crowdsourcing has the potential to reduce
+the number of samples required. An example that requires many human judgments
+is sorting :math:`n` items with pairwise comparisons (e.g., :math:`x < y`). In
+the ideal case, an adaptive algorithm requires :math:`O(n\log n)` comparisons
+on average while passive algorithms requires :math:`O(n^2)` comparisons
+:cite:`hoare1962quicksort`.
 
 Adaptively collecting large-scale datasets is challenging and time-consuming,
 as mentioned below.  As such, most experiments on adaptive sampling algorithms
@@ -179,7 +178,8 @@ experimentalists.
 
 .. figure:: figures/crowdsourcing-data-flow.png
 
-    The system required to use adaptive algorithm with crowdsourcing.
+    The system required to use adaptive algorithm with crowdsourcing. The
+    results are stored in the model, which may contain additional information.
     :label:`crowdsourcing-data-flow`
 
 One other system that addresses this challenge is the Microsoft Decision
