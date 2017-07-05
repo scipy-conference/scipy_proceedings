@@ -208,7 +208,7 @@ Though, for particular examples we show in this paper, the best performance is a
 
 2.2. Limiting Simultaneous OpenMP Parallel Regions
 --------------------------------------------------
-The second approach is based on modifications to the OpenMP runtime.
+The second approach relies on modifications to the OpenMP runtime.
 The basic idea, is to prevent oversubscription by not allowing concurrent parallel regions to collide,
 which resembles in a sense "Global OpenMP Lock" as was suggested in [AMala16]_.
 The actual implementation suggests two modes for scheduling parallel regions: *exclusive* and *counting*.
@@ -224,10 +224,9 @@ as part of Intel |R| Distrubution for Python 2018 [#]_ as an experimental previe
 To enable this mode, :code:`KMP_COMPOSABILITY` environment variable should be set, for example:
 
 .. [#] It was also introduced on Anaconda cloud along with the version 2017.0.3 in limited, undocumented form.
-
 .. code-block:: sh
 
-    env KMP_COMPOSABILITY=mode=exclusive python script.py
+    env KMP_COMPOSABILITY=mode=exclusive python app.py
 
 This enables each OpenMP parallel region to run exclusively, eliminating most of oversubscription issues.
 
@@ -239,18 +238,21 @@ the many co-existing threads may still cause resource exhaustion issue.
 
 2.3. Coordinated Task Scheduler with Intel |R| TBB
 --------------------------------------------------
+The last approach has been initially introduced in our previous paper [AMala16]_.
+It is based upon using Intel |R| TBB as a sigle task scheduler for coordinating parallelism for all the Python pools and modules.
+Its work stealing task scheduler is used to map tasks onto the set of TBB worker threads
+while monkey-patching technique is used to redirect Python's :code:`ThreadPool` on top of TBB tasks.
+That allows to dynamically balance the load across multiple tasks from multiple modules but has been limited to multi-threading only.
+
+In this paper we extended this approach by introducing the multi-processing coordination layer for Intel |R| TBB.
+As shown in figure :ref:`components`, different modules, that can be used in an applicaion,
+work on top of the shared Intel |R| TBB pool, which is coordinated across multiple processes.
+
 .. figure:: components.png
 
-   Intel |R| Threading Building Blocks is used as a common runtime for different Python modules. :label:`components`
+   Intel |R| TBB provides a common runtime for Python modules and coordinates threads across processes. :label:`components`
 
-The third approach is also based on using a single thread pool but through Intel |R| TBB.
-In this case, the work stealing task scheduler is used to map the set of tasks to the set of threads.
-As shown in figure :ref:`components`, different components, that may be used in a script, work on top of the shared Intel |R| TBB pool.
-That allows one to dynamically balance the load across multiple tasks from multiple modules.
-This approach for the multi-threading case is described in more detail in our previous paper [AMala16]_.
-
-Here we are presenting an extended approach that covers the multi-processing case as well.
-The approach works in following way.
+This works as in the following way.
 We create a number of processes not to exceed the number of hardware threads.
 In each separate process, there is a thread pool.
 Before starting any thread in any pool, one should acquire a system-wide semaphore with maximum value equal to the number of CPU hardware threads.
@@ -271,7 +273,7 @@ Even a more flexible locking mechanism in OpenMP would need to wait for all the 
 
 3. Evaluation
 -------------
-For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the Dask [Dask]_ library which simplifies parallelism with Python.
+For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the [Dask]_ library which simplifies parallelism with Python.
 
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
 
@@ -279,8 +281,8 @@ For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be 
 
     # install Intel(R) Distribution for Python
     <path to installer of the Distribution>/install.sh
-    # setup environment
-    source <path to the Distribution>/bin/pythonvars.sh
+    # activate in environment
+    source <path to the Distribution>/bin/activate.sh
     # install Dask
     conda install dask
 
