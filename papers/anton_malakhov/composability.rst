@@ -21,7 +21,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
+   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
@@ -208,8 +208,9 @@ Though, for particular examples we show in this paper, the best performance is a
 
 2.2. Limiting Simultaneous OpenMP Parallel Regions
 --------------------------------------------------
-The second approach we will describe here is more common and based on the OpenMP runtime.
-The basic idea is to use a single thread pool and run different parallel regions on it sequentially, one after the other.
+The second approach is based on modifications to the OpenMP runtime.
+The basic idea, as was suggested in [AMala16]_, is to run different parallel regions sequentially, one after the other,
+which resembles in a sense "Global OpenMP Lock".
 To implement this, we need to have a lock that is acquired before running the next parallel region.
 This idea can be easily extended to the case of multiple processes.
 To do this, we use a global lock such as a system-wide semaphore.
