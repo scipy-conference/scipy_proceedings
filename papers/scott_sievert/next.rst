@@ -86,13 +86,13 @@ NEXT: A system to easily connect crowdsourcing and adaptive data collection
 
 .. class:: abstract
 
-    Crowdsourcing is widely used, but obtaining useful crowdsourcing results
-    often requires more responses than can be collected. Reducing the number of
-    responses required can be done by `adapting` to previous responses with
-    "adaptive" sampling algorithms, but these algorithms present a fundamental
-    challenge when paired with crowdsourcing. At UW–Madison, we have built a
-    crowdsourcing data collection tool that can be used with arbitrary adaptive
-    algorithms called NEXT (http://nextml.org). Each week, our system is used
+    Obtaining useful crowdsourcing results often requires more responses than
+    can be easily collected. Reducing the number of responses required can be
+    done by `adapting` to previous responses with "adaptive" sampling
+    algorithms, but these algorithms present a fundamental challenge when
+    paired with crowdsourcing. At UW–Madison, we have built a powerful
+    crowdsourcing data collection tool called NEXT (http://nextml.org) that can
+    be used with arbitrary adaptive algorithms. Each week, our system is used
     by The New Yorker to run their Cartoon Caption contest
     (http://www.newyorker.com/cartoons/vote). In this paper, we will explain
     what NEXT is and it's applications, architecture and experimentalist use.
@@ -106,13 +106,10 @@ Introduction
 -----------------
 
 The ubiquitousness of the Internet has enabled crowdsourcing, which gives fast
-access to unprecedented amounts of human judgment data.  Tapping into the
-"wisdom of the crowd" includes scenarios where questions are asked about simple
-cognitive tasks, and crowdsourcing has enabled the collection of many such
-judgments. For example, crowdsourcing participants have been asked to
-determine the locations in an image that contain a certain object (e.g.,
-"select all image locations that contain buildings") on many different images
-:cite:`deng2009imagenet`.
+access to unprecedented amounts of human judgment data. For example, millions
+of crowdsourcing participants have been asked to determine the locations in an
+image that contain a certain object (e.g., "select all image locations that
+contain buildings") on many different images :cite:`deng2009imagenet`.
 
 .. comment
     Crowdsourcing enables the collection of many simple human judgments. Uses
@@ -124,16 +121,15 @@ determine the locations in an image that contain a certain object (e.g.,
 The cost of collecting crowdsourcing responses can be significant – especially
 in problem domains where expert input is required. Minimizing the number of
 queries required has large practical benefits: higher accuracy with fewer
-responses, and ultimately a shorter time to a particular result.  To obtain
-these benefits, a fundamental change in the method of data collection is
-required.
+responses, and ultimately a shorter time to the result.  To obtain these
+benefits, a fundamental change in the method of data collection is required.
 
 At UW–Madison, we have developed a crowdsourcing data collection tool that
 efficiently collects crowdsourced data via "adaptive" sampling algorithms
 :cite:`jamieson2015next`. In this paper, we will focus on the use of NEXT
-rather than the applications of NEXT and their results. We will address the
-interface NEXT presents to the experimentalist and algorithm designer, after
-mentioning the fundamental problem NEXT addresses and its applications.
+rather than the applications of NEXT and their results. We will mention the
+fundamental problem NEXT addresses, its applications, and the interfaces NEXT
+presents to the experimentalist and algorithm designer.
 
 Problem statement
 -----------------
@@ -167,15 +163,16 @@ Problem statement
     adaptive algorithms to reach a particular quality (e.g., classification
     accuracy). :label:`adaptive-gains`
 
-Supervised machine learning relies on human labels to help produce a model that
-predicts labels :cite:`kotsiantis2007supervised`. One example of this workflow
-is with the popular ImageNet dataset :cite:`deng2009imagenet`: humans have
-provided millions of image labels, and there have been dozens of models to
-predict labels for unseen images :cite:`szegedy2015going, he2015delving,
+Supervised machine learning relies on human responses to help produce a model
+that can predict the response a human would give
+:cite:`kotsiantis2007supervised`. One example of this workflow is with the
+popular ImageNet dataset :cite:`deng2009imagenet`: humans have provided
+millions of image labels, and there have been dozens of models to predict
+labels for unseen images :cite:`szegedy2015going, he2015delving,
 simonyan2014very`.
 
 The collection of these data is `passive` and does not `adapt` to previous
-responses: previous responses does not effect which queries are presented.
+responses: previous responses do not effect which queries are presented.
 Adaptive data collection is a process which selects the most useful data (in
 some sense) as quickly as possible to help achieve some goal (e.g.,
 classification accuracy) :cite:`holland1992adaptation`.  Adaptive data
@@ -203,12 +200,10 @@ do not address the practical issues faced in crowdsourcing: adaptive algorithm
 response time, human fatigue and differing label quality among humans.
 
 The problem that needs to be solved is to allow arbitrary adaptive algorithms
-to collect crowdsourced data.
-
-An additional problem is the use of adaptive algorithms by experimentalists.
-Arguably, some of the deepest insights and greatest innovations have come
-through experimentation. This is only possible if adaptive data collection is
-easily accessible by both
+to collect crowdsourced data and to allow the use of adaptive algorithms by
+experimentalists. Arguably, some of the deepest insights and greatest
+innovations have come through experimentation. This is only possible if
+adaptive data collection is easily accessible by both
 
 1. Machine learning researchers, to test and deploy adaptive algorithms
 2. Experimentalists, to use and test adaptive algorithms in real-world applications
