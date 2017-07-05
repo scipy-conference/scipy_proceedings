@@ -190,11 +190,15 @@ Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N
 Results and Discussion
 ======================
 
+Trajectories from MD simulations record snapshots of the positions of all particles are regular time intervals.
+A snapshot at a specified time point is called a frame.
+MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu` to allow the analysis of large trajectories that may contain, for example, :math:`n_\text{frames} = 10^7` frames in total.
+In a map-reduce approach, :math:`N` processes will iterate in parallel over :math:`N` chunks of the trajectory, each containing :math:`n_\text{frames}/N` frames. 
+
+
 Effect of File Format on I/O Time
 ---------------------------------
 
-In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
-To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
 Depending on the file format the loading time of frames into memory will be different.
 Some file systems like distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however this will be possible only if there is a parallel I/O library which is not the case in the present study.
 Figure :ref:`pattern-formats` illustrates the I/O pattern compared between different file formats.
