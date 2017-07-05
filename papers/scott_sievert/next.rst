@@ -30,59 +30,9 @@
 :bibliography: refs
 
 
-.. next paper outline
-    * Problem statement
-        * active learning adjusts on previously collected data
-        * adaptive data collection poses challenges
-        * adaptively collecting large-scale datasets is difficult and time
-          consuming
-        * To do this, we have build NEXT which addresses 2 audiences, ML and
-          practicioners
-        * "Arguably, some of the deepest insights and greatest innovations have
-          come through experimentation."
-    * Solution
-    * Example applications
-        * cardinal bandits (with New Yorker)
-        * dueling bandits (with New Yorker again)
-        * triplets, with psycology studies
-
-
 ---------------------------------------------------------------------------
 NEXT: A system to easily connect crowdsourcing and adaptive data collection
 ---------------------------------------------------------------------------
-
-.. comment
-    - Notes from lalit
-    - Stress adaptive data collection, not machine learning
-    - For example, have fun getting all the labels to ImageNet (Lalit is sending
-        slide)
-    - general system: NEXT is the sum of two components (connecting math +
-      systems). Do active algorithms work? There's a ton of theory but
-      question if actually work
-    - Can't do this without Flask + Celery + AWS
-    - Extremely
-    - Drop the word "design pattern".
-    - Sell the algorithms harder
-    - emphasize the tooling we've used
-    - Where does Bob's stuff come into this?
-    - Say "why don't implement active algorithms? It's hard to do."
-    - Wax philosphically "we'd like to be the scikit-learn of active learning"
-    - It could be better
-    - Ask Sumeet "what's a good active algorithm to show people?"
-    - Keep the audience in mind -- engineers, not mathematicians
-    - what's the story you can tell the community
-    - I'm not going to talk about machine learning
-    - There's a first step. This addresses that. That's what active learning is
-      there for.
-    - Ask Rob for slides on ImageNet cost
-    - Lalit slides Chicago data science conference
-    - Another way: look, active learning has humans in the loop. What does that
-      mean, and compare with
-    - Talk with Devin/AmFam about this
-    - Slide1: sklearn story. Go down imagenet root. Slide2: the next story.
-      introduce adaptive. Next box starts expanding (celery, docker, javascript
-      for frontend).
-    - sklearn is Jupyter notebook, active learning requires NEXT.
 
 .. class:: abstract
 
@@ -133,28 +83,6 @@ presents to the experimentalist and algorithm designer.
 
 Problem statement
 -----------------
-
-.. outline
-    * Basic def of standard ML
-        * give imagenet example
-    * This process does not adapt
-        * No human in the loop
-        * never looks at previously collected responses
-    * Adaptive data collection
-        * There are benefits to adapting (cite papers)
-    * Adaptive data collection is difficult
-        * existing tools (PsiTurk, Mechanical Turk, Crowd Flower) can't be used
-          (no computational backend)
-        * these are fundamentally `passive`: they decide which queries to
-          present in advance
-    * To resolve this, most data collection done by simulation with passively
-      collected datasets
-    * "Arguably, some of the deepest insights and greatest innovations have
-          come through experimentation."
-        * To enable these breakthroughts, we need to design a system that is
-          easy to use by (list)
-    * The solution to this problem necessitates
-
 
 .. figure:: figures/adaptive-gains.png
     :scale: 70%
