@@ -209,23 +209,32 @@ Though, for particular examples we show in this paper, the best performance is a
 2.2. Limiting Simultaneous OpenMP Parallel Regions
 --------------------------------------------------
 The second approach is based on modifications to the OpenMP runtime.
-The basic idea, as was suggested in [AMala16]_, is to run different parallel regions sequentially, one after the other,
-which resembles in a sense "Global OpenMP Lock".
-To implement this, we need to have a lock that is acquired before running the next parallel region.
-This idea can be easily extended to the case of multiple processes.
-To do this, we use a global lock such as a system-wide semaphore.
+The basic idea, is to prevent oversubscription by not allowing concurrent parallel regions to collide,
+which resembles in a sense "Global OpenMP Lock" as was suggested in [AMala16]_.
+The actual implementation suggests two modes for scheduling parallel regions: *exclusive* and *counting*.
+Exclusive mode implements exclusive lock that is acquired before running a parallel region and releases it after the work is done.
+Counting mode implements mechanism equivalent to semaphore, which allows multiple parallel regions with small number of threads as long
+as the total number of threads does not cross the limit.
+When the limit is exceeded, it blocks in a similar way as the lock in exclusive mode until requested resources become available.
+This idea is easily extended to the case of multiple processes using Inter Process Coordination (IPC) mechanisms such as
+system-wide semaphore.
 
-This approach was implemented in Intel |R| OpenMP* runtime as a preview feature that can be enabled using the following option:
+The exclusive mode approach is implemented in the Intel |R| OpenMP* runtime library being released
+as part of Intel |R| Distrubution for Python 2018 [#]_ as an experimental preview feature.
+To enable this mode, :code:`KMP_COMPOSABILITY` environment variable should be set, for example:
+
+.. [#] It was also introduced on Anaconda cloud along with the version 2017.0.3 in limited, undocumented form.
 
 .. code-block:: sh
 
-    KMP_COMPOSABILITY=mode=exclusive python script.py
+    env KMP_COMPOSABILITY=mode=exclusive python script.py
 
-As a result, each OpenMP parallel region will be executed exclusively, eliminating most oversubscription issues.
+This enables each OpenMP parallel region to run exclusively, eliminating most of oversubscription issues.
 
-In the multi-processing case, one thread pool per process will exist.
-Because of the global lock, only one of these pools will work at a time, which may help to improve performance by preventing oversubscription,
-but the many co-existing threads may still cause resource exhaustion issues.
+With the composability mode on, the multi-processing coordination is enabled automatically on the first usage.
+In the case, each process will have its own pool of OpenMP worker threads.
+While these threads will be coordinated across the processes preventing oversubscription,
+the many co-existing threads may still cause resource exhaustion issue.
 
 
 2.3. Coordinated Task Scheduler with Intel |R| TBB
