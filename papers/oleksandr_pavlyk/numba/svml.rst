@@ -32,7 +32,7 @@ Using SVML intrinsics is faster than repeatedly calling the scalar math function
 
 Besides intrinsics available with Intel |R| compiler there is opportunity to call vectorized implementations directly from svml library by their names.
 
-Beginning with version 4.0 LLVM features (experimental) model of autovectorization using SVML library, so a full stack of technologies is now available to exploit in-core parallelization of python code.
+Beginning with version 4.0 LLVM features (experimental) model of autovectorization using SVML library, so a full stack of technologies is now available to exploit in-core parallelization of python code. To enable the autovectorization feature in Numba, included in the Intel |R| Distribution for Python*, user needs to set ``NUMBA_INTEL_SVML`` environmental variable to a non-zero value, prompting Numba to load SVML library and to pass an appropriate option to LLVM. 
 
 Let's see how it works with a small example:
 
@@ -93,10 +93,6 @@ We can see direct use of the SVML-provided vector implementation of sine functio
 
 .. code-block:: Asm
 
-            movq    %rdi, 8(%rsp)
-            movq    %r13, 16(%rsp)
-            movq    %r15, 24(%rsp)
-            subq    %rbx, %r12
             leaq    96(%rdx), %r14
             leaq    96(%rsi), %r15
             movabsq $__svml_sin4_ha, %rbp
