@@ -226,7 +226,7 @@ Effect of File Format on I/O Performance
 We first sought to quantify the effect of the trajectory format on the analysis performance.
 The overall run time depends strongly on the trajectory file format as well as the underlying storage system as shown for the 300x trajectories in Figure :ref:`time-comparison`; results for other trajectory sizes are similar (see :cite:`Khoshlessan:2017aa`) except for the smallest 50x trajectories where possibly caching effects tend to improve overall performance.
 Using DCD files with SSDs on a single node (Figure :ref:`time-comparison` A) is about one order of magnitude faster than the other formats (Figure :ref:`time-comparison` B, C) and scales near linearly for small CPU core counts (:math:`N \le 12`).
-However, DCD does not scale at all with other storage systems such as HDD of NFS and run time only improves up to :math:`N=4` on the Lustre file system.
+However, DCD does not scale at all with other storage systems such as HDD or NFS and run time only improves up to :math:`N=4` on the Lustre file system.
 On the other hand, the run time with NCDF and especially with XTC trajectories improves linearly with increasing |Ncores|, with XTC on Lustre and :math:`N=24` cores almost obtaining the best DCD run time of about 30 s (SSD, :math:`N=12`); at the highest single node core count :math:`N=24`, XTC on SSD performs even better (run time about 25 s).
 For larger |Ncores| on multiple nodes, only a shared file system (Lustre or NFS) based on HDD was available.
 All three file formats only show small improvements in run time at higher core counts (:math:`N > 24`) on the Lustre file system on supercomputers with fast interconnects and no improvements on NFS over Gigabit (Figure :ref:`time-comparison` D–F).
@@ -279,7 +279,7 @@ Strong Scaling Analysis for Different File Formats
 
 We quantified the strong scaling behavior by analyzing the speed-up :math:`S(N)`; as an example, the 300x trajectories for multiprocessing and distributed schedulers are show in Figure :ref:`speedup-300x`.
 The DCD format exhibits poor scaling, except for :math:`N \le 12` on a single node and SSDs  (Figure :ref:`speedup-300x` A, D) and is due to the increase in |tIO| with |Ncores|, as discussed in the previous section.
-XTC file format  scale close to ideal up :math:`N=24` (single node) for both multiprocessing and distributed scheduler, almost independent from the underlying storage system.
+The XTC file format scales close to ideal on :math:`N \le 24` cores (single node) for both the multiprocessing and distributed scheduler, almost independent from the underlying storage system.
 The NCDF file format only scales well up to 8 cores (Figure :ref:`speedup-300x` C, F) as expected from |tIO| in Figure :ref:`IO-comparison` C, F.
 
 For the XTC file format, |tIO| is is nearly constant up to :math:`N=50` cores (Figure :ref:`IO-comparison` E) and |tcomp| also remains constant up to 72 cores.
@@ -299,7 +299,7 @@ To identify and quantify these additional overheads, we analyzed the performance
 The total job execution time |tN| differs from the total compute and I/O time, :math:`N\,(t_\text{comp} + t_\text{I/O})`.
 This difference measures additional overheads that we did not consider so far.
 It increases with trajectory size for all file formats and for all machines (for details refer to :cite:`Khoshlessan:2017aa`) but is smaller for SDSC *Comet* and TACC *Stampede* than compared to other machines.
-The difference is small for the results obtained using multiprocessing scheduler on a single node but it is substantial for the results obtained using distributed scheduler on multiple nodes.
+The difference is small for the results obtained using the multiprocessing scheduler on a single node but it is substantial for the results obtained using distributed scheduler on multiple nodes.
 
 .. figure:: figs/XTC600-54c-Web-In-Comet.pdf
    
@@ -419,8 +419,8 @@ Effect of Over-Subscribing
 
 In order to make our code more robust against uncertainty in computation times we explored over-subscribing the workers, i.e., to submit many more tasks than the number of available workers (and CPU cores, using one worker per core). 
 Over-Subscription might allow Dask to balance the load appropriately and as a result cover the extra time when there are some stragglers.
-We set the number :math:`M` of tasks to be three times the number of workers, :math:`M = 3 N`, where the number of workers :math:`N = N_\text{cores}` equaled the number of CPU cores. 
-Lustre-striping was also activated and set to three, which is also equal to the number of nodes used.
+We set the number :math:`M` of tasks to be three times the number of workers, :math:`M = 3 N`, where the number of workers |Ncores| equaled the number of CPU cores; now each task only works on :math:`n_\text{frames}/M` frames.
+To reduce the influence of |tIO| on the benchmark, Lustre-striping was activated and set to three, equal to the number of nodes used.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
 
@@ -441,7 +441,7 @@ Lustre-striping was also activated and set to three, which is also equal to the 
    :label:`timing-600x-oversubscribing`
 
 	  
-For XTC600x, no substantial speed-up is observed due to over-subscribing (compare Figure :ref:`speedup-IO-600x-oversubscribing` A to :ref:`speedup-IO-600x-striping` A).
+For XTC600x, no substantial speed-up is observed due to over-subscribing (compare Figure :ref:`speedup-IO-600x-oversubscribing` A to :ref:`speedup-IO-600x-striping` A), although fluctuations are reduced.
 As before, the I/O time is constant up to 72 cores due to striping (Figure :ref:`speedup-IO-600x-oversubscribing` B).
 However, a time difference between average total compute and I/O time and job execution time (Figure :ref:`timing-600x-oversubscribing`) reveals that over-subscribing does not help to remove the stragglers and as a result the overall speed-up is not improved.
 Figure :ref:`Dask-time-stacked-comparison` shows a time comparison for different parts of the calculations. 
