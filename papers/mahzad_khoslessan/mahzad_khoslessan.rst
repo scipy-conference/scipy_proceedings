@@ -397,7 +397,7 @@ Scheduler Throughput
 
 In order to test the hypothesis that straggler tasks were due to limitations in the speed of the Dask scheduler, we 
 performed scheduling experiments with all Dask schedulers (multithreaded, multiprocessing and distributed) on TACC *Stampede* (16 CPU cores per node).
-In each run, a total of 100,000 zero workload (``pass``) tasks were executed in order to measure the maximum scheduling throughput; each run itself was repeated and mean values together with standard deviations were reported.
+In each run, a total of 100,000 zero workload (``pass``) tasks were executed in order to measure the maximum scheduling throughput; each run itself was repeated ten times and mean values together with standard deviations were reported.
 Figure :ref:`daskThroughput` A shows the throughput of each scheduler over time on a single *Stampede* node, with Dask scheduler and worker being located on the same node.
 The most efficient scheduler is the distributed scheduler, which manages to schedule 20,000 tasks per second when there is one worker process for each available core.
 The distributed scheduler with just one worker process and a number of threads equal to the number of available cores has lower peak performance of about 2000 tasks/s and is able to schedule and execute these 100,000 tasks in 50 s.
