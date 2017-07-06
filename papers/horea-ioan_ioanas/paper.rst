@@ -131,6 +131,13 @@ The database schema draws from ongoing input, testing, and the wet work experien
 The development team currently consists of one programmer (corresponding author), who will maintain and actively develop LabbookDB at least until 2019 |---| independently of community involvement.
 Beyond that time point development may become contingent on the established impact of the project, including number of contributors, academic recognition of the metadata management system, adoption in the scientific Python or biomedical community, or the prospect of developing commercial tools to leverage the open source schema and API.
 
+Documentation
+~~~~~~~~~~~~~
+
+Project documentation is published `via Read the Docs <http://labbookdb.readthedocs.io/en/latest/>`_, and contains a general project description, alongside installation instructions and a browsable listing of the API.
+The documentation model is based primarly on docstrings, but also contains example functions and example input stored in `the corresponding submodule <https://github.com/TheChymera/LabbookDB/blob/master/labbookdb/report/examples.py>`_.
+A number of fully reproducible minimal input (working with the Demolog data only) versions of these functions are also presented in this paper.
+
 Capabilities
 ------------
 
