@@ -60,6 +60,7 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
    We found that the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottleneck in the analysis work flow.
    However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
    Scaling was tested on a single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
+   Although very good strong scaling could be achieved for single nodes, good scaling across multiple nodes was hindered by the persistent occurence of "stragglers", tasks that take much longer than all other tasks, and whose ultimate cause could not be completely ascertained.
    In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
 
 .. class:: Keywords
@@ -172,7 +173,7 @@ Dask produces a task graph (Figure :ref:`rmsd-dask` B) and the computation of th
    timeseries = result.compute(get=get)
 
 
-The complete code for benchmarking is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library under the MIT License.
+The complete code for benchmarking as well as an alternative implementation based on mpi4py_ is available from https://github.com/Becksteinlab/Parallel-analysis-in-the-MDAnalysis-Library under the MIT License.
 
 The data files consist of a topology file ``adk4AKE.psf`` (in CHARMM PSF format; :math:`N = 3341` atoms) and a trajectory ``1ake_007-nowater-core-dt240ps.dcd`` (DCD format) of length 1.004 µs with 4187 frames; both are freely available from figshare at DOI `10.6084/m9.figshare.5108170`_  :cite:`Seyler:2017aa`.
 Files in XTC and NCDF formats are generated from the DCD on the fly using MDAnalysis.
@@ -455,12 +456,6 @@ However, when extending to multiple nodes the time for overheads and communicati
    :label:`Dask-time-stacked-comparison`
 
 	  
-..  In addition, scheduler plugin is also used to validate our observations from Dask web-interface.
-..   In fact, we create a plugin that performs logging whenever a task changes state.
-..  Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
-.. Scheduler Plugin Results
-..   ~~~~~~~~~~~~~~~~~~~~~~~~
-
 In order to better quantify the scheduling decisions and to have verification of stragglers independent from the Dask web interface, we implemented a Dask scheduler `reporter plugin`_ (freely available from https://github.com/radical-cybertools/midas), which captures task execution events from the scheduler and their respective timestamps.
 We analyzed the execution of XTC300x on TACC *Stampede* with three-fold over-subscription (:math:`M =3 N_\text{cores}`) and measured how many tasks were submitted per worker process.
 Table :ref:`process-subm` shows that although most workers executed three tasks as would be expected for three-fold over-subscription, between 0 and 17% executed four tasks and others only one or two. 
@@ -493,71 +488,54 @@ Therfore, over-subscription does not necessarily lead to a balanced execution an
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
 --------------------------------------------------------------------------------------
 
-Based on the results presented in previous sections, it turned out that the stragglers are not because of the scheduler throughput.
-Lustre striping improves I/O time; however, the job computation is still delayed due to stragglers and as a result performance is not improved.    
-In order to make sure if the stragglers are created because of scheduler overhead in Dask framework we have tried to measure the performance of our Map-Reduce job using an MPI-based implementation, which makes use of mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa`.
-This will let us figure out whether the stragglers observed in the present benchmark using Dask parallel library are as a result of scheduler overhead or any other factor than scheduler.
-The comparison is performed on XTC 600x using SDSC Comet. 
-Figure :ref:`MPItimestackedcomparison` A  shows time comparison on different parts of the calculations.
-Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
-Computation time is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
-Total time is the summation of communication time, computation time and the overhead in the calculations.
-As can be seen in Figure :ref:`MPItimestackedcomparison` A, the overhead in the calculations is small up to 24 cores (Single node).
-Based on Figure :ref:`MPItimestackedcomparison`, the communication time is very small up to a single node and increases as the calculations are extended to multiple nodes. 
-Overall, only a small fraction of total time is spent on communications.
-Overhead in the calculations is also very small.
-The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases for a sigle node.
-However, when extending to multiple nodes computation time also increases.
-We believe that this is caused due to stragglers which is also confirmed based on Figure :ref:`MPItimestackedcomparison` A.
-
-.. figure:: figs/MPItimestackedcomparison.pdf
-
-   **A** Time comparison on different parts of the calculations obtained using MPI for python. In this aggregate view, the time spent on different
-   parts of the calculation are combined for different number of processes tested.
-   The bars are subdivided into the contributions of each time spent on different parts.
-   Reported values are the mean values across 5 repeats. 
-   **A inset** Total job execution time along with the mean and standard deviations across 5 repeats across parallelism from 1 to 72 obtained using MPI for python.
-   The calculations are performed on XTC 600x using SDSC Comet.
-   **B** Comparison of job execution time across processor ranks for 72 CPU cores obtained using MPI for python. There are several stragglers which slow down the whole process.
-   :label:`MPItimestackedcomparison`
-
-Figure :ref:`MPItimestackedcomparison` B, shows comparison of job execution time across all ranks tested with 72 cores.
-As seen in Figure :ref:`MPItimestackedcomparison` B, there are several slow processes as compared to others which slow down the whole process and as a result affect the overall performance. 
-These stragglers are observed in all cases when number of cores is more than 24 (extended to multiple cores).
-However, they are only shown for :math:`N = 72` CPU cores for the sake of brevity. 
- 
-Overall speed-up along with the efficiency plots are shown in Figure :ref:`MPI-Speed-up`.
-As seen the overall performance is affected when extended to multiple nodes (more than 24 CPU cores). 
+The investigations so far indicated that stragglers are responsible for poor scaling beyond a single node.
+These delayed processes were observed on three different HPC systems and on different days, so they are unlikely to be infrastructure specific.
+In order to rule out the hypothesis that Dask is inherently limited in its applicability to our problem we re-implemented our map-reduce problem with MPI based on the Python  mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa` module.
+The comparison was performed with the XTC600x trajectory on SDSC *Comet*. 
 
 .. figure:: figs/panels/MPI-Speed-up.pdf
 
-   **A** Speed-up and **B** efficiency plots for benchmark performed on XTC 600x on SDSC Comet across parallelism from 1 to 72 using MPI for python.
-   Five repeats are run for each block size to collect statistics and the reported values are the mean values across 5 repeats.
+   **A** Speed-up and **B** efficiency plots for benchmark performed on XTC600x on SDSC *Comet* using MPI for Python.
+   Five repeats are run for each block size and the reported values are the mean values and standard deviations.
    :label:`MPI-Speed-up`
 
-Based on the results from MPI for python the reason for stragglers is not the Dask scheduler overhead.
-In order to make sure that the reason for stragglers is not the qcprot RMSD calculation we tested the performance of our code using another metric `MDAnalysis.lib.distances.distance_array`_.
-This metric calculates all distances between a reference set and another configuration.
-Even with the new metric the same behavior observed and hence we can conclude that qcprot RMSD calculation is not the reason why we are seeing the stragglers.
-Further studies are necessary to identify the underlying reason for the stragglers observed in the present benchmark.
+The overall performance is very similar to the Dask implementation: it scales almost ideally up to 24 CPU cores (a single node) but then drops to a very low efficiency (Figure :ref:`MPI-Speed-up`).
+A detailed analysis of the time spent on computation versus communication (Figure :ref:`MPItimestackedcomparison` A) shows that the communication and overheads are englibible up to 24 cores (single node) and only moderately increases for larger |Ncores|.
+The largest fraction of the calculations is always spent on the calculation of RMSD arrays with I/O (computation time).
+Although the computation time  decreases with increasing number of cores for a sigle node, it increases again when increasing |Ncores| further, in a pattern similar to what we saw earlier for Dask.
+
+.. figure:: figs/MPItimestackedcomparison.pdf
+
+   **A** Time comparison on different parts of the calculations obtained using MPI for Python. In this aggregate view, the time spent on different parts of the calculation are combined for different number of processes tested.
+   The bars are subdivided into different contributions (compute (RMSD computation and I/O), communication, remaining overheads), with the total reflecting the overall run time.
+   Reported values are the mean values across 5 repeats. 
+   **A inset** Total job execution time along with the mean and standard deviations across 5 repeats.
+   The calculations are performed on XTC 600x using SDSC Comet.
+   **B** Comparison of job execution time across processor ranks for 72 CPU cores obtained using MPI for python. There are several stragglers that slow down the whole process.
+   :label:`MPItimestackedcomparison`
+
+
+Figure :ref:`MPItimestackedcomparison` B compares the execution times across all MPI ranks for 72 cores.
+There are several processes that are about ten times slower than the majority of processes.
+These stragglers reduce the overall performance and are always observed when the number of cores is more than 24 and the ranks span multiple nodes. 
+Based on the results from MPI for Python, Dask is probably no responsible for the occurence of the stragglers.
+
+We finally also wanted to ascertain that variable execution time is not a property of the computational task itself and replaced the RMSD calculation with optimal superposition (based on the iterative qcprot algorithm :cite:`PuLiu_FastRMSD_2010`) with a completely different, fully deterministic metric, namely a simple all-versus-all distance calculation based on `MDAnalysis.lib.distances.distance_array`_.
+The distance array calculates all distances between the reference coordinates at time 0 and the  coordinates of the current frame and provides a comparable computational load.
+Even with the new metric the same behavior was observed in the MPI implementation (data not shown) and hence we can conclude that the qcprot RMSD calculation is not the reason why we are seeing the stragglers.
+
+
 
 Conclusions
 ===========
 
-In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
+Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
-Nevertheless, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
+Performance on a single node can be close to ideal, especially when using the XTC trajectory format that trades I/O for CPU cycles through agressive compression, or when using SSDs with any format.
+However, obtaining good strong scaling beyond a single node was hindered by the occurence of stragglers, one or few tasks that would take much longer than all the other tasks.
+Further studies are necessary to identify the underlying reason for the stragglers observed here; they are not due to Dask or the specific computational test case, and they cannot be circumvented by over-subscribing.
+Thus, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
 
-.. speed up:
-.. In fact, reducing IO time can lead to noticeable improvement in performance which emphasizes the impact of IO time on the overall performance.
-.. According to the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
-   
-
-   
-..
-..   These factors further complicate any attempts at benchmarking. 
-..   Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
-..   This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 
 
 Acknowledgments
@@ -577,7 +555,8 @@ References
 
 
 .. _MDAnalysis: http://mdanalysis.org
-.. _`MDAnalysis.lib.distances.distance_array`: http://www.mdanalysis.org/mdanalysis/documentation_pages/lib/distances.html.. 
+.. _`MDAnalysis.lib.distances.distance_array`:
+   http://www.mdanalysis.org/mdanalysis/documentation_pages/lib/distances.html.. 
 .. _multiprocessing: https://docs.python.org/2/library/multiprocessing.html
 .. _joblib: https://pypi.python.org/pypi/joblib
 .. _mpi4py: https://mpi4py.scipy.org/
