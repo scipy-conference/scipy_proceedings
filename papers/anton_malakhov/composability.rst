@@ -159,7 +159,7 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 Our goal is to provide alternative solutions for composing multiple levels of parallelism across multiple threading libraries
 with better or at least the same performance comparing to usual approaches
 while simplifying interface and requiring less knowledge and decisions from end-users.
-We prepared and evaluted few approaches which we now discuss in this paper.
+We prepared and evaluted few approaches that we now discuss in this paper.
 
 
 2.1. Static Settings
@@ -195,8 +195,8 @@ To run it, one should use one of the following commands:
 
 .. code-block:: sh
 
-    python -m smp script.py
-    python -m smp -f <oversubscription_factor> script.py
+    python -m smp app.py
+    python -m smp -f <oversubscription_factor> app.py
 
 Optional argument :code:`-f <oversubscription_factor>` sets oversubscription factor that will be used
 to compute number of threads per pool worker.
@@ -236,8 +236,8 @@ While these threads will be coordinated across the processes preventing oversubs
 the many co-existing threads may still cause resource exhaustion issue.
 
 
-2.3. Coordinated Task Scheduler with Intel |R| TBB
---------------------------------------------------
+2.3. Coordinated Thread Pools with Intel |R| TBB
+------------------------------------------------
 The last approach has been initially introduced in our previous paper [AMala16]_.
 It is based upon using Intel |R| TBB as a sigle engine for coordinating parallelism across all the Python pools and modules.
 Its work stealing task scheduler is used to map tasks onto a limited set of TBB worker threads
@@ -277,6 +277,13 @@ This TBB-based approach to the coordination is more dynamic and flexible than on
 because it allows to repurpose and to rebalance threads more flexible, achieving better load balancing overall.
 Even in counting composability mode, OpenMP needs to wait for all the requested threads to join
 while Intel |R| TBB allows threads joining parallel computations when the work has already been started.
+
+IPC mode for TBB module should be enabled manually via :code:`--ipc` key, for example:
+
+.. code-block:: sh
+
+    python -m tbb --ipc app.py
+
 
 3. Evaluation
 -------------
