@@ -278,7 +278,7 @@ because it allows to repurpose and to rebalance threads more flexible, achieving
 Even in counting composability mode, OpenMP needs to wait for all the requested threads to join
 while Intel |R| TBB allows threads joining parallel computations when the work has already been started.
 
-IPC mode for TBB module should be enabled manually via :code:`--ipc` key, for example:
+IPC mode for TBB module should be enabled manually via explicit command line key :code:`--ipc`, for example:
 
 .. code-block:: sh
 
@@ -287,18 +287,46 @@ IPC mode for TBB module should be enabled manually via :code:`--ipc` key, for ex
 
 3. Evaluation
 -------------
-For our experiments, we need Intel |R| Distribution for Python [IntelPy]_ to be installed along with the [Dask]_ library which simplifies parallelism with Python.
+All the results for this paper have been acquired on 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4
+(2.20GHz, 22 cores, 44 hyper-threads each) and 128 GB RAM.
 
+For our experiments, we used [Miniconda]_ distribution along with the packages of
+Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel_
+
+.. [Miniconda] Miniconda, https://conda.io/miniconda.html
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
 
 .. code-block:: sh
 
-    # install Intel(R) Distribution for Python
-    <path to installer of the Distribution>/install.sh
-    # activate in environment
-    source <path to the Distribution>/bin/activate.sh
-    # install Dask
-    conda install dask
+    # activate miniconda environment
+    source <path to miniconda3>/bin/activate.sh
+    # install packages from the Intel channel
+    conda install -c intel numpy dask tbb smp
+    # this setting is used for default runs
+    export KMP_BLOCKTIME=0
+
+We installed the following versions of the packages for our experiments:
+Python 3.5.3, mkl 2017.0.3-intel_6, numpy 1.12.1_py35-intel_8, dask 0.15.0-py35_0, tbb 2017.0.7-py35_intel_2, smp 0.1.3-py_2.
+We also used experimental build of OpenMP (``libiomp``) library, which will be available since version 2018 of the ``openmp`` package.
+Multi-threading results in exclusive composability mode can be reproduced using openmp 2017.0.3-intel_8 as well
+when setting ``KMP_FOREIGN_THREAD_LOCK`` (deprecated).
+
+Here is an example of how to run the benchmark program in different modes:
+
+.. code-block:: sh
+
+    # Default mode
+    python bench.py
+    # Tunned OpenMP mode
+    env OMP_NUM_THREADS=1 python bench.py
+    # SMP module, oversubscription factor = 1
+    python -m smp -f 1 bench.py
+    # Composable OpenMP, exclusive mode
+    env KMP_COMPOSABILITY=mode=exclusive python bench.py
+    # Composable OpenMP, counting mode
+    env KMP_COMPOSABILITY=mode=counting  python bench.py
+    # Composable TBB mode (multithreading only)
+    python -m tbb bench.py
 
 
 3.1. Balanced QR Decomposition with Dask
@@ -324,47 +352,40 @@ This combination results in nested parallelism, i.e. when one parallel component
 For this example, we will talk mostly about the multi-threading case, but according to our investigations,
 all conclusions that will be shown are applicable for the multi-processing case as well.
 
-Here is an example of running the benchmark program in five different modes:
-
-.. code-block:: sh
-    :linenos:
-
-    python bench.py             # Default OpenMP mode
-    KMP_BLOCKTIME=0 OMP_NUM_THREADS=1 \
-        python bench.py         # Tunned OpenMP mode
-    python -m SMP -f 1 bench.py # OpenMP + SMP mode
-    KMP_COMPOSABILITY=mode=exclusive \
-        python bench.py         # Composable OpenMP mode
-    python -m TBB bench.py      # Composable TBB mode
-
 .. figure:: dask_static.png
 
    Execution times for balanced QR decomposition workload. :label:`sdask`
 
-Figure :ref:`sdask` shows performance results acquired on a 44-core (88-thread) machine with 128 GB memory.
-The results presented here were acquired with cpython v3.5.2; however, there is no significant performance difference with cpython v2.7.12.
-By default, Dask will process a chunk in a separate thread so there will be 44 threads on the top level
-(note that by default Dask will create a thread pool with 88 workers but only half of them will be really used since there are only 44 chunks).
-Each chunk will be computed in parallel with 44 OpenMP workers.
-Thus, there will be 1936 threads vying for 44 cores, resulting in oversubscripton and poor performance.
+Figure :ref:`sdask` shows the performance results for the code above.
+By default, Dask will process a chunk in a separate thread so there will be 44 threads on the top level.
+Please note that by default, Dask creates a thread pool with 88 workers,
+but only half of them are used since there are only 44 chunks.
+Chunks are computed in parallel with 44 OpenMP workers each.
+Thus, there can be 1936 threads competing for 44 cores, which results in oversubscripton and poor performance.
 
-An simple way to improve performance is to tune the OpenMP runtime using environment variables.
+A simple way to improve performance is to tune the OpenMP runtime using the environment variables.
 First, we need to limit total number of threads.
-We will set 1x oversubscription instead of quadratic as our target.
-Since we work on an 88-thread machine, we should set number of threads per parallel region to 1 ((88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
-We also noticed that reducing period of time after which Intel OpenMP worker threads will go to sleep, helps to improve performance in such workloads with oversubscription
+We will set singular oversubscription instead of double as our target.
+Since we work on an 88-thread machine, we should set number of threads per parallel region to 1
+((88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
+We also noticed that reducing period of time after which Intel OpenMP worker threads will go to sleep,
+helps to improve performance in such workloads with oversubscription
 (this works best for the multi-processing case but helps for multi-threading as well).
 We achieve this by setting KMP_BLOCKTIME to zero.
 These simple optimizations allows reduce the computational time by more than 3x.
 
-The third mode with *SMP.py* module in fact does the same optimizations but automatically, and shows the same level of performance as the second one.
-Moreover, it is more flexible and allows to work carefully with several thread/process pools in the application scope even if they have different sizes.
+The third mode with *smp* module in fact does the same optimizations but automatically,
+and shows the same level of performance as the second one.
+Moreover, it is more flexible and allows to work carefully with several thread/process pools in the application scope,
+even if they have different sizes.
 Thus, it is a good alternative to manual OpenMP tunning.
 
 The fourth and fifth modes represents our dynamic OpenMP- and Intel |R| TBB-based approaches.
 Both modes improve the default result, but exclusive execution with OpenMP gave us the fastest results.
-As described above, the OpenMP-based solution allows processes chunks one by one without any oversubscription, since each separate chunk can utilize the whole CPU.
-In contrast, the work stealing task scheduler from Intel |R| TBB is truly dynamic and tries to use a single thread pool to process all given tasks simultaneoulsy.
+As described above, the OpenMP-based solution allows processes chunks one by one without any oversubscription,
+since each separate chunk can utilize the whole CPU.
+In contrast, the work stealing task scheduler from Intel |R| TBB is truly dynamic
+and tries to use a single thread pool to process all given tasks simultaneoulsy.
 As a result, it has worse cache utilization, and higher overhead for work balancing.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
@@ -388,7 +409,7 @@ The code below performs an algorithm of eigenvalues and right eigenvectors searc
 
 In this example we process several matricies from an array in parallel using :code:`ThreadPool`
 while each separate matrix is computed using OpenMP parallel regions from Intel |R| MKL.
-As a result, simillary to QR decomposition benchmark we've faced with quadratic oversubscription here.
+As a result, simillary to QR decomposition benchmark we have faced with quadratic oversubscription here.
 But this code has a distinctive feature, in spite of parallel execution of eigenvalues search algorithm,
 it cannot fully utilize all available CPU cores.
 That is why an additional level of parallelizm we used here may significantly improve overall benchmark performance.
@@ -429,15 +450,11 @@ The code above demonstrates unbalanced version of QR decomposition workload:
         test = da.all(da.isclose(x, q.dot(r)))
         test.compute(num_workers=44)
         print(time.time() - t0)
-    x01 = da.random.random((440000, 1000),
-                           chunks=(440000, 1000))
-    x22 = da.random.random((440000, 1000),
-                           chunks=(20000, 1000))
-    x44 = da.random.random((440000, 1000),
-                           chunks=(10000, 1000))
-    qr(x01)
-    qr(x22)
-    qr(x44)
+    sz = (440000, 1000)
+    x01 = da.random.random(s, chunks=(440000, 1000))
+    x22 = da.random.random(s, chunks=(20000, 1000))
+    x44 = da.random.random(s, chunks=(10000, 1000))
+    qr(x01); qr(x22); qr(x44)
 
 To run this benchmark, we used the four modes: default, OpenMP with *SMP.py*, composable OpenMP and composable Intel |R| TBB.
 We don't show results for OpenMP with manual optimizations since they are very close to the results for "OMP + SMP" mode.
@@ -505,17 +522,17 @@ And as for the mode with serialization of OpenMP parallel regions, it works sign
 
 3.5. Acceptable Level of Oversubscription
 -----------------------------------------
-We did some experiments to determine what level of oversubscription has acceptable performance.
+We few did experiments to determine what level of oversubscription has acceptable performance.
 We started with various sizes for the top level thread or process pool,
-and ran our balanced eigenvalues search workload with different pool sizes from 1 to 88 (since our machine has 88 threads).
+and ran our balanced eigenvalues search workload with different pool sizes from 1 to 88.
 
 .. figure:: scalability_multithreading.png
 
    Multi-threading scalability of eigenvalues seach workload. :label:`smt`
 
 Figure :ref:`smt` shows the scalability results for the multi-threading case.
-Two modes are compared: default and OpenMP with *SMP.py* as the best approach for this benchmark.
-As one can see, the difference in execution time between these two methods starts from 8 threads in top level pool and becomes larger as the pool size increases.
+Two modes are compared: default and OpenMP with SMP as the best approach for this benchmark.
+The difference in execution time between these two methods starts from 8 threads in top level pool and becomes larger as the pool size increases.
 
 .. figure:: scalability_multiprocessing.png
 
@@ -523,15 +540,17 @@ As one can see, the difference in execution time between these two methods start
 
 The multi-processing scalability results are shown in figure :ref:`smp`.
 They can be obtained from the same eigenvalues search workload by replacing :code:`ThreadPool` to :code:`Pool`.
-The results are very similar to the multi-threading case: oversubscription effects become visible starting from 8 processes at the top level of parallelization.
+The results are very similar to the multi-threading case:
+oversubscription effects become visible starting from 8 processes at the top level of parallelization.
 
 
 4. Solutions Applicability
 --------------------------
-In summary, all three suggested approaches to avoid oversubscription are valuable and can obtain significant performance increases for both multi-threading and multi-processing cases.
+In summary, all three suggested approaches to avoid oversubscription are valuable and can obtain significant performance increases
+for both multi-threading and multi-processing cases.
 Moreover, the approaches complement each other and have their own fields of applicability.
 
-The *SMP.py* module works perfectly for balanced workloads where each pool's workers have the same load.
+The SMP module works perfectly for balanced workloads where each pool's workers have the same load.
 Compared with manual tunning of OpenMP options, it is more stable,
 since it can work with pools of different sizes within the scope of a single application without performance degradation.
 It also works with Intel |R| TBB.
@@ -546,17 +565,17 @@ To summarize our conclusions, we've prepared a table to help choose which approa
 
 .. table:: How to choose the best approach to deal with oversubscription issues. :label:`rtable`
 
-    +===================+==========================================================+
-    | Innermost level   |           Outermost level                                |
-    |                   +--------------------------------------+-------------------+
-    |                   |           Balanced work              | Unbalanced work   |
-    |                   +------------------+-------------------+                   |
-    |                   | Low subscription | High subscription |                   |
-    +===================+==================+===================+===================+
-    | Low subscription  |   $ python       | $ python -m smp   | $ python -m tbb   |
-    +-------------------+                  |                   +-------------------+
-    | High subscription |                  |                   | KMP_COMPOSABILITY |
-    +-------------------+------------------+-------------------+-------------------+
+    +-------------------+--------------------------------------------------------------+
+    | Innermost level   |           Outermost level                                    |
+    |                   +----------------------------------------+---------------------+
+    |                   |           Balanced work                |   Unbalanced work   |
+    |                   +------------------+---------------------+                     |
+    |                   | Low subscription | High subscription   |                     |
+    +===================+==================+=====================+=====================+
+    | Low subscription  | ``$ python``     | ``$ python -m smp`` | ``$ python -m tbb`` |
+    +-------------------+                  |                     +---------------------+
+    | High subscription |                  |                     |   KMP_COMPOSABILITY |
+    +-------------------+------------------+---------------------+---------------------+
 
 
 5. Limitations and Future Work
