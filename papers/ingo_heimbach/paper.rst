@@ -52,28 +52,28 @@
 
 :author: Ingo Heimbach
 :email: i.heimbach@fz-juelich.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 :corresponding:
 
 :author: Florian Rhiem
 :email: f.rhiem@fz-juelich.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
 :author: Fabian Beule
 :email: f.beule@fz-juelich.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
 :author: David Knodt
 :email: david.knodt@iais.Fraunhofer.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
 :author: Josef Heinen
 :email: j.heinen@fz-juelich.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
 :author: Robert O. Jones
 :email: r.jones@fz-juelich.de
-:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich
+:institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
 :video: https://pgi-jcns.fz-juelich.de/pub/media/pymoldyn_algorithms.mp4
 
@@ -127,8 +127,8 @@ The properties of many materials are influenced significantly or even
 dominated by the presence of empty regions, referred to as cavities,
 vacancies, or voids. In phase change materials, for example, they play
 an essential role in the rapid and reversible transformation between
-amorphous and crystalline regions of chalcogenide semiconductors.
-:cite:`AJ07,AJ08,AJ12` In soft matter, such as polymers, cavities can
+amorphous and crystalline regions of chalcogenide semiconductors
+:cite:`AJ07,AJ08,AJ12`. In soft matter, such as polymers, cavities can
 lead to structural failure and are often crucial for diffusion of small
 molecules. Voids caused by radiation (neutrons, x-rays) can lead to
 dramatic changes in the strength of materials. It is essential to
@@ -136,8 +136,8 @@ provide efficient algorithms and programs to visualize cavities in the
 course of computer simulations. We describe here methods developed in
 the context of phase change materials, where the empty regions are
 rarely larger than a few atomic volumes, and the term "vacancy" is
-also in common use. :cite:`LE11b` The approach will be useful in other
-contexts. The present manuscript is an updated and corrected version
+also in common use :cite:`LE11b`. The approach will be useful in other
+contexts. The present manuscript is an extended and corrected version
 of :cite:`Hetal17`.
 
 Geometrical algorithms to identify cavities have a long history in the
@@ -154,27 +154,27 @@ etc.) can be used for identification and characterization. A small
 Voronoi polyhedron indicates an interstitial defect, and a local
 assembly of large polyhedra could imply the existence of a cavity. This
 approach has been used to analyze defect structures in simulations of
-radiation damage :cite:`CL85` and the motion of vacancies in colloids,
-:cite:`LAC13` although the coordination number (the number of faces of
+radiation damage :cite:`CL85` and the motion of vacancies in colloids
+:cite:`LAC13`, although the coordination number (the number of faces of
 the Voronoi cell) is not necessarily a convenient measure of their
-positions. :cite:`LAC13` Similar techniques have been applied to the
+positions :cite:`LAC13`. Similar techniques have been applied to the
 distinction between solute and solvent in a liquid, such as hydrated
-peptide molecules. :cite:`Vetal11`
+peptide molecules :cite:`Vetal11`.
 
-Delaunay triangulation, :cite:`De34` a division of space closely related
+Delaunay triangulation :cite:`De34`, a division of space closely related
 to the Dirichlet-Voronoi analysis, has been used to identify the
 "unoccupied space" :cite:`AMS92` or "cavities" :cite:`VBM15` in
 polymer systems and to analyze their connectivity, and it has been
 used to analyze the normal modes in a molecular dynamics simulation of a
-glass. :cite:`LMNS00` Efficient programs are available for performing
+glass :cite:`LMNS00`. Efficient programs are available for performing
 Voronoi analyses (see, for example, Ref. :cite:`Ry09`) and its extension
 to Voronoi :math:`S`-surfaces, which are appropriate for systems with atoms of
-different sizes. :cite:`MVLG06,VNP` Ref. :cite:`MVLG06` contains many
+different sizes :cite:`MVLG06,VNP`. Ref. :cite:`MVLG06` contains many
 references to physical applications of Dirichlet-Voronoi-Delaunay
 analyses. The present work and the above approaches focus on the
 geometrical arrangement resulting from a simulation, rather than
-determining other physical quantities such as local atomic pressures.
-:cite:`LN88`
+determining other physical quantities such as local atomic pressures
+:cite:`LN88`.
 
 In the following section, we define essential terms and describe the
 analysis, based on the "split and merge" :cite:`HP76` and "marching
@@ -184,16 +184,16 @@ definitions of cavities:
 -   Regions (sometimes referred to as "domains") where each point
     is outside spheres centered on the atoms. The radii of the spheres are
     generally element-dependent, but an equal cutoff for all elements
-    (:angstrom:`2.5`) was chosen in a study of Ge/Sb/Te phase change materials.
-    :cite:`LE11b`
+    (:angstrom:`2.5`) was chosen in a study of Ge/Sb/Te phase change materials
+    :cite:`LE11b`.
 
 -   "Center-based" cavities resulting from a Dirichlet-Voronoi
     construction using the atomic positions and the cavity *centers*.
 
--   "Surface-based" cavities, :cite:`AJ07` where the boundaries are
+-   "Surface-based" cavities :cite:`AJ07`, where the boundaries are
     determined by Dirichlet-Voronoi constructions from each point on the
     domain surface to neighboring atoms, have been used in numerous studies
-    of phase change materials. :cite:`AJ12,CBP10,KAJ14`
+    of phase change materials :cite:`AJ12,CBP10,KAJ14`.
 
 The code, the ways to access it, and the online documentation are
 described below, and an application demonstrates some of its features.
@@ -242,8 +242,8 @@ results can be cached and used for other data files.
 
 As shown in Fig. :refa:`cav12`, we now construct spheres centered on
 each atom with radii specified for each atom type (element). In earlier
-work on alloys of Ge/Sb/Te :cite:`AJ07,AJ12` and Ag/In/Sb/Te,
-:cite:`Metal11` the radius was chosen to be the same (:angstrom:`2.8`) for all
+work on alloys of Ge/Sb/Te :cite:`AJ07,AJ12` and Ag/In/Sb/Te
+:cite:`Metal11`, the radius was chosen to be the same (:angstrom:`2.8`) for all
 elements [:math:`r_{\rm C}` in Fig. :refa:`cav12`]. Points outside the
 simulation cell are replaced by equivalent points inside. All points
 outside these spheres form "cavity domains" [yellow in Fig.
@@ -274,14 +274,14 @@ volumes and surface areas of cavities and cavity domains are determined
 as follows.
 
 Points in domains are grouped together by applying the *split and
-merge* algorithm, :cite:`HP76` which consists of three main steps for
+merge* algorithm :cite:`HP76`, which consists of three main steps for
 periodic cells. First, the discrete grid is split recursively into
 subgrids until they contain either atoms or domain points. Subgrids
 containing atom points are not needed to determine the domains and are
 ignored. During the split phase the direct neighbors of each subgrid are
 recorded, and neighboring subgrid points are then merged to form the
 cavity domains. As noted above, these domains can be identified as
-cavities by choosing an appropriate cutoff radius. :cite:`LE11b`
+cavities by choosing an appropriate cutoff radius :cite:`LE11b`.
 
 Center-based cavities comprise points that are closer to domain centers
 than to any atom, and their construction requires points inside atomic
@@ -329,10 +329,10 @@ area, and location of the center, we calculate the characteristic radius
 spherical cavity with volume :math:`V_{\rm C}`. We also evaluate and export
 pair distribution functions (PDF) between all atom types and/or cavity
 centers. Continuous representations can be generated using Gaussian,
-Epanechnikov, :cite:`Ep69` compact, triangular, box, right box, and left
+Epanechnikov :cite:`Ep69`, compact, triangular, box, right box, and left
 box window functions. The corresponding kernels are listed in the online
 documentation, and the default bandwidth :math:`\sigma` is 0.4 in all cases.
-Following earlier work, :cite:`AMS92,VBM15,TS85` we calculate the
+Following earlier work :cite:`AMS92,VBM15,TS85`, we calculate the
 volume-weighted gyration tensor **R**, which describes the second
 moment of the coordinates (:math:`x`, :math:`y`, :math:`z`) of points inside a cavity
 
@@ -370,7 +370,7 @@ eigenvalues of :math:`\mathbf{R}` (:math:`\lambda_1\ge\lambda_2\ge\lambda_3`).
 
 These quantities provide compact information about the symmetry and
 overall shape of a cavity and have been useful in the context of
-diffusants in polymers. :cite:`AMS92` The asphericity is always
+diffusants in polymers :cite:`AMS92`. The asphericity is always
 non-negative and is zero only when the cavity is symmetric with respect
 to the three coordinate axes, e.g. for a spherically symmetric or a
 cubic cavity. The acylindricity is zero when the cavity is symmetric
@@ -428,10 +428,10 @@ triclinic (TRI), monoclinic (MON), orthorhombic (ORT), tetragonal (TET),
 rhombohedral (RHO), hexagonal (HEX), and cubic (CUB). These cells and
 the parameters required for their definition are shown in Fig.
 :ref:`bravais`. The bond length cutoffs in all visualizations are  15\%
-longer than the sum of the covalent radii of the elements.
-:cite:`OB,Cetal08` The default colors for the elements are those used in
-Jmol/JSmol :cite:`Jmol` and other programs ("CPK", Corey-Pauling-Koltun).
-:cite:`SF`
+longer than the sum of the covalent radii of the elements
+:cite:`OB,Cetal08`. The default colors for the elements are those used in
+Jmol/JSmol :cite:`Jmol` and other programs ("CPK", Corey-Pauling-Koltun)
+:cite:`SF`.
 
 Each frame to be analyzed requires input in the ``.xyz``-form,
 which can be read by Jmol/JSmol and other packages. The first lines of
@@ -458,6 +458,9 @@ In the case of a hexagonal lattice with :math:`a=17.68942` and :math:`c=22.61158
 atoms and a space) or the second line are ignored, and the space may be
 used to store additional information.
 
+|noindent| The organization of the program and the workflow in practice
+are clarified in the `video linked after the title <https://pgi-jcns.fz-juelich.de/pub/media/pymoldyn_algorithms.mp4>`_.
+
 
 Application
 ###########
@@ -465,10 +468,10 @@ Application
 
 The use of ``pyMolDyn`` is described in detail in the online
 documentation (see links above). To illustrate its usage, we take the
-attached input file `AgGeS-Box.xzy <https://raw.githubusercontent.com/sciapp/pyMolDyn/develop/data/AgGeS-BOX.xyz>`_,
+attached input file `AgGeS-BOX.xyz <https://raw.githubusercontent.com/sciapp/pyMolDyn/develop/data/AgGeS-BOX.xyz>`_,
 which shows a result of a 500-atom simulation of an amorphous alloy
 of Ag, Ge, and S (:math:`\textrm{Ag}_{100}\textrm{Ge}_{168}\textrm{S}_{232}`)
-in a cubic box of size :angstrom:`21.799`. :cite:`Aetal15` The first
+in a cubic box of size :angstrom:`21.799` :cite:`Aetal15`. The first
 three lines of the input are then::
 
     500
@@ -553,24 +556,39 @@ spherical regions around each atom, (b) "center-based" cavities
 determined by Dirichlet-Voronoi constructions for atoms and cavity
 centers, and (c) Dirichlet-Voronoi constructions for atoms and points of
 domain surfaces ("surface-based" cavities). The "split and merge"
-and "marching cubes" algorithms are utilized. Surface areas, volumes,
-characteristic radii, and shape parameters (asphericity, acylindricity,
-relative shape anisotropy) of all cavities can be calculated, along with
-distribution functions for all pairs of elements and cavities. The
-program is based on the GR3 and GR framework software :cite:`HRH15` and
-allows the production of high-resolution figures and videos. The input
+and "marching cubes" algorithms are utilized. The program is based on
+the GR3 and GR framework software :cite:`HRH15` and the input
 files use the ``.xyz`` format used in Jmol/JSmol and other
 packages.
 
 The size of systems that can be calculated depends on the number of
 atoms, the necessary resolution, and on the computing hardware
-(processor, memory) used. Systems with 500 atoms and a resolution of 512
-points in a cubic unit cell can be computed in minutes on a laptop
-computer with modest (4 |_| GB) memory, and we have used the batch version
-on an array of cores to generate the data needed for high-resolution
-videos of several minutes length (10000 frames). Extensions to simplify
-calculations for isolated molecules and to allow the easy use of
-many-core, large memory computers are being implemented. We welcome
+(processor, memory) used. Systems with 500 atoms (for example ``AgGeS-BOX.xyz``)
+can be computed in minutes on a 2.5 GHz Intel Core i7 (see TABLE :ref:`measurementtable`).
+
+.. table:: Time consumption for calculating surface and center based cavities for ``AgGeS-BOX.xyz`` on a 2.5 GHz Core i7 with 16 GB RAM. :label:`measurementtable`
+
+   +------------+---------+
+   | resolution | time    |
+   +============+=========+
+   | 128        | 4.0 s   |
+   +------------+---------+
+   | 192        | 6.5 s   |
+   +------------+---------+
+   | 256        | 15.3 s  |
+   +------------+---------+
+   | 384        | 43.0 s  |
+   +------------+---------+
+   | 512        | 158.3 s |
+   +------------+---------+
+
+
+Up to a resolution of 512 points the memory consumption is modest (4 |_| GB
+of RAM are adequate). For higher resolutions over 10 GB of memory should be
+available.
+
+Extensions to simplify calculations for isolated molecules and to allow the
+easy use of many-core, large memory computers are being implemented. We welcome
 suggestions and contributions to this ongoing project. Full details are
 available on `<https://pgi-jcns.fz-juelich.de/portal/pages/pymoldyn-main.html>`_.
 
