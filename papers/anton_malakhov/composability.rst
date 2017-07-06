@@ -531,10 +531,6 @@ The results are very similar to the multi-threading case: oversubscription effec
 In summary, all three suggested approaches to avoid oversubscription are valuable and can obtain significant performance increases for both multi-threading and multi-processing cases.
 Moreover, the approaches complement each other and have their own fields of applicability.
 
-.. figure:: recommendation_table.png
-
-   How to choose the best approach to deal with oversubscription issues. :label:`rtable`
-
 The *SMP.py* module works perfectly for balanced workloads where each pool's workers have the same load.
 Compared with manual tunning of OpenMP options, it is more stable,
 since it can work with pools of different sizes within the scope of a single application without performance degradation.
@@ -545,7 +541,22 @@ The exclusive mode for the OpenMP runtime works best with unbalanced benchmarks 
 The dynamic work stealing scheduler from Intel |R| TBB obtains the best performance
 when innermost parallel regions cannot fully utilize the whole CPU and have varying amounts of work to do.
 
-To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case (see figure :ref:`rtable`).
+To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case
+(see :ref:`recommendation` table).
+
+.. table:: How to choose the best approach to deal with oversubscription issues. :label:`rtable`
+
+    +===================+==========================================================+
+    | Innermost level   |           Outermost level                                |
+    |                   +--------------------------------------+-------------------+
+    |                   |           Balanced work              | Unbalanced work   |
+    |                   +------------------+-------------------+                   |
+    |                   | Low subscription | High subscription |                   |
+    +===================+==================+===================+===================+
+    | Low subscription  |   $ python       | $ python -m smp   | $ python -m tbb   |
+    +-------------------+                  |                   +-------------------+
+    | High subscription |                  |                   | KMP_COMPOSABILITY |
+    +-------------------+------------------+-------------------+-------------------+
 
 
 5. Limitations and Future Work
