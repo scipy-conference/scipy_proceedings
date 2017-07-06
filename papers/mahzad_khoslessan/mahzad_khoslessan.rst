@@ -38,6 +38,7 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+.. |tN| replace:: :math:`t_N`
 .. |tcomp| replace:: :math:`t_\text{comp}`
 .. |tIO| replace:: :math:`t_\text{I/O}`
 .. |tcomptIO| replace:: :math:`t_\text{comp}+t_\text{I/O}`
@@ -188,8 +189,9 @@ The DCD file format is a binary representation for 32-bit floating point numbers
 Amber NCDF is implemented with netCDF_ classic format version 3.6.0 (same accuracy as DCD) and trajectories are about the same size as DCD.
 DCD and NCDF natively allow fast random access to frames or blocks of frames, which is critical to implement the map-reduce algorithm.
 XTC does not natively support frame seeking but MDAnalysis implements a fast frame scanning algorithm for XTC files that caches all frame offsets and so enables random access for the XTC format, too :cite:`Gowers:2016aa`.
+In MDAnalysis 0.15.0, Amber NCDF files are read with the Python netCDF4_ module that wraps the netcdf_ C library; in the upcoming MDAnalysis 0.17.0, netCDF v3 files are read with the pure Python ``scipy.io.netcdf`` module, which tends to read netCDF v3 files about five times faster than netCDF4, and hence results for NCDF presented here might change with more recent versions of MDAnalysis.
 
-Performance was quantified by measuring the average time per trajectory frame to load data from storage into memory (I/O time per frame, |tIO|), the average time to complete the RMSD calculation (compute time per frame, |tcomp|), and the total wall time for job execution :math:`t_N` when using |Ncores| CPU cores.
+Performance was quantified by measuring the average time per trajectory frame to load data from storage into memory (I/O time per frame, |tIO|), the average time to complete the RMSD calculation (compute time per frame, |tcomp|), and the total wall time for job execution |tN| when using |Ncores| CPU cores.
 Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
 
 
@@ -206,13 +208,13 @@ Therefore, in the following we focus exclusively on the harder problem of strong
 
 
 
-Effect of File Format on I/O
-----------------------------
+Effect of File Format on I/O Performance
+----------------------------------------
 
 .. figure:: figs/panels/timing-comparison.pdf
    :figclass: t
 
-   Comparison of total job execution time :math:`t_N` for different file formats (300x trajectory size) using Dask multiprocessing on a *single node* (1–24 CPU cores, **A** – **C**) and Dask distributed on *up to three nodes* (1–72 CPU cores, **D** – **F**).
+   Comparison of total job execution time |tN| for different file formats (300x trajectory size) using Dask multiprocessing on a *single node* (1–24 CPU cores, **A** – **C**) and Dask distributed on *up to three nodes* (1–72 CPU cores, **D** – **F**).
    The trajectory was split into :math:`M` blocks and computations were performed using :math:`N = M` CPU cores.
    The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system, NFS), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
    **A**, **D** CHARMM/NAMD DCD.
@@ -264,59 +266,57 @@ Data access with NCDF is slower but due to the additional computational overhead
 
 
 
-Performance Comparison between Different File Format
-----------------------------------------------------
-
-Figure :ref:`speedup-300x` shows speed up comparison for 300x trajectories between multiprocessing and distributed schedulers.
-The DCD file format does not scale at all by increasing parallelism across different cores (Figure :ref:`speedup-300x` A, D).
-This is due to the fact that IO time does not remain level by increasing the number of processes as discussed in the previous section.
-Our study showed that SSDs can be very helpful and can lead to better performance for all file formats especially DCD file format (Figure :ref:`speedup-300x` A, D).  
-XTC file format expresses reasonably well scaling with the increase in parallelism up to the limit of 24 (single node) for both multiprocessing and distributed scheduler.
-The NCDF file format scales very well up to 8 cores for all trajectory sizes.
-As the number of prcocesses increases the IO time also increases for NCDF file format and as a result the scaling is limited up to 8 CPU cores.
-For XTC file format, the I/O time is leveled up to 50 cores and compute time also remains level across parallelism up to 72 cores.
-Therefore, it is expected to achieve speed up, across parallelism up to 50 cores.
-However, based on Figure :ref:`speedup-300x` E, XTC format only scales well up to 20 cores.
-Based on the present result, there is a difference between job execution time, and total compute and I/O time averaged over all processes (Figure :ref:`timing-XTC-600x` A).
-This difference increases with increase in trajectory size for all file formats for all machines (For details refer to the Technical Report :cite:`Khoshlessan:2017aa`).
-This time difference is much smaller for Comet and Stampede as compared to other machines.
-The difference between job execution time and total compute and I/O time measured inside our code is very small for the results obtained using multiprocessing scheduler; however, it is considerable for the results obtained using distributed scheduler.
-
-In order to obtain more insight on the underlying network behavior both at the worker level and communication level and in order to be able to see where this difference originates from we have used the web-interface of the Dask library.
-This web-interface is launched whenever Dask scheduler is launched.
-Figure :ref:`task-stream-comet` B, shows the comparison between timing measurements from instrumentation inside the Python code and Dask web-interface (average :math:`n_\text{frames}/N (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]`, and :math:`t_N`) for XTC600x on SDSC Comet for two different CPU cores (:math:`N_\text{cores} = 30`, :math:`N_\text{cores} = 54`). 
-For :math:`N_\text{cores} = 54`, the measured :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` through our instrumentation inside the Python code and web-interface shows two different values. 
-:math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` measured using Dask web-interface is closer to the measured job execution time. 
-The reason why :math:`\max[n_\text{frames}/N (t_\text{comp} + t_\text{I/O})]` measured using Dask web-interface and our instrumentation are different is open to question.
-Based on task stream plot shown in Figure :ref:`task-stream-comet` A, the "straggler" task (#32) is much slower as compared to others and as a result slows down the whole process. 
-But, the reason why the "straggler" task (#32) is delayed is not clear.
-The next sections in the present study aim to find the reason for which we are seeing these delayed tasks (so called "stragglers"). 
+Strong Scaling Analysis for Different File Formats
+--------------------------------------------------
 
 .. figure:: figs/panels/speedup-comparison.pdf
 
    Speed-up :math:`S` for the analysis of the 300x trajectory on HPC resources using Dask multiprocessing (single node, **A** – **C**) and distributed (up to three nodes, **D** – **F**).
    The dashed line shows the ideal limit of strong scaling.
-   All other parameters as in Fig. :ref:`IO-comparison`.
+   All other parameters as in Fig. :ref:`time-comparison`.
    :label:`speedup-300x`
+
+We quantified the strong scaling behavior by analyzing the speed-up :math:`S(N)`; as an example, the 300x trajectories for multiprocessing and distributed schedulers are show in Figure :ref:`speedup-300x`.
+The DCD format exhibits poor scaling, except for :math:`N \le 12` on a single node and SSDs  (Figure :ref:`speedup-300x` A, D) and is due to the increase in |tIO| with |Ncores|, as discussed in the previous section.
+XTC file format  scale close to ideal up :math:`N=24` (single node) for both multiprocessing and distributed scheduler, almost independent from the underlying storage system.
+The NCDF file format only scales well up to 8 cores (Figure :ref:`speedup-300x` C, F) as expected from |tIO| in Figure :ref:`IO-comparison` C, F.
+
+For the XTC file format, |tIO| is is nearly constant up to :math:`N=50` cores (Figure :ref:`IO-comparison` E) and |tcomp| also remains constant up to 72 cores.
+Therefore, close to ideal scaling would be expected for up to 50 cores, assuming that average processing time per frame :math:`t_\text{comp} + t_\text{I/O}` dominates the computation.
+However, based on Figure :ref:`speedup-300x` E, the XTC format only scales well up to about 24 cores, which suggests that this assumption is wrong and there are other computational overheads.
 
 .. figure:: figs/panels/timing-XTC-600x.pdf
 
    Detailed analysis of timings for the 600x XTC trajectory on HPC resources using Dask distributed.
-   All other parameters as in Fig. :ref:`IO-comparison`.
-   **A** Total time to solution (wall clock), :math:`t_N` for |Ncores| trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
+   All other parameters as in Fig. :ref:`time-comparison`.
+   **A** Total time to solution (wall clock), |tN| for |Ncores| trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
    **B** Sum of the I/O time per frame |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
    **C** Difference :math:`t_N - n_\text{frames} (t_\text{I/O} + t_\text{comp})`, accounting for the cost of communications and other overheads.
    :label:`timing-XTC-600x`
 
-   
+To identify and quantify these additional overheads, we analyzed the performance of the XTC600x trajectory in more detail (Figure :ref:`timing-XTC-600x`); results for other trajectory sizes are qualitatively similar.
+The total job execution time |tN| differs from the total compute and I/O time, :math:`N\,(t_\text{comp} + t_\text{I/O})`.
+This difference measures additional overheads that we did not consider so far.
+It increases with trajectory size for all file formats and for all machines (for details refer to :cite:`Khoshlessan:2017aa`) but is smaller for SDSC *Comet* and TACC *Stampede* than compared to other machines.
+The difference is small for the results obtained using multiprocessing scheduler on a single node but it is substantial for the results obtained using distributed scheduler on multiple nodes.
+
 .. figure:: figs/XTC600-54c-Web-In-Comet.pdf
    
    Evidence for uneven distribution of task execution times, shown for the XTC600x trajectory on SDSC *Comet* on the Lustre file system.
    **A** Task stream plot showing the fraction of time spent on different parts of the task by each worker, obtained using the Dask web-interface. (54 tasks for 54 workers that used :math:`N = 54` cores).
    Green bars ("Compute") represent time spent on RMSD calculations, including trajectory I/O, red bars show data transfer.
    A "straggler" task (#32) takes much longer than any other task and thus determines the total execution time.
-   **B** Comparison between timing measurements from instrumentation inside the Python code (average compute and I/O time per task :math:`n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})]`, and :math:`t_N`) and Dask web-interface for :math:`N = 30` and :math:`N = 54` cores.
+   **B** Comparison between timing measurements from instrumentation inside the Python code (average compute and I/O time per task :math:`n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})`, :math:`\max[n_\text{frames}/N \, (t_\text{comp} + t_\text{I/O})]`, and |tN|) and Dask web-interface for :math:`N = 30` and :math:`N = 54` cores.
    :label:`task-stream-comet`
+
+In order to obtain more insight into the underlying network behavior both at the Dask worker level and communication level and in order to pinpoint the origin of the overheads, we used the web-interface of the Dask library, which is launched together with the Dask scheduler.
+Dask task stream plots such as the example shown in Figure :ref:`task-stream-comet` A typically show one or more *straggler* tasks that take much more time than the other tasks and as a result slow down the whole run. 
+Stragglers do not actually spend more time on the RMSD computation and trajectory I/O than other tasks, as shown by comparing the average compute and I/O time for a single task :math:`i`, :math:`n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})`, with the maximum over all tasks :math:`\max_i[n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})]`  (Figure :ref:`task-stream-comet` B).
+However, for larger core numbers, for instance, :math:`N=54`, the maximum compute and I/O time as measured inside the Python code is smaller than the maximum value extracted from the web-interface (and the Dask scheduler) (Figure :ref:`task-stream-comet` B).
+The maximum compute and I/O value from the scheduler matches the total measured run time, indicating that stragglers limit the overall performance of the run.
+The timing of the scheduler includes waiting due to network effects, which would explain why the difference is only visible when using multiple nodes where the node interconnect must be used.
+The next sections aims to narrow down the causes for the stragglers by investigating various aspects of an HPC environment.
+
 
 
 Challenges for Good HPC Performance
@@ -377,7 +377,7 @@ However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, 
 .. figure:: figs/panels/timing-XTC-600x-striping.pdf
    
    Detailed timings for three-fold Lustre striping (see Fig. :ref:`speedup-IO-600x-striping` for other parameters).
-   **A** Total time to solution (wall clock), :math:`t_N` for :math:`M` trajectory blocks using :math:`N = M` CPU cores.
+   **A** Total time to solution (wall clock), |tN| for :math:`M` trajectory blocks using :math:`N = M` CPU cores.
    **B** |tcomptIO|, average sum of the I/O time (|tIO|, Fig. :ref:`speedup-IO-600x-striping` B) and the (constant) time for the RMSD computation |tcomp| (data not shown).
    **C** Difference :math:`t_N - n_\text{frames}(t_\text{I/O} + t_\text{comp})`, accounting for communications and overheads that are not directly measured.
    :label:`timing-600x-striping`
@@ -412,7 +412,7 @@ However, when extending to multiple nodes the time due to overhead and communica
 .. figure:: figs/panels/timing-XTC-600x-oversubscribing.pdf
 
    Detailed timings for three-fold oversubscribing distributed workers.
-   **A** Total time to solution (wall clock), :math:`t_N`.
+   **A** Total time to solution (wall clock), |tN|.
    **B** |tcomptIO|, average sum of |tIO| (Fig. :ref:`speedup-IO-600x-oversubscribing` B) and the (constant) computation time |tcomp| (data not shown) per frame.
    **C** Difference :math:`t_N - n_\text{frames} (t_\text{I/O} + t_\text{comp})`, accounting for communications and overheads that are not directly measured.
    Other parameters as in Fig. :ref:`speedup-IO-600x-oversubscribing`.
@@ -423,7 +423,7 @@ However, when extending to multiple nodes the time due to overhead and communica
    :scale: 50%	    
 	    
    Time comparison for three-fold oversubscribing distributed workers (XTC600x on SDSC *Comet* on Lustre with stripe count three).
-   Bars indicate the mean total execution time :math:`t_N` (averaged over five repeats) as a function of available worker processes, with one worker per CPU core.
+   Bars indicate the mean total execution time |tN| (averaged over five repeats) as a function of available worker processes, with one worker per CPU core.
    Time for compute + I/O (red, see Fig. :ref:`timing-600x-oversubscribing` B) dominates for smaller core counts (up to one node, 24) but is swamped by communication and overheads (blue, see see Fig. :ref:`timing-600x-oversubscribing` C) beyond a single node. 
    :label:`Dask-time-stacked-comparison`
 
@@ -585,5 +585,6 @@ References
 .. _Dask: http://dask.pydata.org
 .. _distributed: https://distributed.readthedocs.io/
 .. _netCDF: https://www.unidata.ucar.edu/netcdf/docs
+.. _netCDF4: https://unidata.github.io/netcdf4-python/
 .. _10.6084/m9.figshare.5108170: https://doi.org/10.6084/m9.figshare.5108170
 .. _plugin: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
