@@ -315,7 +315,7 @@ Dask task stream plots such as the example shown in Figure :ref:`task-stream-com
 Stragglers do not actually spend more time on the RMSD computation and trajectory I/O than other tasks, as shown by comparing the average compute and I/O time for a single task :math:`i`, :math:`n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})`, with the maximum over all tasks :math:`\max_i[n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})]`  (Figure :ref:`task-stream-comet` B).
 These stragglers are observed at some repeats when the number of cores is more than 24. 
 However, we do not always see these stragglers which shows the importance of collecting statistics and looking at the average value of several repeats (5 in the present study).
-For example, for :math:`N=30` at one repeat no straggler was observed but, the statistics show poor perforrmance as also see in Figure :ref:`timing-XTC-600x` A and B. 
+For example, for :math:`N=30` at one repeat no straggler was observed but, the statistics show poor perforrmance as also seen in Figure :ref:`timing-XTC-600x` A and B. 
 However, as seen in the example for :math:`N=54` for one repeat, the maximum compute and I/O time as measured inside the Python code is smaller than the maximum value extracted from the web-interface (and the Dask scheduler) (Figure :ref:`task-stream-comet` B).
 The maximum compute and I/O value from the scheduler matches the total measured run time, indicating that stragglers limit the overall performance of the run.
 The timing of the scheduler includes waiting due to network effects, which would explain why the difference is only visible when using multiple nodes where the node interconnect must be used.
