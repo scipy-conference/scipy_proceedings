@@ -361,7 +361,7 @@ This structure allows animals to share a cage for a given time frame, and to be 
 This complexity is seamlessly handled by LabbookDB reporting functions, as seen e.g. in the command line reporting example previously presented.
 
 Conversely, atomization can result in a somewhat simpler schema, as higher level phenomena may turn out to be special cases of atomized interactions.
-By design (and in contrast to `the MouseDB implementation <https://github.com/davebridges/mousedb/blob/49b0a2c4eb7008fb8ed663d6a05a96d52d2a6d6d/mousedb/animal/models.py#L276>`_), we would not track breeding cages as a separate entity, as the housing relationships are not distinct from those tracked by the ``CageStay`` Object.
+By design (and in contrast to `the MouseDB implementation <https://github.com/davebridges/mousedb/blob/49b0a2c4eb7008fb8ed663d6a05a96d52d2a6d6d/mousedb/animal/models.py#L276>`_), we would not track breeding cages as a separate entity, as the housing relationships are not distinct from those tracked by the ``CageStay`` object.
 A separate object may rather be introduced for breeding events |---| which need not overlap perfectly with breeding cages.
 
 
@@ -369,12 +369,15 @@ A separate object may rather be introduced for breeding events |---| which need 
 
     LabbookDB schema section, illustrating a more complex and accurate representation of the relational structure linking animals and cages in the housing facility. :label:`cagestays`
 
-Irregularity Management
-~~~~~~~~~~~~~~~~~~~~~~~
+Irregularity and Free Text Management
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The atomized schema seeks to introduce structure wherever possible, but also provides a bare minimum set of free-text fields, to record uncategorizable occurrences.
-Such events are stored in the ``irregularities`` table, and linked by a many-to-many relationship to e.g. ``Measurement`` objects.
-This not only promotes irregularity re-use, but also facilitates rudimentary manual pattern detection, and the organic design of new objects within the schema.
+Irregular events associated with e.g. ``Measurement`` or ``Operation`` instances are stored in the ``irregularities`` table, and linked by a many-to-many relationship to the respective objects.
+This not only promotes irregularity re-use, but also facilitates rudimentary manual pattern discovery, and the organic design of new objects within the schema.
+
+Irregular events can also be recored outside of predetermined interventions, via ``Observation`` objects.
+These objects have their own date attribute, alongside free-text attributes, and a ``value`` attribute, to more appropriately record a quantifiable trait in the observation.
 
 Plotting via BehavioPy
 ~~~~~~~~~~~~~~~~~~~~~~
