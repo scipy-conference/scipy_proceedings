@@ -239,37 +239,44 @@ the many co-existing threads may still cause resource exhaustion issue.
 2.3. Coordinated Task Scheduler with Intel |R| TBB
 --------------------------------------------------
 The last approach has been initially introduced in our previous paper [AMala16]_.
-It is based upon using Intel |R| TBB as a sigle task scheduler for coordinating parallelism for all the Python pools and modules.
-Its work stealing task scheduler is used to map tasks onto the set of TBB worker threads
-while monkey-patching technique is used to redirect Python's :code:`ThreadPool` on top of TBB tasks.
-That allows to dynamically balance the load across multiple tasks from multiple modules but has been limited to multi-threading only.
+It is based upon using Intel |R| TBB as a sigle engine for coordinating parallelism across all the Python pools and modules.
+Its work stealing task scheduler is used to map tasks onto a limited set of TBB worker threads
+while monkey-patching technique applied in TBB module for Python redirects Python's :code:`ThreadPool` on top of TBB tasks.
+That allows to dynamically balance the load across multiple tasks from different modules but has been limited to multi-threading only.
 
-In this paper we extended this approach by introducing the multi-processing coordination layer for Intel |R| TBB.
-As shown in figure :ref:`components`, different modules, that can be used in an applicaion,
-work on top of the shared Intel |R| TBB pool, which is coordinated across multiple processes.
+In this paper we extended this approach by introducing the InterProcess Communication (IPC) layer for Intel |R| TBB.
+As shown in figure :ref:`components`, different modules that can be mixed into single applicaion,
+work on top of the shared Intel |R| TBB pool, which is also coordinated across multiple processes.
 
 .. figure:: components.png
 
    Intel |R| TBB provides a common runtime for Python modules and coordinates threads across processes. :label:`components`
 
-This works as in the following way.
-We create a number of processes not to exceed the number of hardware threads.
-In each separate process, there is a thread pool.
-Before starting any thread in any pool, one should acquire a system-wide semaphore with maximum value equal to the number of CPU hardware threads.
-To acquire the semaphore, a greedy algorithm is used that may lead to a situation when some processes do not have pool workers.
-However, each process uses at least one master thread to perform computations.
-Thus, the total number of working threads for all running processes doesn't exceed twice the number of CPU hardware threads in the worst case
-(instead of the quadratic oversubscripton case one could face with).
-To make this solution truly dynamic, an additional worker thread is added to each Intel |R| TBB thread pool,
-which allows processes to acquire threads that become free on other processes thereby eliminating CPU underutilization.
+TBB module for Python introduces shared library *libirml*, which is recognized by Intel |R| TBB library as a thread pool provider.
+Before creating any new worker thread, this library acquires an IPC semaphore.
+The semaphore is initialized with maximum value set to the number of CPU hardware threads.
+When all the allowed threads are allocated, no additional threads can be created.
 
-However, from the point of view of simultaneously existing threads, we still may have resource exhaustion issues.
-Since we can't just move a thread from one process to another, it may happen that there are too many threads alive at the same time.
-To eliminate such issues, we have implemented an algorithm that disposes of unused threads when a shortage or resources is detected.
+Because of this greedy algorithm, some TBB processes can be left without worker threads at all.
+This is legitimate situation within optional parallelism paradigm implemented in Intel |R| TBB,
+which does not prevent master threads from makeing progress and completing computation even without worker threads joined.
+Thus, even in the worst case, counting all the worker and master threads, 
+the total number of active threads for all the running processes does not exceed twice of the number of CPU hardware threads,
+which excludes situation of quadratic oversubscripton.
 
-This solution is different from the approach that uses an OpenMP runtime with global lock,
-it allows the processing of several parallel regions simultaneously and provides the ability to do work balancing on the fly.
-Even a more flexible locking mechanism in OpenMP would need to wait for all the requested threads to become available while Intel |R| TBB allows threads joining when the work is ongoing.
+When first process finishes computations, TBB lets worker threads to return back to the pool releasing resources for the semaphore.
+A special monitor thread implemented in libirml detects this situation allowing the rest of the processes
+to acquire relinquished resources and to add threads on the fly to ongoing computations in order to improve CPU utilization.
+
+However, without removing excessive threads, such a solution would not prevent resource exhaustion issue.
+Since we cannot move a thread from one process to another, it can happen that there are too many threads allocated at the same time,
+which prevents processes in need to create more threads in order to balance the load.
+To fix this issue, we implemented algorithm that disposes unused threads when a shortage of resources is detected.
+
+This TBB-based approach to the coordination is more dynamic and flexible than one based on OpenMP
+because it allows to repurpose and to rebalance threads more flexible, achieving better load balancing overall.
+Even in counting composability mode, OpenMP needs to wait for all the requested threads to join
+while Intel |R| TBB allows threads joining parallel computations when the work has already been started.
 
 3. Evaluation
 -------------
