@@ -575,15 +575,6 @@ similar results to the solution based on stochastic simulation techniques
 processing, user-friendliness and usability of the PyHRF tool to make it more
 easy to use by non experts and clinicians.
 
-In the years to come, we plan to reduce the computation time by identifying
-a relevant parcellation of the brain from data instead of entering
-a parcellation of the whole brain which may not ensure reliable HRF estimation
-and detection performance. For that, we envisage to integrate the Join
-Parcellation Detection Estimation (JPDE) model presented in
-:cite:`Albughdadi2016`. The proposed approach consists in performing an online
-parcellation during the detection estimation step of JDE through the selection
-of sets of voxels that share the same HRF pattern.
-
-Finally, we plan to develop a light viewer to explore the results of PyHRF
-interactively. Moreover, we aspire to make the package compatible with Python
-3 and extend its use to the analysis of fMRI data on small animals.
+In the years to come, we plan to develop a light viewer to explore the results
+of PyHRF interactively. Moreover, we aspire to make the package compatible with
+Python 3 and extend its use to the analysis of fMRI data on small animals.
