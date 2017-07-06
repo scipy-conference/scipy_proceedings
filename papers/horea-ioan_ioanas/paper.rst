@@ -338,13 +338,21 @@ This example should generate Figure :ref:`measurements` in ``.pdf`` format (thou
 
     LabbookDB schema section, illustrating the polymorphic relationship between Animal objects and different Measurement variants. :label:`measurements`
 
-Polymorphic Mapping
-~~~~~~~~~~~~~~~~~~~
+Polymorphic Mapping and Schema Extension
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In current research, it is common to subject animals to experimental procedures which are similar in kind, but which can be split into categories with vastly different attributes.
 Prime examples of such procedures are ``Measurements`` and ``Operations``.
 In Figure :ref:`measurements` we present how LabbookDB uses SQLAlchemy's support for polymorphic relationships to link different measurement types to the ``measurements`` attribute of the ``Animal`` object.
-Attributes common to all measurement types are stored on the ``Measurement`` table, as are relationships common to multiple measurements (e.g. the relationship to the ``Animal`` object, instantiated in the ``animal_id`` attribute).
+Attributes common to all measurement types are stored on the ``measurements`` table, as are relationships common to multiple measurements (e.g. the relationship to the ``Animal`` object, instantiated in the ``animal_id`` attribute).
+
+One of the foremost requirements for a relational database application to become a general purpose lab book replacement is an easily extendable schema.
+The ``Measurement`` and ``Operation`` polymorphic classes demonstrate how meta-categories for interventions can help extend the schema to cover new types of work without changing existing classes.
+Polymorphism can be extended to more classes, to further propagate this feature.
+For instance, all measurement subjects in LabbookDB databases are currenly recorded as ``Mouse`` objects.
+These are adequate for most rodents, however they remain inadequate for e.g. human subects.
+The issue would best be mitigated by creating a ``Subject`` class, with attributes common to all types of subjects, and then creating polymorphic identities, such as ``HumanSubject`` or ``MouseSubject`` to address specific cases.
+``Measurement`` and ``Operation`` assignements would be seamlessly transferrable, as human operations would simply require a new identity in the already polymorphic ``Protocol`` set of classes.
 
 Atomized Relationships
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -480,3 +488,16 @@ and could give LabbookDB the capability to import large numbers of old records, 
 Not least of all, the ideal outlook for LabbookDB is to automatically handle as much of the data input process as possible, e.g. via specialized sensors, via semantic image :cite:`You_2016_CVPR` or video evaluation, or via an entity-barcode-scanner (as currently used by the iRATS system)    .
 This poses nontrivial engineering challenges in excess of relation modelling, and requires distinctly more manpower than currently available.
 However, LabbookDB is from the licensing point of view suitable for use in commercial products, and additional manpower may be provided by science service providers interested in offering powerful, transparent, and extendable metadata tracking to their discerning customers.
+
+Graphical User Interface
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+A notable special case of data input is the graphical user interface (GUI).
+While we acknowledge the potential of a GUI to attract scientists who are not confident users of the command line, we both believe that such an outreach effort is incompatible with the immediate goals of the project and that it is not typically an attractive long-term outlook for scientific Python applications.
+
+Particularly at this stage in development, manpower is limited, and contributions are performed on a per-need basis (little code was written which was not relevant to addressing an actual data management issue).
+Presently our foremost outreach target are researchers who posess the technical affinity needed to test our schema at its fringes and contribute to or comment on our code and schema.
+A GUI would serve to add furter layers of abstraction and make it more difficult for users to provide helpful feedback in our technology development efforts.
+
+In the long run, we would rather look towards developing more automatic or implicit tracking of wet work, rather than simply writing a GUI.
+Our outlook towards automation also means that a GUI is likely to remain uninteresting for the use cases of the developers themselves, which would make the creation of such an interface more compatible with a commercial service model than with the classical Free and Open Source user-developer model.
