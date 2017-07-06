@@ -228,7 +228,7 @@ As described previously in the `Additional SVG/Python Interoperability`_ section
 
 Acknowledgements
 -----------------------------
-We conceived and began work on FigureFirst in lab of Michael Dickinson at Caltech, supported by a grant from the National Science Foundation (IOS 1452510).
+We conceived and began work on FigureFirst in lab of Michael Dickinson at Caltech, supported by a grant (T.L.) from the National Science Foundation (IOS 1452510). Travel funding and future developement is also supported by the Moore-Sloan Data Science (F.v.B). 
 
 .. [Aird11] W. C. Aird. *Discovery of the cardiovascular system: from Galen to William Harvey.*, 
             Journal of Thrombosis and Haemostasis, 9 (Suppl. 1): 118-129, July 2011. https://doi.org/10.1111/j.1538-7836.2011.04312.x
