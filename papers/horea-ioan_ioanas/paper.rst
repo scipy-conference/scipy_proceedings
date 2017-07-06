@@ -60,8 +60,8 @@ One notable exception is MouseDB :cite:`mousedb`, a database application framewo
 This package is considerably more mature than our present endeavour, yet more closely intended as a lab management tool rather than a general lab book replacement.
 It makes a number of differing structure choices, but given the permissive license (BSD :cite:`bsd`) of both projects, it is conceivable for functionalities from one to be merged into another in the future.
 
-The need for a wet work metadata system which provides a better internal data model and consistently structured outputs, is compounded by the fact that such a system may also be better suited for (semi)automatic record keeping.
-Some automated tracking (in a rudimentary barcode-scanning fashion) is already available for at least one commercial platform (iRATS), and the concept is likely to become of even more interest, as the internet of things reaches the laboratory.
+The need for a wet work metadata system providing a better internal data model and consistently structured outputs, is compounded by the fact that such a system may also be better suited for (semi)automatic record keeping.
+Rudimentary semiautomatic tracking (via barcode-scanning) is already available for at least one commercial platform (iRATS), and the concept is likely to become of even more interest, as the internet of things reaches the laboratory.
 This makes a well-formed open source relational schema of object interactions accurately representing the physical world pivotal in the development of laboratory record keeping.
 
 Methods
