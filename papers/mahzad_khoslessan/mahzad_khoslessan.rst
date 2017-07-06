@@ -77,34 +77,33 @@ Therefore, there is a need for high performance computing (HPC) approaches for t
 
 MDAnalysis does not yet provide a standard interface for parallel analysis; instead, various existing parallel libraries such as Python multiprocessing_, joblib_, and mpi4py_ :cite:`Dalcin:2005aa,Dalcin:2011aa` are currently used to parallelize MDAnalysis-based code on a case-by-case basis.
 Here we evaluated performance for parallel map-reduce :cite:`Dean:2008aa` type analysis with the Dask_ parallel computing library :cite:`Rocklin:2015aa` for task-graph based distributed computing on HPC and local computing resources.
-Although Dask is able to implement much more complex computations than map-reduce, we chose Dask for this task because of its ease of use and because we envisage using this approach for more complicated analysis applications whose parallelization cannot easily be expressed as a simple map-reduce algorithm.
+Although Dask is able to implement much more complex computations than map-reduce, we chose Dask for this task because of its ease of use and because we envisage using this approach for more complicated analysis applications whose parallelization cannot be easily expressed as a simple map-reduce algorithm.
 
 .. figure:: figs/panels/rmsd_dask.pdf
    :figclass: b
 
-   rmsd calculation via map-reduce with Dask.
+   Calculation of the root mean square distance (rmsd) of a protein structure from the starting conformation via map-reduce with Dask.
    **A** rmsd as a function of time, with partial time series colored by trajectory block.   
    **B** Dask task graph for splitting the rmsd calculation into three trajectory blocks.
    :label:`rmsd-dask`
 
-As the computational task we performed an optimal structural superposition of the atoms of a protein to a reference structure by minimizing the RMSD of the |Calpha| atoms :cite:`Mura:2014kx` (Figure :ref:`rmsd-dask`).
+As the computational task we performed a common task in the analysis of the structural dynamics of proteins: we computed the time series of the root mean squared distance (rmsd) of the positions of all |Calpha| atoms to their initial coordinates at time 0; for each time step ("frame") in the trajectory, rigid body degrees of freedom (translations and rotations) have to be removed through an optimal structural superposition that minimizes the rmsd  :cite:`Mura:2014kx` (Figure :ref:`rmsd-dask`).
 A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NCDF :cite:`Case:2005uq`) and different trajectory sizes were benchmarked.
 
 We looked at different HPC resources including national supercomputers (XSEDE TACC *Stampede* and SDSC *Comet*), university supercomputers (Arizona State University Research Computing *Saguaro*), and local resources (Gigabit networked multi-core workstations). 
 The tested resources are parallel and heterogeneous with different CPUs, file systems, high speed networks and are suitable for high-performance distributed computing at various levels of parallelization.
-Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), and the parallel Lustre file system (implemented on top of HDD) were tested to examine the effect of I/O on the performance. 
+Different storage systems such as solid state drives (SSDs), hard disk drives (HDDs), network file system (NFS), and the parallel Lustre file system (using HDDs) were tested to examine the effect of I/O on the performance. 
 The benchmarks were performed both on a single node and across multiple nodes using the multiprocessing and distributed_ schedulers in the Dask library.
 
-Our results showed strong dependency on the storage system because competition for access to the same file from multiple processes emerged as a key problem.
-But because the trajectory file format dictates the data access pattern, the overall performance depends critically on the storage system *and* the actual data format, with some formats being more robust against storage system specifics than others.
-
-Overall, good performance and strong scaling with the number of CPU cores was found on a single node but robust across-node performance remained challenging.
+We previously showed that the overall computational cost scales directly with the length of the trajectory, i.e., the weak scaling is close to ideal and is fairly independent from other factors :cite:`Khoshlessan:2017aa`.
+Here we focus on the strong scaling behavior, i.e., the dependence of overall run time on the number of CPU cores used.
+Competition for access to the same file from multiple processes appears to be a bootleneck and thefore the storage system is an important determinant of performance.
+But because the trajectory file format dictates the data access pattern, overall performance also depends on the actual data format, with some formats being more robust against storage system specifics than others.
+Overall, good strong scaling performance  could be obtained for a single node but robust across-node performance remained challenging.
 In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, oversubscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
 From these tests we tentatively conclude that poor across-nodes performance is rooted in contention on the shared network that may slow down individual tasks and lead to poor load balancing.
 Nevertheless, Dask with MDAnalysis appears to be a promising approach for high-level parallelization for analysis of MD trajectories, especially at moderate CPU core numbers.
 
-Present study considers both strong and weak scaling for measuring parallel performance of our Map-Reduce job. 
-All file formats including XTC, DCD, and NCDF are used
 
 
 Methods
@@ -181,19 +180,12 @@ All results for Dask distributed were obtained across three nodes on different c
 
 Trajectories with different number of frames per trajectory were analyzed to assess the effect of trajectory file size.
 These trajectories were generated by concatenating the base trajectory 50, 100, 300, and 600 times and are referred to as, e.g., "DCD300x" or "XTC600x".
-Present study considers both strong and weak scaling for measuring parallel performance of our Map-Reduce job.
-The scaling of each file szie is studied both on a single node (1-24 CPU cores) and on multiple nodes (1-72 CPU cores) for each file format (Strong scaling)
-For Dask multiprocessing we investigated 50x, 100x, 300x and 100x, 300x, and 600x for Dask distributed for each file format (weak scaling).
-In the present study, only strong scaling is presented and discussed. 
-Here we only present data for the 300x and 600x trajectory sizes, which represent typical medium size results.
-Depending on the file format the performance of weak scaling is different.
-For Dask multiprocessing and distribuetd, XTCs show a very good scaling up to 24 CPU cores. 
-DCDs using SSDs show good scaling up to 8 CPU cores.
-NCDFs also show good scaling up to 8 CPU cores.
-For an analysis of the full data set see the Technical Report :cite:`Khoshlessan:2017aa`.
+Run time was analyzed on single nodes (1–24 CPU cores) and up to three nodes (1–72 cores) as function of the number of cores (strong scaling behavior) and trajectory sizes (weak scaling).
+However, here we only present strong scaling data for the 300x and 600x trajectory sizes, which represent typical medium size results.
+For an analysis of the full data including weak scaling results set see the Technical Report :cite:`Khoshlessan:2017aa`.
 
-The DCD file format is just a binary representation and the DCD300x trajectory has a file size of 47 GB (DCD600x is twice as much); XTC is a lossy compressed format and XTC300x is only 15 GB.
-Amber NCDF is implemented with netCDF_ classic format version 3.6.0 and trajectories are about the same size as DCD.
+The DCD file format is a binary representation for 32-bit floating point numbers (accuracy of positions about :math:`10^{-6}` Å) and the DCD300x trajectory has a file size of 47 GB (DCD600x is twice as much); XTC is a lossy compressed format that effectively rounds floats to the second decimal (accuracy about :math:`10^{-2}` Å, which is sufficient for typical analysis) and XTC300x is only 15 GB.
+Amber NCDF is implemented with netCDF_ classic format version 3.6.0 (same accuracy as DCD) and trajectories are about the same size as DCD.
 
 Performance was quantified by measuring the average time per trajectory frame to load data from storage into memory (I/O time per frame, |tIO|), the average time to complete the RMSD calculation (compute time per frame, |tcomp|), and the total wall time for job execution :math:`t_N` when using :math:`N` CPU cores.
 Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
@@ -202,11 +194,21 @@ Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N
 Results and Discussion
 ======================
 
+Trajectories from MD simulations record snapshots of the positions of all particles are regular time intervals.
+A snapshot at a specified time point is called a frame.
+MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu` to allow the analysis of large trajectories that may contain, for example, :math:`n_\text{frames} = 10^7` frames in total.
+In a map-reduce approach, :math:`N` processes will iterate in parallel over :math:`N` chunks of the trajectory, each containing :math:`n_\text{frames}/N` frames.
+Because frames are loaded serially, the run time scales directly with :math:`n_\text{frames}` and the weak scaling behavior (as a function of trajectory length) is trivially close to ideal as seen from the data in :cite:`Khoshlessan:2017aa`.
+Weak scaling with the system size also appears to be fairly linear, according to preliminary data (not shown).
+Therefore, in the following we focus exclusively on the harder problem of strong scaling, i.e., reducing the run time by employing parallelism.
+
+
+
+
+
 Effect of File Format on I/O Time
 ---------------------------------
 
-In MDAnalysis library, trajectories from MD simulations are a frame by frame description of the motion of particles as a function of time. 
-To allow the analysis of large trajectories, MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu`.
 Depending on the file format the loading time of frames into memory will be different.
 Some file systems like distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however this will be possible only if there is a parallel I/O library which is not the case in the present study.
 Figure :ref:`pattern-formats` illustrates the I/O pattern compared between different file formats.
@@ -444,7 +446,7 @@ In each run a total of 100000 zero workload tasks were executed.
 Figure :ref:`daskThroughput` A shows the Throughput of each scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
 Each value is the mean throughput value of several runs for each scheduler. 
 
-.. figure:: figs/panels/daskThroughputPanel.pdf
+.. figure:: figs/panels/dask-throughput.pdf
    :scale: 66%
 
    Benchmark of Dask scheduler throughput on TACC *Stampede*.
