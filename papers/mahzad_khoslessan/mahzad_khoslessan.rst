@@ -315,54 +315,36 @@ Stragglers do not actually spend more time on the RMSD computation and trajector
 However, for larger core numbers, for instance, :math:`N=54`, the maximum compute and I/O time as measured inside the Python code is smaller than the maximum value extracted from the web-interface (and the Dask scheduler) (Figure :ref:`task-stream-comet` B).
 The maximum compute and I/O value from the scheduler matches the total measured run time, indicating that stragglers limit the overall performance of the run.
 The timing of the scheduler includes waiting due to network effects, which would explain why the difference is only visible when using multiple nodes where the node interconnect must be used.
-The next sections aims to narrow down the causes for the stragglers by investigating various aspects of an HPC environment.
 
-
+    
 
 Challenges for Good HPC Performance
 -----------------------------------
 
-It should be noted that all the present results were obtained during normal, multi-user, production periods on all machines.
-In fact, the time the jobs take to run is affected by the other jobs on the system.  
+All results were obtained during normal, multi-user, production periods on all machines, which means that jobs run times are affected by other jobs on the system.  
 This is true even when the job is the only one using a particular node, which was the case in the present study.  
 There are shared resources such as network file systems that all the nodes use.  
 The high speed interconnect that enables parallel jobs to run is also a shared resource.  
 The more jobs are running on the cluster, the more contention there is for these resources.  
-As a result, the same job runs at different times will take a different amount of time to complete.  
-In addition, remarkable fluctuations in task completion time across different processes is observed through monitoring network behavior using Dask web-interface.  
+As a result, the same job run at different times may take a different amount of time to complete, as seen in the fluctuations in task completion time across different processes.  
 These fluctuations differ in each repeat and are dependent on the hardware and network. 
-These factors further complicate any attempts at benchmarking. 
-Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
-This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
-There is also variability in network latency, in addition to the variability in underlying hardware in each machine.
-This causes the results to vary significantly across different machines.
-Since our Map-reduce job is pleasantly parallel, each or a subset of computations can be executed independently on each process. 
-Also, the claculations are load balanced which means that all of our processes have the same amount of work to do (One block per process). 
-Therefore, observing these stragglers shown in Figure :ref:`task-stream-comet` A is unexpected and the following sections in the present study aim to identify the reason for which we are seeing these stragglers.
+There is also variability in network latency, in addition to the variability in underlying hardware in each machine, which may also cause the results to vary across different machines.
+Since our map-reduce problem is pleasantly parallel, each or a subset of computations can be executed by independent processes. 
+Furthermore, all of our processes have the same amount of work to do, namely one trajectory block per process, and therefore our problem should exhibit good load balancing.
+Therefore, observing the stragglers shown in Figure :ref:`task-stream-comet` A is unexpected and the following sections aim to identify possible causes for their occurence.
+
+
 
 Performance Optimization
 ------------------------
 
-In the present section, we have tested different features of our computing environment to see if we can identify the reason for those stragglers and improve performance by avoiding the stragglers.
-Lustre striping, oversubscribing, scheduler throughput are tested to examine their effect on the performance. 
-In addition, scheduler plugin is also used to validate our observations from Dask web-interface.
-In fact, we create a plugin that performs logging whenever a task changes state.
-Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
+We tested different features of the computing environment to identify causes of stragglers and to improve performance and robustness, focusing on the XTC file format as the most promising candidate so far.
+We tested the hypothesis that waiting for file access might lead to stalled tasks by increasing the effective number of accessible files through "striping" in the Lustre parallel file system.
+We investigated the hypothesis that the Dask distributed scheduler might be too slow to schedule the tasks and we looked at improved load balancing by oversubscribing Dask workers.
+
 
 Effect of Lustre Striping
 ~~~~~~~~~~~~~~~~~~~~~~~~~
-
-As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
-This is strongly affecting our results since our compute per frame is not heavy and therefore the overlapping of data requests will be more frequent depending on the file format.
-The effect on the performance is strongly dependent on file format and some formats like XTC file formats which take advantage of in-built decompression are less affected by the contention from many data requests from many processes.
-However, when extending to multiple nodes, even XTC files are affected by this, as is also shown in Figure :ref:`IO-comparison` B, E.
-In Lustre, a copy of the shared file can be in different physical storage devices (OSTs). 
-Single shared files can have a stripe count equal to the number of nodes or processes which access the file.
-In the present study, we set the stripe count equal to three which is equal to the number of nodes used for our benchmark using distributed scheduler.
-This may be helpful to improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests will decrease.
-Figure :ref:`speedup-IO-600x-striping` show the speed up and I/O time per frame plots obtained for XTC file format (600X) when striping is activated. 
-As can be seen, IO time is level across parallelism up to 72 cores which means that striping is helpful for leveling IO time per frame across all cores.
-However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, there is a time difference between average total compute and I/O time and job execution time which is due to the stragglers and as a result the overall speed-up is not improved.  
 
 .. figure:: figs/panels/speed-up-IO-600x-striping.pdf
 
@@ -382,6 +364,52 @@ However, based on the timing plots shown in Figure :ref:`timing-600x-striping`, 
    **C** Difference :math:`t_N - n_\text{frames}(t_\text{I/O} + t_\text{comp})`, accounting for communications and overheads that are not directly measured.
    :label:`timing-600x-striping`
 
+As discussed before, the overlapping of data requests from different processes can lead to higher I/O time and as a result poor performance.
+|tIO| strongly affects performance since it is much larger than |tcomp| in all multi-node scenarios.
+Although the XTC format showed the best performance, for multiple nodes |tIO| increased for it, too (Figure :ref:`IO-comparison` E).
+In Lustre, a copy of the shared file can be in different physical storage devices (object storage targets, OSTs). 
+Single shared files can have a stripe count equal to the number of nodes or processes which access the file.
+We set the stripe count equal to three, which is equal to the number of nodes used for our benchmark using the distributed scheduler.
+This might improve performance, since all the processes from each node will have a copy of the file and as a result the contention due to many data requests should decrease.
+Figure :ref:`speedup-IO-600x-striping` show the speed up and I/O time per frame plots obtained for XTC file format (XTC600x) when striping is activated. 
+I/O time remains constant for up to 72 cores.
+Thus, striping improves |tIO| and makes file access more robust.
+However, the timing plots in Figure :ref:`timing-600x-striping` still show a time difference between average total compute and I/O time and job execution time that remains due to stragglers and as a result the overall speed-up is not improved.  
+
+
+	  
+Scheduler Throughput
+~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: figs/panels/daskThroughputPanel.pdf
+   :scale: 66%
+
+   Benchmark of Dask scheduler throughput on TACC *Stampede*.
+   Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
+   The scheduler had to lauch 100,000 tasks and the run ended when all tasks had been run.
+   **A** single node with different schedulers; multithreading and multiprocessing are almost indistinguishable from each other.
+   **B** multiple nodes with the distributed scheduler and 1 worker process per node.
+   **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
+   :label:`daskThroughput`
+
+In order to test the hypothesis that straggler tasks were due to limitations in the speed of the Dask scheduler, we 
+performed scheduling experiments with all Dask schedulers (multithreaded, multiprocessing and distributed) on TACC *Stampede* (16 CPU cores per node).
+In each run, a total of 100,000 zero workload (``pass``) tasks were executed in order to measure the maximum scheduling throughput; each run itself was repeated and mean values together with standard deviations were reported.
+Figure :ref:`daskThroughput` A shows the throughput of each scheduler over time on a single *Stampede* node, with Dask scheduler and worker being located on the same node.
+The most efficient scheduler is the distributed scheduler, which manages to schedule 20,000 tasks per second when there is one worker process for each available core.
+The distributed scheduler with just one worker process and a number of threads equal to the number of available cores has lower peak performance of about 2000 tasks/s and is able to schedule and execute these 100,000 tasks in 50 s.
+The multiprocessing and multithreading schedulers behave similarly, but need much more time (about 200 s) to finish compared to distributed.
+
+Figure :ref:`daskThroughput` B shows the distributed scheduler's throughput over time for increasing number of nodes when each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
+No clear pattern for the throughput emerges, with values between 2000 and 8000 tasks/s.
+Figure :ref:`daskThroughput` C shows the same execution with Dask distributed set up to have one worker process per core, i.e., 16 workers per node.
+The scheduler never reaches its steady throughput state, compared to Figure :ref:`daskThroughput` B so that it is difficult to quantify the effect of the additional nodes.
+Although a peak throughput between 10,000 to 30,000 tasks/s is reported, overall scheduling is erratic and the total 100,000 tasks are not completed sooner than for the case with 1 worker per node with 16 threads.
+It appears that assigning one worker process to each core will speed up Dask's throughput but more work would need to be done to assess if the burst-like behavior seen in this case is an artifact of the zero workload test.
+
+Either way, the distributed and even the multiprocessing scheduler are sufficiently fast as to not cause a bottleneck in our map-reduce problem and are probably not responsible for the stragglers.
+
+	  
 
 Effect of Oversubscribing
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -428,48 +456,20 @@ However, when extending to multiple nodes the time due to overhead and communica
    :label:`Dask-time-stacked-comparison`
 
 	  
-Examining Scheduler Throughput
-------------------------------
-
-An experiment were executed with Dask schedulers (multithreaded, multiprocessing and distributed) on Stampede.
-In each run a total of 100000 zero workload tasks were executed.
-Figure :ref:`daskThroughput` A shows the Throughput of each scheduler over time on a single Stampede node - Dask scheduler and worker are on the same node.
-Each value is the mean throughput value of several runs for each scheduler. 
-
-.. figure:: figs/panels/daskThroughputPanel.pdf
-   :scale: 66%
-
-   Benchmark of Dask scheduler throughput on TACC *Stampede*.
-   Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
-   The scheduler had to lauch 100,000 tasks and the run ended when all tasks had been run.
-   **A** single node with different schedulers; multithreading and multiprocessing are almost indistinguishable from each other.
-   **B** multiple nodes with the distributed scheduler and 1 worker process per node.
-   **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
-   :label:`daskThroughput`
-
-Our understanding is that the most efficient scheduler is the distributed scheduler, especially when there is one worker process for each available core.
-Also, the distributed with just one worker process and a number of threads equal to the number of available cores are still able to schedule and execute these 100,000 tasks.
-The multiprocessing and multithreading schedulers have similar behavior again, but need significantly more time to finish compared to the distributed.
-
-Figure :ref:`daskThroughput` B shows the distributed scheduler's throughput over time when the number of Nodes increases.
-Each node has a single worker process and each worker launches a thread to execute a task (maximum 16 threads per worker).
-By increasing the number of nodes we can see that Dask's throughput increases by the same factor. 
-Figure :ref:`daskThroughput` C shows the same execution with the Dask cluster being setup to have one worker process per core.
-In this figure, the scheduler does not reach its steady throughput state, compared to :ref:`daskThroughput` B, thus it is not clear what is the effect of the extra nodes.
-Another interesting aspect is that when a worker process is assigned to each core, Dask's Throughput is an order of magnitude larger allowing for even faster scheduling decisions and task execution.
-
- 
-Scheduler Plugin Results
-------------------------
+..  In addition, scheduler plugin is also used to validate our observations from Dask web-interface.
+..   In fact, we create a plugin that performs logging whenever a task changes state.
+..  Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
+.. Scheduler Plugin Results
+   ~~~~~~~~~~~~~~~~~~~~~~~~
 
 In addition to Dask web-interface, we implemented a Dask scheduler plugin_.
 This plugin captures task execution events from the scheduler and their respective timestamps.
 These captured profiles were later used to analyze the execution of XTC 300x on Stampede.
 In all the previous benchmarks in the present study, number of blocks is equal to the number of processes (:math:`N = N_\text{cores}`). 
 However, when extended to multiple nodes the whole calculation is delayed due to the stragglers and as a result the overall performance was affected.
-In the present section, we repeated the benchmark where the number of blocks is three times the number of processes (:math:`N =3*N_\text{cores}`).
+In the present section, we repeated the benchmark where the number of blocks is three times the number of processes (:math:`N =3 N_\text{cores}`).
 We were able to measure how many tasks are submitted per worker process.
-This exexutions are performed to see why oversubscribing introduced in the previous section was not helpful.
+This executions are performed to see why oversubscribing introduced in the previous section was not helpful.
 Table :ref:`process-subm` summarizes the results and Figure :ref:`task-histograms` shows in detail how RMSD blocks were submitted per worker process in each run.
 As it is shown the execution is not balanced between worker processes.
 Although, most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
@@ -495,6 +495,10 @@ Therefore, we can conclude that over-subscription does not necessarily lead to a
    Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
    192 blocks. Each histogram is a different run of the same execution. The X axis is worker process ID and the Y     
    axis the number of tasks submitted to that process. :label:`task-histograms`
+
+	  
+
+ 
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
@@ -559,6 +563,12 @@ Nevertheless, implementing robust parallel trajectory analysis that scales over 
 .. In fact, reducing IO time can lead to noticeable improvement in performance which emphasizes the impact of IO time on the overall performance.
 .. According to the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
    
+
+   
+..
+   These factors further complicate any attempts at benchmarking. 
+   Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
+   This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 
 
 Acknowledgments
