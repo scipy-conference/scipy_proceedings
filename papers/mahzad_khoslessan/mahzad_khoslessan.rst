@@ -101,7 +101,7 @@ Here we focus on the strong scaling behavior, i.e., the dependence of overall ru
 Competition for access to the same file from multiple processes appears to be a bootleneck and thefore the storage system is an important determinant of performance.
 But because the trajectory file format dictates the data access pattern, overall performance also depends on the actual data format, with some formats being more robust against storage system specifics than others.
 Overall, good strong scaling performance  could be obtained for a single node but robust across-node performance remained challenging.
-In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, oversubscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
+In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, over-subscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
 From these tests we tentatively conclude that poor across-nodes performance is rooted in contention on the shared network that may slow down individual tasks and lead to poor load balancing.
 Nevertheless, Dask with MDAnalysis appears to be a promising approach for high-level parallelization for analysis of MD trajectories, especially at moderate CPU core numbers.
 
@@ -340,7 +340,7 @@ Performance Optimization
 
 We tested different features of the computing environment to identify causes of stragglers and to improve performance and robustness, focusing on the XTC file format as the most promising candidate so far.
 We tested the hypothesis that waiting for file access might lead to stalled tasks by increasing the effective number of accessible files through "striping" in the Lustre parallel file system.
-We investigated the hypothesis that the Dask distributed scheduler might be too slow to schedule the tasks and we looked at improved load balancing by oversubscribing Dask workers.
+We investigated the hypothesis that the Dask distributed scheduler might be too slow to schedule the tasks and we looked at improved load balancing by over-subscribing Dask workers.
 
 
 Effect of Lustre Striping
@@ -411,26 +411,17 @@ Either way, the distributed and even the multiprocessing scheduler are sufficien
 
 	  
 
-Effect of Oversubscribing
-~~~~~~~~~~~~~~~~~~~~~~~~~
+Effect of Over-Subscribing
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-One useful way to robust our code to uncertainty in computations is to submit much more tasks than the number of cores. 
-This may allow Dask to load balance appropriately, and as a result cover the extra time when there are some stragglers.
-In order for this, we set the number :math:`M` of tasks to be three times the number of workers, :math:`M = 3 N`, where the number of workers :math:`N = N_\text{cores}` equals the number of CPU cores. 
-Lustre-striping is also activated and is set to three which is also equal to number of nodes.
-Figures :ref:`speedup-IO-600x-oversubscribing` show the speed up, and I/O time per frame plots obtained for XTC file format (XTC600x).
-As can be seen, IO time is level across parallelism up to 72 cores because of striping.
-However, based on the timing plots shown in Figure :ref:`timing-600x-oversubscribing`, there is a time difference between average total compute and I/O time and job execution time which reveals that oversubscribing does not help to remove the stragglers and as a result the overall speed-up is not improved.
-Figure :ref:`Dask-time-stacked-comparison` shows time comparison on different parts of the calculations. 
-Bars are subdivided into the contribution of overhead in the calculations, communication time and RMSD calculation across parallelism from 1 to 72.
-RMSD calculation is the time spent on RMSD tasks, and communication time is the time spent for gathering RMSD arrays calculated by each processor rank.
-As can be seen in Figure :ref:`Dask-time-stacked-comparison`, the overhead in the calculations is small up to 24 cores (Single node).
-The largest fraction of the calculations is spent on the calculation of RMSD arrays (computation time) which decreases pretty well as the number of cores increases from 1 to 72.
-However, when extending to multiple nodes the time due to overhead and communication increases which affects the overall performance.
+In order to make our code more robust against uncertainty in computation times we explored over-subscribing the workers, i.e., to submit many more tasks than the number of available workers (and CPU cores, using one worker per core). 
+Over-Subscription might allow Dask to balance the load appropriately and as a result cover the extra time when there are some stragglers.
+We set the number :math:`M` of tasks to be three times the number of workers, :math:`M = 3 N`, where the number of workers :math:`N = N_\text{cores}` equaled the number of CPU cores. 
+Lustre-striping was also activated and set to three, which is also to the number of nodes used.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
 
-   Effect of three-fold oversubscribing distributed workers.
+   Effect of three-fold over-subscribing distributed workers.
    The XTC600x trajectory was analyzed on HPC resources (Lustre stripe count of three) and local NFS using Dask distributed where  :math:`M` number of trajectory blocks (tasks) is three times the number of worker processes, :math:`M = 3 N`, and there is one worker per CPU core.
    **A** Speed-up :math:`S`.
    **B** I/O time |tIO| per frame.
@@ -439,20 +430,28 @@ However, when extending to multiple nodes the time due to overhead and communica
 	  
 .. figure:: figs/panels/timing-XTC-600x-oversubscribing.pdf
 
-   Detailed timings for three-fold oversubscribing distributed workers.
+   Detailed timings for three-fold over-subscribing distributed workers.
    **A** Total time to solution (wall clock), |tN|.
    **B** |tcomptIO|, average sum of |tIO| (Fig. :ref:`speedup-IO-600x-oversubscribing` B) and the (constant) computation time |tcomp| (data not shown) per frame.
    **C** Difference :math:`t_N - n_\text{frames} (t_\text{I/O} + t_\text{comp})`, accounting for communications and overheads that are not directly measured.
-   Other parameters as in Fig. :ref:`speedup-IO-600x-oversubscribing`.
+   Other parameters as in Fig. :ref:`speedup-IO-600x-oversubscribing`. 
    :label:`timing-600x-oversubscribing`
 
 	  
+For XTC600x, no substantial speed-up is observed due to over-subscribing (compare Figure :ref:`speedup-IO-600x-oversubscribing` A to :ref:`speedup-IO-600x-striping` A).
+As before, the I/O time is constant up to 72 cores due to striping (Figure :ref:`speedup-IO-600x-oversubscribing` B).
+However, a time difference between average total compute and I/O time and job execution time (Figure :ref:`timing-600x-oversubscribing`) reveals that over-subscribing does not help to remove the stragglers and as a result the overall speed-up is not improved.
+Figure :ref:`Dask-time-stacked-comparison` shows a time comparison for different parts of the calculations. 
+The overhead in the calculations is small up to 24 cores (single node).
+For lower |Ncores|, the largest fraction of time is spent on the calculation of RMSD arrays and I/) (computation time) which decreases as the number of cores increases from 1 to 72.
+However, when extending to multiple nodes the time for overheads and communication increases, which reduces the overall performance.
+
 .. figure:: figs/Dask-time_stacked_comparison.pdf
    :scale: 50%	    
 	    
-   Time comparison for three-fold oversubscribing distributed workers (XTC600x on SDSC *Comet* on Lustre with stripe count three).
+   Time comparison for three-fold over-subscribing distributed workers (XTC600x on SDSC *Comet* on Lustre with stripe count three).
    Bars indicate the mean total execution time |tN| (averaged over five repeats) as a function of available worker processes, with one worker per CPU core.
-   Time for compute + I/O (red, see Fig. :ref:`timing-600x-oversubscribing` B) dominates for smaller core counts (up to one node, 24) but is swamped by communication and overheads (blue, see see Fig. :ref:`timing-600x-oversubscribing` C) beyond a single node. 
+   Time for compute + I/O (red, see Fig. :ref:`timing-600x-oversubscribing` B) dominates for smaller core counts (up to one node, 24) but is swamped by communication (time to gather the RMSD arrays computed by each worker for the reduction) and overheads (blue, see see Fig. :ref:`timing-600x-oversubscribing` C) beyond a single node. 
    :label:`Dask-time-stacked-comparison`
 
 	  
@@ -460,22 +459,15 @@ However, when extending to multiple nodes the time due to overhead and communica
 ..   In fact, we create a plugin that performs logging whenever a task changes state.
 ..  Through the scheduler plugin we will be able to get lots of information about a task whenever it finishes computing.
 .. Scheduler Plugin Results
-   ~~~~~~~~~~~~~~~~~~~~~~~~
+..   ~~~~~~~~~~~~~~~~~~~~~~~~
 
-In addition to Dask web-interface, we implemented a Dask scheduler plugin_.
-This plugin captures task execution events from the scheduler and their respective timestamps.
-These captured profiles were later used to analyze the execution of XTC 300x on Stampede.
-In all the previous benchmarks in the present study, number of blocks is equal to the number of processes (:math:`N = N_\text{cores}`). 
-However, when extended to multiple nodes the whole calculation is delayed due to the stragglers and as a result the overall performance was affected.
-In the present section, we repeated the benchmark where the number of blocks is three times the number of processes (:math:`N =3 N_\text{cores}`).
-We were able to measure how many tasks are submitted per worker process.
-This executions are performed to see why oversubscribing introduced in the previous section was not helpful.
-Table :ref:`process-subm` summarizes the results and Figure :ref:`task-histograms` shows in detail how RMSD blocks were submitted per worker process in each run.
-As it is shown the execution is not balanced between worker processes.
-Although, most workers are calculating three RMSD blocks, as it is expected by oversubscribing, there are a few workers that are receiving a smaller number of blocks and workers that receive more than three.
-Therefore, we can conclude that over-subscription does not necessarily lead to a balanced execution, adding additional execution time.
+In order to better quantify the scheduling decisions and to have verification of stragglers independent from the Dask web interface, we implemented a Dask scheduler `reporter plugin`_ (freely available from https://github.com/radical-cybertools/midas), which captures task execution events from the scheduler and their respective timestamps.
+We analyzed the execution of XTC300x on TACC *Stampede* with three-fold over-subscription (:math:`M =3 N_\text{cores}`) and measured how many tasks were submitted per worker process.
+Table :ref:`process-subm` shows that although most workers executed three tasks as would be expected for three-fold over-subscription, between 0 and 17% executed four tasks and others only one or two. 
+This variability is also borne out in detail by Figure :ref:`task-histograms`, which shows how RMSD blocks were submitted per worker process in each run.
+Therfore, over-subscription does not necessarily lead to a balanced execution and might add additional execution time; unfortunately, over-subscription does not get rid of the straggler tasks.
 
-.. table:: Summary of the number of worker processes per submitted RMSD blocks. Each column shows the total number of Worker process that executed a number of RMSD blocks per run. Executed on TACC Stampede utilizing 64 cores :label:`process-subm` 
+.. table:: Number of worker processes that executed 1, 2, 3, or 4 of tasks (RMSD calculation over one trajectory block) per run. Executed on TACC *Stampede* utilizing 64 cores :label:`process-subm` 
 
    +------------+-------+-------+-------+-------+-------+
    |RMSD Blocks | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 |
@@ -484,21 +476,18 @@ Therefore, we can conclude that over-subscription does not necessarily lead to a
    +------------+-------+-------+-------+-------+-------+
    |    2       |   8   |   5   |   7   |   7   |   2   |
    +------------+-------+-------+-------+-------+-------+
-   |    3       |  48   |  54   |  56   |  50   |  60   |
+   |    3       |  48   |  54   |  47   |  50   |  60   |
    +------------+-------+-------+-------+-------+-------+
-   |    4       |   8   |   5   |   0   |   7   |   2   |
+   |    4       |   8   |   5   |   9   |   7   |   2   |
    +------------+-------+-------+-------+-------+-------+
 
 .. figure:: figs/x300TaskHistograms.pdf
    :scale: 35%
       
-   Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
-   192 blocks. Each histogram is a different run of the same execution. The X axis is worker process ID and the Y     
-   axis the number of tasks submitted to that process. :label:`task-histograms`
+   Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 192 trajectory blocks.
+   Each histogram corresponds to an independent repeat of the same computational experiment.
+   For each worker process ID, the number of tasks submitted to that process is shown. :label:`task-histograms`
 
-	  
-
- 
 
 
 Comparison of Performance of Map-Reduce Job Between MPI for Python and Dask Frameworks
@@ -566,9 +555,9 @@ Nevertheless, implementing robust parallel trajectory analysis that scales over 
 
    
 ..
-   These factors further complicate any attempts at benchmarking. 
-   Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
-   This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
+..   These factors further complicate any attempts at benchmarking. 
+..   Therefore, this makes it really hard to optimize codes, since it is hard to determine whether any changes in the code are having a positive effect.
+..   This is because the margin of error introduced by the non-deterministic aspects of the cluster's environment is greater than the performance improvements the changes might produce.
 
 
 Acknowledgments
@@ -597,4 +586,4 @@ References
 .. _netCDF: https://www.unidata.ucar.edu/netcdf/docs
 .. _netCDF4: https://unidata.github.io/netcdf4-python/
 .. _10.6084/m9.figshare.5108170: https://doi.org/10.6084/m9.figshare.5108170
-.. _plugin: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
+.. _`reporter plugin`: https://github.com/radical-cybertools/midas/blob/master/Dask/schedulerPlugin.py
