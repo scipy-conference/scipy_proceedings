@@ -291,7 +291,7 @@ All the results for this paper have been acquired on 2-socket system with Intel 
 (2.20GHz, 22 cores, 44 hyper-threads each) and 128 GB RAM.
 
 For our experiments, we used [Miniconda]_ distribution along with the packages of
-Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel_
+Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
 
 .. [Miniconda] Miniconda, https://conda.io/miniconda.html
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
