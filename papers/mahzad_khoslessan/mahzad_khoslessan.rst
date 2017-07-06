@@ -58,9 +58,9 @@ Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
    We evaluated if this challenge can be met by a parallel map-reduce approach with the Dask_ parallel computing library for task-graph based computing coupled with our MDAnalysis_ Python library for the analysis of molecular dynamics (MD) simulations.
    We performed a representative performance evaluation, taking into account the highly heterogeneous computing environment that researchers typically work in together with the diversity of existing file formats for MD trajectory data.
    We found that the underlying storage system (solid state drives, parallel file systems, or simple spinning platter disks) can be a deciding performance factor that leads to data ingestion becoming the primary bottleneck in the analysis work flow.
-   However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core cpu-intensive decompression.
+   However, the choice of the data file format can mitigate the effect of the storage system; in particular, the commonly used Gromacs XTC trajectory format, which is highly compressed, can exhibit strong scaling close to ideal due to trading a decrease in global storage access load against an increase in local per-core CPU-intensive decompression.
    Scaling was tested on a single node and multiple nodes on national and local supercomputing resources as well as typical workstations.
-   Although very good strong scaling could be achieved for single nodes, good scaling across multiple nodes was hindered by the persistent occurence of "stragglers", tasks that take much longer than all other tasks, and whose ultimate cause could not be completely ascertained.
+   Although very good strong scaling could be achieved for single nodes, good scaling across multiple nodes was hindered by the persistent occurrence of "stragglers", tasks that take much longer than all other tasks, and whose ultimate cause could not be completely ascertained.
    In summary, we show that, due to the focus on high interoperability in the scientific Python eco system, it is straightforward to implement map-reduce with Dask in MDAnalysis and provide an in-depth analysis of the considerations to obtain good parallel performance on HPC resources.
 
 .. class:: Keywords
@@ -99,7 +99,7 @@ The benchmarks were performed both on a single node and across multiple nodes us
 
 We previously showed that the overall computational cost scales directly with the length of the trajectory, i.e., the weak scaling is close to ideal and is fairly independent from other factors :cite:`Khoshlessan:2017aa`.
 Here we focus on the strong scaling behavior, i.e., the dependence of overall run time on the number of CPU cores used.
-Competition for access to the same file from multiple processes appears to be a bootleneck and thefore the storage system is an important determinant of performance.
+Competition for access to the same file from multiple processes appears to be a bottleneck and therefore the storage system is an important determinant of performance.
 But because the trajectory file format dictates the data access pattern, overall performance also depends on the actual data format, with some formats being more robust against storage system specifics than others.
 Overall, good strong scaling performance  could be obtained for a single node but robust across-node performance remained challenging.
 In order to identify performance bottlenecks we examined several other factors including the effect of striping in the parallel Lustre file system, over-subscribing (using more tasks than Dask workers), the performance of the Dask scheduler itself, and we also benchmarked an MPI-based implementation in contrast to the Dask approach.
@@ -332,7 +332,7 @@ These fluctuations differ in each repeat and are dependent on the hardware and n
 There is also variability in network latency, in addition to the variability in underlying hardware in each machine, which may also cause the results to vary across different machines.
 Since our map-reduce problem is pleasantly parallel, each or a subset of computations can be executed by independent processes. 
 Furthermore, all of our processes have the same amount of work to do, namely one trajectory block per process, and therefore our problem should exhibit good load balancing.
-Therefore, observing the stragglers shown in Figure :ref:`task-stream-comet` A is unexpected and the following sections aim to identify possible causes for their occurence.
+Therefore, observing the stragglers shown in Figure :ref:`task-stream-comet` A is unexpected and the following sections aim to identify possible causes for their occurrence.
 
 
 
@@ -387,7 +387,7 @@ Scheduler Throughput
 
    Benchmark of Dask scheduler throughput on TACC *Stampede*.
    Performance is measured by the number of empty ``pass`` tasks that were executed in a second.
-   The scheduler had to lauch 100,000 tasks and the run ended when all tasks had been run.
+   The scheduler had to launch 100,000 tasks and the run ended when all tasks had been run.
    **A** single node with different schedulers; multithreading and multiprocessing are almost indistinguishable from each other.
    **B** multiple nodes with the distributed scheduler and 1 worker process per node.
    **C** multiple nodes with the distributed scheduler and 16 worker processes per node.
@@ -460,7 +460,7 @@ In order to better quantify the scheduling decisions and to have verification of
 We analyzed the execution of XTC300x on TACC *Stampede* with three-fold over-subscription (:math:`M =3 N_\text{cores}`) and measured how many tasks were submitted per worker process.
 Table :ref:`process-subm` shows that although most workers executed three tasks as would be expected for three-fold over-subscription, between 0 and 17% executed four tasks and others only one or two. 
 This variability is also borne out in detail by Figure :ref:`task-histograms`, which shows how RMSD blocks were submitted per worker process in each run.
-Therfore, over-subscription does not necessarily lead to a balanced execution and might add additional execution time; unfortunately, over-subscription does not get rid of the straggler tasks.
+Therefore, over-subscription does not necessarily lead to a balanced execution and might add additional execution time; unfortunately, over-subscription does not get rid of the straggler tasks.
 
 .. table:: Number of worker processes that executed 1, 2, 3, or 4 of tasks (RMSD calculation over one trajectory block) per run. Executed on TACC *Stampede* utilizing 64 cores :label:`process-subm` 
 
@@ -500,9 +500,9 @@ The comparison was performed with the XTC600x trajectory on SDSC *Comet*.
    :label:`MPI-Speed-up`
 
 The overall performance is very similar to the Dask implementation: it scales almost ideally up to 24 CPU cores (a single node) but then drops to a very low efficiency (Figure :ref:`MPI-Speed-up`).
-A detailed analysis of the time spent on computation versus communication (Figure :ref:`MPItimestackedcomparison` A) shows that the communication and overheads are englibible up to 24 cores (single node) and only moderately increases for larger |Ncores|.
+A detailed analysis of the time spent on computation versus communication (Figure :ref:`MPItimestackedcomparison` A) shows that the communication and overheads are negligible up to 24 cores (single node) and only moderately increases for larger |Ncores|.
 The largest fraction of the calculations is always spent on the calculation of RMSD arrays with I/O (computation time).
-Although the computation time  decreases with increasing number of cores for a sigle node, it increases again when increasing |Ncores| further, in a pattern similar to what we saw earlier for Dask.
+Although the computation time  decreases with increasing number of cores for a single node, it increases again when increasing |Ncores| further, in a pattern similar to what we saw earlier for Dask.
 
 .. figure:: figs/MPItimestackedcomparison.pdf
 
@@ -518,7 +518,7 @@ Although the computation time  decreases with increasing number of cores for a s
 Figure :ref:`MPItimestackedcomparison` B compares the execution times across all MPI ranks for 72 cores.
 There are several processes that are about ten times slower than the majority of processes.
 These stragglers reduce the overall performance and are always observed when the number of cores is more than 24 and the ranks span multiple nodes. 
-Based on the results from MPI for Python, Dask is probably no responsible for the occurence of the stragglers.
+Based on the results from MPI for Python, Dask is probably no responsible for the occurrence of the stragglers.
 
 We finally also wanted to ascertain that variable execution time is not a property of the computational task itself and replaced the RMSD calculation with optimal superposition (based on the iterative qcprot algorithm :cite:`PuLiu_FastRMSD_2010`) with a completely different, fully deterministic metric, namely a simple all-versus-all distance calculation based on `MDAnalysis.lib.distances.distance_array`_.
 The distance array calculates all distances between the reference coordinates at time 0 and the  coordinates of the current frame and provides a comparable computational load.
@@ -531,8 +531,8 @@ Conclusions
 
 Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
-Performance on a single node can be close to ideal, especially when using the XTC trajectory format that trades I/O for CPU cycles through agressive compression, or when using SSDs with any format.
-However, obtaining good strong scaling beyond a single node was hindered by the occurence of stragglers, one or few tasks that would take much longer than all the other tasks.
+Performance on a single node can be close to ideal, especially when using the XTC trajectory format that trades I/O for CPU cycles through aggressive compression, or when using SSDs with any format.
+However, obtaining good strong scaling beyond a single node was hindered by the occurrence of stragglers, one or few tasks that would take much longer than all the other tasks.
 Further studies are necessary to identify the underlying reason for the stragglers observed here; they are not due to Dask or the specific computational test case, and they cannot be circumvented by over-subscribing.
 Thus, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
 
