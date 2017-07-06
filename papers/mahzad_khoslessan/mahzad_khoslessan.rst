@@ -45,7 +45,7 @@
 .. |E| replace:: :math:`\frac{S}{N}`
 .. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
-.. |Ncores| replace:: :math:`N_\text{cores}`
+.. |Ncores| replace:: :math:`N`
 
 -------------------------------------------------------------------------
 Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
@@ -82,12 +82,12 @@ Although Dask is able to implement much more complex computations than map-reduc
 .. figure:: figs/panels/rmsd_dask.pdf
    :figclass: b
 
-   Calculation of the root mean square distance (rmsd) of a protein structure from the starting conformation via map-reduce with Dask.
-   **A** rmsd as a function of time, with partial time series colored by trajectory block.   
-   **B** Dask task graph for splitting the rmsd calculation into three trajectory blocks.
+   Calculation of the root mean square distance (RMSD) of a protein structure from the starting conformation via map-reduce with Dask.
+   **A** RMSD as a function of time, with partial time series colored by trajectory block.   
+   **B** Dask task graph for splitting the RMSD calculation into three trajectory blocks.
    :label:`rmsd-dask`
 
-As the computational task we performed a common task in the analysis of the structural dynamics of proteins: we computed the time series of the root mean squared distance (rmsd) of the positions of all |Calpha| atoms to their initial coordinates at time 0; for each time step ("frame") in the trajectory, rigid body degrees of freedom (translations and rotations) have to be removed through an optimal structural superposition that minimizes the rmsd  :cite:`Mura:2014kx` (Figure :ref:`rmsd-dask`).
+As the computational task we performed a common task in the analysis of the structural dynamics of proteins: we computed the time series of the root mean squared distance (RMSD) of the positions of all |Calpha| atoms to their initial coordinates at time 0; for each time step ("frame") in the trajectory, rigid body degrees of freedom (translations and rotations) have to be removed through an optimal structural superposition that minimizes the RMSD  :cite:`Mura:2014kx` (Figure :ref:`rmsd-dask`).
 A range of commonly used MD file formats (CHARMM/NAMD DCD :cite:`Brooks:2009pt`, Gromacs XTC :cite:`Abraham:2015aa`, Amber NCDF :cite:`Case:2005uq`) and different trajectory sizes were benchmarked.
 
 We looked at different HPC resources including national supercomputers (XSEDE TACC *Stampede* and SDSC *Comet*), university supercomputers (Arizona State University Research Computing *Saguaro*), and local resources (Gigabit networked multi-core workstations). 
@@ -143,8 +143,8 @@ The calculation on each block (function ``block_rmsd()``, corresponding to the *
 
 In the *reduce* step, the partial time series from each block are concatenated in the correct order (``np.vstack``, see Figure :ref:`rmsd-dask` A); because results from delayed objects are used, this step also has to be delayed.
 
-As computational load we implement the calculation of the root mean square distance (rmsd) of the |Calpha| atoms of the protein adenylate kinase :cite:`Seyler:2014il` when fitted to a reference structure using an optimal rigid body superposition :cite:`Mura:2014kx`, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`.
-The rmsd is calculated for each trajectory frame in each block by iterating over ``u.trajectory[start:stop]``:
+As computational load we implement the calculation of the root mean square distance (RMSD) of the |Calpha| atoms of the protein adenylate kinase :cite:`Seyler:2014il` when fitted to a reference structure using an optimal rigid body superposition :cite:`Mura:2014kx`, using the qcprot implementation :cite:`PuLiu_FastRMSD_2010` in MDAnalysis :cite:`Gowers:2016aa`.
+The RMSD is calculated for each trajectory frame in each block by iterating over ``u.trajectory[start:stop]``:
 
 .. code-block:: python
 
@@ -186,8 +186,10 @@ For an analysis of the full data including weak scaling results set see the Tech
 
 The DCD file format is a binary representation for 32-bit floating point numbers (accuracy of positions about :math:`10^{-6}` Å) and the DCD300x trajectory has a file size of 47 GB (DCD600x is twice as much); XTC is a lossy compressed format that effectively rounds floats to the second decimal (accuracy about :math:`10^{-2}` Å, which is sufficient for typical analysis) and XTC300x is only 15 GB.
 Amber NCDF is implemented with netCDF_ classic format version 3.6.0 (same accuracy as DCD) and trajectories are about the same size as DCD.
+DCD and NCDF natively allow fast random access to frames or blocks of frames, which is critical to implement the map-reduce algorithm.
+XTC does not natively support frame seeking but MDAnalysis implements a fast frame scanning algorithm for XTC files that caches all frame offsets and so enables random access for the XTC format, too :cite:`Gowers:2016aa`.
 
-Performance was quantified by measuring the average time per trajectory frame to load data from storage into memory (I/O time per frame, |tIO|), the average time to complete the RMSD calculation (compute time per frame, |tcomp|), and the total wall time for job execution :math:`t_N` when using :math:`N` CPU cores.
+Performance was quantified by measuring the average time per trajectory frame to load data from storage into memory (I/O time per frame, |tIO|), the average time to complete the RMSD calculation (compute time per frame, |tcomp|), and the total wall time for job execution :math:`t_N` when using |Ncores| CPU cores.
 Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N}` and the efficiency :math:`E(N) = S(N)/N`.
 
 
@@ -197,22 +199,51 @@ Results and Discussion
 Trajectories from MD simulations record snapshots of the positions of all particles are regular time intervals.
 A snapshot at a specified time point is called a frame.
 MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu` to allow the analysis of large trajectories that may contain, for example, :math:`n_\text{frames} = 10^7` frames in total.
-In a map-reduce approach, :math:`N` processes will iterate in parallel over :math:`N` chunks of the trajectory, each containing :math:`n_\text{frames}/N` frames.
+In a map-reduce approach, |Ncores| processes will iterate in parallel over |Ncores| chunks of the trajectory, each containing :math:`n_\text{frames}/N` frames.
 Because frames are loaded serially, the run time scales directly with :math:`n_\text{frames}` and the weak scaling behavior (as a function of trajectory length) is trivially close to ideal as seen from the data in :cite:`Khoshlessan:2017aa`.
 Weak scaling with the system size also appears to be fairly linear, according to preliminary data (not shown).
 Therefore, in the following we focus exclusively on the harder problem of strong scaling, i.e., reducing the run time by employing parallelism.
 
 
 
+Effect of File Format on I/O
+----------------------------
 
+.. figure:: figs/panels/timing-comparison.pdf
+   :figclass: t
 
-Effect of File Format on I/O Time
----------------------------------
+   Comparison of total job execution time :math:`t_N` for different file formats (300x trajectory size) using Dask multiprocessing on a *single node* (1–24 CPU cores, **A** – **C**) and Dask distributed on *up to three nodes* (1–72 CPU cores, **D** – **F**).
+   The trajectory was split into :math:`M` blocks and computations were performed using :math:`N = M` CPU cores.
+   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system, NFS), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
+   **A**, **D** CHARMM/NAMD DCD.
+   **B**, **E** Gromacs XTC.
+   **C**, **F** Amber NetCDF.    
+   :label:`time-comparison`
+	  
+We first sought to quantify the effect of the trajectory format on the analysis performance.
+The overall run time depends strongly on the trajectory file format as well as the underlying storage system as shown for the 300x trajectories in Figure :ref:`time-comparison`; results for other trajectory sizes are similar (see :cite:`Khoshlessan:2017aa`) except for the smallest 50x trajectories where possibly caching effects tend to improve overall performance.
+Using DCD files with SSDs on a single node (Figure :ref:`time-comparison` A) is about one order of magnitude faster than the other formats (Figure :ref:`time-comparison` B, C) and scales near linearly for small CPU core counts (:math:`N \le 12`).
+However, DCD does not scale at all with other storage systems such as HDD of NFS and run time only improves up to :math:`N=4` on the Lustre file system.
+On the other hand, the run time with NCDF and especially with XTC trajectories improves linearly with increasing |Ncores|, with XTC on Lustre and :math:`N=24` cores almost obtaining the best DCD run time of about 30 s (SSD, :math:`N=12`); at the highest single node core count :math:`N=24`, XTC on SSD performs even better (run time about 25 s).
+For larger |Ncores| on multiple nodes, only a shared file system (Lustre or NFS) based on HDD was available.
+All three file formats only show small improvements in run time at higher core counts (:math:`N > 24`) on the Lustre file system on supercomputers with fast interconnects and no improvements on NFS over Gigabit (Figure :ref:`time-comparison` D–F).
 
-Depending on the file format the loading time of frames into memory will be different.
-Some file systems like distributed parallel file systems (Lustre) allow simultaneous access to the file by different processes; however this will be possible only if there is a parallel I/O library which is not the case in the present study.
-Figure :ref:`pattern-formats` illustrates the I/O pattern compared between different file formats.
-Figure :ref:`IO-comparison` compares the difference in I/O time for different file formats for 300X trajectory for multiprocessing (A, B, C) and distributed (D, E, F) schedulers respectively. 
+.. figure:: figs/panels/IO-time-comparison.pdf
+   :figclass: t
+	    
+   Comparison of I/O time |tIO| per frame between different file formats (300x trajectory size) using Dask multiprocessing on a *single node* (**A** – **C**) and Dask distributed on *multiple nodes* (**D** – **F**).
+   **A**, **D** CHARMM/NAMD DCD.
+   **B**, **E** Gromacs XTC.
+   **C**, **F** Amber NetCDF.       
+   All parameters as in Fig. :ref:`time-comparison`. 
+   :label:`IO-comparison`
+
+In order to explain the differences in performance and scaling of the file formats, we analyzed the time to load the coordinates of a single frame from storage into memory (|tIO|) and the time to perform the computation on a single frame using the in-memory data (|tcomp|).
+As expected, |tcomp| is independent from the file format, :math:`n_\text{frames}`, and |Ncores| and only depends on the CPU type itself (mean and standard deviation on SDSC *Comet* :math:`0.098\pm0.004` ms, TACC *Stampede* :math:`0.133\pm0.000` ms, ASU RC *Saguaro* :math:`0.174\pm0.000` ms, local workstations :math:`0.225\pm0.022` ms, see :cite:`Khoshlessan:2017aa`).
+Figure :ref:`IO-comparison`, however shows how |tIO| (for the 300x trajectories) varies widely and in most cases, is at least an order of magnitude larger than |tcomp|.
+The exception is |tIO| for the DCD file format using SSDs, which remains small (:math:`0.06\pm0.04` ms on SDSC *Comet*) and almost constant with :math:`N \le 12` (Figure :ref:`IO-comparison` A) and as a result, the DCD file format shows good scaling and the best performance on a single node.
+For HDD-based storage, the time to read data from a DCD frame increases with the number of processes that are simultaneously trying to access the DCD file.
+XTC and NCDF show flat |tIO| with |Ncores| on a single node (Figure :ref:`IO-comparison` B, C) and even for multiple nodes, the time to ingest a frame of a XTC trajectory is almost constant, except for NFS, which broadly shows poor performance (Figure :ref:`IO-comparison` E, F).
 
 .. figure:: figs/panels/trj-access-patterns.pdf
    :scale: 70%
@@ -222,56 +253,15 @@ Figure :ref:`IO-comparison` compares the difference in I/O time for different fi
    **B** CHARMM/NAMD DCD file format and Amber NCDF format.
    :label:`pattern-formats`
 
-XTC file format takes advantage of in-built compression and as a result has smaller file size as compared to the other formats. 
-In addition, MDAnalysis implements a fast frame scanning algorithm for XTC files.
-This algorithm computes frame offsets and saves the offsets to disk as a hidden file once the trajectory is read the first time. 
-When a trajectory is loaded again then instead of reading the whole trajectory the offset is used to seek individual frames. 
-As a result, opening the same file again is fast. 
-For XTC file format, each frame I/O will be followed by decompressing of that frame as soon as it is loaded into memory (see Figure :ref:`pattern-formats` A). 
-Thus, as soon as the frame is loaded into memory by one process, the file system will let the next process to load its requested frame into memory.
-This happens while the first process is decompressing the loaded frame.
-As a result, the overlapping of the requests to different frames by different processes will be less frequent.
-This is why IO time per frame for XTC file format remains level with increasing the number of processes for both schedulers (Figure :ref:`IO-comparison` B, E).
-However, DCD and NCDF file formats do not take benefit from in-built compression and as a result their file sizes are larger as compared to XTC file format.
-The IO pattern for DCD and NCDF file format is shown in Figure :ref:`pattern-formats` B. 
-As seen the piplining of the frame access is not happeing for these file formats and other processes are prevented from accessing their requested frame while another process is loading its frame into memory. 
-The overlapping of per frame trajectory data access can lead to higher IO time.
-The overlapping of per frame trajectory data access is especially critical when defined tasks per process do not have the desired level of granularity which is the case in the present benchmark. 
-DCD file format has a very simple format and the IO time per frame is very small as compared to other formats when the number of processes is small.
-As the number of processes increases, IO time per frame increases due to the overlapping of per frame trajectory data access (Figure :ref:`IO-comparison` A, D). 
-According to Figure :ref:`IO-comparison` A, SSD can be very helpful for DCD file formats and can lead to significant improvement in performance due to faster access time.
+Depending on the file format the loading time of frames into memory will be different, as illustrated in Figure :ref:`pattern-formats`.
+The XTC file format is compressed and has a smaller file size when compared to the other formats. 
+When a compressed XTC frame is loaded into memory, it is immediately decompressed (see Figure :ref:`pattern-formats` A). 
+During decompression by one process, the file system allows the next process to load its requested frame into memory.
+As a result, competition for file access between processes and overall wait time is reduced and |tIO| remains almost constant, even for large number of parallel processes (Figure :ref:`IO-comparison` B, E).
+Neither DCD nor NCDF files are compressed and multiple processes compete for access to the file (Figure :ref:`pattern-formats` B) although NCDF files is a more complicated file format than DCD and has additional computational overhead.
+Therefore, for DCD the I/O time per frame is very small as compared to other formats when the number of processes is small (and the storage is fast), but even at low levels of parallelization, |tIO| increases due to the overlapping of per frame trajectory data access (Figure :ref:`IO-comparison` A, D). 
+Data access with NCDF is slower but due to the additional computational overhead, is amenable to some level of parallelization (Figure :ref:`IO-comparison` C, F).
 
-The I/O time per frame is larger for NCDF file format as compared to DCD file format due to larger file size (Figure :ref:`IO-comparison` C, F).
-Also, NCDF has a more complicated file format. 
-Reading an existing NCDF data set involves opening the data set, inquiring about dimensions, variables and attributes, reading variable data, and closing the data set.
-The NCDF format is more sophisticated than the DCD format, which might contribute to the better scaling of parallel access to NCDF files than to DCD files.
-This is why IO time per frame remains level up to higher number of cores for NCDF file format (Figure :ref:`IO-comparison` C, F). 
-
-Figure :ref:`time-comparison` compares job execution time between different file format for 300x trajectory sizes using Dask multiprocessing and distributed schedulers.
-According to Figure :ref:`time-comparison` A, DCD files which are single precision binary FORTRAN files and have a simpler format as compared to XTC and NCDF are faster and have less execution time especially using SSDs.
-As described above, IO time per frame remains pretty level for DCD file format using SSDs (Figure :ref:`IO-comparison` A) and as a result DCD file format shows a very good scaling on a single node.
-Moreover, job execution time for DCD file format using SSDs is one order of magnitude smaller than other formats.
-In fact, reducing IO time can lead to noticeable improvement in performance which emphasizes the impact of IO time on the overall performance.
-According to the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
-Based on Figure :ref:`IO-comparison` A, B and C, very good speed up is achievable using SSDs for DCD format in much shorter time as compared to XTC and NCDF file formats.
-One can also achieve better performance with DCD file format by increasing the level of granularity per process.
-XTC and NCDF have comparable larger execution time as compared to DCDs due to their rather more complex file formats than DCDs (Figure :ref:`time-comparison` B, C, E, F).
-
-.. figure:: figs/panels/IO-time-comparison.pdf
-
-   Comparison of I/O time |tIO| per frame between different file formats (300x trajectory size) using Dask multiprocessing on a *single node* (**A** – **C**) and Dask distributed (**D** – **F**).
-   The trajectory was split into :math:`M` blocks and computations were performed using :math:`N = M` CPU cores.
-   The runs were performed on different resources (ASU RC *Saguaro*, SDSC *Comet*, TACC *Stampede*, *local* workstations with different storage systems (locally attached *HDD*, *remote HDD* (via network file system), locally attached *SSD*, *Lustre* parallel file system with a single stripe).
-   **A**, **D** CHARMM/NAMD DCD.
-   **B**, **E** Gromacs XTC.
-   **C**, **F** Amber NetCDF.   
-   :label:`IO-comparison`
-
-.. figure:: figs/panels/timing-comparison.pdf
-
-   Comparison of total job execution time :math:`t_N` for different file formats.
-   All other parameters as in Fig. :ref:`IO-comparison`
-   :label:`time-comparison`
 
 
 Performance Comparison between Different File Format
@@ -313,7 +303,7 @@ The next sections in the present study aim to find the reason for which we are s
 
    Detailed analysis of timings for the 600x XTC trajectory on HPC resources using Dask distributed.
    All other parameters as in Fig. :ref:`IO-comparison`.
-   **A** Total time to solution (wall clock), :math:`t_N` for :math:`N` trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
+   **A** Total time to solution (wall clock), :math:`t_N` for |Ncores| trajectory blocks using :math:`N_\text{cores} = N` CPU cores.
    **B** Sum of the I/O time per frame |tIO| and the (constant) time for the RMSD computation |tcomp| (data not shown).
    **C** Difference :math:`t_N - n_\text{frames} (t_\text{I/O} + t_\text{comp})`, accounting for the cost of communications and other overheads.
    :label:`timing-XTC-600x`
@@ -500,8 +490,7 @@ Therefore, we can conclude that over-subscription does not necessarily lead to a
    +------------+-------+-------+-------+-------+-------+
 
 .. figure:: figs/x300TaskHistograms.pdf
-   :figclass: w
-   :scale: 50%
+   :scale: 35%
       
    Task Histogram of RMSD with MDAnalysis and Dask with XTC 300x over 64 cores on Stampede with 
    192 blocks. Each histogram is a different run of the same execution. The X axis is worker process ID and the Y     
@@ -565,6 +554,11 @@ Conclusions
 In summary, Dask together with MDAnalysis makes it straightforward to implement parallel analysis of MD trajectories within a map-reduce scheme.
 We show that obtaining good parallel performance depends on multiple factors such as storage system and trajectory file format and provide guidelines for how to optimize trajectory analysis throughput within the constraints of a heterogeneous research computing environment.
 Nevertheless, implementing robust parallel trajectory analysis that scales over many nodes remains a challenge.
+
+.. speed up:
+.. In fact, reducing IO time can lead to noticeable improvement in performance which emphasizes the impact of IO time on the overall performance.
+.. According to the present benchmark, one can achieve a very good speed up using many SSDs for DCD file format on a single node.
+   
 
 
 Acknowledgments
