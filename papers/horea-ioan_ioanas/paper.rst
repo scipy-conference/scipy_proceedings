@@ -102,7 +102,7 @@ Output Design
 
 Outputs include simple human-readable command line reports and spreadsheets, ``.pdf`` protocols, introspective graphs, and dataframes.
 Dataframe ouput is designed to support both the Pandas ``DataFrame`` format and export as ``.csv``.
-The dataframe conventions are kept simple and are perfectly understood by BehavioPy :cite:`behaviopy`, a collection of plotting functions originally developed as part of LabbookDB, but now branched off for more general usage.
+The dataframe conventions are kept simple and are perfectly understood by BehavioPy :cite:`behaviopyGH`, a collection of plotting functions originally developed as part of LabbookDB, but now branched off for more general usage.
 The formatting of command line reports is built by concatenating ``__str__`` methods of queryable objects and their immediate relationships, and is based on the most common use cases for rapid monitoring.
 Contingent on the availability of object-specific formatting guidelines, an interface is available for generating human-readable, itemized ``.pdf`` protocols.
 
@@ -379,7 +379,7 @@ This not only promotes irregularity re-use, but also facilitates rudimentary man
 Plotting via BehavioPy
 ~~~~~~~~~~~~~~~~~~~~~~
 
-LabbookDB provides a number of powerful data selection and processing functions, which produce consistently structured dataframes that seamlessly integrate with the BehavioPy plotting API.
+LabbookDB provides a number of powerful data selection and processing functions, which produce consistently structured dataframes that seamlessly integrate with the BehavioPy :cite:`behaviopyGH` plotting API.
 The forced swim test, for instance, is a preclinically highly relevant behavioural assay :cite:`Petit-Demouliere2005`, which LabbookDB can document and evaluate.
 The following example code should be executable locally, contingent on LabbookDB, example database, and example data (included in Demolog) availability:
 
