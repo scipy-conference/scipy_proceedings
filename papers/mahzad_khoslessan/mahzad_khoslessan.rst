@@ -199,7 +199,7 @@ Strong scaling was assessed by calculating the speed up :math:`S(N) = t_{1}/t_{N
 Results and Discussion
 ======================
 
-Trajectories from MD simulations record snapshots of the positions of all particles are regular time intervals.
+Trajectories from MD simulations record snapshots of the positions of all particles at regular time intervals.
 A snapshot at a specified time point is called a frame.
 MDAnalysis only loads a single frame into memory at any time :cite:`Gowers:2016aa, Michaud-Agrawal:2011fu` to allow the analysis of large trajectories that may contain, for example, :math:`n_\text{frames} = 10^7` frames in total.
 In a map-reduce approach, |Ncores| processes will iterate in parallel over |Ncores| chunks of the trajectory, each containing :math:`n_\text{frames}/N` frames.
@@ -313,11 +313,13 @@ The difference is small for the results obtained using multiprocessing scheduler
 In order to obtain more insight into the underlying network behavior both at the Dask worker level and communication level and in order to pinpoint the origin of the overheads, we used the web-interface of the Dask library, which is launched together with the Dask scheduler.
 Dask task stream plots such as the example shown in Figure :ref:`task-stream-comet` A typically show one or more *straggler* tasks that take much more time than the other tasks and as a result slow down the whole run. 
 Stragglers do not actually spend more time on the RMSD computation and trajectory I/O than other tasks, as shown by comparing the average compute and I/O time for a single task :math:`i`, :math:`n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})`, with the maximum over all tasks :math:`\max_i[n_\text{frames}/N (t_{\text{comp}, i} + t_{\text{I/O}, i})]`  (Figure :ref:`task-stream-comet` B).
-However, for larger core numbers, for instance, :math:`N=54`, the maximum compute and I/O time as measured inside the Python code is smaller than the maximum value extracted from the web-interface (and the Dask scheduler) (Figure :ref:`task-stream-comet` B).
+These stragglers are observed at some repeats when the number of cores is more than 24. 
+However, we do not always see these stragglers which shows the importance of collecting statistics and looking at the average value of several repeats (5 in the present study).
+For example, for :math:`N=30` at one repeat no straggler was observed but, the statistics show poor perforrmance as also see in Figure :ref:`timing-XTC-600x` A and B. 
+However, as seen in the example for :math:`N=54` for one repeat, the maximum compute and I/O time as measured inside the Python code is smaller than the maximum value extracted from the web-interface (and the Dask scheduler) (Figure :ref:`task-stream-comet` B).
 The maximum compute and I/O value from the scheduler matches the total measured run time, indicating that stragglers limit the overall performance of the run.
 The timing of the scheduler includes waiting due to network effects, which would explain why the difference is only visible when using multiple nodes where the node interconnect must be used.
 
-    
 
 Challenges for Good HPC Performance
 -----------------------------------
@@ -418,7 +420,7 @@ Effect of Over-Subscribing
 In order to make our code more robust against uncertainty in computation times we explored over-subscribing the workers, i.e., to submit many more tasks than the number of available workers (and CPU cores, using one worker per core). 
 Over-Subscription might allow Dask to balance the load appropriately and as a result cover the extra time when there are some stragglers.
 We set the number :math:`M` of tasks to be three times the number of workers, :math:`M = 3 N`, where the number of workers :math:`N = N_\text{cores}` equaled the number of CPU cores. 
-Lustre-striping was also activated and set to three, which is also to the number of nodes used.
+Lustre-striping was also activated and set to three, which is also equal to the number of nodes used.
 
 .. figure:: figs/panels/speed-up-IO-600x-oversubscribing.pdf
 
@@ -444,7 +446,7 @@ As before, the I/O time is constant up to 72 cores due to striping (Figure :ref:
 However, a time difference between average total compute and I/O time and job execution time (Figure :ref:`timing-600x-oversubscribing`) reveals that over-subscribing does not help to remove the stragglers and as a result the overall speed-up is not improved.
 Figure :ref:`Dask-time-stacked-comparison` shows a time comparison for different parts of the calculations. 
 The overhead in the calculations is small up to 24 cores (single node).
-For lower |Ncores|, the largest fraction of time is spent on the calculation of RMSD arrays and I/) (computation time) which decreases as the number of cores increases from 1 to 72.
+For lower |Ncores|, the largest fraction of time is spent on the calculation of RMSD arrays and I/O) (computation time) which decreases as the number of cores increases from 1 to 72.
 However, when extending to multiple nodes the time for overheads and communication increases, which reduces the overall performance.
 
 .. figure:: figs/Dask-time_stacked_comparison.pdf
@@ -518,7 +520,7 @@ Although the computation time  decreases with increasing number of cores for a s
 Figure :ref:`MPItimestackedcomparison` B compares the execution times across all MPI ranks for 72 cores.
 There are several processes that are about ten times slower than the majority of processes.
 These stragglers reduce the overall performance and are always observed when the number of cores is more than 24 and the ranks span multiple nodes. 
-Based on the results from MPI for Python, Dask is probably no responsible for the occurrence of the stragglers.
+Based on the results from MPI for Python, Dask is probably not responsible for the occurrence of the stragglers.
 
 We finally also wanted to ascertain that variable execution time is not a property of the computational task itself and replaced the RMSD calculation with optimal superposition (based on the iterative qcprot algorithm :cite:`PuLiu_FastRMSD_2010`) with a completely different, fully deterministic metric, namely a simple all-versus-all distance calculation based on `MDAnalysis.lib.distances.distance_array`_.
 The distance array calculates all distances between the reference coordinates at time 0 and the  coordinates of the current frame and provides a comparable computational load.
