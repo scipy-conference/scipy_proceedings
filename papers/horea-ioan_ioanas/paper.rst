@@ -134,8 +134,8 @@ Beyond that time point development may become contingent on the established impa
 Capabilities
 ------------
 
-The aforementioned integration testing data reposited as Demolog :cite:`demolog` can also serve to demonstrate the capabilities of this first LabbookDB release in a concise fashion.
-Contingent on the presence of LabbookDB ``0.0.1`` and its dependencies on the system, an example database can be built |---| and correspondingly described subsequent entries can be executed locally.
+The aforementioned integration testing data reposited as Demolog :cite:`demolog` also serves to demonstrate the capabilities of this first LabbookDB release in a concise fashion.
+Contingent on the presence of LabbookDB ``0.0.1`` :cite:`labbookdb` and its dependencies on the system, an example database can be built |---| and correspondingly described subsequent entries can be executed locally.
 To set up the example database, the following should be run from the terminal:
 
 .. code-block:: console
