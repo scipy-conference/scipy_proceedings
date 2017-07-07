@@ -109,7 +109,8 @@ It is an efficient way for hiding serial regions which are an inevitable part of
 -------------------------------
 Nevertheless, the libraries named above do not coordinate the creation or pooling of threads, which may lead to *oversubscription*,
 where there are much more active software threads than available hardware resources.
-For sufficiently big machines, it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
+For sufficiently big machines with roughly more than 16 cores,
+it can lead to sub-optimal execution due to frequent context switches, thread migration, broken cache-locality,
 and finally to a load imbalance when some threads have finished their work but others are stuck, thus halting the overall progress.
 
 For example, Intel OpenMP [*]_ runtime library (used by NumPy/SciPy)
@@ -121,8 +122,9 @@ the other parallel work cannot start until OpenMP threads stop spinning or are p
 
 .. [*] Other names and brands may be claimed as the property of others.
 
-Because overhead from linear oversubscription (e.g. 2x) is not always visible on the application level (especially for small systems),
-it can be tolerated in many cases when the work for parallel regions is big enough.
+Because overhead from linear oversubscription (e.g. 2x) is not always visible on the application level
+(especially for smaller number of processor cores),
+it can be tolerated in many cases when the work for parallel regions is big enough to hide the overhead.
 However, in the worst case a program starts multiple parallel tasks and each of these tasks ends up executing an OpenMP parallel region.
 This results in quadratic oversubscription (with default settings) which ruins multi-threaded performance on systems with a significant number of threads.
 Within some big systems like Intel |R| Xeon Phi |TM|, it may not be even possible to create as many software threads as the number of hardware threads multiplied by itself due to insufficient resources.
@@ -315,7 +317,7 @@ We also used experimental build of OpenMP (``libiomp``) library, which will be a
 Multi-threading results in exclusive composability mode can be reproduced using openmp 2017.0.3-intel_8 as well
 when setting ``KMP_FOREIGN_THREAD_LOCK`` (deprecated).
 
-Here is an example of how to run the benchmark program in different modes:
+Here is an example of how to run the benchmark programs in different modes:
 
 .. code-block:: sh
 
@@ -339,7 +341,7 @@ unless additional memory copying happens between the processes, which is out of 
 
 3.1. Balanced QR Decomposition with Dask
 ----------------------------------------
-The code below is a simple program using Dask that validates QR decomposition by multiplying computed components and comparing the result against the original input.
+The code below is a simple program using Dask that validates QR decomposition function by multiplying computed components and comparing the result against the original input.
 
 .. code-block:: python
     :linenos:
@@ -535,11 +537,12 @@ Composable OpenMP modes work significantly slower than default version
 since there is not enough work for each parallel region, which leads to CPU underutilization.
 
 
-3.5. Acceptable Level of Oversubscription
------------------------------------------
-We set few experiments to determine what level of oversubscription has acceptable performance.
-We started with various sizes for the top level thread or process pool,
-and ran our balanced eigenvalues search workload with different pool sizes from 1 to 88.
+3.5. Impact of nested parallelism and oversubscription
+------------------------------------------------------
+Experiments of this section demonstrate benefits of using nested parallelism and
+when oversubscription start impacting performance.
+We took our balanced eigenvalues search workload (p3.2) to run it in default and the best performing SMP modes.
+Then we run it with various sizes for the top level thread and process pool, from 1 to 88 workers.
 
 .. figure:: scalability_multithreading.png
    :figclass: b
@@ -551,19 +554,20 @@ and ran our balanced eigenvalues search workload with different pool sizes from 
 
    Multi-processing scalability of eigenvalues search workload. :label:`smp`
 
+.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
+
 Figure :ref:`smt` shows the scalability results for the multi-threading case.
-Two modes are compared: default one and with SMP module since it is the best approach for this benchmark.
 The difference in execution time between these two methods starts from 8 threads in top level pool
 and becomes larger as the pool size increases.
 
 The multi-processing scalability results are shown in figure :ref:`smp`.
-They can be obtained from the same eigenvalues search workload by replacing :code:`ThreadPool` by :code:`Pool`.
+They can be obtained from the same example by replacing :code:`ThreadPool` by :code:`Pool`.
 The results are very similar to the multi-threading case:
 oversubscription effects become visible starting from 8 processes at the top level of parallelization.
 
 
-4. Solutions Applicability
---------------------------
+4. Solutions Applicability and Future Work
+------------------------------------------
 In summary, all the three evaluated approaches to compose parallelism are valuable
 and can provide significant performance increases for both multi-threading and multi-processing cases.
 Ideally, we would like to find a single solution, which works well for all the cases.
@@ -587,45 +591,43 @@ in the following table as a starting point for tuning performance of application
 .. figure:: recommendation_table.png
    :figclass: h
 
+Threads created for blocking I/O operations are not subject for performance degradation because of the oversubscription.
+In fact, it is recommended to maintain much higher number of threads because they are mostly blocked in the operation system.
+If your program uses blocking I/O, please consider using asynchronous I/O instead
+that blocks only one thread for the event loop and so prevents other threads from being blocked.
 
-5. Limitations and Future Work
-------------------------------
 We encourage the readers to try suggested composability modes and use them in production environment,
-if it provides better results.
-However, there are still a lot of potential enhancements and we need real customers with feedback and specific use cases
-in order to keep working in this whole direction and prioritize improvements.
+if this provides better results.
+However, there are still some potential enhancements that can be implemented
+and we need real customers with feedback and specific use cases
+in order to keep working in this whole direction and prioritize the improvements.
 
 The *smp* module works only on Linux currently though can be expanded to all the other platforms as well.
 It bases its calculations only on the pool size and does not take into account its real usage.
 We think it can be improved in future to trace task scheduling pool events and so to become more flexible.
 
-The composable mode of Intel OpenMP* runtime library is also limited by Linux platform currently.
+The composable mode of Intel OpenMP* runtime library is currently limited by Linux platform as well.
 It works fine with parallel regions with high CPU utilization,
 but it has significant performance gap in other cases, which we believe can be improved.
 
-Threads created for blocking I/O operations are not subject for performance degradation because of the oversubscription.
-In fact, it is recommended to maintain much higher number of threads because they are mostly blocked in the operation system.
-If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop
-and so prevents other threads from being blocked.
-
-IPC mode of the TBB module for Python is in an experimental stage and might be insufficiently optimized and verified
+The IPC mode of the TBB module for Python is a preview feature, which might be insufficiently optimized and verified
 with different use cases.
 Also, the TBB-based threading layer of Intel |R| MKL might be suboptimal comparing to the default OpenMP-based threading layer.
-However, all these problems can be eliminated as more users will become interested in solving their composability issues
-and Intel |R| MKL and the TBB module are further developed.
+
+However, all these problems can be eliminated as more users will become interested in using nested parallelism
+in prodution environment and as all the mentioned here software is further developed.
 
 .. [OptNote] https://software.intel.com/en-us/articles/optimization-notice
-.. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
-6. Conclusion
+5. Conclusion
 -------------
 This paper starts by substantiating the necessity of broader usage of nested parallelism for multi-core systems.
 Then, it defines threading composability and discusses the issues of Python programs and libraries,
 which use parallelism with multi-core systems, such as GIL and oversubscription.
 These issues affect the performance of Python programs that use libraries like NumPy, SciPy, SciKit-learn, Dask, and Numba.
 
-Three approaches are presented as potential solutions.
+Three approaches are suggested as potential solutions.
 The first one is to limit statically the number of threads created on the nested parallel level.
 The second one is to coordinate execution of OpenMP parallel regions.
 The third one is to use a common threading runtime using Intel |R| TBB extended to multi-processing parallelism.
@@ -633,7 +635,7 @@ All these approaches limit the number of active threads in order to prevent pena
 They coordinate parallel execution of independent program modules to improve overall performance.
 
 The examples presented in the paper show promising results while achieving the best performance
-using nested parallelism and threading composability.
+using nested parallelism in threading composability modes.
 In particular, balanced QR decomposition and eigenvalues search examples are 2.5x and 7.5x faster
 compared to the baseline implementations.
 Imbalanced versions of these benchmarks are 34-35% faster than the baseline.
@@ -642,9 +644,9 @@ These improvements are achieved with all different approaches,
 demonstrating that the three solutions are valuable and complement each other.
 We have compared suggested approaches and provided recommendations of when it makes sense to employ each of them.
 
-All the described solutions are available as open source software,
-and the Intel |R| Distribution for Python accelerated by Intel |R| MKL is available for free
-as a stand-alone installer [IntelPy]_ and on anaconda.org/intel channel.
+All the described modules and libraries are available as open source software and
+included as part of the free Intel |R| Distribution for Python product.
+The Distribution is available as a stand-alone installer [IntelPy]_and as a set of packages on anaconda.org/intel channel.
 
 
 References
