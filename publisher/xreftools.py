@@ -79,7 +79,7 @@ class XrefMeta:
         proceedings_doi = xml.SubElement(proceedings_doi_data, 'doi')
         proceedings_doi.text = make_doi(self.scipy_entry["proceedings"]["xref"]["prefix"])
         proceedings_resource = xml.SubElement(proceedings_doi_data, 'resource')
-        proceedings_resource.text = 'http://XXX.org'
+        proceedings_resource.text = self.proceedings_url()
 
     def make_conference_papers(self, conference, entry):
         paper = xml.SubElement(conference, "conference_paper")
@@ -106,10 +106,20 @@ class XrefMeta:
         paper_doi = xml.SubElement(paper_doi_data, 'doi')
         paper_doi.text = make_doi(self.scipy_entry["proceedings"]["xref"]["prefix"])
         paper_resource = xml.SubElement(paper_doi_data, 'resource')
-        paper_resource.text = 'http://XXX.org'
+        paper_resource.text = self.paper_url(entry['paper_id'])
 
     def write_metadata(self, filepath):
         xml.ElementTree(self.doi_batch).write(filepath)
+
+    def paper_url(self, paper_id):
+        page = paper_id + '.htm'
+        return '/'.join([self.proceedings_url(), page])
+
+    def proceedings_url(self):
+        url_base = self.scipy_entry["proceedings"]["xref"]["resource_url"]
+        title = self.scipy_entry["proceedings"]['title']['acronym'].lower()
+        year = self.scipy_entry["proceedings"]['year']
+        return  '/'.join([url_base, title+year])
 
 def split_name(string, missing='MISSING'):
     name = HumanName(string)
