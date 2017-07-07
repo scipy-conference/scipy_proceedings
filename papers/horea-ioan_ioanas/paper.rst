@@ -19,7 +19,7 @@ LabbookDB - A Wet-Work-Tracking Database Application Framework
 
 .. class:: abstract
 
-    LabbookDB is a database application framework containing a relational database structure for life science research -
+    LabbookDB is a database application framework containing a relational database structure for life science research |---|
     along with a number of functions to conveniently add and retrieve information, and generate summaries.
     The core concept of LabbookDB is that most information commonly tracked in a lab book can be more efficiently and more reliably stored in a relational database.
     We overcome the flexibility limitations of designed-for-analysis spreadsheets and databases by building our schema around atomized physical object interactions in the laboratory
@@ -34,23 +34,23 @@ LabbookDB - A Wet-Work-Tracking Database Application Framework
 Introduction
 ------------
 
-The laboratory notebook (more commonly, lab book) is a long-standing multi-purpose record -
+The laboratory notebook (more commonly, lab book) is a long-standing multi-purpose record |---|
 serving as a primary data trace, as a calendar, diary, legal document, memory aid, organizer, timetable, and also proposed as a rapid science communication medium :cite:`Bradley2007`.
 It is of notable popularity in the natural sciences, especially in the life sciences |---| where research largely consists of “wet work” (i.e. real-world manipulation), which generally leaves no data trace unless explicitly recorded.
 With the advent of electronic data acquisition and storage, however, the lab book has increasingly lost significance as a repository for actual data, and has transformed into a metadata record.
 Notably, the modern lab book has become a general repository of information, for which simple array formats (e.g. tables, spreadsheets, or data matrices) do not provide an adequate input and/or storage format.
 
-Some scientists and science service providers seek to emulate the seemingly convenient lab book format in the electronic medium -
+Some scientists and science service providers seek to emulate the seemingly convenient lab book format in the electronic medium |---|
 even providing support for sketching and doodling (e.g. eLabFTW :cite:`elabftw`).
 Storing information in free-text or pictorial form, however, exacerbates the incompatibility with electronic data analysis and reporting
 (which commonly requires consistent array formats).
-This approach, rather than merely retarding information flow by increasing the need for manual lookup and input, can also increase the incidence of biased evaluation
-- most easily as a consequence of notes being more often or more attentively consulted, and judged by varied but not explicitly documented standards, depending on the expectations of the researcher.
+This approach, rather than merely retarding information flow by increasing the need for manual lookup and input, can also increase the incidence of biased evaluation |---|
+most easily as a consequence of notes being more often or more attentively consulted, and judged by varied but not explicitly documented standards, depending on the expectations of the researcher.
 
 Conversely, researchers often force multidimensional and relationship-rich experimental metadata into the familiar and analysis-apt spreadsheet format.
 Under a list-like model, however, relationships become spread over many combinations of cells while remaining untracked.
 This leads to the repetition of identical cell combinations across multiple entries, which in turn renders e.g. the task of updating the correspondence between related cells non-trivial.
-These issues are known as information redundancy and update anomalies, respectively -
+These issues are known as information redundancy and update anomalies, respectively |---|
 and are prone to damage data integrity over time.
 The temptation also arises in such cases to truncate data input to only the parts considered essential at the time of the experiment.
 This runs the risk of omitting information which may have been easily recorded (even automatically) given a proper data structure, and which may become crucial for closer ex-post deliberation of results.
@@ -114,15 +114,15 @@ To accommodate for a developing schema, reduce dependencies, and reduce usage di
 As such, the database is stored locally, managed without a client-server model, and accessed without the need for authentication.
 The scope thus extends to maximally a few users, which trust each other with full access.
 This is an appropriate scope for most research groups.
-Aditionally, this design choice allows single researchers or clusters of computationally inclined researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without the need for a larger institutional commitment.
+Aditionally, this design choice enables single researchers or clusters of researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without significant overhead or the need for a larger institutional commitment.
 
 Quality Control
 ~~~~~~~~~~~~~~~
 
 LabbookDB provides an outline for unit testing which ships in the form of a submodule.
 Currently this is populated with a small number of simple example tests for low-level functionality, and is intended to grow as individual code units become more hardened.
-Additionally, we provide extensive integration testing which assures that the higher-level functionality of LabbookDB remains consistent, and databases can be regenerated from updated source code whenever needed.
-The ever-growing data required for extensive integration testing is distributed independently of LabbookDB and PIP, in a separate Git repository named Demolog :cite:`demolog`.
+Additionally, we provide extensive integration testing which assures that the higher-level functionality of LabbookDB remains consistent, and that databases can be regenerated from updated source code as needed.
+The ever-increasing data required for extensive integration testing is distributed independently of LabbookDB and PIP, in a separate Git repository named Demolog :cite:`demolog`.
 Both unit and integration tests are currently run continuously with TravisCI.
 
 Development Model
@@ -186,7 +186,7 @@ The Python API allows for clearly laid out entry insertion, via the ``add_generi
 
 Technically, all entries could be created in such a fashion.
 However, in order to better organize logging (e.g. quarterly, as in the Demolog submodules), we provide an additional function for entry update.
-Instead of editing the original animal input file to set e.g. the death date, the animal entry can be updated via a separately tracked Python file:
+Instead of editing the original animal input file to set e.g. the death date, the animal entry can be updated via a separate function call:
 
 .. code-block:: python
 
@@ -205,7 +205,7 @@ In this example an existing entry is selected in a compact fashion using custom 
 Compact Syntax for Entry Selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to identifiy related entries in a compact function for data input, we have developed a custom LabbookDB syntax.
+In order to compactly identifiy related for data input, we have developed a custom LabbookDB syntax.
 This syntax is automatically parsed by the ``labbookdb.db.add.get_related_ids()`` function, which is called internatlly by input functions.
 Notably, understanding of this syntax is not required in order to use reporting functions, and plenty of examples of its usage for input can be seen in Demolog.
 
@@ -351,22 +351,22 @@ Polymorphic Mapping and Schema Extension
 
 In current research, it is common to subject animals to experimental procedures which are similar in kind, but which can be split into categories with vastly different attributes.
 Prime examples of such procedures are ``Measurements`` and ``Operations``.
-In Figure :ref:`measurements` we present how LabbookDB uses SQLAlchemy's support for polymorphic relationships to link different measurement types to the ``measurements`` attribute of the ``Animal`` object.
-Attributes common to all measurement types are stored on the ``measurements`` table, as are relationships common to multiple measurements (e.g. the relationship to the ``Animal`` object, instantiated in the ``animal_id`` attribute).
+In Figure :ref:`measurements` we present how LabbookDB uses SQLAlchemy's joined table inheritance to link different measurement types to the ``measurements`` attribute of the ``Animal`` class.
+Attributes common to all measurement types are stored on the ``measurements`` table, as are relationships common to multiple measurements (e.g. the relationship to the ``Animal`` class, instantiated in the ``animal_id`` attribute).
 
 One of the foremost requirements for a relational database application to become a general purpose lab book replacement is an easily extendable schema.
-The ``Measurement`` and ``Operation`` polymorphic classes demonstrate how meta-categories for interventions can help extend the schema to cover new types of work without changing existing classes.
+The ``Measurement`` and ``Operation`` base classes demonstrate how inheritance and polymorphic mapping can help extend the schema to cover new types of work without changing existing classes.
 Polymorphism can be extended to more classes, to further propagate this feature.
-For instance, all measurement subjects in LabbookDB databases are currenly recorded as ``Mouse`` objects.
-These are adequate for most rodents, however they remain inadequate for e.g. human subects.
-The issue would best be mitigated by creating a ``Subject`` class, with attributes common to all types of subjects, and then creating polymorphic identities, such as ``HumanSubject`` or ``MouseSubject`` to address specific cases.
-``Measurement`` and ``Operation`` assignements would be seamlessly transferrable, as human operations would simply require a new identity in the already polymorphic ``Protocol`` set of classes.
+For instance, all measurement subjects in LabbookDB databases are currenly recorded as ``Animal`` objects.
+This is adequate for most rodents, however it remains inadequate for e.g. human subects.
+The issue would best be resolved by creating a ``Subject`` class, with attributes (including relationships) common to multiple types of subjects, and then creating derived classes, such as ``HumanSubject`` or ``MouseSubject`` to track more specific attributes.
+``Measurement`` and ``Operation`` assignments would be seamlessly transferrable, as relationships between objects derived from the ``Subject`` base class and e.g. the ``Operation`` base class would be polymorphic.
 
 Atomized Relationships
 ~~~~~~~~~~~~~~~~~~~~~~
 
 We use the expression “atomized relationships” to refer to the finest grained representation of a relationship which can feasibly be observed in the real world.
-In more common relational model terms, higher atomization would correspond to higher normal forms |---| though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook to more automated wet work tracking.
+In more common relational model terms, higher atomization would correspond to higher normal forms |---| though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook to more easily automatable wet work tracking.
 Similarly to higher normal forms, increasingly atomized relationships give rise to an increasingly complex relational structure of objects with decreasing numbers of attributes.
 LabbookDB embraces the complexity thus generated and the flexibility and exploratory power it facilitates.
 Database interaction in LabbookDB is by design programmatic, an thus ease of human readability of the raw relational structure is only of subordinate concern to reporting flexibility.
@@ -469,13 +469,13 @@ Disk space usage, while of secondary concern, may also become an issue.
 Going forward, better solutions for record keeping should be implemented.
 
 Of available options we would preferentially consider input code tracking (if possible in a form which is compatible with incremental execution) rather than output code tracking (e.g. in the form of data dumps).
-This is chiefly because output code tracking would be dependent not only of the data being racked, but also of the version of LabookDB used for database creation
-- ideally these versioning schemes would not have to become convoluted.
+This is chiefly because output code tracking would be dependent not only of the data being tracked, but also of the version of LabookDB used for database creation |---|
+ideally these versioning schemes would not have to become convoluted.
 
 Structure Migration
 ~~~~~~~~~~~~~~~~~~~
 
-The long-term unsustainability of database source code tracking also means that a more automated means of structure migration should be developed, so that LabbookDB databases can be re-cast from older relational structures into improved and extended newer structures -
+The long-term unsustainability of database source code tracking also means that a more automated means of structure migration should be developed, so that LabbookDB databases can be re-cast from older relational structures into improved and extended newer structures |---|
 instead of relying on source code editing and regeneration from scratch.
 Possibly, this could be handled by shipping an update script with every release |---| though it would be preferable if this could be done in a more dynamic, rolling release fashion.
 
@@ -483,14 +483,14 @@ Data Input
 ~~~~~~~~~~
 
 Data input via sequential Python function calls requires a significant amount of boilerplate code, and appears very intransparent for users unaccustomed to the Python syntax.
-It is also requires interfacing with an editor, minding syntax and formatting conventions, and browsing directory trees for the appropriate file in which to reposit the function calls.
+It also requires interfacing with an editor, minding syntax and formatting conventions, and browsing directory trees for the appropriate file in which to reposit the function calls.
 
 While LabbookDB provides a command line interface to input the exact same data with the exact same dictionary and string conventions with arguably less boilerplate code, this input format has not been implemented for the full database generation source code.
 The main concern precluding this implementation is that the syntax, though simplified form standard SQL, is not nearly simple enough to be relied on for the robustness of thousands of manual input statements generated on-site.
 
 A better approach may be to design automated recording workflows, which prompt the researcher for values only, while applying structure internally, based on a number of templates.
 Another possibility would be to write a parser for spreadsheets, which applies known LabbookDB input structures, and translates them into the internal relational representation.
-This second approach would also benefit from the fact that spreadsheets are already a very popular way in which researchers record their metadata -
+This second approach would also benefit from the fact that spreadsheets are already a very popular way in which researchers record their metadata |---|
 and could give LabbookDB the capability to import large numbers of old records, with comparatively little manual intervention.
 
 Not least of all, the ideal outlook for LabbookDB is to automatically handle as much of the data input process as possible, e.g. via specialized sensors, via semantic image :cite:`You_2016_CVPR` or video evaluation, or via an entity-barcode-scanner (as currently used by the iRATS system)    .
@@ -504,7 +504,7 @@ A notable special case of data input is the graphical user interface (GUI).
 While we acknowledge the potential of a GUI to attract scientists who are not confident users of the command line, we both believe that such an outreach effort is incompatible with the immediate goals of the project and that it is not typically an attractive long-term outlook for scientific Python applications.
 
 Particularly at this stage in development, manpower is limited, and contributions are performed on a per-need basis (little code was written which was not relevant to addressing an actual data management issue).
-Presently our foremost outreach target are researchers who posess the technical affinity needed to test our schema at its fringes and contribute to or comment on our code and schema.
+Presently our foremost outreach target are researchers who posess the technical affinity needed to test our schema at its fringes and contribute to |---| or comment on |---| our code and schema.
 A GUI would serve to add further layers of abstraction and make it more difficult for users to provide helpful feedback in our technology development efforts.
 
 In the long run, we would rather look towards developing more automatic or implicit tracking of wet work, rather than simply writing a GUI.
