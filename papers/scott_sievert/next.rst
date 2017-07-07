@@ -87,12 +87,12 @@ Problem statement
 .. figure:: figures/adaptive-gains.png
     :scale: 70%
 
-    As problem size grows, fewer samples (e.g., labeled images) are needed in
-    adaptive algorithms to reach a particular quality (e.g., classification
-    accuracy). :label:`adaptive-gains`
+    As problem difficulty increases, fewer samples (e.g., labeled images) are
+    needed with adaptive sampling to reach a particular quality (e.g.,
+    classification accuracy). :label:`adaptive-gains`
 
-Supervised machine learning relies on human responses to help produce a model
-that can predict the response a human would give
+Supervised machine learning relies humans to label examples in order to build a
+model to predict the response a human would give
 :cite:`kotsiantis2007supervised`. One example of this workflow is with the
 popular ImageNet dataset :cite:`deng2009imagenet`: humans have provided
 millions of image labels, and there have been dozens of models to predict
@@ -109,28 +109,30 @@ sampling algorithm that chooses the next query to be labeled.
 Adaptive data collection naturally requires fewer responses to produce the same
 model as passive data collection: it's adapting to previous responses by
 choosing which query to present next. This is most useful when many labels are
-needed, or as problem size increases. Adaptive algorithms do not require more
-responses than passive algorithms :cite:`castro2005faster`. A clearer depiction
-of these gains is shown in Figure :ref:`adaptive-gains`.
+needed unlabeled examples. Adaptive algorithms do not require more responses
+than passive algorithms :cite:`castro2005faster`. A representative depiction of
+gains obtained by adaptive data collection is shown in Figure
+:ref:`adaptive-gains` :cite:`dasgupta2008general`.
 
 Applying adaptive data collection to crowdsourcing has the potential to reduce
-the number of samples required. An example that requires many human judgments
-is sorting :math:`n` items with pairwise comparisons (e.g., :math:`x < y`). In
-the ideal case, an adaptive algorithm requires :math:`O(n\log n)` comparisons
-on average while passive algorithms requires :math:`O(n^2)` comparisons
-:cite:`hoare1962quicksort`.
+the number of samples required. An simple example that requires many human
+judgments is sorting :math:`n` items with pairwise comparisons (e.g., :math:`x
+< y`). In the ideal case, an adaptive algorithm requires :math:`O(n\log n)`
+comparisons on average while passive algorithms requires :math:`O(n^2)`
+comparisons :cite:`hoare1962quicksort`.
 
 Adaptively collecting large-scale datasets is challenging and time-consuming,
-as mentioned below.  As such, most experiments on adaptive sampling algorithms
-are simulations that use these passively collected datasets. These simulations
-do not address the practical issues faced in crowdsourcing: adaptive algorithm
-response time, human fatigue and differing label quality among humans.
+as mentioned below.  As such, the evaluation of novel adaptive sampling
+algorithms resort to simulations that use large passively collected datasets.
+These simulations do not address the practical issues faced in crowdsourcing:
+adaptive algorithm response time, human fatigue and differing label quality
+among humans.
 
 The problem that needs to be solved is to allow arbitrary adaptive algorithms
-to collect crowdsourced data and to allow the use of adaptive algorithms by
-experimentalists. Arguably, some of the deepest insights and greatest
-innovations have come through experimentation. This is only possible if
-adaptive data collection is easily accessible by both
+to collect crowdsourced data in real time by experimentalists. Arguably, some
+of the deepest insights and greatest innovations have come through
+experimentation. This is only possible if adaptive data collection is easily
+accessible by both
 
 1. Machine learning researchers, to test and deploy adaptive algorithms
 2. Experimentalists, to use and test adaptive algorithms in real-world applications
@@ -154,6 +156,8 @@ they require
 * receiving, storing and accessing responses
 * delivering and selecting queries to be labeled
 * updating some internal model which selects queries to be presented.
+* scaling to tens or hundreds of simultaneous users in an online environment
+  when applied to crowdsourcing
 
 General crowdsourcing systems (e.g., Mechanical Turk, PsiTurk, Crowd Flower)
 were not designed with these requirements in mind. Adaptive data collection
@@ -223,9 +227,8 @@ the real world and one required fewer samples as expected [#]_.
 .. [#] With contest 559 of The New Yorker Cartoon Caption contest
 
 In our usage, the system remains responsive to participants even after
-receiving millions of responses from thousands of participants, at least with
-fast and simple algorithms. This is illustrated by the problem below, though
-it also illustrates other features.
+receiving millions of responses from thousands of participants. This is
+illustrated by the problem below, though it also illustrates other features.
 
 .. figure:: figures/block-diagram.png
 
