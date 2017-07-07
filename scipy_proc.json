@@ -10,14 +10,16 @@
      },
      "year": "2017",
      "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Katy Huff",
+        "David Lippa",
+        "Dillon Niederhut",
+        "M Pacer"
      ],
      "volume": 3,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "July 10 - July 16",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -30,20 +32,119 @@
         {
             "name": "Conference Chairs",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
-                 "org": "Enthought, Inc."}
+                {"name": "Prabhu Ramachandran",
+                 "org": "Enthought Inc. & IIT Bombay"},
+                {"name": "Serge Rey",
+                 "org": "Arizona State University"}
                 ]
         },
-  
+
         {
             "name": "Program Chairs",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Lorena Barba",
+                 "org": "George Washington University"},
+                {"name": "Gil Forsyth",
+                 "org": "George Washington University"}
+                ]
+        },
+        {
+            "name": "Communications",
+            "members": [
+                {"name": "Juan Shishido",
+                 "org": "Twitter"}
+                ]
+        },
+        {
+            "name": "Birds of a Feather",
+            "members": [
+                {"name": "Aashish Chaudhary",
+                 "org": "Kitware"},
+                {"name": "Matt McCormick",
+                 "org": "Kitware"}
+                ]
+        },
+        {
+            "name": "Proceedings",
+            "members": [
+                {"name": "Katy Huff",
+                 "org": "University of Illinois"},
+                {"name": "David Lippa",
+                 "org": "Amazon"},
+                {"name": "Dillon Niederhut",
+                 "org": "Enthought"},
+                {"name": "M Pacer",
+                 "org": "Berkeley Institute of Data Science"}
+                ]
+        },
+        {
+            "name": "Financial Aid",
+            "members": [
+                {"name": "Scott Collis",
+                 "org": "Argonne National Laboratory"},
+                {"name": "Eric Ma",
+                 "org": "MIT"}
+                ]
+        },
+        {
+            "name": "Tutorials",
+            "members": [
+                {"name": "Alexandre Chabot-Leclerc",
+                 "org": "Enthought"},
+                {"name": "Mike Hearne",
+                 "org": "USGS"},
+                {"name": "Ben Root",
+                 "org": "Atmospheric and Environmental Research, Inc."}
+                ]
+        },
+        {
+            "name": "Sprints",
+            "members": [
+                {"name": "Jonathan Rocher",
+                 "org": "KBI Biopharma"},
+                {"name": "Charlye Tran",
+                 "org": "Lewis University and The Recurse Center"}
+                ]
+        },
+        {
+            "name": "Diversity",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+        {
+            "name": "Activities",
+            "members": [
+                {"name": "Chris Niemira",
+                 "org": "AOL"},
+                {"name": "Randy Paffenroth",
+                 "org": "Worcester Polytechnic Institute"}
+                ]
+        },
+        {
+            "name": "Sponsors",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"}
+                ]
+        },
+        {
+            "name": "Financial",
+            "members": [
+                {"name": "Bill Cowan",
+                 "org": "Enthought"},
+                {"name": "Jodi Havranek",
+                 "org": "Enthought"}
+                ]
+        },
+        {
+            "name": "Logistics",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"},
+                {"name": "Leah Jones",
+                 "org": "Enthought"}
                 ]
         }
     ],
@@ -56,5 +157,3 @@
       }
   ]
 }
-
-
