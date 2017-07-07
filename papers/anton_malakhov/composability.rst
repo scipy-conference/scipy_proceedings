@@ -365,28 +365,27 @@ Thus, there can be 1936 threads competing for 44 cores, which results in oversub
 
 A simple way to improve performance is to tune the OpenMP runtime using the environment variables.
 First, we need to limit total number of threads.
-We will set singular oversubscription instead of double as our target.
 Since we work on an 88-thread machine, we should set number of threads per parallel region to 1
-((88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
+( (88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
 We also noticed that reducing period of time after which Intel OpenMP worker threads will go to sleep,
 helps to improve performance in such workloads with oversubscription
 (this works best for the multi-processing case but helps for multi-threading as well).
-We achieve this by setting KMP_BLOCKTIME to zero.
-These simple optimizations allows reduce the computational time by more than 3x.
+We achieve this by setting KMP_BLOCKTIME to zero by default.
+These simple optimizations allows reduce the computational time by 2.5x.
 
 The third mode with *smp* module in fact does the same optimizations but automatically,
-and shows the same level of performance as the second one.
+and shows the same level of performance as for ``OMP_NUM_THREADS=1``.
 Moreover, it is more flexible and allows to work carefully with several thread/process pools in the application scope,
 even if they have different sizes.
-Thus, it is a good alternative to manual OpenMP tunning.
+Thus, we suggest it as a better alternative to manual OpenMP tunning.
 
-The fourth and fifth modes represents our dynamic OpenMP- and Intel |R| TBB-based approaches.
-Both modes improve the default result, but exclusive execution with OpenMP gave us the fastest results.
+The remaining modes represents our dynamic OpenMP- and Intel |R| TBB-based approaches.
+Both modes improve the default result, but OpenMP gaves us the fastest time.
 As described above, the OpenMP-based solution allows processes chunks one by one without any oversubscription,
 since each separate chunk can utilize the whole CPU.
-In contrast, the work stealing task scheduler from Intel |R| TBB is truly dynamic
-and tries to use a single thread pool to process all given tasks simultaneoulsy.
-As a result, it has worse cache utilization, and higher overhead for work balancing.
+In contrast, the work stealing task scheduler of Intel |R| TBB is truly dynamic
+and uses a single thread pool to process all the given tasks simultaneoulsy.
+As a result, besides higher overhead for work distribution, it has worse cache utilization.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
