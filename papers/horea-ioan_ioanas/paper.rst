@@ -21,10 +21,11 @@ LabbookDB - A Wet-Work-Tracking Database Application Framework
 
     LabbookDB is a database application framework containing a relational database structure for life science research -
     along with a number of functions to conveniently add and retrieve information, and generate summaries.
-    The core concept of LabbookDB is that most of the information commonly tracked in a lab book can be more efficiently and more reliably stored in a relational database.
-    We overcome the lack of flexibility and portability of designed-for-analysis spreadsheets and databases by building the database schema around atomized physical interactions of objects in the laboratory
-    (and providing ready-for-plotting and/or ready-for-analysis dataframes as a compatibility layer).
-    LabbookDB provides a wet work metadata storage model excellently suited for explorative ex-post reporting and analysis, as well as a potential infrastructure for automated wet work tracking.
+    The core concept of LabbookDB is that most information commonly tracked in a lab book can be more efficiently and more reliably stored in a relational database.
+    We overcome the flexibility limitations of designed-for-analysis spreadsheets and databases by building our schema around atomized physical object interactions in the laboratory
+    (and providing plotting- and/or analysis-ready dataframes as a compatibility layer).
+    We keep our database schema more easily extendable and adaptable by using joined table inheritance to manage polymorphic object types and their relationships.
+    LabbookDB thus provides a wet work metadata storage model excellently suited for explorative ex-post reporting and analysis, as well as a potential infrastructure for automated wet work tracking.
 
 .. class:: keywords
 
@@ -39,19 +40,19 @@ It is of notable popularity in the natural sciences, especially in the life scie
 With the advent of electronic data acquisition and storage, however, the lab book has increasingly lost significance as a repository for actual data, and has transformed into a metadata record.
 Notably, the modern lab book has become a general repository of information, for which simple array formats (e.g. tables, spreadsheets, or data matrices) do not provide an adequate input and/or storage format.
 
-Some scientists and science service providers seek to emulate the seemingly convenient functionality of the lab book in the electronic medium -
+Some scientists and science service providers seek to emulate the seemingly convenient lab book format in the electronic medium -
 even providing support for sketching and doodling (e.g. eLabFTW :cite:`elabftw`).
-Storing information in free-text or pictorial form, however, exacerbates the lab book's incompatibility with electronic data analysis and reporting
+Storing information in free-text or pictorial form, however, exacerbates the incompatibility with electronic data analysis and reporting
 (which commonly requires consistent array formats).
-This approach, rather than merely retarding information flow by increasing the need for manual lookup and input, can also increase the incidence of biased evaluation.
-This can happen most easily as a consequence of notes being more often or more attentively consulted, and judged by varied but not explicitly documented standards, depending on the expectations of the researcher.
+This approach, rather than merely retarding information flow by increasing the need for manual lookup and input, can also increase the incidence of biased evaluation
+- most easily as a consequence of notes being more often or more attentively consulted, and judged by varied but not explicitly documented standards, depending on the expectations of the researcher.
 
-Conversely, some researchers routinely force multidimensional and relationship-rich experimental metadata into the familiar and analysis-friendly spreadsheet format.
+Conversely, researchers often force multidimensional and relationship-rich experimental metadata into the familiar and analysis-apt spreadsheet format.
 Under a list-like model, however, relationships become spread over many combinations of cells while remaining untracked.
 This leads to the repetition of identical cell combinations across multiple entries, which in turn renders e.g. the task of updating the correspondence between related cells non-trivial.
 These issues are known as information redundancy and update anomalies, respectively -
 and are prone to damage data integrity over time.
-The temptation also arises in such cases to truncate the data input to only the parts considered essential at the time of the experiment.
+The temptation also arises in such cases to truncate data input to only the parts considered essential at the time of the experiment.
 This runs the risk of omitting information which may have been easily recorded (even automatically) given a proper data structure, and which may become crucial for closer ex-post deliberation of results.
 
 The crux of the issue, which neither of these approaches adequately addresses, is to store experimental metadata in a fashion which befits its relationship-rich nature, while providing array-formatted data output for analysis, and spreadsheet-formatted data for human inspection.
