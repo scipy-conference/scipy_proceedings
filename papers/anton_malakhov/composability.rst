@@ -151,7 +151,7 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 #. Global settings provided once and for all cannot take into account different parts or stages of the application, which can have opposite requirements for better performance.
 #. Setting right values might require from regular users deep enough understanding of the issue, architecture of the application, and the system it uses.
 #. There are more settings to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
-#. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
+#. The issue is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
 
 
 2. New approaches
@@ -332,6 +332,10 @@ Here is an example of how to run the benchmark program in different modes:
     # Composable TBB mode (multithreading only)
     python -m tbb bench.py
 
+For our examples, we will talk mostly about the multi-threading case, but according to our investigations,
+all conclusions that will be shown are applicable for the multi-processing case as well
+unless additional memory copying happens between the processes, which is out of scope for this paper.
+
 
 3.1. Balanced QR Decomposition with Dask
 ----------------------------------------
@@ -353,8 +357,7 @@ The code below is a simple program using Dask that validates QR decomposition by
 Dask splits the array into 44 chunks and processes them in parallel using multiple threads.
 However, each Dask task executes the same NumPy matrix operations which are accelerated using Intel |R| MKL under the hood and thus multi-threaded by default.
 This combination results in nested parallelism, i.e. when one parallel component calls another component, which is also threaded.
-For this example, we will talk mostly about the multi-threading case, but according to our investigations,
-all conclusions that will be shown are applicable for the multi-processing case as well.
+It is repeated in order to distingish warming-up effects in the first iterations from how it works for real computations.
 
 Figure :ref:`sdask` shows the performance results for the code above.
 By default, Dask processes a chunk in a separate thread, so there are 44 threads on the top level.
@@ -365,7 +368,7 @@ Thus, there can be 1936 threads competing for 44 cores, which results in oversub
 
 A simple way to improve performance is to tune the OpenMP runtime using the environment variables.
 First, we need to limit total number of threads.
-Since we work on an 88-thread machine, we should set number of threads per parallel region to 1
+Since we work on an 88-thread machine, we want single thread per parallel region
 ( (88 CPU threads / 88 workers in thread pool) * 1x over-subscription).
 We also noticed that reducing period of time after which Intel OpenMP worker threads goes to sleep,
 helps to improve performance in such workloads with oversubscription
@@ -373,7 +376,7 @@ helps to improve performance in such workloads with oversubscription
 We achieve this by setting KMP_BLOCKTIME to zero by default.
 These simple optimizations allows reduce the computational time by 2.5x.
 
-The third mode with *smp* module in fact does the same optimizations but automatically,
+The third mode with *smp* module specifying ``-f 1`` in fact does the same optimizations but automatically,
 and shows the same level of performance as for ``OMP_NUM_THREADS=1``.
 Moreover, it is more flexible and allows to work carefully with several thread/process pools in the application scope,
 even if they have different sizes.
@@ -381,7 +384,7 @@ Thus, we suggest it as a better alternative to manual OpenMP tuning.
 
 The remaining modes represents our dynamic OpenMP- and Intel |R| TBB-based approaches.
 Both modes improve the default result, but OpenMP gives us the fastest time.
-As described above, the OpenMP-based solution allows processes chunks one by one without any oversubscription,
+As described above, the OpenMP-based solution allows processing chunks one by one without any oversubscription,
 since each separate chunk can utilize the whole CPU.
 In contrast, the work stealing task scheduler of Intel |R| TBB is truly dynamic
 and uses a single thread pool to process all the given tasks simultaneously.
@@ -442,7 +445,7 @@ The first stage uses only one thread from the pool, which is able to fully utili
 During the second stage, half of top level threads is used (22 in our examples).
 And on the third stage, the whole pool is employed (44 threads).
 
-The code above demonstrates *unbalanced* version of QR decomposition workload:
+The code below demonstrates *unbalanced* version of QR decomposition workload:
 
 .. code-block:: python
     :linenos:
@@ -529,7 +532,7 @@ which allows to reduce execution time to 67% of the default mode.
 SMP module works even slower than the default version due to the same issues
 as described for unbalanced QR decomposition example.
 Composable OpenMP modes work significantly slower than default version
-since there is no enough work for each parallel region that leads to CPU underutilization.
+since there is not enough work for each parallel region, which leads to CPU underutilization.
 
 
 3.5. Acceptable Level of Oversubscription
