@@ -21,7 +21,7 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
+   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
    These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
@@ -58,7 +58,7 @@ using multiple threads, effectively serializing them.
 Thus the parallelism with multiple isolated processes is popular and widely used in Python
 since it allows to avoid the issues with GIL but it is prone to inefficiency due to memory-related overhead.
 However, when it comes to numeric computations with libraries like Numpy,
-most of the time is spent in C extensions whithout accessing Python data structures.
+most of the time is spent in C extensions without accessing Python data structures.
 It allows to release the GIL during computations and which enables scaling of compute-intensive applications.
 Thus, both multi-processing and multi-threading approaches are valuable for Python users and have its own areas of applicability.
 
@@ -83,7 +83,7 @@ This might relax the concerns regarding Python as a language for parallel comput
 since the serial portion is mostly fixed in Python when all the data-processing is hidden behind libraries like NumPy and SciPy.
 Nevertheless, a larger problem-size demands more operational memory to be used for processing it, but memory is a limited resource.
 Thus, even if problem-size is nearly unlimited, like for "Big Data", it has to be processed by chunks that fit into memory.
-Overall, the limitted growth of the problem-size on a single node leaves us with the scalability defined by Amdahl's Law anyway.
+Overall, the limited growth of the problem-size on a single node leaves us with the scalability defined by Amdahl's Law anyway.
 As a result, the best strategy to efficiently load a multi-core system is still to avoid serial regions and synchronization.
 
 
@@ -134,7 +134,7 @@ Altogether, the co-existing issues of multi-threaded components define *threadin
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
 The first aspect of building a composable threading system is to avoid creation of an excessive number of software threads, preventing oversubscription.
 That effectively means that a component and especially a parallel region cannot dictate how many threads it needs for execution (*mandatory parallelism*).
-Instead, it should expose available parallelism to a run-time library, which provides contol over the number of threads or
+Instead, it should expose available parallelism to a run-time library, which provides control over the number of threads or
 which automatically coordinates tasks between components and parallel regions and map them onto available software threads (*optional parallelism*).
 
 
@@ -150,7 +150,7 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 #. There might be not enough parallelism on the application level thus blindly disabling data parallelism can result in underutilization and so in slower execution.
 #. Global settings provided once and for all cannot take into account different parts or stages of the application, which can have opposite requirements for better performance.
 #. Setting right values might require from regular users deep enough understanding of the issue, architecture of the application, and the system it uses.
-#. There are more settinggs to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
+#. There are more settings to take into account like :code:`KMP_BLOCKTIME` and especially various thread affinity settings.
 #. It is not limited solely to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or custom threading runtime.
 
 
@@ -159,7 +159,7 @@ However, it has few deficiencies, which one might want to keep in mind on the wa
 Our goal is to provide alternative solutions for composing multiple levels of parallelism across multiple threading libraries
 with better or at least the same performance comparing to usual approaches
 while simplifying interface and requiring less knowledge and decisions from end-users.
-We prepared and evaluted few approaches that we now discuss in this paper.
+We prepared and evaluated few approaches that we now discuss in this paper.
 
 
 2.1. Static Settings
@@ -173,9 +173,9 @@ can use only some particular number of processor cores.
 For example, if we have an eight core CPU and want to create a pool of two workers,
 we can limit the number of threads per pool worker to four.
 When using a process pool, the best way to do so is to set thread affinity mask accordingly for each worker process
-thus limitting any threads created within this process to operte only on specified processor cores.
+thus limiting any threads created within this process to operate only on specified processor cores.
 In our example, the first process will use cores 0 through 3 and the second process will use cores 4 through 7.
-Furthermore, since both OpenMP and Intel |R| TBB respect the incoming affinty mask during initialization,
+Furthermore, since both OpenMP and Intel |R| TBB respect the incoming affinity mask during initialization,
 they limit the number of threads per each process to four.
 As a result, we have a simple way of sharing threads between pool workers without any oversubscription issues.
 
@@ -202,7 +202,7 @@ Optional argument :code:`-f <oversubscription_factor>` sets oversubscription fac
 to compute number of threads per pool worker.
 By default it equals to 2, which means that in our example, 8 threads will be used per process.
 Allowing this limited degree of oversubscription by default, we hope that for most applications benefits from load balancing
-will overwheight the overheads incurred by it, as discussed in details in p3.5.
+will overweight the overheads incurred by it, as discussed in details in p3.5.
 Though, for particular examples we show in this paper, the best performance is achieved with :code:`-f 1` specified on the command line.
 
 
@@ -220,7 +220,7 @@ This idea is easily extended to the case of multiple processes using Inter Proce
 system-wide semaphore.
 
 The exclusive mode approach is implemented in the Intel |R| OpenMP* runtime library being released
-as part of Intel |R| Distrubution for Python 2018 [#]_ as an experimental preview feature.
+as part of Intel |R| Distribution for Python 2018 [#]_ as an experimental preview feature.
 To enable this mode, :code:`KMP_COMPOSABILITY` environment variable should be set, for example:
 
 .. [#] It was also introduced on Anaconda cloud along with the version 2017.0.3 in limited, undocumented form.
@@ -239,13 +239,13 @@ that many co-existing threads can still cause resource exhaustion issue.
 2.3. Coordinated Thread Pools with Intel |R| TBB
 ------------------------------------------------
 The last approach has been initially introduced in our previous paper [AMala16]_.
-It is based upon using Intel |R| TBB as a sigle engine for coordinating parallelism across all the Python pools and modules.
+It is based upon using Intel |R| TBB as a single engine for coordinating parallelism across all the Python pools and modules.
 Its work stealing task scheduler is used to map tasks onto a limited set of TBB worker threads
 while monkey-patching technique applied in TBB module for Python redirects Python's :code:`ThreadPool` on top of TBB tasks.
 That allows to dynamically balance the load across multiple tasks from different modules but has been limited to multi-threading only.
 
 In this paper we extended this approach by introducing the InterProcess Communication (IPC) layer for Intel |R| TBB.
-As shown in figure :ref:`components`, different modules that can be mixed into single applicaion,
+As shown in figure :ref:`components`, different modules that can be mixed into single application,
 work on top of the shared Intel |R| TBB pool, which is also coordinated across multiple processes.
 
 .. figure:: components.png
@@ -259,10 +259,10 @@ When all the allowed threads are allocated, no additional threads can be created
 
 Because of this greedy algorithm, some TBB processes can be left without worker threads at all.
 This is legitimate situation within optional parallelism paradigm implemented in Intel |R| TBB,
-which does not prevent master threads from makeing progress and completing computation even without worker threads joined.
+which does not prevent master threads from making progress and completing computation even without worker threads joined.
 Thus, even in the worst case, counting all the worker and master threads, 
 the total number of active threads for all the running processes does not exceed twice of the number of CPU hardware threads,
-which excludes situation of quadratic oversubscripton.
+which excludes situation of quadratic oversubscription.
 
 When first process finishes computations, TBB lets worker threads to return back to the pool releasing resources for the semaphore.
 A special monitor thread implemented in libirml detects this situation allowing the rest of the processes
@@ -361,7 +361,7 @@ By default, Dask processes a chunk in a separate thread, so there are 44 threads
 Please note that by default, Dask creates a thread pool with 88 workers,
 but only half of them are used since there are only 44 chunks.
 Chunks are computed in parallel with 44 OpenMP workers each.
-Thus, there can be 1936 threads competing for 44 cores, which results in oversubscripton and poor performance.
+Thus, there can be 1936 threads competing for 44 cores, which results in oversubscription and poor performance.
 
 A simple way to improve performance is to tune the OpenMP runtime using the environment variables.
 First, we need to limit total number of threads.
@@ -377,14 +377,14 @@ The third mode with *smp* module in fact does the same optimizations but automat
 and shows the same level of performance as for ``OMP_NUM_THREADS=1``.
 Moreover, it is more flexible and allows to work carefully with several thread/process pools in the application scope,
 even if they have different sizes.
-Thus, we suggest it as a better alternative to manual OpenMP tunning.
+Thus, we suggest it as a better alternative to manual OpenMP tuning.
 
 The remaining modes represents our dynamic OpenMP- and Intel |R| TBB-based approaches.
-Both modes improve the default result, but OpenMP gaves us the fastest time.
+Both modes improve the default result, but OpenMP gives us the fastest time.
 As described above, the OpenMP-based solution allows processes chunks one by one without any oversubscription,
 since each separate chunk can utilize the whole CPU.
 In contrast, the work stealing task scheduler of Intel |R| TBB is truly dynamic
-and uses a single thread pool to process all the given tasks simultaneoulsy.
+and uses a single thread pool to process all the given tasks simultaneously.
 As a result, besides higher overhead for work distribution, it has worse cache utilization.
 
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
@@ -411,9 +411,9 @@ The code below processes an algorithm of eigenvalues and right eigenvectors sear
         p.map(np.linalg.eig, [x for i in range(1024)])
         print(time.time() - t0)
 
-In this example we process several matricies from an array in parallel using Python's :code:`ThreadPool`
+In this example we process several matrices from an array in parallel using Python's :code:`ThreadPool`
 while each separate matrix is computed in parallel by Intel |R| MKL.
-As a result, simillary to QR decomposition benchmark before, we stuck with quadratic oversubscription here.
+As a result, similarly to QR decomposition benchmark before, we stuck with quadratic oversubscription here.
 However, this code has a distinctive feature, in spite of parallel execution of eigenvalues search algorithm,
 it cannot fully utilize all available CPU cores.
 That is why an additional level of parallelism we used here may significantly improve overall benchmark performance.
@@ -424,10 +424,10 @@ Such approach allows to obtain more than 7x speed-up.
 However in this case, Intel |R| TBB based approach looks much better than composable OpenMP modes.
 The reason is insufficient parallelism in each separate chunk.
 In fact, exclusive mode of composable OpenMP leads to serial matrix processing, one by one,
-so significant part of the CPU stays unsed.
+so significant part of the CPU stays unused.
 As a result, execution time in this case becomes even larger than by default.
 The result of counting mode can be further improved on Intel |R| MKL side
-if parallel regions are adjusted to requess less threads.
+if parallel regions are adjusted to request less threads.
 
 3.3. Unbalanced QR Decomposition with Dask
 ------------------------------------------
@@ -489,7 +489,7 @@ allowing each chunk to be calculated one after the other avoids oversubscription
 
 3.4. Unbalanced Eigenvalues Search with NumPy
 ---------------------------------------------
-The second dynamic exapmle present here is based on eigenvalues search algorithm from NumPy:
+The second dynamic example present here is based on eigenvalues search algorithm from NumPy:
 
 .. code-block:: python
     :linenos:
@@ -541,12 +541,12 @@ and ran our balanced eigenvalues search workload with different pool sizes from 
 .. figure:: scalability_multithreading.png
    :figclass: b
 
-   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
+   Multi-threading scalability of eigenvalues search workload. :label:`smt`
 
 .. figure:: scalability_multiprocessing.png
    :figclass: t
 
-   Multi-processing scalability of eigenvalues seach workload. :label:`smp`
+   Multi-processing scalability of eigenvalues search workload. :label:`smp`
 
 Figure :ref:`smt` shows the scalability results for the multi-threading case.
 Two modes are compared: default one and with SMP module since it is the best approach for this benchmark.
@@ -563,11 +563,11 @@ oversubscription effects become visible starting from 8 processes at the top lev
 --------------------------
 In summary, all the three evaluated approaches to compose parallelism are valuable
 and can provide significant performance increases for both multi-threading and multi-processing cases.
-Ideally, we would like to find a single solution which works well for all the cases.
+Ideally, we would like to find a single solution, which works well for all the cases.
 However, the presented approaches rather complement each other and have their own fields of applicability.
 
 The SMP module works perfectly for balanced workloads where all the outermost workers have same amount of work.
-Compared with manual tunning of OpenMP settings, this approach is more stable,
+Compared with manual tuning of OpenMP settings, this approach is more stable,
 since it can work with pools of different sizes within the scope of a single application without performance degradation.
 It also covers other threading libraries such as Intel |R| TBB.
 
@@ -577,7 +577,7 @@ where there is enough work to load each innermost parallel region.
 The dynamic task scheduler from Intel |R| TBB provides the best performance
 when innermost parallel regions cannot fully utilize the whole CPU and/or have varying amounts of work to process.
 
-Though, this emperical evidence might not be enough to properly generalize our experience while there are a lot of
+Though, this empirical evidence might not be enough to properly generalize our experience while there are a lot of
 other variables and moving targets, we did our best to summarize conclusions and suggest practical guidance
 in the following table as a starting point for tuning performance of applications with nested parallelism:
 
@@ -589,7 +589,7 @@ in the following table as a starting point for tuning performance of application
 ------------------------------
 We encourage the readers to try suggested composability modes and use them in production environment,
 if it provides better results.
-However, there are still a lot of potential simprovements and we need real customers with feedback and specific use cases
+However, there are still a lot of potential enhancements and we need real customers with feedback and specific use cases
 in order to keep working in this whole direction and prioritize improvements.
 
 The *smp* module works only on Linux currently though can b expanded to all the other platforms as well.
@@ -600,8 +600,8 @@ The composable mode of Intel OpenMP* runtime library is also limited by Linux pl
 It works fine with parallel regions with high CPU utilization,
 but it has significant performance gap in other cases, which we believe can be improved.
 
-Threads created for blocking I/O operations are not suject for performance degradation because of the oversubscription.
-In fact, it is recommended to maintain much higher number of threads because they are mostl blocked in the operation system.
+Threads created for blocking I/O operations are not subject for performance degradation because of the oversubscription.
+In fact, it is recommended to maintain much higher number of threads because they are mostly blocked in the operation system.
 If your program uses blocking I/O, please consider using asynchronous I/O that blocks only one thread for the event loop
 and so prevents other threads from being blocked.
 
@@ -623,7 +623,7 @@ which use parallelism with multi-core systems, such as GIL and oversubscription.
 These issues affect the performance of Python programs that use libraries like NumPy, SciPy, SciKit-learn, Dask, and Numba.
 
 Three approaches are presented as potential solutions.
-The first one is to statically limit the number of threads created on the nested parallel level.
+The first one is to limit statically the number of threads created on the nested parallel level.
 The second one is to coordinate and execution of OpenMP parallel regions.
 The third one is to use a common threading runtime using Intel |R| TBB extended to multi-processing parallelism.
 All these approaches limit the number of active threads in order to prevent penalties of oversubscription.
