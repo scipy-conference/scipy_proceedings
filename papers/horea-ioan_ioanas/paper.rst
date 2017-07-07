@@ -70,7 +70,7 @@ Methods
 Database Management System
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to cast complex laboratory metadata into tractable relationships with high enough entry numbers for statistical analysis, as well as to reduce data redundancy and the risk of introducing anomalies, we opt for a relational database management system, as interfaced with via SQLAlchemy.
+In order to cast complex laboratory metadata into tractable relationships with high enough entry numbers for statistical analysis, as well as in order to reduce data redundancy and the risk of introducing anomalies, we opt for a relational database management system, as interfaced with via SQLAlchemy.
 The scalability and flexibility advantages of flat data stores are not pertinent to the content at hand, as experimental metadata is comparatively smaller, more reliable, and more slowly obtained than data from other use cases which these systems were built to adress.
 With an easily extendable but robust schema design we set out to reposit data in such a way that encapsulates contributors' wet work procedural knowledge in order to facilitate reproducibility and encourage standardization in reporting and comparability across experiments.
 
@@ -504,7 +504,7 @@ While we acknowledge the potential of a GUI to attract scientists who are not co
 
 Particularly at this stage in development, manpower is limited, and contributions are performed on a per-need basis (little code was written which was not relevant to addressing an actual data management issue).
 Presently our foremost outreach target are researchers who posess the technical affinity needed to test our schema at its fringes and contribute to or comment on our code and schema.
-A GUI would serve to add furter layers of abstraction and make it more difficult for users to provide helpful feedback in our technology development efforts.
+A GUI would serve to add further layers of abstraction and make it more difficult for users to provide helpful feedback in our technology development efforts.
 
 In the long run, we would rather look towards developing more automatic or implicit tracking of wet work, rather than simply writing a GUI.
 Our outlook towards automation also means that a GUI is likely to remain uninteresting for the use cases of the developers themselves, which would make the creation of such an interface more compatible with a commercial service model than with the classical Free and Open Source user-developer model.
