@@ -4,7 +4,8 @@
          "prefix" : "10.25080",
          "depositor_name" : "Dillon Niederhut",
          "depositor_email": "dniederhut@enthought.com",
-         "registrant" : "Crossref"
+         "registrant" : "Crossref",
+         "resource_url" : "https://conference.scipy.org/proceedings"
      },
      "citation_key": "proc-scipy-2017",
      "title": {
