@@ -295,6 +295,10 @@ Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
 
 .. [Miniconda] Miniconda, https://conda.io/miniconda.html
 .. [IntelPy] Intel(R) Distribution for Python, https://software.intel.com/python-distribution
+.. figure:: dask_static.png
+   :figclass: b
+
+   Execution times for balanced QR decomposition workload. :label:`sdask`
 
 .. code-block:: sh
 
@@ -352,10 +356,6 @@ This combination results in nested parallelism, i.e. when one parallel component
 For this example, we will talk mostly about the multi-threading case, but according to our investigations,
 all conclusions that will be shown are applicable for the multi-processing case as well.
 
-.. figure:: dask_static.png
-
-   Execution times for balanced QR decomposition workload. :label:`sdask`
-
 Figure :ref:`sdask` shows the performance results for the code above.
 By default, Dask will process a chunk in a separate thread so there will be 44 threads on the top level.
 Please note that by default, Dask creates a thread pool with 88 workers,
@@ -395,6 +395,11 @@ As a result, it has worse cache utilization, and higher overhead for work balanc
 -------------------------------------------
 The code below performs an algorithm of eigenvalues and right eigenvectors search in a square matrix using Numpy:
 
+.. figure:: numpy_static.png
+   :figclass: tb
+
+   Execution time for balanced eignevalues search workload. :label:`snumpy`
+
 .. code-block:: python
     :linenos:
 
@@ -413,10 +418,6 @@ As a result, simillary to QR decomposition benchmark we have faced with quadrati
 But this code has a distinctive feature, in spite of parallel execution of eigenvalues search algorithm,
 it cannot fully utilize all available CPU cores.
 That is why an additional level of parallelizm we used here may significantly improve overall benchmark performance.
-
-.. figure:: numpy_static.png
-
-   Execution time for balanced eignevalues search workload. :label:`snumpy`
 
 Figure :ref:`snumpy` shows benchmark execution time in the same five modes as we used for QR decomposition.
 As previously the best choice here is to limit number of threads statically either using manual settings or *smp* module.
@@ -460,6 +461,7 @@ To run this benchmark, we used the four modes: default, OpenMP with *SMP.py*, co
 We don't show results for OpenMP with manual optimizations since they are very close to the results for "OMP + SMP" mode.
 
 .. figure:: dask_dynamic.png
+   :figclass: tb
 
    Execution times for unbalanced QR decomposition workload. :label:`ddask`
 
@@ -483,6 +485,11 @@ allowing ech chunk to be calculated one after the other avoids oversubscription 
 3.4. Unbalanced Eigenvalues Search with NumPy
 ---------------------------------------------
 The second dynamic exapmle we'd like to discuss is based on eigenvalues search algorithm from NumPy:
+
+.. figure:: scalability_multithreading.png
+   :figclass: b
+
+   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
 
 .. code-block:: python
     :linenos:
@@ -511,13 +518,14 @@ The second dynamic exapmle we'd like to discuss is based on eigenvalues search a
 In this workload we have same three stages. The second and the third stage computes eignevalues and the first one performs matrix multiplication.
 The reason of why we don't use eignevalues search for the first stage as well is that it cannot fully load CPU as we planned.
 
-.. figure:: numpy_dynamic.png
-
-   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
-
 From figure :ref:`dnumpy` one can see that the best solution for this workload is work stealing scheduler from Intel |R| TBB which allows to reduce execution time on 35%.
 *SMP.py* module works even slower than default version due to the same issues as described for unbalanced QR decomposition example.
 And as for the mode with serialization of OpenMP parallel regions, it works significantly slower than default version since there is no enough work for each parallel region that leads to CPU underutilization.
+
+.. figure:: numpy_dynamic.png
+   :figclass: t
+
+   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
 
 
 3.5. Acceptable Level of Oversubscription
@@ -526,17 +534,14 @@ We few did experiments to determine what level of oversubscription has acceptabl
 We started with various sizes for the top level thread or process pool,
 and ran our balanced eigenvalues search workload with different pool sizes from 1 to 88.
 
-.. figure:: scalability_multithreading.png
+.. figure:: scalability_multiprocessing.png
+   :figclass: b
 
-   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
+   Multi-processing scalability of eigenvalues seach workload. :label:`smp`
 
 Figure :ref:`smt` shows the scalability results for the multi-threading case.
 Two modes are compared: default and OpenMP with SMP as the best approach for this benchmark.
 The difference in execution time between these two methods starts from 8 threads in top level pool and becomes larger as the pool size increases.
-
-.. figure:: scalability_multiprocessing.png
-
-   Multi-processing scalability of eigenvalues seach workload. :label:`smp`
 
 The multi-processing scalability results are shown in figure :ref:`smp`.
 They can be obtained from the same eigenvalues search workload by replacing :code:`ThreadPool` to :code:`Pool`.
@@ -560,22 +565,13 @@ The exclusive mode for the OpenMP runtime works best with unbalanced benchmarks 
 The dynamic work stealing scheduler from Intel |R| TBB obtains the best performance
 when innermost parallel regions cannot fully utilize the whole CPU and have varying amounts of work to do.
 
+.. figure:: recommendation_table.png
+   :figclass: hb
+
+   How to choose the best approach to deal with oversubscription issues. :label:`recommendation`
+
 To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case
 (see :ref:`recommendation` table).
-
-.. table:: How to choose the best approach to deal with oversubscription issues. :label:`rtable`
-
-    +-------------------+--------------------------------------------------------------+
-    | Innermost level   |           Outermost level                                    |
-    |                   +----------------------------------------+---------------------+
-    |                   |           Balanced work                |   Unbalanced work   |
-    |                   +------------------+---------------------+                     |
-    |                   | Low subscription | High subscription   |                     |
-    +===================+==================+=====================+=====================+
-    | Low subscription  | ``$ python``     | ``$ python -m smp`` | ``$ python -m tbb`` |
-    +-------------------+                  |                     +---------------------+
-    | High subscription |                  |                     |   KMP_COMPOSABILITY |
-    +-------------------+------------------+---------------------+---------------------+
 
 
 5. Limitations and Future Work
