@@ -18,7 +18,7 @@
 Edited by {{if len(proceedings['editor']) <=2:}}
   {{' and '.join(proceedings['editor'])}}%
 {{else}}
-  {{', '.join(authlist[:-1] + ['and ' + authlist[-1],])}}%
+  {{', '.join(proceedings['editor'][:-1] + ['and ' + proceedings['editor'][-1],])}}%
 {{endif}}.
 
 \bigskip
