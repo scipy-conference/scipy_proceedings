@@ -321,7 +321,7 @@ Here is an example of how to run the benchmark program in different modes:
 
     # Default mode
     python bench.py
-    # Tunned OpenMP mode
+    # Serialized OpenMP mode
     env OMP_NUM_THREADS=1 python bench.py
     # SMP module, oversubscription factor = 1
     python -m smp -f 1 bench.py
@@ -461,7 +461,7 @@ To run this benchmark, we used the four modes: default, OpenMP with *SMP.py*, co
 We don't show results for OpenMP with manual optimizations since they are very close to the results for "OMP + SMP" mode.
 
 .. figure:: dask_dynamic.png
-   :figclass: tb
+   :figclass: t
 
    Execution times for unbalanced QR decomposition workload. :label:`ddask`
 
@@ -485,11 +485,6 @@ allowing ech chunk to be calculated one after the other avoids oversubscription 
 3.4. Unbalanced Eigenvalues Search with NumPy
 ---------------------------------------------
 The second dynamic exapmle we'd like to discuss is based on eigenvalues search algorithm from NumPy:
-
-.. figure:: scalability_multithreading.png
-   :figclass: b
-
-   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
 
 .. code-block:: python
     :linenos:
@@ -515,17 +510,17 @@ The second dynamic exapmle we'd like to discuss is based on eigenvalues search a
     p.map(np.linalg.eig, [x for i in range(1408)], 32)
     print(time.time() - t0)
 
+.. figure:: numpy_dynamic.png
+   :figclass: t
+
+   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
+
 In this workload we have same three stages. The second and the third stage computes eignevalues and the first one performs matrix multiplication.
 The reason of why we don't use eignevalues search for the first stage as well is that it cannot fully load CPU as we planned.
 
 From figure :ref:`dnumpy` one can see that the best solution for this workload is work stealing scheduler from Intel |R| TBB which allows to reduce execution time on 35%.
 *SMP.py* module works even slower than default version due to the same issues as described for unbalanced QR decomposition example.
 And as for the mode with serialization of OpenMP parallel regions, it works significantly slower than default version since there is no enough work for each parallel region that leads to CPU underutilization.
-
-.. figure:: numpy_dynamic.png
-   :figclass: t
-
-   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
 
 
 3.5. Acceptable Level of Oversubscription
@@ -534,8 +529,13 @@ We few did experiments to determine what level of oversubscription has acceptabl
 We started with various sizes for the top level thread or process pool,
 and ran our balanced eigenvalues search workload with different pool sizes from 1 to 88.
 
-.. figure:: scalability_multiprocessing.png
+.. figure:: scalability_multithreading.png
    :figclass: b
+
+   Multi-threading scalability of eigenvalues seach workload. :label:`smt`
+
+.. figure:: scalability_multiprocessing.png
+   :figclass: t
 
    Multi-processing scalability of eigenvalues seach workload. :label:`smp`
 
@@ -565,13 +565,10 @@ The exclusive mode for the OpenMP runtime works best with unbalanced benchmarks 
 The dynamic work stealing scheduler from Intel |R| TBB obtains the best performance
 when innermost parallel regions cannot fully utilize the whole CPU and have varying amounts of work to do.
 
+To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case:
+
 .. figure:: recommendation_table.png
-   :figclass: hb
-
-   How to choose the best approach to deal with oversubscription issues. :label:`recommendation`
-
-To summarize our conclusions, we've prepared a table to help choose which approach will work best for which case
-(see :ref:`recommendation` table).
+   :figclass: h
 
 
 5. Limitations and Future Work
