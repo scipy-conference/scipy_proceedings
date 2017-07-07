@@ -500,7 +500,7 @@ The second dynamic example present here is based on eigenvalues search algorithm
 
     x = np.random.random((256, 256))
     y = np.random.random((8192, 8192))
-    p = ThreadPool
+    p = ThreadPool(44)
 
     t0 = time.time()
     mmul = partial(np.matmul, y)
@@ -592,7 +592,7 @@ if it provides better results.
 However, there are still a lot of potential enhancements and we need real customers with feedback and specific use cases
 in order to keep working in this whole direction and prioritize improvements.
 
-The *smp* module works only on Linux currently though can b expanded to all the other platforms as well.
+The *smp* module works only on Linux currently though can be expanded to all the other platforms as well.
 It bases its calculations only on the pool size and does not take into account its real usage.
 We think it can be improved in future to trace task scheduling pool events and so to become more flexible.
 
@@ -624,7 +624,7 @@ These issues affect the performance of Python programs that use libraries like N
 
 Three approaches are presented as potential solutions.
 The first one is to limit statically the number of threads created on the nested parallel level.
-The second one is to coordinate and execution of OpenMP parallel regions.
+The second one is to coordinate execution of OpenMP parallel regions.
 The third one is to use a common threading runtime using Intel |R| TBB extended to multi-processing parallelism.
 All these approaches limit the number of active threads in order to prevent penalties of oversubscription.
 They coordinate parallel execution of independent program modules to improve overall performance.
