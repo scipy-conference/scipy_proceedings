@@ -21,7 +21,7 @@ LabbookDB - A Wet-Work-Tracking Database Application Framework
 
     LabbookDB is a database application framework containing a relational database structure for life science research |---|
     along with a number of functions to conveniently add and retrieve information, and generate summaries.
-    The core concept of LabbookDB is that most information commonly tracked in a lab book can be more efficiently and more reliably stored in a relational database.
+    The core concept of LabbookDB is that wet work metadata commonly tracked in lab books or spreadsheets can be more efficiently and more reliably stored in a relational database, and more flexibly queried therefrom.
     We overcome the flexibility limitations of designed-for-analysis spreadsheets and databases by building our schema around atomized physical object interactions in the laboratory
     (and providing plotting- and/or analysis-ready dataframes as a compatibility layer).
     We keep our database schema more easily extendable and adaptable by using joined table inheritance to manage polymorphic object types and their relationships.
