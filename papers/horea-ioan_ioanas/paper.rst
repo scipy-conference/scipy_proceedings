@@ -72,8 +72,9 @@ Database Management System
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In order to cast complex laboratory metadata into tractable relationships with high enough entry numbers for statistical analysis, as well as in order to reduce data redundancy and the risk of introducing anomalies, we opt for a relational database management system, as interfaced with via SQLAlchemy.
-The scalability and flexibility advantages of flat data stores are not pertinent to the content at hand, as experimental metadata is comparatively smaller, more reliable, and more slowly obtained than data from other use cases which these systems were built to adress.
-With an easily extendable but robust schema design we set out to reposit data in such a way that encapsulates contributors' wet work procedural knowledge in order to facilitate reproducibility and encourage standardization in reporting and comparability across experiments.
+The scalability and input flexibility advantages of noSQL databases do not apply well to the content at hand, as experimental metadata is small, reliable, and slowly obtained enough to make scalability a secondary concern and schema quality and consistency a principal concern.
+Our robust but easily extendable schema design encapsulates contributors' wet work procedural knowledge, and is valuable in excess of creating an efficient storage model;
+as well-chosen predefined attributes facilitate reproducibility and encourage standardization in reporting and comparability across experiments.
 
 Database Schema Design
 ~~~~~~~~~~~~~~~~~~~~~~
