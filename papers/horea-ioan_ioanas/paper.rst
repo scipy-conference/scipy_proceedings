@@ -143,7 +143,7 @@ A number of fully reproducible minimal input (working with the Demolog data only
 Capabilities
 ------------
 
-The aforementioned integration testing data reposited as Demolog :cite:`demolog` also serves to demonstrate the capabilities of this first LabbookDB release in a concise fashion.
+The aforementioned integration testing data reposited as Demolog :cite:`demolog` demonstrates the capabilities of this first LabbookDB release in a concise fashion.
 Contingent on the presence of LabbookDB ``0.0.1`` :cite:`labbookdb` and its dependencies on the system, an example database can be built |---| and correspondingly described subsequent entries can be executed locally.
 To set up the example database, the following should be run from the terminal:
 
