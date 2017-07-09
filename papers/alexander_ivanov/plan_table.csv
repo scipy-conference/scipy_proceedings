@@ -1,0 +1,10 @@
+N,scaler,dim_reduction,classifier
+0,standard,pca,LR
+1,standard,pca,SVC
+2,standard,pca,SGD
+3,standard,k_pca,LR
+4,standard,k_pca,SVC
+5,standard,k_pca,SGD
+6,minmax,pca,LR
+7,minmax,pca,SVC
+8,minmax,pca,SGD

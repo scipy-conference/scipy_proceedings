@@ -1,0 +1,11 @@
+subject1_id,subject1_target,subject2_id,subject2_target,are_same
+003_S_2374_1,EMCI,003_S_2374_4,EMCI,1
+003_S_2374_1,EMCI,003_S_4081_1,Normal,0
+003_S_2374_1,EMCI,003_S_4081_5,Normal,0
+003_S_2374_1,EMCI,003_S_4119_1,Normal,0
+...,...,...,...,...
+129_S_4396_2,Normal,129_S_4422_2,Normal,0
+129_S_4396_2,Normal,131_S_0123_1,Normal,0
+129_S_4422_1,Normal,129_S_4422_2,Normal,1
+129_S_4422_1,Normal,131_S_0123_1,Normal,0
+129_S_4422_2,Normal,131_S_0123_1,Normal,0

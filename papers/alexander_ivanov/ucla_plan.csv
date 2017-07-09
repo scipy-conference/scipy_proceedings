@@ -1,0 +1,7 @@
+a,N,featurizer,classifier
+0,pagerank,LR
+1,pagerank,SVC
+2,pagerank,SGD
+3,degrees,LR
+4,degrees,SVC
+5,degrees,SGD
