@@ -304,10 +304,11 @@ Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
 
 .. code-block:: sh
 
-    # activate miniconda environment
+    # activate miniconda
     source <path to miniconda3>/bin/activate.sh
-    # install packages from the Intel channel
-    conda install -c intel numpy dask tbb smp
+    # create & activate environment from the Intel channel
+    conda create -n intel3 -c intel numpy dask tbb smp
+    source activate.sh intel3
     # this setting is used for default runs
     export KMP_BLOCKTIME=0
 
