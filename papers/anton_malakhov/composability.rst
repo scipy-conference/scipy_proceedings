@@ -21,8 +21,8 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   Python is popular among scientific communities that value its simplicity and power, which comes with number crunching modules like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
-   These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores.
+   Python is popular among scientific communities that value its simplicity and power coming along with numeric libraries like [NumPy]_, [SciPy]_, [Dask]_, [Numba]_, and many others.
+   These modules often use multi-threading for efficient multi-core parallelism in order to utilize all the available CPU cores which counts keep increasing.
    Nevertheless, their threads can interfere with each other leading to overhead and inefficiency if used together in one application on machines with large number of cores.
    The loss of performance can be prevented if all the multi-threaded parties are coordinated.
    This paper continues the work started in [AMala16]_ by introducing more approaches to such coordination for both multi-threading and multi-processing cases:
@@ -72,7 +72,7 @@ According to Amdahl's Law, speedup is limited by the serial portion of the work,
 which effectively puts a limit on scalability of parallel processing for a fixed-size job.
 Python is especially vulnerable to this because it makes the serial part of the same code much slower
 compared to implementations in some other languages due to its deeply dynamic and interpretative nature.
-Moreover, the GIL makes things serial often where they potentially can be parallel, further adding to the serial portion of a program.
+Moreover, the GIL serializes operations that could be potentially executed in parallel, further adding to the serial portion of a program.
 
 .. [AGlaws] Michael McCool, Arch Robison, James Reinders, "Amdahl's Law vs. Gustafson-Barsis' Law", Dr. Dobb's Parallel, October 22, 2013.
             http://www.drdobbs.com/parallel/amdahls-law-vs-gustafson-barsis-law/240162980
@@ -290,7 +290,7 @@ IPC mode for TBB module should be enabled manually via explicit command line key
 3. Evaluation
 -------------
 All the results for this paper have been acquired on 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4
-(2.20GHz, 22 cores, 44 hyper-threads each) and 128 GB RAM.
+(2.20GHz, 22 cores * 2 hyper-threads) and 128 GB RAM. This system consists of 88 hardware threads in total.
 
 For our experiments, we used [Miniconda]_ distribution along with the packages of
 Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
@@ -395,14 +395,14 @@ As a result, besides higher overhead for work distribution, it has worse cache u
 .. [#] For more complete information about compiler optimizations, see our Optimization Notice [OptNote]_
 
 
-3.2. Balanced Eignevalues Search with NumPy
+3.2. Balanced Eigenvalues Search with NumPy
 -------------------------------------------
 The code below processes an algorithm of eigenvalues and right eigenvectors search in a square matrix using Numpy:
 
 .. figure:: numpy_static.png
    :figclass: tb
 
-   Execution time for balanced eignevalues search workload. :label:`snumpy`
+   Execution time for balanced eigenvalues search workload. :label:`snumpy`
 
 .. code-block:: python
     :linenos:
@@ -523,11 +523,11 @@ The second dynamic example present here is based on eigenvalues search algorithm
 .. figure:: numpy_dynamic.png
    :figclass: t
 
-   Execution time for unbalanced eignevalues search workload. :label:`dnumpy`
+   Execution time for unbalanced eigenvalues search workload. :label:`dnumpy`
 
 In this workload, we have same three stages.
-The second and the third stage computes eignevalues and the first one performs matrix multiplication.
-The reason for why we do not use eignevalues search for the first stage as well is that it cannot fully load CPU as we intended.
+The second and the third stage computes eigenvalues and the first one performs matrix multiplication.
+The reason for why we do not use eigenvalues search for the first stage as well is that it cannot fully load CPU as we intended.
 
 From figure :ref:`dnumpy` we can see that the best solution for this workload is Intel |R| TBB mode,
 which allows to reduce execution time to 67% of the default mode.
