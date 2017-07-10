@@ -339,6 +339,10 @@ For our examples, we will talk mostly about the multi-threading case, but accord
 all conclusions that will be shown are applicable for the multi-processing case as well
 unless additional memory copying happens between the processes, which is out of scope for this paper.
 
+Please find these benchmarks along with install and run script at [compbench]_
+
+.. [compbench] Repository for composability benchmarks, https://github.com/IntelPython/composability_bench
+
 
 3.1. Balanced QR Decomposition with Dask
 ----------------------------------------
