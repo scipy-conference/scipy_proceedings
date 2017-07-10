@@ -540,10 +540,6 @@ If there is no exception, then the epilogue formula is executed, and
 the output values of the function are returned (assuming there is no exception
 in the epilogue formula).
 
-.. raw:: LaTeX
-
-     \newpage
-
 .. code-block:: Python
 
      if s.controller.getException() is not None:

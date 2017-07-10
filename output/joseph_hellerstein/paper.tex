@@ -718,9 +718,7 @@ The occurrence of an exception in the formula evaluation loop causes an exceptio
 with the line number in the formula in which the (last) exception occurred.
 If there is no exception, then the epilogue formula is executed, and
 the output values of the function are returned (assuming there is no exception
-in the epilogue formula).
-\newpage
-\vspace{1mm}
+in the epilogue formula).\vspace{1mm}
 \begin{Verbatim}[commandchars=\\\{\},fontsize=\footnotesize]
 \PY{k}{if} \PY{n}{s}\PY{o}{.}\PY{n}{controller}\PY{o}{.}\PY{n}{getException}\PY{p}{(}\PY{p}{)} \PY{o+ow}{is} \PY{o+ow}{not} \PY{n+nb+bp}{None}\PY{p}{:}
   \PY{k}{raise} \PY{n+ne}{Exception}\PY{p}{(}\PY{n}{s}\PY{o}{.}\PY{n}{controller}\PY{o}{.}\PY{n}{formatError}\PY{p}{(}
