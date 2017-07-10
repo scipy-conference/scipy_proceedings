@@ -465,9 +465,9 @@ The code below demonstrates *unbalanced* version of QR decomposition workload:
         test.compute(num_workers=44)
         print(time.time() - t0)
     sz = (440000, 1000)
-    x01 = da.random.random(s, chunks=(440000, 1000))
-    x22 = da.random.random(s, chunks=(20000, 1000))
-    x44 = da.random.random(s, chunks=(10000, 1000))
+    x01 = da.random.random(sz, chunks=(440000, 1000))
+    x22 = da.random.random(sz, chunks=(20000, 1000))
+    x44 = da.random.random(sz, chunks=(10000, 1000))
     qr(x01); qr(x22); qr(x44)
 
 To run this benchmark, we used the four modes: default, with smp module, composable OpenMP and Intel |R| TBB.
