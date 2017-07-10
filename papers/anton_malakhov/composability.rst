@@ -647,7 +647,7 @@ We have compared suggested approaches and provided recommendations of when it ma
 
 All the described modules and libraries are available as open source software and
 included as part of the free Intel |R| Distribution for Python product.
-The Distribution is available as a stand-alone installer [IntelPy]_and as a set of packages on anaconda.org/intel channel.
+The Distribution is available as a stand-alone installer [IntelPy]_ and as a set of packages on anaconda.org/intel channel.
 
 
 References
