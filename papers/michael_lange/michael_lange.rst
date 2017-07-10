@@ -915,6 +915,10 @@ This work was financially supported in part by EPSRC grant
 EP/L000407/1 and the Imperial College London Intel Parallel Computing
 Centre. This research was carried out as part of the SINBAD project
 with the support of the member organizations of the SINBAD Consortium.
+Part of this work was supported by the U.S. Department of Energy,
+Office of Science, Office of Advanced Scientific Computing Research,
+Applied Mathematics and Computer Science programs under contract
+number DE-AC02-06CH11357.
 
 
 References
