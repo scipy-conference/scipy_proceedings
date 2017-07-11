@@ -275,12 +275,14 @@ substitution map argument :code:`subs`.
    op = Operator(Eq(u.forward, stencil),
                  subs={h: dx, s:dt})
 
-   # Set initial condition as a "hat function"
-   u.data[:] = 1.
-   u.data[int(.5 / dx):int(1 / dx + 1),
-          int(.5 / dy):int(1 / dy + 1)] = 2.
+   # Set initial condition as a smooth function
+   init_smooth(u.data, dx, dy)
 
    op(u=u, time=100)  # Apply for 100 timesteps
+
+.. raw:: latex
+
+   \newpage
 
 Using this operator we can now create a similar example to the one
 presented in the original tutorial by initialising the data associated
@@ -915,6 +917,10 @@ This work was financially supported in part by EPSRC grant
 EP/L000407/1 and the Imperial College London Intel Parallel Computing
 Centre. This research was carried out as part of the SINBAD project
 with the support of the member organizations of the SINBAD Consortium.
+Part of this work was supported by the U.S. Department of Energy,
+Office of Science, Office of Advanced Scientific Computing Research,
+Applied Mathematics and Computer Science programs under contract
+number DE-AC02-06CH11357.
 
 
 References
