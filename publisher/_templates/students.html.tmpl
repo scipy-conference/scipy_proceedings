@@ -1,14 +1,32 @@
-<h1>Sponsored Students</h1>
+<h1>Scholarship Recipients</h1>
 
-<div id="content">
+<div id="scipy_scholarship">
 
   <ul>
 
-    {{for student in sponsored_students}}
+    {{for student in scipy_scholarship}}
       <li>{{html_quote(student['name']) | html}},
       <em>{{html_quote(student['org']) | html}}
-          {{if student['location']}}, {{endif}}
-          {{html_quote(student['location']) | html}}</em>
+          {{if student.get('location')}}, 
+          {{html_quote(student['location']) | html}} {{endif}}</em>
+      </li>
+    {{endfor}}
+
+  </ul>
+
+</div>
+
+<h1>Jump Trading and NumFOCUS Diversity Scholarship Recipients</h1>
+
+<div id="diversity_scholarship">
+
+  <ul>
+
+    {{for student in diversity_scholarship}}
+      <li>{{html_quote(student['name']) | html}},
+      <em>{{html_quote(student['org']) | html}}
+          {{if student.get('location')}}, 
+          {{html_quote(student['location']) | html}}{{endif}}</em>
       </li>
     {{endfor}}
 
