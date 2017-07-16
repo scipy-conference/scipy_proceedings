@@ -21,13 +21,11 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 .. class:: abstract
 
-   Python is popular among scientific communities that value its simplicity and power, especially as it comes along with numeric libraries such as [NumPy]_, [SciPy]_, [Dask]_, and [Numba]_.
-   As CPU core counts keep increasing, these modules can make use of many cores via multi-threading for efficient multi-core parallelism.
-   However, threads can interfere with each other leading to overhead and inefficiency if used together in a single application on machines with a large number of cores.
-   This performance loss can be prevented if all multi-threaded modules are coordinated.
-   This paper continues the work started in [AMala16]_ by introducing more approaches to coordination for both multi-threading and multi-processing cases.
-   In particular, we investigate the use of static settings, limiting the number of simultaneously active [OpenMP]_ parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| [TBB]_).
-   We will show how these approaches help to unlock additional performance for numeric applications on multi-core systems.
+   As the number of cores in central processing units continues to grow, numeric libraries such as [NumPy]_, [SciPy]_, [Dask]_, and [Numba]_ continue to exploit multi-threading to provide higher throughput for their customers.
+   When these libraries are used in a single Python application, unorchestrated use of threads can lead to a significant overhead resulting in inefficient use of the cores present in the system.
+   This paper continues the work on coordinating multi-threaded parallelism started in [AMala16]_.
+   In particular, we investigate the use of static settings, limiting the number of simultaneous active [OpenMP]_ parallel regions, and optional parallelism with Intel |R| Threading Building Blocks (Intel |R| [TBB]_).
+   We show how these approaches help unlock additional performance boost for numeric applications on multi-core systems.
 
 .. class:: keywords
 
@@ -44,23 +42,21 @@ Composable Multi-Threading and Multi-Processing for Numeric Libraries
 
 1. Motivation
 -------------
-A fundamental shift toward parallelism was declared more than 11 years ago [HSutter]_, and today, multi-core processors have become ubiquitous [WTichy]_.
-However, the adoption of multi-core parallelism in the software world has been slow and Python along with its computing ecosystem is not an exception.
-Python suffers from several issues which make it suboptimal for parallel processing.
+The fundamental shift toward parallelism that was announced more than 11 years ago in [HSutter]_ has made multi-core processors ubiquitous [WTichy]_.
+Adoption of these ideas by software developers, however, has not been as rapid and Python with all of its ecosystem is not an exception.
+In fact, there is a number of issues that can seriously affect parallel processing in Python [REFS_TO_EXAMPLES_WITH_PROBLEMS].
 
 .. [HSutter] Herb Sutter, "The Free Lunch Is Over", Dr. Dobb's Journal, 30(3), March 2005.
              http://www.gotw.ca/publications/concurrency-ddj.htm
 .. [WTichy]  Walter Tichy, "The Multicore Transformation", Ubiquity, Volume 2014 Issue May, May 2014. DOI: 10.1145/2618393.
              http://ubiquity.acm.org/article.cfm?id=2618393
 
-In particular, Python's infamous global interpreter lock [GIL]_ makes it challenging to scale an interpreter-dependent code
-using multiple threads, effectively serializing them.
-Thus, the practice of using multiple isolated processes is popular and widely utilized in Python
-since it avoids the issues with the GIL, but it is prone to inefficiency due to memory-related overhead.
+In particular, the infamous Python's global interpreter lock [GIL]_ effectively serializes multiple threads and, therefore, makes it challenging to scale an interpreter-dependent code with threads.
+As a result, developers turn their attention to multiple isolated processes that let them avoid GIL issues at a price of memory-related overhead.
 However, when it comes to numeric computations with libraries like Numpy,
-most of the time is spent in C extensions with no access to Python data structures.
-The GIL can be released during such computations, which enables better scaling of compute-intensive applications.
-Thus, both multi-processing and multi-threading approaches are valuable for Python users and have their own areas of applicability.
+most of the time is spent in the so-called C extensions with no access to Python data structures.
+As a result, the GIL can be released during such computations thus allowing for better scaling of compute-intensive applications.
+Therefore, both multi-processing and multi-threading approaches are valuable for Python users and have their own areas of applicability.
 
 .. [GIL] David Beazley, "Understanding the Python GIL", PyCON Python Conference, Atlanta, Georgia, 2010.
          http://www.dabeaz.com/python/UnderstandingGIL.pdf
