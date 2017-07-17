@@ -5,6 +5,8 @@ PDFDIR = _build/pdfs
 PAPERDIR = ../output
 TEMPLATES = _templates
 STATIC = _static
+YEARDIR = scipy2017
+ZIPNAME = camera_ready_draft_proceedings.zip
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -43,3 +45,8 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 proceedings-html: proceedings
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
+
+proceedings-html-zip: proceedings-html
+	cp -r $(HTMLDIR) $(YEARDIR)
+	zip -r camera_ready_draft_proceedings.zip $(YEARDIR)
+	rm -rf $(YEARDIR)
