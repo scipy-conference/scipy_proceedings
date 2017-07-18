@@ -13,6 +13,8 @@ config = get_config()
 mkdir_p(bib_dir)
 for file in glob.glob(os.path.join(static_dir,'*.css')):
     shutil.copy(file, html_dir)
+for file in glob.glob(os.path.join(static_dir,'*.js')):
+    shutil.copy(file, os.path.join(html_dir,'..'))
 html_pdfs = os.path.join(html_dir, 'pdfs')
 mkdir_p(html_pdfs)
 for file in glob.glob(os.path.join(pdf_dir,'*.pdf')):
@@ -25,7 +27,7 @@ bib_from_tmpl('proceedings', config, citation_key)
 proc_dict = deepcopy(config)
 proc_dict.update({
     'pdf': 'pdfs/proceedings.pdf',
-    'bibtex': 'bib/' + citation_key
+    'bibtex': 'bib/' + citation_key + '.bib'
     })
 
 for dest_fn in ['index', 'organization', 'students']:
@@ -39,4 +41,4 @@ for article in config['toc']:
         'bibtex': 'bib/'+article['paper_id']+'.bib',
         })
     bib_from_tmpl('article', art_dict, article['paper_id'])
-    html_from_tmpl('article.html',art_dict, article['paper_id'])
+    html_from_tmpl('article.html', art_dict, article['paper_id'])
