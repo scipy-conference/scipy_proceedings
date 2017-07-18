@@ -7,6 +7,7 @@ TEMPLATES = _templates
 STATIC = _static
 YEARDIR = scipy`date "+%Y"`
 ZIPNAME = camera_ready_draft_proceedings.zip
+LINKFILE = proc_links.js
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
