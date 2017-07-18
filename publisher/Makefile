@@ -42,9 +42,11 @@ proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
 	($(TEX2PDF) proceedings 1>/dev/null)
 	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf 
 
-proceedings-html: proceedings
+html: 
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
+
+proceedings-html: proceedings html
 
 proceedings-html-zip: proceedings-html
 	cp -r $(HTMLDIR) $(YEARDIR)
