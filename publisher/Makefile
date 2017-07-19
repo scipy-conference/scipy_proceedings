@@ -50,7 +50,7 @@ html-zip: html
 	cp -r $(HTMLDIR) $(YEARDIR)
 	zip -r $(ZIPNAME) $(YEARDIR) 
 	rm -rf $(YEARDIR)
-
+	
 proceedings-html: proceedings html
 
 proceedings-html-zip: proceedings html-zip
