@@ -49,9 +49,10 @@ html:
 
 html-zip: html
 	cp -r $(HTMLDIR) $(YEARDIR)
-	zip -r $(ZIPNAME) $(YEARDIR) 
-	rm -rf $(YEARDIR)
-	
+	cp -r $(STATIC)/$(LINKFILE) $(LINKFILE)
+	zip -r $(ZIPNAME) $(YEARDIR) $(LINKFILE)
+	rm -rf $(YEARDIR) $(LINKFILE)
+
 proceedings-html: proceedings html
 
 proceedings-html-zip: proceedings html-zip
