@@ -5,7 +5,7 @@ PDFDIR = _build/pdfs
 PAPERDIR = ../output
 TEMPLATES = _templates
 STATIC = _static
-YEARDIR = scipy2017
+YEARDIR = scipy`date "+%Y"`
 ZIPNAME = camera_ready_draft_proceedings.zip
 
 BUILDTMPL = ./build_template.py
@@ -46,9 +46,11 @@ html:
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
 
+html-zip: html
+	cp -r $(HTMLDIR) $(YEARDIR)
+	zip -r $(ZIPNAME) $(YEARDIR) 
+	rm -rf $(YEARDIR)
+
 proceedings-html: proceedings html
 
-proceedings-html-zip: proceedings-html
-	cp -r $(HTMLDIR) $(YEARDIR)
-	zip -r camera_ready_draft_proceedings.zip $(YEARDIR)
-	rm -rf $(YEARDIR)
+proceedings-html-zip: proceedings html-zip
