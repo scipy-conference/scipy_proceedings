@@ -221,7 +221,7 @@ Consider the string used to identify the entry to be updated in the previous cod
 
 Under the custom LabbookDB syntax, the selection string always starts with the entry's object name (in the string at hand, ``Animal``).
 The object name is separated from the name of the attribute to be matched by a colon, and the attribute name is separated from the value identifying the existing entry by a period.
-The value can be either a string, or |---| if the string contains a colon |---| it is presumed to be another object (which is then selected by using the same syntax).
+The value can be either a string, or |---| if the string contains a colon |---| it is presumed to be another object (which is then selected using the same syntax).
 Multiple matching constraints can be specified, by separating them via double ampersands.
 Inserting one or multiple hashtags in between the ampersands indicates at what level the additional constraint is to be applied.
 In the current example, two ampersands separated by one hashtag mean that an ``AnimalExternalIdentifier`` object is matched contingent on a ``database`` attribute value of ``"ETH/AIC"`` and an ``identifier`` attribute value of ``"5682"``.
@@ -266,7 +266,7 @@ The code should return an overview similar to the flollowing, directly in the te
 Human Readable Spreadsheets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For a broader overview, LabbookDB can join tables from the database in order to construct comprehensive human-readable spreadsheet overviews.
+LabbookDB can join tables from the database in order to construct comprehensive human-readable spreadsheet overviews.
 Storing information in a well-formed relational structure allows for versatile and complex reporting formats.
 In the following model, for instance, the “responsive functional measurements” column is computed automatically from the number of fMRI measurements and the number of occurrences of the ``"ICA failed to indicate response to stimulus"`` irregularity on these measurements.
 
@@ -469,7 +469,7 @@ Disk space usage, while of secondary concern, may also become an issue.
 Going forward, better solutions for record keeping should be implemented.
 
 Of available options we would preferentially consider input code tracking (if possible in a form which is compatible with incremental execution) rather than output code tracking (e.g. in the form of data dumps).
-This is chiefly because output code tracking would be dependent not only of the data being racked, but also of the version of LabookDB used for database creation
+This is chiefly because output code tracking would be dependent not only of the data being racked, but also of the version of LabbookDB used for database creation
 - ideally these versioning schemes would not have to become convoluted.
 
 Structure Migration
