@@ -470,8 +470,8 @@ Disk space usage, while of secondary concern, may also become an issue.
 Going forward, better solutions for record keeping should be implemented.
 
 Of available options we would preferentially consider input code tracking (if possible in a form which is compatible with incremental execution) rather than output code tracking (e.g. in the form of data dumps).
-This is chiefly because output code tracking would be dependent not only of the data being racked, but also of the version of LabbookDB used for database creation
-- ideally these versioning schemes would not have to become convoluted.
+This is chiefly because output code tracking would be dependent not only of the data being tracked, but also of the version of LabbookDB used for database creation
+|---| ideally these versioning schemes would not have to become convoluted.
 
 Structure Migration
 ~~~~~~~~~~~~~~~~~~~
