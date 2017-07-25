@@ -14,7 +14,7 @@
 :bibliography: mybib
 
 
-LabbookDB - A Wet-Work-Tracking Database Application Framework
+LabbookDB — A Wet-Work-Tracking Database Application Framework
 ==============================================================
 
 .. class:: abstract
