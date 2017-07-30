@@ -10,6 +10,7 @@ import io
 import conf
 import options
 from build_paper import build_paper
+from xreftools import XrefMeta
 
 output_dir = conf.output_dir
 build_dir  = conf.build_dir
@@ -18,7 +19,9 @@ pdf_dir    = conf.pdf_dir
 toc_conf   = conf.toc_conf
 proc_conf  = conf.proc_conf
 dirs       = conf.dirs
+xref_conf = conf.xref_conf
 papers_dir = conf.papers_dir
+
 
 
 def paper_stats(paper_id, start):
@@ -74,3 +77,7 @@ if __name__ == "__main__":
 
     toc = {'toc': toc_entries}
     options.dict2cfg(toc, toc_conf)
+    scipy_entry = options.cfg2dict(proc_conf)
+    xref = XrefMeta(scipy_entry, toc_entries)
+    xref.make_metadata()
+    xref.write_metadata(xref_conf)
