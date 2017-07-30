@@ -11,20 +11,22 @@
      "title": {
        "acronym": "SciPy",
        "conference": "Python in Science Conference",
-       "ordinal": "15th",
-       "short": "PROC. OF THE 15th PYTHON IN SCIENCE CONF. (SCIPY 2017)",
-       "full": "Proceedings of the 15th Python in Science Conference"
+       "ordinal": "16th",
+       "short": "PROC. OF THE 16th PYTHON IN SCIENCE CONF. (SCIPY 2017)",
+       "full": "Proceedings of the 16th Python in Science Conference"
      },
      "year": "2017",
      "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
+        "Katy Huff",
+        "David Lippa",
+        "Dillon Niederhut",
+        "M Pacer"
      ],
      "volume": 3,
      "number": 1,
      "isbn": "value",
      "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
+     "dates": "July 10 - July 16",
      "copyright": {
        "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
        "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -37,29 +39,201 @@
         {
             "name": "Conference Chairs",
             "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
-                 "org": "Enthought, Inc."}
+                {"name": "Prabhu Ramachandran",
+                 "org": "Enthought Inc. & IIT Bombay"},
+                {"name": "Serge Rey",
+                 "org": "Arizona State University"}
                 ]
         },
 
         {
             "name": "Program Chairs",
             "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
+                {"name": "Lorena Barba",
+                 "org": "George Washington University"},
+                {"name": "Gil Forsyth",
+                 "org": "George Washington University"}
+                ]
+        },
+        {
+            "name": "Communications",
+            "members": [
+                {"name": "Juan Shishido",
+                 "org": "Twitter"}
+                ]
+        },
+        {
+            "name": "Birds of a Feather",
+            "members": [
+                {"name": "Aashish Chaudhary",
+                 "org": "Kitware"},
+                {"name": "Matt McCormick",
+                 "org": "Kitware"}
+                ]
+        },
+        {
+            "name": "Proceedings",
+            "members": [
+                {"name": "Katy Huff",
+                 "org": "University of Illinois"},
+                {"name": "David Lippa",
+                 "org": "Amazon"},
+                {"name": "Dillon Niederhut",
+                 "org": "Enthought"},
+                {"name": "M Pacer",
+                 "org": "Berkeley Institute of Data Science"}
+                ]
+        },
+        {
+            "name": "Financial Aid",
+            "members": [
+                {"name": "Scott Collis",
+                 "org": "Argonne National Laboratory"},
+                {"name": "Eric Ma",
+                 "org": "MIT"}
+                ]
+        },
+        {
+            "name": "Tutorials",
+            "members": [
+                {"name": "Alexandre Chabot-Leclerc",
+                 "org": "Enthought"},
+                {"name": "Mike Hearne",
+                 "org": "USGS"},
+                {"name": "Ben Root",
+                 "org": "Atmospheric and Environmental Research, Inc."}
+                ]
+        },
+        {
+            "name": "Sprints",
+            "members": [
+                {"name": "Jonathan Rocher",
+                 "org": "KBI Biopharma"},
+                {"name": "Charlye Tran",
+                 "org": "Lewis University and The Recurse Center"}
+                ]
+        },
+        {
+            "name": "Diversity",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+        {
+            "name": "Activities",
+            "members": [
+                {"name": "Chris Niemira",
+                 "org": "AOL"},
+                {"name": "Randy Paffenroth",
+                 "org": "Worcester Polytechnic Institute"}
+                ]
+        },
+        {
+            "name": "Sponsors",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"}
+                ]
+        },
+        {
+            "name": "Financial",
+            "members": [
+                {"name": "Bill Cowan",
+                 "org": "Enthought"},
+                {"name": "Jodi Havranek",
+                 "org": "Enthought"}
+                ]
+        },
+        {
+            "name": "Logistics",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"},
+                {"name": "Leah Jones",
+                 "org": "Enthought"}
+                ]
+        },
+        {
+            "name": "Proceedings Reviewers",
+            "members": [
+                {"name" : "David Lippa"},
+                {"name" : "Katy Huff"},
+                {"name" : "M Pacer"},
+                {"name" : "Dillon Niederhut"},
+                {"name" : "Chien-Hsiu Lee"},
+                {"name" : "Priya Sawant"},
+                {"name" : "Guy Tel-Zur"},
+                {"name" : "Nick Wan"},
+                {"name" : "Alejandro de la Vega"},
+                {"name" : "George Markomanolis"},
+                {"name" : "Matthew Rocklin"},
+                {"name" : "Oleksandr Pavlyk"},
+                {"name" : "Jean Bilheux"},
+                {"name" : "Brian McFee"},
+                {"name" : "Alejandro Weinstein"},
+                {"name" : "Stefan van der Walt"},
+                {"name" : "Li Wang"},
+                {"name" : "Serge Guelton"},
+                {"name" : "Kapil Saraswat"},
+                {"name" : "Thomas Arildsen"},
+                {"name" : "Paul Celicourt"},
+                {"name" : "Cyrus Harrison"},
+                {"name" : "Kyle Niemeyer"},
+                {"name" : "Sartaj Singh"},
+                {"name" : "Ankur Ankan"},
+                {"name" : "Nathan Goldbaum"},
+                {"name" : "Angelos Krypotos"},
+                {"name" : "Jaime Arias"},
+                {"name" : "Jonathan J. Helmus"},
+                {"name" : "Fernando Chirigati"},
+                {"name" : "Chris Calloway"},
+                {"name" : "Nicholas Malaya"},
+                {"name" : "Daniel Wheeler"},
+                {"name" : "Jeremiah Johnson"},
+                {"name" : "Yu Feng"},
+                {"name" : "Yingwei Yu"},
+                {"name" : "Manoj Pandey"},
+                {"name" : "James A. Bednar"},
+                {"name" : "Adrian Heilbut"},
+                {"name" : "Jason Vertrees"},
+                {"name" : "Horacio Vargas"},
+                {"name" : "Fatih Akici"},
+                {"name" : "Sebastian Benthall"},
+                {"name" : "Nirmal Sahuji"}
                 ]
         }
     ],
 
-  "sponsored_students": [
-      {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
-      }
+  "scipy_scholarship": [
+      {"name":"Will Barnes","org":"Rice University"},
+      {"name":"Scott Cole","org":"University of California, San Diego"},
+      {"name":"Roberto Colistete Jr","org":"UFES"},
+      {"name":"Bjorn Dahlgren","org":"KTH Royal Institute of Technology"},
+      {"name":"Filipe Fernandes","org":"SECOORA"},
+      {"name":"Eric Ma","org":"Massachusetts Institute of Technology"},
+      {"name":"Jeremy McGibbon","org":"University of Washington"},
+      {"name":"Himanshu Mishra","org":"NetworkX and Timelab"},
+      {"name":"Daniil Pakhomov","org":"Johns Hopkins University"},
+      {"name":"Zach Sailer","org":"University of Oregon"},
+      {"name":"Carl Savage","org":"School District 69 (Qualicum)"},
+      {"name":"Tobias Schraink","org":"New York University"},
+      {"name":"Scott Sievert","org":"UWisconsin Madison"},
+      {"name":"Sartaj Singh","org":"India Institute of Technology, BHU"}
+  ],
+  "diversity_scholarship": [
+      {"name":"Selena Aleman","org":"University of Texas at Austin"},
+      {"name":"Celia Cintas","org":"CENPAT-CONICET"},
+      {"name":"Natalia Clementi","org":"The George Washington University"},
+      {"name":"Johanna Cohoon","org":"The University of Texas at Austin"},
+      {"name":"Charlye Delgado","org":"Lewis University"},
+      {"name":"Alexander Ivanov","org":"The Institute for Information Transmission Problems of Russian Academy of Sciences"},
+      {"name":"Dana Miller","org":"University of California, Berkeley"},
+      {"name":"Rebecca Minich","org":null},
+      {"name":"Juliette Seive","org":"University of Texas at Austin"},
+      {"name":"Malvika Sharan","org":"European Molecular Biology Laboratory (EMBL), Heidelberg"},
+      {"name":"Chaya Stern","org":"Weill Cornell Graduate School"},
+      {"name":"Pamela Wu","org":"New York University"},
+      {"name":"Israel Zúñiga de la Mora","org":"Alturin"}
   ]
 }
