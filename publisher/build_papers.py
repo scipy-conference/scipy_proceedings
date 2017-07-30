@@ -20,6 +20,8 @@ toc_conf   = conf.toc_conf
 proc_conf  = conf.proc_conf
 dirs       = conf.dirs
 xref_conf = conf.xref_conf
+papers_dir = conf.papers_dir
+
 
 
 def paper_stats(paper_id, start):
@@ -52,12 +54,18 @@ if __name__ == "__main__":
 
     options.mkdir_p(pdf_dir)
     for paper_id in dirs:
+        currdir = os.getcwd()
+        basedir = os.path.join(os.path.dirname(__file__), '..')
+        os.chdir(basedir)
         build_paper(paper_id)
+        os.chdir(currdir)
 
         stats, start = paper_stats(paper_id, start + 1)
         toc_entries.append(stats)
 
+        os.chdir(basedir)
         build_paper(paper_id)
+        os.chdir(currdir)
 
         src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')

@@ -28,12 +28,12 @@ can use ``__name='tmpl.html'`` to set the name of the template.
 
 If there are syntax errors ``TemplateError`` will be raised.
 """
-from __future__ import unicode_literals
+from __future__ import unicode_literals 
 
 import re
 import sys
 import cgi
-
+import traceback
 import os
 import tokenize
 
@@ -52,6 +52,7 @@ __all__ = ['TemplateError', 'Template', 'sub', 'HTMLTemplate',
 
 in_re = re.compile(r'\s+in\s+')
 var_re = re.compile(r'^[a-z_][a-z0-9_]*$', re.I)
+sys_vers = getattr(sys, 'version_info', (0,))
 
 
 class TemplateError(Exception):
@@ -310,12 +311,18 @@ class Template(object):
             else:
                 arg0 = coerce_text(e)
             e.args = (self._add_line_info(arg0, pos),)
-            raise exc_info[0](e).with_traceback(exc_info[2])
+            if sys_vers < (3, 0):
+                traceback.print_exc()
+                traceback.print_tb(exc_info[2])
+                import ipdb; ipdb.set_trace()
+                raise e
+            else:
+                raise exc_info[0](e).with_traceback(exc_info[2])
 
     def _exec(self, code, ns, pos):
         __traceback_hide__ = True
         try:
-            exec(code in self.default_namespace, ns)
+            exec(code, self.default_namespace, ns)
         except:
             exc_info = sys.exc_info()
             e = exc_info[1]
@@ -323,7 +330,14 @@ class Template(object):
                 e.args = (self._add_line_info(e.args[0], pos),)
             else:
                 e.args = (self._add_line_info(None, pos),)
-            raise exc_info[0](e).with_traceback(exc_info[2])
+            if sys_vers < (3, 0):
+                traceback.print_exc()
+                traceback.print_tb(exc_info[2])
+                import ipdb; ipdb.set_trace()
+                raise e
+                # raise exc_info[0](e)
+            else:
+                raise exc_info[0](e).with_traceback(exc_info[2])
 
     def _repr(self, value, pos):
         __traceback_hide__ = True
@@ -332,7 +346,7 @@ class Template(object):
                 return ''
             if self._unicode:
                 try:
-                    value = unicode(value)
+                    value = str(value)
                 except UnicodeDecodeError:
                     value = bytes(value)
             else:
@@ -345,7 +359,12 @@ class Template(object):
             exc_info = sys.exc_info()
             e = exc_info[1]
             e.args = (self._add_line_info(e.args[0], pos),)
-            raise exc_info[0](e).with_traceback(exc_info[2])
+            if sys_vers < (3, 0):
+                traceback.print_exc()
+                traceback.print_tb(exc_info[2])
+                raise e
+            else:
+                raise exc_info[0](e).with_traceback(exc_info[2])
         else:
             if self._unicode and isinstance(value, bytes):
                 if not self.default_encoding:
