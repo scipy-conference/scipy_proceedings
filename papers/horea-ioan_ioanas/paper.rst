@@ -14,8 +14,8 @@
 :bibliography: mybib
 
 
-LabbookDB - A Wet-Work-Tracking Database Application Framework
-==============================================================
+LabbookDB: A Wet-Work-Tracking Database Application Framework
+=============================================================
 
 .. class:: abstract
 
@@ -103,7 +103,7 @@ Output Design
 ~~~~~~~~~~~~~
 
 Outputs include simple human-readable command line reports and spreadsheets, ``.pdf`` protocols, introspective graphs, and dataframes.
-Dataframe ouput is designed to support both the Pandas ``DataFrame`` format and export as ``.csv``.
+Dataframe output is designed to support both the Pandas ``DataFrame`` format and export as ``.csv``.
 The dataframe conventions are kept simple and are perfectly understood by BehavioPy :cite:`behaviopyGH`, a collection of plotting functions originally developed as part of LabbookDB, but now branched off for more general usage.
 The formatting of command line reports is built by concatenating ``__str__`` methods of queryable objects and their immediate relationships, and is based on the most common use cases for rapid monitoring.
 Contingent on the availability of object-specific formatting guidelines, an interface is available for generating human-readable, itemized ``.pdf`` protocols.
@@ -115,7 +115,7 @@ To accommodate for a developing schema, reduce dependencies, and reduce usage di
 As such, the database is stored locally, managed without a client-server model, and accessed without the need for authentication.
 The scope thus extends to maximally a few users, which trust each other with full access.
 This is an appropriate scope for most research groups.
-Aditionally, this design choice enables single researchers or clusters of researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without significant overhead or the need for a larger institutional commitment.
+Additionally, this design choice enables single researchers or clusters of researchers within a larger group to autonomously try out, test, contribute to, or adopt LabbookDB without significant overhead or the need for a larger institutional commitment.
 
 Quality Control
 ~~~~~~~~~~~~~~~
@@ -137,7 +137,7 @@ Documentation
 ~~~~~~~~~~~~~
 
 Project documentation is published `via Read the Docs <http://labbookdb.readthedocs.io/en/latest/>`_, and contains a general project description, alongside installation instructions and a browsable listing of the API.
-The documentation model is based primarly on docstrings, but also contains example functions and example input stored in `the corresponding submodule <https://github.com/TheChymera/LabbookDB/blob/master/labbookdb/report/examples.py>`_.
+The documentation model is based primarily on docstrings, but also contains example functions and example input stored in `the corresponding submodule <https://github.com/TheChymera/LabbookDB/blob/master/labbookdb/report/examples.py>`_.
 A number of fully reproducible minimal input (working with the Demolog data only) versions of these functions are also presented in this paper.
 
 Capabilities
@@ -206,8 +206,8 @@ In this example an existing entry is selected in a compact fashion using custom 
 Compact Syntax for Entry Selection
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-In order to compactly identifiy related for data input, we have developed a custom LabbookDB syntax.
-This syntax is automatically parsed by the ``labbookdb.db.add.get_related_ids()`` function, which is called internatlly by input functions.
+In order to compactly identify related for data input, we have developed a custom LabbookDB syntax.
+This syntax is automatically parsed by the ``labbookdb.db.add.get_related_ids()`` function, which is called internally by input functions.
 Notably, understanding of this syntax is not required in order to use reporting functions, and plenty of examples of its usage for input can be seen in Demolog.
 
 Custom LabbookDB syntax is not written as a wrapper for SQL, but rather specifically designed to satisfy LabbookDB entry selection use cases in a minimum number of characters.
@@ -222,7 +222,7 @@ Consider the string used to identify the entry to be updated in the previous cod
 
 Under the custom LabbookDB syntax, the selection string always starts with the entry's object name (in the string at hand, ``Animal``).
 The object name is separated from the name of the attribute to be matched by a colon, and the attribute name is separated from the value identifying the existing entry by a period.
-The value can be either a string, or |---| if the string contains a colon |---| it is presumed to be another object (which is then selected by using the same syntax).
+The value can be either a string, or |---| if the string contains a colon |---| it is presumed to be another object (which is then selected using the same syntax).
 Multiple matching constraints can be specified, by separating them via double ampersands.
 Inserting one or multiple hashtags in between the ampersands indicates at what level the additional constraint is to be applied.
 In the current example, two ampersands separated by one hashtag mean that an ``AnimalExternalIdentifier`` object is matched contingent on a ``database`` attribute value of ``"ETH/AIC"`` and an ``identifier`` attribute value of ``"5682"``.
@@ -238,7 +238,7 @@ The following code should be executable locally in the terminal, contingent on L
 
     LDB animal-info -p ~/syncdata/meta.db 5682 ETH/AIC
 
-The code should return an overview similar to the flollowing, directly in the terminal:
+The code should return an overview similar to the following, directly in the terminal:
 
 .. code-block:: console
 
@@ -267,7 +267,7 @@ The code should return an overview similar to the flollowing, directly in the te
 Human Readable Spreadsheets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-For a broader overview, LabbookDB can join tables from the database in order to construct comprehensive human-readable spreadsheet overviews.
+LabbookDB can join tables from the database in order to construct comprehensive human-readable spreadsheet overviews.
 Storing information in a well-formed relational structure allows for versatile and complex reporting formats.
 In the following model, for instance, the “responsive functional measurements” column is computed automatically from the number of fMRI measurements and the number of occurrences of the ``"ICA failed to indicate response to stimulus"`` irregularity on these measurements.
 
@@ -358,16 +358,16 @@ Attributes common to all measurement types are stored on the ``measurements`` ta
 One of the foremost requirements for a relational database application to become a general purpose lab book replacement is an easily extendable schema.
 The ``Measurement`` and ``Operation`` base classes demonstrate how inheritance and polymorphic mapping can help extend the schema to cover new types of work without changing existing classes.
 Polymorphism can be extended to more classes, to further propagate this feature.
-For instance, all measurement subjects in LabbookDB databases are currenly recorded as ``Animal`` objects.
-This is adequate for most rodents, however it remains inadequate for e.g. human subects.
+For instance, all measurement subjects in LabbookDB databases are currently recorded as ``Animal`` objects.
+This is adequate for most rodents, however it remains inadequate for e.g. human subjects.
 The issue would best be resolved by creating a ``Subject`` class, with attributes (including relationships) common to multiple types of subjects, and then creating derived classes, such as ``HumanSubject`` or ``MouseSubject`` to track more specific attributes.
-``Measurement`` and ``Operation`` assignments would be seamlessly transferrable, as relationships between objects derived from the ``Subject`` base class and e.g. the ``Operation`` base class would be polymorphic.
+``Measurement`` and ``Operation`` assignments would be seamlessly transferable, as relationships between objects derived from the ``Subject`` base class and e.g. the ``Operation`` base class would be polymorphic.
 
 Atomized Relationships
 ~~~~~~~~~~~~~~~~~~~~~~
 
 We use the expression “atomized relationships” to refer to the finest grained representation of a relationship which can feasibly be observed in the real world.
-In more common relational model terms, higher atomization would correspond to higher normal forms |---| though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook to more easily automatable wet work tracking.
+In more common relational model terms, higher atomization would correspond to higher normal forms |---| though we prefer this separate nomenclature to emphasize the preferential consideration of physical interactions, with an outlook towards more easily automated wet work tracking.
 Similarly to higher normal forms, increasingly atomized relationships give rise to an increasingly complex relational structure of objects with decreasing numbers of attributes.
 LabbookDB embraces the complexity thus generated and the flexibility and exploratory power it facilitates.
 Database interaction in LabbookDB is by design programmatic, an thus ease of human readability of the raw relational structure is only of subordinate concern to reporting flexibility.
@@ -393,7 +393,7 @@ The atomized schema seeks to introduce structure wherever possible, but also pro
 Irregular events associated with e.g. ``Measurement`` or ``Operation`` instances are stored in the ``irregularities`` table, and linked by a many-to-many relationship to the respective objects.
 This not only promotes irregularity re-use, but also facilitates rudimentary manual pattern discovery, and the organic design of new objects within the schema.
 
-Irregular events can also be recored outside of predetermined interventions, via ``Observation`` objects.
+Irregular events can also be recorded outside of predetermined interventions, via ``Observation`` objects.
 These objects have their own date attribute, alongside free-text attributes, and a ``value`` attribute, to more appropriately record a quantifiable trait in the observation.
 
 Plotting via BehavioPy
@@ -417,7 +417,7 @@ The following example code should be executable locally, contingent on LabbookDB
 The above code prompts LabbookDB to traverse the complex relational structure depicted in Figure :ref:`fstschema`, in order to join the values relevant to evaluation of the forced swim test.
 ``Animal`` objects are joined to ``Treatment.code`` values via their relationships to ``Cage`` and ``CageStay`` objects.
 This relational structure is determined by the administration of drinking water treatments at the cage level, and thus their contingence on the presence of animals in cages at the time of the treatment.
-Futher, ``Evaluation.path`` values are joined to ``Animal`` objects (via their respective relationships to ``Measurement`` objects) in order to determine where the forced swim test evaluation data is stored for every animal.
+Further, ``Evaluation.path`` values are joined to ``Animal`` objects (via their respective relationships to ``Measurement`` objects) in order to determine where the forced swim test evaluation data is stored for every animal.
 Subsequently, the annotated event tracking data is processed into desired length time bins (here, 1 minute), and immobility ratios are calculated per bin.
 Finally, the data is cast into a consistent and easily readable dataframe (formatted in the same fashion as Table :ref:`fstdf`) which can be both saved to disk, or passed to the appropriate BehavioPy plotting function, to produce Figure :ref:`fst`.
 
@@ -470,8 +470,8 @@ Disk space usage, while of secondary concern, may also become an issue.
 Going forward, better solutions for record keeping should be implemented.
 
 Of available options we would preferentially consider input code tracking (if possible in a form which is compatible with incremental execution) rather than output code tracking (e.g. in the form of data dumps).
-This is chiefly because output code tracking would be dependent not only of the data being tracked, but also of the version of LabookDB used for database creation |---|
-ideally these versioning schemes would not have to become convoluted.
+This is chiefly because output code tracking would be dependent not only of the data being tracked, but also of the version of LabbookDB used for database creation
+|---| ideally these versioning schemes would not have to become convoluted.
 
 Structure Migration
 ~~~~~~~~~~~~~~~~~~~
@@ -505,7 +505,7 @@ A notable special case of data input is the graphical user interface (GUI).
 While we acknowledge the potential of a GUI to attract scientists who are not confident users of the command line, we both believe that such an outreach effort is incompatible with the immediate goals of the project and that it is not typically an attractive long-term outlook for scientific Python applications.
 
 Particularly at this stage in development, manpower is limited, and contributions are performed on a per-need basis (little code was written which was not relevant to addressing an actual data management issue).
-Presently our foremost outreach target are researchers who posess the technical affinity needed to test our schema at its fringes and contribute to |---| or comment on |---| our code and schema.
+Presently our foremost outreach target are researchers who possess the technical affinity needed to test our schema at its fringes and contribute to |---| or comment on |---| our code and schema.
 A GUI would serve to add further layers of abstraction and make it more difficult for users to provide helpful feedback in our technology development efforts.
 
 In the long run, we would rather look towards developing more automatic or implicit tracking of wet work, rather than simply writing a GUI.
