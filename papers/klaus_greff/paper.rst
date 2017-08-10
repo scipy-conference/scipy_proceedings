@@ -25,7 +25,7 @@
 :bibliography: sacred
 
 
-.. .:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://www.youtube.com/watch?v=qqg7RO0o1OE 
 
 ----------------------------------------------------
 The Sacred Infrastructure for Computational Research

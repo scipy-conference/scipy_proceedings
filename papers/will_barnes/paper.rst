@@ -9,7 +9,7 @@
 
 :bibliography: references
 
-:video: http://youtube.com/the-video-of-my-talk.html
+:video: https://youtu.be/79ledxbnrPU 
 
 ----------------------------------------------------------
 ChiantiPy: a Python package for Astrophysical Spectroscopy

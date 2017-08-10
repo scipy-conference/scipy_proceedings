@@ -14,7 +14,6 @@
 
 :bibliography: mybib
 
-:video: https://github.com/narendramukherjee/blech_clust
 
 --------------------------------------------------------------------------------------------------------------------
 Python meets systems neuroscience: affordable, scalable and open-source electrophysiology in awake, behaving rodents

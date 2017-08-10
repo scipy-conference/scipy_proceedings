@@ -27,6 +27,8 @@
 :email: g.gorman@imperial.ac.uk
 :institution: Imperial College London
 
+:video: https://youtu.be/KinmqFTEs94
+
 ---------------------------------------------------------------
 Optimised finite difference computation from symbolic equations
 ---------------------------------------------------------------

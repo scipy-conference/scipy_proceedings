@@ -7,6 +7,8 @@
 :institution: eScience Institute and School of Computer Science, University of Washington. This work was made possible by the Moore/Sloan Data Science Environments Project at the University of Washington supported by grants from the Gordon and Betty Moore Foundation (Award #3835) and the Alfred P. Sloan Foundation (Award #2013-10-29).
 :corresponding:
 
+:video: https://www.youtube.com/watch?v=2-qCCR5r01A
+
 ---------------------------------------------------------------------------------
 SciSheets: Providing the Power of Programming With The Simplicity of Spreadsheets
 ---------------------------------------------------------------------------------

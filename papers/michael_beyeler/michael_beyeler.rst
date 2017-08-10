@@ -20,7 +20,7 @@
 
 :bibliography: bibliography
 
-:video: https://github.com/uwescience/pulse2percept
+:video: https://youtu.be/KxsNAa-P2X4
 
 
 --------------------------------------------------------------------
