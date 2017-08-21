@@ -13,7 +13,7 @@ import io
 from distutils import dir_util
 
 from writer import writer
-from conf import papers_dir, output_dir
+from conf import papers_dir, output_dir, status_file
 
 import options
 
@@ -46,9 +46,9 @@ def rst2tex(in_path, out_path):
     dir_util.copy_tree(in_path, out_path)
 
     base_dir = os.path.dirname(__file__)
-    # is it a draft? 
     # draft.sty , camera_ready.sty,  ready.sty
-    scipy_status = os.path.join(base_dir, '_static/draft.sty')
+
+    scipy_status = os.path.join(base_dir, '_static/status.sty')
     shutil.copy(scipy_status, out_path)
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
