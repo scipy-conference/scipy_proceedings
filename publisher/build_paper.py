@@ -2,6 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 import docutils.core as dc
+import os
 import os.path
 import sys
 import re
@@ -13,7 +14,7 @@ import io
 from distutils import dir_util
 
 from writer import writer
-from conf import papers_dir, output_dir, status_file
+from conf import papers_dir, output_dir, status_file, static_dir
 
 import options
 
@@ -46,10 +47,8 @@ def rst2tex(in_path, out_path):
     dir_util.copy_tree(in_path, out_path)
 
     base_dir = os.path.dirname(__file__)
-    # draft.sty , camera_ready.sty,  ready.sty
-
-    scipy_status = os.path.join(base_dir, '_static/status.sty')
-    shutil.copy(scipy_status, out_path)
+    out_file = shutil.copy(status_file, out_path)
+    os.rename(out_file, os.path.join(out_path, 'status.sty'))
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
     preamble = u'''\\usepackage{scipy}'''

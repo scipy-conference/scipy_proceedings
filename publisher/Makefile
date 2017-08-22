@@ -6,7 +6,7 @@ PAPERDIR = ../output
 TEMPLATES = _templates
 STATIC = _static
 YEARDIR = scipy`date "+%Y"`
-ZIPNAME = proceedings_2017_with_dois.zip
+ZIPNAME = draft_proceedings.zip
 DOIXMLNAME = doi_batch.xml
 
 BUILDTMPL = ./build_template.py
