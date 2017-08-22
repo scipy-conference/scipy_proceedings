@@ -6,7 +6,8 @@ PAPERDIR = ../output
 TEMPLATES = _templates
 STATIC = _static
 YEARDIR = scipy`date "+%Y"`
-ZIPNAME = camera_ready_draft_proceedings.zip
+ZIPNAME = proceedings_2017_with_dois.zip
+DOIXMLNAME = doi_batch.xml
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -48,7 +49,8 @@ html:
 
 html-zip: html
 	cp -r $(HTMLDIR) $(YEARDIR)
-	zip -r $(ZIPNAME) $(YEARDIR) 
+	cp $(BUILDDIR)/$(DOIXMLNAME) $(YEARDIR)/$(DOIXMLNAME)
+	zip -r $(ZIPNAME) $(YEARDIR)
 	rm -rf $(YEARDIR)
 
 proceedings-html: proceedings html
