@@ -154,7 +154,7 @@ class XrefMeta:
         The "paper_id" is pulled out of the toc, and is literally whatever the
         author named the folder that they put their paper in
         """
-        page = paper_id + '.htm'
+        page = paper_id + '.html'
         return '/'.join([self.proceedings_url(), page])
 
     def proceedings_url(self):
