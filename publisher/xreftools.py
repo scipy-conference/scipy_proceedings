@@ -57,7 +57,7 @@ class XrefMeta:
         doi_batch_id = xml.SubElement(head, 'doi_batch_id')
         doi_batch_id.text = make_batch_id()
         timestamp = xml.SubElement(head, 'timestamp')
-        timestamp.text = str(time.mktime(time.gmtime()))
+        timestamp.text = str(int(time.mktime(time.gmtime())))
         depositor = xml.SubElement(head, 'depositor')
         depositor_name = xml.SubElement(depositor, 'depositor_name')
         depositor_name.text = self.scipy_entry["proceedings"]["xref"]["depositor_name"]
