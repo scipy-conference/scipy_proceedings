@@ -19,7 +19,7 @@ import lxml.etree as xml
 from nameparser import HumanName
 import time
 
-from doitools import make_batch_id, make_doi
+from doitools import make_batch_id
 
 class XrefMeta:
 
@@ -111,7 +111,7 @@ class XrefMeta:
         noisbn = xml.SubElement(proceedings_metadata, 'noisbn', reason="simple_series") # Do not modify, unless someone has actually gone and gotten us an ISBN
         proceedings_doi_data = xml.SubElement(proceedings_metadata, 'doi_data')
         proceedings_doi = xml.SubElement(proceedings_doi_data, 'doi')
-        proceedings_doi.text = make_doi(self.scipy_entry["proceedings"]["xref"]["prefix"])
+        proceedings_doi.text = self.scipy_entry["proceedings"]["doi"]
         proceedings_resource = xml.SubElement(proceedings_doi_data, 'resource')
         proceedings_resource.text = self.proceedings_url()
 
@@ -140,7 +140,7 @@ class XrefMeta:
         last_page.text = str(entry['page']['stop'])
         paper_doi_data = xml.SubElement(paper, 'doi_data')
         paper_doi = xml.SubElement(paper_doi_data, 'doi')
-        paper_doi.text = make_doi(self.scipy_entry["proceedings"]["xref"]["prefix"])
+        paper_doi.text = entry['doi']
         paper_resource = xml.SubElement(paper_doi_data, 'resource')
         paper_resource.text = self.paper_url(entry['paper_id'])
 
