@@ -30,6 +30,10 @@ class Clock:
         self._data += 1
         return result
 
+def make_series_doi(prefix, issn):
+    """Given prefix and issn, return appropriate doi for series"""
+    formatted_issn = "issn.{}".format(issn)
+    return '/'.join([prefix, formatted_issn])
 
 def make_doi(prefix):
     """Given an assigned prefix, returns full, unique DOI for an object"""
