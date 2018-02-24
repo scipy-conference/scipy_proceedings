@@ -57,14 +57,7 @@ class Translator(LaTeXTranslator):
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
         self.table_type = 'table'
-
-        try:
-            self.active_table.set_table_style('booktabs')
-        except TypeError:
-            raise TypeError(
-                  "You are running into an error because you are using docutils "
-                  "version {}, instead please install docutils version {}".format(dc.__version__, '0.12.0')
-                  )
+        self.settings.table_style = ['booktabs']
 
     def visit_docinfo(self, node):
         pass
@@ -395,7 +388,6 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
-        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it

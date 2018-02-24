@@ -8,4 +8,4 @@ pygments
 pytest
 testpath
 ##### requirements with version specifiers
-docutils == 0.12
+docutils >= 0.14
