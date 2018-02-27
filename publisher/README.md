@@ -1,5 +1,29 @@
 # For editors publishing the proceedings.
 
+## Building the proceedings: Makefile
+
+There are a few commands of use when publishing the proceedings. 
+
+The primary four tasks are:
+
+1. Building the individual papers: `papers`
+2. Building the front-matter: `front-pdf`
+3. Building complete proceedings: `proceedings`
+4. Creating the website to display the proceedings and papers: `html`
+5. Zipping the website, proceedings and papers into a sharable file: `zip`
+
+Each of these tasks can be performed individually by running `make <command>`
+inside this directory. 
+
+Additionally, these commands can be combined:
+
+- `proceedings`: includes building `papers` and `front-pdf`
+- `proceedings-html` builds the proceedings and then builds the html
+- `html-zip` builds the html, and then zips the proceedings as they are
+- `proceedings-html-zip` builds everything and then zips it up
+
+
+## Build styles
 There are three different modes for publishing the proceedings, you will need to
 set the mode inside the `publisher/conf.py` file under the `status_file_base`
 value. The main use of this feature is to make it easier to switch from "draft"
