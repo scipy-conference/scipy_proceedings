@@ -47,11 +47,13 @@ html:
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
 
-html-zip: html
+zip: 
 	cp -r $(HTMLDIR) $(YEARDIR)
 	cp $(BUILDDIR)/$(DOIXMLNAME) $(YEARDIR)/$(DOIXMLNAME)
 	zip -r $(ZIPNAME) $(YEARDIR)
 	rm -rf $(YEARDIR)
+	
+html-zip: html zip
 
 proceedings-html: proceedings html
 
