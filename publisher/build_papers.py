@@ -29,22 +29,20 @@ def paper_stats(paper_id, start):
     stats = options.cfg2dict(os.path.join(output_dir, paper_id, 'paper_stats.json'))
 
     # Write page number snippet to be included in the LaTeX output
-    if 'pages' in stats:
-        pages = stats['pages']
-    else:
-        pages = 1
-
+    pages = stats.get('pages', 1)
     stop = start + pages - 1
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
+    page_number_file = os.path.join(output_dir, paper_id, 'page_numbers.tex')
 
-    with io.open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w', encoding='utf-8') as f:
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
         f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents
     stats.update({'page': {'start': start,
-                           'stop': stop}})
-    stats.update({'paper_id': paper_id})
+                           'stop': stop},
+                  'paper_id': paper_id
+                 })
 
     return stats, stop
 
