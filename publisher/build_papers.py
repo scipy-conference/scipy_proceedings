@@ -52,27 +52,23 @@ if __name__ == "__main__":
     toc_entries = []
 
     options.mkdir_p(pdf_dir)
+    basedir = os.path.join(os.path.dirname(__file__), '..')
+    
     for paper_id in dirs:
-        currdir = os.getcwd()
-        basedir = os.path.join(os.path.dirname(__file__), '..')
-        os.chdir(basedir)
-        build_paper(paper_id)
-        os.chdir(currdir)
+        with options.temp_cd(basedir):
+            build_paper(paper_id)
 
+        # this has a sideffect: it creates page_numbers.tex 
         stats, start = paper_stats(paper_id, start + 1)
         toc_entries.append(stats)
 
-        os.chdir(basedir)
-        build_paper(paper_id)
-        os.chdir(currdir)
+        # This build step uses page_numbers.tex to set the starting page number
+        with options.temp_cd(basedir):
+            build_paper(paper_id)
 
         src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
-
-        command_line = 'cd '+pdf_dir+' ; pdfannotextractor '+paper_id+'.pdf'
-        run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
-        out, err = run.communicate()
 
     # load metadata
     toc = {'toc': toc_entries}
