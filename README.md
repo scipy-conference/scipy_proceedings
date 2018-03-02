@@ -111,9 +111,6 @@ examples of how to:
  - AMSmath LaTeX classes (included in most LaTeX distributions)
  - alphaurl (often packaged as ``texlive-bibtex-extra``, or download from
    [CTAN](https://www.ctan.org/pkg/urlbst)) urlbst BibTeX style
- - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
-   to execute ``pdfannotextractor --install`` to fetch the PDFBox library.
-   This command may not work, but the proceedings have run correctly without it.
 
 ### Debian-like distributions:
 
