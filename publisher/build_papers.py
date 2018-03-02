@@ -29,22 +29,20 @@ def paper_stats(paper_id, start):
     stats = options.cfg2dict(os.path.join(output_dir, paper_id, 'paper_stats.json'))
 
     # Write page number snippet to be included in the LaTeX output
-    if 'pages' in stats:
-        pages = stats['pages']
-    else:
-        pages = 1
-
+    pages = stats.get('pages', 1)
     stop = start + pages - 1
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
+    page_number_file = os.path.join(output_dir, paper_id, 'page_numbers.tex')
 
-    with io.open(os.path.join(output_dir, paper_id, 'page_numbers.tex'), 'w', encoding='utf-8') as f:
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
         f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents
     stats.update({'page': {'start': start,
-                           'stop': stop}})
-    stats.update({'paper_id': paper_id})
+                           'stop': stop},
+                  'paper_id': paper_id
+                 })
 
     return stats, stop
 
@@ -54,27 +52,23 @@ if __name__ == "__main__":
     toc_entries = []
 
     options.mkdir_p(pdf_dir)
+    basedir = os.path.join(os.path.dirname(__file__), '..')
+    
     for paper_id in dirs:
-        currdir = os.getcwd()
-        basedir = os.path.join(os.path.dirname(__file__), '..')
-        os.chdir(basedir)
-        build_paper(paper_id)
-        os.chdir(currdir)
+        with options.temp_cd(basedir):
+            build_paper(paper_id)
 
+        # this has a sideffect: it creates page_numbers.tex 
         stats, start = paper_stats(paper_id, start + 1)
         toc_entries.append(stats)
 
-        os.chdir(basedir)
-        build_paper(paper_id)
-        os.chdir(currdir)
+        # This build step uses page_numbers.tex to set the starting page number
+        with options.temp_cd(basedir):
+            build_paper(paper_id)
 
         src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
-
-        command_line = 'cd '+pdf_dir+' ; pdfannotextractor '+paper_id+'.pdf'
-        run = subprocess.Popen(command_line, shell=True, stdout=subprocess.PIPE)
-        out, err = run.communicate()
 
     # load metadata
     toc = {'toc': toc_entries}

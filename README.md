@@ -104,18 +104,15 @@ examples of how to:
 
 ## Requirements
 
+ - Install the requirements in the requirements.txt file: `pip install -r requirements.txt`
  - IEEETran (often packaged as ``texlive-publishers``, or download from
    [CTAN](http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/)) LaTeX
    class
  - AMSmath LaTeX classes (included in most LaTeX distributions)
  - alphaurl (often packaged as ``texlive-bibtex-extra``, or download from
    [CTAN](https://www.ctan.org/pkg/urlbst)) urlbst BibTeX style
- - `docutils` 0.8 or later (``easy_install docutils``)
- - `pygments` for code highlighting (``easy_install pygments``)
- - Due to a bug in the Debian packaging of ``pdfannotextractor``, you may have
-   to execute ``pdfannotextractor --install`` to fetch the PDFBox library.
 
-On Debian-like distributions:
+### Debian-like distributions:
 
 ```
 sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
@@ -123,9 +120,11 @@ sudo apt-get install python-docutils texlive-latex-base texlive-publishers \
                      texlive-bibtex-extra
 ```
 
-Note you will still need to install `docutils` with `easy-install` or `pip` even on a Debian system.
+Note you will still need to install `docutils` with `pip` even on a Debian system.
 
-On Fedora, the package names are slightly different
+### Fedora
+
+On Fedora, the package names are slightly different:
 
 ```
 su -c `dnf install python-docutils texlive-collection-basic texlive-collection-fontsrecommended texlive-collection-latex texlive-collection-latexrecommended texlive-collection-latexextra texlive-collection-publishers texlive-collection-bibtexextra`
@@ -133,9 +132,11 @@ su -c `dnf install python-docutils texlive-collection-basic texlive-collection-f
 
 ## Build Server
 
-There is a server online building the open pull requests 
+There will be a server online building the open pull requests 
 [here](http://zibi.bids.berkeley.edu:7001). You should be able to pull a built PDF 
 for review from there.
+
+TODO: update server link
 
 ## For organizers
 
