@@ -7,6 +7,7 @@ TEMPLATES = _templates
 STATIC = _static
 YEARDIR = scipy`date "+%Y"`
 ZIPNAME = camera_ready_draft_proceedings.zip
+LINKFILE = proc_links.js
 
 BUILDTMPL = ./build_template.py
 TEX2PDF := cd $(TEXDIR) && pdflatex -interaction=batchmode
@@ -48,8 +49,9 @@ html:
 
 html-zip: html
 	cp -r $(HTMLDIR) $(YEARDIR)
-	zip -r $(ZIPNAME) $(YEARDIR) 
-	rm -rf $(YEARDIR)
+	cp -r $(STATIC)/$(LINKFILE) $(LINKFILE)
+	zip -r $(ZIPNAME) $(YEARDIR) $(LINKFILE)
+	rm -rf $(YEARDIR) $(LINKFILE)
 
 proceedings-html: proceedings html
 
