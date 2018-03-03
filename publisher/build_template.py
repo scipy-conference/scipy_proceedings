@@ -6,9 +6,14 @@ import sys
 import shlex
 import subprocess
 import io
+import shutil
+
+
+from distutils import dir_util
 
 import tempita
-from conf import bib_dir, build_dir, template_dir, html_dir
+from conf import (bib_dir, build_dir, template_dir, html_dir,
+                  static_dir, status_file)
 from options import get_config
 
 class TeXTemplate(tempita.Template):
@@ -69,6 +74,13 @@ def html_from_tmpl(src, config, target):
     with io.open(outname, mode='w', encoding='utf-8') as f:
         f.write(outfile)
 
+def copy_static_files(dest_fn):
+    extension = os.path.splitext(dest_fn)[1][1:]
+    outdir = os.path.join(build_dir, extension, "static")
+    dir_util.copy_tree(static_dir, outdir)
+    style_fn = os.path.join(outdir, 'status.sty')
+    shutil.copy(status_file, style_fn)
+
 if __name__ == "__main__":
 
     if not len(sys.argv) == 2:
@@ -81,6 +93,7 @@ if __name__ == "__main__":
     if not os.path.exists(template_fn):
         print("Cannot find template.")
         sys.exit(-1)
-
+        
     config = get_config()
     from_template(dest_fn, config, dest_fn)
+    copy_static_files(dest_fn)
