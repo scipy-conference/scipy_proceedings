@@ -207,10 +207,14 @@ def page_count(pdflatex_stdout, paper_dir):
     options.dict2cfg(d, cfgname)
 
 
-def build_paper(paper_id):
+def build_paper(paper_id, start=1):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
+    
+    page_number_file = os.path.join(output_dir, paper_id, 'page_numbers.tex')
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
+        f.write('\setcounter{page}{%s}' % start)
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
