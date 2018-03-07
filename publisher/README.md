@@ -1,5 +1,28 @@
 # For editors publishing the proceedings.
 
+## Structure of the proceedings
+
+This section will give you an introduction to the various documents and resources that you will need to create in the course of managing the proceedings. 
+
+The proceedings themselves made up of 2 primary parts, the front-matter and the papers. Building the proceedings is only one of the tasks you will need to handle in the course of managing the proceedings, but that is what we'll focus on for right now.
+
+### Front-matter:
+
+The front-matter is composed of:
+
+- title section
+- the copyright section
+- the organinization section: shows the committee chairs and reviewers
+- the students section: shows the students who have been given scholarships
+
+### Papers
+
+The papers are a continuous sequence of the individual papers submitted by authors via PRs.
+
+Building an individual paper is done by running build_paper.py on the paper directory.
+
+In order to ensure that the papers will appear in order with the correct page numbers, you need to build all of them at once. This is the distinction between running build_papers.py
+
 ## Building the proceedings: Makefile
 
 There are a few commands of use when publishing the proceedings. 
