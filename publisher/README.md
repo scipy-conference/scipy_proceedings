@@ -23,6 +23,29 @@ Building an individual paper is done by running build_paper.py on the paper dire
 
 In order to ensure that the papers will appear in order with the correct page numbers, you need to build all of them at once. This is the distinction between running build_papers.py
 
+## Structure of the website
+
+In addition to the proceedings pdf, you will need to construct the html files needed to share the proceedings with the world.
+
+The html pages are derived from a few different templates:
+
+- the main landing page (index.html.tmpl)
+- a header shared across the html pages (header.html.tmpl)
+- pages for the individual articles (article.html.tmpl)
+- a page for the information about the conference organisers (organization.html.tmpl) 
+- a page for the information about students receiving scholarships (students.html.tmpl)
+
+The resulting html files will include:
+
+- `index.html`
+- a page for each article, named ``<article_author>.html`
+- a `bib/`` directory, containing:
+    - a bibfile for each article, named `<article_author>.bib`
+    - a bibfile for the complete proceedings, named `proc-scipy-<year of proceedings>.bib`
+- a `pdf/` directory, containing:
+    - a pdf for each article, named `<article_author>.pdf`
+    - a pdf for the complete proceedings, named `proceedings.pdf`
+
 ## Building the proceedings: Makefile
 
 There are a few commands of use when publishing the proceedings. 
