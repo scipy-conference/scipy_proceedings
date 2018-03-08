@@ -212,7 +212,9 @@ def build_paper(paper_id, start=1):
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
     
-    page_number_file = os.path.join(output_dir, paper_id, 'page_numbers.tex')
+    
+    options.mkdir_p(out_path)
+    page_number_file = os.path.join(out_path, 'page_numbers.tex')
     with io.open(page_number_file, 'w', encoding='utf-8') as f:
         f.write('\setcounter{page}{%s}' % start)
 
