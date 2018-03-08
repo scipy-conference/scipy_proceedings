@@ -4,7 +4,9 @@
 
 This section will give you an introduction to the various documents and resources that you will need to create in the course of managing the proceedings. 
 
-The proceedings themselves made up of 2 primary parts, the front-matter and the papers. Building the proceedings is only one of the tasks you will need to handle in the course of managing the proceedings, but that is what we'll focus on for right now.
+The proceedings themselves are made up of 2 primary parts, the front-matter and the papers. 
+
+This section focuses on building the pdfs for the proceedings, other sections will focus on the html and other metadata information.
 
 ### Front-matter:
 
@@ -21,7 +23,7 @@ The papers are a continuous sequence of the individual papers submitted by autho
 
 Building an individual paper is done by running build_paper.py on the paper directory.
 
-In order to ensure that the papers will appear in order with the correct page numbers, you need to build all of them at once. This is the distinction between running build_papers.py
+In order to ensure that the papers will appear in order with the correct page numbers, you need to build all of them at once. This is the distinction between running build_papers.py and running build_paper.py on each of the individual papers. 
 
 ## Structure of the website
 
@@ -48,33 +50,39 @@ The resulting html files will include:
 
 ## Building the proceedings: Makefile
 
-There are many make targets available in the Makefile, some of them are built of others.
+There are many more make targets available in the Makefile than we will discuss here.
 
-That means you tend to use the different targets when you want to see a complete published version of the proceedings
+You will need to use different targets when you want to see a complete published version of the proceedings vs. individual parts of the proceedings. 
 
-### When publishing
+### Publishing complete proceedings
 
-To see the complete version of the proceedings you need to build everything to do that run:
+To build the complete version of the proceedings (html & pdfs) run:
 
 - `make proceedings-html` 
 
-If you need to share this version of the proceedings you can automatically zip it into a single file by running:
+Then, you can view the website by running `open _build/html/index.html`.
+
+If you need to share the proceedings, it is easier to zip the files automatically by running:
 
 - `make proceedings-html-zip`
 
-### When working on the build system
+### Working on the build system
 
-When you are working with the build system, you will often want to build only some parts of the proceedings. If you want to do that you can use the following commands
+When you are working with the build system, you will often want to iterate
+between making changes the build system and building parts of the
+proceedings. 
+
+The following commands are some of the most useful for partial builds:
 
 1. `make papers`: builds a pdf composed of all of the papers, as well as pdfs for the individual papers
 2. `make front-pdf`: builds the pdfs for the front-matter elements
 3. `make html`: builds the html pages for displaying the proceedings and papers
-4. `make zip`: builds a zip file for the html and proceedings
-5. `make proceedings`: builds the pdf of the proceedings (front-matter + papers)
-6. `make proceedings-html`: builds the proceedings and then builds the html (proceedings + html)
-7. `make html-zip`: builds the html, and then zips the proceedings as they are (html + zip)
+4. `make proceedings`: builds the pdf of the proceedings (front-matter + papers)
+5. `make html-zip`: builds the html, and then zips the proceedings as they are (html + zip)
 
-NB: You will tend to use `html-zip` when you want to iterate on the website without needing to rebuild the entire proceedings.
+NB: You will tend to use `html-zip` if you need to iterate on the portable copy
+of the website without needing to rebuild the entire proceedings. This is most
+useful after authors' PRs are no longer being updated.
 
 ## Build styles
 
