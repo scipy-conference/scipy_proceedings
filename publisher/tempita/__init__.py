@@ -314,7 +314,6 @@ class Template(object):
             if sys_vers < (3, 0):
                 traceback.print_exc()
                 traceback.print_tb(exc_info[2])
-                import ipdb; ipdb.set_trace()
                 raise e
             else:
                 raise exc_info[0](e).with_traceback(exc_info[2])
@@ -333,7 +332,6 @@ class Template(object):
             if sys_vers < (3, 0):
                 traceback.print_exc()
                 traceback.print_tb(exc_info[2])
-                import ipdb; ipdb.set_trace()
                 raise e
                 # raise exc_info[0](e)
             else:

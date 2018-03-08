@@ -26,29 +26,26 @@ papers_dir = conf.papers_dir
 
 
 def paper_stats(paper_id, start):
+    """Pull in stats of paper, return stats and the next paper 
+    """
     stats = options.cfg2dict(os.path.join(output_dir, paper_id, 'paper_stats.json'))
 
-    # Write page number snippet to be included in the LaTeX output
     pages = stats.get('pages', 1)
     stop = start + pages - 1
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
-    page_number_file = os.path.join(output_dir, paper_id, 'page_numbers.tex')
-
-    with io.open(page_number_file, 'w', encoding='utf-8') as f:
-        f.write('\setcounter{page}{%s}' % start)
 
     # Build table of contents
     stats.update({'page': {'start': start,
                            'stop': stop},
                   'paper_id': paper_id
                  })
-
-    return stats, stop
+    
+    return stats 
 
 if __name__ == "__main__":
 
-    start = 0
+    start = 1
     toc_entries = []
 
     options.mkdir_p(pdf_dir)
@@ -56,15 +53,11 @@ if __name__ == "__main__":
     
     for paper_id in dirs:
         with options.temp_cd(basedir):
-            build_paper(paper_id)
+            build_paper(paper_id, start=start)
 
-        # this has a sideffect: it creates page_numbers.tex 
-        stats, start = paper_stats(paper_id, start + 1)
+        stats = paper_stats(paper_id, start)
+        start = stats.get('page',{}).get('stop', start) + 1
         toc_entries.append(stats)
-
-        # This build step uses page_numbers.tex to set the starting page number
-        with options.temp_cd(basedir):
-            build_paper(paper_id)
 
         src_pdf = os.path.join(output_dir, paper_id, 'paper.pdf')
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
