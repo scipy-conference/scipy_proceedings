@@ -48,32 +48,40 @@ The resulting html files will include:
 
 ## Building the proceedings: Makefile
 
-There are a few commands of use when publishing the proceedings. 
+There are many make targets available in the Makefile, some of them are built of others.
 
-The primary four tasks are:
+That means you tend to use the different targets when you want to see a complete published version of the proceedings
 
-1. Building the individual papers: `papers`
-2. Building the front-matter: `front-pdf`
-3. Building complete proceedings: `proceedings`
-4. Creating the website to display the proceedings and papers: `html`
-5. Zipping the website, proceedings and papers into a sharable file: `zip`
+### When publishing
 
-Each of these tasks can be performed individually by running `make <command>`
-inside this directory. 
+To see the complete version of the proceedings you need to build everything to do that run:
 
-Additionally, these commands can be combined:
+- `make proceedings-html` 
 
-- `proceedings`: includes building `papers` and `front-pdf`
-- `proceedings-html` builds the proceedings and then builds the html
-- `html-zip` builds the html, and then zips the proceedings as they are
-- `proceedings-html-zip` builds everything and then zips it up
+If you need to share this version of the proceedings you can automatically zip it into a single file by running:
 
+- `make proceedings-html-zip`
+
+### When working on the build system
+
+When you are working with the build system, you will often want to build only some parts of the proceedings. If you want to do that you can use the following commands
+
+1. `make papers`: builds a pdf composed of all of the papers, as well as pdfs for the individual papers
+2. `make front-pdf`: builds the pdfs for the front-matter elements
+3. `make html`: builds the html pages for displaying the proceedings and papers
+4. `make zip`: builds a zip file for the html and proceedings
+5. `make proceedings`: builds the pdf of the proceedings (front-matter + papers)
+6. `make proceedings-html`: builds the proceedings and then builds the html (proceedings + html)
+7. `make html-zip`: builds the html, and then zips the proceedings as they are (html + zip)
+
+NB: You will tend to use `html-zip` when you want to iterate on the website without needing to rebuild the entire proceedings.
 
 ## Build styles
+
 There are three different modes for publishing the proceedings, you will need to
 set the mode inside the `publisher/conf.py` file under the `status_file_base`
 value. The main use of this feature is to make it easier to switch from "draft"
-the default to a "conference ready" or "ready" version of the proceedings that
+(the default) to a "conference ready" or "ready" version of the proceedings that
 can be served on the official SciPy organisation website. 
 
 - "draft": (default)
