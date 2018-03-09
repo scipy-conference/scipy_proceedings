@@ -41,7 +41,6 @@
 
 :year: 2017
 
-:video: http://www.youtube.com/watch?v=
 
 -------------------------------------------------------
 Accelerating Scientific Python with Intel Optimizations

@@ -12,6 +12,7 @@
 :institution: Institute for Biomedical Engineering, ETH and University of Zurich
 
 :bibliography: mybib
+:video: https://youtu.be/yDBu_wSyw-g
 
 
 LabbookDB: A Wet-Work-Tracking Database Application Framework

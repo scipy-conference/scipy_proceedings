@@ -75,8 +75,6 @@
 :email: r.jones@fz-juelich.de
 :institution: PGI-1 and PGI/JCNS-TA, Forschungszentrum Jülich, D-52425 Jülich, Germany
 
-:video: https://pgi-jcns.fz-juelich.de/pub/media/pymoldyn_algorithms.mp4
-
 
 #################################################################################################
 pyMolDyn: Identification, structure, and properties of cavities in condensed matter and molecules

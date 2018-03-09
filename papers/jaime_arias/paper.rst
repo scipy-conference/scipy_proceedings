@@ -37,6 +37,7 @@
 :equal-contributor:
 
 :bibliography: biblio
+:video: https://youtu.be/Usyvds1o4lQ
 
 --------------------------------------------------------------------------------------------------------------------
 PyHRF: A Python Library for the Analysis of fMRI Data Based on Local Estimation of the Hemodynamic Response Function
