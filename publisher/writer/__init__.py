@@ -44,6 +44,7 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.latex_video_url = ''
         self.bibliography = ''
 
         # This gets read by the underlying docutils implementation.
@@ -101,7 +102,8 @@ class Translator(LaTeXTranslator):
         elif self.current_field == 'copyright_holder':
             self.copyright_holder = text
         elif self.current_field == 'video':
-            self.video_url = text
+            self.latex_video_url = text
+            self.video_url = node.astext() if text else ''
         elif self.current_field == 'bibliography':
             self.bibtex = ['alphaurl', text]
             self._use_latex_citations = True
@@ -229,10 +231,10 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
-        if not self.video_url:
+        if not self.latex_video_url:
             video_template = ''
         else:
-            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.video_url
+            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.latex_video_url
 
         title_template = r'\newcounter{footnotecounter}' \
                 r'\title{%s}\author{%s' \
