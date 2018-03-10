@@ -368,7 +368,7 @@ class Translator(LaTeXTranslator):
         # Work-around for a bug in docutils where
         # '%' is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[1].strip('%')
+        self.out[-1] = self.out[-1].strip('%')
 
         self.non_breaking_paragraph = True
 
