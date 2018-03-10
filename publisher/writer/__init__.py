@@ -53,7 +53,6 @@ class Translator(LaTeXTranslator):
         self.bibtex = None
 
         self.abstract_in_progress = False
-        self.non_breaking_paragraph = False
 
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
@@ -304,9 +303,6 @@ class Translator(LaTeXTranslator):
             self.out.append('\\begin{IEEEkeywords}')
             self.keywords = self.encode(node.astext())
 
-        elif self.non_breaking_paragraph:
-            self.non_breaking_paragraph = False
-
         else:
             if self.active_table.is_open():
                 self.out.append('\n')
@@ -368,9 +364,7 @@ class Translator(LaTeXTranslator):
         # Work-around for a bug in docutils where
         # '%' is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[1].strip('%')
-
-        self.non_breaking_paragraph = True
+        self.out[-1] = self.out[-1].strip('%')
 
     def visit_table(self, node):
         classes = node.attributes.get('classes', [])
@@ -413,7 +407,6 @@ class Translator(LaTeXTranslator):
         LaTeXTranslator.depart_thead(self, node)
 
     def visit_literal_block(self, node):
-        self.non_breaking_paragraph = True
 
         if 'language' in node.attributes:
             # do highlighting
@@ -463,7 +456,6 @@ class Translator(LaTeXTranslator):
     def visit_PartMath(self, node):
         self.requirements['amsmath'] = '\\usepackage{amsmath}'
         self.out.append(mathEnv(node['latex'], node['label'], node['type']))
-        self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
     def visit_PartLaTeX(self, node):
