@@ -31,6 +31,7 @@ header = r'''
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
+    \newcommand*\DUrolecode[1]{#1}
     \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
