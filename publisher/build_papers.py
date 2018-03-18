@@ -11,7 +11,7 @@ import conf
 import options
 from build_paper import build_paper
 from xreftools import XrefMeta
-from doitools import make_doi
+from doitools import make_doi, make_series_doi
 
 output_dir = conf.output_dir
 build_dir  = conf.build_dir
@@ -69,9 +69,11 @@ if __name__ == "__main__":
 
     # make dois for papers, then entire proceedings
     doi_prefix = scipy_entry["proceedings"]["xref"]["prefix"]
+    issn = scipy_entry['series']['xref']['issn']
     for paper in toc_entries:
         paper['doi'] = make_doi(doi_prefix)
     scipy_entry['proceedings']['doi'] = make_doi(doi_prefix)
+    scipy_entry['series']['doi'] = make_series_doi(doi_prefix, issn)
 
     # persist metadata
     options.dict2cfg(toc, toc_conf)

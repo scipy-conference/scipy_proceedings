@@ -97,19 +97,36 @@ class XrefMeta:
 
         'no_isbn' must be 'simple_series' or CrossRef will refuse DOIs.
         """
-        proceedings_metadata = xml.SubElement(conference, 'proceedings_metadata')
-        proceedings_title = xml.SubElement(proceedings_metadata, 'proceedings_title')
+        proceedings_series_metadata = xml.SubElement(conference, 'proceedings_series_metadata')
+        series_metadata = xml.SubElement(proceedings_series_metadata, 'series_metadata')
+        titles = xml.SubElement(series_metadata, 'titles')
+        title = xml.SubElement(titles, 'title')
+        title.text = self.scipy_entry['series']['title']['full']
+        original_language_title = xml.SubElement(titles, 'original_language_title')
+        original_language_title.text = self.scipy_entry['series']['title']['full']
+        issn = xml.SubElement(series_metadata, 'issn')
+        issn.text = self.scipy_entry['series']['xref']['issn']
+        # TODO: decide on whether/how to archive proceedings
+        # series_archive_locations = xml.SubElement(series_metadata, 'archive_locations')
+        # series_archive_location = xml.SubElement(series_archive_locations, 'archive_location')
+        # series_archive_location.text = "Internet Archive"
+        series_doi_data = xml.SubElement(series_metadata, 'doi_data')
+        series_doi = xml.SubElement(series_doi_data, 'doi')
+        series_doi.text = self.scipy_entry['series']['doi']
+        series_resource = xml.SubElement(series_doi_data, 'resource')
+        series_resource.text = self.scipy_entry["series"]["xref"]["resource_url"]
+        proceedings_title = xml.SubElement(proceedings_series_metadata, 'proceedings_title')
         proceedings_title.text = self.scipy_entry['proceedings']['title']['full']
-        proceedings_subject = xml.SubElement(proceedings_metadata, 'proceedings_subject')
+        proceedings_subject = xml.SubElement(proceedings_series_metadata, 'proceedings_subject')
         proceedings_subject.text = "Scientific Computing with Python" # TODO: move to scipy_proc.json
-        publisher = xml.SubElement(proceedings_metadata, 'publisher')
+        publisher = xml.SubElement(proceedings_series_metadata, 'publisher')
         publisher_name = xml.SubElement(publisher, 'publisher_name')
         publisher_name.text = 'SciPy' # TODO: move to scipy_proc.json
-        publication_date = xml.SubElement(proceedings_metadata, 'publication_date')
+        publication_date = xml.SubElement(proceedings_series_metadata, 'publication_date')
         publication_year = xml.SubElement(publication_date, 'year')
         publication_year.text = self.scipy_entry['proceedings']['year']
-        noisbn = xml.SubElement(proceedings_metadata, 'noisbn', reason="simple_series") # Do not modify, unless someone has actually gone and gotten us an ISBN
-        proceedings_doi_data = xml.SubElement(proceedings_metadata, 'doi_data')
+        noisbn = xml.SubElement(proceedings_series_metadata, 'noisbn', reason="simple_series") # Do not modify, unless someone has actually gone and gotten us an ISBN
+        proceedings_doi_data = xml.SubElement(proceedings_series_metadata, 'doi_data')
         proceedings_doi = xml.SubElement(proceedings_doi_data, 'doi')
         proceedings_doi.text = self.scipy_entry["proceedings"]["doi"]
         proceedings_resource = xml.SubElement(proceedings_doi_data, 'resource')
