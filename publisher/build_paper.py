@@ -2,6 +2,7 @@
 from __future__ import print_function, unicode_literals
 
 import docutils.core as dc
+import os
 import os.path
 import sys
 import re
@@ -13,7 +14,7 @@ import io
 from distutils import dir_util
 
 from writer import writer
-from conf import papers_dir, output_dir
+from conf import papers_dir, output_dir, status_file, static_dir
 
 import options
 
@@ -30,6 +31,7 @@ header = r'''
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
+    \newcommand*\DUrolecode[1]{#1}
     \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
@@ -46,8 +48,8 @@ def rst2tex(in_path, out_path):
     dir_util.copy_tree(in_path, out_path)
 
     base_dir = os.path.dirname(__file__)
-    scipy_status = os.path.join(base_dir, '_static/status.sty')
-    shutil.copy(scipy_status, out_path)
+    out_file = shutil.copy(status_file, out_path)
+    os.rename(out_file, os.path.join(out_path, 'status.sty'))
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
     preamble = u'''\\usepackage{scipy}'''
@@ -83,7 +85,7 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
-    with io.open(rst, mode='r') as f:
+    with io.open(rst, mode='r', encoding='utf-8') as f:
         content = header + f.read()
     
     tex = dc.publish_string(source=content, writer=writer,
@@ -206,10 +208,16 @@ def page_count(pdflatex_stdout, paper_dir):
     options.dict2cfg(d, cfgname)
 
 
-def build_paper(paper_id):
+def build_paper(paper_id, start=1):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
+    
+    
+    options.mkdir_p(out_path)
+    page_number_file = os.path.join(out_path, 'page_numbers.tex')
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
+        f.write('\setcounter{page}{%s}' % start)
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)
