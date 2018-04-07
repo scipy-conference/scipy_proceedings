@@ -80,3 +80,8 @@ specific problems that come up for authors. If we aren't putting any changes in
 The solution to this is to merge `dev` into `2018` with every change to
 `dev`.
 
+## Update webhook
+
+If the server has changed you will need to update the webhook as well.
+
+![change webhook](./images/change_webhook.png)
