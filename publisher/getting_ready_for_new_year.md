@@ -85,3 +85,11 @@ The solution to this is to merge `dev` into `2018` with every change to
 If the server has changed you will need to update the webhook as well.
 
 ![change webhook](./images/change_webhook.png)
+
+## TODO: move previous year's branch into its own git repository.
+
+TODO: Figure out workflow to move previous year's branch into its own repo.
+
+Once we write up the workflow, this should be added to the todo list under
+[](#Workflow).
+
