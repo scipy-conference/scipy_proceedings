@@ -17,6 +17,18 @@ If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-f
 
 
 
+## Timeline for 2018
+
+In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
+
+- April 9th: Authors invited to submit full papers
+- May 14th: 1st Draft for Submission
+- May 14th – June 25th: Open Review Period
+- May 15th: Reviewers Assigned
+- June 11th: Initial Complete Review
+- June 25th: Final Recommendation and Comprehensive Review
+- July 2: Final Editorial Decisions for Proceedings Contents
+- July 9: Conference Ready Proceedings Published
 
 ## Instructions for Authors
 
@@ -40,6 +52,12 @@ the PR's comment sections. It is important to remember in this case that we expe
 In the event that the authors and reviewers find
 themselves unable to resolve a disagreement about a recommendation, they should
 alert a Proceedings Co-Chair to this situation.
+
+### Author Deadlines
+
+- May 14th: 1st Draft for Submission Deadline
+- May 14th – June 25th: Open Review Period 
+- July 2: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
 
@@ -196,6 +214,11 @@ outstanding issues remaining. As a heuristic, if you think the paper should not
 be in the proceedings unless the authors make the change in question, then that 
 change should be made before the *Final Recommendation Deadline*.
 
+### Reviewer Deadlines
+
+- 1st Draft of Proceedings Submission Due: 5/14/2018	
+- Initial Complete Review Deadline:	6/11/2018
+- Final Recommendation Deadline: 6/25/2018
 
 ### Reviewer Workflow
 
