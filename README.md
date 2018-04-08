@@ -7,34 +7,14 @@ If you are an *Author*, please see [Instructions-for-Authors](#Instructions-for-
 If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-for-Reviewers).
 
 
-Papers are formatted using reStructuredText and the compiled version should be
-no longer than 8 pages, including figures.  Here are the steps to produce a
-paper:
 
-- Fork the
-  [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
-  repository on GitHub.
 
-- Check out the 2017 branch (``git checkout 2017``).
 
-- Create a new environment (using your choice of environment manager, e.g., ``pyenv`` or ``conda``).
 
-- Install/update the required python libraries (``pip install -U -r requirements.txt``).
 
-- An example paper is provided in ``papers/00_vanderwalt``.  Create a new
-  directory ``papers/firstname_surname``, copy the example paper into it, and
-  modify to your liking.
 
-- Run ``./make_paper.sh papers/firstname_surname`` to compile your paper to
-  PDF (requires LaTeX, docutils, Python--see below).  The output appears in
-  ``output/firstname_surname/paper.pdf``.
 
-- Once you are ready to submit your paper, file a pull request on GitHub.
-  **Please ensure that you file against the correct branch**--your branch
-  should be named 2017, and the pull-request should be against our 2017
-  branch.
 
-- Please do not modify any files outside of your paper directory.
 
 ## Schedule Summary
 
@@ -81,6 +61,104 @@ These dates are the tentative timeline for 2017:
 - Do not modify any files outside of your paper directory. 
 - The compiled version of the paper (PDF) should be at most 8 pages,
   including figures and references.
+
+### Author Workflow
+
+Below we outline the steps to submit a paper.
+
+Before you begin, you should have a GitHub account. If we refer to `<username>`
+in code examples, you should replace that with your GitHub username. 
+
+More generally, angle brackets with a value inside are meant to be replaced with
+the value that applies to you. 
+
+For example, if your GitHub username was `mpacer`, you would transform 
+
+```
+git clone https://github.com/<username>/scipy_proceedings
+```
+
+into: 
+
+```
+git clone https://github.com/mpacer/scipy_proceedings
+```
+
+1. Get a local copy of the `scipy_proceedings` repo.
+2. Update your local copy of the `scipy_proceedings` repo.
+3. Create a new branch for your paper based off the latest `2018` branch.
+    - If you submit multiple papers, you will need a new branch for each.
+4. Set up your environment.
+5. Write your paper, commit changes, and build your paper.
+6. Repeat step 6, while also responding to reviewer feedback.
+
+#### Getting a local copy of the scipy_proceedings repo 
+
+- If you do not have a GitHub account, create one. 
+- Fork the
+  [scipy_proceedings](https://github.com/scipy-conference/scipy_proceedings)
+  repository on GitHub.
+- Clone the repo locally 
+    - `git clone https://github.com/<username>/scipy_proceedings`
+- Add the `scipy-conference` repository as your `upstream` remote
+    - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
+
+If you run `git remote -v  ` you should see something like the following: 
+```
+origin	https://github.com/<username>/scipy_proceedings.git (fetch)
+origin	https://github.com/<username>/scipy_proceedings.git (push)
+upstream	https://github.com/scipy-conference/scipy_proceedings.git (fetch)
+upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
+```
+
+#### Getting the latest `2018` branch
+
+- Fetch the latest version of the `scipy_proceedings` repo
+    - `git fetch upstream`
+- Check out the upstream `2018` branch 
+    - `git checkout -b 2018 --track upstream/2018`
+
+#### Creating a new branch based off of `2018`
+
+If you are submitting only one paper, you can use the `2018` directly.
+
+Otherwise, you will need to create a new branch based on `2018` and set its
+upstream to origin.
+
+```
+git checkout 2018
+git checkout -b <your_branch_name> 
+git push --set-upstream origin <your_branch_name>
+```
+
+#### Setting up your environment
+
+- Create a new environment (using your choice of environment manager, e.g., `pyenv` or `conda`).
+- Install/update the required python libraries (`pip install -U -r requirements.txt`).
+- Install LaTeX and any other non-python dependencies 
+- Create a new directory `papers/<your_directory_name>`
+    - if you are submitting one paper, we recommend you use `<firstname_surname>`
+    - if you are submitting more than one paper, you will need to use a different 
+      directory name for each paper
+
+#### Write your paper
+
+- Copy an example paper into your directory.
+    - You must have only one reST file in the top level of `<your_directory_name>`.
+- As you make changes to your paper, commit those changes in discrete chunks. 
+- Do not modify any files outside of your paper directory.
+
+#### Build your paper
+
+- Run `./make_paper.sh papers/firstname_surname` to make a PDF of your paper 
+- Check the output in `output/<your_directory_name>/paper.pdf`.
+
+#### Create a paper PR
+
+- Once you are ready to submit your paper, file a pull request on GitHub.
+  **Please ensure that you file against the correct branch**
+- Create a pull-request against our `2018` branch.
+
 
 ### Reviewer Workflow
 
