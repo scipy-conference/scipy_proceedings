@@ -1,44 +1,88 @@
 # SciPy Proceedings
 
-This is the repository for submitting to and managing the Proceedings for the Annual Conference.
+This is the repository for submitting to and managing the Proceedings for the
+Annual Conference.
+
+This repository is a home for authors, reviewers and editors to collaboratively
+create the proceedings for the conference.
+
+**All** communication between authors and reviewers should be civil. There are
+no exceptions to this rule.
 
 If you are an *Author*, please see [Instructions-for-Authors](#Instructions-for-Authors).
 
 If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-for-Reviewers).
 
-## Organising Principles
+## Organising Principles: Openness
 
-Overall, we aim to combine the best principles of open source development and
-open academic publication processes.
+Overall, the SciPy proceedings are organised to be a fully open proceedings.
 
-**All** communication between authors and reviewers should be civil. There are
-no exceptions to this rule.
+We aim to combine the best aspects of open source development, open peer review,
+and open access publication.
 
-Authors submit papers through PRs, and reviewers review the papers through
-comments on PRs.
 
-Authors and reviewers are encouraged to work collaboratively to improve submissions
-throughout the review process, much like open source code-review.
+### Built by and for Open Source Communities on Open Source Tech 
 
-The purpose of collaborative review is primarily to improve the publication
-quality, not merely to vet and validate the content of the paper.
+The technologies used for running the conference are themselves developed in the open and built on open source tools.
 
-Conversations occur in the open, allowing for transparency in this open review
-process. This holds authors and reviewers accountable and encourages civil
-communication practices.
+Open Development:
+    - with many people contributing code over more than a decade
+        - many contributors start as authors submitting to the proceedings 
+        - provides a natural pathway for new members to join the proceedings   
+          committee
+    - technologies are managed via public, open source GitHub repositories:
+        - build system: https://github.com/scipy-conference/scipy_proceedings
+        - server: https://github.com/scipy-conference/procbuild
 
-Reviewers are invited by the editors, but community members may volunteer to
-review papers that interest them.
+The systems for running the conference are built on top of open source tools:
+    - build system:
+        - LaTeX
+        - ReStructured Text (reST)
+        - Python: docutils, lxml, pygments, pytest
+    - server:
+        - Flask & waitress
+        - pyzmq
+        - Docker
+        - Python: asyncio 
 
-All the resulting papers have DOIs (making them easily citable) and are openly
-available.
+### Open Peer Review meets Open Source Code Review
 
-The build tools are built on open source tools (LaTeX, docutils, Python, ReST).
+The entire submission and review procedure occurs through public PRs attached to
+identifiable individuals.
 
-The build tools have been developed by a variety of individuals and are managed
-via public, open source repositories (https://github.com/scipy-conference/scipy_proceedings and
-https://github.com/scipy-conference/procbuild), allowing anyone who wishes to
-adopt or extend these tools to do so easily.
+- Authors and reviewers are encouraged to work collaboratively to improve
+  submissions throughout the review process, much like open source code-review.
+
+- Reviews are collaborative, aiming to improve the publication quality. This is 
+  possible because the content was already vetted by the program committee.
+
+- Conversations occur in the open, allowing for transparency in this open review
+  process. This holds authors and reviewers accountable and encourages civil
+  communication practices.
+
+### Open Access for an Open Community
+
+The papers are published as true open access articles. The community is involved
+in the entire process for creating the proceedings, which ensures relevance to
+the community that created them.
+
+- Papers are submitted by authors who will be presenting talks and posters at the 
+  annual SciPy conference. Because we know the content is relevant to the SciPy 
+  community, review can focus on improving papers, not vetting them.
+
+- Reviewers are invited by the editors, but community members may volunteer to
+  review papers that interest them.
+ 
+- There are no author processing charges barring authors from submitting papers.
+    - Reviewers and co-chairs volunteer their time.
+    - Services with free tiers (like GitHub and Heroku) allow distributing the 
+      technologies with minimal cost.
+
+- Papers are openly available at http://conference.scipy.org/proceedings/, with
+  no pay walls barring consumption or author processing charges. 
+  
+- From 2017 onward, papers have DOIs (making them easily citable) and are also 
+  openly available from those DOIs.
 
 ## Timeline for 2018
 
