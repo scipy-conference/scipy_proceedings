@@ -16,31 +16,30 @@ If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-f
 
 
 
-## Schedule Summary
 
-Authors may make changes to their submisions throughout the review process.
 
-There are many different styles of review (some do paragraph comments, others
-do 'code review' style line edits) and the process is open.
 ## Instructions for Authors
 
-We encourage authors and reviewers to work together iteratively to make each 
-others papers the best they can be.
-Combine the best principles of open source development and academic publication.
+Please submit your papers by 23:59 PST of the *1st Draft for Submission* 
+Deadline.
 
-These dates are the tentative timeline for 2017:
+During the Open Review Period authors should work with their reviewers to refine
+and improve their submission.
 
-- May 4th - Authors invited to submit full papers
-- June 6th - Initial submissions due
-- June 7th - Reviewers assigned
-- June 21st - Reviews due
-- June 21st -July 7th: Authors revise papers based on reviews
-- July 7th - Acceptance/rejection of papers
-- July 8th - Papers must be camera-ready
-- July 10-16th - Conference
-- July 20th - Publication
+Authors should respond to all the reviewers' comments. 
 
-## General Guidelines
+**All** communication between authors and reviewers should be civil at all times. 
+
+Authors should default to modifying their papers in response to reviewers'
+comments. In some cases, authors may not agree with the reviewers comments. 
+
+If the authors do not agree with the comments or do not wish to implement the
+suggested changes, the authors and reviewers should attempt to discuss this in
+the PR's comment sections. It is important to remember in this case that we expect **all** communication between authors and reviewers to be civil.
+
+In the event that the authors and reviewers find
+themselves unable to resolve a disagreement about a recommendation, they should
+alert a Proceedings Co-Chair to this situation.
 
 ### General Information and Guidelines for Authors:
 
@@ -170,6 +169,32 @@ submission procedure.
 - Make your changes to the build system.
 - Do **not** commit any changes from your paper PR to this new branch.
 - Make a separate PR against the `dev` branch, it will be reviewed separately. 
+
+## Instructions for Reviewers
+
+You will be reviewing authors' pull requests. While authors should have a proper
+draft of their paper ready for you by *1st Draft Submission* deadline. 
+
+We ask that you read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md) before beginning any reviews.
+
+**All** communication between authors and reviewers should be civil at all times. 
+
+The goal of our review process is to improve the paper that the authors are
+working on. Our aim is to have you and the author collaborate on making their
+better by using an iterative process.  
+
+While our basic approach is to have you and the author iterate, we ask you to
+complete an initial review and start that conversation by the *Initial Complete Review
+Deadline*.
+
+We ask that by the *Final Recommendation Deadline* you have a recommendation to
+either accept or reject the paper at that point and time. 
+
+**Note**: You may still recommend changes after the *Final Recommendation 
+Deadline*, but these should be seen as recommendations. There should be no large 
+outstanding issues remaining. As a heuristic, if you think the paper should not 
+be in the proceedings unless the authors make the change in question, then that 
+change should be made before the *Final Recommendation Deadline*.
 
 
 ### Reviewer Workflow
