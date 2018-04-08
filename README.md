@@ -6,16 +6,39 @@ If you are an *Author*, please see [Instructions-for-Authors](#Instructions-for-
 
 If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-for-Reviewers).
 
+## Organising Principles
 
+Overall, we aim to combine the best principles of open source development and
+open academic publication processes.
 
+**All** communication between authors and reviewers should be civil. There are
+no exceptions to this rule.
 
+Authors submit papers through PRs, and reviewers review the papers through
+comments on PRs.
 
+Authors and reviewers are encouraged to work collaboratively to improve submissions
+throughout the review process, much like open source code-review.
 
+The purpose of collaborative review is primarily to improve the publication
+quality, not merely to vet and validate the content of the paper.
 
+Conversations occur in the open, allowing for transparency in this open review
+process. This holds authors and reviewers accountable and encourages civil
+communication practices.
 
+Reviewers are invited by the editors, but community members may volunteer to
+review papers that interest them.
 
+All the resulting papers have DOIs (making them easily citable) and are openly
+available.
 
+The build tools are built on open source tools (LaTeX, docutils, Python, ReST).
 
+The build tools have been developed by a variety of individuals and are managed
+via public, open source repositories (https://github.com/scipy-conference/scipy_proceedings and
+https://github.com/scipy-conference/procbuild), allowing anyone who wishes to
+adopt or extend these tools to do so easily.
 
 ## Timeline for 2018
 
