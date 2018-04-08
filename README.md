@@ -295,4 +295,5 @@ Reviewers: You should be able to pull a built PDF for review from there.
 
 ## For organizers
 
-To build the whole proceedings, see the Makefile in the publisher directory.
+To information about how to manage the whole proceedings, please see
+`publisher/README.md` and `publisher/Makefile`.
