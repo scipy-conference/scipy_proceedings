@@ -287,11 +287,11 @@ su -c `dnf install python-docutils texlive-collection-basic texlive-collection-f
 
 ## Build Server
 
-There will be a server online building the open pull requests 
-[here](http://zibi.bids.berkeley.edu:7001). You should be able to pull a built PDF 
-for review from there.
+There will be a server online building open pull requests at http://procbuild.scipy.org. 
 
-TODO: update server link
+Authors, you should check to ensure that your local builds match the papers built on this site. Please create an issue if they do not match.
+
+Reviewers: You should be able to pull a built PDF for review from there.
 
 ## For organizers
 
