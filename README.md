@@ -90,6 +90,7 @@ git clone https://github.com/mpacer/scipy_proceedings
     - If you submit multiple papers, you will need a new branch for each.
 4. Set up your environment.
 5. Write your paper, commit changes, and build your paper.
+    - If you want to alter the build system, create a separate PR against `dev`.
 6. Repeat step 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo 
@@ -158,6 +159,17 @@ git push --set-upstream origin <your_branch_name>
 - Once you are ready to submit your paper, file a pull request on GitHub.
   **Please ensure that you file against the correct branch**
 - Create a pull-request against our `2018` branch.
+- Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
+
+#### Creating build system PRs
+
+If you want to change the way the build system works, we use a separate
+submission procedure.
+
+- Create a new branch against `dev`.
+- Make your changes to the build system.
+- Do **not** commit any changes from your paper PR to this new branch.
+- Make a separate PR against the `dev` branch, it will be reviewed separately. 
 
 
 ### Reviewer Workflow
