@@ -6,8 +6,10 @@ Annual Conference.
 This repository is a home for authors, reviewers and editors to collaboratively
 create the proceedings for the conference.
 
-**All** communication between authors and reviewers should be civil. There are
-no exceptions to this rule.
+**All** communication between authors and reviewers should be civil and 
+respectful. There are no exceptions to this rule. Please see the 
+[SciPy2018 Code of Conduct](https://scipy2018.scipy.org/ehome/299527/648147/)
+for more info.
 
 If you are an *Author*, please see [Instructions-for-Authors](#Instructions-for-Authors).
 
@@ -105,20 +107,23 @@ Deadline.
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
 
+Proceedings Co-Chairs have final say in determining whether a paper is to be
+accepted to the proceedings.
+
 Authors should respond to all the reviewers' comments. 
 
-**All** communication between authors and reviewers should be civil at all times. 
-
 Authors should default to modifying their papers in response to reviewers'
-comments. In some cases, authors may not agree with the reviewers comments. 
+comments. 
 
-If the authors do not agree with the comments or do not wish to implement the
-suggested changes, the authors and reviewers should attempt to discuss this in
-the PR's comment sections. It is important to remember in this case that we expect **all** communication between authors and reviewers to be civil.
+Authors may not agree with the reviewers comments or may not wish to implement
+the suggested changes. In those cases, the authors and reviewers should
+attempt to discuss this in the PR's comment sections. It is important to
+remember in these cases that we expect **all** communication between authors and
+reviewers to be civil and respectful.
 
-In the event that the authors and reviewers find
-themselves unable to resolve a disagreement about a recommendation, they should
-alert a Proceedings Co-Chair to this situation.
+In the event that authors and reviewers are deadlocked, they should alert the
+Proceedings Co-Chairs to this situation. As always, the Proceedings Co-Chairs
+have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
@@ -262,7 +267,7 @@ draft of their paper ready for you by *1st Draft Submission* deadline.
 
 We ask that you read [this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md) before beginning any reviews.
 
-**All** communication between authors and reviewers should be civil at all times. 
+**All** communication between authors and reviewers should be civil and respectful at all times. 
 
 The goal of our review process is to improve the paper that the authors are
 working on. Our aim is to have you and the author collaborate on making their
@@ -275,11 +280,13 @@ Deadline*.
 We ask that by the *Final Recommendation Deadline* you have a recommendation to
 either accept or reject the paper at that point and time. 
 
-**Note**: You may still recommend changes after the *Final Recommendation 
-Deadline*, but these should be seen as recommendations. There should be no large 
-outstanding issues remaining. As a heuristic, if you think the paper should not 
-be in the proceedings unless the authors make the change in question, then that 
-change should be made before the *Final Recommendation Deadline*.
+**Note**:   
+You many recommend changes after the *Final Recommendation Deadline*. If there
+are any major changes after the *Final Recommendation Deadline* you should
+immediately contact the Proceedings Committee Co-Chairs. As a heuristic, if you
+think the paper should not be in the proceedings unless the authors make the
+change in question, then that change should be requested and made before the
+*Final Recommendation Deadline*.
 
 ### Reviewer Deadlines
 
