@@ -1,19 +1,29 @@
 # SciPy Proceedings
 
 This is the repository for submitting to and managing the Proceedings for the
-Annual Conference.
+Annual Scientific Computing with Python Conference.
 
 This repository is a home for authors, reviewers and editors to collaboratively
 create the proceedings for the conference.
+
+You can find more information about the [proceedings' organising principles](#organising-principles-openness) below.
 
 **All** communication between authors and reviewers should be civil and 
 respectful. There are no exceptions to this rule. Please see the 
 [SciPy2018 Code of Conduct](https://scipy2018.scipy.org/ehome/299527/648147/)
 for more info.
 
-If you are an *Author*, please see [Instructions-for-Authors](#Instructions-for-Authors).
+You can find the [schedule for 2018](#timeline-for-2018) below.
 
-If you are a *Reviewer*, please see [Instructions-for-Reviewers](#Instructions-for-Reviewers).
+Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
+
+If you are an *Author*, please see [Instructions for Authors](#instructions-for-authors).
+
+If you are a *Reviewer*, please see [Instructions for Reviewers](#instructions-for-reviewers). 
+
+If you are an *Editor*, please see [Instructions for Editors](#instructions-for-editors).
+
+If you are a *Publisher*, please see [Instructions for Publishers](#instructions-for-publishers).
 
 ## Organising Principles: Openness
 
@@ -22,30 +32,29 @@ Overall, the SciPy proceedings are organised to be a fully open proceedings.
 We aim to combine the best aspects of open source development, open peer review,
 and open access publication.
 
-
 ### Built by and for Open Source Communities on Open Source Tech 
 
-The technologies used for running the conference are themselves developed in the open and built on open source tools.
+The technologies used for running the conference are themselves developed in the
+open and built on open source tools.
 
-Open Development:
-    - with many people contributing code over more than a decade
-        - many contributors start as authors submitting to the proceedings 
-        - provides a natural pathway for new members to join the proceedings   
-          committee
-    - technologies are managed via public, open source GitHub repositories:
-        - build system: https://github.com/scipy-conference/scipy_proceedings
-        - server: https://github.com/scipy-conference/procbuild
+Open Development:  
+- with many people contributing code over more than a decade  
+    - many contributors start as authors submitting to the proceedings   
+    - provides a natural pathway for new members to join the proceedings committee  
+- technologies are managed via public, open source GitHub repositories:  
+    - build system: https://github.com/scipy-conference/scipy_proceedings  
+    - server: https://github.com/scipy-conference/procbuild  
 
-The systems for running the conference are built on top of open source tools:
-    - build system:
-        - LaTeX
-        - ReStructured Text (reST)
-        - Python: docutils, lxml, pygments, pytest
-    - server:
-        - Flask & waitress
-        - pyzmq
-        - Docker
-        - Python: asyncio 
+The systems for running the conference are built on top of open source tools:  
+- build system:  
+    - LaTeX  
+    - ReStructured Text (reST)  
+    - Python: docutils, lxml, pygments, pytest  
+- server:  
+    - Flask & waitress  
+    - pyzmq  
+    - Docker  
+    - Python: asyncio   
 
 ### Open Peer Review meets Open Source Code Review
 
@@ -58,27 +67,20 @@ identifiable individuals.
 - Reviews are collaborative, aiming to improve the publication quality. This is 
   possible because the content was already vetted by the program committee.
 
-- Conversations occur in the open, allowing for transparency in this open review
-  process. This holds authors and reviewers accountable and encourages civil
-  communication practices.
+- Conversations occur attached to people's real GitHub usernames and are open to
+  the public. 
+    - This allows for a transparent open review process. 
+    - This holds authors and reviewers accountable and encourages civil communication practices.
 
 ### Open Access for an Open Community
 
-The papers are published as true open access articles. The community is involved
-in the entire process for creating the proceedings, which ensures relevance to
-the community that created them.
+The papers are published as true Open Access (OA) articles with Creative Commons
+Attribution (CC By) license. 
 
-- Papers are submitted by authors who will be presenting talks and posters at the 
-  annual SciPy conference. Because we know the content is relevant to the SciPy 
-  community, review can focus on improving papers, not vetting them.
-
-- Reviewers are invited by the editors, but community members may volunteer to
-  review papers that interest them.
- 
-- There are no author processing charges barring authors from submitting papers.
+- There are no article processing charges barring authors from submitting papers.
     - Reviewers and co-chairs volunteer their time.
     - Services with free tiers (like GitHub and Heroku) allow distributing the 
-      technologies with minimal cost.
+      underlying technologies with minimal cost.
 
 - Papers are openly available at http://conference.scipy.org/proceedings/, with
   no pay walls barring consumption or author processing charges. 
@@ -86,6 +88,28 @@ the community that created them.
 - From 2017 onward, papers have DOIs (making them easily citable) and are also 
   openly available from those DOIs.
 
+The community is involved in the entire process for creating the proceedings,
+which ensures relevance to the community that created them.
+
+- Papers are submitted by authors who will be presenting talks and posters at the 
+  annual SciPy conference. Because we know the content is relevant to the SciPy 
+  community, review can focus on improving papers, not vetting them.
+
+- Reviewers are invited by the editors, but community members may volunteer to
+  review papers that interest them. The only barrier to participation is having
+  a GitHub account.
+ 
+
+## Contacting the Proceedings Co-Chairs
+
+The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
+
+In 2018, the Proceedings Co-Chairs are 
+- M Pacer (@mpacer)
+- David Lippa (@dalippa)
+- Dillon Niederhut (@deniederhut)
+- Fatih Akici (@FatihAkici)
+    
 ## Timeline for 2018
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
@@ -278,7 +302,7 @@ complete an initial review and start that conversation by the *Initial Complete 
 Deadline*.
 
 We ask that by the *Final Recommendation Deadline* you have a recommendation to
-either accept or reject the paper at that point and time. 
+either **accept** or **reject** the paper at that point and time. 
 
 **Note**:   
 You many recommend changes after the *Final Recommendation Deadline*. If there
@@ -304,29 +328,16 @@ change in question, then that change should be requested and made before the
   modifying their paper.  
 - This begins an iterative review process where authors and reviewers can discuss the
   evolving submission.
-- As you review the paper, it will help to apply **labels** to the PR to flag the 
-  current state of the review process. 
-     - The **labels** in question are:
-        - **needs-more-review** if the paper needs further review, 
-        - **pending-comment** if the paper is waiting on an authors' response, or 
-        - **unready** if the paper is not ready for the proceedings.
 - By the *Final Recommendation Deadline*, we ask that you give two things
     1. A comprehensive review of the paper as it stands. This will act as the final 
        review.  
     2. A final recommendation to include the paper in the proceedings or not.
-    - When you make the Final Recommendation, please (@)mention the editor(s) assigned 
-      to the paper. For 2018, this will be some of:
-        - M Pacer (@mpacer)
-        - David Lippa (@dalippa)
-        - Dillon Niederhut (@deniederhut)
-        - Fatih Akici (@FatihAkici)
-- Editors should come to a final 'ready', 'unready' decision before the **Final Editorial Decisions for Proceedings Contents** deadline.
-
+        - When you make the Final Recommendation, please [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs) in the PR in question.
+    
 ## Review Criteria
 
-A small subcommittee of the SciPy 2017 organizing committee has created [this
-set of suggested review
-criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
+A small subcommittee of the SciPy 2017 organizing committee has created 
+[this set of suggested review criteria](https://github.com/scipy-conference/scipy_proceedings/blob/master/review_criteria.md)
 to help guide authors and reviewers alike. Suggestions and amendments to these
 review criteria are enthusiastically welcomed via discussion or pull request.
 
@@ -363,11 +374,26 @@ su -c `dnf install python-docutils texlive-collection-basic texlive-collection-f
 
 There will be a server online building open pull requests at http://procbuild.scipy.org. 
 
-Authors, you should check to ensure that your local builds match the papers built on this site. Please create an issue if they do not match.
+Authors: you should check to ensure that your local builds match the papers
+built on this site. Please create an issue if they do not match.
 
 Reviewers: You should be able to pull a built PDF for review from there.
 
-## For organizers
+## For organisers
+
+### Instructions for Publishers
 
 To information about how to manage the whole proceedings, please see
 `publisher/README.md` and `publisher/Makefile`.
+
+### Instructions for Editors
+
+As reviewers review papers, editors should apply **labels** to the PR to flag the 
+current state of the review process. 
+  - The **labels** in question are:
+    - **needs-more-review** if the paper needs further review, 
+    - **pending-comment** if the paper is waiting on an authors' response, or 
+    - **unready** if the paper is not ready for the proceedings.
+
+Editors should come to a final 'ready', 'unready' decision before the **Final Editorial Decisions for Proceedings Contents** deadline.
+
