@@ -1,28 +1,28 @@
 {
  "proceedings": {
-  "volume": 3,
+  "volume": 4,
   "number": 1,
-  "year": "2017",
+  "year": "2018",
   "editor": [
-   "Katy Huff",
+   "Fatih Akici",
    "David Lippa",
    "Dillon Niederhut",
    "M Pacer"
   ],
   "doi": "10.25080/dniederhut-mbp-96aba8a-012",
   "editor_email": [
-   "katyhuff@gmail.com",
+   "akicifatih@gmail.com",
    "dalippa@gmail.com",
-   "dniederhut@enthought.com",
-   "mpacer@berkeley.edu"
+   "dillon.niederhut@gmail.com",
+   "mpacer.phd@gmail.com"
   ],
-  "citation_key": "proc-scipy-2017",
+  "citation_key": "proc-scipy-2018",
   "title": {
    "conference": "Python in Science Conference",
    "acronym": "SciPy",
-   "short": "PROC. OF THE 16th PYTHON IN SCIENCE CONF. (SCIPY 2017)",
-   "ordinal": "16th",
-   "full": "Proceedings of the 16th Python in Science Conference"
+   "short": "PROC. OF THE 17th PYTHON IN SCIENCE CONF. (SCIPY 2018)",
+   "ordinal": "17th",
+   "full": "Proceedings of the 17th Python in Science Conference"
   },
   "xref": {
    "depositor_name": "Dillon Niederhut",
@@ -31,8 +31,8 @@
    "resource_url": "https://conference.scipy.org/proceedings",
    "prefix": "10.25080"
   },
-  "dates": "July 10 - July 16",
-  "isbn": "value",
+  "dates": "July 9 - July 15",
+  "isbn": "noisbn",
   "location": "Austin, Texas",
   "copyright": {
    "proceedings": [
@@ -75,8 +75,8 @@
    "name": "Communications",
    "members": [
     {
-     "org": "Twitter",
-     "name": "Juan Shishido"
+     "org": "Bloomberg",
+     "name": "Paul Ivanov"
     }
    ]
   },
@@ -84,12 +84,12 @@
    "name": "Birds of a Feather",
    "members": [
     {
-     "org": "Kitware",
-     "name": "Aashish Chaudhary"
+     "org": "Berkeley Institute for Data Science",
+     "name": "Nelle Varoquaux"
     },
     {
-     "org": "Kitware",
-     "name": "Matt McCormick"
+     "org": "Deep Mind",
+     "name": "Jessica Hamrick"
     }
    ]
   },
@@ -97,8 +97,8 @@
    "name": "Proceedings",
    "members": [
     {
-     "org": "University of Illinois",
-     "name": "Katy Huff"
+     "org": "",
+     "name": "Fatih Akici"
     },
     {
      "org": "Amazon",
@@ -109,7 +109,7 @@
      "name": "Dillon Niederhut"
     },
     {
-     "org": "Berkeley Institute of Data Science",
+     "org": "Netflix",
      "name": "M Pacer"
     }
    ]
@@ -118,8 +118,16 @@
    "name": "Financial Aid",
    "members": [
     {
+     "org": "",
+     "name": "Celia Cintas"
+    },
+    {
      "org": "Argonne National Laboratory",
      "name": "Scott Collis"
+    },
+    {
+     "org": "Los Alamos National Laboratory",
+     "name": "Pat Kelly"
     },
     {
      "org": "MIT",
@@ -148,6 +156,10 @@
    "name": "Sprints",
    "members": [
     {
+     "org": "University Corporation for Atmospheric Research",
+     "name": "Ryan May"
+    },
+    {
      "org": "KBI Biopharma",
      "name": "Jonathan Rocher"
     },
@@ -161,6 +173,10 @@
    "name": "Diversity",
    "members": [
     {
+     "org": "Capital One",
+     "name": "Jackie Kazil"
+    },
+    {
      "org": "Twitter",
      "name": "Julie Krugler Hollek"
     }
@@ -170,12 +186,12 @@
    "name": "Activities",
    "members": [
     {
-     "org": "AOL",
-     "name": "Chris Niemira"
+     "org": "Oregon State University",
+     "name": "Kyle Niemeyer"
     },
     {
-     "org": "Worcester Polytechnic Institute",
-     "name": "Randy Paffenroth"
+     "org": "Enthought",
+     "name": "Julia Pasquarella"
     }
    ]
   },
@@ -218,250 +234,32 @@
    "name": "Proceedings Reviewers",
    "members": [
     {
-     "name": "David Lippa"
+     "name": ""
     },
     {
-     "name": "Katy Huff"
-    },
-    {
-     "name": "M Pacer"
-    },
-    {
-     "name": "Dillon Niederhut"
-    },
-    {
-     "name": "Chien-Hsiu Lee"
-    },
-    {
-     "name": "Priya Sawant"
-    },
-    {
-     "name": "Guy Tel-Zur"
-    },
-    {
-     "name": "Nick Wan"
-    },
-    {
-     "name": "Alejandro de la Vega"
-    },
-    {
-     "name": "George Markomanolis"
-    },
-    {
-     "name": "Matthew Rocklin"
-    },
-    {
-     "name": "Oleksandr Pavlyk"
-    },
-    {
-     "name": "Jean Bilheux"
-    },
-    {
-     "name": "Brian McFee"
-    },
-    {
-     "name": "Alejandro Weinstein"
-    },
-    {
-     "name": "Stefan van der Walt"
-    },
-    {
-     "name": "Li Wang"
-    },
-    {
-     "name": "Serge Guelton"
-    },
-    {
-     "name": "Kapil Saraswat"
-    },
-    {
-     "name": "Thomas Arildsen"
-    },
-    {
-     "name": "Paul Celicourt"
-    },
-    {
-     "name": "Cyrus Harrison"
-    },
-    {
-     "name": "Kyle Niemeyer"
-    },
-    {
-     "name": "Sartaj Singh"
-    },
-    {
-     "name": "Ankur Ankan"
-    },
-    {
-     "name": "Nathan Goldbaum"
-    },
-    {
-     "name": "Angelos Krypotos"
-    },
-    {
-     "name": "Jaime Arias"
-    },
-    {
-     "name": "Jonathan J. Helmus"
-    },
-    {
-     "name": "Fernando Chirigati"
-    },
-    {
-     "name": "Chris Calloway"
-    },
-    {
-     "name": "Nicholas Malaya"
-    },
-    {
-     "name": "Daniel Wheeler"
-    },
-    {
-     "name": "Jeremiah Johnson"
-    },
-    {
-     "name": "Yu Feng"
-    },
-    {
-     "name": "Yingwei Yu"
-    },
-    {
-     "name": "Manoj Pandey"
-    },
-    {
-     "name": "James A. Bednar"
-    },
-    {
-     "name": "Adrian Heilbut"
-    },
-    {
-     "name": "Jason Vertrees"
-    },
-    {
-     "name": "Horacio Vargas"
-    },
-    {
-     "name": "Fatih Akici"
-    },
-    {
-     "name": "Sebastian Benthall"
-    },
-    {
-     "name": "Nirmal Sahuji"
+     "name": ""
     }
    ]
   }
  ],
  "scipy_scholarship": [
   {
-   "org": "Rice University",
-   "name": "Will Barnes"
+   "org": "",
+   "name": ""
   },
   {
-   "org": "University of California, San Diego",
-   "name": "Scott Cole"
-  },
-  {
-   "org": "UFES",
-   "name": "Roberto Colistete Jr"
-  },
-  {
-   "org": "KTH Royal Institute of Technology",
-   "name": "Bjorn Dahlgren"
-  },
-  {
-   "org": "SECOORA",
-   "name": "Filipe Fernandes"
-  },
-  {
-   "org": "Massachusetts Institute of Technology",
-   "name": "Eric Ma"
-  },
-  {
-   "org": "University of Washington",
-   "name": "Jeremy McGibbon"
-  },
-  {
-   "org": "NetworkX and Timelab",
-   "name": "Himanshu Mishra"
-  },
-  {
-   "org": "Johns Hopkins University",
-   "name": "Daniil Pakhomov"
-  },
-  {
-   "org": "University of Oregon",
-   "name": "Zach Sailer"
-  },
-  {
-   "org": "School District 69 (Qualicum)",
-   "name": "Carl Savage"
-  },
-  {
-   "org": "New York University",
-   "name": "Tobias Schraink"
-  },
-  {
-   "org": "UWisconsin Madison",
-   "name": "Scott Sievert"
-  },
-  {
-   "org": "India Institute of Technology, BHU",
-   "name": "Sartaj Singh"
+   "org": "",
+   "name": ""
   }
  ],
  "diversity_scholarship": [
   {
-   "org": "University of Texas at Austin",
-   "name": "Selena Aleman"
+   "org": "",
+   "name": ""
   },
   {
-   "org": "CENPAT-CONICET",
-   "name": "Celia Cintas"
-  },
-  {
-   "org": "The George Washington University",
-   "name": "Natalia Clementi"
-  },
-  {
-   "org": "The University of Texas at Austin",
-   "name": "Johanna Cohoon"
-  },
-  {
-   "org": "Lewis University",
-   "name": "Charlye Delgado"
-  },
-  {
-   "org": "The Institute for Information Transmission Problems of Russian Academy of Sciences",
-   "name": "Alexander Ivanov"
-  },
-  {
-   "org": "University of California, Berkeley",
-   "name": "Dana Miller"
-  },
-  {
-   "org": null,
-   "name": "Rebecca Minich"
-  },
-  {
-   "org": "University of Texas at Austin",
-   "name": "Juliette Seive"
-  },
-  {
-   "org": "European Molecular Biology Laboratory (EMBL), Heidelberg",
-   "name": "Malvika Sharan"
-  },
-  {
-   "org": "Weill Cornell Graduate School",
-   "name": "Chaya Stern"
-  },
-  {
-   "org": "New York University",
-   "name": "Pamela Wu"
-  },
-  {
-   "org": "Alturin",
-   "name": "Israel Z\u00fa\u00f1iga de la Mora"
+   "org": "",
+   "name": ""
   }
  ],
  "series": {
