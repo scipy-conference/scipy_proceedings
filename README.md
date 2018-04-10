@@ -114,14 +114,14 @@ In 2018, the Proceedings Co-Chairs are
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 9th: Authors invited to submit full papers
-- May 14th: 1st Draft for Submission
-- May 14th – June 25th: Open Review Period
-- May 15th: Reviewers Assigned
-- June 11th: Initial Complete Review
-- June 25th: Final Recommendation and Comprehensive Review
-- July 2: Final Editorial Decisions for Proceedings Contents
-- July 9: Conference Ready Proceedings Published
+- April 10–12: Authors invited to submit full papers
+- May 21: 1st Draft for Submission
+- May 21–July 2: Open Review Period
+- May 22: Reviewers Assigned
+- June 18: Initial Complete Review
+- July 2: Final Recommendation and Comprehensive Review Deadlines
+- July 3: Final Editorial Decisions for Proceedings Contents Deadline
+- July 6-9: Time Window for Publishing Conference Ready Proceedings
 
 ## Instructions for Authors
 
@@ -151,9 +151,10 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- May 14th: 1st Draft for Submission Deadline
-- May 14th – June 25th: Open Review Period 
-- July 2: Final Editorial Decisions for Proceedings Contents Deadline
+- April 10–12: Authors invited to submit full papers
+- May 21: 1st Draft for Submission Deadline
+- May 21–July 2: Open Review Period 
+- July 5: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
 
@@ -348,9 +349,9 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- 1st Draft of Proceedings Submission Due: 5/14/2018	
-- Initial Complete Review Deadline:	6/11/2018
-- Final Recommendation Deadline: 6/25/2018
+- May 21: 1st Draft of Proceedings Submission Due: 5/14/2018	
+- June 18: Initial Complete Review Deadline:	6/11/2018
+- July 2: Final Recommendation Deadline: 6/25/2018
 
 ### Reviewer Workflow
 
@@ -420,6 +421,13 @@ Reviewers: You should be able to pull a built PDF for review from there.
 To information about how to manage the whole proceedings, please see
 `publisher/README.md` and `publisher/Makefile`.
 
+#### Publisher Deadlines
+
+- April 10–12: Authors invited to submit full papers
+- May 21–July 2: Open Review Period
+    - The [build server](#build-server) should be maintained throughout the Open Review Period.
+- July 6-9: Time Window for Publishing Conference Ready Proceedings
+
 ### Instructions for Editors
 
 As reviewers review papers, editors should apply **labels** to the PR to flag the 
@@ -431,3 +439,11 @@ current state of the review process.
 
 Editors should come to a final 'ready', 'unready' decision before the **Final Editorial Decisions for Proceedings Contents** deadline.
 
+#### Editor Deadlines
+
+- April 10–12: Authors invited to submit full papers
+- May 21–July 2: Open Review Period
+- May 22: Reviewers Assigned
+- June 18: Initial Complete Review  
+    - Editors should verify that reviews have been completed
+- July 3: Final Editorial Decisions for Proceedings Contents Deadline
