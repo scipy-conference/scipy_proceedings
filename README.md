@@ -163,7 +163,9 @@ have final say in whether to accept or reject a paper.
         - Label figures, equations and tables
         - Use math markup
         - Include code snippets
-    - `00_bibderwalt` also shows how to use a bib file for citations
+    - `00_bibderwalt` shows how to use a bib file for citations.
+- All citations that have DOIs should include those DOIs in the paper's 
+  references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
 - All figures and tables should have captions.
 - Figures and tables should be positioned inline, close to their explanatory text.
 - License conditions on images and figures must be respected (Creative Commons,
@@ -197,14 +199,19 @@ into:
 git clone https://github.com/mpacer/scipy_proceedings
 ```
 
+#### Author workflow steps
+
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. Create a new branch for your paper based off the latest `2018` branch.
+3. [Create a new branch](Creating a new branch based off-of-`2018`) for your paper based off the latest `2018` branch.
     - If you submit multiple papers, you will need a new branch for each.
-4. Set up your environment.
-5. Write your paper, commit changes, and build your paper.
-    - If you want to alter the build system, create a separate PR against `dev`.
-6. Repeat step 6, while also responding to reviewer feedback.
+4. [Set up your environment](#setting-up-your-environment).
+5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper) 
+6. [Create a PR](#create-a-paper-pr) or [push changes to your PR's branch](#push-your-changes) and [check your paper](#check-your-paper) on http://procbuild.scipy.org.
+    - If you want to alter the build system, do not include it in your 
+      submission's PR, create a separate PR against `dev` 
+      ([see below](creating-build-system-prs) for more details).
+7. Repeat steps 5 and 6, while also responding to reviewer feedback.
 
 #### Getting a local copy of the scipy_proceedings repo 
 
@@ -260,12 +267,22 @@ git push --set-upstream origin <your_branch_name>
 - Copy an example paper into your directory.
     - You must have only one reST file in the top level of `<your_directory_name>`.
 - As you make changes to your paper, commit those changes in discrete chunks. 
-- Do not modify any files outside of your paper directory.
+
+#### Commit your changes
+
+- Commit any changes inside the `paper/<your_directory_name>`
+- When you push your commits to your PR's branch, the paper will be autobuilt 
+- Do not commit any changes to files outside of your paper directory.
+
+If you want to change the way the build system works, we use a separate
+submission procedure ([see below](creating-build-system-prs)).
 
 #### Build your paper
 
 - Run `./make_paper.sh papers/firstname_surname` to make a PDF of your paper 
 - Check the output in `output/<your_directory_name>/paper.pdf`.
+- Check that this output matches what you see on the 
+  [build server](http://procbuild.scipy.org).
 
 #### Create a paper PR
 
@@ -283,6 +300,23 @@ submission procedure.
 - Make your changes to the build system.
 - Do **not** commit any changes from your paper PR to this new branch.
 - Make a separate PR against the `dev` branch, it will be reviewed separately. 
+
+#### Push to your PR 
+
+When you push to your repositories branch it automatically updates the PR. This
+triggers a new build on the provided [build server](http://procbuild.scipy.org).
+
+#### Check your paper's build
+
+We encourage reviewers to review the pdfs built on our 
+[build server](http://procbuild.scipy.org). 
+
+You should regularly check to see if the papers that you build locally match the
+paper that you see on the server. 
+
+If it is not the same please immediately contact us with a GitHub issue
+describing the discrepancy. Please include screenshots and an explanation of the
+differences. For best results, please [@-mention the Proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
 ## Instructions for Reviewers
 
