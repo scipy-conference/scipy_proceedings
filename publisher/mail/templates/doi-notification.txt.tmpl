@@ -1,7 +1,7 @@
 From: {{proceedings['xref']['depositor_email'] | html}}
 Subject: Your {{proceedings['title']['acronym']}} {{proceedings['year']}} Paper DOI
-To: {{author_email | html}}
-Cc: {{proceedings['editor_email'] | html}}
+To: {{recipients | html}}
+Cc: {{editor_email_string | html}}
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -11,4 +11,6 @@ Your paper from the {{proceedings['title']['ordinal']}} {{proceedings['title']['
 
 Yours,
 {{proceedings['xref']['depositor_name']}}, on behalf of:
-  {{committee}}
+{{for cochair in committee}}
+- {{cochair['name']}} <{{cochair['email']}}>
+{{endfor}}

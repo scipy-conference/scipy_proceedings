@@ -1,26 +1,24 @@
 #!/usr/bin/env python
 
-import os
-
 import _mailer as mailer
-from conf import work_dir, toc_conf, proc_conf
-import options
+from conf import toc_conf, proc_conf
+from options import cfg2dict
 
 args = mailer.parse_args()
-scipy_proc = options.cfg2dict(proc_conf)
-toc = options.cfg2dict(toc_conf)
+scipy_proc = cfg2dict(proc_conf)
+toc = cfg2dict(toc_conf)
 
 sender = scipy_proc['proceedings']['xref']['depositor_email']
 template = 'doi-notification.txt'
 template_data = scipy_proc.copy()
-template_data['proceedings']['editor_email'] = ', '.join(template_data['proceedings']['editor_email'])
 
 for paper in toc['toc']:
 
     template_data.update(paper)
     recipients = ','.join(template_data['author_email'])
     template_data['author'] = mailer.author_greeting(template_data['author'])
-    template_data['author_email'] = ', '.join(template_data['author_email'])
-    template_data['committee'] = '\n  '.join(template_data['proceedings']['editor'])
+    template_data['committee'] = mailer.create_committee()
+    template_data['editor_email_string'] =  mailer.editor_email_string()
+    template_data['recipients'] = ', '.join(template_data['author_email'])
 
     mailer.send_template(sender, recipients, template, template_data)

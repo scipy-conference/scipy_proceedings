@@ -1,7 +1,7 @@
 From: {{sender['name'] | html}}
 Subject: [{{conference}}] invitation to review proceedings
-To: {{email | html}}
-Cc: {{cced | html}}
+To: {{recipients | html}}
+Cc: {{editor_email_string | html}}
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -33,4 +33,6 @@ Please note that reviews are made public, including the reviewer's name.
 
 With best regards,
 
-{{editors}}
+{{for cochair in committee}}
+- {{cochair['name']}} <{{cochair['email']}}>
+{{endfor}}

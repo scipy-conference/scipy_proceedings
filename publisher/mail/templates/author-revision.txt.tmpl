@@ -1,7 +1,7 @@
 From: {{sender['name'] | html}}
 Subject: [{{conference}}] reviews submitted, revisions requested
-To: {{email | html}}
-Cc: {{cced | html}}
+To: {{recipients | html}}
+Cc: {{editor_email_string | html}}
 MIME-Version: 1.0
 Content-Type: text/plain
 
@@ -31,4 +31,6 @@ is {{due}}.
 
 With best regards,
 
-{{editors}}
+{{for cochair in committee}}
+- {{cochair['name']}} <{{cochair['email']}}>
+{{endfor}}
