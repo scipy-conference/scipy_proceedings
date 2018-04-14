@@ -2,7 +2,8 @@ import argparse
 import smtplib
 import os
 import getpass
-from email.mime.text import MIMEText
+
+from contextlib import contextmanager
 
 import sys
 sys.path.insert(0, '..')
@@ -49,6 +50,16 @@ def get_password(sender):
 
 
 def email_addr_from(name_email):
+    """
+    Parameters
+    ----------
+    name_email: dict
+        A dictionary of names and emails. 
+        Expected fields: 
+            'name': name of person
+            'email': email of person
+    """
+    
     return '"%s" <%s>' % (name_email['name'], name_email['email'])
 
 
@@ -111,3 +122,170 @@ def send_template(sender, recipient, template, template_data,
 
     session.sendmail(sender['name'], recipient, message)
     session.quit()
+
+
+def load_data_file(source_file):
+        if os.path.exists(source_file):
+            return cfg2dict(source_file)
+        else:
+             print('file at {} not found'.format(os.path.abspath(s)))
+
+
+def load_data_sources(sources):
+    """Combines dictionaries starting with the first included.
+    """
+    new_dict = {}
+    for s in sources:
+        if isinstance(s, dict):
+            data = s
+        elif isinstance(s, str):
+            data = load_data_file(s)
+        new_dict = {**new_dict, **data}
+    return new_dict
+
+class Mailer:
+    
+    def __init__(self,
+                 sender=None,
+                 template='',
+                 base_dir='../mail/templates/',
+                 data_sources=None,
+                 smtp_server='smtp.gmail.com', 
+                 smtp_port=587,
+                 dry_run=True,
+                 ):
+        if sender is not None and isinstance(sender, dict):
+            self.sender = sender
+        
+        
+        if data_sources is None:
+            data_sources = []
+        elif isinstance(data_sources, (str, dict)):
+            data_sources = [data_sources]
+        elif isinstance(data_sources, list):
+            data_sources = data_sources
+        # we always need the email metadata, so let's make that default
+        
+        self.data_sources = ['./email.json'] + data_sources
+        
+        self.dry_run = True
+        self.base_dir = base_dir
+        self.template = template
+        self.smtp_server = smtp_server
+        self.smtp_port = smtp_port
+        self.aux_data = {}
+        
+    # TODO: update this to take a list of recipient dicts (name, email)
+    # that will require changing the rest of the recipients logic
+    # def recipient_emails(self):
+    #     """ get emails from list 
+    #     Parameters
+    #     ----------
+    #     name_email: dict
+    #         A dictionary of names and emails. 
+    #         Expected fields: 
+    #             'name': name of person
+    #             'email': email of person
+    #     """
+    #     return ', '.join([email_addr_from(r) for r in self.recipients]))
+        
+    def recipient_greeting(self, names):
+        if len(names) == 1:
+            name_string = names[0]
+        else:
+            name_string = ', '.join(names[:-1]) + ', and ' + names[-1]
+        return name_string
+            
+
+    @property
+    def recipients(self):
+        return 'blah@blah.org'
+        
+    @property
+    def sender(self):
+        return self._sender if self._sender else self.template_data["sender"]
+        
+    @sender.setter
+    def sender(self, value):
+        if (isinstance(value, dict) and all(k in value for k in ('name','email'))):
+            self._sender = value
+        else:
+            raise ValueError("You tried to set {} as the sender "
+                             "but it has no 'name' and 'email' keys.".format(value))
+        
+    @property
+    def password(self):
+        if not self.dry_run and not self._password:
+            self._password = getpass.getpass(sender + "'s password:  ")
+        return self._password
+    
+    @property
+    def template_data(self):
+        return {**load_data_sources(self.data_sources), **self.aux_data}
+        
+    @property
+    def template(self):
+        return self._template if os.path.exists(self._template+'.tmpl') else ""
+            
+    @template.setter
+    def template(self, value):
+        self._template = resolve_template(value, self.base_dir)
+        
+    def prep_data(self, data=None):
+        data = data if (data and isinstance(data, dict)) else {}
+        self.aux_data = {**self.common_data, **self.custom_data, **data}
+    
+    @property
+    def common_data(self):
+        return {'editor_email_string':  editor_email_string(),
+                'committee': create_committee()}
+    
+    @property
+    def custom_data(self):
+        return {}
+            
+    def send_from_template(self, recipients=None, data=None):
+        """
+        
+        Parameters
+        ----------
+        recipient: str
+            email 
+        
+        """
+        data = {} if data is None else data
+        recipients = self.recipients if recipients is None else recipients
+        self.prep_data({**data, 'recipients':recipients})
+
+        message = _from_template(self.template, self.template_data)
+        
+        if self.dry_run:
+            self.display_message(recipients, message)
+        else:
+            self.send_mail(recipients, message)
+
+
+    def display_message(self, recipients, message):
+        print('Dry run -> not sending mail to %s' % recipients)
+        print("=" * 80)
+        print(message)
+        print("=" * 80)
+    
+    def send_mail(self, recipients, message):
+        with self.session() as session:
+            session.sendmail(self.sender['name'], recipients, message)
+
+    @contextmanager
+    def session(self):
+        
+        self.get_password(self.sender['login'])
+        print('-> %s' % self.recipients)
+        session = smtplib.SMTP(self.smtp_server, self.smtp_port)
+
+        session.ehlo()
+        session.starttls()
+        session.ehlo
+        session.login(self.sender['login'], self.password)
+        yield session
+
+        session.quit()
