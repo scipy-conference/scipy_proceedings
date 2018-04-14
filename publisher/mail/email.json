@@ -1,22 +1,24 @@
 {
-
-  "conference": "SciPy 2011",
-  "year": "2011",
+  "conference": "SciPy 2018",
+  "year": "2018",
   "due": "April 29, 2012",
-  "download": "http://jarrodmillman.com/scipy2011",
-  "editors": "Stefan van der Walt and Jarrod Millman",
+  "submission_date": "May 21st, 2018",
+  "download": "http://procbuild.scipy.org",
   "sender": {
-     "login": "jarrod.millman",
-     "name": "Jarrod Millman <jarrod.millman+scipy2011@gmail.com>",
+     "login": "mpacer",
+     "name": "M Pacer <mpacer.phd+scipyproc@gmail.com>",
      "password": "test"
    },
 
-   "submit_email": "jarrod.millman+scipy2011@gmail.com",
+   "submit_email": "mpacer.phd+scipyproc@gmail.com",
    "review_form": "https://raw.github.com/scipy/scipy_proceedings/master/reviews/review-template.rst",
-   "cced": "millman.ucb@gmail.com, sjvdwalt@gmail.com",
+   "github_url": "https://github.com/scipy-conference/scipy_proceedings",
+   "readme_url": {
+     "authors": "https://github.com/scipy-conference/scipy_proceedings#instructions-for-authors",
+     "reviewers": "https://github.com/scipy-conference/scipy_proceedings#instructions-for-reviewers"
+   },
 
-   "reviews_url": "http://jarrodmillman.com/scipy2011-reviews",
-   "built_proceedings_url": "http://jarrodmillman.com/scipy2011",
+   "built_proceedings_url": "http://procbuild.scipy.org",
 
    "reviewers": [
      {"name": "Stefan van der Walt",
