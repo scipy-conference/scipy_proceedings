@@ -2,30 +2,32 @@
 
 from _mailer import Mailer, parse_args
 
-from conf import toc_conf, proc_conf
 from options import cfg2dict
 
-args = parse_args()
-template = args.template or 'call_for_papers.txt'
 
-scipy_proc = cfg2dict(proc_conf)
-toc = cfg2dict(toc_conf)
 
 class AuthorMailer(Mailer):
     @property
     def recipients(self):
-        return ', '.join(self.template_data['author_email'])
+        # this is for testing
+        # send_to = {"names": ["M Pacer", "David Lippa"], 
+        #            "emails": ["mpacer@berkeley.edu", "dalippa@gmail.com"]}
+        # return self.fancy_emails(send_to, name_key="names", email_key="emails")
+        
+        send_to = self.template_data
+        return self.fancy_emails(send_to, name_key="authors", email_key="emails")
 
     @property
     def custom_data(self):
-        return {'author': self.recipient_greeting(self.template_data['author'])}
+        return {'author': self.recipient_greeting(self.template_data['authors'])}
 
-for paper in toc['toc']:
 
+args = parse_args()
+template = args.template or 'call_for_papers.txt'
+
+accepts = cfg2dict('./accepted_talks_and_posters.json')
+for proposal, info in accepts.items():
     mailer = AuthorMailer(template=template, 
-                          data_sources=[scipy_proc, 
-                                        paper])
-                                        
-    recipients = ','.join(paper['author_email'])
-    mailer.send_from_template(recipients)
-
+                          data_sources=[info])
+    
+    mailer.send_from_template()
