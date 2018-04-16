@@ -251,6 +251,12 @@ class Mailer:
         if data is None:
             data = cfg2dict(proc_conf).get('proceedings', {})
         return cls.fancy_emails(data, name_key='editor', email_key='editor_email')
+        
+    @classmethod
+    def editor_email_list(cls, data=None):
+        if data is None:
+            data = cfg2dict(proc_conf).get('proceedings', {})
+        return cls.fancy_email_list(data, name_key='editor', email_key='editor_email')
 
     @classmethod
     def create_committee(cls, data=None):
@@ -312,6 +318,10 @@ class Mailer:
     @property
     def custom_data(self):
         return {}
+    
+    @property
+    def cc_list(self):
+        return self.editor_email_list()
             
     def send_from_template(self, recipients_list=None, data=None):
         """
@@ -329,10 +339,13 @@ class Mailer:
         message = _from_template(self.template, self.template_data)
         
         if self.dry_run:
-            self.display_message(recipients_list, message)
+            self.display_message(self.send_list(recipients_list), message)
         else:
-            self.send_mail(recipients_list, message)
+            self.send_mail(self.send_list(recipients_list), message)
 
+    def send_list(self, recipients_list):
+        return list(set(recipients_list+self.cc_list))
+        
     def display_message(self, recipients_list, message):
         print('Dry run -> not sending mail to %s' % recipients_list)
         print("=" * 80)
@@ -340,6 +353,7 @@ class Mailer:
         print("=" * 80)
     
     def send_mail(self, recipients_list, message):
+        print('-> %s' % recipients_list)
         with self.session() as session:
             import ipdb; ipdb.set_trace()
             session.sendmail(self.sender['name'], recipients_list, message)
@@ -347,7 +361,6 @@ class Mailer:
     @contextmanager
     def session(self):
         
-        print('-> %s' % self.recipients)
         session = smtplib.SMTP(self.smtp_server, self.smtp_port)
 
         session.ehlo()
