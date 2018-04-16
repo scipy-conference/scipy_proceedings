@@ -13,6 +13,7 @@
    "submit_email": "mpacer.phd+scipyproc@gmail.com",
    "review_form": "https://raw.github.com/scipy/scipy_proceedings/master/reviews/review-template.rst",
    "github_url": "https://github.com/scipy-conference/scipy_proceedings",
+   "reviews_url": "https://github.com/scipy-conference/scipy_proceedings/pulls?utf8=%E2%9C%93&q=is%3Apr+is%3Aopen+label%3Apaper",
    "readme_url": {
      "authors": "https://github.com/scipy-conference/scipy_proceedings#instructions-for-authors",
      "reviewers": "https://github.com/scipy-conference/scipy_proceedings#instructions-for-reviewers"

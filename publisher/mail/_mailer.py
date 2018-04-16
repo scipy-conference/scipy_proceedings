@@ -76,11 +76,13 @@ def create_committee(data=None):
             for name, email 
             in zip(editors, editor_email)]
 
+
 def editor_email_string(data=None):
     if data is None:
         data = cfg2dict(proc_conf)
-    editor_email_list = data.get('proceedings', {}).get('editor_email',[])
+    editor_email_list = data.get('proceedings', {}).get('editor_email', [])
     return ', '.join(editor_email_list)
+
 
 def create_message(recipient, template, template_data):
     template_data['email'] = recipient
@@ -91,8 +93,8 @@ def create_message(recipient, template, template_data):
 def resolve_template(template_name, base_dir):
     template_path = os.path.join(base_dir, template_name)
     # This needs to be add '.tmpl' because that's what _from_template expects
-    if not os.path.exists(template_path +'.tmpl'):
-        raise ValueError('There is no template file at {}.'.format(template_path+'.tmpl'))
+    if not os.path.exists(template_path + '.tmpl'):
+        raise ValueError('There is no template file at {}.'.format(template_path + '.tmpl'))
     else:
         return os.path.abspath(template_path)
 
@@ -113,22 +115,24 @@ def send_template(sender, recipient, template, template_data,
         print("=" * 80)
         return
 
-    session = smtplib.SMTP(smtp_server, smtp_port)
+    try:
+        session = smtplib.SMTP(smtp_server, smtp_port)
 
-    session.ehlo()
-    session.starttls()
-    session.ehlo
-    session.login(sender['login'], password)
+        session.ehlo()
+        session.starttls()
+        session.ehlo
+        session.login(sender['login'], password)
 
-    session.sendmail(sender['name'], recipient, message)
-    session.quit()
+        session.sendmail(sender['name'], recipient, message)
+    finally:
+        session.quit()
 
 
 def load_data_file(source_file):
         if os.path.exists(source_file):
             return cfg2dict(source_file)
         else:
-             print('file at {} not found'.format(os.path.abspath(s)))
+            raise ValueError('file at {} not found'.format(os.path.abspath(source_file)))
 
 
 def load_data_sources(sources):
@@ -140,8 +144,9 @@ def load_data_sources(sources):
             data = s
         elif isinstance(s, str):
             data = load_data_file(s)
-        new_dict = {**new_dict, **data}
+        new_dict.update(data)
     return new_dict
+
 
 class Mailer:
     
@@ -236,7 +241,10 @@ class Mailer:
         
     @property
     def sender(self):
-        return self._sender if self._sender else self.template_data["sender"]
+        default_sender = {"name": "Scipy Proceedings Co-Chairs", 
+                          "email": "proceedings@scipy.org"}
+        
+        return self._sender if self._sender else self.template_data.get("sender", default_sender)
         
     @sender.setter
     def sender(self, value):
@@ -249,7 +257,7 @@ class Mailer:
     @property
     def password(self):
         if not self.dry_run and not self._password:
-            self._password = getpass.getpass(sender + "'s password:  ")
+            self._password = getpass.getpass(self.sender['name'] + "'s password:  ")
         return self._password
     
     @property
