@@ -159,9 +159,12 @@ class Mailer:
                  smtp_port=587,
                  dry_run=True,
                  ):
+        # private attributes
+        self._password = None
+        self._sender = None 
+        
         if sender is not None and isinstance(sender, dict):
             self.sender = sender
-        
         
         if data_sources is None:
             data_sources = []
@@ -173,7 +176,7 @@ class Mailer:
         
         self.data_sources = ['./email.json'] + data_sources
         
-        self.dry_run = True
+        self.dry_run = dry_run
         self.base_dir = base_dir
         self.template = template
         self.smtp_server = smtp_server
@@ -217,10 +220,31 @@ class Mailer:
         email_key: str
             this is the key to indicate emails
         """
+        return ", ".join(cls.fancy_email_list(data, name_key=name_key, email_key=email_key))
+    
+    @classmethod
+    def fancy_email_list(cls, data, name_key="names", email_key="emails"):
+        """this is a method that takes a data object and gives back a email string
+        
+        First we preprocess the people with fancy_prep.
+        
+        Then we fileter to make sure all the emails and names are valid strings.
+        We have to do the filtering because sometimes emails are nans.
+        
+        Then we join the list into a comma separated string with email appropriate formatting.
+        
+        Parameters:
+        -----------
+        data: dict
+            this should have at least two fields, the vals of name_key and email_key
+        name_key: str
+            this is the key to indicate names
+        email_key: str
+            this is the key to indicate emails
+        """
         people_gen = (p for p in cls.fancy_prep(data, name_key=name_key, email_key=email_key))
         are_str = lambda x: (isinstance(x['name'], str) and isinstance(x['email'], str)) 
-        eml_strs = ('"{name}" <{email}>'.format(**p) for p in people_gen if are_str(p))
-        return ", ".join(eml_strs)
+        return ['"{name}" <{email}>'.format(**p) for p in people_gen if are_str(p)]
 
     @classmethod
     def editor_email_string(cls, data=None):
@@ -237,7 +261,11 @@ class Mailer:
 
     @property
     def recipients(self):
-        return 'blah@blah.org'
+        return ", ".join(self.recipients_list)
+    
+    @property
+    def recipients_list(self):
+        return ['blah@blah.org']
         
     @property
     def sender(self):
@@ -253,7 +281,7 @@ class Mailer:
         else:
             raise ValueError("You tried to set {} as the sender "
                              "but it has no 'name' and 'email' keys.".format(value))
-        
+    
     @property
     def password(self):
         if not self.dry_run and not self._password:
@@ -285,7 +313,7 @@ class Mailer:
     def custom_data(self):
         return {}
             
-    def send_from_template(self, recipients=None, data=None):
+    def send_from_template(self, recipients_list=None, data=None):
         """
         
         Parameters
@@ -295,30 +323,30 @@ class Mailer:
         
         """
         data = {} if data is None else data
-        recipients = self.recipients if recipients is None else recipients
-        self.prep_data({**data, 'recipients': recipients})
+        recipients_list = self.recipients_list if recipients_list is None else recipients_list
+        self.prep_data({**data, 'recipients': ", ".join(recipients_list)})
 
         message = _from_template(self.template, self.template_data)
         
         if self.dry_run:
-            self.display_message(recipients, message)
+            self.display_message(recipients_list, message)
         else:
-            self.send_mail(recipients, message)
+            self.send_mail(recipients_list, message)
 
-    def display_message(self, recipients, message):
-        print('Dry run -> not sending mail to %s' % recipients)
+    def display_message(self, recipients_list, message):
+        print('Dry run -> not sending mail to %s' % recipients_list)
         print("=" * 80)
         print(message)
         print("=" * 80)
     
-    def send_mail(self, recipients, message):
+    def send_mail(self, recipients_list, message):
         with self.session() as session:
-            session.sendmail(self.sender['name'], recipients, message)
+            import ipdb; ipdb.set_trace()
+            session.sendmail(self.sender['name'], recipients_list, message)
 
     @contextmanager
     def session(self):
         
-        self.get_password(self.sender['login'])
         print('-> %s' % self.recipients)
         session = smtplib.SMTP(self.smtp_server, self.smtp_port)
 
