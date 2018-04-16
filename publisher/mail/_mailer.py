@@ -187,6 +187,8 @@ class Mailer:
     def recipient_greeting(names):
         if len(names) == 1:
             name_string = names[0]
+        elif len(names) == 2:
+            name_string = " and ".join(names)
         else:
             name_string = ', '.join(names[:-1]) + ', and ' + names[-1]
         return name_string
@@ -333,6 +335,8 @@ class Mailer:
         
         """
         data = {} if data is None else data
+        self.temp_data = data
+        
         recipients_list = self.recipients_list if recipients_list is None else recipients_list
         self.prep_data({**data, 'recipients': ", ".join(recipients_list)})
 
@@ -342,6 +346,7 @@ class Mailer:
             self.display_message(self.send_list(recipients_list), message)
         else:
             self.send_mail(self.send_list(recipients_list), message)
+        self.temp_data = {}
 
     def send_list(self, recipients_list):
         return list(set(recipients_list+self.cc_list))
@@ -355,8 +360,9 @@ class Mailer:
     def send_mail(self, recipients_list, message):
         print('-> %s' % recipients_list)
         with self.session() as session:
-            import ipdb; ipdb.set_trace()
-            session.sendmail(self.sender['name'], recipients_list, message)
+            # if we ever change the assumption that it's only a plaintext email 
+            # we will need to revisit this encoding as 'utf-8'
+            session.sendmail(self.sender['name'], recipients_list, message.encode('utf-8'))
 
     @contextmanager
     def session(self):

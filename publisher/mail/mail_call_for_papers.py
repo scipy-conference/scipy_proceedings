@@ -18,7 +18,9 @@ class AuthorMailer(Mailer):
 
     @property
     def custom_data(self):
-        return {'author': self.recipient_greeting(self.template_data['authors'])}
+        return {'author': self.recipient_greeting(self.temp_data['authors']),
+                'abstract_title': self.temp_data['title']}
+
 
 
 args = parse_args()
@@ -31,4 +33,3 @@ mailer = AuthorMailer(template=template,
 for proposal, info in accepts.items():
     
     mailer.send_from_template(data=info)
-    import ipdb; ipdb.set_trace()
