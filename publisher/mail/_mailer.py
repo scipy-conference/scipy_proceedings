@@ -217,6 +217,18 @@ class Mailer:
         eml_strs = ('"{name}" <{email}>'.format(**p) for p in people_gen if are_str(p))
         return ", ".join(eml_strs)
 
+    @classmethod
+    def editor_email_string(cls, data=None):
+        if data is None:
+            data = cfg2dict(proc_conf).get('proceedings', {})
+        return cls.fancy_emails(data, name_key='editor', email_key='editor_email')
+
+    @classmethod
+    def create_committee(cls, data=None):
+        if data is None:
+            data = cfg2dict(proc_conf)
+        proc = data.get('proceedings', {})
+        return cls.fancy_prep(proc, name_key="editor", email_key='editor_email')
 
     @property
     def recipients(self):
@@ -258,8 +270,8 @@ class Mailer:
     
     @property
     def common_data(self):
-        return {'editor_email_string':  editor_email_string(),
-                'committee': create_committee()}
+        return {'editor_email_string': self.editor_email_string(),
+                'committee': self.create_committee()}
     
     @property
     def custom_data(self):
@@ -276,7 +288,7 @@ class Mailer:
         """
         data = {} if data is None else data
         recipients = self.recipients if recipients is None else recipients
-        self.prep_data({**data, 'recipients':recipients})
+        self.prep_data({**data, 'recipients': recipients})
 
         message = _from_template(self.template, self.template_data)
         
@@ -284,7 +296,6 @@ class Mailer:
             self.display_message(recipients, message)
         else:
             self.send_mail(recipients, message)
-
 
     def display_message(self, recipients, message):
         print('Dry run -> not sending mail to %s' % recipients)
