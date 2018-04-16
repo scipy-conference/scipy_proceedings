@@ -175,27 +175,48 @@ class Mailer:
         self.smtp_port = smtp_port
         self.aux_data = {}
         
-    # TODO: update this to take a list of recipient dicts (name, email)
-    # that will require changing the rest of the recipients logic
-    # def recipient_emails(self):
-    #     """ get emails from list 
-    #     Parameters
-    #     ----------
-    #     name_email: dict
-    #         A dictionary of names and emails. 
-    #         Expected fields: 
-    #             'name': name of person
-    #             'email': email of person
-    #     """
-    #     return ', '.join([email_addr_from(r) for r in self.recipients]))
-        
-    def recipient_greeting(self, names):
+    @staticmethod
+    def recipient_greeting(names):
         if len(names) == 1:
             name_string = names[0]
         else:
             name_string = ', '.join(names[:-1]) + ', and ' + names[-1]
         return name_string
+    
+    @staticmethod
+    def fancy_prep(data, name_key="names", email_key="emails"):
+        names = data[name_key]
+        emails = data[email_key]
+        assert len(names) == len(emails)
+        return [{"name": name, "email": email} 
+                for name, email 
+                in zip(names, emails)]
             
+    @classmethod
+    def fancy_emails(cls, data, name_key="names", email_key="emails"):
+        """this is a method that takes a data object and gives back a email string
+        
+        First we preprocess the people with fancy_prep.
+        
+        Then we fileter to make sure all the emails and names are valid strings.
+        We have to do the filtering because sometimes emails are nans.
+        
+        Then we join the list into a comma separated string with email appropriate formatting.
+        
+        Parameters:
+        -----------
+        data: dict
+            this should have at least two fields, the vals of name_key and email_key
+        name_key: str
+            this is the key to indicate names
+        email_key: str
+            this is the key to indicate emails
+        """
+        people_gen = (p for p in cls.fancy_prep(data, name_key=name_key, email_key=email_key))
+        are_str = lambda x: (isinstance(x['name'], str) and isinstance(x['email'], str)) 
+        eml_strs = ('"{name}" <{email}>'.format(**p) for p in people_gen if are_str(p))
+        return ", ".join(eml_strs)
+
 
     @property
     def recipients(self):
