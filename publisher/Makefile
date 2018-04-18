@@ -38,21 +38,21 @@ front-pdf: title-pdf copyright-pdf organization-pdf students-pdf
 papers:
 	./build_papers.py
 
-proceedings: front-pdf papers $(TEXDIR)/proceedings.tex
+proceedings: papers $(TEXDIR)/proceedings.tex front-pdf
 	($(TEX2PDF) proceedings 1>/dev/null)
 	($(TEX2PDF) proceedings 1>/dev/null)
-	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf 
+	cp $(TEXDIR)/proceedings.pdf $(PDFDIR)/proceedings.pdf
 
-html: 
+html:
 	python build_html.py
 	-convert $(STATIC)/logo.png -resize x100 $(HTMLDIR)/logo.png
 
-zip: 
+zip:
 	cp -r $(HTMLDIR) $(YEARDIR)
 	cp $(BUILDDIR)/$(DOIXMLNAME) $(YEARDIR)/$(DOIXMLNAME)
 	zip -r $(ZIPNAME) $(YEARDIR)
 	rm -rf $(YEARDIR)
-	
+
 html-zip: html zip
 
 proceedings-html: proceedings html
