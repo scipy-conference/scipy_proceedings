@@ -8,18 +8,11 @@
    type = {Journal Article}
 }
 
-@article{pyPRISM,
-    author = {Martin, T. B. and Gartner III, T. E. and Jones, R. L. and Snyder, C. R. and Jayaraman, A.},
-    title = {pyPRISM: A Computational Tool for Liquid-State Theory Calculations of Macromolecular Materials},
-    journal = {Macromolecules},
-    doi = {10.1021/acs.macromol.8b00011},
-}
-
 @misc{disclaimer,
    note = {Any identification of commerical or open-source software in this paper is done so purely in order to specify the methodology adequately. Such identification is not intended to imply recommendation or endorsement by the National Institute of Standards and Technology, nor is it intended to imply that the softwares identified are necessarily the best available for the purpose.}
 }
 
-@article{numpy1,
+@article{numpy2,
    author = {Walt, S. van der and Colbert, S. C. and Varoquaux, G.},
    title = {The NumPy Array: A Structure for Efficient Numerical Computation},
    journal = {Computing in Science \& Engineering},
@@ -27,13 +20,13 @@
    number = {2},
    pages = {22-30},
    ISSN = {1521-9615},
-   DOI = {10.1109/MCSE.2011.37},
+   doi = {10.1109/MCSE.2011.37},
    url = {http://ieeexplore.ieee.org/document/5725236/},
    year = {2011},
    type = {Journal Article}
 }
 
-@article{scipy1,
+@article{scipy2,
    author = {Oliphant, T. E.},
    title = {Python for Scientific Computing},
    journal = {Computing in Science \& Engineering},
@@ -41,10 +34,17 @@
    number = {3},
    pages = {10-20},
    ISSN = {1521-9615},
-   DOI = {10.1109/MCSE.2007.58},
+   doi = {10.1109/MCSE.2007.58},
    url = {http://ieeexplore.ieee.org/document/4160250/},
    year = {2007},
    type = {Journal Article}
+}
+
+@article{pyPRISM,
+    author = {Martin, T. B. and Gartner III, T. E. and Jones, R. L. and Snyder, C. R. and Jayaraman, A.},
+    title = {pyPRISM: A Computational Tool for Liquid-State Theory Calculations of Macromolecular Materials},
+    journal = {Macromolecules},
+    doi = {10.1021/acs.macromol.8b00011},
 }
 
 @misc{pyPRISMdocs,
@@ -52,12 +52,47 @@
    type = {Web Page}
 }
 
-@misc{scipy,
+@misc{pyPRISMapi,
+   url = {http://pyprism.readthedocs.io/en/latest/api/pyPRISM.html},
+   type = {Web Page}
+}
+
+@misc{pyPRISMbinder,
+   url = {https://mybinder.org/v2/gh/usnistgov/pyprism/master?filepath=tutorial},
+   type = {Web Page}
+}
+
+@misc{jupyter1,
+   url = {https://jupyter.org},
+   type = {Web Page}
+}
+
+@misc{pyPRISMgithub,
+   url = {https://github.com/usnistgov/pyPRISM},
+   type = {Web Page}
+}
+
+@misc{pyPRISMtut,
+   url = {http://pyprism.readthedocs.io/en/latest/tutorial/tutorial.html},
+   type = {Web Page}
+}
+
+@misc{pyPRISMpypi,
+   url = {https://pypi.org/project/pyPRISM/},
+   type = {Web Page}
+}
+
+@misc{pyPRISMconda,
+   url = {https://anaconda.org/conda-forge/pyprism},
+   type = {Web Page}
+}
+
+@misc{scipy1,
    url = {http://scipy.org/},
    type = {Web Page}
 }
 
-@misc{numpy,
+@misc{numpy1,
    url = {http://numpy.org/},
    type = {Web Page}
 }
@@ -77,6 +112,21 @@
    type = {Web Page}
 } 
 
+@article{PRISMorig,
+   author = {Schweizer, K. S. and Curro, J. G.},
+   title = {Integral-Equation Theory of the Structure of Polymer Melts},
+   journal = {Physical Review Letters},
+   volume = {58},
+   number = {3},
+   pages = {246-249},
+   ISSN = {0031-9007},
+   DOI = {10.1103/PhysRevLett.58.246},
+   year = {1987},
+   type = {Journal Article}
+}
+
+
+
 @inbook{PRISMreview,
    author = {Schweizer, K. S. and Curro, J. G.},
    title = {PRISM Theory of the Structure, Thermodynamics, and Phase-Transitions of Polymer Liquids and Alloys},
@@ -91,6 +141,158 @@
    type = {Book Section}
 }
 
+@misc{hoomd1,
+   url={http://glotzerlab.engin.umich.edu/hoomd-blue/index.html},
+   type = {Web Page}
+}
 
+
+@article{hoomd2,
+    title = "Strong scaling of general-purpose molecular dynamics simulations on GPUs",
+    journal = "Computer Physics Communications",
+    volume = "192",
+    pages = "97 - 107",
+    year = "2015",
+    issn = "0010-4655",
+    doi = "10.1016/j.cpc.2015.02.028",
+    author = "Jens Glaser and Trung Dac Nguyen and Joshua A. Anderson and Pak Lui and Filippo Spiga and Jaime A. Millan and David C. Morse and Sharon C. Glotzer",
+    keywords = "Multi-GPU, Molecular dynamics, MPI/CUDA, Strong scaling, Weak scaling, Domain decomposition, LAMMPS"
+}
+
+@article{hoomd3,
+    title = "General purpose molecular dynamics simulations fully implemented on graphics processing units",
+    journal = "Journal of Computational Physics",
+    volume = "227",
+    number = "10",
+    pages = "5342 - 5359",
+    year = "2008",
+    issn = "0021-9991",
+    doi = "10.1016/j.jcp.2008.01.047",
+    author = "Joshua A. Anderson and Chris D. Lorenz and A. Travesset",
+    keywords = "Graphics processing unit, GPU, NVIDIA, CUDA, Molecular dynamics, Polymer systems"
+}
+
+@misc{lammps1,
+   url={http://lammps.sandia.gov/},
+   type = {Web Page}
+}
+
+@article{lammps2,
+   author = {Plimpton, S.},
+   title = {False Parallel Algorithms for Short-Range Molecular-Dynamics},
+   journal = {Journal of Computational Physics},
+   volume = {117},
+   number = {1},
+   pages = {1-19},
+   ISSN = {0021-9991},
+   DOI = {10.1006/jcph.1995.1039},
+   year = {1995},
+   type = {Journal Article}
+}
+
+@misc{pscf1,
+   url={http://pscf.cems.umn.edu/},
+   type = {Web Page}
+}
+
+@article{pscf2,
+   author = {Arora, Akash and Qin, Jian and Morse, David C. and Delaney, Kris T. and Fredrickson, Glenn H. and Bates, Frank S. and Dorfman, Kevin D.},
+   title = {Broadly Accessible Self-Consistent Field Theory for Block Polymer Materials Discovery},
+   journal = {Macromolecules},
+   volume = {49},
+   number = {13},
+   pages = {4675-4690},
+   ISSN = {0024-9297},
+   DOI = {10.1021/acs.macromol.6b00107},
+   year = {2016},
+   type = {Journal Article}
+}
+
+@misc{cassandra1,
+   url={https://www3.nd.edu/~ed/research/cassandra.html},
+   type = {Web Page}
+}
+
+@article{cassandra2,
+	author = {Rai, Neeraj and Maginn, Edward J.},
+	title = {Vapor–Liquid Coexistence and Critical Behavior of Ionic Liquids via Molecular Simulations},
+	journal = {The Journal of Physical Chemistry Letters},
+	volume = {2},
+	number = {12},
+	pages = {1439-1443},
+	year = {2011},
+	doi = {10.1021/jz200526z},
+}
+
+
+@misc{simpatico1,
+   url={http://dmorse.github.io/simpatico/index.html},
+   type = {Web Page}
+}
+
+@article{iecg1,
+   author = {Dinpajooh, Mohammadhasan and Guenza, Marina G.},
+   title = {On the Density Dependence of the Integral Equation Coarse-Graining Effective Potential},
+   journal = {The Journal of Physical Chemistry B},
+   ISSN = {1520-6106},
+   DOI = {10.1021/acs.jpcb.7b10494},
+   year = {2017},
+   type = {Journal Article}
+}
+
+@article{iecg2,
+   author = {Dinpajooh, M. and Guenza, M. G.},
+   title = {Thermodynamic consistency in the structure-based integral equation coarse-grained method},
+   journal = {Polymer},
+   volume = {117},
+   pages = {282-286},
+   ISSN = {0032-3861},
+   DOI = {https://doi.org/10.1016/j.polymer.2017.04.025},
+   year = {2017},
+   type = {Journal Article}
+}
+
+@article{iecg3,
+   author = {McCarty, J. and Clark, A. J. and Lyubimov, I. Y. and Guenza, M. G.},
+   title = {Thermodynamic Consistency between Analytic Integral Equation Theory and Coarse-Grained Molecular Dynamics Simulations of Homopolymer Melts},
+   journal = {Macromolecules},
+   volume = {45},
+   number = {20},
+   pages = {8482-8493},
+   ISSN = {0024-9297},
+   DOI = {10.1021/ma301502w},
+   url = {<Go to ISI>://WOS:000310101600039
+http://pubs.acs.org/doi/pdfplus/10.1021/ma301502w},
+   year = {2012},
+   type = {Journal Article}
+}
+
+@article{iecg4,
+   author = {Yatsenko, G. and Sambriski, E. J. and Nemirovskaya, M. A. and Guenza, M.},
+   title = {Analytical soft-core potentials for macromolecular fluids and mixtures},
+   journal = {Physical Review Letters},
+   volume = {93},
+   number = {25},
+   ISSN = {0031-9007},
+   DOI = {10.1103/PhysRevLett.93.257803},
+   year = {2004},
+   type = {Journal Article}
+}
+
+
+
+
+@article{composite,
+   author = {Hooper, Justin B. and Schweizer, Kenneth S.},
+   title = {Contact Aggregation, Bridging, and Steric Stabilization in Dense Polymer-Particle Mixtures},
+   journal = {Macromolecules},
+   volume = {38},
+   number = {21},
+   pages = {8858-8869},
+   ISSN = {0024-9297},
+   DOI = {10.1021/ma051318k},
+   year = {2005},
+   type = {Journal Article}
+}
 
 
