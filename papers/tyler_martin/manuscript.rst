@@ -106,15 +106,17 @@ equation of these correlations functions.
     \hat{H}(k)  = \hat{\Omega}(k) \hat{C}(k) 
                   \left[ \hat{\Omega}(k) + \hat{H}(k) \right]
 
-In this expression, :math:`\hat{H}(k)` is the inter-molecular total correlation
-function matrix, :math:`\hat{C}(k)` is the inter-molecular direct correlation
-function matrix, and :math:`\hat{\Omega}(k)` is the intra-molecular correlation
+In this expression, :math:`\hat{H}(k)` is the *inter*-molecular total correlation
+function matrix, :math:`\hat{C}(k)` is the *inter*-molecular direct correlation
+function matrix, and :math:`\hat{\Omega}(k)` is the *intra*-molecular correlation
 function matrix. Each of these matrices is function of wavenumber :math:`k`
 which returns an :math:`n \times n` matrix, with :math:`n` being the number of
 site-types in the calculation. Each element of a correlation function matrix
 (e.g.  :math:`\hat{H}_{\alpha,\beta}(k)`) represents the value of that
 correlation function between site types :math:`\alpha` and :math:`\beta` at a
-given wavenumber :math:`k`. 
+given wavenumber :math:`k`. These correlation function matrices are symmetric,
+therefore there are :math:`\frac{n(n+1)}{2}` independent site-type pairs and
+correlation function values in each correlation function matrix.
 
 Equation :ref:`PRISMeq`, as written, has one unspecified degree of freedom for
 each site-type pair, therefore additional mathematical relationships 
@@ -130,7 +132,7 @@ widely-used closure is the Percus-Yevick closure shown below
     C_{\alpha,\beta}(r) = \left(e^{-U_{\alpha,\beta}(r)} - 1.0 \right) 
                           \left(1.0 + \Gamma_{\alpha,\beta}(r) \right)
 
-where :math:`\Gamma(r)` which is defined in real-space as
+where :math:`\Gamma(r)` is defined in real-space as
 
 .. math::
     :label: gamma
@@ -141,13 +143,15 @@ While the PRISM equation can be solved analytically in select cases, we focus on
 a more general numerical approach in pyPRISM. Figure :ref:`numerical` shows a
 schematic of our approach. For all site-types or site-type pairs, the user
 provides input values for :math:`\hat{\Omega}_{\alpha,\beta}(k)`, site-site pair
-potentials :math:`U_{\alpha,\beta}(r)`, and site-type densities
-:math:`\rho_{\alpha}`, and an initial guess for :math:`\Gamma(r)`.  After the
-user supplies all necessary parameters and input correlation functions, pyPRISM
-apply a numerical optimization routine, such as a Newton-Krylov method,
-:cite:`newton-krylov` to minimize a self-consistent cost function. After the
-cost function is minimized, the PRISM equation is considered "solved" and the
-resultant correlation functions can be used for subsequent calculations.
+potentials :math:`U_{\alpha,\beta}(r)`, site-type densities
+:math:`\rho_{\alpha}`, and an initial guess for all
+:math:`\Gamma_{\alpha,\beta}(r)`.  After the user supplies all necessary
+parameters and input correlation functions, pyPRISM applies a numerical
+optimization routine, such as a Newton-Krylov method, :cite:`newton-krylov` to
+minimize a self-consistent cost function. The details of this cost function were
+discussed in our previous work. :cite:`pyPRISM` After the cost function is
+minimized, the PRISM equation is considered "solved" and the resultant
+correlation functions can be used for subsequent calculations.
 
 Knowledge of :math:`\hat{H}(k)`, :math:`\hat{C}(k)`, and :math:`\hat{\Omega}(k)`
 for a given system allows one to calculate a range of important structural and
@@ -155,7 +159,7 @@ thermodynamic parameters, e.g., structure factors, radial distribution
 functions, second virial coefficients, Flory-Huggins :math:`\chi` parameters,
 bulk isothermal compressibilities, and spinodal decomposition temperatures. A
 full description of PRISM theory and the nature of these correlation functions
-can be found in our recent work. :cite:`pyPRISM`
+can be found in our previous work. :cite:`pyPRISM`
 
 Installation
 ------------
@@ -193,14 +197,16 @@ structures listed in the left column of the figure. Parameters and data in
 PRISM theory fall into two categories: those that define the properties of a
 single site-type (e.g., density, diameter) and those that define
 properties for a site-type pair (e.g., closure, potential, omega). pyPRISM
-defines two base container classes, based on this concept, which inherit from a
-parent :code:`pyPRISM.Table` class: :code:`pyPRISM.ValueTable` and
+defines two base container classes based on this concept, both of which inherit
+from a parent :code:`pyPRISM.Table` class: :code:`pyPRISM.ValueTable` and
 :code:`pyPRISM.PairTable`. These classes store numerical and non-numerical data,
 support complex iteration, and provide a :code:`.check()` method that is used to
 ensure that all parameters are fully specified. Both :code:`pyPRISM.Table`
 subclasses also support setting multiple pair-data at once, thereby making
-scripts easier to maintain *via* reduced visual noise and
-repetition. 
+scripts easier to maintain *via* reduced visual noise and repetition.
+Additionally, :code:`pyPRISM.ValueTable` automatically invokes matrix symmetry
+when a user set an off-diagonal pair, setting the :math:`\alpha,\beta` and
+:math:`\beta,\alpha` pairs automatically. 
 
 .. code:: python
     :linenos:
@@ -291,14 +297,13 @@ An additional specialized container is :code:`pyPRISM.Domain`. This class
 specifies the discretized real- and Fourier-space grids over which the PRISM
 equation is solved and is instantiated by specifying the length (i.e. number of
 gridpoints) and grid spacing in real- or Fourier space (i.e. :math:`dr` or
-:math:`dk`). An important detail of the PRISM cost function mentioned above 
-(and described in more detail below) is that correlation functions need 
-to be transformed to and from Fourier space during the cost function 
-evaluation. :code:`pyPRISM.Domain` also contains the Fast Fourier Transform 
-(FFT) methods needed to efficiently carry out these transforms. The 
-mathematics behind these FFTs, which are implemented as Type II and III 
-Discrete Sine Transforms (DST-II and DST-III), are discussed in our previous
-work. :cite:`pyPRISM`
+:math:`dk`). An important detail of the PRISM cost function mentioned above is
+that correlation functions need to be transformed to and from Fourier space
+during the cost function evaluation. :code:`pyPRISM.Domain` also contains the
+Fast Fourier Transform (FFT) methods needed to efficiently carry out these
+transforms. The mathematics behind these FFTs, which are implemented as Type II
+and III Discrete Sine Transforms (DST-II and DST-III), are discussed in our
+previous work. :cite:`pyPRISM`
 
 The :code:`pyPRISM.System` class contains multiple :code:`pyPRISM.ValueTable`
 and :code:`pyPRISM.PairTable` objects in addition to the specialized container
@@ -315,7 +320,7 @@ similar to :code:`pyPRISM.ValueTable` objects, but with a focus on mathematics
 rather than storage. :code:`pyPRISM.MatrixArray` objects can only contain
 numerical data, are space-aware, and provide many operators and methods which
 simplify PRISM theory mathematics. The core data structure underlying the
-:code:`pyPRISM.MatrixArray` is a three-dimensional Numpy ndarray as :math:`m`
+:code:`pyPRISM.MatrixArray` is a three-dimensional Numpy ndarray of :math:`m`
 :math:`n \times n` matrices, where :math:`m` is the length of the
 :code:`pyPRISM.Domain`.
 
@@ -409,8 +414,8 @@ coupled to a simulation engine by calling the engine *via* a subprocess,
 processing the engine output, and then feeding that output to to a pyPRISM
 calculation.
 
-Full pyPRISM Example 
---------------------
+Example pyPRISM Script
+----------------------
 
 .. figure:: figure3.pdf
     :scale: 60%
@@ -510,7 +515,7 @@ Note that all parameters in pyPRISM are specified in a reduced unit system
 commonly called Lennard-Jones units. In this scheme, a characteristic length
 :math:`d_c`, mass :math:`m_c`, and energy :math:`e_c` are specified. All other
 units are then specified in terms of these characteristic units. For example, if
-:math:`d_c = 1 nm`, the grid spacing in the above code would be:math:`dr = 0.1
+:math:`d_c = 1 nm`, the grid spacing in the above code would be :math:`dr = 0.1
 d_c = 0.1 nm`  See :cite:`brownbook` for more information on the Lennard-Jones
 reduced unit scheme. 
 
@@ -544,7 +549,7 @@ The *intra*-molecular correlation function
 :math:`\hat{\Omega}_{polymer,polymer}(k)` is specified as a freely jointed
 chain, a well-known physical model for a polymer chain. :cite:`rubinstein`
 Since the polymer chains and particles are not connected,
-:math:`\hat{\Omega}_{polymer,particle}(k)` is specified as *inter*--molecular.
+:math:`\hat{\Omega}_{polymer,particle}(k)` is specified as *inter*-molecular.
 The particles are modeled as spherical sites so
 :math:`\hat{\Omega}_{particle,particle}(k)` is modeled as a
 :code:`pyPRISM.omega.SingleSite`.
@@ -561,10 +566,10 @@ The particles are modeled as spherical sites so
     pyPRISM.potential.HardSphere()
 
 :math:`U_{polymer,polymer}(r)` and :math:`U_{particle,particle}(r)` pair
-potentials are specified to as athermal hard sphere interactions, while the
+potentials are specified as athermal hard sphere interactions, while the
 :math:`U_{polymer,particle}(r)` potential is an exponential attractive
 interaction. This configuration describes a dense melt-like nanocomposite where
-the polymer chains are attracted and adhere to (wet) the nanoparticle surface.
+the polymer chains are attracted to and adhere to (wet) the nanoparticle surface.
 The :math:`\alpha` and :math:`\epsilon` parameters in the
 :code:`pyPRISM.potential.Expontential` constructor control the range and
 strength of the exponential attraction.
@@ -579,10 +584,10 @@ strength of the exponential attraction.
     pyPRISM.closure.HyperNettedChain()
 
 To demonstrate one utility of the :code:`pyPRISM.PairTable` data structure, here
-we have specified both the *polymer*-*polymer* and *polymer*-*particle* pair
-potential in a single line. Both pair-data are specified to the Percus-Yevick
-closure, while the *particle*-*particle* closure is set to be the hypernetted
-chain closure. In this code-block and those above, note how the subclasses of
+we have specified both the *polymer*-*polymer* and *polymer*-*particle* closure
+in a single line. Both pair-data are specified to the Percus-Yevick closure,
+while the *particle*-*particle* closure is set to be the hypernetted chain
+closure. In this code-block and those above, note how the subclasses of
 :code:`pyPRISM.Omega`, :code:`pyPRISM.Potential` and :code:`pyPRISM.Closure` are
 used to easily specify complex theoretical constructs. 
 
@@ -594,7 +599,7 @@ used to easily specify complex theoretical constructs.
 
 When all properties are defined, the user calls the
 :code:`pyPRISM.System.solve()` method which first conducts a number of sanity
-checks, and issues any relevant exceptions or warnings if issues are found. If
+checks and issues any relevant exceptions or warnings if issues are found. If
 no issues are found, a PRISM object is created and minimization is attempted.
 The :code:`.solve()` method accepts arguments which allow the user to tune the
 details of the minimization.
@@ -663,7 +668,7 @@ which provide more nuanced information about using and numerically solving PRISM
 theory. This knowledgebase includes everything from concise lists of systems 
 and properties that can be studied with pyPRISM to tips and tricks for reaching 
 convergence of the numerical solver. In reference to Challenge 2 above, we 
-also recognize that a significant barrier for nonexperts to use these tools is the 
+also recognize that a significant barrier for non-experts to use these tools is the 
 installation process. Our installation documentation :cite:`pyPRISMdocs` attempts 
 to be holistic and provide detailed instructions for the several different 
 ways that users can install pyPRISM. 
@@ -703,7 +708,7 @@ from simulation trajectories. While we do provide a Cython-enhanced tool to do
 the calculation, we also plan to add features to more easily couple pyPRISM to
 common MD and MC simulation packages. :cite:`hoomd1, lammps1, simpatico1,
 cassandra1` These linkages would also make it easier for users to carry out the
-Self-Consistent PRISM (SCPRISM) method, as described previously. :cite:`pyPRISM`
+Self-Consistent PRISM (SCPRISM) method. :cite:`pyPRISM`
 
 PRISM theory also has advanced applications that are not possible in the
 current pyPRISM workflow. One example is the use of PRISM theory to 
