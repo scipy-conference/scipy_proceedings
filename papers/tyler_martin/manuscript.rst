@@ -27,18 +27,19 @@ Design and Implementation of pyPRISM: A Polymer Liquid-State Theory Framework
 
 .. class:: abstract
 
-    We describe the code structure, implementation, and usage of a Python-based,
-    open-source framework, pyPRISM, for conducting polymer liquid-state theory
-    calculations. Polymer Reference Interaction Site Model (PRISM) theory
-    describes the equilibrium spatial-correlations, thermodynamics, and
-    structure of liquid-like polymer systems and macromolecular materials.
-    pyPRISM provides data structures, functions, and classes that streamline
-    predictive PRISM calculations and can be extended for use in other tasks
-    such as the coarse-graining of atomistic simulation force-fields or the
-    modeling of experimental scattering data. The goal of providing this
-    framework is to reduce the barrier to correctly and appropriately using
-    PRISM theory and to provide a platform for rapid calculations of the
-    structure and thermodynamics of polymeric fluids and nanocomposites.  
+    In this work, we describe the code structure, implementation, and usage of a
+    Python-based, open-source framework, pyPRISM, for conducting polymer
+    liquid-state theory calculations. Polymer Reference Interaction Site Model
+    (PRISM) theory describes the equilibrium spatial-correlations,
+    thermodynamics, and structure of liquid-like polymer systems and
+    macromolecular materials.  pyPRISM provides data structures, functions, and
+    classes that streamline predictive PRISM calculations and can be extended
+    for use in other tasks such as the coarse-graining of atomistic simulation
+    force-fields or the modeling of experimental scattering data. The goal of
+    providing this framework is to reduce the barrier to correctly and
+    appropriately using PRISM theory and to provide a platform for rapid
+    calculations of the structure and thermodynamics of polymeric fluids and
+    nanocomposites.  
 
 .. class:: keywords
 
@@ -53,9 +54,9 @@ can be leveraged by non-experts. Here, we describe the implementation and
 structure of pyPRISM, a Python tool which implements Polymer Reference
 Interaction Site Model (PRISM) theory. :cite:`pyPRISM,disclaimer` PRISM theory
 is an integral equation formalism that describes the structure and
-thermodynamics of polymer liquids. :cite:`PRISMreview,PRISMorig` Despite the
-success of PRISM in past studies on these complex systems, the use of PRISM in
-the soft-matter community has been limited compared to other theory and
+thermodynamics of polymer liquids. :cite:`PRISMorig` Despite the successful
+application of PRISM theory to study a variety of complex soft-matter systems,
+:cite:`PRISMreview` its use has been limited compared to other theory and
 simulation methods that have available open-source tools, such as
 Self-Consistent Field Theory (SCFT), :cite:`pscf1,pscf2` Molecular Dynamics
 (MD), :cite:`hoomd1,hoomd2,hoomd3,lammps1,lammps2` or Monte Carlo (MC),
@@ -76,8 +77,8 @@ about PRISM theory and pyPRISM, and finally our view for the future of the tool.
     A schematic representation of the components of a coarse grained
     nanocomposite made up of bead-spring polymer chains and large spherical
     nanoparticles. This system is the focus of reference :cite:`composite`. In
-    this example, there are two site-types: a monomer site-type in green and a
-    nanoparticle site-type in yellow. Also labeled are the polymer-polymer
+    this example, there are two site-types: a monomer site-type (M) in green and
+    a nanoparticle site-type (P) in yellow. Also labeled are the polymer-polymer
     intra-molecular :math:`\left( \Omega_{M,M}(r) \right)` and inter-molecular
     correlation functions :math:`\left( H_{M,M}(r) \ \text{and} \ C_{M,M}(r)
     \right)`. :label:`nanocomposite` 
@@ -89,28 +90,29 @@ PRISM Theory
 For a detailed discussion of PRISM theory, as well as a review of key
 applications of the theory, we direct the reader to our previous publication.
 :cite:`pyPRISM` Here, we briefly highlight the salient points of PRISM theory in
-order to help motivate our our code and the design of our class structure.
+order to help motivate the design of our class structure.
 
 PRISM theory describes the *spatial correlations* in a liquid-like polymer
 system made up of spherical interacting "sites." The category of liquid-like
 polymers includes melts, blends, solutions, and nanocomposites of both
 homopolymers and copolymers. Within these systems, PRISM is able to handle
-varying chain chemistry, monomer sequence, and topology. Due to the nature of
-the formalism, PRISM cannot handle glassy, crystalline, macro-phase separated or
-otherwise non-isotropic materials. While there is a special formalism for
-oriented (liquid-crystalline) materials, the traditional form of PRISM theory is
-a spherically symmetric formalism that cannot capture liquid-crystalline
-behavior. Figure :ref:`nanocomposite` shows a schematic of a polymer
-nanocomposite that could be studied with PRISM theory using a two-site model. 
+varying chain chemistry, monomer sequence, and topology.  The traditional PRISM
+formalism is spherically symmetric, which in general prevents the use of PRISM
+to study glassy, crystalline, phase-separated or otherwise non-isotropic
+materials. While there is a modified PRISM formalism for oriented
+(liquid-crystalline) materials, :cite:`prism_lc1,prism_lc2,prism_lc3,prism_lc4`
+those modifications are outside the scope of the current work Figure
+:ref:`nanocomposite` shows a schematic of a polymer nanocomposite that could be
+studied with PRISM theory using a two-site model. 
 
-In general, PRISM sites are the same as the atoms or coarse-grained beads that
-are simulated in MD or MC simulations. Unlike these simulation methods, PRISM
-treats all of the sites of a given type as indistinguishable and does not track
-the individual positions of each site in space. Instead, the structure of the
-system is described through average spatial correlation functions. The
-fundamental PRISM equation for multi-component systems is represented in
-Fourier-space as a matrix equation of the site-site spatial correlations
-functions.
+In general, PRISM sites represent a segment of a molecule or polymer chain,
+similar to the atoms or coarse-grained beads that comprise an MD or MC
+simulation. Unlike these simulation methods, PRISM treats all of the sites of a
+given type as indistinguishable and does not track the individual positions of
+each site in space. Instead, the structure of the system is described through
+average spatial correlation functions. The fundamental PRISM equation for
+multi-component systems is represented in Fourier-space as a matrix equation of
+the site-site spatial correlation functions.
 
 .. math::
     :label: PRISMeq
@@ -121,11 +123,11 @@ functions.
 In this expression, :math:`\hat{H}(k)` is the *inter*-molecular total
 correlation function matrix, :math:`\hat{C}(k)` is the *inter*-molecular direct
 correlation function matrix, and :math:`\hat{\Omega}(k)` is the
-*intra*-molecular correlation function matrix. While :math:`\hat{\Omega}(k)`
+*intra*-molecular correlation function matrix. :math:`\hat{\Omega}(k)`
 describes the how the monomers *within a molecule* are connected and
 placed, :math:`\hat{H}(k)` and  :math:`\hat{C}(k)` describe how the molecules
-are placed in space relative to one another. The difference between
-:math:`\hat{H}(k)` and :math:`\hat{C}(k)` is that the former includes all
+are placed in space relative to one another. The key difference between
+:math:`\hat{H}(k)` and :math:`\hat{C}(k)` is that the former includes
 many-body effects, while the latter does not.  Knowledge of :math:`\hat{H}(k)`,
 :math:`\hat{C}(k)`, and :math:`\hat{\Omega}(k)` for a given system allows one to
 calculate a range of important structural and thermodynamic parameters, e.g.,
@@ -182,7 +184,7 @@ optimization routine, such as a Newton-Krylov method, :cite:`newton-krylov` to
 minimize a self-consistent cost function. The details of this cost function were
 discussed in our previous work. :cite:`pyPRISM` After the cost function is
 minimized, the PRISM equation is considered "solved" and the resultant
-correlation functions can be used for subsequent calculations. 
+correlation functions can be used for calculations. 
 
 pyPRISM Overview
 ----------------
@@ -192,11 +194,12 @@ users to construct calculations and numerically solve the PRISM equation for a
 range of liquid-like polymer systems. All of the theoretical details of PRISM
 theory are encapsulated in classes and methods which allow users to specify
 parameters and input correlation functions by name e.g., :code:`PercusYevick`
-for Equation :ref:`percusyevick`. Furthermore, the structure of these classes
-was intentionally made to be simple so that novice scientific programmers could
-extend pyPRISM by creating new closures, potentials, or intra-molecular
-correlation functions. These code structure of pyPRISM is shown in schematically
-in Figure :ref:`code` and is discussed in the `Implementation`_ Section. 
+for Equation :ref:`percusyevick`.  Furthermore, the structure of these classes
+was kept as simple as possible so that novice scientific programmers could
+easily extend pyPRISM by implementing new closures, potentials, or
+intra-molecular correlation functions. These code structure of pyPRISM is shown
+in schematically in Figure :ref:`code` and is discussed in the `Implementation`_
+Section. 
 
 Providing a scripting API rather than an "input file"-based scheme gives users
 the ability to use the full power of Python for complex PRISM-based
@@ -208,13 +211,23 @@ that output to to a pyPRISM calculation. The pyPRISM API is demonstrated in the
 `Example pyPRISM Script`_ section by modeling the system shown in Figure
 :ref:`nanocomposite`.
 
-While the pyPRISM developers do want to support the needs of PRISM theory
-experts, we also want to ensure the widest audience can correctly make use of
-pyPRISM. To this end, we have created comprehensive documentation
-:cite:`pyPRISMdocs` and tutorial :cite:`pyPRISMtut` materials. Users can also
-try pyPRISM in their web-browser by visiting :cite:`pyPRISMbinder`. See the
-`Pedagogy`_ section for more information on our philosophy in educating the
-scientific community about pyPRISM.
+
+While experts in PRISM theory likely will need little guidance on how to
+appropriately apply pyPRISM, we also would like to make pyPRISM accessible to
+the widest possible audience. To this end, we have created comprehensive
+documentation :cite:`pyPRISMdocs` and tutorial :cite:`pyPRISMtut` materials.
+Users can also try pyPRISM in their web-browser by visiting
+:cite:`pyPRISMbinder`. See the `Pedagogy`_ section for more information on our
+philosophy in educating the scientific community about pyPRISM.
+
+.. figure:: figure3.pdf
+    :figclass: w
+    :align: center
+    :scale: 40%
+
+    Overview of codebase and class organization. A full description of the
+    codebase classes and methods can be found in the online documentation.
+    :cite:`pyPRISMdocs`. :label:`code`
 
 Installation
 ------------
@@ -243,15 +256,6 @@ or alternatively
 Full installation instructions can be found in the documentation.
 :cite:`pyPRISMdocs`
 
-.. figure:: figure3.pdf
-    :figclass: w
-    :align: center
-    :scale: 40%
-
-    Overview of codebase and class organization. A full description of the
-    codebase classes and methods can be found in the online documentation.
-    :cite:`pyPRISMdocs`. :label:`code`
-
 Implementation
 --------------
 
@@ -270,7 +274,7 @@ numerical and non-numerical data, support complex iteration, and provide a
 specified. Both :code:`pyPRISM.Table` subclasses also support setting multiple
 pair-data at once, thereby making scripts easier to maintain *via* reduced
 visual noise and repetition.  Additionally, :code:`pyPRISM.ValueTable`
-automatically invokes matrix symmetry when a user set an off-diagonal pair,
+automatically invokes matrix symmetry when a user sets an off-diagonal pair,
 setting the :math:`\alpha,\beta` and :math:`\beta,\alpha` pairs automatically. 
 
 .. code:: python
@@ -375,34 +379,37 @@ The :code:`pyPRISM.System` class contains multiple :code:`pyPRISM.ValueTable`
 and :code:`pyPRISM.PairTable` objects in addition to the specialized container
 classes described above. The goal of the :code:`pyPRISM.System` class is to be a
 super-container that can validate that a system is fully and correctly
-specified before allowing the user to attempt to solve the PRISM equations.
+specified before allowing the user to attempt to solve the PRISM equation.
 
 While :code:`pyPRISM.System` primarily houses input property tables,
 :code:`pyPRISM.PRISM` represents a fully specified PRISM calculation and
 contains the cost function to be numerically minimized. The correlation
 functions shown in Equation :ref:`PRISMeq` are stored in the
-:code:`pyPRISM.PRISM` object as :code:`pyPRISM.MatrixArray` objects which are
-similar to :code:`pyPRISM.ValueTable` objects, but with a focus on mathematics
+:code:`pyPRISM.PRISM` object as :code:`pyPRISM.MatrixArray` objects, which are
+similar to :code:`pyPRISM.ValueTable` objects but with a focus on mathematics
 rather than storage. :code:`pyPRISM.MatrixArray` objects can only contain
 numerical data and provide many operators and methods which simplify PRISM
 theory mathematics. In particular, they satisfy the need for easy access to both
 the matrix and pair-function representations of the correlation functions, shown
 schematically in Figure :ref:`matrixarray` . The former is necessary for
 carrying out the mathematics of the PRISM equation (Equation :ref:`PRISMeq`) and
-the latter for Fourier transformations of the individual pair-functions.  The
-:code:`pyPRISM.MatrixArray` objects also carry out a number of run-time error
-checks including ensuring that both :code:`MatrixArray` objects involved in a
-binary operation are in the same space (real or Fourier). The core data
-structure underlying the :code:`pyPRISM.MatrixArray` is a three-dimensional
-Numpy ndarray of :math:`m` :math:`n \times n` matrices, where :math:`m` is the
-length of the :code:`pyPRISM.Domain`.
+the latter for performing Fourier transformations of the individual
+pair-functions.  The :code:`pyPRISM.MatrixArray` objects also carry out a number
+of run-time error checks including ensuring that both :code:`MatrixArray`
+objects involved in a binary operations (such as addition) are in the same space
+(real or Fourier).  The core data structure underlying the
+:code:`pyPRISM.MatrixArray` is a three-dimensional Numpy ndarray of :math:`m`
+:math:`n \times n` matrices, where :math:`m` is the length of the
+:code:`pyPRISM.Domain`.
 
 .. figure:: figure6.pdf
     :scale: 50%
 
     Schematic of the pair-function and MatrixArray representations of the total
     correlation function for the nanocomposite system shown in Figure
-    :ref:`nanocomposite`. 
+    :ref:`nanocomposite`. The :math:`r_1, r_2, r_N` variables represent specific
+    distances in the real-space solution grid. :label:`matrixarray`
+    
 
 
 .. code:: python
@@ -435,7 +442,7 @@ length of the :code:`pyPRISM.Domain`.
     # All matrices in W are modified by the scalar x
     x = 1 # arbitrary scalar 
     W+x; W-x; W*x; W/x; # elementwise ops
-    
+
     ## MatrixArray by Matrix Operations ##
     # All matrices in W are modified by the matrix rho
     W+rho; W-rho; W*rho; W/rho;   # elementwise ops
@@ -479,14 +486,17 @@ can easily add new potentials, closures, and
 :math:`\hat{\Omega}_{\alpha,\beta}(k)` to the codebase, we have kept the
 programming interface contract of these classes as simple as possible:
 Subclasses must inherit from the proper parent class and implement a
-:code:`.calculate()` method with specified arguments and return values.
+:code:`.calculate()` method.
 
+.. figure:: figure4.pdf
+    :scale: 75%
 
+    All pair-correlation functions from the pyPRISM example for the
+    nanocomposite system depicted in Figure :ref:`nanocomposite`.
+    :label:`results`
 
 Example pyPRISM Script
 ----------------------
-
-
 
 .. code:: python
     :linenos:
@@ -496,6 +506,7 @@ Example pyPRISM Script
     functions and chi parameters of a polymer 
     nanocomposite.
     '''
+
     import pyPRISM
     
     sys = pyPRISM.System(['particle','polymer'],kT=1.0)
@@ -537,13 +548,6 @@ Example pyPRISM Script
 
 Example Discussion
 ------------------
-
-.. figure:: figure4.pdf
-    :scale: 75%
-
-    All pair-correlation functions from the pyPRISM example for the
-    nanocomposite system depicted in Figure :ref:`nanocomposite`.
-    :label:`results`
 
 The code above shows how to use pyPRISM to calculate the properties of a
 nanocomposite made of linear polymer chains and spherical nanoparticles. This
@@ -592,9 +596,10 @@ reduced unit scheme.
     sys.density['particle'] = 6e-6
 
 Next, site-type diameters and number densities are specified for both site-types
-in units of :math:`d_c` and beads per :math:`d_c^3`, respectively. Qualitatively,
-these specifications imply that we are considering a dilute concentration of
-nanoparticles which are significantly larger than the monomers in diameter.
+in units of :math:`d_c` and beads per :math:`d_c^3`, respectively.
+Qualitatively, these specifications imply that we are considering a dilute
+concentration of nanoparticles dissolved in a polymer matrix made up of polymer
+sites of significantly smaller diameter.
 
 .. code:: python
     :linenos:
@@ -693,7 +698,7 @@ effects, both of which limit simulation methods. Furthermore, a simulation of
 sufficient size to study the large nanoparticles and relatively long polymer
 chains in this example would be computationally expensive (e.g. requiring many
 hours to days of CPU time from a supercomputing resource). In contrast, the
-PRISM equations can be solved in seconds, even on modest (e.g., laptop)
+PRISM equation can be solved in seconds, even on modest (e.g., laptop)
 hardware. Finally, once the PRISM equation is solved, a variety of properties
 can quickly be screened without having to process large simulation trajectories.
 While PRISM theory does have limitations around the types of systems and
@@ -747,15 +752,14 @@ form of a series of Jupyter notebooks. :cite:`pyPRISMtut,jupyter1` The tutorial
 notebooks are designed to target a wide audience with varied programming and
 materials science expertise, with topics ranging from a basic introduction to
 Python to how to add new features to pyPRISM. The tutorial also has several
-case-study focused notebooks which walk users through the process of reproducing
+case study-focused notebooks which walk users through the process of reproducing
 PRISM results from the literature.  Figure :ref:`tutorial` shows our
 recommendations for how users of different backgrounds and skill levels might
 move through the tutorial. In order to ensure the widest audience possible can
 take advantage of this tutorial, we have also set up a binder instance
 :cite:`pyPRISMbinder`, which allows users to try out pyPRISM and run the
 tutorial instantly in a web-browser without installing any software.  This
-feature is also a great benefit to users who might be hampered by Challenge 2
-above. 
+feature should also  benefit users who might be hampered by Challenge 2 above. 
 
 Future Directions
 -----------------
