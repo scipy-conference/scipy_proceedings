@@ -38,7 +38,10 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
    astronomy, databases, fitting, data analysis
 
 Introduction
-------------
+============
+
+Polycyclic aromatic hydrocarbons
+--------------------------------
 
 The astrophysical relevance of polycyclic aromatic hydrocarbons (PAHs)
 cannot be overstated. As interstellar molecules go, they are
@@ -48,6 +51,9 @@ HC11N, contains 11 carbon atoms. PAHs are also exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
 variety of astronomical objects, making them ubiquitous throughout the
 Cosmos and ideal probes of astronomical objects.
+
+Scientific analysis with molecular databases
+--------------------------------------------
 
 We present here software for the astronomical community developed at
 the Astrophysics & Astrochemistry Laboratory (`www.asrochemistry.org
@@ -64,6 +70,9 @@ galaxies. Thus far, PAHdb’s full set of analytical tools has only been
 available as a suite to be used with the IDL[#]_ programming language.
 
 .. [#] IDL is a registered trademark of `Harris Geospatial <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
+
+Premise of this work: pyPAHdb
+-----------------------------
 
 Our new software is pyPAHdb, a streamlined version of the PAHdb
 analysis suite. The software accepts spectroscopic observations
@@ -92,7 +101,7 @@ Early Release Science program for *JWST* and will be incorporated into
 the standard astronomer’s *JWST* Toolkit for ease of use by the
 general astronomy community, in addition to PAH experts.
 
-The role of astronomical PAHs
+The importance of astronomical PAHs
 =============================
 
 The astrophysical relevance of PAHs cannot be overstated. As
@@ -170,8 +179,35 @@ The James Webb Space Telescope
 
 Explain what JWST is, why it's so important for infrared astronomy. Maybe a nice image here, link to the ERS program and our involvement.
 
-pyPAHdb
-=======
+The software: pyPAHdb
+=====================
 
-Philosophy, input, output, parallelization, comparison to full suite etc.? IDL vs python benchmarks. Code examples!
+Philosophy
+----------
+
+Its utility vs the full suite, why it exists -- simplicity for non-experts. etc.
+
+Inputs, outputs, general workflow
+---------------------------------
+
+What the user needs to know to effectively apply it to their dataset. Maybe code examples in here showing how it can be used?
+
+Parallelization, benchmarks
+---------------------------
+
+IDL vs Python, whole field is moving that way. Parallelization, Python versions vs OS etc too?
+
+Best practices?
+---------------
+
+Not sure about this subsection, could maybe be folded into "general workflow."
+
+Future development/application?
+-------------------------------
+
+Brainstorming for this paper:
+=============================
+
+Need to have a showcase example of its application. Anything from Les Houches that might be useful as a prototypical use case?
+
 
