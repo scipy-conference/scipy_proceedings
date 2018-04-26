@@ -92,6 +92,9 @@ Early Release Science program for *JWST* and will be incorporated into
 the standard astronomer’s *JWST* Toolkit for ease of use by the
 general astronomy community, in addition to PAH experts.
 
+The role of astronomical PAHs
+=============================
+
 The astrophysical relevance of PAHs cannot be overstated. As
 interstellar molecules go, they are extraordinarily large,
 intermediate in size between molecules and particles, with properties
@@ -156,3 +159,19 @@ analyze the state of the PAH population, i.e., ionization balance,
 size, structure, and composition and tie these to the prevailing local
 astrophysical conditions, e.g., electron density, parameters of the
 radiation field, etc. :cite:`2016ApJ...832...51B`.
+
+NASA Ames PAH IR Spectroscopic Database (PAHdb)
+===============================================
+
+Database explanation, PR. Emission model discussion etc? Maybe some simple physics.
+
+The James Webb Space Telescope
+==============================
+
+Explain what JWST is, why it's so important for infrared astronomy. Maybe a nice image here, link to the ERS program and our involvement.
+
+pyPAHdb
+=======
+
+Philosophy, input, output, parallelization, comparison to full suite etc.? IDL vs python benchmarks. Code examples!
+
