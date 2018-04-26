@@ -86,11 +86,12 @@ for characterizing PAHs in infrared spectroscopic observations from
 *Spitzer*, *ISO* and synthetic *JWST* data. As pyPAHdb is designed to
 be streamlined compared to the full IDL suite, we will also
 demonstrate its performance via benchmarks. pyPAHdb is open source and
-being developed on `GitHub <https://github.com/pahdb/pypahdb>`_,
-therefore encouraging community involvement. It is part of an accepted
-Early Release Science program for *JWST* and will be incorporated into
-the standard astronomer’s *JWST* Toolkit for ease of use by the
-general astronomy community, in addition to PAH experts.
+being developed on GitHub (`github.com/pahdb/pypahdb
+<https://github.com/pahdb/pypahdb>`_), therefore encouraging community
+involvement. It is part of an accepted Early Release Science program
+for *JWST* and will be incorporated into the standard astronomer’s
+*JWST* Toolkit for ease of use by the general astronomy community, in
+addition to PAH experts.
 
 The astrophysical relevance of PAHs cannot be overstated. As
 interstellar molecules go, they are extraordinarily large,
@@ -156,3 +157,32 @@ analyze the state of the PAH population, i.e., ionization balance,
 size, structure, and composition and tie these to the prevailing local
 astrophysical conditions, e.g., electron density, parameters of the
 radiation field, etc. :cite:`2016ApJ...832...51B`.
+
+The James Webb Space Telescope (JWST)
+-------------------------------------
+
+The James Webb Space Telescope (JWST; `www.jwst.nasa.gov
+<https://www.jwst.nasa.gov>`_) is NASA's next flagship observatory and
+is the successor to the succesful Hubble Space Telescope
+(`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and Spitzer
+Space Telescope (`www.nasa.gov/spitzer
+<https://www.nasa.gov/spitzer>`_). JWST is being developed through a
+collaboration between NASA, the European Space Agency (ESA) and the
+Canadian Space Agency (CSA). The telescope features a primary mirror
+with a diameter of 6.5 m made up from 18 individual hexagonal segments
+and carriers four science instruments. These instruments will observe
+the Universe with unprecedented resolution and sensitivity from 0.6 to
+27 µm. The observatory is expected to launch in 2020. A 3D rendering
+of the spacecraft is shown in Figure :ref:`fig:JWST`.
+
+.. figure:: JWST.png
+   :align: center
+
+   3D-rendering of the James Webb Space Telescope (JWST) using the
+   Maya® 3D animation, modeling, simulation, and rendering software
+   (`www.autodesk.com/products/maya/overview
+   <https://www.autodesk.com/products/maya/overview>`_). JWST's
+   signature 6.5 m diameter primary mirror made up from 18 hexagonal
+   segments (gold) dominates the picture together with the stacked
+   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
+   <https://nasa3d.arc.nasa.gov/search/jwst/>`_.  :label:`fig:JWST`
