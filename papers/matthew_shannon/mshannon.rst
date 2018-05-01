@@ -123,7 +123,7 @@ astronomers to probe properties of astronomical plasmas in regions not
 normally accessible. On top of this, PAHs are not only witnesses to
 their local environment; they are often key players in local
 processes. The origin and evolution of astronomical PAHs starts in
-circumstellar ejecta from late type stars. They are subsequently
+circum-stellar ejecta from late type stars. They are subsequently
 processed in the diffuse interstellar medium (ISM) by the prevalent UV
 field, energetic particles, and strong shocks. Once in dense clouds
 they participate in chemistry and are incorporated into newly formed
@@ -203,6 +203,13 @@ of the spacecraft is shown in Fig. :ref:`fig:JWST`.
 NASA Ames PAH IR Spectroscopic Database (PAHdb)
 ===============================================
 
+.. figure:: PAHdb.png
+   :align: center
+
+   Screenshot of the landing page of the NASA Ames PAH IR
+   Spectroscopic Database located at `www.astrochemistry.org/pahdb/
+   <http://www.astrochemistry.org/pahdb/>`_. :label:`fig:PAHdb`
+
 The NASA Ames PAH IR Spectroscopic Database (PAHdb) is the culmination
 of more that 30 years of laboratory and computational research carried
 out at the NASA Ames Research Center to test and refine the
@@ -233,13 +240,6 @@ interpret PAH emission spectra. Hence, the development of pyPAHdb.
 .. [#] IDL is a registered trademark of `Harris Geospatial
        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
 
-.. figure:: PAHdb.png
-   :align: center
-
-   Screenshot of the landing page of the NASA Ames PAH IR
-   Spectroscopic Database located at
-   www.astrochemistry.org/pahdb/. :label:`fig:PAHdb`
-
 The software: pyPAHdb
 =====================
 
@@ -261,16 +261,74 @@ spectra. This matrix has been constructed from a collection of
 "astronomical" PAHs, which meet the following critera and include the
 fullerenes C60 and C70:
 
-   'magnesium=0 oxygen=0 iron=0 silicium=0 chx=0 ch2=0 c>20 hydrogen>0'
+* 'magnesium=0 oxygen=0 iron=0 silicium=0 chx=0 ch2=0 c>20 hydrogen>0'
 
-The PAH emission spectra have been calculated with the following
-parameters:
+PAH Emission Model
+------------------
 
-* A calculated vibrational temperature upon the absorption of a 7 eV photon
-* Blackbody emission at the calculated vibrational temperature
-* A redshift of 15 /cm to mimic some anharmonic effect
-* Gaussian emission profile with a FWHM of 15 /cm
+In order to analyze astronomical PAH *emission* spectra with the
+spectroscopic data contained in PAHdb's libraries, a PAH emission
+model is needed. Whilst several more sophisticated emission models are
+available in the full Python suite, here a PAH's emission spectrum is
+calculated from the vibrational temperature it reaches after absorbing
+a single 7 eV photon and making use of the thermal approximation
+(e.g., :cite:`1993ApJ...415..397S` and :cite:`2001A&A...372..981V`).
 
+The spectral radiance :math:`I_{j}(\nu)`, in erg s\ :math:`^{-1}` cm\
+:math:`^{-1}` mol\ :math:`^{-1}`, from the :math:`j^{\rm th}` PAH is
+thus calculated as:
+
+.. math::
+   :label: eq:model
+
+   I_{j}(\nu) = 4\pi\sum\limits_{i=1}^{n}\frac{2hc\nu_{i}^{3}\sigma_{i}}{e^{\frac{hc\nu_{i}}{kT}} - 1}\phi(\nu)\ ,
+
+with :math:`\nu` the frequency in cm\ :math:`^{-1}`, :math:`h`
+Planck's constant in erg s, :math:`c` the speed-of-light in cm s\
+:math:`^{-1}`, :math:`\nu_{i}` the frequency of mode :math:`i` in cm\
+:math:`^{-1}`, :math:`\sigma_{i}` the integrated absorption
+cross-section for mode\ :math:`i` in cm mol\ :math:`^{-1}`, :math:`k`
+Boltzmann's constant in erg K\ :math:`^{-1}`, :math:`T` the
+vibrational temperature in K, and :math:`\phi(\nu)` is the frequency
+dependent emission profile in cm. The sum is taken over all :math:`n`
+modes and the emission profile is assumed Gaussian with a FWHM of 15
+cm\ :math:`^{-1}`. Note that before applying the emission profile, a
+redshift of 15 cm\ :math:`^{-1}` is applied to each of the band
+positions (:math:`\nu_{i}`) to mimic some anharmonic effects.
+
+The vibrational temperature attained after absorbing a single 7 eV
+photon is calculated through the heat capacity. The heat capacity,
+:math:`C_{\rm V}` in erg K, of a molecular system is given, in terms
+of isolated harmonic oscillators by:
+
+.. math::
+   :label: eq:heatcapacity
+
+   C_{\rm V} = k\int\limits_{0}^{\infty}e^{-\frac{h\nu}{kT}}\left[\frac{\frac{h\nu}{kT}}{1-e^{-\frac{h\nu}{kT}}}\right]^{2}g(\nu)\mathrm{d}\nu\ ,
+
+where :math:`g(\nu)` is known as the density of states and describes
+the distribution of vibrational modes. However due to the discrete
+nature of the modes, the density of states is just a sum of
+:math:`\delta`\ -functions:
+
+.. math::
+   :label: eq:delta
+
+   g(\nu) = \sum\limits_{i=1}^{n}\delta(\nu-\nu_{i})\ .
+
+The vibrational temperature is ultimately calculated by solving:
+
+.. math::
+   :label: eq:solve
+
+   \int\limits_{0}^{T_{\rm vibration}}C_{\rm V}\mathrm{d}T = E_{\rm in}\ ,
+
+where :math:`E_{\rm in}` is the energy of the absorbed photon, here 7
+eV.
+
+In Python, in the full suite, Equation :ref:`eq:solve` is solved
+using root-finding with ``scipy.optimize.brentq``. The integral is
+calculated with ``scipy.optimize.quad``.
 
 Philosophy
 ----------
