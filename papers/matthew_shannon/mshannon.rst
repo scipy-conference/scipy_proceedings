@@ -274,27 +274,27 @@ calculated from the vibrational temperature it reaches after absorbing
 a single 7 eV photon and making use of the thermal approximation
 (e.g., :cite:`1993ApJ...415..397S` and :cite:`2001A&A...372..981V`).
 
-The spectral radiance :math:`I_{j}(\nu)`, in erg s\ :math:`^{-1}` cm\
-:math:`^{-1}` mol\ :math:`^{-1}`, from the :math:`j^{\rm th}` PAH is
-thus calculated as:
+The spectral intensity :math:`I_{j}(\nu)`, in erg s\ :sup:`-1` cm\ 
+:sup:`-1` mol\ :sup:`-1`, from a mol of the :math:`j^{\rm th}`
+PAH is thus calculated as:
 
 .. math::
    :label: eq:model
 
-   I_{j}(\nu) = 4\pi\sum\limits_{i=1}^{n}\frac{2hc\nu_{i}^{3}\sigma_{i}}{e^{\frac{hc\nu_{i}}{kT}} - 1}\phi(\nu)\ ,
+   I_{j}(\nu) = \sum\limits_{i=1}^{n}\frac{2hc\nu_{i}^{3}\sigma_{i}}{e^{\frac{hc\nu_{i}}{kT}} - 1}\phi(\nu)\ ,
 
-with :math:`\nu` the frequency in cm\ :math:`^{-1}`, :math:`h`
-Planck's constant in erg s, :math:`c` the speed-of-light in cm s\
-:math:`^{-1}`, :math:`\nu_{i}` the frequency of mode :math:`i` in cm\
-:math:`^{-1}`, :math:`\sigma_{i}` the integrated absorption
-cross-section for mode\ :math:`i` in cm mol\ :math:`^{-1}`, :math:`k`
-Boltzmann's constant in erg K\ :math:`^{-1}`, :math:`T` the
-vibrational temperature in K, and :math:`\phi(\nu)` is the frequency
-dependent emission profile in cm. The sum is taken over all :math:`n`
-modes and the emission profile is assumed Gaussian with a FWHM of 15
-cm\ :math:`^{-1}`. Note that before applying the emission profile, a
-redshift of 15 cm\ :math:`^{-1}` is applied to each of the band
-positions (:math:`\nu_{i}`) to mimic some anharmonic effects.
+with :math:`\nu` the frequency in cm\ :sup:`-1`, :math:`h` Planck's
+constant in erg s, :math:`c` the speed-of-light in cm s\ :sup:`-1`,
+:math:`\nu_{i}` the frequency of mode :math:`i` in cm\ :sup:`-1`,
+:math:`\sigma_{i}` the integrated absorption cross-section for mode\
+:math:`i` in cm mol\ :sup:`-1`, :math:`k` Boltzmann's constant in erg
+K\ :sup:`-1`, :math:`T` the vibrational temperature in K, and
+:math:`\phi(\nu)` is the frequency dependent emission profile
+in cm. The sum is taken over all :math:`n` modes and the emission
+profile is assumed Gaussian with a FWHM of 15 cm\ :sup:`-1`. Note that
+before applying the emission profile, a redshift of 15 cm\ :sup:`-1`
+is applied to each of the band positions (:math:`\nu_{i}`) to mimic
+some anharmonic effects.
 
 The vibrational temperature attained after absorbing a single 7 eV
 photon is calculated through the heat capacity. The heat capacity,
@@ -308,7 +308,7 @@ of isolated harmonic oscillators by:
 
 where :math:`g(\nu)` is known as the density of states and describes
 the distribution of vibrational modes. However due to the discrete
-nature of the modes, the density of states is just a sum of
+nature of the modes, the density of states is just a sum of\
 :math:`\delta`\ -functions:
 
 .. math::
@@ -329,6 +329,23 @@ eV.
 In Python, in the full suite, Equation :ref:`eq:solve` is solved
 using root-finding with ``scipy.optimize.brentq``. The integral is
 calculated with ``scipy.optimize.quad``.
+
+Figure :ref:`fig:model` illustrates the process on the spectrum of the
+coronene cation (C\ :sub:`24`\ H\ :sub:`12`\ :sup:`+`\ ), which
+reaches a vibrational temperature of 1406 K after absorbing a single 7
+eV photon.
+
+.. figure:: model.png
+   :align: center
+
+   Demonstration of applying the simple PAH emission model as outlined
+   in Equations :ref:`eq:model`\ - :ref:`eq:solve` to the 0 K spectrum
+   of coronene (in black; C\ :sub:`24`\ H\ :sub:`12`\ :sup:`+`) from
+   version 3.00 of the library of computed spectra of PAHdb. After
+   applying the PAH emission model, but before the convolution with
+   the emission profile, the blue spectrum is obtained. The final
+   spectrum is shown in orange. For display purposes the profiles have
+   been given a FWHM of 45 cm\ :sup:`-1`. :label:`fig:model`
 
 Philosophy
 ----------
