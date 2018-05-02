@@ -67,7 +67,8 @@ collection of data on PAHs, namely the NASA Ames PAH IR Spectroscopic
 Database (PAHdb). It is highly cited and is used to characterize and
 understand organic molecules in our own galaxy and external
 galaxies. Thus far, PAHdb’s full set of analytical tools has only been
-available as a suite to be used with the IDL[#]_ programming language.
+available as a suite to be used with the IDL\ [#]_ programming
+language.
 
 .. [#] IDL is a registered trademark of `Harris Geospatial
        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
@@ -156,13 +157,13 @@ of the circumstellar disks from which new stars and planets form. For
 example, since PAH IR emission is pumped by UV light from the forming
 star, the extent of PAH emission from the disk can discriminate
 between flaring and non-flaring protoplanetary disk geometries
-:cite:`2001A&A...365..476M`; :cite:`2009A&A...502..175B`. However, the
+:cite:`2001A&A...365..476M` :cite:`2009A&A...502..175B`. However, the
 treasure trove of information of local conditions and an object's
 evolutionary history is only accessible through detailed spectroscopic
 analysis. A full spectroscopic analysis of these observations and an
 understanding of the factors that drive the spectroscopic changes is
 only now possible with the NASA Ames PAH IR Spectroscopic Database
-(PAHdb) :cite:`2018ApJS..234...32B`;
+(PAHdb) :cite:`2018ApJS..234...32B`
 :cite:`2014ApJSS..211....8B`. PAHdb is a NASA database containing
 thousands of spectra coupled to a set of innovative astronomical
 models and tools that enables astronomers to probe and quantitatively
@@ -174,7 +175,7 @@ radiation field, etc. :cite:`2016ApJ...832...51B`.
 The James Webb Space Telescope (*JWST*)
 ---------------------------------------
 
-The James Webb Space Telescope (JWST; `www.jwst.nasa.gov
+The James Webb Space Telescope (*JWST*; `www.jwst.nasa.gov
 <https://www.jwst.nasa.gov>`_) is NASA's next flagship observatory and
 is the successor to the succesful Hubble Space Telescope
 (`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and Spitzer
@@ -186,7 +187,7 @@ with a diameter of 6.5 m made up from 18 individual hexagonal segments
 and carriers four science instruments. These instruments will observe
 the Universe with unprecedented resolution and sensitivity from 0.6 to
 27 µm. The observatory is expected to launch in 2020. A 3D rendering
-of the spacecraft is shown in Fig. :ref:`fig:JWST`.
+of the spacecraft is shown in Figure :ref:`fig:JWST`.
 
 .. figure:: JWST.png
    :align: center
@@ -218,18 +219,18 @@ currently contain the spectra of 75 and 3139 PAH species,
 respectively, and are continuously expanded. At
 `www.astrochemistry.org/pahdb/
 <http://www.astrochemistry.org/pahdb/>`_ these libraries can be
-perused and/or downloaded. Fig. :ref:`fig:PAHdb` presents a screenshot
-of the website's landing page. Dowloads are offered formatted as ASCII
-or XML. In addition, several software tools are provided that allow
-users to interact with a downloaded database XML-file and perform the
-necessary steps to analyze astronomical data. Historically, the
-astronomical community has embraced the IDL[#]_ programming
-language. As such, the software tools have been developed
-in IDL. However, Python is seeing increasingly widespread usage among
-astronomers, in part due to its non-proprietary nature. Python has
-significantly matured over the last two decades and many astronomical
-utilities once only available through IDL and/or IRAF have been ported
-to Python (e.g., PyFITS; `www.astropy.org
+perused and/or downloaded. Figure :ref:`fig:PAHdb` presents a
+screenshot of the website's landing page. Dowloads are offered
+formatted as ASCII or XML. In addition, several software tools are
+provided that allow users to interact with a downloaded database
+XML-file and perform the necessary steps to analyze astronomical
+data. Historically, the astronomical community has embraced the IDL\
+[#]_ programming language. As such, the software tools have been
+developed in IDL. However, Python is seeing increasingly widespread
+usage among astronomers, in part due to its non-proprietary
+nature. Python has significantly matured over the last two decades and
+many astronomical utilities once only available through IDL and/or
+IRAF have been ported to Python (e.g., PyFITS; `www.astropy.org
 <http://www.astropy.org>`_). Notably, many of the astronomical
 utilities offered by the Space Telescope Science Institute, including
 the Data Analysis Toolbox for use with *JWST*, are being developed in
@@ -244,24 +245,26 @@ The software: pyPAHdb
 =====================
 
 pyPAHdb is being developed as part of the awarded James Webb Space
-Telescope (JWST) Early Release Science (ERS) program "Radiative
-Feedback from Massive Stars as Traced by Multiband Imaging and
-Spectroscopic Mosaics" (`program website <http://jwst-ism.org/>`_; ID:
-1288). The entire program is coordinated by an international "Core
-team" of 19 scientists and supported by 119 "science
-collaborators". The purpose of pyPAHdb is to derive astronomical
-parameters directly from the *JWST* observations.
-
-pyPAHdb should be considered a Lite version of the full suite of
-Python analyzes tools that is the analog of the *AmesPAHdbIDLSuite*.
-
-pyPAHdb uses a precomputed matrix of theoretically calculated PAH
-emission spectra from version 3.00 of the library of computed
-spectra. This matrix has been constructed from a collection of
-"astronomical" PAHs, which meet the following critera and include the
-fullerenes C60 and C70:
-
-* 'magnesium=0 oxygen=0 iron=0 silicium=0 chx=0 ch2=0 c>20 hydrogen>0'
+Telescope (*JWST*) Early Release Science (ERS) program titled
+"Radiative Feedback from Massive Stars as Traced by Multiband Imaging
+and Spectroscopic Mosaics" (`program website <http://jwst-ism.org/>`_;
+ID: 1288). The purpose of the ERS is to educate and inform the
+astronimical community of *JWST*'s capabilities, and provide rapid
+access to data and software tools that will enable full scientific
+exploitation in Cycle 2 and beyond. More information about the ERS
+program can be found at the `JDox
+<https://jwst-docs.stsci.edu/display/JSP/JWST+DD+ERS+Program+Goals%2C+Project+Updates%2C+and+Status+Reviews>`_. The
+program is coordinated by an international "core team" of 19
+scientists and supported by 119 "science collaborators". The purpose
+of pyPAHdb is to derive astronomical parameters directly from *JWST*
+observations, but is not limited to *JWST* observations alone. pyPAHdb
+is the Lite version of the full suite of Python software tools, dubbed
+the *AmesPAHdbPythonSuite* (`github.com/PAHdb/AmesPAHdbPythonSuite
+<https://github.com/PAHdb/AmesPAHdbPythonSuite>`_), that is being the
+analog of the *AmesPAHdbIDLSuite* (`github.com/PAHdb/AmesPAHdbIDLSuite
+<https://github.com/PAHdb/AmesPAHdbIDLSuite>`_). pyPAHdb should enable
+PAH experts and non-experts alike to analyze and interpret
+astronomical PAH emission spectra.
 
 PAH Emission Model
 ------------------
@@ -347,17 +350,46 @@ eV photon.
    spectrum is shown in orange. For display purposes the profiles have
    been given a FWHM of 45 cm\ :sup:`-1`. :label:`fig:model`
 
-Philosophy
-----------
-
-Its utility vs. the full suite, why it exists -- simplicity for
-non-experts. etc.
+pyPAHdb uses a precomputed matrix of theoretically calculated,
+highly-over-sampled, PAH emission spectra from version 3.00 of the
+library of computed spectra. This matrix has been constructed from a
+collection of "astronomical" PAHs, which include those PAHs that have
+more than 20 carbon atoms, have no hetero-atom substitutions except
+for possibly nitrogen, have no aliphatic side groups, and are not
+fully dehydrogenated. In addition, the fullerenes C\ :sub:`60` and C\
+:sub:`70` are added.
 
 Inputs, outputs, general workflow
 ---------------------------------
 
 What the user needs to know to effectively apply it to their
-dataset. Maybe code examples in here showing how it can be used?
+data set.
+
+The code-block below is taken from the example.py included in the
+pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
+
+.. code-block:: python
+
+    import pypahdb
+    # load an observation from file
+    observation = pypahdb.observation('NGC7023-NW-PAHs.txt')
+    # decompose the spectrum with PAHdb
+    result = pypahdb.decomposer(observation.spectrum)
+    # write results to file
+    pypahdb.writer(result, header=observation.header)
+
+Figure :ref:`fig:fit` presents the output.
+
+.. figure:: fit.png
+   :align: center
+
+   Output from running the code example. :label:`fig:fit`
+
+.. figure:: map.png
+   :align: center
+
+   PAH ionization map constructed from analyzing the *Spitzer*
+   spectral map of the reflection nebula NGC 7023. :label:`fig:map`.
 
 Parallelization, benchmarks
 ---------------------------
