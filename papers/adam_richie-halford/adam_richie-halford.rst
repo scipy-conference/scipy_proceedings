@@ -46,7 +46,7 @@ limitations are impractical for many data-oriented workloads, that
 require more RAM and local storage, longer compute times, and complex
 dependencies. Here, we introduce a new Python library: Cloudknot [1][2],
 that launches Python functions as jobs on the AWS Batch service, thereby
-lifting these limitations. 
+lifting these limitations.
 
 Methods
 -------
@@ -95,7 +95,41 @@ programmatically executing UDFs in AWS Batch. This lowers the barrier to
 cloud computing and allows users to launch massive compute workloads at
 scale from within their Python environment.
 
+Examples
+--------
+
+In this section, we will present a few use-cases of `Cloudknot`.
+We will start with examples that have minimal software and data dependencies, and increase the complexity by adding first data dependencies and subsequently complex software dependencies.
+
+
+Simulations
+~~~~~~~~~~~
+Simulation use-cases are straightforward. In contrast to `pywren`, simulations executed with `Cloudknot` do not have to comply with any particular memory or time limitations.
+While `pywren`'s limitations stem from the use of the AWS Lambda service.
+
+
+Data Dependencies: Analysis of magnetic resonance imaging data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Dependency of individual tasks on data can be addressed by preloading the data into object storage on S3, and the downloading of individual bits of data needed to complete each task  into the individual worker machines. For example, we implemented an analysis pipeline for human MRI data.
+
+We replicated the pipeline that we used in a previous study [mehta2017comparative]_. This allows us to compare the performance of `Cloudknot` directly against the performance of several alternative systems for distributed computing: Spark [Zaharia2010-rp]_, Myria [Halperin2014-vu]_ and Dask [Rocklin2015-ra].
+
+
+
+Two important caveats to this analysis An important caveat is that the timing data for the other systems is from early 2017, and some of these systems have evolved since then.
+
+
+Data and software dependencies: analysis of microscopy data
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. In this example,
+
+
+
+
+Acknowledgements
+----------------
+
 References
 ----------
-
-
