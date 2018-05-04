@@ -103,6 +103,8 @@ How allofplos uses corpora and parses articles
 -  Use Corpus & Article classes together to rapidly iterate through
    files
 -  Query the full-text of the article using article.tree & XPath
+-  Query the corpus using *peewee* ORM
+-  Included "starter" SQLite database
 -  SQLite database constructor available
 -  Use case examples from inside PLOS
 
@@ -111,6 +113,7 @@ Relevant external links
 
 -  allofplos on `GitHub <https://github.com/PLOS/allofplos>`__
 -  allofplos on `PyPI <https://pypi.python.org/pypi/allofplos>`__
+-  allofplos on `DockerHub <https://hub.docker.com/r/plos/allofplos/>`__
 -  allofplos `tutorial <https://github.com/eseiver/xml_tutorial>`__ and
    `slides <https://github.com/eseiver/xml_tutorial/blob/master/allofplos_presentation%20slides.pdf>`__
    from The Hacker Within at UC Berkeley, Nov 2017
