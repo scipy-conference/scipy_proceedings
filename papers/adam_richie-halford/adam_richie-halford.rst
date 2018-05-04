@@ -98,8 +98,7 @@ scale from within their Python environment.
 Examples
 --------
 
-In this section, we will present a few use-cases of `Cloudknot`.
-We will start with examples that have minimal software and data dependencies, and increase the complexity by adding first data dependencies and subsequently complex software dependencies.
+In this section, we will present a few use-cases of `Cloudknot`. We will start with examples that have minimal software and data dependencies, and increase the complexity by adding first data dependencies and subsequently complex software and resource dependencies.
 
 
 Simulations
@@ -116,20 +115,24 @@ Dependency of individual tasks on data can be addressed by preloading the data i
 We replicated the pipeline that we used in a previous study [mehta2017comparative]_. This allows us to compare the performance of `Cloudknot` directly against the performance of several alternative systems for distributed computing: Spark [Zaharia2010-rp]_, Myria [Halperin2014-vu]_ and Dask [Rocklin2015-ra].
 
 
-
-Two important caveats to this analysis An important caveat is that the timing data for the other systems is from early 2017, and some of these systems have evolved since then.
+Two important caveats to this analysis: the first is that the analysis with the other systems was all conducted on a 16-node cluster (each node was an AWS r3.2xlarge instance), and there is indication that the benchmark code would run faster with more nodes. Notably, even the largest amount of data (25 subjects) was executed in `Cloudknot` using two instances of the r4.16xlarge type -- each with 64 vCPUs and 488 GB of RAM. In terms of RAM, this is the equivalent of a 16 node cluster of r3.2xlarge. So AWS chooses not to dispatch more resources.  The other is that that the timing data for the other systems is from early 2017, and some of these systems have evolved and improved since.
 
 
 Data and software dependencies: analysis of microscopy data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. In this example,
+The MRI example demonstrates the use of a large and complex dataset. In addition, `Cloudknot` can manage complex software dependencies. Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. These fields often rely on the ImageJ software. This software, written in Java, can be scripted using Jython. However, this requires installation of the ImageJ Jython run-time.
+Because `Cloudknot` relies on docker, this installation can be managed using the command line interface (i.e. `wget`). Once a docker image is created that contains the software dependencies for a particular analysis, Python code can be written on top of it to execute system calls that will run the analysis. This is the approach taken here. We do not provide a quantitative benchmark for this example.
 
+Because of the data size in this case, a custom AMI had to be created from the AWS Batch AMI, that includes a larger volume (Batch AMI volumes are limited to XXX GB of disk-space).
 
+In summary: rather complex sets of dependencies both in terms of the software required, as well as the data and resources that are required can be managed with the combination of docker, AWS and `Cloudknot`, but putting together such combinations may require more work and more expertise in managing each of these parts.
 
 
 Acknowledgements
 ----------------
+This work was funded through a grant from the Gordon & Betty Moore Foundation and the Alfred P. Sloan Foundation to the University of Washington eScience Institute. Thanks to Chad Curtis and Elizabth Nance for the collaboration on the implementation of a Cloudknot pipeline for analysis of microscopy data.
+
 
 References
 ----------
