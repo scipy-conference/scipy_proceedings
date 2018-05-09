@@ -155,7 +155,7 @@ open-source, distributed under BSD license. The source code can be found
 https://github.com/FOSSEE/online_test/
 
 
-.. figure:: yaksh_login.png
+.. figure:: yaksh_login.PNG
    :scale: 30%
    :height: 919
    :width: 1914
@@ -165,7 +165,7 @@ https://github.com/FOSSEE/online_test/
    it. :label:`fig:yaksh-login`
 
 
-.. figure:: yaksh_mcc_mcq.png
+.. figure:: yaksh_mcc_mcq.PNG
    :scale: 30%
    :height: 916
    :width: 1914
@@ -175,7 +175,7 @@ https://github.com/FOSSEE/online_test/
    yaksh. :label:`fig:yaksh-mcq`
 
 
-.. figure:: yaksh_coding.png
+.. figure:: yaksh_coding.PNG
    :scale: 30%
    :height: 920
    :width: 1893
@@ -184,7 +184,7 @@ https://github.com/FOSSEE/online_test/
    The interface for a programming question on yaksh. :label:`fig:yaksh-code`
 
 
-.. figure:: yaksh_fill_in_the_blanks.png
+.. figure:: yaksh_fill_in_the_blanks.PNG
    :scale: 30%
    :height: 918
    :width: 1918
@@ -193,7 +193,7 @@ https://github.com/FOSSEE/online_test/
    The interface for a fill in the blank question on yaksh. :label:`fig:yaksh-fill`
 
 
-.. figure:: yaksh_monitor.png
+.. figure:: yaksh_monitor.PNG
    :scale: 30%
    :height: 919
    :width: 1908
