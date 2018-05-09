@@ -217,11 +217,181 @@ monitoring a running quiz.
 Installation and setup
 ~~~~~~~~~~~~~~~~~~~~~~
 
-XXX
+Deployment of a web application for temporary use as well as for production should be as easy as possible. There are a couple of different ways of setting up Yaksh:
+
+- Set up a trial instance with Docker
+- Set up a trial instance without Docker
+- Set up a production instance using Docker and Docker compose.
+
+The deployment procedure has been boiled down to a limited number of commands using the 'invoke' python package to make the deployment as easy as possible.
+
+Prerequisites:
+
+1. Ensure that Python is available.
+2. Ensure `pip <https://pip.pypa.io/en/latest/installing.html>`__ is
+   installed.
+3. Ensure Docker is installed
+
+
+Installation:
+
+1. Install yaksh
+
+   -  Clone the repository
+
+      ::
+
+          $ git clone https://github.com/FOSSEE/online_test.git
+
+   -  Go to the online\_test directory
+
+      ::
+
+          $ cd ./online_test
+
+   -  Install the dependencies
+
+      -  For Python 2 use:
+
+         ::
+
+             $ pip install -r ./requirements/requirements-py2.txt
+
+      -  For Python 3 (recommended) use:
+
+         ::
+
+             $ pip install -r ./requirements/requirements-py3.txt
+
+Quickstart:
+
+This setup method allows a user to setup a local instance of Yaksh to try the platform for a limited number of users.
+
+1. Start up the code server that executes the user code safely:
+
+   -  To run the code server in a sandboxed docker environment, run the
+      command, this method is recommended:
+
+      ::
+
+          $ invoke start
+
+   -  Make sure that you have Docker installed on your system
+      beforehand. `Docker
+      Installation <https://docs.docker.com/engine/installation/#desktop>`__
+
+   -  To run the code server without docker, locally use:
+
+      ::
+
+          $ invoke start --unsafe
+
+   -  Note this command will run the yaksh code server locally on your
+      machine and is susceptible to malicious code. You will have to
+      install the code server requirements in sudo mode.
+
+2. On another terminal, run the application using the following command:
+
+   ::
+
+       $ invoke serve
+
+   -  *Note:* The serve command will run the django application server
+      on the 8000 port and hence this port will be unavailable to other
+      processes.
+
+3. Open your browser and open the URL ``http://localhost:8000/exam``
+
+4. Login as a teacher to edit the quiz or as a student to take the quiz
+   Credentials:
+
+   -  Student - Username: student \| Password: student
+   -  Teacher - Username: teacher \| Password: teacher
+
+5. User can also login to the Default Django admin using;
+
+   -  Admin - Username: admin \| Password: admin
+
+
+Production Setup with Docker:
+
+1. Clone this repository and cd to the cloned repo.
+
+   ::
+
+       $ git clone  https://github.com/FOSSEE/online_test.git
+
+2. Rename the ``.sampleenv`` to ``.env``
+
+3. In the ``.env`` file, uncomment the following and replace the values (please keep the remaining settings as is);
+
+   ::
+
+       DB_ENGINE=mysql # Or psycopg (postgresql), sqlite3 (SQLite)
+       DB_NAME=yaksh
+       DB_USER=root
+       DB_PASSWORD=mypassword # Or the password used while creating a Database
+       DB_PORT=3306
+
+4. Install `Docker Compose <https://docs.docker.com/compose/install/>`__
+
+5. Rename the ``.sampleenv`` to ``.env``
+
+6. In the ``.env`` file, uncomment all the values and keep the default values as is.
+
+7. Go to the ``docker`` directory where the project is located:
+   
+   ::
+
+       cd /path/to/online_test/docker
+
+8. Build the docker images
+
+   ::
+
+       invoke build
+
+9. Run the containers and scripts necessary to deploy the web
+   application
+
+   ::
+
+       invoke begin
+
+10. Make sure that all the containers are ``Up`` and stable
+
+   ::
+
+       invoke status
+
+11. Run the containers and scripts necessary to deploy the web
+   application, ``--fixtures`` allows you to load fixtures.
+
+   ::
+
+       invoke deploy --fixtures
+
+12. Stop the containers, you can use ``invoke restart`` to restart the containers without removing them
+
+   ::
+
+       invoke halt
+
+13. Remove the containers
+
+   ::
+
+       invoke remove
+
+14. You can use ``invoke --list`` to get a list of all the available commands
+
 
 The demo course/exams
 ~~~~~~~~~~~~~~~~~~~~~
 
+Yaksh allows moderators to create a Demo Course by clicking on the 'Create Demo Course' button available on the dashboard.
+
+This actions sets up a Demo Course and associated Modules, Lessons, Quizzes and Questions.
 
 Basic features
 ---------------
