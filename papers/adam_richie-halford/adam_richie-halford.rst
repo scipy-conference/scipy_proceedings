@@ -8,25 +8,25 @@
 
 :bibliography: mybib
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+------------------------------------------------------------------
+Cloudknot: A Python Library to Run your Existing Code on AWS Batch 
+------------------------------------------------------------------
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
-
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+   We introduce Cloudknot, a software library that simplifies cloud-based
+   distributed computing by programmatically executing user-defined functions
+   (UDFs) in AWS Batch. It takes as input a Python function, packages it as a
+   container, creates all the necessary AWS constituent resources to submit
+   jobs, monitors their execution and gathers the results, all from within the
+   Python environment. Cloudknot overcomes limitations of previous similar
+   libraries, such as pywren, that runs UDFs on AWS Lambda, because most data
+   science workloads exceed the AWS Lambda limits on execution time, RAM, and
+   local storage.
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   cloud computing, Amazon AWS
 
 Introduction
 ------------
