@@ -14,15 +14,16 @@ Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 
 .. class:: abstract
 
-   We introduce Cloudknot, a software library that simplifies cloud-based
-   distributed computing by programmatically executing user-defined functions
-   (UDFs) in AWS Batch. It takes as input a Python function, packages it as a
-   container, creates all the necessary AWS constituent resources to submit
-   jobs, monitors their execution and gathers the results, all from within the
-   Python environment. Cloudknot overcomes limitations of previous similar
-   libraries, such as pywren, that runs UDFs on AWS Lambda, because most data
-   science workloads exceed the AWS Lambda limits on execution time, RAM, and
-   local storage.
+   We introduce Cloudknot, a software library that simplifies
+   cloud-based distributed computing by programmatically executing
+   user-defined functions (UDFs) in AWS Batch. It takes as input
+   a Python function, packages it as a container, creates all the
+   necessary AWS constituent resources to submit jobs, monitors their
+   execution and gathers the results, all from within the Python
+   environment. Cloudknot overcomes limitations of previous similar
+   libraries, such as pywren, that runs UDFs on AWS Lambda, because most
+   data science workloads exceed the AWS Lambda limits on execution
+   time, RAM, and local storage.
 
 .. class:: keywords
 
@@ -51,13 +52,31 @@ lifting these limitations.
 Methods
 -------
 
-Cloudknot employs the single program, multiple data (SPMD) paradigm
-to achieve parallelism. A Python user-defined function (UDF) is
-automatically wrapped in a command line interface (CLI) and packaged
-into a Docker container, together with its dependencies. The container
-is uploaded into the AWS Elastic Container Registry (ECR), and the
-location of this container on AWS ECR is supplied as an AWS Batch job
-definition.
+The primary object in cloudknot is the `Knot`, which employs the single
+program, multiple data (SPMD) paradigm to achieve parallelism. In
+this section, we describe cloudknot's approach to establishing the
+single program (SP) and managing the (MD). `Knot`'s user-facing API
+and interactions with cloud-based resources are depicted in Figure
+:ref:`fig.workflow`.
+
+.. figure:: figures/cloudknot_workflow.svg
+
+   Cloudknot's SPMD workflow. The left two columns depict steps
+   cloudknot takes to create the SP. The right columns depicts
+   cloudknot's management of the MD. Blue rounded squares represent
+   components of cloudknot's user-facing API. Yellow circles represent
+   AWS resources. Grey document shapes represent containers, templates,
+   or data used to communicate with cloud resources.
+
+To create the single program, `Knot` takes a user-defined function (UDF)
+as input, wraps it in a command line interface (CLI) and packages it,
+along with its dependencies, into a Docker container. The container is
+uploaded into the Amazon Elastic Container Registry (ECR). Separately,
+`Knot` uses an AWS CloudFormation template to create the AWS resources
+required by AWS Batch.
+.. Comment: Should we list the resource types required by batch here?
+`Knot` passes the location of the Docker container on AWS ECR to the AWS
+Batch Job Definition.
 
 A list of inputs (i.e. the MD in SPMD) is provided to AWS Batch, and
 the job definition is executed in parallel on each element of the list.
