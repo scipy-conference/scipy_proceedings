@@ -69,17 +69,27 @@ and interactions with cloud-based resources are depicted in Figure
    templates, or data used to communicate with cloud resources.
    :label:`fig.workflow`
 
-To create the single program, `Knot` takes a user-defined function (UDF)
-as input, wraps it in a command line interface (CLI) and packages it,
-along with its dependencies, into a Docker container. The container is
-uploaded into the Amazon Elastic Container Registry (ECR). Separately,
-`Knot` uses an AWS CloudFormation template to create the AWS resources
-required by AWS Batch.
-.. Comment: Should we list the resource types required by batch here?
-`Knot` passes the location of the Docker container on AWS ECR to the AWS
-Batch Job Definition.
+`Knot` creates the single program on initialization, taking a
+user-defined function (UDF) as input and wraps it in a command line
+interface (CLI) that downloads data from an Amazon S3 bucket specified
+by an input URL. The UDF is also wrapped in a Python decorator that
+sends its output back to an S3 bucket. So in total, the command line
+program downloads input data from S3, executes the UDF, and sends output
+back to S3. `Knot` then packages the CLI, along with its dependencies,
+into a Docker container. The container is uploaded into the Amazon
+Elastic Container Registry (ECR). Separately, `Knot` uses an AWS
+CloudFormation template to create the AWS resources required by AWS
+Batch. `Knot` passes the location of the Docker container on AWS ECR to
+the AWS Batch Job Definition. Cloudknot's use of Docker allows it to
+handle non-trivial software and data dependencies (see the microscopy
+examples later in this paper).
 
-A list of inputs (i.e. the MD in SPMD) is provided to AWS Batch, and
+To operate on the MD, the `Knot.map()` method distributes serialized
+multiple inputs to S3 and launches an AWS Batch array job (or
+optionally, separate individual Batch jobs) to execute the program over
+these data.
+
+A sequence of inputs (the MD) is provided to AWS Batch, and
 the job definition is executed in parallel on each element of the list.
 Cloudknot uses Amazon Simple Storage Service (S3) as an intermediary,
 storing the inputs in a format that conforms to the expectations of the
@@ -148,8 +158,7 @@ Two important caveats to this analysis: the first is that the analysis with the 
 Data and software dependencies: analysis of microscopy data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MRI example demonstrates the use of a large and rather complex dataset. In addition, `Cloudknot` can manage complex software dependencies. Researchers in cell biology, molecular engineering and nano-engineering are also increasingly relying on methods that generate large amounts of data and on analysis that requires large amounts of compute power. For example, in experiments that evaluate the mobility of synthetically designed nano-particles in biological tissue [Nance2017-xp, Nance2012-nu]_, researchers may record movies of microscopic images of the tissue at high spatial and temporal resolution and with wide field of view, resulting in large amounts image data, often stored in multiple large image files. To analyze these experiments, researchers rely on software implemented in ImageJ for particle segmentation and tracking, such as TrackMate :cite:`Tinevez2017-ti`. However, when applied to large amounts of data, using TrackMate serially in each experiment can be prohibitively time consuming. One solution is to divide the movies spatially into smaller field of view movies, and analyze them in parallel :cite:`Curtis2018`.
-
+The MRI example demonstrates the use of a large and rather complex dataset. In addition, `Cloudknot` can manage complex software dependencies. Researchers in cell biology, molecular engineering and nano-engineering are also increasingly relying on methods that generate large amounts of data and on analysis that requires large amounts of compute power. For example, in experiments that evaluate the mobility of synthetically designed nano-particles in biological tissue :cite:`Nance2017-xp`, :cite:`Nance2012-nu`, researchers may record movies of microscopic images of the tissue at high spatial and temporal resolution and with wide field of view, resulting in large amounts image data, often stored in multiple large image files. To analyze these experiments, researchers rely on software implemented in ImageJ for particle segmentation and tracking, such as TrackMate :cite:`Tinevez2017-ti`. However, when applied to large amounts of data, using TrackMate serially in each experiment can be prohibitively time consuming. One solution is to divide the movies spatially into smaller field of view movies, and analyze them in parallel :cite:`Curtis2018`.
 
 Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. These fields often rely on the ImageJ software. This software, written in Java, can be scripted using Jython. However, this requires installation of the ImageJ Jython run-time.
 Because `Cloudknot` relies on docker, this installation can be managed using the command line interface (i.e. `wget`). Once a docker image is created that contains the software dependencies for a particular analysis, Python code can be written on top of it to execute system calls that will run the analysis. This is the approach taken here. We do not provide a quantitative benchmark for this example.
