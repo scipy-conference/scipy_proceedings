@@ -154,49 +154,73 @@ Yaksh is created and maintained by the Python team at FOSSEE
 open-source, distributed under BSD license. The source code can be found
 https://github.com/FOSSEE/online_test/
 
-XXX old figures included here as examples.
 
 .. figure:: yaksh_login.png
-   :alt: Yaksh login screen.
+   :scale: 30%
+   :height: 919
+   :width: 1914
+   :alt:  Login screen
 
    The Yaksh application login screen with a video on how one can use
    it. :label:`fig:yaksh-login`
 
-.. figure:: yaksh-mcq.png
-   :alt: Yaksh interface for an MCQ question.
+
+.. figure:: yaksh_mcc_mcq.png
+   :scale: 30%
+   :height: 916
+   :width: 1914
+   :alt: MCQ interface
 
    The interface for a multiple-choice question on
    yaksh. :label:`fig:yaksh-mcq`
 
-.. figure:: yaksh-code.png
-   :alt: Yaksh interface for a programming question.
+
+.. figure:: yaksh_coding.png
+   :scale: 30%
+   :height: 920
+   :width: 1893
+   :alt: Code interface
 
    The interface for a programming question on yaksh. :label:`fig:yaksh-code`
 
+
+.. figure:: yaksh_fill_in_the_blanks.png
+   :scale: 30%
+   :height: 918
+   :width: 1918
+   :alt: Fill in the blanks interface
+
+   The interface for a fill in the blank question on yaksh. :label:`fig:yaksh-fill`
+
+
 .. figure:: yaksh_monitor.png
-   :alt: Yaksh interface for monitoring student progress.
+   :scale: 30%
+   :height: 919
+   :width: 1908
+   :alt: Monitor interface
 
    The moderator interface for monitoring student progress during an exam on
    yaksh. :label:`fig:yaksh-monitor`
 
-XXX Examples showing how to put in an image and how to refer it.  Redo this.
-
 Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
 Fig. :ref:`fig:yaksh-mcq` shows the interface for an MCQ question.
+
 Fig. :ref:`fig:yaksh-code` shows the interface for a programming question.
+
+Fig. :ref:`fig:yaksh-fill` shows the interface for an Fill in the blank question.
 
 Fig. :ref:`fig:yaksh-monitor` shows a typical moderator interface while
 monitoring a running quiz.
 
 
 Installation and setup
-~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
 
 XXX
 
 The demo course/exams
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
 
 Basic features
@@ -214,30 +238,214 @@ Basic features
   - Assignment upload.
 
 
-
-
-
 Internal design
-~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~
 
+Yaksh has two important modules:-
 
-The two essential pieces:
+- Web server
+
+  A django server for client interaction.
 
 - Code server
-- Django interface
+
+  A tornado server for code evaluation.
 
 
-Code server internal details and tornado interface.
+Web Server
+----------
 
-- Sandboxing.
+Django is a high-level Python Web framework. Django makes it is easy to create web applications, handles basic security issues, provides basic authentication system.
+
+For client interaction we need to focus on some areas i.e.
+
+- How to store the information
+- How a user interacts with the system
+
+To store the information we need a database. Django provides Object-relational mapping(ORM) which makes it easy to interact with the database instead of traditional SQL query approach.
+
+Django has a view controller to handle all the requests sent from the client side.
+A view then interacts with the database if any database data is required, collects all the data and sends the data to the templates which is then rendered for the client.
+
+Code Server
+-----------
+
+Code Server is an important part of yaksh. All the code evaluations are done through code server.
+We have used Tornado web framework for asynchronous process generation.
+Tornado is a Python web framework and asynchronous networking library. Tornado generates a code server process queue depending on the number of code server processes. This queue is used to keep track of the code server processes. Once a process finishes its job it is dequeued.
+
+A settings file is provided which contains information such as:
+
+- number of code server processes required to process a code (defaults to 5).
+- server timeout if a code runs too long then server times out with the specified time (defaults to 4 seconds).
+- dictionary of code evaluators based on programming language of a question i.e. Python, Cpp, Java etc and test case type i.e. Standard Assert, Standard Input/Output, Hook based test case.
+
+Code Server consists of several modules:
+
+- Grader
+- Language Registry
+- Evaluators
+
+Code Server takes metadata in json format.
+Json metadata includes programming language, user answer, files(if any for file based questions), test case data i.e. test case type and test cases.
+
+**Grader**
+
+Code server sends all the metadata to the Grader. Grader gets the evaluator from the metadata 
+i.e. the evaluator which will evaluate the code.
+
+**Language Registry**
+
+The evaluator instance in Grader is provided by Language Registry.
+Language Registry takes question programming language type and test case type and generates a evaluator instance using the dictionary mapping from settings file and returns the evaluator instance to the Grader.
+
+**Evaluators**
+
+Evaluators are selected based on the programming language and test case type set during the question creation.
+
+For ex. say *python* language and *standard assert* test case type are set during question creation, then python assertion evaluator is used for evaluating python code.
+
+For each programming language and test case type separate evaluator classes are available.
+
+Each evaluator class subclasses BaseEvaluator.
+The BaseEvaluator class includes common functionality such as running a code using python subprocess, creating a file and writing user code in the file, setting the file as executable.
+
+Several important aspects handled in code evaluation:
+
+- Sandboxing
+
+  A code might be malicious i.e it might contain instructions which can access the system information and can harm the system. To avoid such situation, all the code server process run as a nobody so that the code does not damage the system.
+
 - Handling infinite loops.
+
+  In a code, due to improper condition in loops there are chances that it might run infinitely.
+  To avoid this, code is executed within a specific time limit. If the code execution is not finished in the specified time, a signal alarm is triggered to stop the code execution sending a message to the user that code might contain an infinite loop.
+
 - Docker.
+
+  To make the code evaluation more secure all the code evaluation are done inside docker.
+  Docker can also be used to limit the use of system resources such as cpu utilization, memory utilization etc.
+
 - Logging of the answers.
 
 
-Supporting a new language, the Grader etc.
+Supporting a new language
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Django models and overall approach.
+Adding a new language is easy. In the settings file you need to add mapping for the evaluator corresponding to the language. An example is shown below
+
+.. code-block:: python
+
+   code_evaluators = {
+    "python": {"standardtestcase": "yaksh.python_assertion_evaluator.PythonAssertionEvaluator",
+               "stdiobasedtestcase": "yaksh.python_stdio_evaluator.PythonStdIOEvaluator",
+               "hooktestcase": "yaksh.hook_evaluator.HookEvaluator"
+               },
+    "new_language": {
+                "standardtestcase": "yaksh.new_language_assertion_evaluator.New_languageAssertionEvaluator",
+                "stdiobasedtestcase": "yaksh.new_language_stdio_evaluator.New_languageStdIOEvaluator",
+                "hooktestcase": "yaksh.hook_evaluator.HookEvaluator"
+               }
+              }
+
+In the given example 
+
+python is the programming language.
+
+standardtestcase, stdiobasedtestcase, hooktestcase are the test case type which are mapped to corresponding evaluator class. Here yaksh is the directory, python_assertion_evaluator is the file and PythonAssertionEvaluator is the class which contains evaluation related code.
+
+Separate evaluator files need to be created for all the test case types except hook test case.
+
+An evaluator class should have four methods __init__, teardown, compile_code and check_code.
+
+- __init__ method is used to extract all the metadata such as user answer, test cases, files (if any for file based questions), weightage (float value), partial_grading (boolean value).
+- teardown method is used to delete all the files that are not relevant once the execution is done.
+- All the code compilation task will be done in compile_code method. No need to add this method if there is no compilation procedure.
+- All the code execution task will be done in check_code method. This method should return three values.
+
+  - success (Boolean value) - indicating if code was executed successfully, correctly
+  - weight (Float value) - indicating total weight of all successful test cases
+  - error (String value) - error message if success is false
+
+
+Yaksh models
+-------------
+
+A model is a Python class that subclasses django.db.models.Model representing the database table.
+Each attribute of the model represents a database field.
+
+Model classes for yaksh are as follows:
+
+- User
+  
+  This is the default model provided by django for storing username, first name, last name, password etc.
+
+- Profile
+
+  This model consists of user information such as institute, roll number, department etc and a OnetoOne relation with the user model to associate the profile with the specific user.
+
+- Question
+
+  This model consists of question information such as description, points, language etc and a foreign key relation with the user model so that each question is associated with a specific user.
+
+- TestCase
+  
+  This model contains foreign key relation to the Question model and the test case type.
+
+  Different test case models are available which subclasses the TestCase model. They are:
+
+  - StandardTestCase
+  - StdIOBasedTestCase
+  - McqTestCase
+  - HookTestCase
+  - IntegerTestCase
+  - StringTestCase
+  - FloatTestCase
+  - ArrangeTestCase
+
+- Course
+  
+  This model contains course information such as course name, enrollment type (open enrollment or enrollment request), start time and end time for course enrollment etc.
+
+  This model has ManytoMany relation with user model to store enrolled students, requested students, rejected students and ManytoMany relation with LearningModule model to store learning modules.
+
+- Quiz
+  
+  This model contains quiz information such as start time, end time of the quiz, quiz duration,
+  quiz creator, passing percentage etc.
+
+- QuestionPaper
+  
+  This model contains foreign key association with the quiz. This model also has ManytoMany relation with questions i.e fixed questions added to the questionpaper, random questions set to be added to the questionpaper. Along with that it also has total marks etc.
+
+- AnswerPaper
+  
+  This model contains information such as user, questions, question paper, course, start time, end time, marks obtained, pass status (boolean) etc.
+
+- Answer
+  
+  This model contains information such as question to which user answered, user answer, error message, marks, correct etc.
+
+- Lesson
+
+  A lesson can be any markdown text with/or an embedded video of a particular topic.
+
+  This model contains lesson information such as lesson name, description (markdown text) and
+  foreign key association with user model.
+
+- LearningUnit
+  
+  A learning unit can either be a lesson or a quiz.
+
+  This model contains lesson, quiz, order i.e order in which the units will be added to the learning module, check prerequisite i.e. check if previous unit is completed this is required once the unit is added to a learning module.
+
+- LearningModule
+
+  A learning module contains learning units.
+
+  This model contains module information such as name, description (markdown text), order i.e order in which the modules will be added to the course.
+
+**Note:** order attribute in LearningUnit and LearningModule models indicates the order of appearance of a unit or a module.
 
 Use of docker.
 
