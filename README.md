@@ -237,12 +237,13 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2018` branch 
+- Check out the upstream `2018` branch
+    - `cd scipy_proceedings/`
     - `git checkout -b 2018 --track upstream/2018`
 
 #### Creating a new branch based off of `2018`
 
-If you are submitting only one paper, you can use the `2018` directly.
+If you are submitting only one paper, you can use the `2018` branch directly.
 
 Otherwise, you will need to create a new branch based on `2018` and set its
 upstream to origin.
@@ -287,9 +288,9 @@ submission procedure ([see below](creating-build-system-prs)).
 
 #### Create a paper PR
 
-- Once you are ready to submit your paper, file a pull request on GitHub.
-  **Please ensure that you file against the correct branch**
-- Create a pull-request against our `2018` branch.
+- Once you are ready to submit your paper, make a pull request on GitHub.
+  **Please ensure that you file against the correct branch.**
+- Create a pull request against our `2018` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
@@ -309,13 +310,13 @@ triggers a new build on the provided [build server](http://procbuild.scipy.org).
 
 #### Check your paper's build
 
-We encourage reviewers to review the pdfs built on our 
+We encourage reviewers to review the PDFs built on our 
 [build server](http://procbuild.scipy.org). 
 
-You should regularly check to see if the papers that you build locally match the
-paper that you see on the server. 
+You should regularly check to see if the paper(s) that you build locally match the
+paper(s) that you see on the server. 
 
-If it is not the same please immediately contact us with a GitHub issue
+If it is not the same, please immediately contact us with a GitHub issue
 describing the discrepancy. Please include screenshots and an explanation of the
 differences. For best results, please [@-mention the Proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
