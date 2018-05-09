@@ -59,14 +59,15 @@ single program (SP) and managing the (MD). `Knot`'s user-facing API
 and interactions with cloud-based resources are depicted in Figure
 :ref:`fig.workflow`.
 
-.. figure:: figures/cloudknot_workflow.svg
+.. figure:: figures/cloudknot_workflow.pdf
 
    Cloudknot's SPMD workflow. The left two columns depict steps
    cloudknot takes to create the SP. The right columns depicts
    cloudknot's management of the MD. Blue rounded squares represent
    components of cloudknot's user-facing API. Yellow circles represent
-   AWS resources. Grey document shapes represent containers, templates,
-   or data used to communicate with cloud resources.
+   AWS resources. Grey document shapes represent containers,
+   templates, or data used to communicate with cloud resources.
+   :label:`fig.workflow`
 
 To create the single program, `Knot` takes a user-defined function (UDF)
 as input, wraps it in a command line interface (CLI) and packages it,
@@ -135,9 +136,9 @@ As an example, we implemented a pipeline for analysis of human MRI data. Human M
 
 For example, diffusion MRI (dMRI) is a method that measures the properties of the connections between different regions of the brain. Over the last few decades, this method has been used to establish the role of these connections in many different cognitive and behavioral properties of the human brain, and to delineate the role that the biology of these connections plays in neurological and psychiatric disorders [XXX]. Because of the interest in these connections, several large consortium efforts for data collection have aggregated large datasets of human dMRI data from multiple different subjects.
 
-In analysis of dMRI data, the first few steps are done at the individual level: selection of regions of interest within each image, denoising and initial modeling of the data. These are the steps that were implemented in the pipeline that we used in a previous study [mehta2017comparative]_, and we reused this pipeline in the current study. This allows us to compare the performance of `Cloudknot` directly against the performance of several alternative systems for distributed computing that were studied in our previous work: Spark [Zaharia2010-rp]_, Myria [Halperin2014-vu]_ and Dask [Rocklin2015-ra].
+In analysis of dMRI data, the first few steps are done at the individual level: selection of regions of interest within each image, denoising and initial modeling of the data. These are the steps that were implemented in the pipeline that we used in a previous study :cite:`mehta2017comparative`, and we reused this pipeline in the current study. This allows us to compare the performance of `Cloudknot` directly against the performance of several alternative systems for distributed computing that were studied in our previous work: Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and Dask :cite:`Rocklin2015-ra`
 
-In `Cloudknot`, we used the reference implementation from this previous study written in Python and using methods implemented in Python and Cython in `Dipy` [Garyfallidis2014]_. In contrast to all of these other systems, essentially no changes had to be made to the reference implementation when using `Cloudknot`, except to download data from S3 into the individual instances. Parallelization was implemented only at the level of individual subjects, and a naive serial approach was taken at the level of each individual.
+In `Cloudknot`, we used the reference implementation from this previous study written in Python and using methods implemented in Python and Cython in `Dipy` :cite:`Garyfallidis2014`. In contrast to all of these other systems, essentially no changes had to be made to the reference implementation when using `Cloudknot`, except to download data from S3 into the individual instances. Parallelization was implemented only at the level of individual subjects, and a naive serial approach was taken at the level of each individual.
 
 As expected, with a small number of subjects this reference implementation is significantly slower with `Cloudknot` compared with the parallelized implementation in these other systems. But the relative advantage of these systems diminshes substantially as the number of subjects grows larger (Figure XXX), and the benefits of parallelization across subjects starts to be more substantial.
 
@@ -147,7 +148,7 @@ Two important caveats to this analysis: the first is that the analysis with the 
 Data and software dependencies: analysis of microscopy data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MRI example demonstrates the use of a large and rather complex dataset. In addition, `Cloudknot` can manage complex software dependencies. Researchers in cell biology, molecular engineering and nano-engineering are also increasingly relying on methods that generate large amounts of data and on analysis that requires large amounts of compute power. For example, in experiments that evaluate the mobility of synthetically designed nano-particles in biological tissue [Nance2017-xp, Nance2012-nu]_, researchers may record movies of microscopic images of the tissue at high spatial and temporal resolution and with wide field of view, resulting in large amounts image data, often stored in multiple large image files. To analyze these experiments, researchers rely on software implemented in ImageJ for particle segmentation and tracking, such as TrackMate [Tinevez2017-ti]_. However, when applied to large amounts of data, using TrackMate serially in each experiment can be prohibitively time consuming. One solution is to divide the movies spatially into smaller field of view movies, and analyze them in parallel [Curtis2018]_.
+The MRI example demonstrates the use of a large and rather complex dataset. In addition, `Cloudknot` can manage complex software dependencies. Researchers in cell biology, molecular engineering and nano-engineering are also increasingly relying on methods that generate large amounts of data and on analysis that requires large amounts of compute power. For example, in experiments that evaluate the mobility of synthetically designed nano-particles in biological tissue [Nance2017-xp, Nance2012-nu]_, researchers may record movies of microscopic images of the tissue at high spatial and temporal resolution and with wide field of view, resulting in large amounts image data, often stored in multiple large image files. To analyze these experiments, researchers rely on software implemented in ImageJ for particle segmentation and tracking, such as TrackMate :cite:`Tinevez2017-ti`. However, when applied to large amounts of data, using TrackMate serially in each experiment can be prohibitively time consuming. One solution is to divide the movies spatially into smaller field of view movies, and analyze them in parallel :cite:`Curtis2018`.
 
 
 Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. These fields often rely on the ImageJ software. This software, written in Java, can be scripted using Jython. However, this requires installation of the ImageJ Jython run-time.
