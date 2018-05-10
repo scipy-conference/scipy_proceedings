@@ -6,18 +6,23 @@
 
 :author: Prathamesh Salunke
 :email: pratham920@gmail.com
+:institution: FOSSEE IIT Bombay, Mumbai, India
 
 :author: Ankit Javalkar
 :email: ankitrj.iitb@gmail.com
+:institution: FOSSEE IIT Bombay, Mumbai, India
 
 :author: Aditya Palaparthy
 :email: aditya94palaparthy@gmail.com
+:institution: FOSSEE IIT Bombay, Mumbai, India
 
 :author: Mahesh Gudi
 :email: mahesh.p.gudi@gmail.com
+:institution: FOSSEE IIT Bombay, Mumbai, India
 
 :author: Hardik Ghaghada
 :email: hardy_the1@yahoo.com
+:institution: FOSSEE IIT Bombay, Mumbai, India
 
 
 --------------------------------------
@@ -396,16 +401,34 @@ This actions sets up a Demo Course and associated Modules, Lessons, Quizzes and 
 Basic features
 ---------------
 
+Features available in yaksh:
+
 - For a student.
-  - The generic interface and how quizzes etc. are taken.
+  
+  Student interface is fairly simple. For a student to attend a course first the student has to enroll in the course. A Course will have Modules which contains Lessons, Quiz or  Exercises. A Course has start and end time within which student has to start and complete the course. Student can view the course progress on the interface. Student can view the answerpaper for any quiz. Student can view the course grades and download the certificate for a particular course.
 
 - For an instructor
+  
+  Instructor interface provides following features:
 
-  - Different question types, their use.
-  - Stdio
-  - Assertion
-  - Philosophy of allowing multiple submissions to make it easier.
-  - Assignment upload.
+  - On the main dashboard an instructor can view the details of all the courses along with its quizzes and exercises i.e. total number of students attempting the quiz, passed students, failed students.
+  - Yaksh allows moderator to create a course with lessons, quizzes and practice exercises.
+  - Yaksh provides several languages support to the moderator. A moderator can choose one of them.
+  - For every language several question types are available:
+    - MCQ, MCC
+    - Programming
+    - Fill in the blanks
+    - Arrange the options
+    - Assignment upload
+  - Several test case type are available:
+    - Stdio test case
+    - Standard Assertion test case
+    - Hook based test case
+    - Mcq based test case
+    - Fill in the blanks test case
+      - Integer type
+      - String type
+      - Float type
 
 
 Internal design
@@ -437,37 +460,45 @@ To store the information we need a database. Django provides Object-relational m
 Django has a view controller to handle all the requests sent from the client side.
 A view then interacts with the database if any database data is required, collects all the data and sends the data to the templates which is then rendered for the client.
 
+
 Code Server
 -----------
 
-Code Server is an important part of yaksh. All the code evaluations are done through code server.
-We have used Tornado web framework for asynchronous process generation.
-Tornado is a Python web framework and asynchronous networking library. Tornado generates a code server process queue depending on the number of code server processes. This queue is used to keep track of the code server processes. Once a process finishes its job it is dequeued.
+Code Server is an important part of yaksh. All the code evaluations are done through code server. We have used Tornado web framework for asynchronous process generation. A settings file is provided which is used to get values required to start the tornado server and code evaluation procedure.
 
-A settings file is provided which contains information such as:
+This settings file contains information such as:
 
-- number of code server processes required to process a code (defaults to 5).
-- server timeout if a code runs too long then server times out with the specified time (defaults to 4 seconds).
+- number of code server processes required to process the code (defaults to 5).
+- server pool port, a common port for accessing the Tornado web server(defaults to 55555).
+- server host name, a server host for accessing the Tornado web server(defaults to http://localhost).
+- server timeout a code runs within this time (defaults to 4 seconds).
 - dictionary of code evaluators based on programming language of a question i.e. Python, Cpp, Java etc and test case type i.e. Standard Assert, Standard Input/Output, Hook based test case.
 
-Code Server consists of several modules:
 
-- Grader
-- Language Registry
-- Evaluators
+A Tornado server is started with the specified server host and server pool port from the settings. Django server connects to the tornado server and sends json metadata. Json metadata includes programming language, user answer, user output directory, files(if any for file based questions), test case data i.e. test case type and test cases as well as a unique id. Each submitted answer has a unique id associated with it which makes it easier to keep the track of the evalaution status whether it is completed or not. Tornado server then takes the json data and creates code server processes depending on the number of code server processes specified in the settings. A separate dictionary is maintained for each process storing the data such as process status (done, not started, runnning, unknown), result (success, test case weightage, error). Once the evaluation is done, the results are popped out. Sending a get request to the tornado server with the host url http://localhost:55555 gives the process status i.e. total, running and queued processes.
 
-Code Server takes metadata in json format.
-Json metadata includes programming language, user answer, files(if any for file based questions), test case data i.e. test case type and test cases.
+The json meta data is sent to the grader where the actual code evaluation procedure takes place. Code evalaution takes place in several steps:-
 
 **Grader**
 
-Code server sends all the metadata to the Grader. Grader gets the evaluator from the metadata 
-i.e. the evaluator which will evaluate the code.
+Grader extracts the data such as language, test case type, test cases, user directory path from json metadata sent to it. Grader creates the user directory from the path. Then it sends the test case type and language information to the language registry to get the evaluator. Once the evaluator is obtained, grader calls the evaluator and sends the test cases, user answer to the evaluator and code execution starts. Evaluator will be explained in the next section.
 
 **Language Registry**
 
-The evaluator instance in Grader is provided by Language Registry.
-Language Registry takes question programming language type and test case type and generates a evaluator instance using the dictionary mapping from settings file and returns the evaluator instance to the Grader.
+Language Registry takes programming language type and test case type and generates a evaluator instance using the dictionary mapping from settings file and returns the evaluator instance to the Grader.
+
+Dictionary mapping of evaluators is as shown below:
+
+.. code-block:: python
+
+   code_evaluators = {
+    "python": {"standardtestcase": "yaksh.python_assertion_evaluator.PythonAssertionEvaluator",
+               "stdiobasedtestcase": "yaksh.python_stdio_evaluator.PythonStdIOEvaluator",
+               "hooktestcase": "yaksh.hook_evaluator.HookEvaluator"
+               },
+              }
+
+For ex. say *python* language and *standard assert* test case type are set during question creation, then python assertion evaluator is instantiated from the dictionary mapping and the created instance is returned to grader.
 
 **Evaluators**
 
@@ -478,31 +509,31 @@ For ex. say *python* language and *standard assert* test case type are set durin
 For each programming language and test case type separate evaluator classes are available.
 
 Each evaluator class subclasses BaseEvaluator.
-The BaseEvaluator class includes common functionality such as running a code using python subprocess, creating a file and writing user code in the file, setting the file as executable.
+The BaseEvaluator class includes common functionality such as running a command using python subprocess, creating a file and writing user code in the file, setting the file as executable.
 
-Several important aspects handled in code evaluation:
+Several important aspects handled during code evaluation:
 
 - Sandboxing
 
-  A code might be malicious i.e it might contain instructions which can access the system information and can harm the system. To avoid such situation, all the code server process run as a nobody so that the code does not damage the system.
+  A code might be malicious i.e it might contain instructions which can access the system information and can damage the system. To avoid such situation, all the code server process run as a nobody so that the code does not damage the system.
 
-- Handling infinite loops.
+- Handling infinite loops
 
-  In a code, due to improper condition in loops there are chances that it might run infinitely.
-  To avoid this, code is executed within a specific time limit. If the code execution is not finished in the specified time, a signal alarm is triggered to stop the code execution sending a message to the user that code might contain an infinite loop.
+  Several times there are chances that in a code, due to improper condition in loops code might run infinitely. To avoid this, code is executed within a specific time limit. If the code execution is not finished in the specified time, a signal alarm is triggered to stop the code execution sending a message to the user that code might contain an infinite loop.
+  We use the signal module to trigger the SIGALARM with the server timeout value.
 
-- Docker.
+- Docker
 
   To make the code evaluation more secure all the code evaluation are done inside docker.
   Docker can also be used to limit the use of system resources such as cpu utilization, memory utilization etc.
 
-- Logging of the answers.
+- Logging of the answers
 
 
 Supporting a new language
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Adding a new language is easy. In the settings file you need to add mapping for the evaluator corresponding to the language. An example is shown below
+Adding a new language is relatively easy. In the settings file you need to add mapping for the evaluator corresponding to the language. An example is shown below
 
 .. code-block:: python
 
@@ -512,8 +543,8 @@ Adding a new language is easy. In the settings file you need to add mapping for 
                "hooktestcase": "yaksh.hook_evaluator.HookEvaluator"
                },
     "new_language": {
-                "standardtestcase": "yaksh.new_language_assertion_evaluator.New_languageAssertionEvaluator",
-                "stdiobasedtestcase": "yaksh.new_language_stdio_evaluator.New_languageStdIOEvaluator",
+                "standardtestcase": "yaksh.new_language_assertion_evaluator.new_languageAssertionEvaluator",
+                "stdiobasedtestcase": "yaksh.new_language_stdio_evaluator.new_languageStdIOEvaluator",
                 "hooktestcase": "yaksh.hook_evaluator.HookEvaluator"
                }
               }
@@ -524,7 +555,7 @@ python is the programming language.
 
 standardtestcase, stdiobasedtestcase, hooktestcase are the test case type which are mapped to corresponding evaluator class. Here yaksh is the directory, python_assertion_evaluator is the file and PythonAssertionEvaluator is the class which contains evaluation related code.
 
-Separate evaluator files need to be created for all the test case types except hook test case.
+Separate evaluator files needs to be created for all the test case types except hook test case.
 
 An evaluator class should have four methods __init__, teardown, compile_code and check_code.
 
@@ -542,9 +573,9 @@ Yaksh models
 -------------
 
 A model is a Python class that subclasses django.db.models.Model representing the database table.
-Each attribute of the model represents a database field.
+Each attribute of the model represents a database table field.
 
-Model classes for yaksh are as follows:
+Models for yaksh are as follows:
 
 - User
   
@@ -556,7 +587,7 @@ Model classes for yaksh are as follows:
 
 - Question
 
-  This model consists of question information such as description, points, language etc and a foreign key relation with the user model so that each question is associated with a specific user.
+  This model consists of question information such as description, points, language, partial_grading (boolean value) etc and a foreign key relation with the user model so that each question is associated with a specific user.
 
 - TestCase
   
@@ -565,13 +596,36 @@ Model classes for yaksh are as follows:
   Different test case models are available which subclasses the TestCase model. They are:
 
   - StandardTestCase
+
+    This model has field test case.
+
   - StdIOBasedTestCase
+
+    This model has fields expected input and expected output.
+
   - McqTestCase
+
+    This models has fields options and correct.
+
   - HookTestCase
+
+    This model has field hook code.
+
   - IntegerTestCase
+
+    This model has field correct.
+
   - StringTestCase
+
+    This model has fields correct and string check.
+
   - FloatTestCase
+
+    This model has fields correct and error margin.
+
   - ArrangeTestCase
+
+    This model has field options
 
 - Course
   
