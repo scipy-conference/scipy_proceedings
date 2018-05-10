@@ -144,6 +144,11 @@ Batch jobs) to execute the program over these data. When run, each batch
 job selects its own input, executes the UDF, and returns its serialized
 output to S3.
 
+|warning| Talk about S3 transfers within the data center. User shouldn't
+pay for transfer from S3 to instance and back. Only for transfer out of
+the data center (i.e. from local machine to S3 and back. Is that true?
+|warning|
+
 Finally, :code:`Knot.map()` downloads the output from S3 and returns
 it to the user. Since AWS Batch, and therefore cloudknot, allows
 arbitrarily long execution times, :code:`Knot.map()` returns a list
