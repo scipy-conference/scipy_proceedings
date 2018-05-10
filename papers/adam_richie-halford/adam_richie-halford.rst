@@ -29,6 +29,7 @@ Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 
    cloud computing, Amazon AWS
 
+
 Introduction
 ------------
 
@@ -39,25 +40,27 @@ the complexity and steep learning curve associated with a transition to
 cloud computing, it remains inaccessible. A number of Python libraries
 have sought to close this gap by allowing users to interact seamlessly
 with AWS resources from within their Python environment. For example
-Pywren enables users to run their existing Python code on AWS Lambda,
-providing convenient distributed execution for jobs that fall within
-the limits of this service (maximum 300 seconds of execution time, 1.5
-GB of RAM, 512 MB of local storage, and no root access). However, these
-limitations are impractical for many data-oriented workloads, that
-require more RAM and local storage, longer compute times, and complex
-dependencies. Here, we introduce a new Python library: cloudknot,
-that launches Python functions as jobs on the AWS Batch service, thereby
+pywren :cite:`jonas2017` enables users to run their existing Python
+code on AWS Lambda, providing convenient distributed execution for
+jobs that fall within the limits of this service (maximum 300 seconds
+of execution time, 1.5 GB of RAM, 512 MB of local storage, and no
+root access). However, these limitations are impractical for many
+data-oriented workloads, that require more RAM and local storage, longer
+compute times, and complex dependencies. Here, we introduce a new Python
+library: cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`, that
+launches Python functions as jobs on the AWS Batch service, thereby
 lifting these limitations.
+
 
 Methods
 -------
 
-The primary object in cloudknot is the :code:`Knot`, which employs the single
-program, multiple data (SPMD) paradigm to achieve parallelism. In
-this section, we describe cloudknot's approach to establishing the
-single program (SP) and managing the (MD). :code:`Knot`'s user-facing API
-and interactions with cloud-based resources are depicted in Figure
-:ref:`fig.workflow`.
+The primary object in cloudknot is the :code:`Knot`, which employs the
+single program, multiple data (SPMD) paradigm to achieve parallelism.
+In this section, we describe cloudknot's approach to establishing the
+single program (SP) and managing the multiple data (MD). :code:`Knot`'s
+user-facing API and interactions with cloud-based resources are depicted
+in Figure :ref:`fig.workflow`.
 
 .. figure:: figures/cloudknot_workflow.pdf
 
@@ -69,20 +72,69 @@ and interactions with cloud-based resources are depicted in Figure
    templates, or data used to communicate with cloud resources.
    :label:`fig.workflow`
 
+
+Single Program (SP)
+~~~~~~~~~~~~~~~~~~~
+
 :code:`Knot` creates the single program on initialization, taking a
-user-defined function (UDF) as input and wraps it in a command line
+user-defined function (UDF) as input and wrapping it in a command line
 interface (CLI) that downloads data from an Amazon S3 bucket specified
 by an input URL. The UDF is also wrapped in a Python decorator that
 sends its output back to an S3 bucket. So in total, the command line
 program downloads input data from S3, executes the UDF, and sends
 output back to S3. :code:`Knot` then packages the CLI, along with its
 dependencies, into a Docker container. The container is uploaded into
-the Amazon Elastic Container Registry (ECR). Separately, :code:`Knot`
-uses an AWS CloudFormation template to create the AWS resources required
-by AWS Batch. :code:`Knot` passes the location of the Docker container
-on AWS ECR to the AWS Batch Job Definition. Cloudknot's use of Docker
+the Amazon Elastic Container Registry (ECR). Cloudknot's use of Docker
 allows it to handle non-trivial software and data dependencies (see the
 microscopy examples later in this paper).
+
+Separately, :code:`Knot` uses an AWS CloudFormation template to create
+the AWS resources required by AWS Batch:
+
+- AWS Identity and Access Management (IAM) Roles
+
+  - A batch service IAM role to allow AWS Batch to make calls to other
+    AWS services on the user's behalf
+
+  - An ECS instance role to be attached to each container instance when
+    it is launched
+
+  - A EC2 Spot Fleet role to allow Spot Fleet to bid on, launch, and
+    terminate instances if the user chooses to use Spot Fleet instances
+    instead of dedicated EC2 instances.
+
+- An AWS Virtual Private Cloud (VPC) with subnets and a security group
+
+- An AWS Batch job definition specifying the job to be run. :code:`Knot`
+  passes the location of the Docker container on AWS ECR to this job
+  definition so that all jobs execute the SP.
+
+- An AWS Batch job queue that schedules jobs onto a compute environment.
+
+- An AWS Batch compute environment, which is a set of compute resources
+  that will be used to run jobs. The user may ask :code:`Knot` to
+  restrict the compute environment to only certain instance types (e.g.
+  ``c4.2xlarge``) or may choose a specific Amazon Machine Image (AMI)
+  to be loaded on each compute resource. Or thay may simply request a
+  minimum, desires, and maximum number of virtual CPUs and let AWS Batch
+  select and manage the EC2 instances.
+
+:code:`Knot` uses sensible defaults for the job definition and compute
+environment parameters so that the casual user may never need to concern
+themselves with selecting an instance type or specifying an AMI. More
+advanced users can their jobs' memory requirements, instance types, or
+AMIs. This might be necessary if the jobs require special hardware (e.g.
+GPGPU computing) or if the user wants more fine-grained control over
+which resources are launched.
+
+Finally, :code:`Knot` exposes AWS resource tags to the user so that
+they can assign metadata to each created resource. This facilitates
+management of cloudknot generated resources and allows the user to
+quickly recognize cloudknot resources in the AWS console.
+
+
+Multiple Data (MD)
+~~~~~~~~~~~~~~~~~~
 
 To operate on the MD, the :code:`Knot.map()` method serializes each
 element of the input and sends it to S3, organizing the data in a schema
@@ -98,23 +150,31 @@ arbitrarily long execution times, :code:`Knot.map()` returns a list
 of futures for the results, mimicking Python's concurrent futures'
 :code:`Executor` objects.
 
-Under the hood, these futures are intermittently querying S3 for
-the returned output. One can attach callbacks to the results. e.g.
-Do a reduction on the returned values.
+Under the hood, :code:`Knot.map()` creates a
+:code:`concurrent.futures.ThreadPoolExecutor` instance where each
+thread intermittently queries S3 for its returned output. The results
+are encapsulated in :code:`concurrent.futures.Future` objects, allowing
+asynchronous execution. The user can use :code:`Future` methods such
+as :code:`done()` and :code:`result()` to test for success or view the
+results. This also allows them to attach callbacks to the results using
+the :code:`add_done_callback()` method. For example a user may want to
+perform a local reduction on results generated on AWS Batch.
 
 
 API
 ---
 
-The above interactions with AWS resources are hidden from the user.
-The advanced or curious user can customize the Docker container or
-cloudformation template. But for moderate uses, here is an example
-of using the API
+|warning| The above interactions with AWS resources are hidden from the
+user. The advanced or curious user can customize the Docker container or
+cloudformation template. But for basic use cases, here is an example of
+using the API
 
 .. code-block:: python
 
    # Insert really awesome code example here
    import cloudknot as ck
+
+|warning|
 
 
 Results
@@ -149,6 +209,7 @@ In this section, we will present a few use-cases of cloudknot. We will start wit
 
 Simulations
 ~~~~~~~~~~~
+
 Simulation use-cases are straightforward. In contrast to pywren, simulations executed with cloudknot do not have to comply with any particular memory or time limitations.
 While pywren's limitations stem from the use of the AWS Lambda service.
 
@@ -191,3 +252,6 @@ This work was funded through a grant from the Gordon & Betty Moore Foundation an
 
 References
 ----------
+
+.. |warning| image:: figures/warning.jpg
+             :scale: 3%
