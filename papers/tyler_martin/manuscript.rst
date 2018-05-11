@@ -138,7 +138,7 @@ spinodal decomposition temperatures.
 Each of the variables in Equation :ref:`PRISMeq` represents a function of
 wavenumber :math:`k` which returns an :math:`n \times n` matrix, with :math:`n`
 being the number of site-types in the calculation. Each element of a correlation
-function matrix (e.g. :math:`\hat{H}_{\alpha,\beta}(k)`) represents the value
+function matrix (e.g., :math:`\hat{H}_{\alpha,\beta}(k)`) represents the value
 of that correlation function between site types :math:`\alpha` and :math:`\beta`
 at a given wavenumber :math:`k`. These correlation function matrices are
 symmetric, therefore there are :math:`\frac{n(n+1)}{2}` independent site-type
@@ -159,14 +159,14 @@ widely-used closure is the Percus-Yevick closure shown below
     :label: percusyevick
 
     C_{\alpha,\beta}(r) = \left(e^{-U_{\alpha,\beta}(r)} - 1.0 \right) 
-                          \left(1.0 + \Gamma_{\alpha,\beta}(r) \right)
+                          \left(1.0 + \Gamma_{\alpha,\beta}(r) \right),
 
 where :math:`\Gamma(r)` is defined in real-space as
 
 .. math::
     :label: gamma
 
-    \Gamma_{\alpha,\beta}(r) = H_{\alpha,\beta}(r) - C_{\alpha,\beta}(r)
+    \Gamma_{\alpha,\beta}(r) = H_{\alpha,\beta}(r) - C_{\alpha,\beta}(r).
 
 .. figure:: figure2.pdf
 
@@ -366,8 +366,8 @@ individual site-type densities :math:`\rho_{\alpha}`.
 
 An additional specialized container is :code:`pyPRISM.Domain`. This class
 specifies the discretized real- and Fourier-space grids over which the PRISM
-equation is solved and is instantiated by specifying the length (i.e. number of
-gridpoints) and grid spacing in real- or Fourier space (i.e. :math:`dr` or
+equation is solved and is instantiated by specifying the length (i.e., number of
+gridpoints) and grid spacing in real- or Fourier space (i.e., :math:`dr` or
 :math:`dk`). An important detail of the PRISM cost function mentioned above is
 that correlation functions need to be transformed to and from Fourier space
 during the cost function evaluation. :code:`pyPRISM.Domain` also contains the
@@ -582,8 +582,8 @@ Note that all parameters in pyPRISM are specified in a reduced unit system
 commonly called Lennard-Jones units. In this scheme, a characteristic length
 :math:`d_c`, mass :math:`m_c`, and energy :math:`e_c` are specified. All other
 units are then specified in terms of these characteristic units. For example, if
-:math:`d_c = 1 nm`, the grid spacing in the above code would be :math:`dr = 0.1
-d_c = 0.1 nm`.  See :cite:`brownbook` for more information on the Lennard-Jones
+:math:`d_c = 1\ nm`, the grid spacing in the above code would be :math:`dr = 0.1
+d_c = 0.1\ nm`.  See :cite:`brownbook` for more information on the Lennard-Jones
 reduced unit scheme. 
 
 .. code:: python
@@ -810,14 +810,16 @@ documentation, knowledgebase materials, and Jupyter-notebook powered tutorials.
 Acknowledgements
 ----------------
 
-TBM is supported by the NIST/NRC fellowship program and, in addition, this work
-has been supported by the members of the NIST nSoft consortium (nist.gov/nsoft).
-TEG and AJ thank NSF DMR-CMMT grant number 1609543 for financial support. This
-research was supported in part through the use of Information Technologies (IT)
-resources at the University of Delaware, specifically the high-performance
-computing resources of the Farber supercomputing cluster. This work used the
-Extreme Science and Engineering Discovery Environment (XSEDE) Stampede cluster
-at the University of Texas through allocation MCB100140 (AJ), which is supported
-by National Science Foundation grant number ACI-1548562. 
+TBM is supported by a National Research Council (NRC) fellowship at the National
+Institute of Standards and Technology (NIST). In addition, this work has been
+supported by the members of the NIST nSoft consortium (nist.gov/nsoft).  TEG and
+AJ thank National Science Foundation Division of Materials Research Condensed
+Matter and Materials Theory  (NSF DMR-CMMT) grant number 1609543 for financial
+support.  This research was supported in part through the use of Information
+Technologies (IT) resources at the University of Delaware, specifically the
+high-performance computing resources of the Farber supercomputing cluster. This
+work used the Extreme Science and Engineering Discovery Environment (XSEDE)
+Stampede cluster at the University of Texas through allocation MCB100140 (AJ),
+which is supported by National Science Foundation grant number ACI-1548562. 
 
 
