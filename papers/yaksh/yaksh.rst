@@ -159,6 +159,7 @@ Yaksh is created and maintained by the Python team at FOSSEE
 open-source, distributed under BSD license. The source code can be found
 https://github.com/FOSSEE/online_test/
 
+XXX old figures included here as examples.
 
 .. figure:: yaksh_login.PNG
    :scale: 30%
@@ -207,128 +208,91 @@ https://github.com/FOSSEE/online_test/
    The moderator interface for monitoring student progress during an exam on
    yaksh. :label:`fig:yaksh-monitor`
 
+XXX Examples showing how to put in an image and how to refer it.  Redo this.
+
 Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
 Fig. :ref:`fig:yaksh-mcq` shows the interface for an MCQ question.
-
 Fig. :ref:`fig:yaksh-code` shows the interface for a programming question.
-
-Fig. :ref:`fig:yaksh-fill` shows the interface for an Fill in the blank question.
 
 Fig. :ref:`fig:yaksh-monitor` shows a typical moderator interface while
 monitoring a running quiz.
 
 
 Installation and setup
-~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Deployment of a web application for temporary use as well as for production should be as easy as possible. There are a couple of different ways of setting up Yaksh:
+Deployment of a web application for temporary use as well as for production should be as easy as possible. There are a few different ways of setting up Yaksh:
 
-- Set up a trial instance with Docker
-- Set up a trial instance without Docker
-- Set up a production instance using Docker and Docker compose.
+- Trial instance with Docker
+- Trial instance without Docker
+- Production instance using Docker and Docker compose.
 
 The deployment procedure has been boiled down to a limited number of commands using the 'invoke' python package to make the deployment as easy as possible.
 
 Prerequisites:
 
-1. Ensure that Python is available.
-2. Ensure `pip <https://pip.pypa.io/en/latest/installing.html>`__ is
-   installed.
-3. Ensure Docker is installed
-
+Yaksh is written in Python and depends on Django and a few other Python dependencies. The dependencies can be installed using the `pip <https://pip.pypa.io/en/latest/installing.html>`__ package manager tool. It is recommended to use Yaksh along with Docker.
 
 Installation:
 
-1. Install yaksh
-
-   -  Clone the repository
+Yaksh can be cloned from the Github repository. To do this one can run
 
       ::
 
           $ git clone https://github.com/FOSSEE/online_test.git
 
-   -  Go to the online\_test directory
+One can then install the required dependencies, for Python 2, by running
 
       ::
 
           $ cd ./online_test
+          $ pip install -r ./requirements/requirements-py2.txt # For Python 2
 
-   -  Install the dependencies
 
-      -  For Python 2 use:
+or for Python 3, by running
 
-         ::
+      ::
 
-             $ pip install -r ./requirements/requirements-py2.txt
+          $ cd ./online_test
+          $ pip install -r ./requirements/requirements-py3.txt # For Python 3
 
-      -  For Python 3 (recommended) use:
+It is recommended that one must use Python 3 to run Yaksh.
 
-         ::
 
-             $ pip install -r ./requirements/requirements-py3.txt
-
-Quickstart:
+Quickstart
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 This setup method allows a user to setup a local instance of Yaksh to try the platform for a limited number of users.
 
-1. Start up the code server that executes the user code safely:
-
-   -  To run the code server in a sandboxed docker environment, run the
-      command, this method is recommended:
+Yaksh can be run within a demo instance on a local system to try the platform for a limited number of users. To set up a demo instance one can run
 
       ::
 
           $ invoke start
 
-   -  Make sure that you have Docker installed on your system
-      beforehand. `Docker
-      Installation <https://docs.docker.com/engine/installation/#desktop>`__
+This command will start the code server within a docker environment.
 
-   -  To run the code server without docker, locally use:
+In case docker is not available, the code server can also be run without docker by running
 
       ::
 
           $ invoke start --unsafe
 
-   -  Note this command will run the yaksh code server locally on your
-      machine and is susceptible to malicious code. You will have to
-      install the code server requirements in sudo mode.
+However, this is not recommended since this leaves the bases system potentially vulnerable to malicious code. In case one wishes to use this method, all Python dependencies will have to be installed using sudo.
 
-2. On another terminal, run the application using the following command:
+In order to access the interface, one can run the web server using
 
    ::
 
        $ invoke serve
 
-   -  *Note:* The serve command will run the django application server
-      on the 8000 port and hence this port will be unavailable to other
-      processes.
+This command will run the django application server on the 8000 port and can be accessed using a browser, also this port will be unavailable to other processes.
 
-3. Open your browser and open the URL ``http://localhost:8000/exam``
+Production Setup With Docker
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-4. Login as a teacher to edit the quiz or as a student to take the quiz
-   Credentials:
-
-   -  Student - Username: student \| Password: student
-   -  Teacher - Username: teacher \| Password: teacher
-
-5. User can also login to the Default Django admin using;
-
-   -  Admin - Username: admin \| Password: admin
-
-
-Production Setup with Docker:
-
-1. Clone this repository and cd to the cloned repo.
-
-   ::
-
-       $ git clone  https://github.com/FOSSEE/online_test.git
-
-2. Rename the ``.sampleenv`` to ``.env``
-
-3. In the ``.env`` file, uncomment the following and replace the values (please keep the remaining settings as is);
+In order to setup Yaksh on a Production server with docker compose. To start off, one needs to set certain environment variables. To do so, one can create a ``.env`` file with the following details
 
    ::
 
@@ -338,65 +302,33 @@ Production Setup with Docker:
        DB_PASSWORD=mypassword # Or the password used while creating a Database
        DB_PORT=3306
 
-4. Install `Docker Compose <https://docs.docker.com/compose/install/>`__
+The local system needs to have `Docker Compose <https://docs.docker.com/compose/install/>`__ installed.
 
-5. Rename the ``.sampleenv`` to ``.env``
+One must navigate to the Docker directory
 
-6. In the ``.env`` file, uncomment all the values and keep the default values as is.
-
-7. Go to the ``docker`` directory where the project is located:
-   
    ::
 
        cd /path/to/online_test/docker
 
-8. Build the docker images
+And running the following commands will ensure that the platform is setup
 
    ::
 
        invoke build
-
-9. Run the containers and scripts necessary to deploy the web
-   application
-
-   ::
-
        invoke begin
-
-10. Make sure that all the containers are ``Up`` and stable
-
-   ::
-
-       invoke status
-
-11. Run the containers and scripts necessary to deploy the web
-   application, ``--fixtures`` allows you to load fixtures.
-
-   ::
-
        invoke deploy --fixtures
 
-12. Stop the containers, you can use ``invoke restart`` to restart the containers without removing them
-
-   ::
-
-       invoke halt
-
-13. Remove the containers
-
-   ::
-
-       invoke remove
-
-14. You can use ``invoke --list`` to get a list of all the available commands
+The ``build`` command builds the docker images, the ``begin`` command spwans the docker containers and the ``deploy`` command runs the necessary migrations.
 
 
 The demo course/exams
-~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
-Yaksh allows moderators to create a Demo Course by clicking on the 'Create Demo Course' button available on the dashboard.
+Since setting up a complete course with associated Modules, Lessons, Quizzes and Questions can be a tedious process for a first time user, Yaksh allows moderators to create a Demo Course by clicking on the 'Create Demo Course' button available on the dashboard.
 
-This actions sets up a Demo Course and associated Modules, Lessons, Quizzes and Questions.
+One can then click on the Courses tab and browse through the Demo Course that has been just created.
+
+One can read more about Courses, Modules, Lessons and Quizzes in the section below.
 
 Basic features
 ---------------
@@ -432,21 +364,14 @@ Features available in yaksh:
 
 
 Internal design
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
-Yaksh has two important modules:-
 
-- Web server
-
-  A django server for client interaction.
+The two essential pieces:
 
 - Code server
+- Django interface
 
-  A tornado server for code evaluation.
-
-
-Web Server
-----------
 
 Django is a high-level Python Web framework. Django makes it is easy to create web applications, handles basic security issues, provides basic authentication system.
 
@@ -669,7 +594,7 @@ Models for yaksh are as follows:
 
   This model contains module information such as name, description (markdown text), order i.e order in which the modules will be added to the course.
 
-**Note:** order attribute in LearningUnit and LearningModule models indicates the order of appearance of a unit or a module.
+Django models and overall approach.
 
 Use of docker.
 
