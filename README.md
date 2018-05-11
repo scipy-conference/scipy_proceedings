@@ -204,7 +204,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](Creating a new branch based off-of-`2018`) for your paper based off the latest `2018` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2018) for your paper based off the latest `2018` branch.
     - If you submit multiple papers, you will need a new branch for each.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper) 
