@@ -294,32 +294,113 @@ for more complex simulations.
 Data Dependencies: Analysis of magnetic resonance imaging data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because cloudknot is run on the standard AWS infrastructure, it allows specification of complex and large data dependencies. Dependency of individual tasks on data can be addressed by preloading the data into object storage on S3, and the downloading of individual bits of data needed to complete each task into the individual worker machines.
+Because cloudknot is run on the standard AWS infrastructure, it allows
+specification of complex and large data dependencies. Dependency of
+individual tasks on data can be addressed by preloading the data into
+object storage on S3, and the downloading of individual bits of data
+needed to complete each task into the individual worker machines.
 
-As an example, we implemented a pipeline for analysis of human MRI data. Human MRI data is a good use-case for a system such as cloudknot, because much of the analysis in computational pipelines that analyze this type of data proceeds in an embarassingly parallel manner: even for large data-sets with multiple subjects, a large part of the analysis is conducted first at the level of each individual brain, and aggregation of information across brains is typically done after many preprocessing and analysis stages are done at the level of each individual.
+As an example, we implemented a pipeline for analysis of human MRI
+data. Human MRI data is a good use-case for a system such as cloudknot,
+because much of the analysis in computational pipelines that analyze
+this type of data proceeds in an embarassingly parallel manner: even for
+large data-sets with multiple subjects, a large part of the analysis is
+conducted first at the level of each individual brain, and aggregation
+of information across brains is typically done after many preprocessing
+and analysis stages are done at the level of each individual.
 
-For example, diffusion MRI (dMRI) is a method that measures the properties of the connections between different regions of the brain. Over the last few decades, this method has been used to establish the role of these connections in many different cognitive and behavioral properties of the human brain, and to delineate the role that the biology of these connections plays in neurological and psychiatric disorders [XXX]. Because of the interest in these connections, several large consortium efforts for data collection have aggregated large datasets of human dMRI data from multiple different subjects.
+For example, diffusion MRI (dMRI) is a method that measures the
+properties of the connections between different regions of the brain.
+Over the last few decades, this method has been used to establish the
+role of these connections in many different cognitive and behavioral
+properties of the human brain, and to delineate the role that the
+biology of these connections plays in neurological and psychiatric
+disorders [XXX]. Because of the interest in these connections, several
+large consortium efforts for data collection have aggregated large
+datasets of human dMRI data from multiple different subjects.
 
-In analysis of dMRI data, the first few steps are done at the individual level: selection of regions of interest within each image, denoising and initial modeling of the data. These are the steps that were implemented in the pipeline that we used in a previous study :cite:`mehta2017comparative`, and we reused this pipeline in the current study. This allows us to compare the performance of cloudknot directly against the performance of several alternative systems for distributed computing that were studied in our previous work: Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and Dask :cite:`Rocklin2015-ra`
+In analysis of dMRI data, the first few steps are done at the
+individual level: selection of regions of interest within each image,
+denoising and initial modeling of the data. These are the steps that
+were implemented in the pipeline that we used in a previous study
+:cite:`mehta2017comparative`, and we reused this pipeline in the
+current study. This allows us to compare the performance of cloudknot
+directly against the performance of several alternative systems
+for distributed computing that were studied in our previous work:
+Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and Dask
+:cite:`Rocklin2015-ra`
 
-In cloudknot, we used the reference implementation from this previous study written in Python and using methods implemented in Python and Cython in Dipy :cite:`Garyfallidis2014`. In contrast to all of these other systems, essentially no changes had to be made to the reference implementation when using cloudknot, except to download data from S3 into the individual instances. Parallelization was implemented only at the level of individual subjects, and a naive serial approach was taken at the level of each individual.
+In cloudknot, we used the reference implementation from this previous
+study written in Python and using methods implemented in Python and
+Cython in Dipy :cite:`Garyfallidis2014`. In contrast to all of these
+other systems, essentially no changes had to be made to the reference
+implementation when using cloudknot, except to download data from S3
+into the individual instances. Parallelization was implemented only at
+the level of individual subjects, and a naive serial approach was taken
+at the level of each individual.
 
-As expected, with a small number of subjects this reference implementation is significantly slower with cloudknot compared with the parallelized implementation in these other systems. But the relative advantage of these systems diminshes substantially as the number of subjects grows larger (Figure XXX), and the benefits of parallelization across subjects starts to be more substantial.
+As expected, with a small number of subjects this reference
+implementation is significantly slower with cloudknot compared with the
+parallelized implementation in these other systems. But the relative
+advantage of these systems diminshes substantially as the number of
+subjects grows larger (Figure XXX), and the benefits of parallelization
+across subjects starts to be more substantial.
 
-Two important caveats to this analysis: the first is that the analysis with the other systems was all conducted on a 16-node cluster (each node was an AWS r3.2xlarge instance with 8 vCPUs). The benchmark code does run faster with more nodes added to the cluster. Notably, even for the largest amount of data (25 subjects) that was executed in cloudknot, AWS chooses to deploy only two instances of the r4.16xlarge type -- each with 64 vCPUs and 488 GB of RAM. In terms of RAM, this is the equivalent of a 16 node cluster of r3.2xlarge, but the number of CPUs deployed to the task is much half. The other is that that the timing data for the other systems is from early 2017, and some of these systems have evolved and improved since.
+Two important caveats to this analysis: the first is that the analysis
+with the other systems was all conducted on a 16-node cluster (each node
+was an AWS r3.2xlarge instance with 8 vCPUs). The benchmark code does
+run faster with more nodes added to the cluster. Notably, even for the
+largest amount of data (25 subjects) that was executed in cloudknot, AWS
+chooses to deploy only two instances of the r4.16xlarge type -- each
+with 64 vCPUs and 488 GB of RAM. In terms of RAM, this is the equivalent
+of a 16 node cluster of r3.2xlarge, but the number of CPUs deployed to
+the task is much half. The other is that that the timing data for the
+other systems is from early 2017, and some of these systems have evolved
+and improved since.
 
 
 Data and software dependencies: analysis of microscopy data
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The MRI example demonstrates the use of a large and rather complex dataset. In addition, cloudknot can manage complex software dependencies. Researchers in cell biology, molecular engineering and nano-engineering are also increasingly relying on methods that generate large amounts of data and on analysis that requires large amounts of compute power. For example, in experiments that evaluate the mobility of synthetically designed nano-particles in biological tissue :cite:`Nance2017-xp`, :cite:`Nance2012-nu`, researchers may record movies of microscopic images of the tissue at high spatial and temporal resolution and with wide field of view, resulting in large amounts image data, often stored in multiple large image files. To analyze these experiments, researchers rely on software implemented in ImageJ for particle segmentation and tracking, such as TrackMate :cite:`Tinevez2017-ti`. However, when applied to large amounts of data, using TrackMate serially in each experiment can be prohibitively time consuming. One solution is to divide the movies spatially into smaller field of view movies, and analyze them in parallel :cite:`Curtis2018`.
+The MRI example demonstrates the use of a large and rather complex
+dataset. In addition, cloudknot can manage complex software
+dependencies. Researchers in cell biology, molecular engineering
+and nano-engineering are also increasingly relying on methods that
+generate large amounts of data and on analysis that requires large
+amounts of compute power. For example, in experiments that evaluate
+the mobility of synthetically designed nano-particles in biological
+tissue :cite:`Nance2017-xp`, :cite:`Nance2012-nu`, researchers may
+record movies of microscopic images of the tissue at high spatial and
+temporal resolution and with wide field of view, resulting in large
+amounts image data, often stored in multiple large image files. To
+analyze these experiments, researchers rely on software implemented
+in ImageJ for particle segmentation and tracking, such as TrackMate
+:cite:`Tinevez2017-ti`. However, when applied to large amounts of data,
+using TrackMate serially in each experiment can be prohibitively time
+consuming. One solution is to divide the movies spatially into smaller
+field of view movies, and analyze them in parallel :cite:`Curtis2018`.
 
-Another field that has seen a dramatic increase in data volumes is the field of cell biology and molecular engineering. These fields often rely on the ImageJ software. This software, written in Java, can be scripted using Jython. However, this requires installation of the ImageJ Jython run-time.
-Because cloudknot relies on docker, this installation can be managed using the command line interface (i.e. :code:`wget`). Once a docker image is created that contains the software dependencies for a particular analysis, Python code can be written on top of it to execute system calls that will run the analysis. This is the approach taken here. We do not provide a quantitative benchmark for this example.
+Another field that has seen a dramatic increase in data volumes is the
+field of cell biology and molecular engineering. These fields often rely
+on the ImageJ software. This software, written in Java, can be scripted
+using Jython. However, this requires installation of the ImageJ Jython
+run-time.
+Because cloudknot relies on docker, this installation can be managed
+using the command line interface (i.e. :code:`wget`). Once a docker
+image is created that contains the software dependencies for a
+particular analysis, Python code can be written on top of it to execute
+system calls that will run the analysis. This is the approach taken
+here. We do not provide a quantitative benchmark for this example.
 
-Because of the data size in this case, a custom AMI had to be created from the AWS Batch AMI, that includes a larger volume (Batch AMI volumes are limited to XXX GB of disk-space).
+Because of the data size in this case, a custom AMI had to be created
+from the AWS Batch AMI, that includes a larger volume (Batch AMI volumes
+are limited to XXX GB of disk-space).
 
-In summary: rather complex sets of dependencies both in terms of the software required, as well as the data and resources that are required can be managed with the combination of docker, AWS and cloudknot, but putting together such combinations may require more work and more expertise in managing each of these parts.
+In summary: rather complex sets of dependencies both in terms of the
+software required, as well as the data and resources that are required
+can be managed with the combination of docker, AWS and cloudknot, but
+putting together such combinations may require more work and more
+expertise in managing each of these parts.
 
 
 Conclusion
@@ -344,7 +425,11 @@ scale from within their Python environment.
 
 Acknowledgements
 ----------------
-This work was funded through a grant from the Gordon & Betty Moore Foundation and the Alfred P. Sloan Foundation to the University of Washington eScience Institute. Thanks to Chad Curtis and Elizabth Nance for the collaboration on the implementation of a cloudknot pipeline for analysis of microscopy data.
+This work was funded through a grant from the Gordon & Betty Moore
+Foundation and the Alfred P. Sloan Foundation to the University of
+Washington eScience Institute. Thanks to Chad Curtis and Elizabth Nance
+for the collaboration on the implementation of a cloudknot pipeline for
+analysis of microscopy data.
 
 
 References
