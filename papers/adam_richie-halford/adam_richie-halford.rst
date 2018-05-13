@@ -169,54 +169,126 @@ perform a local reduction on results generated on AWS Batch.
 API
 ---
 
-|warning| The above interactions with AWS resources are hidden from the
-user. The advanced or curious user can customize the Docker container or
-cloudformation template. But for basic use cases, here is an example of
-using the API
+The above interactions with AWS resources are hidden from the user.
+The advanced or curious user can customize the Docker container or
+cloudformation template. But for most use cases, the user interacts
+only with the :code:`Knot` object. This section provides an example
+multiplying random matrices and vectors as a pedagogical introduction to
+the cloudknot API.
+
+We first import cloudknot and define the function that we would like to
+run on AWS Batch. Cloudknot uses the `pipreqs` :cite:`pipreqs` package
+to generate the requirements file used to install dependencies in the
+Docker container on AWS ECR. So all required packages must be imported
+inside the UDF itself.
 
 .. code-block:: python
 
-   # Insert really awesome code example here
    import cloudknot as ck
 
-|warning|
+   def random_mv_prod(b):
+       """Multiply a random 1024x1024 matrix by a
+       random vector of length 1024. Matrix and vector
+       elements are normally distributed with standard
+       deviation `sd`.
 
+       Parameters
+       ----------
+       sd : float
+           Standard deviation of the normal
+           distribution from which elements of the
+           matrix and vector are drawn
 
-Results
--------
+       Returns
+       -------
+       ndarray
+           Random matrix-vector product
+       """
+       import numpy as np
 
-Because cloudknot's approach favors "embarrassingly parallel"
-applications, one should expect near-linear scaling with an additional
-fixed overhead for creating AWS resources and transmitting results
-through S3. This suits use-cases for which execution time is much
-greater than the time required to create the necessary resources on AWS
-(infrastructure setup time can be minimized, reusing AWS resources that
-have already been created). We show near-linear scaling for a scientific
-use-case: analysis of human brain MRI data. This use-case demonstrates
-that cloudknot does not introduce undue overhead burden, exploiting the
-scaling efficiency of underlying AWS Batch infrastructure.
+       x = np.random.normal(0, b, 1024)
+       A = np.random.normal(0, b, (1024, 1024))
 
+       return np.dot(A, x)
 
-Conclusion
-----------
+Next, we create a :code:`Knot` instance and pass the UDF using the func
+argument. The name argument affects the names of resources created on
+AWS. For example, if ``name='test'``, then the created job definition
+would be named "test-cloudknot-job-definition."
 
-cloudknot simplifies cloud-based distributed computing by
-programmatically executing UDFs in AWS Batch. This lowers the barrier to
-cloud computing and allows users to launch massive compute workloads at
-scale from within their Python environment.
+.. code-block:: python
+
+   knot = ck.Knot(name='random_mv_product',
+                  func=random_mv_prod)
+
+Then we submit jobs with the :code:`Knot.map()` method
+
+.. code-block:: python
+
+   import numpy as np # for np.linspace
+   futures = knot.map(np.linspace(0.1, 100, 20))
+
+This will launch an AWS Batch array job with 20 child jobs, one for each
+element of :code:`np.linspace(0.1, 100, 20)`. Cloudknot can accomodate
+functions with multiple inputs by passing the :code:`map()` method a
+sequence of tuples of input arguments and the :code:`starmap=True`
+argument. For example, if the UDF signature were :code:`def udf(arg0,
+arg1)`, one could execute :code:`udf` over all combinations of
+:code:`arg0` in ``[1, 2, 3]`` and :code:`arg1` in ``['a', 'b', 'c']``
+by calling
+
+.. code-block:: python
+
+   args = list(itertools.product([1, 2, 3],
+                                 ['a', 'b', 'c']))
+   future = knot.map(args, starmap=True)
+
+We can then query the result status using :code:`future.done()`
+and retrieve the results using :code:`future.result()`, which
+will block until results are returned unless the user passes an
+optional :code:`timeout` argument. We can also check the status
+of all the jobs that have been submitted with this :code:`Knot`
+instance by inspecting the :code:`knot.jobs` property, which returns
+a list of :code:`cloudknot.BatchJob` instances, each of which
+has its own :code:`done` property and :code:`result()` method.
+So in the example above, :code:`future.done()` is equivalent to
+:code:`knot.jobs[-1].done` and :code:`future.result()` is equivalent to
+:code:`knot.jobs[-1].result()`. In this way, users have access to AWS
+Batch job results that they have run in past sessions.
+
+Lastly, without navigating to the AWS console, we can get a quick
+summary of the status of all jobs submitted with this :code:`Knot` using
+
+.. code-block:: python
+
+   >>> knot.view_jobs()
+   Job ID          Name                  Status   
+   -----------------------------------------------
+   565605cc...     random_mv_prod-0      SUBMITTED
 
 
 Examples
 --------
 
-In this section, we will present a few use-cases of cloudknot. We will start with examples that have minimal software and data dependencies, and increase the complexity by adding first data dependencies and subsequently complex software and resource dependencies.
+In this section, we will present a few use-cases of cloudknot. We will
+start with examples that have minimal software and data dependencies,
+and increase the complexity by adding first data dependencies and
+subsequently complex software and resource dependencies.
 
 
 Simulations
 ~~~~~~~~~~~
 
-Simulation use-cases are straightforward. In contrast to pywren, simulations executed with cloudknot do not have to comply with any particular memory or time limitations.
+Simulation use-cases are straightforward. In contrast to pywren,
+simulations executed with cloudknot do not have to comply with any
+particular memory or time limitations.
 While pywren's limitations stem from the use of the AWS Lambda service.
+
+As an example, we used pywren and cloudknot to find the steady-state
+solution to the two-dimensional heat equation by the Gauss-Seidel method
+:cite:`templates-linear-sys`. The method chosen is suboptimal, as is the
+specific implementation of the method, and serves only as a benchmark
+for more complex simulations.
 
 
 Data Dependencies: Analysis of magnetic resonance imaging data
@@ -248,6 +320,26 @@ Because cloudknot relies on docker, this installation can be managed using the c
 Because of the data size in this case, a custom AMI had to be created from the AWS Batch AMI, that includes a larger volume (Batch AMI volumes are limited to XXX GB of disk-space).
 
 In summary: rather complex sets of dependencies both in terms of the software required, as well as the data and resources that are required can be managed with the combination of docker, AWS and cloudknot, but putting together such combinations may require more work and more expertise in managing each of these parts.
+
+
+Conclusion
+----------
+
+Because cloudknot's approach favors "embarrassingly parallel"
+applications, one should expect near-linear scaling with an additional
+fixed overhead for creating AWS resources and transmitting results
+through S3. This suits use-cases for which execution time is much
+greater than the time required to create the necessary resources on AWS
+(infrastructure setup time can be minimized, reusing AWS resources that
+have already been created). We show near-linear scaling for a scientific
+use-case: analysis of human brain MRI data. This use-case demonstrates
+that cloudknot does not introduce undue overhead burden, exploiting the
+scaling efficiency of underlying AWS Batch infrastructure.
+
+Cloudknot simplifies cloud-based distributed computing by
+programmatically executing UDFs in AWS Batch. This lowers the barrier to
+cloud computing and allows users to launch massive compute workloads at
+scale from within their Python environment.
 
 
 Acknowledgements
