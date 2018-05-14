@@ -33,8 +33,8 @@ Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 Introduction
 ------------
 
-In the quest to minimize time-to-first-result, data scientists are
-increasingly turning to cloud-based distributed computing with
+|warning| In the quest to minimize time-to-first-result, data scientists
+are increasingly turning to cloud-based distributed computing with
 commercial vendors like Amazon Web Services (AWS). However, because of
 the complexity and steep learning curve associated with a transition to
 cloud computing, it remains inaccessible. A number of Python libraries
@@ -49,7 +49,7 @@ data-oriented workloads, that require more RAM and local storage, longer
 compute times, and complex dependencies. Here, we introduce a new Python
 library: cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`, that
 launches Python functions as jobs on the AWS Batch service, thereby
-lifting these limitations.
+lifting these limitations. |warning|
 
 
 Methods
@@ -276,19 +276,71 @@ and increase the complexity by adding first data dependencies and
 subsequently complex software and resource dependencies.
 
 
-Simulations
-~~~~~~~~~~~
+Solving differential equations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Simulation use-cases are straightforward. In contrast to pywren,
-simulations executed with cloudknot do not have to comply with any
-particular memory or time limitations.
-While pywren's limitations stem from the use of the AWS Lambda service.
+|warning| Simulations executed with cloudknot do not have to comply with
+any particular memory or time limitations. This is in contradistinction
+to pywren's limitations, which stem from the use of the AWS Lambda
+service. On the other hand, cloudknot's use of AWS Batch increases the
+overhead associated with creating AWS resources and uploading a Docker
+container to ECR. While this infrastructure setup time can be minimized
+by reusing AWS resources that were created in a previous session, this
+setup time suits use-cases for which execution time is much greater than
+the time required to create the necessary resources on AWS.
 
-As an example, we used pywren and cloudknot to find the steady-state
-solution to the two-dimensional heat equation by the Gauss-Seidel method
+To demonstrate this, we used cloudknot and pywren (the package which
+catalyzed cloudknot's creation) to find the steady-state solution
+to the two-dimensional heat equation by the Gauss-Seidel method
 :cite:`templates-linear-sys`. The method chosen is suboptimal, as is the
-specific implementation of the method, and serves only as a benchmark
-for more complex simulations.
+specific implementation of the method, and serves only as a benchmarking
+tool. In this fictitious example, we wish to parallelize execution both
+over a range of different boundary conditions and over a range of grid
+sizes.
+
+|warning| First, we hold the grid size constant and parallelize over
+different temperature constraints on one edge of the simulation grid.
+We investigate the scaling of job execution time as a function of the
+size of the argument array. In Figure :ref:`fig.nargsscaling` we
+show the execution time as a function of the length of the argument
+array. The default :code:`Knot` instance has a maximum of 256 vCPUs
+in its compute environment and a desired vCPUs setting of 8. We
+testing scaling using these default parameters and also using a custom
+parameters with :code:`min_vcpus=512`, :code:`desired_vcpus=2048`, and
+:code:`max_vcpus=4096`. These tests were also limited by the EC2 service
+limits for our region and account, which vary by instance type but never
+exceed 200 instances. The user interested in maximizing throughput
+will need to request limit increases. Regardless of the :code:`Knot`
+parameters, pywren outperformed cloudknot at all argument array sizes.
+
+.. figure:: figures/nargsscaling.png
+
+   Write caption. :label:`fig.nargsscaling`
+
+In Figure :ref:`fig.syssizescaling`, we still parallelize over a range
+of temperature constraints, but we do so for increasing grid sizes. Grid
+sizes beyond 125 x 125 required an individual job execution time that
+exceeded the AWS Lambda execution limit of 300s. So pywren was unable
+to compute on the larger grid sizes. Before that, there is a crossover
+point around 100 x 100 where cloudknot outperforms pywren.
+
+.. figure:: figures/syssizescaling.png
+
+   Write caption. :label:`fig.syssizescaling`
+
+|warning| Taken together, Figures :ref:`fig.nargsscaling` and
+:ref:`fig.syssizescaling` indicate that if a UDF can be executed
+within AWS Lambda's execution time and memory limitations and does not
+have software and data dependencies that would prohibit the useing
+pywren, it should be parallelized on AWS using pywren rather than
+cloudknot. However, when similations are too large or complicated to fit
+well into pywren's stateless function framework, cloudknot simplifies
+their distributed execution on AWS. Pywren's authors note that the AWS
+Lambda limits are not fixed and are likely to improve. We agree and note
+only that EC2 and AWS Batch limitations are likely to improve alongside
+the Lambda increases. It is likely that there will always exist
+scientific workloads in the region between the two sets of limitations.
+|warning|
 
 
 Data Dependencies: Analysis of magnetic resonance imaging data
@@ -330,7 +382,7 @@ for distributed computing that were studied in our previous work:
 Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and Dask
 :cite:`Rocklin2015-ra`
 
-In cloudknot, we used the reference implementation from this previous
+In cloudknot, we used the reference implementation from a previous
 study written in Python and using methods implemented in Python and
 Cython in Dipy :cite:`Garyfallidis2014`. In contrast to all of these
 other systems, essentially no changes had to be made to the reference
@@ -406,21 +458,18 @@ expertise in managing each of these parts.
 Conclusion
 ----------
 
-Because cloudknot's approach favors "embarrassingly parallel"
+|warning| Because cloudknot's approach favors "embarrassingly parallel"
 applications, one should expect near-linear scaling with an additional
 fixed overhead for creating AWS resources and transmitting results
-through S3. This suits use-cases for which execution time is much
-greater than the time required to create the necessary resources on AWS
-(infrastructure setup time can be minimized, reusing AWS resources that
-have already been created). We show near-linear scaling for a scientific
-use-case: analysis of human brain MRI data. This use-case demonstrates
-that cloudknot does not introduce undue overhead burden, exploiting the
+through S3. We show near-linear scaling for a scientific use-case:
+analysis of human brain MRI data. This use-case demonstrates that
+cloudknot does not introduce undue overhead burden, exploiting the
 scaling efficiency of underlying AWS Batch infrastructure.
 
 Cloudknot simplifies cloud-based distributed computing by
 programmatically executing UDFs in AWS Batch. This lowers the barrier to
 cloud computing and allows users to launch massive compute workloads at
-scale from within their Python environment.
+scale from within their Python environment. |warning|
 
 
 Acknowledgements
