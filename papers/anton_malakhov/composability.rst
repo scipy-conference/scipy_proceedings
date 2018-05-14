@@ -3,6 +3,10 @@
 :institution: Intel Corporation
 :corresponding:
 
+:author: David Liu
+:email: david.a.liu@intel.com
+:institution: Intel Corporation
+
 :author: Anton Gorshkov
 :email: Anton.V.Gorshkov@intel.com
 :institution: Intel Corporation
