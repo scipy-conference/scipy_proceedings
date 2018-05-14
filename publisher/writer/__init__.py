@@ -44,6 +44,7 @@ class Translator(LaTeXTranslator):
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.latex_video_url = ''
         self.bibliography = ''
 
         # This gets read by the underlying docutils implementation.
@@ -57,14 +58,7 @@ class Translator(LaTeXTranslator):
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
         self.table_type = 'table'
-
-        try:
-            self.active_table.set_table_style('booktabs')
-        except TypeError:
-            raise TypeError(
-                  "You are running into an error because you are using docutils "
-                  "version {}, instead please install docutils version {}".format(dc.__version__, '0.12.0')
-                  )
+        self.settings.table_style = ['booktabs']
 
     def visit_docinfo(self, node):
         pass
@@ -108,7 +102,8 @@ class Translator(LaTeXTranslator):
         elif self.current_field == 'copyright_holder':
             self.copyright_holder = text
         elif self.current_field == 'video':
-            self.video_url = text
+            self.latex_video_url = text
+            self.video_url = node.astext() if text else ''
         elif self.current_field == 'bibliography':
             self.bibtex = ['alphaurl', text]
             self._use_latex_citations = True
@@ -236,10 +231,10 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
-        if not self.video_url:
+        if not self.latex_video_url:
             video_template = ''
         else:
-            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.video_url
+            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.latex_video_url
 
         title_template = r'\newcounter{footnotecounter}' \
                 r'\title{%s}\author{%s' \
@@ -373,7 +368,7 @@ class Translator(LaTeXTranslator):
         # Work-around for a bug in docutils where
         # '%' is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[1].strip('%')
+        self.out[-1] = self.out[-1].strip('%')
 
         self.non_breaking_paragraph = True
 
@@ -395,7 +390,6 @@ class Translator(LaTeXTranslator):
 
         self.out.append(r'\end{%s}' % self.table_type)
         self.active_table.set('preamble written', 1)
-        self.active_table.set_table_style('booktabs')
 
     def visit_thead(self, node):
         # Store table caption locally and then remove it

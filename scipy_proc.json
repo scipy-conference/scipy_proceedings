@@ -1,60 +1,275 @@
 {
-  "proceedings": {
-     "citation_key": "proc-scipy-2017",
-     "title": {
-       "acronym": "SciPy",
-       "conference": "Python in Science Conference",
-       "ordinal": "15th",
-       "short": "PROC. OF THE 15th PYTHON IN SCIENCE CONF. (SCIPY 2017)",
-       "full": "Proceedings of the 15th Python in Science Conference"
-     },
-     "year": "2017",
-     "editor": [
-        "Stéfan van der Walt",
-        "Jarrod Millman"
-     ],
-     "volume": 3,
-     "number": 1,
-     "isbn": "value",
-     "location": "Austin, Texas",
-     "dates": "June 28 - July 3",
-     "copyright": {
-       "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-       "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
-                       "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-                       "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"],
-       "license": "Creative Commons Attribution License (CCAL)"}
+ "proceedings": {
+  "volume": 4,
+  "number": 1,
+  "year": "2018",
+  "editor": [
+   "Fatih Akici",
+   "David Lippa",
+   "Dillon Niederhut",
+   "M Pacer"
+  ],
+  "doi": "10.25080/dniederhut-mbp-96aba8a-012",
+  "editor_email": [
+   "akicifatih@gmail.com",
+   "dalippa@gmail.com",
+   "dillon.niederhut@gmail.com",
+   "mpacer.phd@gmail.com"
+  ],
+  "citation_key": "proc-scipy-2018",
+  "title": {
+   "conference": "Python in Science Conference",
+   "acronym": "SciPy",
+   "short": "PROC. OF THE 17th PYTHON IN SCIENCE CONF. (SCIPY 2018)",
+   "ordinal": "17th",
+   "full": "Proceedings of the 17th Python in Science Conference"
   },
-  "organization": [
-
-        {
-            "name": "Conference Chairs",
-            "members": [
-                {"name": "Jarrod Millman",
-                 "org": "UC Berkeley"},
-                {"name": "Travis Oliphant",
-                 "org": "Enthought, Inc."}
-                ]
-        },
-  
-        {
-            "name": "Program Chairs",
-            "members": [
-                {"name": "Stéfan van der Walt",
-                 "org": "Applied Mathematics, Stellenbosch University"},
-                {"name": "Someone else",
-                 "org": "Some company"}
-                ]
-        }
-    ],
-
-  "sponsored_students": [
-      {
-          "name": "First name",
-          "org": "University",
-          "location": "Where from"
-      }
-  ]
+  "xref": {
+   "depositor_name": "Dillon Niederhut",
+   "depositor_email": "dniederhut@enthought.com",
+   "registrant": "Crossref",
+   "resource_url": "https://conference.scipy.org/proceedings",
+   "prefix": "10.25080"
+  },
+  "dates": "July 9 - July 15",
+  "isbn": "noisbn",
+  "location": "Austin, Texas",
+  "copyright": {
+   "proceedings": [
+    "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+    "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+    "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
+   ],
+   "license": "Creative Commons Attribution License (CCAL)",
+   "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited."
+  }
+ },
+ "organization": [
+  {
+   "name": "Conference Chairs",
+   "members": [
+    {
+     "org": "Enthought Inc. & IIT Bombay",
+     "name": "Prabhu Ramachandran"
+    },
+    {
+     "org": "Arizona State University",
+     "name": "Serge Rey"
+    }
+   ]
+  },
+  {
+   "name": "Program Chairs",
+   "members": [
+    {
+     "org": "George Washington University",
+     "name": "Lorena Barba"
+    },
+    {
+     "org": "George Washington University",
+     "name": "Gil Forsyth"
+    }
+   ]
+  },
+  {
+   "name": "Communications",
+   "members": [
+    {
+     "org": "Bloomberg",
+     "name": "Paul Ivanov"
+    }
+   ]
+  },
+  {
+   "name": "Birds of a Feather",
+   "members": [
+    {
+     "org": "Berkeley Institute for Data Science",
+     "name": "Nelle Varoquaux"
+    },
+    {
+     "org": "Deep Mind",
+     "name": "Jessica Hamrick"
+    }
+   ]
+  },
+  {
+   "name": "Proceedings",
+   "members": [
+    {
+     "org": "ACE Cash Express",
+     "name": "Fatih Akici"
+    },
+    {
+     "org": "Amazon",
+     "name": "David Lippa"
+    },
+    {
+     "org": "Enthought",
+     "name": "Dillon Niederhut"
+    },
+    {
+     "org": "Netflix",
+     "name": "M Pacer"
+    }
+   ]
+  },
+  {
+   "name": "Financial Aid",
+   "members": [
+    {
+     "org": "CONICET",
+     "name": "Celia Cintas"
+    },
+    {
+     "org": "Argonne National Laboratory",
+     "name": "Scott Collis"
+    },
+    {
+     "org": "Los Alamos National Laboratory",
+     "name": "Pat Kelly"
+    },
+    {
+     "org": "MIT",
+     "name": "Eric Ma"
+    }
+   ]
+  },
+  {
+   "name": "Tutorials",
+   "members": [
+    {
+     "org": "Enthought",
+     "name": "Alexandre Chabot-Leclerc"
+    },
+    {
+     "org": "USGS",
+     "name": "Mike Hearne"
+    },
+    {
+     "org": "Atmospheric and Environmental Research, Inc.",
+     "name": "Ben Root"
+    }
+   ]
+  },
+  {
+   "name": "Sprints",
+   "members": [
+    {
+     "org": "University Corporation for Atmospheric Research",
+     "name": "Ryan May"
+    },
+    {
+     "org": "KBI Biopharma",
+     "name": "Jonathan Rocher"
+    },
+    {
+     "org": "Lewis University and The Recurse Center",
+     "name": "Charlye Tran"
+    }
+   ]
+  },
+  {
+   "name": "Diversity",
+   "members": [
+    {
+     "org": "Capital One",
+     "name": "Jackie Kazil"
+    },
+    {
+     "org": "Twitter",
+     "name": "Julie Krugler Hollek"
+    }
+   ]
+  },
+  {
+   "name": "Activities",
+   "members": [
+    {
+     "org": "Oregon State University",
+     "name": "Kyle Niemeyer"
+    },
+    {
+     "org": "Enthought",
+     "name": "Julia Pasquarella"
+    }
+   ]
+  },
+  {
+   "name": "Sponsors",
+   "members": [
+    {
+     "org": "Enthought",
+     "name": "Jill Cowan"
+    }
+   ]
+  },
+  {
+   "name": "Financial",
+   "members": [
+    {
+     "org": "Enthought",
+     "name": "Bill Cowan"
+    },
+    {
+     "org": "Enthought",
+     "name": "Jodi Havranek"
+    }
+   ]
+  },
+  {
+   "name": "Logistics",
+   "members": [
+    {
+     "org": "Enthought",
+     "name": "Jill Cowan"
+    },
+    {
+     "org": "Enthought",
+     "name": "Leah Jones"
+    }
+   ]
+  },
+  {
+   "name": "Proceedings Reviewers",
+   "members": [
+    {
+     "name": ""
+    },
+    {
+     "name": ""
+    }
+   ]
+  }
+ ],
+ "scipy_scholarship": [
+  {
+   "org": "",
+   "name": ""
+  },
+  {
+   "org": "",
+   "name": ""
+  }
+ ],
+ "diversity_scholarship": [
+  {
+   "org": "",
+   "name": ""
+  },
+  {
+   "org": "",
+   "name": ""
+  }
+ ],
+ "series": {
+  "xref": {
+   "issn": "2575-9752",
+   "resource_url": "https://conference.scipy.org/proceedings"
+  },
+  "title": {
+   "full": "Proceedings of the Python in Science Conference"
+  },
+  "doi": "10.25080/issn.2575-9752"
+ }
 }
-
-

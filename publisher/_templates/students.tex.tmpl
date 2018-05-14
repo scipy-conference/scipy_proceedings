@@ -2,19 +2,32 @@
 \thispagestyle{empty}
 \pagestyle{empty}
 \usepackage[utf8]{inputenc}
-\usepackage{../../_static/status}
+\usepackage{static/status}
 
 \begin{document}
 
-\section*{Sponsored Students}
+\section*{Scholarship Recipients}
 \vspace{4mm}
 
 \begin{itemize}
 
-{{for student in sponsored_students}}
+{{for student in scipy_scholarship}}
       \item[] \normalsize\textsc{%
 {{student['name']}}}, \small{%
-{{student['org']}}{{if student['location']}}, {{endif}}{{student['location']}}}
+{{student['org']}}}
+{{endfor}}
+
+\end{itemize}
+
+\section*{Jump Trading and NumFOCUS Diversity Scholarship Recipients}
+\vspace{4mm}
+
+\begin{itemize}
+
+{{for student in diversity_scholarship}}
+      \item[] \normalsize\textsc{%
+{{student['name']}}}, \small{%
+{{student['org']}}}
 {{endfor}}
 
 \end{itemize}

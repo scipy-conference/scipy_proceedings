@@ -10,5 +10,6 @@ def bibtex_caps(words):
   booktitle = { {{bibtex_caps(proceedings['title']['full'])}} },
   pages     = { {{' - '.join([str(article['page']['start']), str(article['page']['stop'])])}} },
   year      = { {{proceedings['year']}} },
-  editor    = { {{bibtex_caps(' and '.join(proceedings['editor']))}} }
+  editor    = { {{bibtex_caps(' and '.join(proceedings['editor']))}} },
+  doi       = { {{article['doi']}} }
 }

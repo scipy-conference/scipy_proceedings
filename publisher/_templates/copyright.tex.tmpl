@@ -3,7 +3,7 @@
 \pagestyle{empty}
 \usepackage[utf8]{inputenc}
 \usepackage{parskip}
-\usepackage{../../_static/status}
+\usepackage{static/status}
 
 \begin{document}
 
@@ -18,7 +18,7 @@
 Edited by {{if len(proceedings['editor']) <=2:}}
   {{' and '.join(proceedings['editor'])}}%
 {{else}}
-  {{', '.join(authlist[:-1] + ['and ' + authlist[-1],])}}%
+  {{', '.join(proceedings['editor'][:-1] + ['and ' + proceedings['editor'][-1],])}}%
 {{endif}}.
 
 \bigskip
@@ -37,9 +37,12 @@ Copyright \copyright{ {{ proceedings['year']}}}. {{for line in proceedings['copy
 
 \bigskip
 \bigskip
-\bigskip
-\bigskip
 
 % ISBN-13: {{proceedings['isbn']}}
+ISSN:{{series['xref']['issn']}}\\
+https://doi.org/{{proceedings['doi']}}\\
+
+\bigskip
+\bigskip
 
 \end{document}
