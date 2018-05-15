@@ -380,7 +380,7 @@ pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
 
 Figure :ref:`fig:fit` presents the output.
 
-.. figure:: fit.png
+.. figure:: fit2.png
    :align: center
 
    Output from running the code example. :label:`fig:fit`
