@@ -2,17 +2,18 @@
 :email: hameerabbasi@yahoo.com
 :institution: TU Darmstadt
 :corresponding:
+:bibliography: references
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
--------------------------------------------
-Sparse - A More Modern Sparse Array Library
--------------------------------------------
+------------------------------------------
+Sparse: A more modern sparse array library
+------------------------------------------
 
 .. class:: abstract
 
    This paper is about sparse multi-dimensional arrays in Python. We discuss
-   their applications, layouts, and current implementations in the Scipy
+   their applications, layouts, and current implementations in the SciPy
    ecosystem along with strengths and weaknesses. We then introduce a new
    package for sparse arrays that builds on the legacy of the scipy.sparse
    implementation, but supports more modern interfaces, dimensions greater
@@ -30,219 +31,42 @@ Sparse - A More Modern Sparse Array Library
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
-   
-Inline code looks like this: :code:`chunk of code`.
-
-Important Part
---------------
-
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption.:code:`chunk of code` inside of it. :label:`egfig` 
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-   This caption also has :code:`chunk of code`.
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it.  :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
+Sparse arrays are important in many situations and offer both speed and memory benefits
+over regular arrays when solving a broad spectrum of problems. For example, they can be
+used in solving systems of equations :cite:`liu1989limited`, solving partial differential
+equations :cite:`mu1991organization`, machine learning problems involving Bayesian models
+:cite:`tipping2001sparse` and natural language processing :cite:`nickel2011three`.
+
+Traditionally, within the SciPy ecosystem, sparse arrays have been provided within SciPy
+in the submodule :code:`scipy.sparse` :cite:`sps110`, which is arguably the most
+feature-complete implementation of sparse matrices within the ecosystem, providing support
+for basic arithmetic, linear algebra and graph theoretic algorithms.
+
+However, it lacks certain features which prevent it from working nicely with other packages
+in the ecosystem which consume NumPy's :code:`ndarray` interface:
+
+* It doesn't follow the :code:`ndarray` interface (rather, it follows NumPy's deprecated
+  :code:`matrix` interface)
+* It is limited to two dimensions only (even one-dimensional structures aren't supported)
+
+This is important for a number of other packages that are quite innovative, but cannot take
+advantage of :code:`scipy.sparse` for these reasons, because they expect objects following
+the :code:`ndarray` interface. These include packages like Dask :cite:`dask` and XArray
+:cite:`xarray`.
+
+Both of these frameworks could benefit tremendously from sparse structures. In the case of
+Dask, it could be used in combination with sparse structures to scale up computational tasks
+that need sparse structures. In the case of XArray, datasets with large amounts of missing
+data could be represented efficiently.
+
+In this paper, we present Sparse, a sparse array library that supports arbitrary dimension
+sparse arrays and supports most common parts of the :code:`ndarray` interface. It supports
+basic arithmetic, application of :code:`ufunc` s directly to sparse arrays (including with
+broadcasting), most common reductions, indexing, concatenation, stacking, transpose, reshape
+and a number of other features. The primary format in this library is based on the coordinate
+format, which stores indices where the array is nonzero, and the corresponding data.
+
+Since a full explanation of usage would be a repeat of the NumPy user manual and the package
+documentation, we only provide brief demos of certain features of interest. Then, we move on
+to some of the design decisions that went into making this package, some optimizations,
+applications and possible future work.
