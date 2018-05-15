@@ -18,19 +18,19 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
 
    We present the software tool pyPAHdb to the scientific astronomical
    community, which is used to characterize emission from one of the
-   prevalent types of organic molecules in space, namely polycyclic
+   most prevalent types of organic molecules in space, namely polycyclic
    aromatic hydrocarbons (PAHs). It leverages the detailed studies of
    organic molecules done at NASA Ames Research Center. pyPAHdb is a
    streamlined Python version of the NASA Ames PAH IR Spectroscopic
    Database (PAHdb; `www.astrochemistry.org
-   <http://www.astrochemistry.org/pahdb>`_) IDL suite of tools. PAHdb has
+   <http://www.astrochemistry.org/pahdb>`_) suite of IDL tools. PAHdb has
    been extensively used to analyze and interpret the PAH signature
    from a plethora of emission sources, ranging from solar-system
    objects to entire galaxies. pyPAHdb has the capability to interface
    with the spectroscopic libraries of PAHdb, model the detailed
-   photo-physics of the PAH excitation/emission-process, and, through
+   photo-physics of the PAH excitation/emission process, and, through
    a database-fitting technique, decompose the PAH emission into
-   contributing PAH subclasses in terms of charge, size, structure and
+   contributing PAH subclasses in terms of molecule charge, size, structure and
    composition.
 
 .. class:: keywords
@@ -43,14 +43,15 @@ Introduction
 Polycyclic aromatic hydrocarbons
 --------------------------------
 
+**this section has some redundancy/repetition with the "pah importance" section.**
 The astrophysical relevance of polycyclic aromatic hydrocarbons (PAHs)
-cannot be overstated. As interstellar molecules go, they are
-extraordinarily large and contain some 50-100 carbon atoms. In
+cannot be overstated. They are extraordinarily large for interstellar molecules, 
+typically containing 50-100 carbon atoms or larger. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
 HC11N, contains 11 carbon atoms. PAHs are also exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
 variety of astronomical objects, making them ubiquitous throughout the
-Cosmos and ideal probes of astronomical objects.
+Cosmos and ideal probes of astronomical environments.
 
 Scientific analysis with molecular databases
 --------------------------------------------
@@ -63,7 +64,7 @@ provides key insights into organic molecules in astronomical
 environments through a combination of quantum chemical calculations,
 direct laboratory measurements and different analysis techniques of
 astronomical data. The Laboratory provides the world’s foremost
-collection of data on PAHs, namely the NASA Ames PAH IR Spectroscopic
+collection of data on PAHs, namely the NASA Ames PAH IR (infrared) Spectroscopic
 Database (PAHdb). It is highly cited and is used to characterize and
 understand organic molecules in our own galaxy and external
 galaxies. Thus far, PAHdb’s full set of analytical tools has only been
@@ -80,22 +81,25 @@ Our new software is pyPAHdb, a streamlined version of the PAHdb
 analysis suite. The software accepts spectroscopic observations
 (including spectral maps) and characterizes the PAH emission using a
 database-fitting technique, providing the user with all pertinent PAH
-parameters derived from the fits: their ionization state, the molecule
-sizes, and the structure and/or presence of heteroatoms (e.g.,
+parameters derived from the fits: their ionization state(s), molecule
+sizes, structure and/or the presence of heteroatoms (e.g.,
 nitrogen). Its design is directly linked to the upcoming launch of the
 James Webb Space Telescope (*JWST*), but it is extended to be utilized
-with any major observatory, e.g., the *Spitzer* Space Telescope,
+with any major observatory, e.g., *Spitzer Space Telescope*,
 *ISO*, etc. The general program methodology is to: (1) read in various
 astronomical file formats, including FITS-files, astronomical
 ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
-least-squares-like fit to the data, using highly oversampled
+least-squares-like fit to the data, using highly-oversampled
 pre-computed PAHdb spectra, which contains much of the relevant
-molecular physics; and (3) produce user output in a consistent way.
+molecular physics; and (3) produce user output in a consistent way so
+that the user may interpret the role and characteristics of PAHs in their
+astronomical observations.
 
 We will present specific results based on the use of the pyPAHdb suite
-for characterizing PAHs in infrared spectroscopic observations from
-*Spitzer*, *ISO* and synthetic *JWST* data. As pyPAHdb is designed to
-be streamlined compared to the full IDL suite, we will also
+for characterizing PAHs in infrared spectroscopic observations. Here, we use
+*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
+it will be manipulated to accept data from other telescopes (e.g., *ISO*, *JWST*).
+As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also
 demonstrate its performance via benchmarks. pyPAHdb is open source and
 being developed on GitHub (`github.com/pahdb/pypahdb
 <https://github.com/pahdb/pypahdb>`_), therefore encouraging community
@@ -107,8 +111,10 @@ addition to PAH experts.
 The importance of astronomical PAHs
 ===================================
 
-The astrophysical relevance of PAHs cannot be overstated. As
-interstellar molecules go, they are extraordinarily large,
+.. The astrophysical relevance of PAHs cannot be overstated. As
+.. interstellar molecules go, 
+
+PAHs are extraordinarily large,
 intermediate in size between molecules and particles, with properties
 of both. The PAHs that dominate the interstellar emission contain some
 50-100 carbon atoms. In contrast, the largest non-PAH carbon-rich
@@ -121,15 +127,19 @@ their ability to convert UV to IR radiation, makes them powerful
 probes of astronomical objects at all stages of the stellar life
 cycle. Due to their low ionization potentials (6-8 eV), they allow
 astronomers to probe properties of astronomical plasmas in regions not
-normally accessible. On top of this, PAHs are not only witnesses to
-their local environment; they are often key players in local
-processes. The origin and evolution of astronomical PAHs starts in
-circum-stellar ejecta from late type stars. They are subsequently
-processed in the diffuse interstellar medium (ISM) by the prevalent UV
-field, energetic particles, and strong shocks. Once in dense clouds
-they participate in chemistry and are incorporated into newly formed
-stars and their budding planetary systems. All during this evolution,
-PAHs exert a direct influence on their environment. They play
+normally accessible (**what about maybe HI? and is plasma the right word here?**).
+On top of this, PAHs are not only witnesses to
+their local environment, but are often key players in local
+processes. (**example here or no?**)
+
+PAHs are formed in the circumstellar ejecta of late-type stars, which are
+thereafter incorporated into the interstellar medium (ISM) as the material
+travels away from the star. They are subsequently
+processed in the diffuse ISM by the prevalent ultraviolet (UV)
+field, energetic particles, and strong shocks. Over time, PAHs are incorporated
+into dense clouds, wherein they participate in ongoing chemistry and are
+eventually brought into the newly-forming star and budding planetary system.
+All during this evolution, PAHs exert a direct influence on their environment. They play
 important roles in circumstellar processes and the diffuse ISM by
 modulating radiation fields and influencing charge balance. Once
 incorporated into dense molecular clouds, they can dominate cloud
@@ -147,22 +157,22 @@ their environment, and in protoplanetary disk surface layers.
 
 Thanks to their ubiquity, PAH IR emission signatures are routinely
 used by astronomers as probes of object type and different
-processes. Some examples. The PAH IR signature is used as an indicator
+processes. For example, the PAH IR signature is used as an indicator
 of star formation in high redshift galaxies
 :cite:`2014ApJ...786...31R` and to differentiate between black hole
 and starburst engines in galactic nuclei
 :cite:`1998ApJ...498..579G`. Those astronomers who study star- and
-planet formation use the IR PAH signature as an indicator of the shape
-of the circumstellar disks from which new stars and planets form. For
-example, since PAH IR emission is pumped by UV light from the forming
+planet formation use the IR PAH signature as indicative
+of the circumstellar disks and clouds from which new stars and planets form. For
+instance, since PAH IR emission is pumped by UV light from the forming
 star, the extent of PAH emission from the disk can discriminate
 between flaring and non-flaring protoplanetary disk geometries
 :cite:`2001A&A...365..476M` :cite:`2009A&A...502..175B`. However, the
-treasure trove of information of local conditions and an object's
-evolutionary history is only accessible through detailed spectroscopic
-analysis. A full spectroscopic analysis of these observations and an
-understanding of the factors that drive the spectroscopic changes is
-only now possible with the NASA Ames PAH IR Spectroscopic Database
+treasure trove of information about an astronomical object's
+local conditions and its evolutionary history is only accessible through detailed spectroscopic
+analysis. This type of analysis, along with an understanding of the factors
+that drive the these spectroscopic changes, is only now possible with the
+NASA Ames PAH IR Spectroscopic Database
 (PAHdb) :cite:`2018ApJS..234...32B`
 :cite:`2014ApJSS..211....8B`. PAHdb is a NASA database containing
 thousands of spectra coupled to a set of innovative astronomical
@@ -170,7 +180,7 @@ models and tools that enables astronomers to probe and quantitatively
 analyze the state of the PAH population, i.e., ionization balance,
 size, structure, and composition and tie these to the prevailing local
 astrophysical conditions, e.g., electron density, parameters of the
-radiation field, etc. :cite:`2016ApJ...832...51B`.
+radiation field, etc. :cite:`2016ApJ...832...51B`. (**this last sentence kinda repeats what we have in earlier sections, cut it here or cut it from the earlier bits...?**)
 
 The James Webb Space Telescope (*JWST*)
 ---------------------------------------
