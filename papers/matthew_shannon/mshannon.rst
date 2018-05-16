@@ -37,93 +37,47 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
 
    astronomy, databases, fitting, data analysis
 
-Introduction
-============
+Science background
+==================
 
 Polycyclic aromatic hydrocarbons
 --------------------------------
 
-**this section has some redundancy/repetition with the "pah importance" section.**
+.. **this section has some redundancy/repetition with the "pah importance" section.**
+
 The astrophysical relevance of polycyclic aromatic hydrocarbons (PAHs)
 cannot be overstated. They are extraordinarily large for interstellar molecules, 
 typically containing 50-100 carbon atoms or larger. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
-HC11N, contains 11 carbon atoms. PAHs are also exceptionally stable,
+HC11N, contains 11 carbon atoms. PAHs are composed of an interlocking hexagonal carbon lattice with hydrogen atoms attached to its periphery (see Figure :ref:`fig:PAH`). PAHs are exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
 variety of astronomical objects, making them ubiquitous throughout the
 Cosmos and ideal probes of astronomical environments.
 
-Scientific analysis with molecular databases
---------------------------------------------
+.. figure:: ovalene.png
+   :align: center
 
-We present here software for the astronomical community developed at
-the Astrophysics & Astrochemistry Laboratory (`www.astrochemistry.org
-<http://www.astrochemistry.org/pahdb>`_) at NASA Ames Research Center
-(`www.nasa.gov/ames <http://www.nasa.gov/ames>`_). The Laboratory
-provides key insights into organic molecules in astronomical
-environments through a combination of quantum chemical calculations,
-direct laboratory measurements and different analysis techniques of
-astronomical data. The Laboratory provides the world’s foremost
-collection of data on PAHs, namely the NASA Ames PAH IR (infrared) Spectroscopic
-Database (PAHdb). It is highly cited and is used to characterize and
-understand organic molecules in our own galaxy and external
-galaxies. Thus far, PAHdb’s full set of analytical tools has only been
-available as a suite to be used with the IDL\ [#]_ programming
-language.
-
-.. [#] IDL is a registered trademark of `Harris Geospatial
-       <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
-
-Premise of this work: pyPAHdb
------------------------------
-
-Our new software is pyPAHdb, a streamlined version of the PAHdb
-analysis suite. The software accepts spectroscopic observations
-(including spectral maps) and characterizes the PAH emission using a
-database-fitting technique, providing the user with all pertinent PAH
-parameters derived from the fits: their ionization state(s), molecule
-sizes, structure and/or the presence of heteroatoms (e.g.,
-nitrogen). Its design is directly linked to the upcoming launch of the
-James Webb Space Telescope (*JWST*), but it is extended to be utilized
-with any major observatory, e.g., *Spitzer Space Telescope*,
-*ISO*, etc. The general program methodology is to: (1) read in various
-astronomical file formats, including FITS-files, astronomical
-ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
-least-squares-like fit to the data, using highly-oversampled
-pre-computed PAHdb spectra, which contains much of the relevant
-molecular physics; and (3) produce user output in a consistent way so
-that the user may interpret the role and characteristics of PAHs in their
-astronomical observations.
-
-We will present specific results based on the use of the pyPAHdb suite
-for characterizing PAHs in infrared spectroscopic observations. Here, we use
-*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
-it will be manipulated to accept data from other telescopes (e.g., *ISO*, *JWST*).
-As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also
-demonstrate its performance via benchmarks. pyPAHdb is open source and
-being developed on GitHub (`github.com/pahdb/pypahdb
-<https://github.com/pahdb/pypahdb>`_), therefore encouraging community
-involvement. It is part of an accepted Early Release Science program
-for *JWST* and will be incorporated into the standard astronomer’s
-*JWST* Toolkit for ease of use by the general astronomy community, in
-addition to PAH experts.
+   **Figure out how to make this smaller...!**
+   The polycyclic aromatic hydrocarbon (PAH) ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ).
+   :label:`fig:PAH`
 
 The importance of astronomical PAHs
-===================================
+-----------------------------------
 
 .. The astrophysical relevance of PAHs cannot be overstated. As
-.. interstellar molecules go, 
+   interstellar molecules go, 
+   PAHs are extraordinarily large,
+   intermediate in size between molecules and particles, with properties
+   of both. The PAHs that dominate the interstellar emission contain some
+   50-100 carbon atoms. In contrast, the largest non-PAH carbon-rich
+   interstellar molecule known, HC\ :sub:`11`\ N, contains 11 carbon
+   atoms. PAHs are also exceptionally stable, allowing them to survive
+   conditions in a remarkably wide variety of astronomical objects,
+   making them
 
-PAHs are extraordinarily large,
-intermediate in size between molecules and particles, with properties
-of both. The PAHs that dominate the interstellar emission contain some
-50-100 carbon atoms. In contrast, the largest non-PAH carbon-rich
-interstellar molecule known, HC\ :sub:`11`\ N, contains 11 carbon
-atoms. PAHs are also exceptionally stable, allowing them to survive
-conditions in a remarkably wide variety of astronomical objects,
-making them ubiquitous throughout the Cosmos. Their unique properties,
+PAHs are ubiquitous throughout the Cosmos. Their unique properties,
 coupled with their spectroscopic response to changing conditions and
-their ability to convert UV to IR radiation, makes them powerful
+their ability to convert ultraviolet (UV) to infrared (IR) radiation, makes them powerful
 probes of astronomical objects at all stages of the stellar life
 cycle. Due to their low ionization potentials (6-8 eV), they allow
 astronomers to probe properties of astronomical plasmas in regions not
@@ -132,10 +86,11 @@ On top of this, PAHs are not only witnesses to
 their local environment, but are often key players in local
 processes. (**example here or no?**)
 
+**Show PAH spectrum?! or an image with prominent PAH emission.**
 PAHs are formed in the circumstellar ejecta of late-type stars, which are
 thereafter incorporated into the interstellar medium (ISM) as the material
 travels away from the star. They are subsequently
-processed in the diffuse ISM by the prevalent ultraviolet (UV)
+processed in the diffuse ISM by the prevalent UV
 field, energetic particles, and strong shocks. Over time, PAHs are incorporated
 into dense clouds, wherein they participate in ongoing chemistry and are
 eventually brought into the newly-forming star and budding planetary system.
@@ -171,66 +126,88 @@ between flaring and non-flaring protoplanetary disk geometries
 treasure trove of information about an astronomical object's
 local conditions and its evolutionary history is only accessible through detailed spectroscopic
 analysis. This type of analysis, along with an understanding of the factors
-that drive the these spectroscopic changes, is only now possible with the
-NASA Ames PAH IR Spectroscopic Database
+that drive the these spectroscopic changes, is now possible with software
+at NASA Ames.
+
+.. only now possible with the
+   NASA Ames PAH IR Spectroscopic Database
+   (PAHdb) :cite:`2018ApJS..234...32B`
+   :cite:`2014ApJSS..211....8B`.
+  
+.. PAHdb is a NASA database containing
+   thousands of spectra coupled to a set of innovative astronomical
+   models and tools that enables astronomers to probe and quantitatively
+   analyze the state of the PAH population, i.e., ionization balance,
+   size, structure, and composition and tie these to the prevailing local
+   astrophysical conditions, e.g., electron density, parameters of the
+   radiation field, etc. :cite:`2016ApJ...832...51B`.
+
+.. (**this last sentence kinda repeats what we have in earlier sections, cut it here or cut it from the earlier bits...?**)
+
+
+.. Scientific analysis with molecular databases
+
+The Astrophysics & Astrochemistry Laboratory at NASA Ames
+=========================================================
+
+.. **this subsection seems more like database PR, which could go in the next section. Do we
+   need/want a dedicated subsection about using databases in general? Maybe just fold into PAHdb.**
+
+We present software for the astronomical community developed at
+the Astrophysics & Astrochemistry Laboratory (`www.astrochemistry.org
+<http://www.astrochemistry.org/pahdb>`_) at NASA Ames Research Center
+(`www.nasa.gov/ames <http://www.nasa.gov/ames>`_). The Laboratory
+provides key insights into organic molecules in astronomical
+environments through a combination of quantum chemical calculations,
+direct laboratory measurements and different analysis techniques of
+astronomical data.
+
+
+NASA Ames PAH IR Spectroscopic Database (PAHdb)
+-----------------------------------------------
+
+.. **Repetition an issue here, need to figure out how much of PAHdb should be introduced earlier in the 
+   paper and how much is done right here.**
+
+.. The Laboratory provides the world’s foremost
+   collection of data on PAHs, namely the NASA Ames PAH IR Spectroscopic
+   Database (PAHdb).
+
+.. Thus far, PAHdb’s full set of analytical tools has only been
+   available as a suite to be used with the IDL\ [#]_ programming
+   language.
+
+The NASA Ames PAH IR Spectroscopic Database
 (PAHdb) :cite:`2018ApJS..234...32B`
-:cite:`2014ApJSS..211....8B`. PAHdb is a NASA database containing
-thousands of spectra coupled to a set of innovative astronomical
+:cite:`2014ApJSS..211....8B` is the culmination
+of more that 30 years of laboratory and computational research carried
+out at the NASA Ames Research Center to test and refine the
+astronomical PAH model. The laboratory-measured and theoretically-computed libraries
+currently contain the spectra of 75 and 3139 PAH species,
+respectively, and are continuously expanded -- the world's foremost collection of PAH spectra.
+
+PAHdb is highly cited and is used to characterize and
+understand organic molecules in our own galaxy and external
+galaxies. The database includes a set of innovative astronomical
 models and tools that enables astronomers to probe and quantitatively
 analyze the state of the PAH population, i.e., ionization balance,
 size, structure, and composition and tie these to the prevailing local
 astrophysical conditions, e.g., electron density, parameters of the
-radiation field, etc. :cite:`2016ApJ...832...51B`. (**this last sentence kinda repeats what we have in earlier sections, cut it here or cut it from the earlier bits...?**)
-
-The James Webb Space Telescope (*JWST*)
----------------------------------------
-
-The James Webb Space Telescope (*JWST*; `www.jwst.nasa.gov
-<https://www.jwst.nasa.gov>`_) is NASA's next flagship observatory and
-is the successor to the succesful Hubble Space Telescope
-(`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and Spitzer
-Space Telescope (`www.nasa.gov/spitzer
-<https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
-collaboration between NASA, the European Space Agency (ESA) and the
-Canadian Space Agency (CSA). The telescope features a primary mirror
-with a diameter of 6.5 m made up from 18 individual hexagonal segments
-and carriers four science instruments. These instruments will observe
-the Universe with unprecedented resolution and sensitivity from 0.6 to
-27 µm. The observatory is expected to launch in 2020. A 3D rendering
-of the spacecraft is shown in Figure :ref:`fig:JWST`.
-
-.. figure:: JWST.png
-   :align: center
-
-   3D-rendering of the James Webb Space Telescope (*JWST*) using the
-   Maya® 3D animation, modeling, simulation, and rendering software
-   (`www.autodesk.com/products/maya/overview
-   <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
-   signature 6.5 m diameter primary mirror made up from 18 hexagonal
-   segments (gold) dominates the picture together with the stacked
-   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
-   <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
-
-NASA Ames PAH IR Spectroscopic Database (PAHdb)
-===============================================
+radiation field, etc. :cite:`2016ApJ...832...51B`.
 
 .. figure:: PAHdb.png
    :align: center
 
+   **maybe show ovalene instead?**
    Screenshot of the landing page of the NASA Ames PAH IR
    Spectroscopic Database located at `www.astrochemistry.org/pahdb/
    <http://www.astrochemistry.org/pahdb/>`_. :label:`fig:PAHdb`
 
-The NASA Ames PAH IR Spectroscopic Database (PAHdb) is the culmination
-of more that 30 years of laboratory and computational research carried
-out at the NASA Ames Research Center to test and refine the
-astronomical PAH model. The laboratory measured and computed libraries
-currently contain the spectra of 75 and 3139 PAH species,
-respectively, and are continuously expanded. At
+At
 `www.astrochemistry.org/pahdb/
 <http://www.astrochemistry.org/pahdb/>`_ these libraries can be
 perused and/or downloaded. Figure :ref:`fig:PAHdb` presents a
-screenshot of the website's landing page. Dowloads are offered
+screenshot of the website's landing page. Downloads are offered
 formatted as ASCII or XML. In addition, several software tools are
 provided that allow users to interact with a downloaded database
 XML-file and perform the necessary steps to analyze astronomical
@@ -251,8 +228,80 @@ interpret PAH emission spectra. Hence, the development of pyPAHdb.
 .. [#] IDL is a registered trademark of `Harris Geospatial
        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
 
+
+
+The next leap forward: The James Webb Space Telescope (*JWST*)
+==============================================================
+
+The James Webb Space Telescope (*JWST*; `www.jwst.nasa.gov
+<https://www.jwst.nasa.gov>`_) is NASA's next flagship observatory and
+is the successor to the exceptionally successful *Hubble Space Telescope*
+(`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and *Spitzer
+Space Telescope* (`www.nasa.gov/spitzer
+<https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
+collaboration between NASA, the European Space Agency (ESA) and the
+Canadian Space Agency (CSA). The telescope features a primary mirror
+with a diameter of 6.5 m made up from 18 individual hexagonal segments
+and carries four science instruments. These instruments will observe
+the Universe with unprecedented resolution and sensitivity from 0.6 to
+28 µm. The observatory is expected to launch in 2020. A 3D rendering
+of the spacecraft is shown in Figure :ref:`fig:JWST`.
+
+.. figure:: JWST.png
+   :align: center
+
+   3D-rendering of the James Webb Space Telescope (*JWST*) using the
+   Maya® 3D animation, modeling, simulation, and rendering software
+   (`www.autodesk.com/products/maya/overview
+   <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
+   signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
+   segments (gold), dominates the picture together with the stacked
+   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
+   <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
+
+
+
+
+Premise of this work: pyPAHdb
+==============================
+
+Our new software is pyPAHdb, a streamlined version of the PAHdb
+analysis suite. The software accepts spectroscopic observations
+(including spectral maps) and characterizes the PAH emission using a
+database-fitting technique, providing the user with all pertinent PAH
+parameters derived from the fits: their ionization state(s), molecule
+sizes, structure and/or the presence of heteroatoms (e.g.,
+nitrogen). Its design is directly linked to the upcoming launch of the
+James Webb Space Telescope (*JWST*), but it is extended to be utilized
+with any major observatory, e.g., *Spitzer Space Telescope*,
+*ISO*, etc. The general program methodology is to: (1) read in various
+astronomical file formats, including FITS-files, astronomical
+ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
+least-squares-like fit to the data, using highly-oversampled
+pre-computed PAHdb spectra, which contains much of the relevant
+molecular physics; and (3) produce user output in a consistent way so
+that the user may interpret the role and characteristics of PAHs in their
+astronomical observations.
+
+We will present specific results based on the use of the pyPAHdb suite
+for characterizing PAHs in infrared spectroscopic observations. Here, we use
+*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
+it will be manipulated to accept data from other telescopes (e.g., *ISO*, *JWST*).
+As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also
+demonstrate its performance via benchmarks. pyPAHdb is open source and
+being developed on GitHub (`github.com/pahdb/pypahdb
+<https://github.com/pahdb/pypahdb>`_), therefore encouraging community
+involvement. It is part of an accepted Early Release Science program
+for *JWST* and will be incorporated into the standard astronomer’s
+*JWST* Toolkit for ease of use by the general astronomy community, in
+addition to PAH experts.
+
+
+
+
+
 The software: pyPAHdb
-=====================
+---------------------
 
 pyPAHdb is being developed as part of the awarded James Webb Space
 Telescope (*JWST*) Early Release Science (ERS) program titled
@@ -276,8 +325,8 @@ analog of the *AmesPAHdbIDLSuite* (`github.com/PAHdb/AmesPAHdbIDLSuite
 PAH experts and non-experts alike to analyze and interpret
 astronomical PAH emission spectra.
 
-PAH Emission Model
-------------------
+The physics of PAH emission
+===========================
 
 In order to analyze astronomical PAH *emission* spectra with the
 spectroscopic data contained in PAHdb's libraries, a PAH emission
