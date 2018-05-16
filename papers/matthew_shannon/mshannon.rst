@@ -189,7 +189,7 @@ of more that 30 years of laboratory and computational research carried
 out at the NASA Ames Research Center to test and refine the
 astronomical PAH model. The laboratory-measured and theoretically-computed libraries
 currently contain the spectra of 75 and 3139 PAH species,
-respectively, and are continuously expanded -- the world's foremost collection of PAH spectra.
+respectively, and are continuously expanded — the world's foremost collection of PAH spectra.
 
 PAHdb is highly cited and is used to characterize and
 understand organic molecules in our own galaxy and external
@@ -303,22 +303,24 @@ analysis suite. The software accepts spectroscopic observations
 database-fitting technique, providing the user with all pertinent PAH
 parameters derived from the fits: their ionization state(s), molecule
 sizes, structure and/or the presence of heteroatoms (e.g.,
-nitrogen). Its design is directly linked to the upcoming launch of the
-James Webb Space Telescope (*JWST*), but it is extended to be utilized
+nitrogen). Its design is directly linked to the upcoming launch of *JWST*, but it can and will be extended to be utilized
 with any major observatory, e.g., *Spitzer Space Telescope*,
-*ISO*, etc. The general program methodology is to: (1) read in various
+*ISO*, etc.
+
+The general program methodology is to: (1) read in various
 astronomical file formats, including FITS-files, astronomical
 ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
 least-squares-like fit to the data, using highly-oversampled
 pre-computed PAHdb spectra, which contains much of the relevant
 molecular physics; and (3) produce user output in a consistent way so
 that the user may interpret the role and characteristics of PAHs in their
-astronomical observations.
+astronomical observations. To understand the assumptions made in this model,
+we first examine the physics of PAH emission.
 
-We present results based on the use of the pyPAHdb suite
-for characterizing PAHs in infrared spectroscopic observations. Here, we use
-*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
-it will be adjusted to accept data from other telescopes (e.g., *ISO*, synthetic *JWST* data).
+.. We present results based on the use of the pyPAHdb suite
+   for characterizing PAHs in infrared spectroscopic observations. Here, we use
+   *Spitzer Space Telescope* spectral data cubes as a test case. In the future,
+   it will be adjusted to accept data from other telescopes (e.g., *ISO*, synthetic *JWST* data).
 
 .. As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also demonstrate its performance via benchmarks. pyPAHdb is open source and
    being developed on GitHub (`github.com/pahdb/pypahdb
@@ -329,7 +331,7 @@ it will be adjusted to accept data from other telescopes (e.g., *ISO*, synthetic
    addition to PAH experts.
 
 
-Modelling the underlying PAH physics
+Modeling the underlying PAH physics
 ------------------------------------
 
 In order to analyze astronomical PAH *emission* spectra with the
@@ -352,19 +354,20 @@ PAH is thus calculated as:
 with :math:`\nu` the frequency in cm\ :sup:`-1`, :math:`h` Planck's
 constant in erg s, :math:`c` the speed-of-light in cm s\ :sup:`-1`,
 :math:`\nu_{i}` the frequency of mode :math:`i` in cm\ :sup:`-1`,
-:math:`\sigma_{i}` the integrated absorption cross-section for mode\
+:math:`\sigma_{i}` the integrated absorption cross-section for mode \
 :math:`i` in cm mol\ :sup:`-1`, :math:`k` Boltzmann's constant in erg
 K\ :sup:`-1`, :math:`T` the vibrational temperature in K, and
 :math:`\phi(\nu)` is the frequency dependent emission profile
 in cm. The sum is taken over all :math:`n` modes and the emission
-profile is assumed Gaussian with a FWHM of 15 cm\ :sup:`-1`. Note that
+profile is assumed Gaussian with a full-width at half-maximum (FWHM)
+of 15 cm\ :sup:`-1`. Note that
 before applying the emission profile, a redshift of 15 cm\ :sup:`-1`
 is applied to each of the band positions (:math:`\nu_{i}`) to mimic
 some anharmonic effects.
 
 The vibrational temperature attained after absorbing a single 7 eV
-photon is calculated through the heat capacity. The heat capacity,
-:math:`C_{\rm V}` in erg K, of a molecular system is given, in terms
+photon is calculated by the molecule's heat capacity. The heat capacity,
+:math:`C_{\rm V}` in erg K, of a molecular system can be described in terms
 of isolated harmonic oscillators by:
 
 .. math::
@@ -374,7 +377,7 @@ of isolated harmonic oscillators by:
 
 where :math:`g(\nu)` is known as the density of states and describes
 the distribution of vibrational modes. However due to the discrete
-nature of the modes, the density of states is just a sum of\
+nature of the modes, the density of states is just a sum of \
 :math:`\delta`\ -functions:
 
 .. math::
@@ -387,9 +390,9 @@ The vibrational temperature is ultimately calculated by solving:
 .. math::
    :label: eq:solve
 
-   \int\limits_{0}^{T_{\rm vibration}}C_{\rm V}\mathrm{d}T = E_{\rm in}\ ,
+   \int\limits_{0}^{T_{\rm vibration}}C_{\rm V} \mathrm{d}T = E_{\rm in}\ ,
 
-where :math:`E_{\rm in}` is the energy of the absorbed photon, here 7
+where :math:`E_{\rm in}` is the energy of the absorbed photon—here this is 7
 eV.
 
 In Python, in the full suite, Equation :ref:`eq:solve` is solved
@@ -404,8 +407,10 @@ eV photon.
 .. figure:: model.png
    :align: center
 
+   **ask CB how/where he made this, maybe use a lighter blue in the figure (to
+   match blue axis labels?)**
    Demonstration of applying the simple PAH emission model as outlined
-   in Equations :ref:`eq:model`\ - :ref:`eq:solve` to the 0 K spectrum
+   in Equations :ref:`eq:model`\ -:ref:`eq:solve` to the 0 K spectrum
    of coronene (in black; C\ :sub:`24`\ H\ :sub:`12`\ :sup:`+`) from
    version 3.00 of the library of computed spectra of PAHdb. After
    applying the PAH emission model, but before the convolution with
@@ -414,7 +419,7 @@ eV photon.
    been given a FWHM of 45 cm\ :sup:`-1`. :label:`fig:model`
 
 pyPAHdb uses a precomputed matrix of theoretically calculated,
-highly-over-sampled, PAH emission spectra from version 3.00 of the
+highly-over-sampled PAH emission spectra from version 3.00 of the
 library of computed spectra. This matrix has been constructed from a
 collection of "astronomical" PAHs, which include those PAHs that have
 more than 20 carbon atoms, have no hetero-atom substitutions except
@@ -422,22 +427,31 @@ for possibly nitrogen, have no aliphatic side groups, and are not
 fully dehydrogenated. In addition, the fullerenes C\ :sub:`60` and C\
 :sub:`70` are added.
 
-Inputs, outputs, general workflow
----------------------------------
+Fitting a spectrum with pypahdb
+================================
 
-What the user needs to know to effectively apply it to their
-data set.
+As a sample,
 
-The code-block below is taken from the example.py included in the
+
+.. Inputs, outputs, general workflow
+.. ---------------------------------
+
+.. What the user needs to know to effectively apply it to their
+.. data set.
+
+The code-block below is taken from the ``example.py`` included in the
 pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
 
 .. code-block:: python
 
     import pypahdb
+
     # load an observation from file
     observation = pypahdb.observation('NGC7023-NW-PAHs.txt')
+    
     # decompose the spectrum with PAHdb
     result = pypahdb.decomposer(observation.spectrum)
+    
     # write results to file
     pypahdb.writer(result, header=observation.header)
 
@@ -446,11 +460,13 @@ Figure :ref:`fig:fit` presents the output.
 .. figure:: fit2.png
    :align: center
 
+   **should we use shading for the charge breakdown? maybe too busy.**
    Output from running the code example. :label:`fig:fit`
 
 .. figure:: map.png
    :align: center
 
+   **let's use viridis?**
    PAH ionization map constructed from analyzing the *Spitzer*
    spectral map of the reflection nebula NGC 7023. :label:`fig:map`.
 
