@@ -235,7 +235,7 @@ interpret PAH emission spectra. Hence, the development of pyPAHdb.
 
 
 
-The next leap forward: The James Webb Space Telescope (*JWST*)
+The next leap forward: James Webb Space Telescope (*JWST*)
 ==============================================================
 
 The James Webb Space Telescope (*JWST*; `www.jwst.nasa.gov
@@ -268,54 +268,14 @@ the ERS program perhaps?**
    <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
 
 
-
-
-Premise of this work: pyPAHdb
-==============================
-
-Our new software is pyPAHdb, a streamlined version of the PAHdb
-analysis suite. The software accepts spectroscopic observations
-(including spectral maps) and characterizes the PAH emission using a
-database-fitting technique, providing the user with all pertinent PAH
-parameters derived from the fits: their ionization state(s), molecule
-sizes, structure and/or the presence of heteroatoms (e.g.,
-nitrogen). Its design is directly linked to the upcoming launch of the
-James Webb Space Telescope (*JWST*), but it is extended to be utilized
-with any major observatory, e.g., *Spitzer Space Telescope*,
-*ISO*, etc. The general program methodology is to: (1) read in various
-astronomical file formats, including FITS-files, astronomical
-ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
-least-squares-like fit to the data, using highly-oversampled
-pre-computed PAHdb spectra, which contains much of the relevant
-molecular physics; and (3) produce user output in a consistent way so
-that the user may interpret the role and characteristics of PAHs in their
-astronomical observations.
-
-We will present specific results based on the use of the pyPAHdb suite
-for characterizing PAHs in infrared spectroscopic observations. Here, we use
-*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
-it will be manipulated to accept data from other telescopes (e.g., *ISO*, *JWST*).
-As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also
-demonstrate its performance via benchmarks. pyPAHdb is open source and
-being developed on GitHub (`github.com/pahdb/pypahdb
-<https://github.com/pahdb/pypahdb>`_), therefore encouraging community
-involvement. It is part of an accepted Early Release Science program
-for *JWST* and will be incorporated into the standard astronomer’s
-*JWST* Toolkit for ease of use by the general astronomy community, in
-addition to PAH experts.
-
-
-
-
-
-The software: pyPAHdb
----------------------
+pyPAHdb: a tool designed for JWST
+=================================
 
 pyPAHdb is being developed as part of the awarded James Webb Space
 Telescope (*JWST*) Early Release Science (ERS) program titled
 "Radiative Feedback from Massive Stars as Traced by Multiband Imaging
 and Spectroscopic Mosaics" (`program website <http://jwst-ism.org/>`_;
-ID: 1288). The purpose of the ERS is to educate and inform the
+ID: 1288). The purpose of ERS is to educate and inform the
 astronimical community of *JWST*'s capabilities, and provide rapid
 access to data and software tools that will enable full scientific
 exploitation in Cycle 2 and beyond. More information about the ERS
@@ -333,8 +293,44 @@ analog of the *AmesPAHdbIDLSuite* (`github.com/PAHdb/AmesPAHdbIDLSuite
 PAH experts and non-experts alike to analyze and interpret
 astronomical PAH emission spectra.
 
-The physics of PAH emission
-===========================
+
+The pyPAHdb software
+---------------------
+
+pyPAHdb is a streamlined version of the PAHdb
+analysis suite. The software accepts spectroscopic observations
+(including spectral maps) and characterizes the PAH emission using a
+database-fitting technique, providing the user with all pertinent PAH
+parameters derived from the fits: their ionization state(s), molecule
+sizes, structure and/or the presence of heteroatoms (e.g.,
+nitrogen). Its design is directly linked to the upcoming launch of the
+James Webb Space Telescope (*JWST*), but it is extended to be utilized
+with any major observatory, e.g., *Spitzer Space Telescope*,
+*ISO*, etc. The general program methodology is to: (1) read in various
+astronomical file formats, including FITS-files, astronomical
+ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
+least-squares-like fit to the data, using highly-oversampled
+pre-computed PAHdb spectra, which contains much of the relevant
+molecular physics; and (3) produce user output in a consistent way so
+that the user may interpret the role and characteristics of PAHs in their
+astronomical observations.
+
+We present results based on the use of the pyPAHdb suite
+for characterizing PAHs in infrared spectroscopic observations. Here, we use
+*Spitzer Space Telescope* spectral data cubes as a test case. In the future,
+it will be adjusted to accept data from other telescopes (e.g., *ISO*, synthetic *JWST* data).
+
+.. As pyPAHdb is designed to be streamlined compared to the full IDL suite, we will also demonstrate its performance via benchmarks. pyPAHdb is open source and
+   being developed on GitHub (`github.com/pahdb/pypahdb
+   <https://github.com/pahdb/pypahdb>`_), therefore encouraging community
+   involvement. It is part of an accepted Early Release Science program
+   for *JWST* and will be incorporated into the standard astronomer’s
+   *JWST* Toolkit for ease of use by the general astronomy community, in
+   addition to PAH experts.
+
+
+Modelling the underlying PAH physics
+------------------------------------
 
 In order to analyze astronomical PAH *emission* spectra with the
 spectroscopic data contained in PAHdb's libraries, a PAH emission
