@@ -45,14 +45,19 @@ Polycyclic aromatic hydrocarbons
 
 .. **this section has some redundancy/repetition with the "pah importance" section.**
 
-The astrophysical relevance of polycyclic aromatic hydrocarbons (PAHs)
-cannot be overstated. They are extraordinarily large for interstellar molecules, 
-typically containing 50-100 carbon atoms or larger. In
+Polycyclic aromatic hydrocarbons (PAHs) are exceptionally important
+interstellar molecules found throughout the universe. They dominate the
+mid-infrared (IR) emission of many astronomical objects, as they absorb
+ultraviolet (UV) photons and re-emit through a series of IR emission features
+between 3-20 µm. They are seen in reflection nebulae, protoplanetary disks,
+the diffuse interstellar medium (ISM), planetary nebula, and entire galaxies,
+among other environments. PAHs themselves are extraordinarily large for interstellar molecules, 
+typically containing 50-100 carbon atoms. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
 HC11N, contains 11 carbon atoms. PAHs are composed of an interlocking hexagonal carbon lattice with hydrogen atoms attached to its periphery (see Figure :ref:`fig:PAH`). PAHs are exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
 variety of astronomical objects, making them ubiquitous throughout the
-Cosmos and ideal probes of astronomical environments.
+Cosmos and thus ideal probes of astronomical environments. (**bit of repetition?**)
 
 .. figure:: ovalene.png
    :align: center
@@ -75,15 +80,15 @@ The importance of astronomical PAHs
    conditions in a remarkably wide variety of astronomical objects,
    making them
 
-PAHs are ubiquitous throughout the Cosmos. Their unique properties,
-coupled with their spectroscopic response to changing conditions and
-their ability to convert ultraviolet (UV) to infrared (IR) radiation, makes them powerful
+The unique properties of PAHs,
+coupled with their spectroscopic response to changing physical conditions and
+their ability to convert UV photons to IR radiation, makes them powerful
 probes of astronomical objects at all stages of the stellar life
 cycle. Due to their low ionization potentials (6-8 eV), they allow
 astronomers to probe properties of astronomical plasmas in regions not
 normally accessible (**what about maybe HI? and is plasma the right word here?**).
 On top of this, PAHs are not only witnesses to
-their local environment, but are often key players in local
+their local environment, but are key players in affecting astrophysical ongoing
 processes. (**example here or no?**)
 
 **Show PAH spectrum?! or an image with prominent PAH emission.**
@@ -246,6 +251,9 @@ and carries four science instruments. These instruments will observe
 the Universe with unprecedented resolution and sensitivity from 0.6 to
 28 µm. The observatory is expected to launch in 2020. A 3D rendering
 of the spacecraft is shown in Figure :ref:`fig:JWST`.
+**should say something about how it will advance PAH research, 
+and provide a link to the next section (pypahdb), something about
+the ERS program perhaps?**
 
 .. figure:: JWST.png
    :align: center
