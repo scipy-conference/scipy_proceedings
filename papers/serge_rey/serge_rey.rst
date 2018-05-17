@@ -19,6 +19,7 @@
 :email: 
 :institution: Center for Geospatial Sciences, University of California, Riverside 
 
+:bibliography: reference
 
 
 
@@ -384,21 +385,10 @@ tigris so that users
 
 Reproducibility: A final direction for future research is the development of
 reproducible workflows as part of OSLNAP. Here we envisage leveraging our
-earlier work on provenance for spatial anayltical workflows [Anselin14]_ and
+earlier work on provenance for spatial anayltical workflows :cite:`Anselin_2014` and
 extending it to the full longitudinal neighborhood analysis pipeline.
 
 
 
 References
 ----------
-.. [Anselin14] L. Anselin, S. J. Rey, W. Li. *Metadata and provenance for spatial analysis: the case of spatial weights*,
-               International Journal of Geographical Information Science, 28(11): 2261-2280.
-
-.. [logan_2016] Logan
-                blah
-
-.. [Rey01] S. J. Rey. *Spatial empirics for economic growth and convergence*,
-              Geographical Analysis, 33(3):195-213, July 2001.
-
-.. [Rey14] S. J. Rey. *Python Spatial Analysis Library (PySAL): An update and illustration*,
-           In Brunsdon, C. and Singleton, A. (eds). Geocomputation: A practical primer. Sage Publications Ltd., pages 233-235.
