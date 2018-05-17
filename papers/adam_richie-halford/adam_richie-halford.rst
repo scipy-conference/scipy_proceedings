@@ -169,14 +169,13 @@ Batch jobs) to execute the program over these data. When run, each batch
 job selects its own input, executes the UDF, and returns its serialized
 output to S3.
 
-|warning| Talk about S3 transfers within the data center. User shouldn't
-pay for transfer from S3 to instance and back. Only for transfer out of
-the data center (i.e. from local machine to S3 and back. Is that true?
-
-[ARIEL: I think that this is true only if your instances and your
-buckets are in the same region!]
-
-|warning|
+.. Talk about S3 transfers within the data center. If the instances and
+   bucket are in the same region, then users shouldn't pay for transfer
+   from S3 to instance and back. Only for transfer out of the data
+   center (i.e. from local machine to S3 and back. We probably don't
+   need to mention this detail in the paper. If we do, we should talk
+   about how the use can use functions in ck.config to change their
+   bucket region to match the instance region.
 
 Finally, :code:`Knot.map()` downloads the output from S3 and returns
 it to the user. Since AWS Batch, and therefore Cloudknot, allows
@@ -211,40 +210,15 @@ to generate the requirements file used to install dependencies in the
 Docker container on AWS ECR. So all required packages must be imported
 inside the UDF itself.
 
-|warning|
-
-[ARIEL: Do we really need the docstring below? It makes the whole
-thing rather long]
-
 .. code-block:: python
 
    import cloudknot as ck
 
-   def random_mv_prod(b):
-       """
-       Multiply a random 1024x1024 matrix by a
-       random vector of length 1024. Matrix and vector
-       elements are normally distributed with standard
-       deviation `sd`.
-
-       Parameters
-       ----------
-       sd : float
-           Standard deviation of the normal
-           distribution from which elements of the
-           matrix and vector are drawn
-
-       Returns
-       -------
-       ndarray
-           Random matrix-vector product
-       """
+   def monte_pi_count(b):
        import numpy as np
-
-       x = np.random.normal(0, b, 1024)
-       A = np.random.normal(0, b, (1024, 1024))
-
-       return np.dot(A, x)
+       x = np.random.rand(n)
+       y = np.random.rand(n)
+       return np.count_nonzero(x * x + y * y <= 1.0)
 
 Next, we create a :code:`Knot` instance and pass the UDF using the func
 argument. The name argument affects the names of resources created on
@@ -253,15 +227,16 @@ would be named "random_mv_product-cloudknot-job-definition."
 
 .. code-block:: python
 
-   knot = ck.Knot(name='random_mv_product',
-                  func=random_mv_prod)
+   knot = ck.Knot(name='pi-calc', func=monte_pi_count)
 
 We submit jobs with the :code:`Knot.map()` method:
 
 .. code-block:: python
 
    import numpy as np # for np.linspace
-   futures = knot.map(np.linspace(0.1, 100, 20))
+   n_jobs, n_samples = 10000, 100000000
+   args = np.ones(n_jobs, dtype=np.int32) * n_samples
+   future = knot.map(args)
 
 This will launch an AWS Batch array job with 20 child jobs, one for each
 element of the input array. Cloudknot can accomodate
@@ -291,15 +266,32 @@ So in the example above, :code:`future.done()` is equivalent to
 :code:`knot.jobs[-1].result()`. In this way, users have access to AWS
 Batch job results that they have run in past sessions.
 
+In this pedagogical example, we are estimating :math:`\pi` using the
+Monte Carlo method. :code:`Knot.map()` returns a future for an array
+of counts of random points that fall within the circle enclosed by the
+unit square. To get the final estimate of :math:`\pi`, we need to sum
+all the elements of this array and divide by four, a simple use case for
+:code:`future.add_done_callback()`:
+
+.. code-block:: python
+
+   PI = 0.0
+   n_total = n_samples * n_jobs
+   def pi_from_future(future):
+       global PI
+       PI = 4.0 * np.sum(future.result()) / n_total
+
+   future.add_done_callback(pi_from_future)
+
 Lastly, without navigating to the AWS console, we can get a quick
 summary of the status of all jobs submitted with this :code:`Knot` using
 
 .. code-block:: python
 
    >>> knot.view_jobs()
-   Job ID          Name                  Status
-   -----------------------------------------------
-   565605cc...     random_mv_prod-0      SUBMITTED
+   Job ID          Name           Status
+   ----------------------------------------
+   fcd2a14b...     pi-calc-0      PENDING
 
 
 Examples
@@ -314,15 +306,15 @@ subsequently complex software and resource dependencies.
 Solving differential equations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-|warning| Simulations executed with cloudknot do not have to comply with any
+Simulations executed with cloudknot do not have to comply with any
 particular memory or time limitations. This is in contrast to Pywren's
-limitations, which stem from the use of the AWS Lambda service. On the other
-hand, cloudknot's use of AWS Batch increases the overhead associated with
-creating AWS resources and uploading a Docker container to ECR. While this
-infrastructure setup time can be minimized by reusing AWS resources that were
-created in a previous session, this setup time suits use-cases for which
-execution time is much greater than the time required to create the necessary
-resources on AWS.
+limitations, which stem from the use of the AWS Lambda service. On
+the other hand, cloudknot's use of AWS Batch increases the overhead
+associated with creating AWS resources and uploading a Docker container
+to ECR. While this infrastructure setup time can be minimized by reusing
+AWS resources that were created in a previous session, this setup time
+suits use-cases for which execution time is much greater than the time
+required to create the necessary resources on AWS.
 
 To demonstrate this, we used Cloudknot and Pywren to find the steady-state
 solution to the two-dimensional heat equation by the Gauss-Seidel method
@@ -331,49 +323,70 @@ specific implementation of the method, and serves only as a benchmarking tool.
 In this fictitious example, we wish to parallelize execution both over a range
 of different boundary conditions and over a range of grid sizes.
 
-|warning| First, we hold the grid size constant and parallelize over
-different temperature constraints on one edge of the simulation grid.
-We investigate the scaling of job execution time as a function of the
-size of the argument array. In Figure :ref:`fig.nargsscaling` we
-show the execution time as a function of the length of the argument
-array. The default :code:`Knot` instance has a maximum of 256 vCPUs
-in its compute environment and a desired vCPUs setting of 8. We
-testing scaling using these default parameters and also using a custom
-parameters with :code:`min_vcpus=512`, :code:`desired_vcpus=2048`, and
-:code:`max_vcpus=4096`. These tests were also limited by the EC2 service
-limits for our region and account, which vary by instance type but never
-exceed 200 instances. The user interested in maximizing throughput
-will need to request limit increases. Regardless of the :code:`Knot`
-parameters, Pywren outperformed cloudknot at all argument array sizes.
+First, we hold the grid size constant at 10 x 10 and parallelize over
+different temperature constraints on one edge of the simulation grid. We
+investigate the scaling of job execution time as a function of the size
+of the argument array. In Figure :ref:`fig.nargsscaling` we show the
+execution time as a function of the length of the argument array (with
+a :math:`\log_2` scale on both axes). The default :code:`Knot` instance
+has a maximum of 256 vCPUs in its compute environment and a desired
+vCPUs setting of 8. We testing scaling using these default parameters
+and also using a custom parameters with :code:`min_vcpus=512`,
+:code:`desired_vcpus=2048`, and :code:`max_vcpus=4096`. These tests
+were also limited by the EC2 service limits for our region and account,
+which vary by instance type but never exceeded 200 instances. The user
+interested in maximizing throughput could request limit increases.
+Regardless of the :code:`Knot` parameters, Pywren outperformed cloudknot
+at all argument array sizes. Indeed, Pywren appears to achieve
+:math:`\mathcal{O}(1)` scaling for much of the argument range, revealing
+AWS Lambda's capabilities for massively parallel computation. |warning|
 
 .. figure:: figures/nargsscaling.png
 
-   Write caption. :label:`fig.nargsscaling`
+   Execution time to find solutions of the 2D heat equation for many
+   different temperature constraints on a 10x10 grid. We show scaling
+   as a function of the number of constraints for Pywren, the default
+   cloudknot configuration, and a cloudknot configuration with more
+   available vCPUs. Pywren outperforms cloudknot in all cases. We posit
+   that the additional overhead associated with building the Docker
+   image, along with EC2 service limits limited cloudknot's throughput.
+   :label:`fig.nargsscaling`
 
-In Figure :ref:`fig.syssizescaling`, we still parallelize over a range
-of temperature constraints, but we do so for increasing grid sizes. Grid
-sizes beyond 125 x 125 required an individual job execution time that
-exceeded the AWS Lambda execution limit of 300s. So Pywren was unable
-to compute on the larger grid sizes. Before that, there is a crossover
-point around 100 x 100 where Cloudknot outperforms Pywren.
+For the data in Figure :ref:`fig.syssizescaling`, we still parallelized
+over only five different temperature constraints, but we did so
+for increasing grid sizes. Grid sizes beyond 125 x 125 required an
+individual job execution time that exceeded the AWS Lambda execution
+limit of 300s. So Pywren was unable to compute on the larger grid sizes.
+There is a crossover point around 80 x 80 where Cloudknot outperforms
+Pywren. Before this point, AWS Lambda's fast triggering and continuous
+scaling surpass the AWS Batch queueing system. Conversely, past this
+point the compute power of each individual EC2 instance launched by
+AWS Batch is enough to compensate for the difference in queueing
+performance. |warning|
 
 .. figure:: figures/syssizescaling.png
 
-   Write caption. :label:`fig.syssizescaling`
+   Execution time to find five solutions to the 2D heat equation
+   as a function of grid size. Grid sizes above 125 x 125 exceed
+   Pywren's limit on execution time of 300s. The cross-over point at
+   around 80 x 80 occurs when it is more beneficial to have the more
+   powerful EC2 instances provided by cloudknot with AWS Batch than the
+   massively parallel execution provided by Pywren with AWS Lambda.
+   :label:`fig.syssizescaling`
 
-|warning| Taken together, Figures :ref:`fig.nargsscaling` and
-:ref:`fig.syssizescaling` indicate that if a UDF can be executed
-within AWS Lambda's execution time and memory limitations and does not
-have software and data dependencies that would prohibit using
-Pywren, it should be parallelized on AWS using Pywren rather than
-Cloudknot. However, when similations are too large or complicated to fit
-well into Pywren's stateless function framework, Cloudknot simplifies
-their distributed execution on AWS. Pywren's authors note that the AWS
-Lambda limits are not fixed and are likely to improve. We agree and note
-only that EC2 and AWS Batch limitations are likely to improve alongside
-the Lambda increases. It is likely that there will always exist
-scientific workloads in the region between the two sets of limitations.
-|warning|
+Taken together, Figures :ref:`fig.nargsscaling` and
+:ref:`fig.syssizescaling` indicate that if a UDF can be executed within
+AWS Lambda's execution time and memory limitations and does not have
+software and data dependencies that would prohibit using Pywren, it
+should be parallelized on AWS using Pywren rather than Cloudknot.
+However, when similations are too large or complicated to fit well into
+Pywren's stateless function framework, Cloudknot is the appropriate tool
+to simplify their distributed execution on AWS. Pywren's authors note
+that the AWS Lambda limits are not fixed and are likely to improve. We
+agree and note only that EC2 and AWS Batch limitations are likely to
+improve alongside the Lambda increases. It is likely that there will
+always exist scientific workloads in the region between the two sets of
+limitations.
 
 
 Data Dependencies: Analysis of magnetic resonance imaging data
