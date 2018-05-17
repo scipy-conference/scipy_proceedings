@@ -362,7 +362,9 @@ Conclusion (0.5)
 
 Future Directions (SR, EK, SH, LW, WK)
 
-In this paper we have presented the motivation for, and initial design and implementation of OSLNAP. At present, we are in the early phases of the project and moving we will be focusing on the following directions.
+In this paper we have presented the motivation for, and initial design and
+implementation of OSLNAP. At present, we are in the early phases of the project
+and moving we will be focusing on the following directions.
 
 Parameter sweeps: In the definition of neighborhoods, a researcher faces a
 daunting number of decisions surrounding treatment of harmonization, selection
