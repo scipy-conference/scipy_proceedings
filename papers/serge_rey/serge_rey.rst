@@ -361,13 +361,36 @@ Conclusion (0.5)
 ----------------
 
 Future Directions (SR, EK, SH, LW, WK)
-~
+
+In this paper we have presented the motivation for, and initial design and implementation of OSLNAP. At present, we are in the early phases of the project and moving we will be focusing on the following directions.
+
+Parameter sweeps: In the definition of neighborhoods, a researcher faces a
+daunting number of decisions surrounding treatment of harmonization, selection
+of variables, and choice of clustering algorithm, among others. In the
+neighborhood literature, the implications of these decisions remain unexplored
+and this is due to the computational burdens that have precluded formal
+examination. We plan on a modular design for OSLNAP that would support extensive
+parameter sweeps to provide an empirical basis for exploring these issues and to
+offer applied researchers computationally informed guidance on these decisions.
+
+Data services: OSLNAP is being designed to work with existing harmonized data
+sets available from various firms and research labs. Because these fall under
+restrictive licenses, users must first acquire these sources - they cannot be
+distributed with OLSNAP. To address the limitations associated with this
+strategy, we are exploring interfaces to public data services such as CenPy and
+tigris so that users
+
+Reproducibility: A final direction for future research is the development of
+reproducible workflows as part of OSLNAP. Here we envisage leveraging our
+earlier work on provenance for spatial anayltical workflows [Anselin14]_ and
+extending it to the full longitudinal neighborhood analysis pipeline.
+
 
 
 References
 ----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [Anselin14] L. Anselin, S. J. Rey, W. Li. *Metadata and provenance for spatial analysis: the case of spatial weights*,
+               International Journal of Geographical Information Science, 28(11): 2261-2280.
 
 .. [logan_2016] Logan
                 blah
