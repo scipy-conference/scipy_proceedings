@@ -234,7 +234,7 @@ We submit jobs with the :code:`Knot.map()` method:
 .. code-block:: python
 
    import numpy as np # for np.linspace
-   n_jobs, n_samples = 10000, 100000000
+   n_jobs, n_samples = 1000, 100000000
    args = np.ones(n_jobs, dtype=np.int32) * n_samples
    future = knot.map(args)
 
@@ -368,7 +368,7 @@ performance. |warning|
 
    Execution time to find five solutions to the 2D heat equation
    as a function of grid size. Grid sizes above 125 x 125 exceed
-   Pywren's limit on execution time of 300s. The cross-over point at
+   Pywren's limit on execution time of 300 sec. The cross-over point at
    around 80 x 80 occurs when it is more beneficial to have the more
    powerful EC2 instances provided by cloudknot with AWS Batch than the
    massively parallel execution provided by Pywren with AWS Lambda.
@@ -466,7 +466,12 @@ have evolved and improved since.
 
 .. figure:: figures/mri_benchmark.png
 
-   Write caption. :label:`fig.mribenchmark`
+   MRI analysis pipeline with data requirements. A comparison of
+   Cloudknot performance to other parallel computing systems: Dask,
+   Spark and Myria, based on a previous benchmark
+   :cite:`mehta2017comparative`. Cloudknot is orders of magnitude
+   slower for small amounts of data, but reaches within 10-25 %
+   of these systems' performance for large amounts of data.
 
 
 Data and software dependencies: analysis of microscopy data
