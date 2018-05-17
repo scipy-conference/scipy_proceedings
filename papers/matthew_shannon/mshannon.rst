@@ -50,21 +50,22 @@ interstellar molecules found throughout the universe. They dominate the
 mid-infrared (IR) emission of many astronomical objects, as they absorb
 ultraviolet (UV) photons and re-emit through a series of IR emission features
 between 3-20 µm. They are seen in reflection nebulae, protoplanetary disks,
-the diffuse interstellar medium (ISM), planetary nebula, and entire galaxies,
+the diffuse interstellar medium (ISM), planetary nebula, and entire galaxies (e.g., Figure :ref:`fig:M82`),
 among other environments. PAHs themselves are extraordinarily large for interstellar molecules, 
 typically containing 50-100 carbon atoms. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
-HC11N, contains 11 carbon atoms. PAHs are composed of an interlocking hexagonal carbon lattice with hydrogen atoms attached to its periphery (see Figure :ref:`fig:PAH`). PAHs are exceptionally stable,
+HC11N, contains 11 carbon atoms. PAHs are composed of an interlocking hexagonal carbon lattice with hydrogen atoms attached to its periphery (see Figure :ref:`fig:PAHdb`). PAHs are exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
 variety of astronomical objects, making them ubiquitous throughout the
 Cosmos and thus ideal probes of astronomical environments. (**bit of repetition?**)
 
-.. figure:: ovalene.png
-   :align: center
+.. .. 
+.. spectra.png
+..    :align: center
 
-   **Figure out how to make this smaller...!**
-   The polycyclic aromatic hydrocarbon (PAH) ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ).
-   :label:`fig:PAH`
+..    **Figure out how to make this smaller...!**
+..    The polycyclic aromatic hydrocarbon (PAH) ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ).
+..    :label:`fig:PAH`
 
 The importance of astronomical PAHs
 -----------------------------------
@@ -85,13 +86,20 @@ coupled with their spectroscopic response to changing physical conditions and
 their ability to convert UV photons to IR radiation, makes them powerful
 probes of astronomical objects at all stages of the stellar life
 cycle. Due to their low ionization potentials (6-8 eV), they allow
-astronomers to probe properties of astronomical plasmas in regions not
-normally accessible (**what about maybe HI? and is plasma the right word here?**).
+astronomers to probe properties of diffuse media in regions not
+normally accessible.
 On top of this, PAHs are not only witnesses to
-their local environment, but are key players in affecting astrophysical ongoing
+their local environment, but are key players in affecting ongoing astrophysical 
 processes. (**example here or no?**)
 
-**Show PAH spectrum?! or an image with prominent PAH emission.**
+.. figure:: M82.png
+   :align: center
+
+   A combined visible light-infrared image from the *Spitzer Space Telescope* of the galaxy Messier-82 (M82), also known as the cigar nebula because of its cigar-like shape in the visible. The red region streaming away from the galaxy into intergalactic space traces the infrared emission from PAHs.
+   :label:`fig:M82`
+
+.. Visible (left; Hubble Space Telescope) and combined 
+
 PAHs are formed in the circumstellar ejecta of late-type stars, which are
 thereafter incorporated into the interstellar medium (ISM) as the material
 travels away from the star. They are subsequently
@@ -200,13 +208,19 @@ size, structure, and composition and tie these to the prevailing local
 astrophysical conditions, e.g., electron density, parameters of the
 radiation field, etc. :cite:`2016ApJ...832...51B`.
 
-.. figure:: PAHdb.png
+.. figure:: screenshot.png
    :align: center
 
-   **maybe show ovalene instead?**
-   Screenshot of the landing page of the NASA Ames PAH IR
+   **hacky, photoshop the main title onto the screenshot below to make a single figure?**
+   Screenshot of the NASA Ames PAH IR
    Spectroscopic Database located at `www.astrochemistry.org/pahdb/
-   <http://www.astrochemistry.org/pahdb/>`_. :label:`fig:PAHdb`
+   <http://www.astrochemistry.org/pahdb/>`_, here shown for the molecule
+   ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ). Molecule details and 
+   the overall vibrational spectrum are presented. Additional, each vibrational transition
+   can be inspected and is presented as an animation
+   for ease of interpretation (c.f. the vectors on the molecule
+   in the lower-right corner).
+   :label:`fig:PAHdb`
 
 At
 `www.astrochemistry.org/pahdb/
@@ -316,6 +330,19 @@ molecular physics; and (3) produce user output in a consistent way so
 that the user may interpret the role and characteristics of PAHs in their
 astronomical observations. To understand the assumptions made in this model,
 we first examine the physics of PAH emission.
+
+.. figure:: flowchart_draft2.png
+   :align: center
+
+   The methodology of pyPAHdb. Astronomical spectra, whether individual FITS or ASCII files or entire spectral cubes, are read in and their headers parsed for specific keywords. A large precomputed matrix of PAH spectra is loaded and interpolated to the wavelength grid of the astronomical observations.
+   Fitting is performed with a non-negative least squares (NNLS) method, which 
+   yields the individual PAH molecule contributions to the total fit. As a result, 
+   we obtain a breakdown of the model fit in terms of PAH size, charge, structure (e.g., 
+   symmetric vs. asymmetric), and composition (e.g., the presence of nitrogen-substituted
+   PAHs). The results are written to disk as a single FITS file and a PDF (one page per pixel, if 
+   a spectral cube is given as input). The molecule physics needed for this method are encapsulated
+   in the precomputed matrix of PAH spectra.
+   :label:`fig:flowchart`
 
 .. We present results based on the use of the pyPAHdb suite
    for characterizing PAHs in infrared spectroscopic observations. Here, we use
@@ -427,17 +454,19 @@ for possibly nitrogen, have no aliphatic side groups, and are not
 fully dehydrogenated. In addition, the fullerenes C\ :sub:`60` and C\
 :sub:`70` are added.
 
-Fitting a spectrum with pypahdb
-================================
 
-As a sample,
+pyPAHdb performance
+--------------------
+
+compare times for running pypahdb versus IDL suite for ngc7023 map? maybe turning parallelization
+on/off too.
 
 
-.. Inputs, outputs, general workflow
-.. ---------------------------------
+Fitting spectra with pyPAHdb: demonstration
+===========================================
 
-.. What the user needs to know to effectively apply it to their
-.. data set.
+**Should maybe show an image of NGC 7023 to place side-by-side with the derived ionization map?**
+
 
 The code-block below is taken from the ``example.py`` included in the
 pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
@@ -445,13 +474,10 @@ pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
 .. code-block:: python
 
     import pypahdb
-
     # load an observation from file
     observation = pypahdb.observation('NGC7023-NW-PAHs.txt')
-    
     # decompose the spectrum with PAHdb
     result = pypahdb.decomposer(observation.spectrum)
-    
     # write results to file
     pypahdb.writer(result, header=observation.header)
 
@@ -463,31 +489,66 @@ Figure :ref:`fig:fit` presents the output.
    **should we use shading for the charge breakdown? maybe too busy.**
    Output from running the code example. :label:`fig:fit`
 
-.. figure:: map.png
+
+.. figure:: NGC7023_dpi100.png
+   :align: center
+
+   Test. :label:`fig:7023`.
+
+
+.. figure:: map_viridis.png
    :align: center
 
    **let's use viridis?**
    PAH ionization map constructed from analyzing the *Spitzer*
    spectral map of the reflection nebula NGC 7023. :label:`fig:map`.
 
-Parallelization, benchmarks
----------------------------
 
-IDL vs. Python, whole field is moving that way. Parallelization,
-Python versions vs OS etc too?
+Future
+=========
 
-Best practices?
----------------
+Accept more data types and from different telescopes. ISO, synthetic JWST data.
+Extend the number of data types, keywords, documentation, additional outputs, etc.
 
-Not sure about this subsection, could maybe be folded into "general
-workflow."
 
-Future development/application?
--------------------------------
+.. Summary and conclusions
+.. =======================
 
-Brainstorming for this paper:
-=============================
+.. is good!
 
-Need to have a showcase example of its application. Anything from Les
-Houches that might be useful as a prototypical use case? - YES,
-analyzing the spectral map of NGC7023 :-)
+
+.. Parallelization, benchmarks
+.. ---------------------------
+
+.. IDL vs. Python, whole field is moving that way.
+
+.. Best practices?
+.. ---------------
+
+.. Not sure about this subsection, could maybe be folded into "general
+.. workflow."
+
+.. Future development/application?
+.. -------------------------------
+
+.. Brainstorming for this paper:
+.. =============================
+
+.. Need to have a showcase example of its application. Anything from Les
+.. Houches that might be useful as a prototypical use case? - YES,
+.. analyzing the spectral map of NGC7023 :-)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
