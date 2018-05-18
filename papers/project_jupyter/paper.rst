@@ -25,7 +25,7 @@
 
 :author: Tim Head
 :email:
-:institution:
+:institution: Wild Tree Tech, Switzerland
 :equal-contributor:
 
 :author: Chris Holdgraf
