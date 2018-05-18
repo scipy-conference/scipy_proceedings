@@ -417,7 +417,7 @@ The json meta data is sent to the grader where the actual code evaluation proced
 
   Language Registry takes programming language type and test case type and generates a evaluator instance using the dictionary mapping from settings file and returns the evaluator instance to the Grader.
 
-  Dictionary mapping of evaluators is as shown below:
+  Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dictionary`
 
   .. figure:: code_evaluators.PNG
      :alt:  Code evaluator dictionary
