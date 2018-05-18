@@ -65,20 +65,19 @@ developments.
 OSLNAP
 ------
 
-Data Layer 0.5
-~~~~~~~~~~~~~~
+Neighborhood analysis involves a multitude of analytic tasks, and different
+types of enquiry lead to different analytical pipelines in which distinct tasks
+are combined in sequence. OSLNAP is designed in a modular fashion to facilitate
+the composition of different pipelines for neighborhood analysis. Its
+functionality is available through different interfaces from a web-based front end
+as a service to a library for scripting in Jupyter notebooks or at the shell. We
+first provide an overview of each of the main analytical components of OSLNAP
+before moving on to an illustration of how selections of the analytical
+functionality can be combined for particular use cases.
 
-.. raw:: html
+OSLNAP's analytical components are organized into three core modules: [a] data
+layer; [b] neighborhood definition layer; [c] longitudinal analysis layer.
 
-   <!-- [ek]: should we also include some info about the open data we plan to
-        provide, and the utilities like Cenpy that we provide for users to easily
-        construct a database?-->
-
-ST databases 0.25 (SH, EK, SR)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Harmonization 0.75 (EK, SR)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Like many quantitative analyses, one of the most important and
 challenging aspects of longitudinal neighborhood analysis is the
@@ -105,33 +104,30 @@ location may fall within the boundary of different reporting units at
 different points in time, it is impossible to compare directly a single
 neighborhood with itself over time.
 
-.. raw:: html
-
-   <!-- image here -->
 
 To facilitate temporal comparisons, research to date has proceeded by
 designating a “target” geographic unit or zone that is held constant
 over time, and allocating data from other zones using areal
 interpolation and other estimation techniques. This process is sometimes
-known as “boundary harmonization” [logan_2016]_. While “harmonized” data
+known as “boundary harmonization” :cite:`logan_2016`. While “harmonized” data
 is used widely in neighborhood research, the harmonization process also
 has known shortcomings, since the areal interpolation of aggregate data
 is subject to the ecological fallacy–the geographic manifestation of
 which is known as the “Modifiable Areal Unit Problem” (MAUP)
-[@Openshaw1984]. Simply put, MAUP holds that areal interpolation
+:cite:`Openshaw1984`. Simply put, MAUP holds that areal interpolation
 introduces bias since the spatial distribution of variables in each of
 the overlapping zones is unknown. A number of alternative approaches
 have been suggested to reduce the amount of error by incorporating
 auxiliary data such as road networks, which help to uncover the “true”
 spatial distribution of underlying variables, but this remains an active
-area of research [@schroeder_2017; @Sridharan2013; @Tapp2010; @Xie1995].
+area of research :cite:`schroeder_2017,Sridharan2013,Tapp2010,Xie1995`.
 
 In practice, these challenges mean that exceedingly few neighborhood
 researchers undertake harmonization routines in their own research, and
 those performing temporal analyses typically use exogenous,
 pre-harmonized boundaries from a commercial source such as the
-Neighborhood Change Database (NCDB) [@tatian], or the freely available
-Longitudinal Tract Database (LTDB) [@logan_2014]. The developers of
+Neighborhood Change Database (NCDB) :cite:`tatian`, or the freely available
+Longitudinal Tract Database (LTDB) :cite:`logan_2014`. The developers of
 creators of these products have published studies verifying the accuracy
 of their respective data, but those claims have gone untested because
 researchers are unable to fully replicate the underlying methodology.
@@ -140,7 +136,7 @@ To overcome the issues outlined above, ``oslnap`` provides a suite of
 functionality for conducting areal interpolation and boundary
 harmonization in the ``harmonize`` module. It leverages ``geopandas``
 and ``PySAL`` for managing data and performing geospatial operations,
-and the pydata stack for attribute calculations [@rey2009]. The
+and the pydata stack for attribute calculations :cite:`rey2009`. The
 ``harmonize`` module allows a researcher to specify a set of input data
 (drawn from the space-time database described in the prior section), a
 set of target geographic units to remain constant over time, and an
@@ -151,12 +147,6 @@ unemployed residents, than for total population; not only because the
 researcher may wish to treat rates and counts separately, but also
 because different auxiliary information might be applicable for
 different types of variables.
-
-.. raw:: html
-
-   <!-- this is weird but this section is far too long already, so leaving it for
-   now-->
-
 In a prototypical workflow, ``harmonize`` permits the end-user to:
 
 -  query the spatiotemporal database created via the ``data`` module
@@ -173,8 +163,8 @@ In a prototypical workflow, ``harmonize`` permits the end-user to:
    -  developing new primitive units (e.g. the intersection of all
       polygons)
 
-Analytics Layer 1.5
-~~~~~~~~~~~~~~~~~~~
+Neighborhood Identification 1.5
+~~~~~~~~~~~~~~~~~~-------------~
 
 cluster 1.0 (EK, LW, SR) (1)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -188,14 +178,14 @@ urban research focus on the application of multivariate clustering
 algorithms to develop neighborhood typologies. Such typologies are
 sometimes viewed as more holistic descriptions of neighborhoods because
 they account simultaneously for multiple characteristics simultaneously
-[@galster2001].
+:cite:`galster2001`.
 
 One notable tradition from this perspective called “geodemographics”, is
 used to derive prototypical neighborhoods whose residents are similar
 along a variety of socioeconomic and demographic attributes
-[@flowerdew1989; @singleton2014]. Geodemographics have been applied
-widely in marketing [@farr2005], education [@singleton2009a], and health
-research [@petersen2011] among a wide variety of additional fields. The
+:cite:`flowerdew1989,singleton2014`. Geodemographics have been applied
+widely in marketing :cite:`farr2005`, education :cite:`singleton2009a`, and health
+research :cite:`petersen2011` among a wide variety of additional fields. The
 geodemographic approach as also been criticized, however, for failing to
 model geographic space formally. In other words, the geodemographic
 approach ignores spatial autocorrelation, or the “first law of
@@ -253,13 +243,7 @@ several common clustering algorithms from ``scikit-learn`` that can be
 applied . Beyond these, however, it also provides wrappers for several
 *spatial* clustering algorithms from ``PySAL``, in addition to a number
 of state-of-the art algorithms that have recently been developed
-[@wolf2018] .
-
-.. raw:: html
-
-   <!-- this is weird but this section is far too long already, so leaving it for
-   now-->
-
+:cite:`wolf2018`.
 In a prototypical workflow, ``cluster`` permits the end-user to:
 
 -  query the (tidy) space-time dataset created via the ``harmonize``
@@ -282,8 +266,8 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
    method, or interactively by leveraging the ``geovisualization``
    module.
 
-empirics/dynamics (WK, SR, EK) (.5)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Longitudinal Analysis (WK, SR, EK) (.5)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The second major component of the analytical layer provides a suite of
 functionalities for the longitudinal analysis of neighborhoods to
 uncover how neighborhoods evolve over time. Traditional analysis focuses
@@ -307,13 +291,13 @@ neighborhood types between any two consecutive time points for all
 spatial units. Drawbacks of such approach include that it treats all the
 time series as being independent of one another and following an
 identical transition mechanism. The spatial Markov approach was proposed
-by [Rey01]_ to interrogate potential spatial
+by :cite:`Rey01` to interrogate potential spatial
 interactions by conditioning transition matrices on neighboring context
 while the spatial regime Markov approach allows several transition
 matrices to be formed for different spatial regimes which are
 constituted by contiguous spatial units. Both approaches together with
 inferences have been implemented in Python Spatial Analysis Library
-(PySAL) [1]_ [Rey14]_ and the Geospatial Distribution
+(PySAL) [1]_ :cite:`Rey14` and the Geospatial Distribution
 Dynamics (giddy) package  [2]_. Our module considers these packages as
 dependencies and wrap relevant classes/functions to make them consistent
 and efficient to the longitudinal neighborhood analysis.
@@ -340,28 +324,8 @@ dependence and spatial heterogeneity.
 
 
 
-Geovisualization Layer 1.0
-~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-View Types 0.75 (SH, SR)
-^^^^^^^^^^^^^^^^^^^^^^^^
-
-Interactivity 0.75 (SH, SR)
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Illustration (4.5-7.5)
-----------------------
-
-Neighborhood Identification 1.5 (EK, LW, SH, SR)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Neighborhood Dynamics 1 (WK, SR, EK, SH, LW)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Conclusion (0.5)
 ----------------
-
-Future Directions (SR, EK, SH, LW, WK)
 
 In this paper we have presented the motivation for, and initial design and
 implementation of OSLNAP. At present, we are in the early phases of the project
