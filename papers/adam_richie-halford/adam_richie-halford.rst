@@ -56,7 +56,7 @@ service (currently maximum 300 seconds of execution time, 1.5 GB of RAM,
 impractical for many data-oriented workloads, that require more RAM and
 local storage, longer compute times, and complex dependencies. The AWS
 Batch service, on the other hand, offers a platform for these workloads.
-Batch does XXX, XXX and XXX. One of the main advantages of batch,
+Batch does XXX, XXX and XXX. |warning| One of the main advantages of batch,
 relative to the provisioning of your own compute instances is that it
 abstracts away the exact details of the infrastructure that is needed,
 offering instead relatively straight-forward abstractions: a *job*,
@@ -339,7 +339,7 @@ interested in maximizing throughput could request limit increases.
 Regardless of the :code:`Knot` parameters, Pywren outperformed cloudknot
 at all argument array sizes. Indeed, Pywren appears to achieve
 :math:`\mathcal{O}(1)` scaling for much of the argument range, revealing
-AWS Lambda's capabilities for massively parallel computation. |warning|
+AWS Lambda's capabilities for massively parallel computation.
 
 .. figure:: figures/nargsscaling.png
 
@@ -362,7 +362,7 @@ Pywren. Before this point, AWS Lambda's fast triggering and continuous
 scaling surpass the AWS Batch queueing system. Conversely, past this
 point the compute power of each individual EC2 instance launched by
 AWS Batch is enough to compensate for the difference in queueing
-performance. |warning|
+performance.
 
 .. figure:: figures/syssizescaling.png
 
