@@ -56,8 +56,8 @@ typically containing 50-100 carbon atoms. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
 HC11N, contains 11 carbon atoms. PAHs are composed of an interlocking hexagonal carbon lattice with hydrogen atoms attached to its periphery (see Figure :ref:`fig:PAHdb`). PAHs are exceptionally stable,
 allowing them to survive in harsh conditions amongst a remarkably wide
-variety of astronomical objects, making them ubiquitous throughout the
-Cosmos and thus ideal probes of astronomical environments. (**bit of repetition?**)
+variety of astronomical objects, which when combined with their ubiquity make them
+ideal probes of astronomical environments.
 
 .. .. 
 .. spectra.png
@@ -87,15 +87,18 @@ their ability to convert UV photons to IR radiation, makes them powerful
 probes of astronomical objects at all stages of the stellar life
 cycle. Due to their low ionization potentials (6-8 eV), they allow
 astronomers to probe properties of diffuse media in regions not
-normally accessible.
-On top of this, PAHs are not only witnesses to
+normally accessible. On top of this, PAHs are not only witnesses to
 their local environment, but are key players in affecting ongoing astrophysical 
-processes. (**example here or no?**)
+processes.
+
+.. (**example here or no?**)
 
 .. figure:: M82.png
    :align: center
 
-   A combined visible light-infrared image from the *Spitzer Space Telescope* of the galaxy Messier-82 (M82), also known as the cigar nebula because of its cigar-like shape in the visible. The red region streaming away from the galaxy into intergalactic space traces the infrared emission from PAHs.
+   A combined visible light-infrared image from the *Spitzer Space Telescope* of the galaxy Messier-82 (M82), also known as the cigar nebula because of its cigar-like shape in the visible. The red region streaming away from the galaxy into intergalactic space traces the infrared emission from PAHs. Courtesy NASA/JPL-Caltech/C. Engelbracht (Steward Observatory) and the SINGS team.
+
+
    :label:`fig:M82`
 
 .. Visible (left; Hubble Space Telescope) and combined 
@@ -211,14 +214,12 @@ radiation field, etc. :cite:`2016ApJ...832...51B`.
 .. figure:: screenshot.png
    :align: center
 
-   **hacky, photoshop the main title onto the screenshot below to make a single figure?**
    Screenshot of the NASA Ames PAH IR
    Spectroscopic Database located at `www.astrochemistry.org/pahdb/
-   <http://www.astrochemistry.org/pahdb/>`_, here shown for the molecule
-   ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ). Molecule details and 
-   the overall vibrational spectrum are presented. Additional, each vibrational transition
-   can be inspected and is presented as an animation
-   for ease of interpretation (c.f. the vectors on the molecule
+   <http://www.astrochemistry.org/pahdb/>`_. Shown here are the details
+   and vibrational spectrum for the molecule
+   ovalene (C\ :sub:`32`\ H\ :sub:`14`\ ). Additionally, each vibrational transition
+   is animated and can be inspected for ease of interpretation (shown
    in the lower-right corner).
    :label:`fig:PAHdb`
 
@@ -265,9 +266,6 @@ and carries four science instruments. These instruments will observe
 the Universe with unprecedented resolution and sensitivity from 0.6 to
 28 µm. The observatory is expected to launch in 2020. A 3D rendering
 of the spacecraft is shown in Figure :ref:`fig:JWST`.
-**should say something about how it will advance PAH research, 
-and provide a link to the next section (pypahdb), something about
-the ERS program perhaps?**
 
 .. figure:: JWST.png
    :align: center
@@ -285,8 +283,8 @@ the ERS program perhaps?**
 pyPAHdb: a tool designed for JWST
 =================================
 
-pyPAHdb is being developed as part of the awarded James Webb Space
-Telescope (*JWST*) Early Release Science (ERS) program titled
+pyPAHdb is being developed as part of an awarded (*JWST*)
+Early Release Science (ERS) program titled
 "Radiative Feedback from Massive Stars as Traced by Multiband Imaging
 and Spectroscopic Mosaics" (`program website <http://jwst-ism.org/>`_;
 ID: 1288). The purpose of ERS is to educate and inform the
@@ -321,15 +319,18 @@ nitrogen). Its design is directly linked to the upcoming launch of *JWST*, but i
 with any major observatory, e.g., *Spitzer Space Telescope*,
 *ISO*, etc.
 
-The general program methodology is to: (1) read in various
+The general program methodology is encapsulated in Figure :ref:`fig:flowchart`, which is: (1) read in various
 astronomical file formats, including FITS-files, astronomical
-ASCII-tables, VOTables, and spectral maps; (2) perform a non-negative
+ASCII-tables, VOTables, and spectral maps (using ``observation.py``); (2) perform a non-negative
 least-squares-like fit to the data, using highly-oversampled
-pre-computed PAHdb spectra, which contains much of the relevant
-molecular physics; and (3) produce user output in a consistent way so
+precomputed PAHdb spectra, which contains much of the relevant
+molecular physics (using ``decomposer.py``); and (3) produce user output in a consistent way so
 that the user may interpret the role and characteristics of PAHs in their
-astronomical observations. To understand the assumptions made in this model,
-we first examine the physics of PAH emission.
+astronomical observations (``writer.py``). Next we examine the molecular physics
+used in the precomputed PAH spectra to model the PAH emission mechanism.
+
+.. To understand the assumptions made in this model,
+.. we first examine the physics of PAH emission.
 
 .. figure:: flowchart_draft2.png
    :align: center
@@ -434,8 +435,6 @@ eV photon.
 .. figure:: model.png
    :align: center
 
-   **ask CB how/where he made this, maybe use a lighter blue in the figure (to
-   match blue axis labels?)**
    Demonstration of applying the simple PAH emission model as outlined
    in Equations :ref:`eq:model`\ -:ref:`eq:solve` to the 0 K spectrum
    of coronene (in black; C\ :sub:`24`\ H\ :sub:`12`\ :sup:`+`) from
@@ -458,57 +457,101 @@ fully dehydrogenated. In addition, the fullerenes C\ :sub:`60` and C\
 pyPAHdb performance
 --------------------
 
-compare times for running pypahdb versus IDL suite for ngc7023 map? maybe turning parallelization
-on/off too.
+We tested the performance of pyPAHdb relative to the full IDL suite by fitting a spectral cube of 
+reflection nebula NGC 7023 (to be explored in the next section). Since we use precomputed PAH spectra with pyPAHdb, there is a significant savings by using pyPAHdb: the spectral cube required <4 seconds to fit with pyPAHdb, and >60 seconds with the full IDL suite. 
 
 
 Fitting spectra with pyPAHdb: demonstration
 ===========================================
 
-**Should maybe show an image of NGC 7023 to place side-by-side with the derived ionization map?**
+We demonstrate the use of pyPAHdb by analyzing a spectral cube of the reflection nebula
+NGC 7023. The cube is overlaid on a visible image from the Hubble Space Telescope 
+in Figure :ref:`fig:7023` :cite:`2018ApJ...858...67B`.
 
+.. NGC7023_dpi100.png
 
-The code-block below is taken from the ``example.py`` included in the
-pyPAHdb distribution, which also includes the NGC7023-NW-PAHs.txt.
+.. figure:: NGC7023_HST_rotated_field_slits.png
+   :align: center
+
+   A visible image of the reflection nebula NGC 7023 obtained with the *Hubble Space Telescope*.
+   Overlaid is a pixel grid representing a spectral cube of observations taken with the
+   *Spitzer Space Telescope*; each pixel contains an infrared spectrum. In this figure, the exciting star is just beyond the lower left corner. We are observing here a photodissociation region (PDR) boundary: the material in the lower half of the figure is diffuse and exposed to the UV field of the star; the material in the upper (right) half is molecular and somewhat shielded from the star. The diagonal boundary separating the atomic and molecular zones is clearly visible. PAHs are common in these environments and are present in most PDRs and their boundaries. Figure adapted from :cite:`2018ApJ...858...67B`.
+   :label:`fig:7023`.
+
+This environment traces the transition from diffuse, ionized/atomic species (e.g., HI) near the exciting star to dense, molecular material (e.g., H\ :sub:`2`) distant from the star. The transition zone between the two is the PDR, which is full of emitting PAHs. The properties of the PAH molecules are known to vary across these boundaries, since they are exposed to harsh radiation in the exposed cavity of the diffuse zone, and shielded in the molecular region.
+
+We use pyPAHdb to determine how the PAH properties vary across this boundary using a *Spitzer Space Telescope* 
+spectral cube. Every pixel contains a full spectrum, and thus we can loop over the cube and produce a map of any
+parameters of our choosing.
+
+Performing the fit
+-------------------
+
+To illustrate how a single fit is performed, we show the 
+code-block below, which is taken from ``example.py`` included in the
+pyPAHdb distribution.
+.. This also includes the spectrum file ``NGC7023.fits``.
 
 .. code-block:: python
 
     import pypahdb
     # load an observation from file
-    observation = pypahdb.observation('NGC7023-NW-PAHs.txt')
+    observation = pypahdb.observation('NGC7023.fits')
     # decompose the spectrum with PAHdb
     result = pypahdb.decomposer(observation.spectrum)
     # write results to file
     pypahdb.writer(result, header=observation.header)
 
-Figure :ref:`fig:fit` presents the output.
+
+Figure :ref:`fig:fit` presents part of the output when fitting a spectrum (the charge breakdown
+has been suppressed here for clarity).
 
 .. figure:: fit2.png
    :align: center
 
-   **should we use shading for the charge breakdown? maybe too busy.**
-   Output from running the code example. :label:`fig:fit`
+   The pyPAHdb fit to a spectrum from NGC 7023. The upper panel displays the total model fit to the data; 
+   the middle panel the residuals; and the lower panel the breakdown of large-to-small PAHs in the 
+   pyPAHdb fit (here PAHs are considered large when they contain 30 carbon atoms or more). The charge
+   breakdown (cation, neutral, anion) is suppressed here for simplicity.
 
+   :label:`fig:fit`
 
-.. figure:: NGC7023_dpi100.png
-   :align: center
+Interpreting the results
+------------------------
 
-   Test. :label:`fig:7023`.
+Once we have the PAH properties for each pixel in the map measured, we can then create maps
+of relevant astrophysical quantities. For instance, in Figure :ref:`fig:map` we plot
+the ionization fraction as a function of position within NGC 7023.
 
-
+As one would expect, the PAHs are more ionized in the diffuse region of the map closer to the exciting
+star (in the lower-left of the map, where the radiation field is stronger). Upon passing the boundary
+between atomic and molecular material, we see that the PAHs are less ionized (i.e., more neutral) in the 
+molecular zone, where species are significantly shielded from radiation.
+      
 .. figure:: map_viridis.png
    :align: center
 
-   **let's use viridis?**
-   PAH ionization map constructed from analyzing the *Spitzer*
-   spectral map of the reflection nebula NGC 7023. :label:`fig:map`.
+   A map of PAH ionization for the nebula NGC 7023 derived using pyPAHdb (c.f., Figure :ref:`fig:7023`; an ionization fraction of ``1`` means all PAHs are cationic, while ``0`` means they are fully neutral).
+   The exciting star is off the figure, below and to the left of this region. Note that in the diffuse, exposed cavity (lower half) the PAHs are on average more ionized than in the denser molecular zone (upper half).
+   :label:`fig:map`.
+
+This type of analysis allows the user to quickly interpret the distribution of PAHs in their
+astronomical observations and variations in PAH size, charge state, and the contribution of 
+nitrogenated PAHs (not shown here).
 
 
 Future
 =========
 
-Accept more data types and from different telescopes. ISO, synthetic JWST data.
-Extend the number of data types, keywords, documentation, additional outputs, etc.
+pyPAHdb is in active development in preparation for the launch of JWST. It is important that we extend
+the software to accommodate other archival telescope observations, such as those from *ISO*. We will also 
+accept more data types, such as VO Tables, and likely increase the outputs of the software depending
+on typical use cases.
+
+In terms of documentation, we anticipate releasing a user manual along with a "v0.50" release of the software later in the year. **what else to say here?!**
+
+.. Accept more data types and from different telescopes. ISO, synthetic JWST data.
+.. Extend the number of data types, keywords, documentation, additional outputs, etc.
 
 
 .. Summary and conclusions
