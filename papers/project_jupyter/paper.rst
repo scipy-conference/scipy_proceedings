@@ -13,6 +13,16 @@
 :institution:
 :equal-contributor:
 
+:author: Jeremy Freeman
+:email:
+:institution:
+:equal-contributor:
+
+:author: Brian Granger
+:email:
+:institution:
+:equal-contributor:
+
 :author: Tim Head
 :email:
 :institution:
@@ -23,12 +33,27 @@
 :institution: Berkeley Institute for Data Science, UC Berkeley
 :corresponding:
 
+:author: Kyle Kelley
+:email:
+:institution:
+:equal-contributor:
+
+:author: Andrew Osheroff
+:email:
+:institution:
+:equal-contributor:
+
 :author: M Pacer
 :email:
 :institution:
 :equal-contributor:
 
 :author: Yuvi Panda
+:email:
+:institution:
+:equal-contributor:
+
+:author: Fernando Perez
 :email:
 :institution:
 :equal-contributor:
