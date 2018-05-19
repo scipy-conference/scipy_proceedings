@@ -24,8 +24,8 @@
 :equal-contributor:
 
 :author: Tim Head
-:email:
-:institution:
+:email: tim@wildtreetech.com
+:institution: Wild Tree Tech, Switzerland
 :equal-contributor:
 
 :author: Chris Holdgraf
