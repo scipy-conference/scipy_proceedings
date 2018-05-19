@@ -439,14 +439,18 @@ together. BinderHub defines two primary patterns of interaction with this proces
 sharable, interactive, GUI-based sessions; and a REST API for building, requesting,
 and interacting with user-defined kernels.
 
-.. figure:: images/nteract_ui.png
-   :align: center
+The BinderHub User Interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   `play.nteract.io <play.nteract.io>`_ is a GUI frontend that connects to the
-   ``mybinder.org`` REST API. When a user opens the page, it requests a Kernel
-   from mybinder.org according to the environment chosen in the top-right menu.
-   Once mybinder.org responds that it is ready, users can execute code that
-   will be sent to their Binder kernel, with results displayed to the right.
+.. figure:: images/binderhub_diagram.png
+   :align: center
+   :figclass: w
+
+   The BinderHub architecture for interactive GUI sessions. Users
+   connect to the Binder UI via a public URL. All computational infrastructure
+   is managed with a Kubernetes deployment (light green) managing several pods
+   (dark green) that make up the BinderHub service. Interactive user pods
+   (blue squares) are spawned and managed by a JupyterHub.
 
 The primary pattern of interaction with BinderHub for an author is via its “build
 form” user interface. This form lets users point BinderHub to a public git
@@ -486,6 +490,9 @@ as a user session that serves this repository is created. Once this process
 is finished, they can immediately start interacting with the environment that
 the author has created.
 
+The BinderHub REST API
+~~~~~~~~~~~~~~~~~~~~~~
+
 While GUIs are preferable for most human interaction with a BinderHub,
 there are also moments when a programmatic or text-based interaction is
 preferable. For example, if someone wishes to use BinderHub to request arbitrary
@@ -493,9 +500,59 @@ kernels that power computations underlying a completely different GUI. For
 these use-cases, BinderHub also provides a REST API that controls all of the
 steps described above.
 
+BinderHub currently provides a single REST endpoint that allows users to
+programmatically build and launch Binder repositories. It takes the following
+form::
 
-XXX TODO IF WE HAVE SPACE
+    https://<binderhub-url>/build/<provider>/<spec>
 
+This follows a similar pattern to BinderHub's sharable URLs. Here's an API
+request that will request a Binder environment for the JupyterLab example
+Binder repository on ``mybinder.org``::
+
+    https://mybinder.org/build/gh/binder-examples/jupyterlab/master
+
+Hitting this endpoint will trigger the following events:
+
+1. Check if the image for this URL exists in the BinderHub cached image registry.
+   If so, launch it.
+2. If it doesn’t exist in the image registry, check if a build is currently
+   running. If there is **not**, then start a build process. If there **is**,
+   then attach to the pre-existing build process.
+3. Stream logs from the build process to the user.
+4. If the build succeeds, contact the JupyterHub API, telling it to launch a user
+   server with the environment that has just been built.
+5. Once the server is launched, display a message showing the URL where they
+   can connect to the notebook server (and thus connect with the Jupyter
+   Notebook Server REST API).
+
+Information about the process above is streamed to the user via a persistent
+HTTP connection with structured JSON. Here's an example of the output for
+the above build::
+
+    data: {"phase": "built",
+           "imageName": "gcr.io/binder-prod/r2d-05168b0...",
+           "message": "Found built image, launching...\n"}
+
+    data: {"phase": "launching", "message": "Launching server...\n"}
+
+    data: {"phase": "ready",
+           "message": "server running at https://hub.mybinder.org/user/<POD-URL>/\n",
+           "url": "https://hub.mybinder.org/user/<POD-URL>/",
+           "token": "<POD-TOKEN>"}
+
+In this case, the user can then access the value in ``url:`` to use their
+Binder session (either via their browser, or programmatically via the notebook
+server REST API served at this URL).
+
+.. figure:: images/nteract_ui.png
+   :align: center
+
+   `play.nteract.io <play.nteract.io>`_ is a GUI frontend that connects to the
+   ``mybinder.org`` REST API. When a user opens the page, it requests a Kernel
+   from mybinder.org according to the environment chosen in the top-right menu.
+   Once mybinder.org responds that it is ready, users can execute code that
+   will be sent to their Binder kernel, with results displayed to the right.
 
 There are already several examples of services that use BinderHub’s REST API
 to run webpages and applications that utilize arbitrary kernel execution. For
@@ -515,16 +572,6 @@ that run in the cloud. The Binder team runs one-such service as a proof-of-conce
 of the technology, as well as a public service that can be used to share
 interactive code repositories. This service runs at the URL ``https://mybinder.org``,
 and will be discussed in the final section.
-
-.. figure:: images/binderhub_diagram.png
-   :align: center
-   :figclass: w
-
-   The BinderHub architecture for interactive GUI sessions. Users
-   connect to the Binder UI via a public URL. All computational infrastructure
-   is managed with a Kubernetes deployment (light green) managing several pods
-   (dark green) that make up the BinderHub service. Interactive user pods
-   (blue squares) are spawned and managed by a JupyterHub.
 
 Mybinder.org
 ------------
@@ -561,15 +608,56 @@ in Python <https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuratio
 with Sphinx Gallery, and sharing `interactive content <http://greenteapress.com/wp/think-dsp/>`_
 that requires a language-specific kernel in order to run.
 
+Cost and sustainability  for ``mybinder.org``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Mybinder.org is currently funded through a grant from the Moore foundation, and
 the team is actively exploring new models for keeping the service running sustainably.
 The public service currently restricts the hardware available to users in several
 ways in order to keep costs down. For example, users are only given access to one
 CPU, two gigabytes of RAM, can only access public git repositories, and are
-restricted in the kinds of network I/O that can take place. The Binder team hopes
-that other organizations, companies, or universities will deploy their own
-BinderHubs for their own users, potentially powered by more complex hardware
-or more permissive environments.
+restricted in the kinds of network I/O that can take place. It currently
+runs on the Google Cloud Platform (though could be run on any setup that runs
+on top of Kubernetes).
+
+.. figure:: images/cost_breakdown.png
+   :align: center
+
+   Cloud computing costs for running ``mybinder.org`` in 2018. x-axis shows
+   one point per day. Daily unique users has consistently grown over this time,
+   while modifications to the BinderHub codebase (as well as the cloud
+   resources used) has kept costs relatively flat. As a result, ``mybinder.org``
+   currently operates at about 5 cents per user per day.
+
+The decision to avoid the notion of a user "identity" in particular has strong
+effects on the cost of running a BinderHub server. Because users do not require
+persistent storage (e.g. the content of any changes they make to Jupyter
+Notebooks throughout a session), a significant cost of running a JupyterHub
+is avoided. In addition, because Kubernetes is built with flexibiliy in mind,
+a BinderHub deployment can efficiently use the resources available to it in
+order to avoid over-provisioning cloud resources as much as possible.
+
+Currently, ``mybinder.org`` runs at a cost of several hundred dollars per
+week. At roughly 50,000 users per week, this comes out to around $0.05 per
+user. The ``mybinder.org`` team publishes its daily costs in `a public
+repository on GitHub <https://github.com/binder-examples/binder-billing>`_.
+It hopes that this serves to encourage other organizations to deploy BinderHub
+for their own purposes, since it is possible to do so in a cost-effective
+manner.
+
+Moving forward, the Binder team is interested in exploring multiple models
+for sustaining the public ``mybinder.org`` deployment, as well as the
+broader Binder ecosystem. First, at its current rate the annual cost of running
+``mybinder.org`` is around $80,000, an amount that could be sustainable with
+a grant-funded model. Second, the Binder team is actively exploring a
+*federation model* for BinderHub servers. Other organizations, companies, or
+universities can deploy their own BinderHubs for their own users or students,
+either on their own hardware or on cloud providers such as Google, Amazon, or
+Microsoft. These organization-specific deployments could require authentication
+or provide access to more complex cloud resources. In this case, ``mybinder.org``
+could serve as a hub that connects this federated network of BinderHubs together,
+directing the user to an organization-specific BinderHub provided that they
+have the proper credentials on their machine.
 
 The future of binder
 --------------------
