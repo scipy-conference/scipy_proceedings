@@ -152,11 +152,11 @@ Among these are the following examples:
 For details on usage and the latest supported features, see the sparse package documentation.
 :cite:`sparse`.
 
-Design Considerations
----------------------
+Algorithms Used
+---------------
 
 Storage Format
-^^^^^^^^^^^^^^
+..............
 
 Although not the most efficient in any respect, for simplicity of operations, we chose the COO
 format for its storage simplicity. In this format, two dense arrays are required to store the
@@ -184,7 +184,7 @@ To save on memory, we always choose the smallest possible data type for the coor
    ==== ==== ==== === ====
 
 Element-wise Operations
-^^^^^^^^^^^^^^^^^^^^^^^
+.......................
 
 There was a challenge around designing a function that could perform any kind of element-wise
 operation on any number of variables. The design we decided to adopt at the end was slow compared
@@ -234,7 +234,7 @@ psuedocode in the broadcasting case. New psuedocode is in parentheses::
                 similar to an SQL outer join)
        coords = filter out coordinates that are
                 in zero inputs
-                (for non-broadcast dimensions)
+                (again, for non-broadcast dimensions)
        data = apply function to data corresponding
               to these coordinates
 
@@ -251,7 +251,7 @@ psuedocode in the broadcasting case. New psuedocode is in parentheses::
 
 
 Reductions
-^^^^^^^^^^
+..........
 
 Only some reductions are possible with this library at the moment, but most common ones are supported.
 Supported reductions must have a few properties:
@@ -282,7 +282,7 @@ we use for reductions::
    y = y.reshape(non_selected_axes_shape)
 
 Indexing
-^^^^^^^^
+........
 
 For indexing, we realize that to construct the new coordinates and data, we can perform two kinds of
 filtering as to which coordinates will be in the new array and which ones won't.
@@ -306,7 +306,7 @@ After getting the required coordinates and corresponding data, we apply some sim
 to it to get the output coordinates and data.
 
 Transposing and Reshaping
-^^^^^^^^^^^^^^^^^^^^^^^^^
+.........................
 
 Transposing corresponds to a simple reordering of the dimensions in the coordinates, along with a re-sorting
 of the coordinates and data to make the coordinates C-contiguous again.
@@ -316,7 +316,7 @@ Reshaping corresponds to linearizing the coordinates and then doing the reverse 
 this, in order to save on memory.
 
 :code:`dot` and :code:`tensordot`
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.................................
 
 For :code:`tensordot`, we currently just use the NumPy implementation, replacing :code:`np.dot` with
 :code:`scipy.sparse.csr_matrix.dot`.
@@ -326,11 +326,60 @@ For :code:`dot`, we simply dispatch to :code:`tensordot`, providing the appropri
 Optimizations
 -------------
 
+Element-wise Sparse Broadcasting
+................................
+
 In our element-wise algorithm, we perform quite a few optimizations. The first is for operations like
 multiplication, which is (barring some edge cases) zero if either of the operands are zero. We detect
 this when calculating the output data, and neglect to append this data at all.
 
+This can be especially useful in a broadcasting case. Consider two arrays, one with shape
+:code:`(1000, 1000)` and another with shape :code:`(1000,)`, each with only one nonzero entry.
+Multiplying them would result in an array with just one nonzero entry. However, if we used the
+first algorithm for element-wise, we'd have to first broadcast the second array, which would
+result in an array with a thousand nonzero entries. With the second algorithm, this does not need
+to happen and only one entry is actually calculated.
+
+Indexing
+........
+
+In indexing, using one of the two approaches can be very prohibitive in certain scenarios. The first
+is slow when we are accessing integer indices or single elements, and the second is slow when we
+are accessing slices of an array that are large in nature.
+
+Therefore, we adopt a hybrid approach to indexing that uses the second method at first and falls back
+to the second if the number of slices are too large.
+
 Benchmarks
 ----------
 
+Because of our desire for clean and generic code as well as using mainly pure Python as opposed to
+Cython/C/C++ in most places, our code is not as fast as :code:`scipy.sparse.csr_matrix`. It, however,
+does beat :code:`numpy.ndarray`. The benchmarks were performed on a laptop with a Core i7-3537U
+processor and 16 GB of memory. Any arrays used had a shape of :code:`(10000, 10000)` with a density
+of :code:`0.001`. The results are tabulated in table :ref:`tab:bench`.
 
+.. table:: Benchmarks :label:`tab:bench`
+
+   +----------------+-------------------+-------------------+-------------------+
+   | Benchmark      | Sparse            | SciPy Sparse      | NumPy             |
+   +================+===================+===================+===================+
+   | Addition       | 68.1 ms ± 5.17 ms | 2.49 ms ± 211 µs  | 507 ms ± 6.43 ms  |
+   +----------------+-------------------+-------------------+-------------------+
+   | Multiplication | 12.4 ms ± 496 µs  | 14.9 ms ± 1.68 ms | 529 ms ± 13.5 ms  |
+   +----------------+-------------------+-------------------+-------------------+
+   | Sum, Axis=0    | 12 ms ± 116 µs    | 545 µs ± 49.8 µs  | 97.8 ms ± 4.19 ms |
+   +----------------+-------------------+-------------------+-------------------+
+   | Sum, Axis=1    | 959 µs ± 23.7 µs  | 641 µs ± 83.9 µs  | 62.7 ms ± 4.86 ms |
+   +----------------+-------------------+-------------------+-------------------+
+
+Outlook and Future Work
+-----------------------
+
+There are a number of areas we would like to focus on in the future. These include, in very broad terms:
+
+* Better performance
+* Better integration with community packages, such as scikit-learn, Dask and XArray
+* Support for more of the :code:`ndarray` interface (particularly through protocols)
+* Implementation of more linear algebra routines, such as :code:`eig`, :code:`svd`, and :code:`solve`
+* Implementation of more sparse storage formats, such as a generalization of CSR/CSC
