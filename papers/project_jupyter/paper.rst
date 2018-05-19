@@ -24,7 +24,7 @@
 :equal-contributor:
 
 :author: Tim Head
-:email:
+:email: tim@wildtreetech.com
 :institution: Wild Tree Tech, Switzerland
 :equal-contributor:
 
