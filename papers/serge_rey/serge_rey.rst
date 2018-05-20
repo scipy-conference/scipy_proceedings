@@ -55,7 +55,7 @@ geography, political science, economics, psychology, and urban planning,
 however, neighborhoods remain understudied because researchers lack
 appropriate analytical tools for understanding their evolution through
 time and space. Towards this goal we are developing the *open source
-longitudinal neighborhood analysis program* ``(OSLNAP)``. We envisage OSLNAP as  a
+longitudinal neighborhood analysis program* ``(OSLNAP)``. We envisage OSLNAP as a
 toolkit for better, more open and reproducible science focused on neighborhoods
 and their sociospatial ecology. In this paper we first provide an overview of
 the main components of OSLNAP. Next, we present an illustration of selected
@@ -128,7 +128,7 @@ those performing temporal analyses typically use exogenous,
 pre-harmonized boundaries from a commercial source such as the
 Neighborhood Change Database (NCDB) :cite:`tatian`, or the freely available
 Longitudinal Tract Database (LTDB) :cite:`logan_2014`. The developers of
-creators of these products have published studies verifying the accuracy
+these products have published studies verifying the accuracy
 of their respective data, but those claims have gone untested because
 researchers are unable to fully replicate the underlying methodology.
 
@@ -177,7 +177,7 @@ neighborhood’s essential nuance. For this reason, several traditions of
 urban research focus on the application of multivariate clustering
 algorithms to develop neighborhood typologies. Such typologies are
 sometimes viewed as more holistic descriptions of neighborhoods because
-they account simultaneously for multiple characteristics simultaneously
+they account for multiple characteristics simultaneously
 :cite:`galster2001`.
 
 One notable tradition from this perspective called “geodemographics”, is
@@ -269,7 +269,7 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
 Longitudinal Analysis (WK, SR, EK) (.5)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 The second major component of the analytical layer provides a suite of
-functionalities for the longitudinal analysis of neighborhoods to
+functionality for the longitudinal analysis of neighborhoods to
 uncover how neighborhoods evolve over time. Traditional analysis focuses
 solely on the changes in the socioeconomic composition, while it is
 argued that the geographic footprint should not be ignored
@@ -281,7 +281,8 @@ interaction between these processes and geographic structure.
 
 Both sets of analytics take time series of neighborhood types assigned
 for all the spatial units of analysis (e.g. census tracts) based on
-adopting a spatial clustering algorithm as the input while they differ
+adopting a spatial clustering algorithm (the output of the ``cluster`` module)
+as the input while they differ
 in how the time series are modeled and analyzed. The first set centers
 on *transition analysis* which treats each time series as stochastically
 generated from time point to time point. It is in the same spirit of the
@@ -312,7 +313,10 @@ series. It generally works by finding the minimum cost for transforming
 one time series to another using a combination of operations including
 replacement, insertion and deletion. The similarity matrix is then used
 as the input for another round of clustering to derive a typology of
-neighborhood trajectory :cite:`delmelle2016`. We extend the
+neighborhood trajectory :cite:`delmelle2016`. How to measure similarity
+between sequences should be driven by specific research questions. It
+is argued that the
+We extend the
 definition of various operation costs to incorporate potential spatial
 dependence and spatial heterogeneity.
 
