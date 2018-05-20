@@ -125,8 +125,10 @@ In addition to the following list, we break up the deadlines in the respective d
 
 ## Instructions for Authors
 
-Please submit your papers by 23:59 PST of the *1st Draft for Submission* 
-Deadline.
+Please submit your papers by 23:59 PST of the *1st Draft for Submission*
+Deadline. 
+
+Submit your papers as an ReStructured Text file via PR against this repository. 
 
 During the Open Review Period authors should work with their reviewers to refine
 and improve their submission.
@@ -165,6 +167,9 @@ have final say in whether to accept or reject a paper.
         - Use math markup
         - Include code snippets
     - `00_bibderwalt` shows how to use a bib file for citations.
+- For your paper to be found by the build system at http://procbuild.scipy.org
+  your PR needs to have a title that begins with "Paper:". If you do not do
+  this, the co-chairs will change your title on your behalf.
 - All citations that have DOIs should include those DOIs in the paper's 
   references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
 - All figures and tables should have captions.
