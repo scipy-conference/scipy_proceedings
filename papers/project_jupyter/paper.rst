@@ -64,8 +64,8 @@
 :equal-contributor:
 
 :author: Carol Willing
-:email:
-:institution:
+:email: willingc@gmail.com
+:institution: Cal Poly SLO
 :equal-contributor:
 
 
