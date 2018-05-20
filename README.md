@@ -222,6 +222,7 @@ git clone https://github.com/mpacer/scipy_proceedings
   repository on GitHub.
 - Clone the repo locally 
     - `git clone https://github.com/<username>/scipy_proceedings`
+    - `cd scipy_proceedings/`
 - Add the `scipy-conference` repository as your `upstream` remote
     - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
 
@@ -238,7 +239,6 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
 - Check out the upstream `2018` branch
-    - `cd scipy_proceedings/`
     - `git checkout -b 2018 --track upstream/2018`
 
 #### Creating a new branch based off of `2018`
