@@ -54,7 +54,7 @@ Being able to not only quantify the structure of a protein, but also it’s chan
 
 We have begun by modeling the subcellular patterns of mitochondria in epithelial cells. Mitochondria are dynamic organelles, which undergo continual rounds of fission and fusion. These fission and fusion events are important for maintaining proper function and overall mitochondrial health :cite:`ZLN13` :cite:`WT16`. Mitochondrial fission allows for the turnover of damaged and the protection of healthy organelles. Additionally, mitochondrial fusion leads to the mixing of internal contents, which is important for responding to environmental needs :cite:`ZLN13` :cite:`KPSB08`.
 
-The dynamics between fission and fusion creates a spectrum of mitochondrial morphologies. Further, imbalances between fission and fusion events generate phenotypes associated with mitochondrial dysfunction :cite:`ZLN13`. An excess of fission or dearth of fusion events results in fragmented mitochondria. In the fragmented phenotype, the mitochondrial network is fractured, and individual mitochondria exist in small spheres. However, an overabundance of fusion or a lack of fission events generate hyperfused mitochondria. In the hyperfusion phenotype, the mitochondrial network is overconnected, and composed of long interconnected tubules :cite:`CCI+08`.
+The dynamics between fission and fusion creates a spectrum of mitochondrial morphologies. Further, imbalances between fission and fusion events generate phenotypes associated with mitochondrial dysfunction :cite:`ZLN13`. An excess of fission or dearth of fusion events results in fragmented mitochondria. In the fragmented phenotype, the mitochondrial network is fractured, and individual mitochondria exist in small spheres. However, an overabundance of fusion or a lack of fission events generate hyperfused mitochondria. In the hyperfusion phenotype, the mitochondrial network is overconnected, and composed of long interconnected tubules :cite:`CCI08`.
 
 Recently, several bacterial species have been shown to cause mitochondrial perturbations during infection :cite:`SBSRC11`:cite:`FGQR15`. Through social network modeling, we hope to build a more rapid and efficient method for identifying changes in size, shape, and distribution of mitochondria as well as other diffuse organelles.
 
@@ -110,7 +110,7 @@ However, with our affinity function we wanted the angular spread of the gaussian
     :label:`fig5`
     (Left) A partially connected network with binary connections. (Right) A single node’s weighted connection within a fully connected graph
 
-    
+
 Many well known social networks have asymmetric connections. For example, there are Twitter and Instagram, in which one member may follow another without being followed back. Even Facebook, which has a symmetric ‘friend’ connection has asymmetric weights in terms of how friends interact over the network. From a mitochondria specific biological perspective, there is little behavioral evidence to support an directed or undirected graph structure. However with a cell’s general Brownian behavior, the undirected structure seem more analogous. This element of the our graph analogue’s structure will be more cemented as we analyze the networks created.
 
 Network Analysis
