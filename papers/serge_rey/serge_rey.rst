@@ -276,8 +276,7 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
 
 Longitudinal Analysis (WK, SR, EK) 
 ===================================
-
-The third major  analytical layer of OSLNAP provides a suite of
+The third major analytical layer of OSLNAP provides a suite of
 functionalities for the longitudinal analysis of neighborhoods to
 uncover how neighborhoods evolve over time. Traditional analysis focuses
 solely on the changes in the socioeconomic composition, while it is
@@ -306,24 +305,33 @@ while the spatial regime Markov approach allows several transition
 matrices to be formed for different spatial regimes which are
 constituted by contiguous spatial units. Both approaches together with
 inferences have been implemented in Python Spatial Analysis Library
-(PySAL) [1]_ :cite:`Rey14` and the Geospatial Distribution
+(PySAL) [1]_ :cite:`Rey14` and Geospatial Distribution
 Dynamics (giddy) package  [2]_. Our module considers these packages as
 dependencies and wrap relevant classes/functions to make them consistent
 and efficient to the longitudinal neighborhood analysis.
 
 The other set of spatially explicit approach to neighborhood dynamics is
 concerned with *sequence analysis* which treats each time series of
-neighborhood types as a whole in contrast to *transition analysis*. The
+neighborhood types as a whole in contrast to *transition analysis*. In
+this logic, demographic classifications are identified using some
+clustering method on demographic data alone. Then, the demographic experience
+of the neighborhood being studied is described by the demographic classifications
+it experiences over time. From here, neigborhoods can be further clustered
+or assigned based on how similar their demographic histories
+are. One method of building this measure of similarity focuses on the
+neighborhood's "demographic experience" using the
 optimal matching (OM) algorithm, which was originally used for matching
-protein and DNA sequences :cite:`ABBOTT:2000`, is adopted
-to measure the similarity between every pair of neighborhood type time
-series. It generally works by finding the minimum cost for transforming
-one time series to another using a combination of operations including
-replacement, insertion and deletion. The similarity matrix is then used
-as the input for another round of clustering to derive a typology of
-neighborhood trajectory :cite:`delmelle2016`. We extend the
-definition of various operation costs to incorporate potential spatial
-dependence and spatial heterogeneity.
+protein and DNA sequences :cite:`ABBOTT:2000`. 
+OM scores the similarity of neighborhoods' experiences by finding the 
+minimum number of transformations required to shift one sequence to another 
+using a combination of operations, including replacement, insertion, realignment, 
+and deletion :cite: `delmelle2016`. Thus, OM is not explicitly "time sensitive,"
+and similarities in demographic transitions are considered "near" regardless of
+whether or not they are contemporaneous. Another collection of methods does 
+not allow for realignment, so edit distances capture areas' similarity in 
+contemporary experience :cite:`li2018`. We allow for both contemporaneous 
+and experiential scoring methods and provide further tools to incorporate 
+potential spatial dependence and spatial heterogeneity.
 
 .. [1]
    https://github.com/pysal/pysal
