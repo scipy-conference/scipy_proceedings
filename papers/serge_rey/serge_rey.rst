@@ -293,6 +293,7 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
 
 Longitudinal Analysis (WK, SR, EK)
 ===================================
+
 Having identified the neighborhood types for all units of analysis over
 the whole time span, researchers might be interested in how they evolve over time.
 The third core module ``change`` of ``OSLNAP``'s analytical components provides a suite of
@@ -613,30 +614,77 @@ three clustering algorithms, SKATER was applied to each cross
 section of census tracts independently yielding clusters which are not
 directly comparable over time. Thus, we focuses only on the
 six neighborhood types identified by the agglomerative Ward method
-(Figure :ref:`f:ward`) and
-the fourteen neighborhood types identified by the affinity
-propagation method (Figure :ref:`f:ap`).
+(Fig. :ref:`f:ward`) and the fourteen neighborhood types identified by
+the affinity propagation method (Fig. :ref:`f:ap`).
 
 We start with the aspatial transition analysis which pools all the time
 series of neighborhood types and counts how many transitions between
-any pair of neighborhood types across immediate consecutive census years
+any pair of neighborhood types across immediate consecutive census years :math:`(t,t+10)`
+(or :math:`(t,t+5)` for 2010-2015)
 which are further organized into a :math:`(k,k)` transition count matrix
 :math:`\pmb{N}`. Adopting
 the maximum likelihood estimator for the first-order Markov transition
-probability :math:`\hat{p}_{ij} = \frac{n_{ij}}{\sum_{q=1}^k n_{iq} }`, a
+probability as shown in Equation (:ref:`mle`), a
 :math:`(k,k)` transition probability matrix can thus be constructed providing
-the insights in the probability of falling in any neighborhood type :math:`j` given that
-it was previously in any neighborhood type :math:`i`.
-Focusing on the six neighborhood types identified by the agglomerative Ward
-method,
+the insights in the underlying dynamics of neighborhood change.
+The :math:`(6,6)` and the :math:`(14,14)`
+transition probability matrices for ward and affinity propagation clusters
+are estimated and visualized in Fig. :ref:`f:wardapm` where the color in
+grid :math:`(i,j)` represents the probability of transitioning from
+neighborhood type :math:`i` to :math:`j` in the next census year. It is
+obvious that both transition probability matrices are characterized by large
+diagonal entries, indicating a certain level of neighborhood stability
+for the focal four census years. This is especially true for the ward neighborhood
+type 4 which is featured by racially concentrated (Hispanic) poverty.
+The probability of staying at this type is 0.876
+meaning that there is only 12.4% chance of changing to other neighborhood types
+once the census tract enters into type 4.
 
 
-The transition
-count matrix.
-:math:`(k,k)` matrix: :math:`k=6` for the agglomerative Ward method and :math:`k=14`
-for the affinity propagation method.
+.. math::
+   :label: mle
 
-Since we are experimenting with four census years and
+   \hat{p}_{ij} = \frac{n_{ij}}{\sum_{q=1}^k n_{iq}}, \quad \text{where} \quad i,j \in \mathbb{S} = \{1,2,\cdots,k \}
+
+
+
+.. figure:: ward_ap_m.png
+
+   Markov transition probability matrix for Ward and Affinity Propagation
+   clusters. :label:`f:wardapm`
+
+
+Moving from the aspatial transition analysis, we interrogate potential spatial
+interactions among neighborhood dynamics using the spatial Markov chain approach.
+More specifically, we hypothesize that the transition probability for any focal
+census tract is not constant, but rather dependent on the spatial context,
+that is, the most common neighborhood type of contiguous tracts, the so-called
+spatial lag. Therefore,
+:math:`k` exhaustive and mutually exclusive subsamples are constructed based
+on the spatial lag at :math:`t`, from which :math:`k` :math:`(k,k)` transition probability
+matrices are estimated based on Equation (:ref:`mle`). Fig. :ref:`f:smward`
+displays the spatial Markov transition probability matrices for Ward neighborhood types.
+It should be noted that the interpretation with these conditional transition probabilities
+should proceed with caution as the increased number of parameters to be estimated
+here could lead to large standard errors for some estimates. For example, the
+:math:`(0,0)` entry in the subplot of Spatial Lag 3 is :math:`1`. The tendency
+of interpreting the 100 percent to be tracts "perfectly stuck at" ward neighborhood type 0 if the spatial lag
+is type 3 should be compromised by the fact that there is only :math:`1`
+observation transitioning from type 0 which has the spatial lag
+of type 3 at :math:`t` and this very observation happens to stay at type 0.
+Since we are short of information, we could not conclude with the "perfectly stuck" theory.
+The spatial Markov tests
+including likelihood ratio test and the :math:`\chi^2` test
+:cite:`Bickenbach:2003wg, Rey20161` are both rejected indicating that neighboring
+context plays an important role in shaping the neighborhood dynamics.
+
+
+
+.. figure:: ward_sm_6.png
+
+   Spatial Markov transition probability matrices for Ward clusters. :label:`f:smward`
+
+
 
 Sequence Analysis to Neighborhood Change
 ========================================
@@ -644,7 +692,7 @@ Sequence Analysis to Neighborhood Change
 
 In analyzing the clusters in sequences of neighborhood transitions, we
 begin by considering the trajectories of neighborhoods as shown in Figure
-:ref: `f:ward`. Given how the neighborhood classifications can change over
+:ref:`f:ward`. Given how the neighborhood classifications can change over
 time, a neighborhood's socioeconomic classification can change over time. 
 Identifying areas where these shifts happen in the same way in the same point
 in time, a neighborhood experiencing gentrification may move from minority
