@@ -728,22 +728,24 @@ more or less representative of their clusters; a transition of one area from
 of social/spatial volatility as a move from "minority working class" to "white upper class,"
 as might happen during rapid gentrification.
 
-As such, we can also weight the edit distance based on how "expensive" the edit is in terms of the
-clustering distance. Using this weighting method, not all transitions from
-white working class to white upper class will be treated the same: observations
-that are "almost" white upper class but not quite will be considered more similar
-to white upper class tracts. But, since a reassignment is still involved, there will
-still be a cost associated with that edit. Clusterings for both the raw hamming edit
-distance and the weighted hamming edit distances over sociodemographic sequences are shown
-in Figure :ref: `f:trajclust` using :cite: `wolf2018`. Broadly speaking, the assignments
-between the two clustering methods are strongly related (with an adjusted Rand index of .68), 
-but macro-level distinctions between assignment structures are visible, particularly in
-in the areas of central northern LA near the Hollywood Hills, as well as the areas
-of east LA, near Fullerton. This means that, when the sub-classification information is
-taken into account, clusterings can change. However, when examining spatially-contiguous
-clusters, the total amount of possible change is often quite constrained as well. 
-Thus, the move from unweighted to weighted edit distances may make even more of a 
-difference in some cases. 
+As such, we can also weight the edit distance based on how "expensive" the edit
+is in terms of the clustering distance. Using this weighting method, not all
+transitions from white working class to white upper class will be treated the
+same: observations that are "almost" white upper class but not quite will be
+considered more similar to white upper class tracts. But, since a reassignment
+is still involved, there will still be a cost associated with that edit.
+Clusterings for both the raw hamming edit distance and the weighted hamming edit
+distances over sociodemographic sequences are shown in Figure :ref:`f:trajclust`
+using :cite:`wolf2018`. Broadly speaking, the assignments between the two
+clustering methods are strongly related (with an adjusted Rand index of .68),
+but macro-level distinctions between assignment structures are visible,
+particularly in in the areas of central northern LA near the Hollywood Hills, as
+well as the areas of east LA, near Fullerton. This means that, when the
+sub-classification information is taken into account, clusterings can change.
+However, when examining spatially-contiguous clusters, the total amount of
+possible change is often quite constrained as well. Thus, the move from
+unweighted to weighted edit distances may make even more of a difference in some
+cases.
 
 In general, since decisions about how to operationalize these distance metrics, which initial
 clusterings to use to generate sequences, and the final clustering algorithms all may have 
