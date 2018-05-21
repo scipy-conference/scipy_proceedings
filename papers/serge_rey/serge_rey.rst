@@ -599,6 +599,7 @@ six neighborhood types identified by the agglomerative Ward method and
 the fourteen neighborhood types identified by the affinity
 propagation method.
 
+Since we are experimenting with four census years and
 
 Sequence Analysis to Neighborhood Change
 ========================================
