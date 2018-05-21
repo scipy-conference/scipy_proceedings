@@ -344,11 +344,16 @@ A view then interacts with the database if any database data is required, collec
 
     - McqTestCase
 
-      This model is used for mcq or mcc type of question.
+      This model is used for MCQ (Single correct choice) or MCC
+      (Multiple correct choice) type of question.
 
     - HookTestCase
 
-      This model is used for creating a code which can the
+      This model is used for questions where there is a need for higher level
+      of testing. This models comes with a predefined function `check_answer`
+      where the student answer (path to user submitted files for assignment
+      uploads) is passed as an argument. The question creator can hence
+      scrutinise the user answer in much more specific ways.
 
     - Fill in the blanks Test case
 
@@ -574,44 +579,112 @@ An evaluator class should have four methods `__init__`, teardown, compile_code a
   - weight (Float value) - indicating total weight of all successful test cases
   - error (String value) - error message if success is false
 
-An example of interfacing yaksh on the ST website.
-
-Additional plugin app support.
-
-Import and export.
-
-API?
-
-
-
 Some experiences using yaksh
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-- Usage in the internal courses at IIT, AE 102, SDES etc.
+  During its inception in 2011, Yaksh was designed as a quizzing interface
+  with the idea that anyone can use Yaksh to test and grade the programming
+  skills of students. As a quizzing interface, Yaksh was first used with
+  training 600 teachers in an event in 2011. Since then, Yaksh is a regular
+  tool in teaching students, especially for courses at IIT Bombay and for
+  conducting employment hiring tests within FOSSEE. With the introduction of
+  Python Workshops (https://python-workshops.fossee.in/), an initiative of
+  FOSSEE to remotely train students and teachers across India, Yaksh has since
+  been refactored around the MOOC ideology, introducing the ability to learn
+  with an heavy emphasis on hands on coding.
+  Let's look at an overview of all the activities done using Yaksh -
 
-- Usage for hiring!
+    Courses at IIT Bombay
+    ~~~~~~~~~~~~~~~~~~~~~
+    Yaksh has been used as a online learning and testing tool for courses at
+    IIT Bombay. The **SDES** course used Yaksh extensively to quiz students on
+    concepts from Python, Bash and Git.
+    Yaksh is used frequently by one of the authors, Prof. Prabhu Ramachandran,
+    to teach Python to undergraduate  students. So far, almost 300 students
+    from IIT-B have been taught using Yaksh.
 
-- Usage for practice
 
-- Usage for full MOOC course
+    Usage for Python Workshops
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    In early 2017, FOSSEE started conducting Remote Python Workshops in
+    technical colleges across India. These workshops consists of several
+    sessions spread through one or three days, depending on the type of
+    the course an institute chooses. A Session typically begins with screening
+    a video tutorial inside the venue. The tutorials are followed by
+    a demanding set of exercises and quizzes, both of which are conducted on
+    Yaksh. This is followed by brief Q&A sessions with the remotely
+    assisting Python instructors from FOSSEE. Finally a certificate is awarded
+    to those students who successfully finish the course. Apart from this,
+    Yaksh also hosts a monthly, self learning online course, consisting of the
+    same workshop materials and some bonus contents. Here is some figures that
+    we have gathered from these activities -
 
+    1. As of mid 2018, around 13,000 active users are on Yaksh, with more
+       expected to join by the end of the year.
+
+    2. Rapidly growing user base with 730+,4500+ and 7500+ user registrations
+       for year 2016, 2017 and mid-2018 respectively.
+
+    3. 100+ institutes have conducted the workshop with 6000+ students
+       participating and 3600+ students obtaining a certificate.
+
+    4. For the first three months of the Python Self learning Course, an
+       estimate of 3500+ students enrolled with 1200+ completing the course
+       within the time frame and 400+ students obtaining a passing certificate.
+
+    5. An astounding equal ratio of male to female participants with most users
+       from the age of 18-24.
+
+    6. Average time spent on the website by an user is around 30 mins.
+    7. Major users from tier 1 cities of India, regarded as highly developed
+       IT hubs like -
+
+      - Hyderabad
+      - Bengaluru
+      - Pune
+      - Mumbai
+
+    Usage for hiring
+    ~~~~~~~~~~~~~~~~
+    One surprising use case for Yaksh has been as a tool for evaluating
+    employment candidates by conducting tests.
+    Yaksh has been used several times for hiring for teams functioning inside
+    FOSSEE project.
+    Some of the projects that have used Yaksh are -
+
+      - OSDAG (https://osdag.fossee.in/)
+      - Esim/Xcos (https://esim.fossee.in/)
+      - Python (https://python.fossee.in/)
+      - DWSIM (https://dwsim.fossee.in/)
+      - SBHS (https://sbhs.fossee.in/)
 
 
 Plans
 ~~~~~~
+  The team behind Yaksh is devoted to further improving user experience for
+  both moderators and students. This includes addition of features like
+  Instant Messaging (IM) service for moderators and teachers to
+  guide and solve students' doubts in real time. The team also plans to add
+  support for more programming languages to include a larger question base.
+  Moderators will have facility to do detailed analysis on students'
+  performance in future.
 
-New features planned.
-
-Things already under way.
-
-Other features we are thinking of.
-
-
+  For moderators, a stable web-API is being designed for other websites to
+  harness the power of Yaksh. With this API, moderators could be able to
+  embed lessons and quizzes available on Yaksh in Jupyter notebooks.
 
 Conclusions
 ------------
 
+  As discussed in this paper, Yaksh as an free and open source tool can be used
+  effectively and extensively for testing programming skills of students.
+  The features provided by Yaksh facilitates teachers to automate evaluation
+  of students in almost real time, thereby reducing the grunt work. With
+  addition of MOOC like features, students can learn, practice and test their
+  programming abilities within the same place. With Yaksh in its arsenal,
+  the Python team at FOSSEE continues to promote and spread Python throughout
+  India.
 
 
 Acknowledgments
