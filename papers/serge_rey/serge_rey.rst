@@ -535,7 +535,77 @@ dynamic models of urban spatial structure.
 Neighborhood Dynamics
 =====================
 
+Transition Analysis
+-------------------
+
 **Wei's Results**
+
+Sequence Analysis
+------------------
+
+In analyzing the clusters in sequences of neighborhood transitions, we
+begin by considering the trajectories of neighborhoods as shown in Figure
+:ref: `f:ward`. Given how the neighborhood classifications can change over
+time, a neighborhood's socioeconomic classification can change over time. 
+Identifying areas where these shifts happen in the same way in the same point
+in time, a neighborhood experiencing gentrification may move from minority
+working class to integrated middle class, terminating in white upper class
+as the process of demographic and economic shift matures. Identifying areas
+that experience the same trajectories since 1980 allows us to examine spaces 
+with similar aligned histories, rather than areas that may have experienced
+similar transitions at some point in their history. 
+
+.. figure:: hamming_and_weighted.png
+   :align: center
+   :figclass: w
+
+   Neighborhoods with similar spatial-social histories since 1980 :label:`f:trajclust`
+
+Armed with the sequences of sociodemographic classifications for every harmonized 
+tract in LA, the distance between these sequences can be computed. Since these 
+sequences are intrinsically aligned in time, the Hamming distance between classifications
+yields an effective metric for how different places' demographic changes
+have been. The pairwise Hamming distance matrix for demographic transitions in LA
+is sufficient to recover a set of boundaries. However, alone, this metric only considers
+that two areas are in different sociodemographic classifications at a specific point in time.
+It does not consider the difference in the attribute's strength of assignment in these
+classifications, nor does it consider how well an area fits into its demographic classification.
+
+Conceptually, this is important; even though the gist of the demographic
+classifications stay consistent over time, the members of these classes may
+shift around significantly over time. As a tract drifts from one classification
+to another classification over time, it may move within the class before it hops classifications
+if the movement is slow. This means that, at each point in time, tracts are 
+more or less representative of their clusters; a transition of one area from 
+"white working class" to "white upper class" may not necessarily reflect the same amount
+of social/spatial volatility as a move from "minority working class" to "white upper class,"
+as might happen during rapid gentrification.
+
+As such, we can also weight the edit distance based on how "expensive" the edit is in terms of the
+clustering distance. Using this weighting method, not all transitions from
+white working class to white upper class will be treated the same: observations
+that are "almost" white upper class but not quite will be considered more similar
+to white upper class tracts. But, since a reassignment is still involved, there will
+still be a cost associated with that edit. Clusterings for both the raw hamming edit
+distance and the weighted hamming edit distances over sociodemographic sequences are shown
+in Figure :ref: `f:trajclust` using :cite: `wolf2018`. Broadly speaking, the assignments
+between the two clustering methods are strongly related (with an adjusted Rand index of .68), 
+but macro-level distinctions between assignment structures are visible, particularly in
+in the areas of central northern LA near the Hollywood Hills, as well as the areas
+of east LA, near Fullerton. This means that, when the sub-classification information is
+taken into account, clusterings can change. However, when examining spatially-contiguous
+clusters, the total amount of possible change is often quite constrained as well. 
+Thus, the move from unweighted to weighted edit distances may make even more of a 
+difference in some cases. 
+
+In general, since decisions about how to operationalize these distance metrics, which initial
+clusterings to use to generate sequences, and the final clustering algorithms all may have 
+a significant effect on the resulting clusters discovered, it becomes important to support many
+different options, configurations, and analysis workflows. As discussed above, 
+the differences in "final" results can also impact the substantive understandings of how 
+neighborhood dynamics are operating in an area under study. Thus, providing the user with 
+many ways to flexibly reparameterize these complex questions about space-time similarity
+will enhance and improve the usefulness of ``OSLNAP`` for reproducible urban science.
 
 
 Conclusion (0.5)
