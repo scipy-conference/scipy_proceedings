@@ -13,7 +13,7 @@
 :bibliography: bib
 
 ------------------------------------------------------------------------
-WrightSim: Numerical integration for Simulating Multidimensional Spectra
+WrightSim: Numerical Integration for Simulating Multidimensional Spectra
 ------------------------------------------------------------------------
 
 .. class:: abstract
@@ -43,7 +43,7 @@ Theory and Background
 
 The information presented in this section is largely a reproduction,
 edited for brevity, of that which was presented by Kohler, Thompson, and
-Wright:cite:`Kohler_2017`. Readers interested in finer
+Wright :cite:`Kohler_2017`. Readers interested in finer
 grained detail are encouraged to reference their work, in particular the
 supplemental information. Below, I discuss the broader goals of this
 project, provide an insight into the mathematics underlying the
@@ -68,7 +68,7 @@ always valid.
 
 .. figure:: example_spectrum.png
 
-    Simulated spectrum at normalized coordinates:label:`fig:example\_spectrum`
+    Simulated spectrum at normalized coordinates :label:`fig:examplespectrum`
 
 Figure [fig:example\_spectrum] shows an example visualization of a
 spectrum in 2-Dimensional frequency space. The axes are two different
@@ -90,7 +90,7 @@ A Brief Introduction on Relevant Quantum Mechanics
 --------------------------------------------------
 
 If you are interested in a more full understanding, please refer to
-Kohler, Thompson, and Wright:cite:`Kohler_2017`. This
+Kohler, Thompson, and Wright :cite:`Kohler_2017`. This
 introduction is intended to very quickly introduce *what* is being done,
 but not *why*.
 
@@ -117,7 +117,7 @@ and pathways, to as fine a detail as desired.
     :math:`\omega_1` are in yellow, excitations from
     :math:`\omega_2 = \omega_{2^\prime}` are shown in purple. Figure was
     originally published as Figure 1 of Kohler, Thompson, and
-    Wright:cite:`Kohler_2017` :label:`fig:WMELs`
+    Wright :cite:`Kohler_2017` :label:`fig:WMELs`
 
 .. figure:: flow_diagram.pdf
 
@@ -127,9 +127,9 @@ and pathways, to as fine a detail as desired.
     with (the superscript). Arrows indicate interactions with
     :math:`\omega_1` (blue), :math:`\omega_{2^\prime}` (red), and
     :math:`\omega_2` (green). Figure was originally published as Figure S1
-    of Kohler, Thompson, and Wright:cite:`Kohler_2017:label:`fig:flow\_diagram`
+    of Kohler, Thompson, and Wright :cite:`Kohler_2017` :label:`fig:fsa` 
 
-Figure [fig:flow\_diagram] shows a finite state automata, starting at
+Figure [fig:fsa] shows a finite state automata, starting at
 the ground state (:math:`\rho_{00}`). Encoded within each node is both
 the quantum mechanical state and the fields with which the system has
 already interacted. Interactions occur along the arrows, which transfer
@@ -181,6 +181,7 @@ matrix:
 .. math::
 
    \overline{\overline{Q}} \equiv
+   \setlength{\arraycolsep}{2pt}
    \begin{bmatrix}
        0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
        -A_2 & -\Gamma_{10} & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
@@ -238,7 +239,7 @@ When first translating the code from ``NISE`` into the paradigm of
 ``WrightSim``, I sought to understand why it took so long to compute. I
 used Python’s standard library package ``cProfile`` to produce traces of
 execution, and visualized them with
-``SnakeViz``\ :cite:`snakeviz`. Figure [fig:snakeviz].1
+``SnakeViz`` :cite:`snakeviz`. Figure [fig:snakeviz].1
 shows the trace obtained from a single-threaded run of ``NISE``
 simulating a :math:`32 x 32 x 16` frequency-frequency-delay space. This
 trace provided some interesting insights into how the algorithm could be
@@ -316,7 +317,7 @@ versus the number of points simulated, were conducted for each of the
 following: ``NISE`` single threaded, ``NISE`` Multiprocessed using four
 cores, ``WrightSim`` Single threaded, ``WrightSim`` Multiprocessed using
 four cores, and ``WrightSim`` CUDA implementation. A machine with an
-Intel Core i5-7600 (3.5 GHz) CPU and an Nvidia GTX 1070 graphics card,
+Intel Core i5-7600 (3.5 GHz) CPU and an Nvidia GTX 1060 graphics card,
 running Arch Linux was used for all tests. The simulations all had the
 same end goal for simulation, with the same number of time steps and
 same recorded values. The ``NISE`` simulations use two seven by seven
@@ -326,7 +327,7 @@ single nine by nine matrix. The results are summarized in Figure
 
 .. figure:: Scaling.png
 
-    Scaling Comparison of ``WrightSim`` and ``NISE``:label:`fig:scaling`
+    Scaling Comparison of ``WrightSim`` and ``NISE`` :label:`fig:scaling`
 
 The log-log plot shows that the time scales linearly with number of
 points. All lines have approximately the same slope at high values of N,
