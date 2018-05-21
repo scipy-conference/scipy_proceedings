@@ -338,15 +338,16 @@ happening in a particular order :cite:`delmelle2016`.
 It should be noted here that the operation costs are not necessarily
 identical. Rather, they can be manipulated so that the resulted similarity
 measure reflects the exact characteristics of the neighborhood sequence we are
-interested in. For example, specific operations such as insertion, deletion and
+interested in. For example, the cost of substution may capture units' socioeconomic
+dissimilarity in contemporary experience :cite:`li2018` while operations
+including insertion, deletion and
 transposition can be assigned such an expensive cost that it is highly unlikely
-they will be allowed while the cost of substution captures units' socioeconomic
-dissimilarity in contemporary experience :cite:`li2018`.
+they will be allowed in the OM process .
 We allows for various cost functions and further extend the definition
 of operation costs to incorporate potential spatial
 dependence and spatial heterogeneity.
 
-In a prototypical workflow, ``change`` permits the end user to explore
+In a prototypical workflow, the ``change`` module permits the end user to explore
 the nature of neighborhood change:
 
 .. raw:: latex
