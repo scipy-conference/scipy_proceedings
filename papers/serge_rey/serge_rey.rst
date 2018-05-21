@@ -274,11 +274,12 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
    method, or interactively by leveraging the ``geovisualization``
    module.
 
-Longitudinal Analysis (WK, SR, EK) 
+Longitudinal Analysis (WK, SR, EK)
 ===================================
-The third major analytical layer of OSLNAP provides a suite of
-functionalities for the longitudinal analysis of neighborhoods to
-uncover how neighborhoods evolve over time. Traditional analysis focuses
+Having identified the neighborhood types for all units of analysis over
+the whole time span, researchers might be interested in how they evolve over time.
+The third core module ``change`` of ``OSLNAP``'s analytical components provides a suite of
+functionality towards such end. Traditional longitudinal analysis focuses
 solely on the changes in the socioeconomic composition, while it is
 argued that the geographic footprint should not be ignored
 :cite:`rey2011`. Therefore, this component draws upon
@@ -289,7 +290,8 @@ interaction between these processes and geographic structure.
 
 Both sets of analytics take time series of neighborhood types assigned
 for all the spatial units of analysis (e.g. census tracts) based on
-adopting a spatial clustering algorithm as the input while they differ
+adopting a spatial clustering algorithm (the output of the ``cluster`` module)
+as the input while they differ
 in how the time series are modeled and analyzed. The first set centers
 on *transition analysis* which treats each time series as stochastically
 generated from time point to time point. It is in the same spirit of the
@@ -306,32 +308,80 @@ matrices to be formed for different spatial regimes which are
 constituted by contiguous spatial units. Both approaches together with
 inferences have been implemented in Python Spatial Analysis Library
 (PySAL) [1]_ :cite:`Rey14` and Geospatial Distribution
-Dynamics (giddy) package  [2]_. Our module considers these packages as
+Dynamics (giddy) package  [2]_. The ``change`` module considers these packages as
 dependencies and wrap relevant classes/functions to make them consistent
 and efficient to the longitudinal neighborhood analysis.
 
 The other set of spatially explicit approach to neighborhood dynamics is
 concerned with *sequence analysis* which treats each time series of
-neighborhood types as a whole in contrast to *transition analysis*. In
-this logic, demographic classifications are identified using some
-clustering method on demographic data alone. Then, the demographic experience
-of the neighborhood being studied is described by the demographic classifications
-it experiences over time. From here, neigborhoods can be further clustered
-or assigned based on how similar their demographic histories
-are. One method of building this measure of similarity focuses on the
-neighborhood's "demographic experience" using the
+neighborhood types as a whole in contrast to *transition analysis*.
+The core of *sequence analysis* is the similarity measure of a pair
+of sequences. Various aspects of a neighborhood sequence such as the order
+in which successive neighborhood types appears, the year(s) in which a
+specific neighborhood type appears and the duration of a neighborhood type
+could be the focus of the similarity measure. Choosing which aspect or
+aspects to focus on should be driven by the research question at hand
+and the interpretation should proceed with caution :cite:`Studer:2016`.
+A major approach of *sequence analysis*, the
 optimal matching (OM) algorithm, which was originally used for matching
-protein and DNA sequences :cite:`ABBOTT:2000`. 
-OM scores the similarity of neighborhoods' experiences by finding the 
-minimum number of transformations required to shift one sequence to another 
-using a combination of operations, including replacement, insertion, realignment, 
-and deletion :cite: `delmelle2016`. Thus, OM is not explicitly "time sensitive,"
-and similarities in demographic transitions are considered "near" regardless of
-whether or not they are contemporaneous. Another collection of methods does 
-not allow for realignment, so edit distances capture areas' similarity in 
-contemporary experience :cite:`li2018`. We allow for both contemporaneous 
-and experiential scoring methods and provide further tools to incorporate 
-potential spatial dependence and spatial heterogeneity.
+protein and DNA sequences :cite:`ABBOTT:2000`, has been adopted
+to measure the similarity between neighborhood sequences in
+metropolitan areas such as Los Angeles and Chicago
+:cite:`delmelle2016,delmelle2017`.
+It generally works by finding the minimum cost for transforming
+one sequence to another using a combination of operations including
+substitution, insertion, deletion and transposition.
+The similarity matrix is then used as the input for another round of clustering
+to derive a typology of neighborhood trajectory to produce several sequences
+of neighborhood types typically
+happening in a particular order :cite:`delmelle2016`.
+It should be noted here that the operation costs are not necessarily
+identical. Rather, they can be manipulated so that the resulted similarity
+measure reflects the exact characteristics of the neighborhood sequence we are
+interested in. For example, specific operations such as insertion, deletion and
+transposition can be assigned such an expensive cost that it is highly unlikely
+they will be allowed while the cost of substution captures units' socioeconomic
+dissimilarity in contemporary experience :cite:`li2018`.
+We allows for various cost functions and further extend the definition
+of operation costs to incorporate potential spatial
+dependence and spatial heterogeneity.
+
+In a prototypical workflow, ``change`` permits the end user to explore
+the nature of neighborhood change:
+
+.. raw:: latex
+
+   \begin{itemize}
+        \item from a dynamic perspective (\textit{transition analysis})
+             \begin{itemize}
+             \item by applying a first-order Markov chains model to look at probabilities of
+   transitioning between neighborhood types over time.
+             \item by applying a spatial Markov chains model to interrogate the role of
+   spatial interactions in shaping neighborhood dynamics.
+             \item by applying a spatial regime Markov chains model to explore spatially
+   heterogeneous neighborhood dynamics.
+             \end{itemize}
+        \item from a holistic perspective (\textit{sequence analysis})
+             \begin{itemize}
+             \item by applying the OM algorithm with chosen cost functions for
+   substitution, insertion, deletion and transposition.
+             \item by applying the spatially explicit OM algorithm which takes
+   account of potential spatial dependence and spatial heterogeneity in the operation
+   costs.
+             \end{itemize}
+        \item from a combined holistic \& dynamic perspective
+             \begin{itemize}
+             \item by incorporating the similarity matrix produced by the
+   \textit{sequence analysis} in the \textit{transition analysis} to explore
+   potential interactions and heterogeneity in the underlying dynamics of
+   neighborhood change.
+             \item by incorporating the transition matrix or matrices (from
+   spatially extensions to a Markov chains model) produced by the
+   \textit{transition analysis} in the \textit{sequence analysis} to better
+   cost functions of operations.
+             \end{itemize}
+   \end{itemize}
+
 
 .. [1]
    https://github.com/pysal/pysal
@@ -528,117 +578,14 @@ processes rather than the demographic makeup of communities is the focus
 of study, the neighborhood types derived here can be used as input to
 dynamic analyses of neighborhood change and evolution, particularly as
 they relate to phenomena such as gentrification and displacement. In the
-following section, we demonstrate how the neighborhood typologies
-generated by ``OSLNAP``\ ’s ``cluster`` module can be used as input to
-dynamic models of urban spatial structure.
+following sections, we demonstrate how the neighborhood typologies
+generated by ``OSLNAP``\ ’s ``cluster`` module can be used as input to the
+``change`` module to explore the neighborhood evolution.
 
-Neighborhood Dynamics
-=====================
+Transition Analysis to Neighborhood Change
+==========================================
 
-<<<<<<< HEAD
-Longitudinal Analysis (WK, SR, EK) 
-===================================
-
-Having identified the neighborhood types for all units of analysis over
-the whole time span, researchers might be interested in how they evolve over time.
-The third core module ``change`` of ``OSLNAP``'s analytical components provides a suite of
-functionality towards such end. Traditional longitudinal analysis focuses
-solely on the changes in the socioeconomic composition, while it is
-argued that the geographic footprint should not be ignored
-:cite:`rey2011`. Therefore, this component draws upon
-recent methodological developments from spatial inequality dynamics and
-implements two broad sets of spatially explicit analytics to provide
-deeper insights into the evolution of socioeconomic processes and the
-interaction between these processes and geographic structure.
-
-Both sets of analytics take time series of neighborhood types assigned
-for all the spatial units of analysis (e.g. census tracts) based on
-adopting a spatial clustering algorithm (the output of the ``cluster`` module)
-as the input while they differ
-in how the time series are modeled and analyzed. The first set centers
-on *transition analysis* which treats each time series as stochastically
-generated from time point to time point. It is in the same spirit of the
-first-order Markov Chain analysis where a :math:`(k,k)` transition
-matrix is formed by counting transitions across all the :math:`k`
-neighborhood types between any two consecutive time points for all
-spatial units. Drawbacks of such approach include that it treats all the
-time series as being independent of one another and following an
-identical transition mechanism. The spatial Markov approach was proposed
-by :cite:`Rey01` to interrogate potential spatial
-interactions by conditioning transition matrices on neighboring context
-while the spatial regime Markov approach allows several transition
-matrices to be formed for different spatial regimes which are
-constituted by contiguous spatial units. Both approaches together with
-inferences have been implemented in Python Spatial Analysis Library
-(PySAL) [1]_ :cite:`Rey14` and the Geospatial Distribution
-Dynamics (giddy) package  [2]_. ``change`` considers these packages as
-dependencies and wrap relevant classes/functions to make them consistent
-and efficient to the longitudinal neighborhood analysis.
-
-The other set of spatially explicit approach to neighborhood dynamics is
-concerned with *sequence analysis* which treats each sequence (time series) of
-neighborhood types as a whole in contrast to *transition analysis*.
-The core of *sequence analysis* is the similarity measure of a pair
-of sequences. Various aspects of a neighborhood sequence such as the order
-in which successive neighborhood types appears, the year(s) in which a
-specific neighborhood type appears and the duration of a neighborhood type
-could be the focus of the similarity measure. Choosing which aspect or
-aspects to focus on should be driven by the research question at hand
-and the interpretation should proceed with caution :cite:`Studer:2016`.
-A major approach of *sequence analysis*, the
-optimal matching (OM) algorithm, which was originally used for matching
-protein and DNA sequences :cite:`ABBOTT:2000`, has been adopted
-to measure the similarity between neighborhood sequences in
-metropolitan areas such as Los Angeles and Chicago
-:cite:`delmelle2016,delmelle2017`.
-It generally works by finding the minimum cost for transforming
-one sequence to another using a combination of operations including
-substitution, insertion and deletion. The similarity matrix is then used
-as the input for another round of clustering to derive a typology of
-neighborhood trajectory to produce several sequences of neighborhood types typically
-happening in a particular order :cite:`delmelle2016`.
-We extend the definition of operation costs to incorporate potential spatial
-dependence and spatial heterogeneity and also implement several other sequence
-similarity measures for users to choose
-from.
-
-In a prototypical workflow, ``change`` permits the end user to explore
-the nature of neighborhood change:
-
-.. raw:: latex
-
-   \begin{itemize}
-        \item from a dynamic perspective (\textit{transition analysis})
-             \begin{itemize}
-             \item by applying a first-order Markov chains model to look at probabilities of
-   transitioning between neighborhood types over time.
-             \item by applying a spatial Markov chains model to interrogate the role of
-   spatial interactions in shaping neighborhood dynamics.
-             \item by applying a spatial regime Markov chains model to explore spatially
-   heterogeneous neighborhood dynamics.
-             \end{itemize}
-        \item from a holistic perspective (\textit{sequence analysis})
-             \begin{itemize}
-             \item by applying the OM algorithm with chosen cost functions
-   for substitution, insertion and deletion.
-             \item by applying the spatially explicit OM algorithm which takes
-   account of potential spatial dependence and spatial heterogeneity.
-             \end{itemize}
-        \item from a combined holistic \& dynamic perspective
-             \begin{itemize}
-             \item by incorporating the similarity matrix produced by the
-   \textit{sequence analysis} in the \textit{transition analysis} to explore
-   potential interactions and heterogeneity in the underlying dynamics of
-   neighborhood change.
-             \item by incorporating the transition matrix or matrices (from
-   spatially extensions to a Markov chains model) produced by the
-   \textit{transition analysis} in the \textit{sequence analysis} to better
-   cost functions of operations.
-             \end{itemize}
-   \end{itemize}
-
-
-In what follows, we will demonstrate the usage of the ``change``
+In what follows, we demonstrate the usage of the ``change``
 module to provide insights into the nature of neighborhood change in
 the Los Angeles metropolitan area. We utilize the neighborhood types
 for all census tracts of the Los Angeles metropolitan area across four
@@ -651,23 +598,11 @@ six neighborhood types identified by the agglomerative Ward method and
 the fourteen neighborhood types identified by the affinity
 propagation method.
 
-Transition Analysis
-~~~~~~~~~~~~~~~~~~~
 
-Since the agglomerative Ward method produced
+Sequence Analysis to Neighborhood Change
+========================================
 
-Sequence Analysis
-~~~~~~~~~~~~~~~~~
 
-.. [1]
-   https://github.com/pysal/pysal
-
-.. [2]
-   https://github.com/pysal/giddy
-
-=======
-**Wei's Results**
->>>>>>> 36525088ca9b51192bdfab26858be4f9038ae560
 
 
 Conclusion (0.5)
