@@ -45,8 +45,8 @@ using the scientific Python ecosystem.
    neighborhoods, GIS, clustering, dynamics
 
   
-Introduction (.5) (SR, EK, SH, LW, WK)
---------------------------------------
+Introduction 
+------------
 
 For social scientists in a wide variety of disciplines, neighborhoods
 are central thematic topics, focal units of analysis, and first-class
@@ -190,8 +190,8 @@ In a prototypical workflow, ``harmonize`` permits the end-user to:
       polygons)
 
 
-Neighborhood Identification 1.5
-===============================
+Neighborhood Identification
+===========================
 
 
 Neighborhoods are complex social and spatial environments with multiple
@@ -291,8 +291,8 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
    method, or interactively by leveraging the ``geovisualization``
    module.
 
-Longitudinal Analysis (WK, SR, EK)
-===================================
+Longitudinal Analysis
+=====================
 
 Having identified the neighborhood types for all units of analysis over
 the whole time span, researchers might be interested in how they evolve over time.
@@ -757,8 +757,8 @@ many ways to flexibly reparameterize these complex questions about space-time si
 will enhance and improve the usefulness of ``OSLNAP`` for reproducible urban science.
 
 
-Conclusion (0.5)
-----------------
+Conclusion
+----------
 
 In this paper we have presented the motivation for, and initial design and
 implementation of OSLNAP. At present, we are in the early phases of the project
