@@ -100,11 +100,17 @@ aggregated to a geographic reporting unit such as a state, county or zip
 code which may be relatively stable. The boundaries of smaller
 geographies like census tracts, however, often are designed to
 encapsulate roughly the same number of people for the sake of
-comparability, which means that they are necessarily redrawn with each
-data release as population grows and fluctuates. Since same physical
-location may fall within the boundary of different reporting units at
-different points in time, it is impossible to compare directly a single
+comparability, which means that they are necessarily redrawn with each data
+release as population grows and fluctuates. Figure :ref:`f:harm` illustrates the
+issues involved. Here two census tracts from 2000 have been merged to form a new
+tract in 2010. However, while one of the original tracts is completely contained
+in the new tracts, the second original tract is only partially contained in the new tract. In other words, since same physical location may fall within the boundary of different reporting
+units at different points in time, it is impossible to compare directly a single
 neighborhood with itself over time.
+
+.. figure:: tractchange.png
+
+   Enumeration Unit Changes :cite:`Census_2010`. :label:`f:harm`
 
 
 To facilitate temporal comparisons, research to date has proceeded by
@@ -134,7 +140,7 @@ these products have published studies verifying the accuracy
 of their respective data, but those claims have gone untested because
 researchers are unable to fully replicate the underlying methodology.
 
-To overcome the issues outlined above, ``oslnap`` provides a suite of
+To overcome the issues outlined above, ``OSLNAP`` provides a suite of
 functionality for conducting areal interpolation and boundary
 harmonization in the ``harmonize`` module. It leverages ``geopandas``
 and ``PySAL`` for managing data and performing geospatial operations,
@@ -166,15 +172,16 @@ In a prototypical workflow, ``harmonize`` permits the end-user to:
    -  developing new primitive units (e.g. the intersection of all
       polygons)
 
+
 Neighborhood Identification 1.5
 ===============================
 
 
 Neighborhoods are complex social and spatial environments with multiple
-interacting individuals, markets, and processes. Despite 100 years of
+interacting individuals, markets, and processes. Despite hundreds of years of
 research it remains difficult to quantify neighborhood context, and
 certainly no single variable is capable of capturing the entirety of a
-neighborhood’s essential nuance. For this reason, several traditions of
+neighborhood’s essential essence. For this reason, several traditions of
 urban research focus on the application of multivariate clustering
 algorithms to develop neighborhood typologies. Such typologies are
 sometimes viewed as more holistic descriptions of neighborhoods because
@@ -204,7 +211,7 @@ multiple different clustering solutions in their work, and evaluate the
 implications of including space as a formal component in their
 clustering models.
 
-the ``cluster`` module leverages the scientific python ecosystem,
+In OSLNAP, the ``cluster`` module leverages the scientific python ecosystem,
 building from ```geopandas`` <http://geopandas.org/>`__,
 ```PySAL`` <http://pysal.org>`__, and
 ```scikit-learn`` <http://scikit-learn.org>`__. Using input from the
@@ -227,17 +234,16 @@ drawback of this approach is the type of a single neighborhood cannot be
 compared between two different time periods because the types are
 independent in each period.
 
-In the (c), clusters are defined from all observations in all time
-periods. In this case, the universe of potential neighborhood types is
-held constant over time, the neighborhood types are consistent across
-time periods, and researchers can examine how particular neighborhoods
-get classified into different neighborhood types as their composition
-transitions through different time periods. While comparatively rare in
-the research, this latter approach allows a richer examination of
-socio-spatial dynamics. By providing tools to drastically simplify the
-data manipulation and analysis pipeline, we aim to facilitate greater
-exploration of urban dynamics that will help catalyze more of this
-research.
+In the third approach (c), clusters are defined from all observations in all
+time periods. The universe of potential neighborhood types is held
+constant over time, the neighborhood types are consistent across time periods,
+and researchers can examine how particular neighborhoods get classified into
+different neighborhood types as their composition transitions through different
+time periods. While comparatively rare in the research, this latter approach
+allows a richer examination of socio-spatial dynamics. By providing tools to
+drastically simplify the data manipulation and analysis pipeline, we aim to
+facilitate greater exploration of urban dynamics that will help catalyze more of
+this research.
 
 To facilitate this work, the ``cluster`` module provides wrappers for
 several common clustering algorithms from ``scikit-learn`` that can be
@@ -268,15 +274,83 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
    method, or interactively by leveraging the ``geovisualization``
    module.
 
+Longitudinal Analysis (WK, SR, EK) 
+===================================
+The third major analytical layer of OSLNAP provides a suite of
+functionalities for the longitudinal analysis of neighborhoods to
+uncover how neighborhoods evolve over time. Traditional analysis focuses
+solely on the changes in the socioeconomic composition, while it is
+argued that the geographic footprint should not be ignored
+:cite:`rey2011`. Therefore, this component draws upon
+recent methodological developments from spatial inequality dynamics and
+implements two broad sets of spatially explicit analytics to provide
+deeper insights into the evolution of socioeconomic processes and the
+interaction between these processes and geographic structure.
 
-In the following sections we demonstrate the utility of ``oslnap`` by
+Both sets of analytics take time series of neighborhood types assigned
+for all the spatial units of analysis (e.g. census tracts) based on
+adopting a spatial clustering algorithm as the input while they differ
+in how the time series are modeled and analyzed. The first set centers
+on *transition analysis* which treats each time series as stochastically
+generated from time point to time point. It is in the same spirit of the
+first-order Markov Chain analysis where a :math:`(k,k)` transition
+matrix is formed by counting transitions across all the :math:`k`
+neighborhood types between any two consecutive time points for all
+spatial units. Drawbacks of such approach include that it treats all the
+time series as being independent of one another and following an
+identical transition mechanism. The spatial Markov approach was proposed
+by :cite:`Rey01` to interrogate potential spatial
+interactions by conditioning transition matrices on neighboring context
+while the spatial regime Markov approach allows several transition
+matrices to be formed for different spatial regimes which are
+constituted by contiguous spatial units. Both approaches together with
+inferences have been implemented in Python Spatial Analysis Library
+(PySAL) [1]_ :cite:`Rey14` and Geospatial Distribution
+Dynamics (giddy) package  [2]_. Our module considers these packages as
+dependencies and wrap relevant classes/functions to make them consistent
+and efficient to the longitudinal neighborhood analysis.
+
+The other set of spatially explicit approach to neighborhood dynamics is
+concerned with *sequence analysis* which treats each time series of
+neighborhood types as a whole in contrast to *transition analysis*. In
+this logic, demographic classifications are identified using some
+clustering method on demographic data alone. Then, the demographic experience
+of the neighborhood being studied is described by the demographic classifications
+it experiences over time. From here, neigborhoods can be further clustered
+or assigned based on how similar their demographic histories
+are. One method of building this measure of similarity focuses on the
+neighborhood's "demographic experience" using the
+optimal matching (OM) algorithm, which was originally used for matching
+protein and DNA sequences :cite:`ABBOTT:2000`. 
+OM scores the similarity of neighborhoods' experiences by finding the 
+minimum number of transformations required to shift one sequence to another 
+using a combination of operations, including replacement, insertion, realignment, 
+and deletion :cite: `delmelle2016`. Thus, OM is not explicitly "time sensitive,"
+and similarities in demographic transitions are considered "near" regardless of
+whether or not they are contemporaneous. Another collection of methods does 
+not allow for realignment, so edit distances capture areas' similarity in 
+contemporary experience :cite:`li2018`. We allow for both contemporaneous 
+and experiential scoring methods and provide further tools to incorporate 
+potential spatial dependence and spatial heterogeneity.
+
+.. [1]
+   https://github.com/pysal/pysal
+
+.. [2]
+   https://github.com/pysal/giddy
+
+
+Empirical Illustration
+----------------------
+
+In the following sections we demonstrate the utility of ``OSLNAP`` by
 presenting the results of several sample analyses conducted with the
 package. We begin with a series of cluster analyses, which are used in
 the proceeding section to analyze neighborhood dynamics. Typically,
 workflows of this variety would require extensive data collection,
-munging and recombination; with ``oslnap``, however, we accomplish the
+munging and recombination; with ``OSLNAP``, however, we accomplish the
 same in just a few lines of code. Using the Los Angeles metropolitan
-area as our laboratory, we present three neighborhood typologies, each
+area as our example, we present three neighborhood typologies, each
 of which leverages the same set of demographic and socioeconomic
 variables, albeit with different clustering algorithms. The results show
 similarities across the three methods but also several marked
@@ -295,7 +369,7 @@ greater) and socioeconomic status (median income, median home value,
 percent of residents in poverty).
 
 Agglomerative Ward
-~~~~~~~~~~~~~~~~~~
+==================
 
 We begin with a simple example identifying six clusters via the
 agglomerative Ward method. Following the geodemographic approach, we aim
@@ -306,16 +380,15 @@ variables listed earlier, the Ward method identifies three clusters that
 are predominantly white on average but which differ with respect to
 socioeconomic status. The other three clusters, meanwhile, tend to be
 predominantly minority neighborhoods but are differentiated mainly by
-the dominant racial group (black versus Hispanic/Latino) rather than by
-class. The results, while unsurprising to most urban scholars, highlight
-the continued segregation by race and class that characterize American
-cities. For purposes of illustration, we give each neighborhood type a
-stylized moniker that attempts to summarize succinctly its composition
-(again, a common practice in the geodemographic literature). To be
-clear, these labels are oversimplifications of the socioeconomic context
-within each type, but they help facilitate rapid consumption of the
-information nonetheless. The resulting clusters are presented below in
-fig. 1.
+the dominant racial group (black versus Hispanic/Latino) rather than by class.
+The results, while unsurprising to most urban scholars, highlight the continued
+segregation by race and class that characterize American cities. For purposes of
+illustration, we give each neighborhood type a stylized moniker that attempts to
+summarize succinctly its composition (again, a common practice in the
+geodemographic literature). To be clear, these labels are oversimplifications of
+the socioeconomic context within each type, but they help facilitate rapid
+consumption of the information nonetheless. The resulting clusters are presented
+below in :ref:`f:ward`.
 
 .. figure:: la_ward_all.png
 
@@ -346,19 +419,19 @@ analytical tools to understand how neighborhood composition can affect
 the lives of its residents (a research tradition known as neighborhood
 effects), but also how neighborhood identities can transform (or remain
 stagnant) over time and space. Beyond the simple diagnostics plots
-presented above, ``oslnap`` also includes an interactive visualization
+presented above, ``OSLNAP`` also includes an interactive visualization
 interface that allows users to interrogate the results of their analyses
 in a dynamic web-based environment where interactive charts and maps
 automatically readjust according to user selections.
 
 
 Affinity Propagation
-~~~~~~~~~~~~~~~~~~~~
+====================
 
 Affinity propagation is a newer clustering algorithm with
-implementations in scikit-learn and elsewhere that is capable of
+implementations in scikit-learn that is capable of
 determining the number of clusters endogenously (subject to a few tuning
-parameters). Initialized with the default settings, ``oslnap`` discovers
+parameters). Initialized with the default settings, ``OSLNAP`` discovers
 14 neighborhood types in the Los Angeles region; in a way, this
 increases the resolution of the analysis beyond the Ward example, since
 increasing the number of clusters means neighborhoods are more tightly
@@ -406,7 +479,7 @@ the continued diversification of the I-5 corridor along the southern
 portion of the region.
 
 SKATER
-~~~~~~
+======
 
 Breaking from the geodemographic approach, the third example leverages
 SKATER, a spatially-constrained clustering algorithm that finds groups
@@ -446,7 +519,7 @@ regionalization approach presents neighborhood researchers with another
 critical tool for understanding the bi-directional relationship between
 people and places.
 
-In each of the sample analyses presented above, we use ``oslnap`` to
+In each of the sample analyses presented above, we use ``OSLNAP`` to
 derive a set of neighborhood clusters or types that can be used to
 analyze the demographic makeup of places over time. In some cases, these
 maps can serve as foundations for descriptive analyses or analyzed as
@@ -456,10 +529,13 @@ of study, the neighborhood types derived here can be used as input to
 dynamic analyses of neighborhood change and evolution, particularly as
 they relate to phenomena such as gentrification and displacement. In the
 following section, we demonstrate how the neighborhood typologies
-generated by ``oslnap``\ ’s ``cluster`` module can be used as input to
+generated by ``OSLNAP``\ ’s ``cluster`` module can be used as input to
 dynamic models of urban spatial structure.
 
+Neighborhood Dynamics
+=====================
 
+<<<<<<< HEAD
 Longitudinal Analysis (WK, SR, EK) 
 ===================================
 
@@ -589,6 +665,9 @@ Sequence Analysis
 .. [2]
    https://github.com/pysal/giddy
 
+=======
+**Wei's Results**
+>>>>>>> 36525088ca9b51192bdfab26858be4f9038ae560
 
 
 Conclusion (0.5)
