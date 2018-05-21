@@ -69,14 +69,31 @@ Neighborhood analysis involves a multitude of analytic tasks, and different
 types of enquiry lead to different analytical pipelines in which distinct tasks
 are combined in sequence. OSLNAP is designed in a modular fashion to facilitate
 the composition of different pipelines for neighborhood analysis. Its
-functionality is available through different interfaces from a web-based front end
-as a service to a library for scripting in Jupyter notebooks or at the shell. We
-first provide an overview of each of the main analytical components of OSLNAP
-before moving on to an illustration of how selections of the analytical
-functionality can be combined for particular use cases.
+functionality is available through several interfaces that include a web-based
+front end as well as a library for scripting in Jupyter notebooks or at the
+shell. As such, OSLNAP is intended to support different types of researchers and
+questions. For example, a sociologist interested in comparative segregation
+dynamics can use OSLNAP to derive time-consistent boundaries for a collection of
+US metropolitan areas from 1980-2010. Alternatively, public health
+epidemiologists can use the same boundaries to study the impact of neighborhood
+context on childhood obesity trends. Both of these types of studies might be
+characterized as "neighborhood effects" studies as neighborhood units serve as
+containers to study different socioeconomic processes.
 
-OSLNAP's analytical components are organized into three core modules: [a] data
-layer; [b] neighborhood definition layer; [c] longitudinal analysis layer.
+An alternative group of studies falls under the "neighborhood dynamics" label.
+Here the interest is in the neighborhood units themselves and how their
+boundaries *and* internal socioeconomic composition evolve over time. Processes
+such as gentrification and the so called great inversion :cite:`Ehrenhalt_2012`
+where wealthy, higher educated, white populations are relocating into the center
+cities while growing numbers of minorities move to the suburbs both
+fundamentally restructure urban and suburban neighborhoods. OSLNAP is designed to support
+both neighborhood effects and neighborhood dynamics modes of inquiry.
+
+We first provide an overview of each of the main analytical components of OSLNAP
+before moving on to an illustration of how selections of the analytical
+functionality can be combined for particular use cases. OSLNAP's analytical
+components are organized into three core modules: [a] data layer; [b]
+neighborhood definition layer; [c] longitudinal analysis layer.
 
 Data Layer
 ==========
@@ -675,7 +692,7 @@ Conclusion (0.5)
 
 In this paper we have presented the motivation for, and initial design and
 implementation of OSLNAP. At present, we are in the early phases of the project
-and moving we will be focusing on the following directions.
+and moving forward we will be focusing on the following directions.
 
 Parameter sweeps: In the definition of neighborhoods, a researcher faces a
 daunting number of decisions surrounding treatment of harmonization, selection
