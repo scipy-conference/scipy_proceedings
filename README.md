@@ -115,9 +115,9 @@ In 2018, the Proceedings Co-Chairs are
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
 - April 10–12: Authors invited to submit full papers
-- May 21: 1st Draft for Submission
-- May 21–July 2: Open Review Period
-- May 22: Reviewers Assigned
+- May 23: 1st Draft for Submission
+- May 23–July 2: Open Review Period
+- May 25: Reviewers Assigned
 - June 18: Initial Complete Review
 - July 2: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
@@ -152,8 +152,8 @@ have final say in whether to accept or reject a paper.
 ### Author Deadlines
 
 - April 10–12: Authors invited to submit full papers
-- May 21: 1st Draft for Submission Deadline
-- May 21–July 2: Open Review Period 
+- May 23: 1st Draft for Submission Deadline
+- May 23–July 2: Open Review Period 
 - July 5: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
@@ -204,7 +204,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](Creating a new branch based off-of-`2018`) for your paper based off the latest `2018` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2018) for your paper based off the latest `2018` branch.
     - If you submit multiple papers, you will need a new branch for each.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper) 
@@ -222,6 +222,7 @@ git clone https://github.com/mpacer/scipy_proceedings
   repository on GitHub.
 - Clone the repo locally 
     - `git clone https://github.com/<username>/scipy_proceedings`
+    - `cd scipy_proceedings/`
 - Add the `scipy-conference` repository as your `upstream` remote
     - `git remote add upstream https://github.com/scipy-conference/scipy_proceedings`
 
@@ -237,12 +238,12 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2018` branch 
+- Check out the upstream `2018` branch
     - `git checkout -b 2018 --track upstream/2018`
 
 #### Creating a new branch based off of `2018`
 
-If you are submitting only one paper, you can use the `2018` directly.
+If you are submitting only one paper, you can use the `2018` branch directly.
 
 Otherwise, you will need to create a new branch based on `2018` and set its
 upstream to origin.
@@ -287,9 +288,9 @@ submission procedure ([see below](creating-build-system-prs)).
 
 #### Create a paper PR
 
-- Once you are ready to submit your paper, file a pull request on GitHub.
-  **Please ensure that you file against the correct branch**
-- Create a pull-request against our `2018` branch.
+- Once you are ready to submit your paper, make a pull request on GitHub.
+  **Please ensure that you file against the correct branch.**
+- Create a pull request against our `2018` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
@@ -309,13 +310,13 @@ triggers a new build on the provided [build server](http://procbuild.scipy.org).
 
 #### Check your paper's build
 
-We encourage reviewers to review the pdfs built on our 
+We encourage reviewers to review the PDFs built on our 
 [build server](http://procbuild.scipy.org). 
 
-You should regularly check to see if the papers that you build locally match the
-paper that you see on the server. 
+You should regularly check to see if the paper(s) that you build locally match the
+paper(s) that you see on the server. 
 
-If it is not the same please immediately contact us with a GitHub issue
+If it is not the same, please immediately contact us with a GitHub issue
 describing the discrepancy. Please include screenshots and an explanation of the
 differences. For best results, please [@-mention the Proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -349,9 +350,9 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- May 21: 1st Draft of Proceedings Submission Due: 5/14/2018	
-- June 18: Initial Complete Review Deadline:	6/11/2018
-- July 2: Final Recommendation Deadline: 6/25/2018
+- May 23: 1st Draft of Proceedings Submission Due
+- June 18: Initial Complete Review Deadline
+- July 2: Final Recommendation Deadline
 
 ### Reviewer Workflow
 
@@ -424,7 +425,7 @@ To information about how to manage the whole proceedings, please see
 #### Publisher Deadlines
 
 - April 10–12: Authors invited to submit full papers
-- May 21–July 2: Open Review Period
+- May 23–July 2: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
 - July 6-9: Time Window for Publishing Conference Ready Proceedings
 
@@ -442,7 +443,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 #### Editor Deadlines
 
 - April 10–12: Authors invited to submit full papers
-- May 21–July 2: Open Review Period
+- May 23–July 2: Open Review Period
 - May 22: Reviewers Assigned
 - June 18: Initial Complete Review  
     - Editors should verify that reviews have been completed
