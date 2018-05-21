@@ -590,14 +590,34 @@ In what follows, we demonstrate the usage of the ``change``
 module to provide insights into the nature of neighborhood change in
 the Los Angeles metropolitan area. We utilize the neighborhood types
 for all census tracts of the Los Angeles metropolitan area across four
-census years identified by a selected clustering algorithm in
+census years identified by selected clustering algorithms in
 the former section as the input for the ``change`` module. Among the
-three clustering algorithms, since SKATER was applied to each cross
-section of census tracts independently, the yielded clusters are not
+three clustering algorithms, SKATER was applied to each cross
+section of census tracts independently yielding clusters which are not
 directly comparable over time. Thus, we focuses only on the
-six neighborhood types identified by the agglomerative Ward method and
+six neighborhood types identified by the agglomerative Ward method
+(Figure :ref:`f:ward`) and
 the fourteen neighborhood types identified by the affinity
-propagation method.
+propagation method (Figure :ref:`f:ap`).
+
+We start with the aspatial transition analysis which pools all the time
+series of neighborhood types and counts how many transitions between
+any pair of neighborhood types across immediate consecutive census years
+which are further organized into a :math:`(k,k)` transition count matrix
+:math:`\pmb{N}`. Adopting
+the maximum likelihood estimator for the first-order Markov transition
+probability :math:`\hat{p}_{ij} = \frac{n_{ij}}{\sum_{q=1}^k n_{iq} }`, a
+:math:`(k,k)` transition probability matrix can thus be constructed providing
+the insights in the probability of falling in any neighborhood type :math:`j` given that
+it was previously in any neighborhood type :math:`i`.
+Focusing on the six neighborhood types identified by the agglomerative Ward
+method,
+
+
+The transition
+count matrix.
+:math:`(k,k)` matrix: :math:`k=6` for the agglomerative Ward method and :math:`k=14`
+for the affinity propagation method.
 
 Since we are experimenting with four census years and
 
