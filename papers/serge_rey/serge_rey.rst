@@ -783,13 +783,13 @@ Interactive visualization: Apart from scripted environments demonstrated in this
 paper, OSLNAP is being designed  with a web-based, interactive front-end that
 allows users to explore the results of  different neighborhood analyses with the
 assistance of linked maps, charts, and tables. Together, these linked "views"
-allow a researcher to interrogate the results in a manner far richer than
+allow a researcher to interrogate their results in a manner far richer than
 creating a series of static maps. Users may change the map extent, and the
 associated charts are redrawn using only the data that falls within the map
 extent.  By allowing the chart to change dynamically according to the current
 map view, investigators may examine the temporal change of neighborhoods in both
 global (e.g. Los Angeles metropolitan area) and local scales (e.g. downtown of
-Los Angeles),  and determine the robustness of the spatial patterns that
+Los Angeles), and determine the robustness of the spatial patterns that
 materialize.
 
 .. figure:: ward_viz.png
