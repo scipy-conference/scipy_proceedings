@@ -179,24 +179,21 @@ Installation:
 
 Yaksh can be cloned from the Github repository. To do this one can run
 
-      ::
+**$ git clone https://github.com/FOSSEE/online_test.git**
 
-          $ git clone https://github.com/FOSSEE/online_test.git
+**$ cd ./online_test**
 
 One can then install the required dependencies, for Python 2, by running
 
-      ::
+**# For Python 2**
 
-          $ cd ./online_test
-          $ pip install -r ./requirements/requirements-py2.txt # For Python 2
-
+**$ pip install -r ./requirements/requirements-py2.txt**
 
 or for Python 3, by running
 
-      ::
+**# For Python 3**
 
-          $ cd ./online_test
-          $ pip install -r ./requirements/requirements-py3.txt # For Python 3
+**$ pip install -r ./requirements/requirements-py3.txt**
 
 It is recommended that one must use Python 3 to run Yaksh.
 
@@ -208,56 +205,51 @@ This setup method allows a user to setup a local instance of Yaksh to try the pl
 
 Yaksh can be run within a demo instance on a local system to try the platform for a limited number of users. To set up a demo instance one can run
 
-      ::
-
-          $ invoke start
+**$ invoke start**
 
 This command will start the code server within a docker environment.
 
 In case docker is not available, the code server can also be run without docker by running
 
-      ::
-
-          $ invoke start --unsafe
+**$ invoke start --unsafe**
 
 However, this is not recommended since this leaves the bases system potentially vulnerable to malicious code. In case one wishes to use this method, all Python dependencies will have to be installed using sudo.
 
 In order to access the interface, one can run the web server using
 
-   ::
-
-       $ invoke serve
+**$ invoke serve**
 
 This command will run the django application server on the 8000 port and can be accessed using a browser, also this port will be unavailable to other processes.
 
 Production Setup With Docker
 ----------------------------
 
+
 In order to setup Yaksh on a Production server with docker compose. To start off, one needs to set certain environment variables. To do so, one can create a ``.env`` file with the following details
 
-   ::
+**DB_ENGINE=mysql**
 
-       DB_ENGINE=mysql # Or psycopg (postgresql), sqlite3 (SQLite)
-       DB_NAME=yaksh
-       DB_USER=root
-       DB_PASSWORD=mypassword # Or the password used while creating a Database
-       DB_PORT=3306
+**DB_NAME=yaksh**
+
+**DB_USER=root**
+
+**DB_PASSWORD=db_password**
+
+**DB_PORT=3306**
 
 The local system needs to have `Docker Compose <https://docs.docker.com/compose/install/>`__ installed.
 
 One must navigate to the Docker directory
 
-   ::
-
-       cd /path/to/online_test/docker
+**cd /path/to/online_test/docker**
 
 And running the following commands will ensure that the platform is setup
 
-   ::
+**invoke build**
 
-       invoke build
-       invoke begin
-       invoke deploy --fixtures
+**invoke begin**
+
+**invoke deploy --fixtures**
 
 The ``build`` command builds the docker images, the ``begin`` command spwans the docker containers and the ``deploy`` command runs the necessary migrations.
 
