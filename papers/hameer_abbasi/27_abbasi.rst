@@ -49,6 +49,11 @@ in the ecosystem which consume NumPy's :cite:`numpy` :code:`ndarray` interface:
   :code:`matrix` interface)
 * It is limited to two dimensions only (even one-dimensional structures aren't supported)
 
+In addition, :code:`scipy.sparse` is depended on by many downstream projects, which makes
+removing NumPy's :code:`matrix` interface that much more difficult, and limits usage of
+both :code:`ndarray` style duck arrays and :code:`scipy.sparse` arrays within the same
+codebase.
+
 This is important for a number of other packages that are quite innovative, but cannot take
 advantage of :code:`scipy.sparse` for these reasons, because they expect objects following
 the :code:`ndarray` interface. These include packages like Dask :cite:`dask` (which is
@@ -59,7 +64,8 @@ dimensions).
 Both of these frameworks could benefit tremendously from sparse structures. In the case of
 Dask, it could be used in combination with sparse structures to scale up computational tasks
 that need sparse structures. In the case of XArray, datasets with large amounts of missing
-data could be represented efficiently.
+data could be represented efficiently, as well as other benefits such as broadcasting by
+axis name rather than by rather opaque axis positions.
 
 In this paper, we present Sparse :cite:`sparse`, a sparse array library that supports
 arbitrary dimension sparse arrays and supports most common parts of the :code:`ndarray`
@@ -69,97 +75,17 @@ transpose, reshape and a number of other features. The primary format in this li
 the coordinate format, which stores indices where the array is nonzero, and the corresponding data.
 
 Since a full explanation of usage would be a repeat of the NumPy user manual and the package
-documentation, we only provide brief demos of certain features of interest. Then, we move on
-to some of the design decisions that went into making this package, some optimizations,
-applications and possible future work.
+documentation, we move on to some of the design decisions that went into making this package,
+including some challenges we had to face some optimizations, applications and possible future work.
 
-Usage Overview
---------------
+Algorithms and Challenges
+-------------------------
 
-Sparse can be installed both via :code:`pip` and with :code:`conda` from conda-forge. [#]_ The main
-sparse storage structure in the library at this time is based on the COO format. It stores the
-coordinates of nonzero entries; as well as the data corresponding to those entries. All coordinates
-are sorted in the order they would appear in a C-contiguous array, and there are no duplicates allowed.
+Choice of storage format
+........................
 
-.. [#] All features shown here are tested against the :code:`master` branch on GitHub at the time of
-   writing.
-
-Arrays can be constructed from SciPy sparse matrices or NumPy arrays as follows:
-
-.. code-block:: pycon
-
-   >>> x1 = sparse.COO.from_scipy_sparse(sps_matrix)
-   >>> x2 = sparse.COO.from_numpy(np_array)
-
-It can also be constructed from DOK arrays:
-
-.. code-block:: pycon
-
-   >>> d = sparse.DOK((3, 4, 5), dtype=np.int64)
-   >>> d[1:3, 2:3] = -23
-   >>> x3 = d.asformat('coo')
-
-Two COO arrays can have arithmetic performed on them, just like regular NumPy arrays. Arithmetic supports
-broadcasting.
-
-.. code-block:: pycon
-
-   >>> x_sum = x1 + x2
-   >>> x_prod = x1 * x2
-
-However, at the time of writing, the first line below will not work, and the user must explicitly densify,
-i.e. convert to a regular NumPy array:
-
-.. code-block:: pycon
-
-   >>> # Can't divide because it will densify
-   >>> x_div = x1 / x2
-   >>> # The user can explicitly convert to dense
-   >>> x_div = x1.todense() / x2.todense()
-
-Applying a :code:`ufunc` will also work, provided the :code:`ufunc` preserves zeros.
-
-.. code-block:: pycon
-
-   >>> x_sin = np.sin(x)
-
-Basic reductions like :code:`sum`, :code:`prod`, :code:`min` and :code:`max` work.
-
-.. code-block:: pycon
-
-   >>> x_sum = np.sum(x)
-   >>> x_min = x.min(axis=0)
-
-Indexing a sparse COO array also works for most common cases.
-
-.. code-block:: pycon
-
-   >>> x_subarray = x[233]
-   >>> x_slice = x[34:56]
-
-Some features don't directly work via NumPy functions, but work through library-provided alternatives.
-Among these are the following examples:
-
-.. code-block:: pycon
-
-   >>> # np.where doesn't work
-   >>> x_where = sparse.where(condition, x, y)
-   >>> # np.transpose doesn't work
-   >>> x_tr = x.transpose((2, 0, 1))
-   >>> # np.dot doesn't work
-   >>> x_dot = sparse.dot(x1, x2)
-
-For details on usage and the latest supported features, see the sparse package documentation.
-:cite:`sparse`.
-
-Algorithms Used
----------------
-
-Storage Format
-..............
-
-Although not the most efficient in any respect, for simplicity of operations, we chose the COO
-format for its storage simplicity. In this format, two dense arrays are required to store the
+We chose the COO format for its simplicity while storing and accessing elements, even though it
+isn't the most efficient storage format. In this format, two dense arrays are required to store the
 sparse array's data. The first is a coordinates array, which stores the coordinates where the
 array is nonzero. This array has a shape :code:`(ndim, nnz)`. The second is a data array, which
 stores the data corresponding to each coordinate, and thus it has the shape :code:`(nnz,)`. Here,
@@ -167,9 +93,7 @@ stores the data corresponding to each coordinate, and thus it has the shape :cod
 of nonzero entries in the array.
 
 For simplicity of operations in many cases, the coordinates are always stored in C-contiguous order.
-Table :ref:`tab:coo-vis` shows a visual representation of COO.
-
-To save on memory, we always choose the smallest possible data type for the coordinates array.
+Table :ref:`tab:coo-vis` shows a visual representation of how data is stored in the COO format.
 
 .. table:: A visual representation of the COO format. :label:`tab:coo-vis`
 
@@ -183,18 +107,26 @@ To save on memory, we always choose the smallest possible data type for the coor
      3    1     4 ...   21
    ==== ==== ==== === ====
 
-Element-wise Operations
+To save on memory, we always choose the smallest possible data type for the coordinates array.
+
+Element-wise operations
 .......................
 
-There was a challenge around designing a function that could perform any kind of element-wise
-operation on any number of variables. The design we decided to adopt at the end was slow compared
-to :code:`scipy.sparse`, but rather fast compared to dense arrays.
+Element-wise operations are an important and common part of any array interface. For example,
+arithmetic, casting an array, and all NumPy :code:`ufunc` s are common examples of element-wise
+operations.
 
-This was chosen in order to avoid writing different code for different operations. It also allows
-element-wise operations like :code:`ufunc` s, :code:`astype` and the three-argument version of
-:code:`where` to be handled under a single umbrella. We used the :code:`__array_ufunc__` protocol
-to allow application of :code:`ufunc` s to COO arrays. Here is some simplified psuedocode for the
-algorithm that we use::
+These turn out to be simple for NumPy arrays, but are surprisingly complex for sparse arrays.
+The first problem to overcome was the lack of dependency on Numba/Cython/C++. At the time, I
+wished to solve the problem in NumPy, therefore looping over all possible nonzero coordinates
+was not an option, and we had to process the coordinates and data in batches. The batches that
+made sense at the time were something like the following:
+
+1. Coordinates in the first array but not in the second.
+2. Coordinates in the second array but not in the first.
+3. Coordinates in both arrays simultaneously.
+
+This algorithm (when applied to multiple inputs instead of just two) looks like the following::
 
    all_coords = []
    all_data = []
@@ -216,8 +148,18 @@ algorithm that we use::
 
    concatenate all_coords and all_data
 
-This gets a lot more complex when dealing with broadcasting. Below, we show some simplified
-psuedocode in the broadcasting case. New psuedocode is in parentheses::
+The addition of broadcasting makes this problem even more complex to solve, as it turns out
+that for sparse arrays, simply broadcasting all arrays to a common shape and then performing
+element-wise operations is not the most efficient way to perform such an operation.
+
+Consider two arrays, one shaped :code:`(n,)` and another shaped :code:`(m, n)`, both with only
+one nonzero entry. If all we wanted to do was multiply them, the result would have just one
+nonzero entry, yet broadcasting the first array would result in an array with :code:`m` nonzero
+entries (which clearly isn't the most optimal way to do things). For this reason, we chose to
+handle broadcasting within the algorithm itself, instead of broadcasting all inputs upfront.
+
+Effectively, this resulted in the following algorithm, which doesn't have the limitation mentioned
+above. This is because any zeros are filtered out before any broadcasting is done::
 
    all_coords = []
    all_data = []
@@ -232,14 +174,14 @@ psuedocode in the broadcasting case. New psuedocode is in parentheses::
                 (for dimensions that are not being
                 broadcast in both, with repetition
                 similar to an SQL outer join)
-       coords = filter out coordinates that are
-                in zero inputs
-                (again, for non-broadcast dimensions)
        data = apply function to data corresponding
               to these coordinates
 
-       filter out zeros in data and corresponding
-           coordinates
+       coords, data = filter out zeros from coords/data
+
+       coords, data = filter out coordinates/data that
+                      are in zero inputs
+                      (again, for non-broadcast dimensions)
 
        broadcast coordinates and data to output shape
 
@@ -248,7 +190,30 @@ psuedocode in the broadcasting case. New psuedocode is in parentheses::
 
    concatenate all_coords and all_data
 
+While this algorithm is effective at applying all sorts of element-wise operations for
+any amount of inputs, it does have a few drawbacks:
 
+* It's slower than :code:`scipy.sparse`, because
+
+  * It loops over all possible combinations of zero/nonzero
+    coordinates, which makes it exponential in the number of inputs.
+  * It's in COO format rather than CSR/CSC.
+  * :code:`scipy.sparse` uses specialized code paths for each operation that greatly
+    reduce the strain on the CPU whereas we keep everything generic.
+
+* In the current implementation, sorting of coordinates is sometimes done unnecessarily.
+
+This can be improved in the future in the following ways:
+
+* Looping over possibly nonzero coordinates with something like Numba or Cython.
+
+  * This approach will solve most of the speed issues.
+  * Sorting will be rendered unnecessary.
+  * Specialized code paths introduce a large maintenance burden, but can be implemented.
+
+* Introducing multidimensional CSR/CSC.
+
+You can see the current performance of the code in table :cite:`tab:bench`.
 
 Reductions
 ..........
