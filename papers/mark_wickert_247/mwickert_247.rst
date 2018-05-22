@@ -48,7 +48,7 @@ specified by the coarse acquisition (C/A) code pseudo-random noise (PRN) number,
 in view by the User. The ECEF coordinates 
 of the SVs are then propagated along with the User trajectory using [SGP4]_ and the two-line 
 element (TLE) data available from [Celestrak]_. The relationship between ECEF and ENU is 
-explained in Figure :ref:`ECEFENU`. For convenience this computational tool, is housed in a Jupyter 
+explained in Figure :ref:`ECEFENU`. For convenience, this computational tool, is housed in a Jupyter 
 notebook. Data set generation and 3D trajectory plotting is provided with the assistance of a 
 single module, :code:`GPS_helper.py`.
 
@@ -67,7 +67,7 @@ GPS Background
 GPS was started in 1973 with the first block of satellites launched over the 1978 to 1985 time 
 interval [GPS]_. The formal name became NAVSTAR, which stands for NAVigation Satellite Timing 
 And Ranging system, in the early days. At the present time there are 31 GPS satellites in orbit. 
-The original design called for 24 satellites, commonly referred to as space vehicles (SVs). 
+The original design called for 24 satellites. 
 The satellites orbit at an altitude of about 20,350 km (~12,600 mi). This altitude classifies 
 the satellites as being in a medium earth orbit (MEO), as opposed to low earth orbit (LEO), 
 or geostationary above the equator (GEO), or high earth orbit (HEO).  The orbit period is 11 
@@ -118,12 +118,12 @@ by briefly describing the linear model case and move quickly to the nonlinear ca
 Kalman Filter and State Estimation
 ----------------------------------
 
-It was back in 1960 the R. E. Kalman introduced the his filter [Brown2012]_. It immediately became 
+It was back in 1960 that R. E. Kalman introduced his filter [Brown2012]_. It immediately became 
 popular in guidance, navigation, and control applications. The Kalman filter is an optimal, 
 in the minimum mean-squared error sense, as means to estimate the 
 *state* of a dynamical system [Simon2006]_. By state we mean a vector of variables that adequately 
-describe the dynamical behavior of a system over time.  For the GPS problem a simplifying assumption, 
-regarding the state model, is to assume that the User has approximately constant velocity, so a position-velocity 
+describes the dynamical behavior of a system over time.  For the GPS problem a simplifying assumption 
+regarding the state model is to assume that the User has approximately constant velocity, so a position-velocity 
 (PV) only state model is adequate. The Kalman filter is recursive, meaning that the estimate of the 
 state is refined with each new input measurement and 
 without the need to store all of the past measurements.
@@ -293,10 +293,10 @@ for the case of :math:`m = 4` measurements.
 Extended Kalman Filter
 ======================
 
-The extended Kalman filter (EKF) allows both the state update equation, Step 1. in Figure 
-:ref:`KFBlock`, to be a nonlinear function of the state, and the measurement model, Step 3. in 
-Figure :ref:`KFblock`, to be a nonlinear function of the state. Thus the EKF block diagram 
-replaces two expressions in :ref:`KFBlock` as follows:
+The extended Kalman filter (EKF) allows both the state update equation, Step 1 in Figure 
+:ref:`KFBlock`, to be a nonlinear function of the state, and the measurement model, Step 3 in 
+Figure :ref:`KFBlock`, to be a nonlinear function of the state. Thus the EKF block diagram 
+replaces two expressions in Figure :ref:`KFBlock` as follows:
 
 .. math::
    :label: ekfNewEqns
@@ -306,7 +306,7 @@ replaces two expressions in :ref:`KFBlock` as follows:
    \mathbf{H}\hat{\mathbf{x}}_{k-1}^-\ \ \longrightarrow\ \ h(\hat{\mathbf{x}}_{k-1}^-)
 
 
-For the case of GPS problem we have already seen that the state transition model is linear, 
+For the case of the GPS problem we have already seen that the state transition model is linear, 
 thus the first calculation of **Step 1**, *predicted state update expression*, is the same as 
 that found in the standard linear Kalman filter. For **Step 3**, the state estimate, we need to 
 linearize :math:`h(\hat{\mathbf{x}}_k^-)`. This is done by forming a matrix of partials 
@@ -318,7 +318,7 @@ Computational Tool
 
 The Python computational tool is composed of a Jupyter notebook and a helper module :code:`GPS_helper.py`. 
 The key elements of the helper are described in Figure :ref:`GPShelper`. Here we see that the class 
-:code:`GPS_data_source` is responsible propagating the SVs in view by the User in 
+:code:`GPS_data_source` is responsible for propagating the SVs in view by the User in 
 time-step with a constant velocity *line segment* User trajectory. The end result is a collection of 
 matrices (ndarrays) that contain the ECEF User coordinates as the triples :math:`(x_u,y_u,z_u)` versus 
 times (also the ENU version) and for each SV indexed as :math:`i=1,2,3,4`, the ECEF triples 
