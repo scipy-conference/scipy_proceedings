@@ -100,8 +100,8 @@ practical applications of object detection include face detection,
 counting, visual search engine.
 
 .. figure:: fig2.png
-   :height: 30 px
-   :width: 60 px
+   :height: 100 px
+   :width: 200 px
    :scale: 10 %
 
    Turn Lane Markings Detection.
@@ -112,11 +112,11 @@ recognizing the road from the buildings, we also have to delineate the
 boundaries of each object (See Figure 3)
 
 .. figure:: fig3.png
-   :height: 30 px
-   :width: 60 px
+   :height: 100 px
+   :width: 200 px
    :scale: 10 %
 
-Semantic segmentation on roads, buildings and greens
+   Semantic segmentation on roads, buildings and greens
 
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
@@ -141,12 +141,13 @@ all shapes and sizes, as well as ones that are partially covered by cars
 and/or shadows. We excluded turn lane markings that are erased or fully
 covered by cars (see Figure 5).
 
-|image4|\ |image5|
+.. figure:: fig45.png
+   :height: 100 px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 4: Annotating turn lane markings - Draw bounding box around the turn lane markings
-
-Figure 5: Data Cleaning - Excluding turn lane arrows that are fully
-covered by car
+   Figure 4: Annotating turn lane markings - Draw bounding box around the turn lane markings.
+   Figure 5: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
 To prepare training data for parking lot segmentation, we first generate
 polygons from OpenStreetMap tags excluding features that are not visible
