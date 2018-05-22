@@ -48,25 +48,24 @@ using the scientific Python ecosystem.
 Introduction 
 ------------
 
-For social scientists in a wide variety of disciplines, neighborhoods
-are central thematic topics, focal units of analysis, and first-class
-objects of inquiry. Despite their centrality public health, sociology,
-geography, political science, economics, psychology, and urban planning,
-however, neighborhoods remain understudied because researchers lack
-appropriate analytical tools for understanding their evolution through
-time and space. Towards this goal we are developing the *open source
-longitudinal neighborhood analysis program* ``(OSLNAP)``. We envisage OSLNAP as a
-toolkit for better, more open and reproducible science focused on neighborhoods
-and their sociospatial ecology. In this paper we first provide an overview of
-the main components of OSLNAP. Next, we present an illustration of selected
-OSLNAP functionality. We conclude the paper with a road map for future
-developments.
+For social scientists in a wide variety of disciplines, neighborhoods are
+central thematic topics, focal units of analysis, and first-class objects of
+inquiry. Despite their centrality public health, sociology, geography, political
+science, economics, psychology, and urban planning, however, neighborhoods
+remain understudied because researchers lack appropriate analytical tools for
+understanding their evolution through time and space. Towards this goal we are
+developing the *open source longitudinal neighborhood analysis program*
+``(OSLNAP)``. We envisage OSLNAP as a toolkit for better, more open and
+reproducible science focused on neighborhoods and their sociospatial ecology. In
+this paper we first provide an overview of the main components of OSLNAP. Next,
+we present an illustration of selected OSLNAP functionality. We conclude the
+paper with a road map for future developments.
 
 OSLNAP
 ------
 
 Neighborhood analysis involves a multitude of analytic tasks, and different
-types of enquiry lead to different analytical pipelines in which distinct tasks
+types of inquiry lead to different analytical pipelines in which distinct tasks
 are combined in sequence. OSLNAP is designed in a modular fashion to facilitate
 the composition of different pipelines for neighborhood analysis. Its
 functionality is available through several interfaces that include a web-based
@@ -86,8 +85,8 @@ boundaries *and* internal socioeconomic composition evolve over time. Processes
 such as gentrification and the so called great inversion :cite:`Ehrenhalt_2012`
 where wealthy, higher educated, white populations are relocating into the center
 cities while growing numbers of minorities move to the suburbs both
-fundamentally restructure urban and suburban neighborhoods. OSLNAP is designed to support
-both neighborhood effects and neighborhood dynamics modes of inquiry.
+fundamentally restructure urban and suburban neighborhoods. OSLNAP is designed
+to support both neighborhood effects and neighborhood dynamics modes of inquiry.
 
 We first provide an overview of each of the main analytical components of OSLNAP
 before moving on to an illustration of how selections of the analytical
@@ -102,7 +101,7 @@ Like many quantitative analyses, one of the most important and
 challenging aspects of longitudinal neighborhood analysis is the
 development of a tidy and accurate dataset. When studying the
 socioeconomic makeup of neighborhoods over time, this challenge is
-compounded by the fact that spatial units whose composition is under
+compounded by the fact that the spatial units whose composition is under
 study often change size, shape, and configuration over time. The
 ``harmonize`` module provides social scientists with a set of simple and
 consistent tools for building transparent and reproducible
@@ -111,19 +110,20 @@ researchers to investigate the implications of alternative decisions in
 the data processing pipeline and how those decisions affect the results
 of their research.
 
-Neighborhood demographic and socioeconomic data relevant to social
-scientists are typically collected via a household census or survey and
-aggregated to a geographic reporting unit such as a state, county or zip
-code which may be relatively stable. The boundaries of smaller
-geographies like census tracts, however, often are designed to
-encapsulate roughly the same number of people for the sake of
-comparability, which means that they are necessarily redrawn with each data
-release as population grows and fluctuates. Figure :ref:`f:harm` illustrates the
-issues involved. Here two census tracts from 2000 have been merged to form a new
-tract in 2010. However, while one of the original tracts is completely contained
-in the new tracts, the second original tract is only partially contained in the new tract. In other words, since same physical location may fall within the boundary of different reporting
-units at different points in time, it is impossible to compare directly a single
-neighborhood with itself over time.
+Neighborhood demographic and socioeconomic data relevant to social scientists
+are typically collected via a household census or survey and aggregated to a
+geographic reporting unit such as a state, county or zip code which may be
+relatively stable. The boundaries of smaller geographies like census tracts,
+however, often are designed to encapsulate roughly the same number of people for
+the sake of comparability, which means that they are necessarily redrawn with
+each data release as population grows and fluctuates. Figure :ref:`f:harm`
+illustrates the issues involved. Here two census tracts from 2000 have been
+merged to form a new tract in 2010. However, while one of the original tracts is
+completely contained in the new tracts, the second original tract is only
+partially contained in the new tract. In other words, since same physical
+location may fall within the boundary of different reporting units at different
+points in time, it is impossible to compare directly a single neighborhood with
+itself over time.
 
 .. figure:: tractchange.png
 
@@ -155,7 +155,7 @@ Neighborhood Change Database (NCDB) :cite:`tatian`, or the freely available
 Longitudinal Tract Database (LTDB) :cite:`logan_2014`. The developers of
 these products have published studies verifying the accuracy
 of their respective data, but those claims have gone untested because
-researchers are unable to fully replicate the underlying methodology.
+external researchers are unable to fully replicate the underlying methodology.
 
 To overcome the issues outlined above, ``OSLNAP`` provides a suite of
 functionality for conducting areal interpolation and boundary
@@ -175,12 +175,13 @@ different types of variables.
 
 In a prototypical workflow, ``harmonize`` permits the end-user to:
 
--  query the spatiotemporal database created via the ``data`` module
+-  compile and query a spatiotemporal database using either local data or
+   connections to  pubilic data services
 
    -  queries may have spatial, temporal, and attribute filters
 
 -  define the relevant variables to be harmonized and optionally apply a
-   different interpolation function to each
+   different (spatial and/or temporal) interpolation function to each;
 -  harmonize temporal data to consistent spatial units by either:
 
    -  selecting an existing native unit (e.g. zip codes in 2016)
@@ -224,7 +225,7 @@ fields. In the ``cluster`` module, we implement both clustering
 approaches to (a) foster greater collaboration among weakly connected
 components in the field of geographic information science, and (b) to
 allow neighborhood researchers to investigate the performance of
-multiple different clustering solutions in their work, and evaluate the
+multiple different clustering solutions in their work and evaluate the
 implications of including space as a formal component in their
 clustering models.
 
@@ -288,7 +289,7 @@ In a prototypical workflow, ``cluster`` permits the end-user to:
       contiguity matrix
 
 -  clustering results may be reviewed quickly via the builtin ``plot()``
-   method, or interactively by leveraging the ``geovisualization``
+   method, or interactively by leveraging the planned ``geovisualization``
    module.
 
 Longitudinal Analysis
@@ -296,47 +297,45 @@ Longitudinal Analysis
 
 Having identified the neighborhood types for all units of analysis over
 the whole time span, researchers might be interested in how they evolve over time.
-The third core module ``change`` of ``OSLNAP``'s analytical components provides a suite of
-functionality towards such end. Traditional longitudinal analysis focuses
-solely on the changes in the socioeconomic composition, while it is
-argued that the geographic footprint should not be ignored
+The third core module of ``OSLNAP``'s analytical components, ``change``, provides a suite of
+functionality towards this end. Traditional longitudinal analysis in neighborhood contexts focuses
+solely on changes in residential socioeconomic composition, while we and others have
+argued that changes in geographic footprints are also substantively interesting
 :cite:`rey2011`. Therefore, this component draws upon
 recent methodological developments from spatial inequality dynamics and
 implements two broad sets of spatially explicit analytics to provide
 deeper insights into the evolution of socioeconomic processes and the
 interaction between these processes and geographic structure.
 
-Both sets of analytics take time series of neighborhood types assigned
-for all the spatial units of analysis (e.g. census tracts) based on
-adopting a spatial clustering algorithm (the output of the ``cluster`` module)
-as the input while they differ
-in how the time series are modeled and analyzed. The first set centers
-on *transition analysis* which treats each time series as stochastically
-generated from time point to time point. It is in the same spirit of the
-first-order Markov Chain analysis where a :math:`(k,k)` transition
-matrix is formed by counting transitions across all the :math:`k`
-neighborhood types between any two consecutive time points for all
-spatial units. Drawbacks of such approach include that it treats all the
-time series as being independent of one another and following an
-identical transition mechanism. The spatial Markov approach was proposed
-by :cite:`Rey01` to interrogate potential spatial
-interactions by conditioning transition matrices on neighboring context
-while the spatial regime Markov approach allows several transition
-matrices to be formed for different spatial regimes which are
+Both sets of analytics operate on time series of neighborhood types; they each take
+as input a set of spatial units of analysis (e.g. census tracts) that have
+been assigned a categorical variable for each point in time (e.g.the output of
+the ``cluster`` module). They differ, however, in how the time series
+are modeled and analyzed. The first set centers on *transition analysis*, which
+treats each time series as stochastically generated from time point to time
+point. It is in the same spirit of the first-order Markov Chain analysis where a
+:math:`(k,k)` transition matrix is formed by counting transitions across all the
+:math:`k` neighborhood types between any two consecutive time points for all
+spatial units. The drawbacks of such approach include that it treats all the time
+series as being independent of one another and following an identical transition
+mechanism. The spatial Markov approach was proposed by :cite:`Rey01` to
+interrogate potential spatial interactions by conditioning transition matrices
+on neighboring context while the spatial regime Markov approach allows several
+transition matrices to be formed for different spatial regimes which are
 constituted by contiguous spatial units. Both approaches together with
-inferences have been implemented in Python Spatial Analysis Library
-(PySAL) [1]_ :cite:`Rey14` and Geospatial Distribution
-Dynamics (giddy) package  [2]_. The ``change`` module considers these packages as
-dependencies and wrap relevant classes/functions to make them consistent
-and efficient to the longitudinal neighborhood analysis.
+inferences have been implemented in Python Spatial Analysis Library (PySAL) [1]_
+:cite:`Rey14` and Geospatial Distribution Dynamics (giddy) package  [2]_. The
+``change`` module considers these packages as dependencies and wraps relevant
+classes and functions to make them consistent and efficient for longitudinal
+neighborhood analysis.
 
 The other set of spatially explicit approach to neighborhood dynamics is
 concerned with *sequence analysis* which treats each time series of
-neighborhood types as a whole in contrast to *transition analysis*.
-The core of *sequence analysis* is the similarity measure of a pair
+neighborhood types as a whole, in contrast to *transition analysis*.
+The core of *sequence analysis* is the similarity measure between a pair
 of sequences. Various aspects of a neighborhood sequence such as the order
 in which successive neighborhood types appears, the year(s) in which a
-specific neighborhood type appears and the duration of a neighborhood type
+specific neighborhood type appears, and the duration of a neighborhood type
 could be the focus of the similarity measure. Choosing which aspect or
 aspects to focus on should be driven by the research question at hand
 and the interpretation should proceed with caution :cite:`Studer:2016`.
@@ -373,7 +372,7 @@ the nature of neighborhood change:
    \begin{itemize}
         \item from a dynamic perspective (\textit{transition analysis})
              \begin{itemize}
-             \item by applying a first-order Markov chains model to look at probabilities of
+             \item by applying a first-order Markov chain model to look at probabilities of
    transitioning between neighborhood types over time.
              \item by applying a spatial Markov chains model to interrogate the role of
    spatial interactions in shaping neighborhood dynamics.
@@ -395,7 +394,7 @@ the nature of neighborhood change:
    potential interactions and heterogeneity in the underlying dynamics of
    neighborhood change.
              \item by incorporating the transition matrix or matrices (from
-   spatially extensions to a Markov chains model) produced by the
+   spatial extensions to a Markov chain model) produced by the
    \textit{transition analysis} in the \textit{sequence analysis} to better
    cost functions of operations.
              \end{itemize}
@@ -583,7 +582,7 @@ output from SKATER to conduct an analysis to determine the ways in which
 the empirical neighborhood boundaries derived from SKATER conform to
 residents’ perceptions of such boundaries, their evolution over time,
 and their social re-definition as developed by different residential
-groups [@Hwang2016a]. Regardless of its particular use, the
+groups :cite:`Hwang2016a`. Regardless of its particular use, the
 regionalization approach presents neighborhood researchers with another
 critical tool for understanding the bi-directional relationship between
 people and places.
@@ -635,7 +634,7 @@ neighborhood type :math:`i` to :math:`j` in the next census year. It is
 obvious that both transition probability matrices are characterized by large
 diagonal entries, indicating a certain level of neighborhood stability
 for the focal four census years. This is especially true for the ward neighborhood
-type 4 which is featured by racially concentrated (Hispanic) poverty.
+type 4 which is characterized by racially concentrated (Hispanic) poverty.
 The probability of staying at this type is 0.876
 meaning that there is only 12.4% chance of changing to other neighborhood types
 once the census tract enters into type 4.
