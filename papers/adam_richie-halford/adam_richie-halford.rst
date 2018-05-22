@@ -164,15 +164,15 @@ Single Program (SP)
 
 :code:`Knot` creates the single program on initialization, taking a
 user-defined function (UDF) as input and wrapping it in a command line
-interface (CLI) using clize :cite:`clize`. The resulting CLI downloads data
-from an Amazon Simple Storage Service (S3) bucket specified by an input URL.
-The UDF is also wrapped in a Python decorator that sends its output back to an
-S3 bucket. So in total, the resulting command line program downloads input data
-from S3, executes the UDF, and sends output back to S3. :code:`Knot` then
-packages the CLI, along with its dependencies, into a Docker container. The
+interface (CLI), which downloads data from an Amazon Simple Storage
+Service (S3) bucket specified by an input URL. The UDF is also wrapped in
+a Python decorator that sends its output back to an S3 bucket. So in
+total, the resulting command line program downloads input data from S3,
+executes the UDF, and sends output back to S3. :code:`Knot` then packages
+the CLI, along with its dependencies, into a Docker container. The
 container is uploaded into the Amazon Elastic Container Registry (ECR).
-Cloudknot's use of Docker allows it to handle non-trivial software and data
-dependencies (see examples below).
+Cloudknot's use of Docker allows it to handle non-trivial software and
+data dependencies (see examples below).
 
 Separately, :code:`Knot` uses an AWS CloudFormation template to create
 the AWS resources required by AWS Batch:
