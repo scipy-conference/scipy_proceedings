@@ -1,0 +1,400 @@
+This is a generated file for the LaTeX2e validation system.
+Don't change this file in any respect.
+--- File loaded request (\usepackage or ...)
+    1: article
+    2: 
+    3: 
+    4: cls
+(article.cls
+(size10.clo
+)
+\c@part=\count...
+\c@section=\count...
+\c@subsection=\count...
+\c@subsubsection=\count...
+\c@paragraph=\count...
+\c@subparagraph=\count...
+\c@figure=\count...
+\c@table=\count...
+\abovecaptionskip=\skip...
+\belowcaptionskip=\skip...
+\bibindent=\dimen...
+)
+--- File loaded request (\usepackage or ...)
+    1: alltt
+    2: 
+    3: 
+    4: sty
+(alltt.sty
+)
+--- File loaded request (\usepackage or ...)
+    1: ifthen
+    2: 
+    4: sty
+(ifthen.sty
+)
+--- File loaded request (\usepackage or ...)
+    1: makeidx
+    2: 
+    4: sty
+(makeidx.sty
+)
+LaTeX Warning: You have requested, on input line ..., version
+               but only version
+               is available.
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: 
+    4: sty
+(testpkg.sty
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+ -> option dvips executed
+This is the current testpkg! 
+)
+LaTeX Warning: You have requested, on input line ..., version
+               but only version
+               is available.
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+! LaTeX Error: Suspicious rollback date given.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+is after your requested rollback date --- so something is wrong here.
+Continue and we use the earliest known release.
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+Result: use current version
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: =v2
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Rollback for package 'testpkg' requested -> version 'v2'.
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: 
+    3: =v3
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Label doesn't match
+---DeclareCurrentRelease
+ 1: v3
+Result: use current version
+Rollback for package 'testpkg' requested -> version 'v3'.
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: =v4
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Label doesn't match
+---DeclareCurrentRelease
+ 1: v3
+! LaTeX Error: Requested version 'v4' for package 'testpkg' is unknown.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: 
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+LaTeX Warning: Suspicious rollback/min-date date given
+               'testpkg'.
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+LaTeX Warning: You have requested, on input line ..., version
+               but only version
+               is available.
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+LaTeX Warning: Suspicious rollback/min-date date given
+               'testpkg'.
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+LaTeX Warning: You have requested, on input line ..., version
+               but only version
+               is available.
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+! LaTeX Error: Suspicious rollback date given.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+is after your requested rollback date --- so something is wrong here.
+Continue and we use the earliest known release.
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+Result: use current version
+ -> option dvips executed
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: =v2
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Rollback for package 'testpkg' requested -> version 'v2'.
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: 
+    3: =v3
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Label doesn't match
+---DeclareCurrentRelease
+ 1: v3
+Result: use current version
+Rollback for package 'testpkg' requested -> version 'v3'.
+This is the current testpkg! 
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg
+    2: dvips
+    3: =v4
+    4: sty
+(testpkg.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Label doesn't match
+---DeclareCurrentRelease
+ 1: v3
+! LaTeX Error: Requested version 'v4' for package 'testpkg' is unknown.
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+ -> option dvips executed
+This is the current testpkg! 
+)

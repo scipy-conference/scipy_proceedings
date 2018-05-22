@@ -1,0 +1,81 @@
+This is a generated file for the LaTeX2e validation system.
+Don't change this file in any respect.
+--- File loaded request (\usepackage or ...)
+    1: article
+    2: 
+    3: 
+    4: cls
+(article.cls
+(size10.clo
+)
+\c@part=\count...
+\c@section=\count...
+\c@subsection=\count...
+\c@subsubsection=\count...
+\c@paragraph=\count...
+\c@subparagraph=\count...
+\c@figure=\count...
+\c@table=\count...
+\abovecaptionskip=\skip...
+\belowcaptionskip=\skip...
+\bibindent=\dimen...
+)
+--- File loaded request (\usepackage or ...)
+    1: testpkg-rb002
+    2: dvips
+    3: 
+    4: sty
+(testpkg-rb002.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg-rb002
+    2: dvips
+    4: sty
+LaTeX Warning: Suspicious rollback/min-date date given
+               'testpkg-rb002'.
+(testpkg-rb002.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+ -> option dvips executed
+))
+LaTeX Warning: You have requested, on input line ..., version
+               but only version
+               is available.
+--- File loaded request (\usepackage or ...)
+    1: testpkg-rb002
+    2: dvips
+    4: sty
+(testpkg-rb002.sty
+---\DeclareRelease:
+    1: v1
+---\DeclareRelease:
+    1: v2
+---DeclareCurrentRelease
+ 1: v3
+ -> option dvips executed
+))
+--- File loaded request (\usepackage or ...)
+    1: testpkg-rb002
+    2: 
+    3: =v3
+    4: sty
+(testpkg-rb002.sty
+---\DeclareRelease:
+    1: v1
+Label doesn't match
+---\DeclareRelease:
+    1: v2
+Label doesn't match
+---DeclareCurrentRelease
+ 1: v3
+Result: use current version
+Rollback for package 'testpkg-rb002' requested -> version 'v3'.
+This is the current testpkg-rb002! 
+)
