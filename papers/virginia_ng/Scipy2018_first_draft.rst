@@ -80,10 +80,11 @@ present are turn lane markings and parking lot segmentation with aerial
 and satellite imagery.
 
 .. figure:: fig1.png
-   :width: 6.5in
-   :height: 2.69444in
+   :height: 100px
+   :width: 200 px
+   :scale: 10 %
 
-   Figure 1: Feature Extraction Pipeline. 
+   Feature Extraction Pipeline. 
 
 
 1. Data
@@ -98,9 +99,12 @@ detect turn lane markings from satellite imagery (See :ref:`Figure 2`). Other
 practical applications of object detection include face detection,
 counting, visual search engine.
 
-|image2a|\ |image2b|
+.. figure:: fig2.png
+   :height: 100px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 2: Turn Lane Markings Detection.
+   Turn Lane Markings Detection.
 
 Semantic segmentation on the other hand, not only locates and classifies
 objects, it does so at pixel level. For example, in addition to
@@ -326,37 +330,53 @@ allows users to pan around for instant turn lane markings detection
 
 Figure 9: Front-end UI for instant turn lane markings detection
 
-.. |image0| image:: fig1.png
-   :width: 6.5in
-   :height: 2.69444in
-
 .. |image2a| image:: fig2a.png
-   :width: 3.14063in
-   :height: 3.2457in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image2b| image:: fig2b.png
-   :width: 3.13698in
-   :height: 3.26563in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image3a| image:: fig3a.png
-   :width: 3.18214in
-   :height: 3.19271in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image3b| image:: fig3b.png
-   :width: 3.20313in
-   :height: 3.20313in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image4| image:: fig4.png
-   :width: 3.11979in
-   :height: 3.11979in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image5| image:: fig5.png
-   :width: 3.12023in
-   :height: 3.14063in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image6| image:: fig6.png
-   :width: 6.5in
-   :height: 2.5in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image7| image:: fig7.png
-   :width: 4.16667in
-   :height: 4.16667in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image8| image:: fig8.png
-   :width: 6in
-   :height: 6.10417in
+   :height: 100px
+   :width: 100 px
+   :scale: 10 %
+
 .. |image9| image:: fig9.png
-   :width: 6.5in
-   :height: 3.84722in
+   :height: 100px
+   :width: 200 px
+   :scale: 10 %
+
