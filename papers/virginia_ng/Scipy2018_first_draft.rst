@@ -253,9 +253,12 @@ order to better localize and learn representations with following
 convolutions. For parking lots segmentation, we are doing binary
 segmentation distinguishing parking lots from the background.
 
-|image6|
+.. figure:: fig6.png
+   :height: 100 px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 6: U-Net Architecture
+   U-Net Architecture
 
 We also experimented with Pyramid Scene Parsing Network (PSPNet). PSPNet
 is good when the scene is complex (multi-class) and dataset has great
@@ -282,9 +285,12 @@ OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
 right data format for OpenStreetMap.
 
-|image7|
+.. figure:: fig7.png
+   :height: 100 px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 7: U-Net Architecture
+   U-Net Architecture
 
 **Noise Removal.** We remove noise in the data by performing two
 morphological operations: erosion followed by dilation. Erosion removes
@@ -314,9 +320,12 @@ After all these post-processing steps, we have a clean mask (Figure 8)
 that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
-|image8|
+.. figure:: fig8.png
+   :height: 100 px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 8: Clean polygon in the form of GeoJSON
+   Clean polygon in the form of GeoJSON
 
 4. Output
 ----------
@@ -330,38 +339,10 @@ into account when calculating routes. We also built a front-end UI that
 allows users to pan around for instant turn lane markings detection
 (Figure 9).
 
-|image9|
-
-Figure 9: Front-end UI for instant turn lane markings detection
-
-
-.. |image4| image:: fig4.png
-   :height: 30 px
-   :width: 30 px
+.. figure:: fig9.png
+   :height: 100 px
+   :width: 200 px
    :scale: 10 %
 
-.. |image5| image:: fig5.png
-   :height: 30 px
-   :width: 30 px
-   :scale: 10 %
-
-.. |image6| image:: fig6.png
-   :height: 30 px
-   :width: 30 px
-   :scale: 10 %
-
-.. |image7| image:: fig7.png
-   :height: 30 px
-   :width: 30 px
-   :scale: 10 %
-
-.. |image8| image:: fig8.png
-   :height: 30 px
-   :width: 30 px
-   :scale: 10 %
-
-.. |image9| image:: fig9.png
-   :height: 30 px
-   :width: 60 px
-   :scale: 10 %
+   Front-end UI for instant turn lane markings detection
 
