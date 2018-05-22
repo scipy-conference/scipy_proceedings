@@ -4,7 +4,7 @@
 :bibliography: mybib
 
 ----------------------------------------
-Bringing ipywidgets support to plotly.py
+Bringing ipywidgets Support to plotly.py
 ----------------------------------------
 
 .. class:: abstract
@@ -61,7 +61,7 @@ Data model
    JSON specification of a basic Plotly.js figure :label:`datamodel`
 
 Plotly figures are fully defined by a declarative JSON specification. Key
-components of this specification are show in the example in Figure
+components of this specification are shown in the example in Figure
 :ref:`datamodel`.
 
 The top-level ``'data'`` property contains an array of the traces present in
@@ -170,7 +170,7 @@ built-in widgets see :cite:`widgetList`.
 The integration of graphical widgets into the notebook workflow allows users
 to configure ad-hoc control panels to interactively sweep over parameters
 using graphical widget controls rather than by editing code or writing loops
-over a fixed ranges of values.
+over a fixed range of values.
 
 The infrastructure behind the built-in ipywidgets is available to library
 authors and many custom ipywidgets libraries have been developed
@@ -254,7 +254,7 @@ by the schema excerpt in Figure :ref:`schemaExample`.
    Tab completion, documentation, and validation of ``hovermode`` property
    :label:`validationExample`
 
-Select components of this new API are described below, and an example of their
+Select components of the new API are described below, and an example of their
 use is presented in Figure :ref:`figureApiExample`.
 
 Construction
@@ -501,7 +501,7 @@ Plotly.js provides a flexible range of configuration options to control
 the appearance of a figure's traces and layout, and it will attempt to
 compute reasonable defaults for properties not specified by the user.
 
-To improve the experience of interactivly refining a figure's appearance,
+To improve the experience of interactively refining a figure's appearance,
 it is very helpful to provide the user with the default values of unspecified
 properties. For example, if a user would like to specify a ``scatter`` trace
 marker size that is slightly larger than the default, it is very helpful for
@@ -525,7 +525,7 @@ The integration of plotly.py version 3 with the ipywidgets library brings a
 wide range of benefits to plotly.py users working in the Jupyter Notebook.
 Figure properties are now easily discoverable through the use of tab
 completion, and they are understandable thanks to the presence of detailed
-docstrings.  This greatly reduces the need for users to interrupt their
+docstrings. This greatly reduces the need for users to interrupt their
 analysis workflow to consult external documentation resources.
 
 All of these properties may be updated using property assignment syntax and
