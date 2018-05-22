@@ -80,8 +80,8 @@ present are turn lane markings and parking lot segmentation with aerial
 and satellite imagery.
 
 .. figure:: fig1.png
-   :height: 100px
-   :width: 200 px
+   :height: 30 px
+   :width: 60 px
    :scale: 10 %
 
    Feature Extraction Pipeline. 
@@ -100,8 +100,8 @@ practical applications of object detection include face detection,
 counting, visual search engine.
 
 .. figure:: fig2.png
-   :height: 100px
-   :width: 200 px
+   :height: 30 px
+   :width: 60 px
    :scale: 10 %
 
    Turn Lane Markings Detection.
@@ -112,8 +112,8 @@ recognizing the road from the buildings, we also have to delineate the
 boundaries of each object (See Figure 3)
 
 .. figure:: fig3.png
-   :height: 100px
-   :width: 200 px
+   :height: 30 px
+   :width: 60 px
    :scale: 10 %
 
 Semantic segmentation on roads, buildings and greens
@@ -335,32 +335,32 @@ Figure 9: Front-end UI for instant turn lane markings detection
 
 
 .. |image4| image:: fig4.png
-   :height: 100px
-   :width: 100 px
+   :height: 30 px
+   :width: 30 px
    :scale: 10 %
 
 .. |image5| image:: fig5.png
-   :height: 100px
-   :width: 100 px
+   :height: 30 px
+   :width: 30 px
    :scale: 10 %
 
 .. |image6| image:: fig6.png
-   :height: 100px
-   :width: 100 px
+   :height: 30 px
+   :width: 30 px
    :scale: 10 %
 
 .. |image7| image:: fig7.png
-   :height: 100px
-   :width: 100 px
+   :height: 30 px
+   :width: 30 px
    :scale: 10 %
 
 .. |image8| image:: fig8.png
-   :height: 100px
-   :width: 100 px
+   :height: 30 px
+   :width: 30 px
    :scale: 10 %
 
 .. |image9| image:: fig9.png
-   :height: 100px
-   :width: 200 px
+   :height: 30 px
+   :width: 60 px
    :scale: 10 %
 
