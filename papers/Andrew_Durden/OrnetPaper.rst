@@ -30,6 +30,7 @@
 :email: spq@uga.edu
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 :institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
+:corresponding:
 :bibliography: mybib
 
 -------------------------------------------------------------------
