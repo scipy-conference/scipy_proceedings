@@ -790,11 +790,14 @@ extent.  By allowing the chart to change dynamically according to the current
 map view, investigators may examine the temporal change of neighborhoods in both
 global (e.g. Los Angeles metropolitan area) and local scales (e.g. downtown of
 Los Angeles), and determine the robustness of the spatial patterns that
-materialize.
+materialize. An example of the current visualization module showing linked cluster 
+maps over time and an associated stacked line plot is shown below in Figure :ref:`f:viz`
 
 .. figure:: ward_viz.png
    :align: center
    :figclass: w
+
+   Interactive Vizualizations of Ward Clustering in Los Angeles :label:`f:viz`
 
 
 Reproducible Urban Science: A final direction for future research is the development of
