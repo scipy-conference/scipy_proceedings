@@ -238,7 +238,7 @@ segmentation. The U-Net architecture consists of a contracting path to
 capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
-best method such as the sliding-window convolutional network. (Figure 6)
+best method such as the sliding-window convolutional network. (Figure 5)
 This first part is called down or you may think it as the encoder part
 where you apply convolution blocks followed by a maxpool downsampling to
 encode the input image into feature representations at multiple
@@ -254,9 +254,9 @@ convolutions. For parking lots segmentation, we are doing binary
 segmentation distinguishing parking lots from the background.
 
 .. figure:: fig6.png
-   :height: 100 px
-   :width: 200 px
-   :scale: 10 %
+   :height: 200 px
+   :width: 400 px
+   :scale: 50 %
 
    U-Net Architecture
 
@@ -279,7 +279,7 @@ knowledge, and not make as many false positives.
 3. Post-Processing
 ------------------
 
-Figure 7 below shows an example of the raw segmentation mask derived
+Figure 6 shows an example of the raw segmentation mask derived
 from our U-Net model. It cannot be used directly as input into
 OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
@@ -316,7 +316,7 @@ tiles.
 
 **Deduplication.** Deduplicate by matching GeoJSONs with OSM data.
 
-After all these post-processing steps, we have a clean mask (Figure 8)
+After all these post-processing steps, we have a clean mask (Figure 7)
 that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
@@ -337,11 +337,11 @@ these GeoJSONs back into OpenStreetMap as turn lane and parking lot
 features. Our routing engines then take these OpenStreetMap features
 into account when calculating routes. We also built a front-end UI that
 allows users to pan around for instant turn lane markings detection
-(Figure 9).
+(Figure 8).
 
 .. figure:: fig9.png
-   :height: 100 px
-   :width: 200 px
+   :height: 200 px
+   :width: 400 px
    :scale: 10 %
 
    Front-end UI for instant turn lane markings detection
