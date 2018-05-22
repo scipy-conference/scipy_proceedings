@@ -655,11 +655,14 @@ below starting with the slider creation:
 
    import sk_dsp_comm.sigsys as ss
    import scipy.signal as signal
-   b_b1,a_b1 = ss.peaking(band1.value,100,Q=3.5,fs=48000)
+   b_b1,a_b1 = ss.peaking(band1.value,100,Q=3.5,
+                          fs=48000)
    zi_b1 = signal.lfiltic(b_b1,a_b1,[0])
-   b_b2,a_b2 = ss.peaking(band2.value,1000,Q=3.5,fs=48000)
+   b_b2,a_b2 = ss.peaking(band2.value,1000,Q=3.5,
+                          fs=48000)
    zi_b2 = signal.lfiltic(b_b2,a_b2,[0])
-   b_b3,a_b3 = ss.peaking(band3.value,8000,Q=3.5,fs=48000)
+   b_b3,a_b3 = ss.peaking(band3.value,8000,Q=3.5,
+                          fs=48000)
    zi_b3 = signal.lfiltic(b_b3,a_b3,[0])
    b_12,a_12 = ss.cascade_filters(b_b1,a_b1,b_b2,a_b2)
    b_123,a_123 = ss.cascade_filters(b_12,a_12,b_b3,a_b3)
