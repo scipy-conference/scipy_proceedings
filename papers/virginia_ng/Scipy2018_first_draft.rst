@@ -80,9 +80,9 @@ present are turn lane markings and parking lot segmentation with aerial
 and satellite imagery.
 
 .. figure:: fig1.png
-   :height: 80 px
-   :width:  160 px
-   :scale: 20 %
+   :height: 100 px
+   :width:  200 px
+   :scale: 50 %
 
    Feature Extraction Pipeline. 
 
@@ -101,8 +101,8 @@ counting, visual search engine.
 
 .. figure:: fig2.png
    :height: 100 px
-   :width: 200 px
-   :scale: 10 %
+   :width:  200 px
+   :scale: 50 %
 
    Turn Lane Markings Detection.
 
@@ -114,7 +114,7 @@ boundaries of each object (See Figure 3)
 .. figure:: fig3.png
    :height: 100 px
    :width: 200 px
-   :scale: 10 %
+   :scale: 50 %
 
    Semantic segmentation on roads, buildings and greens
 
@@ -144,7 +144,7 @@ covered by cars (see Figure 4b).
 .. figure:: fig45.png
    :height: 100 px
    :width: 200 px
-   :scale: 10 %
+   :scale: 50 %
 
    Annotating turn lane markings - Draw bounding box around the turn lane markings.
    Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
@@ -254,8 +254,8 @@ convolutions. For parking lots segmentation, we are doing binary
 segmentation distinguishing parking lots from the background.
 
 .. figure:: fig6.png
-   :height: 200 px
-   :width: 400 px
+   :height: 150 px
+   :width: 300 px
    :scale: 50 %
 
    U-Net Architecture
@@ -286,9 +286,9 @@ quality of the segmentation mask and to transform the mask into the
 right data format for OpenStreetMap.
 
 .. figure:: fig7.png
-   :height: 100 px
+   :height: 200 px
    :width: 200 px
-   :scale: 10 %
+   :scale: 50 %
 
    U-Net Architecture
 
@@ -321,9 +321,9 @@ that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
 .. figure:: fig8.png
-   :height: 100 px
+   :height: 200 px
    :width: 200 px
-   :scale: 10 %
+   :scale: 50 %
 
    Clean polygon in the form of GeoJSON
 
@@ -342,7 +342,7 @@ allows users to pan around for instant turn lane markings detection
 .. figure:: fig9.png
    :height: 200 px
    :width: 400 px
-   :scale: 10 %
+   :scale: 50 %
 
    Front-end UI for instant turn lane markings detection
 
