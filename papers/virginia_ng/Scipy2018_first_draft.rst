@@ -95,7 +95,7 @@ explain the difference between object detection and semantic
 segmentation. These are two different problem spaces in computer vision.
 Object detection is the problem of locating and classifying a variable
 number of objects in an image. Here we use object detection models to
-detect turn lane markings from satellite imagery (See :ref:`Figure 2`). Other
+detect turn lane markings from satellite imagery (See Figure 2). Other
 practical applications of object detection include face detection,
 counting, visual search engine.
 
@@ -111,9 +111,12 @@ objects, it does so at pixel level. For example, in addition to
 recognizing the road from the buildings, we also have to delineate the
 boundaries of each object (See Figure 3)
 
-|image3a|\ |image3b|
+.. figure:: fig3.png
+   :height: 100px
+   :width: 200 px
+   :scale: 10 %
 
-Figure 3: Semantic segmentation on roads, buildings and greens
+Semantic segmentation on roads, buildings and greens
 
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
@@ -330,25 +333,6 @@ allows users to pan around for instant turn lane markings detection
 
 Figure 9: Front-end UI for instant turn lane markings detection
 
-.. |image2a| image:: fig2a.png
-   :height: 100px
-   :width: 100 px
-   :scale: 10 %
-
-.. |image2b| image:: fig2b.png
-   :height: 100px
-   :width: 100 px
-   :scale: 10 %
-
-.. |image3a| image:: fig3a.png
-   :height: 100px
-   :width: 100 px
-   :scale: 10 %
-
-.. |image3b| image:: fig3b.png
-   :height: 100px
-   :width: 100 px
-   :scale: 10 %
 
 .. |image4| image:: fig4.png
    :height: 100px
