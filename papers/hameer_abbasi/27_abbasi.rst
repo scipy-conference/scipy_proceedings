@@ -117,10 +117,10 @@ arithmetic, casting an array, and all NumPy :code:`ufunc` s are common examples 
 operations.
 
 These turn out to be simple for NumPy arrays, but are surprisingly complex for sparse arrays.
-The first problem to overcome was the lack of dependency on Numba/Cython/C++. At the time, I
-wished to solve the problem in NumPy, therefore looping over all possible nonzero coordinates
-was not an option, and we had to process the coordinates and data in batches. The batches that
-made sense at the time were something like the following:
+The first problem to overcome was the lack of dependency on Numba :cite:`numba`/Cython
+:cite:`cython`/C++. At the time, I wished to solve the problem in NumPy, therefore looping over
+all possible nonzero coordinates was not an option, and we had to process the coordinates and
+data in batches. The batches that made sense at the time were something like the following:
 
 1. Coordinates in the first array but not in the second.
 2. Coordinates in the second array but not in the first.
@@ -196,7 +196,8 @@ any amount of inputs, it does have a few drawbacks:
 * It's slower than :code:`scipy.sparse`, because
 
   * It loops over all possible combinations of zero/nonzero
-    coordinates, which makes it exponential in the number of inputs.
+    coordinates, which makes it :math:`O \left( \left(2^\text{nin} - 1 \right) \times \text{nnz} \right)`
+    in the worst case.
   * It's in COO format rather than CSR/CSC.
   * :code:`scipy.sparse` uses specialized code paths for each operation that greatly
     reduce the strain on the CPU whereas we keep everything generic.
@@ -213,26 +214,14 @@ This can be improved in the future in the following ways:
 
 * Introducing multidimensional CSR/CSC.
 
-You can see the current performance of the code in table :cite:`tab:bench`.
+You can see the current performance of the code in table :ref:`tab:bench`.
 
 Reductions
 ..........
 
-Only some reductions are possible with this library at the moment, but most common ones are supported.
-Supported reductions must have a few properties:
-
-* They must be implemented in the form of :code:`ufunc.reduce`
-* The :code:`ufunc` must be reorderable
-* Reducing by multiple zeros shouldn't change the result
-* An all-zero reduction must produce a zero.
-
-Although these restrictions may seem crippling, in practice most reductions such as :code:`sum`,
-:code:`prod`, :code:`min`, :code:`max`, :code:`any` and :code:`all` actually fall within the class
-of supported reductions. We used :code:`__array_ufunc__` protocol to allow application of :code:`ufunc`
-reductions to COO arrays.
-
-Notable exceptions are :code:`argmin` and :code:`argmax`. The following is some simplified psuedocode that
-we use for reductions::
+We implemented reductions by the simple concept of a "grouped reduce". The idea is to first group the
+coordinates by the non-selected axes, and then reduce along the selected axes. This is simple to
+implement in practice, and also works quite well. Here is some psuedocode that we use for reductions::
 
    x = x.transpose((selected_axes, non_selected_axes))
    x = x.reshape((selected_axes_size,
@@ -246,6 +235,28 @@ we use for reductions::
 
    y = y.reshape(non_selected_axes_shape)
 
+Only some reductions are possible with this algorithm at the moment, but most common ones are supported.
+Supported reductions must have a few properties:
+
+* They must be implemented in the form of :code:`ufunc.reduce`
+* The :code:`ufunc` must be reorderable
+* Reducing by multiple zeros shouldn't change the result
+* An all-zero reduction must produce a zero.
+
+Although these restrictions may seem crippling, in practice most reductions such as :code:`sum`,
+:code:`prod`, :code:`min`, :code:`max`, :code:`any` and :code:`all` actually fall within the class
+of supported reductions. We used :code:`__array_ufunc__` protocol to allow application of :code:`ufunc`
+reductions to COO arrays. Notable unsupported reductions are :code:`argmin` and :code:`argmax`.
+
+This is nearly as fast as the reductions in :code:`scipy.sparse` when reducing along C-contiguous axes,
+but is slow otherwise. Performance results can be seen in table :ref:`tab:bench`. Profiling reveals
+that most of the time in the slow case is taken up by sorting, as :code:`ufunc.reduceat` expects all
+"groups" to be right next to each other. This can be improved in the following ways:
+
+* Implement a radix argsort, which will significantly speed up the sorting.
+* Perform a "grouped reduce" by other methods, such as how Pandas does it, perhaps
+  by using a :code:`dict` to maintain the results.
+
 Indexing
 ........
 
@@ -253,19 +264,22 @@ For indexing, we realize that to construct the new coordinates and data, we can 
 filtering as to which coordinates will be in the new array and which ones won't.
 
 * We can work directly with the coordinates and filter out unwanted coordinates and data. This turns
-  out to be :math:`O(\text{ndim} \times \text{nnz})`.
+  out to be :math:`O(\text{ndim} \times \text{nnz})` in total.
 * We can realize that for a fixed value of :code:`coords[:n]`, where :code:`n` is some non-negative
   integer, the sorting order implies that the sub-coords :code:`coords[n:]` will also be sorted.
-  Getting a single item in this case is :math:`O(\text{ndim} \times \log \text{nnz})`, as we can use
-  a binary search.
+  Getting a single item or an integer slice in this case is
+  :math:`O(\text{ndim} \times \log \text{nnz})`, as we can use a binary search.
 
 We realized that we can get successively smaller slices of the original COO array and append them to
 the required coordinates for indexing, using the second method listed above. However, this presents
 issues when calling code like :code:`x[:500, :500, :500]` as we will have to do a large amount of
-binary searches.
+binary searches (:math:`500^3` in this case).
 
 So we used a hybrid approach where the second method is used until there are a sufficiently low
-number of coordinates, then we fall back to simple filtering.
+number of coordinates left for filtering, then we fall back to simple filtering. Where we do the
+switch is determined by a heuristic: will the expected number of binary searches be faster in a
+specific case, or directly filtering the number of left-over coordinates? The overall algorithm
+is implemented in Numba.
 
 After getting the required coordinates and corresponding data, we apply some simple transformations
 to it to get the output coordinates and data.
@@ -284,45 +298,25 @@ this, in order to save on memory.
 .................................
 
 For :code:`tensordot`, we currently just use the NumPy implementation, replacing :code:`np.dot` with
-:code:`scipy.sparse.csr_matrix.dot`.
+:code:`scipy.sparse.csr_matrix.dot`. This is mainly just transposing and reshaping the matrix into
+2-D, using :code:`np.dot` (or :code:`scipy.sparse.csr_matrix.dot` in our case), and performing the
+reshape and transpose operations in reverse.
 
-For :code:`dot`, we simply dispatch to :code:`tensordot`, providing the appropriate axes.
-
-Optimizations
--------------
-
-Element-wise Sparse Broadcasting
-................................
-
-In our element-wise algorithm, we perform quite a few optimizations. The first is for operations like
-multiplication, which is (barring some edge cases) zero if either of the operands are zero. We detect
-this when calculating the output data, and neglect to append this data at all.
-
-This can be especially useful in a broadcasting case. Consider two arrays, one with shape
-:code:`(1000, 1000)` and another with shape :code:`(1000,)`, each with only one nonzero entry.
-Multiplying them would result in an array with just one nonzero entry. However, if we used the
-first algorithm for element-wise, we'd have to first broadcast the second array, which would
-result in an array with a thousand nonzero entries. With the second algorithm, this does not need
-to happen and only one entry is actually calculated.
-
-Indexing
-........
-
-In indexing, using one of the two approaches can be very prohibitive in certain scenarios. The first
-is slow when we are accessing integer indices or single elements, and the second is slow when we
-are accessing slices of an array that are large in nature.
-
-Therefore, we adopt a hybrid approach to indexing that uses the second method at first and falls back
-to the second if the number of slices are too large.
+For :code:`sparse.dot`, we simply dispatch to :code:`tensordot`, providing the appropriate axes.
 
 Benchmarks
 ----------
 
 Because of our desire for clean and generic code as well as using mainly pure Python as opposed to
 Cython/C/C++ in most places, our code is not as fast as :code:`scipy.sparse.csr_matrix`. It, however,
-does beat :code:`numpy.ndarray`. The benchmarks were performed on a laptop with a Core i7-3537U
-processor and 16 GB of memory. Any arrays used had a shape of :code:`(10000, 10000)` with a density
-of :code:`0.001`. The results are tabulated in table :ref:`tab:bench`.
+does beat :code:`numpy.ndarray`, provided the sparsity of the array is small enough. The benchmarks
+were performed on a laptop with a Core i7-3537U processor and 16 GB of memory. Any arrays used had a
+shape of :code:`(10000, 10000)` with a density of :code:`0.001`. The results are tabulated in table
+:ref:`tab:bench`.
+
+The NumPy results are given only for comparison, and for the purposes of illustrating that using sparse
+arrays does, indeed, have benefits over using dense arrays when the density of the sparse array is
+sufficiently low.
 
 .. table:: Benchmarks :label:`tab:bench`
 
@@ -340,6 +334,13 @@ of :code:`0.001`. The results are tabulated in table :ref:`tab:bench`.
 
 Outlook and Future Work
 -----------------------
+
+We discussed the current leading solution for sparse arrays in the ecosystem, :code:`scipy.sparse`,
+along with its shortcomings and limitations. We then introduced a new package for N-dimensional
+sparse arrays, and how it has the potential to address these shortcomings. We discuss its current
+implementation, including the algorithms used in some of the different operations and the limitations
+and drawbacks of each algorithm. We also discuss future improvements that could be made to improve
+these algorithms.
 
 There are a number of areas we would like to focus on in the future. These include, in very broad terms:
 
