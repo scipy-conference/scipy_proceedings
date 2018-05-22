@@ -139,15 +139,15 @@ OSM data (nodes, ways, and relations) and their metadata tags. It is
 open source and licensed under GPL. We included turn lane markings of
 all shapes and sizes, as well as ones that are partially covered by cars
 and/or shadows. We excluded turn lane markings that are erased or fully
-covered by cars (see Figure 5).
+covered by cars (see Figure 4b).
 
 .. figure:: fig45.png
    :height: 100 px
    :width: 200 px
    :scale: 10 %
 
-   Figure 4: Annotating turn lane markings - Draw bounding box around the turn lane markings.
-   Figure 5: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
+   Annotating turn lane markings - Draw bounding box around the turn lane markings.
+   Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
 To prepare training data for parking lot segmentation, we first generate
 polygons from OpenStreetMap tags excluding features that are not visible
