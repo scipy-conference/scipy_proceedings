@@ -18,7 +18,7 @@ Developing an LSTM Pipeline for Accelerometer data
 Introduction
 ------------
 
-Human Activity Recognition (HAR) is a time series classification problem in which a classifier attempts to discern distinguishable features from movement-capturing on-body sensors :cite:`KimCook2010`. Typical sensors record changes in velocity through time in the x- y- and z-directions, i.e., accelerometers. Accelerometer output consists of high-frequency (30-200Hz) triaxial time series recordings, often containing noise, imprecision, and missing data :cite:`Ravietal2005`, :cite:`BaoIntille2004`. Furthermore, periods of non-activity – commonly referred to as the Null class – typically represent a large majority of HAR-related accelerometer data :cite:`OrdonezRoggen2016`. Consequently, attempts to use traditional classifiers have resulted in an apparent upper bound on performance and typically require significant preprocessing and technical engineering of hand crafted features from raw data :cite:`Gaoetal2016`, :cite:`Charvarriagaetal2013`, :cite:`ManniniSabatini2010` :cite:`Gjoreskietal2016` :cite:`Ravietal2005` :cite:`OrdonezRoggen2016`.
+Human Activity Recognition (HAR) is a time series classification problem in which a classifier attempts to discern distinguishable features from movement-capturing on-body sensors :cite:`KimCook2010`. Typical sensors record changes in velocity through time in the x- y- and z-directions, i.e., accelerometers. Accelerometer output consists of high-frequency (30-200Hz) triaxial time series recordings, often containing noise, imprecision, and missing data :cite:`Ravietal2005` :cite:`BaoIntille2004`. Furthermore, periods of non-activity – commonly referred to as the Null class – typically represent a large majority of HAR-related accelerometer data :cite:`OrdonezRoggen2016`. Consequently, attempts to use traditional classifiers have resulted in an apparent upper bound on performance and typically require significant preprocessing and technical engineering of hand crafted features from raw data :cite:`Gaoetal2016` :cite:`Charvarriagaetal2013` :cite:`ManniniSabatini2010` :cite:`Gjoreskietal2016` :cite:`Ravietal2005` :cite:`OrdonezRoggen2016`.
 
 The limitations of classical methods in this domain have been alleviated by concurrent theoretical and practical advancements in artificial neural networks, which are more suited for complex non-linear data. While convolutional neural networks (CNNs) are attractive for their automated feature extraction capabilities during convolution and pooling operations :cite:`Sjostrom2017` :cite:`Rassemetal2017` :cite:`Fiterauetal2016` :cite:`SeokKimPark2018` :cite:`Zebinetal2017` :cite:`Gaoetal2016` :cite:`Zhuetal2017` :cite:`OrdonezRoggen2016` :cite:`Gjoreskietal2016`, recurrent neural networks (RNNs) are specifically designed to extract information from time series data due to the recurrent nature of their data processing and weight updating operations :cite:`WilliamsZipser1989`. Furthermore, whereas earlier implementations of RNNs suffered from vanishing and exploding gradients during training, the incorporation of a multi-gated memory cell in long short-term memory recurrent neural networks (LSTMs) :cite:`HochreiterSchmidhuber1997` as well as regularization schemes such as an upper constraint known as gradient clipping :cite:`Pascanuetal2013` helped alleviate these issues.
 
@@ -40,11 +40,11 @@ Numerous experimental data analysis pipelines were used, including cross validat
 
 *Preprocessing*
 
-Before training the proposed models, each study performed some degree of preprocessing. Some reports kept preprocessing to a minimum, e.g., linear interpolation to fill missing values :cite:`OrdonezRoggen2016`, per-channel normalization :cite:`OrdonezRoggen2016` :cite:`Huetal2018`, and simple standardization :cite:`Chenetal2016`, :cite:`Zhaoetal2017`. Typically, data is standardized to have zero mean, i.e., centering the amplitude around zero :cite:`Broome2017`, and unit standard deviation, whereas Zhao, et. al. standardized the data to have 0.5 standard deviation :cite:`Zhaoetal2017`, citing Wiesler, et. al. as supporting this nuance for deep learning implementations :cite:`Wiesleretal2014`.
+Before training the proposed models, each study performed some degree of preprocessing. Some reports kept preprocessing to a minimum, e.g., linear interpolation to fill missing values :cite:`OrdonezRoggen2016`, per-channel normalization :cite:`OrdonezRoggen2016` :cite:`Huetal2018`, and simple standardization :cite:`Chenetal2016` :cite:`Zhaoetal2017`. Typically, data is standardized to have zero mean, i.e., centering the amplitude around zero :cite:`Broome2017`, and unit standard deviation, whereas Zhao, et. al. standardized the data to have 0.5 standard deviation :cite:`Zhaoetal2017`, citing Wiesler, et. al. as supporting this nuance for deep learning implementations :cite:`Wiesleretal2014`.
 
 Other noise reduction strategies employed include kernel smoothing :cite:`Gaoetal2016`, removing the gravity component :cite:`Moreauetal2016`, applying a low-pass filter :cite:`Lefebvreetal2015`, removing the initial and last 0.5 seconds :cite:`Huetal2018`. Gao, et. al. go so far as to apply Nadaraya-Watson kernel weighted average smoothing, using the Epanachnikov quadratic kernel and 40-nearest neighbor window size :cite:`Gaoetal2016`. Moreau, et. al. used the derivative of the axis-wise gravity component in order to group together segments of data from different axes, tracking a single motion across axes as the sensor rotated during a gesture :cite:`Moreauetal2016`.
 
-Some form of data redistribution or organization was also typical. For example, Broome 2017 and Moreau, et. al. excluded the dominant Null class as a solution to class imbalance :cite:`Broome2017`, :cite:`Moreauetal`. Lee & Cho aimed to circumvent the Null-related class imbalance by first training a model to differentiate meaningful data segments from the Null class, and subsequently training a second model to predict the specific gesture class :cite:`LeeCho2013`. Moreau, et. al. used resampling to solve class imbalance Moreauetal2016.
+Some form of data redistribution or organization was also typical. For example, Broome 2017 and Moreau, et. al. excluded the dominant Null class as a solution to class imbalance :cite:`Broome2017` :cite:`Moreauetal`. Lee & Cho aimed to circumvent the Null-related class imbalance by first training a model to differentiate meaningful data segments from the Null class, and subsequently training a second model to predict the specific gesture class :cite:`LeeCho2013`. Moreau, et. al. used resampling to solve class imbalance Moreauetal2016.
 
 For feeding the data into the models, the sliding window technique was commonly used, with vast discrepancy in the optimal size of the window (reported both as units of time and number of time points) and step size. Window sizes used range from 30 :cite:`Broome2017` to 100 :cite:`Zhaoetal2016` time points, and 32 :cite:`Muscietal2018`to 5000 :cite:`Zhaoetal2017` milliseconds (ms). Using a step size between windows of 50% of the window size was typical :cite:`Rassemetal2017` :cite:`Sjostrum2017` :cite:`Broome2017` :cite:`OrdonezRoggen2016`. Finally, Guan & Plotz ran an ensemble of models, each using a random sampling of a random number of frames with varying sample lengths and starting points using a wrap-around windowing method. This method is similar to the bagging scheme of random forests and was implemented to increase robustness of the model :cite:`Guan&Plotz2017`.
 
@@ -66,7 +66,7 @@ Once a model architecture is specified, it must be trained and the weights must 
 
 To calculate the amount of change needed for each training epoch, different loss functions are used. Categorical cross-entropy is the most widely used method :cite:`OrdonezRoggen2016` :cite:`Murad&Pyun2017` :cite:`Chenetal2016` :cite:`Sjostrum2017` :cite:`Kyritsisetal2017` :cite:`Setterquist2018` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, but F1 score loss :cite:`GuanPlotz2017`, mean squared error (MSE) :cite:`Carvalhoetal2017`, and mean absolute error and root MSE :cite:`Zhaoetal2016` were also used with varying degrees of success. During back propagation, various updating rules – e.g. RMSProp :cite:`OrdonezRoggen2016` :cite:`Setterquist2018` :cite:`Broome2017`, Adam :cite:`Murad&Pyun2017` :cite:`Kyritsisetal2017` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, and Adagrad :cite:`ShinSung2016` – and learning rates – 10^-7 :cite:`ShinSung2016`, 10^-4 :cite:`Sjostrum2017`, :cite:`GuanPlotz2017`, 2e-4 :cite:`Moreauetal2016`, 5e-4 :cite:`Lefebvreetal2015`, and 10^-2 :cite:`OrdonezRoggen2016` are used.
 
-Regularization techniques are often employed to stabilize the weight update process and avoid the problem of exploding gradients (LSTMs are not susceptible to vanishing gradients :cite:`HochreiterSchmidhuber1997`. Regularization techniques employed include weight decay of 0.9 :cite:`OrdonezRoggen2016,Sjostrum2017`; update momentum of 0.9 :cite:`Moreauetal2016`, 0.2 :cite:`Lefebvreetal2015`, or the Nesterov implementation :cite:`ShinSung2016`; dropout (forgetting the output from a proportion of units, e.g., 0.5 :cite:`OrdonezRoggen2016,Sjostrum2017` or 0.7 :cite:`Zhaoetal2016`) between various layers; batch normalization :cite:`Zhaoetal2017`; or gradient clipping using the norm :cite:`Zhaoetal2017` :cite:`Huetal2018` :cite:`Zhangetal2018`. Broome 2017 chose to use the stateful configuration for its baseline LSTM :cite:`Broome2017`. In this configuration, unit memory cell weights are maintained between each training example instead of resetting them to zero after each forward pass.
+Regularization techniques are often employed to stabilize the weight update process and avoid the problem of exploding gradients (LSTMs are not susceptible to vanishing gradients :cite:`HochreiterSchmidhuber1997`. Regularization techniques employed include weight decay of 0.9 :cite:`OrdonezRoggen20161` :cite:`Sjostrum2017`; update momentum of 0.9 :cite:`Moreauetal2016`, 0.2 :cite:`Lefebvreetal2015`, or the Nesterov implementation :cite:`ShinSung2016`; dropout (forgetting the output from a proportion of units, e.g., 0.5 :cite:`OrdonezRoggen2016` :cite:`Sjostrum2017` or 0.7 :cite:`Zhaoetal2016`) between various layers; batch normalization :cite:`Zhaoetal2017`; or gradient clipping using the norm :cite:`Zhaoetal2017` :cite:`Huetal2018` :cite:`Zhangetal2018`. Broome 2017 chose to use the stateful configuration for its baseline LSTM :cite:`Broome2017`. In this configuration, unit memory cell weights are maintained between each training example instead of resetting them to zero after each forward pass.
 
 Finally, models are trained for a given number of iterations, i.e., epochs. The number of epochs specified ranged from 100 :cite:`Broome2017` to 10,000 :cite:`Huetal2018`. Many studies chose to use early stopping, which stops training once performance on the validation set has slowed or halted. This prevents overfitting, which occurs when the model learns to represent irreducible error in the training data :cite:`Garethetal2017`. Various patience schemes, specifying how many epochs with no improvement above a given threshold the model should allow, were chosen.
 
@@ -104,26 +104,43 @@ The ranges of hyperparameters were devised to include all ranges explored by the
 
 .. code-block:: python
 
-  LSTM(units={{choice(numpy.arange(2,522,20))}},\
-        activation={{choice(['softmax', 'tanh', 'sigmoid', 'relu', 'linear'])}},\
-        recurrent_activation={{choice(['tanh', 'hard_sigmoid', 'sigmoid', 'relu', 'linear'])}},\
-        use_bias={{choice([True, False])}},\
-        kernel_initializer={{choice(['zeros', 'ones', RandomNormal(), RandomUniform(minval=-1, maxval=1), Constant(value=0.1), 'orthogonal', 'lecun_normal', 'glorot_uniform'])}},\
-        recurrent_initializer={{choice(['zeros', 'ones', RandomNormal(), RandomUniform(minval=-1, maxval=1), Constant(value=0.1), 'orthogonal', 'lecun_normal', 'glorot_uniform'])}},\
-        unit_forget_bias=True,\
-        kernel_regularizer={{choice([None,'l2', 'l1'])}},\
-        recurrent_regularizer={{choice([None,'l2', 'l1'])}},\
-        bias_regularizer={{choice([None,'l2', 'l1'])}},\
-        activity_regularizer={{choice([None,'l2', 'l1'])}},\
-        dropout={{uniform(0, 1)}},\
+  LSTM(units={{choice(numpy.arange(2,522,20))}},
+        activation={{choice(['softmax', 'tanh', 'sigmoid', 
+                                    'relu', 'linear'])}},
+        recurrent_activation={{choice(['tanh', 'hard_sigmoid', 
+                                'sigmoid', 'relu', 'linear'])}},
+        use_bias={{choice([True, False])}},
+        kernel_initializer={{choice(['zeros', 'ones', 
+                                        RandomNormal(), 
+                                        RandomUniform(minval=-1, maxval=1), 
+                                        Constant(value=0.1), 
+                                        'orthogonal', 'lecun_normal', 
+                                        'glorot_uniform'])}},
+        recurrent_initializer={{choice(['zeros', 'ones', 
+                                         RandomNormal(), 
+                                         RandomUniform(minval=-1, maxval=1), 
+                                         Constant(value=0.1), 
+                                         'orthogonal', 'lecun_normal', 
+                                         'glorot_uniform'])}},
+        unit_forget_bias=True,
+        kernel_regularizer={{choice([None,'l2', 'l1'])}},
+        recurrent_regularizer={{choice([None,'l2', 'l1'])}},
+        bias_regularizer={{choice([None,'l2', 'l1'])}},
+        activity_regularizer={{choice([None,'l2', 'l1'])}},
+        dropout={{uniform(0, 1)}},
         recurrent_dropout={{uniform(0, 1)}})
 
-  adam = keras.optimizers.Adam(lr={{choice([10**-6, 10**-5, 10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
-  rmsprop = keras.optimizers.RMSprop(lr={{choice([10**-6, 10**-5, 10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
-  sgd = keras.optimizers.SGD(lr={{choice([10**-6, 10**-5, 10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
+  adam = keras.optimizers.Adam(lr={{choice([10**-6, 10**-5, 
+                      10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
+  rmsprop = keras.optimizers.RMSprop(lr={{choice([10**-6, 10**-5, 
+                      10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
+  sgd = keras.optimizers.SGD(lr={{choice([10**-6, 10**-5, 
+                       10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
 
-  model.compile(optimizer={{choice(['sgd', 'rmsprop', 'adagrad', 'adadelta', 'nadam', 'adam'])}},
-                loss='categorical_crossentropy', metrics=['accuracy'])
+  model.compile(optimizer={{choice(['sgd', 'rmsprop', 'adagrad', 
+                                        'adadelta', 'nadam', 'adam'])}},
+                 loss='categorical_crossentropy', 
+                 metrics=['accuracy'])
 
   results = model.fit(X_train, y_train, epochs=1000,\
                       batch_size={{choice(numpy.arange(32, 480, 32))}},\
@@ -134,7 +151,9 @@ Due to constraints in the Python package used for hyperparameter optimization (i
 .. code-block:: python
 
   window_size = [24, 48, 64, 128, 192, 256]
-  stride      = [0.25*window_size, 0.5*window_size, 0.75*window_size]
+  stride      = [0.25*window_size, 
+                  0.5*window_size,
+                  0.75*window_size]
   n_layers    = [1, 2, 3, 4]
 
 For the second portion of the experiment, the highest performing model was assessed using 5-fold cross validation, where the folds were made at the participant level so that no single participant's data ended up in the training and testing sets.
