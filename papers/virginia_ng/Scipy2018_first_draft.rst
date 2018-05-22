@@ -80,9 +80,9 @@ present are turn lane markings and parking lot segmentation with aerial
 and satellite imagery.
 
 .. figure:: fig1.png
-   :height: 30 px
-   :width: 60 px
-   :scale: 10 %
+   :height: 80 px
+   :width:  160 px
+   :scale: 20 %
 
    Feature Extraction Pipeline. 
 
