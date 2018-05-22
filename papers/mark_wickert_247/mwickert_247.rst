@@ -59,8 +59,7 @@ single module, :code:`GPS_helper.py`.
 
    The earth centric earth fixed (ECEF) coordinate system compared with the local east-north-up 
    (ENU) coordinate system. :label:`ECEFENU`
-
-The remaining sections of this paper will cover: 
+  
 
 GPS Background
 --------------
@@ -461,10 +460,10 @@ of the route taken by the user. The velocity is only 5 mph in straight line segm
 Case #1
 =======
 
-With the data set created we now construct the EKF simulation for estimating the User 
+With the data set created we now construct an EKF simulation for estimating the User 
 trajectory from the measured pseudoranges for four SVs. Specifically we consider high quality 
 satellite signals, with measurement update period :math:`T_s = 1\text{s}`, and constant velocity 
-:math:`V_\text{User} = 5` mph.
+:math:`V_\text{User} = 5` mph. The simulation code, as taken from a Jupyter notebook cell, is given below:
 
 .. code-block:: python
 
@@ -495,12 +494,24 @@ satellite signals, with measurement update period :math:`T_s = 1\text{s}`, and c
        Pos_KF[k,:] = GPS_EKF1.x[0:6:2,0]
        P_diag[k,:] = GPS_EKF1.P.diagonal()
 
+With the simulation complete, we now consider the ECEF errors in m in Figure 
+:ref:`UserECEFErrors1` for m for :code:`(x,y,z)` components. The initial  position *guess* in this 
+example has a standard deviation of 5 m (or variance of 25 meters-squared), so we see that from the 
+start of the tracking the errors are relatively rather small and then settle down to peak errors of 
+:math:`pm 1` m, or so.
+
 .. figure:: User_ECEF_Errors1.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
    ECEF errors in position estimation for Case #1. :label:`UserECEFErrors1` 
+
+Figure :ref:`SelectErrorCovariance1`  shows selected error covariance matrix terms  from 
+:math:`\mathbf{P}_k` throughout the simulation. The terms displayed are the position diagonal terms, 
+that is :math:`\sigma_x^2, \sigma_y^2`, and :math:`\sigma_z^2`. The initial conditions of the EKF 
+make these variance terms initially large. Settling begins about 50s into the simulation, 
+and the decay continues as the 13.2 m simulation comes to an end. The EKF is behaving as expected. 
 
 .. figure:: SelectErrorCovariance1.pdf
    :scale: 50%
@@ -511,6 +522,12 @@ satellite signals, with measurement update period :math:`T_s = 1\text{s}`, and c
    :math:`\sigma_x^2`, :math:`\sigma_y^2`, :math:`\sigma_z^2`. :label:`SelectErrorCovariance1` 
 
 
+Finally, in Figure :ref:`UserEstTrajectory1` we have a plot of the User trajectory estimate 
+in ENU, as a 
+map-like 2D plot showing just the east-west and north-south axes. The units are tenths of 
+miles, so with the User moving along linear line segments at just 5 mph, the trajectory looks 
+perfect.
+
 .. figure:: User_EstTrajectory1.pdf
    :scale: 50%
    :align: center
@@ -519,14 +536,24 @@ satellite signals, with measurement update period :math:`T_s = 1\text{s}`, and c
    The estimated user trajectory in ENU coordinates and the same scale as Figure 
    :ref:`UserTrajectory1`. :label:`UserEstTrajectory1`
 
+In the next example parameters will be varied to see the impact.
 
 Case #2
 =======
 
 In this case we still consider high quality satellite signals and a 1s update period, but 
 now the user velocity is increased to 30 mph, so the time to traverse the User trajectory is 
-reduced from 13.2 min down to 2.2 min. The random initial :math:`xyz` position is set to 
-a error standard deviation of 50 m compared with 5 m in the first case.
+reduced from 13.2 min down to 2.2 min. The random initial :math:`(xyz)` position is set to 
+a error standard deviation of 50 m compared with 5 m in the first case. We expect to see some 
+difference in performance.
+
+In Figure :ref:`UserECEFErrors2` we again plot the ECEF errors in m. The large initial position 
+error variance forces the plot axes scale to change from Case #1. The initial errors are now 
+very large, but do settle to small values with the exception of *blips* that occur every time 
+the user changes direction by making a :math:`90^\circ` turn. The blips are somewhat artificial, 
+since making a perfect right-angle turn without slowing or *rounding* the corner is more 
+practical. Still it is interesting to see this behavior and also see that the EKF recovers 
+from these errors.
 
 .. figure:: User_ECEF_Errors2.pdf
    :scale: 50%
@@ -534,6 +561,15 @@ a error standard deviation of 50 m compared with 5 m in the first case.
    :figclass: htb
 
    ECEF errors in position estimation for Case #1. :label:`UserECEFErrors2` 
+
+Figure :ref:`SelectErrorCovariance2` again shows the error covariance  terms for 
+:math:`\sigma_x^2, \sigma_y^2`, and :math:`\sigma_z^2`. The results here are very 
+similar to Case #1. The variance peaks at about 50 s into the simulation and then 
+rapidly decays. This is not too surprising as the EKF tuning has changed from Case #$1, 
+with the exception of the initial position error. Since the simulation only runs for 
+2.2 min wich is 132 s, we have to compare the variances at this time to the Case #2 
+end results. They appear to be about the same, once again the EKF appears to be 
+working correctly.
 
 .. figure:: SelectErrorCovariance2.pdf
    :scale: 50%
@@ -543,6 +579,11 @@ a error standard deviation of 50 m compared with 5 m in the first case.
    Selected error covariance matrix terms, in particular the diagonal elements 
    :math:`\sigma_x^2`, :math:`\sigma_y^2`, :math:`\sigma_z^2`. :label:`SelectErrorCovariance2` 
 
+Finally, Figure :ref:`UserEstTrajectory2` plots the ENU trajectory estimate in the plane EN
+(ignoring the UP coordinate as before). The speed is upped by a factor six compared to 
+case #1. The most notable change is trajectory overshoot at each of the right-angle turns. 
+No surprise here as the EKF is asked to handle very abrupt (and impractical) position 
+changes. The EKF recovers quickly.
 
 .. figure:: User_EstTrajectory2.pdf
    :scale: 50%
@@ -552,14 +593,20 @@ a error standard deviation of 50 m compared with 5 m in the first case.
    The estimated user trajectory in ENU coordinates and the same scale as Figure 
    :ref:`UserTrajectory1`. :label:`UserEstTrajectory2`
 
+Over the results for both cases are very good. There a lot of *knobs* to turn in this 
+framework, so may options to explore.
+
 Conclusions and Future Work
 ---------------------------
 
-The objective of creating a Jupyter notebook-based  simulation tool for studying the use of 
+The objective of creating a Jupyter notebook-based simulation tool for studying the use of 
 the EKF in GPS position estimation has been met. There are many tuning options to explore. The 
 performance results are consistent with expectations.
 
-There are several improvements under consideration: (1) , (2), (3)? 
+There are several improvements under consideration: (1) develop  a more realistic user 
+trajectory generator, make measurement quality a function of the SV range, (3) use a least-squares 
+algorithm to obtain an initial position fix. The last item is to deal with the fact that the 
+EKF needs a reasonable position fix to get started. It may not converge without it.
 
 
 References
