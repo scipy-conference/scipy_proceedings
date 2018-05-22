@@ -268,10 +268,14 @@ obtained (See Figure :ref:`fig:snakeviz2`). Still, 99% of the time was
 spent within a highly parallelizable inner loop.
 
 .. figure:: NISE_prof.png
+    :figclass: w
+    :scale: 35%
 
     Profile trace of a single threaded simulation from ``NISE``. :label:`fig:snakeviz`
 
 .. figure:: WrightSim_prof.png
+    :figclass: w
+    :scale: 35%
 
     Profile trace of a single threaded simulation from ``WrightSim``. :label:`fig:snakeviz2`
 
