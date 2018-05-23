@@ -67,7 +67,7 @@ practical matter is in reality :math:`x[n]` is a scaled and finite precision ver
 of :math:`x(t)`.  In real-time DSP environments the ADC maps the analog signal samples to signed 
 integers, most likely :code:`int16`. As we shall see in pyaudio, this is indeed the case.
 
-.. figure:: basic_DSP_IO.pdf
+.. figure:: basic_dsp_IO.pdf
    :scale: 58%
    :align: center
    :figclass: htb
