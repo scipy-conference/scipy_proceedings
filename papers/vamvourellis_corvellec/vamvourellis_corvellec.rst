@@ -542,6 +542,63 @@ data.
 
 .. figure:: corr.png
 
+With Stan, we can also utilize the built-in checks to inspect the correctness of
+of the inference results. One of the basic tests is the :math:`\hat{R}`
+(:code:`Rhat`),
+which is a general summary of the convergence of the Hamiltonian Monte Carlo
+(HMC) chains. Another measure is the
+number of effective samples, denoted by :code:`n_eff`.
+These metrics, along with other basic information on the Stan :code:`fit` object,
+are shown below. We shall come back to the topic of fit diagnostics in the
+next section.
+
+.. code-block:: c++
+
+    Inference for Stan model:
+    anon_model_389cd056347577840573e8f6df0e7636.
+    4 chains, each with iter=1000; warmup=500; thin=1;
+    post-warmup draws per chain=500,
+    total post-warmup draws=2000.
+
+               mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
+    mu[0]      0.36  2.1e-3   0.09   0.17    0.3   0.36   0.42   0.54   2000    1.0
+    mu[1]      0.56  4.1e-3   0.18    0.2   0.44   0.56   0.69   0.94   2000    1.0
+    mu[2]      0.67  4.0e-3   0.18   0.33   0.55   0.68   0.79   1.02   2000    1.0
+    R[0,0]      1.0     0.0    0.0    1.0    1.0    1.0    1.0    1.0   2000    nan
+    R[1,0]    -0.24  3.6e-3   0.16  -0.55  -0.35  -0.24  -0.13    0.1   2000    1.0
+    R[2,0]    -0.38  3.6e-3   0.16  -0.69  -0.49  -0.39  -0.28  -0.05   2000    1.0
+    R[0,1]    -0.24  3.6e-3   0.16  -0.55  -0.35  -0.24  -0.13    0.1   2000    1.0
+    R[1,1]      1.0 2.1e-189.3e-17    1.0    1.0    1.0    1.0    1.0   1958    nan
+    R[2,1]      0.1    0.01   0.32  -0.52  -0.12   0.11   0.32   0.69    550    1.0
+    R[0,2]    -0.38  3.6e-3   0.16  -0.69  -0.49  -0.39  -0.28  -0.05   2000    1.0
+    R[1,2]      0.1    0.01   0.32  -0.52  -0.12   0.11   0.32   0.69    550    1.0
+    R[2,2]      1.0 1.7e-187.8e-17    1.0    1.0    1.0    1.0    1.0   2000    nan
+    sigma[0]   1.28  1.4e-3   0.06   1.16   1.24   1.28   1.32   1.41   2000    1.0
+
+*5. Fit the model to the real data*
+
+Once we have built confidence in our inference algorithm, we are ready to fit our
+model to the real data and answer the question of interest. Our goal is to use
+the data to predict the effect of the treatment on a new patient, i.e.,
+the posterior predictive distribution.
+
+In this case study, we may not share real data but, for demonstration purposes,
+we created two other sets of fake data, one representing the control group and
+the other the treatment group. We plot the results in Figure :ref:`pred`.
+
+.. figure:: pred.png
+
+   Posterior predictive distributions. :label:`pred`
+
+Looking at the plots, we can visualize the effect of the treatment by
+distinguishing between the blue and green colors. Note how the posterior
+predictive distributions incorporates the uncertainty from the inference of the
+parameters.
+
+Bayesian Inference with Stan
+----------------------------
+
+
 References
 ----------
 
