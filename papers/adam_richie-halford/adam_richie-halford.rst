@@ -98,18 +98,15 @@ project conception to first publishable result [#]_,
 
 .. math::
 
-   t_\mathrm{pub} = t_\mathrm{understand}
-       + t_\textrm{compute}
-       + t_\mathrm{write},
+   t_\mathrm{result} = t_\mathrm{understand} + t_\textrm{compute},
 
-where :math:`t_\mathrm{understand}` is the time to acquire domain
-expertise and frame the problem, :math:`t_\mathrm{compute}` is the time
-to collect results using computation, and :math:`t_\mathrm{write}`
-is the time to analyze results and write the findings. We
-leave the minimization of :math:`t_\mathrm{understand}` and
-:math:`t_\mathrm{write}` to the researcher and instead focus on how
-software can aid researchers in minimizing :math:`t_\mathrm{compute}`.
-Computation time can be further decomposed into
+where :math:`t_\mathrm{understand}` is the time to acquire
+domain expertise, frame the problem, and interpret results, and
+:math:`t_\mathrm{compute}` is the time to collect results using
+computation. We leave the minimization of :math:`t_\mathrm{understand}`
+to the researcher and instead focus on how software can aid researchers
+in minimizing :math:`t_\mathrm{compute}`. Computation time can be
+further decomposed into
 
 .. math::
    :label: eq.tcompute
