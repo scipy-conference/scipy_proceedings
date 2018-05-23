@@ -297,7 +297,7 @@ right data format for OpenStreetMap.
 .. figure:: fig8.png
    :height: 200 px
    :width: 200 px
-   :scale: 38 %
+   :scale: 39 %
 
    Clean polygon in the form of GeoJSON
 
