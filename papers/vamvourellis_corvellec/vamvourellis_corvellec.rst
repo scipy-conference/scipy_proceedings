@@ -61,9 +61,10 @@ An advanced workflow, which is beyond the scope of this paper, could be
 extended to include the following steps:
 
 6. Check the predictive accuracy of the model;
-7. Select best model among different candidates (model selection);
-8. Specify and integrate the utility function over the posterior distribution;
-9. Perform a sensitivity analysis.
+7. Evaluate the model fit;
+8. Select best model among different candidates (model selection);
+9. Specify and integrate the utility function over the posterior distribution;
+10. Perform a sensitivity analysis.
 
 In what follows, we will use :math:`\mathcal{M}(\theta)` to denote the model as
 a function of its parameter :math:`\theta` (:math:`\theta` is either a scalar
@@ -151,7 +152,7 @@ brought in by the likelihood.  In fact, Bayesian inference technically works
 even when the prior is not a proper distribution but a function that assumes all
 values are equally likely, referred to as *improper prior*. However, it is
 generally advisable to avoid improper priors, especially in settings beyond
-just inference, such as the more advanced workflow of steps 6)–9).
+just inference, such as the more advanced workflow of steps 6)–10).
 If no prior knowledge is available, a very vague normal
 distribution with large variance is still a better default prior than a uniform
 distribution. It is important to note that improper or even vague priors are not
@@ -251,25 +252,28 @@ not sufficient guarantee that the model will fit well to the real data, but it i
 a necessary condition for proceeding further.
 
 b. Equipped with a correct inferential algorithm for our model :math:`\mathcal{M}`,
-it is time to critique it and ask if it is appropriate for the application. More
-generally, this is a good time to check the model fit and decide if we need to
-make any changes to the model. This step is usually specific to each
+it is time to critique the model and ask if it is appropriate for the application.
+More generally, this is a good time to check the model fit and decide if we
+need to make any changes to it. This step is usually specific to each
 application. There is no limit as to how many tests we can do at this stage. It is
 up to us to decide which tests are necessary to build confidence in
 the model. If we choose a different model :math:`\mathcal{M'}`, we need to go
-back to step 2 and start again. A more comprehensive evaluation of the model
-should include checking the fit to the real data as well.
+back to step 2 and start again.
+Note that for a more comprehensive evaluation of the model, we can, and
+probably should, wait until we check how the model fits the real data as well.
 
 *5. Fit the model to the real data*
 
 This is the time we have been waiting for. Once we have finalized the design of
 our model and have tested it on fake data, we are ready to fit it to the real
-data and get the results. Usually, we are interested in a specific quantity that
-is derived from the posterior samples, as illustrated by our
-case study in the next section.
+data and get the results. Usually, we focus our attention on a specific
+quantity of interest to our problem, that is derived from the posterior samples
+(see our case study in the next section for an example). If we are satisfied
+with the fit of the model and the results, we are done.
 
-At this point, we are expected to evaluate the model again if
-necessary, depending on the application. For example, the model
+In most cases, though, at this stage we are expected to evaluate the model to
+revise it as necessary, depending on the application.
+For example, the model
 may capture the average of the quantity but fail to capture the behavior at
 the tails of the distribution.  This step is highly application-specific and
 requires a combination of statistical expertise and subject-matter expertise. It is
@@ -281,6 +285,8 @@ back and start again from the beginning.
 
 *Posterior Predictive Checks and Model Evaluation*
 
+In this subsection, we would like to touch briefly on two topics for more
+advanced workflows, predictive accuracy and model evaluation.
 One way to evaluate a model is to check how well it predicts unknown observable
 data :math:`\tilde{y}`, where unknown means that the model was not fit
 to :math:`\tilde{y}`. The Bayesian posterior predictive distribution is given
@@ -297,7 +303,7 @@ distributions, by mapping each parameter posterior sample
 
 .. math::
 
-   \theta_0 \sim p(\theta|\mathcal{D})
+   \tilde{\theta} \sim p(\theta|\mathcal{D})
 
 to the corresponding sample of the posterior predictive distribution
 
@@ -307,10 +313,15 @@ to the corresponding sample of the posterior predictive distribution
 
 Posterior predictive accuracy is useful even outside the strict scope of a
 predictive task. Posterior predictive checks, evaluating the predictive accuracy
-of a model, can be a good method to evaluate a model, especially in exploratory
+of a model [#]_, can be a good method to evaluate a model, especially in exploratory
 analyses. A model that predicts well is a model that fits the data well. Model
 evaluation is an extensive area of research with a rich literature, which is
 beyond the scope of this contribution.
+
+.. [#] To check the predictive accuracy of the model, we need to measure our
+       predictions :math:`\tilde{y}` against real data. To do this, we usually
+       hold out a small random sample of the original data and deliberately
+       restrain from fitting the model to that sample.
 
 *Further reading*
 
