@@ -370,7 +370,7 @@ Running returns a ``Scan`` object, which allows for interrogation of several int
 including the electric field values themselves.
 The important part, however is the signal array that is generated.
 In this example, the complex floating point number array is of shape :math:`(2x64x64x32)` (i.e. the number of 
-``recorded_elements`` followed by the shape of the experiment itself.
+``recorded_elements`` followed by the shape of the experiment itself).
 These numbers can be manipulated and visualized to produce spectra like that seen in :ref:`fig:examplespectrum`.
 The Wright Group also maintains a library for working with multidimensional data, ``WrightTools``. 
 This library will be integrated more fully to provide even easier access to visualization and 
@@ -378,8 +378,20 @@ archival storage of simulation results.
 
 
 
+Performance
+===========
+
+Performance is a key consideration in the implementation of ``WrightSim``.
+Careful analysis of the algorithms, identifying and measuring the bottlenecks and working
+to implement strategies to avoid them are key to achieving the best performance possible.
+Another key is taking advantage of modern hardware for parallelization.
+These implementations have their advantages and tradeoffs, which are quantified and
+examined in detail herein.
+
+
+
 Algorithmic Improvements
-========================
+------------------------
 
 When first translating the code from ``NISE`` into the paradigm of
 ``WrightSim``, we sought to understand why it took so long to compute. We
@@ -426,7 +438,7 @@ spent within a highly parallelizable inner loop.
     Profile trace of a single threaded simulation from ``WrightSim``. :label:`fig:snakeviz2`
 
 CPU and GPU Parallel Implementations
-====================================
+------------------------------------
 
 ``NISE`` already had, and ``WrightSim`` inherited, CPU multiprocessed
 parallelism using the Python standard library multiprocessing interface.
