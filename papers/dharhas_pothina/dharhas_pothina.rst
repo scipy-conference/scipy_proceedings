@@ -161,9 +161,11 @@ EarthSim is a website and associated GitHub repository that serves two purposes.
 new tools before moving them into other more general purpose python libraries. Second, it contains examples of how 
 to solve common Earth Science simulation workflow and visualization problems. EarthSim aims to demonstrate building
 flexible, lightweight workflows entirely in Jupyter notebooks with the aim of timely support for operational 
-decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the 
-globe. The goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
-as needed to rapidly solve specific emerging issues. 
+decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
+The goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
+as needed to rapidly solve specific emerging issues.
+
+
 
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other open source tools Filigree and Quest. Short descriptions of these tools follow:
@@ -176,7 +178,7 @@ GeoViews is a Python library that makes it easy to explore and visualize geograp
 
 Datashader is a graphics pipeline system for creating meaningful representations of large datasets quickly and flexibly. Datashader breaks the creation of images into a series of explicit steps that allow computations to be done on intermediate representations. This approach allows accurate and effective visualizations to be produced automatically without trial-and-error parameter tuning, and also makes it simple for data scientists to focus on particular data and relationships of interest in a principled way.
 
-ParamParam is a library providing Parameters: Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, default values, etc., each of which is inherited from parent classes if not specified in a subclass. Param lets you program declaratively in Python, by just stating facts about each of your parameters, and then using them throughout your code. With Parameters, error checking will be automatic, which eliminates huge amounts of boilerplate code that would otherwise be required to verify or test user-supplied values.
+Param is a library providing Parameters: Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, default values, etc., each of which is inherited from parent classes if not specified in a subclass. Param lets you program declaratively in Python, by just stating facts about each of your parameters, and then using them throughout your code. With Parameters, error checking will be automatic, which eliminates huge amounts of boilerplate code that would otherwise be required to verify or test user-supplied values.
 
 Quest is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
 
