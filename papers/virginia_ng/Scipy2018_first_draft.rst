@@ -102,7 +102,7 @@ counting, visual search engine.
 .. figure:: fig2.png
    :height: 75 px
    :width:  150 px
-   :scale: 25 %
+   :scale: 22 %
 
    Turn Lane Markings Detection.
 
@@ -114,7 +114,7 @@ boundaries of each object (See Figure 3)
 .. figure:: fig3.png
    :height: 100 px
    :width: 200 px
-   :scale: 25 %
+   :scale: 22 %
 
    Semantic segmentation on roads, buildings and greens
 
@@ -144,7 +144,7 @@ covered by cars (see Figure 4b).
 .. figure:: fig45.png
    :height: 75 px
    :width: 150 px
-   :scale: 20 %
+   :scale: 22 %
 
    Annotating turn lane markings - Draw bounding box around the turn lane markings.
    Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
@@ -256,7 +256,7 @@ segmentation distinguishing parking lots from the background.
 .. figure:: fig6.png
    :height: 150 px
    :width: 300 px
-   :scale: 35 %
+   :scale: 36 %
 
    U-Net Architecture
 
@@ -289,7 +289,7 @@ right data format for OpenStreetMap.
 .. figure:: fig7.png
    :height: 200 px
    :width: 200 px
-   :scale: 30 %
+   :scale: 36 %
 
    Raw segmentation mask derived from our U-Net model
 
@@ -322,7 +322,7 @@ tiles.
 .. figure:: fig8.png
    :height: 200 px
    :width: 200 px
-   :scale: 30 %
+   :scale: 36 %
 
    Clean polygon in the form of GeoJSON
 
