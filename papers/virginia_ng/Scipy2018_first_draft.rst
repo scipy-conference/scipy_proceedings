@@ -104,7 +104,7 @@ counting, visual search engine.
    :width:  150 px
    :scale: 22 %
 
-   Turn Lane Markings Detection.
+   Turn lane markings detection.
 
 Semantic segmentation on the other hand, not only locates and classifies
 objects, it does so at pixel level. For example, in addition to
@@ -121,7 +121,7 @@ boundaries of each object (See Figure 3)
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
 project to create a free editable map of the world. Turn lane markings
-on OpenStreetMap are recorded as “ways” (line-strings). We used a tool
+on OpenStreetMap [1]_ are recorded as “ways” (line-strings). We used a tool
 called `Overpass Turbo <https://overpass-turbo.eu/>`__ to query
 OpenStreetMap turn lane markings. We then extracted GeoJSONs in 5 cities
 from OpenStreetMap that have one of the following attributes
@@ -150,7 +150,7 @@ covered by cars (see Figure 4b).
    Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
 To prepare training data for parking lot segmentation, we first generate
-polygons from OpenStreetMap tags excluding features that are not visible
+polygons from OpenStreetMap tags [2]_ excluding features that are not visible
 in satellite imagery. Explicitly, these are OSM features with the
 attributes “Tag:amenity=parking=*” except underground, sheds, carports,
 garage_boxes. To prepare training data for building segmentation, we
@@ -209,8 +209,8 @@ apply.
 works is, the model is pre-trained on ImageNet for classification. Then
 for detection, the network is resized to higher resolution especially to
 detect smaller objects in a scene. Fully convolutional models jointly
-trains these two steps. We implemented YOLOv2, a real-time object
-detection system and is the improved version of YOLO, which was
+trains these two steps. We implemented YOLOv2 [3]_, a real-time object
+detection system and is the improved version of YOLO [4]_, which was
 introduced in 2015. YOLOv2 outperforms all the other state-of-the-art
 methods like Faster RCNN with ResNet and SSD in both speed and detection
 accuracy. Improvements made to YOLOv2 included batch normalization,
@@ -233,7 +233,7 @@ directly. Instead of using pre-defined anchor boxes, YOLOv2 authors
 performed K-means clustering on bounding boxes from the training data
 set.
 
-**Segmentation Models.** We implemented U-Net for parking lot
+**Segmentation Models.** We implemented U-Net [5]_ for parking lot
 segmentation. The U-Net architecture consists of a contracting path to
 capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
@@ -260,7 +260,7 @@ segmentation distinguishing parking lots from the background.
 
    U-Net Architecture
 
-We also experimented with Pyramid Scene Parsing Network (PSPNet). PSPNet
+We also experimented with Pyramid Scene Parsing Network (PSPNet) [6]_. PSPNet
 is good when the scene is complex (multi-class) and dataset has great
 diversity. It’s redundant when the number of categories are less and
 dataset are more simple (such as self-driving car). PSP adds a
@@ -324,7 +324,7 @@ space back into GeoJSONs (world coordinate).
 **Removing tile border artifacts.** Query and match neighboring image
 tiles.
 
-**Deduplication.** Deduplicate by matching GeoJSONs with OSM data.
+**Deduplication.** Deduplicate by matching GeoJSONs with data that already exist on OpenStreetMap.
 
 After performing all these post-processing steps, we have a clean mask (Figure 7)
 that is also a polygon in the form of GeoJSON. This can now be added to
@@ -350,6 +350,18 @@ allows users to pan around for instant turn lane markings detection
    :scale: 42 %
 
    Front-end UI for instant turn lane markings detection
+
+
+References
+----------
+.. [1] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
+.. [2] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
+.. [3] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
+.. [4] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
+.. [5] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
+.. [6] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
+
+
 
 
 
