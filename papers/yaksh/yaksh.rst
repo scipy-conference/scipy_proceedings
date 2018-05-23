@@ -161,16 +161,16 @@ Yaksh:
 - Trial instance without Docker
 - Production instance using Docker and Docker compose.
 
-The deployment procedure has been boiled down to a limited number of commands
-using the invoke_ python package to make the deployment as easy as possible.
+Yaksh can be deployed with a limited number of commands using the invoke_
+python package to make the deployment as easy as possible.
 
 .. _invoke: http://www.pyinvoke.org/
 
-Prerequisites:
+Yaksh is written in Python and depends on Django and a few other Python
+dependencies. The dependencies can be installed using the `pip
+<https://pip.pypa.io/en/latest/installing.html>`_ package manager tool. It is
+recommended to use Yaksh along with Docker.
 
-Yaksh is written in Python and depends on Django and a few other Python dependencies. The dependencies can be installed using the `pip <https://pip.pypa.io/en/latest/installing.html>`__ package manager tool. It is recommended to use Yaksh along with Docker.
-
-Installation:
 
 Yaksh can be cloned from the Github repository. To do this one can run::
 
@@ -227,7 +227,7 @@ In order to setup Yaksh on a Production server with docker compose. To start off
 
   DB_PORT=3306
 
-The local system needs to have `Docker Compose <https://docs.docker.com/compose/install/>`__ installed.
+The local system needs to have `Docker Compose <https://docs.docker.com/compose/install/>`_ installed.
 
 One must navigate to the Docker directory::
 
@@ -256,20 +256,19 @@ One can read more about Courses, Modules, Lessons and Quizzes in the sections be
 Basic features of Yaksh
 -------------------------
 
-Once Yaksh is installed and running,
-
-- one can create a full fleged course with lessons, practice and evaluation based quizzes.
-- Yaksh supports following languages such as Python, Java, C, C++, Scilab, etc.
-- Yaksh provides several question types such as Single Correct Choice,
-  Multiple Correct Choice, Programming, Fill in the blanks, Arrange the
-  options, Assignment upload.
-- For simple and complex questions several test case types are provided such
-  as standard input/output test case, Standard Assertion test case, Hook based
-  test case, Mcq based test case, Fill in the blanks test case, Arrange
-  options.
-- One can monitor a course or quiz in real-time.
-- Automatic grading and instant feedback for a student to improve on submissions.
-- Get certificates after successful completion of a course.
+Once Yaksh is installed and running, one can create a full fleged course with
+lessons, practice, and evaluation based quizzes. Yaksh supports following
+languages such as Python, Java, C, C++, and Scilab. It provides several
+question types such as Single Correct Choice, Multiple Correct Choice,
+Programming, Fill in the blanks, Arrange the options, Assignment upload. For
+simple and complex questions several test case types are provided such as
+standard input/output test case, Standard Assertion test case, Hook based test
+case, MCQ based test case, etc. The interface provides instant feedback for
+the student to improve their submissions. While administering quizzes or
+practice sessions, one can monitor the student's progress in real-time. This
+is particularly useful in practice sessions so as to help students who are not
+doing well. Finally, a student gets a certificate after successful completion
+of a course.
 
 All the features are explained in detail in workflow section.
 
@@ -284,34 +283,34 @@ The two essential pieces of yaksh are:
 Django Server
 -------------
 
-Django is a high-level Python Web framework. Django makes it is easy to create web applications, handles basic security issues, and provides basic authentication system.
+Django is a high-level Python web framework. Django makes it is easy to create web applications, handles basic security issues, and provides a basic authentication system.
 
-For client interaction we need to focus on some areas i.e..
+Django makes it easy to store information in a database by providing an
+object-relational mapping (ORM). This allows users to define the database
+tables at a very high level without having to write raw SQL queries.
 
-- How to store the information
-- How a user interacts with the system
-
-To store the information we need a database. Django provides Object-relational mapping(ORM) which makes it easy to interact with the database instead of traditional SQL query approach.
-
-Django provides a view controller to handle all the requests sent from the client side.
-A view then interacts with the database if any database data is required, collects all the data and sends the data back to the templates which is then rendered for the client.
+Django provides a view controller to handle all the requests sent from the
+client side. A view then interacts with the database if any database data is
+required, collects all the data and sends the data back to the templates which
+is then rendered for the client.
 
 Yaksh models
 ~~~~~~~~~~~~
 
-A model is a Python class that subclasses ``django.db.models.Model``
+A Django model is a Python class that subclasses ``django.db.models.Model``
 representing the database table. Each attribute of the model represents a
 database table field.
 
-Models for yaksh are as follows:
+The models for yaksh are as follows:
 
 - User
 
-  This is the default model provided by django for storing username, first name, last name, password etc.
+  This is the default model provided by django for storing the user name,
+  first name, last name, password etc.
 
 - Profile
 
-  This model is used for storing more info of a user such as institute, department etc.
+  This model is used for storing more information about of a user such as institute, department etc.
 
 - Question
 
@@ -326,24 +325,24 @@ Models for yaksh are as follows:
 
   - StandardTestCase
 
-    This model is used for standard assertion test case type.
+    This model is used for test cases that use assertions to test success or failure.
 
   - StdIOBasedTestCase
 
-    This model is used for standard input/output test case type.
+    This model is used for test cases based on the standard output produced by a test.
 
   - McqTestCase
 
-    This model is used for MCQ (Single correct choice) or MCC
-    (Multiple correct choice) type of question.
+    This model is used for MCQ (single correct choice) or MCC
+    (multiple correct choice) type of question.
 
   - HookTestCase
 
-    This model is used for questions where there is a need for higher level
-    of testing. This models comes with a predefined function `check_answer`
-    where the student answer (path to user submitted files for assignment
-    uploads) is passed as an argument. The question creator can hence
-    scrutinise the user answer in much more specific ways.
+    This model is used for questions where there is a need for more complex
+    testing. This model comes with a predefined function `check_answer` where
+    the student answer (path to user submitted files for assignment uploads)
+    is passed as an argument. The question creator can hence scrutinise the
+    user answer in much more specific ways.
 
   - Fill in the blanks Test case
 
@@ -406,39 +405,37 @@ This settings file contains information such as:
 
 
 A Tornado HTTP server is started with the specified server host and server
-pool port from the settings. The server handles POST requests may be submitted
-with a unique id, along with a JSONized string with the programming language
-of the question, the user answer, files (if any), test case data i.e. test
-case type and test cases. Each submitted answer has a unique id associated
-with it which makes it easy to keep the track of the evalaution status whether
-it is completed or not. The server then takes the json data and creates a
-suitable process to evaluate the code as specified in the settings. A separate
-dictionary is maintained for each process storing the data such as process
-status, and the result (success, test case weightage, error, error message
-etc.). The Django client then polls the server asking for a result after a
-wait time and displays the result when one is available until a hard timeout.
+pool port from the settings. The server handles POST requests which are
+submitted with a unique id, along with a JSONized string with the programming
+language of the question, the user answer, files (if any), test case data i.e.
+test case type and test cases. Each submitted answer has a unique id
+associated with it which makes it easy to keep the track if the evaluation is
+completed or not. The server then takes the JSON data and creates a suitable
+process to evaluate the code as specified in the settings. A separate
+dictionary is maintained which stores the data such as process status, and the
+result (success, test case weightage, error, error message etc.). The Django
+client then polls the server asking for a result after a wait time and
+displays the result when one is available until a hard timeout.
 
-The json meta data is sent to the grader where the actual code evaluation
-procedure takes place. The code evaluation itself takes place in several
-steps:
+The JSON meta data is sent to a ``Grader`` instance which is responsible for
+the actual code evaluation.
 
 Grader
 ~~~~~~~
 
 Grader extracts the data such as language, test case type, test cases, user
-directory path from json metadata sent to it. Grader creates the user
+directory path from json metadata sent to it. It then creates the user
 directory from the path. Then it sends the test case type and language
 information to the language registry to get the evaluator. Once the evaluator
 is obtained, grader calls the evaluator and sends the test cases, user answer
-to the evaluator and code execution starts. Evaluator will be explained in the
-next section.
+to the evaluator and code execution starts.
 
 Language Registry
 ~~~~~~~~~~~~~~~~~
 
-Language Registry takes programming language type and test case type and
-generates a evaluator instance using the dictionary mapping from settings file
-and returns the evaluator instance to the Grader.
+The language registry takes a programming language and test case type and
+generates a evaluator instance using the dictionary mapping in the settings
+file and returns the evaluator instance to the Grader.
 
 Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dictionary`
 
@@ -447,7 +444,7 @@ Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dict
 
    Dictionary mapping of python code evaluator :label:`fig:code-evaluator-dictionary`
 
-For ex. say *python* language and *standard assert* test case type are set
+For example say *python* language and *standard assert* test case type are set
 during question creation, then python assertion evaluator is instantiated from
 the dictionary mapping and the created instance is returned to grader.
 
@@ -457,35 +454,31 @@ Evaluators
 Evaluators are selected based on the programming language and test case type
 set during the question creation.
 
-For example say *python* language and *standard assert* test case type are set
-during question creation, then python assertion evaluator is used for
-evaluating python code.
-
 For each programming language and test case type separate evaluator classes are available.
 
-Each evaluator class subclasses BaseEvaluator. The BaseEvaluator class
-includes common functionality such as running a command using python
-subprocess, creating a file and writing user code in the file, setting the
-file as executable.
+Each evaluator class subclasses ``BaseEvaluator``. The ``BaseEvaluator`` class
+includes common functionality such as running a command using a python
+subprocess, creating a file, and writing user code in the file, making a file
+executable etc.
 
-Several important aspects handled during code evaluation:
+There are several important aspects handled during code evaluation:
 
 - Sandboxing
 
-  A code might be malicious i.e. it might contain instructions which can
-  access the system information and can damage the system. To avoid such
-  situation, all the code server process run as "nobody" so that the code does
-  not damage the system.
+  A user answer might be malicious i.e. it might contain instructions which
+  can access the system information and can damage the system. To avoid such a
+  situation, all the code server process run as "nobody" so as to minimize the
+  damage due to malicious code.
 
 - Handling infinite loops
 
-  There are chances that user answers end up in infinte loops. To avoid this,
-  code is executed within a specific time limit. If the code execution is not
-  finished in the specified time, a signal alarm is triggered to stop the code
-  execution and sending a message to the user that code might contain an
-  infinite loop. We use the ``signal`` module to trigger the ``SIGALARM`` with
-  the server timeout value. Unfortunately, this does make our code server
-  Linux/MacOS specific.
+  There are chances that user answers contain infinte loops and lock up a
+  process. To avoid this, code is executed within a specific time limit. If
+  the code execution is not finished in the specified time, a signal is
+  triggered to stop the code execution and sending a message to the user that
+  code might contain an infinite loop. We use the ``signal`` module to trigger
+  the ``SIGALARM`` with the server timeout value. Unfortunately, this does
+  make our code server Linux/MacOS specific.
 
 - Docker
 
@@ -499,7 +492,7 @@ Workflow of yaksh
 
 - **Authentication system**
 
-  Yaksh provides a basic authentication system for a user. A user has to first register on the interface. An email is sent to verify if the user email is correct or not. Once the email is verified user can login to the interface. A user can also login via oauth system such as Gmail and Facebook. By default the user becomes student, although the user can become a moderator if the user is added to the moderator group. Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
+  Yaksh provides a basic authentication system for a user. A user has to first register on the interface. An email is sent to verify if the user email is correct or not. Once the email is verified user can login to the interface. A user can also login via an oauth system such as Gmail or Facebook. By default the user is a student, although the user can become a moderator if the user is added to the moderator group. Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
   .. figure:: yaksh_login.PNG
      :alt:  Login screen
@@ -518,10 +511,10 @@ Workflow of yaksh
 
      Sample Test case :label:`fig:yaksh-testcase`
 
-  An instructor (also called the moderator) has to first create a course before creating a quiz, lesson or module. Before creating a quiz, instructor has to create some questions which can be added to a quiz. The instuctor can create any number of questions through the online interface. These can be either Mcq, programming, assignment upload, fill in the blanks or arrange option questions. All these question types must be accompanied with several test cases. A sample python question along with its test case is shown in the Fig. :ref:`fig:yaksh-question` and Fig. :ref:`fig:yaksh-testcase`. The instructor can set minimum time for a question if the question is required for an exercise. Question can have partial grading which depends on weightage of each test case. Question can have a solution which can be either a video or any code.
+  An instructor (also called the moderator) has to first create a course before creating a quiz, lesson or module. Before creating a quiz, instructor has to create some questions which can be added to a quiz. The instuctor can create any number of questions through the online interface. These can be either multiple-choice, programming, assignment upload, fill in the blanks or arrange option questions. All these question types must be accompanied with several test cases. A sample python question along with its test case is shown in the Fig. :ref:`fig:yaksh-question` and Fig. :ref:`fig:yaksh-testcase`. The instructor can set minimum time for a question if it is part of an exercise. A question can have partial grading which depends on a weight assigned to each test case. A question can have a solution which can be either a video or any code.  This allows us to pose a question, ask the student to attempt it for a while and then show a solution.
 
-  A programming question can have test case types of standard assert, standard I/O or hook.
-  Fig. :ref:`fig:yaksh-testcase` shows sample test case of standard assert type. In the similar way, instructor can add test cases for standard I/O. For simple questions standard assert and standard I/O type test cases can be used. For complex questions, hook based test case is provided where the user answer is provided to the hook code as a string and instructor can write some code to check the user answer. For other languages assertions are not easily possible but standard input/output based questions are easy to create. The moderator can also create a question with jumbled options and student has to arrange the options in correct order. Detailed instructions on creating a question and test cases are provided at (https://yaksh.readthedocs.io).
+  A programming question can have test case types of standard assert, standard I/O or a hook.
+  Fig. :ref:`fig:yaksh-testcase` shows sample test case of standard assert type. In a similar way, the instructor can add test cases for standard I/O. For simple questions standard assert and standard I/O type test cases can be used. For complex questions, hook based test case is provided where the user answer is provided to the hook code as a string and instructor can write some code to check the user answer. For other languages assertions are not easily possible but standard input/output based questions are easy to create. The moderator can also create a question with jumbled options and student has to arrange the options in correct order. Detailed instructions on creating a question and test cases are provided at (https://yaksh.readthedocs.io).
 
   The moderator can also import and export questions. The moderator then creates a quiz and an associated question paper. A quiz can have a passing criterion. Quizzes have active durations and each question paper will have a particular time within which it must be completed. For example one could conduct a 15 minute quiz with a 30 minute activity window. Questions are automatically graded. A user either gets the full marks or zero if the tests fail. If a question is allowed to have partial grading then during evaluation the user gets partial marks based on passing test cases.
 
@@ -530,15 +523,15 @@ Workflow of yaksh
   .. figure:: yaksh_monitor.PNG
    :alt: Monitor interface
 
-   The moderator interface for monitor of a quiz on yaksh. :label:`fig:yaksh-monitor`
+   The moderator interface for monitoring a quiz on yaksh. :label:`fig:yaksh-monitor`
 
-  Fig. :ref:`fig:yaksh-monitor` shows monitor for a quiz from one of the course running on yaksh. The instructors can also monitor students real time during a quiz there by gaining insight on how students are performing. The moderator can also view complete course progress showing student progress for overall course. i.e how many modules a student has completed, how much percentage of the course is completed.
+  Fig. :ref:`fig:yaksh-monitor` shows monitor for a quiz from one of the course running on yaksh. The instructors can also monitor students in real time during a quiz there by gaining insight on how students are performing. The moderator can also view complete course progress showing student progress for overall course. i.e how many modules a student has completed, how much percentage of the course is completed.
 
   The moderator can regrade answerpapers using three ways:
 
-  - Answerpaper can be regraded per quiz
-  - Answerpaper can be regraded per student
-  - Answerpaper can be regraded per question
+  - Answer paper can be regraded per quiz.
+  - Answer paper can be regraded per student.
+  - Answer paper can be regraded per question.
 
 
 - **Student workflow**
@@ -591,7 +584,7 @@ Workflow of yaksh
 Supporting a new language
 -------------------------
 
-Adding a new language is relatively easy. In the settings file you need to add mapping for the evaluator corresponding to the language. An example for adding new evaluator
+Adding a new language is relatively easy. In the settings file you need to add a mapping for the evaluator corresponding to the language. An example for adding new evaluator
 is shown in Fig :ref:`fig:yaksh-new-code`.
 
 .. figure:: adding_new_code_evaluator.PNG
@@ -609,23 +602,24 @@ code.
 Separate evaluator files needs to be created for all the test case types
 except the hook test case.
 
-An evaluator class should have four methods ``__init__``, teardown, compile_code and check_code.
+An evaluator class should define four methods ``__init__``, ``teardown``,
+``compile_code``, and ``check_code``.
 
 - ``__init__`` method is used to extract all the metadata such as user answer, test cases, files (if any for file based questions), weightage (float value), partial_grading (boolean value).
-- teardown method is used to delete all the files that are not relevant once the execution is done.
-- All the code compilation task will be done in ``compile_code`` method. No need to add this method if there is no compilation procedure.
-- All the code execution task will be done in ``check_code`` method. This method should return three values.
+- The ``teardown`` method is used to delete all the files that are not relevant once the execution is done.
+- All the code compilation task will be done by the ``compile_code`` method. There is no need to add this method if there is no compilation procedure.
+- The execution of the code is performed in the ``check_code`` method. This method should return three values.
 
-  - success (Boolean value) - indicating if code was executed successfully, correctly
-  - weight (Float value) - indicating total weight of all successful test cases
-  - error (String value) - error message if success is false
+  - success (``bool``) - indicating if code was executed successfully, correctly
+  - weight (``float``) - indicating total weight of all successful test cases
+  - error (``str``) - error message if success is false
 
 Some experiences using Yaksh
 -----------------------------
 
 During its inception in 2011, Yaksh was designed as an evaluation interface
 with the idea that anyone can use Yaksh to test and grade the programming
-skills of students. As an evaluation interface, Yaksh was first used to train
+skills of students. As an evaluation interface, Yaksh was first used to evaluate
 600 teachers. Since then, Yaksh has been used for teaching students,
 especially for courses at IIT Bombay and for conducting employment hiring
 tests within FOSSEE. With the introduction of Python Workshops
