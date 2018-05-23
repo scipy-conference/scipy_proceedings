@@ -102,7 +102,7 @@ counting, visual search engine.
 .. figure:: fig2.png
    :height: 75 px
    :width:  150 px
-   :scale: 20 %
+   :scale: 25 %
 
    Turn Lane Markings Detection.
 
@@ -114,7 +114,7 @@ boundaries of each object (See Figure 3)
 .. figure:: fig3.png
    :height: 100 px
    :width: 200 px
-   :scale: 20 %
+   :scale: 25 %
 
    Semantic segmentation on roads, buildings and greens
 
@@ -256,7 +256,7 @@ segmentation distinguishing parking lots from the background.
 .. figure:: fig6.png
    :height: 150 px
    :width: 300 px
-   :scale: 30 %
+   :scale: 35 %
 
    U-Net Architecture
 
@@ -285,12 +285,14 @@ OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
 right data format for OpenStreetMap.
 
+
 .. figure:: fig7.png
    :height: 200 px
    :width: 200 px
    :scale: 30 %
 
    Raw segmentation mask derived from our U-Net model
+
 
 **Noise Removal.** We remove noise in the data by performing two
 morphological operations: erosion followed by dilation. Erosion removes
@@ -316,9 +318,6 @@ tiles.
 
 **Deduplication.** Deduplicate by matching GeoJSONs with OSM data.
 
-After all these post-processing steps, we have a clean mask (Figure 7)
-that is also a polygon in the form of GeoJSON. This can now be added to
-OpenStreetMap as a parking lot feature.
 
 .. figure:: fig8.png
    :height: 200 px
@@ -326,6 +325,12 @@ OpenStreetMap as a parking lot feature.
    :scale: 30 %
 
    Clean polygon in the form of GeoJSON
+
+
+After all these post-processing steps, we have a clean mask (Figure 7)
+that is also a polygon in the form of GeoJSON. This can now be added to
+OpenStreetMap as a parking lot feature.
+
 
 4. Output
 ----------
@@ -339,10 +344,13 @@ into account when calculating routes. We also built a front-end UI that
 allows users to pan around for instant turn lane markings detection
 (Figure 8).
 
+
 .. figure:: fig9.png
    :height: 200 px
    :width: 400 px
    :scale: 40 %
 
    Front-end UI for instant turn lane markings detection
+
+
 
