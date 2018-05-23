@@ -779,6 +779,27 @@ distributed with OLSNAP. To address the limitations associated with this
 strategy, we are exploring interfaces to public data services such as CenPy and
 tigris so that users
 
+Interactive visualization: Apart from scripted environments demonstrated in this
+paper, OSLNAP is being designed  with a web-based, interactive front-end that
+allows users to explore the results of  different neighborhood analyses with the
+assistance of linked maps, charts, and tables. Together, these linked "views"
+allow a researcher to interrogate their results in a manner far richer than
+creating a series of static maps. Users may change the map extent, and the
+associated charts are redrawn using only the data that falls within the map
+extent.  By allowing the chart to change dynamically according to the current
+map view, investigators may examine the temporal change of neighborhoods in both
+global (e.g. Los Angeles metropolitan area) and local scales (e.g. downtown of
+Los Angeles), and determine the robustness of the spatial patterns that
+materialize. An example of the current visualization module showing linked cluster 
+maps over time and an associated stacked line plot is shown below in Figure :ref:`f:viz`
+
+.. figure:: ward_viz.png
+   :align: center
+   :figclass: w
+
+   Interactive Vizualizations of Ward Clustering in Los Angeles :label:`f:viz`
+
+
 Reproducible Urban Science: A final direction for future research is the development of
 reproducible workflows as part of OSLNAP. Here we envisage leveraging our
 earlier work on provenance for spatial analytical workflows :cite:`Anselin_2014` and
