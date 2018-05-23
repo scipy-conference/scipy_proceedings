@@ -243,6 +243,113 @@ reducing performance.
 ``NISE`` is included here as a reference for the performance of previous
 simulations of this kind.
 
+Usage
+=====
+
+``WrightSim`` is designed in a modular, extensible manner in order to be 
+friendly to experimentalists and theorists alike.
+The key steps to running a basic simulation are: 
+
+- Define the experimental space
+- Select a hamiltonian for propagation
+- Run the scan
+- Process the results
+
+Experimental spaces are defined in an INI format that defines a set of parameters
+and specifies their defaults and relationships.
+Here, we are using a space called ``trive`` which provides, among other settings,
+two independent frequency axes and two independent delay axes, controlling a total of
+three incident pulses.
+The frequency axes are called ``w1`` and ``w2``, the delays are termed ``d1`` and ``d2``.
+To scan a particular axis, simply set the ``points`` array to a ``NumPy`` array and set it's ``active``
+attribute to ``True``.
+You can also set a static value for any available axis, by setting the ``points`` attribute to 
+a single number (and keeping ``active`` set to ``False``.
+Finally, the ``experiment`` class tracks the timing in the simulation.
+Three main parameters control this: ``timestep``, which controls the size of each numerical integration step,
+``early_buffer``, which defines how long to integrate before the first pulse maximum, and
+``late_buffer``, which defines how long to inytegrate after the last pulse maximum.
+Here is an example of setting up a 3-D (shape :math:`64x64x32`) scan with an additional static parameter set:
+
+.. code-block:: python
+
+    import WrightSim as ws
+    import numpy as np
+
+    dt = 50.  # pulse duration (fs)
+    nw = 64  # number of frequency points (w1 and w2)
+    nt = 32  # number of delay points (d2)
+
+    # create experiment
+    exp = ws.experiment.builtin('trive')
+
+    # Set the scan ranges, tell WrightSim to treat the axis as scanned
+    exp.w1.points = np.linspace(-500., 500., nw)
+    exp.w2.points = np.linspace(-500., 500., nw)
+    exp.d2.points = np.linspace(-2 * dt, 8 * dt, nt)
+    exp.w1.active = exp.w2.active = exp.d2.active = True
+
+    # Set a non-default delay time for the 'd1' axis
+    exp.d1.points = 4 * dt  # fs
+    exp.d1.active = False
+
+    # Set time between iterations, buffers
+    exp.timestep = 2.  # fs
+    exp.early_buffer = 100.0  # fs
+    exp.late_buffer  = 400.0  # fs
+
+
+Hamiltonians define a time-dependant matrix used to propagate electric fields and their
+effect on the density matrix elements.
+The matrix can also be used to obtain a subset of the time orderings by holding particular elements at 0.
+It is responsible for the density vector and the holding on to the propagation function
+used when the experiment is run.
+Included in the density vector responsibility is the identity of which columns will be returned
+in the end result array.
+Hamiltonians may have arbitrary parameters to define themselves in intuitive ways.
+Under the hood, the Hamiltonian class also holds the C struct and source code for the ``PyCUDA``
+implementation and a method to send itself to the CUDA device.
+Here is an example of setting up a Hamiltonian object with restricted pathways and explicitly set 
+recorded element parameters:
+
+.. code-block:: python
+
+    # create hamiltonian
+    ham = ws.hamiltonian.Hamiltonian(w_central=0.)
+
+    # Select particular pathways
+    ham.time_orderings = [4, 5, 6]
+    # Select particular elements to be returned
+    ham.recorded_elements = [7,8]
+
+
+Finally, all that is left is to run the experiment itself.
+The run method takes the hamiltonian object and a keyword argument ``mp``, short for "multiprocess".
+In general, any value that evaluates to ``False`` will run non-multiprocessed (i.e. single threaded).
+Almost all values that evalueates to ``True`` with run CPU - multiprocessed with the number of processes
+determined by the number of cores of the machine.
+The exception is the special string ``'gpu'``, which will cause ``WrightSim`` to run using ``PyCUDA``.
+
+.. code-block:: python
+
+    # do scan, using PyCUDA
+    scan = exp.run(ham, mp='gpu')
+    
+    # obtain results as a NumPy array
+    gpuSig = scan.sig.copy()
+
+Running returns a ``Scan`` object, which allows for interrogation of several internal features of the scan 
+including the electric field values themselves.
+The important part, however is the signal array that is generated.
+In this example, the complex floating point number array is of shape :math:`(2x64x64x32)` (i.e. the number of 
+``recorded_elements`` followed by the shape of the experiment itself.
+These numbers can be manipulated and visualized to produce spectra like that seen in :ref:`fig:examplespectrum`.
+The Wright Group also maintains a library for working with multidimensional data, ``WrightTools``. 
+This library will be integrated more fully to provide even easier access to visualization and 
+archival storage of simulation results.
+
+
+
 Algorithmic Improvements
 ========================
 
