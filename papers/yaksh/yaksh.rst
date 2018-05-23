@@ -56,8 +56,8 @@ group attempts to promote the adoption of Python in India. More details on the
 activities of the Python group of FOSSEE have been presented earlier at SciPy
 2016 [PR2016]_. Yaksh was described briefly there. However, Yaksh has evolved
 considerably in the last few years. It has been used for several courses at
-IIT Bombay as well as online. Yaksh provides a simple interface to host a MOOC
-and we discuss this feature as well.
+IIT Bombay as well as online. In addition, Yaksh provides a simple interface
+to host a MOOC and we discuss this feature as well.
 
 As part of FOSSEE's efforts we have created learning material for Python and
 have conducted hundreds of workshops on Python. We find that to effectively
@@ -68,10 +68,6 @@ programming problems.  Yaksh_ has been created by FOSSEE for this purpose.
 .. _`FOSSEE Python team`: https://python.fossee.in
 .. _`FOSSEE project`: https://fossee.in
 .. _Yaksh: https://github.com/FOSSEE/online_test
-
-The FOSSEE project is based out of IIT Bombay and promotes the use of various
-open source packages in order to help eliminate the use of proprietary
-packages in the curriculum.
 
 
 Overview of Yaksh
@@ -86,19 +82,18 @@ means to evaluate students' performance. Yaksh seeks to improve on this.
 It is well known that practice assignments and problem solving improve
 understanding. In the case of programming languages, this is especially so.
 Programming is a skill and to develop it, one must necessarily write programs.
-By providing an interface where users can attempt a question and immediately
+Providing an interface where users can attempt a question and immediately
 obtain feedback on the correctness of their program would be very useful both
-to a student and also to a teacher. This same interface could also be used to
-assess the performance of the student and assess how much the student has
-understood. This is useful for the student to understand where they can
-improve and to the teacher to find out which concepts are not properly
-understood by the students. In the Indian context, a recent study [AM2017]_
-that even though there are many graduates from a computer science background,
-that only 5% of the students are able to write the correct logic for the
-program. Indeed, our own experience is that many students learn computer
-science theoretically without writing too many computer programs. It is
-therefore important to provide a tool that facilitates practice programming
-and programming assessment.
+to a student and to a teacher. This same interface could also be used to
+assess the performance of the student. This is useful for the student to
+understand where they can improve and to the teacher to identify which
+concepts are not properly understood by the students. In the Indian context, a
+recent study [AM2017]_ found that even though there are many graduates with a
+computer science background, only 5% of the students are able to write
+programs with the correct logic. Indeed, our own experience is that many
+students learn computer science theoretically without writing too many
+computer programs. It is therefore important to provide a tool that
+facilitates practice programming and programming assessment.
 
 In 2011, the first version of Yaksh was developed to administer programming
 quizzes for an online teacher training course that FOSSEE conducted. More than
@@ -127,23 +122,23 @@ to setup.
 
 For teachers, Yaksh provides a wide array of question types which include the
 basic question types like multiple choice, fill-in-the-blanks, assignment
-upload, etc. One can also add standard I/O and assertion test cases based
-questions for simple and basic programming questions. Also, for complex
-programs, teachers can add a hook-based test case which would enable them to
-take the student answer and evaluate it in whatever way they want. Once the
-questions are created, they can create a question paper that can be added to a
-practice exercise or a quiz. The question paper can have a mixed set of fixed
-questions or a random set of questions selected from a pool of questions. In
-conjunction with quizzes, teachers can also add video or markdown text-based
-lessons. With that, teachers can also monitor students real time during a
-test, as well as their overall progress for the course, there by gaining
-insight on how students are performing.
+upload, etc. One can also add standard I/O and assertion-based questions for
+simple and basic programming questions. For complex programs, teachers can add
+a hook-based test case which would enable them to take the student answer and
+evaluate it in whatever way they want. Once the questions are created, they
+can create a question paper that can be added to a practice exercise or a
+quiz. The question paper can have a mixed set of fixed questions or a random
+set of questions selected from a pool of questions. In conjunction with
+quizzes, teachers can also add video or markdown text-based lessons. Teachers
+can also monitor students in real-time during a test, as well as their overall
+progress for the course, thereby gaining insight on how students are
+performing.
 
 Yaksh is designed to be easy-to-use by a student. All they have to do is
 sign-up, enroll for a course and start. They could go through the lessons,
 practice a few questions and then attempt the quiz, on which their performance
-is rated. While doing so, they get easy to understand feedback for their
-answers from the interface, thereby improving their answers.
+is rated. While doing so, they get easy-to-understand feedback for any
+mistakes they make from the interface, thereby improving their answers.
 
 Yaksh is being used extensively by the FOSSEE team to teach Python to many
 students all across India. Over 3000 students have used the interface to learn
@@ -154,22 +149,22 @@ In this talk we first demonstrate yaksh and then discuss its features and
 implementation. We show an example of a complete Python course that we host at
 FOSSEE using yaksh.
 
-Yaksh is created and maintained by the Python team at FOSSEE
-(http://fossee.in), based at IIT Bombay. Yaksh is completely free and
-open-source, distributed under BSD license. The source code can be found
-https://github.com/FOSSEE/online_test/
-
 
 Installation and setup
 ----------------------
 
-Deployment of a web application for temporary use as well as for production should be as easy as possible. There are a few different ways of setting up Yaksh:
+Deployment of a web application for temporary use as well as for production
+should be as easy as possible. There are a few different ways of setting up
+Yaksh:
 
 - Trial instance with Docker
 - Trial instance without Docker
 - Production instance using Docker and Docker compose.
 
-The deployment procedure has been boiled down to a limited number of commands using the 'invoke' python package to make the deployment as easy as possible.
+The deployment procedure has been boiled down to a limited number of commands
+using the invoke_ python package to make the deployment as easy as possible.
+
+.. _invoke: http://www.pyinvoke.org/
 
 Prerequisites:
 
@@ -177,47 +172,42 @@ Yaksh is written in Python and depends on Django and a few other Python dependen
 
 Installation:
 
-Yaksh can be cloned from the Github repository. To do this one can run
+Yaksh can be cloned from the Github repository. To do this one can run::
 
-**$ git clone https://github.com/FOSSEE/online_test.git**
+  $ git clone https://github.com/FOSSEE/online_test.git
 
-**$ cd ./online_test**
+  $ cd ./online_test
 
-One can then install the required dependencies, for Python 2, by running
+One can then install the required dependencies, for Python 2, by running::
 
-**# For Python 2**
+  $ pip install -r ./requirements/requirements-py2.txt
 
-**$ pip install -r ./requirements/requirements-py2.txt**
+or for Python 3, by running::
 
-or for Python 3, by running
+  $ pip install -r ./requirements/requirements-py3.txt
 
-**# For Python 3**
-
-**$ pip install -r ./requirements/requirements-py3.txt**
-
-It is recommended that one must use Python 3 to run Yaksh.
+It is recommended that one use Python 3 to run Yaksh.
 
 
 Quickstart
 ----------
 
-This setup method allows a user to setup a local instance of Yaksh to try the platform for a limited number of users.
+The method discussed here allows a user to setup a local instance of Yaksh to try the platform for a limited number of users.  Yaksh can be run within a demo instance on a local system to try the platform for a limited number of users. To set up a demo instance one can run::
 
-Yaksh can be run within a demo instance on a local system to try the platform for a limited number of users. To set up a demo instance one can run
-
-**$ invoke start**
+  $ invoke start
 
 This command will start the code server within a docker environment.
 
-In case docker is not available, the code server can also be run without docker by running
+In case docker is not available, the code server can also be run without
+docker by running::
 
-**$ invoke start --unsafe**
+  $ invoke start --unsafe
 
-However, this is not recommended since this leaves the bases system potentially vulnerable to malicious code. In case one wishes to use this method, all Python dependencies will have to be installed using sudo.
+However, this is not recommended since this leaves the base system potentially vulnerable to malicious code. In case one wishes to use this method, all Python dependencies will have to be installed using sudo.
 
-In order to access the interface, one can run the web server using
+In order to access the interface, one can run the web server using::
 
-**$ invoke serve**
+  $ invoke serve
 
 This command will run the django application server on the 8000 port and can be accessed using a browser, also this port will be unavailable to other processes.
 
@@ -225,31 +215,31 @@ Production Setup With Docker
 ----------------------------
 
 
-In order to setup Yaksh on a Production server with docker compose. To start off, one needs to set certain environment variables. To do so, one can create a ``.env`` file with the following details
+In order to setup Yaksh on a Production server with docker compose. To start off, one needs to set certain environment variables. To do so, one can create a ``.env`` file with the following details::
 
-**DB_ENGINE=mysql**
+  DB_ENGINE=mysql
 
-**DB_NAME=yaksh**
+  DB_NAME=yaksh
 
-**DB_USER=root**
+  DB_USER=root
 
-**DB_PASSWORD=db_password**
+  DB_PASSWORD=db_password
 
-**DB_PORT=3306**
+  DB_PORT=3306
 
 The local system needs to have `Docker Compose <https://docs.docker.com/compose/install/>`__ installed.
 
-One must navigate to the Docker directory
+One must navigate to the Docker directory::
 
-**cd /path/to/online_test/docker**
+  $ cd /path/to/online_test/docker
 
-And running the following commands will ensure that the platform is setup
+And running the following commands will ensure that the platform is setup::
 
-**invoke build**
+  $ invoke build
 
-**invoke begin**
+  $ invoke begin
 
-**invoke deploy --fixtures**
+  $ invoke deploy --fixtures
 
 The ``build`` command builds the docker images, the ``begin`` command spwans the docker containers and the ``deploy`` command runs the necessary migrations.
 
@@ -261,18 +251,23 @@ Since setting up a complete course with associated Modules, Lessons, Quizzes and
 
 One can then click on the Courses tab and browse through the Demo Course that has been just created.
 
-One can read more about Courses, Modules, Lessons and Quizzes in the section below.
+One can read more about Courses, Modules, Lessons and Quizzes in the sections below.
 
-Basic features
----------------
+Basic features of Yaksh
+-------------------------
 
-- Create a full fleged course with lessons, practice and evaluation based quizzes.
-- Yaksh supports following languages such as Python, Java, C, C++, Scilab.
-- Yaksh provides several question types such as Single Correct Choice, Multiple Correct Choice, Programming, Fill in the blanks, Arrange the options, Assignment upload.
+Once Yaksh is installed and running,
 
-- For simple and complex questions several test case types are provided such as Stdio test case, Standard Assertion test case, Hook based test case, Mcq based test case, Fill in the blanks test case, Arrange options.
-
-- Monitoring a course or quiz almost real time.
+- one can create a full fleged course with lessons, practice and evaluation based quizzes.
+- Yaksh supports following languages such as Python, Java, C, C++, Scilab, etc.
+- Yaksh provides several question types such as Single Correct Choice,
+  Multiple Correct Choice, Programming, Fill in the blanks, Arrange the
+  options, Assignment upload.
+- For simple and complex questions several test case types are provided such
+  as standard input/output test case, Standard Assertion test case, Hook based
+  test case, Mcq based test case, Fill in the blanks test case, Arrange
+  options.
+- One can monitor a course or quiz in real-time.
 - Automatic grading and instant feedback for a student to improve on submissions.
 - Get certificates after successful completion of a course.
 
@@ -289,9 +284,9 @@ The two essential pieces of yaksh are:
 Django Server
 -------------
 
-Django is a high-level Python Web framework. Django makes it is easy to create web applications, handles basic security issues, provides basic authentication system.
+Django is a high-level Python Web framework. Django makes it is easy to create web applications, handles basic security issues, and provides basic authentication system.
 
-For client interaction we need to focus on some areas i.e.
+For client interaction we need to focus on some areas i.e..
 
 - How to store the information
 - How a user interacts with the system
@@ -301,161 +296,210 @@ To store the information we need a database. Django provides Object-relational m
 Django provides a view controller to handle all the requests sent from the client side.
 A view then interacts with the database if any database data is required, collects all the data and sends the data back to the templates which is then rendered for the client.
 
-- **Yaksh models**
+Yaksh models
+~~~~~~~~~~~~
 
-  A model is a Python class that subclasses django.db.models.Model representing the database table.
-  Each attribute of the model represents a database table field.
+A model is a Python class that subclasses ``django.db.models.Model``
+representing the database table. Each attribute of the model represents a
+database table field.
 
-  Models for yaksh are as follows:
+Models for yaksh are as follows:
 
-  - User
-    
-    This is the default model provided by django for storing username, first name, last name, password etc.
+- User
 
-  - Profile
+  This is the default model provided by django for storing username, first name, last name, password etc.
 
-    This model is used for storing more info of a user such as institute, department etc.
+- Profile
 
-  - Question
+  This model is used for storing more info of a user such as institute, department etc.
 
-    This model is used for storing question information such as name, description etc. Once the questions are created they are added in the question paper
+- Question
 
-  - TestCase
-    
-    This model is used for storing question test cases.
+  This model is used for storing question information such as name, description etc. Once the questions are created they are added in the question paper
 
-    Different test case models are available which subclasses the TestCase model. They are:
+- TestCase
 
-    - StandardTestCase
+  This model is used for storing question test cases.
 
-      This model is used for standard assertion test case type.
+  Different test case models are available which subclasses the TestCase
+  model. Some of these are:
 
-    - StdIOBasedTestCase
+  - StandardTestCase
 
-      This model is used for standard input/output test case type.
+    This model is used for standard assertion test case type.
 
-    - McqTestCase
+  - StdIOBasedTestCase
 
-      This model is used for MCQ (Single correct choice) or MCC
-      (Multiple correct choice) type of question.
+    This model is used for standard input/output test case type.
 
-    - HookTestCase
+  - McqTestCase
 
-      This model is used for questions where there is a need for higher level
-      of testing. This models comes with a predefined function `check_answer`
-      where the student answer (path to user submitted files for assignment
-      uploads) is passed as an argument. The question creator can hence
-      scrutinise the user answer in much more specific ways.
+    This model is used for MCQ (Single correct choice) or MCC
+    (Multiple correct choice) type of question.
 
-    - Fill in the blanks Test case
+  - HookTestCase
 
-      This model supports integer, float, string type of fill in the blanks.
+    This model is used for questions where there is a need for higher level
+    of testing. This models comes with a predefined function `check_answer`
+    where the student answer (path to user submitted files for assignment
+    uploads) is passed as an argument. The question creator can hence
+    scrutinise the user answer in much more specific ways.
 
-    - ArrangeTestCase
+  - Fill in the blanks Test case
 
-      This model is used for creating a test case with jumbled options.
+    This model supports integer, float, string type of fill in the blanks.
 
-  - Course
-    
-    This model is used for creating a course.
+  - ArrangeTestCase
 
-  - Quiz
-    
-    This model is used for creating a quiz.
+    This model is used for creating a test case with jumbled options.
 
-  - QuestionPaper
-    
-    This model is used for creating a questionpaper for a quiz containing all the questions for the quiz.
+- Course
 
-  - AnswerPaper
-    
-    This model is used for storing answerpaper for a particular course and quiz.
+  This model is used for creating a course.
 
-  - Answer
-    
-    This model is used for storing the answer submitted by the user which are added to answerpaper.
+- Quiz
 
-  - Lesson
+  This model is used for creating a quiz.
 
-    A lesson can be any markdown text with/or an embedded video of a particular topic.
+- QuestionPaper
 
-  - LearningUnit
-    
-    A learning unit can either be a lesson or a quiz.
+  This model is used for creating a questionpaper for a quiz containing all the questions for the quiz.
 
-  - LearningModule
+- AnswerPaper
 
-    A learning module can be any markdown text with/or an embedded video of a particular topic. A learning module contains learning units.
+  This model is used for storing answerpaper for a particular course and quiz.
+
+- Answer
+
+  This model is used for storing the answer submitted by the user which are added to answerpaper.
+
+- Lesson
+
+  A lesson can be any markdown text with/or an embedded video of a particular topic.
+
+- LearningUnit
+
+  A learning unit can either be a lesson or a quiz.
+
+- LearningModule
+
+  A learning module can be any markdown text with/or an embedded video of a particular topic. A learning module contains learning units.
 
 
 Code Server
 -----------
 
-Code Server is an important part of yaksh. All the code evaluations are done through code server. We have used Tornado web framework for asynchronous process generation. A settings file is provided which is used to get values required to start the tornado server and code evaluation procedure.
+Code Server is an important part of yaksh. The evaluation of any code is done
+through the code server. We have used the Tornado_ web framework to manage the
+for asynchronous process generation. A ``settings.py`` file is provided which
+is used to specify various parameters necessary for the code server.
+
+.. _Tornado: https://www.tornadoweb.org
 
 This settings file contains information such as:
 
-- number of code server processes required to process the code (defaults to 5).
-- server pool port, a common port for accessing the Tornado web server(defaults to 55555).
-- server host name, a server host for accessing the Tornado web server(defaults to http://localhost).
-- server timeout a code runs within this time (defaults to 4 seconds).
-- dictionary of code evaluators based on programming language of a question i.e. Python, Cpp, Java etc and test case type i.e. Standard Assert, Standard Input/Output, Hook based test case.
+- number of code server processes required to process the code.
+- server pool port, a common port for accessing the Tornado web server.
+- server host name, a server host for accessing the Tornado web server.
+- a timeout to prevent infinite loops locking up a process.
+- dictionary of code evaluators based on the programming language.
 
 
-A Tornado server is started with the specified server host and server pool port from the settings. Tornado server reuires json metadata which should contain unique id, programming language of the question, user answer, user output directory, files(if any for file based questions), test case data i.e. test case type and test cases. Each submitted answer has a unique id associated with it which makes it easier to keep the track of the evalaution status whether it is completed or not. Tornado server then takes the json data and creates code server processes as specified in the settings. A separate dictionary is maintained for each process storing the data such as process status (done, not started, runnning, unknown), result (success, test case weightage, error). Once the evaluation is done, the result is sent back to the django server. Sending a get request to the tornado server with the host url http://localhost:55555 gives the process status i.e. total, running and queued processes.
+A Tornado HTTP server is started with the specified server host and server
+pool port from the settings. The server handles POST requests may be submitted
+with a unique id, along with a JSONized string with the programming language
+of the question, the user answer, files (if any), test case data i.e. test
+case type and test cases. Each submitted answer has a unique id associated
+with it which makes it easy to keep the track of the evalaution status whether
+it is completed or not. The server then takes the json data and creates a
+suitable process to evaluate the code as specified in the settings. A separate
+dictionary is maintained for each process storing the data such as process
+status, and the result (success, test case weightage, error, error message
+etc.). The Django client then polls the server asking for a result after a
+wait time and displays the result when one is available until a hard timeout.
 
-The json meta data is sent to the grader where the actual code evaluation procedure takes place. Code evalaution takes place in several steps:
+The json meta data is sent to the grader where the actual code evaluation
+procedure takes place. The code evaluation itself takes place in several
+steps:
 
-- **Grader**
+Grader
+~~~~~~~
 
-  Grader extracts the data such as language, test case type, test cases, user directory path from json metadata sent to it. Grader creates the user directory from the path. Then it sends the test case type and language information to the language registry to get the evaluator. Once the evaluator is obtained, grader calls the evaluator and sends the test cases, user answer to the evaluator and code execution starts. Evaluator will be explained in the next section.
+Grader extracts the data such as language, test case type, test cases, user
+directory path from json metadata sent to it. Grader creates the user
+directory from the path. Then it sends the test case type and language
+information to the language registry to get the evaluator. Once the evaluator
+is obtained, grader calls the evaluator and sends the test cases, user answer
+to the evaluator and code execution starts. Evaluator will be explained in the
+next section.
 
-- **Language Registry**
+Language Registry
+~~~~~~~~~~~~~~~~~
 
-  Language Registry takes programming language type and test case type and generates a evaluator instance using the dictionary mapping from settings file and returns the evaluator instance to the Grader.
+Language Registry takes programming language type and test case type and
+generates a evaluator instance using the dictionary mapping from settings file
+and returns the evaluator instance to the Grader.
 
-  Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dictionary`
+Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dictionary`
 
-  .. figure:: code_evaluators.PNG
-     :alt:  Code evaluator dictionary
+.. figure:: code_evaluators.PNG
+   :alt:  Code evaluator dictionary
 
-     Dictionary mapping of python code evaluator :label:`fig:code-evaluator-dictionary`
+   Dictionary mapping of python code evaluator :label:`fig:code-evaluator-dictionary`
 
-  For ex. say *python* language and *standard assert* test case type are set during question creation, then python assertion evaluator is instantiated from the dictionary mapping and the created instance is returned to grader.
+For ex. say *python* language and *standard assert* test case type are set
+during question creation, then python assertion evaluator is instantiated from
+the dictionary mapping and the created instance is returned to grader.
 
-- **Evaluators**
+Evaluators
+~~~~~~~~~~
 
-  Evaluators are selected based on the programming language and test case type set during the question creation.
+Evaluators are selected based on the programming language and test case type
+set during the question creation.
 
-  For ex. say *python* language and *standard assert* test case type are set during question creation, then python assertion evaluator is used for evaluating python code.
+For example say *python* language and *standard assert* test case type are set
+during question creation, then python assertion evaluator is used for
+evaluating python code.
 
-  For each programming language and test case type separate evaluator classes are available.
+For each programming language and test case type separate evaluator classes are available.
 
-  Each evaluator class subclasses BaseEvaluator.
-  The BaseEvaluator class includes common functionality such as running a command using python subprocess, creating a file and writing user code in the file, setting the file as executable.
+Each evaluator class subclasses BaseEvaluator. The BaseEvaluator class
+includes common functionality such as running a command using python
+subprocess, creating a file and writing user code in the file, setting the
+file as executable.
 
 Several important aspects handled during code evaluation:
 
 - Sandboxing
 
-  A code might be malicious i.e it might contain instructions which can access the system information and can damage the system. To avoid such situation, all the code server process run as a nobody so that the code does not damage the system.
+  A code might be malicious i.e. it might contain instructions which can
+  access the system information and can damage the system. To avoid such
+  situation, all the code server process run as "nobody" so that the code does
+  not damage the system.
 
 - Handling infinite loops
 
-  Several times there are chances that in a code, due to improper condition in loops code might run infinitely. To avoid this, code is executed within a specific time limit. If the code execution is not finished in the specified time, a signal alarm is triggered to stop the code execution sending a message to the user that code might contain an infinite loop.
-  We use the signal module to trigger the SIGALARM with the server timeout value.
+  There are chances that user answers end up in infinte loops. To avoid this,
+  code is executed within a specific time limit. If the code execution is not
+  finished in the specified time, a signal alarm is triggered to stop the code
+  execution and sending a message to the user that code might contain an
+  infinite loop. We use the ``signal`` module to trigger the ``SIGALARM`` with
+  the server timeout value. Unfortunately, this does make our code server
+  Linux/MacOS specific.
 
 - Docker
 
-  To make the code evaluation more secure all the code evaluation are done inside docker.
-  Docker can also be used to limit the use of system resources such as cpu utilization, memory utilization etc.
+  To make the code evaluation more secure all the code evaluation is done
+  inside a docker container. Docker containers can also be used to limit the
+  use of system resources such as CPU utilization, memory utilization etc.
+
 
 Workflow of yaksh
 -----------------
 
 - **Authentication system**
-  
-  Yaksh provides a basic authentication system for an user. A user has to first register on the interface. An email is sent to verify if the user email is correct or not. Once the email is verified user can login to the interface. A user can also login via oauth system such as Gmail and Facebook. By default the user becomes student, although the user can become a moderator if the user is added to the moderator group. Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
+
+  Yaksh provides a basic authentication system for a user. A user has to first register on the interface. An email is sent to verify if the user email is correct or not. Once the email is verified user can login to the interface. A user can also login via oauth system such as Gmail and Facebook. By default the user becomes student, although the user can become a moderator if the user is added to the moderator group. Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
   .. figure:: yaksh_login.PNG
      :alt:  Login screen
@@ -463,7 +507,7 @@ Workflow of yaksh
      The Yaksh application login screen :label:`fig:yaksh-login`
 
 - **Instructor workflow**
-  
+
   .. figure:: yaksh_question.png
      :alt:  Question interface
 
@@ -474,7 +518,7 @@ Workflow of yaksh
 
      Sample Test case :label:`fig:yaksh-testcase`
 
-  An instructor (also called the moderator) has to first create a course before creating a quiz, lesson or module. Before creating a quiz, instructor has to create some questions which can be added to a quiz. The instuctor can create any number of questions through the online interface. These can be either Mcq, programming, assignment upload, fill in the blanks or arrange option questions. All these question types must be accompanied with several test cases. A sample python question along with its test case is shown in the Fig. :ref:`fig:yaksh-question` and Fig. :ref:`fig:yaksh-testcase`. The instructor can set minimum time for a question if the question is required for an exercise. Question can have partial grading which depends on weightage of each test case. Question can have a solution which can be either a video or any code. 
+  An instructor (also called the moderator) has to first create a course before creating a quiz, lesson or module. Before creating a quiz, instructor has to create some questions which can be added to a quiz. The instuctor can create any number of questions through the online interface. These can be either Mcq, programming, assignment upload, fill in the blanks or arrange option questions. All these question types must be accompanied with several test cases. A sample python question along with its test case is shown in the Fig. :ref:`fig:yaksh-question` and Fig. :ref:`fig:yaksh-testcase`. The instructor can set minimum time for a question if the question is required for an exercise. Question can have partial grading which depends on weightage of each test case. Question can have a solution which can be either a video or any code.
 
   A programming question can have test case types of standard assert, standard I/O or hook.
   Fig. :ref:`fig:yaksh-testcase` shows sample test case of standard assert type. In the similar way, instructor can add test cases for standard I/O. For simple questions standard assert and standard I/O type test cases can be used. For complex questions, hook based test case is provided where the user answer is provided to the hook code as a string and instructor can write some code to check the user answer. For other languages assertions are not easily possible but standard input/output based questions are easy to create. The moderator can also create a question with jumbled options and student has to arrange the options in correct order. Detailed instructions on creating a question and test cases are provided at (https://yaksh.readthedocs.io).
@@ -489,7 +533,7 @@ Workflow of yaksh
    The moderator interface for monitor of a quiz on yaksh. :label:`fig:yaksh-monitor`
 
   Fig. :ref:`fig:yaksh-monitor` shows monitor for a quiz from one of the course running on yaksh. The instructors can also monitor students real time during a quiz there by gaining insight on how students are performing. The moderator can also view complete course progress showing student progress for overall course. i.e how many modules a student has completed, how much percentage of the course is completed.
-  
+
   The moderator can regrade answerpapers using three ways:
 
   - Answerpaper can be regraded per quiz
@@ -498,7 +542,7 @@ Workflow of yaksh
 
 
 - **Student workflow**
-  
+
   Working on the student side is relatively easy. After login, a student can view all the open courses or search for a course. Once the course is available, the student can enroll in a course.
   A Student has to complete the course within a specified time. After enrolling, the student will be able to see all the modules and its units (Lessons/Quizzes) for the course. A student can view all the lessons and once the lessons are finished student can attempt the quiz. Fig. :ref:`fig:yaksh-lesson` shows a video lesson from the monthly running Python course.
 
@@ -533,7 +577,7 @@ Workflow of yaksh
      Error output for stdio question type. :label:`fig:yaksh-error-stdio`
 
   Fig. :ref:`fig:yaksh-mcq` shows a mcq question from a quiz. A student can select any one of the option and submit the answer.
-  
+
   Fig. :ref:`fig:yaksh-code` shows a programming question from a quiz in Python course. Once the student clicks on check answer, the answer is sent to the code server for evaluation and the result from the code server is shown. From the Fig. :ref:`fig:yaksh-code` we can see that there is an indentation error in the code. Once the answer is submitted we get an indentation error message as shown in the Fig. :ref:`fig:yaksh-error`.
 
   Fig. :ref:`fig:yaksh-code-stdio` shows an StdIO based question. Once the answer is submitted we get the error output as shown in fig :ref:`fig:yaksh-error-stdio`. Fig :ref:`fig:yaksh-error-stdio` shows the user output and expected output separately indicating line by line difference between user output and expected output making it easy to trace where the error occured.
@@ -555,16 +599,22 @@ is shown in Fig :ref:`fig:yaksh-new-code`.
 
      Dictionary mapping for new code evaluator :label:`fig:yaksh-new-code`
 
-In the given Fig :ref:`fig:yaksh-new-code`, python is the programming language, standardtestcase, stdiobasedtestcase, hooktestcase are the test case type which are mapped to corresponding evaluator class. Here yaksh is the directory, python_assertion_evaluator is the file and PythonAssertionEvaluator is the class which contains evaluation related code.
+In the given Fig :ref:`fig:yaksh-new-code`, python is the programming
+language, standardtestcase, stdiobasedtestcase, hooktestcase are the test case
+type which are mapped to corresponding evaluator class. Here the values of the
+dictionary correspond to the full name of the Evaluator subclass, in this case
+``PythonAssertionEvaluator`` is the class which is responsible to evaluate the
+code.
 
-Separate evaluator files needs to be created for all the test case types except hook test case.
+Separate evaluator files needs to be created for all the test case types
+except the hook test case.
 
-An evaluator class should have four methods `__init__`, teardown, compile_code and check_code.
+An evaluator class should have four methods ``__init__``, teardown, compile_code and check_code.
 
-- `__init__` method is used to extract all the metadata such as user answer, test cases, files (if any for file based questions), weightage (float value), partial_grading (boolean value).
+- ``__init__`` method is used to extract all the metadata such as user answer, test cases, files (if any for file based questions), weightage (float value), partial_grading (boolean value).
 - teardown method is used to delete all the files that are not relevant once the execution is done.
-- All the code compilation task will be done in compile_code method. No need to add this method if there is no compilation procedure.
-- All the code execution task will be done in check_code method. This method should return three values.
+- All the code compilation task will be done in ``compile_code`` method. No need to add this method if there is no compilation procedure.
+- All the code execution task will be done in ``check_code`` method. This method should return three values.
 
   - success (Boolean value) - indicating if code was executed successfully, correctly
   - weight (Float value) - indicating total weight of all successful test cases
@@ -573,70 +623,67 @@ An evaluator class should have four methods `__init__`, teardown, compile_code a
 Some experiences using Yaksh
 -----------------------------
 
-During its inception in 2011, Yaksh was designed as a quizzing interface
+During its inception in 2011, Yaksh was designed as an evaluation interface
 with the idea that anyone can use Yaksh to test and grade the programming
-skills of students. As a quizzing interface, Yaksh was first used with
-training 600 teachers in an event in 2011. Since then, Yaksh is a regular
-tool in teaching students, especially for courses at IIT Bombay and for
-conducting employment hiring tests within FOSSEE. With the introduction of
-Python Workshops (https://python-workshops.fossee.in/), an initiative of
-FOSSEE to remotely train students and teachers across India, Yaksh has since
-been refactored around the MOOC ideology, introducing the ability to learn
-with an heavy emphasis on hands on coding.
-Let's look at an overview of all the activities done using Yaksh -
+skills of students. As an evaluation interface, Yaksh was first used to train
+600 teachers. Since then, Yaksh has been used for teaching students,
+especially for courses at IIT Bombay and for conducting employment hiring
+tests within FOSSEE. With the introduction of Python Workshops
+(https://python-workshops.fossee.in/), an initiative of FOSSEE to remotely
+train students and teachers across India, Yaksh has since been refactored
+around the MOOC ideology, introducing the ability to learn with an emphasis on
+hands-on programming. Let's look at an overview of all the activities done using
+Yaksh -
 
 - **Courses at IIT Bombay**
 
-  Yaksh has been used as a online learning and testing tool for courses at
-  IIT Bombay. The **SDES** course used Yaksh extensively to quiz students on
-  concepts from Python, Bash and Git.
-  Yaksh is used frequently by one of the authors, Prof. Prabhu Ramachandran,
-  to teach Python to undergraduate  students. So far, almost 300 students
-  from IIT-B have been taught using Yaksh.
+  Yaksh has been used as a online learning and testing tool for some courses
+  at IIT Bombay. Yaksh is used to teach Python to some undergraduate students.
+  These courses have served as a test-bed for the software. Thus far, about
+  300 students from IIT Bombay have been taught using Yaksh.
 
 
 - **Usage for Python Workshops**
 
-  In early 2017, FOSSEE started conducting Remote Python Workshops in
+  In early 2017, FOSSEE started conducting remote Python workshops in
   technical colleges across India. These workshops consists of several
-  sessions spread through one or three days, depending on the type of
-  the course an institute chooses. A Session typically begins with screening
-  a video tutorial inside the venue. The tutorials are followed by
-  a demanding set of exercises and quizzes, both of which are conducted on
-  Yaksh. This is followed by brief Q&A sessions with the remotely
-  assisting Python instructors from FOSSEE. Finally a certificate is awarded
-  to those students who successfully finish the course. Apart from this,
-  Yaksh also hosts a monthly, self learning online course, consisting of the
-  same workshop materials and some bonus contents. Here is some figures that
-  we have gathered from these activities -
+  sessions spread through one or three days, depending on the type of the
+  course an institute chooses. A session typically begins with screening a
+  video tutorial inside the venue. The tutorials are followed by a demanding
+  set of exercises and quizzes, both of which are conducted on Yaksh. This is
+  followed by brief Q&A sessions with the remotely assisting Python
+  instructors from FOSSEE. Finally a certificate is awarded to those students
+  who successfully finish the course. Apart from this, Yaksh also hosts a
+  monthly, self learning online course, consisting of the same workshop
+  materials and some bonus contents. Here are some figures that we have
+  gathered from these activities -
 
   1. As of mid 2018, around 13,000 active users are on Yaksh, with more
      expected to join by the end of the year.
 
-  2. Rapidly growing user base with 730+,4500+ and 7500+ user registrations
-     for year 2016, 2017 and mid-2018 respectively.
+  2. Rapidly growing user base with about 730, 4500 and 7500 user
+     registrations for year 2016, 2017 and mid-2018 respectively.
 
-  3. 100+ institutes have conducted the workshop with 6000+ students
-     participating and 3600+ students obtaining a certificate.
+  3. 100+ institutes have conducted the workshop with about 6000 students
+     participating and about 3600 students obtaining a certificate.
 
-  4. For the first three months of the Python Self learning Course, an
-     estimate of 3500+ students enrolled with 1200+ completing the course
-     within the time frame and 400+ students obtaining a passing certificate.
+  4. For the first three months of the Python self learning Course, an
+     estimate of 3500 students enrolled with 1200 completing the course within
+     the time frame and 400 students obtaining a passing certificate.
 
-  5. An astounding equal ratio of male to female participants with most users
-     from the age of 18-24.
+  5. An equal ratio of male to female participants with most users from the
+     age of 18-24.
 
   6. Average time spent on the website by an user is around 30 mins.
-  7. Major users from tier 1 cities of India, regarded as highly developed
-     IT hubs like Hyderabad, Bengaluru, Pune, Mumbai.
+  7. Major users are from tier 1 cities of India, regarded as highly developed
+     IT hubs like Hyderabad, Bengaluru, Pune, and Mumbai.
 
 - **Usage for hiring**
 
   One surprising use case for Yaksh has been as a tool for evaluating
-  employment candidates by conducting tests.
-  Yaksh has been used several times for hiring for teams functioning inside
-  FOSSEE project.
-  Some of the projects that have used Yaksh are:
+  employment candidates by conducting tests. Yaksh has been used several times
+  for hiring for teams functioning inside FOSSEE project. Some of the projects
+  that have used Yaksh are:
 
   - OSDAG (https://osdag.fossee.in/)
   - Esim/Xcos (https://esim.fossee.in/)
@@ -647,29 +694,35 @@ Let's look at an overview of all the activities done using Yaksh -
 
 Plans
 -----
-  The team behind Yaksh is devoted to further improving user experience for
-  both moderators and students. This includes addition of features like
-  Instant Messaging (IM) service for moderators and teachers to
-  guide and solve students' doubts in real time. The team also plans to add
-  support for more programming languages to include a larger question base.
-  Moderators will have facility to do detailed analysis on students'
-  performance in future.
 
-  For moderators, a stable web-API is being designed for other websites to
-  harness the power of Yaksh. With this API, moderators could be able to
-  embed lessons and quizzes available on Yaksh in Jupyter notebooks.
+The team behind Yaksh is devoted to further improving user experience for both
+moderators and students. This includes addition of features like Instant
+Messaging (IM) service for moderators and teachers to guide and solve
+students' doubts in real time. The team also plans to add support for more
+programming languages to include a larger question base. Moderators will have
+facility to do detailed analysis on student performance in future.
+
+Many colleges and schools in India do not have good internet access. We are
+hoping to make it easy for such institutions to locally host yaksh using a
+bootable USB drive.
+
+In addition, we are planning to make it easy for students to download the
+course materials and any videos in order to view the lectures offline.
+
+For moderators, a stable web-API is being designed for other websites to
+harness the power of Yaksh. With this API, moderators could be able to embed
+lessons and quizzes available on Yaksh in Jupyter notebooks.
 
 Conclusions
 ------------
 
-  As discussed in this paper, Yaksh as an free and open source tool can be used
-  effectively and extensively for testing programming skills of students.
-  The features provided by Yaksh facilitates teachers to automate evaluation
-  of students in almost real time, thereby reducing the grunt work. With
-  addition of MOOC like features, students can learn, practice and test their
-  programming abilities within the same place. With Yaksh in its arsenal,
-  the Python team at FOSSEE continues to promote and spread Python throughout
-  India.
+As discussed in this paper, Yaksh as an free and open source tool can be used
+effectively and extensively for testing programming skills of students. The
+features provided by Yaksh facilitates teachers to automate evaluation of
+students in almost real time, thereby reducing the grunt work. With addition
+of MOOC like features, students can learn, practice and test their programming
+abilities within the same place. With Yaksh in its arsenal, the Python team at
+FOSSEE continues to promote and spread Python throughout India.
 
 
 Acknowledgments
@@ -678,8 +731,8 @@ Acknowledgments
 FOSSEE would not exist but for the continued support of MHRD and we are
 grateful to them for this. This work would not be possible without the efforts
 of the many FOSSEE staff members. The past and present members of the project
-are listed here: http://python.fossee.in/about/ the author wishes to thank
-them all.
+are listed here: http://python.fossee.in/about/ the authors wish to thank them
+all.
 
 
 References
