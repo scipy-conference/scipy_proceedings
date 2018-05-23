@@ -24,7 +24,7 @@ WrightSim: Numerical Integration for Simulating Multidimensional Spectra
     A Hamiltonian describes all of the ways that a set of states interact with
     each-other and with externally applied electric fields in the course of a
     spectroscopic experiment.
-    Numerical integration (of the Liouville-von Numann equation) is used to
+    Numerical integration (of the Liouville-von Neumann equation) is used to
     evolve the density state vector over time as the system interacts with
     several electric fields in the course of a multidimensional experiment.
     This numerical approach allows WrightSim to fully account for finite pulse
