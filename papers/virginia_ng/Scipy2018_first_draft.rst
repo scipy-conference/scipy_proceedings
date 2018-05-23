@@ -163,24 +163,30 @@ these parking lots.
 **Data Engineering.** We built a data engineering pipeline within the
 larger object detection pipeline. This data engineering pipeline streams
 any set of prefixes off of s3 into prepared training sets. First, we
-stream OpenStreetMap features (turn lane markings) out of the GeoJSON files on S3
-and merge classes and geographic bounding boxes into the feature
-attributes.Next, we convert these into JSON image annotations grouped by
-tile. During this step, the feature bounding boxes are converted to
+stream OpenStreetMap features (turn lane markings, parking lots) out of the GeoJSON files on S3
+and merge classes, bounding boxes, and polygons into the feature
+attributes. Next, we convert these into JSON image annotations grouped by
+tile. During this step, the annotated bounding boxes are converted to
 image pixel coordinates. The annotations are then randomly assigned to
-training and testing sets (80/20 split) and written to disk, joined by
+training and testing datasets (80/20 split) and written to disk, joined by
 imagery fetched from the Mapbox Maps API. This is where the abstract
-tile in the pipeline is replaced by real imagery. Finally, the training
-data is zipped and uploaded to S3. In our first iteration, we wrote
+tile in the pipeline is replaced by real imagery. Finally, the training and test
+data are zipped and uploaded to S3. In our first iteration, we wrote
 scripts for our data preparation steps (Python library and CLI). These
 scripts were then ran at large scale in parallel (multiple cities at
-once) by on AWS Amazon Elastic Container Service (Amazon ECS). ECS is a
+once) on Amazon Elastic Container Service. Amazon Elastic Container Service is a
 highly scalable, fast, container management service that makes it easy
-to run, stop, and manage Docker containers on a cluster (grouping of
-container instances).
+to run, terminate, and manage Docker containers on a cluster (grouping of
+container instances). This pipeline is shown in Figure 5.
+
+.. figure:: fig_eng_pipeline.png
+   :height: 200 px
+   :width: 400 px
+   :scale: 42 %
 
 Our data engineering pipelines are generalizable to any OpenStreetMap
-feature. Users can generate training sets with any OpenStreetMap feature
+feature. Examples of other features we have implemented include buildings. 
+Users can generate training sets with any OpenStreetMap feature
 simply by writing their own Osmium handler to turn OpenStreetMap geometries into
 polygons.
 
@@ -238,7 +244,7 @@ segmentation. The U-Net architecture consists of a contracting path to
 capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
-best method such as the sliding-window convolutional network. (Figure 5)
+best method such as the sliding-window convolutional network. (Figure 6)
 This first part is called down or you may think it as the encoder part
 where you apply convolution blocks followed by a maxpool downsampling to
 encode the input image into feature representations at multiple
@@ -279,7 +285,7 @@ knowledge, and not make as many false positives.
 3. Post-Processing
 ------------------
 
-Figure 6 shows an example of the raw segmentation mask derived
+Figure 8 shows an example of the raw segmentation mask derived
 from our U-Net model. It cannot be used directly as input into
 OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
@@ -326,7 +332,7 @@ tiles.
 
 **Deduplication.** Deduplicate by matching GeoJSONs with data that already exist on OpenStreetMap.
 
-After performing all these post-processing steps, we have a clean mask (Figure 7)
+After performing all these post-processing steps, we have a clean mask (Figure 9)
 that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
@@ -341,7 +347,7 @@ these GeoJSONs back into OpenStreetMap as turn lane and parking lot
 features. Our routing engines then take these OpenStreetMap features
 into account when calculating routes. We also built a front-end UI that
 allows users to pan around for instant turn lane markings detection
-(Figure 8).
+(Figure 10).
 
 
 .. figure:: fig9.png
