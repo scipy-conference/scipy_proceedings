@@ -256,7 +256,7 @@ segmentation distinguishing parking lots from the background.
 .. figure:: fig6.png
    :height: 150 px
    :width: 300 px
-   :scale: 36 %
+   :scale: 37 %
 
    U-Net Architecture
 
@@ -289,9 +289,17 @@ right data format for OpenStreetMap.
 .. figure:: fig7.png
    :height: 200 px
    :width: 200 px
-   :scale: 36 %
+   :scale: 38 %
 
    Raw segmentation mask derived from our U-Net model
+
+
+.. figure:: fig8.png
+   :height: 200 px
+   :width: 200 px
+   :scale: 38 %
+
+   Clean polygon in the form of GeoJSON
 
 
 **Noise Removal.** We remove noise in the data by performing two
@@ -318,16 +326,7 @@ tiles.
 
 **Deduplication.** Deduplicate by matching GeoJSONs with OSM data.
 
-
-.. figure:: fig8.png
-   :height: 200 px
-   :width: 200 px
-   :scale: 36 %
-
-   Clean polygon in the form of GeoJSON
-
-
-After all these post-processing steps, we have a clean mask (Figure 7)
+After performing all these post-processing steps, we have a clean mask (Figure 7)
 that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
@@ -348,7 +347,7 @@ allows users to pan around for instant turn lane markings detection
 .. figure:: fig9.png
    :height: 200 px
    :width: 400 px
-   :scale: 40 %
+   :scale: 42 %
 
    Front-end UI for instant turn lane markings detection
 
