@@ -121,7 +121,7 @@ boundaries of each object (See Figure 3)
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
 project to create a free editable map of the world. Turn lane markings
-on OpenStreetMap are recorded as “ways” (line-strings)[1]_. We used a tool
+on OpenStreetMap are recorded as “ways” (line-strings) [1]_. We used a tool
 called `Overpass Turbo <https://overpass-turbo.eu/>`__ to query
 OpenStreetMap turn lane markings. We then extracted GeoJSONs in 5 cities
 from OpenStreetMap that have one of the following attributes
@@ -133,9 +133,9 @@ classes of turn lane markings: “Left”, “Right”, “Through” (straight)
 “ThroughLeft”, “ThroughRight”, “Other” using
 `JOSM <https://josm.openstreetmap.de/)>`__ in 5 cities, over 53K turn
 lane markings. JOSM is an extensible editor for OpenStreetMap (OSM) for
-Java 8+. It supports loading GPX tracks, background imagery and OSM data
+Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data
 from local sources as well as from online sources and allows to edit the
-OSM data (nodes, ways, and relations) and their metadata tags. It is
+OpenStreetMap data (nodes, ways, and relations) and their metadata tags. It is
 open source and licensed under GPL. We included turn lane markings of
 all shapes and sizes, as well as ones that are partially covered by cars
 and/or shadows. We excluded turn lane markings that are erased or fully
@@ -151,19 +151,19 @@ covered by cars (see Figure 4b).
 
 To prepare training data for parking lot segmentation, we first generate
 polygons from OpenStreetMap tags [2]_ excluding features that are not visible
-in satellite imagery. Explicitly, these are OSM features with the
+in satellite imagery. Explicitly, these are OpenStreetMap features with the
 attributes “Tag:amenity=parking=*” except underground, sheds, carports,
 garage_boxes. To prepare training data for building segmentation, we
 generate polygons from tags with attributes “building=*” except
 construction, houseboat, static_caravan, stadium, conservatory ,
-digester, greenhouse, ruins. We then
+digester, greenhouse, ruins. We then use a tool called
 `Osmium <https://wiki.openstreetmap.org/wiki/Osmium>`__ to annotate
 these parking lots.
 
 **Data Engineering.** We built a data engineering pipeline within the
 larger object detection pipeline. This data engineering pipeline streams
 any set of prefixes off of s3 into prepared training sets. First, we
-stream OSM features (turn lane markings) out of the GeoJSON files on S3
+stream OpenStreetMap features (turn lane markings) out of the GeoJSON files on S3
 and merge classes and geographic bounding boxes into the feature
 attributes.Next, we convert these into JSON image annotations grouped by
 tile. During this step, the feature bounding boxes are converted to
@@ -181,7 +181,7 @@ container instances).
 
 Our data engineering pipelines are generalizable to any OpenStreetMap
 feature. Users can generate training sets with any OpenStreetMap feature
-simply by writing their own osmium handler to turn OSM geometries into
+simply by writing their own Osmium handler to turn OpenStreetMap geometries into
 polygons.
 
 2. Model
@@ -316,7 +316,7 @@ that have same color or intensity.
 
 **Simplification.** Douglas-Peucker Simplification takes a curve
 compared of line segments and finds a similar curve with fewer points.
-We get simple polygons that can be ingested by OSM as “nodes” and “ways”
+We get simple polygons that can be ingested by OpenStreetMap as feature type “nodes” and “ways”
 
 **Transform Data.** Convert detection or segmentation results from pixel
 space back into GeoJSONs (world coordinate).
