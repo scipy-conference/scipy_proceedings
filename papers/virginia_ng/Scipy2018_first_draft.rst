@@ -82,7 +82,7 @@ and satellite imagery.
 .. figure:: fig1.png
    :height: 100 px
    :width:  200 px
-   :scale: 40 %
+   :scale: 39 %
 
    Feature Extraction Pipeline. 
 
