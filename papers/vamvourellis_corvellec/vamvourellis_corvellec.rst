@@ -563,15 +563,23 @@ The Stan program encoding this model is the following:
 
 *Model Fit Checks*
 
-We plot the posterior samples on top of the true values and check visually that
+Figures :ref:`mean`, :ref:`sd`, and :ref:`corr`,
+we plot the posterior samples on top of the true values and check visually that
 the confidence intervals cover the true values we used to generate the fake
 data.
 
 .. figure:: mean.png
 
+   Histogram of values sampled from the posterior mean of latent variables. :label:`mean`
+
 .. figure:: sd.png
 
+   Histogram of values sampled from the posterior standard deviation for
+   Hemoglobin Level. :label:`sd`
+
 .. figure:: corr.png
+
+   Histogram of values sampled from the posterior correlation of effects. :label:`corr`
 
 With Stan, we can also utilize the built-in checks to inspect the correctness of
 of the inference results. One of the basic tests is the :math:`\hat{R}`
@@ -619,7 +627,8 @@ the other the treatment group. We plot the results in Figure :ref:`pred`.
 
 .. figure:: pred.png
 
-   Posterior predictive distributions. :label:`pred`
+   Histogram of values sampled from the posterior predictive distributions.
+   :label:`pred`
 
 Looking at the plots, we can visualize the effect of the treatment by
 distinguishing between the blue and green colors. Note how the posterior
