@@ -641,16 +641,18 @@ Bayesian Inference with Stan
 Stan is a powerful tool which “mitigates the challenges of programming and
 tuning” HMC to do statistical inference. Stan is a compiled language written in C++.
 It includes various useful tools and integrations which make the researcher's life easier.
-It can be accessed from different languages via interfaces;
-the Python interface is called PyStan.
-RStan, the R interface, is the most developed.
+It can be accessed from different languages via interfaces.
+This case study was created with the Python interface, called Pystan.
+Note that, at the time of writing, the most developed interfaced is the R one, called RStan.
 Although the underlying algorithm and speed is the same throughout the different
 interfaces, differences in user experience can be meaningful.
 
 Stan requires a description of the basic ingredients of Bayesian inference (i.e.,
 the model, likelihood, priors, and data) and returns samples from the posterior
 distribution of the parameters. The user specifies these ingredients in separate
-code blocks called  `model`, `parameters`, and `data`. Stan code is passed in via a character
+code blocks called  `model` (lines 37–45),
+`parameters` (lines 14–20), and `data` (lines 1–8).
+Stan code is passed in via a character
 string or a plain-text `.stan` file, which is compiled down to C++ when the
 computation happens. Results are returned to the interface as objects.
 
@@ -664,12 +666,20 @@ pre-implemented to maximize efficiency. The Stan team also provides researchers
 with recommendations on default priors for commonly used parameters, via the
 Stan manual :cite:`StanManual`
 and other online materials. In our case study, we chose
-an LKJ prior for the correlation matrix which has certain attractive properties
-and is pre-implemented in Stan. Another example is the half-Cauchy prior
-distribution for scale parameters such as standard deviation. Stan accepts
-restrictions on parameters, such as :code:`vector<lower=0>[Kc] sigma;` which are
-respected even when combined with a prior distribution such as
-:code:`sigma~cauchy(0, 2.5);` to yield constrained priors.
+an LKJ prior (line 39) for the correlation matrix, one of the pre-implemented
+distributions in Stan. The LKJ prior has certain attractive properties and is a
+recommended prior for correlation matrices in Stan (for reasons beyond the
+scope of this paper). It has only one parameter (we set it to 2) which pulls
+slightly the correlation terms towards 0.
+Another example is the half-Cauchy prior distribution for scale parameters such
+as standard deviation (line 40). Half-Cauchy is the recommended prior for
+standard deviation parameters because its support is the positive real line but
+it has higher dispersion than other alternatives such as the normal
+distribution. Note that it is easy to truncate any pre-implemented
+distribution. Stan accepts restrictions on parameters. For example, we restrict
+the parameter for standard deviation to be positive (line 18). This restriction
+is then respected when combined with the prior distribution defined later (line
+40) to yield a constrained half-Cauchy prior.
 
 *Fit diagnostics*
 
@@ -677,7 +687,10 @@ HMC has many parameters that need to be tuned and can have a big impact on the
 quality of the inference.  Stan provides many automated fit diagnostics as well
 as options to tune manually the algorithm, if the  default values do not work.
 For example, the Gelman–Rubin convergence statistic, :math:`\hat{R}`, comes for free with
-a Stan fit; effective sample size is another good way to evaluate the fit. More
+a Stan fit; effective sample size is another good way to evaluate the fit.
+In most cases, :math:`\hat{R}` values need to be very close to
+:math:`1.0 \; (\pm 0.01)` for the results of the inference to be trusted, although
+this on its own does not guarantee a good fit. More
 advanced topics, such as divergent transitions, step sizes and tree depths are
 examined in the Stan manual, together with recommendations on how to use them.
 
@@ -687,7 +700,12 @@ Stan, and HMC in general, is not perfect and can be challenged in various ways.
 For example multimodal posterior distribution, which are common in mixture
 models, are hard to explore [#]_.
 Another common issue is that mathematically equivalent parameterizations of a
-model can have vastly different performance in terms of sampling [#]_. It is
+model can have vastly different performance in terms of sampling.
+See https://github.com/stan-dev/example-models/tree/master/knitr/mle-params.
+One parameterization trick is to center parameters that are normally
+distributed. In our case study, we achieve this by targeting the non-centered
+parts of the latent variable :code:`Z` (line 23) [#]_.
+It is
 important to note that most of the issues that a researcher will encounter when
 using Stan stem from the difficulties of Bayesian inference, and HMC in
 particular, not Stan. The biggest limitation of HMC is that it only works for
@@ -696,8 +714,7 @@ to do inference on discrete unknown model parameters. However, in some cases we
 are able to circumvent this issue [#]_.
 
 .. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/identifying_mixture_models.
-.. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/qr_regression
-       and https://github.com/stan-dev/example-models/tree/master/knitr/mle-params.
+.. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/qr_regression.
 .. [#] See http://elevanth.org/blog/2018/01/29/algebra-and-missingness/.
 
 Reproducibility
