@@ -387,8 +387,8 @@ a. Model
 
 Let :math:`Y` be a :math:`N\times K` matrix where each column represents an effect and each
 row refers to an individual subject. This matrix contains our observations,
-it is our clinical trial dataset. We distinguish between treatment and placebo
-(control) subjects by considering separately :math:`Y^T` (resp. :math:`Y^{C}`),
+it is our clinical trial dataset. We distinguish between treatment and
+control subjects by considering separately :math:`Y^T` (resp. :math:`Y^{C}`),
 the subset of :math:`Y` containing only treatment subjects (resp. control subjects).
 Since the model for :math:`Y^T` and :math:`Y^{C}` is identical, for convenience,
 we suppress the notation into :math:`Y` in the
@@ -411,8 +411,8 @@ measured on the binary scale, the model is
 .. math::
    :type: eqnarray
 
-   Y_{ij} &\sim& \text{Bernoulli}(\eta_j)\\
-   h_{j}(\eta_j) &=& Z_{ij},
+   Y_{ij} &\sim& \text{Bernoulli}(\eta_{ij})\\
+   h_{j}(\eta_{ij}) &=& Z_{ij},
 
 where the link function can be the logit, probit, or any other bijection from
 :math:`[0, 1]` to the real line. Continuous data are assumed to be observed
@@ -452,7 +452,7 @@ The likelihood function can be expressed as
    :type: eqnarray
 
    f(Y | Z, \mu, \Sigma) &=& f(Y|Z) \cdot p(Z| \mu, \Sigma)\\
-   &=& \prod_{j \in J_b} \prod_{i=1}^N h^{-1}(Z_{ij})^{Y_{ij}} (1-h^{-1}(Z_{ij}))^{(1-Y_{ij})} \cdot p(Z| \mu, \Sigma)\\
+   &=& \prod_{j \in J_b} \prod_{i=1}^N h_j^{-1}(Z_{ij})^{Y_{ij}} (1-h_j^{-1}(Z_{ij}))^{(1-Y_{ij})} \cdot p(Z| \mu, \Sigma)\\
    &=& \prod_{j \in J_b} \prod_{i=1}^N \eta_{ij}^{Y_{ij}} (1-\eta_{ij})^{(1-Y_{ij})} \cdot N(Z| \mu , \Sigma),\\
 
 where :math:`J_b` is the index of effects that are binary and
@@ -484,6 +484,8 @@ will be relatively insensitive to the priors.
 To generate fake data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
 and generate 200 samples of underlying latent variables
 :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_.
+We picked :math:`\mu = (0.3, 0.5, 0.7)`, :math:`\sigma = (1.3, 1, 1)`, and
+:math:`R(1, 2) = -0.5, \; R(1, 3) = -0.3, \; R(2, 3) = 0.7`.
 The observed fake data :math:`Y_{ij}` are defined to be equal to
 :math:`Z_{ij}` for the effects that are continuous. For the binary effects, we sample
 Bernoulli variables with probability equal to the inverse logit of the
