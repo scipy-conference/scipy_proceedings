@@ -149,7 +149,7 @@ def tex2pdf_singlepass(out_path):
     if b"Fatal" in out or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
-        print(out.decode())
+        print(out)
         print("=" * 80)
         if err:
             print(err)
