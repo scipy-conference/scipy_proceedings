@@ -12,9 +12,9 @@
 
 :bibliography: bib
 
-----------------------------------------------------------------------------
-``WrightSim``: Numerical Integration for Simulating Multidimensional Spectra
-----------------------------------------------------------------------------
+-----------------------------------------------------------------
+``WrightSim``: Using PyCUDA to  Simulate Multidimensional Spectra
+-----------------------------------------------------------------
 
 .. class:: abstract
 
