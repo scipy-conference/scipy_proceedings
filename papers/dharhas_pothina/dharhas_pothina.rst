@@ -157,11 +157,13 @@ assumptions and modeling mechanisms. In this paper, we show how we have built su
 EarthSim
 --------
 
-As mentioned previously, an explicit decision was made to push functionality into existing open source tools where 
-they existed and only create new tools where the was a gap in the open source ecosystem. The reasoning behind this 
-was to reduce maintainance burden and put the functionality in places which were less likely to be abandoned because
-of the larger community. In this sense, EarthSim [cite: EarthSim] is documentation plus a collection of examples on 
-how to use the PyViz [cite PyViz] ecosystem of python tools to setup particular environmental simulation workflows.
+EarthSim is a website and associated GitHub repository that serves two purposes. First, it is a location to mature 
+new tools before moving them into other more general purpose python libraries. Second, it contains examples of how 
+to solve common Earth Science simulation workflow and visualization problems. EarthSim aims to demonstrate building
+flexible, lightweight workflows entirely in Jupyter notebooks with the aim of timely support for operational 
+decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the 
+globe. The goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
+as needed to rapidly solve specific emerging issues. 
 
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other open source tools Filigree and Quest. Short descriptions of these tools follow:
