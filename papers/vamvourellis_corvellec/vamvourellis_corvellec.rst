@@ -9,8 +9,6 @@
 
 :bibliography: library
 
-:video: https://www.youtube.com/watch?v=Gt73VNaZLXA
-
 --------------------------------------------------
 A Bayesian’s journey to a better research workflow
 --------------------------------------------------
@@ -194,9 +192,8 @@ The fake data
 :math:`\mathcal{D'}`
 can then be interpreted as our prior distribution of the data.
 Hence, by inspecting the fake data, we can reflect back on our choices for the
-likelihood and priors. This inspection can be used for high-level
-characteristics of the model, such as the scale of the outcome values or the
-shape of the distributions. However, with this approach, we should make
+likelihood and priors. However,
+if we do use our priors to generate parameter values, we should make
 sure that our priors are not uninformative, which would likely produce
 unreasonable fake data.
 
@@ -204,8 +201,8 @@ Note how the model :math:`\mathcal{M}` is a hypothesized process and comes with
 necessary assumptions and simplifications. It is highly unlikely that the real
 world would follow exactly :math:`\mathcal{M}`. That being said, if
 :math:`\mathcal{M}` is close enough to the real generative process, it can
-still be very useful to help us understand something about the world. All
-models are wrong, but some models are useful.
+still be very useful to help us understand something about the world.
+As the phrase goes, “all models are wrong, but some models are useful.”
 
 *4) Fit the model to the fake data*
 
@@ -215,7 +212,8 @@ parameter values could have produced such data, under :math:`\mathcal{M}`.
 
 The most popular statistical inference algorithm is maximum likelihood
 estimation (MLE), which finds the parameter values that maximize the likelihood
-given the observed data. Under the Bayesian approach, we treat the parameters
+given the observed data.
+To reiterate, under the Bayesian approach, we treat the parameters
 :math:`\theta` as random variables and express our prior knowledge about :math:`\theta` with
 the prior probability distribution :math:`p(\theta)`. Bayesian inference is the process of
 updating our beliefs about :math:`\theta` in light of the data :math:`\mathcal{D}`. The
@@ -230,7 +228,7 @@ of the inference algorithm and the quality of our model.
 
 a. Much like in software testing, we want to check if the inference process
 works by starting simple and advance progressively to the real challenge. By
-fitting the model to fake data generated from the same model, we, effectively,
+fitting the model to fake data generated from the same model, we effectively
 rule out issues of mismatch between our model and the real data. Testing the
 inference algorithm under these ideal conditions allows us to perfect the
 inference algorithm in a controlled environment, before trying it on the real data. In
@@ -239,7 +237,8 @@ issues about the model in general.
 It offers an added benefit, later on, when
 we critique the fit of our model :math:`\mathcal{M}` to the real data
 :math:`\mathcal{D}`. Having confidence in the correctness of our inference process
-allows us to attribute any mismatch issues to the choice of the model.
+allows us to attribute any mismatch issues to the choice of the model,
+as opposed to the inference algorithm.
 
 By fitting the model to fake data, we recover samples from the posterior
 distribution of the model parameters. There are various model fit tests to
@@ -703,7 +702,7 @@ In the day-to-day, we want to save time, catch mistakes, and ease collaboration.
 We are experiencing these benefits already, having taken a few steps towards
 computational reproducibility. Finally, let us borrow a quote which is
 well-known in the reproducible research communities:
-"Your most important collaborator is your future self."
+“Your most important collaborator is your future self.”
 
 The case study presented earlier was not originally set up according to the
 three practices outlined above. Notably, it used to live in a variety of files
