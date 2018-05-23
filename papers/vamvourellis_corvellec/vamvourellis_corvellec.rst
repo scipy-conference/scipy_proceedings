@@ -598,6 +598,196 @@ parameters.
 Bayesian Inference with Stan
 ----------------------------
 
+Stan is a powerful tool which “mitigates the challenges of programming and
+tuning” HMC to do statistical inference. Stan is a compiled language written in C++.
+It includes various useful tools and integrations which make the researcher's life easier.
+It can be accessed from different languages via interfaces;
+the Python interface is called PyStan.
+RStan, the R interface, is the most developed.
+Although the underlying algorithm and speed is the same throughout the different
+interfaces, differences in user experience can be meaningful.
+
+Stan requires a description of the basic ingredients of Bayesian inference (i.e.,
+the model, likelihood, priors, and data) and returns samples from the posterior
+distribution of the parameters. The user specifies these ingredients in separate
+code blocks called  `model`, `parameters`, and `data`. Stan code is passed in via a character
+string or a plain-text `.stan` file, which is compiled down to C++ when the
+computation happens. Results are returned to the interface as objects.
+
+Aside from the implementation of HMC, Stan and the researchers behind it, provide users
+with guidance that make Bayesian inference easier to use.
+
+*Choice of priors*
+
+Stan provides many distributions to choose from, which are
+pre-implemented to maximize efficiency. The Stan team also provides researchers
+with recommendations on default priors for commonly used parameters, via the
+Stan manual :cite:`StanManual`
+and other online materials. In our case study, we chose
+an LKJ prior for the correlation matrix which has certain attractive properties
+and is pre-implemented in Stan. Another example is the half-Cauchy prior
+distribution for scale parameters such as standard deviation. Stan accepts
+restrictions on parameters, such as :code:`vector<lower=0>[Kc] sigma;` which are
+respected even when combined with a prior distribution such as
+:code:`sigma~cauchy(0, 2.5);` to yield constrained priors.
+
+*Fit diagnostics*
+
+HMC has many parameters that need to be tuned and can have a big impact on the
+quality of the inference.  Stan provides many automated fit diagnostics as well
+as options to tune manually the algorithm, if the  default values do not work.
+For example, the Gelman–Rubin convergence statistic, :math:`\hat{R}`, comes for free with
+a Stan fit; effective sample size is another good way to evaluate the fit. More
+advanced topics, such as divergent transitions, step sizes and tree depths are
+examined in the Stan manual, together with recommendations on how to use them.
+
+*Challenges*
+
+Stan, and HMC in general, is not perfect and can be challenged in various ways.
+For example multimodal posterior distribution, which are common in mixture
+models, are hard to explore [#]_.
+Another common issue is that mathematically equivalent parameterizations of a
+model can have vastly different performance in terms of sampling [#]_. It is
+important to note that most of the issues that a researcher will encounter when
+using Stan stem from the difficulties of Bayesian inference, and HMC in
+particular, not Stan. The biggest limitation of HMC is that it only works for
+continuous parameters. As a result we cannot use Stan, or HMC for that matter,
+to do inference on discrete unknown model parameters. However, in some cases we
+are able to circumvent this issue [#]_.
+
+.. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/identifying_mixture_models.
+.. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/qr_regression
+       and https://github.com/stan-dev/example-models/tree/master/knitr/mle-params.
+.. [#] See http://elevanth.org/blog/2018/01/29/algebra-and-missingness/.
+
+Reproducibility
+---------------
+
+In this last section, we report on our experience of making the case study
+more reproducible. We consider the definition of reproducibility put forward by
+:cite:`Kitzes2018`.
+Namely, reproducibility is “the ability of a researcher to
+duplicate the results of a prior study using the same materials as were used by
+the original investigator” :cite:`Kitzes2018:chapter2`.
+To achieve it, we follow the guidance of the three key practices of computational
+reproducibility :cite:`Kitzes2018:chapter3`:
+
+1. Organizing the project into meaningful files and folders;
+2. Documenting each processing step;
+3. Chaining these steps together (into a processing *pipeline*).
+
+We care about reproducibility for both high-level and low-level reasons. In the
+big picture, we want to make the work more shareable, reliable, and auditable.
+In the day-to-day, we want to save time, catch mistakes, and ease collaboration.
+We are experiencing these benefits already, having taken a few steps towards
+computational reproducibility. Finally, let us borrow a quote which is
+well-known in the reproducible research communities:
+"Your most important collaborator is your future self."
+
+The case study presented earlier was not originally set up according to the
+three practices outlined above. Notably, it used to live in a variety of files
+(scripts, notebooks, figures, etc.) with no particular structure. File
+organization is a common source of confusion and frustration in academic
+research projects. So, the first step we took was to create a clear, relatively
+standardized directory structure. We went for the following:
+
+.. code-block:: bash
+
+    |-- mixed-data/        <- Root (top-most) directory
+                              for the project.
+      |-- README.md        <- General information about
+                              the project.
+      |-- environment.yml  <- Spec. file for reproducing
+                              the computing environment.
+      |-- data/
+        |-- raw/           <- The original, immutable
+                              data dump.
+        |-- interim/       <- Intermediate outputs.
+      |-- models/
+        |-- modelcode.stan <- Model definition.
+      |-- notebooks/       <- <- Jupyter notebooks.
+        |-- rosi_py.ipynb
+        |-- rosi_py_files/ <- Subdirectory for temporary
+                              outputs such as figures.
+          |-- README.md    <- Documentation for this
+                              subdirectory.
+
+We have found this directory structure to be very helpful and useful in the case of an
+exploratory data analysis project. Additionally, there is value in reusing the
+same structure for other projects (given a structure that works for us):
+By reducing unnecessary cognitive load,
+this practice has made our day-to-day more productive and more enjoyable.
+For further inspiration, we refer the
+interested reader to :cite:`Tran2017`,
+:cite:`cookiecutterdsdocs` and references therein.
+
+The second step we took was to set up the project as its own Git repository [#]_.
+Thus, we can track changes conveniently and copy (‘clone’) the project on
+other machines safely (preserving the directory structure and, hence, relative
+paths) [#]_.
+
+.. [#] Git is a distributed version control system which is extremely popular
+       in software development (https://git-scm.com/).
+.. [#] The `mixed-data` project is hosted remotely at
+       https://github.com/bayesways/mixed-data.
+
+Reproducible research practitioners recommend licensing your scientific work
+under a license which ensures attribution and facilitates sharing
+:cite:`Stodden2009`.
+Raw data are not copyrightable, so it makes no sense to license them. Code
+should be made available under a FLOSS [#]_ license.
+Licenses suitable for materials which are neither software nor data (i.e.,
+papers, reports, figures), and offering both attribution and ease of sharing,
+are the Creative Commons Attribution (CC BY) licenses.
+The case study (notebook) has been licensed under CC BY since the beginning.
+This practice can indeed contribute to improving reproducibility, since other
+researchers may then reuse the materials independently, without having to ask
+the copyright holders for permission.
+
+.. [#] FLOSS stands for “Free/Libre and Open Source Software.”
+
+We were confronted with the issue of software portability in real life, as soon
+as we (the authors) started collaborating. We created an isolated Python 3
+environment with `conda`, a cross-platform package and environment manager
+[#]_. As it turned out, the conventional file :code:`environment.yml`,
+which specifies package dependencies, did
+not suffice: We run different operating systems and some dependencies were not
+available for the other platform. Therefore, we included a
+:code:`spec-file.txt` as a
+specification file for creating the `conda` environment on GNU/Linux.
+Admittedly, this feels only mildly satisfying and we would welcome feedback from
+the community.
+
+.. [#] See https://conda.io/docs/.
+
+At the moment, all the analysis takes place in one long Jupyter notebook. We
+could break it down into smaller notebooks (and name them with number prefixes,
+for ordering). This way, someone new to the project could identify the various
+modelling and computing steps, in order, only by looking at the
+‘self-documenting’ file structure. If we ever take the project to a
+production-like stage, we could further modularize the functionality of each
+notebook into modules (`.py` files), which would contain functions and would be
+organized into a project-specific Python package. This would pave the way for
+creating a build file [#]_
+which would chain all operations together and generate results for our specific
+project. Reaching this stage is referred to as *automation*.
+
+.. [#] See https://swcarpentry.github.io/make-novice/reference#build-file.
+
+In data analysis, the first of these operations usually consists in accessing
+the initial, raw dataset(s). This brings about the question of data
+availability. In human subject research,
+such as clinical trials, the raw data cannot, and should not, be made publicly
+available. We ackowledge the tension existing between reproducibility and
+privacy [#]_. At the time of this writing and as mentioned in the case study
+section, we are showcasing the analysis only with synthetic input data.
+
+.. [#] A case study in political science is discussed in this respect in
+       :cite:`Kitzes2018:Barbera`. Some private communication with political
+       scientists and various technologists have led us to throw the idea of
+       leveraging the blockchain to improve reproducibility in human subject research:
+       What if the raw datasets could live as private data on a public blockchain,
+       notably removing the possibility of cherry-picking *by design*?
 
 References
 ----------
