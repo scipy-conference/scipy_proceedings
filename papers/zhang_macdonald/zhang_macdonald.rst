@@ -103,8 +103,89 @@ What git lacks is the ability to do environmental management.
 Git is not a package manager. System dependencies in git can only be documented- and need the user to install them following instructions.
 It is recommended that git be used to store the source code, and that some other package manager be used to manage the system environment.
 
-Python
-------
+Python Packaging
+----------------
+
+Python has a strong community, and many libraries and tools are hosted on the Python Package Index.
+Currently, the standard tool for installing packages is [pip](https://pip.pypa.io/en/stable/),
+which installs Python packages and their Python dependencies. For development, it is strongly
+recommended to use pip with virtual environments [footnote 0]. Doing so will allow the developed
+projects to use the newest stable versions of their dependencies, and well maintained dependencies
+should work correctly together.
+
+.. code-block:: bash
+
+   $ mkvirtualenv venv-demo (venv-demo) $ pip install scipy
+
+After development is complete and analysis begins, the need for reproducibility overtakes the for
+keeping dependencies up to date. Though many projects strive to maintain backwards compatibility, a
+researcher would not want to use numpy-1.13.1 for part of their analysis and numpy-1.14.2 for
+another, the stakes are simply too high. At this point, users can “pin” their versions.
+
+.. code-block:: bash
+
+   $ workon venv-demo (venv-demo) $ pip freeze > scipy-requirements.txt
+
+Pip can use [requirements files](https://pip.readthedocs.io/en/1.1/requirements.html) to achieve
+more stability. Creating a requirements file in this way specifies the exact version of each
+dependency.
+
+.. code-block:: bash
+
+   numpy==1.14.3 scipy==1.1.0
+
+The requirements file can now be used to recreate the same environment using the same versions.
+
+.. code-block:: bash
+
+   $ mkvirtualenv separate-env (separate-env) $ pip install -r scipy-requirements.txt
+
+For Python users who need to guarantee deterministic builds, another step is suggested. Adding
+hashes to a requirements.txt provides the guarantee that the exact bits are installed. PyPI now
+supports sha256, which is strongly recommended over md5, which has known vulnerabilities. Pip can
+be used to calculate the hashes, which are then added to the requirements file.
+
+.. code-block:: bash
+
+   $ pip download numpy==1.14.3 Collecting numpy==1.14.3 Saved
+   ./numpy-1.14.3-cp27-cp27mu-manylinux1_x86_64.whl Successfully downloaded numpy $ pip hash
+   ./numpy-1.14.3-cp27-cp27mu-manylinux1_x86_64.whl ./numpy-1.14.3-cp27-cp27mu-manylinux1_x86_64.whl:
+   --hash=sha256:0db6301324d0568089663ef2701ad90ebac0e975742c97460e89366692bd0563
+
+Add these hashes to your requirements file, and use the `--require-hashes` option. Note that these
+files are specific to architecture and python type. For code that should run in more than one
+environment, multiple hashes can be specified.
+
+.. code-block:: bash
+
+   numpy==1.14.3 \ --hash=sha256:0db6301324d0568089663ef2701ad90ebac0e975742c97460e89366692bd0563
+   scipy==1.1.0 \ --hash=sha256:08237eda23fd8e4e54838258b124f1cd141379a5f281b0a234ca99b38918c07a
+
+.. code-block:: bash
+
+   $ mkvirtualenv deterministic-venv (deterministic-venv) $ pip install --require-hashes -r
+   scipy_requirements.txt
+
+Guarantees:
+- All Python dependencies installed this way will contain exactly the same bits Hashes
+safeguard against man in the middle attacks
+- Hashes safeguard against malicious modification of
+packages on PyPI
+
+Limitations: Packages on PyPI can be removed at any time by their maintainer TODO(hellllllllp, this
+seems pretty good to meeeeee)
+
+Pip was selected because it is the standard tool, and it is most likely to maintain backward
+compatibility. However, there are other tools with rich feature sets that simplify the process. In
+particular, [pipenv](https://docs.pipenv.org/) uses hashing and virtual environments by default for
+a smooth experience.
+
+[footnote 0] A virtual environment, often abbreviated “virtualenv” or “venv”, is an isolated python
+environments that is used to prevent projects and their dependencies from interfering with with
+each other. Under the hood, virtual environments work by managing the PYTHON_PATH (TODO: is this
+the right var name?) Another benefit of virtual environments is that they do not require root
+privileges and are safer to use.
+
 
 Ansible
 -------
