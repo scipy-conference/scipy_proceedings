@@ -95,7 +95,10 @@ The traditional workflow for building environmental simulations can be broken do
  
  [Fig: example image AdH model showing areas with material properties & some BC's]
 
-2. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental 
+2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web based 
+and local data stores.
+
+3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental 
 simulation engine. The simulation types that we are focused on in this work uses a 2D structured/regular grid or an 
 unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers.
 Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification 
@@ -149,6 +152,46 @@ is available, and fast, flexible, primarily 2D visualization of remote or local 
 is to put power and flexibility into the hands of domain experts so that they can respond quickly and easily to 
 emerging issues that require input to help decision making throughout their organizations, without requiring a 
 lengthy period of model development and without requiring external software contractors to make basic changes to 
-assumptions and modeling mechanisms. 
+assumptions and modeling mechanisms. In this paper, we show how we have built such a system.
+
+EarthSim
+--------
+
+As mentioned previously, an explicit decision was made to push functionality into existing open source tools where 
+they existed and only create new tools where the was a gap in the open source ecosystem. The reasoning behind this 
+was to reduce maintainance burden and put the functionality in places which were less likely to be abandoned because
+of the larger community. In this sense, EarthSim [cite: EarthSim] is documentation plus a collection of examples on 
+how to use the PyViz [cite PyViz] ecosystem of python tools to setup particular environmental simulation workflows.
+
+EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
+other open source tools Filigree and Quest. Short descriptions of these tools follow:
+
+Bokeh is an interactive visualization library that targets modern web browsers for presentation. Its goal is to provide elegant, concise construction of versatile graphics, and to extend this capability with high-performance interactivity over very large or streaming datasets. Bokeh can help anyone who would like to quickly and easily create interactive plots, dashboards, and data applications.
+
+HoloViews is an open-source Python library designed to make data analysis and visualization seamless and simple. With HoloViews, you can usually express what you want to do in very few lines of code, letting you focus on what you are trying to explore and convey, not on the process of plotting.
+
+GeoViews is a Python library that makes it easy to explore and visualize geographical, meteorological, and oceanographic datasets, such as those used in weather, climate, and remote sensing research. GeoViews is built on the HoloViews library for building flexible visualizations of multidimensional data. GeoViews adds a family of geographic plot types based on the Cartopy library, plotted using either the Matplotlib or Bokeh packages.
+
+Datashader is a graphics pipeline system for creating meaningful representations of large datasets quickly and flexibly. Datashader breaks the creation of images into a series of explicit steps that allow computations to be done on intermediate representations. This approach allows accurate and effective visualizations to be produced automatically without trial-and-error parameter tuning, and also makes it simple for data scientists to focus on particular data and relationships of interest in a principled way.
+
+ParamParam is a library providing Parameters: Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, default values, etc., each of which is inherited from parent classes if not specified in a subclass. Param lets you program declaratively in Python, by just stating facts about each of your parameters, and then using them throughout your code. With Parameters, error checking will be automatic, which eliminates huge amounts of boilerplate code that would otherwise be required to verify or test user-supplied values.
+
+Quest is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
+
+Filigree 
+
+Enhancements: Drawing Tools
+---------------------------
+
+Enhancements: Annotations
+-------------------------
+
+Enhancements: Efficient Raster regridding
+-----------------------------------------
+
+Enhancements: Triangular mesh vizualization
+-------------------------------------------
+
+
 
 
