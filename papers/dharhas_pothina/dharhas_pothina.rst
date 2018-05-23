@@ -88,8 +88,7 @@ Background
 
 The traditional workflow for building environmental simulations can be broken down into the following stages:
 
-1. Model specification: Building a human-specified conceptual model that denote regions of interest
- (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define to partition
+1. Model specification: Building a human-specified conceptual model that denote regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define to partition
  the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom 
  friction, permeability, etc.) 
  
@@ -101,11 +100,11 @@ and local data stores.
 3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental 
 simulation engine. The simulation types that we are focused on in this work uses a 2D structured/regular grid or an 
 unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers.
-Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification 
-process. After this an iterative approach is used to build a good quality mesh based on the needs of the numerical 
+Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process.
+After this an iterative approach is used to build a good quality mesh based on the needs of the numerical 
 algorithms and to resolve certain physics in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
-[Fig: show an example mesh]
+ [Fig: show an example mesh]
 
 4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and 
 time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the 
@@ -120,14 +119,14 @@ is run on an HPC system.
 6. Visualization/analysis: The results of environmental simulations, typically consist of time varying scalar and 
 vector fields defined on the computational mesh stored in binary or ascii files. Analysts first render an overall 
 animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app. For more detailed 
-analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space. i.e.:
+analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space. i.e.: 
  - Virtual measurement station: A specific point on the Earth's surface where e.g. water level can be computed for 
  every time point and then compared with historical data from nearby actual measurement stations
  - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
  - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated 
  quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
-[fig: show some sample results from sms or cmb]
+    [fig: show some sample results from sms or cmb]
 
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
@@ -165,8 +164,6 @@ decisions, providing basic predictions of environmental conditions quickly and f
 The goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
 as needed to rapidly solve specific emerging issues.
 
-
-
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other open source tools Filigree and Quest. Short descriptions of these tools follow:
 
@@ -187,14 +184,51 @@ Filigree is a library version of the computational mesh generator from Aquaveo's
 Enhancements: Drawing Tools
 ---------------------------
 
+Bidirectional Connection between Javascript plots and Python
+
+.. figure:: images/drawing_tools.png
+
+   This is the caption1. :label:`drawing_tools`
+
+.. figure:: images/drawing_tools_python.png
+
+   This is the caption2. :label:`drawing_tools_python`
+
 Enhancements: Annotations
 -------------------------
+
+Stuff about Annotations
+
+.. figure:: images/annotation_tools.png
+
+   This is the caption2. :label:`annotation_tools`
 
 Enhancements: Efficient Raster regridding
 -----------------------------------------
 
 Enhancements: Triangular mesh vizualization
 -------------------------------------------
+
+Addition of a TriMesh element to holviews. + Efficient Viz through DataShader
+
+Interactive Dashboards
+----------------------
+
+Stuff about Annotations
+
+.. figure:: images/dashboard_animation.png
+
+   This is the caption3. :label:`dashboard_animation`
+
+.. figure:: images/dashboard_sweep.png
+
+   This is the caption4. :label:`dashboard_sweep`
+
+.. figure:: images/dashboard_cross_section.png
+
+   This is the caption5. :label:`dashboard_cross_section`
+
+
 
 GSSHA Hydrology Workflow Example
 --------------------------------
@@ -207,5 +241,11 @@ Coastline Definition (GrabCut) Workflow Example
 
 Conclusions and Future Work
 ---------------------------
+
+Performance enhancements for GIS & Unstructured mesh datasets
+Making annotation and drawing tools easier to use (i.e. less code)
+Layout of Jupyter Notebooks in Dashboard type form factor
+Integration with Tethys platform & other web frontends
+Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
 
 
