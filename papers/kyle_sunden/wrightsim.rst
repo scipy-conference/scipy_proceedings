@@ -48,9 +48,69 @@ WrightSim: Numerical Integration for Simulating Multidimensional Spectra
     for these kinds of simulations.
     Potential further improvements are discussed.
 
+Introduction
+============
 
-Theory and Background
-=====================
+Nonlinear multidimensional spectroscopy (MDS) is an increasingly important
+analytical technique for the analysis of complex chemical material systems.
+MDS can directly observe fundemental physics that are not possible to record in
+any other way.
+With recent advancements in lasers and optics, MDS experiments are becoming
+routine.
+Applications of MDS in semiconductor physics, drug screening, and other
+domains are currently being developed.
+Ultimately, MDS may become a key research tool akin to multidimensional
+nuclear magnetic resonance spectroscopy.
+
+A generic MDS experiment involves exiting a sample with multiple pulses of
+light and measuring the magnitude of the sample response (the signal).
+The dependence of this signal on the properties of the excitation pulses
+(frequency, delay, fluence, polarization etc.) contains information about
+the microscopic physics of the material.
+However, this information cannot be directly "read off" of the spectrum.
+Instead, MDS practitioners typically compare the measured spectrum with model
+spectra.
+A quantitative microscopic model is developed based on this comparison between
+experiment and theory.
+Here, we focus on this crucial modeling step.
+We present a general-purpose simulation package for MDS: "WrightSim".
+
+.. figure:: example_spectrum.png
+
+    Simulated spectrum at normalized coordinates :label:`fig:examplespectrum`
+
+Figure :ref:`fig:examplespectrum` shows an example visualization of a
+spectrum in 2-Dimensional frequency space.
+The axes are two different frequencies for the input electric fields, the axes
+are normalized such that there is a resonance around :math:`0.0` in both
+frequencies.
+This system that we have chosen for this simulation is very simple, with a single
+resonance.
+This two-dimensional simulation is merely representative of WrightSim's ability
+to traverse through many aspects of experimental space.
+Every concievable pulse paramater (delay, fluence, frequency, chirp etc.) can
+become an axis in the simulation.
+
+``WrightSim`` is designed with the experimentalist in mind, allowing users
+to parameterize their simulations in much the same way that they would collect
+a similar spectrum in the laboratory. 
+WrightSim is modular and flexable---it is capable of simulating different
+kinds of MDS, and it is easy to extend to new kinds.
+WrightSim uses a numerical integration approach that captures the full
+interaction between material and electric field without making common limiting
+assumptions.
+This approach makes WrightSim flexable, accurate, and interpretable.
+
+While the numerical approach we use is more accurate, it does demand
+significantly more computational time.
+We have focused on performance as a critical component of WrightSim.
+Here we report algorithmic improvements which have significantly decreased 
+computational time relative to prior implementations.
+We also discuss parallelzation approaches we have taken, and show how the
+symmetry of the simulation can be exploited.
+
+Theory
+======
 
 The information presented in this section is largely a reproduction,
 edited for brevity, of that which was presented by Kohler, Thompson, and
@@ -60,42 +120,6 @@ supplemental information. Below, we discuss the broader goals of this
 project, provide an insight into the mathematics underlying the
 simulation, and discuss an existing implementation of a software package
 to perform the simulations.
-
-Goals
------
-
-The primary goal of ``WrightSim`` is to reproduce *in silico* the
-multidimensional spectra obtained by experimentalists like those found
-within the Wright Group. ``WrightSim`` is designed with the
-experimentalist in mind, allowing users to parameterize their
-simulations in much the same way that they would collect a similar
-spectrum in the laboratory. Numerical integration is used to provide the
-most flexible, accurate, and interpretable simulations possible. While
-the focus is on frequency domain nonlinear spectroscopy, in principle
-the technique is applicable to the wider field of spectroscopy. There are
-other levels of theory which can provide more computationally efficient
-analytical solutions, however these make assumptions which are not
-always valid.
-
-.. figure:: example_spectrum.png
-
-    Simulated spectrum at normalized coordinates :label:`fig:examplespectrum`
-
-Figure :ref:`fig:examplespectrum` shows an example visualization of a
-spectrum in 2-Dimensional frequency space. The axes are two different
-frequencies for the input electric fields, the axes are normalized such
-that there is a resonance around :math:`0.0` in both frequencies. While
-this particular visualization took a more naïve approach, encoded within
-the values available are information about the frequency and phase of
-the output signal. This enables users to select a particular portion of
-the spectrum to visualize, similar to using a monochromator in the
-laboratory. This technique allows for traversals through many aspects of
-experimental space. Figure :ref:`fig:examplespctrum` is in 2-D frequency space,
-however we also have control over temporal separation of pulses, and can simulate
-against this delay space. Another advantage of this package is that it allows users
-to be selective of which portions of the signal are simulated, providing
-a deeper understanding of how the shape of a spectrum arises from the
-underlying quantum mechanics.
 
 A Brief Introduction on Relevant Quantum Mechanics
 --------------------------------------------------
