@@ -399,7 +399,7 @@ the dataset looks like Table :ref:`mtable`.
    | 224        | Treatment  | 2.42             | 1         | 1      |
    +------------+------------+------------------+-----------+--------+
 
-The fact that the effects are of mixed data types, boolean and
+The fact that the effects are of mixed data types, binary and
 continuous, makes it harder to model their interdependencies. To address this
 challenge, we propose a latent variable  structure. Then, the expected value of
 the latent variables will correspond to the average effect of the treatment.
