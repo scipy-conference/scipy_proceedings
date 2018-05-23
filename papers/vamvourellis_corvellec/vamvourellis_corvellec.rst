@@ -33,7 +33,34 @@ A Bayesian’s journey to a better research workflow
 Introduction
 ------------
 
-TODO Proofread introduction.
+We present a research workflow for Bayesian statistical analysis. We
+demonstrate lessons we learned from our own computational research that other
+scientists, not necessarily Bayesian, could find useful when they manage their
+own work. To illustrate these lessons we use a specific case study in clinical
+trial modeling.
+
+Clinical trial data are presented to experts and clinicians to assess the
+efficacy and safety of a given drug. The analysis of trial data is based on
+statistical summaries of the data, including averages, standard deviations, and
+significance levels. However, dependencies between the treatment effects are
+the subject of clinical judgment and are rarely included in the statistical
+summaries.
+
+We propose a Bayesian approach to model clinical trial data. We use latent
+variables to account for the whole joint distribution of the treatment effects,
+including effects of different types. As a result, we can find the predictive
+distribution of the treatment effects on a new patient accounting for
+uncertainty in all the parameters, including the correlation between the effects.
+
+Although this case study is by no means the ideal introductory example of
+computational modeling, it provides us with a real-world problem from which we
+can share practical lessons. We believe this paper can be of help to a number
+of different audiences. Firstly, it can help non-Bayesian statisticians, or
+beginning Bayesians, get a a sense of how to apply Bayesian statistics to their
+work. Secondly, it can provide computational scientists with advice on building
+a reproducible and efficient research workflow. And, thirdly, it can spark
+discussions with advanced Bayesians about the complexities of Bayesian
+workflows and how to build better models.
 
 A Bayesian Workflow
 -------------------
