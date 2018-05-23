@@ -35,11 +35,34 @@ Oxidizing Python: writing extensions in Rust
 Introduction
 ------------
 
-Rust is the closing thing to metal, so the process of converting a codebase
-to Rust is referred as "Oxidation" in the Rust community.
+The process of converting a codebase to Rust is referred as "Oxidation" [#]_ in
+the Rust community, following the codename Mozilla chose for the process of
+integrating Rust components into the Firefox codebase.
+Many of these components were tested and derived in Servo, an experimental
+browser engine written in Rust, and are being integrated into Gecko,
+the current browser engine (mostly written in C++).
 
-Rust
-----
+
+.. [#] The creator of the language is known to keep making up different
+       explanations for the name of the language [RustName]_,
+       but in this case "oxidation" refers to the chemical process that creates
+       rust, and rust is the closest thing to metal (metal being the hardware).
+       There are many terrible puns in the Rust community.
+
+Why Rust?
+---------
+
+There are other programming languages more focused on scientific software
+that could be used instead, like Julia.
+
+Many programming languages start from a specific niche (like R and statistics,
+or Maple and mathematics) and grow into larger languages over time.
+While Rust goal is not to be a scientific language,
+its focus on being a general purpose language allows a phenomenon similar
+to what happened with Python, where people from many areas pushed the
+language in different directions (system scripting, web development,
+numerical programming...) allowing developers to combine all these things
+in their systems.
 
 Brings many best practices to the default experience:
 integrated package management (with Cargo)
@@ -56,38 +79,6 @@ leading to fragmentation and increasing the impedance to use these features.
 
 Is compatible with C/C++ through an explicit layer (the FFI),
 avoiding the semantic issues that C++ backwards compatibility with C introduces.
-
-Unified libraries for Bioinformatics
-------------------------------------
-
-Bioinformatics is an umbrella term for many different methods, depending on
-what analysis you want to do with your data (or model).
-In this sense, it's distinct from other scientific areas where it is possible
-to rely on a common set of libraries (numpy and linear algebra), since a
-library supporting many disjoint methods tend to grow too big and hard to
-maintain.
-
-The environment also tends to be very diverse, with many different languages
-needing to interact (?!?)
-
-
-Exploratory vs production-ready software
-----------------------------------------
-
-Bioinformatics analysis is usually written as a pipeline: a workflow
-describing how to connect the input and output of many different tools to
-generate results. The basic unit is a tool, usually with a command-line interface,
-and so pipelines tend to rely on standard operating system abstractions like
-files and pipes to make the tools communicate with each other. But since tools
-might have input requirements distinct from what the previous tool provides,
-many times it is necessary to do format conversion or adapting to make the
-pipeline work.
-
-Using tools as blackboxes, controllable through specific parameters at the
-command-line level, make exploratory analysis and algorithm reuse harder:
-if something needs to be investigated the user needs to resort to perturbations
-of the parameters or the input data, without access to the more feature-rich and
-meaningful abstraction happening inside the tool.
 
 Converting from a C++ extension to Rust
 ---------------------------------------
@@ -132,18 +123,41 @@ generating wheels lead to one wheel for each OS and Python version supported.
 
 
 
+Unified libraries for Bioinformatics
+------------------------------------
+
+Bioinformatics is an umbrella term for many different methods, depending on
+what analysis you want to do with your data (or model).
+In this sense, it's distinct from other scientific areas where it is possible
+to rely on a common set of libraries (numpy and linear algebra), since a
+library supporting many disjoint methods tend to grow too big and hard to
+maintain.
+
+The environment also tends to be very diverse, with many different languages
+needing to interact (?!?)
 
 
+Exploratory vs production-ready software
+----------------------------------------
+
+Bioinformatics analysis is usually written as a pipeline: a workflow
+describing how to connect the input and output of many different tools to
+generate results. The basic unit is a tool, usually with a command-line interface,
+and so pipelines tend to rely on standard operating system abstractions like
+files and pipes to make the tools communicate with each other. But since tools
+might have input requirements distinct from what the previous tool provides,
+many times it is necessary to do format conversion or adapting to make the
+pipeline work.
+
+Using tools as blackboxes, controllable through specific parameters at the
+command-line level, make exploratory analysis and algorithm reuse harder:
+if something needs to be investigated the user needs to resort to perturbations
+of the parameters or the input data, without access to the more feature-rich and
+meaningful abstraction happening inside the tool.
 
 
-
-
-
-
-
-
-
-
-
-
-
+References
+----------
+.. [RustName] “Internet Archaeology: The Definitive, End-All Source for Why Rust Is Named ‘Rust’”.
+              Accessed May 10, 2018.
+              https://www.reddit.com/r/rust/comments/27jvdt/internet_archaeology_the_definitive_endall_source/.
