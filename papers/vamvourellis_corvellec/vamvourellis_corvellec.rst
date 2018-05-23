@@ -452,16 +452,95 @@ will be relatively insensitive to the priors.
 
 To generate fake data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
 and generate 200 samples of underlying latent variables
-:math:`Z_{i \cdot} \sim N(\mu,\Sigma)`.
+:math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_.
 The observed fake data :math:`Y_{ij}` are defined to be equal to
 :math:`Z_{ij}` for the effects that are continuous. For the binary effects, we sample
 Bernoulli variables with probability equal to the inverse logit of the
 corresponding :math:`Z_{ij}` value.
 
+.. [#] Both :math:`Z_{i\cdot} \sim \mathcal{N}_{K}(\mu, \Sigma)` and
+       :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` hold, since the :math:`\sim`
+       symbol means “is distributed as” and :math:`N(\mu,\Sigma)` is
+       the pdf of :math:`\mathcal{N}_{K}(\mu, \Sigma)`.
+
 A Bayesian model with proper informative priors, such as the one above, can also
 be used directly to sample fake data. As explained in the previous section,
 we can sample all the parameters according to the prior distributions.
 The fake data can then be interpreted as our prior distribution on the data.
+
+*4) Fit the model to the fake data*
+
+The Stan program encoding this model is the following:
+
+.. code-block:: c++
+   :linenos:
+
+   data {
+     int<lower=0> N;
+     int<lower=0> K;
+     int<lower=0> Kb;
+     int<lower=0> Kc;
+     int<lower=0, upper=1> yb[N, Kb];
+     vector[Kc] yc[N];
+   }
+
+   transformed data {
+     matrix[Kc, Kc] I = diag_matrix(rep_vector(1, Kc));
+   }
+
+   parameters {
+     vector[Kb] zb[N];
+     // first continuous, then binary
+     cholesky_factor_corr[K] L_R;
+     vector<lower=0>[Kc] sigma;
+     vector[K] mu;
+   }
+
+   transformed parameters {
+     matrix[N, Kb] z;
+     vector[Kc] mu_c = head(mu, Kc);
+     vector[Kb] mu_b = tail(mu, Kb); {
+       matrix[Kc, Kc] L_inv = \
+       mdivide_left_tri_low(diag_pre_multiply(sigma, \
+       L_R[1:Kc, 1:Kc]), I);
+        for (n in 1:N) {
+          vector[Kc] resid = L_inv * (yc[n] - mu_c);
+          z[n,] = transpose(mu_b + tail(L_R * \
+          append_row(resid, zb[n]), Kb));
+        }
+     }
+   }
+
+   model {
+     mu ~ normal(0, 10);
+     L_R ~ lkj_corr_cholesky(2);
+     sigma~cauchy(0, 2.5);
+     yc ~ multi_normal_cholesky(mu_c, \
+     diag_pre_multiply(sigma, L_R[1:Kc, 1:Kc]));
+     for (n in 1:N) zb[n] ~ normal(0, 1);
+     for (k in 1:Kb) yb[, k] ~ bernoulli_logit(z[, k]);
+   }
+
+   generated quantities {
+     matrix[K, K] R = multiply_lower_tri_self_transpose(L_R);
+     vector[K] full_sigma = append_row(sigma, \
+                                       rep_vector(1, Kb));
+     matrix[K, K] Sigma = \
+     multiply_lower_tri_self_transpose(\
+     diag_pre_multiply(full_sigma, L_R));
+   }
+
+*Model Fit Checks*
+
+We plot the posterior samples on top of the true values and check visually that
+the confidence intervals cover the true values we used to generate the fake
+data.
+
+.. figure:: mean.png
+
+.. figure:: sd.png
+
+.. figure:: corr.png
 
 References
 ----------
