@@ -305,9 +305,163 @@ many workflow-related discussions, see :cite:`gelman2013bayesian` [#]_.
 .. [#] And for an example implementation of a complete workflow with PyStan,
        see https://github.com/betanalpha/jupyter_case_studies/tree/master/pystan_workflow.
 
-Case Study
-----------
+A Case Study in Clinical Trial Data Analysis
+--------------------------------------------
 
+We propose a Bayesian model to extract insights from clinical trial datasets.
+We are interested in understanding the effect of a treatment on the patients.
+Our goal is to use the data to predict the effect of the treatment on a new
+patient. We apply our method on artificially created data, for illustration
+purposes only.
+
+*1) Scope the problem*
+
+Regulators focus on a few key effects when deciding whether a drug is fit for
+market. In our case we will assume, for simplicity, that there are three
+effects, where two are binary variables and the other is a continuous variable.
+
+Our data is organized as a table, with one patient (subject) per row and one effect per column. For
+example, if our clinical trial dataset records three effects per subject,
+‘Hemoglobin Levels’ (continuous), ‘Nausea’ (yes/no), and ‘Dyspepsia’ (yes/no),
+the dataset looks like Table :ref:`mtable`.
+
+.. table:: Toy clinical trial data. :label:`mtable`
+
+   +------------+------------+------------------+-----------+--------+
+   | Subject ID | Group Type | Hemoglobin Level | Dyspepsia | Nausea |
+   +============+============+==================+===========+========+
+   | 123        | Control    | 3.42             | 1         | 0      |
+   +------------+------------+------------------+-----------+--------+
+   | 213        | Treatment  | 4.41             | 1         | 0      |
+   +------------+------------+------------------+-----------+--------+
+   | 431        | Control    | 1.12             | 0         | 0      |
+   +------------+------------+------------------+-----------+--------+
+   | 224        | Control    | -0.11            | 1         | 0      |
+   +------------+------------+------------------+-----------+--------+
+   | 224        | Treatment  | 2.42             | 1         | 1      |
+   +------------+------------+------------------+-----------+--------+
+
+The fact that the effects are of mixed data types, boolean and
+continuous, makes it harder to model their interdependencies. To address this
+challenge, we propose a latent variable  structure. Then, the expected value of
+the latent variables will correspond to the average effect of the treatment.
+Similarly, the correlations between the latent variables will correspond to the
+the correlations between the effects. Knowing the distribution of the latent
+variables will give us a way to predict what the effect will be on a new
+patient.
+
+*2) Specify the model, likelihood, and priors*
+
+a. Model
+
+Let :math:`Y` be a :math:`N\times K` matrix where each column represents an effect and each
+row refers to an individual subject. This matrix contains our observations,
+it is our clinical trial dataset. We distinguish between treatment and placebo
+(control) subjects by considering separately :math:`Y^T` (resp. :math:`Y^{C}`),
+the subset of :math:`Y` containing only treatment subjects (resp. control subjects).
+Since the model for :math:`Y^T` and :math:`Y^{C}` is identical, for convenience,
+we suppress the notation into :math:`Y` in the
+remainder of this section. Recall that the important feature of
+the data is that each column in :math:`Y` may be measured on different scales, i.e.,
+binary, count, continuous, etc. The main purpose of this work is to extend the
+current framework so that it can incorporate interdependencies between
+different features, both discrete and continuous.
+
+We consider the following general latent variable framework. We assume subjects
+are independent and wish to model the dependencies between the effects.
+The idea is to bring all columns to a common scale :math:`(-\infty, \infty)`.
+The continuous effects are observed directly and are already on this scale.
+For the binary effects, we apply appropriate transformations on their
+parameters via user-specified link functions :math:`h_{j}(\cdot)`, in order to
+bring them to the :math:`(-\infty, \infty)` scale.
+Let us consider the :math:`i`-th subject. Then, if the :math:`j`-th effect is
+measured on the binary scale, the model is
+
+.. math::
+   :type: eqnarray
+
+   Y_{ij} &\sim& \text{Bernoulli}(\eta_j)\\
+   h_{j}(\eta_j) &=& Z_{ij},
+
+where the link function can be the logit, probit, or any other bijection from
+:math:`[0, 1]` to the real line. Continuous data are assumed to be observed
+directly and accurately (without measurement error), and modeled as follows:
+
+.. math::
+
+   Y_{ij} = Z_{ij} \quad \text{for}\; i=1, \dots, N.
+
+In order to complete the model, we need to define the
+:math:`N\times K` matrix :math:`Z`.
+Here, we use a :math:`K`-variate normal distribution
+:math:`\mathcal{N}_K(\cdot)` on each :math:`Z_{i \cdot}` row, such that
+
+.. math::
+
+   Z_{i\cdot} \sim \mathcal{N}_{K}(\mu, \Sigma),
+
+where :math:`\Sigma` is a :math:`K\times K` covariance matrix, :math:`\mu` is a row
+:math:`K`-dimensional vector, and :math:`Z_{i\cdot}` are independent for all :math:`i`.
+
+In the model above, the vector :math:`\mu=(\mu_{1},\dots,\mu_K)` represents
+the average treatment effect in the common scale. In our example, the first
+effect is directly observed whereas the other effects can only be
+inferred via the corresponding binary observations. Note that the variance of
+the non-observed latent variables is non-identifiable :cite:`Chib1998a,Talhouk2012a`,
+so we need to fix it to a known constant to fully specify
+the model. We do this by decomposing the covariance into correlation and
+variance: :math:`\Sigma = DRD`, where :math:`R` is the correlation matrix and :math:`D` is a
+diagonal matrix of variances :math:`D_{jj} = \sigma_j^2` for the :math:`j`-th effect.
+
+b. Likelihood
+
+The likelihood function can be expressed as
+
+.. math::
+   :type: eqnarray
+
+   f(Y | Z, \mu, \Sigma) &=& f(Y|Z) \cdot p(Z| \mu, \Sigma)\\
+   &=& \prod_{j \in J_b} \prod_{i=1}^N h^{-1}(Z_{ij})^{Y_{ij}} (1-h^{-1}(Z_{ij}))^{(1-Y_{ij})} \cdot p(Z| \mu, \Sigma)\\
+   &=& \prod_{j \in J_b} \prod_{i=1}^N \eta_{ij}^{Y_{ij}} (1-\eta_{ij})^{(1-Y_{ij})} \cdot N(Z| \mu , \Sigma),\\
+
+where :math:`J_b` is the index of effects that are binary and
+:math:`N(Z| \mu , \Sigma)` is the probability density function (pdf)
+of the multivariate normal distribution.
+
+c. Priors
+
+In this case study, the priors should come from previous studies of the treatment
+in question or from clinical judgment. If there was no such option,
+then it would be up to us to decide on an appropriate prior. We use
+the following priors for demonstration purposes:
+
+.. math::
+   :type: eqnarray
+
+   \mu_i \; & \sim \; N(0,10) \\
+   R \; & \sim \; \text{LKJ}(2) \\
+   \sigma_j \; & \sim \; \text{Cauchy}(0,2)  \; \text{for} \; j \not\in J_b \\
+   Z_{ij} \; & \sim \; N(0,1) \; \text{for} \; j \in J_b. \\
+
+This will become more transparent in the next section, when we come back to
+the choice of priors.
+Let us note that our data contain a lot of information, so the final outcome
+will be relatively insensitive to the priors.
+
+*3) Generate fake data*
+
+To generate fake data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
+and generate 200 samples of underlying latent variables
+:math:`Z_{i \cdot} \sim N(\mu,\Sigma)`.
+The observed fake data :math:`Y_{ij}` are defined to be equal to
+:math:`Z_{ij}` for the effects that are continuous. For the binary effects, we sample
+Bernoulli variables with probability equal to the inverse logit of the
+corresponding :math:`Z_{ij}` value.
+
+A Bayesian model with proper informative priors, such as the one above, can also
+be used directly to sample fake data. As explained in the previous section,
+we can sample all the parameters according to the prior distributions.
+The fake data can then be interpreted as our prior distribution on the data.
 
 References
 ----------
