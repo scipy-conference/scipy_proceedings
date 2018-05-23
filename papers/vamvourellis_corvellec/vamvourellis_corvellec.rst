@@ -50,7 +50,7 @@ We propose a simple workflow made of the following steps:
 
 5. Fit the model to the real data.
 
-An advanced workflow, which is  beyond the scope of this paper, could be
+An advanced workflow, which is beyond the scope of this paper, could be
 extended to include the following steps:
 
 6. Check the predictive accuracy of the model;
@@ -75,7 +75,11 @@ densities, even though it is not rigorous notation.
 The main goal of this workflow is to achieve successful Bayesian inference.
 That is, correctly retrieving samples from the posterior distribution of the
 parameter values, which are typically unknown before the analysis, using the
-information contained in the data. The posterior distribution
+information contained in the data.
+The major difference of the Bayesian approach relative to frequentist, is that
+it modifies the likelihood function (to be introduced later) into a proper
+distribution over the parameters, called the posterior distribution.
+The posterior distribution
 :math:`p(\theta | \mathcal{D})` forms the basis of the Bayesian approach from
 which we derive all quantities of interest.
 
@@ -88,12 +92,13 @@ explicit parameter :math:`\theta` in a statistical model, such as:
 * How can we predict the future outcome of an experiment?
 
 To proceed, we need to define a model. Choosing a model is usually
-tied to the exact research questions we are interested in. We can choose to
-start with a postulated data generation process and then decide on how to interpret
-the parameters in relation to the research question. Alternatively, it is
-equally valid to start from the research question and design the model in a
-way such that the model parameters are directly connected to the specific
-questions we wish to answer. In the next section, we illustrate with an example
+tied to the exact research questions we are interested in.
+We can choose to start with a postulated data generation process and then
+decide how to interpret the parameters in relation to the research question.
+Alternatively, it is equally valid to start from the research question and
+design the model so that its parameters are directly connected to the specific
+questions we wish to answer.
+In the next section, we illustrate with an example
 how to design a model to answer a specific research question.
 
 Note that the question of prediction depends directly on inferring successfully
@@ -105,9 +110,10 @@ Once we have defined the scope of the problem, we need to specify the design of
 the model which is captured in the *likelihood* function
 :math:`f(\mathcal{D} | \theta, \mathcal{M})`.
 Usually, argument :math:`\mathcal{M}` is dropped for notational
-simplicity, the model being chosen and assumed known. When the
-model include covariates, the more accurate expression is
-:math:`f(\mathcal{D} | \theta, x)`.
+simplicity, the model being chosen and assumed known.
+Note, however, that when the model includes covariates, the more accurate
+expression is
+:math:`f(y | \theta, x)`.
 This function ties together the ingredients of
 statistical inference and allows information to flow from the data
 :math:`\mathcal{D}` to the parameters :math:`\theta`.
@@ -115,8 +121,10 @@ statistical inference and allows information to flow from the data
 The second ingredient of Bayesian inference is the prior distribution
 :math:`p(\theta)`. Priors are inescapably part of the Bayesian approach and, hence,
 have to be considered carefully. The goal of Bayesian inference is to combine
-the prior knowledge we have with the evidence contained in the data, to derive the
-posterior distribution of :math:`\theta`. It is difficult to predict how sensitive the final
+the prior information on the parameters (the prior distribution), with the
+evidence contained in the data (the likelihood), to derive the posterior
+distribution :math:`p(\theta | \mathcal{D})`.
+It is difficult to predict how sensitive the final
 results will be to a change in the priors. However, it is important to note
 that the impact of priors progressively diminishes as the number of observations
 increases.
@@ -136,7 +144,8 @@ brought in by the likelihood.  In fact, Bayesian inference technically works
 even when the prior is not a proper distribution but a function that assumes all
 values are equally likely, referred to as *improper prior*. However, it is
 generally advisable to avoid improper priors, especially in settings beyond
-just inference. If no prior knowledge is available, a very vague normal
+just inference, such as the more advanced workflow of steps 6)–9).
+If no prior knowledge is available, a very vague normal
 distribution with large variance is still a better default prior than a uniform
 distribution. It is important to note that improper or even vague priors are not
 appropriate for model selection.
@@ -161,17 +170,20 @@ we typically do not consider any parameter value to be equally likely.
 *3) Generate fake data*
 
 Once we have agreed on a generative process, i.e., a model :math:`\mathcal{M}`,
-we can use it to simulate data :math:`\mathcal{D'}`. We can choose reasonable
+we can use it to simulate data :math:`\mathcal{D'}`.
+To do that, we choose reasonable
 parameter values :math:`\theta_0` and use :math:`\mathcal{M}` to generate data
 based on these values. Alternatively,
 instead of coming up with reasonable parameter values, we can sample
-these values from the prior distributions:
+these values from the prior distribution
 
 .. math::
 
-   \theta_0 \sim p(\theta)
+   \theta_0 \sim p(\theta).
 
-The fake data can then be interpreted as our prior distribution of the data.
+The fake data
+:math:`\mathcal{D'}`
+can then be interpreted as our prior distribution of the data.
 Hence, by inspecting the fake data, we can reflect back on our choices for the
 likelihood and priors. This inspection can be used for high-level
 characteristics of the model, such as the scale of the outcome values or the
