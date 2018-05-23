@@ -1,14 +1,14 @@
 :author: Kyle F Sunden
 :email: sunden@wisc.edu
-:institution: University of Wisconsin - Madison
+:institution: University of Wisconsin--Madison
 
 :author: Blaise J Thompson
-:email: bthompson@chem.wisc.edu
-:institution: University of Wisconsin - Madison
+:email: blaise@untzag.com
+:institution: University of Wisconsin--Madison
 
 :author: John C Wright
 :email: wright@chem.wisc.edu
-:institution: University of Wisconsin - Madison
+:institution: University of Wisconsin--Madison
 
 :bibliography: bib
 
@@ -18,24 +18,35 @@ WrightSim: Numerical Integration for Simulating Multidimensional Spectra
 
 .. class:: abstract
 
-    Presented here is a reimplementation of a package for simulating quantum
-    mechanical non-linear spectra. This package uses numerical integration
-    to evolve a density state vector over time as the system interacts with
-    several electric fields. Herein, an existing implementation, ``NISE``,
-    is analyzed, and algorithmic improvements made for a new implementation,
-    ``WrightSim``. The effect of parallelizing the simulation, both at the
-    CPU and GPU (CUDA) levels, is demonstrated. ``PyCUDA`` was used to
-    integrate parallel code written in C with serial Python set up,
-    post-processing, and API. Python utilities, such as ``cProfile`` with
-    ``snakeviz`` were used to assess the implementations. ``WrightSim``
-    takes advantage of just-in-time compilation of the CUDA code in order to
-    provide a flexible and user friendly platform. This simulation is highly
-    paralellizable, and benefits by multiple orders of magnitude from the
-    combined effects of algorithmic improvements and parallelism. Many
-    possible further improvements are also discussed, such as improving the
-    memory footprint of the simulations. ``WrightSim`` has taken a huge leap
-    forward towards the goal of being a fast, easy to use, experimentalist
-    friendly simulation package.
+    We present a Python package designed to simulate multidimesional
+    nonlinear spectra: "WrightSim".
+    WrightSim uses the densitry matrix formulation of quantum mechanics.
+    A Hamiltonian describes all of the ways that a set of states interact with
+    each-other and with externally applied electric fields in the course of a
+    spectroscopic experiment.
+    Numerical integration (of the Liouville-von Numann equation) is used to
+    evolve the density state vector over time as the system interacts with
+    several electric fields in the course of a multidimensional experiment.
+    This numerical approach allows WrightSim to fully account for finite pulse
+    effects that are commonly ignored.
+    WrightSim is made using modules that can be exchanged to accomidate many
+    different experimental setups.
+    Simulations are accomplished through a Python interface that is designed
+    to be intuitive for experimentalists and theorists.
+    We have worked to ensure that the integration itself is performant.
+    We report several algorithimic improvements that make WrightSim faster
+    than previous implementations.
+    The effect of parallelizing the simulation, both at the CPU and GPU
+    (CUDA) levels, is demonstrated. 
+    Taken together, algorithmic improvements and parallization has made
+    WrightSim multiple orders of magnitude faster than previous
+    implementations.
+    WrightSim represents a large step forward towards the goal of a fast,
+    accuarate, and easy to use general purpose simulation package for the
+    multidimensional spectroscopy commmunity.
+    To our knowledge, WrightSim is the first openly licensed software package
+    for these kinds of simulations.
+    Potential further improvements are discussed.
 
 
 Theory and Background
