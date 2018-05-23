@@ -49,17 +49,17 @@ mid-infrared (IR) emission of many astronomical objects, as they
 absorb ultraviolet (UV) photons and re-emit that energy through a
 series of IR emission features between 3-20 µm. They are seen in
 reflection nebulae, protoplanetary disks, the diffuse interstellar
-medium (ISM), planetary nebula, and entire galaxies (e.g., Figure
+medium (ISM), planetary nebulae, and entire galaxies (e.g., Figure
 :ref:`fig:M82`), among other environments. Interstellar PAHs are
 extraordinarily large, typically containing 50-100 carbon atoms. In
 contrast, the largest non-PAH carbon-rich interstellar molecule known,
-HC\ :sub: `11`\ N, contains 11 carbon atoms. PAHs are composed of an
+HC\ :sub:`11`\ N, contains 11 carbon atoms. PAHs are composed of an
 interlocking hexagonal carbon lattice with hydrogen atoms attached to
 its periphery (see Figure :ref:`fig:PAHdb`). PAHs are exceptionally
 stable, allowing them to survive the harsh conditions amongst a
 remarkably wide variety of astronomical objects.
 
-.. figure:: M82.png
+.. figure:: fig_M82.png
    :align: center
    :scale: 55%
 
@@ -82,7 +82,7 @@ UV photons to IR radiation, makes them powerful probes of astronomical
 objects at all stages of the stellar life cycle. Due to their low
 ionization potentials (6-8 eV), they allow astronomers to probe
 properties of diffuse media in regions not normally accessible. On top
-of this, PAHs are not only witnesses to their local environment, but
+of this, PAHs are not only witnesses to their local environment but
 are key players in affecting ongoing astrophysical processes.
 
 PAHs are believed to form in the circumstellar ejecta of late-type
@@ -109,14 +109,14 @@ created by massive stars interacting with their environment, and in
 protoplanetary disk surface layers.
 
 Thanks to their ubiquity, PAH IR emission signatures are routinely
-used by astronomers as probes of object type and different
+used by astronomers as probes of object type and astrophysical
 processes. For example, the PAH IR signature is used as an indicator
 of star formation in high redshift galaxies
 :cite:`2014ApJ...786...31R` and to differentiate between black hole
 and starburst engines in galactic nuclei
 :cite:`1998ApJ...498..579G`. Those astronomers who study star- and
-planet formation use the IR PAH signature as and indicator of the
-geometry of circumstellar disk :cite:`2001A&A...365..476M`
+planet formation use the IR PAH signature as an indicator of the
+geometry of circumstellar disks :cite:`2001A&A...365..476M`
 :cite:`2009A&A...502..175B`. However, the treasure trove of
 information about an astronomical object's local conditions and its
 evolutionary history is only accessible through detailed spectroscopic
@@ -127,9 +127,10 @@ with the software developed at the NASA Ames Research Center.
 NASA Ames PAH IR Spectroscopic Database (PAHdb)
 ===============================================
 
-We present software for the astronomical community developed at the
-Astrophysics & Astrochemistry Laboratory () at the NASA Ames Research Center
-. The Laboratory
+We present software for the astronomical community developed at
+the Astrophysics & Astrochemistry Laboratory (`www.astrochemistry.org
+<http://www.astrochemistry.org/pahdb>`_) at NASA Ames Research Center
+(`www.nasa.gov/ames <http://www.nasa.gov/ames>`_). The Laboratory
 provides key insights into organic molecules in astronomical
 environments through a combination of quantum chemical calculations,
 direct laboratory measurements and different analysis techniques of
@@ -138,15 +139,14 @@ astronomical data.
 The NASA Ames PAH IR Spectroscopic Database (PAHdb;
 :cite:`2018ApJS..234...32B` :cite:`2014ApJSS..211....8B`) is the
 culmination of more that 30 years of laboratory and computational
-research carried out at the NASA Ames Research Center
-(`www.nasa.gov/ames <http://www.nasa.gov/ames>`_) to test and refine
+research carried out at the NASA Ames Research Center to test and refine
 the astronomical PAH model. The laboratory-measured and
 theoretically-computed libraries currently contain the spectra of 75
-and 3139 PAH species, respectively, and are continuously expanded and
+and 3139 PAH species, respectively, and are continuously expanded. It is
 the world's foremost collection of PAH spectra.
 
 PAHdb is highly cited and is used to characterize and understand
-organic molecules in our own galaxy and external galaxies. The
+organic molecules in our own Galaxy and external galaxies. The
 database includes a set of innovative astronomical models and tools
 that enables astronomers to probe and quantitatively analyze the state
 of the PAH population, i.e., ionization balance, size, structure, and
@@ -154,7 +154,7 @@ composition and tie these to the prevailing local astrophysical
 conditions, e.g., electron density, parameters of the radiation field,
 etc. :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
 
-.. figure:: screenshot.png
+.. figure:: fig_screenshot.png
    :align: center
 
    Screenshot of the NASA Ames PAH IR Spectroscopic Database website
@@ -163,7 +163,7 @@ etc. :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
    details and vibrational spectrum for the PAH molecule ovalene (C\
    :sub:`32`\ H\ :sub:`14`\ ). Additionally, each vibrational
    transition is animated and can be inspected for ease of
-   interpretation (shown in the lower-right corner).
+   interpretation (shown in the lower-right).
    :label:`fig:PAHdb`
 
 At `www.astrochemistry.org/pahdb/
@@ -205,7 +205,7 @@ the Universe with unprecedented resolution and sensitivity from 0.6 to
 28 µm. The observatory is expected to launch in 2020. A 3D rendering
 of the spacecraft is shown in Figure :ref:`fig:JWST`.
 
-.. figure:: JWST.png
+.. figure:: fig_JWST.png
    :align: center
    :scale: 10%
 
@@ -221,9 +221,9 @@ of the spacecraft is shown in Figure :ref:`fig:JWST`.
 pypahdb: a tool designed for JWST
 ---------------------------------
 
-On the eve of the *JWST*-era, it is our goal to make PAHdb a go-to
-tools for the astronomical community to analyze and interpret PAH
-emission spectra. The Python analyzes tool pypahdb is one of the means
+On the eve of the *JWST* era, it is our goal to make PAHdb a go-to
+tools for the astronomical community for analyzing and interpreting PAH
+emission spectra. The Python analysis tool pypahdb is one of the means
 with which we hope to reach that goal. pypahdb is being developed as
 part of an awarded (*JWST*) Early Release Science (ERS) program titled
 "Radiative Feedback from Massive Stars as Traced by Multiband Imaging
@@ -250,16 +250,16 @@ astronomical PAH emission spectra.
 
 pypahdb analyzes spectroscopic observations (including spectral maps)
 and characterizes the PAH emission using a database-fitting technique,
-providing the PAH ionization and size fraction. The general program
+providing the PAH ionization and size fractions. The general program
 methodology is encapsulated in the flowchart presented in Figure
-:ref:`fig:flowchart` and is as follows. (1) read-in file containing
+:ref:`fig:flowchart` and is as follows: (1) read-in a file containing
 astronomical observations (using ``observation.py``); (2) perform a
 non-negative least-squares fit to the data (using ``decomposer.py``);
 and (3) produce user output in a consistent way so that the user may
-assess the quality of the fit and retrieve the characteristics of PAHs
+assess the quality of the fit and retrieve the PAH characteristics
 in their astronomical observations (``writer.py``).
 
-.. figure:: flowchart_draft2.png
+.. figure:: fig_flowchart.png
    :align: center
 
    pypahdb flowchart. Astronomical spectroscopic data is loaded,
@@ -270,16 +270,17 @@ in their astronomical observations (``writer.py``).
    least-squares (NNLS), which yields the contribution of an
    individual PAH molecule to the total fit. As a result, we obtain a
    breakdown of the model fit in terms of PAH charge and size. The
-   results are written to disk as a single FITS file and a PDF (one
+   results are written to disk as a single FITS file and a PDF 
+   summarizing the model fit (one
    page per pixel, if a spectral cube is given as
    input). :label:`fig:flowchart`
 
 
 The performance of pyPAHdb relative to the full IDL suite was tested
 by fitting a spectral cube. Using pyPAHdb, the spectral cube required
-<4 seconds, and >60 seconds to fit with the full IDL suite. It should
-be noted that their were differences in the actual implementation of
-the two test, which were inherent to the differences in the languages
+<4 seconds, while >60 seconds were needed to fit with the full IDL suite.
+It should be noted that their were differences in the actual implementation of
+the two tests, which were inherent to the differences in the languages
 used.
 
 The underlying PAH physics
@@ -364,7 +365,7 @@ coronene cation (C\ :sub:`24`\ H\ :sub:`12`\ :sup:`+`\ ), which
 reaches a vibrational temperature of 1406 K after absorbing a single 7
 eV photon.
 
-.. figure:: model.png
+.. figure:: fig_model.png
    :align: center
 
    Demonstration of applying the simple PAH emission model as outlined
@@ -385,7 +386,7 @@ reflection nebula NGC 7023. The cube is overlaid on an image from the
 *Hubble Space Telescope* in Figure :ref:`fig:7023`
 :cite:`2018ApJ...858...67B`.
 
-.. figure:: NGC7023_HST_rotated_field_slits.png
+.. figure:: fig_NGC7023_HST_rotated_field_slits.png
    :align: center
 
    An image of the reflection nebula NGC 7023 as obtained by the
@@ -393,7 +394,7 @@ reflection nebula NGC 7023. The cube is overlaid on an image from the
    spectral cube of observations taken with the *Spitzer Space
    Telescope*; each pixel contains an infrared spectrum. In this
    figure, the exciting star is just beyond the lower left corner. We
-   are observing here a photodissociation region boundary: the
+   are observing a photodissociation region boundary: the
    material in the lower half of the figure is diffuse and exposed to
    the star; the material in the upper (right) half is molecular and
    shielded from the star. The diagonal boundary separating the two
@@ -425,7 +426,7 @@ presents part of the resulting PDF-output.
     # write results to file
     pypahdb.writer(result, header=observation.header)
 
-.. figure:: fit2.png
+.. figure:: fig_fit.png
    :align: center
 
    pypahdb-fit to the spectrum of a position in the spectral cube of
@@ -445,11 +446,11 @@ higher across the diffuse region, where PAHs are more exposed to the
 star, than the dense region, where PAHs are partially shielded from
 the star.
 
-.. figure:: map_viridis.png
+.. figure:: fig_map_viridis.png
    :align: center
 
-   PAH ionization fraction across the reflection nebula NGC 7023
-   derived from a *Spitzer* spectral cube and using pyPAHdb
+   PAH ionization across the reflection nebula NGC 7023 is shown,
+   as derived from a *Spitzer* spectral cube using pyPAHdb
    (cf. Figure :ref:`fig:7023`; an ionization fraction of ``1`` means
    all PAHs are ionized, while ``0`` means all are neutral).  The
    exciting star is outside the field-of-view, towards the lower-left
@@ -465,14 +466,14 @@ The future
 ==========
 
 pypahdb is in active development, but a finalized Python software
-analysis tool is anticipated well before *JWST*'s launch, which is
+analysis tool is anticipated to be complete well before *JWST*'s launch, which is
 currently scheduled for 2020. The astronomical community can already
 benefit from pypahdb by using it to quickly analyze and interpret
 archival data from other observatories, e.g., *ISO*, *Spitzer*,
 *SOFIA*, etc. Our current efforts are focused on streamlining pypahdb,
-have it transparently accept spectroscopic observations in a variety
-of digital formats, and consolidate output parameters. Further testing
-will be performed to ensure all parts of pypahdb functions as
+having it transparently accept spectroscopic observations in a variety
+of digital formats, and consolidating output parameters. Further testing
+will be performed to ensure all parts of pypahdb function as
 expected. Lastly, API documentation and a guide with analysis
 "recipes" will be provided to help users get started and/or extend
 pypahdb.
