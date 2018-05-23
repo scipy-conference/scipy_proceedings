@@ -100,9 +100,9 @@ practical applications of object detection include face detection,
 counting, visual search engine.
 
 .. figure:: fig2.png
-   :height: 100 px
-   :width:  200 px
-   :scale: 30 %
+   :height: 75 px
+   :width:  150 px
+   :scale: 20 %
 
    Turn Lane Markings Detection.
 
@@ -114,7 +114,7 @@ boundaries of each object (See Figure 3)
 .. figure:: fig3.png
    :height: 100 px
    :width: 200 px
-   :scale: 30 %
+   :scale: 20 %
 
    Semantic segmentation on roads, buildings and greens
 
@@ -142,9 +142,9 @@ and/or shadows. We excluded turn lane markings that are erased or fully
 covered by cars (see Figure 4b).
 
 .. figure:: fig45.png
-   :height: 100 px
-   :width: 200 px
-   :scale: 30 %
+   :height: 75 px
+   :width: 150 px
+   :scale: 20 %
 
    Annotating turn lane markings - Draw bounding box around the turn lane markings.
    Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
@@ -256,7 +256,7 @@ segmentation distinguishing parking lots from the background.
 .. figure:: fig6.png
    :height: 150 px
    :width: 300 px
-   :scale: 40 %
+   :scale: 30 %
 
    U-Net Architecture
 
