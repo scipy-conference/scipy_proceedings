@@ -121,7 +121,7 @@ boundaries of each object (See Figure 3)
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
 project to create a free editable map of the world. Turn lane markings
-on OpenStreetMap [1]_ are recorded as “ways” (line-strings). We used a tool
+on OpenStreetMap are recorded as “ways” (line-strings)[1]_. We used a tool
 called `Overpass Turbo <https://overpass-turbo.eu/>`__ to query
 OpenStreetMap turn lane markings. We then extracted GeoJSONs in 5 cities
 from OpenStreetMap that have one of the following attributes
