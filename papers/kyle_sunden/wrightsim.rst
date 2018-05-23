@@ -19,7 +19,7 @@ WrightSim: Numerical Integration for Simulating Multidimensional Spectra
 .. class:: abstract
 
     We present a Python package designed to simulate multidimesional
-    nonlinear spectra: "WrightSim".
+    nonlinear spectra: ``WrightSim``.
     WrightSim uses the densitry matrix formulation of quantum mechanics.
     A Hamiltonian describes all of the ways that a set of states interact with
     each-other and with externally applied electric fields in the course of a
@@ -73,7 +73,7 @@ spectra.
 A quantitative microscopic model is developed based on this comparison between
 experiment and theory.
 Here, we focus on this crucial modeling step.
-We present a general-purpose simulation package for MDS: "WrightSim".
+We present a general-purpose simulation package for MDS: ``WrightSim``.
 
 .. figure:: example_spectrum.png
 
@@ -86,7 +86,7 @@ are normalized such that there is a resonance around :math:`0.0` in both
 frequencies.
 This system that we have chosen for this simulation is very simple, with a single
 resonance.
-This two-dimensional simulation is merely representative of WrightSim's ability
+This two-dimensional simulation is merely representative of ``WrightSim``'s ability
 to traverse through many aspects of experimental space.
 Every concievable pulse paramater (delay, fluence, frequency, chirp etc.) can
 become an axis in the simulation.
@@ -99,11 +99,11 @@ kinds of MDS, and it is easy to extend to new kinds.
 WrightSim uses a numerical integration approach that captures the full
 interaction between material and electric field without making common limiting
 assumptions.
-This approach makes WrightSim flexible, accurate, and interpretable.
+This approach makes ``WrightSim`` flexible, accurate, and interpretable.
 
 While the numerical approach we use is more accurate, it does demand
 significantly more computational time.
-We have focused on performance as a critical component of WrightSim.
+We have focused on performance as a critical component of ``WrightSim``.
 Here we report algorithmic improvements which have significantly decreased 
 computational time relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
