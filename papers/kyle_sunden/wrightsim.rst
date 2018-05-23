@@ -94,12 +94,12 @@ become an axis in the simulation.
 ``WrightSim`` is designed with the experimentalist in mind, allowing users
 to parameterize their simulations in much the same way that they would collect
 a similar spectrum in the laboratory. 
-WrightSim is modular and flexable---it is capable of simulating different
+WrightSim is modular and flexible---it is capable of simulating different
 kinds of MDS, and it is easy to extend to new kinds.
 WrightSim uses a numerical integration approach that captures the full
 interaction between material and electric field without making common limiting
 assumptions.
-This approach makes WrightSim flexable, accurate, and interpretable.
+This approach makes WrightSim flexible, accurate, and interpretable.
 
 While the numerical approach we use is more accurate, it does demand
 significantly more computational time.
