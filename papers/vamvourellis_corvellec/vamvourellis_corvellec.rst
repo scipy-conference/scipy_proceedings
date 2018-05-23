@@ -269,8 +269,8 @@ by the following formula:
 .. math::
    :type: eqnarray
 
-   p (\tilde{y} | \mathcal{D} ) =& \int p( \tilde{y}, \theta | \mathcal{D}) d\theta \\
-   =& \int p( \tilde{y} |  \theta) p(\theta | \mathcal{D}) d\theta
+   p (\tilde{y} | \mathcal{D} ) &=& \int p( \tilde{y}, \theta | \mathcal{D}) d\theta \\
+   &=& \int p( \tilde{y} |  \theta) p(\theta | \mathcal{D}) d\theta
 
 In practice, we approximate the integral using samples from the posterior
 distributions, by mapping each parameter posterior sample
