@@ -209,7 +209,7 @@ Stuff about Annotations
 Enhancements: Efficient Raster regridding
 -----------------------------------------
 
-Enhancements: Triangular mesh vizualization
+Enhancements: Triangular mesh visualization
 -------------------------------------------
 
 Addition of a TriMesh element to holviews. + Efficient Viz through DataShader
