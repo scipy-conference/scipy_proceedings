@@ -96,7 +96,7 @@ and other error components [Brown2012]_. The noise-free pseudorange takes the fo
 .. math::
    :label: pseudorange
 
-   z_i = \sqrt{(x_i - x_u)^2 + (y_i - y_u)^2 + (z_i - z_u)^2}  + c\Delta t
+   \rho_i = \sqrt{(x_i - x_u)^2 + (y_i - y_u)^2 + (z_i - z_u)^2}  + c\Delta t
 
 
 where :math:`(x_i,y_i,z_i),\ i = 1, \ldots 4`, is the satellite ECEF location and 
