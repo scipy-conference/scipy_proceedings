@@ -19,34 +19,35 @@ WrightSim: Numerical Integration for Simulating Multidimensional Spectra
 .. class:: abstract
 
     We present a Python package designed to simulate multidimesional
-    nonlinear spectra: ``WrightSim``.
-    WrightSim uses the densitry matrix formulation of quantum mechanics.
+    nonlinear spectra: ``WrightSim`` .
+    ``WrightSim`` uses the densitry matrix formulation of quantum mechanics.
     A Hamiltonian describes all of the ways that a set of states interact with
     each-other and with externally applied electric fields in the course of a
     spectroscopic experiment.
     Numerical integration (of the Liouville-von Neumann equation) is used to
     evolve the density state vector over time as the system interacts with
     several electric fields in the course of a multidimensional experiment.
-    This numerical approach allows WrightSim to fully account for finite pulse
+    This numerical approach allows ``WrightSim`` to fully account for finite pulse
     effects that are commonly ignored.
-    WrightSim is made using modules that can be exchanged to accomidate many
+    ``WrightSim`` is made using modules that can be exchanged to accomidate many
     different experimental setups.
     Simulations are accomplished through a Python interface that is designed
     to be intuitive for experimentalists and theorists.
     We have worked to ensure that the integration itself is performant.
-    We report several algorithimic improvements that make WrightSim faster
+    We report several algorithimic improvements that make ``WrightSim`` faster
     than previous implementations.
     The effect of parallelizing the simulation, both at the CPU and GPU
     (CUDA) levels, is demonstrated. 
     Taken together, algorithmic improvements and parallization has made
-    WrightSim multiple orders of magnitude faster than previous
+    ``WrightSim`` multiple orders of magnitude faster than previous
     implementations.
-    WrightSim represents a large step forward towards the goal of a fast,
+    ``WrightSim`` represents a large step forward towards the goal of a fast,
     accuarate, and easy to use general purpose simulation package for the
     multidimensional spectroscopy commmunity.
-    To our knowledge, WrightSim is the first openly licensed software package
+    To our knowledge, ``WrightSim`` is the first openly licensed software package
     for these kinds of simulations.
     Potential further improvements are discussed.
+
 
 Introduction
 ============
@@ -73,7 +74,9 @@ spectra.
 A quantitative microscopic model is developed based on this comparison between
 experiment and theory.
 Here, we focus on this crucial modeling step.
-We present a general-purpose simulation package for MDS: ``WrightSim``.
+We present a general-purpose simulation package for MDS: ``WrightSim`` [#]_.
+
+.. [#] Source code available at https://github.com/wright-group/WrightSim, released under MIT License.
 
 .. figure:: example_spectrum.png
 
@@ -108,6 +111,7 @@ Here we report algorithmic improvements which have significantly decreased
 computational time relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
+
 
 Theory
 ======
