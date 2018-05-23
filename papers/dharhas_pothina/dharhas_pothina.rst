@@ -178,7 +178,7 @@ ParamParam is a library providing Parameters: Python attributes extended to have
 
 Quest is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
 
-Filigree 
+Filigree is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality computational meshes that conform to the constraints setup by the user. 
 
 Enhancements: Drawing Tools
 ---------------------------
@@ -192,6 +192,16 @@ Enhancements: Efficient Raster regridding
 Enhancements: Triangular mesh vizualization
 -------------------------------------------
 
+GSSHA Hydrology Workflow Example
+--------------------------------
 
+AdH Dambreak Workflow Example
+-----------------------------
+
+Coastline Definition (GrabCut) Workflow Example
+-----------------------------------------------
+
+Conclusions and Future Work
+---------------------------
 
 
