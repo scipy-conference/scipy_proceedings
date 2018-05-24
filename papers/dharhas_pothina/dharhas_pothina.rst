@@ -21,6 +21,11 @@
 :institution: US Army Engineer Research and Development Center
 :equal-contributor:
 
+:author: Kimberly Pevey
+:email: Kimberly.C.Pevey@erdc.dren.mil
+:institution: US Army Engineer Research and Development Center
+:equal-contributor:
+
 :author: Christopher E. Ball
 :email: cball@anaconda.com
 :institution: Anaconda, Inc.
@@ -40,7 +45,8 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    Building environmental simulation workflows is typically a slow process involving multiple 
    proprietary desktop tools that do not interoperate well. In this work, we demonstrate building
    flexible, lightweight workflows entirely in Jupyter notebooks. We demonstrate these capabilities
-   through examples in hydrology and hydrodynamics using the AdH and GSSHA simulators. The goal is 
+   through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics Model) and
+   GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal is 
    to provide a set of tools that can easily be reconfigured and repurposed as needed to rapidly 
    solve specific emerging issues.
 
@@ -64,7 +70,8 @@ primary interest are weather, hydrology, hydrodynamics, soil moisture and ground
 combine various material properties such as soil porosity and vegetation types with topology such as land surface 
 elevation and bathymetry, along with forcing functions such as rainfall, tide, and wind, to predict quantities of
 interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct 
-these simulations requires a combination of heavy proprietary desktop tools [cite SMS & CMB] that do not interoperate
+these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS)
+and Computational Model Builder (CMB) that do not interoperate [cite SMS & CMB]
 well with each other. 
 
 The process of building and running environmental simulations using these tools is time consuming, requiring
@@ -122,10 +129,11 @@ vector fields defined on the computational mesh, stored in binary or ASCII files
 animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows.
 For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional
 space, such as:
- - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for 
+
+   - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for 
  every time point and then compared with historical data from nearby actual measurement stations
- - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
- - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated 
+   - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
+   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated 
  quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
     [fig: show some sample results from sms or cmb]
@@ -251,4 +259,25 @@ Layout of Jupyter Notebooks in Dashboard type form factor
 Integration with Tethys platform & other web frontends
 Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
 
+References
+----------
 
+Downer, C. W., Ogden, F. L., and Byrd, A.R. 2008, GSSHAWIKI User’s Manual, Gridded Surface Subsurface Hydrologic Analysis Version 4.0 for WMS 8.1, ERDC Technical Report, Engineer Research and Development Center, Vicksburg, Mississippi.
+
+McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
+
+SMS Website https://www.aquaveo.com
+
+CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
+
+Bokeh Website https://bokeh.pydata.org
+
+Holoviews Website http://holoviews.org
+
+Geoviews Website http://geoviews.org
+
+Param Website https://ioam.github.io/param
+
+Filigree reference
+
+Quest reference
