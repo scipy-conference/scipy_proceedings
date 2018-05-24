@@ -256,7 +256,7 @@ and OpenRefine :cite:`Head2018-jf`.
 .. figure:: images/rstudio_ui.png
    :align: center
 
-   An RStudio interface being served on `mybinder.org <https://mybinder.org>`_. Because BinderHub
+   An RStudio interface being served on ``mybinder.org``. Because BinderHub
    uses a JupyterHub for hosting all user sessions, one can specify an
    environment that serves any user interface, provided that it can run
    via the browser.
@@ -577,7 +577,7 @@ server REST API served at this URL).
    :align: center
 
    play.nteract.io :cite:`Nteract_contributors2016-dg` is a GUI frontend that connects to the
-   `mybinder.org <https://mybinder.org>`_ REST API. When a user opens the page, it requests a kernel
+   ``mybinder.org`` REST API. When a user opens the page, it requests a kernel
    from mybinder.org according to the environment chosen in the top-right menu.
    Once mybinder.org responds that it is ready, users can execute code that
    will be sent to their Binder kernel, with results displayed on the right.
@@ -602,7 +602,7 @@ interactive code repositories. This service runs at the URL ``https://mybinder.o
 and will be discussed in the final section.
 
 Mybinder.org: Maintaining and sustaining a public service
------------------------------------------------------
+---------------------------------------------------------
 
 You can access a public deployment of BinderHub at `mybinder.org <https://mybinder.org>`_.
 This a web service that the Binder and JupyterHub team run both as a
@@ -650,10 +650,10 @@ on top of Kubernetes if that setup proved more cost effective.
 .. figure:: images/cost_breakdown.png
    :align: center
 
-   Cloud computing costs for running `mybinder.org <https://mybinder.org>`_ in 2018. x-axis shows
+   Cloud computing costs for running ``mybinder.org`` in 2018. x-axis shows
    one point per day. Daily unique users has consistently grown over this time,
    while modifications to the BinderHub codebase (as well as the cloud
-   resources used) has kept costs relatively flat. As a result, `mybinder.org <https://mybinder.org>`_
+   resources used) has kept costs relatively flat. As a result, ``mybinder.org``
    currently operates at about 5 cents per user per day.
 
 The decision to avoid the notion of a user "identity" in particular has strong
