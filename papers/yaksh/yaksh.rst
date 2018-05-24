@@ -310,7 +310,7 @@ The models for yaksh are as follows:
 
 - Profile
 
-  This model is used for storing more information about of a user such as institute, department etc.
+  This model is used for storing more information about a user such as institute, department etc.
 
 - Question
 
@@ -390,7 +390,7 @@ Code Server
 
 Code Server is an important part of yaksh. The evaluation of any code is done
 through the code server. We have used the Tornado_ web framework to manage the
-for asynchronous process generation. A ``settings.py`` file is provided which
+asynchronous process generation. A ``settings.py`` file is provided which
 is used to specify various parameters necessary for the code server.
 
 .. _Tornado: https://www.tornadoweb.org
@@ -439,7 +439,7 @@ file and returns the evaluator instance to the Grader.
 
 Dictionary mapping of evaluator is as shown in Fig :ref:`fig:code-evaluator-dictionary`
 
-.. figure:: code_evaluators.PNG
+.. figure:: code_evaluators.png
    :alt:  Code evaluator dictionary
 
    Dictionary mapping of python code evaluator :label:`fig:code-evaluator-dictionary`
@@ -494,7 +494,7 @@ Workflow of yaksh
 
   Yaksh provides a basic authentication system for a user. A user has to first register on the interface. An email is sent to verify if the user email is correct or not. Once the email is verified user can login to the interface. A user can also login via an oauth system such as Gmail or Facebook. By default the user is a student, although the user can become a moderator if the user is added to the moderator group. Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
-  .. figure:: yaksh_login.PNG
+  .. figure:: yaksh_login.png
      :alt:  Login screen
 
      The Yaksh application login screen :label:`fig:yaksh-login`
@@ -520,7 +520,7 @@ Workflow of yaksh
 
   The moderator can then create lessons and modules. A lesson can have description either as a markdown text or a video or both. After lesson creation, the moderator can create modules. A module can have its own description either as a markdown text or a video or both. All the lessons and quizzes are added to the created module. The moderator can create any number of modules, lessons and quizzes as desired. These modules are added to a course.
 
-  .. figure:: yaksh_monitor.PNG
+  .. figure:: yaksh_monitor.png
    :alt: Monitor interface
 
    The moderator interface for monitoring a quiz on yaksh. :label:`fig:yaksh-monitor`
@@ -539,32 +539,32 @@ Workflow of yaksh
   Working on the student side is relatively easy. After login, a student can view all the open courses or search for a course. Once the course is available, the student can enroll in a course.
   A Student has to complete the course within a specified time. After enrolling, the student will be able to see all the modules and its units (Lessons/Quizzes) for the course. A student can view all the lessons and once the lessons are finished student can attempt the quiz. Fig. :ref:`fig:yaksh-lesson` shows a video lesson from the monthly running Python course.
 
-  .. figure:: yaksh_view_lesson.PNG
+  .. figure:: yaksh_view_lesson.png
      :alt:  Lesson
 
      The interface showing a video lesson :label:`fig:yaksh-lesson`
 
-  .. figure:: yaksh_mcc_mcq.PNG
+  .. figure:: yaksh_mcc_mcq.png
      :alt: MCQ interface
 
      The interface for a multiple-choice question on yaksh. :label:`fig:yaksh-mcq`
 
-  .. figure:: yaksh_coding.PNG
+  .. figure:: yaksh_coding.png
      :alt:  Programming
 
      The interface for a programming question on yaksh. :label:`fig:yaksh-code`
 
-  .. figure:: yaksh_error.PNG
+  .. figure:: yaksh_error.png
      :alt:  Error
 
      Error output after submitting the code answer. :label:`fig:yaksh-error`
 
-  .. figure:: yaksh_stdio_que.PNG
+  .. figure:: yaksh_stdio_que.png
      :alt:  Programming Stdio
 
      The interface for a stdio question type on yaksh. :label:`fig:yaksh-code-stdio`
 
-  .. figure:: yaksh_error_stdio.PNG
+  .. figure:: yaksh_error_stdio.png
      :alt:  Error Stdio
 
      Error output for stdio question type. :label:`fig:yaksh-error-stdio`
@@ -587,7 +587,7 @@ Supporting a new language
 Adding a new language is relatively easy. In the settings file you need to add a mapping for the evaluator corresponding to the language. An example for adding new evaluator
 is shown in Fig :ref:`fig:yaksh-new-code`.
 
-.. figure:: adding_new_code_evaluator.PNG
+.. figure:: adding_new_code_evaluator.png
      :alt:  Add new code evaluator
 
      Dictionary mapping for new code evaluator :label:`fig:yaksh-new-code`
