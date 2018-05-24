@@ -147,6 +147,7 @@ section of the XML. We designed the parsing API to quickly locate and parse XML
 elements as properties:
 
 .. code-block:: python
+    
     >>> art.doi
     '10.1371/journal.pone.0052669'
     >>> art.title
@@ -169,35 +170,45 @@ tags whenever possible.
 
 Using XPath
 ~~~~~~~~~~~
-You can also do XPath searches on `art.tree`, which works well for finding article elements that aren't Article class properties.
-``
->>> acknowledge = art.tree.xpath('//ack/p')[0]
->>> acknowledge.text
-'We thank all contributors to the Performance Curve Database (pcdb.santafe.edu).'
-``
-Let's put these pieces together to make a list of articles that use PCR in their Methods section (`pcr_list`). The body of an article is divided into sections (with the element tag 'sec') and the element attributes of Methods sections are either `{'sec-type': 'materials|methods'}` or `{'sec-type': 'methods'}`. The `lxml.etree` module needs to be imported to turn XML elements into strings via the 'tostring' method.
-``
-import lxml.etree as et
-pcr_list = []
-for article in corpus.random_sample(20):
 
-    # Step 1: find Method sections
-    methods_sections = article.root.xpath("//sec[@sec-type='materials|methods']")
-    if not methods_sections:
-        methods_sections = article.root.xpath("//sec[@sec-type='methods']")
+You can also do XPath searches on `art.tree`, which works well for finding
+article elements that aren't Article class properties.
 
-    for sec in methods_sections:
+.. code-block:: python
+  
+    >>> acknowledge = art.tree.xpath('//ack/p')[0]
+    >>> acknowledge.text
+    'We thank all contributors to the Performance Curve Database (pcdb.santafe.edu).'
+  
+Let's put these pieces together to make a list of articles that use PCR in their
+Methods section (``pcr_list``). The body of an article is divided into sections
+(with the element tag 'sec') and the element attributes of Methods sections are
+either ``{'sec-type': 'materials|methods'}`` or ``{'sec-type': 'methods'}``. The
+``lxml.etree`` module needs to be imported to turn XML elements into strings via
+the ``tostring()`` method.
 
-        # Step 2: turn the method sections into strings
-        method_string = et.tostring(sec, method='text', encoding='unicode')
+.. code-block:: python
 
-        # Step 3: add DOI if 'PCR' in string
-        if 'PCR' in method_string:
-            pcr_list.append(article.doi)
-            break
-        else:
-            pass
-``
+    import lxml.etree as et
+    pcr_list = []
+    for article in corpus.random_sample(20):
+
+        # Step 1: find Method sections
+        methods_sections = article.root.xpath("//sec[@sec-type='materials|methods']")
+        if not methods_sections:
+            methods_sections = article.root.xpath("//sec[@sec-type='methods']")
+
+        for sec in methods_sections:
+
+            # Step 2: turn the method sections into strings
+            method_string = et.tostring(sec, method='text', encoding='unicode')
+
+            # Step 3: add DOI if 'PCR' in string
+            if 'PCR' in method_string:
+                pcr_list.append(article.doi)
+                break
+            else:
+                pass
 
 Query with peewee & SQLite
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
