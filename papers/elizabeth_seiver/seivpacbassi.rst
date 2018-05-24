@@ -29,7 +29,7 @@ Text and data mining scientific articles with allofplos
 
 .. class:: keywords
 
-   
+   Text and data mining, metascience, open access, science publishing, scientific articles, XML
 
 Introduction
 ------------
@@ -37,17 +37,7 @@ Introduction
 
 What is allofplos?
 ------------------
-allofplos is a Python package for downloading and maintaining up-to-date scientific article corpora, as well as parsing PLOS XML articles in the JATS format. It's available on PyPI as well as a GitHub repository. Many existing Python packages for parsing XML and/or JATS focus on defensive parsing, where the structure is assumed not to be reliable or the document is immediately converted to another intermediate format (often JSON) and XML is just a temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for fast XML parsing and conversion to familiar Python data structures like lists, dictionaries, and datetime objects.
-
-allofplos's parsing focuses on article metadata (e.g., article title, author names and institutions, date of publication), which are conveniently located in the 'front' section of the XML. We designed the parsing API around the Article() object which takes an article, turns it into an lxml tree, and quickly locates and parses fields as such:
->>> art = Article()
->>> art.title
-'Title of article'
->>> art.journal
-'PLOS ONE'
->>> art.pubdate
-datetime.datetime(2016, 9, 8, 0, 0)
-It's geared at researchers who are familiar with scientific articles and Python, but may not be familiar with the JATS XML.
+allofplos is a Python package for downloading and maintaining up-to-date scientific article corpora, as well as parsing PLOS XML articles in the JATS format. It's available on PyPI as well as a GitHub repository. Many existing Python packages for parsing XML and/or JATS focus on defensive parsing, where the structure is assumed not to be reliable or the document is immediately converted to another intermediate format (often JSON) and XML is just a temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for fast XML parsing and conversion to familiar Python data structures like lists, dictionaries, and datetime objects. It's geared at researchers who are familiar with scientific articles and Python, but may not be familiar with the JATS XML.
 
 How allofplos maintains corpora
 -------------------------------
@@ -67,3 +57,41 @@ If no articles are found at the specified corpus location, it will initiate a do
 How allofplos uses corpora and parses articles
 ----------------------------------------------
 
+To initialize a corpus (defaults to `corpusdir`, or the location set by the 'PLOS_CORPUS' environmental variable), use the Corpus class.
+>>> from allofplos import Corpus
+>>> corpus = Corpus()
+The number of articles in the corpus can be found with `len(corpus)`. The list of every DOI for every article in the corpus can be found at `corpus.dois`, and the path to every XML file in the corpus directory at `corpus.filenames`. To select a random Article object, use `corpus.random_article`. To select a random list of 10 Article objects, use `corpus.random_sample(10)`. You can also iterate through articles as such:
+``
+for article in corpus[:10]:
+    print(article.title)
+``
+Because DOIs contain semantic meaning and XML filenames are based on the DOI, if you're trying to loop through the corpus, it won't be a representative sample but rather will implicitly progress by journal name and then by publication date. The iterator for Corpus() puts the articles in a random order to avoid this problem.
+
+Parsing articles with ``Article``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+As mentioned above, you can use the Corpus class to initialize an Article() object without calling it directly. An Article takes a DOI and the location of the corpus directory to read the accompanying XML document into lxml.
+``
+>>> art = Article('10.1371/journal.pone.0052669')
+``
+The lxml tree of the article is memoized in 'art.tree` so its can be repeatedly called without needing to re-read the XML file.
+``
+>>> type(art.tree)
+lxml.etree._ElementTree
+``
+allofplos's article parsing focuses on metadata (e.g., article title, author names and institutions, date of publication, Creative Commons copyright license[CITE], JATS version/DTD), which are conveniently located in the 'front' section of the XML. We designed the parsing API to quickly locate and parse XML elements as properties:
+``
+>>> art.title
+'Statistical Basis for Predicting Technological Progress'
+>>> art.journal
+'PLOS ONE'
+>>> art.pubdate
+datetime.datetime(2013, 2, 28, 0, 0)
+>>> art.license
+{'license': 'CC-BY 4.0',
+ 'license_link': 'https://creativecommons.org/licenses/by/4.0/',
+ 'copyright_holder': 'Nagy et al',
+ 'copyright_year': 2013}
+>>> art.dtd
+'NLM 3.0'
+``
+For author information, Article reconciles and combines data from multiple elements within the article into a clean standard form. Property names match XML tags whenever possible.
