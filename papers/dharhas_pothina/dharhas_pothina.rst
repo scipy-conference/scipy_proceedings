@@ -139,7 +139,7 @@ space, such as:
    - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
    - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
-.. figure:: images/materials.png
+.. figure:: images/velocity_field.png
 
    Water Velocity quiver plot overlaid on a water depth field. Shows a navigational channel and some dredge stuff???. :label:`velocity_field`
 
