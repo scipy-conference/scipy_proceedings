@@ -10,7 +10,7 @@
 
 :author: Jessica Forde
 :email:
-:institution:
+:institution: Project Jupyter
 :equal-contributor:
 
 :author: Jeremy Freeman
@@ -67,6 +67,7 @@
 :email: willingc@gmail.com
 :institution: Cal Poly SLO
 :equal-contributor:
+:bibliography: binder_bib
 
 
 ===================================================================================
@@ -90,26 +91,26 @@ Binder 2.0 - Reproducible, interactive, shareable environments for science at sc
    accessibility, kubernetes, dev ops, jupyter, jupyter notebooks, github,
    publishing, interactivity
 
-Binder is the first free, open-source, and massively publicly-available tool
+Binder is a free, open-source, and massively publicly-available tool
 for easily creating sharable, interactive, reproducible environments in the
 cloud.
 
-The scientific community is more and more unified around reproducibility. 
+The scientific community is more and more unified around reproducibility.
 To achieve this requires pursuing two subgoals, both of which are difficult to
 achieve:
 
-- technical reproducibility: 
-  
+- technical reproducibility:
+
   making reproducible scientific results possible at all
 - practical reproducibility:
-  
+
   enabling others to reproduce results without difficulty
 
 Both functional and practical reproducibility depend upon the software and
 technology available to researchers at any moment in time. With the growth in
 open-source tools for data analysis, as well as the “data heavy” approach many
 fields are adopting, these problems become both more complex yet more achievable
-than ever before. 
+than ever before.
 
 Fortunately, as the problem grows more complex, the open source community has
 risen to meet the challenge. Tools for packaging analytics environments into
@@ -122,10 +123,13 @@ to live next to the prose that explains their purpose.
 
 However, manual implementation of this processes is very complex, and
 reproducing the full stack of another person’s work is too labor intensive,
-as well as error-prone, for day-to-day use. As a result, while reproducibility
-is *technically* possible, it is not yet *practically* possible. This paper
-introduces Binder 2.0, a tool that takes us one step closer towards workflows
-that make computational work practical to share.
+as well as error-prone, for day-to-day use. A recent study of scientific
+repositories found that citation of "both visualization tools as well as
+common software packages (such as MATLAB) was a widespread failure" :cite:`Stodden2018-fy`.
+As a result, while reproducibility is *technically* possible, it is not yet
+*practically* possible. This paper introduces Binder 2.0, a tool
+that takes us one step closer towards workflows that make computational work
+practical to share.
 
 
 Binder consists of a set of tools for creating sharable, interactive, and
@@ -145,20 +149,33 @@ itself fully open-source for others to use.
    :align: center
    :figclass: w
 
-   Examining image data from Ross et al. on Binder with JupyterLab [Ross17]_.
+   Examining image data from Ross et al. on Binder with JupyterLab :cite:`Ross2017-ff`.
    JupyterLab is one of the three user interfaces available to Binder users.
    In this example, we use JupyterLab to view additional image data in a code
    console. Note that this modification to the code can be made without requiring
    the user to install dependencies.
 
 
-The first iteration of Binder was released in 2016, and provided a prototype
-that managed reproducible user environments in the cloud. In the years since,
-there have been several advances in technology for managing cloud resources,
-serving interactive user environments, and creating reproducible containers for
+Binder continues in the tradition of promoting "the complete software
+development environment and the complete set of instructions which generated
+the figures" :cite:`Buckheit1995-ox` by effortlessly providing these tools to the general
+public in the cloud. The first iteration of Binder was released in 2016 :cite:`Freeman2016-jt`,
+and provided a prototype that managed reproducible user environments in the cloud.
+In the years since, there have been several advances in technology for managing
+cloud resources, serving interactive user environments, and creating reproducible containers for
 analytics. Binder 2.0 utilizes these new tools, and is more scalable, maintainable,
 is easier to deploy, and supports more analytic and scientific workflows than
-before.
+before. While previous work has specified methods or file-formats
+for the sharing of research :cite:`Buckheit1995-ox` :cite:`Gentleman2007-cz`
+:cite:`Liang2015-ay` Binder only requires configuration files typically seen in contemporary software
+development. Related online platforms for reproducibility also have specific
+frontends for presenting research and commands for running code :cite:`Anjos2017-vb`
+:cite:`Liang2015-ay` :cite:`Stodden2012-sd`, while Binder flexibly allows users to interact with
+a repository using modern data science tools such as RStudio, Jupyter Notebok,
+and JupyterLab. By containerizing the environment and using theses frontend
+data science tools, Binder prioritizes an interactive user experience so that
+"someone else can discover it for themselves" :cite:`Somers2018-bj`.
+
 
 At the highest level, Binder is a particular combination of open-source
 tools to achieve the goal of sharable, reproducible environments. This paper
@@ -232,10 +249,10 @@ definition of  a computational environment (e.g. a Docker image) that runs
 the Jupyter notebook server. A core principle of the Jupyter project is to be
 language- and workflow-agnostic, and JupyterHub is no exception. JupyterHub can
 be used to run dozens of languages served with a variety of user interfaces,
-including `Jupyter Notebooks <https://github.com/binder-examples/multi-language-demo>`_,
-`Jupyter Lab <https://github.com/binder-examples/jupyterlab>`_,
-`RStudio <https://github.com/binder-examples/r>`_, `Stencila <https://github.com/minrk/jupyter-dar>`_,
-and `OpenRefine <https://github.com/betatim/openrefineder/>`_.
+including Jupyter Notebooks :cite:`Bussonnier2018-kc`, JupyterLab
+:cite:`Project_Jupyter_Contributors_2017-yi`,
+RStudio :cite:`Project_Juptyer_Contributors_2017-ra`, Stencila :cite:`RK_Min_2018-eq`,
+and OpenRefine :cite:`Head2018-jf`.
 
 
 .. figure:: images/rstudio_ui.png
@@ -273,19 +290,19 @@ universities adopt and contribute to the tool, the Binder community will
 benefit from these advances.
 
 There are several use-cases of JupyterHub being used for shared, interactive
-computing. For example, UC Berkeley hosts a "`Foundation in Data Science <http://data8.org>`_"
+computing. For example, UC Berkeley hosts a Foundation in Data Science :cite:`Berkeley_Division_of_Data_Sciences_undated-nz`
 course that serves nearly 1,000 interactive student sessions simultaneously.
-The Wikimedia foundation also uses `JupyterHub to facilitate users accessing
-the Wikipedia dataset <http://paws.wmflabs.org>`_, allowing them to run bots and
+The Wikimedia foundation also uses JupyterHub to facilitate users accessing
+the Wikipedia dataset :cite:`Wikimedia_undated-si`, allowing them to run bots and
 automate the editing process with a Jupyter interface. Finally, organizations
-such as the Open Humans Project provide a `JupyterHub for their community
-<https://notebooks.openhumans.org>`_ to analyze, explore, and discover interesting
+such as the Open Humans Project provide a JupyterHub for their community
+:cite:`Open_Humans_Foundation_undated-ov` to analyze, explore, and discover interesting
 patterns in a shared dataset.
 
 Deterministic environment building - Repo2Docker
 ------------------------------------------------
 
-Docker is extremely flexible, and has been used throughout the scientific and
+Docker :cite:`Docker_Inc_undated-ai` is extremely flexible, and has been used throughout the scientific and
 data science community for standardizing environments that are shareable with
 other people. A Docker image contains nearly all of the pieces necessary to
 re-run an analysis. This provides the right balance between flexibility (e.g.
@@ -302,8 +319,8 @@ different workflows in data analytics, and requiring the use of a Dockerfile to
 define an environment is too restrictive.
 
 At the same time, the analytics community already makes heavy use of online code
-repositories, often hosted on websites such as `GitHub <https://github.com/>`_
-or `Bitbucket <https://bitbucket.org/>`_. These sites are home to tens of
+repositories, often hosted on websites such as GitHub :cite:`GitHub_undated-wa`
+or Bitbucket :cite:`Atlassian_undated-ra`. These sites are home to tens of
 thousands of repositories containing the computational work for research,
 education, development, and general communication. Best-practices in development
 already dictate storing the requirements needed (in text files such as ``environment.yml``)
@@ -311,8 +328,8 @@ along with the code itself (which often lives in document structures such as Jup
 Notebooks or RMarkdown files). As a result, in many cases the repository already
 contains all the information needed to build the required environment.
 
-Binder’s solution to this is a lightweight tool called “repo2docker”. It is an
-open-source command line tool that converts code repositories into a Docker
+Binder’s solution to this is a lightweight tool called “repo2docker” :cite:`Project_Jupyter_Contributors2017-no`.
+It is an open-source command line tool that converts code repositories into a Docker
 image suitable for running with JupyterHub. Repo2docker does the following things:
 
 1. Is called with a single argument, a path to a git repository, and optionally
@@ -424,7 +441,7 @@ R commands run before building the Docker image.:
        r-2017-10-24
 
 In this case, the date specified in ``runtime.txt`` instructs repo2docker to
-use a specific `MRAN repository <https://mran.microsoft.com/>`_ date. In addition,
+use a specific MRAN repository :cite:`Microsoft_undated-gd` date. In addition,
 note that these files exist in a folder called ``binder/`` (relative to the
 repository root). If repo2docker discovers a folder of this name, it will build
 the environment from the contents of this folder, ignoring any configuration files
@@ -561,7 +578,7 @@ server REST API served at this URL).
 .. figure:: images/nteract_ui.png
    :align: center
 
-   `play.nteract.io <play.nteract.io>`_ is a GUI frontend that connects to the
+   play.nteract.io :cite:`Nteract_contributors2016-dg` is a GUI frontend that connects to the
    ``mybinder.org`` REST API. When a user opens the page, it requests a kernel
    from mybinder.org according to the environment chosen in the top-right menu.
    Once mybinder.org responds that it is ready, users can execute code that
@@ -574,7 +591,7 @@ that are powered by a BinderHub kernel. The author can define the environment
 needed to run code on the static page, and interactive code output can be
 generated by the user once they visit the webpage. There are also several
 applications that use BinderHub’s kernel API to power their computation. For
-example, the `nteract <https://play.nteract.io>`_ project uses BinderHub to
+example, the nteract :cite:`Nteract_contributors2016-dg` project uses BinderHub to
 run an interactive code sandbox that serves an nteract interface and can be
 powered by arbitrary kernels served by BinderHub.
 
@@ -650,8 +667,8 @@ order to avoid over-provisioning cloud resources as much as possible.
 
 Currently, the hosting bill for ``mybinder.org`` runs at a cost of several hundred dollars per
 day. At roughly 50,000 users per week, this comes out to around $\frac{220 \times30}{50000} \approx 13$cents per
-user. The ``mybinder.org`` team publishes its daily hosting costs in `a public
-repository on GitHub <https://github.com/binder-examples/binder-billing>`_.
+user. The ``mybinder.org`` team publishes its daily hosting costs in a public
+repository on GitHub :cite:`JupyterHub2018-ek`.
 It hopes that this serves to encourage other organizations to deploy BinderHub
 for their own purposes, since it is possible to do so in a cost-effective
 manner.
@@ -693,7 +710,8 @@ scenarios:
    it can generate deterministic environments that are linked to a code repository
    stored in a long term archive like Zenodo. This makes it useful for generating
    static representations of the environment needed to reproduce a scientific result.
-   Binder has already been used alongside scientific publications <TODO CITATION>
+   Binder has already been used alongside scientific publications
+   :cite:`LIGO_Scientific_Collaboration_undated-xy` :cite:`Ross2017-ff`
    to provide an interactive and reproducible document with minimal added effort.
    In the future, the Binder project hopes to partner with academic publishers
    and professional societies to incorporate these reproducible environments into
@@ -711,22 +729,12 @@ scenarios:
    on any cloud hardware that is desired. This opens the door for using BinderHub
    as a shared, interactive gateway that provides access to an otherwise inaccessible
    dataset or computational resource. For example, the GESIS Institute for Social
-   Sciences provides a `JupyterHub and BinderHub <https://notebooks.gesis.org/>`_
+   Sciences provides a JupyterHub and BinderHub :cite:`GESIS_Leibniz_Institute_for_the_Social_Sciences_undated-sn`
    for their users at the university. The Binder team hopes to find new cases where
    BinderHub can be used as an entrypoint to provide individuals access to more
    sophisticated resources in the cloud.
 
-Binder is the first free, open-source, and massively publicly-available tool for
+Binder is a free, open-source, and massively publicly-available tool for
 easily creating sharable, interactive, reproducible environments in the cloud.
 The Binder team is excited to see the Binder community continue to evolve and
 utilize BinderHub for new uses in reproducibility and interactive computing.
-
-References
-----------
-
-.. [Ross17] Ross AS, Hughes MC, Doshi-Velez F. Right for the Right
-            Reasons: Training Differentiable Models by Constraining
-            their Explanations. Proceedings of the Twenty-Sixth
-            International Joint Conference on Artificial Intelligence.
-            2017. p. Pages 2662–2670.
-            http://paperpile.com/b/FMgQkX/7HDA9
