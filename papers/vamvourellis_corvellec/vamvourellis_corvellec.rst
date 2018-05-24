@@ -786,8 +786,8 @@ They both are expressive languages and allow flexible model specification in cod
 PyMC3 is leveraging Theano to implement automatic differentiation whereas Stan
 on its own algorithm. Practitioners report that PyMC3 is easier to get started with (hence, more
 suitable for prototyping), while Stan is more robust (hence, more suitable for
-production). For example see Prophet time series packages by Facebook implemented
-with Stan.
+production). For example, Prophet [#]_ is a timeseries forecasting package by
+Facebook implemented with Stan.
 Indeed, there is a rich ecosystem of packages built on top of Stan. However,
 most of these are available in R only. Most of RStan derived
 packages follow pre-existing conventions to ease the transition of researchers who
@@ -798,6 +798,7 @@ Bayesian estimates in place of frequentist estimates with minimal changes to the
 This way users can easily compare the estimates of the two methods and judge whether
 the Bayesian approach works for them.
 
+.. [#] See https://research.fb.com/prophet-forecasting-at-scale/.
 .. [#] This package makes it easy to fit models (https://github.com/paul-buerkner/brms).
 
 Such packages can also be of use to more advanced users of Bayesian inference as
