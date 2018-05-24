@@ -201,7 +201,28 @@ other new open source tools Filigree and Quest. Short descriptions of these tool
 Enhancements: Drawing Tools
 ---------------------------
 
-Bidirectional Connection between Javascript plots and Python
+A new set of edit tools have been added to the Bokeh plotting library. These are sophisticated multi-gesture tools that can 
+add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side by
+adding, modifying and deleting the plot's underlying data. The individual tools can be enabled as needed for each particular
+plot. 
+
+- **BoxEditTool**: The BoxEditTool allows drawing, dragging and deleting rectangular glyphs.
+- **PointDrawTool**: The PointDrawTool allows adding, dragging and deleting point-like glyphs.
+- **PolyDrawTool**: The PolyDrawTool allows drawing, selecting and deleting Patches and MultiLine glyphs.
+- **PolyEditTool**: The PolyEditTool allows editing the vertices of one or more Patches or MultiLine glyphs.
+
+In addition, Holoviews implements new objects called streams that allow for an easy bidirectional connection between the
+javascript plots and Python. This allows for both definition of geometries in python and editing in the enteractive plot
+as well as creation/modification of geometries in the interactive plot with subsequent access of the data from Python for 
+further processing. As a simple motivating example, drawing a bounding box on a map and retrieving landsat data for the 
+region inside the box now becomes a simple XX line code.
+
+```python
+from holoviews.streams import BoxEdit
+import quest
+
+blah blah blah
+```
 
 .. figure:: images/drawing_tools.png
 
