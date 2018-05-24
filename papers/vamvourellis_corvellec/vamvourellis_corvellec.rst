@@ -753,7 +753,7 @@ if we use the non-center parameterization :math:`x = \mu + \sigma^2 z` for
 :math:`z \sim N(0, 1)`.
 In our case study, we use this trick, or rather its multivariate version, by
 targeting the non-centered parts of the latent variable :code:`Z`
-(lines 15, 23, 31-32 and 43). Another cause of bad inference results in
+(lines 15, 23, 31–32 and 43). Another cause of bad inference results in
 regression models is correlation among covariates. The way to improve the
 sampling efficiency of a regression model is to parameterize it using the
 QR decomposition [#]_. We note that these issues, among others, that a
@@ -768,6 +768,75 @@ However, in some cases we are able to circumvent this issue [#]_.
 .. [#] See http://mc-stan.org/users/documentation/case-studies/mle-params.html.
 .. [#] See http://mc-stan.org/users/documentation/case-studies/qr_regression.html.
 .. [#] See http://elevanth.org/blog/2018/01/29/algebra-and-missingness/.
+
+*Stan vs PyMC3*
+
+In this subsection, we provide a brief overview of the similarities and differences
+between PyStan and PyMC3, which is another state-of-the-art FLOSS [#]_ implementation
+of automatic Bayesian inference in Python. By ‘automatic,’ we mean that the
+user only needs to specify the model and the data and the software takes care of the
+Bayesian inference. Both PyStan and
+PyMC3 let users fit highly complex Bayesian models, by using Hamiltonian Monte
+Carlo (HMC) under the hood.
+
+.. [#] FLOSS stands for “Free/Libre and Open Source Software.”
+
+Stan and PyMC3 are the same insofar as they serve exactly the same purpose.
+They both are expressive languages and allow flexible model specification in code.
+PyMC3 is leveraging Theano to implement automatic differentiation whereas Stan
+on its own algorithm. Practitioners report that PyMC3 is easier to get started with (hence, more
+suitable for prototyping), while Stan is more robust (hence, more suitable for
+production). For example see Prophet time series packages by Facebook implemented
+with Stan.
+Indeed, there is a rich ecosystem of packages built on top of Stan. However,
+most of these are available in R only. Most of RStan derived
+packages follow pre-existing conventions to ease the transition of researchers who
+want to try Bayesian modeling seamlessly.
+For example, R users are usually familiar with the `glm` building block for fitting
+generalized linear models; with the `brms` package [#]_ users can insert a
+Bayesian estimates in place of frequentist estimates with minimal changes to their scripts.
+This way users can easily compare the estimates of the two methods and judge whether
+the Bayesian approach works for them.
+
+.. [#] This package makes it easy to fit models (https://github.com/paul-buerkner/brms).
+
+Such packages can also be of use to more advanced users of Bayesian inference as
+they typically implement the state-of-the-art modeling choices such as default
+priors and expose the generated Stan code to the user. Hence, interested
+researchers can learn by essentially using them to generate a baseline Stan
+code that they can tweak further according to their needs. At the time of
+writing, PyStan users cannot directly benefit from the Stan ecosystem of
+packages without leaving Python, at least briefly, as most of the packages above
+are not available in Python. As a result, we think that PyMC3 seems to be a more
+complete solution from a Python perspective. PyMC3 is native to Python and hence
+more integrated into Python than PyStan. PyMC3 also offers more integrated
+plotting capabilities than PyStan.
+
+The value of Stan, in the authors' view, should be considered beyond the mere
+software implementation of HMC. Stan consists of a dynamic research community that aims
+at making Bayesian inference more accessible and robust. This is achieved through
+open discussion of all Bayesian topics, many of which are areas of active research.
+Interested users can learn more about Bayesian inference in general, not just Stan,
+by reading online and participating in the discussion (see next subsection).
+
+*Further reading*
+
+The Stan manual :cite:`StanManual` is a comprehensive guide to Stan but also includes
+guidance for Bayesian data analysis in general. For a concise discussion on the
+history of Bayesian inference programs and the advantages of HMC, see
+:cite:`McElreath2017`.
+For examples of other case studies and tutorials in Stan, see
+http://mc-stan.org/users/documentation/. For active discussions and advice on
+how to use Stan, see the Stan forum at http://discourse.mc-stan.org/.
+
+For additional sources on PyMC3 vs Stan comparisons, see:
+
+* https://github.com/jonsedar/pymc3_vs_pystan
+* http://discourse.mc-stan.org/t/jonathan-sedar-hierarchical-bayesian-modelling-with-pymc3-and-pystan/3207
+* http://andrewgelman.com/2017/05/31/compare-stan-pymc3-edward-hello-world/
+* https://towardsdatascience.com/stan-vs-pymc3-vs-edward-1d45c5d6da77
+* https://pydata.org/london2016/schedule/presentation/30/
+* https://github.com/jonsedar/pymc3_vs_pystan
 
 Reproducibility
 ---------------
@@ -844,7 +913,7 @@ Reproducible research practitioners recommend licensing your scientific work
 under a license which ensures attribution and facilitates sharing
 :cite:`Stodden2009`.
 Raw data are not copyrightable, so it makes no sense to license them. Code
-should be made available under a FLOSS [#]_ license.
+should be made available under a FLOSS license.
 Licenses suitable for materials which are neither software nor data (i.e.,
 papers, reports, figures), and offering both attribution and ease of sharing,
 are the Creative Commons Attribution (CC BY) licenses.
@@ -852,8 +921,6 @@ The case study (notebook) has been licensed under CC BY since the beginning.
 This practice can indeed contribute to improving reproducibility, since other
 researchers may then reuse the materials independently, without having to ask
 the copyright holders for permission.
-
-.. [#] FLOSS stands for “Free/Libre and Open Source Software.”
 
 We were confronted with the issue of software portability in real life, as soon
 as we (the authors) started collaborating. We created an isolated Python 3
