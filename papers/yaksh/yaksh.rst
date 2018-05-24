@@ -145,9 +145,39 @@ students all across India. Over 3000 students have used the interface to learn
 Python. It has been used in several courses taught at IIT Bombay and also for
 conducting recruitment interviews internally.
 
-In this talk we first demonstrate yaksh and then discuss its features and
-implementation. We show an example of a complete Python course that we host at
-FOSSEE using yaksh.
+There are a few other open source software packages that allow to do all or
+part of what Yaksh does.
+
+nbgrader_ is a Jupyter Notebook plugin that can be used to grade programming
+assignments. The student submits jupyter notebooks containing code blocks
+which are then evaluated manually or automatically. nbgrader_ provides a very
+convenient Jupyter based interface. Yaksh offers very different features, it
+offers instant feedback and grading, supports a variety of different
+languages, and also allows one to host a full course.
+
+ .. _nbgrader: https://github.com/jupyter/nbgrader
+
+
+relate_ is similar to Yaksh in scope and goals. It allows a user to create a
+web based course with a grading interface quite similar to Yaksh. However,
+entering content into the software is based largely on YAML which is great for
+developers but not all end-users. Yaksh provides several question types and
+different ways to evaluate students' code.
+
+.. _relate: https://github.com/inducer/relate
+
+
+Datacamp_ also provide several tools that are well suited for hosting very
+attractive courses online. It provides an easy to use and interactive
+interpreter for programming, which is also pluggable. However, it is not
+necessarily designed from the ground up for online assessment of students and
+live quizzes and exercise programs.
+
+.. _Datacamp: https://www.datacamp.com/
+
+In this paper we first discuss how Yaksh may be installed, its features, and a
+high-level overview of its design and implementation. We then present some
+information on how Yaksh has been used at FOSSEE for a variety of tasks.
 
 
 Installation and setup
