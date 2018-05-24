@@ -123,7 +123,7 @@ of :code:`pyaudio_helper` are detailed in Figure :ref:`pyaudioHelperclasses`.
 
 .. _SPCommTutorial: https://github.com/mwickert/SP-Comm-Tutorial-using-scikit-dsp-comm/wiki
 
-.. figure:: pyaudio_DSP_IO.pdf
+.. figure:: pyaudio_dsp_IO.pdf
    :scale: 58%
    :align: center
    :figclass: htb
