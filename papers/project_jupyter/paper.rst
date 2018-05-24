@@ -44,7 +44,7 @@
 :equal-contributor:
 
 :author: M Pacer
-:email:
+:email: mpacer.phd@gmail.com
 :institution:
 :equal-contributor:
 
@@ -77,9 +77,9 @@ Binder 2.0 - Reproducible, interactive, shareable environments for science at sc
 .. class:: abstract
 
    Binder is an open-source web service that lets users create sharable,
-   interactive, reproducible environments in the cloud. It is powered by
-   other core projects in the open-source ecosystem, including JupyterHub
-   and Kubernetes for managing cloud resources. Binder works with pre-existing
+   interactive, reproducible environments in the cloud. It is powered by other
+   core projects in the open-source ecosystem, including JupyterHub and
+   Kubernetes for managing cloud resources. Binder works with pre-existing
    workflows in the analytics community, aiming to create interactive versions
    of repositories that exist on sites like GitHub with minimal extra effort
    needed. This paper details several of the design decisions and goals that
@@ -95,19 +95,33 @@ Binder is a free, open-source, and massively publicly-available tool
 for easily creating sharable, interactive, reproducible environments in the
 cloud.
 
-Core goals of the scientific community are making work reproducible and
-enabling others to reproduce results. Both goals are difficult to achieve
-and depend upon the software and technology available to researchers at any
-moment in time. With the growth in open-source tools for data analysis, as
-well as the “data heavy” approach many fields are adopting, these problems
-become both more complex yet more achievable than ever before. Tools for
-packaging analytics environments into “containers” that others can use to
-re-create the computational environment needed to run analysis code,
-online communities for sharing and discovering scientific results, and a
-myriad of open-source tools are available for doing analytics in open
-and transparent ways.
+The scientific community is more and more unified around reproducibility.
+To achieve this requires pursuing two subgoals, both of which are difficult to
+achieve:
 
-However, manual implementation of this process is very complex, and
+- technical reproducibility:
+
+  making reproducible scientific results possible at all
+- practical reproducibility:
+
+  enabling others to reproduce results without difficulty
+
+Both functional and practical reproducibility depend upon the software and
+technology available to researchers at any moment in time. With the growth in
+open-source tools for data analysis, as well as the “data heavy” approach many
+fields are adopting, these problems become both more complex yet more achievable
+than ever before.
+
+Fortunately, as the problem grows more complex, the open source community has
+risen to meet the challenge. Tools for packaging analytics environments into
+“containers” allows others to re-create the computational environments needed to
+run analyses and evaluate results. Online communities allow more easily sharing
+and discovering scientific results. A myriad of open-source tools are widely and
+freely available for doing analytics in open and transparent ways. New paradigms
+for writing code and displaying results in rich, engaging formats allow results
+to live next to the prose that explains their purpose.
+
+However, manual implementation of this processes is very complex, and
 reproducing the full stack of another person’s work is too labor intensive,
 as well as error-prone, for day-to-day use. A recent study of scientific
 repositories found that citation of "both visualization tools as well as
