@@ -93,12 +93,12 @@ extended to include the following steps:
 9. Specify and integrate the utility function over the posterior distribution;
 10. Perform a sensitivity analysis.
 
-In what follows, we will use :math:`\mathcal{M}(\theta)` to denote the model as
+In what follows, we will use :math:`M(\theta)` to denote the model as
 a function of its parameter :math:`\theta` (:math:`\theta` is either a scalar
 or a vector representing a set of parameters).
 Data usually consist of observable outcomes [#]_ :math:`y`
 and covariates [#]_ :math:`x`, if any. We will distinguish between the two when
-necessary; otherwise, we will denote all data together by :math:`\mathcal{D}`.
+necessary; otherwise, we will denote all data together by :math:`D`.
 We use :math:`p(\cdot)` to denote either probability distributions or probability
 densities, even though it is not rigorous notation.
 
@@ -115,7 +115,7 @@ The major difference of the Bayesian approach relative to frequentist, is that
 it modifies the likelihood function (to be introduced later) into a proper
 distribution over the parameters, called the posterior distribution.
 The posterior distribution
-:math:`p(\theta | \mathcal{D})` forms the basis of the Bayesian approach from
+:math:`p(\theta | D)` forms the basis of the Bayesian approach from
 which we derive all quantities of interest.
 
 Why do we need statistical inference in the first place? We need it to answer
@@ -143,22 +143,22 @@ the parameter values. We shall come back to this at the end of this section.
 
 Once we have defined the scope of the problem, we need to specify the design of
 the model which is captured in the *likelihood* function
-:math:`f(\mathcal{D} | \theta, \mathcal{M})`.
-Usually, argument :math:`\mathcal{M}` is dropped for notational
+:math:`f(D | \theta, M)`.
+Usually, argument :math:`M` is dropped for notational
 simplicity, the model being chosen and assumed known.
 Note, however, that when the model includes covariates, the more accurate
 expression is
 :math:`f(y | \theta, x)`.
 This function ties together the ingredients of
 statistical inference and allows information to flow from the data
-:math:`\mathcal{D}` to the parameters :math:`\theta`.
+:math:`D` to the parameters :math:`\theta`.
 
 The second ingredient of Bayesian inference is the prior distribution
 :math:`p(\theta)`. Priors are inescapably part of the Bayesian approach and, hence,
 have to be considered carefully. The goal of Bayesian inference is to combine
 the prior information on the parameters (the prior distribution), with the
 evidence contained in the data (the likelihood), to derive the posterior
-distribution :math:`p(\theta | \mathcal{D})`.
+distribution :math:`p(\theta | D)`.
 It is difficult to predict how sensitive the final
 results will be to a change in the priors. However, it is important to note
 that the impact of priors progressively diminishes as the number of observations
@@ -204,10 +204,10 @@ we typically do not consider any parameter value to be equally likely.
 
 *3) Generate fake data*
 
-Once we have agreed on a generative process, i.e., a model :math:`\mathcal{M}`,
-we can use it to simulate data :math:`\mathcal{D'}`.
+Once we have agreed on a generative process, i.e., a model :math:`M`,
+we can use it to simulate data :math:`D'`.
 To do that, we choose reasonable
-parameter values :math:`\theta_0` and use :math:`\mathcal{M}` to generate data
+parameter values :math:`\theta_0` and use :math:`M` to generate data
 based on these values. Alternatively,
 instead of coming up with reasonable parameter values, we can sample
 these values from the prior distribution
@@ -217,7 +217,7 @@ these values from the prior distribution
    \theta_0 \sim p(\theta).
 
 The fake data
-:math:`\mathcal{D'}`
+:math:`D'`
 can then be interpreted as our prior distribution of the data.
 Hence, by inspecting the fake data, we can reflect back on our choices for the
 likelihood and priors. However,
@@ -225,18 +225,18 @@ if we do use our priors to generate parameter values, we should make
 sure that our priors are not uninformative, which would likely produce
 unreasonable fake data.
 
-Note how the model :math:`\mathcal{M}` is a hypothesized process and comes with
+Note how the model :math:`M` is a hypothesized process and comes with
 necessary assumptions and simplifications. It is highly unlikely that the real
-world would follow exactly :math:`\mathcal{M}`. That being said, if
-:math:`\mathcal{M}` is close enough to the real generative process, it can
+world would follow exactly :math:`M`. That being said, if
+:math:`M` is close enough to the real generative process, it can
 still be very useful to help us understand something about the world.
 As the phrase goes, “all models are wrong, but some models are useful.”
 
 *4) Fit the model to the fake data*
 
-If simulating data using our generative process :math:`\mathcal{M}` is the forward
+If simulating data using our generative process :math:`M` is the forward
 direction, statistical inference is the reverse direction by which we find what
-parameter values could have produced such data, under :math:`\mathcal{M}`.
+parameter values could have produced such data, under :math:`M`.
 
 The most popular statistical inference algorithm is maximum likelihood
 estimation (MLE), which finds the parameter values that maximize the likelihood
@@ -244,9 +244,9 @@ given the observed data.
 To reiterate, under the Bayesian approach, we treat the parameters
 :math:`\theta` as random variables and express our prior knowledge about :math:`\theta` with
 the prior probability distribution :math:`p(\theta)`. Bayesian inference is the process of
-updating our beliefs about :math:`\theta` in light of the data :math:`\mathcal{D}`. The
+updating our beliefs about :math:`\theta` in light of the data :math:`D`. The
 updating process uses Bayes’ theorem and results in the conditional distribution :math:`p(\theta|
-\mathcal{D})`, the posterior distribution. Bayesian inference is
+D)`, the posterior distribution. Bayesian inference is
 generally a hard problem. In most cases, we cannot derive the mathematical form
 of the posterior distribution; instead, we settle for an algorithm that returns
 samples from the posterior distribution.
@@ -263,8 +263,8 @@ inference algorithm in a controlled environment, before trying it on the real da
 our experience, this step brings to the surface many bugs in the code as well as
 issues about the model in general.
 It offers an added benefit, later on, when
-we critique the fit of our model :math:`\mathcal{M}` to the real data
-:math:`\mathcal{D}`. Having confidence in the correctness of our inference process
+we critique the fit of our model :math:`M` to the real data
+:math:`D`. Having confidence in the correctness of our inference process
 allows us to attribute any mismatch issues to the choice of the model,
 as opposed to the inference algorithm.
 
@@ -278,13 +278,13 @@ time, even if the algorithm is perfectly calibrated. Success at this stage is
 not sufficient guarantee that the model will fit well to the real data, but it is
 a necessary condition for proceeding further.
 
-b. Equipped with a correct inferential algorithm for our model :math:`\mathcal{M}`,
+b. Equipped with a correct inferential algorithm for our model :math:`M`,
 it is time to critique the model and ask if it is appropriate for the application.
 More generally, this is a good time to check the model fit and decide if we
 need to make any changes to it. This step is usually specific to each
 application. There is no limit as to how many tests we can do at this stage. It is
 up to us to decide which tests are necessary to build confidence in
-the model. If we choose a different model :math:`\mathcal{M'}`, we need to go
+the model. If we choose a different model :math:`M'`, we need to go
 back to step 2 and start again.
 Note that for a more comprehensive evaluation of the model, we can, and
 probably should, wait until we check how the model fits the real data as well.
@@ -307,7 +307,7 @@ requires a combination of statistical expertise and subject-matter expertise. It
 important to build confidence in the power of our inference algorithm before we
 proceed to interpreting the results, in order to be able to separate, to the extent
 possible, inference issues from model issues. At this stage, it is likely that we
-will come up with a slightly updated model :math:`\mathcal{M'}`. We then have to go
+will come up with a slightly updated model :math:`M'`. We then have to go
 back and start again from the beginning.
 
 *Posterior Predictive Checks and Model Evaluation*
@@ -322,21 +322,21 @@ by the following formula:
 .. math::
    :type: eqnarray
 
-   p (\tilde{y} | \mathcal{D} ) &=& \int p( \tilde{y}, \theta | \mathcal{D}) d\theta \\
-   &=& \int p( \tilde{y} |  \theta) p(\theta | \mathcal{D}) d\theta
+   p (\tilde{y} | D ) &=& \int p( \tilde{y}, \theta | D) d\theta \\
+   &=& \int p( \tilde{y} |  \theta) p(\theta | D) d\theta
 
 In practice, we approximate the integral using samples from the posterior
 distributions, by mapping each parameter posterior sample
 
 .. math::
 
-   \tilde{\theta} \sim p(\theta|\mathcal{D})
+   \tilde{\theta} \sim p(\theta|D)
 
 to the corresponding sample of the posterior predictive distribution
 
 .. math::
 
-   \tilde{y} \sim p (\tilde{y} | \mathcal{D}).
+   \tilde{y} \sim p (\tilde{y} | D).
 
 Posterior predictive accuracy is useful even outside the strict scope of a
 predictive task. Posterior predictive checks, evaluating the predictive accuracy
