@@ -372,7 +372,6 @@ References
 .. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps
 .. [osm-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Overpass, https://overpass-turbo.eu/
-.. [mbx_satellite] http://api.mapbox.com/v4/mapbox.satellite.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#3/0.00/0.00
 .. [josm] JOSM, https://josm.openstreetmap.de/
 .. [osm-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
