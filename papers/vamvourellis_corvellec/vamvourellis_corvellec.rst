@@ -654,10 +654,10 @@ In this case study, we may not share real data but, for demonstration purposes,
 we created two other sets of fake data, one representing the control group and
 the other the treatment group.
 For each posterior sample of parameters :math:`(\mu_i, \Sigma_i)`, we generate
-a latent variable :math:`Z_{i \cdot} ~ N(\mu_i, \Sigma_i)`.
+a latent variable :math:`Z_{i \cdot} \sim N(\mu_i, \Sigma_i)`.
 We then set :math:`Y_{ij} = Z_{ij}` for :math:`j = 1`, whereas for
 :math:`j = \{2, 3\}`, we sample
-:math:`Y_{ij} ~ \text{Bernoulli}(\text{logit}^{-1}(Z_{ij})`.
+:math:`Y_{ij} \sim \text{Bernoulli}(\text{logit}^{-1}(Z_{ij})`.
 The resulting set of :math:`Y_{i \cdot}` is the posterior predictive
 distribution. We do this for the parameters learned from both groups,
 :math:`Y^T` and :math:`Y^C` separately, and plot the results
@@ -742,22 +742,31 @@ examined in the Stan manual, together with recommendations on how to use them.
 Stan, and HMC in general, is not perfect and can be challenged in various ways.
 For example multimodal posterior distribution, which are common in mixture
 models, are hard to explore [#]_.
+
 Another common issue is that mathematically equivalent parameterizations of a
-model can have vastly different performance in terms of sampling.
-See https://github.com/stan-dev/example-models/tree/master/knitr/mle-params.
-One parameterization trick is to center parameters that are normally
-distributed. In our case study, we achieve this by targeting the non-centered
-parts of the latent variable :code:`Z` (line 23) [#]_.
-It is
-important to note that most of the issues that a researcher will encounter when
-using Stan stem from the difficulties of Bayesian inference, and HMC in
-particular, not Stan. The biggest limitation of HMC is that it only works for
-continuous parameters. As a result we cannot use Stan, or HMC for that matter,
-to do inference on discrete unknown model parameters. However, in some cases we
-are able to circumvent this issue [#]_.
+model can have vastly different performance in terms of sampling efficiency [#]_.
+Although finding the right model parameterization does not admit a simple
+recipe, the Stan manual :cite:`StanManual` provides recommendations to common
+problems. For example, we can usually improve the sampling performance for
+normally distributed parameters of the form :math:`x \sim N(\mu, \sigma^2)`
+if we use the non-center parameterization :math:`x = \mu + \sigma^2 z` for
+:math:`z \sim N(0, 1)`.
+In our case study, we use this trick, or rather its multivariate version, by
+targeting the non-centered parts of the latent variable :code:`Z`
+(lines 15, 23, 31-32 and 43). Another cause of bad inference results in
+regression models is correlation among covariates. The way to improve the
+sampling efficiency of a regression model is to parameterize it using the
+QR decomposition [#]_. We note that these issues, among others, that a
+researcher will encounter when using Stan stem from the difficulties of
+Bayesian inference, and HMC in particular :cite:`Betancourt2013`,
+not Stan. The biggest limitation of HMC is that it only works
+for continuous parameters. As a result we cannot use Stan, or
+HMC for that matter, to do inference on discrete unknown model parameters.
+However, in some cases we are able to circumvent this issue [#]_.
 
 .. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/identifying_mixture_models.
-.. [#] See https://github.com/betanalpha/knitr_case_studies/tree/master/qr_regression.
+.. [#] See http://mc-stan.org/users/documentation/case-studies/mle-params.html.
+.. [#] See http://mc-stan.org/users/documentation/case-studies/qr_regression.html.
 .. [#] See http://elevanth.org/blog/2018/01/29/algebra-and-missingness/.
 
 Reproducibility
