@@ -62,7 +62,7 @@ Applications of MDS in semiconductor photophysics :cite:`Czech_2015`, medicine
 :cite:`Fournier_2009`, and other domains :cite:`Petti_2018` are currently being
 developed.
 Ultimately, MDS may become a key research tool akin to multidimensional
-nuclear magnetic resonance spectroscopy.
+nuclear magnetic resonance spectroscopy. :cite:`Pakoulev_2009`
 
 A generic MDS experiment involves exiting a sample with multiple pulses of
 light and measuring the magnitude of the sample response (the signal).
