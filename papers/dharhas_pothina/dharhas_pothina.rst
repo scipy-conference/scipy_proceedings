@@ -118,7 +118,7 @@ algorithms and to resolve key physical properties in certain regions. Often mesh
 
 .. figure:: images/mesh.png
 
-   Example of a unstructured 2D triangular computational mesh of XXX region including Barrier Islands???/Dredge Piles? :label:`mesh`
+   Example of an unstructured 2D triangular computational mesh of a river that is transected by a roadway embankment with culvert and bridge openings. :label:`mesh`
 
 4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and 
 time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the 
@@ -141,7 +141,7 @@ space, such as:
  
 .. figure:: images/velocity_field.png
 
-   Water Velocity quiver plot overlaid on a water depth field. Shows a navigational channel and some dredge stuff???. :label:`velocity_field`
+   Water velocity color contours overlain with velocity quiver plot showing river flow bypassing roadway embankment :label:`velocity_field`
 
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
@@ -224,20 +224,20 @@ region inside the box now becomes a simple XX line code.
 
 .. figure:: images/drawing_tools.png
 
-   This is the caption1. :label:`drawing_tools`
+   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawing_tools`
 
 .. figure:: images/drawing_tools_python.png
 
-   This is the caption2. :label:`drawing_tools_python`
+   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawing_tools_python`
 
 Enhancements: Annotations
 -------------------------
 
-Stuff about Annotations
+Stuff about Annotations 
 
 .. figure:: images/annotation_tools.png
 
-   This is the caption2. :label:`annotation_tools`
+   The Point Annotation tool provides for indexing and grouping of points :label:`annotation_tools`
 
 Enhancements: Efficient Raster regridding
 -----------------------------------------
@@ -252,19 +252,23 @@ Addition of a TriMesh element to holviews. + Efficient Viz through DataShader
 Interactive Dashboards
 ----------------------
 
-Stuff about Annotations
+The drawing tools make it possible to generate interactive dashboards quickly and easily which visualize and interact with source data. Figure 7 shows hydrodynamic model simulation results displayed in an animation on the left. Users are able to query the results by annotating paths directly on the results visualization. As annotations are added, the drawing on the right dynamically updates to show the depth results along the annotated paths. The animation tool is dynamically linked to both drawings to demonstrate changes over time.
 
 .. figure:: images/dashboard_animation.png
 
-   This is the caption3. :label:`dashboard_animation`
+   Dashboard with animation demonstrating the ability to dynamically visualize multiple looks at a single source dataset. :label:`dashboard_animation`
+
+The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized widgets which are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure 8).
 
 .. figure:: images/dashboard_sweep.png
 
-   This is the caption4. :label:`dashboard_sweep`
+   Dynamic interaction with drawing via interactive widgets. :label:`dashboard_sweep`
+
+Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure 9, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path. 
 
 .. figure:: images/dashboard_cross_section.png
 
-   This is the caption5. :label:`dashboard_cross_section`
+   Dynamic linking provides interaction between drawings as both sender and receiver. :label:`dashboard_cross_section`
 
 
 
@@ -286,8 +290,7 @@ Layout of Jupyter Notebooks in Dashboard type form factor
 Integration with Tethys platform & other web frontends
 Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
 
-References
-----------
+
 
 Downer, C. W., Ogden, F. L., and Byrd, A.R. 2008, GSSHAWIKI User’s Manual, Gridded Surface Subsurface Hydrologic Analysis Version 4.0 for WMS 8.1, ERDC Technical Report, Engineer Research and Development Center, Vicksburg, Mississippi.
 
