@@ -68,14 +68,14 @@ III. Designed with Open-Source Tools
 We designed our processing pipelines and tools with open-source
 libraries like Scipy, Rasterio, Fiona, Osium, JSOM, Keras, PyTorch,
 OpenCV etc, while our training data was compiled from
-`OpenStreetMap <https://www.openstreetmap.org/>`__ and `Mapbox Maps
-API <https://www.mapbox.com/api-documentation/#maps>`__.
+OpenStreetMap [osm]_ and Mapbox Maps
+API [mapbox]_.
 
 IV. Scalable Feature Extraction Pipelines
 -----------------------------------------
 
 In this talk we introduce step-by-step how we scale object detection and
-semantic segmentation pipelines (See Figure 1). Two examples we will
+semantic segmentation pipelines (Figure 1). Two examples we will
 present are turn lane markings and parking lot segmentation with aerial
 and satellite imagery.
 
@@ -95,7 +95,7 @@ explain the difference between object detection and semantic
 segmentation. These are two different problem spaces in computer vision.
 Object detection is the problem of locating and classifying a variable
 number of objects in an image. Here we use object detection models to
-detect turn lane markings from satellite imagery (See Figure 2). Other
+detect turn lane markings from satellite imagery (Figure 2). Other
 practical applications of object detection include face detection,
 counting, visual search engine.
 
@@ -122,16 +122,15 @@ To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
 project to create a free editable map of the world. Turn lane markings
 on OpenStreetMap are recorded as “ways” (line-strings) [OSM-lanes]_. We used a tool
-called `Overpass Turbo <https://overpass-turbo.eu/>`__ to query
+called Overpass Turbo [overpass]_ to query
 OpenStreetMap turn lane markings. We then extracted GeoJSONs in 5 cities
 from OpenStreetMap that have one of the following attributes
-(“turn:lane=*”, “turn:lane:forward=*”, “turn:lane:backward=*” ) and
+(“\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” ) and
 created a custom layer over `mapbox.satellite
 layer <http://api.mapbox.com/v4/mapbox.satellite.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#3/0.00/0.00>`__.
 We annotated (draw bounding box around the turn lane markings) six
-classes of turn lane markings: “Left”, “Right”, “Through” (straight),
-“ThroughLeft”, “ThroughRight”, “Other” using
-`JOSM <https://josm.openstreetmap.de/)>`__ in 5 cities, over 53K turn
+classes of turn lane markings: “\Left”, “\Right”, “\Through” (straight),
+“\ThroughLeft”, “\ThroughRight”, “\Other” using JOSM [josm]__ in 5 cities, over 53K turn
 lane markings. JOSM is an extensible editor for OpenStreetMap (OSM) for
 Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data
 from local sources as well as from online sources and allows to edit the
@@ -151,27 +150,34 @@ covered by cars (see Figure 4b).
 
 To prepare training data for parking lot segmentation, we first generate
 polygons from OpenStreetMap tags [OSM-parking]_ excluding features that are not visible
-in satellite imagery. Explicitly, these are OpenStreetMap features with the
-attributes “Tag:amenity=parking=*” except underground, sheds, carports,
+in aerial imagery. Explicitly, these are OpenStreetMap features with the
+attributes “\Tag:amenity=parking=*” except underground, sheds, carports,
 garage_boxes. To prepare training data for building segmentation, we
-generate polygons from tags with attributes “building=*” except
+generate polygons from tags with attributes “\building=*” except
 construction, houseboat, static_caravan, stadium, conservatory ,
 digester, greenhouse, ruins. We then use a tool called
-`Osmium <https://wiki.openstreetmap.org/wiki/Osmium>`__ to annotate
+Osmium [osmium]_ to annotate
 these parking lots.
 
 **Data Engineering.** We built a data engineering pipeline within the
-larger object detection pipeline. This data engineering pipeline streams
-any set of prefixes off of s3 into prepared training sets. First, we
-stream OpenStreetMap features (turn lane markings, parking lots) out of the GeoJSON files on S3
-and merge classes, bounding boxes, and polygons into the feature
+larger object detection pipeline to create our training datasets. 
+This data engineering pipeline is capable of streaming
+any set of prefixes off of Amazon S3 [s3]_ into prepared training sets. 
+For turn lane marking detection, we first stream these turn lane markings,
+which are stored as OpenStreetMap features, out of the GeoJSON files on S3
+and merge classes and bounding boxes into feature
 attributes. Next, we convert these into JSON image annotations grouped by
 tile. During this step, the annotated bounding boxes are converted to
 image pixel coordinates. The annotations are then randomly assigned to
 training and testing datasets (80/20 split) and written to disk, joined by
 imagery fetched from the Mapbox Maps API. This is where the abstract
 tile in the pipeline is replaced by real imagery. Finally, the training and test
-data are zipped and uploaded to S3. In our first iteration, we wrote
+data are zipped and uploaded to S3. For parking lot segmentation, we convert the annotated parking lots,
+which are also stored as GeoJSON polygons, into single channel numpy arrays.
+We then stack each of these single channel numpy arrays with its respective aerial
+image tile, a three channel numpy array (RGB).
+
+In either of these cases, we wrote
 scripts for our data preparation steps (Python library and CLI). These
 scripts were then ran at large scale in parallel (multiple cities at
 once) on Amazon Elastic Container Service. Amazon Elastic Container Service is a
@@ -242,12 +248,12 @@ performed K-means clustering on bounding boxes from the training data
 set.
 
 **Segmentation Models.** We implemented U-Net [unet]_ for parking lot
-segmentation. The U-Net architecture consists of a contracting path to
+segmentation. The U-Net architecture (Figure 6) consists of a contracting path to
 capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
-best method such as the sliding-window convolutional network. (Figure 6)
-This first part is called down or you may think it as the encoder part
+best method such as the sliding-window convolutional network. This first part is 
+called down or you may think it as the encoder part
 where you apply convolution blocks followed by a maxpool downsampling to
 encode the input image into feature representations at multiple
 different levels. The second part of the network consists of upsample
@@ -287,7 +293,7 @@ knowledge, and not make as many false positives.
 3. Post-Processing
 ------------------
 
-Figure 8 shows an example of the raw segmentation mask derived
+Figure 7 shows an example of the raw segmentation mask derived
 from our U-Net model. It cannot be used directly as input into
 OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
@@ -334,7 +340,7 @@ tiles.
 
 **Deduplication.** Deduplicate by matching GeoJSONs with data that already exist on OpenStreetMap.
 
-After performing all these post-processing steps, we have a clean mask (Figure 9)
+After performing all these post-processing steps, we have a clean mask (Figure 8)
 that is also a polygon in the form of GeoJSON. This can now be added to
 OpenStreetMap as a parking lot feature.
 
@@ -349,7 +355,7 @@ these GeoJSONs back into OpenStreetMap as turn lane and parking lot
 features. Our routing engines then take these OpenStreetMap features
 into account when calculating routes. We also built a front-end UI that
 allows users to pan around for instant turn lane markings detection
-(Figure 10).
+(Figure 9).
 
 
 .. figure:: fig9.png
@@ -362,6 +368,12 @@ allows users to pan around for instant turn lane markings detection
 
 References
 ----------
+.. [osm] OpenStreetMap, https://www.openstreetmap.org
+.. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps
+.. [overpass] Overpass, https://overpass-turbo.eu/
+.. [josm] JOSM, https://josm.openstreetmap.de/
+.. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
+.. [s3] Amazon S3, https://aws.amazon.com/s3/
 .. [OSM-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
 .. [OSM-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
