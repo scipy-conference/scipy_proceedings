@@ -98,6 +98,7 @@ Background
 ----------
 
 The traditional workflow for building environmental simulations can be broken down into the following stages:
+
 .. figure:: images/materials.png
 
    Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
@@ -115,7 +116,7 @@ Initial generation of a computational mesh is typically automated and controlled
 After this an iterative approach is used to build a good quality mesh based on the needs of the numerical 
 algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
-.. figure:: images/materials.png
+.. figure:: images/mesh.png
 
    Example of a unstructured 2D triangular computational mesh of XXX region including Barrier Islands???/Dredge Piles? :label:`mesh`
 
@@ -134,11 +135,9 @@ animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-ba
 For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional
 space, such as:
 
-   - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for 
- every time point and then compared with historical data from nearby actual measurement stations
+   - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
    - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
-   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated 
- quantities (e.g. temperature) can then be plotted in 2D as a color. 
+   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
 .. figure:: images/materials.png
 
@@ -206,10 +205,10 @@ add, delete, or modify glyphs on a plot. The edit tools provide functionality fo
 adding, modifying and deleting the plot's underlying data. The individual tools can be enabled as needed for each particular
 plot. 
 
-- **BoxEditTool**: The BoxEditTool allows drawing, dragging and deleting rectangular glyphs.
-- **PointDrawTool**: The PointDrawTool allows adding, dragging and deleting point-like glyphs.
-- **PolyDrawTool**: The PolyDrawTool allows drawing, selecting and deleting Patches and MultiLine glyphs.
-- **PolyEditTool**: The PolyEditTool allows editing the vertices of one or more Patches or MultiLine glyphs.
+  - **BoxEditTool**: The BoxEditTool allows drawing, dragging and deleting rectangular glyphs.
+  - **PointDrawTool**: The PointDrawTool allows adding, dragging and deleting point-like glyphs.
+  - **PolyDrawTool**: The PolyDrawTool allows drawing, selecting and deleting Patches and MultiLine glyphs.
+  - **PolyEditTool**: The PolyEditTool allows editing the vertices of one or more Patches or MultiLine glyphs.
 
 In addition, Holoviews implements new objects called streams that allow for an easy bidirectional connection between the
 javascript plots and Python. This allows for both definition of geometries in python and editing in the enteractive plot
@@ -217,12 +216,11 @@ as well as creation/modification of geometries in the interactive plot with subs
 further processing. As a simple motivating example, drawing a bounding box on a map and retrieving landsat data for the 
 region inside the box now becomes a simple XX line code.
 
-```python
-from holoviews.streams import BoxEdit
-import quest
+.. code-block:: python
 
-blah blah blah
-```
+   from holoviews.streams import BoxEdit
+   import quest
+   blah blah blah
 
 .. figure:: images/drawing_tools.png
 
@@ -243,6 +241,8 @@ Stuff about Annotations
 
 Enhancements: Efficient Raster regridding
 -----------------------------------------
+
+blah
 
 Enhancements: Triangular mesh visualization
 -------------------------------------------
