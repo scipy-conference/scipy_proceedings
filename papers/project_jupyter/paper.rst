@@ -10,7 +10,7 @@
 
 :author: Jessica Forde
 :email:
-:institution:
+:institution: Project Jupyter
 :equal-contributor:
 
 :author: Jeremy Freeman
@@ -90,7 +90,7 @@ Binder 2.0 - Reproducible, interactive, shareable environments for science at sc
    accessibility, kubernetes, dev ops, jupyter, jupyter notebooks, github,
    publishing, interactivity
 
-Binder is the first free, open-source, and massively publicly-available tool
+Binder is a free, open-source, and massively publicly-available tool
 for easily creating sharable, interactive, reproducible environments in the
 cloud.
 
@@ -101,17 +101,20 @@ moment in time. With the growth in open-source tools for data analysis, as
 well as the “data heavy” approach many fields are adopting, these problems
 become both more complex yet more achievable than ever before. Tools for
 packaging analytics environments into “containers” that others can use to
-re-create the computational environment needed to run analysis code, online
-communities for sharing and discovering scientific results, and a myriad of
-open-source tools are available for doing analytics in open and transparent
-ways.
+re-create the computational environment needed to run analysis code,
+online communities for sharing and discovering scientific results, and a
+myriad of open-source tools are available for doing analytics in open
+and transparent ways.
 
 However, manual implementation of this process is very complex, and
 reproducing the full stack of another person’s work is too labor intensive,
-as well as error-prone, for day-to-day use. As a result, while reproducibility
-is *technically* possible, it is not yet *practically* possible. This paper
-introduces Binder 2.0, a tool that takes us one step closer towards workflows
-that make computational work practical to share.
+as well as error-prone, for day-to-day use. A recent study of scientific
+repositories found that, "failure to cite both visualization tools as well as
+common software packages (such as MATLAB) was a widespread" [Stodden18]_.
+As a result, while reproducibility is *technically* possible, it is not yet
+*practically* possible. This paper introduces Binder 2.0, a tool
+that takes us one step closer towards workflows that make computational work
+practical to share.
 
 
 Binder consists of a set of tools for creating sharable, interactive, and
@@ -138,13 +141,26 @@ itself fully open-source for others to use.
    the user to install dependencies.
 
 
-The first iteration of Binder was released in 2016, and provided a prototype
+Binder continues in the tradition of promoting "the complete software
+development environment and the complete set of instructions which generated
+the figures" [Buckheit95]_ by effortlessly providingthese tools to the general
+public in the cloud. The first iteration of Binder was released in 2016 [LABS16]_, and provided a prototype
 that managed reproducible user environments in the cloud. In the years since,
 there have been several advances in technology for managing cloud resources,
 serving interactive user environments, and creating reproducible containers for
 analytics. Binder 2.0 utilizes these new tools, and is more scalable, maintainable,
 is easier to deploy, and supports more analytic and scientific workflows than
-before.
+before. While previous work has specified methods or file-formats
+for the sharing of research [Buckheit95]_ [Gentleman07]_ [Liang15]_,
+Binder only requires configuration files typically seen in contemporary software
+development. Related online platforms for reproducibility also have specific
+frontends for presenting research and commands for running code [Anjos17]_
+[Liang15]_ [Stodden12]_, while Binder flexibly allows users to interact with
+a repository using modern data science tools such as RStudio, Jupyter Notebok,
+and JupyterLab. By containerizing the environment and using theses frontend
+data science tools, Binder prioritizes an interactive user experience so that
+"someone else can discover it for themselves" [Somers18]_.
+
 
 At the highest level, Binder is a particular combination of open-source
 tools to achieve the goal of sharable, reproducible environments. This paper
@@ -710,9 +726,49 @@ utilize BinderHub for new uses in reproducibility and interactive computing.
 References
 ----------
 
-.. [Ross17] Ross AS, Hughes MC, Doshi-Velez F. Right for the Right
-            Reasons: Training Differentiable Models by Constraining
-            their Explanations. Proceedings of the Twenty-Sixth
-            International Joint Conference on Artificial Intelligence.
-            2017. p. Pages 2662–2670.
-            http://paperpile.com/b/FMgQkX/7HDA9
+.. [Anjos17] Anjos A, El-Shafey L, Marcel S. BEAT: An Open-Source Web-Based
+            Open-Science Platform [Internet]. arXiv [cs.SE]. 2017.
+            Available: http://arxiv.org/abs/1704.02319
+
+.. [Buckheit95] Buckheit JB, Donoho DL.
+                WaveLab and Reproducible Research.
+                In: Antoniadis A, Oppenheim G, editors. Wavelets and Statistics.
+                New York, NY: Springer New York; 1995. pp. 55–81.
+
+.. [Gentleman07] Gentleman R, Lang DT.
+                Statistical Analyses and Reproducible Research.
+                J Comput Graph Stat. [American Statistical Association,
+                Taylor & Francis, Ltd., Institute of Mathematical Statistics,
+                Interface Foundation of America]; 2007;16: 1–23.
+
+.. [LABS16] Labs. Toward publishing reproducible computation with Binder.
+            elifesciences.org. eLife Sciences Publications Limited; 2016;
+            Available:
+            https://elifesciences.org/labs/a7d53a88/toward-publishing-reproducible-computation-with-binder
+
+.. [Liang15] Liang P, Viegas E.
+            CodaLab Worksheets for Reproducible, Executable Papers [Internet].
+            NIPS 2015, Demonstrations Track; 2015 Dec 9;
+            Montreal, Quebec Canada.
+            Available: https://nips.cc/Conferences/2015/Schedule?showEvent=5779
+
+.. [Ross17] Ross AS, Hughes MC, Doshi-Velez F.
+            Right for the Right Reasons:
+            Training Differentiable Models by Constraining their Explanations.
+            Proceedings of the Twenty-Sixth
+            International Joint Conference on Artificial Intelligence. 2017.
+            p. Pages 2662–2670.
+
+.. [Somers18] Somers J. The Scientific Paper Is Obsolete. The Atlantic.
+              5 Apr 2018. Available:
+              https://www.theatlantic.com/science/archive/2018/04/the-scientific-paper-is-obsolete/556676/. Accessed 23 May 2018.
+
+.. [Stodden12] Stodden V, Hurlin C, Pérignon C.
+              RunMyCode.org: A novel dissemination and collaboration platform
+              for executing published computational results. 2012 IEEE 8th
+              International Conference on E-Science. 2012. pp. 1–8.
+
+.. [Stodden18] Stodden V, Seiler J, Ma Z.
+              An empirical analysis of journal policy effectiveness for
+               computational reproducibility.
+               Proc Natl Acad Sci U S A. 2018;115: 2584–2589.
