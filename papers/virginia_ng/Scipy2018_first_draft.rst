@@ -121,16 +121,16 @@ boundaries of each object (See Figure 3)
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
 project to create a free editable map of the world. Turn lane markings
-on OpenStreetMap are recorded as “ways” (line-strings) [OSM-lanes]_. We used a tool
+on OpenStreetMap are recorded as “ways” (line-strings) [osm-lanes]_. We used a tool
 called Overpass Turbo [overpass]_ to query
 OpenStreetMap turn lane markings. We then extracted GeoJSONs in 5 cities
 from OpenStreetMap that have one of the following attributes
 (“\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” ) and
-created a custom layer over `mapbox.satellite
-layer <http://api.mapbox.com/v4/mapbox.satellite.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#3/0.00/0.00>`__.
+created a custom layer over the `mapbox.satellite
+layer` [mapbox]_.
 We annotated (draw bounding box around the turn lane markings) six
 classes of turn lane markings: “\Left”, “\Right”, “\Through” (straight),
-“\ThroughLeft”, “\ThroughRight”, “\Other” using JOSM [josm]__ in 5 cities, over 53K turn
+“\ThroughLeft”, “\ThroughRight”, “\Other” using JOSM [josm]_ in 5 cities, over 53K turn
 lane markings. JOSM is an extensible editor for OpenStreetMap (OSM) for
 Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data
 from local sources as well as from online sources and allows to edit the
@@ -149,9 +149,9 @@ covered by cars (see Figure 4b).
    Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
 To prepare training data for parking lot segmentation, we first generate
-polygons from OpenStreetMap tags [OSM-parking]_ excluding features that are not visible
+polygons from OpenStreetMap tags [osm-parking]_ excluding features that are not visible
 in aerial imagery. Explicitly, these are OpenStreetMap features with the
-attributes “\Tag:amenity=parking=*” except underground, sheds, carports,
+attributes “\tag:amenity=parking=*” except underground, sheds, carports,
 garage_boxes. To prepare training data for building segmentation, we
 generate polygons from tags with attributes “\building=*” except
 construction, houseboat, static_caravan, stadium, conservatory ,
@@ -370,12 +370,13 @@ References
 ----------
 .. [osm] OpenStreetMap, https://www.openstreetmap.org
 .. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps
+.. [osm-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Overpass, https://overpass-turbo.eu/
+.. [mbx_satellite] http://api.mapbox.com/v4/mapbox.satellite.html?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NDg1bDA1cjYzM280NHJ5NzlvNDMifQ.d6e-nNyBDtmQCVwVNivz7A#3/0.00/0.00
 .. [josm] JOSM, https://josm.openstreetmap.de/
+.. [osm-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
 .. [s3] Amazon S3, https://aws.amazon.com/s3/
-.. [OSM-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
-.. [OSM-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
