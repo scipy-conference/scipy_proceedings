@@ -140,7 +140,7 @@ all shapes and sizes, as well as ones that are partially covered by cars
 and/or shadows. We excluded turn lane markings that are erased or fully
 covered by cars (see Figure 4b).
 
-.. figure:: fig45.png
+.. figure:: fig4.png
    :height: 75 px
    :width: 150 px
    :scale: 22 %
@@ -185,7 +185,7 @@ highly scalable, fast, container management service that makes it easy
 to run, terminate, and manage Docker containers on a cluster (grouping of
 container instances). This pipeline is shown in Figure 5.
 
-.. figure:: fig_eng_pipeline.png
+.. figure:: fig5.png
    :height: 200 px
    :width: 400 px
    :scale: 47 %
