@@ -37,7 +37,7 @@
     We report several algorithimic improvements that make ``WrightSim`` faster
     than previous implementations.
     The effect of parallelizing the simulation, both at the CPU and GPU
-    (CUDA) levels, is demonstrated. 
+    (CUDA) levels, is demonstrated.
     Taken together, algorithmic improvements and parallization has made
     ``WrightSim`` multiple orders of magnitude faster than previous
     implementations.
@@ -58,10 +58,11 @@ MDS can directly observe fundemental physics that are not possible to record in
 any other way.
 With recent advancements in lasers and optics, MDS experiments are becoming
 routine.
-Applications of MDS in semiconductor physics, drug screening, and other
-domains are currently being developed.
+Applications of MDS in semiconductor photophysics :cite:`Czech_2015`, medicine
+:cite:`Fournier_2009`, and other domains :cite:`Petti_2018` are currently being
+developed.
 Ultimately, MDS may become a key research tool akin to multidimensional
-nuclear magnetic resonance spectroscopy.
+nuclear magnetic resonance spectroscopy. :cite:`Pakoulev_2009`
 
 A generic MDS experiment involves exiting a sample with multiple pulses of
 light and measuring the magnitude of the sample response (the signal).
@@ -96,7 +97,7 @@ become an axis in the simulation.
 
 ``WrightSim`` is designed with the experimentalist in mind, allowing users
 to parameterize their simulations in much the same way that they would collect
-a similar spectrum in the laboratory. 
+a similar spectrum in the laboratory.
 ``WrightSim`` is modular and flexible---it is capable of simulating different
 kinds of MDS, and it is easy to extend to new kinds.
 ``WrightSim`` uses a numerical integration approach that captures the full
@@ -107,11 +108,11 @@ This approach makes ``WrightSim`` flexible, accurate, and interpretable.
 While the numerical approach we use is more accurate, it does demand
 significantly more computational time.
 We have focused on performance as a critical component of ``WrightSim``.
-Here we report algorithmic improvements which have significantly decreased 
+Here we report algorithmic improvements which have significantly decreased
 computational time relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
-``WrightSim`` is still at a nascent stage of development, but has already 
+``WrightSim`` is still at a nascent stage of development, but has already
 shown itself to be a powerful tool.
 
 
@@ -129,32 +130,34 @@ We propagate all of the relevant density matrix elements, including
 populations and coherences, in our numerical simulation.
 This strategy has been described before :cite:`Gelin_2009`, so we are brief in our
 description here.
-This places ``WrightSim`` at an intermediate level of theory, one where 
-the mechanisms by which the desired signal arises are known, but have 
+This places ``WrightSim`` at an intermediate level of theory, one where
+the mechanisms by which the desired signal arises are known, but have
 non-trivial spectral features as a result.
-This package does **not** perform *ab initio* computations, nor is it simply 
+This package does **not** perform *ab initio* computations, nor is it simply
 plotting a collection of well-behaved peaked functions with amplitudes and widths
 from experimental spectra.
 
 Here, we are simulating the interactions of three electric fields to
-induce an output electric field. These fields can interact in a
-combinatorially large number of fashions. For three fields, there are
-six possible time orderings for the pulses to interact and create
-superpositions or populations in the material system. We are restricting
-this simulation to have two positive interactions (solid up arrows or
-dashed down arrows) and one negative interaction (dashed up arrow or
-solid down arrow). 
+induce an output electric field.
+These fields can interact with our sample via several different pathways.
+Figure :ref:`fig:WMELs` shows a series of wave mixing energy level (WMEL)
+diagrams :cite:`Lee_1985` representing each of these 16 pathways.
+For three fields, there are six possible time orderings for the pulses to
+interact and create superpositions or populations in the material system
+(columns in Figure :ref:`fig:WMELs`).
+We are restricting this simulation to have two positive interactions (solid up
+arrows or dashed down arrows) and one negative interaction (dashed up arrow or
+solid down arrow).
 Experimentalists isolate this condition spatially, by placing an aperature
 where this condition is met.
-This results in 16 independently resolvable possible
-pathways which result in a productive emission. Figure :ref:`fig:WMELs` shows
-these 16 pathways, arranged by their time ordering (I - VI). For the
-purposes of this paper it is not necessary to fully understand what is
-meant by this diagram, the intent is simply to show the complexity of
-the problem at hand. Experimentalists can isolate the time orderings by
-introducing delays between pulses to preferentially follow the according
-pathways. Simulation allows us to fully separate these time orderings
-and pathways, to as fine a detail as desired.
+This results in 16 possible pathways which result in a productive emission.
+For the purposes of this paper it is not necessary to fully understand what is
+meant by this diagram, the intent is simply to show the complexity of the
+problem at hand.
+Experimentalists can isolate the time orderings by introducing delays between
+pulses.
+Simulation allows us to fully separate each pathway, leading to insight into
+the nature of pathway interference in the total signal lineshape.
 
 .. figure:: WMELs.png
 
@@ -172,10 +175,10 @@ and pathways, to as fine a detail as desired.
     with (the superscript). Arrows indicate interactions with
     :math:`\omega_1` (blue), :math:`\omega_{2^\prime}` (red), and
     :math:`\omega_2` (green). Figure was originally published as Figure S1
-    of Kohler, Thompson, and Wright :cite:`Kohler_2017` :label:`fig:fsa` 
+    of Kohler, Thompson, and Wright :cite:`Kohler_2017` :label:`fig:fsa`
 
 Figure :ref:`fig:fsa` shows a finite state automata, starting at
-the ground state (:math:`\rho_{00}`). The nodes are the density matrix 
+the ground state (:math:`\rho_{00}`). The nodes are the density matrix
 elements themselves. Encoded within each node is both
 the quantum mechanical state and the fields with which the system has
 already interacted. Interactions occur along the arrows, which generate
@@ -281,9 +284,9 @@ simulations of this kind.
 Usage
 =====
 
-``WrightSim`` is designed in a modular, extensible manner in order to be 
+``WrightSim`` is designed in a modular, extensible manner in order to be
 friendly to experimentalists and theorists alike.
-The key steps to running a basic simulation are: 
+The key steps to running a basic simulation are:
 
 - Define the experimental space
 - Select a hamiltonian for propagation
@@ -298,7 +301,7 @@ three incident pulses.
 The frequency axes are called ``w1`` and ``w2`` [#]_, the delays are termed ``d1`` and ``d2``.
 To scan a particular axis, simply set the ``points`` array to a ``NumPy`` array and set it's ``active``
 attribute to ``True``.
-You can also set a static value for any available axis, by setting the ``points`` attribute to 
+You can also set a static value for any available axis, by setting the ``points`` attribute to
 a single number (and keeping ``active`` set to ``False``).
 Finally, the ``experiment`` class tracks the timing in the simulation.
 Three main parameters control this: ``timestep``, which controls the size of each numerical integration step,
@@ -348,7 +351,7 @@ in the end result array.
 Hamiltonians may have arbitrary parameters to define themselves in intuitive ways.
 Under the hood, the Hamiltonian class also holds the C struct and source code for the ``PyCUDA``
 implementation and a method to send itself to the CUDA device.
-Here is an example of setting up a Hamiltonian object with restricted pathways and explicitly set 
+Here is an example of setting up a Hamiltonian object with restricted pathways and explicitly set
 recorded element parameters:
 
 .. code-block:: python
@@ -373,18 +376,18 @@ The exception is the special string ``'gpu'``, which will cause ``WrightSim`` to
 
     # do scan, using PyCUDA
     scan = exp.run(ham, mp='gpu')
-    
+
     # obtain results as a NumPy array
     gpuSig = scan.sig.copy()
 
-Running returns a ``Scan`` object, which allows for interrogation of several internal features of the scan 
+Running returns a ``Scan`` object, which allows for interrogation of several internal features of the scan
 including the electric field values themselves.
 The important part, however is the signal array that is generated.
-In this example, the complex floating point number array is of shape :math:`(2x64x64x32)` (i.e. the number of 
+In this example, the complex floating point number array is of shape :math:`(2x64x64x32)` (i.e. the number of
 ``recorded_elements`` followed by the shape of the experiment itself).
 These numbers can be manipulated and visualized to produce spectra like that seen in :ref:`fig:examplespectrum`.
-The Wright Group also maintains a library for working with multidimensional data, ``WrightTools``. 
-This library will be integrated more fully to provide even easier access to visualization and 
+The Wright Group also maintains a library for working with multidimensional data, ``WrightTools``.
+This library will be integrated more fully to provide even easier access to visualization and
 archival storage of simulation results.
 
 
@@ -582,7 +585,7 @@ responses using an HDF5 based file format. The CUDA implementation
 itself would benefit from some way of saving the compiled code for
 multiple runs, removing the 0.2 second overhead. Current implementation
 compiles directly before calling the kernel, whether it has compiled it
-before or not. If performing many simulations in quick succession (e.g. 
+before or not. If performing many simulations in quick succession (e.g.
 a simulation larger than the memory allows in a single kernel call) with
 the same C code, the savings would add up.
 
