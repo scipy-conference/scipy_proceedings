@@ -652,16 +652,30 @@ the posterior predictive distribution.
 
 In this case study, we may not share real data but, for demonstration purposes,
 we created two other sets of fake data, one representing the control group and
-the other the treatment group. We plot the results in Figure :ref:`pred`.
+the other the treatment group.
+For each posterior sample of parameters :math:`(\mu_i, \Sigma_i)`, we generate
+a latent variable :math:`Z_{i \cdot} ~ N(\mu_i, \Sigma_i)`.
+We then set :math:`Y_{ij} = Z_{ij}` for :math:`j = 1`, whereas for
+:math:`j = \{2, 3\}`, we sample
+:math:`Y_{ij} ~ \text{Bernoulli}(\text{logit}^{-1}(Z_{ij})`.
+The resulting set of :math:`Y_{i \cdot}` is the posterior predictive
+distribution. We do this for the parameters learned from both groups,
+:math:`Y^T` and :math:`Y^C` separately, and plot the results
+in Figure :ref:`pred`.
 
 .. figure:: pred.png
 
    Histogram of values sampled from the posterior predictive distributions.
    :label:`pred`
 
-Looking at the plots, we can visualize the effect of the treatment by
-distinguishing between the blue and green colors. Note how the posterior
-predictive distributions incorporates the uncertainty from the inference of the
+Looking at the plots, we can visualize the effect of the drug on a new patient
+by distinguishing the effects with the treatment (green) versus without (blue).
+We observe that the Hemoglobin levels are likely to decrease under the
+treatment by about 1 unit on average. The probability of experiencing
+dyspepsia is slightly lower under the treatment, contrary to that of nausea
+which is the same in both groups.
+Note how the Bayesian approach results in predictive distributions rather than
+point estimates, by incorporating the uncertainty from the inference of the
 parameters.
 
 Bayesian Inference with Stan
