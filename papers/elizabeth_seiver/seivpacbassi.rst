@@ -37,61 +37,131 @@ Introduction
 
 What is allofplos?
 ------------------
-allofplos is a Python package for downloading and maintaining up-to-date scientific article corpora, as well as parsing PLOS XML articles in the JATS format. It's available on PyPI as well as a GitHub repository. Many existing Python packages for parsing XML and/or JATS focus on defensive parsing, where the structure is assumed not to be reliable or the document is immediately converted to another intermediate format (often JSON) and XML is just a temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for fast XML parsing and conversion to familiar Python data structures like lists, dictionaries, and datetime objects. It's geared at researchers who are familiar with scientific articles and Python, but may not be familiar with the JATS XML.
+
+``allofplos`` is a Python package for downloading and maintaining up-to-date
+scientific article corpora, as well as parsing PLOS XML articles in the JATS
+format. It's available on PyPI as well as a GitHub repository. Many existing
+Python packages for parsing XML and/or JATS focus on defensive parsing, where
+the structure is assumed not to be reliable or the document is immediately
+converted to another intermediate format (often JSON) and XML is just a
+temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for
+fast XML parsing and conversion to familiar Python data structures like lists,
+dictionaries, and datetime objects. It's geared at researchers who are familiar
+with scientific articles and Python, but may not be familiar with the JATS XML.
 
 How allofplos maintains corpora
 -------------------------------
-allofplos ships with a starter directory of 122 articles ('starterdir'), and includes commands for downloading a 10,000 article demo corpus as well. The default path to a corpus is stored as the variable 'corpusdir' in the Python program, and first checks for the environment variable 'PLOS_CORPUS' which overrides that default location. If you've used pip to install the program, specifying 'PLOS_CORPUS' will ensure that the article data won't get overwritten when you update the allofplos package, as the default location is within the package. (Forking/cloning the GitHub repository doesn't have the same problem, because the default corpus location is in the .gitignore file.)
->>> import os
->>> os.environ['PLOS_CORPUS'] = 'path/to/corpus_directory'
->>> from allofplos import update
->>> update.main()
 
-Downloading new articles can also be accessed via the command line:
-$ export PLOS_CORPUS="path/to/corpus_directory"
-$ python -m allofplos.update
+``allofplos`` ships with a starter directory of 122 articles ('starterdir'), and
+includes commands for downloading a 10,000 article demo corpus as well. The
+default path to a corpus is stored as the variable 'corpusdir' in the Python
+program, and first checks for the environment variable 'PLOS_CORPUS' which
+overrides that default location. If you've used pip to install the program,
+specifying 'PLOS_CORPUS' will ensure that the article data won't get overwritten
+when you update the allofplos package, as the default location is within the
+package. (Forking/cloning the GitHub repository doesn't have the same problem,
+because the default corpus location is in the .gitignore file.)
+  
 
-If no articles are found at the specified corpus location, it will initiate a download of the full corpus. This is a 4.6 GB zip file stored on Google Drive, updated daily via an internal PLOS server, that then is unzipped in that location to around 25 GB of 230,000+ XML articles. For incremental updates of the corpus, allofplos first scans the corpus directory for all DOIs of all articles (constructed from filenames) and diffs that with every article DOI from the PLOS search API. That list of missing articles are downloaded individually in a rate-limited fashion from links that are constructed using the DOIs. Those files are identical to the ones in the .zip file. The .zip file prevents users from needing to scrape the entire PLOS website for the XML files, and 'smartly' scrapes only the latest articles. It also checks for a subset of provisional articles called 'uncorrected proofs' if the final version is available and downloads a new version if so.
+.. code-block:: python
+
+    import os
+    os.environ['PLOS_CORPUS'] = 'path/to/corpus_directory'
+    from allofplos import update
+    update.main()
+
+Downloading new articles can also be accessed via the command line:: 
+  
+    $ export PLOS_CORPUS="path/to/corpus_directory"
+    $ python -m allofplos.update
+
+If no articles are found at the specified corpus location, it will initiate a
+download of the full corpus. This is a 4.6 GB zip file stored on Google Drive,
+updated daily via an internal PLOS server, that then is unzipped in that
+location to around 25 GB of 230,000+ XML articles. For incremental updates of
+the corpus, allofplos first scans the corpus directory for all DOIs of all
+articles (constructed from filenames) and diffs that with every article DOI from
+the PLOS search API. That list of missing articles are downloaded individually
+in a rate-limited fashion from links that are constructed using the DOIs. Those
+files are identical to the ones in the .zip file. The .zip file prevents users
+from needing to scrape the entire PLOS website for the XML files, and 'smartly'
+scrapes only the latest articles. It also checks for a subset of provisional
+articles called 'uncorrected proofs' if the final version is available and
+downloads a new version if so.
 
 
 How allofplos uses corpora and parses articles
 ----------------------------------------------
 
-To initialize a corpus (defaults to `corpusdir`, or the location set by the 'PLOS_CORPUS' environmental variable), use the Corpus class.
->>> from allofplos import Corpus
->>> corpus = Corpus()
-The number of articles in the corpus can be found with `len(corpus)`. The list of every DOI for every article in the corpus can be found at `corpus.dois`, and the path to every XML file in the corpus directory at `corpus.filenames`. To select a random Article object, use `corpus.random_article`. To select a random list of 10 Article objects, use `corpus.random_sample(10)`. You can also iterate through articles as such:
-``
-for article in corpus[:10]:
-    print(article.title)
-``
-Because DOIs contain semantic meaning and XML filenames are based on the DOI, if you're trying to loop through the corpus, it won't be a representative sample but rather will implicitly progress by journal name and then by publication date. The iterator for Corpus() puts the articles in a random order to avoid this problem.
+To initialize a corpus (defaults to ``corpusdir``, or the location set by the
+``$PLOS_CORPUS`` environmental variable), use the ``Corpus`` class.
+
+
+.. code-block:: python
+  
+   from allofplos import Corpus
+   corpus = Corpus()
+   
+The number of articles in the corpus can be found with ``len(corpus)``. The list
+of every DOI for every article in the corpus can be found at ``corpus.dois``, and
+the path to every XML file in the corpus directory at ``corpus.filenames``. To
+select a random Article object, use ``corpus.random_article``. To select a random
+list of 10 Article objects, use ``corpus.random_sample(10)``. You can also iterate
+through articles as such:
+
+
+.. code-block:: python
+
+    for article in corpus[:10]:
+        print(article.title)
+
+Because DOIs contain semantic meaning and XML filenames are based on the DOI, if
+you're trying to loop through the corpus, it won't be a representative sample
+but rather will implicitly progress by journal name and then by publication
+date. The iterator for ``Corpus()`` puts the articles in a random order to avoid
+this problem.
 
 Parsing articles with ``Article``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-As mentioned above, you can use the Corpus class to initialize an Article() object without calling it directly. An Article takes a DOI and the location of the corpus directory to read the accompanying XML document into lxml.
-``
->>> art = Article('10.1371/journal.pone.0052669')
-``
-The lxml tree of the article is memoized in 'art.tree` so its can be repeatedly called without needing to re-read the XML file.
-``
->>> type(art.tree)
-lxml.etree._ElementTree
-``
-allofplos's article parsing focuses on metadata (e.g., article title, author names and institutions, date of publication, Creative Commons copyright license[CITE], JATS version/DTD), which are conveniently located in the 'front' section of the XML. We designed the parsing API to quickly locate and parse XML elements as properties:
-``
->>> art.title
-'Statistical Basis for Predicting Technological Progress'
->>> art.journal
-'PLOS ONE'
->>> art.pubdate
-datetime.datetime(2013, 2, 28, 0, 0)
->>> art.license
-{'license': 'CC-BY 4.0',
- 'license_link': 'https://creativecommons.org/licenses/by/4.0/',
- 'copyright_holder': 'Nagy et al',
- 'copyright_year': 2013}
->>> art.dtd
-'NLM 3.0'
-``
-For author information, Article reconciles and combines data from multiple elements within the article into a clean standard form. Property names match XML tags whenever possible.
+
+As mentioned above, you can use the Corpus class to initialize an Article()
+object without calling it directly. An Article takes a DOI and the location of
+the corpus directory to read the accompanying XML document into lxml.
+
+.. code-block:: python
+
+   art = Article('10.1371/journal.pone.0052669')
+
+The lxml tree of the article is memoized in ``art.tree`` so it can be repeatedly
+called without needing to re-read the XML file.
+
+.. code-block:: python
+    
+    >>> type(art.tree)
+    lxml.etree._ElementTree
+    
+allofplos's article parsing focuses on metadata (e.g., article title, author
+names and institutions, date of publication, Creative Commons copyright
+license[CITE], JATS version/DTD), which are conveniently located in the 'front'
+section of the XML. We designed the parsing API to quickly locate and parse XML
+elements as properties:
+
+.. code-block:: python
+
+    >>> art.title
+    'Statistical Basis for Predicting Technological Progress'
+    >>> art.journal
+    'PLOS ONE'
+    >>> art.pubdate
+    datetime.datetime(2013, 2, 28, 0, 0)
+    >>> art.license
+    {'license': 'CC-BY 4.0',
+     'license_link': 'https://creativecommons.org/licenses/by/4.0/',
+     'copyright_holder': 'Nagy et al',
+     'copyright_year': 2013}
+    >>> art.dtd
+    'NLM 3.0'
+
+For author information, ``Article`` reconciles and combines data from multiple
+elements within the article into a clean standard form. Property names match XML
+tags whenever possible.
