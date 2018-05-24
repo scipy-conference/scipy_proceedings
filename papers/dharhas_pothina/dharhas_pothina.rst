@@ -98,11 +98,13 @@ Background
 ----------
 
 The traditional workflow for building environmental simulations can be broken down into the following stages:
+.. figure:: images/materials.png
 
-1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.) 
+   Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
+
+
+1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure `materials`. 
  
- [Fig: example image AdH model showing areas with material properties & some BC's]
-
 2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based 
 and local-data stores.
 
@@ -113,7 +115,9 @@ Initial generation of a computational mesh is typically automated and controlled
 After this an iterative approach is used to build a good quality mesh based on the needs of the numerical 
 algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
- [Fig: show an example mesh]
+.. figure:: images/materials.png
+
+   Example of a unstructured 2D triangular computational mesh of XXX region including Barrier Islands???/Dredge Piles? :label:`mesh`
 
 4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and 
 time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the 
@@ -136,7 +140,9 @@ space, such as:
    - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated 
  quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
-    [fig: show some sample results from sms or cmb]
+.. figure:: images/materials.png
+
+   Water Velocity quiver plot overlaid on a water depth field. Shows a navigational channel and some dredge stuff???. :label:`velocity_field`
 
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
