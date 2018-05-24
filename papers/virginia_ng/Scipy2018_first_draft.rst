@@ -182,7 +182,9 @@ container instances). This pipeline is shown in Figure 5.
 .. figure:: fig_eng_pipeline.png
    :height: 200 px
    :width: 400 px
-   :scale: 42 %
+   :scale: 47 %
+
+   Data engineering pipeline combines OpenStreetMap GeoJSON features with imagery fetched from Mapbox Maps API.
 
 Our data engineering pipelines are generalizable to any OpenStreetMap
 feature. Examples of other features we have implemented include buildings. 
