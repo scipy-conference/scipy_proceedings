@@ -59,7 +59,7 @@ any other way.
 With recent advancements in lasers and optics, MDS experiments are becoming
 routine.
 Applications of MDS in semiconductor physics, drug screening, and other
-domains are currently being developed.
+domains :cite:`Petti_2018` are currently being developed.
 Ultimately, MDS may become a key research tool akin to multidimensional
 nuclear magnetic resonance spectroscopy.
 
