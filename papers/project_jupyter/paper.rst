@@ -131,7 +131,6 @@ As a result, while reproducibility is *technically* possible, it is not yet
 that takes us one step closer towards workflows that make computational work
 practical to share.
 
-
 Binder consists of a set of tools for creating sharable, interactive, and
 deterministic environments that run on personal computers and cloud resources.
 It manages the technical complexity around:
@@ -603,8 +602,8 @@ of the technology, as well as digital public infrastructure that can be used to 
 interactive code repositories. This service runs at the URL ``https://mybinder.org``,
 and will be discussed in the final section.
 
-Mybinder.org
-------------
+Mybinder.org: Sustaining the Cost of a public service
+-----------------------------------------------------
 
 You can access a public deployment of BinderHub at ``mybinder.org``.
 This a web service that the Binder and JupyterHub team run both as a
@@ -636,17 +635,18 @@ in Python <https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuratio
 with Sphinx Gallery, and sharing `interactive content <http://greenteapress.com/wp/think-dsp/>`_
 that requires a language-specific kernel in order to run.
 
-Cost and sustainability  for ``mybinder.org``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Cost of ``mybinder.org``
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-Mybinder.org is currently funded through a grant from the Moore foundation, and
-the team is actively exploring new models for keeping the service running sustainably.
-The public service currently restricts the hardware available to users in several
-ways in order to keep costs down. For example, users are only given access to one
-CPU, two gigabytes of RAM, can only access public git repositories, and are
-restricted in the kinds of network I/O that can take place. It currently
-runs on the Google Cloud Platform (though it could run on any setup that runs
-on top of Kubernetes).
+We have designed the public service to be as cost effective as possible.
+``mybinder.org`` restricts users to one CPU, two GB of RAM. We save a great deal
+by not providing users with persistent storage across sessions. Users can only
+access public git repositories, and are restricted in the kinds of network I/O
+that can take place. In addition, a BinderHub deployment efficiently uses its
+resources in order to avoid over-provisioning cloud resources.  Because
+Kubernetes is a open source system for managing containers, while Binder
+currently runs on the Google Cloud Platform, it could run on any setup that runs
+on top of Kubernetes if that setup proved more cost effective.
 
 .. figure:: images/cost_breakdown.png
    :align: center
