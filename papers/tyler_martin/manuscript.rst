@@ -101,7 +101,7 @@ formalism is spherically symmetric, which in general prevents the use of PRISM
 to study glassy, crystalline, phase-separated or otherwise non-isotropic
 materials. While there is a modified PRISM formalism for oriented
 (liquid-crystalline) materials, :cite:`prism_lc1,prism_lc2,prism_lc3,prism_lc4`
-those modifications are outside the scope of the current work Figure
+those modifications are outside the scope of the current work. Figure
 :ref:`nanocomposite` shows a schematic of a polymer nanocomposite that could be
 studied with PRISM theory using a two-site model. 
 
