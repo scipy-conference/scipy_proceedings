@@ -1,9 +1,0 @@
-build/
-/.consign
-
-*.*~
-*.*#
-*.aux
-base/*.pdf
-doc/*.pdf
-required/*/*.pdf
