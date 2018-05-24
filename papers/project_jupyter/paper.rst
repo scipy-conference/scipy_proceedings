@@ -88,21 +88,21 @@ Binder 2.0 - Reproducible, interactive, shareable environments for science at sc
 .. class:: keywords
 
    cloud computing, reproducibility, binder, mybinder.org, shared computing,
-   accessibility, kubernetes, dev ops, jupyter, jupyter notebooks, github,
+   accessibility, kubernetes, dev ops, jupyter, jupyterhub, jupyter notebooks, github,
    publishing, interactivity
 
 Binder is a free, open-source, and massively publicly-available tool
 for easily creating sharable, interactive, reproducible environments in the
 cloud.
 
-The scientific community is more and more unified around reproducibility.
-To achieve this requires pursuing two subgoals, both of which are difficult to
+The scientific community is increasingly unified around reproducibility.
+To achieve this requires pursuing two sub-goals, both of which are difficult to
 achieve:
 
-- technical reproducibility:
+- **technical reproducibility**:
 
   making reproducible scientific results possible at all
-- practical reproducibility:
+- **practical reproducibility**:
 
   enabling others to reproduce results without difficulty
 
@@ -115,15 +115,15 @@ than ever before.
 Fortunately, as the problem grows more complex, the open source community has
 risen to meet the challenge. Tools for packaging analytics environments into
 “containers” allows others to re-create the computational environments needed to
-run analyses and evaluate results. Online communities allow more easily sharing
-and discovering scientific results. A myriad of open-source tools are widely and
+run analyses and evaluate results. Online communities make it easier to share
+and discover scientific results. A myriad of open-source tools are
 freely available for doing analytics in open and transparent ways. New paradigms
 for writing code and displaying results in rich, engaging formats allow results
 to live next to the prose that explains their purpose.
 
-However, manual implementation of this processes is very complex, and
-reproducing the full stack of another person’s work is too labor intensive,
-as well as error-prone, for day-to-day use. A recent study of scientific
+However, manual implementation of this processes is complex, and
+reproducing the full stack of another person’s work is too labor intensive and
+error-prone for day-to-day use. A recent study of scientific
 repositories found that citation of "both visualization tools as well as
 common software packages (such as MATLAB) was a widespread failure" :cite:`Stodden2018-fy`.
 As a result, while reproducibility is *technically* possible, it is not yet
@@ -175,7 +175,6 @@ and JupyterLab. By containerizing the environment and using theses frontend
 data science tools, Binder prioritizes an interactive user experience so that
 "someone else can discover it for themselves" :cite:`Somers2018-bj`.
 
-
 At the highest level, Binder is a particular combination of open-source
 tools to achieve the goal of sharable, reproducible environments. This paper
 lays out the technical vision of Binder 2.0, including the guiding principles
@@ -202,7 +201,7 @@ monitoring. These tools minimize the time that individuals must spend ensuring
 that the service performs as expected. Recognizing the importance of
 maintainability, the Binder team continues to work hard to document effective
 organizational and technical processes around running a production
-BinderHub-powered service such as `mybinder.org`. The goal of the project is to
+BinderHub-powered service such as `mybinder.org <https://mybinder.org>`_. The goal of the project is to
 allow a BinderHub service to be run without specialized knowledge or extensive
 training in cloud orchestration.
 
@@ -537,7 +536,7 @@ form::
 
 This follows a similar pattern to BinderHub's sharable URLs. Here's an API
 request that will request a Binder environment for the JupyterLab example
-Binder repository on ``mybinder.org``::
+Binder repository on `mybinder.org <https://mybinder.org>`_::
 
     https://mybinder.org/build/gh/binder-examples/jupyterlab/master
 
@@ -602,32 +601,32 @@ of the technology, as well as digital public infrastructure that can be used to 
 interactive code repositories. This service runs at the URL ``https://mybinder.org``,
 and will be discussed in the final section.
 
-Mybinder.org: Sustaining the Cost of a public service
------------------------------------------------------
+Mybinder.org: Maintaining and sustaining a public service
+---------------------------------------------------------
 
-You can access a public deployment of BinderHub at ``mybinder.org``.
+You can access a public deployment of BinderHub at `mybinder.org <https://mybinder.org>`_.
 This a web service that the Binder and JupyterHub team run both as a
 demonstration of the BinderHub technology, as well as a piece of digital public infrastructure
 for those who wish to share Binder links so that others may interact with
 their code repositories.
 
-The Binder team (and thus ``mybinder.org``) runs on a model of transparency and
-openness in the tools it creates as well as the operations of ``mybinder.org``.
+The Binder team (and thus `mybinder.org <https://mybinder.org>`_) runs on a model of transparency and
+openness in the tools it creates as well as the operations of `mybinder.org <https://mybinder.org>`_.
 The Binder team has put together several group processes and documentation to
 facilitate maintaining this public service, and to provide a set of resources
 for others who wish to do the same. There are also several data streams that
 the Binder team routinely makes available for others who are interested in
 deploying and maintaining a BinderHub service. For example, the `Binder Billing
 <https://github.com/jupyterhub/binder-billing>`_ repository shows all of the cloud
-hardware costs for the last several months of ``mybinder.org`` operation. In addition,
+hardware costs for the last several months of `mybinder.org <https://mybinder.org>`_ operation. In addition,
 the `Binder Grafana board <https://grafana.mybinder.org>`_ shows a high-level
 view of the status of the BinderHub, JupyterHub, and Kubernetes processes
 underlying the service.
 
-``mybinder.org`` is also meant to be a testing ground for different use-cases
+`mybinder.org <https://mybinder.org>`_ is also meant to be a testing ground for different use-cases
 in the Binder ecosystem. By running as a free, public service, we hope that
 members of the community will find new and interesting applications for Binder.
-For example, ``mybinder.org`` has already been used for `reproducible publishing
+For example, `mybinder.org <https://mybinder.org>`_ has already been used for `reproducible publishing
 <https://github.com/minrk/ligo-binder>`_, sharing `interactive course materials
 <https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html>`_
 at the university and high-school level, creating `interactive package documentation
@@ -639,7 +638,7 @@ Cost of ``mybinder.org``
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 We have designed the public service to be as cost effective as possible.
-``mybinder.org`` restricts users to one CPU, two GB of RAM. We save a great deal
+`mybinder.org <https://mybinder.org>`_ restricts users to one CPU, two GB of RAM. We save a great deal
 by not providing users with persistent storage across sessions. Users can only
 access public git repositories, and are restricted in the kinds of network I/O
 that can take place. In addition, a BinderHub deployment efficiently uses its
@@ -665,19 +664,19 @@ is avoided. In addition,
 a BinderHub deployment can efficiently use the resources available to it in
 order to avoid over-provisioning cloud resources as much as possible.
 
-Currently, the hosting bill for ``mybinder.org`` runs at a cost of several hundred dollars per
+Currently, the hosting bill for `mybinder.org <https://mybinder.org>`_ runs at a cost of several hundred dollars per
 day. At roughly 50,000 users per week, this comes out to around $\frac{220 \times30}{50000} \approx 13$cents per
-user. The ``mybinder.org`` team publishes its daily hosting costs in a public
+user. The `mybinder.org <https://mybinder.org>`_ team publishes its daily hosting costs in a public
 repository on GitHub :cite:`JupyterHub2018-ek`.
 It hopes that this serves to encourage other organizations to deploy BinderHub
 for their own purposes, since it is possible to do so in a cost-effective
 manner.
 
 The Binder team is exploring multiple models
-for sustaining the public digital infrastructure ``mybinder.org``, the team required to operate it, and the
+for sustaining the public digital infrastructure `mybinder.org <https://mybinder.org>`_, the team required to operate it, and the
 broader Binder ecosystem. At its current rate the annual hosting cost of
-``mybinder.org`` is around $ \$ 220 \times 365 \approx 80000$, an amount that could be sustainable with
-a grant-funded model. Operating and supporting the public digital infrastructure ``mybinder.org``
+`mybinder.org <https://mybinder.org>`_ is around $ \$ 220 \times 365 \approx 80000$, an amount that could be sustainable with
+a grant-funded model. Operating and supporting the public digital infrastructure `mybinder.org <https://mybinder.org>`_
 requires several staff members distributed globally to provide reasonable coverage
 across timezones for user support and incident response. This means salary costs will
 require a significant amount of funding.
@@ -687,7 +686,7 @@ The Binder team is actively exploring a
 universities can deploy their own BinderHubs for their own users or students,
 either on their own hardware or on cloud providers such as Google, Amazon, or
 Microsoft. These organization-specific deployments could require authentication
-or provide access to more complex cloud resources. In this case, ``mybinder.org``
+or provide access to more complex cloud resources. In this case, `mybinder.org <https://mybinder.org>`_
 could serve as a hub that connects this federated network of BinderHubs together,
 directing the user to an organization-specific BinderHub provided that they
 have the proper credentials on their machine.
@@ -695,7 +694,7 @@ have the proper credentials on their machine.
 The future of binder
 --------------------
 
-This paper outlines the technical infrastructure underlying ``mybinder.org`` and
+This paper outlines the technical infrastructure underlying `mybinder.org <https://mybinder.org>`_ and
 the BinderHub open-source technology, including the guiding design principles
 and goals of the project. Binder is designed to be modular, to adapt itself to
 pre-existing tools and workflows in the open-source community, and to be
