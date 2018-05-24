@@ -52,15 +52,15 @@ with scientific articles and Python, but may not be familiar with the JATS XML.
 How allofplos maintains corpora
 -------------------------------
 
-``allofplos`` ships with a starter directory of 122 articles ('starterdir'), and
+``allofplos`` ships with a starter directory of 122 articles (``starterdir``), and
 includes commands for downloading a 10,000 article demo corpus as well. The
-default path to a corpus is stored as the variable 'corpusdir' in the Python
-program, and first checks for the environment variable 'PLOS_CORPUS' which
+default path to a corpus is stored as the variable ``corpusdir`` in the Python
+program, and first checks for the environment variable ``$PLOS_CORPUS`` which
 overrides that default location. If you've used pip to install the program,
-specifying 'PLOS_CORPUS' will ensure that the article data won't get overwritten
-when you update the allofplos package, as the default location is within the
+specifying ``$PLOS_CORPUS`` will ensure that the article data won't get overwritten
+when you update the ``allofplos`` package, as the default location is within the
 package. (Forking/cloning the GitHub repository doesn't have the same problem,
-because the default corpus location is in the .gitignore file.)
+because the default corpus location is in the ``.gitignore`` file.)
   
 
 .. code-block:: python
@@ -84,9 +84,9 @@ articles (constructed from filenames) and diffs that with every article DOI from
 the PLOS search API. That list of missing articles are downloaded individually
 in a rate-limited fashion from links that are constructed using the DOIs. Those
 files are identical to the ones in the .zip file. The .zip file prevents users
-from needing to scrape the entire PLOS website for the XML files, and 'smartly'
+from needing to scrape the entire PLOS website for the XML files, and "smartly"
 scrapes only the latest articles. It also checks for a subset of provisional
-articles called 'uncorrected proofs' if the final version is available and
+articles called "uncorrected proofs" if the final version is available and
 downloads a new version if so.
 
 
@@ -140,9 +140,9 @@ called without needing to re-read the XML file.
     >>> type(art.tree)
     lxml.etree._ElementTree
     
-allofplos's article parsing focuses on metadata (e.g., article title, author
+``allofplos``'s article parsing focuses on metadata (e.g., article title, author
 names and institutions, date of publication, Creative Commons copyright
-license[CITE], JATS version/DTD), which are conveniently located in the 'front'
+license[CITE], JATS version/DTD), which are conveniently located in the ``front``
 section of the XML. We designed the parsing API to quickly locate and parse XML
 elements as properties:
 
