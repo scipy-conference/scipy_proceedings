@@ -26,9 +26,9 @@ Introduction
 ------------
 The Jupyter Notebook :cite:`Kluyver:2016aa`  has emerged as the dominant
 interface for exploratory data analysis and visualization in the Python data
-science ecosystem. The ipywidgets library provides a suite of interactive
-widgets for use in the Jupyter Notebook, and it serves as a foundation for
-library authors to build on to create their own custom widgets
+science ecosystem. The ipywidgets library :cite:`ipywidgets` provides a suite
+of interactive widgets for use in the Jupyter Notebook, and it serves as a
+foundation for library authors to build on to create their own custom widgets.
 
 This paper describes our work to bring ipywidgets support to plotly.py
 version 3.  Compared to version 2, plotly.py version 3 brings plotly.py users
@@ -162,10 +162,10 @@ The current state of a figure is stored in the following four variables.
 
 ipywidgets Overview
 -------------------
-The ipywidgets library provides a useful collection of interactive widgets
-(sliders, check boxes, radio buttons, etc.) for use in the Jupyter Notebook
-and in several other contexts :cite:`widgetContexts`. For the full list of
-built-in widgets see :cite:`widgetList`.
+The ipywidgets library :cite:`ipywidgets` provides a useful collection of
+interactive widgets (sliders, check boxes, radio buttons, etc.) for use in
+the Jupyter Notebook and in several other contexts :cite:`widgetContexts`.
+For the full list of built-in widgets see :cite:`widgetList`.
 
 The integration of graphical widgets into the notebook workflow allows users
 to configure ad-hoc control panels to interactively sweep over parameters
