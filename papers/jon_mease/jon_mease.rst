@@ -192,14 +192,14 @@ views, and the Comms interface.  These components are described below.
 Python Model
 ++++++++++++
 The Python model is a Python class that inherits from the
-``ipywidgets.DOMWidget`` superclass and uses the traitlets library
+``ipywidgets.Widget`` superclass and uses the traitlets library
 :cite:`traitlets` to declare typed attributes that should be synchronized with
 the JavaScript model.
 
 JavaScript Model
 ++++++++++++++++
 The JavaScript model is a JavaScript class that extends the
-``@jupyter-widgets/base/DOMWidgetModel`` class and declares a collection of
+``@jupyter-widgets/base/WidgetModel`` class and declares a collection of
 attributes that match the traitlet declarations in the corresponding Python
 model.
 
@@ -212,25 +212,23 @@ JavaScript View
 +++++++++++++++
 The JavaScript view (hereafter referred to as "the view" since there is no
 ambiguity) is a JavaScript class that extends the
-``@jupyter-widgets/base/DOMWidgetView`` class.  The view is responsible for
-rendering a representation of the model to a predefined HTML element.
-
-When used in the notebook, a separate view is constructed each time a model
-is displayed.  Each view has a reference to one JavaScript model, and
-multiple views may share the same model.
+``@jupyter-widgets/base/WidgetView`` class. When used in the notebook, a
+separate view is constructed each time a model is displayed.  Each view has a
+reference to one JavaScript model, and multiple views may share the same model.
 
 Comms and Synchronization
 +++++++++++++++++++++++++
-The synchronization of the Python and JavaScript models is accomplished using
-Jupyter Notebook Comms. The Comms infrastructure abstracts over the complexity
-of performing two-way synchronization of widget properties over WebSockets and
-ZeroMQ.
+The Jupyter Comms API provides an abstraction for performing two-way
+communication between the front-end and the Python kernel, hiding the
+complexity of the web server, ZeroMQ, and WebSocket implementation details.
 
-An added benefit of the Comms infrastructure is that it supports the
+The synchronization of the Python and JavaScript models is accomplished using
+the widget messaging protocol over the Jupyter Comms infrastructure.
+
+A powerful feature of the widget messaging protocol is that it supports the
 efficient serialization of nested data structures containing binary buffers.
 This capability is used by ipyvolume :cite:`ipyvolume` (and now plotly.py) to
-transfer Python numpy arrays into JavaScript TypedArrays with no ASCII encoding
-step.
+transfer Python numpy arrays into JavaScript TypedArrays without ASCII encoding.
 
 New Plotly.py Figure API
 ------------------------
@@ -348,9 +346,10 @@ Python to JavaScript Synchronization
 Python to JavaScript synchronization is achieved by translating Python
 ``FigureWidget`` mutation operations into Plotly.js API commands. These
 commands, and their associated data, are transferred to the JavaScript model
-and views using the Jupyter Comms infrastructure describe above.  The views
-are updated by executing the specified Plotly.js command, and the JavaScript
-model is updated manually in a consistent fashion.
+and views using the widget messaging protocol, over the Jupyter Comms
+infrastructure, as described above.  The views are updated by executing the
+specified Plotly.js command, and the JavaScript model is updated manually in
+a consistent fashion.
 
 .. figure:: figures/plotlyjs_commands_example.pdf
    :align: center
