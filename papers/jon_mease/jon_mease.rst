@@ -169,8 +169,8 @@ For the full list of built-in widgets see :cite:`widgetList`.
 
 The integration of graphical widgets into the notebook workflow allows users
 to configure ad-hoc control panels to interactively sweep over parameters
-using graphical widget controls rather than by editing code or writing loops
-over a fixed range of values.
+using graphical widget controls, rather than by editing code or writing loops
+over fixed ranges of values.
 
 The infrastructure behind the built-in ipywidgets is available to library
 authors and many custom ipywidgets libraries have been developed
