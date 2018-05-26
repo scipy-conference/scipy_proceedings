@@ -44,15 +44,15 @@ Before training the proposed models, each study performed some degree of preproc
 
 Other noise reduction strategies employed include kernel smoothing :cite:`Gaoetal2016`, removing the gravity component :cite:`Moreauetal2016`, applying a low-pass filter :cite:`Lefebvreetal2015`, removing the initial and last 0.5 seconds :cite:`Huetal2018`. Gao, et. al. go so far as to apply Nadaraya-Watson kernel weighted average smoothing, using the Epanachnikov quadratic kernel and 40-nearest neighbor window size :cite:`Gaoetal2016`. Moreau, et. al. used the derivative of the axis-wise gravity component in order to group together segments of data from different axes, tracking a single motion across axes as the sensor rotated during a gesture :cite:`Moreauetal2016`.
 
-Some form of data redistribution or organization was also typical. For example, Broome 2017 and Moreau, et. al. excluded the dominant Null class as a solution to class imbalance :cite:`Broome2017` :cite:`Moreauetal`. Lee & Cho aimed to circumvent the Null-related class imbalance by first training a model to differentiate meaningful data segments from the Null class, and subsequently training a second model to predict the specific gesture class :cite:`LeeCho2013`. Moreau, et. al. used resampling to solve class imbalance Moreauetal2016.
+Some form of data redistribution or organization was also typical. For example, Broome 2017 and Moreau, et. al. excluded the dominant Null class as a solution to class imbalance :cite:`Broome2017` :cite:`Moreauetal`. Lee and Cho aimed to circumvent the Null-related class imbalance by first training a model to differentiate meaningful data segments from the Null class, and subsequently training a second model to predict the specific gesture class :cite:`LeeCho2013`. Moreau, et. al. used resampling to solve class imbalance Moreauetal2016.
 
-For feeding the data into the models, the sliding window technique was commonly used, with vast discrepancy in the optimal size of the window (reported both as units of time and number of time points) and step size. Window sizes used range from 30 :cite:`Broome2017` to 100 :cite:`Zhaoetal2016` time points, and 32 :cite:`Muscietal2018`to 5000 :cite:`Zhaoetal2017` milliseconds (ms). Using a step size between windows of 50% of the window size was typical :cite:`Rassemetal2017` :cite:`Sjostrum2017` :cite:`Broome2017` :cite:`OrdonezRoggen2016`. Finally, Guan & Plotz ran an ensemble of models, each using a random sampling of a random number of frames with varying sample lengths and starting points using a wrap-around windowing method. This method is similar to the bagging scheme of random forests and was implemented to increase robustness of the model :cite:`Guan&Plotz2017`.
+For feeding the data into the models, the sliding window technique was commonly used, with vast discrepancy in the optimal size of the window (reported both as units of time and number of time points) and step size. Window sizes used range from 30 :cite:`Broome2017` to 100 :cite:`Zhaoetal2016` time points, and 32 :cite:`Muscietal2018`to 5000 :cite:`Zhaoetal2017` milliseconds (ms). Using a step size between windows of 50% of the window size was typical :cite:`Rassemetal2017` :cite:`Sjostrum2017` :cite:`Broome2017` :cite:`OrdonezRoggen2016`. Finally, Guan and Plotz ran an ensemble of models, each using a random sampling of a random number of frames with varying sample lengths and starting points using a wrap-around windowing method. This method is similar to the bagging scheme of random forests and was implemented to increase robustness of the model :cite:`GuanandPlotz2017`.
 
 Once a window is generated it must be assigned a class and labeled as such. Labeling schemes used include a jumping window technique, where the class of the last data point in the window is used as the class label :cite:`OrdonezRoggen2016` or using the majority class within the window :cite:`Broome2017`.
 
 *Architectures*
 
-Numerous different architectural and hyperparameter choices were made among the various studies. Most studies used two LSTM layers :cite:`OrdonezRoggen2016` :cite:`Chenetal2016` :cite:`Kyritsisetal2017` :cite:`Zhangetal2017` :cite:`Riveraetal2017` :cite:`U2018` :cite:`Zhaoetal2017` :cite:`GuanPlotz2017` :cite:`Huetal2018` :cite:`Muscietal2018`, while others used a single layer :cite:`WuAdu2017` :cite:`Broome2017` :cite:`ShinSung2016` :cite:`Carvalhoetal2017` :cite:`Zhaoetal2016` :cite:`Zhangetal2018` :cite:`Seoketal2018`, three layers :cite:`Zhaoetal2016`, or four layers :cite:`Murad&Pyun2017`.
+Numerous different architectural and hyperparameter choices were made among the various studies. Most studies used two LSTM layers :cite:`OrdonezRoggen2016` :cite:`Chenetal2016` :cite:`Kyritsisetal2017` :cite:`Zhangetal2017` :cite:`Riveraetal2017` :cite:`U2018` :cite:`Zhaoetal2017` :cite:`GuanPlotz2017` :cite:`Huetal2018` :cite:`Muscietal2018`, while others used a single layer :cite:`WuAdu2017` :cite:`Broome2017` :cite:`ShinSung2016` :cite:`Carvalhoetal2017` :cite:`Zhaoetal2016` :cite:`Zhangetal2018` :cite:`Seoketal2018`, three layers :cite:`Zhaoetal2016`, or four layers :cite:`MuradandPyun2017`.
 
 Several studies designed or utilized novel LSTM architectures that went beyond the simple tuning of hyperparameters. Before we list them, note that the term “deep” in reference to neural network architectures indicates the use of multiple layers of hidden connections; for LSTMs, an architecture generally qualifies as “deep” if it has three or more hidden layers. Architectures tested include the combination of CNNs with LSTMs such as ConvLSTM :cite:`Zhangetal2017` :cite:`Gaoetal2016`, DeepConvLSTM :cite:`OrdonezRoggen2016` :cite:`Sjostrum2017` :cite:`Broome2017`, and the multivariate fully convolutional network LSTM (MLSTM-FCN) :cite:`Karimetal2018`; innovations related to the connections between hidden units including the bidirectional LSTM (b-LSTM) :cite:`Rassemetal2017` :cite:`Broome2017` :cite:`Moreauetal2016` :cite:`Lefebvreetal2015`, hierarchical b-LSTM :cite:`LeeCho2012`, deep residual b-LSTM (deep-res-bidir LSTM) :cite:`Zhaoetal2017`, and LSTM with peephole connections (p-LSTM) :cite:`Rassemetal2017`; and other nuanced architectures such as ensemble deep LSTM :cite:`GuanPlotz2017`, weighted-average spatial LSTM (WAS-LSTM) :cite:`Zhangetal2018`, deep-Q LSTM :cite:`Seoketal2018`, the multivariate squeeze-and-excite fully convolutional network ALSTM (MALSTM-FCN) :cite:`Karimetal2018`, and similarity-based LSTM :cite:`Fiterauetal2016`. The use of densely-connected layers before or after the LSTM layers was also common. Kyritsis, et. al. added a dense layer with ReLU activation after the LSTM layers, Zhao, et. al. included a dense layer with tanh activation after the LSTMs, and Musci, et. al. used a dense layer before and after its two LSTM layers :cite:`Kyritsisetal2017` :cite:`Zhaoetal2016` :cite:`Muscietal2018`. The WAS-LSTM, deep-Q LSTM, and the similarity-based LSTM used a combination of dense and LSTM hidden layers.
 
@@ -64,7 +64,7 @@ Almost all of the reports used the sigmoid activation for the recurrent connecti
 
 Once a model architecture is specified, it must be trained and the weights must be updated through a back propagation technique developed specifically for recurrent neural networks known as back-propagation through time (BPTT). Weights are often initialized using specific strategies, for example random orthogonal initialization :cite:`OrdonezRoggen2016` :cite:`Sjostrum2017`, fixed random seed :cite:`Setterquist2018`, the Glorot uniform initialization :cite:`Broome2017`, random uniform initialization within [-1, 1] :cite:`Moreauetal2016`, or using a random normal distribution :cite:`Huetal2018`. Training may occur using all the input data at once, or in mini-batches of examples. Batch sizes reported range from 32 :cite:`Riveraetal2017` :cite:`Setterquist2018` to 450 :cite:`Bergelin2017`.
 
-To calculate the amount of change needed for each training epoch, different loss functions are used. Categorical cross-entropy is the most widely used method :cite:`OrdonezRoggen2016` :cite:`Murad&Pyun2017` :cite:`Chenetal2016` :cite:`Sjostrum2017` :cite:`Kyritsisetal2017` :cite:`Setterquist2018` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, but F1 score loss :cite:`GuanPlotz2017`, mean squared error (MSE) :cite:`Carvalhoetal2017`, and mean absolute error and root MSE :cite:`Zhaoetal2016` were also used with varying degrees of success. During back propagation, various updating rules – e.g. RMSProp :cite:`OrdonezRoggen2016` :cite:`Setterquist2018` :cite:`Broome2017`, Adam :cite:`Murad&Pyun2017` :cite:`Kyritsisetal2017` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, and Adagrad :cite:`ShinSung2016` – and learning rates – 10^-7 :cite:`ShinSung2016`, 10^-4 :cite:`Sjostrum2017`, :cite:`GuanPlotz2017`, 2e-4 :cite:`Moreauetal2016`, 5e-4 :cite:`Lefebvreetal2015`, and 10^-2 :cite:`OrdonezRoggen2016` are used.
+To calculate the amount of change needed for each training epoch, different loss functions are used. Categorical cross-entropy is the most widely used method :cite:`OrdonezRoggen2016` :cite:`MuradandPyun2017` :cite:`Chenetal2016` :cite:`Sjostrum2017` :cite:`Kyritsisetal2017` :cite:`Setterquist2018` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, but F1 score loss :cite:`GuanPlotz2017`, mean squared error (MSE) :cite:`Carvalhoetal2017`, and mean absolute error and root MSE :cite:`Zhaoetal2016` were also used with varying degrees of success. During back propagation, various updating rules – e.g. RMSProp :cite:`OrdonezRoggen2016` :cite:`Setterquist2018` :cite:`Broome2017`, Adam :cite:`MuradandPyun2017` :cite:`Kyritsisetal2017` :cite:`Broome2017` :cite:`Huetal2018` :cite:`Zhangetal2018`, and Adagrad :cite:`ShinSung2016` – and learning rates – 10^-7 :cite:`ShinSung2016`, 10^-4 :cite:`Sjostrum2017`, :cite:`GuanPlotz2017`, 2e-4 :cite:`Moreauetal2016`, 5e-4 :cite:`Lefebvreetal2015`, and 10^-2 :cite:`OrdonezRoggen2016` are used.
 
 Regularization techniques are often employed to stabilize the weight update process and avoid the problem of exploding gradients (LSTMs are not susceptible to vanishing gradients :cite:`HochreiterSchmidhuber1997`. Regularization techniques employed include weight decay of 0.9 :cite:`OrdonezRoggen20161` :cite:`Sjostrum2017`; update momentum of 0.9 :cite:`Moreauetal2016`, 0.2 :cite:`Lefebvreetal2015`, or the Nesterov implementation :cite:`ShinSung2016`; dropout (forgetting the output from a proportion of units, e.g., 0.5 :cite:`OrdonezRoggen2016` :cite:`Sjostrum2017` or 0.7 :cite:`Zhaoetal2016`) between various layers; batch normalization :cite:`Zhaoetal2017`; or gradient clipping using the norm :cite:`Zhaoetal2017` :cite:`Huetal2018` :cite:`Zhangetal2018`. Broome 2017 chose to use the stateful configuration for its baseline LSTM :cite:`Broome2017`. In this configuration, unit memory cell weights are maintained between each training example instead of resetting them to zero after each forward pass.
 
@@ -77,7 +77,7 @@ Once the model has been trained, it is given a set of examples it has not yet se
 *Benchmark Performances*
 We focus on the performances of models trained and tested using the the HAR dataset, publicly available on the University of California at Irvine (UCI) Machine Learning Repository, as that is the dataset we utilize in this study. Initial benchmark results include the use of classical methods and 551 hand crafted features. Anguita, et. al. released three studies in 2013 following their release of the dataset. Using a multi-class SVM (MC-SVM) classifier, they reach F1 score of 0.96 :cite:`Anguitaetal2013ESANN`. They also reached an F1 score of 89.0 using a hardware-friendly MC-SVM :cite:`Anguitaetal2013JCS`. Finally, they released the results from a competition using the dataset. Accuracies reached include 96.5% by a one-vs-on SVM (OVO SVM), 96.35% by a kernelized matrix learning vector quantized (LVQ) model, 94.33% by a confidence-based model (Conf-AdaBoost.M1), 93.7% by one-vs-all SVM (OVA SVM), and 90.6% by KNN :cite:`Reyes-Ortizetal2013`.
 
-As LSTMs began being used, we see competitive results using lower dimensional data. Most models make use of acceleration and gyroscope data. Accuracies reached consist of 96.7% by a four-layer LSTM model :cite:`Murad&Pyun2017`, 96.71% by a multivariate LSTM + fully convoluted network (MLSTM-FCN), 96.71% by multivariate squeeze-and-excite ALSTM with fully convoluted network (MALSTM-FCN) :cite:`Karimetal2018`, 93.57% by the Deep-Res-Bidir LSTM, and 90.77% by the baseline LSTM :cite:`Zhaoetal2017`. Only one study seems to have used solely the accelerometer data, although it is not explicitly stated. This study reports a testing accuracy of 85.34% from their LSTM model :cite:`U2018`.
+As LSTMs began being used, we see competitive results using lower dimensional data. Most models make use of acceleration and gyroscope data. Accuracies reached consist of 96.7% by a four-layer LSTM model :cite:`MuradandPyun2017`, 96.71% by a multivariate LSTM + fully convoluted network (MLSTM-FCN), 96.71% by multivariate squeeze-and-excite ALSTM with fully convoluted network (MALSTM-FCN) :cite:`Karimetal2018`, 93.57% by the Deep-Res-Bidir LSTM, and 90.77% by the baseline LSTM :cite:`Zhaoetal2017`. Only one study seems to have used solely the accelerometer data, although it is not explicitly stated. This study reports a testing accuracy of 85.34% from their LSTM model :cite:`U2018`.
 
 As this meta-analysis style overview has shown, there are many different model constructions being employed for HAR tasks. The work by the aforementioned studies as well as others have laid the groundwork for this field of research.
 
@@ -104,47 +104,63 @@ The ranges of hyperparameters were devised to include all ranges explored by the
 
 .. code-block:: python
 
-  LSTM(units={{choice(numpy.arange(2,522,20))}},
-        activation={{choice(['softmax', 'tanh', 'sigmoid', 
-                                    'relu', 'linear'])}},
-        recurrent_activation={{choice(['tanh', 'hard_sigmoid', 
-                                'sigmoid', 'relu', 'linear'])}},
-        use_bias={{choice([True, False])}},
-        kernel_initializer={{choice(['zeros', 'ones', 
-                                        RandomNormal(), 
-                                        RandomUniform(minval=-1, maxval=1), 
-                                        Constant(value=0.1), 
-                                        'orthogonal', 'lecun_normal', 
-                                        'glorot_uniform'])}},
-        recurrent_initializer={{choice(['zeros', 'ones', 
-                                         RandomNormal(), 
-                                         RandomUniform(minval=-1, maxval=1), 
-                                         Constant(value=0.1), 
-                                         'orthogonal', 'lecun_normal', 
-                                         'glorot_uniform'])}},
-        unit_forget_bias=True,
-        kernel_regularizer={{choice([None,'l2', 'l1'])}},
-        recurrent_regularizer={{choice([None,'l2', 'l1'])}},
-        bias_regularizer={{choice([None,'l2', 'l1'])}},
-        activity_regularizer={{choice([None,'l2', 'l1'])}},
-        dropout={{uniform(0, 1)}},
-        recurrent_dropout={{uniform(0, 1)}})
+  LSTM(
+    units={{choice(numpy.arange(2,522,20))}},
+    activation={{choice(['softmax', 'tanh', 
+                          'sigmoid', 'relu', 
+                          'linear'])}},
+    recurrent_activation={{choice(['tanh', 
+                           'hard_sigmoid', 
+                           'sigmoid', 'relu', 
+                           'linear'])}},
+    use_bias={{choice([True, False])}},
+    kernel_initializer={{choice(['zeros', 'ones', 
+                           RandomNormal(), 
+                           RandomUniform(minval=-1, maxval=1), 
+                           Constant(value=0.1), 
+                           'orthogonal', 'lecun_normal', 
+                           'glorot_uniform'])}},
+    recurrent_initializer={{choice(['zeros', 'ones', 
+                            RandomNormal(), 
+                            RandomUniform(minval=-1, maxval=1), 
+                            Constant(value=0.1), 
+                            'orthogonal', 'lecun_normal', 
+                            'glorot_uniform'])}},
+    unit_forget_bias=True,
+    kernel_regularizer={{choice([None,'l2', 'l1'])}},
+    recurrent_regularizer={{choice([None,'l2', 'l1'])}},
+    bias_regularizer={{choice([None,'l2', 'l1'])}},
+    activity_regularizer={{choice([None,'l2', 'l1'])}},
+    dropout={{uniform(0, 1)}},
+    recurrent_dropout={{uniform(0, 1)}})
 
-  adam = keras.optimizers.Adam(lr={{choice([10**-6, 10**-5, 
-                      10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
-  rmsprop = keras.optimizers.RMSprop(lr={{choice([10**-6, 10**-5, 
-                      10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
-  sgd = keras.optimizers.SGD(lr={{choice([10**-6, 10**-5, 
-                       10**-4, 10**-3, 10**-2, 10**-1])}}, clipnorm=1.)
+  adam = keras.optimizers.Adam(
+            lr={{choice([10**-6, 10**-5, 
+                         10**-4, 10**-3, 
+                         10**-2, 10**-1])}}, 
+                         clipnorm=1.)
+  rmsprop = keras.optimizers.RMSprop(
+            lr={{choice([10**-6, 10**-5, 
+                         10**-4, 10**-3, 
+                         10**-2, 10**-1])}}, 
+                         clipnorm=1.)
+  sgd = keras.optimizers.SGD(
+            lr={{choice([10**-6, 10**-5, 
+                         10**-4, 10**-3, 
+                         10**-2, 10**-1])}}, 
+                         clipnorm=1.)
 
-  model.compile(optimizer={{choice(['sgd', 'rmsprop', 'adagrad', 
-                                        'adadelta', 'nadam', 'adam'])}},
-                 loss='categorical_crossentropy', 
-                 metrics=['accuracy'])
+  model.compile(
+    optimizer={{choice(['sgd', 'rmsprop', 'adagrad', 
+                       'adadelta', 'nadam', 'adam'])}},
+    loss='categorical_crossentropy', 
+    metrics=['accuracy'])
 
-  results = model.fit(X_train, y_train, epochs=1000,\
-                      batch_size={{choice(numpy.arange(32, 480, 32))}},\
-                      validation_split=0.2, callbacks=[early_stop, model_saver])
+  results = model.fit(
+    X_train, y_train, epochs=1000,\
+    batch_size={{choice(numpy.arange(32, 480, 32))}},\
+    validation_split=0.2, 
+    callbacks=[early_stop, model_saver])
 
 Due to constraints in the Python package used for hyperparameter optimization (i.e., hyperas from hyperopt), the window size, stride length and number of layers were optimized on the highest performing combination of all other hyperparameters. Thus, for initial optimization, data was partitioned using a window size of 128 with 50% stride length and fed into a 2-layer LSTM network. Subsequently, window size, stride length and number of layers were tested using randomized grid search on the following ranges:
 
@@ -182,7 +198,7 @@ Regarding preprocessing, we were surprised to see some of the more advanced tech
 
 Broome, 2017 and Moreau, et. al. excluded the dominant Null class as a solution to class imbalance; however, this is not very feasible for real-world online activity classification, where long periods of non-activity between meaningful segments are to be expected. This is a major obstacle for HAR and the use of a hierarchical LSTM to first recognize segments of activity versus non-activity before classifying the specific activity seemed particularly practical and intriguing for tackling this problem :cite:`LeeCho2012`.
 
-Architecturally, several observations have been made through the use LSTMs in other domains which may shed light on their application for accelerometer data. Reimers & Gurevych emphasize the importance of weight initialization for model performance in their survey of the importance of hyperparameter tuning for using LSTMs for language modeling :cite:`ReimersGurevych2017`. Pascanu, et. al. explain the downside of using an L1 or L2 penalty to regularize the recurrent weights during back propagation. Initially formulated to help with exploding gradients, this technique causes exponential loss of temporal information as a function of time, making long term dependencies difficult to learn :cite:`Pascanuetal2013`. Jozefowicz, et. al. cite the initialization of the forget gate bias to 1 as a major factor in LSTM performance :cite:`Jozefowiczetal2015`. Furthermore, from our own previous experiments, more than three layers is not practical for online or on-device learning due to largely increased training time and computational complexity.
+Architecturally, several observations have been made through the use LSTMs in other domains which may shed light on their application for accelerometer data. Reimers and Gurevych emphasize the importance of weight initialization for model performance in their survey of the importance of hyperparameter tuning for using LSTMs for language modeling :cite:`ReimersGurevych2017`. Pascanu, et. al. explain the downside of using an L1 or L2 penalty to regularize the recurrent weights during back propagation. Initially formulated to help with exploding gradients, this technique causes exponential loss of temporal information as a function of time, making long term dependencies difficult to learn :cite:`Pascanuetal2013`. Jozefowicz, et. al. cite the initialization of the forget gate bias to 1 as a major factor in LSTM performance :cite:`Jozefowiczetal2015`. Furthermore, from our own previous experiments, more than three layers is not practical for online or on-device learning due to largely increased training time and computational complexity.
 
 Regarding performance measures, Kline and Berardi demonstrate that categorical cross-entropy as the objective function to minimize during training has advantages over more standard error terms such as squared error :cite:`Kline&Berardi`. Furthermore, we view the F1 score, calculated for each class individually and then averaged across classes, as a superior performance measure for the testing set compared to the accuracy for multi-class problems. F1 score combines two nuanced measures of performance, namely the precision and the recall. Precision measures the exactness of the positive predictions by measuring the proportion of correct positive predictions for each class. Recall measures completeness of the positive predictions by measuring the proportions of positive examples identified from the test set. However, since accuracy is more intuitive, we feel that reporting both F1 score and accuracy may be useful :cite:`Garethetal2017`.
 
