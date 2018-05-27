@@ -9,19 +9,18 @@
 :institution: FOO
 
 :author: Jacqueline Kazil
-
 :email: FOO
 :institution: FOO
 
-:author: Alexander M. Kaufman
+:author: David C. Low
 :email: FOO
 :institution: FOO
 
-:author: Alexander M. Kaufman
+:author: Nathan M. Palmer
 :email: FOO
 :institution: FOO
 
-:author: Alexander M. Kaufman
+:author: Matthew N. White
 :email: FOO
 :institution: FOO
 
