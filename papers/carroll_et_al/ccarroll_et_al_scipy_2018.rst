@@ -212,9 +212,11 @@ attributes of the module ``HARK.utilities``. In order to calculate CRRA
 utility with a consumption of 1 and a coefficient of risk aversion of 2
 we run:
 
-import HARKutilities as Hutil
+.. code-block:: python
 
-Hutil.CRRAutility(,)
+    import HARKutilities as Hutil
+
+    Hutil.CRRAutility(,)
 
 Python modules in HARK can generally be categorized into three types:
 tools, models, and applications. **Tool modules** contain functions and
