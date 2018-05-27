@@ -187,9 +187,6 @@ models in the HARK framework. summarizes and concludes.
 HARK Structure 
 ===============
 
-
-` <Methodological%20Framework%20...%20of%20the%20HARK%20Framework>`__
-
 The class of problems that HARK solves is highly modular by
 construction. There are approximately these steps in creating a
 heterogneous-agents rational model:
