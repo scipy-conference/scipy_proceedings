@@ -539,6 +539,231 @@ from one period to the next. His decision about how much to consume in a
 particular period :math:`C_t` out of total market resources :math:`M_t`
 can be expressed in Bellman form as:
 
+.. math::
+
+   \begin{aligned}
+   V_t(M_t) &= \max_{C_t} \; \mathrm{u}(C_t)  + \beta  (1-\mathsf{D})_t E [V_{t+1}(M_{t+1}) ], \\
+   A_t &= M_t - C_t, \\
+   M_{t+1} &= \mathsf{R} A_t + Y_{t+1}, \\
+   Y_{t+1} &= \Gamma_{t+1} Y_t, \\
+   \mathrm{u}(C) &= \frac{C^{1-\rho}}{1-\rho}.
+   \end{aligned}
+
+An agent’s problem is thus characterized by values of :math:`\rho`,
+:math:`\mathsf{R}`, and :math:`\beta`, plus sequences of survival
+probabilities :math:`(1-\mathsf{D})_t` and income growth factors
+:math:`\Gamma_t` for :math:`t = 0, ... ,T`. This problem has an
+analytical solution for both the value function and the consumption
+function.
+
+The ``ConsIndShockModel`` module defines the class
+``PerfForesightConsumerType`` as a subclass of ``AgentType`` and
+provides ``solver`` functions for several variations of a
+consumption-saving model, including the perfect foresight problem. A
+HARK user could specify and solve a ten period perfect foresight model
+with the following two commands (the first command is split over
+multiple lines) :
+
+MyConsumer PerfForesightConsumerType( time\_flow, cycles, Nagents , CRRA
+, Rfree , DiscFac , LivPrb [,,,,,,, ,,], PermGroFac [,,,,,, ,,,] )
+
+MyConsumer.solve()
+
+The first line makes a new instance of ConsumerType, specifies that time
+is currently “flowing” forward, specfies that the sequence of periods
+happens exactly once, and that the simulation-based solution will use
+1,000 agents. The next five lines (all part of the same command) set the
+time invariant (CRRA is :math:`\rho`, Rfree is :math:`\mathsf{R}`, and
+DiscFac is :math:`\beta`) and time varying parameters (LivPrb is
+:math:`(1-\mathsf{D})_t`, PermGroFac is :math:`\Gamma_{t}`). After
+running the ``solve method``, ``MyConsumer`` will have an attribute
+called ``solution``, which will be a list with eleven
+``ConsumerSolution`` objects, representing the period-by-period solution
+to the model. [7]_
+
+The consumption function for a perfect foresight consumer is a linear
+function of market resources – not terribly exciting. The marginal
+propensity to consume out of wealth doesn’t change whether theconsumer
+is rich or poor. When facing *uncertain* income, however, the
+consumption function is concave – the marginal propensity to consume is
+very high when agents are poor, and lower when they are rich. In
+addition, agents facing uncertainty save more than agents under
+certainty. However as agents facing uncertainty get richer, their
+consumption function converges to the perfect foresight consumption
+function – rich but uncertain agents act like agents who have certainty.
+In , the solid blue line is consumption under certainty, while the
+dashed orange line is consumption under uncertainty. The inset plot
+demonstrates that these two functions converge as the x-axis of this
+plot are extended.
+
+.. figure:: ./consumption_functions.png
+   :alt: Consumption Functions[fig:consumption-functions]
+
+   Consumption Functions[fig:consumption-functions]
+
+Macroeconomics: the Market Class
+--------------------------------
+
+The modeling framework of ``AgentType`` is called “microeconomic”
+because it pertains only to the dynamic optimization problem of
+individual agents, treating all inputs of the problem from their
+environment as exogenously fixed. In what we label as “macroeconomic”
+models, some of the inputs for the microeconomic models are endogenously
+determined by the collective states and choices of other agents in the
+model. In a rational dynamic general equilibrium, there must be
+consistency between agents’ beliefs about these macroeconomic objects,
+their individual behavior, and the realizations of the macroeconomic
+objects that result from individual choices.
+
+The Market class in ``HARK.core`` provides a framework for such
+macroeconomic models, with a ``solve`` method that searches for a
+rational dynamic general equilibrium. An instance of ``Market`` includes
+a list of ``AgentTypes`` that compose the economy, a method for
+transforming microeconomic outcomes (states, controls, and/or shocks)
+into macroeconomic outcomes, and a method for interpreting a history or
+sequence of macroeconomic outcomes into a new “dynamic rule” for agents
+to believe. Agents treat the dynamic rule as an input to their
+microeconomic problem, conditioning their optimal policy functions on
+it. A dynamic general equilibrium is a fixed point dynamic rule: when
+agents act optimally while believing the equilibrium rule, their
+individual actions generate a macroeconomic history consistent with the
+equilibrium rule.
+
+Down on the Farm
+~~~~~~~~~~~~~~~~
+
+The ``Market`` class uses a farming metaphor to conceptualize the
+process for generating a history of macroeconomic outcomes in a model.
+Suppose all ``AgentTypes`` in the economy believe in some dynamic rule
+(i.e. the rule is stored as attributes of each ``AgentType``, which
+directly or indirectly enters their dynamic optimization problem), and
+that they have each found the solution to their microeconomic model
+using their ``solve`` method. Further, the macroeconomic and
+microeconomic states have been reset to some initial orientation.
+
+To generate a history of macroeconomic outcomes, the ``Market``
+repeatedly loops over the following steps a set number of times:
+
+#. ``sow``: Distribute the macroeconomic state variables to all
+   ``AgentTypes`` in the market.
+
+#. ``cultivate``: Each ``AgentType`` executes their ``marketAction``
+   method, likely corresponding to simulating one period of the
+   microeconomic model.
+
+#. ``reap``: Microeconomic outcomes are gathered from each ``AgentType``
+   in the market.
+
+#. ``mill``: Data gathered by ``reap`` is processed into new
+   macroeconomic states according to some “aggregate market process”.
+
+#. ``store``: Relevant macroeconomic states are added to a running
+   history of outcomes.
+
+This procedure is conducted by the ``makeHistory`` method of ``Market``
+as a subroutine of its ``solve`` method. After making histories of the
+relevant macroeconomic variables, the market then executes its
+``calcDynamics`` function with the macroeconomic history as inputs,
+generating a new dynamic rule to distribute to the ``AgentTypes`` in the
+market. The process then begins again, with the agents solving their
+updated microeconomic models given the new dynamic rule; the ``solve``
+loop continues until the “distance” between successive dynamic rules is
+sufficiently small.
+
+Summary and Conclusion 
+=======================
+
+The HARK project is a modular code library for constructing
+microeconomic and macroeconomic models with heterogeneous agents.
+Portfolio choice under uncertainty is central to nearly all academic
+models, including modern DSGE models (with and without financial
+sectors), models of asset pricing (eg. CAPM and C-CAPM), models of
+financial frictions (eg. Bernanke et al. 1999), and many more. Under
+strict assumptions many of these models can be solved by aggregating
+agent decision-making and employing the representative agent. However
+when individual agents look very different from one another - for
+example, different wealth levels, preferences, or exposures to different
+types of shocks - assumptions required for aggregation can quickly fail
+and a representative agent is no longer appropriate. Code to solve the
+required heterogeneous-agent models tends to be bespoke and
+idiosyncratic, often reinvented by different researchers working on
+similar problems. This needless code duplication increases the chance
+for errors and wastes valuable researcher time.
+
+Researchers should spend their valuable time producing research, not
+reinventing wheels. The HARK toolkit already provides a useful set of
+industrial strength, reliable, reusable wheels, constructed using a
+simple and easily extensible framework with clear documentation,
+testing, and estimation frameworks. The longer-term goals of the
+Econ-ARK project are to create a collaborative codebase that can serve
+the entire discipline of economics, employing the best of modern
+software development tools to accelerate understanding and
+implementation of cutting edge research tools. The solution methods
+employed in HARK are not the only methods available, and those who have
+additional methodological suggestions are strongly encouraged to
+contribute! Increasing returns to production is one of the few
+“non-dismal” possibilities in economic thought – we hope to capture this
+feature of code production in the HARK framework. Key next steps include
+finalizing the general-equilibrium HARK modules, identifying additional
+baseline models to replicate in HARK, and encouraging a new generation
+of students to learn from, use, and contribute to the collaborative
+construction of heterogeneous-agent models.
+
+Bibliography
+============
+
+Adjemian, Stéphane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi,
+George Perendia, Marco Ratto, and Sébastien Villemot. 2011. “Dynare:
+Reference Manual, Version 4.” Dynare working papers 1, CEPREMAP.
+
+Aruoba, S Borağan, and Jesús Fernández-Villaverde. 2015. “A Comparison
+of Programming Languages in Macroeconomics.” *Journal of Economic
+Dynamics and Control* 58. Elsevier: 265–73.
+
+Carroll, Christopher D. 2012. “Implications of Wealth Heterogeneity for
+Macroeconomics.” *Johns Hopkins University Department of Economics
+Working Paper*, no. 597.
+
+———. 2014a. “Representing Consumption and Saving Without a
+Representative Consumer.” In *Measuring Economic Sustainability and
+Progress*, 115–34. University of Chicago Press.
+
+———. 2017. “Monetary Policy According to HANK.” In *American Economic
+Review*, 697-743.
+
+———. 2014b. “Heterogeneous Agent Macroeconomics: An Example and an
+Agenda.” Washington, D.C.: Presentation at IMF Workshop on Computational
+Macroeconomics.
+
+Carroll, Christopher, Alexander Kaufman, David Low, Nathan Palmer, and
+Matthew White. 2017. “A User’s Guide for Hark: Heterogeneous Agents
+Resources and toolKit.”
+https://github.com/econ-ark/HARK/blob/master/Documentation/HARKmanual.pdf:
+Econ ARK.
+
+Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
+White. 2017. “The Distribution of Wealth and the Marginal Propensity to
+Consume.” *Quantitative Economics* 8 (3). Wiley Online Library:
+977–1020.
+
+Chacon, Scott, and Ben Straub. 2014. *Pro Git*. Apress.
+
+Geanakoplos, John. 2010. “The Leverage Cycle.” *NBER Macroeconomics
+Annual* 24 (1). The University of Chicago Press: 1–66.
+
+Geanakoplos, John, Robert Axtell, J Doyne Farmer, Peter Howitt, Benjamin
+Conlee, Jonathan Goldstein, Matthew Hendrey, Nathan M Palmer, and
+Chun-Yi Yang. 2012. “Getting at Systemic Risk via an Agent-Based Model
+of the Housing Market.” *American Economic Review* 102 (3): 53–58.
+
+Ram, Yoav, and Lilach Hadany. 2015. “The Probability of Improvement in
+Fisher’s Geometric Model: A Probabilistic Approach.” *Theoretical
+Population Biology* 99. Elsevier: 1–6.
+
+Sheppard, Kevin. 2018. “Introduction to Python for Econometrics,
+Statistics and Numerical Analysis.” *Lecture Notes, University of
+Oxford*. https://www.kevinsheppard.com/Python_for_Econometrics.
+
 
 
 .. [1]
