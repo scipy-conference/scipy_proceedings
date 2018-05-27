@@ -711,10 +711,11 @@ scenarios:
    static representations of the environment needed to reproduce a scientific result.
    Binder has already been used alongside scientific publications
    :cite:`LIGO_Scientific_Collaboration_undated-xy` :cite:`Ross2017-ff`
-   to provide an interactive and reproducible document with minimal added effort.
-   In the future, the Binder project hopes to partner with academic publishers
-   and professional societies to incorporate these reproducible environments into
-   the publishing workflow.
+   :cite:`Cornish2018-mo` :cite:`Holdgraf2017-so` :cite:`Rein2016-rd`
+   :cite:`Neyrinck2018-xy` to provide an interactive and reproducible document
+   with minimal added effort. In the future, the Binder project hopes to partner
+   with academic publishers and professional societies to incorporate these
+   reproducible environments into the publishing workflow.
 2. **Education and interactive materials**. Binder’s goal is to lower the barrier
    to interactivity, and to allow users to utilize code that is hosted in repository
    providers such as GitHub. Because Binder runs as a free and public service,
