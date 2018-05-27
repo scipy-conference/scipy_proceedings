@@ -9,8 +9,8 @@
 :institution: FOO
 
 :author: Jacqueline Kazil
-:email: FOO
-:institution: FOO
+:email: jackiekazil@gmail.com
+:institution: George Mason University
 
 :author: David C. Low
 :email: FOO
@@ -331,16 +331,16 @@ define a ``distance`` method that takes as an input another instance of
 the same class and returns a non-negative real number representing the
 “distance” between the two. [3]_
 
-HARK.simulation
-```````````````
+**HARK.simulation**
+`````````````````````
 
 The HARK.simulation module provides tools for generating simulated data
 or shocks for post-solution use of models. Currently implemented
 distributions include normal, lognormal, Weibull (including
 exponential), uniform, Bernoulli, and discrete.
 
-HARK.estimation
-```````````````
+**HARK.estimation**
+````````````````````
 
 Methods for optimizing an objective function for the purposes of
 estimating a model can be found in ``HARK.estimation``. As of this
@@ -394,8 +394,8 @@ solver” applicable to any (properly formatted) discrete time model. This
 section provides a brief example of a problem solved by a microeconomic
 instance of ``AgentType``. [6]_
 
-Sample Model: Perfect Foresight Consumption-Saving
-``````````````````````````````````````````````````
+**Sample Model: Perfect Foresight Consumption-Saving**
+``````````````````````````````````````````````````````````
 
 To provide a concrete example of how the AgentType class works, consider
 the very simple case of a perfect foresight consumption-saving model.
@@ -504,8 +504,8 @@ agents act optimally while believing the equilibrium rule, their
 individual actions generate a macroeconomic history consistent with the
 equilibrium rule.
 
-Down on the Farm
-`````````````````
+**Down on the Farm**
+`````````````````````
 
 The ``Market`` class uses a farming metaphor to conceptualize the
 process for generating a history of macroeconomic outcomes in a model.
