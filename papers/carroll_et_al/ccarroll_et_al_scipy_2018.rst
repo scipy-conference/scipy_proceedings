@@ -433,10 +433,17 @@ HARK user could specify and solve a ten period perfect foresight model
 with the following two commands (the first command is split over
 multiple lines) :
 
-MyConsumer PerfForesightConsumerType( time\_flow, cycles, Nagents , CRRA
-, Rfree , DiscFac , LivPrb [,,,,,,, ,,], PermGroFac [,,,,,, ,,,] )
+.. code-block:: python
 
-MyConsumer.solve()
+    MyConsumer = PerfForesightConsumerType(
+        time_flow=True, cycles=1, Nagents = 1000,
+        CRRA = 2.7, Rfree = 1.03, DiscFac = 0.98,
+        LivPrb = [0.99,0.98,0.97,0.96,0.95,0.94,0.93,
+                  0.92,0.91,0.90],
+        PermGroFac = [1.01,1.01,1.01,1.01,1.01,1.02,
+                      1.02,1.02,1.02,1.02] )
+
+    MyConsumer.solve()
 
 The first line makes a new instance of ConsumerType, specifies that time
 is currently “flowing” forward, specfies that the sequence of periods
