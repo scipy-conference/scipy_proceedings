@@ -334,14 +334,16 @@ define a ``distance`` method that takes as an input another instance of
 the same class and returns a non-negative real number representing the
 “distance” between the two. [3]_
 
-**HARK.simulation**
+HARK.simulation
+------------------
 
 The HARK.simulation module provides tools for generating simulated data
 or shocks for post-solution use of models. Currently implemented
 distributions include normal, lognormal, Weibull (including
 exponential), uniform, Bernoulli, and discrete.
 
-**HARK.estimation**
+HARK.estimation
+------------------
 
 Methods for optimizing an objective function for the purposes of
 estimating a model can be found in ``HARK.estimation``. As of this
@@ -632,8 +634,6 @@ Population Biology* 99. Elsevier: 1–6.
 Sheppard, Kevin. 2018. “Introduction to Python for Econometrics,
 Statistics and Numerical Analysis.” *Lecture Notes, University of
 Oxford*. https://www.kevinsheppard.com/Python_for_Econometrics.
-
-
 
 .. [1]
    Running ``ConsIndShockModel.py`` also demonstrates other variations
