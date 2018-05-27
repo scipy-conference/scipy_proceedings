@@ -24,10 +24,6 @@
 :email: FOO
 :institution: FOO
 
-:author: Alexander M. Kaufman
-:email: FOO
-:institution: FOO
-
 
 ------------------------------------------------------------------------------------------
 The Econ-ARK Open Source Tools for Computational Economics
