@@ -232,8 +232,11 @@ where
 Process Model Covariance Matrix
 ===============================
 
-The process covariance matrix for the GPS problem is a block diagonal Matrix, with three identical blocks 
-for the position-velocity pairs and one matrix for the clock-clock drift pair. 
+The process covariance matrix for the GPS problem is a block diagonal Matrix, 
+with three identical blocks for the position-velocity pairs and one 
+matrix for the clock-clock drift pair. The block diagonal form means that 
+the states are assumed be statistically coupled only in pairs and 
+outside of the pairs uncorrelated. 
 In the model of [Brown2012]_ each position-velocity state-pair has two variance terms and 
 one covariance term describing an upper triangle :math:`2\times 2` submatrix
 
@@ -275,11 +278,11 @@ In final form :math:`\mathbf{Q}` is a :math:`4 \times 4` block covariance matrix
 Measurement Model Covariance Matrix
 ===================================
 
-The covariance matrix of the pseudorange measurement error is assumed to diagonal with equal 
+The covariance matrix of the pseudorange measurement error is assumed to be diagonal with equal 
 variance :math:`\sigma_r^2`, thus we have
 
 .. math::
-   :label: measurementCovVariance
+   :label: measurementCovariance
 
    \mathbf{R} = \begin{bmatrix}
    \sigma_r^2 & 0 & 0 & 0 \\
@@ -288,7 +291,8 @@ variance :math:`\sigma_r^2`, thus we have
    0 & 0 & 0 & \sigma_r^2
    \end{bmatrix}
 
-for the case of :math:`m = 4` measurements.
+for the case of :math:`m = 4` measurements. Being diagonal means that all measurements 
+are assumed statistically uncorrelated, which is reasonable.
 
 Extended Kalman Filter
 ======================
@@ -303,15 +307,47 @@ replaces two expressions in Figure :ref:`KFBlock` as follows:
    :type: eqnarray
 
    \mathbf{A}\hat{\mathbf{x}}_{k-1}\ \ \longrightarrow\ \ f(\hat{\mathbf{x}}_{k-1}) \\
-   \mathbf{H}\hat{\mathbf{x}}_{k-1}^-\ \ \longrightarrow\ \ h(\hat{\mathbf{x}}_{k-1}^-)
+   \mathbf{H}\hat{\mathbf{x}}_{k-1}^-\ \ \longrightarrow\ \ \mathbf{h}(\hat{\mathbf{x}}_{k-1}^-)
 
 
 For the case of the GPS problem we have already seen that the state transition model is linear, 
 thus the first calculation of **Step 1**, *predicted state update expression*, is the same as 
 that found in the standard linear Kalman filter. For **Step 3**, the state estimate, we need to 
-linearize :math:`h(\hat{\mathbf{x}}_k^-)`. This is done by forming a matrix of partials 
+linearize the equations :math:`\mathbf{h}(\hat{\mathbf{x}}_k^-)`. This is done by forming a matrix of partials 
 or Jacobian matrix, which then generates an equivalent :math:`\mathbf{H}` matrix as found in 
 the linear Kalman filter, but in the EKF is updated at each iteration of the algorithm.
+
+
+.. math::
+   :label: jacobMatrix
+   :type: eqnarray
+
+   \mathbf{H} &=& \left.\frac{\partial \mathbf{h}}{\mathbf{x}}\right|_{\mathbf{x}=\hat{\mathbf{x}}_k^-} \\
+   &=& \begin{bmatrix} 
+   \frac{\partial\rho_1}{\partial x} & 0 & \frac{\partial\rho_1}{\partial y} & 0 & 
+   \frac{\partial\rho_1}{\partial z} & 0 & 1 & 0 \\
+   \frac{\partial\rho_2}{\partial x} & 0 & \frac{\partial\rho_2}{\partial y} & 0 & 
+   \frac{\partial\rho_2}{\partial z} & 0 & 1 & 0 \\
+   \frac{\partial\rho_3}{\partial x} & 0 & \frac{\partial\rho_3}{\partial y} & 0 & 
+   \frac{\partial\rho_3}{\partial z} & 0 & 1 & 0 \\
+   \frac{\partial\rho_4}{\partial x} & 0 & \frac{\partial\rho_4}{\partial y} & 0 & 
+   \frac{\partial\rho_4}{\partial z} & 0 & 1 & 0 
+   \end{bmatrix}
+
+where
+
+.. math::
+   :label: partials
+   :type: eqnarray
+
+   \frac{\partial\rho_i}{\partial x} &=& \frac{-(x_i - \hat{x}_1^-)}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}} \\
+   \frac{\partial\rho_i}{\partial y} &=& \frac{-(x_i - \hat{x}_3^-)}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}} \\
+   \frac{\partial\rho_i}{\partial z} &=& \frac{-(x_i - \hat{x}_5^-)}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}}
+
+for :math:`i = 1, 2, 3` and 4.
 
 Computational Tool
 ------------------
@@ -389,7 +425,7 @@ Figure :ref:`KFBlock` is the code in the :code:`update()` method:
       
        self.K = Pp @ H.T @ inv(H @ Pp @ H.T + self.R)
       
-       # zp = h(xp)
+       # zp = h(xp), the predicted pseudorange
        zp = self.hx(xp, SV_Pos)
       
        self.x = xp + self.K @ (z - zp)
@@ -604,7 +640,8 @@ the EKF in GPS position estimation has been met. There are many tuning options t
 performance results are consistent with expectations.
 
 There are several improvements under consideration: (1) develop  a more realistic user 
-trajectory generator, make measurement quality a function of the SV range, (3) use a least-squares 
+trajectory generator, make measurement quality a function of the SV range, 
+(3) use a least-squares 
 algorithm to obtain an initial position fix. The last item is to deal with the fact that the 
 EKF needs a reasonable position fix to get started. It may not converge without it.
 
