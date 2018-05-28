@@ -30,11 +30,11 @@ The Econ-ARK Open Source Tools for Computational Economics
 
 .. class:: abstract
 
-   FOO FOO FOO
+    Academic research in computational economics is dominated by R and large complicated, poorly documented code bases that make it difficult for researchers to understand each others work. `Econ-ARK <http://econ-ark.org>`__ is looking to resolve these issues by developing a set of resources and examples as well as standards of practice for communication. The first step to creating this ecosystem is the creation of a toolkit for Heterogeneous Agent (HA) macroeconomics called the Heterogeneous-Agent Resources toolKit (HARK). HARK is a modular programming framework for solving, estimating, and simulating macroeconomic models in which economic agents can be heterogeneous in a large number of ways. To solve the complexity of code sharing in economics research, the HARK project provides a set of well-documented code modules that can be combined to solve a range of heterogeneous-agent models. By applying best software development practices, the HARK project aims to apply the best of them to the development of code in computational economics in order to increase researcher productivity, particularly when interacting with other researchers’ code.
 
 .. class:: keywords
 
-   FOO, FOO, FOO
+   Heterogeneous-Agent Resources toolKit, econ-ark, computational economics, economics modeling
 
 Introduction
 =============
