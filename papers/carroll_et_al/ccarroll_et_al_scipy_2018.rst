@@ -25,7 +25,7 @@
 
 
 ------------------------------------------------------------------------------------------
-Econ-ARK, Open Source Tools for Computational Economics
+The Econ-ARK: Open Source Tools for Computational Economics
 ------------------------------------------------------------------------------------------
 
 .. class:: abstract
