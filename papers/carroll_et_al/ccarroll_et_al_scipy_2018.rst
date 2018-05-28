@@ -439,7 +439,7 @@
   1,000 agents. The next five lines (all part of the same command) set the
   time invariant (CRRA is :math:`\rho`, Rfree is :math:`{R}`, and
   DiscFac is :math:`\beta`) and time varying parameters (LivPrb is
-  :math:`(1-\mathsf{D})_t`, PermGroFac is :math:`\Gamma_{t}`). After
+  :math:`(1-{D})_t`, PermGroFac is :math:`\Gamma_{t}`). After
   running the ``solve method``, ``MyConsumer`` will have an attribute
   called ``solution``, which will be a list with eleven
   ``ConsumerSolution`` objects, representing the period-by-period solution
