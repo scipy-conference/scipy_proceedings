@@ -1,28 +1,27 @@
 :author: Christopher D. Carroll
-:email: FOO
-:institution: FOO
-:institution: FOO2
+:email: ccarroll@jhu.edu
+:institution: Johns Hopkins University
 :corresponding:
 
 :author: Alexander M. Kaufman
-:email: FOO
-:institution: FOO
+:email: TBD
+:institution: TBD
 
 :author: Jacqueline Kazil
 :email: jackiekazil@gmail.com
 :institution: George Mason University
 
 :author: David C. Low
-:email: FOO
-:institution: FOO
+:email: TBD
+:institution: TBD
 
 :author: Nathan M. Palmer
-:email: FOO
-:institution: FOO
+:email: npalmer.professional@gmail.com
+:institution: U.S. Department of the Treasury
 
 :author: Matthew N. White
-:email: FOO
-:institution: FOO
+:email: mnwhite@gmail.com
+:institution: University of Delaware
 
 
 ------------------------------------------------------------------------------------------
