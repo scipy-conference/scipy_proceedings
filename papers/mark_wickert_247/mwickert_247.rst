@@ -636,13 +636,14 @@ Conclusions and Future Work
 ---------------------------
 
 The objective of creating a Jupyter notebook-based simulation tool for studying the use of 
-the EKF in GPS position estimation has been met. There are many tuning options to explore. The 
+the EKF in GPS position estimation has been met. There are many tuning options to explore, which 
+provides a very nice environment for studying a large variety scenarios. The 
 performance results are consistent with expectations.
 
-There are several improvements under consideration: (1) develop  a more realistic user 
-trajectory generator, make measurement quality a function of the SV range, 
-(3) use a least-squares 
-algorithm to obtain an initial position fix. The last item is to deal with the fact that the 
+There are several improvements under consideration. The first is to develop a more realistic user 
+trajectory generator. The second is to make measurement quality a function of the SV range, which would 
+also make the measurement quality SV specific, rather than identical as it is now. A third desire 
+is to use a least-squares algorithm to obtain an initial position fix. The last item is to deal with the fact that the 
 EKF needs a reasonable position fix to get started. It may not converge without it.
 
 
