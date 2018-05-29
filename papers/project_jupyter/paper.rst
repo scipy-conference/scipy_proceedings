@@ -67,7 +67,7 @@
 :email: willingc@gmail.com
 :institution: Cal Poly SLO
 :equal-contributor:
-:bibliography: binder_bib
+:bibliography: binderbib
 
 
 ===================================================================================
