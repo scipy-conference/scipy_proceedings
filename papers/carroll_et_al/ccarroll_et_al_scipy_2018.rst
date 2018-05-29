@@ -17,7 +17,7 @@
 
 :author: Nathan M. Palmer
 :email: npalmer.professional@gmail.com
-:institution: Board of Governors of the Federal Reserve System
+:institution: Econ-ARK
 
 :author: Matthew N. White
 :email: mnwhite@gmail.com
