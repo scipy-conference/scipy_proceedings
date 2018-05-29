@@ -7,7 +7,7 @@
 :email: akaufman10@gmail.com
 :institution: Woodrow Wilson School of Public Policy
 
-:author: Jacqueline Kazil
+:author: Jacqueline L. Kazil
 :email: jackiekazil@gmail.com
 :institution: George Mason University
 
