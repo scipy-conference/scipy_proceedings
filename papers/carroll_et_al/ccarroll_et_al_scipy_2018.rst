@@ -30,7 +30,7 @@ The Econ-ARK: Open Source Tools for Computational Economics
 
 .. class:: abstract
 
-The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims to become a focal resource for computational economics. Its first ‘framework,’ the Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__), provides a modern, robust, transparent set of tools to solve a class of macroeconomic models whose usefulness has become increasingly apparent both for economic policy and for research purposes, but whose adoption has been limited because the existing literature derives from idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK frameworks (e.g., for the analysis of transmission of beliefs through social networks) will draw heavily on key elements of the existing HARK framework, including the API, the structure, and documentation standards (articulated below).
+The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims to become a focal resource for computational economics. Its first ‘framework,’ the Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__), provides a modern, robust, transparent set of tools to solve a class of macroeconomic models whose usefulness has become increasingly apparent both for economic policy and for research purposes, but whose adoption has been limited because the existing literature derives from idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK frameworks (e.g., for analysis of the transmission of beliefs through agents' social networks) will draw heavily on key elements of the existing HARK framework, including the API, the structure, and documentation standards (articulated below).
 
 .. class:: keywords
 
@@ -39,9 +39,9 @@ The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org
 Introduction
 =============
 
-Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed computational and communication tools that allow scholars easily and transparently to exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
+Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed suites of tools that allow scholars easily and transparently to exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
 
-The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit for solving representative agent dynamic stochastic equilibrium models
+The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit for solving representative agent dynamic stochastic general equilibrium models.
 
 Our aim is to provide a high quality set of tools and standards whose
 existence will help bring the rest of economics out of the (comparative)
@@ -85,7 +85,7 @@ The Heterogeneous-Agent Resources toolKit (HARK) is a modular
 programming framework for solving, estimating, and simulating
 macroeconomic models in which economic agents can be heterogeneous in a
 large number of ways. Models with heterogeneity among agents have
-proven to be useful for policy and research purposes. For example,
+proven to be increasingly useful for policy and research purposes. For example,
 recent work by has shown that changes in interest rates (caused, for
 example, by monetary policy actions) affect the economy in large part by
 reallocating income flows across different types of households
@@ -537,12 +537,30 @@ sufficiently small.
 Summary and Conclusion
 =======================
 
-The Econ-ARK project's broadest aim is to provide a platform for improving communication and collaboration among economists on technical and computational questions.  Its first framework, the HARK project, is a modular code library for constructing microeconomic and macroeconomic models with agents who differ from each other in `serious' ways: in dimensions whose consequences cannot be captured by analyzing the behavior of a single agent with average characteristics.
+The Econ-ARK project's broadest aim is to provide a platform for improving
+communication and collaboration among economists on technical and computational
+questions.  Its first framework, the HARK project, is a modular code library for
+constructing microeconomic and macroeconomic models with agents who differ from
+each other in serious ways: in dimensions whose consequences cannot be
+captured by analyzing the behavior of a single agent with average
+characteristics.
 
-The HARK project is the starting point because it is an area where both the need for improvement, and the opportunities for improvement, are great.
-In particular, existing code to solve HA models tends to be bespoke and idiosyncratic, with the consequence that tools are often reinvented by different researchers working on similar problems.  Researchers should spend their valuable time producing research, not reinventing wheels.  The HARK toolkit already provides a useful set of industrial strength, reliable, reusable wheels, constructed using a simple and easily extensible framework with clear documentation, testing, and estimation frameworks.
+The HARK project is the starting point because it is an area where both the need
+for improvement, and the opportunities for improvement, are great.  In
+particular, existing code to solve HA models tends to be bespoke and
+idiosyncratic, with the consequence that tools are often reinvented by different
+researchers working on similar problems.  Researchers should spend their
+valuable time producing research, not reinventing wheels.  The HARK toolkit
+already provides a useful set of industrial strength, reliable, reusable wheels,
+constructed using a simple and easily extensible framework with clear
+documentation, testing, and estimation frameworks.
 
-The longer-term goals of the Econ-ARK project are to create a collaborative codebase that can serve the entire discipline of economics, employing the best of modern software development tools to accelerate understanding and implementation of cutting edge research tools. The solution methods employed in HARK are not the only methods available, and those who have additional methodological suggestions are strongly encouraged to contribute.
+The longer-term goals of the Econ-ARK project are to create a collaborative
+codebase that can serve the entire discipline of economics, employing the best
+of modern software development tools to accelerate understanding and
+implementation of cutting edge research tools. The solution methods employed in
+HARK are not the only methods available, and those who have additional
+methodological suggestions are strongly encouraged to contribute.
 
 
 Bibliography
