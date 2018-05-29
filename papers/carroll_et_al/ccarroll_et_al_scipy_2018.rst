@@ -41,7 +41,7 @@ Introduction
 
 Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed computational and communication tools that allow scholars easily and transparently to exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
 
-The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit.
+The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit for solving representative agent dynamic stochastic equilibrium models
 
 Our aim is to provide a high quality set of tools and standards whose
 existence will help bring the rest of economics out of the (comparative)
