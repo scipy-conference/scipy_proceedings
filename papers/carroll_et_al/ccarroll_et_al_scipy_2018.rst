@@ -49,7 +49,7 @@ wilderness. Part of the reason we are confident our goal is feasible is
 that the tools now available – Python, Github, and Jupyter
 notebooks among them – have finally reached a stage of maturity that can
 handle the communication of almost any message an economist might want
-to transmit. (See the recent blog post by Paul Romer, `“Jupyter,
+to compose. (See the recent blog post by Paul Romer, `“Jupyter,
 Mathematica, and the Future of the Research
 Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
 for a fuller argument).
@@ -57,7 +57,7 @@ for a fuller argument).
 We face two challenges. The first is to develop a set of resources and
 examples and standards of practice for communication that are
 self-evidently a major improvement on the way economists exchange ideas
-now. The second is to persuade scholars to converge on using those
+now. The second is to persuade scholars to adopt those
 tools.
 
 The `Econ-ARK <http://econ-ark.org>`__ is the vehicle by which we hope
@@ -69,11 +69,11 @@ and partly because it is a field where important progress seems particularly
 feasible.
 
 The traditional approach in macroeconomics has been to assume that
-aggregate behavior can adequately be understood by modeling the behavior
+aggregate behavior can be understood by modeling the behavior
 of a single ‘representative agent.’ HA macroeconomics instead starts by
 constructing models of the behavior of individual microeconomic agents
-(a firm or a consumer, e.g.) that match key facts (e.g., some people are
-borrowers and others are savers) from the rich microeconomic evidence
+(a firm or a consumer, e.g.) that match key facts (some people are
+borrowers and others are savers, say) from the rich microeconomic evidence
 about the behavior and circumstances of such agents. With that solid
 foundation in place, macroeconomic outcomes are constructed by
 aggregating the behavior of the idiosyncratic agents subject to sensible
@@ -84,7 +84,7 @@ shares bought).
 The Heterogeneous-Agent Resources toolKit (HARK) is a modular
 programming framework for solving, estimating, and simulating
 macroeconomic models in which economic agents can be heterogeneous in a
-large number of ways. Models that allow heterogeneity among agents have
+large number of ways. Models with heterogeneity among agents have
 proven to be useful for policy and research purposes. For example,
 recent work by has shown that changes in interest rates (caused, for
 example, by monetary policy actions) affect the economy in large part by
@@ -537,41 +537,13 @@ sufficiently small.
 Summary and Conclusion
 =======================
 
-The HARK project is a modular code library for constructing
-microeconomic and macroeconomic models with heterogeneous agents.
-Portfolio choice under uncertainty is central to nearly all academic
-models, including modern DSGE models (with and without financial
-sectors), models of asset pricing (eg. CAPM and C-CAPM), models of
-financial frictions (eg. Bernanke et al. 1999), and many more. Under
-strict assumptions many of these models can be solved by aggregating
-agent decision-making and employing the representative agent. However
-when individual agents look very different from one another - for
-example, different wealth levels, preferences, or exposures to different
-types of shocks - assumptions required for aggregation can quickly fail
-and a representative agent is no longer appropriate. Code to solve the
-required heterogeneous-agent models tends to be bespoke and
-idiosyncratic, often reinvented by different researchers working on
-similar problems. This needless code duplication increases the chance
-for errors and wastes valuable researcher time.
+The Econ-ARK project's broadest aim is to provide a platform for improving communication and collaboration among economists on technical and computational questions.  Its first framework, the HARK project, is a modular code library for constructing microeconomic and macroeconomic models with agents who differ from each other in `serious' ways: in dimensions whose consequences cannot be captured by analyzing the behavior of a single agent with average characteristics.
 
-Researchers should spend their valuable time producing research, not
-reinventing wheels. The HARK toolkit already provides a useful set of
-industrial strength, reliable, reusable wheels, constructed using a
-simple and easily extensible framework with clear documentation,
-testing, and estimation frameworks. The longer-term goals of the
-Econ-ARK project are to create a collaborative codebase that can serve
-the entire discipline of economics, employing the best of modern
-software development tools to accelerate understanding and
-implementation of cutting edge research tools. The solution methods
-employed in HARK are not the only methods available, and those who have
-additional methodological suggestions are strongly encouraged to
-contribute! Increasing returns to production is one of the few
-“non-dismal” possibilities in economic thought – we hope to capture this
-feature of code production in the HARK framework. Key next steps include
-finalizing the general-equilibrium HARK modules, identifying additional
-baseline models to replicate in HARK, and encouraging a new generation
-of students to learn from, use, and contribute to the collaborative
-construction of heterogeneous-agent models.
+The HARK project is the starting point because it is an area where both the need for improvement, and the opportunities for improvement, are great.
+In particular, existing code to solve HA models tends to be bespoke and idiosyncratic, with the consequence that tools are often reinvented by different researchers working on similar problems.  Researchers should spend their valuable time producing research, not reinventing wheels.  The HARK toolkit already provides a useful set of industrial strength, reliable, reusable wheels, constructed using a simple and easily extensible framework with clear documentation, testing, and estimation frameworks.
+
+The longer-term goals of the Econ-ARK project are to create a collaborative codebase that can serve the entire discipline of economics, employing the best of modern software development tools to accelerate understanding and implementation of cutting edge research tools. The solution methods employed in HARK are not the only methods available, and those who have additional methodological suggestions are strongly encouraged to contribute.
+
 
 Bibliography
 ============
