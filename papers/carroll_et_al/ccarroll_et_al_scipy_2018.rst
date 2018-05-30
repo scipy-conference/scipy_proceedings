@@ -91,12 +91,12 @@ example, by monetary policy actions) affect the economy in large part by
 reallocating income flows across different types of households
 (borrowers versus lenders, e.g.) rather than by causing every household
 to change their behavior in the same way (as, implicitly, in a
-traditional RA model). C. Carroll, Slacalek, et al. () show that the
+traditional RA model). [Carroll2017a] shows that the
 response to fiscal policy (e.g., stimulus payments, or tax cuts) depends
 crucially on how such payments are distributed across different groups
 (an extension of unemployment benefits has a bigger effect on spending
-than a cut in the capital gains tax). Geanakoplos () outlines how
-heterogeneity drives the leverage cycle, and Geanakoplos et al. ()
+than a cut in the capital gains tax). [Geanakoplos2010] outlines how
+heterogeneity drives the leverage cycle, and [Geanakoplos2012]
 applies these insights to large-scale model of the housing and mortgage
 markets.
 
@@ -566,57 +566,26 @@ methodological suggestions are strongly encouraged to contribute.
 Bibliography
 ============
 
-Adjemian, Stéphane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi,
-George Perendia, Marco Ratto, and Sébastien Villemot. 2011. “Dynare:
-Reference Manual, Version 4.” Dynare working papers 1, CEPREMAP.
+[Carroll2017a] Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
+White. 2017. “The Distribution of Wealth and the Marginal Propensity to
+Consume.” *Quantitative Economics* 8 (3). Wiley Online Library:
+977–1020.
 
-Aruoba, S Borağan, and Jesús Fernández-Villaverde. 2015. “A Comparison
-of Programming Languages in Macroeconomics.” *Journal of Economic
-Dynamics and Control* 58. Elsevier: 265–73.
-
-Carroll, Christopher D. 2012. “Implications of Wealth Heterogeneity for
-Macroeconomics.” *Johns Hopkins University Department of Economics
-Working Paper*, no. 597.
-
-———. 2014a. “Representing Consumption and Saving Without a
-Representative Consumer.” In *Measuring Economic Sustainability and
-Progress*, 115–34. University of Chicago Press.
-
-———. 2017. “Monetary Policy According to HANK.” In *American Economic
-Review*, 697-743.
-
-———. 2014b. “Heterogeneous Agent Macroeconomics: An Example and an
-Agenda.” Washington, D.C.: Presentation at IMF Workshop on Computational
-Macroeconomics.
-
-Carroll, Christopher, Alexander Kaufman, David Low, Nathan Palmer, and
+[Carroll2017b] Carroll, Christopher, Alexander Kaufman, David Low, Nathan Palmer, and
 Matthew White. 2017. “A User’s Guide for Hark: Heterogeneous Agents
 Resources and toolKit.”
 https://github.com/econ-ark/HARK/blob/master/Documentation/HARKmanual.pdf:
 Econ ARK.
 
-Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
-White. 2017. “The Distribution of Wealth and the Marginal Propensity to
-Consume.” *Quantitative Economics* 8 (3). Wiley Online Library:
-977–1020.
-
-Chacon, Scott, and Ben Straub. 2014. *Pro Git*. Apress.
-
-Geanakoplos, John. 2010. “The Leverage Cycle.” *NBER Macroeconomics
+[Geanakoplos2010] Geanakoplos, John. 2010. “The Leverage Cycle.” *NBER Macroeconomics
 Annual* 24 (1). The University of Chicago Press: 1–66.
 
-Geanakoplos, John, Robert Axtell, J Doyne Farmer, Peter Howitt, Benjamin
+[Geanakoplos2012] Geanakoplos, John, Robert Axtell, J Doyne Farmer, Peter Howitt, Benjamin
 Conlee, Jonathan Goldstein, Matthew Hendrey, Nathan M Palmer, and
 Chun-Yi Yang. 2012. “Getting at Systemic Risk via an Agent-Based Model
 of the Housing Market.” *American Economic Review* 102 (3): 53–58.
 
-Ram, Yoav, and Lilach Hadany. 2015. “The Probability of Improvement in
-Fisher’s Geometric Model: A Probabilistic Approach.” *Theoretical
-Population Biology* 99. Elsevier: 1–6.
 
-Sheppard, Kevin. 2018. “Introduction to Python for Econometrics,
-Statistics and Numerical Analysis.” *Lecture Notes, University of
-Oxford*. https://www.kevinsheppard.com/Python_for_Econometrics.
 
 .. [1]
  Running ``ConsIndShockModel.py`` also demonstrates other variations
@@ -637,15 +606,15 @@ Oxford*. https://www.kevinsheppard.com/Python_for_Econometrics.
  envelope” interpolator, and others.
 
 .. [4]
- See C. Carroll, Kaufman, et al. () for a much more thorough
+ See [Carroll2017b] for a much more thorough
  discussion.
 
 .. [5]
- See C. Carroll, Kaufman, et al. () for a much more thorough
+ See [Carroll2017b] for a much more thorough
  discussion.
 
 .. [6]
- For a much more detailed discussion please see Carroll et al. (2017).
+ For a much more detailed discussion please see [Carroll2017b].
 
 .. [7]
  The solution to a dynamic optimal control problem is a set of policy
