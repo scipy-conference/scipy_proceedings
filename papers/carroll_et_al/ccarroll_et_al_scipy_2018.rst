@@ -8,8 +8,8 @@
 :institution: Woodrow Wilson School of Public Policy
 
 :author: Jacqueline L. Kazil
-:email: jackiekazil@gmail.com
-:institution: George Mason University
+:email: jacqueline.kazil@capitalone.com
+:institution: Capital One
 
 :author: David C. Low
 :email: david.c.low@cfpb.gov
