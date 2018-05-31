@@ -141,7 +141,7 @@ is rated. While doing so, they get easy-to-understand feedback for any
 mistakes they make from the interface, thereby improving their answers.
 
 Yaksh is being used extensively by the FOSSEE team to teach Python to many
-students all across India. Over 3000 students have used the interface to learn
+students all across India. Over 6000 students have used the interface to learn
 Python. It has been used in several courses taught at IIT Bombay and also for
 conducting recruitment interviews internally.
 
