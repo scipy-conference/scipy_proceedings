@@ -45,7 +45,7 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    Building environmental simulation workflows is typically a slow process involving multiple 
    proprietary desktop tools that do not interoperate well. In this work, we demonstrate building
    flexible, lightweight workflows entirely in Jupyter notebooks. We demonstrate these capabilities
-   through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics Model) and
+   through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics) and
    GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal is 
    to provide a set of tools that can easily be reconfigured and repurposed as needed to rapidly 
    solve specific emerging issues.
@@ -87,7 +87,7 @@ for any region of the globe.  We demonstrate these capabilities through examples
 the AdH and GSSHA simulators [cite adh & gssha]. The goal is to provide a set of tools that can easily be reconfigured and repurposed 
 as needed to rapidly solve specific emerging issues. 
 
-An explicit decision was made to avoid creation of new libraries as much as possible and to instead enhance existing
+An explicit decision was made to avoid creation of new special-purpose libraries as much as possible and to instead enhance existing
 tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several 
 general-purpose open source packages, including support for annotating and editing plots and maps in Bokeh and 
 HoloViews, rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and Datashader, 
@@ -113,7 +113,7 @@ and local-data stores.
 simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an 
 unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers.
 Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process.
-After this an iterative approach is used to build a good quality mesh based on the needs of the numerical 
+After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical 
 algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
 .. figure:: images/mesh.png
@@ -173,7 +173,7 @@ EarthSim
 
 EarthSim is a website and associated GitHub repository that serves two purposes. First, it is a location to work on
 new tools before moving them into other more general purpose python libraries as they mature. Second, it contains examples of how 
-to solve common Earth Science simulation workflow and visualization problems. EarthSim aims to demonstrate building
+to solve the common Earth Science simulation workflow and visualization problems outlined above. EarthSim aims to demonstrate building
 flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational 
 decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
 The overall goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
@@ -182,45 +182,60 @@ as needed to rapidly solve specific emerging issues.
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other new open source tools Filigree and Quest. Short descriptions of these tools follow:
 
-**Bokeh** provides interactive plotting in modern web browsers, running JavaScript but controlled by Python.  Bokeh allows users to construct interactive plots, dashboards, and data applications without having to use web technologies directly.
+**Bokeh** provides interactive plotting in modern web browsers, running JavaScript but controlled by Python.  Bokeh allows Python users to construct interactive plots, dashboards, and data applications without having to use web technologies directly.
 
-**HoloViews** provides Declarative objects for instantly visualizable data, building Bokeh plots from convenient high-level specifications so that users can focus on the data being explored.
-
-**GeoViews** extends HoloViews to support geographic projections using the Cartopy library, making it easy to explore and visualize geographical, meteorological, and oceanographic datasets.
+**HoloViews** provides declarative objects for instantly visualizable data, building Bokeh plots from convenient high-level specifications so that users can focus on the data being explored.
 
 **Datashader** allows arbitrarily large datasets to be rendered into a fixed-size raster for display, making it feasible to work with large and remote datasets in a web browser, either in batch mode using Datashader alone or interactively when combined with HoloViews and Bokeh.
 
-**Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robust, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
+**Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
+
+All of the above tools are fully general, applicable to *any* data-analysis or visualization project.  The other libraries involved are specialized for geographic applications:
+
+**GeoViews** extends HoloViews to support geographic projections using the Cartopy library, making it easy to explore and visualize geographical, meteorological, and oceanographic datasets.
 
 **Quest** is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
 
-**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality computational meshes that conform to the constraints setup by the user.
+**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
 
 
 Enhancements: Drawing Tools
 ---------------------------
 
-A new set of edit tools have been added to the Bokeh plotting library. These are sophisticated multi-gesture tools that can 
-add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side by
-adding, modifying and deleting the plot's underlying data. The individual tools can be enabled as needed for each particular
-plot. 
+The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools, which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
 
-  - **BoxEditTool**: The BoxEditTool allows drawing, dragging and deleting rectangular glyphs.
-  - **PointDrawTool**: The PointDrawTool allows adding, dragging and deleting point-like glyphs.
-  - **PolyDrawTool**: The PolyDrawTool allows drawing, selecting and deleting Patches and MultiLine glyphs.
-  - **PolyEditTool**: The PolyEditTool allows editing the vertices of one or more Patches or MultiLine glyphs.
+  - **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
+  - **PointDrawTool**: Adding, dragging and deleting point-like glyphs.
+  - **PolyDrawTool**: Drawing, selecting and deleting Polygon (patch) and Path (polyline) glyphs.
+  - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
-In addition, Holoviews implements new objects called streams that allow for an easy bidirectional connection between the
-javascript plots and Python. This allows for both definition of geometries in python and editing in the enteractive plot
-as well as creation/modification of geometries in the interactive plot with subsequent access of the data from Python for 
-further processing. As a simple motivating example, drawing a bounding box on a map and retrieving landsat data for the 
-region inside the box now becomes a simple XX line code.
+To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for 
+further processing. As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
 
 .. code-block:: python
 
-   from holoviews.streams import BoxEdit
+   import geoviews as gv
+   import geoviews.tile_sources as gts
+   import holoviews.streams as hvs
+   
+   gv.extension('bokeh')
+   box = gv.Polygons(hv.Box(0, 0, 1000000))
+   roi = hvs.BoxEdit(source=box)
+   gts.StamenTerrain.options(width=600) * box
+
+In a Jupyter notebook, this code will display a world map and let the user move or edit a box to cover the region of interest (ROI), which can then be accessed from Python as:
+
+.. code-block:: python
+
+   roi.data
+
+For example, LANDSAT data can then be retrieved for the ROI as:
+
+.. code-block:: python
+
    import quest
-   blah blah blah
+   img = gv.Image(quest....(roi.data))  # Dharhas: fill in
+   gts.StamenTerrain.options(width=600) * img
 
 .. figure:: images/drawing_tools.png
 
@@ -230,36 +245,47 @@ region inside the box now becomes a simple XX line code.
 
    Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawing_tools_python`
 
+Similar tools allow editing points, polygons, and polylines.
+
+   
 Enhancements: Annotations
 -------------------------
 
-Stuff about Annotations 
+The drawing tools allow glyphs to be created graphically, which is an essential first step in designing a simulation.  The next step is then typically to associate specific values with each such glyph, so that the user can declare boundary conditions, parameter values, or other associated labels or quantities to control the simulation. Examples of how to do this are provided in EarthSim as "annotators", which show an editable table alongside the plot that has drawing tools, allowing users to input text or numerical values to associate with each glyph. The table and plots are interlinked, so that editing either one will update the other, making it simple to edit data however is most convenient.
 
 .. figure:: images/annotation_tools.png
 
    The Point Annotation tool provides for indexing and grouping of points :label:`annotation_tools`
 
+Using an annotator currently requires defining a new class to control the behavior, but work on simplifying this process is ongoing, and if it can be made more straightforward the code involved will move into GeoViews or HoloViews as appropriate.
+
+
 Enhancements: Efficient Raster regridding
 -----------------------------------------
 
-blah
+Many of the datasets used in Earth-related workflows come in the form of multidimensional arrays holding values sampled regularly over some portion of the Earth's surface.  These rasters are often very large and thus slow to transfer to a client browser, and are often too large for the browser to display at all. To make it feasible to work naturally with this data, efficient regridding routines were added to Datashader.  Datashader is used by HoloViews to re-render data at the screen's resolution before display, requiring only this downsampled version to be transferred to the client browser. The raster support is described at `datashader.org <http://datashader.org/user_guide/5_Rasters.html>`__, using all available computational cores to quickly render the portions of the dataset needed for display.  The same code can also be used to re-render data into a new grid spacing for a fixed-sized rectangular simulator like GSSHA.
+
+The Datashader code does not currently provide reprojection of the data into a different coordinate system when that is needed. A separate implementation using the xESMF library was also developed for GeoViews to address this need and to provide additional Earth-specific interpolation options.  The `geoviews.org website <http://geoviews.org/user_guide/Resampling_Grids.html>`__ explains how to use either the Datashader or xESMF regridding implementations developed in this project.
+
 
 Enhancements: Triangular mesh visualization
 -------------------------------------------
 
-Addition of a TriMesh element to holviews. + Efficient Viz through DataShader
+Although Earth imaging data is typically measured on a regular grid, how quickly the values change across the Earth's surface is highly non-uniform.  For instance, elevation changes slowly in many regions, but very quickly in others, and thus when simulating phenomena like water runoff it is often necessary to use very high resolution in some locations and relatively sparse sampling in others.  To facilitate working with irregularly gridded data, the Bokeh, HoloViews, GeoViews, and Datashader libraries were extended to support "TriMesh" data, i.e., irregular triangle grids. For very large such grids, Datashader allows them to be rendered into much smaller rectangular grids for display, making it feasible to explore meshes with hundreds of millions of datapoints interactively.  The other libraries provide additional interactivity for smaller meshes without requiring Datashader, while being able to use Datashader for the larger versions.
+
+# Add figure from http://datashader.org/topics/bay_trimesh.html ?
 
 
 Interactive Dashboards
 ----------------------
 
-The drawing tools make it possible to generate interactive dashboards quickly and easily which visualize and interact with source data. Figure 7 shows hydrodynamic model simulation results displayed in an animation on the left. Users are able to query the results by annotating paths directly on the results visualization. As annotations are added, the drawing on the right dynamically updates to show the depth results along the annotated paths. The animation tool is dynamically linked to both drawings to demonstrate changes over time.
+The drawing tools make it possible to generate interactive dashboards quickly and easily to visualize and interact with source data. Figure 7 shows hydrodynamic model simulation results displayed in an animation on the left. Users are able to query the results by annotating paths directly on the results visualization. As annotations are added, the drawing on the right dynamically updates to show the depth results along the annotated paths. The animation tool is dynamically linked to both drawings to demonstrate changes over time.
 
 .. figure:: images/dashboard_animation.png
 
    Dashboard with animation demonstrating the ability to dynamically visualize multiple looks at a single source dataset. :label:`dashboard_animation`
 
-The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized widgets which are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure 8).
+The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized using widgets that are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure 8).
 
 .. figure:: images/dashboard_sweep.png
 
@@ -281,6 +307,9 @@ AdH Dambreak Workflow Example
 
 Coastline Definition (GrabCut) Workflow Example
 -----------------------------------------------
+
+# See https://pyviz.github.io/EarthSim/topics/GrabCut.html
+
 
 Conclusions and Future Work
 ---------------------------
