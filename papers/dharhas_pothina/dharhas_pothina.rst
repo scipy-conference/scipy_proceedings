@@ -249,6 +249,7 @@ Enhancements: Triangular mesh visualization
 
 Addition of a TriMesh element to holviews. + Efficient Viz through DataShader
 
+
 Interactive Dashboards
 ----------------------
 
