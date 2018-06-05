@@ -71,7 +71,7 @@ combine various material properties such as soil porosity and vegetation types w
 elevation and bathymetry, along with forcing functions such as rainfall, tide, and wind, to predict quantities of
 interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct 
 these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS)
-and Computational Model Builder (CMB) that do not interoperate [cite SMS & CMB]
+and Computational Model Builder (CMB) that are tied to certain platforms and do not interoperate [cite SMS & CMB]
 well with each other. 
 
 The process of building and running environmental simulations using these tools is time consuming, requiring
@@ -79,12 +79,13 @@ a large amount of manual effort and a fair amount of expertise. Typically, the t
 reasonable model is measured in months. These workflows support some use cases well, especially multi-year projects 
 where there is often the need for highly accurate, high-resolution physical modeling. But the existing tools and workflows 
 are too heavyweight for other potential applications, such as making short-term operational decisions in novel 
-locations. 
+locations. They also make it difficult to flexibly switch between desktop and remote high-performance-computing (HPC)
+systems as needed for scaling up and for interactive use.
 
 In this work, we demonstrate building flexible, lightweight workflows entirely in Jupyter notebooks with the aim of
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
-for any region of the globe.  We demonstrate these capabilities through examples in hydrology and hydrodynamics using 
-the AdH and GSSHA simulators [cite adh & gssha]. The goal is to provide a set of tools that can easily be reconfigured and repurposed 
+for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples in hydrology and hydrodynamics using 
+the AdH and GSSHA simulators [cite adh & gssha]. The goal is to provide a set of flexible, high-performance tools that can easily be reconfigured and repurposed 
 as needed to rapidly solve specific emerging issues. 
 
 An explicit decision was made to avoid creation of new special-purpose libraries as much as possible and to instead enhance existing
@@ -145,9 +146,10 @@ space, such as:
 
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
-operational decisions.  Most of these stages are also locked into a particular Windows-based GUI application that is 
-typically tied to execution only on specific desktop machines where it is installed. In most cases, once the model 
-input files are generated, they can be moved to an HPC cluster and run from the command line.  This linkage of 
+operational decisions.  Most of these stages are also locked into particular Windows-based GUI applications that are
+typically tied to execution only on specific desktop machines where they are installed. In most cases, once the model 
+input files are generated, they can be moved to an HPC cluster and run from the command line, but then no GUI is
+available.  This linkage of 
 computation and visualization can be very problematic, because the local machine may not have enough processing 
 power to simulate the model in a reasonable time, but if the model is simulated remotely, the resulting data files 
 can be too large to be practical to transfer to the local machine for analysis. 
@@ -190,7 +192,7 @@ other new open source tools Filigree and Quest. Short descriptions of these tool
 
 **Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
 
-All of the above tools are fully general, applicable to *any* data-analysis or visualization project.  The other libraries involved are specialized for geographic applications:
+All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches).  The other libraries involved are specialized for geographic applications:
 
 **GeoViews** extends HoloViews to support geographic projections using the Cartopy library, making it easy to explore and visualize geographical, meteorological, and oceanographic datasets.
 
@@ -297,7 +299,8 @@ Drawings can be both the sender and receiver of dynamic information. Dashboards 
 
    Dynamic linking provides interaction between drawings as both sender and receiver. :label:`dashboard_cross_section`
 
-
+Crucially, note that very little of the code involved here is customized for hydrology or geographic applications specifically, which means that the same techniques can be applied to different problems as they arise in practice, even if they require changing the domain-specific assumptions involved. 
+   
 
 GSSHA Hydrology Workflow Example
 --------------------------------
