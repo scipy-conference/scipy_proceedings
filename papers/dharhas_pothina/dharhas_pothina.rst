@@ -142,7 +142,7 @@ space, such as:
  
 .. figure:: images/velocity_field.png
 
-   Water velocity color contours overlain with velocity quiver plot showing river flow bypassing roadway embankment :label:`velocity_field`
+   Water velocity color contours overlain with velocity quiver plot showing river flow bypassing roadway embankment. :label:`velocityfield`
 
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
@@ -241,11 +241,11 @@ For example, LANDSAT data can then be retrieved for the ROI as:
 
 .. figure:: images/drawing_tools.png
 
-   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawing_tools`
+   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawingtools`
 
 .. figure:: images/drawing_tools_python.png
 
-   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawing_tools_python`
+   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawingtoolspython`
 
 Similar tools allow editing points, polygons, and polylines.
 
@@ -257,7 +257,7 @@ The drawing tools allow glyphs to be created graphically, which is an essential 
 
 .. figure:: images/annotation_tools.png
 
-   The Point Annotation tool provides for indexing and grouping of points :label:`annotation_tools`
+   The Point Annotation tool provides for indexing and grouping of points :label:`annotationtools`
 
 Using an annotator currently requires defining a new class to control the behavior, but work on simplifying this process is ongoing, and if it can be made more straightforward the code involved will move into GeoViews or HoloViews as appropriate.
 
@@ -285,19 +285,19 @@ The drawing tools make it possible to generate interactive dashboards quickly an
 
 .. figure:: images/dashboard_animation.png
 
-   Dashboard with animation demonstrating the ability to dynamically visualize multiple looks at a single source dataset. :label:`dashboard_animation`
+   Dashboard with animation demonstrating the ability to dynamically visualize multiple looks at a single source dataset. :label:`dashboardanimation`
 
 The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized using widgets that are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure 8).
 
 .. figure:: images/dashboard_sweep.png
 
-   Dynamic interaction with drawing via interactive widgets. :label:`dashboard_sweep`
+   Dynamic interaction with drawing via interactive widgets. :label:`dashboardsweep`
 
 Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure 9, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path. 
 
 .. figure:: images/dashboard_cross_section.png
 
-   Dynamic linking provides interaction between drawings as both sender and receiver. :label:`dashboard_cross_section`
+   Dynamic linking provides interaction between drawings as both sender and receiver. :label:`dashboardcrosssection`
 
 Crucially, note that very little of the code involved here is customized for hydrology or geographic applications specifically, which means that the same techniques can be applied to different problems as they arise in practice, even if they require changing the domain-specific assumptions involved. 
    
