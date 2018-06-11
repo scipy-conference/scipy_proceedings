@@ -308,14 +308,29 @@ GSSHA Hydrology Workflow Example
 AdH Dambreak Workflow Example
 -----------------------------
 
-Coastline Definition (GrabCut) Workflow Example
+Coastline Extraction (GrabCut) Workflow Example
 -----------------------------------------------
 
-# See https://pyviz.github.io/EarthSim/topics/GrabCut.html
+The GrabCut algorithm provides a way to annotate an image using polygons or lines to demark the foreground and background. The algorithm estimates the color distribution of the target object and that of the background using a Gaussian mixture model. This is used to construct a Markov random field over the pixel labels, with an energy function that prefers connected regions having the same label, and running a graph cut based optimization to infer their values. This procedure is repeated until convergence, resulting in an image mask denoting the foreground and background.
 
+In this example this algorithm is applied to satellite imagery to automatically extract a coast- and shoreline contour. First we load an Image or RGB and wrap it in a HoloViews element, then we can declare a GrabCutDashboard . Once we have created the object we can display the widgets using parambokeh, and call the view function to display some plots.
 
-Conclusions and Future Work
----------------------------
+The toolbar in the plot on the left contains two polygon/polyline drawing tools to annotate the image with foreground and background regions respectively. To demonstrate this process in a static paper there are already two polygons declared, one marking the sea as the foreground and one marking the land as the background.
+
+.. figure:: images/grabcut1.png
+
+   Demonstration of a interactive widget for coastline extraction using the grabcut algorithm. :label:`grabcut1`
+
+We can trigger an update in the extracted contour by pressing the Update contour button. To speed up the calculation we can also downsample the image before applying the Grabcut algorithm. Once we are done we can view the result in a separate cell. See figure blah
+
+.. figure:: images/grabcut2.png
+
+  Final image with extracted coastline show in red. :label:`grabcut2`
+
+The full coastline extraction with grabcut jupyter notebook is available at the EarthSim website: https://pyviz.github.io/EarthSim/topics/GrabCut.html 
+
+Future Work
+-----------
 
 Performance enhancements for GIS & Unstructured mesh datasets
 Making annotation and drawing tools easier to use (i.e. less code)
