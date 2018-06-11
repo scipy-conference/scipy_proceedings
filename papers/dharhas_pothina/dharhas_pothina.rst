@@ -323,24 +323,27 @@ Layout of Jupyter Notebooks in Dashboard type form factor
 Integration with Tethys platform & other web frontends
 Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
 
+References
+----------
 
+.. [Downer08] Downer, C. W., Ogden, F. L., and Byrd, A.R. 2008, GSSHAWIKI User’s Manual, Gridded Surface Subsurface Hydrologic Analysis Version 4.0 for WMS 8.1, ERDC Technical Report, Engineer Research and Development Center, Vicksburg, Mississippi.
 
-Downer, C. W., Ogden, F. L., and Byrd, A.R. 2008, GSSHAWIKI User’s Manual, Gridded Surface Subsurface Hydrologic Analysis Version 4.0 for WMS 8.1, ERDC Technical Report, Engineer Research and Development Center, Vicksburg, Mississippi.
+.. [McAplin17] McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
 
-McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
+.. [SMS] SMS Website https://www.aquaveo.com
 
-SMS Website https://www.aquaveo.com
+.. [CMB] CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
 
-CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
+.. [Bokeh] Bokeh Website https://bokeh.pydata.org
 
-Bokeh Website https://bokeh.pydata.org
+.. [Holoviews] Holoviews Website http://holoviews.org
 
-Holoviews Website http://holoviews.org
+.. [Geoviews] Geoviews Website http://geoviews.org
 
-Geoviews Website http://geoviews.org
+.. [Param] Param Website https://ioam.github.io/param
 
-Param Website https://ioam.github.io/param
+.. [Filigree] TODO talk to Aquaveo for correct Filigree reference
 
-Filigree reference
+.. [Quest] Quest Website https://quest.readthedocs.io/
 
-Quest reference
+.. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
