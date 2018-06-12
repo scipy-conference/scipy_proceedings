@@ -93,7 +93,7 @@ scientists should be concerned with minimizing the time from
 project conception to first publishable result [#]_,
 
 .. [#] The importance of the "time-to-first-result" metric is not
-       our original insight but rather an adage so ubiququitous that it
+       our original insight but rather an adage so ubiquitous that it
        is difficult to cite.
 
 .. math::
@@ -148,11 +148,12 @@ in Figure :ref:`fig.workflow`.
 .. figure:: figures/cloudknot_workflow.pdf
 
    Cloudknot's SPMD workflow. The left two columns depict steps
-   Cloudknot takes to create the SP. The right columns depicts
-   Cloudknot's management of the MD. Blue rounded squares represent
-   components of Cloudknot's user-facing API. Yellow circles represent
-   AWS resources. Grey document shapes represent containers,
-   templates, or data used to communicate with cloud resources.
+   Cloudknot takes to create the single program (SP). The right column
+   depicts Cloudknot's management of the multiple data (MD). Blue
+   rounded squares represent components of Cloudknot's user-facing
+   API. Yellow circles represent AWS resources. Grey document shapes
+   represent containers, templates, or data used to communicate with
+   cloud resources.
    :label:`fig.workflow`
 
 
@@ -439,7 +440,7 @@ Taken together, Figures :ref:`fig.nargsscaling` and
 AWS Lambda's execution time and memory limitations and does not have
 software and data dependencies that would prohibit using Pywren, it
 should be parallelized on AWS using Pywren rather than Cloudknot.
-However, when similations are too large or complicated to fit well into
+However, when simulations are too large or complicated to fit well into
 Pywren's stateless function framework, Cloudknot is the appropriate tool
 to simplify their distributed execution on AWS. Pywren's authors note
 that the AWS Lambda limits are not fixed and are likely to improve. We
@@ -509,20 +510,20 @@ of parallelization across subjects starts to be more substantial. With
 than Spark and Myria, and less than 25% slower than Dask (which was the
 fastest at that scale, among the systems we previously benchmarked).
 
-Two important caveats to this analysis: the first is that the analysis
-with the other systems was conducted on a cluster with a fixed
-allocation of 16 nodes (each node was an AWS r3.2xlarge instance with 8
-vCPUs). The benchmark code does run faster with more nodes added to the
-cluster (see :cite:`mehta2017comparative` for details). Notably, even
-for the largest amount of data that was benchmarked (25 subjects),
-Cloudknot deployed only two instances of the r4.16xlarge type -- each
-with 64 vCPUs and 488 GB of RAM. In terms of RAM, this is the equivalent
-of a 16 node cluster of r3.2xlarge instances, but the number of CPUs deployed to
-the task is about half. As shown above, additional scaling can be
-reached in Cloudknot by expanding the cluster with :code:`min_vcpus`.
-The second caveat to these results is that that the comparison timing
-data for the other systems is from early 2017, and these systems may
-have evolved and improved since.
+There are two important caveats to this analysis: the first is that
+the analysis with the other systems was conducted on a cluster with a
+fixed allocation of 16 nodes (each node was an AWS r3.2xlarge instance
+with 8 vCPUs). The benchmark code does run faster with more nodes
+added to the cluster (see :cite:`mehta2017comparative` for details).
+Notably, even for the largest amount of data that was benchmarked (25
+subjects), Cloudknot deployed only two instances of the r4.16xlarge
+type -- each with 64 vCPUs and 488 GB of RAM. In terms of RAM, this
+is the equivalent of a 16 node cluster of r3.2xlarge instances, but
+the number of CPUs deployed to the task is about half. As shown above,
+additional scaling can be reached in Cloudknot by expanding the cluster
+with :code:`min_vcpus`. The second caveat to these results is that that
+the comparison timing data for the other systems is from early 2017, and
+these systems may have evolved and improved since.
 
 .. figure:: figures/mri_benchmark.png
 
@@ -542,9 +543,9 @@ The MRI example demonstrates the use of a large and rather complex
 dataset. In addition, Cloudknot can manage complex software
 dependencies. Researchers in cell biology, molecular engineering and
 nano-engineering are also increasingly relying on methods that generate
-large amounts of data and on analysis that requires large amounts of
-compute power. For example, in experiments that evaluate the mobility of
-synthetically designed nano-particles in biological tissue
+large amounts of data and on analysis that requires large amounts
+of computing power. For example, in experiments that evaluate the
+mobility of synthetically designed nano-particles in biological tissue
 :cite:`Nance2017-xp`, :cite:`Nance2012-nu`, researchers may record
 movies of microscopic images of the tissue at high spatial and temporal
 resolution and with a wide field of view, resulting in large amounts of
@@ -582,7 +583,7 @@ scale all from within their Python environment.
 We have demonstrated Cloudknot's ability to handle complicated
 data and software dependencies using real-world examples from
 neuroimaging and microscopy. And we've included scaling analyses
-that shows that Cloudknot performs comparably to other distributed
+that show that Cloudknot performs comparably to other distributed
 computing frameworks. On one hand, scaling charts like the ones in
 Figures :ref:`fig.nargsscaling`, :ref:`fig.syssizescaling`, and
 :ref:`fig.mribenchmark` are important because they show that Cloudknot
