@@ -1,5 +1,5 @@
 function proc_versions() {
-   var versions = ['2011', '2010', '2009', '2008'];
+   var versions = ['2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008'];
    var proc_url = 'http://conference.scipy.org/proceedings/scipy';
    document.write('<ul id="navibar">');
 

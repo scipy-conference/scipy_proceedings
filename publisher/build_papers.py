@@ -25,23 +25,25 @@ papers_dir = conf.papers_dir
 
 
 
-def paper_stats(paper_id, start):
-    """Pull in stats of paper, return stats and the next paper 
+def paper_stats(paper_id, start, doi_prefix=None):
+    """Pull in stats of paper, return stats and the next paper
     """
     stats = options.cfg2dict(os.path.join(output_dir, paper_id, 'paper_stats.json'))
 
     pages = stats.get('pages', 1)
     stop = start + pages - 1
+    paper_doi = make_doi(doi_prefix)
 
     print('"%s" from p. %s to %s' % (paper_id, start, stop))
 
     # Build table of contents
     stats.update({'page': {'start': start,
                            'stop': stop},
-                  'paper_id': paper_id
+                  'paper_id': paper_id,
+                  'doi': paper_doi
                  })
-    
-    return stats 
+
+    return stats
 
 if __name__ == "__main__":
 
@@ -50,12 +52,16 @@ if __name__ == "__main__":
 
     options.mkdir_p(pdf_dir)
     basedir = os.path.join(os.path.dirname(__file__), '..')
-    
+    # load metadata
+    scipy_entry = options.cfg2dict(proc_conf)
+    doi_prefix = scipy_entry["proceedings"]["xref"]["prefix"]
+    issn = scipy_entry['series']['xref']['issn']
+
     for paper_id in dirs:
         with options.temp_cd(basedir):
             build_paper(paper_id, start=start)
 
-        stats = paper_stats(paper_id, start)
+        stats = paper_stats(paper_id, start, doi_prefix)
         start = stats.get('page',{}).get('stop', start) + 1
         toc_entries.append(stats)
 
@@ -63,15 +69,9 @@ if __name__ == "__main__":
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
 
-    # load metadata
+    # load completed TOC
     toc = {'toc': toc_entries}
-    scipy_entry = options.cfg2dict(proc_conf)
-
-    # make dois for papers, then entire proceedings
-    doi_prefix = scipy_entry["proceedings"]["xref"]["prefix"]
-    issn = scipy_entry['series']['xref']['issn']
-    for paper in toc_entries:
-        paper['doi'] = make_doi(doi_prefix)
+    # make doi for this year's proceedings and for whole conference (static)
     scipy_entry['proceedings']['doi'] = make_doi(doi_prefix)
     scipy_entry['series']['doi'] = make_series_doi(doi_prefix, issn)
 
