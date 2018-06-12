@@ -86,7 +86,7 @@ to offer a user-friendly single point of access to these resources.
 Here, we introduce a new Python library: Cloudknot
 :cite:`cloudknot-docs` :cite:`cloudknot-repo`, that launches Python
 functions as jobs on the AWS Batch service, thereby lifting these
-limitations.
+limitations. Cloudknot supports Python versions 2.7 and 3.5+.
 
 We propose that software designed to aid computational and data
 scientists should be concerned with minimizing the time from
@@ -129,8 +129,10 @@ example only to argue that :math:`t_\mathrm{exec}` is a useful metric
 only insofar as it is a good proxy for :math:`t_\mathrm{compute}`.
 
 Cloudknot's aim is to minimize :math:`t_\mathrm{env}` without an
-unacceptable increase in :math:`t_\mathrm{exec}`. We will introduce
-Cloudknot and demonstrate a few of its use cases before returning to the
+unacceptable increase in :math:`t_\mathrm{exec}`. The next section
+discusses Cloudknot's approach to parallelism and the API section
+describes Cloudknot's user interface. In the Examples section, we
+demonstrate a few of Cloudknot's use cases before returning to the
 trade-off between :math:`t_\mathrm{env}` and :math:`t_\mathrm{exec}` in
 the Conclusion.
 
@@ -280,10 +282,10 @@ inside the UDF itself.
        y = np.random.rand(n)
        return np.count_nonzero(x * x + y * y <= 1.0)
 
-Next, we create a :code:`Knot` instance and pass the UDF using the :code:`func`
-argument. The :code:`name` argument affects the names of resources created on AWS. For
-example, in this case, the created job definition would be named
-``pi-calc-cloudknot-job-definition``:
+Next, we create a :code:`Knot` instance and pass the UDF using the
+:code:`func` argument. The :code:`name` argument affects the names of
+resources created on AWS. For example, in this case, the created job
+definition would be named ``pi-calc-cloudknot-job-definition``:
 
 .. code-block:: python
 
@@ -299,13 +301,12 @@ We submit jobs with the :code:`Knot.map()` method:
    future = knot.map(args)
 
 This will launch an AWS Batch array job with 20 child jobs, one for each
-element of the input array. Cloudknot can accomodate
-functions with multiple inputs by passing the :code:`map()` method a
-sequence of tuples of input arguments and the :code:`starmap=True`
-argument. For example, if the UDF signature were :code:`def udf(arg0,
-arg1)`, one could execute :code:`udf` over all combinations of
-:code:`arg0` in ``[1, 2, 3]`` and :code:`arg1` in ``['a', 'b', 'c']``
-by calling
+element of the input array. Cloudknot can accomodate functions with
+multiple inputs by passing the :code:`map()` method a sequence of tuples
+of input arguments and the :code:`starmap=True` argument. For example,
+if the UDF signature were :code:`def udf(arg0, arg1)`, one could execute
+:code:`udf` over all combinations of :code:`arg0` in ``[1, 2, 3]`` and
+:code:`arg1` in ``['a', 'b', 'c']`` by calling
 
 .. code-block:: python
 
