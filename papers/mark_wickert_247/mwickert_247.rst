@@ -15,7 +15,7 @@ Exploring the Extended Kalman Filter for GPS Positioning Using Simulated User an
 .. class:: abstract
 
    This paper describes a Python computational tool for exploring the use of the 
-   extended Kalman filter (EKF) for position estimation using Global Positioning system (GPS) 
+   extended Kalman filter (EKF) for position estimation using the Global Positioning System (GPS) 
    pseudorange measurements. The development was motivated by the need for an example 
    generator in a training class on Kalman filtering, with emphasis on GPS. In operation of
    the simulation framework both user and satellite trajectories are played through the simulation. 
@@ -31,7 +31,7 @@ Exploring the Extended Kalman Filter for GPS Positioning Using Simulated User an
 Introduction
 ------------
 
-The Global positioning system (GPS) allows user position estimation using time difference of 
+The Global Positioning System (GPS) allows user position estimation using time difference of 
 arrival (TDOA) measurements from signals received from a constellation of 24 medium earth orbit 
 satellites of space vehicles (SVs). The Kalman filter is a popular optimal *state estimation* 
 algorithm [Simon2006]_ used 
@@ -41,16 +41,24 @@ process update model. The EKF used in GPS has a linear  process model, but a non
 model [Brown2012]_. This paper describes a Python computational tool for exploring the use of the 
 EKF for GPS position estimation using pseudorange measurements. The development was motivated by the 
 need for an example generator in a training class on Kalman filtering, with emphasis on GPS. 
-Both *User* and satellite trajectories are played through the simulation in earth-centered 
-earth-fixed (ECEF) coordinates. The User trajectory 
-is input in local east-north-up (ENU) coordinates, and the SVs used to form the location estimate 
-specified by the coarse acquisition (C/A) code pseudo-random noise (PRN) number, of the SVs 
-in view by the User. The ECEF coordinates 
+What is special about the tool created here is that both *User* and satellite trajectories 
+are custom generated for input to a Kalman filter implemented 
+in a Jupyter notebook. The steps followed are logical and clear.
+You first enter a desired *User* trajectory/route, then choose appropriate *in-view* 
+GPS satellites, and then using actual GPS satellite orbital mechanics information, 
+create a simulated receiver measurement stream. A 3D plot shows you the satellite tracks in 
+space and the User trajectory on the surface of the earth, over time. The Kalman filter code, also defined in the 
+Jupyter notebook, uses the matrix math commonly found in textbooks, but it is easy to follow  
+as we make use of the PEP 465 @ infix operator for matrix multiplication. 
+As the final step, the data set is played through the Kalman filter in earth-centered 
+earth-fixed (ECEF) coordinates. The User trajectory is input in local east-north-up (ENU) 
+coordinates, and the SVs used to form the location estimate specified by the coarse 
+acquisition (C/A) code pseudo-random noise (PRN) number, of the SVs in view by the User. The ECEF coordinates 
 of the SVs are then propagated along with the User trajectory using [SGP4]_ and the two-line 
 element (TLE) data available from [Celestrak]_. The relationship between ECEF and ENU is 
 explained in Figure :ref:`ECEFENU`. For convenience, this computational tool, is housed in a Jupyter 
 notebook. Data set generation and 3D trajectory plotting is provided with the assistance of a 
-single module, :code:`GPS_helper.py`.
+single module, [GPS_helper]_. 
 
 .. figure:: ECEF_ENU.pdf
    :scale: 90%
@@ -118,7 +126,7 @@ by briefly describing the linear model case and move quickly to the nonlinear ca
 Kalman Filter and State Estimation
 ----------------------------------
 
-It was back in 1960 that R. E. Kalman introduced his filter [Brown2012]_. It immediately became 
+It was back in 1960 that R. E. Kalman introduced his filter [Kalman]_. It immediately became 
 popular in guidance, navigation, and control applications. The Kalman filter is an optimal, 
 in the minimum mean-squared error sense, as means to estimate the 
 *state* of a dynamical system [Simon2006]_. By state we mean a vector of variables that adequately 
@@ -188,7 +196,7 @@ in Table :ref:`kalmantable`. Note the dimensions seen in Table :ref:`kalmantable
 State Vector for the GPS Problem
 ================================
 
-For a PV model the state vector position and velocity 
+For a PV model the User state vector position and velocity 
 in :math:`x,y,z` and clock equivalent range and range velocity error [Brown2012]_:
 
 .. math::
@@ -306,7 +314,7 @@ replaces two expressions in Figure :ref:`KFBlock` as follows:
    :label: ekfNewEqns
    :type: eqnarray
 
-   \mathbf{A}\hat{\mathbf{x}}_{k-1}\ \ \longrightarrow\ \ f(\hat{\mathbf{x}}_{k-1}) \\
+   \mathbf{A}\hat{\mathbf{x}}_{k-1}\ \ \longrightarrow\ \ \mathbf{f}(\hat{\mathbf{x}}_{k-1}) \\
    \mathbf{H}\hat{\mathbf{x}}_{k-1}^-\ \ \longrightarrow\ \ \mathbf{h}(\hat{\mathbf{x}}_{k-1}^-)
 
 
@@ -408,7 +416,7 @@ Figure :ref:`KFBlock` is the code in the :code:`update()` method:
 
 .. code-block:: python
 
-   def update(self, z, SV_Pos):
+   def next_sample(self, z, SV_Pos):
        """
        Update the Kalman filter state by inputting a 
        new set of pseudorange measurements.
@@ -433,7 +441,8 @@ Figure :ref:`KFBlock` is the code in the :code:`update()` method:
        # Return the x,y,z position
        return self.x[0,0], self.x[2,0], self.x[4,0]
 
-Note the above code uses the Python 3 matrix multiplication operator.
+Note the above code uses the Python 3.5+ matrix multiplication operator, @, to make the 
+code nearly match the matrix algebra expressions of Figure :ref:`KFBlock`.
 
 Simulation Examples
 -------------------
@@ -444,7 +453,7 @@ that follow were extracted from a Jupyter notebook that begins with the
 magic :code:`%pylab inline`, hence the namespace is filled with :code:`numpy` and :code:`matplotlib`.
 
 We start by creating a line segment user trajectory with ENU tagging, followed by a GPS data source 
-using TLEs date 1/10/2018, and finally, populate User and satellite (SV) ndarrays using the 
+using TLEs date 1/10/2018, and finally, populate User and satellite (SV) :code:`ndarrays` using the 
 :code:`user_traj_gen()` method:
 
 .. code-block:: python
@@ -525,8 +534,8 @@ satellite signals, with measurement update period :math:`T_s = 1\text{s}`, and c
    for k in range(Nsamples):
        Pseudo_ranges1.measurement(USER_Pos_ecf[k,:],
                                   SV_Pos[:,:,k])
-       GPS_EKF1.update(Pseudo_ranges1.USER_PR,
-                       SV_Pos[:,:,k])
+       GPS_EKF1.next_sample(Pseudo_ranges1.USER_PR,
+                            SV_Pos[:,:,k])
        Pos_KF[k,:] = GPS_EKF1.x[0:6:2,0]
        P_diag[k,:] = GPS_EKF1.P.diagonal()
 
@@ -601,9 +610,9 @@ from these errors.
 Figure :ref:`SelectErrorCovariance2` again shows the error covariance  terms for 
 :math:`\sigma_x^2, \sigma_y^2`, and :math:`\sigma_z^2`. The results here are very 
 similar to Case #1. The variance peaks at about 50 s into the simulation and then 
-rapidly decays. This is not too surprising as the EKF tuning has changed from Case #$1, 
+rapidly decays. This is not too surprising as the EKF tuning has changed from Case #1, 
 with the exception of the initial position error. Since the simulation only runs for 
-2.2 min wich is 132 s, we have to compare the variances at this time to the Case #2 
+2.2 min which is 132 s, we have to compare the variances at this time to the Case #2 
 end results. They appear to be about the same, once again the EKF appears to be 
 working correctly.
 
@@ -629,8 +638,18 @@ changes. The EKF recovers quickly.
    The estimated user trajectory in ENU coordinates and the same scale as Figure 
    :ref:`UserTrajectory1`. :label:`UserEstTrajectory2`
 
-Over the results for both cases are very good. There a lot of *knobs* to turn in this 
-framework, so may options to explore.
+Overall the results for both cases are very good. There a lot of *knobs* to turn in this 
+framework, so many options to explore.
+
+It is worthy of note at this point that the *Unscented Kalman Filter* (UKF) [Wan2006]_, and the 
+more general class of algorithms known as *Sigma-Point Kalman Filters* (SPKF), are today much 
+preferred to the  EKF of the past. The EKF is sub-optimal, and the linearization approach makes it sensitive 
+to initial conditions. The EKF requires the Jacobian matrix, which may be hard to obtain, and 
+may not converge without carefully chosen initial conditions. In this paper the EKF was chosen 
+for use in a training scenario because it is the next logical step from the linear Kalman filter, and 
+its development is simple to follow. The UKF is harder to get explain. 
+In the end, the UKF is of similar complexity to the EKF, can offer large 
+performance benefits, and does not require the use of a Jacobian.
 
 Conclusions and Future Work
 ---------------------------
@@ -642,9 +661,9 @@ performance results are consistent with expectations.
 
 There are several improvements under consideration. The first is to develop a more realistic user 
 trajectory generator. The second is to make measurement quality a function of the SV range, which would 
-also make the measurement quality SV specific, rather than identical as it is now. A third desire 
-is to use a least-squares algorithm to obtain an initial position fix. The last item is to deal with the fact that the 
-EKF needs a reasonable position fix to get started. It may not converge without it.
+also make the measurement quality SV specific, rather than identical as it is now. A third desire is 
+to move to the UKF to avoid the use of the Jacobian, reduce the sensitivity to initial conditions, 
+and improve performance. 
 
 
 References
@@ -652,15 +671,20 @@ References
 
 .. [Celestrak] `https://celestrak.com`_.
 .. [SGP4] `https://github.com/brandon-rhodes/python-sgp4`_
+.. [GPS_helper] `https://github.com/chiranthsiddappa/gps_helper`_
 .. [GPS] `https://en.wikipedia.org/wiki/Global_Positioning_System`_.
 .. [Garmin] `https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf`_.
+.. [Kalman] R.E. Kalman, "A New Approach to Linear Filtering and Prediction Problems," *Journal of Basic Engineering*, 1960, pp. 35–45.
 .. [Brown2012] Robert Brown and Patrick Hwang, Introduction to Random Signals and Applied Kalman Filtering, 4th edition, 2012.
 .. [Kaplan] Elliot Kaplan, editor, Understanding GPS Principles and Applications, 1996 (3rd edition available).
 .. [Kim2011] Phil Kim, Kalman Filtering for Beginners with MATLAB Examples, 2011.
 .. [Simon2006] Dan Simon, Optimal State Estimation, 2006.
+.. [Wan2006]  Eric Wan, "Sigma-Point Filters: An Overview with Applications to Integrated Navigation and Vision Assisted Control," *2006 IEEE Nonlinear Statistical Signal Processing Workshop*, 13-15 Sept. 2006. `doi:10.1109/NSSPW.2006.4378854`_. 
 
 .. _`https://celestrak.com`: https://celestrak.com
+.. _`https://github.com/chiranthsiddappa/gps_helper`: https://github.com/chiranthsiddappa/gps_helper
 .. _`https://github.com/brandon-rhodes/python-sgp4`: https://github.com/brandon-rhodes/python-sgp4
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 .. _`https://en.wikipedia.org/wiki/Global_Positioning_System`: https://en.wikipedia.org/wiki/Global_Positioning_System
 .. _`https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf`: https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf
+.. _`doi:10.1109/NSSPW.2006.4378854`: https://doi-org.libproxy.uccs.edu/10.1109/NSSPW.2006.4378854
