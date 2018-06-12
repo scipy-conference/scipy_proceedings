@@ -698,14 +698,31 @@ distinct advantages. PRISM theory does not suffer from finite-size or
 equilibration effects, both of which limit simulation methods. Furthermore, a
 simulation of sufficient size to study the large nanoparticles and relatively
 long polymer chains in this example would require many hours to days of CPU or
-GPU time from a supercomputing resource. In contrast, the PRISM equation can be
-solved in seconds, even on modest hardware, such as a laptop computer. Finally,
-once the PRISM equation is solved, a variety of properties can quickly be
-screened without having to process large simulation trajectories.  While PRISM
-theory does have limitations around the types of systems and thermodynamic state
-points to which it can be applied, as described in Section IV.D of
-:cite:`pyPRISM`, it provides a powerful alternative or complement to traditional
-simulation approaches. 
+GPU time from a supercomputing resource. This is due to the computational
+expense of evaluating the pairwise interactions at each simulated configuration
+and the many millions of configurations that must be generated in order to
+properly equilibrate and sample such a nanocomposite.  In contrast, PRISM theory
+allows for the globally averaged spatial correlation functions to be solved for
+directly, rather than by iteratively sampling the positions of each atom or
+coarse-grained bead. In this way, the PRISM equation can be numerically solved
+in seconds even on modest hardware such as a laptop computer.  In addition, once
+the full set of pairwise spatial correlation functions is solved for, a variety
+of properties can quickly be screened without having to process large simulation
+trajectories.  
+
+PRISM theory provides a powerful alternative or complement to traditional
+simulation approaches, but we should note that it is not without limitation.
+There are restrictions on the types of systems and thermodynamic state points to
+which PRISM theory can be applied and the numerical closures are approximations
+and therefore sources of error.  See Section IV.D of :cite:`pyPRISM` for a
+discussion on the known limitations of PRISM theory. 
+
+.. figure:: figure5.pdf
+
+    Depiction of the tutorial tracks we provide for users of different
+    backgrounds and trainings. See the Tutorial page :cite:`pyPRISMtut` for more
+    information. :label:`tutorial`
+
 
 Pedagogy 
 --------
@@ -741,12 +758,6 @@ also recognize that a significant barrier for non-experts to use these tools is 
 installation process. Our installation documentation :cite:`pyPRISMdocs` attempts 
 to be holistic and provide detailed instructions for the several different 
 ways that users can install pyPRISM. 
-
-.. figure:: figure5.pdf
-
-    Depiction of the tutorial tracks we provide for users of different
-    backgrounds and trainings. See the Tutorial page :cite:`pyPRISMtut` for more
-    information. :label:`tutorial`
 
 We have also created a self-guided tutorial to PRISM theory and pyPRISM in the
 form of a series of Jupyter notebooks. :cite:`pyPRISMtut,jupyter1` The tutorial
