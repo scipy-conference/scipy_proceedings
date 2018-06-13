@@ -33,13 +33,11 @@ Computational research requires versatile data and workflow management tools tha
 Many existing tools require strict adherence to a particular usage pattern, so researchers often use less robust ad hoc solutions that they find easier to adopt.
 The resulting data fragmentation and methodological incompatibilities significantly impede research.
 Our talk showcases ``signac``, an open-source Python framework that offers highly modular and scalable solutions for this problem.
-The framework's powerful workflow management tools enable users to construct and automate workflows that transition seamlessly from laptops to HPC clusters.
+Named for the Pointillist painter Paul signac, the framework's powerful workflow management tools enable users to construct and automate workflows that transition seamlessly from laptops to HPC clusters.
 Crucially, the underlying data model is completely independent of the workflow.
 The flexible, serverless, and schema-free ``signac`` database can be introduced into other workflows with essentially no overhead and no recourse to the ``signac`` workflow model.
 Additionally, the data model's simplicity makes it easy to parse the underlying data without using ``signac`` at all.
 This modularity and simplicity eliminates significant barriers for consistent data management across projects, facilitating improved provenance management and data sharing with minimal overhead.
-
-.. TODO what does signac stand for?
 
 .. class:: keywords
 
@@ -73,14 +71,14 @@ A simple solution might be to just rename the files to account for this paramete
 A more flexible traditional solution involving the use of a relational MySQL :cite:`mysql` database, for instance, might introduce undesirable setup costs and performance bottlenecks for file-based workflows on HPC.
 Even if we do employ such a solution, we also have to account for our workflow process: we need a way to run analysis and post-processing on just the new data points without performing unnecessary work on the old ones.
 
-This paper showcases the ``signac`` framework, a data and workflow management tool that aims to address these issues in a simple, powerful, and flexible manner (Fig. :ref:`fig:summary`).
-By storing JSON-encoded metadata and the associated data together directly on the file system, ``signac`` provides database functionality such as searching and grouping data without the overhead of maintaining a server or interfacing with external systems, and it takes advantage of the high performance file systems common to HPC.
+This paper showcases the ``signac`` framework, a data and workflow management tool that addresses these issues in a simple, powerful, and flexible manner (Fig. :ref:`fig:summary`).
+The framework derives its name from the painter Paul Signac, one of the early pioneers of the Pointillist painting style.
+This style, in which paintings are composed of individual points of color rather than brushstrokes, provides an apt analogy for the underlying data model of the ``signac`` framework in which a data space is composed of individual data points that must be viewed together to make a complete picture.
+By storing JSON-encoded :cite:`json` metadata and the associated data together directly on the file system, ``signac`` provides database functionality such as searching and grouping data without the overhead of maintaining a server or interfacing with external systems, and it takes advantage of the high performance file systems common to HPC.
 With ``signac``, data space modifications like the one above are trivially achievable with just a few lines of Python code.
 Additionally, ``signac``'s workflow component makes it just as easy to modify the process of data generation by simply defining the post-processing as a Python function.
 The workflow component of the framework, ``signac-flow``, will immediately enable the use of this calculation on the existing data space through a single command, and it tracks which tasks are completed to avoid redundancy.
 The resulting data can be accessed without reference to the workflow, ensuring that it is immediately available to anyone irrespective of the tools they are using.
-
-.. TODO reference/cite JSON
 
 
 Overview and Examples
@@ -92,12 +90,10 @@ Overview and Examples
    :figclass: tw
 
    A very simple example using ``signac`` to create the basics of a data space.
-   In this example, all work is conducted inside a Jupyter notebook to indicate how easily this can be done.
+   In this example, all work is conducted inside a Jupyter :cite:`PER-GRA:2007,Kluyver:2016aa` notebook to indicate how easily this can be done.
    Note how fewer than ten lines of code are required to initialize a database and add data.
    :label:`fig:data`
    
-.. TODO need to cite Jupyter in the above caption
-
 To demonstrate how ``signac`` works, we take a simple, concrete example of the scenario described above.
 Consider an experiment in which we want to find the optimal launch angle to maximize the distance traveled by a projectile through air.
 Figure :ref:`fig:data` shows how we might organize the data associated with this study using ``signac``.
@@ -137,8 +133,8 @@ Having made the above change to our data space, we could now easily add new data
 
 Jobs that already exist in the data space will not be overwritten by the ``init`` operation, so there is no harm in performing a loop like this multiple times.
 
-All of ``signac``'s core functionality is not only available as a Python library but alson as a command line tool which facilitates integration of ``signac`` with almost any pre-existing workflow.
-While these features are critical for interfacing with non-Python code bases, they are also very useful for more ad-hoc analyses of ``signac`` data spaces.
+All of ``signac``'s core functionality is not only available as a Python library, but also as a command line tool, which facilitates integration of ``signac`` with almost any pre-existing workflow.
+While these features are critical for interfacing with non-Python code bases, they are also very useful for more ad hoc analyses of ``signac`` data spaces.
 For example, searching the database using the command line can be very useful for quick data inspection:
 
 .. code-block:: bash
@@ -183,13 +179,13 @@ Additionally, at any point we can get an overview of what the implicit data spac
      'v': 'int([1, 2, 3], 3)',
     }
 
-.. TODO it hasn't been mentioned so far, how the "signac database" actually achieves MongoDB-like querying internally.
-
 Workflows
 =========
 
-The ``signac`` database is intended to be usable as a drop-in solution for data management issues. The ``signac`` framework, however, is designed to simplify the entire process of data generation. This involves clearly defining the processes that generate and operate on the data cleanly and concisely.
-To manage workflows, the ``signac-flow`` component of the framework provides the ``FlowProject`` class (not to be confused with the ``signac`` *Project* class that interfaces with the data in a ``signac`` project).
+The ``signac`` database is intended to be usable as a drop-in solution for data management issues.
+The ``signac`` framework, however, is designed to simplify the entire process of data generation.
+This involves clearly defining the processes that generate and operate on the data cleanly and concisely.
+To manage workflows, the ``signac-flow`` component of the framework provides the ``FlowProject`` class (not to be confused with the ``signac`` ``Project`` class that interfaces with the data in a ``signac`` project).
 The ``FlowProject`` encodes operations acting on ``signac`` data spaces as well as the sequence information required to string these operations together into a complete workflow. 
 In Fig. :ref:`fig:ops`, we demonstrate how ``signac-flow`` can be used to automate our projectile investigation.
 
@@ -199,17 +195,20 @@ In Fig. :ref:`fig:ops`, we demonstrate how ``signac-flow`` can be used to automa
    :figclass: w
 
    The ``signac-flow`` module enables the easy automation of workflows operating on ``signac`` workspaces.
+   Here we demonstrate such a workflow operating on the data space defined in :ref:`fig:data`.
    In this case, the workspace consists only of one job; the real power of the FlowProject arises from its ability to automatically handle an arbitrary sequence of operations on a large number of jobs.
    Note that in this figure we are still assuming ``v=1`` for simplicity.
    :label:`fig:ops`
 
 In this script, we register a simple function ``calculate`` as an operation with the ``FlowProject.operation`` decorator.
-We store our output in the *job document*, a lightweight JSON storage mechanism that ``signac`` provides, and we check the document to determine when the operation has been completed using the ``@FlowProject.post`` decorator.
-Note that any function of a job can be used as a pre- and post-condition, but in this case our use of the job document provides an easy check.
-Although this particular example is quite simple, ``signac-flow`` scales to arbitrarily complex workflows that use pre- and post-conditions on individual operations to construct a directed graph.
+We store our output in the *job document*, a lightweight JSON storage mechanism that ``signac`` provides, and we check the document to determine when the operation has been completed using the ``FlowProject.post`` decorator.
+Any function of a job can be used as a pre- or post-condition.
+In this case, we simply look for the ``tmax`` key in the job document using the ``complete`` function.
+Note the ``FlowProject.label`` decorator for this function; we will discuss this in further detail below.
 
-By default, the ``project.py run`` interface demonstrated in Fig. :ref:`fig:ops` will automatically run the entire workflow for every job in the workspace.
-When conditions are defined in the manner shown above, ``signac-flow`` will ensure that only incomplete tasks are run, i.e., once ``tmax`` has been calculated for a particular job, the ``calculate`` operation will not run again for that job.
+Although this particular example is quite simple, ``signac-flow`` scales to arbitrarily complex workflows that use pre- and post-conditions on individual operations to construct a directed graph.
+To simplify running such workflows, by default the ``project.py run`` interface demonstrated in Fig. :ref:`fig:ops` will automatically run the entire workflow for every job in the workspace.
+When conditions are defined in the manner shown above, ``signac-flow`` will ensure that only incomplete tasks are run, i.e., in this example, once ``tmax`` has been calculated for a particular job, the ``calculate`` operation will not run again for that job.
 Rather than running everything at once, it is also possible to exercise more fine-grained control over which operations to run using ``signac-flow``:
 
 .. code-block:: bash
@@ -251,6 +250,7 @@ The ``signac-flow`` package achieves this by creating cluster job scripts that p
 
 The workflow tracking functionality of ``signac-flow`` extends to compute clusters.
 Users can always check the status of particular jobs to see how far they have progressed in the workflow, and when working on a system with a scheduler, ``signac-flow`` will also provide information about the status of jobs submitted to the scheduler.
+A relatively detailed version of the output is shown here:
 
 .. code-block:: bash
 
@@ -261,15 +261,16 @@ Users can always check the status of particular jobs to see how far they have pr
     # Overview:
     Total # of jobs: 15
 
-    label    ratio
-    -------  -------
-    [no labels to show]
+    label       ratio
+    -------     -------
+    complete    |#-----------------------------| 6.67%
 
     # Detailed View:
 
     ## Labels:
     job_id                            labels
     --------------------------------  --------
+    00e5f0c36294f0eee4a30cabb7c6046c  complete
     d61ac71a00bf73a38434c884c0aa82c9
     ...
 
@@ -282,17 +283,13 @@ Users can always check the status of particular jobs to see how far they have pr
     2fc415  calculate    Y           I
     ...
 
-Underneath each job, information is provided on a per-operation basis.
-The symbols indicate the status of a particular job relative to the workflow, and the character in brackets indicates status on the cluster.
-In this instance, all jobs in the projects are currently eligible for the ``calculate`` operation, three of them have been submitted to the scheduler (and are therefore marked as active).
-Of these three, one has actually begun running (and is marked as ``[A]``), while the other two indicate that they are queued (the final job shown is inactive on the cluster).
-
-Users also have the option of creating and registering arbitrary functions as *labels* to provide additional information on job status using the ``@FlowProject.label`` decorator.
-When defined, these labels will populate the empty section and columns above.
-They also typically provide natural conditions for operation execution.
-For example, we could have a simple label defined by ``def calculated(job): tmax in job.document`` to indicate that the *calculate* operation had been performed, and then we could register it as a post-condition using ``@FlowProject.post(FlowProject.calculated)``.
-
-.. TODO I think it would be more instructive to directly include labels in Fig. 3, and show the status output including label info. The above paragraph could then be shortened/clarified.
+In the overview section, we see that :math:`6.67\%`, or :math:`\frac{1}{15}` jobs have completed, reflecting the job run in Fig. :ref:`fig:ops`.
+The rows in this section are populated by any function decorated with the ``FlowProject.label`` decorator; while any callable, such as a lambda expression, could be used as a pre- or post-condition, using a function decorated in this manner makes it easy to track total progress through the workflow.
+The labels section below the overview provides the same information on a per-job basis, in this case showing which jobs have completed and which have not.
+Finally, the operations section indicates the active progress of incomplete jobs.
+In this instance, there are fourteen jobs remaining that are eligible for the ``calculate`` operation, of which three have been submitted to the cluster (and are therefore marked as active).
+Of these three, one has actually begun running (and is marked as ``[A]``), while the other two indicate that they are queued (the final job shown is inactive on the cluster as it has not yet been submitted).
+Note that the ``eligible`` column is redundant for this view, but in other status views ineligible jobs may be included in this section as well.
 
 The quick overview of this section highlights the core features of the ``signac`` framework.
 Although the example demonstrated here is quite simple, the data model scales easily to thousands of data points and far more complex and nonlinear workflows.
@@ -302,41 +299,37 @@ More involved demonstrations can be seen in the documentation at http://signac.r
 Design and Implementation
 -------------------------
 
-Having provided an overview of ``signac``'s functionality, we now provide a few more specifics on its implementation.
-The framework prioritizes modularity and interoperability over monolithic functionality, so it is implemented in pure Python with no hard dependencies to ensure that it can be easily used with other programs.
-The software runs equally well on Python 2.7 and 3.4+, and the full-featured command line interface enables its use even with non-Python tools.
-To ensure that the data representation is completely independent of the workflow, the data component is developed as a standalone database solution.
-This database is the primary dependency for ``signac-flow``.
+Having provided an overview of ``signac``'s functionality, we now provide some specifics regarding its implementation.
+The central element of the framework is the ``signac`` data management package, which provides the means for organizing data directly on the filesystem.
+The primary requirement for using this database is that every job (data point) in the data space must be uniquely indexable by some set of key-value pairs, namely the job state point.
+The hash of this state point defines the job id, which in turn is used to define the directory where data associated with this job is stored.
+To ensure that the state point associated with the job id can be recovered, a JSON-encoded copy of the state point is stored within this directory.
 
-.. TODO what does "standalone database solution" mean? Did you use existing solution adapted to serve signac's purposes, or was a new database system developed from scratch? Up to this point, the text has unfortunately been very vague as to what the "signac database" actually is (or I missed the clues ;))
+This storage mechanism enables :math:`O(1)` access to the data associated with a particular state point through its hash, but more importantly, parsing of the JSON state point files in the workspace allows :math:`O(N)` indexing of the data space.
+This indexing is performed by traversing the data space and parsing the state point files directly, and other files may also be parsed along the way.
+This mode of operation is well-suited to the high performance filesystems common to high performance computing.
+For better performance, the resulting indexes can be manually saved; in general, ``signac`` automatically caches generated indexes for this purpose.
+These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
 
-The ``signac`` package is designed to be as lightweight and flexible as possible, simultaneously offering the benefits of filesystem usage and more traditional database management systems.
-From the Python implementation standpoint, the central component to the ``signac`` framework is the Project class, which provides the interface to ``signac``'s data model and features.
-The ``signac`` Project encapsulates much of the functionality for searching, selecting, and grouping individual data points from the data space.
-Central to this process is ``signac``'s efficient on-the-fly indexing.
-This process, which leverages the fact that the state point keys map uniquely to a workspace directory, uses filesystem crawlers to efficiently traverse the data space.
-All functions that require indexes construct them automatically, which generally frees the user from explicit index construction.
-Accessing individual data points from this index leads to the instantiation of Job objects, which are Python handles that represent individual data points.
-Since these data points effectively correspond to filesystem locations, they can be mapped directly and operated on in this fashion.
+From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
+In addition to the core index-related functionality previous mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the detection of implicit schema; the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; and the ability to sync data across projects.
+Individual data points, which can be accessed by searching through or iterating over a ``Project`` instance, are represented by ``Job`` objects.
+In addition to providing a Pythonic access point to the job state point and the job document, a ``Job`` object can always be mapped to its location on the filesystem, making it ideal for associating file-based data with the appropriate data point.
 
-.. TODO any examples for "filesystem crawlers" to illustrate how indexing works?
-
-The central object in the ``signac-flow`` package is the Python FlowProject class, which encapsulates a set of operations acting on a ``signac`` data space.
-There is a tight relationship between the FlowProject and the underlying data space, because operations are assumed to act on a per-job basis.
-Using the sequence of conditions associated with each operation, a FlowProject also tracks workflow progress on per-job basis to determine which operations to run next for a given job.
+The central object in the ``signac-flow`` package is the ``FlowProject`` class, which encapsulates a set of operations acting on a ``signac`` data space.
+There is a tight relationship between the ``FlowProject`` and the underlying data space, because operations are assumed to act on a per-job basis.
+Using the sequence of conditions associated with each operation, a ``FlowProject`` also tracks workflow progress on per-job basis to determine which operations to run next for a given job.
 Different HPC environments and cluster schedulers are represented by separate Python classes that provide the means for querying schedulers for cluster job statuses, writing out the job scripts, and constructing the submission commands.
 Job scripts are created using templates written in ``jinja2`` :cite:`jinja2`, making them easily customizable for the requirements of specific compute clusters or users.
 This means that workflows designed on one cluster can be easily ported to another, and that users can easily contribute new environment configurations that can be used by others.
+Currently, we support Slurm and TORQUE schedulers, along with more specialized support for the following supercomputers (listed along with their funding organizations): XSEDE Comet, XSEDE Stampede, XSEDE Bridges, INCITE Titan, INCITE Eos, and the University of Michigan Flux clusters.
 
-.. TODO which HPC environments and schedulers are currently supported?
+The ``signac`` framework prioritizes modularity and interoperability over monolithic functionality, making it readily extensible.
+One of the tools built on top of the core infrastructure is ``signac-dashboard`` (https://bitbucket.org/glotzer/signac-dashboard/src/master/), a web interface for visualizing ``signac`` data spaces that is currently under active development.
+All tools in the framework, including ``signac-flow``, share the ``signac`` database as a core dependency.
+Aside from that, however, core ``signac`` and ``signac-flow`` avoid any hard dependencies and are implemented as pure Python packages compatible with Python 2.7 and 3.3+.
+In conjunction with the framework's full-featured command line interface, these features of the framework ensure that it can be easily incorporated into any existing file-based workflows, even those using primarily non-Python tools.
 
-The extensibility of the ``signac`` framework makes it easy to build other tools on top of ``signac``.
-One such tool is ``signac-dashboard``, a web interface to ``signac`` data spaces that provides an easy way to visualize ``signac`` data spaces.
-The tool has been released open source and is currently under active development.
-
-.. TODO add reference/URL for signac-dashboard
-
-.. TODO the word "easy" is repeated too often in the last few sentences :)
 
 Comparisons
 -----------
@@ -348,28 +341,33 @@ As a result, our initial comparisons will focus on existing packages that solve 
 Of these tools, some of the best known are Fireworks :cite:`Fireworks`, AiiDA :cite:`Pizzi2016`, Sacred :cite:`sacred`, and Sumatra :cite:`sumatra`.
 Fireworks and AiiDA are full-featured workflow managers that, like ``signac-flow``, interface with high performance compute clusters to execute complex, potentially nonlinear workflows.
 These tools in fact currently offer more powerful features than ``signac-flow`` for monitoring the progress of jobs, features that are supported by the use of databases on the back end.
-However, accessing data generated by these tools outside the context of the workflow definition is more challenging than it would be with ``signac`` because the data representation is closely tied to the workflows.
-Additionally, the need to maintain a server for workflow management can be cumbersome and introduces additional unnecessary complexities.
+However, maintaining a server for workflow management can be cumbersome, and it introduces additional unnecessary complexities.
 
-.. TODO To validate this comparison, it would be important to know how the "signac database" works and how it is implemented to provide MongoDB-like querying.
+A more significant limitation of these other tools is that their data representations are closely tied to the workflow execution, making it much more challenging to access the data outside the context of the workflow.
+Concretely, these software typically store data in a specific location based on a particular instance of an operation's execution, so the data can only be found by looking for that specific instance of the operation.
+Conversely, in ``signac`` the data is identified by its own metadata, namely its state point, so once it has been generated its access is no longer linked to a specific instance of a ``signac-flow`` operation (assuming that ``signac-flow`` is being used).
 
-Sacred and Sumatra are slightly different tools in that their primary focus is maintaining data provenance, not orchestrating complex workflows.
-Superficially, the ``signac`` framework appears quite similar to Sacred.
-Both use decorators to convert functions into command line executable operations, and configurations can be injected into these functions (in ``signac``'s case, using the job object).
-However, the similarities largely stop there.
-The focus of Sacred is to track provenance by recording information such as when an operation is executed, the configuration used, and whether any data was saved.
+Of course, knowing exactly where and how data was generated and transformed, *i.e.*, the data provenance, is also valuable information.
+Two tools that are specialized for this task are Sacred and Sumatra.
+Superficially, the ``signac`` framework appears especially similar to Sacred.
+Both use decorators to convert functions into executable operations, and configurations can be injected into these functions (in ``signac``'s case, using the job object).
+Internally, Sacred and ``signac-flow`` both depend on the registration of particular functions with some internal API: in ``signac-flow``, functions are stored as operations within the ``FlowProject``, whereas Sacred tracks functions through the *Experiment* class.
+However, the focus of Sacred is not to store data or execute workflows, but instead to track when an operation was executed, the configuration used, and whether any data was saved.
 Therefore, in principle ``signac`` and Sacred are complementary pieces of software that could be used in concert to achieve different benefits.
 
-.. TODO any plans to integrate the configuration/use of Sacred into signac? It sounds like any signac user could be encouraged to improve his/her provenance by supporting Sacred in signac? ... Well, nvm, you answered it in the next paragraph :)
+We have found that integrating Sacred with ``signac`` is in fact quite simple.
+Once functions are registered with either a Sacred Experiment or a ``signac-flow`` ``FlowProject``, the operations can be run either through Python or on the command line.
+While both tools typically advocate using their command line interfaces, the two can be integrated by using one from the command line while having it internally call the other through the other's Python interface.
+Since ``signac-flow`` provides a more extensive set of command line options that are likely to be regularly changed, we advocate using the ``signac-flow`` command line functionality and encoding a Sacred Experiment within a ``signac-flow`` operation.
 
-However, Sacred is currently incompatible with ``signac-flow``.
-Sacred and ``signac-flow`` both depend on the registration of particular functions with some internal API: in ``signac-flow``, functions are stored as operations within the FlowProject, whereas Sacred tracks functions through the *Experiment* class.
-Since the actual script can only be run through one of these interfaces (whether on the command line or directly in Python), and while it is possible to use ``signac``'s database facilities in concert with Sacred, running operations using ``signac-flow`` prevents tracking them using Sacred.
-Conversely, the Sumatra provenance tracking tool *can* be integrated with ``signac``.
-Sumatra provides a command line utility for simple usage, but it also allows direct integration into Python scripts via a Python API, and it tracks similar information to Sacred.
-While the command line API is not flexible enough to allow passing arguments through to ``signac-flow``, the Python API can be easily integrated into ``signac-flow`` operations for tracking workflows managed by ``signac-flow``.
+The Sumatra provenance tracking tool is an alternative to Sacred.
+Although it is written in Python, it is primarily designed for use as a command line utility, making it more suitable than Sacred for non-Python application.
+However, it does provide a Python API that offers greater flexibility than the command line tool, and this is the recommended mode for integration with ``signac-flow`` operations.
 
-.. TODO it sounds like Sumatra is the way forward for integration with signac-flow. Is it a planned milestone for signac developers?
+We are currently assessing the explicit integration of one or both of these tools with ``signac-flow``.
+At present, the ``signac`` documentation contains example of how to integrate ``signac-flow`` with Sacred, and we plan to flesh out such examples further in the near future.
+Provenance tracking is a planned feature for the next release of ``signac-flow``, so that version will either contain its own implementation of provenance tracking or interface directly with one of these tools.
+
 
 Data Management
 ===============
