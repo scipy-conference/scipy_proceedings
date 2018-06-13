@@ -5,7 +5,7 @@
 
 :author: Matthias Bussonnier
 :email:
-:institution:
+:institution: UC Berkeley
 :equal-contributor:
 
 :author: Jessica Forde
@@ -15,12 +15,12 @@
 
 :author: Jeremy Freeman
 :email:
-:institution:
+:institution: Chan Zuckerberg Initiative
 :equal-contributor:
 
 :author: Brian Granger
 :email:
-:institution:
+:institution:Cal Poly, San Luis Obispo
 :equal-contributor:
 
 :author: Tim Head
@@ -30,12 +30,12 @@
 
 :author: Chris Holdgraf
 :email: choldgraf@berkeley.edu
-:institution: Berkeley Institute for Data Science, UC Berkeley
+:institution: UC Berkeley
 :corresponding:
 
 :author: Kyle Kelley
 :email:
-:institution:
+:institution: Netflix
 :equal-contributor:
 
 :author: Andrew Osheroff
@@ -45,27 +45,27 @@
 
 :author: M Pacer
 :email: mpacer.phd@gmail.com
-:institution:
+:institution: Netflix
 :equal-contributor:
 
 :author: Yuvi Panda
 :email:
-:institution:
+:institution: UC Berkeley
 :equal-contributor:
 
 :author: Fernando Perez
 :email:
-:institution:
+:institution: UC Berkeley
 :equal-contributor:
 
 :author: Benjamin Regan Kelley
 :email:
-:institution:
+:institution: Simula Research Lab
 :equal-contributor:
 
 :author: Carol Willing
 :email: willingc@gmail.com
-:institution: Cal Poly SLO
+:institution: Cal Poly, San Luis Obispo
 :equal-contributor:
 :bibliography: binderbib
 
@@ -96,8 +96,15 @@ for easily creating sharable, interactive, reproducible environments in the
 cloud.
 
 The scientific community is increasingly unified around reproducibility.
-To achieve this requires pursuing two sub-goals, both of which are difficult to
-achieve:
+A survey in 2016 of 1,576 researchers reported that 90% of respondents believed
+there exists a reporoducibility crisis in the scientific community.
+A majority of respondents also reported difficulty
+reproducing the work of colleagues :cite:`Baker2016`. Similar results have
+been reported in the cell biology community
+:cite:`The_American_Society_for_Cell_Biology_undated` and machine
+learning community :cite:`Pineau2017-sb`.
+Making research reproducible requires pursuing two sub-goals, both of which are
+difficult to achieve:
 
 - **technical reproducibility**:
 
@@ -126,10 +133,10 @@ reproducing the full stack of another person’s work is too labor intensive and
 error-prone for day-to-day use. A recent study of scientific
 repositories found that citation of "both visualization tools as well as
 common software packages (such as MATLAB) was a widespread failure" :cite:`Stodden2018-fy`.
-As a result, while reproducibility is *technically* possible, it is not yet
-*practically* possible. This paper introduces Binder 2.0, a tool
-that takes us one step closer towards workflows that make computational work
-practical to share.
+As a result, the technical barriers limit practical reproducibility.
+To lower the technical barriers of sharing computational work,
+we introduce Binder 2.0, a tool that we believe makes reproducibility
+more practically possible.
 
 Binder consists of a set of tools for creating sharable, interactive, and
 deterministic environments that run on personal computers and cloud resources.
@@ -233,8 +240,8 @@ In the following sections, we describe the three major technical components of
 the Binder project—JupyterHub, repo2docker, and BinderHub—and discuss how each
 feeds into the principles we’ve outlined above.
 
-Scalable interactive user sessions (JupyterHub on Kubernetes)
--------------------------------------------------------------
+Scalable interactive user sessions
+----------------------------------
 Binder runs as either a public or a private web service, and needs to handle
 potentially large spikes in user sessions, as well as sustained user activity
 over several minutes of time. It also needs to be deployable on a number of
@@ -710,7 +717,7 @@ scenarios:
    stored in a long term archive like Zenodo. This makes it useful for generating
    static representations of the environment needed to reproduce a scientific result.
    Binder has already been used alongside scientific publications
-   :cite:`LIGO_Scientific_Collaboration_undated-xy` :cite:`Ross2017-ff`
+   :cite:`LIGO_Scientific_Collaboration_undated-xy, Ross2017-ff`
    :cite:`Cornish2018-mo` :cite:`Holdgraf2017-so` :cite:`Rein2016-rd`
    :cite:`Neyrinck2018-xy` to provide an interactive and reproducible document
    with minimal added effort. In the future, the Binder project hopes to partner
