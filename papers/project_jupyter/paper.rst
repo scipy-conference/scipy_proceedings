@@ -40,7 +40,7 @@
 
 :author: Andrew Osheroff
 :email:
-:institution:
+:institution: Independent
 :equal-contributor:
 
 :author: M Pacer
