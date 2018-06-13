@@ -58,7 +58,7 @@
 :institution: UC Berkeley
 :equal-contributor:
 
-:author: Benjamin Regan Kelley
+:author: Benjamin Regan-Kelley
 :email:
 :institution: Simula Research Lab
 :equal-contributor:
