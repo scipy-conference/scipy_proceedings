@@ -46,13 +46,15 @@ could in principle offer substantial speedups. But because of the
 complexity and steep learning curve associated with a transition to
 cloud computing, it remains inaccessible to many researchers.
 
-A number of Python libraries have sought to close this gap by allowing
-users to interact seamlessly with AWS resources from within their
-Python environment. For example, Pywren :cite:`jonas2017` enables users
-to run their existing Python code on AWS Lambda, providing convenient
-distributed execution for jobs that fall within the limits of this
-service (currently maximum 300 seconds of execution time, 1.5 GB of RAM,
-512 MB of local storage, and no root access). These limitations are
+A number of Python libraries have sought to close this gap
+by allowing users to interact seamlessly with AWS resources
+from within their Python environment. For example, Cottoncandy
+allows users to store and access numpy array data on Amazon S3
+:cite:`anwar_o_nunez_elizalde_2017_1034342`. Pywren :cite:`jonas2017`
+enables users to run their existing Python code on AWS Lambda, providing
+convenient distributed execution for jobs that fall within the limits of
+this service (currently maximum 300 seconds of execution time, 1.5 GB of
+RAM, 512 MB of local storage, and no root access). These limitations are
 impractical for many data-oriented workloads, that require more RAM and
 local storage, longer compute times, and complex dependencies. The AWS
 Batch service offers a platform for workloads with these requirements.
