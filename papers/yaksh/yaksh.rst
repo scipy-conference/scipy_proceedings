@@ -838,6 +838,24 @@ using Yaksh -
   7. Major users are from tier 1 cities of India, regarded as highly developed
      IT hubs like Hyderabad, Bengaluru, Pune, and Mumbai.
 
+
+- **Usage for hiring**
+
+  One surprising use case for Yaksh has been as a tool for evaluating
+  employment candidates by conducting tests. Yaksh has been used several
+  times for hiring for teams functioning inside FOSSEE project.
+  Some of the projects that have used Yaksh are:
+
+  - OSDAG (https://osdag.fossee.in/)
+
+  - Esim/Xcos (https://esim.fossee.in/)
+
+  - Python (https://python.fossee.in/)
+
+  - DWSIM (https://dwsim.fossee.in/)
+
+  - SBHS (https://sbhs.fossee.in/)
+
   .. figure:: yaksh_gender_demographics.png
 	 :alt:  Gender Demographics
 	 :scale: 50%
@@ -851,19 +869,6 @@ using Yaksh -
 
      Age breakdown of visitors on Yaksh.
      :label:`fig:yaksh-age-demographics`
-
-- **Usage for hiring**
-
-  One surprising use case for Yaksh has been as a tool for evaluating
-  employment candidates by conducting tests. Yaksh has been used several times
-  for hiring for teams functioning inside FOSSEE project. Some of the projects
-  that have used Yaksh are:
-
-  - OSDAG (https://osdag.fossee.in/)
-  - Esim/Xcos (https://esim.fossee.in/)
-  - Python (https://python.fossee.in/)
-  - DWSIM (https://dwsim.fossee.in/)
-  - SBHS (https://sbhs.fossee.in/)
 
 
 Plans
