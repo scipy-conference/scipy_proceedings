@@ -338,8 +338,12 @@ Comparisons
 -----------
 
 In recent years, many Python tools have emerged to address issues with data provenance and reproducibility in computational science.
-While they are very similar to the ``signac`` framework in their goals, a major distinction between ``signac`` and other tools is that the ``signac`` data management component is independent of ``signac-flow``, making it much easier to interact with the data outside the context of the workflow.
-As a result, our initial comparisons will focus on existing packages that solve the same problem as ``signac``, but generally take different and generally less modular approaches to doing so.
+While in general they are very similar to the ``signac`` framework in their goals, a major distinction between ``signac`` and other tools is that the ``signac`` data management component is independent of ``signac-flow``, making it much easier to interact with the data outside the context of the workflow.
+As a result, our comparisons will focus on existing packages that solve the same problem as ``signac``, but generally take different and generally less modular approaches to doing so.
+
+
+Workflow and Provenance Management
+=================================
 
 Two of the best-known Python workflow managers are Fireworks :cite:`Fireworks` and AiiDA :cite:`Pizzi2016`.
 Fireworks and AiiDA are full-featured workflow managers that, like ``signac-flow``, interface with high performance compute clusters to execute complex, potentially nonlinear workflows.
