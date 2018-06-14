@@ -15,7 +15,7 @@
 
 :author: Jeremy Freeman
 :email:
-:institution: Chan Zuckerberg Initiative
+:institution:
 :equal-contributor:
 
 :author: Brian Granger
@@ -40,7 +40,7 @@
 
 :author: Andrew Osheroff
 :email:
-:institution: Independent
+:institution:
 :equal-contributor:
 
 :author: M Pacer
