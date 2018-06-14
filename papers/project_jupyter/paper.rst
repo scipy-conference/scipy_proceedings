@@ -20,7 +20,7 @@
 
 :author: Brian Granger
 :email:
-:institution:Cal Poly, San Luis Obispo
+:institution: Cal Poly, San Luis Obispo
 :equal-contributor:
 
 :author: Tim Head
