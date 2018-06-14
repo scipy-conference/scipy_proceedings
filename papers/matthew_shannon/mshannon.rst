@@ -16,17 +16,17 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
 
 .. class:: abstract
 
-   We present the software tool pypahdb to the scientific astronomical
+   We present the software tool pyPAHdb to the scientific astronomical
    community, which is used to characterize emission from one of the
    most prevalent types of organic molecules in space, namely
    polycyclic aromatic hydrocarbons (PAHs). It leverages the detailed
    studies of organic molecules done at the NASA Ames Research
-   Center. pypahdb is a streamlined Python version of the NASA Ames
+   Center. pyPAHdb is a streamlined Python version of the NASA Ames
    PAH IR Spectroscopic Database (PAHdb; `www.astrochemistry.org
    <http://www.astrochemistry.org/pahdb>`_) suite of IDL tools. PAHdb
    has been extensively used to analyze and interpret the PAH
    signature from a plethora of emission sources, ranging from
-   solar-system objects to entire galaxies. pypahdb decomposes
+   solar-system objects to entire galaxies. pyPAHdb decomposes
    astronomical PAH emission spectra into contributing PAH sub-classes
    in terms of charge and size using a database-fitting technique. The
    inputs for the fit are spectra constructed using the spectroscopic
@@ -114,7 +114,7 @@ processes. For example, the PAH IR signature is used as an indicator
 of star formation in high redshift galaxies
 :cite:`2014ApJ...786...31R` and to differentiate between black hole
 and starburst engines in galactic nuclei
-:cite:`1998ApJ...498..579G`. Those astronomers who study star- and
+:cite:`1998ApJ...498..579G`. Those astronomers who study star and
 planet formation use the IR PAH signature as an indicator of the
 geometry of circumstellar disks :cite:`2001A&A...365..476M`
 :cite:`2009A&A...502..175B`. However, the treasure trove of
@@ -122,7 +122,7 @@ information about an astronomical object's local conditions and its
 evolutionary history is only accessible through detailed spectroscopic
 analysis. This type of analysis, along with an understanding of the
 factors that drive the these spectroscopic changes, is now possible
-with the software developed at the NASA Ames Research Center.
+with this software developed at the NASA Ames Research Center.
 
 NASA Ames PAH IR Spectroscopic Database (PAHdb)
 ===============================================
@@ -138,7 +138,7 @@ astronomical data.
 
 The NASA Ames PAH IR Spectroscopic Database (PAHdb;
 :cite:`2018ApJS..234...32B` :cite:`2014ApJSS..211....8B`) is the
-culmination of more that 30 years of laboratory and computational
+culmination of more than 30 years of laboratory and computational
 research carried out at the NASA Ames Research Center to test and refine
 the astronomical PAH model. The laboratory-measured and
 theoretically-computed libraries currently contain the spectra of 75
@@ -149,10 +149,10 @@ PAHdb is highly cited and is used to characterize and understand
 organic molecules in our own Galaxy and external galaxies. The
 database includes a set of innovative astronomical models and tools
 that enables astronomers to probe and quantitatively analyze the state
-of the PAH population, i.e., ionization balance, size, structure, and
+of the PAH population, such as ionization balance, size, structure, and
 composition and tie these to the prevailing local astrophysical
-conditions, e.g., electron density, parameters of the radiation field,
-etc. :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
+conditions (e.g., electron density, parameters of the radiation field,
+etc.) :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
 
 .. figure:: fig_screenshot.png
    :align: center
@@ -199,32 +199,36 @@ Space Telescope* (`www.nasa.gov/spitzer
 <https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
 collaboration between NASA, the European Space Agency (ESA) and the
 Canadian Space Agency (CSA). The telescope features a primary mirror
-with a diameter of 6.5 m made up from 18 individual hexagonal segments
+with a diameter of 6.5 m
 and carries four science instruments. These instruments will observe
 the Universe with unprecedented resolution and sensitivity from 0.6 to
-28 µm. The observatory is expected to launch in 2020. A 3D rendering
-of the spacecraft is shown in Figure :ref:`fig:JWST`.
+28 µm. The observatory is expected to launch in 2020.
 
-.. figure:: fig_JWST.png
-   :align: center
-   :scale: 10%
+.. A 3D rendering
+.. of the spacecraft is shown in Figure :ref:`fig:JWST`.
 
-   3D-rendering of *JWST* using the Maya® 3D animation, modeling,
-   simulation, and rendering software
-   (`www.autodesk.com/products/maya/overview
-   <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
-   signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
-   segments (gold), dominates the picture together with the stacked
-   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
-   <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
+..    :align: center
+..    :scale: 10%
 
-pypahdb: a tool designed for JWST
+..    3D-rendering of *JWST* using the Maya® 3D animation, modeling,
+..    simulation, and rendering software
+..    (`www.autodesk.com/products/maya/overview
+..    <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
+..    signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
+..    segments (gold), dominates the picture together with the stacked
+..    sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
+..    <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
+
+pyPAHdb: a tool designed for JWST
 ---------------------------------
 
-On the eve of the *JWST* era, it is our goal to make PAHdb a go-to
-tools for the astronomical community for analyzing and interpreting PAH
-emission spectra. The Python analysis tool pypahdb is one of the means
-with which we hope to reach that goal. pypahdb is being developed as
+On the eve of the *JWST* era, it is our goal to
+make PAHdb the astronomical community's primary tool for analyzing and interpreting PAH emission spectra.
+.. a go-to
+.. tools for the astronomical community for analyzing and interpreting PAH
+.. emission spectra.
+The Python analysis tool pyPAHdb is one of the means
+with which we hope to reach that goal. pyPAHdb is being developed as
 part of an awarded (*JWST*) Early Release Science (ERS) program titled
 "Radiative Feedback from Massive Stars as Traced by Multiband Imaging
 and Spectroscopic Mosaics" (`jwst-ism.org <http://jwst-ism.org/>`_;
@@ -236,19 +240,19 @@ program can be found at the `JDox
 <https://jwst-docs.stsci.edu/display/JSP/JWST+DD+ERS+Program+Goals%2C+Project+Updates%2C+and+Status+Reviews>`_. The
 awarded program is coordinated by an international "core team" of 19
 scientists and supported by 119 "science collaborators". The purpose
-of pypahdb is to derive astronomical parameters directly from *JWST*
+of pyPAHdb is to derive astronomical parameters directly from *JWST*
 observations, but the tool will not be limited to *JWST* observations
-alone. pypahdb is the Lite version of the full suite of Python
+alone. pyPAHdb is the light version of the full suite of Python
 software tools, dubbed the *AmesPAHdbPythonSuite*
 (`github.com/PAHdb/AmesPAHdbPythonSuite
 <https://github.com/PAHdb/AmesPAHdbPythonSuite>`_), that is currently
 being developed and is the analog of the *AmesPAHdbIDLSuite*
 (`github.com/PAHdb/AmesPAHdbIDLSuite
-<https://github.com/PAHdb/AmesPAHdbIDLSuite>`_). pypahdb will enable
+<https://github.com/PAHdb/AmesPAHdbIDLSuite>`_). pyPAHdb will enable
 PAH experts and non-experts alike to analyze and interpret
 astronomical PAH emission spectra.
 
-pypahdb analyzes spectroscopic observations (including spectral maps)
+pyPAHdb analyzes spectroscopic observations (including spectral maps)
 and characterizes the PAH emission using a database-fitting technique,
 providing the PAH ionization and size fractions. The general program
 methodology is encapsulated in the flowchart presented in Figure
@@ -262,7 +266,7 @@ in their astronomical observations (``writer.py``).
 .. figure:: fig_flowchart.png
    :align: center
 
-   pypahdb flowchart. Astronomical spectroscopic data is loaded,
+   pyPAHdb flowchart. Astronomical spectroscopic data is loaded,
    whether represented in FITS or ASCII files. An over-sampled
    precomputed matrix of PAH spectra is loaded and interpolated onto
    the wavelength grid of the astronomical
@@ -278,17 +282,18 @@ in their astronomical observations (``writer.py``).
 
 The performance of pyPAHdb relative to the full IDL suite was tested
 by fitting a spectral cube. Using pyPAHdb, the spectral cube required
-<4 seconds, while >60 seconds were needed to fit with the full IDL suite.
+less than 4 seconds, while more than 60 seconds were needed to fit
+with the full IDL suite.
 It should be noted that their were differences in the actual implementation of
 the two tests, which were inherent to the differences in the languages
-used.
+used. **specify differences!**
 
 The underlying PAH physics
 --------------------------
 
 In order to analyze astronomical PAH *emission* spectra with the
 spectroscopic data contained in PAHdb's libraries, a PAH emission
-model is needed. pypahdb hides the underlying photo-physics in a
+model is needed. pyPAHdb hides the underlying photo-physics in a
 precomputed matrix. The precomputed matrix is constructed using the
 full Python suite and takes modeled, highly-over-sampled PAH
 emission spectra from version 3.00 of the library of computed
@@ -298,7 +303,7 @@ have no hetero-atom substitutions except for possibly nitrogen, have
 no aliphatic side groups, and are not fully dehydrogenated. In
 addition, the fullerenes C\ :sub:`60` and C\ :sub:`70` are added.
 
-Whilst several more sophisticated emission models are available in the
+While several more sophisticated emission models are available in the
 full Python suite, here a PAH's emission spectrum is calculated from
 the vibrational temperature it reaches after absorbing a single 7 eV
 photon and making use of the thermal approximation (e.g.,
@@ -324,7 +329,8 @@ in cm. The sum is taken over all :math:`n` modes and the emission
 profile is assumed Gaussian with a full-width at half-maximum (FWHM)
 of 15 cm\ :sup:`-1`. Note that before applying the emission profile, a
 redshift of 15 cm\ :sup:`-1` is applied to each of the band positions
-(:math:`\nu_{i}`) to mimic some anharmonic effects.
+(:math:`\nu_{i}`) to mimic some anharmonic effects. **state where
+this redshift value comes from**
 
 The vibrational temperature attained after absorbing a single 7 eV
 photon is calculated by the molecule's heat capacity. The heat
@@ -410,7 +416,7 @@ properties of the PAH molecules are known to vary across these
 boundaries, since they are exposed to harsh radiation in the exposed
 cavity of the diffuse zone, and shielded in the molecular region.
 
-pypahdb is used to determine how the PAH properties vary across this
+pyPAHdb is used to determine how the PAH properties vary across this
 boundary by analyzing the full spectrum at every pixel. The code-block
 below, which is taken from ``example.py`` included in the pyPAHdb
 distribution, demonstrates how this is done and Figure :ref:`fig:fit`
@@ -418,30 +424,33 @@ presents part of the resulting PDF-output.
 
 .. code-block:: python
 
-    import pypahdb
+    import pyPAHdb
     # load an observation from file
-    observation = pypahdb.observation('NGC7023.fits')
+    observation = pyPAHdb.observation('NGC7023.fits')
     # decompose the spectrum with PAHdb
-    result = pypahdb.decomposer(observation.spectrum)
+    result = pyPAHdb.decomposer(observation.spectrum)
     # write results to file
-    pypahdb.writer(result, header=observation.header)
+    pyPAHdb.writer(result, header=observation.header)
 
 .. figure:: fig_fit.png
    :align: center
 
-   pypahdb-fit to the spectrum of a position in the spectral cube of
+   pyPAHdb-fit to the spectrum of a position in the spectral cube of
    NGC 7023. The upper panel displays the total model fit to the data;
    the middle panel the residual; and the lower panel the breakdown of
-   large-to-small PAHs (PAHs are considered large when they contain 30
-   carbon atoms or more). The charge breakdown (cation, neutral,
+   PAHs in descending order from large, containing 30 atoms or more, to
+   small. The charge breakdown (cation, neutral,
    anion) has been suppressed for clarity.
+
+.. large-to-small PAHs (PAHs are considered large when they contain 30
+.. carbon atoms or more). 
 
    :label:`fig:fit`
 
 With the results from the entire spectral cube, maps of relevant
 astrophysical quantities can be constructed. For example, Figure
 :ref:`fig:map` presents a map of the varying PAH ionization fraction
-across NGC 7023. As one would expect, the fraction is systematically
+across NGC 7023. As expected, the fraction is systematically
 higher across the diffuse region, where PAHs are more exposed to the
 star, than the dense region, where PAHs are partially shielded from
 the star.
@@ -462,24 +471,24 @@ The type of analysis demonstrated here allows users to quickly
 interpret the distribution of PAHs in their astronomical observations
 and variations in PAH charge and size.
 
-The future
-==========
+Future Work
+===========
 
-pypahdb is in active development, but a finalized Python software
+pyPAHdb is in active development, but a finalized Python software
 analysis tool is anticipated to be complete well before *JWST*'s launch, which is
 currently scheduled for 2020. The astronomical community can already
-benefit from pypahdb by using it to quickly analyze and interpret
+benefit from pyPAHdb by using it to quickly analyze and interpret
 archival data from other observatories, e.g., *ISO*, *Spitzer*,
-*SOFIA*, etc. Our current efforts are focused on streamlining pypahdb,
+*SOFIA*, etc. Our current efforts are focused on streamlining pyPAHdb,
 having it transparently accept spectroscopic observations in a variety
 of digital formats, and consolidating output parameters. Further testing
-will be performed to ensure all parts of pypahdb function as
+will be performed to ensure all parts of pyPAHdb function as
 expected. Lastly, API documentation and a guide with analysis
 "recipes" will be provided to help users get started and/or extend
-pypahdb.
+pyPAHdb.
 
 The development of a PAHdb tool in Python has turned out to be largely
 straightforward as Python is backed by a large active
 community. Python offers great flexibility and in combination with
-pypahdb's development on GitHub, allows constructive feedback from a
+pyPAHdb's development on GitHub, allows constructive feedback from a
 considerable audience.
