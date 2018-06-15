@@ -372,7 +372,6 @@ As a result, to optimally utilize both tools, we advocate using the ``signac-flo
 The Sumatra provenance tracking tool is an alternative to Sacred.
 Although it is written in Python, it is primarily designed for use as a command line utility, making it more suitable than Sacred for non Python application.
 However, it does provide a Python API that offers greater flexibility than the command line tool, and this is the recommended mode for integration with ``signac-flow`` operations.
-We are currently assessing the explicit integration of one or both of these tools with ``signac-flow``, so the next release of the package will include the ability to track data provenance as workflows are executed.
 
 
 Data Management
