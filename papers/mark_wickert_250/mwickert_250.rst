@@ -10,14 +10,30 @@ Real-Time Digital Signal Processing Using pyaudio_helper and the ipywidgets
 
 .. class:: abstract
 
-  The focus of this poster is on teaching real-time digital signal processing to 
+  The focus of this paper is on teaching real-time digital signal processing to 
   electrical and computer engineers using the Jupyter notebook and the code 
-  module ``pyaudio_helper``, which is a component of the package 
-  scikit-dsp-comm_. Specifically, we show how easy it is to prototype real-time DSP 
-  algorithms for processing analog signal inputs and returning analog signal outputs, 
-  all within the Jupyter notebook. Real-time control of running code is provided 
-  by ipywidgets. Audio applications and in a reduced bandwidth fashion, 
-  software defined radio applications can be developed.
+  module :code:`pyaudio_helper`, which is a component of the package 
+  scikit-dsp-comm_. Specifically, we show how easy it is to design, prototype, and 
+  test using PC-based instrumentation, real-time DSP algorithms for processing 
+  analog signal inputs and returning analog signal outputs, all within the Jupyter 
+  notebook. A key feature is that real-time algorithm prototyping is simplified 
+  by configuring a few attributes of a :code:`DSP_io_stream` object from the 
+  :code:`pyaudio_helper` module, leaving the developer to focus on the real-time DSP 
+  code contained in a *callback* function, using a template notebook cell. 
+  Real-time control of running code is provided by ipywidgets. The PC-based 
+  instrumentation aspect allows measurement of the analog input/output (I/O) to be 
+  captured, stored in text files, and then read back into the notebook to 
+  compare with the original design expectations via :code:`matplotlib` plots.
+  In a typical 
+  application *slider* widgets are used to change variables in the callback. 
+  One and two channel audio applications as well as algorithms for complex 
+  signal (in-phase/quadrature) waveforms, as found in software defined radio, 
+  can also be developed. The analog I/O devices that can be 
+  interfaced are both internal and via USB external sound interfaces. The 
+  sampling rate, and hence the bandwidth of the signal that can be 
+  processed, is limited by the operating system audio subsystem capabilities, 
+  but is at least 48 KHz and often 96 kHz.
+  
 
 .. _scikit-dsp-comm: https://github.com/mwickert/scikit-dsp-comm
 
@@ -31,33 +47,57 @@ Introduction
 As the power of personal computer has increased, the dream of rapid prototyping of real-time 
 signal processing, without the need to use dedicated DSP-microprocessors or digital signal 
 processing (DSP) enhanced 
-microcontrollers, such as the ARM Cortex-M4 [cortexM4]_, can be set aside. Students can focus on the 
-powerful capability of :code:`numpy` and :code:`scipy`, along with packages such as 
-:code:`scipy.signal` [Scipysignal]_ and :code:`scikit-dsp-comm` [DSPComm]_ to explore 
-real-time signals and systems computing. 
+microcontrollers, such as the ARM Cortex-M4 [cortexM4]_, can be set aside. Students can 
+focus on the powerful capability of :code:`numpy`, :code:`scipy`, and :code:`matplotlib`, 
+along with packages such as :code:`scipy.signal` [Scipysignal]_ and 
+:code:`scikit-dsp-comm` [DSPComm]_, to explore real-time signals and systems computing. 
 
 The focus of this paper is on teaching real-time DSP to electrical 
 and computer engineers using the Jupyter notebook and the code module :code:`pyaudio_helper`, 
 which is a component of the package :code:`scikit-dsp-comm`. To be clear,  
 :code:`pyaudio_helper` is built upon the well known package [pyaudio]_, which has 
-its roots in *Port Audio* [portaudio]_. We will see that to set up an audio input/output (I/O) 
+its roots in *Port Audio* [portaudio]_. Specifically, we show how easy it is to design, 
+prototype, and test using PC-based instrumentation, real-time DSP 
+algorithms for processing analog signal inputs and returning analog signal outputs, 
+all within the Jupyter notebook. 
+Real-time algorithm prototyping is simplified by configuring a :code:`DSP_io_stream` 
+object from the :code:`pyaudio_helper` module, allowing the developer to quickly focus 
+on writing a DSP *callback* function using a template notebook cell. The developer is free 
+to take advantage of :code:`scipy.signal` filter functions, write custom classes, 
+and as needed utilize global variables to allow the algorithm to maintain *state* between 
+callbacks pushed by the underlying PyAudio framework. The PC-based 
+instrumentation aspect allows measurement of the analog input/output (I/O) to be 
+captured, stored in text files, and then read back into the notebook to 
+compare with the original design expectations via :code:`matplotlib` plots. 
+Real-time control of running code is provided by ipywidgets. In a typical 
+application *slider* widgets are used to change variables in the callback 
+during I/O streaming. The analog I/O devices that can be 
+interfaced are both internal and via USB external sound interfaces. The 
+sampling rate, and hence the bandwidth of the signal that can be 
+processed, is limited by the operating system audio subsystem capabilities, 
+but is at least 48 KHz and often 96 kHz.
+
+We will ultimately see that to set up an audio  
 stream requires: (1) create and instance of the :code:`DSP_io_stream` class by assigning valid
 input and output device ports to it, (2) define a callback function to process the input signal 
-sample frames into output sample frames, and (3) call the method :code:`interactive_stream()` 
-to start streaming. All of this is done within the Jupyter notebook. Real-time control of 
-running code is provided by [ipywidgets]_. Audio applications and in a reduced bandwidth 
-fashion, software defined radio (SDR) applications can also be developed.
+sample frames into output sample frames with a user defined algorithm, and (3) 
+call the method :code:`interactive_stream()` to start streaming.  
 
 Analog Input/Output Using DSP Algorithms
 ----------------------------------------
 
-A class text to learn the theory of digital signal processing is [Opp2010]_. This book is heavy on 
+A classic text to learn the theory of digital signal processing is [Opp2010]_. This book is heavy on 
 the underlying theoretical concepts of DSP, including the mathematical modeling of analog I/O systems 
-as shown in Figure :ref:`basicDSPio`. An analog or continuous-time signal :math:`x(t)` enters the 
-system on the left and is converted to the discrete-time signal :math:`x[n]` by the analog to 
-digital block. In practice this block is known as the analog-to-digital converter (ADC). 
-The sampling rate :math:`f_s`, which is the inverse of the sampling period, :math:`T`, 
-leads to :math:`x[n] = x(nT)`. The sampling theorem tells us [Opp2010]_ tells us that the sampling 
+as shown in Figure :ref:`basicDSPio`. This block diagram is a mathematical abstraction of what will 
+be implemented using [pyaudio]_ and a PC audio subsystem. An analog or continuous-time signal 
+:math:`x(t)` enters the system on the left and is converted to the discrete-time signal 
+:math:`x[n]` by the analog to digital block. In practice this block is known as the 
+analog-to-digital converter (ADC). The sampling rate :math:`f_s`, which is the inverse of the 
+sampling period, :math:`T`, leads to :math:`x[n] = x(nT)`. To be clear, :math:`x[n]`, denotes 
+a sequence of samples corresponding to the original analog input :math:`x(t)`. The use of 
+brackets versus parentheses differentiates the 
+two signal types as discrete-time and continuous-time respectively. 
+The sampling theorem tells us [Opp2010]_ tells us that the sampling 
 rate :math:`f_s` must be greater than twice the highest frequency we wish to represent in the 
 discrete-time domain. Violating this condition results in *aliasing*, which means a signal centered 
 on frequency :math:`f_0 > f_s/2` will land inside the band of frequencies :math:`[0, f_s/2]`. Fortunately, 
@@ -74,14 +114,16 @@ integers, most likely :code:`int16`. As we shall see in pyaudio, this is indeed 
 
    Analog signal processing implemented using real-time DSP. :label:`basicDSPio`
 
-The DSP algorithms block can be any operation on the signals samples :math:`x[n]` that makes sense. 
+The DSP algorithms block can be any operation on samples :math:`x[n]` that makes sense. 
+Ultimately, once we discuss frame-based processing in the next section, we will see how Python code 
+fulfills this. 
 At this beginning stage, the notion is that the samples flow through the algorithm one at a time, 
 that is one input results in one output sample. The output samples are converted back to analog 
 signal :math:`y(t)` by placing the samples into a digital-to-analog converter (DAC). The DAC does 
-not simply set :math:`y(nT) = y[n]`, as :math:`y(t)` is a continuous function time :math:`t`. A 
+not simply set :math:`y(nT) = y[n]`, a continuous function time :math:`t`. A 
 *reconstruction* operation takes place inside the DAC which *interpolates* the :math:`y[n]` 
 signal samples over continuous time. In most DACs this is accomplished with a combination of 
-digital and analog filters, the details of which is outside the scope of this paper.
+digital and analog filters, the details of which is outside the scope of this paper. The use of
 
 In a DSP theory class the algorithm for producing :math:`y[n]` from :math:`x[n]` is typically a 
 *causal* linear time-invariant (LTI) system/filter, implemented via a difference equation, i.e.,
@@ -91,14 +133,15 @@ In a DSP theory class the algorithm for producing :math:`y[n]` from :math:`x[n]`
 
    y[n] = -\sum_{k=1}^N a_k y[n-k] + \sum_{m=0}^M b_m x[n-m]
 
-where :math:`a_k, k=1,2,\ldots,N` and :math:`b_k, m=0,1,\ldots,M` are the filter coefficients. The 
+where :math:`a_k, k=1,2,\ldots,N` and :math:`b_m, m=0,1,\ldots,M` are the filter coefficients. The 
 filter coefficients that implement a particular filter design can be obtained using design tools in [DSPComm]_.
 
 Other algorithms of course are possible. We might have a two channel system and perform operations on 
 both signals, say combining them, filtering, and locally generating time varying periodic signals 
 to create audio special effects. When first learning about real-time DSP it is important to start 
 with simple algorithm configurations, so that external measurements can be used to characterize 
-the systems and verify that the intended results are realized. So the process follows along the lines 
+the systems and verify that the intended results are realized. Developing a real-time DSP 
+project follows along the lines 
 of, design, implement, and test using external test equipment. The Jupyter notebook allows all of 
 this to happen in one place, particularly if the test instrumentation is also PC-based, since 
 PC-based instrument results can be exported as :code:`csv` and then imported in Jupyter notebook 
@@ -107,19 +150,20 @@ student/instructor/tinkerer, can explore real-time DSP from most anywhere at any
 In this paper we use the Analog Discovery 2 
 [AD2]_ for signal generation (two function generator channels), signal measurement (two scope channels, 
 with fast Fourier transform (FFT) spectrum analysis included). It is also helpful to have a signal 
-generator cellphone app available, and of course music from the cell phone or PC. All of the cabling 
+generator cellphone app available, and of course music from a cell phone or PC. All of the cabling 
 is done using 3.5mm stereo patch cables and small pin header adapters [3p5mm]_ to interface to the AD2.
 
-Frame-based Real-Time DSP Using the :code:`io_stream` class
------------------------------------------------------------
+Frame-based Real-Time DSP Using the :code:`DSP_io_stream` class
+---------------------------------------------------------------
 
 The block diagram of Figure :ref:`pyaudioDSPio` illustrates the essence of this paper. 
 Implementing the stucture of this figure relies upon the class :code:`DSP_io_stream` which is housed
 in :code:`sk_dsp_comm.pyaudio_helper.py`. To make use of this requires the scipy stack 
 (numpy, scipy, and matplotlib), as well as [DSPComm]_ and [pyaudio]_. PyAudio is supported 
-supported on all majors OSs, e.g., Windows, macOS, and Linux. The configuration varies, 
+on all majors OSs, e.g., Windows, macOS, and Linux. The configuration varies, 
 but the set-up is documented at [pyaudio]_ and SPCommTutorial_. The classes and functions 
-of :code:`pyaudio_helper` are detailed in Figure :ref:`pyaudioHelperclasses`.
+of :code:`pyaudio_helper` are detailed in Figure :ref:`pyaudioHelperclasses`. We will make 
+reference to the classes, methods, and functions throughout the remainder of this paper.
 
 .. _SPCommTutorial: https://github.com/mwickert/SP-Comm-Tutorial-using-scikit-dsp-comm/wiki
 
@@ -137,7 +181,7 @@ of :code:`pyaudio_helper` are detailed in Figure :ref:`pyaudioHelperclasses`.
 
    The major classes and functions of the module :code:`sk_dsp_comm.pyaudio_helper.py`. :label:`pyaudioHelperclasses`
 
-With :code:`DSP_io_stream` one or two channel streaming is possible, as shown in :ref:`pyaudioDSPio`. The ADCs 
+With :code:`DSP_io_stream` one or two channel streaming is possible, as shown in Figure :ref:`pyaudioDSPio`. The ADCs 
 and DACs can be internal to the PC or external, say using a USB interface. In a modern PC the audio 
 subsystem has a microphone hardwired to the ADCs and the DACs are connected to the speakers and 3.5mm 
 headphone jack. To provide more flexibility in doing real-time DSP, an external USB audio interface 
@@ -162,12 +206,20 @@ AD2 to avoid interaction between the two devices in parallel).
    Hardware interfaces: (a) iMic stereo USB audio device and the Digilent Analog Discovery 2 and (b) the 
    low-cost Sabrent mono input stereo output USB audio device. :label:`USBAudioAD2`
    
+When a :code:`DSP_io_stream` is created (top of Figure :ref:`pyaudioHelperclasses`) it needs to know 
+which input and output devices to connect to. If you just want and input or just an out, you still need 
+to supply a valid output or input device, respectively. 
 To list the internal/external devices available on a given PC 
-we use the function :code:`available_devices()` found in :ref:`pyaudioHelperclasses`:
+we use the function :code:`available_devices()` from Figure :ref:`pyaudioHelperclasses`. If you add or 
+remove devices while the notebook kernel is running, you will need to restart the kernel to get an accurate 
+listing of devices. The code block below was run with the iMic plugged into a USB hub:
+
+.. and Sabrent
 
 .. code-block:: python
 
    import sk_dsp_comm.pyaudio_helper as pah
+   # Index 3 is the Sabarent device
    In[3]: pah.available_devices()
    Out[3]:
    Index 0 device name = Built-in Microphone, 
@@ -176,31 +228,46 @@ we use the function :code:`available_devices()` found in :ref:`pyaudioHelperclas
            inputs = 0, outputs = 2
    Index 2 device name = iMic USB audio system, 
            inputs = 2, outputs = 2
+   
+.. Index 3 device name = USB Audio Device, 
+           inputs = 1, outputs = 2
 
-The output list can be viewed as a look-up table (LUT) for how to patch physical devices into 
-the block diagram of :ref:`pyaudioDSPio`. 
+The output list can be viewed as a look-up table (LUT) for how to *patch* physical devices into 
+the block diagram of Figure :ref:`pyaudioDSPio`. 
 
-We now shift the focus to the interior of :ref:`pyaudioDSPio` to discuss frame-based DSP and 
-the *Frame-Based DSP Callback*. When a DSP micro controller, is configured for real-time DSP, it 
+We now shift the focus to the interior of Figure :ref:`pyaudioDSPio` to discuss frame-based DSP and 
+the *Frame-Based DSP Callback*. When a DSP microcontroller is configured for real-time DSP, it 
 can focus on just this one task very well. Sample-by-sample processing is possible with low 
 I/O latency and overall reasonable audio sample throughput. On a PC, with its multitasking OS, 
-there is a lot going on. To get reasonable audio sample throughput with a PC, *frames* or 
-*chucks* of audio samples must be dealt with. The pack and unpack blocks sitting next to the ADCs 
-and DACs of :ref:`pyaudioDSPio`, respectively, are there to make it clear that processing 
-takes place one frame at a time rather than one sample at a time. The central block, 
-Frame-Based DSP Callback, is where the real-time DSP code resides. Global variables are needed 
-inside the call back, as the callback input/output signature is fixed by PyAudio. The globals 
-allow algorithm parameters to be available inside the callback, e.g., filter coefficients, 
-and in the case of digital filter, the filter state must be maintained from frame-to-frame. 
-We will see in a later example how :code:`scipy.signal.lfilter()` conveniently supports 
-frame-based digital filtering. To allow interactive control of parameters of the DSP 
-algorithm we can use :code:`ipywidgets`. We will see later the sliders widgets are 
-particularly nice.
+there is a lot going on. To get reasonable audio sample throughput the PC audio subsystem fills
+or *packs* an input buffer with :code:`frame_length` samples (or two times :code:`frame_length`), 
+sample for a two channel stream) originating as 16-bit signed integers 
+(i.e., :code:`int16`), before calling the *callback* function. The details of the callback function 
+is the subject of the next section. As the callback prepares to exit, an output buffer of 16-bit 
+signed integers is formed, again of length :code:`frame_length`, and the buffer is absorbed by 
+the PC audio subsystem. In the context of *embedded systems* programming, the callback can be 
+thought of as an *interrupt service routine*. To the PC audio community the frame or buffer, just 
+described is also known as a *CHUNK*. In a two-channel stream the frame holds an interleaving of 
+left and right channels, :code:`...LRLRL...` in the buffer formed/absorbed by the PC audio system.
+Understand that the efficiency of frame-based processing comes with a price. 
+The buffering either side of the callback block of Figure :ref:`pyaudioDSPio` introduces a latency 
+or processing time delay of at least two times the :code:`frame_length` times the sampling period.
+
+Moving along with this top level discussion, the central block of Figure :ref:`pyaudioDSPio` is 
+labeled Frame-Based DSP Callback, and as we have alluded to already, is where the real-time DSP 
+code resides. Global variables are needed inside the call back, as the callback input/output 
+signature is fixed by [pyAudio]_. The globals allow algorithm parameters to be available inside 
+the callback, e.g., filter coefficients, and in the case of a digital filter, the filter state 
+must be maintained from frame-to-frame. We will see in the examples section how 
+:code:`scipy.signal.lfilter()`, which implements (:ref:`LCCDE`), conveniently supports frame-based digital filtering. To allow 
+interactive control of parameters of the DSP algorithm we can use :code:`ipywidgets`. We will 
+also see later the sliders widgets are particularly suited to this task.
 
 Anatomy of a PyAudio Callback function
 ======================================
 
-Before writing the callback we first need to instantiate a :code:`DSP_io_stream` object:
+Before writing the callback we first need to instantiate a :code:`DSP_io_stream` object, as shown 
+in the following code block:
 
 .. code-block:: python
 
@@ -209,13 +276,22 @@ Before writing the callback we first need to instantiate a :code:`DSP_io_stream`
                   fs=48000, # sampling rate
                   Tcapture=0) # capture buffer length
 
-A basic loop through callback function takes the following form in the Jupyter notebook:
+The constructor for :code:`DSP_io_stream` of Figure :ref:`pyaudioHelperclasses` and the code block 
+above confirm that most importantly we need to supply a function callback name, and most likely 
+provide custom input/output device numbers, choose a sampling rate, and optionally choose the 
+length of the capture buffer.
+
+.. Valid sampling rates vary by system, but most PC audio systems support 8000, 11025, 
+   16000, 22050, 32000, 44100, 48000, and 96000 samples per second.
+
+A basic single channel *loop through* callback function, where the input samples are passed to 
+the output, is shown in the code block below:
 
 .. code-block:: python
 
    # define a pass through, y = x, callback
-   def callback(in_data, frame_count, 
-                 time_info, status):
+   def callback(in_data, frame_length, time_info, 
+                status):
        global b, a, zi # typical globals for a filter
        DSP_IO.DSP_callback_tic() #log entering time
        # convert audio byte data to an int16 ndarray
@@ -241,14 +317,29 @@ A basic loop through callback function takes the following form in the Jupyter n
        # Convert ndarray back to bytes
        return y.tobytes(), pah.pyaudio.paContinue
 
-In this simple callback example the input sample array of length 1024, is cast to 
-:code:`float32` and then passed to the output array, where it ultimately is cast 
-back to :code:`int16` signed integers. To start streaming we need to call the method 
-:code:`interactive_stream()`, which display :code:`ipywidgets` start/stop buttons 
-below the code cell as shown in Figure :ref:`LoopThrough`.
+The :code:`frame_length` has been set to 1024, and of the four required inputs 
+from [pyaudio]_, the first, :code:`in_data`, is the input buffer which we 
+first convert to a :code:`int16` :code:`ndarray` using :code:`np.frombuffer`, 
+and then as a working array convert to :code:`float32`. Note to fill the 
+full dynamic range of the fixed-point signal samples, means that the 
+:math:`x[n]` sample values can range over :math:`[-2^{15}, 2^{15}-1]`.   
+Passing over the comments we set :code:`y=x`, and finally convert the output array 
+:code:`y` back to :code:`int16` and then in the :code:`return` line back to a 
+byte-string buffer using :code:`.tobytes()`. In general when :code:`y` is converted 
+from :code:`float` back to :code:`int16`, clipping/overflow will occur unless the 
+dynamic range mentioned above is observed. Along the way code instrumentation 
+methods from Figure :ref:`pyaudioHelperclasses` are included to record time spent 
+in the callback (:code:`DSP_callback_tic()` and :code:`DSP_callback_toc()`) 
+and store samples for later analysis in the attribute :code:`capture_buffer` 
+(:code:`DSP_capture_add_samples`). These features will be examined in an upcoming 
+example.
+
+To start streaming we need to call the method :code:`interactive_stream()`, 
+which runs the stream in a thread and displays :code:`ipywidgets` start/stop 
+buttons below the code cell as shown in Figure :ref:`LoopThrough`.
 
 .. figure:: Loop_through_app.pdf
-   :scale: 50%
+   :scale: 65%
    :align: center
    :figclass: htb
 
@@ -256,7 +347,7 @@ below the code cell as shown in Figure :ref:`LoopThrough`.
    using a run time of 0, which implies run forever. :label:`LoopThrough`
 
 Performance Measurements
-===============================
+========================
 
 The loop through example is good place to explore some performance metrics of 
 :ref:`pyaudioDSPio`, and take a look at some of the instrumentation that is part of the 
@@ -266,13 +357,17 @@ stores samples in the attribute :code:`data_capture`. For the instrumentation to
 collect operating data we need to set :code:`Tcapture` greater than zero. We will also set 
 the total run time to 2s:
 
+
 .. code-block:: python
 
-   DSP_IO = pah.DSP_io_stream(callback,2,2,fs=48000,Tcapture=2)
+   DSP_IO = pah.DSP_io_stream(callback,2,2,fs=48000,
+                              Tcapture=2)
    DSP_IO.interactive_stream(2,1)
+
 
 Running the above in Jupyter notebook cell will capture 2s of data. The method 
 :code:`stream_stats()` displays the following:
+
 
 .. code-block:: python
 
@@ -280,17 +375,21 @@ Running the above in Jupyter notebook cell will capture 2s of data. The method
    Average Callback Period = 21.33 (ms)
    Average Callback process time = 0.40 (ms)
 
+
 which tells us that as expected for a sampling rate of 48 kHz, and a frame length of 1024 is simply
+
 
 .. math::
    :label: callbackPeriod
 
    T_\text{callback period} = 1024 \times \frac{1}{48000} = 21.33\ \text{ms}
 
+
 The time spent in the callback should be very small, as very little processing is being done. 
 We can also examine the callback latency by having the AD2 input a low duty cycle pulse train 
-have a 2 Hz rate. The scope then measures the time difference between the input and output waveforms. 
-The resulting plot is shown in Figure :ref:`CBlatency`. We sees that PyAudio and 
+have a 2 Hz rate. The scope then measures the time difference between the input (scope channel 
+C2) and output (scope channel C1) waveforms. 
+The resulting plot is shown in Figure :ref:`CBlatency`. We see that PyAudio and 
 and the PC audio subsystem introduces about 70.7ms of latency.  
 
 .. figure:: 48kHz_latency.pdf
@@ -298,8 +397,8 @@ and the PC audio subsystem introduces about 70.7ms of latency.
    :align: center
    :figclass: htb
 
-   Callback latency measurement using the AD2 with a 2 Hz pulse train in the 
-   loop through app. :label:`CBlatency`
+   Callback latency measurement using the AD2 where C2 is the input and C1 is the output, of 
+   a 2 Hz pulse train in the loop through app. :label:`CBlatency`
 
 The frequency response magnitude of an LTI system can be measured using the fact that 
 [Opp2010]_ at the output of a system driven by white noise, the measured power output spectrum 
@@ -316,14 +415,15 @@ using the attribute :code:`DSP_IO.capture_buffer`, and then take end-to-end (ADC
 measurements using the AD2 spectrum analyzer in dB average mode (500 records). In both 
 cases the white noise input is provided by the AD2 function generator.
 Finally, the AD2 measurement is saved to a CSV file 
-and imported into the Jupyter notebook to overlay the ADC only measurement, which is made 
-entirely in the Jupyter notebook. The results are compared in Figure 
-:ref:`LoopThroughiMicGainFlatnes`.
+and imported into the Jupyter notebook, as shown in the code block below, to overlay 
+the ADC only measurement, which is made entirely in the Jupyter notebook.
 
 .. code-block:: python
 
+   import sk_dsp_comm.sigsys as ss
    f_AD,Mag_AD = loadtxt('Loop_through_noise_SA.csv',
-                        delimiter=',',skiprows=6,unpack=True)
+                        delimiter=',',skiprows=6,
+                        unpack=True)
    plot(f_AD,Mag_AD-Mag_AD[100])
    Pxx, F = ss.my_psd(DSP_IO.data_capture,2**11,48000);
    plot(F,10*log10(Pxx/Pxx[20]))
@@ -333,18 +433,22 @@ entirely in the Jupyter notebook. The results are compared in Figure
    xlabel(r'Frequency (Hz)')
    legend((r'ADC only from DSP_IO.capture_buffer',r
            'ADC-DAC from AD2 SA dB Avg'))
-   title(r'Loop Through Gain Flatness using iMic at $f_s = 48$ kHz')
+   title(r'Loop Through Gain Flatness using iMic at
+         $f_s = 48$ kHz')
    grid();
    savefig('Loop_through_iMic_gain_flatness.pdf')
+
+The results are compared in Figure :ref:`iMicGainFlatness` by .
 
 .. figure:: Loop_through_iMic_gain_flatness.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Gain flatness of the loop through app of just the ADC path via the :code:`DSP_IO.capture_buffer` 
-   and then the ADC-DAC path using the AD2 spectrum analyzer to average the noise 
-   spectrum. :label:`LoopThroughiMicGainFlatness`
+   Gain flatness of the loop through app of just the ADC path via the 
+   :code:`DSP_IO.capture_buffer` and then the ADC-DAC path using the 
+   AD2 spectrum analyzer to average the noise spectrum. :label:`iMicGainFlatness`
+
 
 The results show considerable roll-off in just the ADC path, but then gain peaking above 
 17 kHz. As a practical matter, humans do not hear sound much above 16 kHz, so the peaking 
@@ -355,22 +459,30 @@ can easily be tested.
 Examples
 --------
 
-In this section we consider a collection of examples.
+In this section we consider a collection of applications examples. This first is a 
+simple two channel loop-through with addition of left and right gain sliders. The second 
+is again two channel, but now cross left-right panning is developed. In of these examples 
+the DSP is memoryless, so there is no need to maintain state using Python globals. The 
+third example is an equal-ripple bandpass filter, which utilizes 
+:code:`sk_dsp_comm.fir_design_helper` to design the filter. The final example develops a 
+three-band audio equalizer using *peaking filters* to raise and lower the gain over a 
+narrow band of frequencies.
 
 Left and Right Gain Sliders
 ===========================
 
 In this first example the signal processing is again minimal, but now two-channel (stereo) 
-processing is untilized, and left and right channel gain slider using :code:`ipywidgets` 
+processing is utilized, and left and right channel gain slider using :code:`ipywidgets` 
 are introduced. Since the audio stream is running in a thread, the :code:`ipywidgets` can freely 
-run and interactively coedntrol parameters inside the callback function. The two slider widgets 
+run and interactively control parameters inside the callback function. The two slider widgets 
 are created below, followed by the callback, and finally calling the
 :code:`interactive_stream` method to run without limit in two channel mode. A 1 kHz sinusoid 
-test signal is input to the lelft channel and a 5 kHz sinusoid is input to the right channel. 
+test signal is input to the left channel and a 5 kHz sinusoid is input to the right channel. 
 While viewing the AD2 scope output in real-time, the gain sliders are adjusted and the signal 
 levels move up and down. A screen shot taken from the Jupyter notebook is combined with a 
 screenshot of the scope output to verify the correlation between the observed signal amplitudes 
-and the slider positions is given in Figure :ref:`LeftRightGainSlider`.
+and the slider positions is given in Figure :ref:`LeftRightGainSlider`. The callback listing, 
+including the set-up of the ipywidgets gain sliders, is given below:
 
 .. code-block:: python
 
@@ -421,6 +533,12 @@ and the slider positions is given in Figure :ref:`LeftRightGainSlider`.
        # Convert ndarray back to bytes
        return y.tobytes(), pah.pyaudio.paContinue
 
+Note for this two channel stream, the audio subsystem interleaves left 
+and right samples, so now the class methods :code:`get_LR` and :code:`pack_LR` 
+of Figure :ref:`pyaudioHelperclasses` are utilized to unpack the left and right 
+samples and then repack them, respectively. A screenshot of the gain sliders 
+app, including an AD2 scope capture, with C1 on the left channel and C2 on 
+the right channel, is given in Figure :ref`LeftRightGainSlider`.
 
 .. figure:: Left_Right_Gain_Slider_app.pdf
    :scale: 50%
@@ -428,9 +546,9 @@ and the slider positions is given in Figure :ref:`LeftRightGainSlider`.
    :figclass: htb
 
    A simple stereo gain slider app: (a) Jupyter notebook interface and (b) testing using the 
-   AD2 with generators and scope channels. :label:`LeftRightGainSlider`
+   AD2 with generators and scope channel C1 on left amd C2 on right. :label:`LeftRightGainSlider`
 
-The results are as expected, especially when listening.
+The ability to control the left and right audio level are as expected, especially when listening.
 
 Cross Left-Right Channel Panning
 ================================
@@ -441,7 +559,7 @@ channel panning system. Ordinarily panning moves a single channel of audio from 
 have equal amplitude in both channels. In cross channel panning two input channels are super 
 imposed, but such that at 0% the left and right channels are fully in their own channel. At 
 50% the left and right outputs are equally mixed. At 100% the input channels are now swapped. 
-AAssuming that :math:`a` represents the panning values on the interval :math:`[0,100]`, a 
+Assuming that :math:`a` represents the panning values on the interval :math:`[0,100]`, a 
 mathematical model of the cross panning app is
 
 .. math::
@@ -466,7 +584,7 @@ In code we have:
    #display(panning)
 
    # Cross Panning
-   def callback(in_data, frame_count, time_info, 
+   def callback(in_data, frame_length, time_info, 
                 status):  
        DSP_IO.DSP_callback_tic()
        # convert byte data to ndarray
@@ -536,7 +654,7 @@ in, then the returned :code:`zi` is held until the next time through the callbac
    zi = signal.lfiltic(b,a,[0])
 
    # define callback (#2)
-   def callback2(in_data, frame_count, time_info, 
+   def callback2(in_data, frame_length, time_info, 
                  status):
        global b, a, zi
        DSP_IO.DSP_callback_tic()
@@ -569,7 +687,7 @@ in, then the returned :code:`zi` is held until the next time through the callbac
                               fs=48000,Tcapture=0)
    DSP_IO.interactive_stream(Tsec=0,numChan=1)
 
-Following the call to :code:`DSP_io.intercative_stream()` the *start* button 
+Following the call to :code:`DSP_io.interactive_stream()` the *start* button 
 is clicked and the AD2 spectrum analyzer estimates the power spectrum. The estimate 
 is saved as a CSV file and brought into the Jupyter notebook to overlay the 
 theoretical design. The comparison results are given in Figure :ref:`FIRBPFDesignCompare`.
@@ -579,11 +697,11 @@ theoretical design. The comparison results are given in Figure :ref:`FIRBPFDesig
    :align: center
    :figclass: htb
 
-   Cross left/right panning control: (a) launching the app in the Jupyter notebook and (b) 
-   a sequence of scope screen shots as the panning slider is from 0% to 50% and then 
-   to 100%. :label:`FIRBPFDesignCompare`
+   An overlay plot of the theoretical frequency response with the measured using an 
+   AD2 noise spectrum capture import to the Jupyter notebook. :label:`FIRBPFDesignCompare`
 
-Excellent agreement is achieved, making the end-to-end design, implement, test very satisfying.
+The theory and measured magnitude response plots are in very close agreement, making the end-to-end design, 
+implement, test very satisfying.
 
 Three Band Equalizer
 ====================
@@ -672,7 +790,7 @@ below starting with the slider creation:
    grid();
 
    # define a pass through, y = x, callback
-   def callback(in_data, frame_count, time_info, 
+   def callback(in_data, frame_length, time_info, 
                 status):
        global zi_b1,zi_b2,zi_b3
        DSP_IO.DSP_callback_tic()
@@ -709,7 +827,7 @@ below starting with the slider creation:
        # Convert ndarray back to bytes
        return y.tobytes(), pah.pyaudio.paContinue
 
-Following the call to :code:`DSP_io.intercative_stream()` the *start* button 
+Following the call to :code:`DSP_io.interactive_stream()` the *start* button 
 is clicked and the FFT spectrum analyzer estimates the power spectrum. The estimate 
 is saved as a CSV file and brought into the Jupyter notebook to overlay the 
 theoretical design. The comparison results are given in Figure :ref:`ThreeBandDesignCompare`.
@@ -723,7 +841,7 @@ theoretical design. The comparison results are given in Figure :ref:`ThreeBandDe
    a sequence of scope screen shots as the panning slider is from 0% to 50% and then 
    to 100%. :label:`ThreeBandDesignCompare`
 
-Reasonable agreement is achieved, but a listening to music is a more effective way of evaluating 
+Reasonable agreement is achieved, but listening to music is a more effective way of evaluating 
 the end result. To complete the design more peaking filters should be added. 
 
 Conclusions and Future Work
