@@ -339,7 +339,7 @@ which runs the stream in a thread and displays :code:`ipywidgets` start/stop
 buttons below the code cell as shown in Figure :ref:`LoopThrough`.
 
 .. figure:: Loop_through_app.pdf
-   :scale: 65%
+   :scale: 60%
    :align: center
    :figclass: htb
 
@@ -390,7 +390,9 @@ We can also examine the callback latency by having the AD2 input a low duty cycl
 have a 2 Hz rate. The scope then measures the time difference between the input (scope channel 
 C2) and output (scope channel C1) waveforms. 
 The resulting plot is shown in Figure :ref:`CBlatency`. We see that PyAudio and 
-and the PC audio subsystem introduces about 70.7ms of latency.  
+and the PC audio subsystem introduces about 70.7ms of latency. A hybrid iMic ADC and builtin 
+DAC results in 138 ms on macOS. Moving to Win 10 latency increases to 142 ms, using default 
+USB drivers.
 
 .. figure:: 48kHz_latency.pdf
    :scale: 50%
@@ -424,9 +426,9 @@ the ADC only measurement, which is made entirely in the Jupyter notebook.
    f_AD,Mag_AD = loadtxt('Loop_through_noise_SA.csv',
                         delimiter=',',skiprows=6,
                         unpack=True)
-   plot(f_AD,Mag_AD-Mag_AD[100])
    Pxx, F = ss.my_psd(DSP_IO.data_capture,2**11,48000);
    plot(F,10*log10(Pxx/Pxx[20]))
+   plot(f_AD,Mag_AD-Mag_AD[100])
    ylim([-10,5])
    xlim([0,20e3])
    ylabel(r'ADC Gain Flatness (dB)')
@@ -438,7 +440,14 @@ the ADC only measurement, which is made entirely in the Jupyter notebook.
    grid();
    savefig('Loop_through_iMic_gain_flatness.pdf')
 
-The results are compared in Figure :ref:`iMicGainFlatness` by .
+The results are compared in Figure :ref:`iMicGainFlatness`, where we see 
+a roll-off of about 3 dB at about 14 kHz in both the ADC path and the composite 
+ADC-DAC path. The composite ADC-DAC begins to rise above 17 kHz and flattens to 2 
+dB down from 18-20 kHz. As a practical matter, humans do not hear sound much above 
+16 kHz, so the peaking is not much of an issue. Testing of the Sabrent device the 
+composite ADC-DAC 3 dB roll-off occurs at about 17 kHz. The native PC audio output 
+can for example be tested in combination with the iMic or Sabrent ADCs.
+
 
 .. figure:: Loop_through_iMic_gain_flatness.pdf
    :scale: 50%
@@ -449,12 +458,6 @@ The results are compared in Figure :ref:`iMicGainFlatness` by .
    :code:`DSP_IO.capture_buffer` and then the ADC-DAC path using the 
    AD2 spectrum analyzer to average the noise spectrum. :label:`iMicGainFlatness`
 
-
-The results show considerable roll-off in just the ADC path, but then gain peaking above 
-17 kHz. As a practical matter, humans do not hear sound much above 16 kHz, so the peaking 
-is not much of an issue. The 3dB roll-off out to 15 kHz is not great, but perhaps testing 
-other audio I/O devices would reveal better results. For example the native PC audio output 
-can easily be tested.
 
 Examples
 --------
@@ -489,17 +492,13 @@ including the set-up of the ipywidgets gain sliders, is given below:
    # Set up two sliders
    L_gain = widgets.FloatSlider(description = 'L Gain', 
                 continuous_update = True,
-                value = 1.0,
-                min = 0.0, 
-                max = 2.0, 
-                step = 0.01, 
+                value = 1.0, min = 0.0, 
+                max = 2.0, step = 0.01, 
                 orientation = 'vertical')
    R_gain = widgets.FloatSlider(description = 'R Gain', 
                 continuous_update = True,
-                value = 1.0,
-                min = 0.0, 
-                max = 2.0, 
-                step = 0.01, 
+                value = 1.0, min = 0.0, 
+                max = 2.0, step = 0.01, 
                 orientation = 'vertical')
 
    # L and Right Gain Sliders callback
@@ -576,10 +575,8 @@ In code we have:
    panning = widgets.FloatSlider(description = \
                   'Panning (%)', 
                   continuous_update = True,
-                  value = 50.0,
-                  min = 0.0, 
-                  max = 100.0, 
-                  step = 0.1, 
+                  value = 50.0, min = 0.0, 
+                  max = 100.0, step = 0.1, 
                   orientation = 'horizontal')
    #display(panning)
 
@@ -749,26 +746,20 @@ below starting with the slider creation:
    band1 = widgets.FloatSlider(description \
                      = '100 Hz', 
                      continuous_update = True, 
-                     value = 2.0,
-                     min = -20.0, 
-                     max = 20.0, 
-                     step = 1, 
+                     value = 2.0, min = -20.0, 
+                     max = 20.0, step = 1, 
                      orientation = 'vertical')
    band2 = widgets.FloatSlider(description \
                      = '1000 Hz', 
                      continuous_update = True, 
-                     value = 10.0,
-                     min = -20.0, 
-                     max = 20.0, 
-                     step = 1, 
+                     value = 10.0, min = -20.0, 
+                     max = 20.0, step = 1, 
                      orientation = 'vertical')
    band3 = widgets.FloatSlider(description \
                      = '8000 Hz', 
                      continuous_update = True,
-                     value = -1.0,
-                     min = -20.0, 
-                     max = 20.0, 
-                     step = 1, 
+                     value = -1.0, min = -20.0, 
+                     max = 20.0, step = 1, 
                      orientation = 'vertical')
 
    import sk_dsp_comm.sigsys as ss
