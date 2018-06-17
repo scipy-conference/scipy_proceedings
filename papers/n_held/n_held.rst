@@ -82,17 +82,40 @@ The CSV file is read as a pandas dataframe [PANDAS]_ and consists of 103 rows (o
 
   Data model for integrating protein abundance, protein annotation, and hydrographic data into a single Bokeh ColumnDataSource, allowing for interactivity among the visualizations in the application. :label:`Figure 4`
 
-We now describe a use case to demonstrate the utility of the application (Figure 4). On initial load, the user can see a map of the ProteOMZ 2016 sampling locations. The user can select a Station via a widget and display a vertical distribution of all of the proteins identified at this station throughout the water column, from surface to deep. Hovering over a protein in the vertical distribution profile displays its identity. The vertical distribution, protein annotation table, and protein vs. hydrographic data charts are directly linked since they are fed through the same ColumnDataSource. Selecting a protein via the TapTool highlights it in the vertical profile, protein annotation table, and in the Protein vs. Hydrographic data chart. A user who is interested in a specific protein can select it from the table, which updates the vertical line profile to highlight that protein. For instance, we can select the most abundant protein in the dataset at Station 5 and see that it is a nitrate oxidoreductase protein. The protein vs. hydrographic data chart displays protein abundance as a function of various hydrographic features, which can be selected by a widget. With the hydrographic widget we select nitrate (NO3), a product of nitrification, and see that abundance of nitrate oxidoreductase is positively correlated with nitrate. The protein is negatively correlated with its reactant ammonium (|NH4|), and also with the intermediary product nitrite (|NO2|). Consistent with the idea that nitrification is prevalent in oxygen minimum zones , we see that the protein is negatively correlated with oxygen (|O2|) concentrations.
+We now describe a use case to demonstrate the utility of the application (Figure 5-8). On initial load, the user can see a map of the ProteOMZ 2016 sampling locations (Figure 5). The user can select a Station via a widget and display a vertical distribution of all of the proteins identified at this station throughout the water column, from surface to deep. Hovering over a protein in the vertical distribution profile displays its identity. The vertical distribution, protein annotation table, and protein vs. hydrographic data charts are directly linked since they are fed through the same ColumnDataSource. Selecting a protein via the TapTool highlights it in the vertical profile, protein annotation table, and in the Protein vs. Hydrographic data chart. A user who is interested in a specific protein can select it from the table, which updates the vertical line profile to highlight that protein. For instance, we can select the most abundant protein in the dataset at Station 5 and see that it is a nitrate oxidoreductase protein (Figure 6). The protein vs. hydrographic data chart displays protein abundance as a function of various hydrographic features, which can be selected by a widget. With the hydrographic widget we select nitrate (NO3), a product of nitrification, and see that abundance of nitrate oxidoreductase is positively correlated with nitrate (Figure 7). The protein is negatively correlated with its reactant ammonium (|NH4|), and also with the intermediary product nitrite (|NO2|). Consistent with the idea that nitrification is prevalent in oxygen minimum zones , we see that the protein is negatively correlated with oxygen (|O2|) concentrations.
 
 Selecting a station additionally populates a vertical profile of the total number of unique proteins identified (line) and number of peptide-to-spectrum matches expressed on a log scale (bubble) at each depth sampled. In proteomics, we do not measure proteins but instead parts of proteins called peptides, which are then matched to spectra that are predicted in silico from a genome database. The peptide-to-spectrum match indicates the total number of peptides identified (non unique). Typically the number of peptide-to-spectrum matches is related to the number of unique peptides identified; we see this reflected in the data at Station 5. For instance, we see that at depths 200m and below there are more proteins and more peptide-to-spectrum matches than in surface waters. However, though the number of unique proteins is approximately constant between 200 and 500m, the number of PSMs varies. 
 
-So far we have looked only at protein function, but a user may also be interested in taxonomic origin of the proteins. At Station 5, we see in the Diversity of Microbial Proteins bar graph that most of the proteins we identified are from the group “Other Bacteria,” which encompasses most heterotrophic bacteria including the nitrifying bacteria. There are also many Prochlorococcus and Pelagibacter proteins in the dataset, which is consistent with the fact that these cells are among the most abundant in the ocean [EGGLESTON2016]_. A user can select a specific taxon with the taxon widget; for example, we can select “Prochlorococcus” from the taxon widget and redisplay the data (Figure 5). We can now see that Prochlorococcus, a photosynthetic cyanobacterium, is present primarily in the  sunlit surface waters above 120m. If we display “Other Bacteria,” we can see that indeed that the heterotrophic nitrifying bacteria are highly abundant in the oxygen deplete waters beginning around 200m. Thus with just a few clicks we can explore major taxonomic and functional regimes throughout the oxic and suboxic water column.
+So far we have looked only at protein function, but a user may also be interested in taxonomic origin of the proteins. At Station 5, we see in the Diversity of Microbial Proteins bar graph that most of the proteins we identified are from the group “Other Bacteria,” which encompasses most heterotrophic bacteria including the nitrifying bacteria (Figure 8). There are also many Prochlorococcus and Pelagibacter proteins in the dataset, which is consistent with the fact that these cells are among the most abundant in the ocean [EGGLESTON2016]_. A user can select a specific taxon with the taxon widget; for example, we can select “Prochlorococcus” from the taxon widget and redisplay the data (Figure 5). We can now see that Prochlorococcus, a photosynthetic cyanobacterium, is present primarily in the  sunlit surface waters above 120m. If we display “Other Bacteria,” we can see that indeed that the heterotrophic nitrifying bacteria are highly abundant in the oxygen deplete waters beginning around 200m. Thus with just a few clicks we can explore major taxonomic and functional regimes throughout the oxic and suboxic water column.
 
-.. figure:: figure4.png
+.. figure:: figure4a.png
   :figclass: w
-  :scale: 19%
+  :scale: 30%
 
-  A- Initial load of the Bokeh application at Station 5. B- Selecting on a single protein and investigating relationship to hydrographic data. C- Filtering on the taxon, we can see that Prochlorococcus proteins are present only in the upper 120m of the water column at this station. D-Selecting “Other Bacteria,” we can see that the nitrifying bacteria become prevalent around 200m in the oxygen minimum zone. :label:`Figure 5`
+  Initial load of the Bokeh application. :label:`Figure 4a`
+
+.. figure:: figure4b.png
+  :figclass: w
+  :scale: 30%
+
+  Selecting on a single protein and investigating relationship to hydrographic data. :label:`Figure 4b`
+
+.. figure:: figure4b.png
+  :figclass: w
+  :scale: 30% 
+
+  Filtering on the taxon, we can see that Prochlorococcus proteins are present only in the upper 120m of the water column at this station. :label:`Figure 4c`
+
+.. figure:: figure4a.png
+  :figclass: w
+  :scale: 30%
+
+  Selecting “Other Bacteria,” we can see that the nitrifying bacteria become prevalent around 200m in the oxygen minimum zone. :label:`Figure 4d`
+
+.. figure:: figure5.png
+  :scale: 30%
+
+  Datashaded version of the vertical protein distribution plot, displaying all 15,000 proteins at Station 5. Each protein abundance is displayed as the difference from its average, so a value of >1 indicates a protein that is more abundant. A large number of Prochlorococcus proteins is present in the upper 120m; this collection of proteins disappears at the base of the euphotic zone. A large number of proteins is present in approximately the same fold change abundance throughout the mesopelagic region. :label:`Figure 8`
 
 Application of Datashader
 =========================
@@ -103,12 +126,7 @@ We used Datashader implemented in Holoviews and a Jupyter notebook to view the d
 
 One question we can ask of the data is whether patterns emerge among proteins that are more or less abundant than average. We normalized the protein quantitation data by dividing each column by its average, such that the resulting data represents the fold-change in the protein in relationship to its mean over the entire water column. In the visualization, a value of 1 on the x axis suggests that protein abundance is equal to the mean; below 1 the protein is less abundant than average and above 1 the protein is more abundant. 
 
-In the datashader plot, the data is overlaid on itself such that areas with more saturated color indicates a high number of proteins with similar fold-change in concentration (Figure 6). This shows the partitioning of microbial proteins on depth. Proteins that are abundant in the surface converge to 0, or "disapper" around 120m. At Station 5, the warm sunight euphotic mixed layer ends at approximately 120m. These surface proteins are most likely attributed to Prochlorococcus, an abundant bacterium that lives only in sunlight waters. Below 120m, proteins attributed to heterotrophic bacteria become abundant.
-
-.. figure:: figure5.png
-  :scale: 20%
-
-  Datashaded version of the vertical protein distribution plot, displaying all 15,000 proteins at Station 5. Each protein abundance is displayed as the difference from its average, so a value of >1 indicates a protein that is more abundant. A large number of Prochlorococcus proteins is present in the upper 120m; this collection of proteins disappears at the base of the euphotic zone. A large number of proteins is present in approximately the same fold change abundance throughout the mesopelagic region. :label:`Figure 6`
+In the datashader plot, the data is overlaid on itself such that areas with more saturated color indicates a high number of proteins with similar fold-change in concentration (Figure 8). This shows the partitioning of microbial proteins on depth. Proteins that are abundant in the surface converge to 0, or "disapper" around 120m. At Station 5, the warm sunight euphotic mixed layer ends at approximately 120m. These surface proteins are most likely attributed to Prochlorococcus, an abundant bacterium that lives only in sunlight waters. Below 120m, proteins attributed to heterotrophic bacteria become abundant.
 
 
 Discussion
