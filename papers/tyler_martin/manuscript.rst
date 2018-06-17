@@ -86,6 +86,7 @@ about PRISM theory and pyPRISM, and finally our view for the future of the tool.
 
 PRISM Theory
 ------------
+:label:`theory`
 
 For a detailed discussion of PRISM theory, as well as a review of key
 applications of the theory, we direct the reader to our previous publication.
@@ -702,13 +703,17 @@ GPU time from a supercomputing resource. This is due to the computational
 expense of evaluating the pairwise interactions at each simulated configuration
 and the many millions of configurations that must be generated in order to
 properly equilibrate and sample such a nanocomposite.  In contrast, PRISM theory
-allows for the globally averaged spatial correlation functions to be solved for
-directly, rather than by iteratively sampling the positions of each atom or
-coarse-grained bead. In this way, the PRISM equation can be numerically solved
-in seconds even on modest hardware such as a laptop computer.  In addition, once
-the full set of pairwise spatial correlation functions is solved for, a variety
-of properties can quickly be screened without having to process large simulation
-trajectories.  
+can be numerically solved in seconds even on modest hardware such as a laptop
+computer. This is because, unlike MD or MC, solving PRISM theory does not
+involve generating molecular configurations, but rather is a set of integral
+equations which are numerically solved for the spatial correlation functions,
+:math:`H_{\alpha,\beta}(r)` and :math:`C_{\alpha,\beta}(r)`. This numerical
+solution process is briefly described above at the end of the `PRISM Theory`_
+section and is described in detail in Section II.E of :cite:`pyPRISM`. In
+addition to the computational performance benefits of PRISM theory over MD or
+MC, once the full set of pairwise spatial correlation functions is solved for, a
+variety of properties can quickly be screened without having to process large
+simulation trajectories.
 
 PRISM theory provides a powerful alternative or complement to traditional
 simulation approaches, but we should note that it is not without limitation.
