@@ -27,13 +27,15 @@
 signac: A Python framework for data and workflow management
 -----------------------------------------------------------
 
+.. TODO maybe a line break can be added after "for" to justify the title?
+
 .. class:: abstract
 
 Computational research requires versatile data and workflow management tools that can easily adapt to the highly dynamic requirements of scientific investigations.
 Many existing tools require strict adherence to a particular usage pattern, so researchers often use less robust ad hoc solutions that they find easier to adopt.
 The resulting data fragmentation and methodological incompatibilities significantly impede research.
 Our talk showcases ``signac``, an open-source Python framework that offers highly modular and scalable solutions for this problem.
-Named for the Pointillist painter Paul signac, the framework's powerful workflow management tools enable users to construct and automate workflows that transition seamlessly from laptops to HPC clusters.
+Named for the Pointillist painter Paul Signac, the framework's powerful workflow management tools enable users to construct and automate workflows that transition seamlessly from laptops to HPC clusters.
 Crucially, the underlying data model is completely independent of the workflow.
 The flexible, serverless, and schema-free ``signac`` database can be introduced into other workflows with essentially no overhead and no recourse to the ``signac`` workflow model.
 Additionally, the data model's simplicity makes it easy to parse the underlying data without using ``signac`` at all.
@@ -96,6 +98,10 @@ Overview and Examples
    Note how fewer than ten lines of code are required to initialize a database and add data.
    :label:`fig:data`
    
+.. TODO not sure the Jupyter references are shown as intended. I'd expect [..., ...]
+
+.. TODO What's the signac.rc file? Format, purpose, contents ...?
+   
 To demonstrate how ``signac`` works, we take a simple, concrete example of the scenario described above.
 Consider an experiment in which we want to find the optimal launch angle to maximize the distance traveled by a projectile through air.
 Figure :ref:`fig:data` shows how we might organize the data associated with this study using ``signac``.
@@ -111,6 +117,8 @@ The unique key is what enables the creation of the 32 character hash, or *job id
 The uniqueness of this hash value is what enables ``signac``'s efficient indexing and searching functionality.
 Additionally, this hash value is automatically updated to reflect any changes to individual jobs, making them highly mutable.
 For example, if we instead wanted to consider how changing initial velocity affects the distance traveled for a particular angle, we can add the velocity to the existing job state points by taking advantage of the fact that the project object is an iterable:
+
+.. TODO travelled? US or UK spelling? Not sure which one is official for SciPy.
 
 .. code-block:: python
 
@@ -294,9 +302,13 @@ In this instance, there are fourteen jobs remaining that are eligible for the ``
 Of these three, one has actually begun running (and is marked as ``[A]``), while the other two indicate that they are queued (the final job shown is inactive on the cluster as it has not yet been submitted).
 Note that the ``eligible`` column is redundant for this view, but in other status views ineligible jobs may be included in this section as well.
 
+.. TODO maybe give an example of what an ineligible job could be in this scenario
+
 The quick overview of this section highlights the core features of the ``signac`` framework.
 Although the example demonstrated here is quite simple, the data model scales easily to thousands of data points and far more complex and nonlinear workflows.
 More involved demonstrations can be seen in the documentation at http://signac.readthedocs.io, on the ``signac`` website at http://signac.io, or in the original paper :cite:`ADORF2018220`.
+
+.. TODO make sure that there isn't a line break in the URL
 
 
 Design and Implementation
