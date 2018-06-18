@@ -343,7 +343,7 @@ As a result, our comparisons will focus on existing packages that solve the same
 
 
 Workflow and Provenance Management
-=================================
+==================================
 
 Two of the best-known Python workflow managers are Fireworks :cite:`Fireworks` and AiiDA :cite:`Pizzi2016`.
 Fireworks and AiiDA are full-featured workflow managers that, like ``signac-flow``, interface with high performance compute clusters to execute complex, potentially nonlinear workflows.
