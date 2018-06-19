@@ -574,7 +574,7 @@ the above build::
     data: {"phase": "launching", "message": "Launching...}
 
     data: {"phase": "ready",
-           "message": "server running at <POD-URL>\n",
+           "message": "server running at <POD-URL>",
            "url": "<POD-URL>",
            "token": "<POD-TOKEN>"}
 
