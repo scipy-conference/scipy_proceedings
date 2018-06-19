@@ -57,18 +57,18 @@ Samples were collected in January-February 2016 at 14 locations (stations) in th
 
 Visualizing Hydrographic Data
 =============================
-We developed a visualization platform to explore the hydrographic data, which includes physical parameters such as temperature and chemical parameters such as ammonium concentrations. The visualization was written with Bokeh in the the Jupyter Notebook interface and produces a standalone html document as the output. This allows the document to be shared with colleagues and, importantly, does not require them to have bokeh or even python installed on their machine. The visualization consists of a map rendered in gmap (Figure 2) and scatter plots showing the vertical distribution of the hydrographic parameters throughout the water column, with surface values at the top (Figure 3). The plots are arranged with gridplot. This visualization is fed from a hydrographic data CSV file, where the data for each variable is in a seperate column (Figure 2). This facilitates ingestion into Bokeh's ColumnDataSource, allowing the plots to be linked. Thus, when the user selects data from one plot, corresponding data for that location is highlighted in the other plots. 
+We developed a visualization platform to explore the hydrographic data, which includes physical parameters such as temperature and chemical parameters such as ammonium concentrations. The visualization was written with Bokeh in the the Jupyter Notebook interface and produces a standalone html document as the output. This allows the document to be shared with colleagues and, importantly, does not require them to have bokeh or even python installed on their machine. The visualization consists of a map rendered in Google Maps using the gmap function in Bokeh (Figure 2a) and scatter plots showing the vertical distribution of the hydrographic parameters throughout the water column, with surface values at the top (Figure 2b). The plots are arranged with gridplot. This visualization is fed from a hydrographic data CSV file, where the data for each variable is in a separate column. This facilitates ingestion into Bokeh's ColumnDataSource, allowing the plots to be linked. Thus, when the user selects data from one plot, corresponding data for that location is highlighted in the other plots. 
 
 .. figure:: figure2a.png
   :scale: 50%
 
-  Station map for the hydrographic data. :label:`Figure 2`
+  Station map for the hydrographic data. :label:`Figure 2a`
 
 .. figure:: figure2b.png
   :figclass: w
   :scale: 50%
 
-  Hydrographic data as a function of water column depth. The file is exported by Bokeh as a standalone html document, allowing it to be easily shared with collaborators. :label:`Figure 3`
+  Hydrographic data as a function of water column depth. The file is exported by Bokeh as a standalone html document, allowing it to be easily shared with collaborators. :label:`Figure 2b`
 
 Bokeh Application 
 =================
