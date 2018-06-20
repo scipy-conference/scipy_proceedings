@@ -146,13 +146,15 @@ increase :math:`t_\mathrm{env}`. We introduce this admittedly hyperbolic
 example only to argue that :math:`t_\mathrm{exec}` is a useful metric
 only insofar as it is a good proxy for :math:`t_\mathrm{compute}`.
 
-Cloudknot's aim is to minimize :math:`t_\mathrm{env}` without an
-unacceptable increase in :math:`t_\mathrm{exec}`. The next section
-discusses Cloudknot's approach to parallelism and the API section
-describes Cloudknot's user interface. In the Examples section, we
-demonstrate a few of Cloudknot's use cases before returning to the
-trade-off between :math:`t_\mathrm{env}` and :math:`t_\mathrm{exec}` in
-the Conclusion.
+Cloudknot's motivating principle is that scientists should not have
+to be experts in cloud computing. It takes the opposite approach
+to the ASIC example above by minimizing the :math:`t_\mathrm{env}`
+for using AWS Batch, thereby increasing the accessibility of cloud
+computing to the scientific community. The next section discusses
+Cloudknot's approach to parallelism and the API section describes
+Cloudknot's user interface. In the Examples section, we demonstrate a
+few of Cloudknot's use cases before returning to the trade-off between
+:math:`t_\mathrm{env}` and :math:`t_\mathrm{exec}` in the Conclusion.
 
 
 Methods
