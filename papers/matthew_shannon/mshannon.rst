@@ -22,7 +22,7 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
    polycyclic aromatic hydrocarbons (PAHs). It leverages the detailed
    studies of organic molecules done at the NASA Ames Research
    Center. pyPAHdb is a streamlined Python version of the NASA Ames
-   PAH IR Spectroscopic Database (PAHdb; `www.astrochemistry.org
+   PAH IR Spectroscopic Database (PAHdb; `www.astrochemistry.org/pahdb
    <http://www.astrochemistry.org/pahdb>`_) suite of IDL tools. PAHdb
    has been extensively used to analyze and interpret the PAH
    signature from a plethora of emission sources, ranging from
@@ -37,7 +37,7 @@ Organic Molecules in Space: Insights from the NASA Ames Molecular Database in th
 
    astronomy, databases, fitting, data analysis
 
-Science background
+Science rationale
 ==================
 
 Polycyclic aromatic hydrocarbons
@@ -120,28 +120,52 @@ geometry of circumstellar disks :cite:`2001A&A...365..476M`
 :cite:`2009A&A...502..175B`. However, the treasure trove of
 information about an astronomical object's local conditions and its
 evolutionary history is only accessible through detailed spectroscopic
-analysis. This type of analysis, along with an understanding of the
-factors that drive the these spectroscopic changes, is now possible
-with this software developed at the NASA Ames Research Center.
+analysis.
+
+The next great facility for PAH research: JWST
+--------------------------------------------------------------------
+
+The next great leap forward for astronomical spectroscopy is the
+the James Webb Space Telescope (*JWST*). *JWST* is NASA's
+next flagship observatory and the successor to the
+exceptionally successful *Hubble Space Telescope*
+(`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and *Spitzer
+Space Telescope* (`www.nasa.gov/spitzer
+<https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
+collaboration between NASA, the European Space Agency (ESA) and the
+Canadian Space Agency (CSA). The telescope features a primary mirror
+with a diameter of 6.5 m
+and carries four science instruments. These instruments will observe
+the Universe with unprecedented resolution and sensitivity from 0.6 to
+28 µm. The observatory is expected to launch in 2020.
+
+Detailed spectroscopic PAH analysis is currently performed at the
+NASA Ames Research Center under the umbrella of
+the NASA Ames PAH IR Spectroscopic Database (PAHdb), which provides
+tools and libraries for the astronmoical community. To best exploit
+the extensive capabilities of *JWST*, we will provide new tools for
+the astronomical community, as *JWST* will be the foremost platform for
+astronomical PAH research for years to come.
 
 NASA Ames PAH IR Spectroscopic Database (PAHdb)
 ===============================================
 
-We present software for the astronomical community developed at
-the Astrophysics & Astrochemistry Laboratory (`www.astrochemistry.org
-<http://www.astrochemistry.org/pahdb>`_) at NASA Ames Research Center
-(`www.nasa.gov/ames <http://www.nasa.gov/ames>`_). The Laboratory
-provides key insights into organic molecules in astronomical
-environments through a combination of quantum chemical calculations,
-direct laboratory measurements and different analysis techniques of
-astronomical data.
+.. The Astrophysics & Astrochemistry Laboratory at NASA Ames
+.. Research Center :cite:`astrochem` provides key
+.. insights into organic molecules in astronomical
+.. environments through a combination of quantum chemical calculations,
+.. direct laboratory measurements and different analysis techniques of
+.. astronomical data.
 
 The NASA Ames PAH IR Spectroscopic Database (PAHdb;
 :cite:`2018ApJS..234...32B` :cite:`2014ApJSS..211....8B`) is the
 culmination of more than 30 years of laboratory and computational
 research carried out at the NASA Ames Research Center to test and refine
-the astronomical PAH model. The laboratory-measured and
-theoretically-computed libraries currently contain the spectra of 75
+the astronomical PAH model. PAHdb consists of three components
+(all under the moniker of "PAHdb"):
+the spectroscopic libraries, the website, and the suite of offline tools.
+The laboratory-measured and theoretically-computed libraries currently
+contain the spectra of 75
 and 3139 PAH species, respectively, and are continuously expanded. It is
 the world's foremost collection of PAH spectra.
 
@@ -166,6 +190,9 @@ etc.) :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
    interpretation (shown in the lower-right).
    :label:`fig:PAHdb`
 
+.. Accessing the data and tools
+.. -----------------------------
+
 At `www.astrochemistry.org/pahdb/
 <http://www.astrochemistry.org/pahdb/>`_ these libraries can be
 perused and/or downloaded. Figure :ref:`fig:PAHdb` presents a
@@ -189,38 +216,40 @@ Space Telescope* (*JWST*; `www.jwst.nasa.gov
 .. [#] IDL is a registered trademark of `Harris Geospatial
        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
 
-The next leap forward: James Webb Space Telescope (*JWST*)
-==========================================================
+.. The next leap forward: James Webb Space Telescope (*JWST*)
+.. ==========================================================
 
-*JWST* is NASA's next flagship observatory and the successor to the
-exceptionally successful *Hubble Space Telescope*
-(`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and *Spitzer
-Space Telescope* (`www.nasa.gov/spitzer
-<https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
-collaboration between NASA, the European Space Agency (ESA) and the
-Canadian Space Agency (CSA). The telescope features a primary mirror
-with a diameter of 6.5 m
-and carries four science instruments. These instruments will observe
-the Universe with unprecedented resolution and sensitivity from 0.6 to
-28 µm. The observatory is expected to launch in 2020.
+.. *JWST* is NASA's next flagship observatory and the successor to the
+.. exceptionally successful *Hubble Space Telescope*
+.. (`www.nasa.gov/hubble <https://www.nasa.gov/hubble>`_) and *Spitzer
+.. Space Telescope* (`www.nasa.gov/spitzer
+.. <https://www.nasa.gov/spitzer>`_). *JWST* is being developed through a
+.. collaboration between NASA, the European Space Agency (ESA) and the
+.. Canadian Space Agency (CSA). The telescope features a primary mirror
+.. with a diameter of 6.5 m
+.. and carries four science instruments. These instruments will observe
+.. the Universe with unprecedented resolution and sensitivity from 0.6 to
+.. 28 µm. The observatory is expected to launch in 2020.
 
 .. A 3D rendering
 .. of the spacecraft is shown in Figure :ref:`fig:JWST`.
 
-..    :align: center
-..    :scale: 10%
+.. figure
+.. fig_JWST.png
+   :align: center
+   :scale: 10%
 
-..    3D-rendering of *JWST* using the Maya® 3D animation, modeling,
-..    simulation, and rendering software
-..    (`www.autodesk.com/products/maya/overview
-..    <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
-..    signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
-..    segments (gold), dominates the picture together with the stacked
-..    sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
-..    <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
+   3D-rendering of *JWST* using the Maya® 3D animation, modeling,
+   simulation, and rendering software
+   (`www.autodesk.com/products/maya/overview
+   <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
+   signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
+   segments (gold), dominates the picture together with the stacked
+   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
+   <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
 
 pyPAHdb: a tool designed for JWST
----------------------------------
+=================================
 
 On the eve of the *JWST* era, it is our goal to
 make PAHdb the astronomical community's primary tool for analyzing and interpreting PAH emission spectra.
@@ -264,7 +293,7 @@ assess the quality of the fit and retrieve the PAH characteristics
 in their astronomical observations (``writer.py``).
 
 .. figure:: fig_flowchart.png
-   :align: center
+   :align: center   
 
    pyPAHdb flowchart. Astronomical spectroscopic data is loaded,
    whether represented in FITS or ASCII files. An over-sampled
@@ -286,7 +315,7 @@ less than 4 seconds, while more than 60 seconds were needed to fit
 with the full IDL suite.
 It should be noted that their were differences in the actual implementation of
 the two tests, which were inherent to the differences in the languages
-used. **specify differences!**
+used.
 
 The underlying PAH physics
 --------------------------
@@ -329,8 +358,19 @@ in cm. The sum is taken over all :math:`n` modes and the emission
 profile is assumed Gaussian with a full-width at half-maximum (FWHM)
 of 15 cm\ :sup:`-1`. Note that before applying the emission profile, a
 redshift of 15 cm\ :sup:`-1` is applied to each of the band positions
-(:math:`\nu_{i}`) to mimic some anharmonic effects. **state where
-this redshift value comes from**
+(:math:`\nu_{i}`) to mimic some anharmonic effects. This redshift value
+is currently the best estimate we have for PAH emission, as determined by experimental mid-IR studies
+(see, e.g., the discussion in :cite:`2013ApJ...769..117B`).
+
+.. Here a 15 cm−1
+.. redshift is taken, a value consistent with shifts measured in a
+.. number of experimental mid-IR studies (
+.. Cherchneff & Barker
+.. 1989; Flickinger&Wdowiak 1990, 1991; Flickinger et al. 1991;
+.. Colangeli et al. 1992; Brenner&Barker 1992; Joblin et al. 1995;
+.. Williams & Leone 1995; Cook & Saykally 1998
+.. )
+
 
 The vibrational temperature attained after absorbing a single 7 eV
 photon is calculated by the molecule's heat capacity. The heat
@@ -471,17 +511,17 @@ The type of analysis demonstrated here allows users to quickly
 interpret the distribution of PAHs in their astronomical observations
 and variations in PAH charge and size.
 
-Future Work
-===========
+Summary & prospects
+===================
 
 pyPAHdb is in active development, but a finalized Python software
 analysis tool is anticipated to be complete well before *JWST*'s launch, which is
 currently scheduled for 2020. The astronomical community can already
 benefit from pyPAHdb by using it to quickly analyze and interpret
 archival data from other observatories, e.g., *ISO*, *Spitzer*,
-*SOFIA*, etc. Our current efforts are focused on streamlining pyPAHdb,
+*SOFIA*, etc. Our current efforts are focused on extending pyPAHdb, including
 having it transparently accept spectroscopic observations in a variety
-of digital formats, and consolidating output parameters. Further testing
+of digital formats, and consolidating output parameters. Further testing of the program logic
 will be performed to ensure all parts of pyPAHdb function as
 expected. Lastly, API documentation and a guide with analysis
 "recipes" will be provided to help users get started and/or extend
