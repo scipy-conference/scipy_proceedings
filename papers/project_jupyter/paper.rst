@@ -269,7 +269,9 @@ Binder runs as either a public or a private web service, and it needs to handle
 potentially large spikes in user sessions as well as sustained user activity
 over several minutes of time. It also needs to be deployable on a number of
 cloud providers in order to avoid locking in the technology to the offerings
-of a single cloud service. To accomplish this
+of a single cloud service. To accomplish this Binder uses a deployment of
+JupyterHub that runs on Kubernetes, both of which contribute to BinderHub's
+scalability and maintainability.
 
 JupyterHub, an open source tool from the Jupyter community, provides a
 centralized resource that serves interactive user sessions. It allows
