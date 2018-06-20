@@ -51,39 +51,49 @@ by allowing users to interact seamlessly with AWS resources
 from within their Python environment. For example, Cottoncandy
 allows users to store and access numpy array data on Amazon S3
 :cite:`anwar_o_nunez_elizalde_2017_1034342`. Pywren :cite:`jonas2017`
-enables users to run their existing Python code on AWS Lambda, providing
-convenient distributed execution for jobs that fall within the limits of
-this service (currently maximum 300 seconds of execution time, 1.5 GB of
-RAM, 512 MB of local storage, and no root access). These limitations are
-impractical for many data-oriented workloads, that require more RAM and
-local storage, longer compute times, and complex dependencies. The AWS
-Batch service offers a platform for workloads with these requirements.
+enables users to run their existing Python code on AWS Lambda,
+providing convenient distributed execution for jobs that fall within
+the limits of this service [#]_. These limitations are impractical
+for many data-oriented workloads, which require more RAM and local
+storage, longer compute times, and complex dependencies. The AWS Batch
+service offers a platform for workloads with these requirements.
 Batch dynamically provisions AWS resources based on the volume and
 requirements of user-submitted jobs. Instead of provisioning and
 managing their own batch computing jobs, users specify job constraints
-(such as the amount of memory required for a single job) and the number
+,such as the amount of memory required for a single job, and the number
 of jobs. AWS Batch manages the job distribution to satisfy those
 constraints. The user can optionally constrain the cost by specifying a
 bid percentage to use with AWS Spot Instances.
 
+.. [#] Current limits include a maximum of 300 seconds of execution
+       time, 1.5 GB of RAM, 512 MB of local storage, and no root access.
+
 One of the main advantages of Batch, relative to the provisioning of
 your own compute instances is that it abstracts away the exact details
 of the infrastructure that is needed, offering instead relatively
-straight-forward abstractions: a *job*, which is an atomic task to
-repeat on multiple inputs, encapsulated in a linux executable, a bash
-script or a Docker container, a *job definition*, which connects the
-job with the compute resources it requires, a *job queue*, which serves
-as a scheduler for the jobs, and a *compute environment*, which defines
-the details of the computational resources needed, such as number of
-processors, or amount of RAM.
+straight-forward abstractions:
 
-While Batch provides useful abstractions for batch computing, the user
-interface provided through the AWS web console still resists automation,
-requires learning many of the terms that control its execution and does
-not facilitate scripting and/or reproducibility. The AWS Python API
-offers a programming interface that can control the execution of
-computational tasks in AWS Batch, but it is not currently designed
-to offer a user-friendly single point of access to these resources.
+- a *job*, which is an atomic task to repeat on multiple inputs,
+  encapsulated in a linux executable, a bash script or a Docker
+  container,
+
+- a *job definition*, which connects the job with the compute resources
+  it requires,
+
+- a *job queue*, which serves as a scheduler for the jobs,
+
+- a *compute environment*, which defines the details of the
+  computational resources needed, such as number of processors, or
+  amount of RAM.
+
+While Batch provides useful functional abstractions for processing data
+in bulk, the user interface provided through the AWS web console still
+resists automation, requires learning many of the terms that control
+its execution and does not facilitate scripting and/or reproducibility.
+The AWS Python API offers a programming interface that can control the
+execution of computational tasks in AWS Batch, but it is not currently
+designed to offer a user-friendly single point of access to these
+resources.
 
 Here, we introduce a new Python library: Cloudknot
 :cite:`cloudknot-docs` :cite:`cloudknot-repo`, that launches Python
@@ -241,11 +251,10 @@ output to S3.
    can use functions in ck.config to change their bucket region to match
    the instance region.
 
-Finally, :code:`Knot.map()` downloads the output from S3 and returns
-it to the user. Since AWS Batch, and therefore Cloudknot, allows
-arbitrarily long execution times, :code:`Knot.map()` returns a list
-of futures for the results, mimicking Python's concurrent futures'
-:code:`Executor` objects.
+Finally, :code:`Knot.map()` downloads the output from S3 and returns it
+to the user. Since AWS Batch allows arbitrarily long execution times,
+:code:`Knot.map()` returns a list of futures for the results, mimicking
+Python's concurrent futures' :code:`Executor` objects.
 
 Under the hood, :code:`Knot.map()` creates a
 :code:`concurrent.futures.ThreadPoolExecutor` instance where each
