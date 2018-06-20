@@ -696,7 +696,7 @@ manner.
 Finally, because Kubernetes is an open source system for managing containers, it has been deployed
 on a number of cloud providers as well as on self-owned hardware and virtual machines.
 While `mybinder.org <https://mybinder.org>`_ currently runs on the Google Cloud Platform,
-a BinderHub can run on any setup that runs on top of Kubernetes. This flexibility
+a BinderHub can run on any setup that runs on top of Kubernetes a fairly common hardware setup. This flexibility
 helps avoid vendor lock-in, and is crucial for an open source tool such as BinderHub and JupyterHub.
 It also makes it possible for `mybinder.org <https://mybinder.org>`_ (or other BinderHub
 deployments) to seek the most cost-effective option for its needs.
