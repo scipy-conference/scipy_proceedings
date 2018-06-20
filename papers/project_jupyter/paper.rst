@@ -99,9 +99,9 @@ The scientific community is increasingly unified around reproducibility.
 A survey in 2016 of 1,576 researchers reported that 90% of respondents believed
 there exists a reproducibility crisis in the scientific community.
 A majority of respondents also reported difficulty
-reproducing the work of colleagues :cite:`Baker2016`. Similar results have
+reproducing the work of colleagues :cite:`Baker2016-gp`. Similar results have
 been reported in the cell biology community
-:cite:`The_American_Society_for_Cell_Biology_undated` and the machine
+:cite:`The_American_Society_for_Cell_Biology_undated-yv` and the machine
 learning community :cite:`Pineau2017-sb`.
 Making research reproducible requires pursuing two sub-goals, both of which are
 difficult to achieve:
@@ -113,7 +113,7 @@ difficult to achieve:
 
   enabling others to reproduce results without difficulty
 
-Both teachnical and practical reproducibility depend upon the software and
+Both technical and practical reproducibility depend upon the software and
 technology available to researchers at any moment in time. With the growth in
 open source tools for data analysis, as well as the “data heavy” approach many
 fields are adopting, these problems become more complex yet more tractable
@@ -138,6 +138,9 @@ To lower the technical barriers of sharing computational work,
 we introduce Binder 2.0, a tool that we believe makes reproducibility
 more practically possible.
 
+An overview of Binder
+---------------------
+
 Binder consists of a set of tools for creating sharable, interactive, and
 deterministic environments that run on personal computers and cloud resources.
 It manages the technical complexity around:
@@ -150,17 +153,37 @@ It manages the technical complexity around:
 Binder is built on modern-day tools from the open source community and is
 itself fully open source for others to use.
 
+You can access a public deployment of Binder at `mybinder.org <https://mybinder.org>`_,
+a web service that the Binder and JupyterHub teams run as a
+demonstration of the BinderHub technology and as digital public infrastructure
+for those who wish to share Binder links so that others may interact with
+their code repositories. It is meant to
+be a testing ground for different use cases in the Binder ecosystem as well as a public
+service for the scientific and educational community.
+`mybinder.org <https://mybinder.org>`_ serves nearly 9,000 daily sessions,
+and has already been used for `reproducible publishing
+<https://github.com/minrk/ligo-binder>`_ (https://github.com/minrk/ligo-binder), sharing `interactive course materials
+<https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html>`_ (https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html),
+at the university and high-school level, creating `interactive package documentation
+in Python <https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links>`_
+with Sphinx Gallery (https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links),
+and sharing `interactive content <http://greenteapress.com/wp/think-dsp/>`_
+that requires a language-specific kernel in order to run (http://greenteapress.com/wp/think-dsp).
 
-.. figure:: images/jupyterlab_binder_ui.png
+.. figure:: images/binder_uis.png
    :align: center
    :figclass: w
 
-   Examining image data from Ross et al. on Binder with JupyterLab :cite:`Ross2017-ff`.
-   JupyterLab is one of the three user interfaces available to Binder users.
-   In this example, we use JupyterLab to view additional image data in a code
-   console. Note that this modification to the code can be made without requiring
-   the user to install dependencies.
-
+   Two example user interfaces that users can run within Binder.
+   Because BinderHub uses a JupyterHub for hosting all user sessions, one can specify an
+   environment that serves any Jupyter-supported user interface, provided that it can run
+   via the browser. A. Examining image data from Ross et al. on Binder with JupyterLab :cite:`Ross2017-ff`.
+   JupyterLab provides access to the file system (left column), a notebook interface (middle column),
+   as well as traditional script files and interactive kernels (right column).
+   B. An RStudio interface running the modern RStudio and ``tidyverse`` stack.
+   In both cases, users can explore the code
+   and make their own modifications from within the Binder session, without any
+   need to manually install dependencies.
 
 Binder continues in the tradition of promoting "the complete software
 development environment and the complete set of instructions which generated
@@ -246,7 +269,7 @@ Binder runs as either a public or a private web service, and it needs to handle
 potentially large spikes in user sessions as well as sustained user activity
 over several minutes of time. It also needs to be deployable on a number of
 cloud providers in order to avoid locking in the technology to the offerings
-of a single cloud service.
+of a single cloud service. To accomplish this
 
 JupyterHub, an open source tool from the Jupyter community, provides a
 centralized resource that serves interactive user sessions. It allows
@@ -255,19 +278,9 @@ the Jupyter notebook server. A core principle of the Jupyter project is to be
 language- and workflow-agnostic, and JupyterHub is no exception. JupyterHub can
 be used to run dozens of languages served with a variety of user interfaces,
 including Jupyter Notebooks :cite:`Bussonnier2018-kc`, JupyterLab
-:cite:`Project_Jupyter_Contributors_2017-yi`,
-RStudio :cite:`Project_Juptyer_Contributors_2017-ra`, Stencila :cite:`RK_Min_2018-eq`,
+:cite:`Project_Jupyter_Contributors2017-yi`,
+RStudio :cite:`Project_Juptyer_Contributors2017-ra`, Stencila :cite:`RK_Min2018-eq`,
 and OpenRefine :cite:`Head2018-jf`.
-
-
-.. figure:: images/rstudio_ui.png
-   :align: center
-
-   An RStudio interface being served on ``mybinder.org``. Because BinderHub
-   uses a JupyterHub for hosting all user sessions, one can specify an
-   environment that serves any Jupyter-supported user interface, provided that it can run
-   via the browser.
-
 
 Another key benefit of JupyterHub is that it is straightforward to run on
 Kubernetes, a modern-day open source platform for orchestrating computational
@@ -278,7 +291,8 @@ Azure, and Amazon AWS each have managed Kubernetes clusters that run with minima
 user intervention. Thus, it is straightforward to deploy JupyterHub on any
 major cloud provider.
 
-Kubernetes is designed to be relatively self-healing and has a declarative
+Kubernetes is designed to be relatively self-healing, often automatically resolving
+problems that would normally disrupt the service. It also has a declarative
 syntax for defining the cloud resources that are needed to run a web service.
 Thus, maintainers can update a JupyterHub running on Kubernetes with minimal
 changes to configuration files for the deployment, providing the flexibility to
@@ -363,10 +377,11 @@ when a particular configuration file is present (e.g. ``requirements.txt`` will
 trigger the Python build pack). They also have a method called ``get_assemble_scripts``
 that inserts the necessary lines into a Dockerfile to support this workflow.
 
-For example, below we show a simplified version of the Python build pack. In
-this case, the ``detect`` method looks for a ``requirements.txt`` file and,
+For example, below we show a simplified version of the Python build pack in
+``repo2docker``. In this case, the ``detect`` method looks for a ``requirements.txt`` file and,
 if it exists, triggers the ``get_assemble_scripts`` method, which inserts
-lines into the Dockerfile that install Python and pip.
+lines into the Dockerfile that install Python and pip. Binder uses ``repo2docker``
+to build repository images dynamically.
 
 .. code-block:: python
 
@@ -386,19 +401,19 @@ lines into the Dockerfile that install Python and pip.
 
        # install requirements.txt in the kernel env
        requirements_file = self.binder_path(
-          'requirements.txt')
+        'requirements.txt')
        if os.path.exists(requirements_file):
-           assemble_scripts.append((
-               '${NB_USER}',
-               '{} install --no-cache-dir -r "{}"'.format(
-                  pip, requirements_file)
-           ))
+         assemble_scripts.append((
+             '${NB_USER}',
+             '{} install --no-cache-dir -r "{}"'.format(
+                pip, requirements_file)
+         ))
        return assemble_scripts
 
      def detect(self):
        """Check if repo builds w/ Python buildpack."""
        requirements_txt = self.binder_path(
-          'requirements.txt')
+        'requirements.txt')
        return os.path.exists(requirements_txt)
 
 Repo2docker also supports more generic configuration files that are applied
@@ -434,9 +449,9 @@ repo2docker will build an image with Python 3 and the packages pip installed.
 .. code-block:: bash
 
    $ cat requirements.txt
-      numpy
-      scipy
-      matplotlib
+   numpy
+   scipy
+   matplotlib
 
 While the following file name/content will install RStudio with these
 R commands run before building the Docker image.:
@@ -444,10 +459,10 @@ R commands run before building the Docker image.:
 .. code-block:: bash
 
    $ cat binder/install.R
-       install.packages("ggplot2")
+   install.packages("ggplot2")
 
    $ cat binder/runtime.txt
-       r-2017-10-24
+   r-2017-10-24
 
 In this case, the date specified in ``runtime.txt`` instructs repo2docker to
 use a specific MRAN repository :cite:`Microsoft_undated-gd` date. In addition,
@@ -466,7 +481,7 @@ researchers can use repo2docker to confirm that all of the information needed to
 recreate their analysis is contained within their configuration files, creating
 a way to intuitively define “recipes” for reproducing one’s work.
 
-A web-interface to user-defined kernels and interactive sessions (BinderHub)
+A web-interface to user-defined kernels and interactive sessions - BinderHub
 ----------------------------------------------------------------------------
 
 JupyterHub can serve multiple interactive user sessions from pre-defined Docker
@@ -496,19 +511,23 @@ form” user interface. This form lets users point BinderHub to a public git
 repository. When the form is filled in and the “launch” button is clicked,
 BinderHub takes the following actions:
 
-1. Check out the repository at the version that is specified.
-2. Compare the version specified in the URL with the versions that have been
+1. **Check out the repository** at the version that is specified.
+2. **Check the latest commit hash**. BinderHub compares the version specified in
+   the URL with the versions that have been previously
    built for this repository in the registry (if a branch is given, BinderHub
-   checks the latest commit hash)
-3. If the version has *not* been built, launch a repo2docker process that builds
+   checks the latest commit hash on this branch)
+3. If the version has *not* been built, **launch a repo2docker process** that builds
    and registers an image from the repository, then returns a reference to the
    registered image.
-4. Create a temporary JupyterHub user account for the visitor, with a private token.
-5. Launch an interactive JupyterHub user session that sources the repo2docker
+4. **Create a temporary JupyterHub user account** for the visitor, with a private token.
+5. **Launch a JupyterHub user session** that sources the repo2docker
    image in the registry. This session will serve the environment needed to run
    the repository, along with any GUI that the user specifies.
-6. Once the user departs, destroy the temporary user ID as well as any remnants
-   of their interactive Jupyter session.
+6. **Clean up the user session**. Once the user departs, Binder destroy's
+   the temporary user ID for the user's unique session, as well as their temporary
+   files from their interactive session (steps 4 and 5). The Docker image for the
+   repository persists, and will be used in subsequent launch attempts (as long as
+   the repository commit hash does not change).
 
 Once a repository has been built with BinderHub, authors can then share a URL
 that triggers this process. URLs for BinderHub take the following form:
@@ -538,7 +557,7 @@ steps described above.
 
 BinderHub currently provides a single REST endpoint that allows users to
 programmatically build and launch Binder repositories. It takes the following
-form::
+form:
 
 .. code-block:: bash
 
@@ -593,10 +612,10 @@ server REST API served at this URL).
 
 There are already several examples of services that use BinderHub’s REST API
 to run webpages and applications that utilize arbitrary kernel execution. For
-example, thebelab :cite:`Min_undated-qd` makes it possible to deploy static websites with code blocks
-that are powered by a BinderHub kernel. The author can define the environment
-needed to run code on the static page, and interactive code output can be
-generated by the end user once they visit the webpage. There are also several
+example, thebelab :cite:`Min_undated-qd` makes it possible to deploy HTML with code blocks
+that are powered by a BinderHub kernel. The website creator can define the environment
+needed to run code on the page, and the end user can generate interactive code output
+once they visit the webpage. There are also several
 applications that use BinderHub’s kernel API to power their computation. For
 example, the nteract :cite:`Nteract_contributors2016-dg` project uses BinderHub to
 run an interactive code sandbox that serves an nteract interface and can be
@@ -607,23 +626,27 @@ serve  as many use cases as possible. Our goal is to provide the tools to
 allow any person or organization to provide arbitrary, user-defined kernels
 that run in the cloud. The Binder team runs one such service as a proof-of-concept
 of the technology, as well as digital public infrastructure that can be used to share
-interactive code repositories. This service runs at the URL ``https://mybinder.org``
+interactive code repositories. This service runs at the URL `mybinder.org <https://mybinder.org>`_
 and will be discussed in the final section.
 
 Mybinder.org: Maintaining and sustaining a public service
 ---------------------------------------------------------
 
-You can access a public deployment of BinderHub at `mybinder.org <https://mybinder.org>`_.
-This a web service that the Binder and JupyterHub teams run both as a
-demonstration of the BinderHub technology and as a piece of digital public infrastructure
-for those who wish to share Binder links so that others may interact with
-their code repositories.
+On top of the technical components of the BinderHub, repo2docker, and JupyterHub architecture,
+the Binder project is also a case study in the maintenance and deployment of an
+open-source service. Managing the operations of a site such as `mybinder.org <https://mybinder.org>`_
+is not trivial, with challenges in team operations, maintaining service stability without
+any full-time staff, and exploring models for keeping the project financially sustainable
+over time. This final section describes recent efforts to address some of these questions,
+and to explore possible outcomes for others.
 
 The Binder team (and thus `mybinder.org <https://mybinder.org>`_) runs on a model of transparency and
 openness in the tools it creates as well as the operations of `mybinder.org <https://mybinder.org>`_.
 The Binder team has put together several group processes and documentation to
 facilitate maintaining this public service, and to provide a set of resources
-for others who wish to do the same. There are also several data streams that
+for others who wish to do the same. For example, the `Binder Site Reliability Guide <http://mybinder-sre.readthedocs.io/en/latest/>`_
+is continuously updated with team knowledge, incident reports, helper scripts, and a description of the
+technical deployment at `mybinder.org <https://mybinder.org>`_. There are also several data streams that
 the Binder team routinely makes available for others who are interested in
 deploying and maintaining a BinderHub service. For example, the `Binder Billing
 <https://github.com/jupyterhub/binder-billing>`_ repository shows all of the cloud
@@ -632,30 +655,15 @@ the `Binder Grafana board <https://grafana.mybinder.org>`_ shows a high-level
 view of the status of the BinderHub, JupyterHub, and Kubernetes processes
 underlying the service.
 
-`mybinder.org <https://mybinder.org>`_ is also meant to be a testing ground for different use cases
-in the Binder ecosystem. By running as a free, public service, we hope that
-members of the community will find new and interesting applications for Binder.
-For example, `mybinder.org <https://mybinder.org>`_ has already been used for `reproducible publishing
-<https://github.com/minrk/ligo-binder>`_ (https://github.com/minrk/ligo-binder), sharing `interactive course materials
-<https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html>`_ (https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html),
-at the university and high-school level, creating `interactive package documentation
-in Python <https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links>`_
-with Sphinx Gallery (https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links),
-and sharing `interactive content <http://greenteapress.com/wp/think-dsp/>`_
-that requires a language-specific kernel in order to run (http://greenteapress.com/wp/think-dsp).
+Cost of running the public Binder service
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Cost of ``mybinder.org``
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-We have designed the public service to be as cost effective as possible.
+The Binder team has designed the public service to be as cost effective as possible.
 `mybinder.org <https://mybinder.org>`_ restricts users to one CPU and two GB of RAM. We save a great deal
 by not providing users with persistent storage across sessions. Users can only
 access public git repositories and are restricted in the kinds of network I/O
 that can take place. In addition, a BinderHub deployment efficiently uses its
-resources in order to avoid over-provisioning cloud resources.  Because
-Kubernetes is an open source system for managing containers, while Binder
-currently runs on the Google Cloud Platform, Binder could run on any setup that runs
-on top of Kubernetes if that setup proved more cost effective.
+resources in order to avoid over-provisioning cloud resources.
 
 .. figure:: images/cost_breakdown.png
    :align: center
@@ -664,7 +672,7 @@ on top of Kubernetes if that setup proved more cost effective.
    one point per day. The number of daily unique users has consistently grown over this time,
    while modifications to the BinderHub codebase (as well as the cloud
    resources used) have kept costs relatively flat. As a result, ``mybinder.org``
-   currently operates at about 5 cents per user per day.
+   currently operates at about 3 cents per user per day.
 
 The decision to avoid the notion of a user "identity" in particular has strong
 effects on the cost of running a BinderHub server. Because users do not require
@@ -674,18 +682,31 @@ is avoided. In addition,
 a BinderHub deployment can efficiently use the resources available to it in
 order to avoid over-provisioning cloud resources as much as possible.
 
-Currently, the hosting bill for `mybinder.org <https://mybinder.org>`_ runs at a cost of several hundred dollars per
-day. At roughly 50,000 users per week, this comes out to around $\frac{220 \times30}{50000} \approx 13$ cents per
+Currently, the hosting bill for `mybinder.org <https://mybinder.org>`_ runs at a cost of
+around $180 per day and around 7,000 users per day. This
+comes out to around :math:`\frac{180 \times30}{7000 \times30} \approx 3` cents per
 user. The `mybinder.org <https://mybinder.org>`_ team publishes its daily hosting costs in a public
 repository on GitHub :cite:`JupyterHub2018-ek`.
 It hopes that this serves to encourage other organizations to deploy BinderHub
 for their own purposes, since it is possible to do so in a cost-effective
 manner.
 
+Finally, because Kubernetes is an open source system for managing containers, it has been deployed
+on a number of cloud providers as well as on self-owned hardware and virtual machines.
+While `mybinder.org <https://mybinder.org>`_ currently runs on the Google Cloud Platform,
+a BinderHub can run on any setup that runs on top of Kubernetes. This flexibility
+helps avoid vendor lock-in, and is crucial for an open source tool such as BinderHub and JupyterHub.
+It also makes it possible for `mybinder.org <https://mybinder.org>`_ (or other BinderHub
+deployments) to seek the most cost-effective option for its needs.
+
+
+Models for sustainability
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
 The Binder team is exploring multiple models
 for sustaining the public digital infrastructure of `mybinder.org <https://mybinder.org>`_, the team required to operate it, and the
 broader Binder ecosystem. At its current rate, the annual hosting cost of
-`mybinder.org <https://mybinder.org>`_ is around $ \$ 220 \times 365 \approx 80000$ , an amount that could be sustainable with
+`mybinder.org <https://mybinder.org>`_ is around :math:`\$180 \times 365 \approx \$66,000`, an amount that could be sustainable with
 a grant-funded model. Operating and supporting the public digital infrastructure of `mybinder.org <https://mybinder.org>`_
 requires several staff members distributed globally to provide reasonable coverage
 across time zones for user support and incident response. This means salary costs will
