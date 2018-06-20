@@ -656,6 +656,22 @@ computational workflow, from within their Python environment, without
 the steep learning curve of learning a new platform.
 
 
+Future Work
+-----------
+
+Currently, Cloudknot does not support computational pipelines that
+define dependencies between different tasks. Future releases may support
+job dependencies so that specific jobs can be scheduled to wait for
+the results of previously submitted jobs. Cloudknot could also provide
+a simple way to connect to EC2 instances to allow in-situ monitoring
+of running jobs. To do this now, a user must lookup an EC2 instance's
+address in the AWS console and connect to that instance using an SSH
+client. Future releases may launch this SSH terminal from within the
+Python session. We will also focus our attention on domain-specific
+applications (in neuroimaging, for example) and include enhancements and
+bug-fixes that arise from use in our own research.
+
+
 Acknowledgements
 ----------------
 
