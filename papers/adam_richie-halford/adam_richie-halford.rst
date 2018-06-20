@@ -650,7 +650,7 @@ AWS Batch infrastructure, it can accomodate the needs of more advanced
 users who want to augment their Dockerfiles or specify instance types.
 
 Cloudknot's simple API and its conditionally acceptable execution
-time compared to other distributed computing frameworks makes it a
+time compared to other distributed computing frameworks make it a
 viable tool for researchers who want distributed execution of their
 computational workflow, from within their Python environment, without
 the steep learning curve of learning a new platform.
