@@ -27,7 +27,7 @@ Real-Time Digital Signal Processing Using pyaudio_helper and the ipywidgets
   In a typical 
   application *slider* widgets are used to change variables in the callback. 
   One and two channel audio applications as well as algorithms for complex 
-  signal (in-phase/quadrature) waveforms, as found in software defined radio, 
+  signal (in-phase/quadrature) waveforms, as found in software-defined radio, 
   can also be developed. The analog I/O devices that can be 
   interfaced are both internal and via USB external sound interfaces. The 
   sampling rate, and hence the bandwidth of the signal that can be 
@@ -97,13 +97,13 @@ sampling period, :math:`T`, leads to :math:`x[n] = x(nT)`. To be clear, :math:`x
 a sequence of samples corresponding to the original analog input :math:`x(t)`. The use of 
 brackets versus parentheses differentiates the 
 two signal types as discrete-time and continuous-time respectively. 
-The sampling theorem tells us [Opp2010]_ tells us that the sampling 
+The sampling theorem [Opp2010]_ tells us that the sampling 
 rate :math:`f_s` must be greater than twice the highest frequency we wish to represent in the 
 discrete-time domain. Violating this condition results in *aliasing*, which means a signal centered 
 on frequency :math:`f_0 > f_s/2` will land inside the band of frequencies :math:`[0, f_s/2]`. Fortunately, 
 most audio ADCs limit the signal bandwidth of :math:`x(t)` in such a way that signals with 
-frequency content greater than :math:`f_s/2` are eliminated from passing through the ADC. Another 
-practical matter is in reality :math:`x[n]` is a scaled and finite precision version 
+frequency content greater than :math:`f_s/2` are eliminated from passing through the ADC. Also note 
+in practice, :math:`x[n]` is a scaled and finite precision version 
 of :math:`x(t)`.  In real-time DSP environments the ADC maps the analog signal samples to signed 
 integers, most likely :code:`int16`. As we shall see in pyaudio, this is indeed the case.
 
@@ -119,9 +119,9 @@ Ultimately, once we discuss frame-based processing in the next section, we will 
 fulfills this. 
 At this beginning stage, the notion is that the samples flow through the algorithm one at a time, 
 that is one input results in one output sample. The output samples are converted back to analog 
-signal :math:`y(t)` by placing the samples into a digital-to-analog converter (DAC). The DAC does 
-not simply set :math:`y(nT) = y[n]`, a continuous function time :math:`t`. A 
-*reconstruction* operation takes place inside the DAC which *interpolates* the :math:`y[n]` 
+signal :math:`y(t)` by placing the samples into a digital-to-analog converter (DAC). 
+The DAC does not simply set :math:`y(nT) = y[n]`, as a continuous function time :math:`t` must be output. 
+A *reconstruction* operation takes place inside the DAC which *interpolates* the :math:`y[n]` 
 signal samples over continuous time. In most DACs this is accomplished with a combination of 
 digital and analog filters, the details of which is outside the scope of this paper. The use of
 
@@ -150,18 +150,18 @@ student/instructor/tinkerer, can explore real-time DSP from most anywhere at any
 In this paper we use the Analog Discovery 2 
 [AD2]_ for signal generation (two function generator channels), signal measurement (two scope channels, 
 with fast Fourier transform (FFT) spectrum analysis included). It is also helpful to have a signal 
-generator cellphone app available, and of course music from a cell phone or PC. All of the cabling 
+generator cell phone app available, and of course music from a cell phone or PC. All of the cabling 
 is done using 3.5mm stereo patch cables and small pin header adapters [3p5mm]_ to interface to the AD2.
 
 Frame-based Real-Time DSP Using the :code:`DSP_io_stream` class
 ---------------------------------------------------------------
 
 The block diagram of Figure :ref:`pyaudioDSPio` illustrates the essence of this paper. 
-Implementing the stucture of this figure relies upon the class :code:`DSP_io_stream` which is housed
-in :code:`sk_dsp_comm.pyaudio_helper.py`. To make use of this requires the scipy stack 
-(numpy, scipy, and matplotlib), as well as [DSPComm]_ and [pyaudio]_. PyAudio is supported 
-on all majors OSs, e.g., Windows, macOS, and Linux. The configuration varies, 
-but the set-up is documented at [pyaudio]_ and SPCommTutorial_. The classes and functions 
+Implementing the structure of this figure relies upon the class :code:`DSP_io_stream`, which is housed
+in :code:`sk_dsp_comm.pyaudio_helper.py`. To make use of this class requires the scipy stack 
+(numpy, scipy, and matplotlib), as well as [DSPComm]_ and [pyaudio]_. PyAudio is multi-platform,  
+with the configuration platform dependent. The 
+set-up is documented at [pyaudio]_ and SPCommTutorial_. The classes and functions 
 of :code:`pyaudio_helper` are detailed in Figure :ref:`pyaudioHelperclasses`. We will make 
 reference to the classes, methods, and functions throughout the remainder of this paper.
 
@@ -219,7 +219,7 @@ listing of devices. The code block below was run with the iMic plugged into a US
 .. code-block:: python
 
    import sk_dsp_comm.pyaudio_helper as pah
-   # Index 3 is the Sabarent device
+   # Index 3 is the Sabrent device
    In[3]: pah.available_devices()
    Out[3]:
    Index 0 device name = Built-in Microphone, 
@@ -246,8 +246,8 @@ sample for a two channel stream) originating as 16-bit signed integers
 is the subject of the next section. As the callback prepares to exit, an output buffer of 16-bit 
 signed integers is formed, again of length :code:`frame_length`, and the buffer is absorbed by 
 the PC audio subsystem. In the context of *embedded systems* programming, the callback can be 
-thought of as an *interrupt service routine*. To the PC audio community the frame or buffer, just 
-described is also known as a *CHUNK*. In a two-channel stream the frame holds an interleaving of 
+thought of as an *interrupt service routine*. To the PC audio community the frame or buffer just 
+described, is also known as a *CHUNK*. In a two-channel stream the frame holds an interleaving of 
 left and right channels, :code:`...LRLRL...` in the buffer formed/absorbed by the PC audio system.
 Understand that the efficiency of frame-based processing comes with a price. 
 The buffering either side of the callback block of Figure :ref:`pyaudioDSPio` introduces a latency 
@@ -255,7 +255,7 @@ or processing time delay of at least two times the :code:`frame_length` times th
 
 Moving along with this top level discussion, the central block of Figure :ref:`pyaudioDSPio` is 
 labeled Frame-Based DSP Callback, and as we have alluded to already, is where the real-time DSP 
-code resides. Global variables are needed inside the call back, as the callback input/output 
+code resides. Global variables are needed inside the callback, as the input/output 
 signature is fixed by [pyAudio]_. The globals allow algorithm parameters to be available inside 
 the callback, e.g., filter coefficients, and in the case of a digital filter, the filter state 
 must be maintained from frame-to-frame. We will see in the examples section how 
@@ -386,9 +386,9 @@ which tells us that as expected for a sampling rate of 48 kHz, and a frame lengt
 
 
 The time spent in the callback should be very small, as very little processing is being done. 
-We can also examine the callback latency by having the AD2 input a low duty cycle pulse train 
-have a 2 Hz rate. The scope then measures the time difference between the input (scope channel 
-C2) and output (scope channel C1) waveforms. 
+We can also examine the callback latency by first having the AD2 input a low duty cycle pulse train 
+at a 2 Hz rate, thus having 500 ms between pules. We then use the scope to measure the time difference 
+between the input (scope channel C2) and output (scope channel C1) waveforms. 
 The resulting plot is shown in Figure :ref:`CBlatency`. We see that PyAudio and 
 and the PC audio subsystem introduces about 70.7ms of latency. A hybrid iMic ADC and builtin 
 DAC results in 138 ms on macOS. Moving to Win 10 latency increases to 142 ms, using default 
@@ -413,12 +413,12 @@ is a scaled version of the underlying system frequency response magnitude square
 
 where :math:`\sigma_x^2` is the variance of the input white noise signal. Here we use this 
 technique to first estimate the frequency response magnitude of the input path (ADC only) 
-using the attribute :code:`DSP_IO.capture_buffer`, and then take end-to-end (ADC-DAC) 
+using the attribute :code:`DSP_IO.capture_buffer`, and secondly take end-to-end (ADC-DAC) 
 measurements using the AD2 spectrum analyzer in dB average mode (500 records). In both 
 cases the white noise input is provided by the AD2 function generator.
 Finally, the AD2 measurement is saved to a CSV file 
-and imported into the Jupyter notebook, as shown in the code block below, to overlay 
-the ADC only measurement, which is made entirely in the Jupyter notebook.
+and imported into the Jupyter notebook, as shown in the code block below. This allows an overlay 
+of the ADC and ADC-DAC measurements, entirely in the Jupyter notebook.
 
 .. code-block:: python
 
@@ -482,7 +482,7 @@ are created below, followed by the callback, and finally calling the
 :code:`interactive_stream` method to run without limit in two channel mode. A 1 kHz sinusoid 
 test signal is input to the left channel and a 5 kHz sinusoid is input to the right channel. 
 While viewing the AD2 scope output in real-time, the gain sliders are adjusted and the signal 
-levels move up and down. A screen shot taken from the Jupyter notebook is combined with a 
+levels move up and down. A screenshot taken from the Jupyter notebook is combined with a 
 screenshot of the scope output to verify the correlation between the observed signal amplitudes 
 and the slider positions is given in Figure :ref:`LeftRightGainSlider`. The callback listing, 
 including the set-up of the ipywidgets gain sliders, is given below:
@@ -540,12 +540,13 @@ app, including an AD2 scope capture, with C1 on the left channel and C2 on
 the right channel, is given in Figure :ref`LeftRightGainSlider`.
 
 .. figure:: Left_Right_Gain_Slider_app.pdf
-   :scale: 50%
+   :scale: 53%
    :align: center
    :figclass: htb
 
    A simple stereo gain slider app: (a) Jupyter notebook interface and (b) testing using the 
-   AD2 with generators and scope channel C1 on left amd C2 on right. :label:`LeftRightGainSlider`
+   AD2 with generators and scope channel C1 (orange) on left and C2 (blue) on 
+   right. :label:`LeftRightGainSlider`
 
 The ability to control the left and right audio level are as expected, especially when listening.
 
@@ -568,6 +569,8 @@ mathematical model of the cross panning app is
    L_\text{out} &=& (100-a)/100 \times L_\text{in} + a/100\times R_\text{in} \\
    R_\text{out} &=& a/100\times L_\text{in} + (100-a)/100 \times R_\text{in}
 
+where :math:`L_\text{in}` and :math:`L_\text{out}` are the left channel inputs and outputs 
+respectively, and similarly :math:`R_\text{in}` and :math:`R_\text{out}` for the right channel. 
 In code we have:
 
 .. code-block:: python
@@ -613,32 +616,37 @@ In code we have:
        # Convert ndarray back to bytes
        return y.tobytes(), pah.pyaudio.paContinue
 
-This app is best experienced by listening, but in picture form Figure :ref:`CrossLeftRightPanning` shows a 
-series of scope captures.
+This app is best experienced by listening, but visually Figure :ref:`CrossLeftRightPanning` shows a 
+series of scope captures, parts (b)-(d), to explain how the sounds sources swap from side-to-side as the 
+panning value changes.
 
 .. figure:: Cross_Left_Right_Panning_app.pdf
-   :scale: 50%
+   :scale: 53%
    :align: center
    :figclass: htb
 
-   Cross left/right panning control: (a) launching the app in the Jupyter notebook and (b) 
-   a sequence of scope screen shots as the panning slider is from 0% to 50% and then 
+   Cross left/right panning control: (a) launching the app in the Jupyter notebook and (b)-(d) 
+   a sequence of scope screenshots as the panning slider is moved from 0% to 50%, and then 
    to 100%. :label:`CrossLeftRightPanning`
 
 For dissimilar left and right audio channels, the action of the slider creates a spinning effect 
-when listening. It is possible to extend this app with a automation, so that a low frequency 
+when listening. It is possible to extend this app with an automation, so that a low frequency 
 sinusoid or other waveform changes the panning value at a rate controlled by a slider.
 
-FIR and IIR Filters
+FIR Bandpass Filter
 ===================
 
 In this example we design a high-order FIR bandpass filter using 
 :code:`sk_dsp_comm.fir_design_helper` and then implement the design to operate at :math:`f_s = 48` kHz. 
+Here we choose the bandpass critical frequencies to be 2700, 3200, 4800, and 5300 Hz, with a 
+passband ripple of 0.5 dB and stopband attenuation of 50 dB (see `fir_d`_). 
 Theory is compared with AD2 measurements using, again using noise excitation. When implementing 
 a digital filter using frame-based processing, :code:`scipy.signal.lfilter` works nicely. The key 
 is to first create a zero initial condition array :code:`zi` and hold this in a global variable. 
 Each time :code:`lfilter` is used in the callback the old initial condition :code:`zi` is passed 
 in, then the returned :code:`zi` is held until the next time through the callback.
+
+.. _`fir_d`: https://mwickert.github.io/scikit-dsp-comm/example_notebooks/FIR_IIR_design_helper/FIR_and_IIR_Filter_Design.html
 
 .. code-block:: python
 
@@ -703,10 +711,11 @@ implement, test very satisfying.
 Three Band Equalizer
 ====================
 
-Here we consider the second-order peaking filter and place three of them in cascade with a 
+Here we consider the second-order peaking filter, which has infinite impulse response, 
+and place three of them in cascade with a 
 :code:`ipywidgets` slider used to control the gain of each filter. The peaking filter is 
-used in the design of audio equalizer, where perhaps each filter is centered on on octave 
-frequency spacings running from from 10 Hz Hz up to 16 kHz, or so. Each peaking filter can 
+used in the design of audio equalizer, where perhaps each filter is centered on octave 
+frequency spacings running from from 10 Hz up to 16 kHz, or so. Each peaking filter can 
 be implemented as a 2nd-order difference equation, i.e., :math:`N=2` in equation 
 (:ref:`LCCDE`). The design equations for a single peaking filter are given below using 
 z-transform [Opp2010]_ notation:
@@ -828,9 +837,9 @@ theoretical design. The comparison results are given in Figure :ref:`ThreeBandDe
    :align: center
    :figclass: htb
 
-   Cross left/right panning control: (a) launching the app in the Jupyter notebook and (b) 
-   a sequence of scope screen shots as the panning slider is from 0% to 50% and then 
-   to 100%. :label:`ThreeBandDesignCompare`
+   Three band equalizer: (a) launching the app in the Jupyter notebook and (b) 
+   an overlay plot of the theoretical log-frequency response with the measured using an 
+   AD2 noise spectrum capture import to the Jupyter notebook. :label:`ThreeBandDesignCompare`
 
 Reasonable agreement is achieved, but listening to music is a more effective way of evaluating 
 the end result. To complete the design more peaking filters should be added. 
