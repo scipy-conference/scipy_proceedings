@@ -522,7 +522,7 @@ BinderHub takes the following actions:
 2. **Check the latest commit hash**. BinderHub compares the version specified in
    the URL with the versions that have been previously
    built for this repository in the registry (if a branch is given, BinderHub
-   checks the latest commit hash on this branch)
+   checks the latest commit hash on this branch).
 3. If the version has *not* been built, **launch a repo2docker process** that builds
    and registers an image from the repository, then returns a reference to the
    registered image.
@@ -530,7 +530,7 @@ BinderHub takes the following actions:
 5. **Launch a JupyterHub user session** that sources the repo2docker
    image in the registry. This session will serve the environment needed to run
    the repository, along with any GUI that the user specifies.
-6. **Clean up the user session**. Once the user departs, Binder destroy's
+6. **Clean up the user session**. Once the user departs, Binder destroys
    the temporary user ID for the user's unique session, as well as their temporary
    files from their interactive session (steps 4 and 5). The Docker image for the
    repository persists, and will be used in subsequent launch attempts (as long as
@@ -729,7 +729,7 @@ could serve as a hub that connects this federated network of BinderHubs together
 directing the user to an organization-specific BinderHub provided that they
 have the proper credentials on their machine.
 
-The future of binder
+The future of Binder
 --------------------
 
 This paper outlines the technical infrastructure underlying `mybinder.org <https://mybinder.org>`_ and
