@@ -590,7 +590,7 @@ Accessing this endpoint will trigger the following events:
    Notebook Server REST API).
 
 Information about the process above is streamed to the user via a persistent
-HTTP connection with structured JSON. Here's an example of the output for
+HTTP connection with structured JSON messages via the EventStream protocol. Here's an example of the output for
 the above build::
 
     data: {"phase": "built",
