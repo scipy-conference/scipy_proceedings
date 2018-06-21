@@ -85,7 +85,7 @@ Gustafson-Barsis' law states that if the problem size grows along with the numbe
 This law eases the concerns regarding Python as a language for parallel computing
 when the amount of serial computation in a Python code is fixed, and all the data-processing is hidden behind libraries like NumPy and SciPy.
 However, a larger problem size demands more operational memory to compute, but memory is a limited resource.
-Even if problem size is nearly unlimited, as it is for "Big Data", it still has to decomposed into chunks that fit into memory.
+Even if problem size is nearly unlimited, as it is for "Big Data", it still has to be decomposed into chunks that fit into memory.
 This limited growth of the problem size on a single node results in the scalability limitations defined by Amdahl's Law anyway.
 Thus, the best strategy to efficiently load a multi-core system is still to avoid serial regions and synchronization.
 
@@ -114,7 +114,7 @@ oversubscription can lead to sub-optimal execution due to frequent context switc
 and load imbalance.
 
 For example, Intel OpenMP [*]_ runtime library (used by NumPy/SciPy)
-may keep its threads active to facilitat the rapid start of subsequent parallel regions.
+may keep its threads active to facilitate the rapid start of subsequent parallel regions.
 This is usually a useful approach to reduce work distribution overhead, but
 when another active thread pool exists in the application,
 it can impact performance.  This is because the waiting OpenMP worker threads consume CPU time busy-waiting, while the other parallel work cannot start until OpenMP threads stop spinning or are preempted by the OS.
@@ -155,7 +155,7 @@ However, this approach can have potential performance-reducing drawbacks:
 -----------------
 Our goal is to provide alternative solutions for composing multiple levels of parallelism across multiple threading libraries
 with same or better performance compared to the usual approaches.
-At the same time, we wish to keep the interface for this simple, requiring less deep knowledge and fewer decisions from end-users.
+At the same time, we wish to keep the interface for this simple, requiring shallower knowledge and fewer decisions from end-users.
 We evaluate several new approaches in this paper.
 
 
@@ -196,10 +196,10 @@ To run it, we use one of the following commands:
 
 The optional argument :code:`-f <oversubscription_factor>` sets an oversubscription factor that will be used
 to compute the number of threads per pool worker.
-By default itis 2, which means that in our example, 8 threads will be used per process.
+By default it is 2, which means that in our example, 8 threads will be used per process.
 By allowing this limited degree of oversubscription by default, many applications achieve better load balance and performance that
-will outweigh the overhead incurred by the oversubscription, as discussed in p3.5.
-For the particular examples we show in this paper, the best performance is achieved with :code:`-f 1` specified on the command line, indicating that any amount of oversubscription leads to non-optimal performance for those applications.
+will outweigh the overhead incurred by the oversubscription, as discussed in section 3.5.
+For the particular examples we show in this paper, the best performance is achieved with an oversubscription factor of 1 specified on the command line as :code:`-f 1`, indicating that any amount of oversubscription leads to non-optimal performance for those applications.
 
 
 2.2. Limiting Simultaneous OpenMP Parallel Regions
@@ -216,15 +216,13 @@ This idea is easily extended to the multiple process case using Inter-Process Co
 a system-wide semaphore.
 
 The exclusive mode approach is implemented in the Intel |R| OpenMP* runtime library being released
-as part of Intel |R| Distribution for Python 2018 [#]_ as an experimental preview feature.
-To enable this mode, :code:`KMP_COMPOSABILITY` environment variable should be set, for example:
+as part of Intel |R| Distribution for Python 2018 [#]_ as an experimental preview feature, later the counting mode was also added.
+Setting the :code:`KMP_COMPOSABILITY` environment variable as follows should enable each OpenMP parallel region to run exclusively, eliminating the worst oversubscription effects:
 
 .. [#] It was also introduced on Anaconda cloud along with the version 2017.0.3 in limited, undocumented form.
 .. code-block:: sh
 
     env KMP_COMPOSABILITY=mode=exclusive python app.py
-
-This enables each OpenMP parallel region to run exclusively, eliminating the worst oversubscription effects.
 
 With composability mode in use, multi-processing coordination is enabled automatically on the first usage.
 Each process has its own pool of OpenMP worker threads.
@@ -375,7 +373,7 @@ We also noticed that reducing the period of time after which an Intel OpenMP wor
 We achieve this by setting KMP_BLOCKTIME to zero by default.
 These simple optimizations reduce the computational time by 2.5x.
 
-The third approach using *smp* module and specifying ``-f 1``does similar optimizations automatically,
+The third approach using *smp* module and specifying an oversubscription factor of 1 (``-f 1``) does similar optimizations automatically,
 and shows the same level of performance as for ``OMP_NUM_THREADS=1``.
 The approach is more flexible and works with several thread/process pools in the application scope,
 even if they have different sizes.
@@ -420,7 +418,7 @@ This code has the distinctive feature that, in spite of parallel execution of ei
 it cannot fully utilize all available CPU cores.
 The additional level of parallelism we use here significantly improves the overall benchmark performance.
 
-Figure :ref:`snumpy` shows benchmark execution time using the same modes as inthe QR decomposition example.
+Figure :ref:`snumpy` shows benchmark execution time using the same modes as in the QR decomposition example.
 The best choice for this benchmark was to limit number of threads statically either using manual settings or the *smp* module, and obtained a more than 7x speed-up.
 Also, Intel |R| TBB based approach performed much better than composable OpenMP.
 The reason for this was that there was insufficient parallelism present in each separate chunk.
@@ -473,7 +471,7 @@ Since we have a single thread pool with a fixed number of workers,
 it is unknown which of workers are used and how intensively.
 Accordingly, it is difficult to set an appropriate number of threads statically.
 Thus, we limit the number of threads per parallel region based on the size of the pool only.
-As a result, just a few threads are used inthe first stage, which leads to underutilization and slow performance.
+As a result, just a few threads are used in the first stage, which leads to underutilization and slow performance.
 The second and third stages work well, but overall we have a mediocre result.
 
 The work stealing scheduler of Intel |R| TBB works slightly better than the default version,
@@ -533,7 +531,7 @@ since there is not enough work for each parallel region, which leads to CPU unde
 ------------------------------------------------------
 The experiments in this section demonstrate the benefits of using nested parallelism and
 determine what degree of oversubscription impacts performance.
-We took our balanced eigenvalues search workload (p3.2) and ran it in default and the best performing SMP modes.
+We took our balanced eigenvalues search workload (section 3.2) and ran it in default and the best performing SMP modes.
 Then we ran it with various sizes for the top level thread and process pool, from 1 to 88 workers.
 
 .. figure:: scalability_multithreading.png
@@ -630,7 +628,7 @@ In particular, balanced QR decomposition and eigenvalues search examples are 2.5
 compared to the baseline implementations.
 Imbalanced versions of these benchmarks are 34-35% faster than the baseline.
 
-These improvements are achieved with all different approaches,
+These improvements are all achieved with different approaches,
 demonstrating that the three solutions are valuable and complement each other.
 We have compared suggested approaches and provided recommendations for when it makes sense to employ each of them.
 
