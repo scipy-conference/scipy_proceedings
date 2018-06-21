@@ -38,6 +38,11 @@
 :institution: Netflix
 :equal-contributor:
 
+:author: Gladys Nalvarte
+:email:
+:institution: Simula Research Lab
+:equal-contributor:
+
 :author: Andrew Osheroff
 :email:
 :institution:
@@ -58,8 +63,8 @@
 :institution: UC Berkeley
 :equal-contributor:
 
-:author: Benjamin Regan-Kelley
-:email:
+:author: Benjamin Ragan-Kelley
+:email: benjaminrk@gmail.com
 :institution: Simula Research Lab
 :equal-contributor:
 
