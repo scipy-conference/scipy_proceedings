@@ -160,7 +160,7 @@ the nature of pathway interference in the total signal lineshape.
 
 .. figure:: WMELs.png
 
-    Independent Lioville pathways simulated. Excitations from
+    Independent Liouville pathways simulated. Excitations from
     :math:`\omega_1` are in yellow, excitations from
     :math:`\omega_2 = \omega_{2^\prime}` are shown in purple. Figure was
     originally published as Figure 1 of Kohler, Thompson, and
