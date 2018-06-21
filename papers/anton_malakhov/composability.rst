@@ -16,7 +16,7 @@
 :email: Terry.L.Wilmarth@intel.com
 :institution: Intel Corporation
 
-:year: 2017
+:year: 2018
 :video: Unknown yet
 
 ---------------------------------------------------------------------
@@ -574,9 +574,9 @@ where there is enough work to load each innermost parallel region.
 The dynamic task scheduler from Intel |R| TBB provides the best performance
 when innermost parallel regions cannot fully utilize the whole CPU and/or have varying amounts of work to process.
 
-This empirical evidence might not be enough to properly generalize our experience while there are a lot of
-other variables and moving targets, but we did our best to summarize conclusions and suggest practical guidance
-in the following table as a starting point for tuning performance of applications with nested parallelism:
+The evidence presented in this paper does not explore the full problem parameter space,
+however it does provide practical guidance that can be used as a starting point to tune
+the performance of applications with nested parallelism.
 
 .. figure:: recommendation_table.png
    :figclass: h
@@ -588,10 +588,10 @@ that blocks only one thread for the event loop and so prevents other threads fro
 
 We encourage readers to try suggested composability modes and use them in production environments,
 if this provides better results.
-However, there are potential enhancements that can be implemented
-and we need feedback and realistic use cases
+However, there are potential enhancements that can be implemented and we need feedback and realistic use cases
 in order prioritize the improvements.
 
+Both *tbb* and *smp* modules are implemented and tested with both major Python versions, 2 (starting with 2.7+) and 3 (3.5 and newer).
 The *smp* module works only on Linux currently, but can be extended to other platforms as well.
 It bases its calculations only on the pool size and does not take into account its real usage.
 We think it can be improved in future to trace task scheduling pool events and become more flexible.
@@ -600,8 +600,10 @@ The composability mode of Intel OpenMP* runtime library is currently limited to 
 It works well with parallel regions with high CPU utilization,
 but it has a significant performance gap in other cases, which we believe can be improved.
 
-The IPC mode of the TBB module for Python is a preview feature, which might be insufficiently optimized and verified
-with different use cases.
+The IPC mode of the TBB module for Python is also limitted to Linux and it is a preview feature,
+which might be insufficiently optimized and verified with different use cases.
+However, the default mode of the TBB module for Python works well on Windows and Mac OS
+for multi-threading coordination in single process.
 Also, the TBB-based threading layer of Intel |R| MKL might be suboptimal compared to the default OpenMP-based threading layer.
 
 All these problems can be eliminated as more users become interested in using nested parallelism
@@ -612,8 +614,10 @@ in a prodution environment and as all software mentioned here is further develop
 
 5. Conclusion
 -------------
-In this paper, we discussed the necessity of broader usage of nested parallelism for multi-core systems, and defines threading composability.  We address the issues, such as GIL and oversubscription, of Python programs and libraries that use parallelism with multi-core systems.
-These issues affect the performance of Python programs that use libraries like NumPy, SciPy, SciKit-learn, Dask, and Numba.
+This paper provides a working definition for threading composability,
+specifically discussing the necessity for broader usage of nested parallelism on multi-core systems.
+We also addressed performance issues related to the GIL and oversubscription of threads,
+for python libraries using parallelism with multi-core processors, such as NumPy, SciPy, SciKit-learn, Dask, and Numba.
 
 Three approaches are suggested as potential solutions.
 The first approach is to statically limit the number of threads created on the nested parallel level.
@@ -630,7 +634,7 @@ Imbalanced versions of these benchmarks are 34-35% faster than the baseline.
 
 These improvements are all achieved with different approaches,
 demonstrating that the three solutions are valuable and complement each other.
-We have compared suggested approaches and provided recommendations for when it makes sense to employ each of them.
+Our comparison of the suggested approaches provides recommendations for when it makes sense to employ each of them.
 
 All the described modules and libraries are available as open source software and
 included as part of the free Intel |R| Distribution for Python product.
