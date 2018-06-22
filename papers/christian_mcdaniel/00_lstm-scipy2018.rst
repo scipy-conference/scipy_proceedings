@@ -28,32 +28,82 @@ In a meta-analysis style overview of the use of LSTM RNNs for HAR experiments (d
 
 Background
 -------------
+This section is intended to give the reader a digestible introduction to artificial neural networks, recurrent neural networks and the LSTM cell. The networks will be discussed as they relate to multi-class classification problems as is the task in HAR.
+
 *Artificial Neural Networks*
 
-The first artificial neural network (ANN) architecture was proposed by Drs. Warren McCulloch and Walter Pitts in 1943 as a means to emulate the cumulative semantic functioning of groups of neurons via propositional logic :cite:`McCullochPitts1943` :cite:`Geron2017`. Frank Rosenblatt subsequently developed the Perceptron in 1957 :cite:`Rosenblatt1957`. This ANN variation uses numbers in lieu of logical on/off states and carries out its step-wise operations via mathematical constructs known as linear threshold units (LTUs). The LTU operates by aggregating multiple weighted (**w**) inputs (**x**) and feeding this summation z through an activation function *f*(z) or step function step(z), which generates an interpretable output (yp) (e.g. 0 or 1).
+The first artificial neural network (ANN) architecture was proposed by Drs. Warren McCulloch and Walter Pitts in 1943 as a means to emulate the cumulative semantic functioning of groups of neurons via propositional logic :cite:`McCullochPitts1943` :cite:`Geron2017`. Frank Rosenblatt subsequently developed the Perceptron in 1957 :cite:`Rosenblatt1957`. This ANN variation uses numbers in lieu of logical on/off states and carries out its step-wise operations via mathematical constructs known as linear threshold units (LTUs). The LTU operates by aggregating multiple weighted (**w**) inputs (**x**) and feeding this summation u through an activation function *f*(u) or step function step(u), which generates an interpretable output (yp) (e.g. 0 or 1).
 
 .. math::
 
-  z  = **w**(t) . **x**
-  yp = *f*(z) or step(z)
+  u  = **w**(t) . **x**
+  yp = *f*(u) or step(u)
 
 where **w**(t) is the transpose of the weight vector **w** and . is the dot product operation from vector calculus. **x** is a single instance of the training data, containing values for all n attributes of the data. As such, **w** is also of length n, and the entire training data set for all m instances is a matrix **X** of dimensions m by n (i.e., m x n).
 
-Each attribute in **x** represents a node in the perceptron's input layer, which simply provides the raw data to the the output layer where the LTU resides. Often more than one LTU is used in the output layer to represent multiple target classes, where each data instance has a target vector **y** the length of the number of classes k. Thus for each instance in the data, **y** contains all zeros except at the location corresponding to the class that that data instance belongs to (e.g., class 0 in a four-class **y** vector would be **y** = 1000 and class 2 would be **y** = 0010). So, prediction yp becomes vector **yp** (one prediction from each LTU node), and each LTU node corresponds to a single class in **y** (for multi-class classification problems as in HAR). Each LTU contains its own weight vector **wk** of length n (i.e., a fully-connected network), resulting in a weight matrix **W** of dimensions n x k. Taken over all training instances in **X**, prediction **yp** from each LTU becomes matrix **Yp** with dimensions m x k.
+Each attribute in **x** represents a node in the perceptron's input layer, which simply provides the raw data to the the output layer where the LTU resides. Often more than one LTU is used in the output layer to represent multiple target classes, where each data instance has a target vector **y** the length of the number of classes k. Thus for each instance in the data, **y** contains all zeros except at the location corresponding to the class that that data instance belongs to (e.g., class 0 in a four-class **y** vector would be **y** = 1000 and class 2 would be **y** = 0010). So, each LTU node corresponds to a single class in **y** and each LTU's prediction yp indicates the probability with which the model predicts the training instance to belong to the class represented by the specific LTU. Given the predictions at each LTU, the prediction with the largest value - max(**yp**) - is taken as the overall predicted class for the instance of the data being analyzed. Taken over the entire dataset, each LTU has a prediction vector **ypk** and the entire output layer produces a prediction matrix **Yp** with dimensions m x k. Additionally, each LTU contains its own weight vector **wk** of length n (i.e., a fully-connected network), resulting in a weight matrix **W** of dimensions n x k. The weight vector at each LTU is what is iteratively adjusted during training to apply a class-specific weighting of the data and yield a class-specific prediction.
 
-Each to predict the probability that the data instance **x** belongs to the corresponding class yk. The LTU yielding the maximum predicted value - max(**yp**) - represents the predicted class for the given data instance **x**, and **yp** is measured against the input's target vector **y** to generate an error term e for each LTU. 
+Neural networks and deep neural networks (DNN) describe more complex architectures with additional layers, which allow for nonlinear transformations of the data and increase the flexibility and robustness of the model. If we look at a simple three-layer neural network, we see input and output layers as described above, as well as a layer in the middle, termed a "hidden layer". This layer acts much like the output layer, except that its outputs **z** for each training instance are fed into the output layer, which then generates predictions **yp** from **z** alone. The complete processing of all instances of the dataset, or all instances of a portion of the dataset called a "mini-batch", through the input layer, the hidden layer, and the output layer marks the completion of a single "forward pass". For the model to improve, the outputs generated by this forward pass must be evaluated somehow and the model updated in an attempt to improve the model's predictive power on the data. An error term ek is calculated by comparing individual predictions ypk to corresponding ground truth target values in yk. Thus, an error matrix **E** is generated composed of error terms over all k classes for all m training instances. This error matrix is used as an indicator for how to adjust the weight matrix in the output layer so as to yield more accurate predictions, and the corrections made to the output layer give an indication of how to adjust the weights in the hidden layer so as to further help transform the data in a way that leads to improved accuracy of the model. This process of carrying the error backward from the output layer through the hidden layer(s) is known as backpropogation. One forward pass and subsequent backpropogation makes up a single epoch, and the training process consists of many epochs repeated in succession to iteratively improve the model. 
 
-.. math::
-
-  yk = *f*(sum(**bk** . **x**)) + ek
-  **y** = *f*(**W**(t) . **x**) + **e**
-  **e** = **y** - **yp** = **y** - ** *f*(z) **
-
-The objective during training then is to minimize this error term through iterative updates to the weight vector **w**. Using the sum of squared error (sse) as the error term (halved for calculation convenience (hsse)), these updates can be implemented by calculating the n-dimensional derivative (gradient) of hsse with respect to the weight vector **w** and update .
+The iterative improvements are known as optimization, and many methods exist to carry this process out. The common example is stochastic gradient descent (SGD), which calculates the gradient *g*, or multi-dimensional derivative, of the error matrix and adjusts the weight matrices at each layer in a direction opposite this gradient. The change *d* (delta) to be applied to weight matrix is mediated via a learning rate *n*.
 
 .. math::
 
-  hsse(**w**) = 1/2 (y - *f*(z)) . (y - *f*(z))
+  **E** = **Y** - *f*(**X** **W**)
+  optimization: min(**W**) ||**E**||(F)
+  hsse(**W**) = 1/2 sum(**yk** - *f*(**X** **wk**) . (**yk** - *f*(**X** **wk**)))
+  *g*hsse / *g* **wk** = **X**(t) [*f*'(**X** **wk**) **ek**] *n* = -**X**(t) ** *d*k** *n*
+
+where min(**W**) ||**E**||(F)  represents the objective function of minimizing the Frobenius norm of the error matrix **E** with respect to weight matrix **W**. hsse(**W**) represents the halved (for mathematical convenience) sum of squared error, calculated for all k nodes in the output layer. *g*hsse / *g* **wk** represents the gradient of the hsse with respect to each weight vector **wk**, and *f*'() represents the derivative of the term in the parentheses.
+
+Looking at our three-layer neural network depicted in ___, a single epoch would proceed as follows (first given in vector notation and then in matrix notation):
+
+1) Compute **yp** and compare with **y** to generate the error term:
+
+.. math::
+
+  **zh** = *f1*(**a**_h . **x**)
+  **ypk** = *f2*(**b**_k . **z**)
+  **ek** = **yk** - **ypk**
+
+  **Z** = *f1*(**X** **A**)
+  **Yp** = *f2*(**Z** **B**)
+  **E** = **Y** - **Yp**
+
+2) Backpropogate the error regarding the correction needed for **yp**
+
+.. math::
+
+  ** *d*yk** = -*f2*'(**b**_k . **z**) **ek**
+  *g*hsse / *g* bhk = **z**h *d*yk
+
+  **D**y = *f2*'(**Z** **B**) **E**
+
+3) Backpropogate the correction to the hidden layer
+
+.. math::
+
+  ** *d*zh** = *f1*'(**a**_h . **x**)[**b**h . *d*y]
+  *g*hsse / *g*ajh = **x**j *d*zh
+
+  **D**z = *f1*'(**X** **A**)**D**y **B**(t)
+
+4) update **A** and **B** via ** *d*y** and ** *d*z**
+
+.. math::
+  bhk = bhk = **z**h *d*yk *n* = bhk - *g*hsse/*g*bhk *n*
+  ajh = ajh - **x**j *d*zh *n* = ajh = *g*hsse/*g*ajh *n*
+
+  **B** = **B** - **Z**(t) **D**y *n*
+  **A** = **A** - **X**(t) **D**z *n*
+
+sse is commonly used as the error term for regression problems, whereas squared error or cross entropy is typical for classification problems.
+
+.. math::
+
+  cross-entropy = -sum( sum(ymk log(*f*k(xm))))
+
+where the first sum is taken over all m training instances in the data set or mini-batch and the second sum is taken over all classes. For reference, a two-layer network which uses the softmax activation function and cross-entropy error is the same as a linear logistic regression model; the weights are estimated via maximum likelihood estimators.
 
 
 Related Works
