@@ -224,7 +224,7 @@ To calculate our final affinity we use the following functions, the normpdf incl
 
 .. code-block:: python
 
-    def normpdf(X, mu, sigma, method = 'direct'):
+    def normpdf(X, mu, sigma):
         """
         Evaluates the PDF under the current GMM
         parameters.
@@ -237,10 +237,6 @@ To calculate our final affinity we use the following functions, the normpdf incl
             Mean of the Gaussian.
         sigma : array, shape (d, d)
             Gaussian covariance.
-        method : string
-            'direct' is a direct implementation of the
-            PDF. 'scipy' will use the scipy.stats.norm
-            function to evaluate the PDF.
 
         Returns
         -------
@@ -249,27 +245,19 @@ To calculate our final affinity we use the following functions, the normpdf incl
             given the parameters.
         """
         d = 1 if len(X.shape) == 1 else X.shape[1]
-        if method == 'direct':
-            # Direct implementation of the normal PDF.
-            if d == 1:
-                n = 1 / ((2 * np.pi * sigma) ** 0.5)
-                e = np.exp(-(((X - mu) ** 2) /
-                    (2 * sigma)))
-                px = n * e
-            else:
-                det = sla.det(sigma)
-                inv = sla.inv(sigma)
-                p = np.einsum('ni,ji,ni->n', X - mu,
-                    inv, X - mu)
-                n = 1 / ((((2 * np.pi) ** d) * det)
-                    ** 0.5)
-                px = np.exp(-0.5 * p) * n
-        else: # SciPy
-            if d == 1:
-                rv = stats.norm(mu, sigma)
-            else:
-                rv = stats.multivariate_normal(mu, sigma)
-            px = rv.pdf(X)
+        if d == 1:
+            n = 1 / ((2 * np.pi * sigma) ** 0.5)
+            e = np.exp(-(((X - mu) ** 2) /
+                (2 * sigma)))
+            px = n * e
+        else:
+            det = sla.det(sigma)
+            inv = sla.inv(sigma)
+            p = np.einsum('ni,ji,ni->n', X - mu,
+                inv, X - mu)
+            n = 1 / ((((2 * np.pi) ** d) * det)
+                ** 0.5)
+            px = np.exp(-0.5 * p) * n
         return px
 
     def aff_by_eval(means, covars):
@@ -289,12 +277,12 @@ To calculate our final affinity we use the following functions, the normpdf incl
         aff_Table : array, shape (k, k)
 
         """
-        aff_Table = np.empty([means.shape[0],0])
+        aff_Table = np.empty([means.shape[0], 0])
         for i, (mean, covar) in enumerate(zip(means,
             covars)):
-            p_mus_Kx = normpdf(means,mean,covar)
+            p_mus_Kx = normpdf(means, mean, covar)
             aff_Table = np.append(aff_Table,
-                np.transpose([p_mus_Kx]),axis=1)
+                np.transpose([p_mus_Kx]), axis=1)
         return aff_Table
 
     def get_all_aff_tables(means,covars):
@@ -316,10 +304,10 @@ To calculate our final affinity we use the following functions, the normpdf incl
         aff_Table : array, shape (k, k)
 
         """
-        aff_Tables = [aff_by_eval(means[0],covars[0])]
-        for i in range(1,means.shape[0]):
+        aff_Tables = [aff_by_eval(means[0], covars[0])]
+        for i in range(1, means.shape[0]):
             aff_Tables = np.append(aff_Tables,
-                [aff_by_eval(means[i],covars[i])],axis =0)
+                [aff_by_eval(means[i], covars[i])], axis =0)
         return aff_Tables
 
 Current Insights and Future Work Discussion
