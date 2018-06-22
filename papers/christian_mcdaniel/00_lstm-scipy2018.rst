@@ -26,11 +26,41 @@ Researchers in various fields have utilized these networks for their data modeli
 
 In a meta-analysis style overview of the use of LSTM RNNs for HAR experiments (discussed below), we found a general lack of consensus regarding the various model architectures and hyperparameters used. Often, a given pair of experiments explored largely or entirely non-overlapping ranges of hyperparameter settings. For example, Carvalho, et. al. assessed the performance of models with two, five, or ten units per layer, Rassem, et. al. constructed models with 25, 35, or 50 units per layer, and Setterquist 2018 searched from 8-512 units per layer :cite:`Carvalhoetal2017` :cite:`Rassemetal2017` :cite:`Setterquist2018`. Furthermore, many architectural and procedural details are not included in the reports, making reproducibility nearly impossible. The analysis pipelines employed are often lacking detail and sources of data leakage, where details from the testing data are exposed to the model during training, appear to be overlooked in certain cases. Without clear justifications for model implementations and deliberate, reproducible data analysis pipelines, objective model comparisons and inferences from results cannot be made. For these reasons, the current report seeks to summarize the previous implementations of LSTMs for HAR research available in literature and outline a structured data analysis pipeline for this domain. We implement our pipeline, optimizing a baseline LSTM model over an expansive hyperparameter search space. We suspect that such efforts will provide unique insights into the usefulness of LSTMs for classifying accelerometer data and will allow for scientifically rigorous comparisons across experiments and datasets.
 
+Background
+-------------
+*Artificial Neural Networks*
+
+The first artificial neural network (ANN) architecture was proposed by Drs. Warren McCulloch and Walter Pitts in 1943 as a means to emulate the cumulative semantic functioning of groups of neurons via propositional logic :cite:`McCullochPitts1943` :cite:`Geron2017`. Frank Rosenblatt subsequently developed the Perceptron in 1957 :cite:`Rosenblatt1957`. This ANN variation uses numbers in lieu of logical on/off states and carries out its step-wise operations via mathematical constructs known as linear threshold units (LTUs). The LTU operates by aggregating multiple weighted (**w**) inputs (**x**) and feeding this summation z through an activation function *f*(z) or step function step(z), which generates an interpretable output (yp) (e.g. 0 or 1).
+
+.. math::
+
+  z  = **w**(t) . **x**
+  yp = *f*(z) or step(z)
+
+where **w**(t) is the transpose of the weight vector **w** and . is the dot product operation from vector calculus. **x** is a single instance of the training data, containing values for all n attributes of the data. As such, **w** is also of length n, and the entire training data set for all m instances is a matrix **X** of dimensions m by n (i.e., m x n).
+
+Each attribute in **x** represents a node in the perceptron's input layer, which simply provides the raw data to the the output layer where the LTU resides. Often more than one LTU is used in the output layer to represent multiple target classes, where each data instance has a target vector **y** the length of the number of classes k. Thus for each instance in the data, **y** contains all zeros except at the location corresponding to the class that that data instance belongs to (e.g., class 0 in a four-class **y** vector would be **y** = 1000 and class 2 would be **y** = 0010). So, prediction yp becomes vector **yp** (one prediction from each LTU node), and each LTU node corresponds to a single class in **y** (for multi-class classification problems as in HAR). Each LTU contains its own weight vector **wk** of length n (i.e., a fully-connected network), resulting in a weight matrix **W** of dimensions n x k. Taken over all training instances in **X**, prediction **yp** from each LTU becomes matrix **Yp** with dimensions m x k.
+
+Each to predict the probability that the data instance **x** belongs to the corresponding class yk. The LTU yielding the maximum predicted value - max(**yp**) - represents the predicted class for the given data instance **x**, and **yp** is measured against the input's target vector **y** to generate an error term e for each LTU. 
+
+.. math::
+
+  yk = *f*(sum(**bk** . **x**)) + ek
+  **y** = *f*(**W**(t) . **x**) + **e**
+  **e** = **y** - **yp** = **y** - ** *f*(z) **
+
+The objective during training then is to minimize this error term through iterative updates to the weight vector **w**. Using the sum of squared error (sse) as the error term (halved for calculation convenience (hsse)), these updates can be implemented by calculating the n-dimensional derivative (gradient) of hsse with respect to the weight vector **w** and update .
+
+.. math::
+
+  hsse(**w**) = 1/2 (y - *f*(z)) . (y - *f*(z))
+
+
 Related Works
 -------------
 The following section outlines the nuanced hyperparameter combinations used by 29 studies available in literature in a meta-analysis style survey. Published works as well as pre-published and thesis research projects were included so as to gain insight into the state-of-the-art methodologies at all levels and increase the volume of works available for review. It should be noted that the following summaries are not necessarily entirely exhaustive regarding the specifications listed or the individual citations made for each specification. Additionally, many reports did not include explicit details of many aspects of their research.
 
-The survey of previous experiments in this field provided blueprints for constructing an adequate search space of hyperparameters. If the reader has a good understanding of the hyperparameters involved in training an LSTM model, he or she may choose to skip this section. Furthermore, as our main focus is on the establishment of a data-focused approach to optimizing LSTMs, we do not discuss in detail the theoretical or mathematical principles of LSTMs, and expect the reader to already be familiar with these topics. Many of the works cited in the following section provide such background knowledge. We have held our commentary on the findings of this meta-study until the Discussion section.
+The survey of previous experiments in this field provided blueprints for constructing an adequate search space of hyperparameters. If the reader has a good understanding of the hyperparameters involved in training an LSTM model, he or she may choose to skip this section. We have held our commentary on the findings of this meta-study until the Discussion section.
 
 *Experimental Setups*
 
@@ -106,25 +136,25 @@ The ranges of hyperparameters were devised to include all ranges explored by the
 
   LSTM(
     units={{choice(numpy.arange(2,522,20))}},
-    activation={{choice(['softmax', 'tanh', 
-                          'sigmoid', 'relu', 
+    activation={{choice(['softmax', 'tanh',
+                          'sigmoid', 'relu',
                           'linear'])}},
-    recurrent_activation={{choice(['tanh', 
-                           'hard_sigmoid', 
-                           'sigmoid', 'relu', 
+    recurrent_activation={{choice(['tanh',
+                           'hard_sigmoid',
+                           'sigmoid', 'relu',
                            'linear'])}},
     use_bias={{choice([True, False])}},
-    kernel_initializer={{choice(['zeros', 'ones', 
-                           RandomNormal(), 
-                           RandomUniform(minval=-1, maxval=1), 
-                           Constant(value=0.1), 
-                           'orthogonal', 'lecun_normal', 
+    kernel_initializer={{choice(['zeros', 'ones',
+                           RandomNormal(),
+                           RandomUniform(minval=-1, maxval=1),
+                           Constant(value=0.1),
+                           'orthogonal', 'lecun_normal',
                            'glorot_uniform'])}},
-    recurrent_initializer={{choice(['zeros', 'ones', 
-                            RandomNormal(), 
-                            RandomUniform(minval=-1, maxval=1), 
-                            Constant(value=0.1), 
-                            'orthogonal', 'lecun_normal', 
+    recurrent_initializer={{choice(['zeros', 'ones',
+                            RandomNormal(),
+                            RandomUniform(minval=-1, maxval=1),
+                            Constant(value=0.1),
+                            'orthogonal', 'lecun_normal',
                             'glorot_uniform'])}},
     unit_forget_bias=True,
     kernel_regularizer={{choice([None,'l2', 'l1'])}},
@@ -135,31 +165,31 @@ The ranges of hyperparameters were devised to include all ranges explored by the
     recurrent_dropout={{uniform(0, 1)}})
 
   adam = keras.optimizers.Adam(
-            lr={{choice([10**-6, 10**-5, 
-                         10**-4, 10**-3, 
-                         10**-2, 10**-1])}}, 
+            lr={{choice([10**-6, 10**-5,
+                         10**-4, 10**-3,
+                         10**-2, 10**-1])}},
                          clipnorm=1.)
   rmsprop = keras.optimizers.RMSprop(
-            lr={{choice([10**-6, 10**-5, 
-                         10**-4, 10**-3, 
-                         10**-2, 10**-1])}}, 
+            lr={{choice([10**-6, 10**-5,
+                         10**-4, 10**-3,
+                         10**-2, 10**-1])}},
                          clipnorm=1.)
   sgd = keras.optimizers.SGD(
-            lr={{choice([10**-6, 10**-5, 
-                         10**-4, 10**-3, 
-                         10**-2, 10**-1])}}, 
+            lr={{choice([10**-6, 10**-5,
+                         10**-4, 10**-3,
+                         10**-2, 10**-1])}},
                          clipnorm=1.)
 
   model.compile(
-    optimizer={{choice(['sgd', 'rmsprop', 'adagrad', 
+    optimizer={{choice(['sgd', 'rmsprop', 'adagrad',
                        'adadelta', 'nadam', 'adam'])}},
-    loss='categorical_crossentropy', 
+    loss='categorical_crossentropy',
     metrics=['accuracy'])
 
   results = model.fit(
     X_train, y_train, epochs=1000,\
     batch_size={{choice(numpy.arange(32, 480, 32))}},\
-    validation_split=0.2, 
+    validation_split=0.2,
     callbacks=[early_stop, model_saver])
 
 Due to constraints in the Python package used for hyperparameter optimization (i.e., hyperas from hyperopt), the window size, stride length and number of layers were optimized on the highest performing combination of all other hyperparameters. Thus, for initial optimization, data was partitioned using a window size of 128 with 50% stride length and fed into a 2-layer LSTM network. Subsequently, window size, stride length and number of layers were tested using randomized grid search on the following ranges:
@@ -167,7 +197,7 @@ Due to constraints in the Python package used for hyperparameter optimization (i
 .. code-block:: python
 
   window_size = [24, 48, 64, 128, 192, 256]
-  stride      = [0.25*window_size, 
+  stride      = [0.25*window_size,
                   0.5*window_size,
                   0.75*window_size]
   n_layers    = [1, 2, 3, 4]
