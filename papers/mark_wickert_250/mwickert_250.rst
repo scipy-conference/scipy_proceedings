@@ -203,8 +203,8 @@ AD2 to avoid interaction between the two devices in parallel).
    :align: center
    :figclass: htb
 
-   Hardware interfaces: (a) iMic stereo USB audio device and the Digilent Analog Discovery 2 and (b) the 
-   low-cost Sabrent mono input stereo output USB audio device. :label:`USBAudioAD2`
+   The iMic stereo USB audio device and the Digilent Analog Discovery 2 (AD2), including the wiring 
+   harness. :label:`USBAudioAD2`
    
 When a :code:`DSP_io_stream` is created (top of Figure :ref:`pyaudioHelperclasses`) it needs to know 
 which input and output devices to connect to. If you just want and input or just an out, you still need 
@@ -219,7 +219,6 @@ listing of devices. The code block below was run with the iMic plugged into a US
 .. code-block:: python
 
    import sk_dsp_comm.pyaudio_helper as pah
-   # Index 3 is the Sabrent device
    In[3]: pah.available_devices()
    Out[3]:
    Index 0 device name = Built-in Microphone, 
@@ -292,7 +291,7 @@ the output, is shown in the code block below:
    # define a pass through, y = x, callback
    def callback(in_data, frame_length, time_info, 
                 status):
-       global b, a, zi # typical globals for a filter
+       global DSP_IO, b, a, zi #no widgets yet
        DSP_IO.DSP_callback_tic() #log entering time
        # convert audio byte data to an int16 ndarray
        in_data_nda = np.frombuffer(in_data, 
@@ -504,6 +503,7 @@ including the set-up of the ipywidgets gain sliders, is given below:
    # L and Right Gain Sliders callback
    def callback(in_data, frame_count, time_info, 
                 status):  
+       global DSP_IO, L_gain, R_gain
        DSP_IO.DSP_callback_tic()
        # convert byte data to ndarray
        in_data_nda = np.frombuffer(in_data, 
@@ -537,7 +537,7 @@ and right samples, so now the class methods :code:`get_LR` and :code:`pack_LR`
 of Figure :ref:`pyaudioHelperclasses` are utilized to unpack the left and right 
 samples and then repack them, respectively. A screenshot of the gain sliders 
 app, including an AD2 scope capture, with C1 on the left channel and C2 on 
-the right channel, is given in Figure :ref`LeftRightGainSlider`.
+the right channel, is given in Figure :ref:`LeftRightGainSlider`.
 
 .. figure:: Left_Right_Gain_Slider_app.pdf
    :scale: 53%
@@ -586,6 +586,7 @@ In code we have:
    # Cross Panning
    def callback(in_data, frame_length, time_info, 
                 status):  
+       global DSP_IO, panning
        DSP_IO.DSP_callback_tic()
        # convert byte data to ndarray
        in_data_nda = np.frombuffer(in_data, 
@@ -661,7 +662,7 @@ in, then the returned :code:`zi` is held until the next time through the callbac
    # define callback (#2)
    def callback2(in_data, frame_length, time_info, 
                  status):
-       global b, a, zi
+       global DSP_IO, b, a, zi
        DSP_IO.DSP_callback_tic()
        # convert byte data to ndarray
        in_data_nda = np.frombuffer(in_data, 
@@ -675,9 +676,9 @@ in, then the returned :code:`zi` is held until the next time through the callbac
        # must be maintained from frame-to-frame,
        # so hold it in a global 
        # for FIR or simple IIR use:
-       y, zi = signal.lfilter(b,a,x,zi=zi) 
+       y, zi = signal.lfilter(b, a, x, zi=zi) 
        # for IIR use second-order sections:
-       #y, zi = signal.sosfilt(sos,x,zi=zi)     
+       #y, zi = signal.sosfilt(sos, x, zi=zi)     
        #***********************************************
        # Save data for later analysis
        # accumulate a new frame of samples
@@ -792,7 +793,8 @@ below starting with the slider creation:
    # define a pass through, y = x, callback
    def callback(in_data, frame_length, time_info, 
                 status):
-       global zi_b1,zi_b2,zi_b3
+       global DSP_IO, zi_b1, zi_b2, zi_b3
+       global band1, band2, band3
        DSP_IO.DSP_callback_tic()
        # convert byte data to ndarray
        in_data_nda = np.frombuffer(in_data, 
