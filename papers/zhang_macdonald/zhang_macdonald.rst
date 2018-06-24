@@ -11,18 +11,26 @@
 :bibliography: mybib
 
 --------------------------------------------------
-Reproducible Environments for Reproducible Results
+Pulp as a Tool to create Reproducible Environments
 --------------------------------------------------
 
 .. class:: abstract
 
    Trustworthy results require reproducibility. Publishing source code is
    necessary but not sufficient for complete reproducibility since complex
-   programs often depend on external code. Pulp_ is
-   open source, written in python, and can be used to manage and maintain
-   reproducible computational environments. Attendees of any skill level can
-   come learn best practices for creating reproducible environments, and
-   managing them with Pulp.
+   programs often depend on external code. Techniques and tools for managing
+   complex environments include but are not limited to requirements.txt files,
+   docker images, and ansible roles. These tools are necessary to create
+   reproducible environments, but managing these tools require different
+   techniques and workflows.
+
+   This talk seeks to provide an overview to the basic tools to manage
+   environments, including workflows, best practices, and potential
+   downfalls.This also provides and overview to Pulp_ as a way to
+   manage and maintain maintain reproducible computational environments.
+
+   Attendees of any skill level can come learn best practices for creating
+   reproducible environments, and managing them with Pulp.
 
 
 .. class:: keywords
@@ -33,6 +41,7 @@ Reproducible Environments for Reproducible Results
 Introduction
 ============
 
+
 Trustworthy results require reproducibility. Publishing code is necessary but
 not sufficient for complete reproducibility. Complex programs often depend on
 external code. “An article […] in a scientific publication is not the
@@ -40,51 +49,6 @@ scholarship itself, it is merely advertising of the scholarship. The actual
 scholarship is the complete software development environment and the complete
 set of instructions which generated the figures” :cite:`Buckheit` .
 
-Fortunately, this is a common problem and there are a number of best practices
-and tools that can make this easier. A common solution for high level
-dependencies is to explicitly "pin" them :cite:`Wilson`. In python this would be
-running
-
-.. code-block:: bash
-
-   pip freeze > requirements.txt
-
-
-But this only manages package dependencies and not system dependencies. And,
-because these resources are user managed and exist on 3rd party platforms,
-content can be modified or removed making it difficult or impossible to
-guarantee reproducibility.
-
-This paper seeks to explore several different methods of managing environmental
-reproducibility, and introduces Pulp as a manager for various environments.
-
-
-Measuring Reproducibility
-=========================
-
-Two factors have to be considered when we think about reproducibility.
-
-Complete reproducibility is having the researcher and reviewer share identical
-'bits' of the necessary system, program, and dependencies.
-
-Vandewalle identifies several necessities for complete reproducibility
-:cite:`Vandewalle`: the program's source code, package dependencies, system
-requirements and configuration, data source used, and documentation on running
-the provided the source code.
-
-On the other side one must determine if these programs and environments are
-flexible to change. Software moves fast, and even widely used programs become
-legacy and eventually deprecated. Pinning dependencies might accelerate this
-process.
-
-A good tool, and management system will balance complete reproducibility and
-code entropy.
-
-Tools
-=====
-
-Published Source Code
----------------------
 
 Scholarly research containing descriptions of methodology is no longer
 sufficient.  For standalone scripts, publishing source code might be
@@ -94,6 +58,55 @@ libraries for everything from left-padding a line to building scalable machine
 learning. This "has led to an ever larger and more complex black box between
 what was actually done and what is described in literature." :cite:`Boettiger`
 
+
+Fortunately, this is a common problem and there are a number of best practices
+and tools that can make this easier. However these tools require different
+techniques and workflows to manage. This talk seeks to summarize these tools
+and techniques including workflows, best practices, and potential pitfalls.
+And will then introduce Pulp_ as a potential environment manager to work in
+conjunction with these tools, to provide easily manageable and maintainable environments.
+
+
+..Note::
+    Tools include things such as requirements.txt and pipfile.lock for Python, Docker Images,
+    and Ansible Roles.
+
+    Managers are used to manage the environment for these tools such as: Package indexes for
+    python packages, Dockerhub for docker Images, Ansible Galaxy for Ansible roles and Pulp.
+
+    Workflows are ...
+
+
+Measuring Reproducibility
+-------------------------
+
+Two factors have to be considered when we think about published environments:
+
+1.  Reproducibility is the ability to have the researcher and reviewer share identical
+    'bits' of the necessary system, program, and dependencies.
+
+    Vandewalle identifies several necessities for complete reproducibility
+    :cite:`Vandewalle`: the program's source code, package dependencies, system
+    requirements and configuration, data source used, and documentation on running
+    the provided the source code.
+
+2.  Code entropy is the tendency of code systems to move fast. Programs and environments need to be
+    flexible to change. Software moves fast, and even widely used programs become
+    legacy and eventually deprecated. Pinning dependencies might accelerate this
+    process. This is the guarantee that code that works today, can also be ran 10 years from now.
+
+A good tool, and management system will balance reproducibility and
+code entropy.
+
+Existing Tools and Techniques
+=============================
+
+This is a quick introduction to the existing tools used to create reproducible environments.
+
+Published Source Code
+---------------------
+
+Publishing source code used to be the only thing necessary to
 Publishing source code in papers makes them inflexible to change-- bugs fixed
 after publication cannot be communicated to the readers of the paper. Code is
 not versioned and even if the source code is updated and made available it is
@@ -272,7 +285,7 @@ Containers
 
 Containers_ [1]_ "are technologies that allow you to package and isolate
 applications with their entire runtime environment—all of the files
-necessary to run." Applied to the scienctific field this means that each
+necessary to run." Applied to the scientific field this means that each
 container will contain an image of your system, a copy of your source code,
 installed dependencies, and data used. These are stored in a static file called
 an Image.
@@ -332,14 +345,14 @@ the system docker to a later version.
 
 
 
-Environmental Management
-========================
+Environmental Managers
+======================
 
 No matter which tool you are working with, even if you follow the best
 practices, you are at the mercy of the upstream repository. For packages that
 are user managed and exist on 3rd party platforms, such as PyPI, content can be
 modified or removed making it difficult or impossible to guarantee
-reproducibility.  The only way to guarantee reproducibility is to create and
+reproducibility. The only way to guarantee reproducibility is to create and
 host your own repositories.
 
 Given all these tools one needs to manage, it be more efficient to do so
@@ -349,9 +362,12 @@ Each content type handles the complexities in a different way- usually tools
 are built and optimized for a single content type. Context switching between
 these tools consume human RAM cycles.
 
+There are a multitude of environmental managers each with their benefits and downsides,
+This paper will primarily focus on Pulp, and have a summary of other managers at the end.
+
 
 Pulp
-----
+====
 
 Pulp is an open source repository manager[2]_ that can be used to create
 immutable computational environments that can be easily verified and shared.
@@ -367,25 +383,57 @@ Pulp v.3 natively versions repositories, which makes it ideal for careful
 management optimized for reproducibility.
 
 
-Concepts_:
-    Content units (like Python Wheel, or Ansible Role) in Pulp are organized by
-    their membership in repositories over time. Plugin users can add or remove
-    content units to a repository. Each time the content set of a repository is
-    changed, a new repository version is created.
+TODO: add a diagram illustrating these concepts
 
-    All content that is managed by Pulp can be hosted. Users create
-    type-specific publishers that provide the settings necessary to generate a
-    publication for a content set in a repository version. A publication
-    consists of the metadata of the content set and the artifacts of each
-    content unit in the content set. To host a publication, it must be assigned
-    to a distribution, which determines how and where a publication is served.
+Pulp stores *content units* (e.g. Python Wheel, Ansible Role) into collections
+called *repositories*.
+
+Repositories are versioned: content units (like Python Wheel, or Ansible Role)
+in Pulp are organized by their membership in repositories over time.
+Plugin users can add or remove content units to a repository by *uploading*
+them individually, or *syncing* from a remote source like PyPI.
+
+All content that is managed by Pulp can be hosted. Users create
+type-specific *publishers* that provide the settings necessary to generate a
+*publication* for a content set in a repository version. A publication
+consists of the metadata of the content set and the *artifacts* of each
+content unit in the content set. To host a publication, it must be assigned
+to a *distribution*, which determines how and where a publication is served.
+
+It is easy to add content types to pulp that is currently doesn't support, plugin
+development is easy and well documented. [5]_
+
+Architecture
+------------
+
+.. image:: pulp.png
+    :align: center
+    :alt: Architecture of Pulp
 
 
-With the versioned repository, and publication, the following workflow can be used
-to manage reproducibility:
+Pulp’s architecture has four components to it. Each of these can be horizontally
+scaled independently for both high availability and/or additional capacity for
+that part of the architecture.
 
-Development
------------
+
+1.  WSGI application
+    Pulp’s web application is served by one or more WSGI webservers. See the
+    WSGI Application docs for more info on deploying and scaling this component.
+
+2.  Task Runner
+    Pulp’s tasking system requires running rq. Additional rq workers can be
+    added to add capacity to the tasking system.
+
+3.  Database
+
+4.  Plugins
+    The content units Pulp manages is dependent on the plugins that are installed.
+
+
+Workflow to Manage Content
+--------------------------
+
+TODO: diagram for this workflow.
 
 1. Set up a pulp repository to mirror a subset of packages from PyPI that
 are used by your lab.
@@ -572,10 +620,29 @@ editors
         top-secret-development/simple/
 
 
+Adding a Plugin to Pulp
+-----------------------
+
+
+
+Downsides to Using Pulp
+-----------------------
+
+There is no hosted instance of Pulp. An instance has to be set up by a
+individual or university.
+
+Other Environmental Managers
+----------------------------
+
+
+Future Work
+-----------
+
+
 Summary
 =======
 
-For researches who use code in their methods, it is crucual to consider the
+For researches who use code in their methods, it is crucial to consider the
 reproducibility of the software environments they use. Excellent research can
 become nearly impossible to replicate because of the difficulty of maintaining
 a reliable dependency chain. By using the tools best practices developed for
@@ -616,6 +683,8 @@ References
 .. [3] https://github.com/moby/moby/issues/20424
 
 .. [4] https://github.com/moby/moby/issues/20380
+
+.. [5] https://docs.pulpproject.org/en/3.0/nightly/plugins/plugin-writer/index.html
 
 .. [#Pulp] Pulp Project, 2018, A Red Hat Community Project, https://pulpproject.org/
 
