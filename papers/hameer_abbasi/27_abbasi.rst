@@ -265,7 +265,8 @@ For indexing, we realize that to construct the new coordinates and data, we can 
 filtering as to which coordinates will be in the new array and which ones won't.
 
 * We can work directly with the coordinates and filter out unwanted coordinates and data. This turns
-  out to be :math:`O(\text{ndim} \times \text{nnz})` in total.
+  out to be :math:`O(\text{ndim} \times \text{nnz})` in total. where :code:`ndim` is the number of
+  dimensions of the array to the operation and :code:`nnz` are the number of nonzero elements.
 * We can realize that for a fixed value of :code:`coords[:n]`, where :code:`n` is some non-negative
   integer, the sorting order implies that the sub-coords :code:`coords[n:]` will also be sorted.
   Getting a single item or an integer slice in this case is
