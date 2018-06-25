@@ -264,9 +264,10 @@ a link to the full Binder interface and offering a public API endpoint to
 request and interact with a kernel backed by an arbitrary environment increase
 usability.
 
-In the following sections, we describe the three major technical components of
-the Binder project—JupyterHub, repo2docker, and BinderHub—and discuss how each
-feeds into the principles we’ve outlined above.
+In the following sections, we describe the three major technical components that
+the Jupyter and Binder teams have developed for the Binder project—JupyterHub, repo2docker, and BinderHub.
+All are open source, and rely heavily on other tools in the open source ecosystem.
+We'll discuss how each feeds into the principles we’ve outlined above. 
 
 Scalable interactive user sessions
 ----------------------------------
