@@ -573,15 +573,15 @@ where :math:`L_\text{in}` and :math:`L_\text{out}` are the left channel inputs a
 respectively, and similarly :math:`R_\text{in}` and :math:`R_\text{out}` for the right channel. 
 In code we have:
 
-.. code-block:: python
-
-   panning = widgets.FloatSlider(description = \
-                  'Panning (%)', 
-                  continuous_update = True,
-                  value = 50.0, min = 0.0, 
-                  max = 100.0, step = 0.1, 
-                  orientation = 'horizontal')
+.. panning = widgets.FloatSlider(description = \
+               'Panning (%)', 
+               continuous_update = True,
+               value = 50.0, min = 0.0, 
+               max = 100.0, step = 0.1, 
+               orientation = 'horizontal')
    #display(panning)
+
+.. code-block:: python
 
    # Cross Panning
    def callback(in_data, frame_length, time_info, 
@@ -868,21 +868,21 @@ Jupyter notebook is our desire.
 
 References
 ----------
-.. [cortexM4] `Thomas Lorenser, "The DSP capabilities of ARM®  Cortex®-M4 and Cortex-M7 Processors", ARM, November 2016.`_
-.. [Scipysignal] `https://docs.scipy.org/doc/scipy/reference/signal.html`_
-.. [DSPComm] `https://github.com/mwickert/scikit-dsp-comm`_
-.. [pyaudio] `https://people.csail.mit.edu/hubert/pyaudio/`_
-.. [portaudio] `http://www.portaudio.com/`_
-.. [ipywidgets] `https://github.com/jupyter-widgets/ipywidgets`_
-.. [Opp2010] Alan V. Oppenheim and Ronald W. Schafer, *Discrete-Time Signal Processing* (3rd ed.), Prentice Hall, 2010.
-.. [AD2] `https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/`_
-.. [3p5mm] `http://www.eas.uccs.edu/~mwickert/ece5655/lecture_notes/ARM/3_5mm_adapter.pdf`_
+.. [cortexM4] *The DSP capabilities of ARM®  Cortex®-M4 and Cortex-M7 Processors*. (2016, November). Retrieved June 25, 2018, from `https://community.arm.com/processors/b/blog/posts/white-paper-dsp-capabilities-of-cortex-m4-and-cortex-m7.`_
+.. [Scipysignal] *Signal Processing*. (2018, May 5). Retrieved June 25, 2018 from `https://docs.scipy.org/doc/scipy/reference/signal.html.`_
+.. [DSPComm] *scikit-dsp-comm*. (2018, June 22). Retrieved June 25, 2018 from `https://github.com/mwickert/scikit-dsp-comm.`_
+.. [pyaudio] *PyAudio*, (2017, March). Retrieved June 25, 2018, from `https://people.csail.mit.edu/hubert/pyaudio/.`_
+.. [portaudio] *Port Audio*. (2012, January 25). Retrieved June 25, 2018 from `http://www.portaudio.com/.`_
+.. [ipywidgets] *ipywidgets*. (2018, June 11). Retrieved June 25, 2018, from `https://github.com/jupyter-widgets/ipywidgets.`_
+.. [Opp2010] Oppenheim, A and Schafer, R (2010). *Discrete-Time Signal Processing* (3rd ed.), New Jersey: Prentice Hall.
+.. [AD2] *Analog Discovery 2*. (2018, June). Retrieved June 25, 2918 from `https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/.`_
+.. [3p5mm] *3.5mm Analog Discovery Adaptor Design*. (2018, January 30). Retrieved June 25, 2018 from `http://www.eas.uccs.edu/~mwickert/ece5655/.`_
 
-.. _`Thomas Lorenser, "The DSP capabilities of ARM®  Cortex®-M4 and Cortex-M7 Processors", ARM, November 2016.`: https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&ved=0ahUKEwjRhqvO25XbAhUDx2MKHRiJBeYQFggnMAA&url=https%3A%2F%2Fcommunity.arm.com%2Fcfs-file%2F__key%2Ftelligent-evolution-components-attachments%2F01-2142-00-00-00-00-73-48%2FARM-white-paper-_2D00_-DSP-capabilities-of-Cortex_2D00_M4-and-Cortex_2D00_M7.pdf&usg=AOvVaw1jyK7ExAE-2YqmaEzRSx8z
-.. _`https://docs.scipy.org/doc/scipy/reference/signal.html`: https://docs.scipy.org/doc/scipy/reference/signal.html
-.. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
-.. _`https://people.csail.mit.edu/hubert/pyaudio/`: https://people.csail.mit.edu/hubert/pyaudio/
-.. _`http://www.portaudio.com/`: http://www.portaudio.com/
-.. _`https://github.com/jupyter-widgets/ipywidgets`: https://github.com/jupyter-widgets/ipywidgets
-.. _`https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/`: https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/
-.. _`http://www.eas.uccs.edu/~mwickert/ece5655/lecture_notes/ARM/3_5mm_adapter.pdf`: http://www.eas.uccs.edu/~mwickert/ece5655/lecture_notes/ARM/3_5mm_adapter.pdf
+.. _`https://community.arm.com/processors/b/blog/posts/white-paper-dsp-capabilities-of-cortex-m4-and-cortex-m7.`: https://community.arm.com/processors/b/blog/posts/white-paper-dsp-capabilities-of-cortex-m4-and-cortex-m7
+.. _`https://docs.scipy.org/doc/scipy/reference/signal.html.`: https://docs.scipy.org/doc/scipy/reference/signal.html
+.. _`https://github.com/mwickert/scikit-dsp-comm.`: https://github.com/mwickert/scikit-dsp-comm
+.. _`https://people.csail.mit.edu/hubert/pyaudio/.`: https://people.csail.mit.edu/hubert/pyaudio/
+.. _`http://www.portaudio.com/.`: http://www.portaudio.com/
+.. _`https://github.com/jupyter-widgets/ipywidgets.`: https://github.com/jupyter-widgets/ipywidgets
+.. _`https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/.`: https://store.digilentinc.com/analog-discovery-2-100msps-usb-oscilloscope-logic-analyzer-and-variable-power-supply/
+.. _`http://www.eas.uccs.edu/~mwickert/ece5655/.`: http://www.eas.uccs.edu/~mwickert/ece5655/
