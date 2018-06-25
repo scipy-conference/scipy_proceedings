@@ -38,7 +38,7 @@ equations :cite:`mu1991organization`, machine learning problems involving Bayesi
 :cite:`tipping2001sparse` and natural language processing :cite:`nickel2011three`.
 
 As a motivating example, consider two NumPy arrays with a shape of :code:`(10 ** 5, 10 ** 5)`
-and only five nonzero elements per row. Computations on such a arrays, such as addition,
+and only five nonzero elements per row. Computations on such arrays, such as addition,
 multiplication and so on would perform the operation on each of the :math:`10^{10}` elements
 individually, taking up a large amount of time and memory.
 
@@ -341,7 +341,7 @@ For :code:`sparse.dot`, we simply dispatch to :code:`tensordot`, providing the a
 This may not always produce a sparse array as output. If we think of each element of the output matrix
 as a dot product of the appropriate row of the first matrix and the appropriate column of the second
 matrix, we realize that it may be difficult to guarantee that this will be zero. Indeed, in general,
-:math:`\text{nnz}_\text{out} \leq \text{nnz}_\text{in1} * \text{nnz}_\text{in2}`, without knowing much
+:math:`\text{nnz}_\text{out} \leq \text{nnz}_\text{in1} \times \text{nnz}_\text{in2}`, without knowing much
 about the structure of the matrix. For some inputs however, the outputs will be relatively sparse
 (for example for identity matrices and diagonal matrices).
 
