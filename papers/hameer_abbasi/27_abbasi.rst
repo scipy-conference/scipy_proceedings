@@ -280,18 +280,29 @@ Indexing
 For indexing, we realize that to construct the new coordinates and data, we can perform two kinds of
 filtering as to which coordinates will be in the new array and which ones won't.
 
-* We can work directly with the coordinates and filter out unwanted coordinates and data. This turns
-  out to be :math:`O(\text{ndim} \times \text{nnz})` in total. where :code:`ndim` is the number of
-  dimensions of the array to the operation and :code:`nnz` are the number of nonzero elements.
-* We can realize that for a fixed value of :code:`coords[:n]`, where :code:`n` is some non-negative
-  integer, the sorting order implies that the sub-coords :code:`coords[n:]` will also be sorted.
-  Getting a single item or an integer slice in this case is
-  :math:`O(\text{ndim} \times \log \text{nnz})`, as we can use a binary search.
+The first is where we look at the coordinates directly, and then filter them out successively for
+each given index. For integers, we check for coordinates that are exactly equal to that index. For
+slices, we similarly check for matching coordinates. We do this for each index. This turns
+out to be :math:`O(\text{ndim} \times \text{nnz})` in total. where :code:`ndim` is the number of
+dimensions of the array to the operation and :code:`nnz` are the number of nonzero elements.
 
-We realized that we can get successively smaller slices of the original COO array and append them to
-the required coordinates for indexing, using the second method listed above. However, this presents
-issues when calling code like :code:`x[:500, :500, :500]` as we will have to do a large amount of
-binary searches (:math:`500^3` in this case).
+This has a few benefits: it is simple to do and the performance only depends on the size of the input
+array.
+
+The second is where we look at each integer index in series, and then look at *sub-arrays* for each
+integer index. Since the coordinates are sorted in lexographical order, we will have to do a binary
+search for the start and end of each sub array, and repeat this for each integer index within the
+previous sub-array. Getting a single item or an integer slice in this case is
+:math:`O(\text{nidx} \times \log \text{nnz})`. Here, :code:`nidx` is the number of provided integer
+indices. For slices, we will loop over each possible integer in the slice and repeat the above procedure.
+
+For integer indexing, the second method is almost always faster. For slices, the situation becomes more
+complicated. Even for slices, in some cases, it is faster to use the second procedure. This happens for
+small slices, e.g. :code:`x[:10]`.
+
+For other cases, it's wise to initially use the second procedure (to filter out some sub-arrays), and then
+switch to the first. For example, for :code:`x[:500, :500, :500]`, as using just the second procedure will
+require a large amount of binary searches (:math:`500^3` in this case).
 
 So we used a hybrid approach where the second method is used until there are a sufficiently low
 number of coordinates left for filtering, then we fall back to simple filtering. Where we do the
@@ -301,6 +312,11 @@ is implemented in Numba.
 
 After getting the required coordinates and corresponding data, we apply some simple transformations
 to it to get the output coordinates and data.
+
+However, one thing is important to realize: indexing sparse arrays is more expensive than indexing dense
+arrays. Indexes of dense arrays produce a view for any combination of slices and integers, and take
+:math:`O(\text{nidx})` time in every case. Sparse arrays take more time, and it's usually not possible to
+produce a view of the original array.
 
 Transposing and Reshaping
 .........................
