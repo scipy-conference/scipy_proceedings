@@ -59,6 +59,11 @@ The dynamics between fission and fusion creates a spectrum of mitochondrial morp
 
 Recently, several bacterial species have been shown to cause mitochondrial perturbations during infection :cite:`SBSRC11`:cite:`FGQR15`. Through social network modeling, we hope to build a more rapid and efficient method for identifying changes in size, shape, and distribution of mitochondria as well as other diffuse organelles.
 
+.. figure:: pipeline.png
+
+  An abstract representation of our proposed pipeline. The first frame represents the raw unsegmented image of three cells' proteins. The next frame demonstrates the simultaneous segmentation, as a border is drawn around each cell. The third frame represents a single cell being extracted for analysis using the determined Segmentation. The fourth cell shows a characteristic set of nodes determined by applying a mixture model to the distribution of mitochondrial protein. The final image shows edges added to the nodes to complete the network structure. At this point in the pipeline Network analysis can be applied to the created graph in hopes for meaningful quantitative information. These steps are applied to each frame of video allowing for fully temporal analysis. :label:`fig0`.
+
+
 Data
 ----
 
@@ -310,16 +315,17 @@ To calculate our final affinity we use the following functions, the normpdf incl
                 [aff_by_eval(means[i], covars[i])], axis =0)
         return aff_Tables
 
+.. figure:: Hists.png
+    :scale: 80%
+    :figclass: w
+
+    A series of distribution plots of the negative log of values found in six affinity tables developed using the most recent affinity function at an early, mid, and late frame. (top) The tables generated from a control cell which show little variation in distribution. (bottom) The tables generated from the LLO cell which shows a drastic increase in connectivity over time as the cell fragments. :label:`fig6`
+
+
 Current Insights and Future Work Discussion
 -------------------------------------------
 
 At this point in our work we’ve been able to generate networks defined by affinity tables for a cell exhibiting fragmentation over time and a control cell. What we see with these is an increase in affinity between nodes as the cell becomes more fragmented (:ref:`fig6`). This occurs due to the increase in the spread of the nodes as they fit less the image with a less present topology. We also have the nodes much closer together due to the overall decrease in area of the fragmenting protein. Meanwhile the control cell shows much less variation in the affinity distribution over time.
-
-.. figure:: Hists.png
-    :scale: 80%
-    :figclass: wh
-
-    A series of distribution plots of the negative log of values found in six affinity tables developed using the most recent affinity function at an early, mid, and late frame. (top) The tables generated from a control cell which show little variation in distribution. (bottom) The tables generated from the LLO cell which shows a drastic increase in connectivity over time as the cell fragments. :label:`fig6`
 
 With these insights we can see that a graph analogue will show the change in the protein’s morphology over time. However before moving directly forward with analyses we want to refine the graph generation process. For our node generation we have begun the implementation of a gaussian mixture model which will include a uniform distribution component to act as a sort of learned threshold to ignore background noise brought into the segmented image during the dilations in the segmentation process, as will as that contained in void areas of the protein. We also want to continue refinement of the affinity function. Both looking at an undirected version of our current function, as well as the possibility of using other metrics such as a Kullback–Leibler divergence between the two nodes. This would naturally create an undirected affinity between node while taking into account the angularity of the gaussians representing the nodes. In moving forward with the network analysis, we want to continue looking at classic network metrics such as connectivity and cliques as well as using algorithms like spectral clustering on the network’s laplacian or a random walk over the network and see if more quantitative measures can characterize the cell’s morphological changes.
 
