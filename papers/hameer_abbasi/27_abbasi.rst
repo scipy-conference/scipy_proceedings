@@ -338,6 +338,13 @@ reshape and transpose operations in reverse.
 
 For :code:`sparse.dot`, we simply dispatch to :code:`tensordot`, providing the appropriate axes.
 
+This may not always produce a sparse array as output. If we think of each element of the output matrix
+as a dot product of the appropriate row of the first matrix and the appropriate column of the second
+matrix, we realize that it may be difficult to guarantee that this will be zero. Indeed, in general,
+:math:`\text{nnz}_\text{out} \leq \text{nnz}_\text{in1} * \text{nnz}_\text{in2}`, without knowing much
+about the structure of the matrix. For some inputs however, the outputs will be relatively sparse
+(for example for identity matrices and diagonal matrices).
+
 Benchmarks
 ----------
 
