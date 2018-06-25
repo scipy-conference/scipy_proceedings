@@ -90,7 +90,7 @@ The axes are normalized such that there is a resonance around :math:`0.0` in bot
 frequencies.
 The system that we have chosen for this simulation is very simple, with a single
 resonance.
-This two-dimensional simulation is merely representative of ``WrightSim``'s ability
+This two-dimensional simulation is representative of ``WrightSim``'s ability
 to traverse through many aspects of experimental space.
 Every concievable pulse paramater (delay, fluence, frequency, chirp etc.) can
 become an axis in the simulation.
@@ -113,8 +113,8 @@ Here we report algorithmic improvements which have significantly decreased
 computational time relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
-``WrightSim`` is still at a nascent stage of development, but has already
-shown itself to be a powerful tool.
+While nascent, ``WrightSim`` has already shown itself to be a powerful tool,
+greatly improving execution time over prior implementation.
 
 
 A Brief Introduction on Relevant Quantum Mechanics
@@ -531,7 +531,7 @@ Future Work
 ===========
 
 This is still quite early days for ``WrightSim``. While it is already a
-startling proof of concept display of how ``PyCUDA`` can be applied to this
+promising proof of concept display of how ``PyCUDA`` can be applied to this
 problem, there is still much room for improvement. In general, there are
 improvements to be made in terms of features, API/ease of use, and indeed further algorithmic
 improvements.
@@ -617,8 +617,7 @@ Further Algorithmic Improvements
 --------------------------------
 
 While great strides were taken in improving the algorithms from previous
-implementations, there are several remaining avenues to improve performance,
-both in terms of execution time and memory usage, even further.
+implementations, there are several remaining avenues to gain improved performance in execution time and memory usage.
 The CUDA implementation is memory bound, both in terms of what
 can be dispatched, and in terms of time of execution. The use of single
 precision complex numbers (and other floating point values) would save
