@@ -205,8 +205,8 @@ above. This is because any zeros are filtered out before any broadcasting is don
 
    concatenate all_coords and all_data
 
-While this algorithm is effective at applying all sorts of element-wise operations for
-any amount of inputs, it does have a few drawbacks:
+The full implementation can be found in :cite:`sparse-elemwise`. While this algorithm is effective
+at applying all sorts of element-wise operations for any amount of inputs, it does have a few drawbacks:
 
 * It's slower than :code:`scipy.sparse`, because
 
@@ -264,8 +264,9 @@ implement in practice, and also works quite well. Here is some psuedocode that w
 
    y = y.reshape(non_selected_axes_shape)
 
-Only some reductions are possible with this algorithm at the moment, but most common ones are supported.
-Supported reductions must have a few properties:
+The full implementation can be found at :cite:`sparse-reductions`. Only some reductions are possible
+with this algorithm at the moment, but most common ones are supported. Supported reductions must have
+a few properties:
 
 * They must be implemented in the form of :code:`ufunc.reduce`
 * The :code:`ufunc` must be reorderable
