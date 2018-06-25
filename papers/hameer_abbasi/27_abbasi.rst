@@ -326,7 +326,7 @@ of the coordinates and data to make the coordinates C-contiguous again.
 
 Reshaping corresponds to linearizing the coordinates and then doing the reverse for the new shape, similar to
 :code:`np.ravel_multi_index` and :code:`np.unravel_index`. However, we write our own custom implementation for
-this, in order to save on memory.
+this.
 
 :code:`dot` and :code:`tensordot`
 .................................
@@ -358,6 +358,10 @@ shape of :code:`(10000, 10000)` with a density of :code:`0.001`. The results are
 The NumPy results are given only for comparison, and for the purposes of illustrating that using sparse
 arrays does, indeed, have benefits over using dense arrays when the density of the sparse array is
 sufficiently low.
+
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.8\linewidth}
 
 .. table:: Performance benchmarks comparing Sparse to SciPy and dense NumPy code :label:`tab:bench`
 
