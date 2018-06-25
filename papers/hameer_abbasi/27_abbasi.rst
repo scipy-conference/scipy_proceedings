@@ -107,8 +107,6 @@ Table :ref:`tab:coo-vis` shows a visual representation of how data is stored in 
      3    1     4 ...   21
    ==== ==== ==== === ====
 
-To save on memory, we always choose the smallest possible data type for the coordinates array.
-
 Element-wise operations
 .......................
 
@@ -117,10 +115,11 @@ arithmetic, casting an array, and all NumPy :code:`ufunc` s are common examples 
 operations.
 
 These turn out to be simple for NumPy arrays, but are surprisingly complex for sparse arrays.
-The first problem to overcome was the lack of dependency on Numba :cite:`numba`/Cython
-:cite:`cython`/C++. At the time, I wished to solve the problem in NumPy, therefore looping over
-all possible nonzero coordinates was not an option, and we had to process the coordinates and
-data in batches. The batches that made sense at the time were something like the following:
+The first problem to overcome was that there was no dependency on Numba :cite:`numba`/Cython
+:cite:`cython`/C++ at the time that this algorithm was to be implemented. I, therefore wished
+to solve the problem in pure NumPy, therefore looping over all possible nonzero coordinates
+was not an option, and we had to process the coordinates and data in batches. The batches that
+made sense at the time were something like the following:
 
 1. Coordinates in the first array but not in the second.
 2. Coordinates in the second array but not in the first.
@@ -197,7 +196,8 @@ any amount of inputs, it does have a few drawbacks:
 
   * It loops over all possible combinations of zero/nonzero
     coordinates, which makes it :math:`O \left( \left(2^\text{nin} - 1 \right) \times \text{nnz} \right)`
-    in the worst case.
+    in the worst case, where :code:`nin` is the number of inputs to the operation and :code:`nnz` are the
+    number of nonzero elements.
   * It's in COO format rather than CSR/CSC.
   * :code:`scipy.sparse` uses specialized code paths for each operation that greatly
     reduce the strain on the CPU whereas we keep everything generic.
@@ -243,10 +243,11 @@ Supported reductions must have a few properties:
 * Reducing by multiple zeros shouldn't change the result
 * An all-zero reduction must produce a zero.
 
-Although these restrictions may seem crippling, in practice most reductions such as :code:`sum`,
+Although these criteria seem restricting, in practice most reductions such as :code:`sum`,
 :code:`prod`, :code:`min`, :code:`max`, :code:`any` and :code:`all` actually fall within the class
 of supported reductions. We used :code:`__array_ufunc__` protocol to allow application of :code:`ufunc`
-reductions to COO arrays. Notable unsupported reductions are :code:`argmin` and :code:`argmax`.
+reductions to COO arrays. Notable unsupported reductions are :code:`argmin` and :code:`argmax`, because
+they cannot be implemented in the form :code:`ufunc.reduce`.
 
 This is nearly as fast as the reductions in :code:`scipy.sparse` when reducing along C-contiguous axes,
 but is slow otherwise. Performance results can be seen in table :ref:`tab:bench`. Profiling reveals
@@ -318,7 +319,7 @@ The NumPy results are given only for comparison, and for the purposes of illustr
 arrays does, indeed, have benefits over using dense arrays when the density of the sparse array is
 sufficiently low.
 
-.. table:: Benchmarks :label:`tab:bench`
+.. table:: Performance benchmarks comparing Sparse to SciPy and dense NumPy code :label:`tab:bench`
 
    +----------------+-------------------+-------------------+-------------------+
    | Benchmark      | Sparse            | SciPy Sparse      | NumPy             |
