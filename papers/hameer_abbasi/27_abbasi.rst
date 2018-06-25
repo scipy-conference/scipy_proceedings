@@ -232,6 +232,19 @@ This can be improved in the future in the following ways:
 
 You can see the current performance of the code in table :ref:`tab:bench`.
 
+Currently, the implementation raises a :code:`ValueError` if :code:`ndarray` s are mixed with sparse
+arrays, or if the operation produces a dense array, such as operations like :code:`y = x + 5` where
+:code:`x` is sparse. This is an intentional design choice: We raise an error to show that the result
+is likely dense, and that if the user wishes to perform a dense operation, they should convert all
+arrays involved to dense ones and repeat the operation. This is better than an undesired performance
+degradation, which can be hard to detect.
+
+However, work is being done to reduce the amount of such errors. For example, there is a feature
+planned to allow mixed :code:`ndarray` -sparse operations if such operations do not produce dense
+results e.g. multiplication. :cite:`sparse-elemwise-ndarray`. Also, we are planning to allow arbitrary
+fill values in arrays, which will allow for operations such as :code:`y = x + 5` (if :code:`x.fill_value`
+was zero, :code:`y.fill_value` will be five). :cite:`sparse-arbitrary-fill-value`
+
 Reductions
 ..........
 
