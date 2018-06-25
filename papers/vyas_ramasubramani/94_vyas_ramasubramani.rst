@@ -94,14 +94,15 @@ Overview and Examples
    :figclass: tw
 
    A very simple example using ``signac`` to create the basics of a data space.
+   Initializing the project creates a ``signac.rc`` file, a configuration file identifying this folder as a ``signac`` project.
+   The workspace directory is created when the first job is added to the project, and all job data is then stored in a subdirectory of the workspace.
+   This subdirectory is named according to the job id, which is computed as the hash of the job state point.
    In this example, all work is conducted inside a Jupyter :cite:`PER-GRA:2007,Kluyver:2016aa` notebook to indicate how easily this can be done.
    Note how fewer than ten lines of code are required to initialize a database and add data.
    :label:`fig:data`
    
 .. TODO not sure the Jupyter references are shown as intended. I'd expect [..., ...]
 
-.. TODO What's the signac.rc file? Format, purpose, contents ...?
-   
 To demonstrate how ``signac`` works, we take a simple, concrete example of the scenario described above.
 Consider an experiment in which we want to find the optimal launch angle to maximize the distance traveled by a projectile through air.
 Figure :ref:`fig:data` shows how we might organize the data associated with this study using ``signac``.
@@ -117,8 +118,6 @@ The unique key is what enables the creation of the 32 character hash, or *job id
 The uniqueness of this hash value is what enables ``signac``'s efficient indexing and searching functionality.
 Additionally, this hash value is automatically updated to reflect any changes to individual jobs, making them highly mutable.
 For example, if we instead wanted to consider how changing initial velocity affects the distance traveled for a particular angle, we can add the velocity to the existing job state points by taking advantage of the fact that the project object is an iterable:
-
-.. TODO travelled? US or UK spelling? Not sure which one is official for SciPy.
 
 .. code-block:: python
 
@@ -261,6 +260,7 @@ The ``signac-flow`` package achieves this by creating cluster job scripts that p
 
 The workflow tracking functionality of ``signac-flow`` extends to compute clusters.
 Users can always check the status of particular jobs to see how far they have progressed in the workflow, and when working on a system with a scheduler, ``signac-flow`` will also provide information about the status of jobs submitted to the scheduler.
+Depending on the desired verbosity, this status information can be output in a variety of formats.
 A relatively detailed version of the output is shown here:
 
 .. code-block:: bash
@@ -295,21 +295,22 @@ A relatively detailed version of the output is shown here:
     ...
 
 In the overview section, we see that :math:`6.67\%`, or :math:`\frac{1}{15}` jobs have completed, reflecting the job run in Fig. :ref:`fig:ops`.
-The rows in this section are populated by any function decorated with the ``FlowProject.label`` decorator; while any callable, such as a lambda expression, could be used as a pre- or post-condition, using a function decorated in this manner makes it easy to track total progress through the workflow.
+The rows in this section are populated by any function decorated with the ``FlowProject.label`` decorator, with each row showing the percentage of jobs that evaluate to ``True`` for that function.
+While any callable, such as a lambda expression, could be used as a pre- or post-condition, using a function decorated in this manner makes it easy to track total progress through the workflow.
 The labels section below the overview provides the same information on a per-job basis, in this case showing which jobs have completed and which have not.
-Finally, the operations section indicates the active progress of incomplete jobs.
-In this instance, there are fourteen jobs remaining that are eligible for the ``calculate`` operation, of which three have been submitted to the cluster (and are therefore marked as active).
-Of these three, one has actually begun running (and is marked as ``[A]``), while the other two indicate that they are queued (the final job shown is inactive on the cluster as it has not yet been submitted).
-Note that the ``eligible`` column is redundant for this view, but in other status views ineligible jobs may be included in this section as well.
 
-.. TODO maybe give an example of what an ineligible job could be in this scenario
+Finally, the operations section indicates the progress of jobs on a per-operation basis.
+In this particular view, the ``eligible`` column is redundant because we have omitted completed operations for brevity; however, if we requested a complete listing, the job marked as complete in the labels section would be listed here with an ``N`` in the eligible column.
+In this instance, there are fourteen jobs remaining that are eligible for the ``calculate`` operation, of which three have been submitted to the cluster (and are therefore marked as active).
+Of these three, one has actually begun running (and is marked as ``[A]``), while the other two indicate that they are queued (marked as ``[Q]``).
+The final job shown is inactive on the cluster (``[I]``) as it has not yet been submitted.
 
 The quick overview of this section highlights the core features of the ``signac`` framework.
 Although the example demonstrated here is quite simple, the data model scales easily to thousands of data points and far more complex and nonlinear workflows.
-More involved demonstrations can be seen in the documentation at http://signac.readthedocs.io, on the ``signac`` website at http://signac.io, or in the original paper :cite:`ADORF2018220`.
+More involved demonstrations can be seen in the documentation [#]_, on the ``signac`` website [#]_, or in the original paper :cite:`ADORF2018220`.
 
-.. TODO make sure that there isn't a line break in the URL
-
+.. [#] http://signac.readthedocs.io
+.. [#] http://signac.io
 
 Design and Implementation
 -------------------------
