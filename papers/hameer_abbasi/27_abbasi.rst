@@ -37,6 +37,16 @@ used in solving systems of equations :cite:`liu1989limited`, solving partial dif
 equations :cite:`mu1991organization`, machine learning problems involving Bayesian models
 :cite:`tipping2001sparse` and natural language processing :cite:`nickel2011three`.
 
+As a motivating example, consider two NumPy arrays with a shape of :code:`(10 ** 5, 10 ** 5)`
+and only five nonzero elements per row. Computations on such a arrays, such as addition,
+multiplication and so on would perform the operation on each of the :math:`10^{10}` elements
+individually, taking up a large amount of time and memory.
+
+If we instead focused on just the nonzero elements in each array and worked with those, we
+would be down to at most :math:`10^6` elements to work with, a *huge* improvement. If we were
+smart about how the array would be stored, we could also bring down memory usage as well.
+This is, in essence, what sparse arrays do and what they're used for.
+
 Traditionally, within the SciPy ecosystem, sparse arrays have been provided within SciPy
 :cite:`scipy` in the submodule :code:`scipy.sparse`, which is arguably the most
 feature-complete implementation of sparse matrices within the ecosystem, providing support
