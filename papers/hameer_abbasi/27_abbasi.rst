@@ -117,6 +117,12 @@ Table :ref:`tab:coo-vis` shows a visual representation of how data is stored in 
      3    1     4 ...   21
    ==== ==== ==== === ====
 
+We use whatever data-type the source array has for the data array and :code:`np.int64` for the
+coordinates array. This means that, assuming :code:`ndim = 3` and :code:`dtype.itemsize = 8`
+(as is the case for a data type of :code:`np.int64`, :code:`np.uint64` and :code:`np.float64`),
+the tipping point versus dense arrays for memory usage will be a density of :code:`0.25`, with
+the benefit increasing with the inverse of the density.
+
 Element-wise operations
 .......................
 
