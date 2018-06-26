@@ -21,12 +21,7 @@
     We present an open-source Python package designed to simulate multidimesional
     nonlinear spectra: ``WrightSim`` .
     ``WrightSim`` uses the densitry matrix formulation of quantum mechanics.
-    A Hamiltonian describes all of the ways that a set of states interact with
-    each-other and with externally applied electric fields in the course of a
-    spectroscopic experiment.
-    Numerical integration (of the Liouville-von Neumann equation) is used to
-    evolve the density state vector over time as the system interacts with
-    several electric fields in the course of a multidimensional experiment.
+    Numerical integration is used to evolve the system as it interacts with several electric fields in the course of a multidimensional experiment.
     This numerical approach allows ``WrightSim`` to fully account for finite pulse
     effects that are commonly ignored.
     ``WrightSim`` is made using modules that can be exchanged to accomidate many
@@ -64,7 +59,7 @@ developed.
 Ultimately, MDS may become a key research tool akin to multidimensional
 nuclear magnetic resonance spectroscopy. :cite:`Pakoulev_2009`
 
-A generic MDS experiment involves exiting a sample with multiple pulses of
+A generic MDS experiment involves exciting a sample with multiple pulses of
 light and measuring the magnitude of the sample response (the signal).
 The dependence of this signal on the properties of the excitation pulses
 (frequency, delay, fluence, polarization etc.) contains information about
@@ -88,9 +83,9 @@ spectrum in 2-dimensional frequency-frequency space.
 The axes are two different frequencies for two different input electric fields.
 The axes are normalized such that there is a resonance around :math:`0.0` in both
 frequencies.
-This system that we have chosen for this simulation is very simple, with a single
+The system that we have chosen for this simulation is very simple, with a single
 resonance.
-This two-dimensional simulation is merely representative of ``WrightSim``'s ability
+This two-dimensional simulation is representative of ``WrightSim``'s ability
 to traverse through many aspects of experimental space.
 Every concievable pulse paramater (delay, fluence, frequency, chirp etc.) can
 become an axis in the simulation.
@@ -113,8 +108,8 @@ Here we report algorithmic improvements which have significantly decreased
 computational time relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
-``WrightSim`` is still at a nascent stage of development, but has already
-shown itself to be a powerful tool.
+While nascent, ``WrightSim`` has already shown itself to be a powerful tool,
+greatly improving execution time over prior implementation.
 
 
 A Brief Introduction on Relevant Quantum Mechanics
@@ -130,14 +125,12 @@ This formulation allows us to describe mixed states (coherences) which are key
 players in light-matter-interaction and spectroscopy.
 This strategy has been described before :cite:`Gelin_2009`, so we are brief in our
 description here.
-We propagate all of the relevant density matrix elements, including
-populations and coherences, in our numerical simulation.
-This places ``WrightSim`` at an intermediate level of theory, one where
-the mechanisms by which the desired signal arises are known, but have
-non-trivial spectral features as a result.
-This package does **not** perform *ab initio* computations, nor is it simply
-plotting a collection of well-behaved peaked functions with amplitudes and widths
-from experimental spectra.
+``WrightSim`` calculates multidimensional spectra for a given well-defined Hamiltonian.
+We do not make common limiting assumptions that allow reduction to analytical expressions.
+Instead, we propagate all of the relevant density matrix elements, including
+populations and coherences, in a numerical integration.
+This package does **not** perform *ab initio* computations.
+This places ``WrightSim`` at an intermediate level of theory where the Hamiltonian is known, but accurately computing the corresponding multidimensional spectrum requires complex numerical analysis.
 
 Here, we are simulating the interactions of three electric fields to
 induce an output electric field.
@@ -376,7 +369,7 @@ Performance
 ===========
 
 Performance is a key consideration in the implementation of ``WrightSim``.
-Careful analysis of the algorithms, identifying and measuring the bottlenecks and working
+Careful analysis of the algorithms, identifying and measuring the bottlenecks, and working
 to implement strategies to avoid them are key to achieving the best performance possible.
 Another key is taking advantage of modern hardware for parallelization.
 These implementations have their advantages and tradeoffs, which are quantified and
@@ -420,7 +413,8 @@ insights. We simplified the code for matrix generation and propagation by
 only having the one 9 by 9 element matrix rather than two 7 by 7
 matrices. The function that took up almost one third the time (``ix_``)
 was removed entirely in favor of a simpler scheme for denoting which values to
-record. We used variables to store the values needed for matrix
+record, simply storing a list of the indicies directly.
+We used variables to store the values needed for matrix
 generation, rather than recalculating each element. As a result, solely
 by algorithmic improvements, almost an order of magnitude speedup was
 obtained (See Figure :ref:`fig:snakeviz2`). Still, 99% of the time was
@@ -449,9 +443,8 @@ the operating system scheduling other tasks than by Amdahl’s law). This
 implementation required little adjustment outside of minor API tweaks.
 
 In order to capitalize as much as possible on the amount of parallelism
-possible, an implementation using Nvidia CUDA
-:cite:`Nickolls_2008` was performed. In order to make the
-implementation as easy to use as possible, and maintainable over the
+possible, the algorithm was re-implementated using Nvidia CUDA :cite:`Nickolls_2008`.
+In order to make the implementation as easy to use as possible, and maintainable over the
 lifetime of ``WrightSim``, ``PyCUDA`` :cite:`Klockner_2012` was used to integrate the call
 to a CUDA kernel from within Python. ``PyCUDA`` allows the source code
 for the device side functions (written in C/C++) to exist as strings
@@ -470,7 +463,7 @@ the Matrices prior to entering the loop. This was done to conserve
 memory on the GPU. Similarly, the electric fields are computed in the
 loop, rather than computing all ahead of time. These two optimizations
 reduce the memory overhead, and allow for easier to write functions,
-without the help of NumPy do perform automatic broadcasting of shapes.
+without the help of NumPy to perform automatic broadcasting of shapes.
 
 Scaling Analysis
 ----------------
@@ -531,7 +524,7 @@ Future Work
 ===========
 
 This is still quite early days for ``WrightSim``. While it is already a
-startling proof of concept display of how ``PyCUDA`` can be applied to this
+promising proof of concept display of how ``PyCUDA`` can be applied to this
 problem, there is still much room for improvement. In general, there are
 improvements to be made in terms of features, API/ease of use, and indeed further algorithmic
 improvements.
@@ -608,15 +601,17 @@ Additional Hamiltonians would make the package significantly more
 valuable as well. To add more Hamiltonians will require ensuring the
 code is robust, that values are transferred as expected. A few small
 assumptions were made in the interest of efficiency in the original
-implementation. Certain values represented by the Hamiltonian were
-hard-coded on the device code.
+implementation. Certain values, such as the initial density vector,
+represented by the Hamiltonian were hard-coded on the device code.
+While the hard-coded values are reasonable for most simulations,
+the ability to set theses at run time is desired, and will be added in the future.
 
 Further Algorithmic Improvements
 --------------------------------
 
 While great strides were taken in improving the algorithms from previous
-implementations, there are several remaining avenues to gain even
-further. The CUDA implementation is memory bound, both in terms of what
+implementations, there are several remaining avenues to gain improved performance in execution time and memory usage.
+The CUDA implementation is memory bound, both in terms of what
 can be dispatched, and in terms of time of execution. The use of single
 precision complex numbers (and other floating point values) would save
 roughly half of the space. One of the inputs is a large array with
@@ -639,7 +634,7 @@ bits. The Python implementation could potentially see a slight
 performance bump from using a boolean array rather than doing list
 searches for this same purpose.
 
-The CUDA implementation does not currently take full advantage shared
+The CUDA implementation does not currently take full advantage of shared
 cache. Most of the data needed is completely separated, but there are
 still a few areas where it could be useful. The Hamiltonian itself is
 shared, and if the electric field parameters array is sent in a more
