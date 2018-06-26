@@ -133,9 +133,10 @@ This results in quadratic oversubscription (with default settings) which ruins m
 The co-existing issues of multi-threaded components together define the *threading composability* of a program module or component.
 A perfectly composable component should be able to function efficiently among other such components without affecting their efficiency.
 The first aspect of building a composable threading system is to avoid creation of an excessive number of software threads, preventing oversubscription.
-A component or a parallel region should not dictate how many threads it needs for execution (*mandatory parallelism*).
-Instead, components or parallel regions essentially expose available parallelism to a runtime library, which in turn can provide control over the number of threads or
-can automatically coordinate tasks between components and parallel regions and map them onto available software threads (*optional parallelism*).
+Ideally, a component or a parallel region should not dictate how many threads it needs for execution (*mandatory parallelism*).
+Instead, components or parallel regions essentially expose available parallelism to a runtime library,
+which in turn can provide control over the number of threads or can automatically coordinate tasks between components
+and parallel regions and map them onto available software threads (*optional parallelism*).
 
 
 1.4. Restricting Number of Threads used in Nested Levels
@@ -145,7 +146,7 @@ We do not discourage the use of this approach as it might be sufficient to solve
 However, this approach can have potential performance-reducing drawbacks:
 
 #. There may not be enough parallelism at the outer application level. Blindly disabling nested parallelism can result in underutilization, and consequently, slower execution.
-#. Globally setting the number of threads once does not take into account different components or phases of the application which can have differing requirements for optimal performance.
+#. Globally setting the number of threads once does not take into account different components or phases of the application, which can have differing requirements for optimal performance.
 #. Setting the optimal value requires the user to have a deep understanding of the issues, the architecture of the application, and the system it uses.
 #. There are additional settings to take into account like :code:`KMP_BLOCKTIME` (time a thread spins before going to sleep) and thread affinity settings.
 #. The issue is not limited to OpenMP. Many Python packages like Numba, PyDAAL, OpenCV, and Intel's optimized SciKit-Learn are based on Intel |R| TBB or a custom threading runtime.
@@ -204,13 +205,13 @@ For the particular examples we show in this paper, the best performance is achie
 
 2.2. Limiting Simultaneous OpenMP Parallel Regions
 --------------------------------------------------
-The second approach relies on modifications to the OpenMP runtime.
+The second approach relies on extensions implemeted in the Intel's OpenMP runtime.
 The basic idea is to prevent oversubscription by not allowing multiple parallel regions (on different top-level application threads) to run simultaneously.
 This resembles the "Global OpenMP Lock" that was suggested in [AMala16]_.
 The implementation provides two modes for scheduling parallel regions: *exclusive* and *counting*.
 Exclusive mode implements an exclusive lock that is acquired before running a parallel region and released after the parallel region completes.
-Counting mode implements a mechanism equivalent to a semaphore, which allows multiple parallel regions with small number of threads to run simultaneously, as long
-as the total number of threads does not exceed a limit.
+Counting mode implements a mechanism equivalent to a semaphore, which allows multiple parallel regions with small number of threads
+to run simultaneously, as long as the total number of threads does not exceed a limit.
 When the limit is exceeded, the mechanism blocks in a similar way to the exclusive lock until the requested resources become available.
 This idea is easily extended to the multiple process case using Inter-Process Coordination (IPC) mechanisms such as
 a system-wide semaphore.
@@ -219,10 +220,11 @@ The exclusive mode approach is implemented in the Intel |R| OpenMP* runtime libr
 as part of Intel |R| Distribution for Python 2018 [#]_ as an experimental preview feature, later the counting mode was also added.
 Setting the :code:`KMP_COMPOSABILITY` environment variable as follows should enable each OpenMP parallel region to run exclusively, eliminating the worst oversubscription effects:
 
-.. [#] It was also introduced on Anaconda cloud along with the version 2017.0.3 in limited, undocumented form.
+.. [#] It was also introduced on Anaconda cloud starting with the version 2017.0.3 in limited, undocumented form.
 .. code-block:: sh
 
     env KMP_COMPOSABILITY=mode=exclusive python app.py
+    env KMP_COMPOSABILITY=mode=counting  python app.py
 
 With composability mode in use, multi-processing coordination is enabled automatically on the first usage.
 Each process has its own pool of OpenMP worker threads.
@@ -280,8 +282,8 @@ The TBB IPC module should be enabled manually via explicit command line key :cod
 
 3. Evaluation
 -------------
-The results for this paper were acquired on a 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4
-(2.20GHz, 22 cores * 2 hyper-threads) and 128 GB RAM. This system consists of 88 hardware threads in total.
+The results for this paper were acquired on a 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4 @ 
+2.20GHz (22 cores * 2 hyper-threads) and 256GB DDR4 @ 2400 MHz. This system consists of 88 hardware threads in total.
 
 For our experiments, we used [Miniconda]_ distribution along with the packages of
 Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
@@ -303,11 +305,8 @@ Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
     # this setting is used for default runs
     export KMP_BLOCKTIME=0
 
-We installed the following versions of the packages for our experiments:
-Python 3.5.3, mkl 2017.0.3-intel_6, numpy 1.12.1_py35-intel_8, dask 0.15.0-py35_0, tbb 2017.0.7-py35_intel_2, smp 0.1.3-py_2.
-We also used an experimental build of OpenMP (``libiomp``) library, which will be available in version 2018 of the ``openmp`` package.
-Multi-threading results in exclusive composability mode can be reproduced using openmp 2017.0.3-intel_8 as well
-when setting ``KMP_FOREIGN_THREAD_LOCK`` (deprecated).
+We installed the following versions and builds of the packages for our experiments:
+Python 3.6.3-intel_12, numpy 1.14.3-py36_intel_0, dask 0.18.1-py36_0, mkl 2018.0.3-intel_1, openmp 2018.0.3-intel_0, tbb4py 2018.0.4-py36_0, smp 0.1.3-py_2.
 
 Here is an example of how to run the benchmark programs in different modes:
 
@@ -325,6 +324,8 @@ Here is an example of how to run the benchmark programs in different modes:
     env KMP_COMPOSABILITY=mode=counting  python bench.py
     # Composable TBB mode (multithreading only)
     python -m tbb bench.py
+    # Composable TBB mode with IPC on
+    python -m tbb --ipc bench.py
 
 For our examples, we will talk mostly about the multi-threading case, but according to our investigations,
 all conclusions that will be shown are applicable for the multi-processing case as well
@@ -566,7 +567,7 @@ Instead, the presented approaches complement each other and have their own field
 The SMP approach works perfectly for balanced workloads where all the outermost workers have same amount of work.
 Compared with manual tuning of OpenMP settings, this approach is more stable,
 since it can work with pools of different sizes within the scope of a single application without performance degradation.
-It also covers other threading libraries such as Intel |R| TBB.
+Thanks to configuring process affinity mask, it also covers other threading libraries such as Intel |R| TBB.
 
 The composable OpenMP mode works best with unbalanced benchmarks for cases
 where there is enough work to load each innermost parallel region.
@@ -588,21 +589,21 @@ that blocks only one thread for the event loop and so prevents other threads fro
 
 We encourage readers to try suggested composability modes and use them in production environments,
 if this provides better results.
-However, there are potential enhancements that can be implemented and we need feedback and realistic use cases
+However, there are potential enhancements that can be implemented and we need feedback and real-life use cases
 in order prioritize the improvements.
 
 Both *tbb* and *smp* modules are implemented and tested with both major Python versions, 2 (starting with 2.7+) and 3 (3.5 and newer).
 The *smp* module works only on Linux currently, but can be extended to other platforms as well.
-It bases its calculations only on the pool size and does not take into account its real usage.
+The *smp* bases calculations only on the size of the pool and does not take into account its real usage.
 We think it can be improved in future to trace task scheduling pool events and become more flexible.
 
 The composability mode of Intel OpenMP* runtime library is currently limited to Linux platform as well.
 It works well with parallel regions with high CPU utilization,
 but it has a significant performance gap in other cases, which we believe can be improved.
 
-The IPC mode of the TBB module for Python is also limitted to Linux and it is a preview feature,
+The IPC mode of the TBB module for Python is also limitted to Linux and classified a preview feature,
 which might be insufficiently optimized and verified with different use cases.
-However, the default mode of the TBB module for Python works well on Windows and Mac OS
+However, the default mode of the TBB module for Python works as well on Windows and Mac OS
 for multi-threading coordination in single process.
 Also, the TBB-based threading layer of Intel |R| MKL might be suboptimal compared to the default OpenMP-based threading layer.
 
