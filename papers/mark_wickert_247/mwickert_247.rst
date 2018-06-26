@@ -669,17 +669,17 @@ and improve performance.
 References
 ----------
 
-.. [Celestrak] `https://celestrak.com`_.
-.. [SGP4] `https://github.com/brandon-rhodes/python-sgp4`_
-.. [GPS_helper] `https://github.com/chiranthsiddappa/gps_helper`_
-.. [GPS] `https://en.wikipedia.org/wiki/Global_Positioning_System`_.
-.. [Garmin] `https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf`_.
-.. [Kalman] R.E. Kalman, "A New Approach to Linear Filtering and Prediction Problems," *Journal of Basic Engineering*, 1960, pp. 35–45.
-.. [Brown2012] Robert Brown and Patrick Hwang, Introduction to Random Signals and Applied Kalman Filtering, 4th edition, 2012.
-.. [Kaplan] Elliot Kaplan, editor, Understanding GPS Principles and Applications, 1996 (3rd edition available).
-.. [Kim2011] Phil Kim, Kalman Filtering for Beginners with MATLAB Examples, 2011.
-.. [Simon2006] Dan Simon, Optimal State Estimation, 2006.
-.. [Wan2006]  Eric Wan, "Sigma-Point Filters: An Overview with Applications to Integrated Navigation and Vision Assisted Control," *2006 IEEE Nonlinear Statistical Signal Processing Workshop*, 13-15 Sept. 2006. `doi:10.1109/NSSPW.2006.4378854`_. 
+.. [Celestrak] *CelesTrack*, (2017, January 26). Retrieved June 26, 2018, from `https://celestrak.com`_.
+.. [SGP4] *Python implementation of most recent SGP4 satellite tracking*, (2018, May 24). Retrieved June 26, 2018, from `https://github.com/brandon-rhodes/python-sgp4`_.
+.. [GPS_helper] *Tools and Examples for GPS*, (2018, June 24), Retrieved from `https://github.com/chiranthsiddappa/gps_helper`_.
+.. [GPS] *Global Positioning System*, (2018, June 24). Retrieved June 26, 2018, from `https://en.wikipedia.org/wiki/Global_Positioning_System`_.
+.. [Garmin] *GPSMAP® 60CSx with sensors and maps owner’s manual*, (2007), Retrieved June 26, 2018, from `https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf`_.
+.. [Kalman] Kalman, R. (1960). A New Approach to Linear Filtering and Prediction Problems. *Journal of Basic Engineering*, 35–45.
+.. [Brown2012] Brown, R. and Hwang, P. (2012). *Introduction to Random Signals and Applied Kalman Filtering with MATLAB Exercises*, 4th edition. New York: Wiley.
+.. [Kaplan] Kaplan, E. and Hegarty, C., editors (2017). *Understanding GPS/GNSS: Principles and Applications*, third edition. Boston: Artech House.
+.. [Kim2011] Phil Kim, P. (2011). *Kalman Filtering for Beginners with MATLAB Examples*. CreateSpace Independent Publishing Platform.
+.. [Simon2006] Simon, D. (2006). *Optimal State Estimation*. New York: Wiley-Interscience.
+.. [Wan2006]  Wan, E. (2006). Sigma-Point Filters: An Overview with Applications to Integrated Navigation and Vision Assisted Control. *IEEE Nonlinear Statistical Signal Processing Workshop*. `doi:10.1109/NSSPW.2006.4378854`_. 
 
 .. _`https://celestrak.com`: https://celestrak.com
 .. _`https://github.com/chiranthsiddappa/gps_helper`: https://github.com/chiranthsiddappa/gps_helper
@@ -687,4 +687,4 @@ References
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 .. _`https://en.wikipedia.org/wiki/Global_Positioning_System`: https://en.wikipedia.org/wiki/Global_Positioning_System
 .. _`https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf`: https://static.garmincdn.com/pumac/GPSMAP60CSx_OwnersManual.pdf
-.. _`doi:10.1109/NSSPW.2006.4378854`: https://doi-org.libproxy.uccs.edu/10.1109/NSSPW.2006.4378854
+.. _`doi:10.1109/NSSPW.2006.4378854`: https://doi.org/10.1109/NSSPW.2006.4378854
