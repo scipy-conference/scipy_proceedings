@@ -105,7 +105,7 @@ While the numerical approach we use is more accurate, it does demand
 significantly more computational time.
 We have focused on performance as a critical component of ``WrightSim``.
 Here we report algorithmic improvements which have significantly decreased
-computational time relative to prior implementations.
+computational time (i.e. wall clock time) relative to prior implementations.
 We also discuss parallelzation approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
 While nascent, ``WrightSim`` has already shown itself to be a powerful tool,
@@ -123,6 +123,7 @@ Kohler, Thompson, and Wright :cite:`Kohler_2017`.
 ``WrightSim`` uses the density matrix formulation of quantum mechanics.
 This formulation allows us to describe mixed states (coherences) which are key
 players in light-matter-interaction and spectroscopy.
+This involves numerically integrating the Liouville-von Neumann equation :cite:`Gibbs1902`.
 This strategy has been described before :cite:`Gelin_2009`, so we are brief in our
 description here.
 ``WrightSim`` calculates multidimensional spectra for a given well-defined Hamiltonian.
@@ -244,7 +245,7 @@ do not correspond to that time ordering to zero.
 At each time step, the dot product of the matrix with the
 :math:`\overline{\rho}` vector is the change in the :math:`\overline{\rho}`
 vector to the next time step (when multiplied by the differential).
-``WrightSim`` uses a second order technique (Runge-Kutta) for determining the
+``WrightSim`` uses a second order technique (Runge-Kutta) :cite:`Blanchard2006` for determining the
 change in the :math:`\overline{\rho}` vector.
 The core of the simulations is to take the :math:`\overline{\rho}` vector and
 multiply by the Hamiltonian at each time step (noting that the
@@ -361,7 +362,7 @@ In this example, the complex floating point number array is of shape
 shape of the experiment itself).
 These numbers can be manipulated and visualized to produce spectra like that
 seen in :ref:`fig:examplespectrum`.
-The Wright Group also maintains a library for working with multidimensional data, ``WrightTools``.
+The Wright Group also maintains a library for working with multidimensional data, ``WrightTools`` :cite:`WrightTools`.
 This library will be integrated more fully to provide even easier access to visualization and
 archival storage of simulation results.
 
