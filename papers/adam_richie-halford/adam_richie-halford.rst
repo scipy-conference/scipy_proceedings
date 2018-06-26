@@ -85,8 +85,8 @@ your own compute instances is that it abstracts away the exact details
 of the infrastructure that is needed, offering instead relatively
 straight-forward abstractions:
 
-- a *job*, which is an atomic task to repeat on multiple inputs,
-  encapsulated in a linux executable, a bash script or a Docker
+- a *job*, which is an atomic, independent task to repeat on multiple
+  inputs, encapsulated in a linux executable, a bash script or a Docker
   container,
 
 - a *job definition*, which connects the job with the compute resources
@@ -102,11 +102,11 @@ straight-forward abstractions:
 While Batch provides useful functional abstractions for processing data
 in bulk, the user interface provided through the AWS web console still
 resists automation, requires learning many of the terms that control
-its execution and does not facilitate scripting and/or reproducibility.
-The AWS Python API offers a programming interface that can control the
-execution of computational tasks in AWS Batch, but it is not currently
-designed to offer an accessible single point of access to these
-resources.
+its execution and does not facilitate scripting and/or reproducibility
+:cite:`batch-getting-started`. The AWS Python API offers a programming
+interface that can control the execution of computational tasks in AWS
+Batch, but it is not currently designed to offer an accessible single
+point of access to these resources.
 
 Here, we introduce a new Python library with support for Python 2.7
 and 3.5+: Cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`,
@@ -253,10 +253,11 @@ we assume that the user has the permissions needed to run AWS Batch
 in the console. We also provide users with the minimal necessary
 permissions in the documentation.
 
-Finally, :code:`Knot` exposes AWS resource tags to the user so that
-they can assign metadata to each created resource. This facilitates
-management of Cloudknot generated resources and allows the user to
-quickly recognize Cloudknot resources in the AWS console.
+Finally, :code:`Knot` exposes AWS resource tags :cite:`aws-tags` to
+the user, allowing the user to assign metadata key-value pairs to each
+created resource. This facilitates management of Cloudknot generated
+resources and allows the user to quickly recognize Cloudknot resources
+in the AWS console.
 
 
 Multiple Data (MD)
