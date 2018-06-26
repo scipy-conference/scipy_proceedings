@@ -116,8 +116,8 @@ NASA Ames PAH IR Spectroscopic Database (PAHdb)
 ------------------------------------------------
 
 The Astrophysics & Astrochemistry Laboratory at NASA Ames
-Research Center :cite:`astrochem` provides data and tools 
-for analyzing and interpreting astronomical PAH spectra. 
+Research Center :cite:`astrochem` provides data and tools
+for analyzing and interpreting astronomical PAH spectra.
 The NASA Ames PAH IR Spectroscopic Database (PAHdb;
 :cite:`2018ApJS..234...32B` :cite:`2014ApJSS..211....8B`) is the
 culmination of more than 30 years of laboratory and computational
@@ -202,7 +202,7 @@ the Universe with unprecedented resolution and sensitivity in the
 near- and mid-IR. The observatory is expected to launch in 2020.
 
 As part of an awarded *JWST* Early Release Science (ERS) program\ [#]_,
-we are developing a Python-based toolkit for 
+we are developing a Python-based toolkit for
 quickly analyzing PAH emission in IR spectroscopic data
 
 .. [#] The ERS program is titled
@@ -241,32 +241,103 @@ quickly analyzing PAH emission in IR spectroscopic data
 pyPAHdb: a tool designed for JWST
 =================================
 
-The purpose
-of pyPAHdb is to derive astronomical parameters directly from *JWST*
-observations, but the tool is not limited to *JWST* observations
-alone. pyPAHdb is the light version of a full suite of Python
-software tools\ [#]_ that is currently
-being developed, which is an analog of the off-line IDL tools\ [#]_.
-pyPAHdb will enable PAH experts and non-experts alike to analyze and interpret
-astronomical PAH emission spectra.
+The purpose of pyPAHdb is to derive astronomical parameters directly
+from *JWST* observations, but the tool is not limited to *JWST*
+observations alone. pyPAHdb is the light version of a full suite of
+Python software tools\ [#]_ that is currently being developed, which
+is an analog of the off-line IDL tools\ [#]_.  pyPAHdb will enable PAH
+experts and non-experts alike to analyze and interpret astronomical
+PAH emission spectra.
 
 .. [#] *AmesPAHdbPythonSuite*: `github.com/PAHdb/AmesPAHdbPythonSuite <https://github.com/PAHdb/AmesPAHdbPythonSuite>`_
 
 .. [#] *AmesPAHdbIDLSuite*: `github.com/PAHdb/AmesPAHdbIDLSuite <https://github.com/PAHdb/AmesPAHdbIDLSuite>`_
 
 pyPAHdb analyzes spectroscopic observations (including spectral maps)
-and characterizes the PAH emission using a database-fitting technique,
-providing the PAH ionization and size fractions. The general program
-methodology is encapsulated in the flowchart presented in Figure
-:ref:`fig:flowchart` and is as follows: (1) read-in a file containing
-astronomical observations (using ``observation.py``); (2) perform a
-non-negative least-squares fit to the data (using ``decomposer.py``);
-and (3) produce user output in a consistent way so that the user may
-assess the quality of the fit and retrieve the PAH characteristics
-in their astronomical observations (``writer.py``).
+and characterizes the PAH emission using a database-fitting approach,
+providing the PAH ionization and size fractions.
+
+The module is imported using the following statement:
+
+.. code-block:: python
+
+    import pypahdb
+
+The general program methodology is encapsulated in the flowchart
+presented in Figure :ref:`fig:flowchart` and is as follows:
+
+(1) Read-in a file containing spectroscopic PAH observations of an
+    astronomical object. This functionality is provided by the class
+    ``observation``, which is implemented in observation.py. The class
+    uses a fall-through try-except chain to attempt to read the given
+    filename using the facilities provided by ``astropy.io``. The
+    spectroscopic data is stored as a class-attribute using a
+    ``spectrum``-object, which holds the data in terms of absissa and
+    ordinate values using ``numpy``\ -arrays. The units associated
+    with the absissa and ordinate value are, in the case of a
+    FITS-file, determined from the accompanying header, which is also
+    stored as a class-attribute. The spectral coordinate system is
+    interpreted from FITS-header keywords following the specification
+    by :cite:`2006A&A...446..747G`. The ``spectrum`` class is
+    implemented in spectrum.py and provides functionality to convert
+    between different coordinate representations. Below is some
+    example Python code demonstrating the use of the class.
+
+.. code-block:: python
+
+    import pypahdb
+    import matplotlib.pyplot as plt
+    observation = pypahdb.observation('NGC7023-NW-BRIGHT.txt_pahs.txt')
+    plt.plot(observation.spectrum.abscissa, observation.spectrum.ordinate[:,0,0])
+    plt.show()
+
+
+(2) Decompose the observed PAH emission into contributions from
+    different PAH subclasses, here charge and size. This
+    functionality is provided by the class ``decomposer``, which is
+    implemented in decomposer.py. The class takes as input a
+    ``spectrum`` object, creates a deep copy and calls the
+    ``spectrum.convertunitsto`` -method to convert the abscissa units
+    to wavenumber. Subsequently, a pre-computed ``numpy``\ - matrix of
+    highly oversampled PAH emission spectra stored in a ``pickle`` is
+    loaded from file. Utilizing ``numpy.interp``, each of the PAH
+    emission spectra, represented by a single column in the
+    pre-computed matrix, is interpolated onto the frequency grid (in
+    wavenumber) of the input spectrum. This process is parallelized
+    using the ``multiprocessing`` package. ``optimize.nnls`` is used
+    to perform a non-negative least-squares fit of the pre-computed
+    spectra to the input spectrum. The solution vector (weights) is
+    stored as an attribute and considered private. Combining lazy
+    instantiation and Python's @property, the charge and size
+    breakdown can be retrieved. In case the input spectrum represents
+    a spectral cube and where possible, the calculations have
+    parallelized across each pixel using, again, the
+    ``multiprocessing`` package. Below is some example code
+    demonstrating the use of the class.
+
+.. code-block:: python
+
+    result = pyPAHdb.decomposer(observation.spectrum)
+    print(result.ionized_fraction)
+
+
+(3) Produce output to file given a ``decomposer``-object. This
+    functionality is provided by the class ``writer``, which is
+    implemented in writer.py, and serves to deliver consistent output
+    so that a user may assess the quality of the fit and store the PAH
+    characteristics of their astronomical observations. The class uses
+    ``astropy.fits`` to write the PAH characteristics to a FITS-file
+    and ``matplotlib`` to generate a PDF summarizing the results. The
+    class will attempt to incorporate relevant information from any
+    (FITS-)header provided. Below is some example code demonstrating
+    the use of the class.
+
+.. code-block:: python
+
+   pypahdb.writer(result, header=observation.header)
 
 .. figure:: fig_flowchart.png
-   :align: center   
+   :align: center
 
    pyPAHdb flowchart. Astronomical spectroscopic data is loaded,
    whether represented in FITS or ASCII files. An over-sampled
@@ -276,17 +347,27 @@ in their astronomical observations (``writer.py``).
    least-squares (NNLS), which yields the contribution of an
    individual PAH molecule to the total fit. As a result, we obtain a
    breakdown of the model fit in terms of PAH charge and size. The
-   results are written to disk as a single FITS file and a PDF 
+   results are written to disk as a single FITS file and a PDF
    summarizing the model fit (one
    page per pixel, if a spectral cube is given as
    input). :label:`fig:flowchart`
 
+.. figure:: fig_fit.png
+   :align: center
+
+   pyPAHdb-fit to the spectrum of a position in the spectral cube of
+   NGC 7023. The upper panel displays the total model fit to the data;
+   the middle panel the residual; and the lower panel the breakdown of
+   PAHs in descending order from large, containing 30 atoms or more, to
+   small. The charge breakdown (cation, neutral,
+   anion) has been suppressed for clarity.
+   :label:`fig:fit`
 
 The performance of pyPAHdb relative to the full IDL suite was tested
 by fitting a spectral cube. Using pyPAHdb, the spectral cube required
 less than 4 seconds, while more than 60 seconds were needed to fit
 with the full IDL suite.
-It should be noted that there were differences in the actual implementation of
+It should be noted that their were differences in the actual implementation of
 the two tests, which were inherent to the differences in the languages
 used.
 
@@ -444,18 +525,6 @@ presents part of the resulting PDF-output.
     result = pyPAHdb.decomposer(observation.spectrum)
     # write results to file
     pyPAHdb.writer(result, header=observation.header)
-
-.. figure:: fig_fit.png
-   :align: center
-
-   pyPAHdb-fit to the spectrum of a position in the spectral cube of
-   NGC 7023. The upper panel displays the total model fit to the data;
-   the middle panel the residual; and the lower panel the breakdown of
-   PAHs in descending order from large, containing 30 atoms or more, to
-   small. The charge breakdown (cation, neutral,
-   anion) has been suppressed for clarity.
-   :label:`fig:fit`
-
 
 With the results from the entire spectral cube, maps of relevant
 astrophysical quantities can be constructed. For example, Figure
