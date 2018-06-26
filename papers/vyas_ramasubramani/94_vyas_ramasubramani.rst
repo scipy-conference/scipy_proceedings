@@ -176,10 +176,10 @@ For example, searching the database using the command line can be very useful fo
     d61ac71a00bf73a38434c884c0aa82c9
     13d54ee5821a739d50fc824214ae9a60
 
-The query syntax is based on the MongoDB :cite:`mongodb` syntax, enabling logical or arithmetic operators, for instance.
+The query syntax is based on the MongoDB :cite:`mongodb` syntax and enables, for instance, logical and arithmetic operators.
 In fact, ``signac`` natively supports export of its databases to MongoDB.
-Although we can add support for integration with any database management system, we decided to start with MongoDB for two reasons: first, because researchers are likely to prefer the comparatively less rigid approach of NoSQL databases to table-based relational databases; and second, because it requires minimal overhead to translate from a ``signac`` database to another JSON-based database.
-Due to this ease of export and the shared query syntax, switching back and forth between ``signac`` and MongoDB is quite easy.
+Although we can add support for integration with any database management system, we started with MongoDB for two reasons: first, because researchers are likely to prefer the comparatively less rigid approach of NoSQL databases to table-based relational databases; and second, because translation from a ``signac`` database to another JSON-based database is relatively straightforward.
+Due to the ease of export and shared query syntax, switching between ``signac`` and MongoDB is quite easy.
 
 At any point, we can also get an overview of what the implicit data space schema looks like:
 
@@ -191,6 +191,7 @@ At any point, we can also get an overview of what the implicit data space schema
      'v': 'int([1, 2, 3], 3)',
     }
 
+Keys with constant values across the entire data space are automatically omitted from the schema.
 Additionally, schema can be filtered, nested keys can be compressed to specified depths, and the number of entries shown in each range can be limited as desired.
 
 Workflows
@@ -230,7 +231,7 @@ Rather than running everything at once, it is also possible to exercise more fin
 
     $ # Runs all outstanding operations for all jobs
     $ python project.py run
-    $ # `exec` ignores the  workflow and just runs a
+    $ # `exec` ignores the workflow and just runs a
     $ # specific job-operation
     $ python project.py exec -o ${OP} -j ${JOB_ID}
     $ # Run up to two operations for a specific job
@@ -334,7 +335,7 @@ These indexes then allow efficient selection and searching of the data space, an
 
 From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
 In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; the ability to synchronize data across projects; and the detection of implicit schema.
-Note that the schema are implicit insofar as they are only defined by the state points of jobs within the workspace, *i.e* there is nothing like a table schema to enforce a particular structure for the state points of individual jobs.
+We qualify these schema as implicit because they are only defined by the state points of jobs within the workspace, *i.e* there is nothing like a table schema to enforce a particular structure for the state points of individual jobs.
 Searching through or iterating over a ``Project`` instance generates ``Job`` objects, which provide Python interfaces to the jobs within the project and their associated data.
 In addition to providing a Pythonic access point to the job state point and the job document, a ``Job`` object can always be mapped to its location on the filesystem, making it ideal for associating file-based data with the appropriate data point.
 
