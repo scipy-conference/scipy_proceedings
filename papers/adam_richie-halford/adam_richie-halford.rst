@@ -207,46 +207,51 @@ control over the software dependencies of a particular application, and
 near-immediate deployment of these dependencies :cite:`Boettiger14`.
 
 Separately, :code:`Knot` uses an AWS CloudFormation template to create
-the AWS resources required by AWS Batch:
+the AWS resources required by AWS Batch [#]_. :code:`Knot` passes the
+location of the Docker container on AWS ECR to its job definition
+so that all jobs execute the SP. The user may ask :code:`Knot` to
+restrict its compute environment to only certain instance types (e.g.
+``c4.2xlarge``) or may choose a specific Amazon Machine Image (AMI)
+to be loaded on each compute resource. Or they may simply request a
+minimum, desired, and maximum number of virtual CPUs and let AWS Batch
+select and manage the EC2 instances.
 
-- AWS Identity and Access Management (IAM) Roles
+.. [#] The required resources are
 
-  - A batch service IAM role to allow AWS Batch to make calls to other
-    AWS services on the user's behalf
+       - AWS Identity and Access Management (IAM) Roles
 
-  - An Elastic Container Service (ECS) instance role to be attached to each
-    container instance when it is launched
+         - a batch service IAM role to allow AWS Batch to make calls to
+           other AWS services on the user's behalf;
 
-  - An Elastic Cloud Compute (EC2) Spot Fleet role to allow Spot Fleet to bid
-    on, launch, and terminate instances if the user chooses to use Spot Fleet
-    instances instead of dedicated EC2 instances.
+         - an Elastic Container Service (ECS) instance role to be
+           attached to each container instance when it is launched;
 
-- An AWS Virtual Private Cloud (VPC) with subnets and a security group
+         - an Elastic Cloud Compute (EC2) Spot Fleet role to allow Spot
+           Fleet to bid on, launch, and terminate instances if the user
+           chooses to use Spot Fleet instances instead of dedicated EC2
+           instances;
 
-- An AWS Batch job definition specifying the job to be run. :code:`Knot`
-  passes the location of the Docker container on AWS ECR to this job
-  definition so that all jobs execute the SP.
+       - an AWS Virtual Private Cloud (VPC) with subnets and a security
+         group;
 
-- An AWS Batch job queue that schedules jobs onto a compute environment.
+       - an AWS Batch job definition specifying the job to be run;
 
-- An AWS Batch compute environment, which is a set of compute resources
-  that will be used to run jobs. The user may ask :code:`Knot` to
-  restrict the compute environment to only certain instance types (e.g.
-  ``c4.2xlarge``) or may choose a specific Amazon Machine Image (AMI)
-  to be loaded on each compute resource. Or thay may simply request a
-  minimum, desired, and maximum number of virtual CPUs and let AWS Batch
-  select and manage the EC2 instances.
+       - an AWS Batch job queue that holds jobs until scheduled into a
+         compute environment;
 
-:code:`Knot` uses job definition and compute environment defaults
-conservative enough to run most simple jobs, with the goal of minimizing
-errors due to insufficient resources. The casual user may never need to
-concern themselves with selecting an instance type or specifying an AMI.
-Users who want to minimize costs by specifying the minimum sufficient
-resources or users who need additional resources for intensive jobs can
-control their jobs' memory requirements, instance types, or AMIs. This
-might be necessary if the jobs require special hardware (e.g. GPGPU
-computing) or if the user wants more fine-grained control over which
-resources are launched.
+       - and an AWS Batch compute environment, which is a set of compute
+         resources that will be used to run jobs.
+
+:code:`Knot` uses job definition and compute environment
+defaults conservative enough to run most simple jobs, with the goal of
+minimizing errors due to insufficient resources. The casual user may
+never need to concern themselves with selecting an instance type or
+specifying an AMI. Users who want to minimize costs by specifying the
+minimum sufficient resources or users who need additional resources for
+intensive jobs can control their jobs' memory requirements, instance
+types, or AMIs. This might be necessary if the jobs require special
+hardware (e.g. GPGPU computing) or if the user wants more fine-grained
+control over which resources are launched.
 
 One of the most complex aspects of AWS is its permissions model. Here,
 we assume that the user has the permissions needed to run AWS Batch
@@ -682,6 +687,21 @@ client. Future releases may launch this SSH terminal from within the
 Python session. We will also focus our attention on domain-specific
 applications (in neuroimaging, for example) and include enhancements and
 bug-fixes that arise from use in our own research.
+
+Lastly, :code:`Knot` uses hard-coded defaults for the configuration of
+its job definition and compute environment. Future Cloudknot releases
+could intelligently estimate these defaults based on the UDF and the
+input data. For example, :code:`Knot` could estimate its resource
+requirements by executing the UDF on one element of the input array many
+times using a variety of EC2 instance types. By recording the execution
+time, memory consumption, and disk usage for each trial, :code:`Knot`
+could then adopt the configuration parameters of the best [#]_ run and
+apply those to the remaining input.
+
+.. [#] The "best" configuration could be specified by the user on
+       :code:`Knot` instantiation as either the one which minimizes cost
+       to the user or that which minimizes the wall time required to
+       process the input data.
 
 
 Acknowledgements
