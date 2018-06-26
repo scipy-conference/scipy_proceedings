@@ -33,18 +33,25 @@ Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 Introduction
 ------------
 
-In the quest to minimize time-to-first-result, data scientists
-are increasingly turning to cloud-based distributed computing with
+In the quest to minimize time-to-first-result, data scientists are
+increasingly turning to cloud-based distributed computing with
 commercial vendors like Amazon Web Services (AWS). Cloud computing
-platforms have the advantage of scalability: users can access limitless
-computing resources to meet the demands of their computational
+platforms have the advantage of linear scalability: users can access
+limitless computing resources to meet the demands of their computational
 workloads. At the same time they offer elasticity: resources are
-provisioned as-needed and can be decomissioned when they are no longer
-needed. In data-intensive research scenarios in which large
+provisioned as-needed and can be decomissioned when they are no
+longer needed. In data-intensive research scenarios in which large
 computational workloads are coupled with large amounts of data this
-could in principle offer substantial speedups. But because of the
-complexity and steep learning curve associated with a transition to
-cloud computing, it remains inaccessible to many researchers.
+could, in principle, offer substantial speedups.
+
+But the complexity and learning curve associated with a transition to
+cloud computing make it inaccessible to beginners. This transition cost
+has been improving. For example, Dask :cite:`Rocklin2015-ra` used to
+be difficult to run in parallel but it is now more accessible, thanks
+in part to tools such as dask-ec2 :cite:`dask-ec2` and kubernetes/helm
+:cite:`helm`. Yet despite these improvements, the cloud remains
+inaccessible to many researchers who have not had previous exposure to
+distributed computing.
 
 A number of Python libraries have sought to close this gap
 by allowing users to interact seamlessly with AWS resources
@@ -59,14 +66,19 @@ storage, longer compute times, and complex dependencies. The AWS Batch
 service offers a platform for workloads with these requirements.
 Batch dynamically provisions AWS resources based on the volume and
 requirements of user-submitted jobs. Instead of provisioning and
-managing their own batch computing jobs, users specify job constraints
-,such as the amount of memory required for a single job, and the number
+managing their own batch computing jobs, users specify job constraints,
+such as the amount of memory required for a single job, and the number
 of jobs. AWS Batch manages the job distribution to satisfy those
-constraints. The user can optionally constrain the cost by specifying a
-bid percentage to use with AWS Spot Instances.
+constraints. The user can optionally constrain the cost by using
+Amazon EC2 Spot Instances :cite:`ec2-spot-instances` and specifying a
+bid percentage [#]_.
 
 .. [#] Current limits include a maximum of 300 seconds of execution
        time, 1.5 GB of RAM, 512 MB of local storage, and no root access.
+
+.. [#] The bid percentage is the maximum price, expressed as a percentage
+       of the on-demand EC2 instance price, with which to bid on unused
+       EC2 capacity.
 
 One of the main advantages of Batch, relative to the provisioning of
 your own compute instances is that it abstracts away the exact details
@@ -80,11 +92,12 @@ straight-forward abstractions:
 - a *job definition*, which connects the job with the compute resources
   it requires,
 
-- a *job queue*, which serves as a scheduler for the jobs,
-
-- a *compute environment*, which defines the details of the
+- a *compute environment*, which defines the configuration of the
   computational resources needed, such as number of processors, or
-  amount of RAM.
+  amount of RAM,
+
+- a *job queue*, where jobs reside until they are run in a compute
+  environment.
 
 While Batch provides useful functional abstractions for processing data
 in bulk, the user interface provided through the AWS web console still
@@ -92,27 +105,23 @@ resists automation, requires learning many of the terms that control
 its execution and does not facilitate scripting and/or reproducibility.
 The AWS Python API offers a programming interface that can control the
 execution of computational tasks in AWS Batch, but it is not currently
-designed to offer a user-friendly single point of access to these
+designed to offer an accessible single point of access to these
 resources.
 
-Here, we introduce a new Python library: Cloudknot
-:cite:`cloudknot-docs` :cite:`cloudknot-repo`, that launches Python
-functions as jobs on the AWS Batch service, thereby lifting these
-limitations. Cloudknot supports Python versions 2.7 and 3.5+. Rather
-than introducing its own set of terms and abstractions, Cloudknot
-attempts to mimic Pythons concurrent futures’ :code:`Executor` objects.
-Users of Cloudknot have to familiarize themselves with one new object:
-the :code:`Knot`, while some of its functionality will initially be new
-to users of Cloudknot (e.g., the way that resources on AWS are managed),
-its :code:`map` method should be familiar to most Python users.
+Here, we introduce a new Python library with support for Python 2.7
+and 3.5+: Cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`,
+that launches Python functions as jobs on the AWS Batch service,
+thereby lifting these limitations. Rather than introducing its own
+set of terms and abstractions, Cloudknot attempts to mimic Pythons
+concurrent futures’ :code:`Executor` objects. Users of Cloudknot have to
+familiarize themselves with one new object: the :code:`Knot`. While some
+of its functionality will initially be new to users of Cloudknot (e.g.,
+the way that resources on AWS are managed), its :code:`map` method
+should be familiar to most Python users.
 
 We propose that software designed to aid computational and data
 scientists should be concerned with minimizing the time from
-project conception to first publishable result [#]_,
-
-.. [#] The importance of the "time-to-first-result" metric is not
-       our original insight but rather an adage so ubiquitous that it
-       is difficult to cite.
+project conception to first publishable result,
 
 .. math::
 
@@ -157,8 +166,8 @@ few of Cloudknot's use cases before returning to the trade-off between
 :math:`t_\mathrm{env}` and :math:`t_\mathrm{exec}` in the Conclusion.
 
 
-Methods
--------
+Design
+------
 
 The primary object in Cloudknot is the :code:`Knot`, which employs the
 single program, multiple data (SPMD) paradigm to achieve parallelism.
@@ -300,7 +309,7 @@ We first import Cloudknot and define the function that we would like to
 run on AWS Batch. Cloudknot uses the `pipreqs` :cite:`pipreqs` package
 to generate the requirements file used to install dependencies in the
 Docker container on AWS ECR. So all required packages must be imported
-inside the UDF itself.
+in the source code of the UDF itself.
 
 .. code-block:: python
 
@@ -388,12 +397,12 @@ summary of the status of all jobs submitted with this :code:`Knot` using
 Examples
 --------
 
-In this section, we will present a few use-cases of Cloudknot, including
-real life uses of the software in data analysis. We will start with
-examples that have minimal software and data dependencies, and increase
-the complexity by adding first data dependencies and subsequently
-complex software and resource dependencies. These and other examples
-are available in Jupyter Notebooks in the Cloudknot repository
+In this section, we will present a few real use cases of Cloudknot,
+including real life uses of the software in data analysis. We will
+start with examples that have minimal software and data dependencies,
+and increase the complexity by adding first data dependencies and
+subsequently complex software and resource dependencies. These and other
+examples are available in Jupyter Notebooks in the Cloudknot repository
 :cite:`cloudknot-examples`.
 
 
@@ -423,19 +432,19 @@ We investigate the scaling of job execution time as a function of the
 size of the argument array. In Figure :ref:`fig.nargsscaling` we show
 the execution time as a function of :math:`n_\mathrm{args}`, the length
 of the argument array (with a :math:`\log_2` scale on the :math:`x`-axis
-and a :math:`\log_{10}` scale on the :math:`y`-axis). We testing scaling
-using Cloudknot's default parameters and also using custom parameters
-[#]_. Regardless of the :code:`Knot` parameters, Pywren outperformed
-Cloudknot at all argument array sizes. Indeed, Pywren appears to achieve
-:math:`\mathcal{O}(1)` scaling between :math:`4 \le n_\mathrm{args}
+and a :math:`\log_{10}` scale on the :math:`y`-axis). We testing
+scaling using Cloudknot's default parameters and also using custom
+parameters [#]_. Regardless of the :code:`Knot` parameters, Pywren
+outperformed Cloudknot at all argument array sizes. Indeed, Pywren
+appears to achieve constant scaling between :math:`4 \le n_\mathrm{args}
 \le 512`, revealing AWS Lambda's capabilities for massively parallel
 computation. For :math:`n_\mathrm{args} > 512`, Pywren appears to
-conform to :math:`\mathcal{O}(n)` scaling with a constant of roughly
-0.25. By contract, Cloudknot exhibits noisy :math:`\mathcal{O}(n)`
-scaling for :math:`n_\mathrm{args} \gtrapprox 32`, with a constant that
-is comparable to Pywren's scaling constant for :math:`n_\mathrm{args}
-> 512`. Precise determination of these scaling constants would require
-more data for a larger range of argument sizes.
+conform to linear scaling with a constant of roughly 0.25. By contract,
+Cloudknot exhibits noisy linear scaling for :math:`n_\mathrm{args}
+\gtrapprox 32`, with a constant that is comparable to Pywren's scaling
+constant for :math:`n_\mathrm{args} > 512`. Precise determination of
+these scaling constants would require more data for a larger range of
+argument sizes.
 
 .. [#] Default settings are :code:`min_vcpus=0`,
    :code:`desired_vcpus=8`, and :code:`max_vcpus=256`. Custom settings
@@ -503,13 +512,12 @@ object storage on S3, and then downloading of individual bits of data
 needed to complete each task into the individual worker machines.
 
 As an example, we implemented a pipeline for analysis of human MRI
-data. Human MRI data is a good use-case for a system such as Cloudknot,
-because much of the analysis in computational pipelines that analyze
-this type of data proceeds in an embarassingly parallel manner: even for
-large data-sets with multiple subjects, a large part of the analysis is
-conducted first at the level of each individual brain, and aggregation
-of information across brains is typically done after many preprocessing
-and analysis stages are done at the level of each individual.
+data. Human MRI data is a good use-case for a system such as Cloudknot
+because much of the analysis proceeds in a parallel manner. Even for
+large datasets with multiple subjects, a large part of the analysis is
+conducted first at the level of each individual brain. Aggregation of
+information across brains is typically done after many preprocessing and
+analysis stages at the level of each individual subject.
 
 For example, diffusion MRI (dMRI) is a method that measures the
 properties of the connections between different regions of the brain.
@@ -523,8 +531,9 @@ aggregated large datasets of human dMRI data from multiple different
 subjects :cite:`Glasser2016-qk`.
 
 In the analysis of dMRI data, the first few steps are done at the
-individual level. For example: selection of regions of interest within
-each image, denoising and initial modeling of the data. In a previous
+individual level. For example, the selection of regions of interest
+within each image and the denoising and initial modeling of the data
+can all be completed at the individual level in parallel. In a previous
 study, we implemented a dMRI analysis pipeline that contained these
 steps and we used it to compare several Big Data systems as a basis for
 efficient scientific image processing :cite:`mehta2017comparative`.
@@ -532,16 +541,16 @@ Here, we reused this pipeline. This allows us to compare the performance
 of Cloudknot directly against the performance of several alternative
 systems for distributed computing that were studied in our previous
 work: Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and
-Dask :cite:`Rocklin2015-ra`
+Dask.
 
-In Cloudknot, we used the reference implementation from this previous
-study written in Python, and using methods implemented in Python and
-Cython in Dipy :cite:`Garyfallidis2014`. In contrast to the other
-systems, essentially no changes had to be made to the reference
-implementation when using Cloudknot, except to download data from S3
-into the individual instances. Parallelization was implemented only at
-the level of individual subjects, and a naive serial approach was taken
-at the level of each individual.
+In Cloudknot, we used the reference implementation from this
+previous study written in Python and using methods from Dipy
+:cite:`Garyfallidis2014`, which are implemented in Python and Cython.
+In contrast to the other systems, essentially no changes had to be
+made to the reference implementation when using Cloudknot, except to
+download data from S3 into the individual instances. Parallelization was
+implemented only at the level of individual subjects, and a naive serial
+approach was taken at the level of each individual.
 
 We found that with a small number of subjects this reference
 implementation is significantly slower with Cloudknot compared with the
@@ -549,15 +558,15 @@ parallelized implementation in these other systems. But the relative
 advantage of these systems diminshes substantially as the number of
 subjects grows larger (Figure :ref:`fig.mribenchmark`), and the benefits
 of parallelization across subjects starts to be more substantial. With
-25 subjects (the largest number we used), Cloudknot is less than 10% slower
-than Spark and Myria, and less than 25% slower than Dask (which was the
-fastest at that scale, among the systems we previously benchmarked).
+the largest number of subjects used, Cloudknot processed 25 subjectss
+10% slower than Spark and Myria; however, it was 25% slower than Dask,
+the fastest of the tools that we previously benchmarked.
 
 There are two important caveats to this analysis: the first is that
 the analysis with the other systems was conducted on a cluster with a
 fixed allocation of 16 nodes (each node was an AWS r3.2xlarge instance
 with 8 vCPUs). The benchmark code does run faster with more nodes
-added to the cluster (see :cite:`mehta2017comparative` for details).
+added to the cluster :cite:`mehta2017comparative`.
 Notably, even for the largest amount of data that was benchmarked (25
 subjects), Cloudknot deployed only two instances of the r4.16xlarge
 type -- each with 64 vCPUs and 488 GB of RAM. In terms of RAM, this
@@ -601,7 +610,7 @@ using TrackMate serially in each experiment can be prohibitively time
 consuming. One solution is to divide the movies spatially into smaller
 field of view movies, and analyze them in parallel.
 
-ImageJ and Trackmate are both written in Java, and can be scripted using
+ImageJ and Trackmate are written in Java and can be scripted using
 Jython. This implies complex software dependencies, because the software
 requires installation of the ImageJ Jython runtime. Because Cloudknot
 relies on docker, this installation can be managed using the command
@@ -621,7 +630,7 @@ Conclusion
 Cloudknot simplifies cloud-based distributed computing by
 programmatically executing UDFs in AWS Batch. This lowers the barrier to
 cloud computing and allows users to launch massive workloads at
-scale all from within their Python environment.
+scale from within their Python environment.
 
 We have demonstrated Cloudknot's ability to handle complicated data and
 software dependencies using real-world examples from neuroimaging and
@@ -638,7 +647,7 @@ Eq :ref:`eq.tcompute`, capturing only partial information about
 :math:`t_\mathrm{compute}`. Precisely measuring :math:`t_\mathrm{env}`
 is beyond the scope of this paper so the reduction in
 :math:`t_\mathrm{compute}` is admittedly speculative. But we believe an
-extra 30-50% in execution time may be acceptable in some situations. For
+increase in execution time may be acceptable in some situations. For
 example, if the amount of time that a user will spend learning a new
 queueing system or batch processing language exceeds the time savings
 due to reduced execution time, then it will be advantageous to accept
