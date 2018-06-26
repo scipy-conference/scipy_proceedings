@@ -658,17 +658,19 @@ wait for results. And because Cloudknot is built using Docker and the
 AWS Batch infrastructure, it can accomodate the needs of more advanced
 users who want to augment their Dockerfiles or specify instance types.
 
-Cloudknot's simple API and its conditionally acceptable execution
-time compared to other distributed computing frameworks make it a
-viable tool for researchers who want distributed execution of their
-computational workflow, from within their Python environment, without
-the steep learning curve of learning a new platform.
+Cloudknot trades runtime performance for development performance and
+is best used when development speed matters most. Its simple API makes
+it a viable tool for researchers who want distributed execution of
+their computational workflow, from within their Python environment,
+without the steep learning curve of learning a new platform. It may
+have business applications as well since data scientists performing
+exploratory analysis would benefit from short development times.
 
 
 Future Work
 -----------
 
-Currently, Cloudknot does not support computational pipelines that
+Unlike Dask, Cloudknot does not support computational pipelines that
 define dependencies between different tasks. Future releases may support
 job dependencies so that specific jobs can be scheduled to wait for
 the results of previously submitted jobs. Cloudknot could also provide
