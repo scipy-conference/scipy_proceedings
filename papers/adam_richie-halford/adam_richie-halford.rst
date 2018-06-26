@@ -571,17 +571,18 @@ the fastest of the tools that we previously benchmarked.
 There are two important caveats to this analysis: the first is that
 the analysis with the other systems was conducted on a cluster with a
 fixed allocation of 16 nodes (each node was an AWS r3.2xlarge instance
-with 8 vCPUs). The benchmark code does run faster with more nodes
-added to the cluster :cite:`mehta2017comparative`.
-Notably, even for the largest amount of data that was benchmarked (25
-subjects), Cloudknot deployed only two instances of the r4.16xlarge
-type -- each with 64 vCPUs and 488 GB of RAM. In terms of RAM, this
-is the equivalent of a 16 node cluster of r3.2xlarge instances, but
-the number of CPUs deployed to the task is about half. As shown above,
-additional scaling can be reached in Cloudknot by expanding the cluster
-with :code:`min_vcpus`. The second caveat to these results is that that
-the comparison timing data for the other systems is from early 2017, and
-these systems may have evolved and improved since.
+with 8 vCPUs). The benchmark code does run faster with more nodes added
+to the cluster :cite:`mehta2017comparative`. The largest amount of
+data that was benchmarked was for 25 subjects, corresponding to 105 GB
+of input data and a maximum of 210 GB of intermediate data. Notably,
+even for this amount of data, Cloudknot deployed only two instances
+of the r4.16xlarge type -- each with 64 vCPUs and 488 GB of RAM. In
+terms of RAM, this is the equivalent of a 16 node cluster of r3.2xlarge
+instances, but the number of CPUs deployed to the task is about half. As
+shown above, additional scaling can be reached in Cloudknot by expanding
+the cluster with :code:`min_vcpus`. The second caveat to these results
+is that that the comparison timing data for the other systems is from
+early 2017, and these systems may have evolved and improved since.
 
 .. figure:: figures/mri_benchmark.png
 
