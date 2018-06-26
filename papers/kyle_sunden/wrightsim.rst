@@ -21,12 +21,7 @@
     We present an open-source Python package designed to simulate multidimesional
     nonlinear spectra: ``WrightSim`` .
     ``WrightSim`` uses the densitry matrix formulation of quantum mechanics.
-    A Hamiltonian describes all of the ways that a set of states interact with
-    each other and with externally applied electric fields in the course of a
-    spectroscopic experiment.
-    Numerical integration (of the Liouville-von Neumann equation) is used to
-    evolve the density state vector over time as the system interacts with
-    several electric fields in the course of a multidimensional experiment.
+    Numerical integration is used to evolve the system as it interacts with several electric fields in the course of a multidimensional experiment.
     This numerical approach allows ``WrightSim`` to fully account for finite pulse
     effects that are commonly ignored.
     ``WrightSim`` is made using modules that can be exchanged to accomidate many
@@ -130,14 +125,12 @@ This formulation allows us to describe mixed states (coherences) which are key
 players in light-matter-interaction and spectroscopy.
 This strategy has been described before :cite:`Gelin_2009`, so we are brief in our
 description here.
-We propagate all of the relevant density matrix elements, including
-populations and coherences, in our numerical simulation.
-This places ``WrightSim`` at an intermediate level of theory, one where
-the mechanisms by which the desired signal arises are known, but have
-non-trivial spectral features as a result.
-This package does **not** perform *ab initio* computations, nor is it simply
-plotting a collection of well-behaved peaked functions with amplitudes and widths
-from experimental spectra.
+``WrightSim`` calculates multidimensional spectra for a given well-defined Hamiltonian.
+We do not make common limiting assumptions that allow reduction to analytical expressions.
+Instead, we propagate all of the relevant density matrix elements, including
+populations and coherences, in a numerical integration.
+This package does **not** perform *ab initio* computations.
+This places ``WrightSim`` at an intermediate level of theory where the Hamiltonian is known, but accurately computing the corresponding multidimensional spectrum requires complex numerical analysis.
 
 Here, we are simulating the interactions of three electric fields to
 induce an output electric field.
