@@ -191,7 +191,7 @@ At any point, we can also get an overview of what the implicit data space schema
      'v': 'int([1, 2, 3], 3)',
     }
 
-Keys with constant values across the entire data space are automatically omitted from the schema.
+Keys with constant values across the entire data space can be optionally omitted from the schema.
 Additionally, schema can be filtered, nested keys can be compressed to specified depths, and the number of entries shown in each range can be limited as desired.
 
 Workflows
