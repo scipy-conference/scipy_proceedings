@@ -142,8 +142,9 @@ Having made the above change to our data space, we could now easily add new data
 
 Jobs that already exist in the data space will not be overwritten by the ``init`` operation, so there is no harm in performing a loop like this multiple times.
 
-All of ``signac``'s core functionality is not only available as a Python library, but also as a command line tool, which facilitates integration of ``signac`` with almost any pre-existing workflow.
-While these features are critical for interfacing with non-Python code bases, they are also very useful for more ad hoc analyses of ``signac`` data spaces.
+All of ``signac``'s core functionality is not only available as a Python library, but also as a command line tool.
+This tool uses the Python ``setuptools`` ``console_scripts`` entry point, so it is automatically installed with ``signac`` and ships with built-in help information.
+This interface not only facilitates the integration of ``signac`` with non-Python code bases and workflows, it is also very useful for more ad hoc analyses of ``signac`` data spaces.
 For example, searching the database using the command line can be very useful for quick data inspection:
 
 .. code-block:: bash
@@ -176,9 +177,11 @@ For example, searching the database using the command line can be very useful fo
     13d54ee5821a739d50fc824214ae9a60
 
 The query syntax is based on the MongoDB :cite:`mongodb` syntax, enabling logical or arithmetic operators, for instance.
-In fact, ``signac`` databases can be easily exported to external database programs such as MongoDB, which in conjunction with the common query syntax makes switching back and forth between the two systems quite easy.
+In fact, ``signac`` natively supports export of its databases to MongoDB.
+Although we can add support for integration with any database management system, we decided to start with MongoDB for two reasons: first, because researchers are likely to prefer the comparatively less rigid approach of NoSQL databases to table-based relational databases; and second, because it requires minimal overhead to translate from a ``signac`` database to another JSON-based database.
+Due to this ease of export and the shared query syntax, switching back and forth between ``signac`` and MongoDB is quite easy.
 
-Additionally, at any point we can get an overview of what the implicit data space schema looks like:
+At any point, we can also get an overview of what the implicit data space schema looks like:
 
 .. code-block:: bash
 
@@ -187,6 +190,8 @@ Additionally, at any point we can get an overview of what the implicit data spac
      'theta': 'int([3], 1), float([0.0, ..., 1.57], 5)',
      'v': 'int([1, 2, 3], 3)',
     }
+
+Additionally, schema can be filtered, nested keys can be compressed to specified depths, and the number of entries shown in each range can be limited as desired.
 
 Workflows
 =========
@@ -328,8 +333,9 @@ For better performance, the resulting indexes can be manually saved; in general,
 These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
 
 From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
-In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the detection of implicit schema; the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; and the ability to synchronize data across projects.
-Individual data points, which can be accessed by searching through or iterating over a ``Project`` instance, are represented by ``Job`` objects.
+In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; the ability to synchronize data across projects; and the detection of implicit schema.
+Note that the schema are implicit insofar as they are only defined by the state points of jobs within the workspace, *i.e* there is nothing like a table schema to enforce a particular structure for the state points of individual jobs.
+Searching through or iterating over a ``Project`` instance generates ``Job`` objects, which provide Python interfaces to the jobs within the project and their associated data.
 In addition to providing a Pythonic access point to the job state point and the job document, a ``Job`` object can always be mapped to its location on the filesystem, making it ideal for associating file-based data with the appropriate data point.
 
 The central object in the ``signac-flow`` package is the ``FlowProject`` class, which encapsulates a set of operations acting on a ``signac`` data space.
