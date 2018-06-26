@@ -37,10 +37,10 @@ provided by Astropy have been employed in two current projects. The data system 
 Zwicky Transient Facility processes a terabyte of image data every night, with a lights-out
 automated pipeline that produces difference images about ten minutes after the receipt of
 every exposure. Astropy is used extensively in the astrometry and light-curve-generation
-modules, making especially heavy use of world coordinate systems, FITS header manipulation,
+modules, making especially heavy use of FITS header manipulation,
 table I/O, and coordinate conversion and matching. The second project is a web application
 made with Plotly Dash for proposal studies for the Origins Space Telescope. The astropy.cosmology
-module provides easy redshifting of our template galaxy spectrum, and astropy.units enabled
+module provided easy redshifting of our template galaxy spectrum, and astropy.units enabled
 the porting of an instrument sensitivity function to Python, with verification that a very
 complex combination of units resulted in a dimensionless signal-to-noise value.
 
@@ -53,7 +53,8 @@ Introduction
 
 The Astropy Project is a community-driven effort to provide both a core Python package of
 functionality commonly used by astronomers, and an extended ecosystem of interoperable
-packages, with high standards for documentation and testing. The astropy core package
+packages, with high standards for documentation and testing (:cite:`astropy2013`,
+:cite:`astropy2018`). The astropy core package
 includes subpackages for representing and manipulating space and time coordinates;
 I/O for astronomical file formats; world coordinate systems in images (e.g. converting
 between celestial coordinates and image pixels); cosmological calculations; and
@@ -70,56 +71,63 @@ Samuel Oschin Telescope at Palomar Observatory in southern California. This tele
 was originally constructed to take images with photographic plates, in large part to
 provide targets for the 200-inch Hale Telescope at the same observatory. The ZTF camera
 fills the focal plane of the 48-inch telescope with sixteen 6000x6000 charge-coupled
-devices (CCDs) with an active detector area of 47 square degrees. ZTF is conducting a fast,
-wide-area time-domain survey designed to discove fast, young and rare flux transients;
+devices (CCDs) with an active detector area of 47 square degrees (Dekany et al in prep).
+ZTF is conducting a fast, wide-area time-domain survey (Bellm et al in prep) designed
+to discover fast, young and rare flux transients;
 counterparts to gravitational wave sources; low-redshift Type Ia supernovae for cosmology;
-variable stars and eclipsing binaries; and Solar System objects. The entire visible sky
-can be imaged each night to declinations about -28 degrees. The survey began in March
-2018 and will continue for three years.
+variable stars and eclipsing binaries; and moving objects in our Solar System such as
+asteroids (Graham et al in prep). The entire visible sky
+can be imaged each night to declinations about -30 degrees. The survey began in March
+2018 and will continue for three years. Figure :ref:`size` shows a field-of-view
+comparison of ZTF with its predecessor at Palomar, the Palomar Transient Factory
+(PTF), and the forthcoming Large Synoptic Survey Telescope (LSST).
 
 .. figure:: ztf_size_comparison.png
 
    Field of view of the ZTF camera, compared to the predecessor Palomar Transient
    Factory (PTF) camera, and the forthcoming Large Synoptic Survey Telescope (LSST).
-   The background image shows the Orion constellation.
+   The background image shows the Orion constellation. :label:`size`
 
 A typical night of ZTF observations includes about 750 exposures totaling about 1
 Terabyte of image data when uncompressed. Each quadrant of the CCDs is processed
 separately for a total of about 55,000 calibrated science images per night. Depending
-on sky location, 0.5 to 1 billion point source measurements are extracted per
-night. Within a few minutes of receipt of an exposure at IPAC, a real-time pipeline
-outputs alert packets including image subtractions of potential transient objects, at
+on sky location, 0.5 to 1 billion individual source measurements are extracted per
+night. The ZTF data system (Masci et al. 2018, in review, :cite:`laher_robotics2017`)
+is operated by the IPAC data center
+on the Caltech campus. Within a few minutes of receipt of an exposure at IPAC, a real-time image
+subtraction pipeline outputs alert packets of potential transient objects, at
 rates already nearing 1 million per night.
 
-The ZTF data system (Masci et al. in prep) is operated by the IPAC data center
-on the Caltech campus.
+
 The data system is mostly scripted in Perl, with job management relying on
-a Postgres database. A cluster of 66 drones handles the processing. Astropy
+a Postgres database. A cluster of 66 compute nodes handles the processing. Astropy
 is used in several key components of the pipeline. In the following subsections
 we outline Astropy use and what we've learned from operational experience.
 
 
-Astropy in the astrometry module
-++++++++++++++++++++++++++++++++
+Improving reliability of the astrometric solver
++++++++++++++++++++++++++++++++++++++++++++++++
 
 Assigning coordinates to ZTF images is challenging for several reasons. The accuracy
 of the pointing of the boresight (center of the field-of-view) is about 20 arcseconds
-rms. Atmospheric effects cause distortions on small scales, and these effects are
-exacerbated at low elevations. ZTF employs the SCAMP astrometric solver from the
+rms. Atmospheric effects cause image distortions on small scales, and these effects are
+exacerbated at low elevations. ZTF employs the *Scamp* astrometric solver from the
 Astromatics suite (:cite:`Bertin2006`) to fit a 4th-order distortion polynomial.
-SCAMP is written in C and requires inputs in a very specialized format. We have
+*Scamp* is written in C and requires inputs in a very specialized format. We have
 developed a procedure that has significantly reduced the rate of incorrect solutions
-in crowded fields.
+in crowded fields, by providing *Scamp* with an accurate starting point.
 
-SCAMP requires both the input catalog of detections and the reference catalog to
-be provided in LDAC FITS format. This format consists of header information encoded in
+*Scamp* requires both the input catalog of detections and the reference catalog to
+be provided in LDAC (Leiden Data Analysis Center) [#]_ FITS format. This format consists of header information encoded in
 a binary format in an image extension, followed by a table extension. Recent versions
-of SCAMP will use a prior WCS solution provided to the program. Providing a distortion
-prior derived from many observations makes it much easier for SCAMP to converge on
+of *Scamp* will use a prior World Coordinate System (WCS; :cite:`wcs_paper_ii`) solution provided to the program. Providing a distortion
+prior derived from many observations makes it much easier for *Scamp* to converge on
 the global minimum, i.e. the correct distortion solution. Our efforts to include
 the WCS in the LDAC file of detections using astropy.io.fits were unsuccessful.
-However, the header information in the LDAC file can be overridden by a text file
-of header information.
+However, the WCS information in the LDAC file can be overridden by a text file
+of header information provided separately to *Scamp*.
+
+.. [#] https://marvinweb.astro.uni-bonn.de/data_products/THELIWWW/LDAC/LDAC_concepts.html
 
 Our distortion prior is constructed from an offline analysis of images taken at high
 elevations (low airmasses), the same conditions used in the ZTF survey. For selected
@@ -128,64 +136,62 @@ fields, we set up idealized WCS objects with 1 degree per "pixel":
 .. code-block:: python
 
     from astropy.wcs import WCS
-    field_ra = {619:143.619,
-                620:151.101,
-                665:133.35,
-                667:149.057}
-    field_dec = {619:26.15,
-                 620:26.15,
-                 665:33.35,
-                 667:33.35}
+    field_radec = {619: (143.619, 26.15),
+                620: (151.101, 26.15),
+                665: (133.35, 33.35),
+                667: (149.057, 33.35)}
 
     wdict = {}
-    for field in field_ra.keys():
+    for field, (ra, dec) in field_radec.items():
         w = WCS(naxis=2)
         w.wcs.crpix = [0.0, 0.0]
         w.wcs.cdelt = np.array([1.0, 1.0])
-        w.wcs.crval = [field_ra[field],
-                       field_dec[field]]
+        w.wcs.crval = [ra, dec]
         w.wcs.ctype = ["RA---TAN", "DEC--TAN"]
         wdict[field] = w
 
 Then when reading in a catalog of sources with positions for each field, we convert
-the right ascensions and declinations to eta, nu in the tangent plane:
+the right ascensions and declinations to projection plane coordinates
+(:cite:`wcs_paper_ii`) :math:`\xi`, :math:`\eta` in units of degrees in the tangent plane:
 
 .. code-block:: python
 
-    w = wdict[ifield]
+    w = wdict[field]
     plane_coords = w.wcs_world2pix(
-           np.vstack(
-                 [tab['ra'],tab['dec']]).T,1)
-    eta = plane_coords[:,0]
-    nu = plane_coords[:,1]
+           np.vstack([tab['ra'],tab['dec']]).T,1)
+    xi = plane_coords[:,0]
+    eta = plane_coords[:,1]
 
-The statsmodels package is used to fit a linear model relating image pixel values
-to the computed eta and nu values, while allowing offsets and linear terms for
+A linear model is fit relating image pixel values
+to the computed :math:`\xi` and :math:`\eta` values, while allowing offsets and linear terms for
 each exposure and readout channel. This fit yields the CRPIX1 and CRPIX2 values
 (pixel offsets) from the telescope boresight
 to each of the 64 readout channels. This linear solution yields residuals of about
 four arcseconds in magnitude. Then "global" pixel coordinates are constructed and
-a quadratic fit relating these to eta and nu is computed. This second fit is used
-to find :math:`eta` and :math:`nu` for the center of each quadrant-image. For each quadrant-image,
-a linear fit is made to yield CD-matrix values for each quadrant. This procedure
-transfers the pointing to the center of each individual qudrant-image.
+a quadratic fit relating these to :math:`\xi` and :math:`\eta` is computed. This second fit is used
+to find :math:`\xi` and :math:`\eta` for the center of each quadrant-image. For each quadrant-image,
+a linear fit is made to yield the multiplicative terms for pixel scale and rotation
+(CD-matrix values; :cite:`wcs_paper_ii`)  for each quadrant. This procedure
+transfers the pointing to the center of each individual quadrant-image.
 
-Parameters for each quadrant are saved to be used by the astrometry pipeline. The
-parameters are read and inserted into a text file that initializes SCAMP. For each
-image, a first run of SCAMP is made using 'PRE-DISTORTED' mode. This performs
-pattern-matching of detected stars and reference stars. SCAMP is allowed only a little
-freedom to rotate and change scale. A second pass of SCAMP skips the pattern-matching
+The CD-matrix, CRPIX1, CRPIX2, and :math:`\xi`, :math:`\eta` values
+for each quadrant are saved to be used by the astrometry pipeline. The
+parameters are read and inserted into a text file that initializes *Scamp*. For each
+image, a first run of *Scamp* is made using 'PRE-DISTORTED' mode. This performs
+pattern-matching of detected stars and reference stars. *Scamp* is allowed only a little
+freedom to rotate and change scale. A second pass of *Scamp* skips the pattern-matching
 and fits a fourth-degree distortion polynomial as part of the output WCS.
 
 
-A problem that plagued previous surveys was not being able to readily tell whether
-a solution output by SCAMP was of poor quality. Astrometric problems will greatly
+A problem encountered often in the PTF survey was not being able to readily tell whether
+a solution output by *Scamp* was of poor quality. Astrometric problems greatly
 increase the number of spurious transients produced by image subtraction and later
-steps of the pipeline and scanning processes. SCAMP does output a chi-squared
+steps of the pipeline and scanning processes. *Scamp* does output a chi-squared
 statistic. When provided with realistic errors, most good solutions result in a
 chi-squared statistic of about five. To ensure that the system catches the case
 of a distortion polynomial that is unconstrained in the corner of an image, we
-developed a scale check test of the final solution against the prior.
+developed a scale check test of the final solution against the distortion prior
+that we initially provided to *Scamp*.
 
 First we generate a grid over the detector, and then make pixel coordinates
 at each grid point:
@@ -207,6 +213,8 @@ pixel areas:
 
 .. code-block:: python
 
+    from astropy.coordinates import SkyCoord
+    import astropy.units as u
     finalcoords = SkyCoord(wcs_final.all_pix2world(
                     pcoords, 1), unit=u.deg, frame='icrs')
     finalcoordsb = SkyCoord(wcs_final.all_pix2world(
@@ -239,7 +247,7 @@ along the azimuthal direction and by a magnitude determined from the differentia
 refraction model. The correction is not needed for the main survey and will only
 help find solutions for targets of opportunity at high airmass.
 
-A peculiarity for ZTF is that with a field-of-view that is seven degress on a side,
+A peculiarity for ZTF is that with a field-of-view that is seven degrees on a side,
 the airmass reported by the telescope control system does not apply well for the
 outer CCDs. We use an AltAz model to recompute airmass when analyzing statistics:
 
@@ -258,7 +266,7 @@ outer CCDs. We use an AltAz model to recompute airmass when analyzing statistics
 
 Another critical speed improvement was in pre-fetching static copies of
 the Gaia DR1 catalog and storing these in the LDAC FITS format, in a
-static area, to be available as static catalogs for SCAMP. We did not use
+static area, to be available as static catalogs for *Scamp*. We did not use
 astroquery but instead a custom TAP query to our IRSA archive, using
 astropy.io.fits to write out each file.
 
@@ -273,8 +281,8 @@ What are the important "tips" or "lessons learned"?
 * When you have a 7-degree field of view, the elevation, azimuth, and airmass
   reported by the telescope system aren't good enough anymore.
 
-Astropy in source-matching
-++++++++++++++++++++++++++
+Accounting for light-travel-time in ZTF light curves
+++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 For ZTF, the PSF-fitting photometry that is extracted from every image is
 periodically combined into matchfiles in HDF5 format. These matchfiles form
@@ -353,7 +361,7 @@ Here are the important lessons learned:
 * Note that the above lesson applies as well to pre-fetching Gaia catalogs for
   the astrometry step.
 * SkyCoord.offset_frame is needed to get around zero-wrapping problems. In fact,
-  offset_frame is very usefel when working on a patch of sky.
+  offset_frame is very useful when working on a patch of sky.
 
 
 
@@ -372,6 +380,7 @@ installing the same version of Astropy in both versions of python.
 
 
 Lessons learned include:
+
 * Configuration files can cause problems at scale.
 * Technical debt from not converting everything to Python 3 will bite you.
 
@@ -384,7 +393,8 @@ mirror with all components cooled to less than 6 K, to provide orders of magnitu
 more sensitivity than previous space infrared missions.
 
 As part of the concept study, a web application has been constructed to
-showcase the potential of one of the spectroscopic instruments. The purpose of
+showcase the potential of one of the spectroscopic instruments, the Mid-Resolution
+Survey Spectrometer (:cite:`Bradford_MRSS`). The purpose of
 the application is to allow trade studies of different observational
 parameters, including the telescope diameter, the exposure time, and the
 distance to the star or galaxy of interest. Plotly Dash was chosen as the
@@ -393,14 +403,6 @@ technology for constructing the project.
 Part of the project involved converting a complicated function for instrument
 sensitivity to Python. The astropy.units and astropy.constants packages made it
 relatively easy to check the results of the calculation.
-
-.. figure:: ost_galaxy.png
-   :align: center
-   :scale: 50%
-   :figclass: w
-
-   The web application for the Origins Space Telescope, showing the galaxy spectrum
-   and controls for changing source characteristics and instrument parameters.
 
 Many astronomers are used to working with "magic numbers" that are constants or
 combinations of constants that we keep in our heads. Here is an example:
@@ -420,15 +422,25 @@ With astropy.units and affiliated packages:
 
     freq = const.c/wave
 
-Here is another example:
+
+
+The noise equivalent flux calculation for the spectrometer depends in part on
+the numbers of photons (occupation number) coming from the background at a particular
+wavelength.
+
+.. math::
+
+    \bar{n} = {{c^2I_{\nu}} \over {2 h \nu^3}}
+
+where :math:`I_{\nu}` is the background intensity in MJy/sr. An assertion in
+the calculation of occupation number ensures it is dimensionless:
 
 .. code-block:: python
 
     def occnum_bkg(wave, background):
         """
         returns photon occupation
-        number, as is required for
-        nef function.
+        number from background
         """
 
         freq=const.c/wave
@@ -442,30 +454,65 @@ Here is another example:
 
 The assertion ensures that the occupation number is dimensionless.
 
-Consider another example in the middle of the nef function:
+The noise equivalent power for an element in the spectrometer depends
+the frequency, bandwidth and photon occupation number at that frequency:
+
+.. math::
+
+    NEP = h\nu \sqrt{\Delta\nu \bar{n} (\bar{n} + 1)}
+
+where the bandwidth :math:`\Delta\nu = \nu / R` and :math:`R` is the 
+spectrometer resolution.
+In the instrument sensitivity function, this is implemented with an
+assertion to check units at an intermediate stage:
 
 .. code-block:: python
 
-    sigma = (const.h*freq*
-              np.sqrt(npol/int_time*freq/res*
-              total_nbar*(total_nbar+1.)))
-    nep_det = (sigma*np.sqrt(int_time)*
-                np.sqrt(2)) # in W/sqrt(Hz)
+    delta_freq = freq / resolution
+    nep_det = (const.h*freq*
+               np.sqrt(delta_freq*nbar*(nbar+1))
+               *sqrt(2)) # in W/sqrt(Hz)
     assert nep_det.unit.is_equivalent(u.W*u.Hz**-0.5)
 
 
-Additionally, the astropy.cosmology module was used to redshift the spectrum.
-The Planck 2015 cosmology is one of the built-in cosmologies in the package.
+For the extragalactic example in the application, the astropy.cosmology module
+was used to redshift the spectrum.
+The Planck 2015 cosmology (:cite:`Planck_2015_cosmology`)
+is one of the built-in cosmologies in the package.
 For each user-selected value of redshift, we computed the luminosity distance
 to scale the flux values of the spectrum.
 
-For re-gridding the wavelength spectrum, we used the pysynphot package to interpolate
+For re-gridding the wavelength spectrum, we used the pysynphot package (not
+an astropy package but developed in part by Astropy developers)
+(cite:`pysynphot`) to interpolate
 the redshifted spectrum onto the observed wavelength channels.
 
-The application has been deployed on the Heroku platform [#]_.
+.. figure:: ost_galaxy.png
+   :align: center
+   :scale: 50%
+   :figclass: w
+
+   The web application for the Origins Space Telescope, showing the galaxy spectrum
+   and controls for changing source characteristics and instrument parameters. :label:`ost-galaxy`
+
+The application has been deployed on the Heroku platform [#]_. A screenshot of
+the galaxy spectrum is shown in :ref:`ost-galaxy`. To ensure good performance
+when changing parameters, the instrument sensitivity was pre-computed for the
+lines in the spectra, for different backgrounds and redshifts.
 
 .. [#] https://ost-mrss.herokuapp.com
 
+The astropy.units package is broadly useful outside astronomy; to that end, the
+unyts package (:cite:`unyts_2018`) is a newly-available standalone alternative.
+
+Lessons learned include:
+
+* Using a units package together with assertions at intermediate stages helped
+  to validate a complex instrument sensitivity function.
+* However, a units package does not help get factors of (1+z) correct.
+* Pre-computing sensitivities for several parameter choices sped up the application.
+* The pysynphot functionality for regridding spectra would be useful to break
+  out into a more accessible Astropy-affiliated package.
 
 
 
@@ -474,4 +521,10 @@ Conclusions
 
 This paper highlights the use of Astropy in two production environments: the
 Zwicky Transient Facility data system, and a web application for the Origins
-Space Telescope. 
+Space Telescope. Astropy's capabilities for manipulating FITS files and image
+headers, coupled with its coordinate conversion capabilities, helped us implement
+a scheme to greatly improve the reliability of ZTF astrometry, and provided
+other conveniences. The astropy.units and astropy.cosmology packages provided
+essential transformations for the Origins study application. We found that some
+care needs to be taken with minimizing or eliminating network calls, and with
+
