@@ -554,11 +554,12 @@ Dask.
 In Cloudknot, we used the reference implementation from this
 previous study written in Python and using methods from Dipy
 :cite:`Garyfallidis2014`, which are implemented in Python and Cython.
-In contrast to the other systems, essentially no changes had to be
-made to the reference implementation when using Cloudknot, except to
-download data from S3 into the individual instances. Parallelization was
-implemented only at the level of individual subjects, and a naive serial
-approach was taken at the level of each individual.
+In contrast to the other systems, essentially no changes had to be made
+to the reference implementation when using Cloudknot, except to download
+the part of the data required for an individual job from S3 into the
+individual instances. Parallelization was implemented only at the level
+of individual subjects, and a naive serial approach was taken at the
+level of each individual.
 
 We found that with a small number of subjects this reference
 implementation is significantly slower with Cloudknot compared with the
@@ -712,12 +713,12 @@ Cloudknot can benefit from several approaches to enhancement:
        process the input data.
 
 In addition to these capability enhancements, Cloudknot could benefit
-from performance enhancements designed to achieve parity with Dask,
-Myria, Spark, or other distributed computing platforms. This might
-involve prebuilding certain Docker containers or intelligently selecting
-an AWS region to minimize cost or queueing time. Lastly, we claimed
-that Cloudknot's simple API likely gives it a gentler learning curve
-than other distributed computing platforms. But we did not rigorously
+from performance enhancements designed to address the performance
+gap with other distributed computing platforms. This might involve
+prebuilding certain Docker containers or intelligently selecting an
+AWS region to minimize cost or queueing time. Lastly, we claimed that
+Cloudknot's simple API likely gives it a gentler learning curve than
+other distributed computing platforms. But we did not rigorously
 quantify the time investment required to start using Cloudknot with
 that of other systems. Future work may seek to fill this gap with a
 comparative human-computer interaction (HCI) study.
