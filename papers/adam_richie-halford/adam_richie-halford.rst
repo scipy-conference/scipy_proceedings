@@ -268,27 +268,36 @@ in the AWS console.
 Multiple Data (MD)
 ~~~~~~~~~~~~~~~~~~
 
-To operate on the MD, the :code:`Knot.map()` method serializes each
-element of the input and sends it to S3, organizing the data in a schema
-that is internally consistent with the expectations of the CLI. It then
-launches an AWS Batch array job (or optionally, separate individual
-Batch jobs) to execute the program over these data. When run, each batch
-job selects its own input, executes the UDF, and returns its serialized
-output to S3.
+To operate on the MD, the :code:`Knot.map()` method uses a simple for
+loop to assign each element of the input to a separate AWS Batch job
+[#]_. It serializes each element and sends it to S3, organizing the data
+in a schema that is internally consistent with the expectations of the
+CLI. It then launches an AWS Batch array job (or optionally, separate
+individual Batch jobs) to execute the program over these data. When run,
+each batch job selects its own input, executes the UDF, and returns its
+serialized output to S3.
 
-.. S3 transfers within the data center: If the instances and bucket are
-   in the same region, then users shouldn't pay for transfer from S3 to
-   instance and back. Only for transfer out of the data center (i.e.
-   from local machine to S3 and back. I don't think we need to mention
-   this detail in the paper. It's too in the weeds and anyone interested
-   can read it in the docs. If we do, we should talk about how the user
-   can use functions in ck.config to change their bucket region to match
-   the instance region.
+.. [#] The for loop iterates over the outer dimension of the input data.
+       So the default behavior creates a one-to-one map between input
+       elements and AWS Batch jobs. However, the elements of the input
+       data may, themselves, be multidimensional sequences and the user
+       can exploit this to achieve a many-to-one map between input
+       elements and jobs.
 
-Finally, :code:`Knot.map()` downloads the output from S3 and returns it
-to the user. Since AWS Batch allows arbitrarily long execution times,
-:code:`Knot.map()` returns a list of futures for the results, mimicking
-Python's concurrent futures' :code:`Executor` objects.
+If the instances and S3 bucket are in the same region, then users do not
+pay for transfer from S3 to the EC2 instances and back. They pay only
+for transfer out of the data center (i.e. from their local machine to
+S3 and back). Transfer speed within the data center also outperforms
+transfer speed between data centers. So it is both less costly and more
+performant to colocate the Cloudknot S3 bucket with the EC2 instances.
+Cloudknot includes utility functions to change regions and S3 buckets
+for this purpose.
+
+In the last step, :code:`Knot.map()` downloads the output from S3
+and returns it to the user. Since AWS Batch allows arbitrarily long
+execution times, :code:`Knot.map()` returns a list of futures for
+the results, mimicking Python's concurrent futures' :code:`Executor`
+objects.
 
 Under the hood, :code:`Knot.map()` creates a
 :code:`concurrent.futures.ThreadPoolExecutor` instance where each
@@ -689,7 +698,7 @@ Python session. We will also focus our attention on domain-specific
 applications (in neuroimaging, for example) and include enhancements and
 bug-fixes that arise from use in our own research.
 
-Lastly, :code:`Knot` uses hard-coded defaults for the configuration of
+:code:`Knot` uses hard-coded defaults for the configuration of
 its job definition and compute environment. Future Cloudknot releases
 could intelligently estimate these defaults based on the UDF and the
 input data. For example, :code:`Knot` could estimate its resource
@@ -703,6 +712,12 @@ apply those to the remaining input.
        :code:`Knot` instantiation as either the one which minimizes cost
        to the user or that which minimizes the wall time required to
        process the input data.
+
+Lastly, we claimed that Cloudknot's simple API likely gives it a gentler
+learning curve than other distributed computing platforms. But we did
+not rigorously quantify the time investment required to start using
+Cloudknot with that of other systems. Future work may seek to fill
+this gap with a comparative human-computer interaction (HCI) study.
 
 
 Acknowledgements
