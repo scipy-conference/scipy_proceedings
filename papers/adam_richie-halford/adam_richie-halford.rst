@@ -606,15 +606,15 @@ scale from within their Python environment.
 
 We have demonstrated Cloudknot's ability to handle complicated data and
 software dependencies using real-world examples from neuroimaging and
-microscopy. And we've included scaling analyses that show Cloudknot's
-performance compared to other distributed computing frameworks. On one
-hand, scaling charts like the ones in Figures :ref:`fig.nargsscaling`,
-:ref:`fig.syssizescaling`, and :ref:`fig.mribenchmark` are important
-because they show potential users the relative cost in execution time of
-using Cloudknot in comparison to other distributed computing platforms.
+microscopy. And we've included analyses that show Cloudknot's performance
+compared to other distributed computing frameworks. On one hand, scaling
+charts like the ones in Figures :ref:`fig.nargsscaling`,
+:ref:`fig.syssizescaling`, and :ref:`fig.mribenchmark` are important because
+they show potential users the relative cost in execution time of using
+Cloudknot in comparison to other distributed computing platforms.
 
-On the other hand, the scaling results in this paper, indeed most
-scaling results in general, measure the bare execution time, capturing
+On the other hand, the timing results in this paper, indeed most
+benchmark results in general, measure the bare execution time, capturing
 only partial information about the time that it takes to reach a
 computational result. This is because all the distributed systems
 currently available require some amount of systems administration and
@@ -624,15 +624,16 @@ code :cite:`mehta2017comparative`. We believe an increase in execution
 time may be acceptable in some situations, if it can reduce the time
 spent on systems administration, setup and particularly on rewriting
 of existing code. For example, if the amount of time that a user will
-spend learning a new queueing system or batch processing language
-xceeds the time savings due to reduced execution time, then it will be
-advantageous to accept Cloudknot's suboptimal execution time in order
-to use its simplified API. Beginning Cloudknot users simply add an
-extra import statement, instantiate a :code:`Knot` object, call the
-:code:`map()` method, and wait for results. And because Cloudknot is
-built using Docker and the AWS Batch infrastructure, it can accomodate
-the needs of more advanced users who want to augment their Dockerfiles
-or specify instance types.
+spend learning a new queueing system or batch processing language,
+and the amount of time that the user will spend rewriting their code
+for this system exceeds the time savings due to reduced execution time,
+then it will be advantageous to accept Cloudknot's suboptimal execution
+time in order to use its simplified API. Beginning Cloudknot users
+simply add an extra import statement, instantiate a :code:`Knot` object,
+call the :code:`map()` method, and wait for results. And because
+Cloudknot is built using Docker and the AWS Batch infrastructure, it
+can accomodate the needs of more advanced users who want to augment their
+Dockerfiles or specify instance types.
 
 Cloudknot trades runtime performance for development performance and
 is best used when development speed matters most. Its simple API makes
