@@ -323,6 +323,8 @@ The two essential pieces of Yaksh are:
 - Django Server
 - Code server
 
+Fig :ref:`fig:codeevaluation-flow` shows the workflow for code evaluation.
+
 Django Server
 -------------
 
@@ -492,6 +494,13 @@ displays the result when one is available until a hard timeout.
 The JSON meta data is sent to a ``Grader`` instance which is responsible for
 the actual code evaluation.
 
+.. figure:: flow_diagram.png
+   :alt:  Flow Diagram of code evaluation
+
+   Flow diagram for code evaluation procedure
+   :label:`fig:codeevaluation-flow`
+
+
 Grader
 ~~~~~~~
 
@@ -566,8 +575,6 @@ Workflow of Yaksh
 -----------------
 
 - **Instructor workflow**
-
-
 
   An instructor (also called the moderator) has to first create a course
   before creating a quiz, lesson or module. Before creating a quiz, instructor
@@ -679,6 +686,9 @@ Workflow of Yaksh
   is shown. From the Fig. :ref:`fig:yaksh-code` we can see that there is an
   indentation error in the code. Once the answer is submitted we get an
   indentation error message as shown in the Fig. :ref:`fig:yaksh-error`.
+  After submmiting the answer, if the answer does not pass the test case then
+  student gets an assertion error as shown in the
+  Fig :ref:`fig:yaksh-assertion-error`.
 
   .. figure:: yaksh_coding.png
      :alt:  Programming
@@ -691,6 +701,12 @@ Workflow of Yaksh
 
      Error output after submitting the code answer.
      :label:`fig:yaksh-error`
+
+  .. figure:: yaksh_assertion_error.png
+     :alt:  Assertion Error
+
+     Asserrtion Error output after submitting the code answer.
+     :label:`fig:yaksh-assertion-error`
 
   Fig. :ref:`fig:yaksh-code-stdio` shows an StdIO based question. Once the
   answer is submitted we get the error output as shown in
