@@ -437,28 +437,27 @@ of different boundary conditions and over a range of grid sizes.
 
 First, we hold the grid size constant at 10 x 10 and parallelize over
 different temperature constraints on one edge of the simulation grid.
-We investigate the scaling of job execution time as a function of the
-size of the argument array. In Figure :ref:`fig.nargsscaling` we show
-the execution time as a function of :math:`n_\mathrm{args}`, the length
-of the argument array (with a :math:`\log_2` scale on the :math:`x`-axis
-and a :math:`\log_{10}` scale on the :math:`y`-axis). We testing
-scaling using Cloudknot's default parameters and also using custom
-parameters [#]_. Regardless of the :code:`Knot` parameters, Pywren
-outperformed Cloudknot at all argument array sizes. Indeed, Pywren
-appears to achieve constant scaling between :math:`4 \le n_\mathrm{args}
-\le 512`, revealing AWS Lambda's capabilities for massively parallel
-computation. For :math:`n_\mathrm{args} > 512`, Pywren appears to
-conform to linear scaling with a constant of roughly 0.25. By contract,
-Cloudknot exhibits noisy linear scaling for :math:`n_\mathrm{args}
-\gtrapprox 32`, with a constant that is comparable to Pywren's scaling
-constant for :math:`n_\mathrm{args} > 512`. Precise determination of
-these scaling constants would require more data for a larger range of
-argument sizes.
+We investigate the scaling of job execution time as a function of
+the size of the argument array. In Figure :ref:`fig.nargsscaling` we
+show the execution time as a function of :math:`n_\mathrm{args}`, the
+length of the argument array (with both on :math:`\log_2` scales). We
+tested scaling using Cloudknot's default parameters and also using
+custom parameters [#]_. Regardless of the :code:`Knot` parameters,
+Pywren outperformed Cloudknot at all argument array sizes. Indeed,
+Pywren appears to achieve constant scaling between :math:`2^2 \le
+n_\mathrm{args} \le 2^9`, revealing AWS Lambda's capabilities for
+massively parallel computation. For :math:`n_\mathrm{args} > 2^9`,
+Pywren appears to conform to linear scaling with a constant of roughly
+0.25. By contrast, Cloudknot exhibits noisy linear scaling for
+:math:`n_\mathrm{args} \gtrapprox 2^5`, with constants of roughly 2 for
+the custom configuration and roughly 4 for the default configuration.
+Precise determination of these scaling constants would require more data
+for a larger range of argument sizes.
 
 .. [#] Default settings are :code:`min_vcpus=0`,
    :code:`desired_vcpus=8`, and :code:`max_vcpus=256`. Custom settings
    are :code:`desired_vcpus=2048`, :code:`max_vcpus=4096`, and
-   :min_vcpus=512`. Both default and custom Cloudknot cases were also
+   :code:`min_vcpus=512`. Both default and custom Cloudknot cases were also
    limited by the EC2 service limits for our region and account, which
    vary by instance type but never exceeded 200 instances.
 
@@ -466,12 +465,12 @@ argument sizes.
 
    Execution time to find solutions of the 2D heat equation for many
    different temperature constraints on a 10 x 10 grid. We show
-   scaling as a function of the number of constraints for Pywren, the
-   default Cloudknot configuration, and a Cloudknot configuration
-   with more available vCPUs. Note the :math:`log_2` scale for the
-   :math:`x`-axis. Pywren outperforms Cloudknot in all cases. We posit
-   that the additional overhead associated with building the Docker
-   image, along with EC2 service limits limited Cloudknot's throughput.
+   execution time scaling as a function of the number of constraints
+   for Pywren, the default Cloudknot configuration, and a Cloudknot
+   configuration with more available vCPUs. Pywren outperforms Cloudknot
+   in all cases. We posit that the additional overhead associated with
+   building the Docker image, along with EC2 service limits limited
+   Cloudknot's throughput.
    :label:`fig.nargsscaling`
 
 For the data in Figure :ref:`fig.syssizescaling`, we still parallelized
