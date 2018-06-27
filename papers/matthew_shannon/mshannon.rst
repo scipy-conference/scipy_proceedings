@@ -480,16 +480,12 @@ eV photon.
 Demonstration
 -------------
 
-The use of pyPAHdb is demonstrated by analyzing a spectral cube
-constructed from *Spitzer Space Telescope* observations of the
-reflection nebula NGC 7023. The cube is overlaid on an image from the
-*Hubble Space Telescope* in Figure :ref:`fig:7023`
-:cite:`2018ApJ...858...67B`.
-
-.. figure:: fig_NGC7023_HST_rotated_field_slits.png
+.. figure:: fig_demonstration.png
    :align: center
+   :figclass: w
+   :scale: 45
 
-   An image of the reflection nebula NGC 7023 as obtained by the
+   **Left:** An image of the reflection nebula NGC 7023 as obtained by the
    *Hubble Space Telescope*. Overlaid is a pixel grid representing a
    spectral cube of observations taken with the *Spitzer Space
    Telescope*; each pixel contains an infrared spectrum. In this
@@ -500,9 +496,23 @@ reflection nebula NGC 7023. The cube is overlaid on an image from the
    shielded from the star. The diagonal boundary separating the two
    zones is clearly visible. PAHs are common in these
    environments. Figure adapted from :cite:`2018ApJ...858...67B`.
-   :label:`fig:7023`.
+   **Right:**  We display PAH ionization across the NGC 7023 (white grid
+   in left panel), using pyPAHdb. Here, an ionization fraction of ``1`` means
+   all PAHs are ionized, while ``0`` means all are neutral.
+   Note that in the diffuse, exposed cavity (lower half) the
+   PAHs are on average more ionized than in the denser molecular zone
+   (upper half).
+   :label:`fig:7023`
 
-The observed region traces the transition from diffuse, ionized/atomic
+As a more sophisticated demonstration of pyPAHdb's utility,
+we analyze a spectral cube dataset of the reflection nebula
+NGC 7023, as constructed from *Spitzer Space Telescope* observations.
+This data cube is overlaid on a visible-light image of NGC 7023 from the
+*Hubble Space Telescope* in Figure :ref:`fig:7023`, left panel
+:cite:`2018ApJ...858...67B`.
+
+The spectral cube is aligned such that, in these observations, we observe
+the transition from diffuse, ionized/atomic
 species (e.g., HI) near the exciting star to dense, molecular material
 (e.g., H\ :sub:`2`) more distant from the star. The transition zone
 between the two is the PDR, where PAHs have a strong presence. The
@@ -510,45 +520,90 @@ properties of the PAH molecules are known to vary across these
 boundaries, since they are exposed to harsh radiation in the exposed
 cavity of the diffuse zone, and shielded in the molecular region.
 
-pyPAHdb is used to determine how the PAH properties vary across this
-boundary by analyzing the full spectrum at every pixel. The code-block
+We use pyPAHdb to derive the variability of PAH properties across this
+boundary layer by analyzing the full spectrum at every pixel. The code-block
 below, which is taken from ``example.py`` included in the pyPAHdb
-distribution, demonstrates how this is done and Figure :ref:`fig:fit`
-presents part of the resulting PDF-output.
+distribution, demonstrates how this is done. Note that this is the same
+general syntax as is used for analyzing a single spectrum, but here
+`NGC7023.fits` is a spectral cube.
 
 .. code-block:: python
 
+    # ----------------------------------------- #
+    # ------------ Running pyPAHdb ------------ #
+    # ----------------------------------------- #
+
     import pyPAHdb
-    # load an observation from file
     observation = pyPAHdb.observation('NGC7023.fits')
-    # decompose the spectrum with PAHdb
     result = pyPAHdb.decomposer(observation.spectrum)
-    # write results to file
+
+    # This will output the results file,
+    # 'NGC7023_pypahdb.fits':
     pyPAHdb.writer(result, header=observation.header)
 
 With the results from the entire spectral cube, maps of relevant
 astrophysical quantities can be constructed. For example, Figure
-:ref:`fig:map` presents a map of the varying PAH ionization fraction
+:ref:`fig:7023` (right panel) presents a map of the varying PAH ionization fraction
 across NGC 7023. As expected, the fraction is systematically
 higher across the diffuse region, where PAHs are more exposed to the
 star, than the dense region, where PAHs are partially shielded from
-the star.
+the star. This figure was constructed in the following manner:
 
-.. figure:: fig_map_viridis.png
-   :align: center
+.. code-block:: python
 
-   PAH ionization across the reflection nebula NGC 7023 is shown,
-   as derived from a *Spitzer* spectral cube using pyPAHdb
-   (cf. Figure :ref:`fig:7023`; an ionization fraction of ``1`` means
-   all PAHs are ionized, while ``0`` means all are neutral).  The
-   exciting star is outside the field-of-view, towards the lower-left
-   corner. Note that in the diffuse, exposed cavity (lower half) the
-   PAHs are on average more ionized than in the denser molecular zone
-   (upper half). :label:`fig:map`.
+    # ----------------------------------------- #
+    # ----- Plotting a map of ionization ------ #
+    # ----------------------------------------- #
+
+    # Import needed/useful modules.
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from astropy.io import fits
+    from mpl_toolkits.axes_grid1 import \
+        make_axes_locatable
+
+    # Read in the results from pyPAHdb.
+    # The data is 3-dimensional, with the first axis
+    # denoting the PAH properties, and the latter two
+    # being spatial.
+    hdulist = fits.open('NGC7023_pypahdb.fits')
+    ionization_fraction, large_fraction, norm = \
+        hdulist[0].data
+
+    # Create a figure instance.
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    # Plot our ionization map; we've flipped it left-right
+    # to match the Hubble image's orientation.
+    im = ax.imshow(np.fliplr(ionization_fraction),
+                   origin='upper', cmap='viridis',
+                   interpolation='nearest')
+
+    # Add a nice colorbar.
+    divider = make_axes_locatable(ax)
+    cax = divider.append_axes("right", size="5%",
+                              pad=0.05)
+    cbar = plt.colorbar(im, cax=cax)
+    cbar.set_label('ionization fraction [#]',
+                   rotation=270, labelpad=18)
+
+    # Set axes labels.
+    ax.set_xlabel('pixel [#]')
+    ax.set_ylabel('pixel [#]')
+
+    # Save the figure.
+    plt.savefig('ionization_fraction_map.pdf',
+                format='pdf', bbox_inches='tight')
+    plt.close()
 
 The type of analysis demonstrated here allows users to quickly
 interpret the distribution of PAHs in their astronomical observations
-and variations in PAH charge and size.
+and variations in PAH charge and size. Note that in addition to the
+ionization fraction, the pyPAHdb results file `NGC7023.fits`
+contains a data array for the ``large PAH fraction`` and ``norm``,
+also defined in the code above.
+
 
 Summary
 ===================
