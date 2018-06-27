@@ -269,20 +269,14 @@ Multiple Data (MD)
 ~~~~~~~~~~~~~~~~~~
 
 To operate on the MD, the :code:`Knot.map()` method uses a simple for
-loop to assign each element of the input to a separate AWS Batch job
-[#]_. It serializes each element and sends it to S3, organizing the data
-in a schema that is internally consistent with the expectations of the
-CLI. It then launches an AWS Batch array job (or optionally, separate
-individual Batch jobs) to execute the program over these data. When run,
-each batch job selects its own input, executes the UDF, and returns its
-serialized output to S3.
-
-.. [#] The for loop iterates over the outer dimension of the input data.
-       So the default behavior creates a one-to-one map between input
-       elements and AWS Batch jobs. However, the elements of the input
-       data may, themselves, be multidimensional sequences and the user
-       can exploit this to achieve a many-to-one map between input
-       elements and jobs.
+loop to iterate over the outer-most dimension of the input array and
+assign each element to a separate AWS Batch job. It serializes each
+element and sends it to S3, organizing the data in a schema that is
+internally consistent with the expectations of the CLI. It then launches
+an AWS Batch array job (or optionally, separate individual Batch jobs)
+to execute the program over these data. When run, each batch job selects
+its own input, executes the UDF, and returns its serialized output to
+S3.
 
 If the instances and S3 bucket are in the same region, then users do not
 pay for transfer from S3 to the EC2 instances and back. They pay only
