@@ -612,7 +612,8 @@ mobility of synthetically designed nano-particles in biological tissue
 :cite:`Nance2017-xp`, :cite:`Nance2012-nu`, researchers may record
 movies of microscopic images of the tissue at high spatial and temporal
 resolution and with a wide field of view, resulting in large amounts of
-image data, often stored in multiple large files.
+image data, often stored in multiple large files. These collections often
+reach several TB in size.
 
 To analyze these experiments, researchers rely on software implemented
 in ImageJ for particle segmentation and tracking, such as TrackMate
