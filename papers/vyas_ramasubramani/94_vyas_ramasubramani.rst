@@ -329,9 +329,12 @@ To ensure that the state point associated with the job id can be recovered, a JS
 
 This storage mechanism enables :math:`O(1)` access to the data associated with a particular state point through its hash, but more importantly, parsing of the JSON state point files in the workspace allows :math:`O(N)` indexing of the data space.
 This indexing is performed by traversing the data space and parsing the state point files directly, and other files may also be parsed along the way.
-This mode of operation is well-suited to the high performance filesystems common to high performance computing.
-For better performance, the resulting indexes can be manually saved; in general, ``signac`` automatically caches generated indexes for this purpose.
+In general, ``signac`` automatically caches generated indexes within a single session where possible, but for better performance the indexes can also be manually saved.
 These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
+
+This distributed mode of operation is well-suited to the high performance filesystems common to high performance computing.
+The implicit partitioning of the data on a per-job basis ensures that any operations that do not require explicit indexing will be fast and nearly scale-invariant with respect to the data space size.
+At present, ``signac`` does not support explicit horizontal partitioning of the data space, but because a ``signac`` project can always be linked with a new workspace, manually partitioning the data space so as to emulate sharding is a relatively simple task that simply requires the user to determine how the data should be divided between shards.
 
 From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
 In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; the ability to synchronize data across projects; and the detection of implicit schema.
