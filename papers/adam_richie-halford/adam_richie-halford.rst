@@ -123,8 +123,9 @@ should be familiar to most Python users.
 
 The next section discusses Cloudknot's approach to parallelism and the
 API section describes Cloudknot's user interface. In the Examples
-section, we demonstrate a few of Cloudknot's use cases before interpreting
-the trade-offs between performance and accessibility in the Conclusion.
+section, we demonstrate a few of Cloudknot's use cases, including
+examples with data in the hundreds of GB to TB range. We then summarize
+the the trade-offs between performance and accessibility in the Conclusion.
 
 
 Design
