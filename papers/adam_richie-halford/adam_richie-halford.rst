@@ -122,20 +122,15 @@ the way that resources on AWS are managed), its :code:`map` method
 should be familiar to most Python users.
 
 We propose that software designed to aid computational and data
-scientists should be concerned with minimizing the time from
-project conception to first publishable result,
-
-.. math::
-
-   t_\mathrm{result} = t_\mathrm{understand} + t_\textrm{compute},
-
-where :math:`t_\mathrm{understand}` is the time to acquire
-domain expertise, frame the problem, and interpret results, and
-:math:`t_\mathrm{compute}` is the time to collect results using
-computation. We leave the minimization of :math:`t_\mathrm{understand}`
-to the researcher and instead focus on how software can aid researchers
-in minimizing :math:`t_\mathrm{compute}`. Computation time can be
-further decomposed into
+scientists should be concerned with minimizing the time from project
+conception to first publishable result, which is the sum of the time to
+acquire domain expertise, frame the problem, and interpret results, and
+the time to collect results using computation. We leave the minimization
+of the time to acquire domain expertise, frame the problem, and
+interpret results to the researcher and instead focus on how software
+can aid researchers in minimizing the time to collect results using
+computation, :math:`t_\mathrm{compute}`. Computation time can be further
+decomposed into
 
 .. math::
    :label: eq.tcompute
