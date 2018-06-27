@@ -121,51 +121,10 @@ of its functionality will initially be new to users of Cloudknot (e.g.,
 the way that resources on AWS are managed), its :code:`map` method
 should be familiar to most Python users.
 
-We propose that software designed to aid computational and data
-scientists should be concerned with minimizing the time from
-project conception to first publishable result,
-
-.. math::
-
-   t_\mathrm{result} = t_\mathrm{understand} + t_\textrm{compute},
-
-where :math:`t_\mathrm{understand}` is the time to acquire
-domain expertise, frame the problem, and interpret results, and
-:math:`t_\mathrm{compute}` is the time to collect results using
-computation. We leave the minimization of :math:`t_\mathrm{understand}`
-to the researcher and instead focus on how software can aid researchers
-in minimizing :math:`t_\mathrm{compute}`. Computation time can be
-further decomposed into
-
-.. math::
-   :label: eq.tcompute
-
-   t_\mathrm{compute} = t_\textrm{env} + t_\mathrm{exec},
-
-where :math:`t_\mathrm{env}` is the time required to set up a
-compute environment and :math:`t_\mathrm{exec}` is the time required
-to execute a computational workflow within that environment.
-
-To put Eq :ref:`eq.tcompute` in context, consider the example of an
-approach that focuses solely on :math:`t_\mathrm{exec}`. One could
-imagine minimizing :math:`t_\mathrm{exec}` by designing a boutique
-application-specific integrated circuit (ASIC), building a cluster of
-computers with these devices, and designing a batch processing system,
-all optimized for one specific research question. While this would
-impressively reduce :math:`t_\mathrm{exec}`, it would also drastically
-increase :math:`t_\mathrm{env}`. We introduce this admittedly hyperbolic
-example only to argue that :math:`t_\mathrm{exec}` is a useful metric
-only insofar as it is a good proxy for :math:`t_\mathrm{compute}`.
-
-Cloudknot's motivating principle is that scientists should not have
-to be experts in cloud computing. It takes the opposite approach
-to the ASIC example above by minimizing the :math:`t_\mathrm{env}`
-for using AWS Batch, thereby increasing the accessibility of cloud
-computing to the scientific community. The next section discusses
-Cloudknot's approach to parallelism and the API section describes
-Cloudknot's user interface. In the Examples section, we demonstrate a
-few of Cloudknot's use cases before returning to the trade-off between
-:math:`t_\mathrm{env}` and :math:`t_\mathrm{exec}` in the Conclusion.
+The next section discusses Cloudknot's approach to parallelism and the
+API section describes Cloudknot's user interface. In the Examples
+section, we demonstrate a few of Cloudknot's use cases before interpreting
+the trade-offs between performance and accessibility in the Conclusion.
 
 
 Design
@@ -653,13 +612,16 @@ because they show potential users the relative cost in execution time of
 using Cloudknot in comparison to other distributed computing platforms.
 
 On the other hand, the scaling results in this paper, indeed most
-scaling results in general, measure :math:`t_\mathrm{exec}` from
-Eq :ref:`eq.tcompute`, capturing only partial information about
-:math:`t_\mathrm{compute}`. Precisely measuring :math:`t_\mathrm{env}`
-is beyond the scope of this paper so the reduction in
-:math:`t_\mathrm{compute}` is admittedly speculative. But we believe an
-increase in execution time may be acceptable in some situations. For
-example, if the amount of time that a user will spend learning a new
+scaling results in general, measure the bare execution time, capturing
+only partial information about the time that it takes to reach a
+computational result. This is because all the distributed systems
+currently available require some amount of systems administration and
+often incur non-trivial setup time. In addition, most of the existing
+systems currently require some amount of rewriting of the original code
+(see :cite:`mehta2017comparative` for further analysis). We believe an
+increase in execution time may be acceptable in some situations, if it
+can reduce the time spent on systems administration, setup and particularly on
+rewriting of existing code. Forexample, if the amount of time that a user will spend learning a new
 queueing system or batch processing language exceeds the time savings
 due to reduced execution time, then it will be advantageous to accept
 Cloudknot's suboptimal execution time in order to use its simplified
