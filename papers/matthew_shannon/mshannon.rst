@@ -199,7 +199,7 @@ Canadian Space Agency (CSA). The telescope features a primary mirror
 with a diameter of 6.5 m
 and carries four science instruments. These instruments will observe
 the Universe with unprecedented resolution and sensitivity in the
-near- and mid-IR. The observatory is expected to launch in 2020.
+near- and mid-IR. The observatory is expected to launch early 2021.
 
 As part of an awarded *JWST* Early Release Science (ERS) program\ [#]_,
 we are developing a Python-based toolkit for
@@ -243,154 +243,203 @@ pyPAHdb: a tool designed for JWST
 
 The purpose of pyPAHdb is to derive astronomical parameters directly
 from *JWST* observations, but the tool is not limited to *JWST*
-observations alone. pyPAHdb is the light version of a full suite of
+observations alone. pyPAHdb is the Lite version of a full suite of
 Python software tools\ [#]_ that is currently being developed, which
-is an analog of the off-line IDL tools\ [#]_.  pyPAHdb will enable PAH
-experts and non-experts alike to analyze and interpret astronomical
-PAH emission spectra.
+is an analog of the off-line IDL tools\ [#]_. A feature comparision is
+made in Table :ref:`capabilities` (see also Section "The underlying
+PAH photo-physics"). pyPAHdb will enable PAH experts and non-experts
+alike to analyze and interpret astronomical PAH emission spectra.
 
 .. [#] *AmesPAHdbPythonSuite*: `github.com/PAHdb/AmesPAHdbPythonSuite <https://github.com/PAHdb/AmesPAHdbPythonSuite>`_
 
 .. [#] *AmesPAHdbIDLSuite*: `github.com/PAHdb/AmesPAHdbIDLSuite <https://github.com/PAHdb/AmesPAHdbIDLSuite>`_
 
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.7\textwidth}
+
+
+.. table:: Feature comparision between pyPAHdb and the full suites of
+           off-line IDL/Python tools. :label:`capabilities`
+
+   +-------------------+----------+------------------+
+   |                   | pyPAHdb  | IDL/Python tools |
+   +===================+==========+==================+
+   | PAHdb subset      | Fixed    | User defined     |
+   +-------------------+----------+------------------+
+   | Excitation energy | Fixed    | User defined     |
+   +-------------------+----------+------------------+
+   | profile           | Fixed    | Selectable       |
+   +-------------------+----------+------------------+
+   | FWHM              | Fixed    | User defined     |
+   +-------------------+----------+------------------+
+   | redshift          | Fixed    | User defined     |
+   +-------------------+----------+------------------+
+   | Emission model    | Fixed    | Selectable       |
+   +-------------------+----------+------------------+
+   | NNLS              | ✓        | ✓                |
+   +-------------------+----------+------------------+
+   | Class breakdown   | ✓        | ✓                |
+   +-------------------+----------+------------------+
+   | Parallelized      | ✓        | ✓                |
+   +-------------------+----------+------------------+
+
 pyPAHdb analyzes spectroscopic observations (including spectral maps)
 and characterizes the PAH emission using a database-fitting approach,
 providing the PAH ionization and size fractions.
 
-The module is imported using the following statement:
+The package is imported using the following statement:
 
 .. code-block:: python
 
     import pypahdb
+
+.. figure:: fig_flowchart.pdf
+   :align: center
+   :scale: 50
+   :figclass: w
+
+   pyPAHdb flowchart. (1) Astronomical spectroscopic data is loaded,
+   whether represented in FITS or ASCII files. (2) An over-sampled
+   pre-computed matrix of PAH spectra is loaded and interpolated onto
+   the wavelength grid of the astronomical
+   observations. Database-fitting is performed using non-negative
+   least-squares (NNLS), which yields the contribution of an
+   individual PAH molecule to the total fit. As a result, we obtain a
+   breakdown of the model fit in terms of PAH charge and size. (3) The
+   results are written to disk as a single FITS file and a PDF
+   summarizing the model fit (one page per pixel, if a spectral cube
+   is provided as input). :label:`fig:flowchart`
 
 The general program methodology is encapsulated in the flowchart
 presented in Figure :ref:`fig:flowchart` and is as follows:
 
 (1) Read-in a file containing spectroscopic PAH observations of an
     astronomical object. This functionality is provided by the class
-    ``observation``, which is implemented in observation.py. The class
-    uses a fall-through try-except chain to attempt to read the given
+    ``observation``, which is implemented in observation.py. It is the
+    responsibility of the user to ensure all non-PAH emission
+    components have been removed from the spectrum. The class uses a
+    fall-through try-except chain to attempt to read the given
     filename using the facilities provided by ``astropy.io``. The
-    spectroscopic data is stored as a class-attribute using a
+    spectroscopic data is stored as a class-attribute as a
     ``spectrum``-object, which holds the data in terms of absissa and
-    ordinate values using ``numpy``\ -arrays. The units associated
-    with the absissa and ordinate value are, in the case of a
-    FITS-file, determined from the accompanying header, which is also
+    ordinate values using ``numpy``-arrays. The units associated with
+    the absissa and ordinate values are, in the case of a FITS-file,
+    determined from the accompanying header, which itself is also
     stored as a class-attribute. The spectral coordinate system is
     interpreted from FITS-header keywords following the specification
     by :cite:`2006A&A...446..747G`. The ``spectrum`` class is
     implemented in spectrum.py and provides functionality to convert
-    between different coordinate representations. Below is some
-    example Python code demonstrating the use of the class.
+    between different coordinate representations. Below is example
+    Python code demonstrating the use of the class. The file
+    'NGC7023-NW-BRIGHT.txt_pahs.txt' in this demonstration can be
+    found in the examples-directory that is part of the
+    pyPAHdb-package. The output of the code-block is shown in Figure
+    :ref:`fig:flowchart`.
 
 .. code-block:: python
 
-    import pypahdb
+    import pypahdb as pah
     import matplotlib.pyplot as plt
-    observation = pypahdb.observation('NGC7023-NW-BRIGHT.txt_pahs.txt')
-    plt.plot(observation.spectrum.abscissa, observation.spectrum.ordinate[:,0,0])
+    file = 'NGC7023-NW-BRIGHT.txt_pahs.txt'
+    obs = pah.observation(file)
+    s = obs.spectrum
+    plt.plot(s.abscissa, s.ordinate[:,0,0])
+    plt.ylabel(s.units['ordinate']['str']);
+    plt.xlabel(s.units['abscissa']['str']);
     plt.show()
 
-
 (2) Decompose the observed PAH emission into contributions from
-    different PAH subclasses, here charge and size. This
-    functionality is provided by the class ``decomposer``, which is
-    implemented in decomposer.py. The class takes as input a
-    ``spectrum`` object, creates a deep copy and calls the
-    ``spectrum.convertunitsto`` -method to convert the abscissa units
-    to wavenumber. Subsequently, a pre-computed ``numpy``\ - matrix of
-    highly oversampled PAH emission spectra stored in a ``pickle`` is
-    loaded from file. Utilizing ``numpy.interp``, each of the PAH
-    emission spectra, represented by a single column in the
+    different PAH subclasses, here charge and size. This functionality
+    is provided by the class ``decomposer``, which is implemented in
+    decomposer.py. The class takes as input a ``spectrum``-object, of
+    which it creates a deep copy and calls its
+    ``spectrum.convertunitsto``-method to convert the abscissa units
+    to wavenumber. Subsequently, a pre-computed ``numpy``\-matrix of
+    highly oversampled PAH emission spectra stored as a ``pickle``
+    (see the Section "The underlying PAH-photo physics" for more
+    details) is loaded from file. Utilizing ``numpy.interp``, each of
+    the PAH emission spectra, represented by a single column in the
     pre-computed matrix, is interpolated onto the frequency grid (in
     wavenumber) of the input spectrum. This process is parallelized
     using the ``multiprocessing`` package. ``optimize.nnls`` is used
-    to perform a non-negative least-squares fit of the pre-computed
-    spectra to the input spectrum. The solution vector (weights) is
-    stored as an attribute and considered private. Combining lazy
-    instantiation and Python's @property, the charge and size
-    breakdown can be retrieved. In case the input spectrum represents
-    a spectral cube and where possible, the calculations have
-    parallelized across each pixel using, again, the
-    ``multiprocessing`` package. Below is some example code
-    demonstrating the use of the class.
+    to perform a non-negative least-squares (NNLS) fit of the
+    pre-computed spectra to the input spectra. NNLS is chosen because
+    it is appropriate to the problem, fast, and always converges. The
+    solution vector (weights) is stored as an attribute and considered
+    private. Combining lazy instantiation and Python's @property, the
+    results of the fit and the breakdown can be retrieved. In case the
+    input spectrum represents a spectral cube and where possible, the
+    calculations are parallelized across each pixel using, again, the
+    ``multiprocessing`` package. Below is example code demonstrating
+    the use of the class and extends the previous code-block. The
+    output of the code-block is shown in Figure :ref:`fig:flowchart`.
 
 .. code-block:: python
 
-    result = pyPAHdb.decomposer(observation.spectrum)
-    print(result.ionized_fraction)
-
+    result = pah.decomposer(obs.spectrum)
+    s = result.spectrum
+    plt.plot(s.abscissa, s.ordinate[:,0,0], 'x')
+    plt.ylabel(s.units['ordinate']['str']);
+    plt.xlabel(s.units['abscissa']['str']);
+    plt.plot(s.abscissa, result.fit[:,0,0])
+    plt.show()
 
 (3) Produce output to file given a ``decomposer``-object. This
     functionality is provided by the class ``writer``, which is
-    implemented in writer.py, and serves to deliver consistent output
-    so that a user may assess the quality of the fit and store the PAH
-    characteristics of their astronomical observations. The class uses
-    ``astropy.fits`` to write the PAH characteristics to a FITS-file
-    and ``matplotlib`` to generate a PDF summarizing the results. The
-    class will attempt to incorporate relevant information from any
-    (FITS-)header provided. Below is some example code demonstrating
-    the use of the class.
+    implemented in writer.py, and serves to summarize the results from
+    the ``decomposer``-class so that a user may assess the quality of
+    the fit and store the PAH characteristics of their astronomical
+    observations. The class uses ``astropy.fits`` to write the PAH
+    characteristics to a FITS-file and the ``matplotlib``-package to
+    generate a PDF summarizing the results. The class will attempt to
+    incorporate relevant information from any (FITS-)header
+    provided. Below is example code demonstrating the use of the
+    class, which extends the previous code-block. The size breakdown
+    part of the generated PDF output is shown in Figure
+    :ref:`fig:flowchart`.
 
 .. code-block:: python
 
-   pypahdb.writer(result, header=observation.header)
+   pah.writer(result, header=obs.header)
 
-.. figure:: fig_flowchart.png
-   :align: center
+It is anticipated that analysis with pyPAHdb will become an integral
+part of an astronomer's data reduction and analyzes procedures;
+handling thousands of spectra. Therefore, performance is of
+importance. To measure performance, a spectral cube containing the PAH
+emission spectra at some 210 pixel locations is analyzed with pyPAHdb
+(see also Section "Demonstration"). To put the measurement in context,
+it is compared to analyzing the same spectral cube using the off-line
+IDL tools. In this comparison, the analysis with pyPAHdb is 15 times
+faster at 4 seconds on a 2.8 GHz Intel Core i7 MacBook Pro with 16 GB
+of memory compared to using the IDL tools.
 
-   pyPAHdb flowchart. Astronomical spectroscopic data is loaded,
-   whether represented in FITS or ASCII files. An over-sampled
-   precomputed matrix of PAH spectra is loaded and interpolated onto
-   the wavelength grid of the astronomical
-   observations. Database-fitting is performed using non-negative
-   least-squares (NNLS), which yields the contribution of an
-   individual PAH molecule to the total fit. As a result, we obtain a
-   breakdown of the model fit in terms of PAH charge and size. The
-   results are written to disk as a single FITS file and a PDF
-   summarizing the model fit (one
-   page per pixel, if a spectral cube is given as
-   input). :label:`fig:flowchart`
+The underlying PAH photo-physics
+--------------------------------
 
-.. figure:: fig_fit.png
-   :align: center
+To analyze astronomical PAH *emission* spectra with the *absorption*
+data contained in PAHdb's libraries, the PAHdb data need to be turned
+into emission spectra. As discussed in the previous section, pyPAHdb
+hides the underlying photo-physics in a pre-computed matrix that is
+read-in by the ``decomposer``-class. The pre-computed matrix is
+constructed using the full Python suite and takes modeled,
+highly-over-sampled PAH emission spectra from version 3.00 of the
+library of computed spectra.
 
-   pyPAHdb-fit to the spectrum of a position in the spectral cube of
-   NGC 7023. The upper panel displays the total model fit to the data;
-   the middle panel the residual; and the lower panel the breakdown of
-   PAHs in descending order from large, containing 30 atoms or more, to
-   small. The charge breakdown (cation, neutral,
-   anion) has been suppressed for clarity.
-   :label:`fig:fit`
-
-The performance of pyPAHdb relative to the full IDL suite was tested
-by fitting a spectral cube. Using pyPAHdb, the spectral cube required
-less than 4 seconds, while more than 60 seconds were needed to fit
-with the full IDL suite.
-It should be noted that their were differences in the actual implementation of
-the two tests, which were inherent to the differences in the languages
-used.
-
-The underlying PAH physics
---------------------------
-
-In order to analyze astronomical PAH *emission* spectra with the
-spectroscopic data contained in PAHdb's libraries, a PAH emission
-model is needed. pyPAHdb hides the underlying photo-physics in a
-precomputed matrix. The precomputed matrix is constructed using the
-full Python suite and takes modeled, highly-over-sampled PAH
-emission spectra from version 3.00 of the library of computed
-spectra. This matrix uses the data on a collection of "astronomical"
-PAHs, which include those PAHs that have more than 20 carbon atoms,
-have no hetero-atom substitutions except for possibly nitrogen, have
-no aliphatic side groups, and are not fully dehydrogenated. In
-addition, the fullerenes C\ :sub:`60` and C\ :sub:`70` are added.
+This matrix uses the data on a collection
+of "astronomical" PAHs, which include those PAHs that have more than
+20 carbon atoms, have no hetero-atom substitutions except for possibly
+nitrogen, have no aliphatic side groups, and are not fully
+dehydrogenated. In addition, the fullerenes C\ :sub:`60` and C\
+:sub:`70` are added.
 
 While several more sophisticated emission models are available in the
 full Python suite, here a PAH's emission spectrum is calculated from
 the vibrational temperature it reaches after absorbing a single 7 eV
 photon and making use of the thermal approximation (e.g.,
-:cite:`1993ApJ...415..397S` and :cite:`2001A&A...372..981V`).
+:cite:`1993ApJ...415..397S` and :cite:`2001A&A...372..981V`). Table
+:ref:`capabilities` highlights some of the differences between pyPAHdb
+and the full suite of IDL/Python tools.
 
 The spectral intensity :math:`I_{j}(\nu)`, in erg s\ :sup:`-1` cm\
 :sup:`-1` mol\ :sup:`-1`, from a mol of the :math:`j^{\rm th}` PAH is
@@ -412,19 +461,9 @@ in cm. The sum is taken over all :math:`n` modes and the emission
 profile is assumed Gaussian with a full-width at half-maximum (FWHM)
 of 15 cm\ :sup:`-1`. Note that before applying the emission profile, a
 redshift of 15 cm\ :sup:`-1` is applied to each of the band positions
-(:math:`\nu_{i}`) to mimic some anharmonic effects. This redshift value
-is currently the best estimate we have for PAH emission, as determined by experimental mid-IR studies
-(see, e.g., the discussion in :cite:`2013ApJ...769..117B`).
-
-.. Here a 15 cm−1
-.. redshift is taken, a value consistent with shifts measured in a
-.. number of experimental mid-IR studies (
-.. Cherchneff & Barker
-.. 1989; Flickinger&Wdowiak 1990, 1991; Flickinger et al. 1991;
-.. Colangeli et al. 1992; Brenner&Barker 1992; Joblin et al. 1995;
-.. Williams & Leone 1995; Cook & Saykally 1998
-.. )
-
+(:math:`\nu_{i}`) to mimic some anharmonic effects. This redshift
+value is currently the best estimate from laboratory experiments (see
+e.g., the discussion in :cite:`2013ApJ...769..117B`).
 
 The vibrational temperature attained after absorbing a single 7 eV
 photon is calculated by the molecule's heat capacity. The heat
