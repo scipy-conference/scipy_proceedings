@@ -497,11 +497,11 @@ performance.
 
 Taken together, Figures :ref:`fig.nargsscaling` and
 :ref:`fig.syssizescaling` indicate that if a UDF can be executed within
-AWS Lambda's execution time and memory limitations and does not have
-software and data dependencies that would prohibit using Pywren, it
-should be parallelized on AWS using Pywren rather than Cloudknot.
-However, when simulations are too large or complicated to fit well into
-Pywren's stateless function framework, Cloudknot is the appropriate tool
+AWS Lambda's five minute execution time and 1.5 GB memory limitations
+and does not have software and data dependencies that would prohibit
+using Pywren, it should be parallelized on AWS using Pywren rather than
+Cloudknot. However, when simulations are too large or complicated to
+fit well into Pywren's framework, Cloudknot is the appropriate tool
 to simplify their distributed execution on AWS. Pywren's authors note
 that the AWS Lambda limits are not fixed and are likely to improve. We
 agree and note only that EC2 and AWS Batch limitations are likely to
