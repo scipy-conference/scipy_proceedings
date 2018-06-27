@@ -621,16 +621,17 @@ often incur non-trivial setup time. In addition, most of the existing
 systems currently require some amount of rewriting of the original code
 (see :cite:`mehta2017comparative` for further analysis). We believe an
 increase in execution time may be acceptable in some situations, if it
-can reduce the time spent on systems administration, setup and particularly on
-rewriting of existing code. For example, if the amount of time that a user will spend learning a new
-queueing system or batch processing language exceeds the time savings
-due to reduced execution time, then it will be advantageous to accept
-Cloudknot's suboptimal execution time in order to use its simplified
-API. Beginning Cloudknot users simply add an extra import statement,
-instantiate a :code:`Knot` object, call the :code:`map()` method, and
-wait for results. And because Cloudknot is built using Docker and the
-AWS Batch infrastructure, it can accomodate the needs of more advanced
-users who want to augment their Dockerfiles or specify instance types.
+can reduce the time spent on systems administration, setup and
+particularly on rewriting of existing code. For example, if the amount
+of time that a user will spend learning a new queueing system or batch
+processing language exceeds the time savings due to reduced execution
+time, then it will be advantageous to accept Cloudknot's suboptimal
+execution time in order to use its simplified API. Beginning Cloudknot
+users simply add an extra import statement, instantiate a :code:`Knot`
+object, call the :code:`map()` method, and wait for results. And because
+Cloudknot is built using Docker and the AWS Batch infrastructure, it
+ can accomodate the needs of more advanced users who want to augment
+ their Dockerfiles or specify instance types.
 
 Cloudknot trades runtime performance for development performance and
 is best used when development speed matters most. Its simple API makes
