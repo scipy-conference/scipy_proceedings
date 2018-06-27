@@ -501,13 +501,13 @@ AWS Lambda's five minute execution time and 1.5 GB memory limitations
 and does not have software and data dependencies that would prohibit
 using Pywren, it should be parallelized on AWS using Pywren rather than
 Cloudknot. However, when simulations are too large or complicated to
-fit well into Pywren's framework, Cloudknot is the appropriate tool
-to simplify their distributed execution on AWS. Pywren's authors note
-that the AWS Lambda limits are not fixed and are likely to improve. We
-agree and note only that EC2 and AWS Batch limitations are likely to
-improve alongside the Lambda increases. It is likely that there will
-always exist scientific workloads in the region between the two sets of
-limitations.
+fit well into Pywren's framework, Cloudknot is the appropriate tool to
+simplify their distributed execution on AWS. Pywren's authors note that
+the AWS Lambda limits are not fixed and are likely to improve. We agree
+and note only that EC2 and AWS Batch limitations are likely to improve
+as well. So long as there exists a computational regime between the two
+sets of limitations, Cloudknot can offer researchers a simple platform
+with which to execute their scientific workloads.
 
 
 Data Dependencies: Analysis of magnetic resonance imaging data
