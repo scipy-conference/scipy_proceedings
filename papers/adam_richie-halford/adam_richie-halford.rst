@@ -679,38 +679,48 @@ exploratory analysis would benefit from short development times.
 Future Work
 -----------
 
-Unlike Dask, Cloudknot does not support computational pipelines that
-define dependencies between different tasks. Future releases may support
-job dependencies so that specific jobs can be scheduled to wait for
-the results of previously submitted jobs. Cloudknot could also provide
-a simple way to connect to EC2 instances to allow in-situ monitoring
-of running jobs. To do this now, a user must lookup an EC2 instance's
-address in the AWS console and connect to that instance using an SSH
-client. Future releases may launch this SSH terminal from within the
-Python session. We will also focus our attention on domain-specific
-applications (in neuroimaging, for example) and include enhancements and
-bug-fixes that arise from use in our own research.
+Cloudknot can benefit from several approaches to enhancement:
 
-:code:`Knot` uses hard-coded defaults for the configuration of
-its job definition and compute environment. Future Cloudknot releases
-could intelligently estimate these defaults based on the UDF and the
-input data. For example, :code:`Knot` could estimate its resource
-requirements by executing the UDF on one element of the input array many
-times using a variety of EC2 instance types. By recording the execution
-time, memory consumption, and disk usage for each trial, :code:`Knot`
-could then adopt the configuration parameters of the best [#]_ run and
-apply those to the remaining input.
+- We will focus our attention on domain-specific applications (in
+  neuroimaging, for example) and include enhancements and bug-fixes that
+  arise from use in our own research.
+
+- Unlike Dask, Cloudknot does not support computational pipelines that
+  define dependencies between different tasks. Future releases may
+  support job dependencies so that specific jobs can be scheduled to
+  wait for the results of previously submitted jobs.
+
+- Cloudknot could also provide a simple way to connect to EC2 instances
+  to allow in-situ monitoring of running jobs. To do this now, a user
+  must lookup an EC2 instance's address in the AWS console and connect
+  to that instance using an SSH client. Future releases may launch this
+  SSH terminal from within the Python session.
+
+- :code:`Knot` uses hard-coded defaults for the configuration of its job
+  definition and compute environment. Future Cloudknot releases could
+  intelligently estimate these defaults based on the UDF and the
+  input data. For example, :code:`Knot` could estimate its resource
+  requirements by executing the UDF on one element of the input array
+  many times using a variety of EC2 instance types. By recording the
+  execution time, memory consumption, and disk usage for each trial,
+  :code:`Knot` could then adopt the configuration parameters of the best
+  [#]_ run and apply those to the remaining input.
 
 .. [#] The "best" configuration could be specified by the user on
        :code:`Knot` instantiation as either the one which minimizes cost
        to the user or that which minimizes the wall time required to
        process the input data.
 
-Lastly, we claimed that Cloudknot's simple API likely gives it a gentler
-learning curve than other distributed computing platforms. But we did
-not rigorously quantify the time investment required to start using
-Cloudknot with that of other systems. Future work may seek to fill
-this gap with a comparative human-computer interaction (HCI) study.
+In addition to these capability enhancements, Cloudknot could benefit
+from performance enhancements designed to achieve parity with Dask,
+Myria, Spark, or other distributed computing platforms. This might
+involve prebuilding certain Docker containers or intelligently selecting
+an AWS region to minimize cost or queueing time. Lastly, we claimed
+that Cloudknot's simple API likely gives it a gentler learning curve
+than other distributed computing platforms. But we did not rigorously
+quantify the time investment required to start using Cloudknot with
+that of other systems. Future work may seek to fill this gap with a
+comparative human-computer interaction (HCI) study.
 
 
 Acknowledgements
