@@ -288,7 +288,10 @@ In the last step, :code:`Knot.map()` downloads the output from S3
 and returns it to the user. Since AWS Batch allows arbitrarily long
 execution times, :code:`Knot.map()` returns a list of futures for
 the results, mimicking Python's concurrent futures' :code:`Executor`
-objects.
+objects. If the results are too large to fit on the local machine, the
+user may augment their UDF to write results to S3 or some other remote
+storage and then simply return the address at which to retrieve the
+result.
 
 Under the hood, :code:`Knot.map()` creates a
 :code:`concurrent.futures.ThreadPoolExecutor` instance where each
