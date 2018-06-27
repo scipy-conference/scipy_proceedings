@@ -622,7 +622,7 @@ systems currently require some amount of rewriting of the original code
 (see :cite:`mehta2017comparative` for further analysis). We believe an
 increase in execution time may be acceptable in some situations, if it
 can reduce the time spent on systems administration, setup and particularly on
-rewriting of existing code. Forexample, if the amount of time that a user will spend learning a new
+rewriting of existing code. For example, if the amount of time that a user will spend learning a new
 queueing system or batch processing language exceeds the time savings
 due to reduced execution time, then it will be advantageous to accept
 Cloudknot's suboptimal execution time in order to use its simplified
