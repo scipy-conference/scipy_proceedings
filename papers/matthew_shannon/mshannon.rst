@@ -130,11 +130,6 @@ PAHdb has the world's foremost collection of PAH spectra.
 .. [#] IDL is a registered trademark of `Harris Geospatial
        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
 
-.. organic molecules in astronomical
-.. environments through a combination of quantum chemical calculations,
-.. direct laboratory measurements and different analysis techniques of
-.. astronomical data.
-
 PAHdb is highly cited and is used to characterize and understand
 organic molecules in our own Galaxy and external galaxies. The
 database includes a set of innovative astronomical models and tools
@@ -155,33 +150,6 @@ etc.) :cite:`2016ApJ...832...51B` :cite:`2018ApJ...858...67B`.
    transition is animated and can be inspected for ease of
    interpretation (shown in the lower-right).
    :label:`fig:PAHdb`
-
-.. Accessing the data and tools
-.. -----------------------------
-
-.. At `www.astrochemistry.org/pahdb/
-.. <http://www.astrochemistry.org/pahdb/>`_ these libraries can be
-.. perused and/or downloaded. Figure :ref:`fig:PAHdb` presents a
-.. screenshot of the website's landing page. Downloads are offered
-.. formatted as ASCII or XML. In addition, several software tools are
-.. provided that allow users to interact with a downloaded database
-.. XML-file and perform the necessary steps to analyze astronomical
-.. data. Historically, the astronomical community has embraced the IDL\
-.. [#]_ programming language. As such, the software tools have been
-.. developed in IDL. However, Python is seeing increasingly widespread
-.. usage among astronomers, in part due to its non-proprietary
-.. nature. Python has significantly matured over the last two decades and
-.. many astronomical utilities once only available through IDL and/or
-.. IRAF have been ported to Python (e.g., PyFITS; `www.astropy.org
-.. <http://www.astropy.org>`_). Notably, many of the astronomical
-.. utilities offered by the Space Telescope Science Institute, including
-.. the Data Analysis Toolbox for use with NASA's upcoming *James Webb
-.. Space Telescope* (*JWST*; `www.jwst.nasa.gov
-.. <https://www.jwst.nasa.gov>`_), are being developed in Python.
-
-.. .. [#] IDL is a registered trademark of `Harris Geospatial
-..        <http://www.harrisgeospatial.com/ProductsandSolutions/GeospatialProducts/IDL.aspx>`_.
-
 
 
 NASA's next great observatory for PAH research: JWST
@@ -211,41 +179,14 @@ quickly analyzing PAH emission in IR spectroscopic data
        ID: 1288).
 
 
-.. ******
-
-.. Detailed spectroscopic PAH analysis is currently performed at the
-.. NASA Ames Research Center under the umbrella of
-.. the NASA Ames PAH IR Spectroscopic Database (PAHdb), which provides
-.. IDL tools and libraries for the astronomical community. To best exploit
-.. the extensive capabilities of *JWST*, we will provide new tools for
-.. the astronomical community, as *JWST* will be the foremost platform for
-.. astronomical PAH research for years to come.
-
-.. A 3D rendering
-.. of the spacecraft is shown in Figure :ref:`fig:JWST`.
-
-.. figure
-.. fig_JWST.png
-   :align: center
-   :scale: 10%
-
-   3D-rendering of *JWST* using the Maya® 3D animation, modeling,
-   simulation, and rendering software
-   (`www.autodesk.com/products/maya/overview
-   <https://www.autodesk.com/products/maya/overview>`_). *JWST*'s
-   signature 6.5 m-diameter primary mirror, made up of 18 hexagonal
-   segments (gold), dominates the picture together with the stacked
-   sunshield. The 3D-model is available from `nasa3d.arc.nasa.gov
-   <https://nasa3d.arc.nasa.gov/search/jwst/>`_. :label:`fig:JWST`
-
 pyPAHdb: a tool designed for JWST
 =================================
 
 The purpose of pyPAHdb is to derive astronomical parameters directly
 from *JWST* observations, but the tool is not limited to *JWST*
-observations alone. pyPAHdb is the Lite version of a full suite of
+observations alone. pyPAHdb is the light version of a full suite of
 Python software tools\ [#]_ that is currently being developed, which
-is an analog of the off-line IDL tools\ [#]_. A feature comparision is
+is an analog of the off-line IDL tools\ [#]_. A feature comparison is
 made in Table :ref:`capabilities` (see also Section "The underlying
 PAH photo-physics"). pyPAHdb will enable PAH experts and non-experts
 alike to analyze and interpret astronomical PAH emission spectra.
@@ -260,29 +201,35 @@ alike to analyze and interpret astronomical PAH emission spectra.
 
 
 .. table:: Feature comparision between pyPAHdb and the full suites of
-           off-line IDL/Python tools. :label:`capabilities`
+           off-line IDL/Python tools. Note: NNLS is non-negative
+           least squares; FWHM is full-width at half-maximum of an
+           emission profile; "uncertainties" in this context
+           refers to handling observational spectroscopic uncertainties.
+           :label:`capabilities`
 
-   +-------------------+----------+------------------+
-   |                   | pyPAHdb  | IDL/Python tools |
-   +===================+==========+==================+
-   | PAHdb subset      | Fixed    | User defined     |
-   +-------------------+----------+------------------+
-   | Excitation energy | Fixed    | User defined     |
-   +-------------------+----------+------------------+
-   | profile           | Fixed    | Selectable       |
-   +-------------------+----------+------------------+
-   | FWHM              | Fixed    | User defined     |
-   +-------------------+----------+------------------+
-   | redshift          | Fixed    | User defined     |
-   +-------------------+----------+------------------+
-   | Emission model    | Fixed    | Selectable       |
-   +-------------------+----------+------------------+
-   | NNLS              | ✓        | ✓                |
-   +-------------------+----------+------------------+
-   | Class breakdown   | ✓        | ✓                |
-   +-------------------+----------+------------------+
-   | Parallelized      | ✓        | ✓                |
-   +-------------------+----------+------------------+
+   +---------------------+----------+------------------+
+   |                     | pyPAHdb  | IDL/Python tools |
+   +=====================+==========+==================+
+   | Included molecules. | Fixed    | User defined     |
+   +---------------------+----------+------------------+
+   | Excitation energy   | Fixed    | User defined     |
+   +---------------------+----------+------------------+
+   | Emission profile    | Fixed    | Selectable       |
+   +---------------------+----------+------------------+
+   | FWHM                | Fixed    | User defined     |
+   +---------------------+----------+------------------+
+   | Band redshift       | Fixed    | User defined     |
+   +---------------------+----------+------------------+
+   | Emission model      | Fixed    | Selectable       |
+   +---------------------+----------+------------------+
+   | NNLS                | ✓        | ✓                |
+   +---------------------+----------+------------------+
+   | Class breakdown     | ✓        | ✓                |
+   +---------------------+----------+------------------+
+   | Parallelization     | ✓        | ✓                |
+   +---------------------+----------+------------------+
+   | Handle uncertainties|          | ✓                |
+   +---------------------+----------+------------------+
 
 pyPAHdb analyzes spectroscopic observations (including spectral maps)
 and characterizes the PAH emission using a database-fitting approach,
@@ -294,7 +241,7 @@ The package is imported using the following statement:
 
     import pypahdb
 
-.. figure:: fig_flowchart.pdf
+.. figure:: fig_flowchart.png
    :align: center
    :scale: 50
    :figclass: w
@@ -403,16 +350,17 @@ presented in Figure :ref:`fig:flowchart` and is as follows:
 
    pah.writer(result, header=obs.header)
 
-It is anticipated that analysis with pyPAHdb will become an integral
-part of an astronomer's data reduction and analyzes procedures;
+It is anticipated that pyPAHdb will constitute an effective and useful
+tool of an astronomer's toolbox,
 handling thousands of spectra. Therefore, performance is of
 importance. To measure performance, a spectral cube containing the PAH
 emission spectra at some 210 pixel locations is analyzed with pyPAHdb
 (see also Section "Demonstration"). To put the measurement in context,
 it is compared to analyzing the same spectral cube using the off-line
-IDL tools. In this comparison, the analysis with pyPAHdb is 15 times
-faster at 4 seconds on a 2.8 GHz Intel Core i7 MacBook Pro with 16 GB
-of memory compared to using the IDL tools.
+IDL tools. In this comparison the analysis with pyPAHdb is 15 times
+faster at four seconds as compared to using the IDL tools,
+when tested on a 2.8 GHz Intel Core i7 MacBook Pro with 16 GB
+of memory.
 
 The underlying PAH photo-physics
 --------------------------------
@@ -554,7 +502,7 @@ The spectral cube is aligned such that, in these observations, we observe
 the transition from diffuse, ionized/atomic
 species (e.g., HI) near the exciting star to dense, molecular material
 (e.g., H\ :sub:`2`) more distant from the star. The transition zone
-between the two is the PDR, where PAHs have a strong presence. The
+between the two is the photodissociation region, where PAHs have a strong presence. The
 properties of the PAH molecules are known to vary across these
 boundaries, since they are exposed to harsh radiation in the exposed
 cavity of the diffuse zone, and shielded in the molecular region.
@@ -564,7 +512,7 @@ boundary layer by analyzing the full spectrum at every pixel. The code-block
 below, which is taken from ``example.py`` included in the pyPAHdb
 distribution, demonstrates how this is done. Note that this is the same
 general syntax as is used for analyzing a single spectrum, but here
-`NGC7023.fits` is a spectral cube.
+``NGC7023.fits`` is a spectral cube.
 
 .. code-block:: python
 
@@ -639,29 +587,20 @@ the star. This figure was constructed in the following manner:
 The type of analysis demonstrated here allows users to quickly
 interpret the distribution of PAHs in their astronomical observations
 and variations in PAH charge and size. Note that in addition to the
-ionization fraction, the pyPAHdb results file `NGC7023.fits`
-contains a data array for the ``large PAH fraction`` and ``norm``,
-also defined in the code above.
+ionization fraction, the pyPAHdb results file ``NGC7023_pypahdb.fits``
+contains a data array for the ``large PAH fraction`` and ``norm``
+(accessed and plotted in the same manner), which we have defined in the code above.
 
 
 Summary
 ===================
 
-pyPAHdb is in active development, but a finalized Python software
-analysis tool is anticipated to be complete well before *JWST*'s launch, which is
-currently scheduled for 2020. The astronomical community can already
-benefit from pyPAHdb by using it to quickly analyze and interpret
-archival data from other observatories, e.g., *ISO*, *Spitzer*,
-*SOFIA*, etc. Our current efforts are focused on extending pyPAHdb, including
-having it transparently accept spectroscopic observations in a variety
-of digital formats, and consolidating output parameters. Further testing of the program logic
-will be performed to ensure all parts of pyPAHdb function as
-expected. Lastly, API documentation and a guide with analysis
-"recipes" will be provided to help users get started and/or extend
-pyPAHdb.
-
-The development of a PAHdb tool in Python has turned out to be largely
-straightforward as Python is backed by a large active
-community. Python offers great flexibility and in combination with
-pyPAHdb's development on GitHub, allows constructive feedback from a
-considerable audience.
+The data and tools provided through PAHdb have proven to be valuable assets for the
+astronomical community for analyzing and interpreting PAH emission spectra.
+The launch of *JWST* in 2021 will usher a new era of astronomical PAH research.
+In the context of an awarded *JWST* Early Release Science program, we are developing
+pyPAHdb as a key data analysis tool to facilitate quick and effective analysis of
+PAH emission spectra. While this tool is being developed with *JWST* in mind, it is
+not limited to *JWST* data: it currently supports spectra from *Spitzer Space Telescope*,
+*Infrared Space Observatory*, and any user-defined spectrum. pyPAHdb is in
+active development and will be finalized well before *JWST*'s launch.
