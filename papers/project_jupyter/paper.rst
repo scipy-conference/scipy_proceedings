@@ -549,7 +549,10 @@ that triggers this process. URLs for BinderHub take the following form:
 
 For example, the URL for the ``binder-examples`` repository
 that builds a Julia environment is
-`https://mybinder.org/v2/gh/binder-examples/julia-python/master <https://mybinder.org/v2/gh/binder-examples/julia-python/master>`_.
+
+.. code-block:: bash
+
+   mybinder.org/v2/gh/binder-examples/julia-python/master
 
 When a user clicks on this link, they will be taken to a brief loading page
 as a user session that serves this repository is created. Once this process
@@ -572,12 +575,15 @@ form:
 
 .. code-block:: bash
 
-   https://<binderhub-url>/build/<provider>/<spec>
+   <bhub-url>/build/<provider>/<spec>
 
 This follows a similar pattern to BinderHub's sharable URLs. For example, the following API
 request results in a Binder environment for the JupyterLab example
 repository on `mybinder.org <https://mybinder.org>`_:
-https://mybinder.org/build/gh/binder-examples/jupyterlab/master
+
+.. code-block:: bash
+
+   mybinder.org/build/gh/binder-examples/jupyterlab/master
 
 Accessing this endpoint will trigger the following events:
 
