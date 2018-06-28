@@ -166,14 +166,16 @@ their code repositories. It is meant to
 be a testing ground for different use cases in the Binder ecosystem as well as a public
 service for the scientific and educational community.
 `mybinder.org <https://mybinder.org>`_ serves nearly 9,000 daily sessions,
-and has already been used for `reproducible publishing
-<https://github.com/minrk/ligo-binder>`_ (https://github.com/minrk/ligo-binder), sharing `interactive course materials
-<https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html>`_ (https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html),
-at the university and high-school level, creating `interactive package documentation
-in Python <https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links>`_
-with Sphinx Gallery (https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links),
-and sharing `interactive content <http://greenteapress.com/wp/think-dsp/>`_
-that requires a language-specific kernel in order to run (http://greenteapress.com/wp/think-dsp).
+and has already been used for reproducible publishing [#]_,
+sharing interactive course materials [#]_,
+at the university and high-school level, creating interactive package documentation
+in Python [#]_ with Sphinx Gallery, and sharing interactive content
+that requires a language-specific kernel in order to run [#]_.
+
+.. [#] https://github.com/minrk/ligo-binder
+.. [#] https://www.inferentialthinking.com/chapters/01/3/plotting-the-classics.html
+.. [#] https://sphinx-gallery.readthedocs.io/en/latest/advanced_configuration.html#binder-links
+.. [#] http://greenteapress.com/wp/think-dsp/
 
 .. figure:: images/binder_uis.png
    :align: center
@@ -197,7 +199,7 @@ public in the cloud. The first iteration of Binder was released in 2016 :cite:`F
 and provided a prototype that managed reproducible user environments in the cloud.
 In the years since, there have been several advances in technology for managing
 cloud resources, serving interactive user environments, and creating reproducible containers for
-analytics. Binder 2.0 utilizes these new tools, and is more scalable and maintainable,
+analytics. Binder 2.0 utilizes these new tools, and it is more scalable and maintainable,
 is easier to deploy, and supports more analytic and scientific workflows than
 before. While previous work has specified methods or file formats
 for the sharing of research :cite:`Buckheit1995-ox` :cite:`Gentleman2007-cz`
@@ -206,7 +208,7 @@ development. Related online platforms for reproducibility also have specific
 front ends for presenting research and commands for running code :cite:`Anjos2017-vb`
 :cite:`Liang2015-ay` :cite:`Stodden2012-sd`, while Binder flexibly allows users to interact with
 a repository using modern data science tools such as RStudio, Jupyter Notebok,
-and JupyterLab. By containerizing the environment and using these frontend
+and JupyterLab. By containerizing the environment and using these front-end
 data science tools, Binder prioritizes an interactive user experience so that
 "someone else can discover it for themselves" :cite:`Somers2018-bj`.
 
@@ -267,7 +269,7 @@ usability.
 In the following sections, we describe the three major technical components that
 the Jupyter and Binder teams have developed for the Binder project—JupyterHub, repo2docker, and BinderHub.
 All are open source, and rely heavily on other tools in the open source ecosystem.
-We'll discuss how each feeds into the principles we’ve outlined above. 
+We'll discuss how each feeds into the principles we’ve outlined above.
 
 Scalable interactive user sessions
 ----------------------------------
@@ -481,6 +483,16 @@ that are present in the project’s root. This allows users to dissociate the
 configuration files used to build the package from those used to share a Binder
 link.
 
+.. figure:: images/binderhub_diagram.png
+   :align: center
+   :figclass: w
+
+   The BinderHub architecture for interactive GUI sessions. Users
+   connect to the Binder UI via a public URL. All computational infrastructure
+   is managed with a Kubernetes deployment (light green) managing several pods
+   (dark green) that make up the BinderHub service. Interactive user pods
+   (blue squares) are spawned and managed by a JupyterHub.
+
 By facilitating the process by which researchers create these reproducible images,
 repo2docker addresses the “works for me” problem that is common when sharing code.
 There are no longer breaking differences in the environment of two users if
@@ -503,16 +515,6 @@ and interacting with user-defined kernels.
 
 The BinderHub User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. figure:: images/binderhub_diagram.png
-   :align: center
-   :figclass: w
-
-   The BinderHub architecture for interactive GUI sessions. Users
-   connect to the Binder UI via a public URL. All computational infrastructure
-   is managed with a Kubernetes deployment (light green) managing several pods
-   (dark green) that make up the BinderHub service. Interactive user pods
-   (blue squares) are spawned and managed by a JupyterHub.
 
 The primary pattern of interaction with BinderHub for an author is via its “build
 form” user interface. This form lets users point BinderHub to a public git
@@ -546,7 +548,7 @@ that triggers this process. URLs for BinderHub take the following form:
 
 For example, the URL for the ``binder-examples`` repository
 that builds a Julia environment is
-`https://mybinder.org/v2/gh/binder-examples/julia-python/master <https://mybinder.org/v2/gh/binder-examples/julia-python/master>`__.
+`https://mybinder.org/v2/gh/binder-examples/julia-python/master <https://mybinder.org/v2/gh/binder-examples/julia-python/master>`_.
 
 When a user clicks on this link, they will be taken to a brief loading page
 as a user session that serves this repository is created. Once this process
@@ -612,7 +614,7 @@ server REST API served at this URL).
 .. figure:: images/nteract_ui.png
    :align: center
 
-   play.nteract.io :cite:`Nteract_contributors2016-dg` is a GUI frontend that connects to the
+   play.nteract.io :cite:`Nteract_contributors2016-dg` is a GUI front-end that connects to the
    ``mybinder.org`` REST API. When a user opens the page, it requests a kernel
    from mybinder.org according to the environment chosen in the top-right menu.
    Once mybinder.org responds that it is ready, users can execute code that
@@ -640,9 +642,10 @@ and will be discussed in the final section.
 Mybinder.org: Maintaining and sustaining a public service
 ---------------------------------------------------------
 
-On top of the technical components of the BinderHub, repo2docker, and JupyterHub architecture,
+In addition to providing a showcase for the technical components of the
+BinderHub, repo2docker, and JupyterHub architecture,
 the Binder project is also a case study in the maintenance and deployment of an
-open-source service. Managing the operations of a site such as `mybinder.org <https://mybinder.org>`_
+open-source service. Managing and providing a site such as `mybinder.org <https://mybinder.org>`_
 is not trivial, with challenges in team operations, maintaining service stability without
 any full-time staff, and exploring models for keeping the project financially sustainable
 over time. This final section describes recent efforts to address some of these questions,
@@ -652,16 +655,18 @@ The Binder team (and thus `mybinder.org <https://mybinder.org>`_) runs on a mode
 openness in the tools it creates as well as the operations of `mybinder.org <https://mybinder.org>`_.
 The Binder team has put together several group processes and documentation to
 facilitate maintaining this public service, and to provide a set of resources
-for others who wish to do the same. For example, the `Binder Site Reliability Guide <http://mybinder-sre.readthedocs.io/en/latest/>`_
+for others who wish to do the same. For example, the Binder Site Reliability Guide [#]_
 is continuously updated with team knowledge, incident reports, helper scripts, and a description of the
 technical deployment at `mybinder.org <https://mybinder.org>`_. There are also several data streams that
 the Binder team routinely makes available for others who are interested in
-deploying and maintaining a BinderHub service. For example, the `Binder Billing
-<https://github.com/jupyterhub/binder-billing>`_ repository shows all of the cloud
+deploying and maintaining a BinderHub service. For example, the Binder Billing [#]_ repository shows all of the cloud
 hardware costs for the last several months of `mybinder.org <https://mybinder.org>`_ operation. In addition,
-the `Binder Grafana board <https://grafana.mybinder.org>`_ shows a high-level
-view of the status of the BinderHub, JupyterHub, and Kubernetes processes
+the Binder Grafana board [#]_ shows a high-level view of the status of the BinderHub, JupyterHub, and Kubernetes processes
 underlying the service.
+
+.. [#] http://mybinder-sre.readthedocs.io/en/latest/
+.. [#] https://github.com/jupyterhub/binder-billing
+.. [#] https://grafana.mybinder.org
 
 Cost of running the public Binder service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -747,7 +752,7 @@ scenarios:
 
 1. **Reproducible publishing**. One of the core benefits of BinderHub is that
    it can generate deterministic environments that are linked to a code repository
-   stored in a long-term archive like `Zenodo <https://zenodo.org/>`_ (https://zenodo.org/).
+   stored in a long-term archive like Zenodo [#]_.
    This makes it useful for generating
    static representations of the environment needed to reproduce a scientific result.
    Binder has already been used alongside scientific publications
@@ -757,6 +762,9 @@ scenarios:
    with minimal added effort. In the future, the Binder project hopes to partner
    with academic publishers and professional societies to incorporate these
    reproducible environments into the publishing workflow.
+
+   .. [#] https://zenodo.org
+
 2. **Education and interactive materials**. Binder’s goal is to lower the barrier
    to interactivity, and to allow users to utilize code that is hosted in repository
    providers such as GitHub. Because Binder runs as a free and public service,
