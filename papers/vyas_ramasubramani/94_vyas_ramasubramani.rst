@@ -333,8 +333,9 @@ In general, ``signac`` automatically caches generated indexes within a single se
 These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
 
 This distributed mode of operation is well-suited to the high performance filesystems common to high performance computing.
-The implicit partitioning of the data on a per-job basis ensures that any operations that do not require explicit indexing will be fast and nearly scale-invariant with respect to the data space size.
-At present, ``signac`` does not support explicit horizontal partitioning of the data space, but because a ``signac`` project can always be linked with a new workspace, manually partitioning the data space so as to emulate sharding is a relatively simple task that simply requires the user to determine how the data should be divided between shards.
+The explicit horizontal partitioning and distributed storage of data on a per-job basis is well suited to HPC operations, which are typically executed for multiple jobs in parallel.
+Since data is accessed distributively, there is no inherent bottleneck posed by funneling all data read and write operations through one or more server applications.
+Further sharding across multiple filesystems, for instance, could be accomplished by devising a scheme to divide a project's data into multiple workspaces that would then be indexed independently.
 
 From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
 In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; the ability to synchronize data across projects; and the detection of implicit schema.
