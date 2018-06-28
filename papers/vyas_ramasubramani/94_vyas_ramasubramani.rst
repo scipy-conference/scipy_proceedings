@@ -142,8 +142,9 @@ Having made the above change to our data space, we could now easily add new data
 
 Jobs that already exist in the data space will not be overwritten by the ``init`` operation, so there is no harm in performing a loop like this multiple times.
 
-All of ``signac``'s core functionality is not only available as a Python library, but also as a command line tool, which facilitates integration of ``signac`` with almost any pre-existing workflow.
-While these features are critical for interfacing with non-Python code bases, they are also very useful for more ad hoc analyses of ``signac`` data spaces.
+All of ``signac``'s core functionality is not only available as a Python library, but also as a command line tool.
+This tool uses the Python ``setuptools`` ``console_scripts`` entry point, so it is automatically installed with ``signac`` and ships with built-in help information.
+This interface not only facilitates the integration of ``signac`` with non-Python code bases and workflows, it is also very useful for more ad hoc analyses of ``signac`` data spaces.
 For example, searching the database using the command line can be very useful for quick data inspection:
 
 .. code-block:: bash
@@ -175,10 +176,12 @@ For example, searching the database using the command line can be very useful fo
     d61ac71a00bf73a38434c884c0aa82c9
     13d54ee5821a739d50fc824214ae9a60
 
-The query syntax is based on the MongoDB :cite:`mongodb` syntax, enabling logical or arithmetic operators, for instance.
-In fact, ``signac`` databases can be easily exported to external database programs such as MongoDB, which in conjunction with the common query syntax makes switching back and forth between the two systems quite easy.
+The query syntax is based on the MongoDB :cite:`mongodb` syntax and enables, for instance, logical and arithmetic operators.
+In fact, ``signac`` natively supports export of its databases to MongoDB.
+Although we can add support for integration with any database management system, we started with MongoDB for two reasons: first, because researchers are likely to prefer the comparatively less rigid approach of NoSQL databases to table-based relational databases; and second, because translation from a ``signac`` database to another JSON-based database is relatively straightforward.
+Due to the ease of export and shared query syntax, switching between ``signac`` and MongoDB is quite easy.
 
-Additionally, at any point we can get an overview of what the implicit data space schema looks like:
+At any point, we can also get an overview of what the implicit data space schema looks like:
 
 .. code-block:: bash
 
@@ -187,6 +190,9 @@ Additionally, at any point we can get an overview of what the implicit data spac
      'theta': 'int([3], 1), float([0.0, ..., 1.57], 5)',
      'v': 'int([1, 2, 3], 3)',
     }
+
+Keys with constant values across the entire data space can be optionally omitted from the schema.
+Additionally, schema can be filtered, nested keys can be compressed to specified depths, and the number of entries shown in each range can be limited as desired.
 
 Workflows
 =========
@@ -225,7 +231,7 @@ Rather than running everything at once, it is also possible to exercise more fin
 
     $ # Runs all outstanding operations for all jobs
     $ python project.py run
-    $ # `exec` ignores the  workflow and just runs a
+    $ # `exec` ignores the workflow and just runs a
     $ # specific job-operation
     $ python project.py exec -o ${OP} -j ${JOB_ID}
     $ # Run up to two operations for a specific job
@@ -323,13 +329,18 @@ To ensure that the state point associated with the job id can be recovered, a JS
 
 This storage mechanism enables :math:`O(1)` access to the data associated with a particular state point through its hash, but more importantly, parsing of the JSON state point files in the workspace allows :math:`O(N)` indexing of the data space.
 This indexing is performed by traversing the data space and parsing the state point files directly, and other files may also be parsed along the way.
-This mode of operation is well-suited to the high performance filesystems common to high performance computing.
-For better performance, the resulting indexes can be manually saved; in general, ``signac`` automatically caches generated indexes for this purpose.
+In general, ``signac`` automatically caches generated indexes within a single session where possible, but for better performance the indexes can also be manually saved.
 These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
 
+This distributed mode of operation is well-suited to the high performance filesystems common to high performance computing.
+The explicit horizontal partitioning and distributed storage of data on a per-job basis is well suited to HPC operations, which are typically executed for multiple jobs in parallel.
+Since data is accessed distributively, there is no inherent bottleneck posed by funneling all data read and write operations through one or more server applications.
+Further sharding across multiple filesystems, for instance, could be accomplished by devising a scheme to divide a project's data into multiple workspaces that would then be indexed independently.
+
 From the Python implementation standpoint, the central component to the ``signac`` framework is the ``Project`` class, which provides the interface to ``signac``'s data model and features.
-In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the detection of implicit schema; the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; and the ability to synchronize data across projects.
-Individual data points, which can be accessed by searching through or iterating over a ``Project`` instance, are represented by ``Job`` objects.
+In addition to the core index-related functionality previously mentioned, the ``signac`` ``Project`` also encapsulates numerous additional features, including, for example, the generation of human-readable views of the hash-obfuscated workspace; the ability to move, copy, or clone a full project; the ability to synchronize data across projects; and the detection of implicit schema.
+We qualify these schema as implicit because they are only defined by the state points of jobs within the workspace, *i.e* there is nothing like a table schema to enforce a particular structure for the state points of individual jobs.
+Searching through or iterating over a ``Project`` instance generates ``Job`` objects, which provide Python interfaces to the jobs within the project and their associated data.
 In addition to providing a Pythonic access point to the job state point and the job document, a ``Job`` object can always be mapped to its location on the filesystem, making it ideal for associating file-based data with the appropriate data point.
 
 The central object in the ``signac-flow`` package is the ``FlowProject`` class, which encapsulates a set of operations acting on a ``signac`` data space.
@@ -378,7 +389,7 @@ Therefore, in principle ``signac`` and Sacred are complementary pieces of softwa
 We have found that integrating Sacred with ``signac`` is in fact quite simple.
 Once functions are registered with either a Sacred ``Experiment`` or a ``signac-flow`` ``FlowProject``, the operations can be run either through Python or on the command line.
 While both tools typically advocate using their command line interfaces, the two can be integrated by using one from the command line while having it internally call the other through the other's Python interface.
-When used in concert with ``signac``, the Sacred command line interface is not particularly useful since its primary feature, the ability to directly interact with the configuration, is instead being managed by the underlying ``signac`` database; in principle, the goal of this integration would be to have all configuration information tracked using ``signac``.
+When used in concert with ``signac``, the primary purpose of the Sacred command line interface, the ability to directly interact with the configuration, is instead being managed by the underlying ``signac`` database; in principle, the goal of this integration would be to have all configuration information tracked using ``signac``.
 Conversely, ``signac-flow``'s command line interface offers not only the ability to specify which parts of the workflow to run, but also to query status information or submit operations to a scheduler with a particular set of script options.
 As a result, to optimally utilize both tools, we advocate using the ``signac-flow`` command line functionality and encoding a Sacred Experiment within a ``signac-flow`` operation.
 
