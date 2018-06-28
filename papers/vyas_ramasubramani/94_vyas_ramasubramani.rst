@@ -389,7 +389,7 @@ Therefore, in principle ``signac`` and Sacred are complementary pieces of softwa
 We have found that integrating Sacred with ``signac`` is in fact quite simple.
 Once functions are registered with either a Sacred ``Experiment`` or a ``signac-flow`` ``FlowProject``, the operations can be run either through Python or on the command line.
 While both tools typically advocate using their command line interfaces, the two can be integrated by using one from the command line while having it internally call the other through the other's Python interface.
-When used in concert with ``signac``, the Sacred command line interface is not particularly useful since its primary feature, the ability to directly interact with the configuration, is instead being managed by the underlying ``signac`` database; in principle, the goal of this integration would be to have all configuration information tracked using ``signac``.
+When used in concert with ``signac``, the primary purpose of the Sacred command line interface, the ability to directly interact with the configuration, is instead being managed by the underlying ``signac`` database; in principle, the goal of this integration would be to have all configuration information tracked using ``signac``.
 Conversely, ``signac-flow``'s command line interface offers not only the ability to specify which parts of the workflow to run, but also to query status information or submit operations to a scheduler with a particular set of script options.
 As a result, to optimally utilize both tools, we advocate using the ``signac-flow`` command line functionality and encoding a Sacred Experiment within a ``signac-flow`` operation.
 
