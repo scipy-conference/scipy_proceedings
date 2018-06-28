@@ -180,6 +180,7 @@ that requires a language-specific kernel in order to run [#]_.
 .. figure:: images/binder_uis.png
    :align: center
    :figclass: w
+   :scale: 37
 
    Two example user interfaces that users can run within Binder.
    Because BinderHub uses a JupyterHub for hosting all user sessions, one can specify an
