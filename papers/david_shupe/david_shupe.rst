@@ -71,7 +71,8 @@ Samuel Oschin Telescope at Palomar Observatory in southern California. This tele
 was originally constructed to take images with photographic plates, in large part to
 provide targets for the 200-inch Hale Telescope at the same observatory. The ZTF camera
 fills the focal plane of the 48-inch telescope with sixteen 6000x6000 charge-coupled
-devices (CCDs) with an active detector area of 47 square degrees (Dekany et al in prep).
+devices (CCDs) with an active detector area of 47 square degrees (Dekany et al in prep;
+:cite:`ztf_camera_2016`).
 ZTF is conducting a fast, wide-area time-domain survey (Bellm et al in prep) designed
 to discover fast, young and rare flux transients;
 counterparts to gravitational wave sources; low-redshift Type Ia supernovae for cosmology;
@@ -96,7 +97,13 @@ night. The ZTF data system (Masci et al. 2018, in review, :cite:`laher_robotics2
 is operated by the IPAC data center
 on the Caltech campus. Within a few minutes of receipt of an exposure at IPAC, a real-time image
 subtraction pipeline outputs alert packets of potential transient objects, at
-rates already nearing 1 million per night.
+rates already nearing 1 million per night. Alert packets from the public portion
+of the survey have just become available [#]_, along with a repository of
+the schema and code examples [#]_.
+
+.. [#] https://ztf.uw.edu/alerts/public
+
+.. [#] https://github.com/ZwickyTransientFacility/ztf-avro-alert
 
 
 The data system is mostly scripted in Perl, with job management relying on
@@ -112,7 +119,8 @@ Assigning coordinates to ZTF images is challenging for several reasons. The accu
 of the pointing of the boresight (center of the field-of-view) is about 20 arcseconds
 rms. Atmospheric effects cause image distortions on small scales, and these effects are
 exacerbated at low elevations. ZTF employs the *Scamp* astrometric solver from the
-Astromatics suite (:cite:`Bertin2006`) to fit a 4th-order distortion polynomial.
+Astromatics suite (:cite:`Bertin2006`) to match star positions from the Gaia Data Release 1 (DR1)
+catalog (:cite:`gaia_mission`, :cite:`gaia_dr1`) and ultimately fit a 4th-order polynomial to the image distortions.
 *Scamp* is written in C and requires inputs in a very specialized format. We have
 developed a procedure that has significantly reduced the rate of incorrect solutions
 in crowded fields, by providing *Scamp* with an accurate starting point.
@@ -178,10 +186,15 @@ The CD-matrix, CRPIX1, CRPIX2, and :math:`\xi`, :math:`\eta` values
 for each quadrant are saved to be used by the astrometry pipeline. The
 parameters are read and inserted into a text file that initializes *Scamp*. For each
 image, a first run of *Scamp* is made using 'PRE-DISTORTED' mode. This performs
-pattern-matching of detected stars and reference stars. *Scamp* is allowed only a little
+pattern-matching of detected stars and reference stars from Gaia DR1. *Scamp* is allowed only a little
 freedom to rotate and change scale. A second pass of *Scamp* skips the pattern-matching
 and fits a fourth-degree distortion polynomial as part of the output WCS.
+An essential speed improvement was pre-fetching static copies of
+the Gaia DR1 catalog and storing these in the LDAC FITS format using astropy.io.fits, in a
+static area, to be available as static catalogs for *Scamp*.
 
+Assessing the quality of the astrometric solution
++++++++++++++++++++++++++++++++++++++++++++++++++
 
 A problem encountered often in the PTF survey was not being able to readily tell whether
 a solution output by *Scamp* was of poor quality. Astrometric problems greatly
@@ -216,13 +229,13 @@ pixel areas:
     from astropy.coordinates import SkyCoord
     import astropy.units as u
     finalcoords = SkyCoord(wcs_final.all_pix2world(
-                    pcoords, 1), unit=u.deg, frame='icrs')
+            pcoords, 1), unit=u.deg, frame='icrs')
     finalcoordsb = SkyCoord(wcs_final.all_pix2world(
-                    pcoordsb, 1), unit=u.deg, frame='icrs')
+            pcoordsb, 1), unit=u.deg, frame='icrs')
     finalcoordsr = SkyCoord(wcs_final.all_pix2world(
-                    pcoordsr, 1), unit=u.deg, frame='icrs')
+            pcoordsr, 1), unit=u.deg, frame='icrs')
     finalcoordsd = SkyCoord(wcs_final.all_pix2world(
-                    pcoordsd, 1), unit=u.deg, frame='icrs')
+            pcoordsd, 1), unit=u.deg, frame='icrs')
     finalareas = (finalcoords.separation(finalcoordsb)*
                   finalcoordsr.separation(finalcoordsd)/2
 
@@ -234,7 +247,11 @@ These steps are repeated for the prior. Finally we compute a percentage change i
           np.sqrt(priorareas))/np.sqrt(priorareas)
 
 If the percentage scale difference changes by more than a percent, the image is marked
-as unusable.
+as unusable. Figure :ref:`scaleairmass` shows the mean value of the percentage scale
+difference for a night of ZTF commissioning exposures, showing the changes follow
+a model [#]_ for differential atmospheric refraction.
+
+.. [#] http://wise-obs.tau.ac.il/~eran/Wise/Util/Refraction.html
 
 .. figure:: ztf_scale_airmass.png
 
@@ -242,14 +259,11 @@ as unusable.
    model points for pressure and temperature appropriate for Palomar Observatory.
    :label:`scaleairmass`
 
-A future update to the astrometry module, now being tested, distorts the CD-matrix
-along the azimuthal direction and by a magnitude determined from the differential
-refraction model. The correction is not needed for the main survey and will only
-help find solutions for targets of opportunity at high airmass.
 
 A peculiarity for ZTF is that with a field-of-view that is seven degrees on a side,
 the airmass reported by the telescope control system does not apply well for the
-outer CCDs. We use an AltAz model to recompute airmass when analyzing statistics:
+outer CCDs. We use an AltAz model to recompute airmass when analyzing metric values
+for the pixel scale change.
 
 .. code-block:: python
 
@@ -264,22 +278,12 @@ outer CCDs. We use an AltAz model to recompute airmass when analyzing statistics
                       location=palomar))
     df['secz'] = altaz.secz
 
-Another critical speed improvement was in pre-fetching static copies of
-the Gaia DR1 catalog and storing these in the LDAC FITS format, in a
-static area, to be available as static catalogs for *Scamp*. We did not use
-astroquery but instead a custom TAP query to our IRSA archive, using
-astropy.io.fits to write out each file.
+A future update to the astrometry module, now being tested, distorts the CD-matrix
+along the azimuthal direction and by a magnitude determined from the differential
+refraction model. The correction is not needed for the main survey and will
+help find solutions for targets of opportunity at high airmass.
 
 
-What are the important "tips" or "lessons learned"?
-
-* It is possible to make code that knows nothing about Astropy or Python,
-  work by using Astropy.
-* LDAC files can be faked, well enough. The key insight is combining LDAC
-  with a text file header which is easily manipulated with Astropy.
-* Astropy.wcs supports TPV distortions now which enables this scheme to work.
-* When you have a 7-degree field of view, the elevation, azimuth, and airmass
-  reported by the telescope system aren't good enough anymore.
 
 Accounting for light-travel-time in ZTF light curves
 ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -295,7 +299,7 @@ images. The reference images are coadds of between 15 and 40 exposures of
 a ZTF field. Astropy's SkyCoord class is employed to perform the matching of
 input sources to reference objects.
 
-Astropy is also used to provide heliocentric julian dates for each source.
+Astropy is also used to provide heliocentric Julian dates for each source.
 The difference between heliocentric Julian date and observed Julian date is
 the light-travel time difference between the Earth-to-coordinate direction
 and the Sun-to-coordinate direction. It is computationally prohibitive to
@@ -306,8 +310,15 @@ difference as a quadratic function of longitude and latitude in the offset
 frame. This provides an accuracy in the calculation of the heliocentric date
 that is much less than a ZTF exposure time of 30 seconds.
 
+Since some ZTF fields straddle RA=0, a mean or median of RA yields misleading
+values. For our nearly-degree-sized fields, we use the maximum values
+and define an offset frame:
 
 .. code-block:: python
+
+    import numpy as np
+    from astropy.coordinates import SkyCoord
+    import units as u
 
     max_ra = np.max(ra)
     max_dec = np.max(dec)
@@ -315,6 +326,12 @@ that is much less than a ZTF exposure time of 30 seconds.
     max_coord = SkyCoord(ra=max_ra*u.deg,
                          dec=max_dec*u.deg)
     aframe = max_coord.skyoffset_frame()
+
+The PSF-fitting catalog coordinates are transformed to the offset frame and
+a bounding box in that frame is computed:
+
+.. code-block:: python
+
     psfcoords = SkyCoord(ra=ra*u.deg,
                          dec=dec*u.deg)
     psfcoords = psfcoords.transform_to(aframe)
@@ -322,6 +339,11 @@ that is much less than a ZTF exposure time of 30 seconds.
     max_lon = np.max(psfcoords.lon)
     min_lat = np.min(psfcoords.lat)
     max_lat = np.max(psfcoords.lat)
+
+A 9x9 grid is set up in the SkyOffset frame:
+
+.. code-block:: python
+
     grid_lon = np.linspace(min_lon.value,
                            max_lon.value,
                            endpoint=True,
@@ -334,6 +356,17 @@ that is much less than a ZTF exposure time of 30 seconds.
     glon, glat = glon.flatten(), glat.flatten()
     gcoords = SkyCoord(lon=glon*u.deg,
                        lat=glat*u.deg,frame=aframe)
+
+Although coord.EarthLocation.of_site was used in our offline astrometry
+analysis, its network fetch of coordinates is not reliable for many
+parallel processes. The hard-coded observatory location is combined with the modified
+Julian date of the observation to compute light-travel-time over our
+9x9 grid:
+
+.. code-block:: python
+
+    from astropy import time
+
     palomar = coord.EarthLocation.from_geocentric(
                     -2410346.78217658,
                     -4758666.82504051,
@@ -342,6 +375,14 @@ that is much less than a ZTF exposure time of 30 seconds.
                        location=palomar)
     ltt_helio = mytime.light_travel_time(gcoords,
                                    'heliocentric')
+
+Coefficients for a least-squares fit of a 2-dimensional quadratic surface
+are computed and applied to our catalog coordinates to yield light-travel-times
+for each source, and then added to our observed times to result in heliocentric
+Julian dates:
+
+.. code-block:: python
+
     A = np.c_[np.ones(glon.shape), glon, glat,
                      glon*glat, glon**2, glat**2]
     coeffs,_,_,_ = np.linalg.lstsq(A, ltt_helio.sec)
@@ -354,20 +395,9 @@ that is much less than a ZTF exposure time of 30 seconds.
                 coeffs).reshape(psfcoords.lon.shape)
     hjd = mytime + fitted*u.s
 
-Here are the important lessons learned:
 
-* Relying on coord.EarthLocation.of_site proved to be problematic because it
-  requires a network connection. **Eliminate network calls as much as possible.**
-* Note that the above lesson applies as well to pre-fetching Gaia catalogs for
-  the astrometry step.
-* SkyCoord.offset_frame is needed to get around zero-wrapping problems. In fact,
-  offset_frame is very useful when working on a patch of sky.
-
-
-
-
-Performance issue
-+++++++++++++++++
+Configuration file issue
+++++++++++++++++++++++++
 
 In the course of running the ZTF pipeline in production, we encountered a serious
 problem caused by the $HOME/.astropy/config file. This file would randomly corrupt,
@@ -376,11 +406,25 @@ Astropy versions installed in our Python 2 & 3 virtual environments. The config
 file is overwritten every time a different versions of Astropy version is imported.
 Our pipeline contained a mixture of Python 2 and Python 3 code, running in parallel
 at enough scale, that a collision would eventually occur. The problem was solved by
-installing the same version of Astropy in both versions of python.
+installing the same version of Astropy in both versions of Python.
 
 
-Lessons learned include:
+Lessons learned from the ZTF experience
++++++++++++++++++++++++++++++++++++++++
 
+* Python and Astropy worked very well to wrap the *Scamp* solver and to
+  provide its specialized inputs to make it converge reliably on correct
+  astrometric solutions.
+* The key to working with the LDAC format is providing an additional text
+  file header that is easily manipulated with Astropy.
+* Astropy.wcs supports TPV distortions since version 1.1, enabling us to
+  compute metrics assessing the quality of the astrometric fits.
+* When you have a 7-degree field of view, the elevation, azimuth, and airmass
+  reported by the telescope system lack sufficient precision.
+* Elminiate network calls as much as possible, by pre-fetching the astrometric
+  catalogs, and bypassing astropy.coordinates.EarthLocation.of_site.
+* SkyCoord.offset_frame is essential to avoid zero-wrapping problems in celestial
+  coordinates, and is very useful when working on a patch of sky.
 * Configuration files can cause problems at scale.
 * Technical debt from not converting everything to Python 3 will bite you.
 
@@ -397,8 +441,10 @@ showcase the potential of one of the spectroscopic instruments, the Mid-Resoluti
 Survey Spectrometer (:cite:`Bradford_MRSS`). The purpose of
 the application is to allow trade studies of different observational
 parameters, including the telescope diameter, the exposure time, and the
-distance to the star or galaxy of interest. Plotly Dash was chosen as the
+distance to the star or galaxy of interest. Plotly Dash [#]_ was chosen as the
 technology for constructing the project.
+
+.. [#] https://plot.ly/products/dash/
 
 Part of the project involved converting a complicated function for instrument
 sensitivity to Python. The astropy.units and astropy.constants packages made it
@@ -484,7 +530,7 @@ to scale the flux values of the spectrum.
 
 For re-gridding the wavelength spectrum, we used the pysynphot package (not
 an astropy package but developed in part by Astropy developers)
-(cite:`pysynphot`) to interpolate
+(:cite:`pysynphot`) to interpolate
 the redshifted spectrum onto the observed wavelength channels.
 
 .. figure:: ost_galaxy.png
@@ -496,7 +542,7 @@ the redshifted spectrum onto the observed wavelength channels.
    and controls for changing source characteristics and instrument parameters. :label:`ost-galaxy`
 
 The application has been deployed on the Heroku platform [#]_. A screenshot of
-the galaxy spectrum is shown in :ref:`ost-galaxy`. To ensure good performance
+the galaxy spectrum is shown in Figure :ref:`ost-galaxy`. To ensure good performance
 when changing parameters, the instrument sensitivity was pre-computed for the
 lines in the spectra, for different backgrounds and redshifts.
 
@@ -527,4 +573,28 @@ a scheme to greatly improve the reliability of ZTF astrometry, and provided
 other conveniences. The astropy.units and astropy.cosmology packages provided
 essential transformations for the Origins study application. We found that some
 care needs to be taken with minimizing or eliminating network calls, and with
+handling configuration files that assume a single package version is in use.
+
+
+Acknowledgments
+---------------
+
+ZTF is led by the California Institute of Technology, US and includes IPAC, US;
+the Joint Space-Science Institute (via the University of Maryland, College Park), US;
+Oskar Klein Centre of the University of Stockholm, Sweden; University of Washington, US;
+Weizmann Institute of Science, Israel; DESY and Humboldt University of Berlin, Germany;
+University of Wisconsin at Milwaukee, US; the University System of Taiwan, Taiwan;
+and Los Alamos National Labora- tory, US; ZTF acknowledges the generous support of
+the National Science Foundation under AST MSIP Grant No 1440341. The alert distribution
+service is provided by the DIRAC Institute at the University of Washington.
+The High Performance Wireless Research & Education Network (HPWREN; https://hpwren.ucsd.edu)
+is a project at the University of California, San Diego and the
+National Science Foundation (grant numbers 0087344 (in 2000), 0426879 (in 2004),
+and 0944131 (in 2009)).
+
+This work has made use of data from the European Space Agency (ESA) mission Gaia
+(https://www.cosmos.esa.int/gaia), processed by the Gaia Data Processing and
+Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium).
+Funding for the DPAC has been provided by national institutions, in particular
+the institutions participating in the Gaia Multilateral Agreement.
 
