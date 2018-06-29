@@ -312,7 +312,7 @@ The final job shown is inactive on the cluster (``[I]``) as it has not yet been 
 
 The quick overview of this section highlights the core features of the ``signac`` framework.
 Although the example demonstrated here is quite simple, the data model scales easily to thousands of data points and far more complex and nonlinear workflows.
-More involved demonstrations can be seen in the documentation [#]_, on the ``signac`` website [#]_, or in the paper in the Journal of Computational Materials Science :cite:`ADORF2018220`.
+More involved demonstrations can be seen in the documentation [#]_, on the ``signac`` website [#]_, or in the original paper published in the Journal of Computational Materials Science :cite:`ADORF2018220`.
 
 .. [#] http://signac.readthedocs.io
 .. [#] http://signac.io
