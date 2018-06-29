@@ -43,7 +43,7 @@ This modularity and simplicity eliminates significant barriers for consistent da
 
 .. class:: keywords
 
-	data management, database, data sharing, provenance, computational workflow
+	data management, database, data sharing, provenance, computational workflow, hpc
 
 Introduction
 ------------
@@ -79,9 +79,9 @@ This style, in which paintings are composed of individual points of color rather
 By storing JSON-encoded :cite:`json` metadata and the associated data together directly on the file system, ``signac`` provides database functionality such as searching and grouping data without the overhead of maintaining a server or interfacing with external systems, and it takes advantage of the high performance file systems common to HPC.
 Additionally, a ``signac`` database is entirely contained within a single root directory, making it compact and highly portable.
 
-With ``signac``, data space modifications like the one above are trivially achievable with just a few lines of Python code.
-Additionally, ``signac``'s workflow component makes it just as easy to modify the process of data generation by simply defining the post-processing as a Python function.
-The workflow component of the framework, ``signac-flow``, will immediately enable the use of this calculation on the existing data space through a single command, and it tracks which tasks are completed to avoid redundancy.
+With ``signac``, data space modifications like the one discussed above are trivially achievable with just a few lines of Python code.
+``signac``'s workflow component makes it just as easy to modify the process of data generation by simply defining the steps as Python functions.
+The workflow component of the framework, ``signac-flow``, will immediately enable the use of these functions on the existing data space through a single command, and it tracks which tasks are completed to avoid redundancy.
 The resulting data can be accessed without reference to the workflow, ensuring that it is immediately available to anyone irrespective of the tools they are using.
 
 
@@ -107,7 +107,7 @@ To demonstrate how ``signac`` works, we take a simple, concrete example of the s
 Consider an experiment in which we want to find the optimal launch angle to maximize the distance traveled by a projectile through air.
 Figure :ref:`fig:data` shows how we might organize the data associated with this study using ``signac``.
 The central object in the ``signac`` data model is the *project*, which represents all the data associated with a particular instance of a ``signac`` data space.
-All of the project's data is contained within the *workspace* directory.
+All of the project's data is contained within the *workspace* directory (see also Fig. :ref:`fig:summary`).
 The workspace holds subdirectories corresponding to *jobs*, which are the individual data points in the data space.
 Each job is uniquely identified by its *state point*, which is an arbitrary key-value mapping.
 Although we see that these objects are stored in files and folders, we will show that these objects are structured in a way that provides layers of abstraction, making them far more useful than simple file system storage.
@@ -128,7 +128,7 @@ In this case, we wanted to modify the entire workspace; more generally, however,
 One way to accomplish this would be to apply a filter within the loop using conditionals based on the job state point, e.g. ``if job.sp.theta < 5: job.sp.v = 1``.
 A more elegant solution, however, is to take advantage of ``signac``'s query API, which allows the user to find only the jobs of interest using a dictionary as a filter.
 For example, in the above snippet we could replace ``for job in project`` with ``for job in project.find_jobs()``, using an arbitrary dictionary as the argument to ``find_jobs`` to filter on the state point keys.
-The job finding functionality of ``signac`` is the entry point for its database functionality, enabling advanced indexing, selection, and grouping operations.
+The job finding functionality of ``signac`` is the entry point for its database functionality, which includes advanced indexing, selection, and grouping operations.
 
 Having made the above change to our data space, we could now easily add new data points to test:
 
@@ -187,7 +187,7 @@ At any point, we can also get an overview of what the implicit data space schema
 
     $ signac schema
     {
-     'theta': 'int([3], 1), float([0.0, ..., 1.57], 5)',
+     'theta': 'float([0.0, ..., 1.57], 5)',
      'v': 'int([1, 2, 3], 3)',
     }
 
@@ -198,8 +198,7 @@ Workflows
 =========
 
 The ``signac`` database is intended to be usable as a drop-in solution for data management issues.
-The ``signac`` framework, however, is designed to simplify the entire process of data generation.
-This involves clearly defining the processes that generate and operate on the data cleanly and concisely.
+The ``signac`` framework, however, is designed to simplify the entire process of data generation, which includes clearly defining the processes that generate and operate on the data cleanly and concisely.
 To manage workflows, the ``signac-flow`` component of the framework provides the ``FlowProject`` class (not to be confused with the ``signac`` ``Project`` class that interfaces with the data in a ``signac`` project).
 The ``FlowProject`` encodes operations acting on ``signac`` data spaces as well as the sequence information required to string these operations together into a complete workflow. 
 In Fig. :ref:`fig:ops`, we demonstrate how ``signac-flow`` can be used to automate our projectile investigation.
@@ -233,7 +232,7 @@ Rather than running everything at once, it is also possible to exercise more fin
     $ python project.py run
     $ # `exec` ignores the workflow and just runs a
     $ # specific job-operation
-    $ python project.py exec -o ${OP} -j ${JOB_ID}
+    $ python project.py exec ${OP} ${JOB_ID}
     $ # Run up to two operations for a specific job
     $ python project.py run -j ${JOB_ID} -n 2
 
@@ -264,8 +263,8 @@ The ``signac-flow`` package achieves this by creating cluster job scripts that p
     python project.py exec calculate d61
 
 
-The workflow tracking functionality of ``signac-flow`` extends to compute clusters.
-Users can always check the status of particular jobs to see how far they have progressed in the workflow, and when working on a system with a scheduler, ``signac-flow`` will also provide information about the status of jobs submitted to the scheduler.
+The workflow tracking functionality of ``signac-flow`` also extends to compute clusters.
+Users can always check the status of particular jobs to see how far they have progressed in the workflow, and when working on a system with a scheduler, ``signac-flow`` will automatically provide information about the status of jobs submitted to the scheduler.
 Depending on the desired verbosity, this status information can be output in a variety of formats.
 A relatively detailed version of the output is shown here:
 
@@ -300,7 +299,7 @@ A relatively detailed version of the output is shown here:
     2fc415  calculate    Y           I
     ...
 
-In the overview section, we see that :math:`6.67\%`, or :math:`\frac{1}{15}` jobs have completed, reflecting the job run in Fig. :ref:`fig:ops`.
+In the overview section, we see that :math:`6.67\%`, or :math:`\frac{1}{15}` jobs have completed, reflecting the job run locally in Fig. :ref:`fig:ops`.
 The rows in this section are populated by any function decorated with the ``FlowProject.label`` decorator, with each row showing the percentage of jobs that evaluate to ``True`` for that function.
 While any callable, such as a lambda expression, could be used as a pre- or post-condition, using a function decorated in this manner makes it easy to track total progress through the workflow.
 The labels section below the overview provides the same information on a per-job basis, in this case showing which jobs have completed and which have not.
@@ -313,7 +312,7 @@ The final job shown is inactive on the cluster (``[I]``) as it has not yet been 
 
 The quick overview of this section highlights the core features of the ``signac`` framework.
 Although the example demonstrated here is quite simple, the data model scales easily to thousands of data points and far more complex and nonlinear workflows.
-More involved demonstrations can be seen in the documentation [#]_, on the ``signac`` website [#]_, or in the original paper :cite:`ADORF2018220`.
+More involved demonstrations can be seen in the documentation [#]_, on the ``signac`` website [#]_, or in the paper in the Journal of Computational Materials Science :cite:`ADORF2018220`.
 
 .. [#] http://signac.readthedocs.io
 .. [#] http://signac.io
@@ -327,9 +326,9 @@ The primary requirement for using this database is that every job (data point) i
 The hash of this state point defines the job id, which in turn is used to define the directory where data associated with this job is stored.
 To ensure that the state point associated with the job id can be recovered, a JSON-encoded copy of the state point is stored within this directory.
 
-This storage mechanism enables :math:`O(1)` access to the data associated with a particular state point through its hash, but more importantly, parsing of the JSON state point files in the workspace allows :math:`O(N)` indexing of the data space.
-This indexing is performed by traversing the data space and parsing the state point files directly, and other files may also be parsed along the way.
-In general, ``signac`` automatically caches generated indexes within a single session where possible, but for better performance the indexes can also be manually saved.
+This storage mechanism enables :math:`O(1)` access to the data associated with a particular state point through its hash as well as :math:`O(N)` indexing of the data space.
+This indexing is performed by traversing the data space and parsing the state point files directly; other files may also be parsed along the way if desired.
+In general, ``signac`` automatically caches generated indexes within a single session where possible, but for better performance after start-up the indexes can also be stored persistently.
 These indexes then allow efficient selection and searching of the data space, and MongoDB-style queries can be used for complex selections.
 
 This distributed mode of operation is well-suited to the high performance filesystems common to high performance computing.
@@ -361,22 +360,24 @@ In conjunction with the framework's full-featured command line interface, these 
 Comparisons
 -----------
 
-In recent years, many Python tools have emerged to address issues with data provenance and reproducibility in computational science.
-While in general they are very similar to the ``signac`` framework in their goals, a major distinction between ``signac`` and other tools is that the ``signac`` data management component is independent of ``signac-flow``, making it much easier to interact with the data outside the context of the workflow.
-As a result, our comparisons will focus on existing packages that solve the same problem as ``signac``, but generally take different and generally less modular approaches to doing so.
+In recent years, many Python tools have emerged to address issues with data provenance and workflow management in computational science.
+While some are very similar to the ``signac`` framework in their goals, a major distinction between ``signac`` and other comparable tools is that the ``signac`` data management component is independent of ``signac-flow``, making it much easier to interact with the data outside the context of the workflow.
+As a result, while these packages solve problems similar to those addressed by ``signac``, they take different and generally less modular approaches to doing so.
+Other packages have focused on the distinct but related need for complete provenance management for reproducibility.
+These tools are orthogonal to ``signac`` and may be used in conjunction with it.
 
 
 Workflow and Provenance Management
 ==================================
 
-Two of the best-known Python workflow managers are Fireworks :cite:`Fireworks` and AiiDA :cite:`Pizzi2016`.
+Two of the best-known, most comparable Python workflow managers are Fireworks :cite:`Fireworks` and AiiDA :cite:`Pizzi2016`.
 Fireworks and AiiDA are full-featured workflow managers that, like ``signac-flow``, interface with high performance compute clusters to execute complex, potentially nonlinear workflows.
 These tools in fact currently offer more powerful features than ``signac-flow`` for monitoring the progress of jobs, features that are supported by the use of databases on the back end.
 However, maintaining a server for workflow management can be cumbersome, and it introduces additional unnecessary complexities.
 
 A more significant limitation of these other tools is that their data representations are closely tied to the workflow execution, making it much more challenging to access the data outside the context of the workflow.
 Concretely, these software typically store data in a specific location based on a particular instance of an operation's execution, so the data can only be found by looking for that specific instance of the operation.
-Conversely, in ``signac`` the data is identified by its own metadata, namely its state point, so once it has been generated its access is no longer linked to a specific instance of a ``signac-flow`` operation (assuming that ``signac-flow`` is being used).
+Conversely, in ``signac`` the data is identified by its own metadata, namely its state point, so once it has been generated its access is no longer linked to a specific instance of a ``signac-flow`` operation (assuming that ``signac-flow`` is being used at all).
 
 Of course, knowing exactly where and how data was generated and transformed, *i.e.*, the data provenance, is also valuable information.
 Two tools that are specialized for this task are Sacred :cite:`sacred` and Sumatra :cite:`sumatra`.
@@ -388,7 +389,7 @@ Therefore, in principle ``signac`` and Sacred are complementary pieces of softwa
 
 We have found that integrating Sacred with ``signac`` is in fact quite simple.
 Once functions are registered with either a Sacred ``Experiment`` or a ``signac-flow`` ``FlowProject``, the operations can be run either through Python or on the command line.
-While both tools typically advocate using their command line interfaces, the two can be integrated by using one from the command line while having it internally call the other through the other's Python interface.
+While both tools typically advocate using their command line interfaces, the two can be integrated by using one from the command line while having it internally call the other through the corresponding Python interface.
 When used in concert with ``signac``, the primary purpose of the Sacred command line interface, the ability to directly interact with the configuration, is instead being managed by the underlying ``signac`` database; in principle, the goal of this integration would be to have all configuration information tracked using ``signac``.
 Conversely, ``signac-flow``'s command line interface offers not only the ability to specify which parts of the workflow to run, but also to query status information or submit operations to a scheduler with a particular set of script options.
 As a result, to optimally utilize both tools, we advocate using the ``signac-flow`` command line functionality and encoding a Sacred Experiment within a ``signac-flow`` operation.
@@ -407,15 +408,15 @@ There are two primary distinctions between datreant and ``signac``: ``signac`` r
 The datreant data model is even simpler than ``signac``'s, which provides additional flexibility at the cost of ``signac``'s database functionality.
 This difference is indicative of datreant's focus on more general file management problems than the issues ``signac`` is designed to solve.
 The generality of the datreant data model makes integrating it into existing workflows just as easy as integrating ``signac``, and the MDSynthesis package :cite:`mdsynthesis` is one example of a workflow tool built around a datreant-managed data space.
-However, this tool is highly domain-specific, unlike ``signac-flow``, and it cannot be used for other types of computational studies.
-In the field of molecular simulation, the combination of MDSynthesis and datreant is the closest analogue to the ``signac`` framework but unfortunately does not generalize to other use-cases.
+However, MDSynthesis is highly domain-specific and it cannot be used for other types of computational studies.
+Therefore, while the combination of MDSynthesis and datreant is a comparable tool to the ``signac`` framework in the field of molecular simulation, it does not generalize to other use-cases.
 
 
 Conclusions
 -----------
 
-The ``signac`` framework provides all the tools required for thorough data, workflow, and provenance management in scientific computing.
+The ``signac`` framework provides all the tools required for thorough data and workflow management in scientific computing.
 Motivated by the need for managing the dynamic, heterogeneous data spaces characteristic in computational sciences, the tools are tailored for the use-cases most commonly faced in this field.
 The framework has strived to achieve high ease of use and interoperability by emphasizing simple interfaces, minimizing external requirements, and employing open data formats like JSON.
 By doing so, the framework aims to minimize the initial barriers for new users, making it easy for researchers to begin using ``signac`` with little effort.
-The framework frees computational scientists from repeatedly solving common data and workflow problems throughout their research, and at a higher level, reduces the burden of sharing data and provenance tracking, both of which are critical to accelerating the production of reproducible and reusable scientific results.
+The framework frees computational scientists from repeatedly solving common data and workflow problems throughout their research, and at a higher level, reduces the burden of data sharing and provenance tracking, both of which are critical to accelerating the production of reproducible and reusable scientific results.
