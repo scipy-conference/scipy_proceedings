@@ -11,7 +11,7 @@ Safe handling instructions for missing data
 
 .. class:: abstract
 
-   In machine learning tasks, it is common to handle missing data by removing observations with missing values, or replacing missing data with the mean value for its feature. To show why this is problematic, we use listwise deletion and mean imputing to recover missing values from artificially created datasets, and we compare those models against ones with full information. Unless quite strong independence assumptions are met, we observe large biases in the resulting coefficients and an increase in the model's prediction error. We conclude with a set of recommendations for handling missing data safely.
+   In machine learning tasks, it is common to handle missing data by removing observations with missing values, or replacing missing data with the mean value for its feature. To show why this is problematic, we use listwise deletion and mean imputing to recover missing values from artificially created datasets, and we compare those models against ones with full information. Unless quite strong independence assumptions are met, we observe large biases in the resulting coefficients and an increase in the model's prediction error. We include a set of recommendations for handling missing data safely, and a case study showing how to put those recommendations into practice.
 
 .. class:: keywords
 
@@ -171,7 +171,7 @@ We find that deleting records with missing values is only safe when data are mis
 
 Single imputation, or using a feature mean or median as replacement for missing data, results in biased coefficients and significantly larger model errors no matter what kind of process created the missingness in the dataset (Fig. :ref:`mean-imputing`). As such, it is our recommendation that it not be used. However, in this set of experiments single imputation did produce smaller biases in model features that were not missing any data.
 
-We were surprised by the poor performance of expectation maximization in this experiment given the widespread evidence of its effectiveness in prior literature [shah-et-al-2014]_. This discrepancy could be due to a mistake in the design of the experiment, or due to the algorithms implementation in impyute. As far as we are aware, well-tested multiple imputation libraries like MICE [vanbuuren-groothuisoudshoorn-2011]_, Amelia  [blackwell-honaker-king-2017]_, and MissForest [stekhoven-buhlmann-2012]_, have yet to be ported to Python.
+We were surprised by the poor performance of expectation maximization during the experiment given the widespread evidence of its effectiveness in prior literature [shah-et-al-2014]_. This discrepancy could be due to a mistake in the design of the experiment, or due to the algorithms implementation in impyute. As far as we are aware, well-tested multiple imputation libraries like MICE [vanbuuren-groothuisoudshoorn-2011]_, Amelia  [blackwell-honaker-king-2017]_, and MissForest [stekhoven-buhlmann-2012]_, have yet to be directly ported to Python.
 
 .. figure:: img/df_x_by_size.png
    :figclass: bht
@@ -192,7 +192,74 @@ We include here guidelines for researchers to use when handling missing data to 
 4. If you are 100% sure that your missingness is MCAR, you have the option of using listwise deletion, keeping in mind that this should not be done for analyses with low statistical power.
 5. Otherwise use a modern multiple imputation technique like MICE or MO, and generate 5-10 imputed datasets. Be sure to create any derived features that you plan on including in your final model before you do this.
 6. Run the rest of your analysis as planned for each of the imputed datasets, and report the average parameters of all of the imputed models.
-7. When you report your results, include the fraction of missing values, the pattern of missing values, and the strategy used to handle them. If your imputed models have widely diverging results, you should report descriptive statistics for parameters are highly variable.
+7. When you report your results, include the fraction of missing values, the pattern of missing values, and the strategy used to handle them. If your imputed models have widely diverging results, you should report descriptive statistics for any parameters that are highly variable.
+
+Case Study
+----------
+
+We can illustrate the use of these guidelines with a real-world case study. The data we'll use is from Scott Cole's open source dataset on burrito quality in San Diego[#]_. The dataset consists of approximately 400 ratings of burritos from a variety of establishments within San Diego, where the ratings for each burrito include five point Likert scores for overall quality, cost, mean, uniformity, salsa, and wrap. The dataset also includes indicator variables for the various ingredients in the burritos, including ones you might expect like beans and avocado, and others that are more surprising, like sushi and taquitos.
+
+The indicator variables were recoded to work with scikit-learn, and the Likert scores were normalized on a per-rater basis to increase the inter-rater reliability. This brought the dataset down to an effective size of 231 observations. We then used a decision tree (with no hyperparameter tuning) to generate a reference model for predicting overall burrito quality given the individual ratings and presence/absence of ingredients.
+
+The individual ingredients in the burrito don't seem to contribute much to the overall score (Table :ref:`reference-burrito-model`). The quality of the meat emerged as the most important feature in a good burrito, with the quality of the salsa and the uniformity of ingredients throughout the length of the burrito as the next two most important features.
+
+.. table:: Features with the highest importance ratings on the fully attested burritos dataset, under a decision tree regressor with no tuning. :label:`reference-burrito-model`
+
+    +---------------+---------------+
+    | feature       | importance    |
+    +===============+===============+
+    | Meat          | 0.54674656983 |
+    +---------------+---------------+
+    | Salsa         | 0.12792116636 |
+    +---------------+---------------+
+    | Uniformity    | 0.15980891451 |
+    +---------------+---------------+
+
+We then impose a regime of MAR on our dataset, removing one ranking score randomly from every record that falls above the 30th percentile for burrito rankings. The causal explanation for this might be something like reviewers are more likely to forget to record data about their burritos when the burrito is tasty, because they are too busy enjoying it.
+
+.. code-block:: python
+
+    rows = df[df.overall > df.overall.quantile(.3)].index
+    cols = np.random.choice(['Cost', 'Meat', 'Salsa',
+                            'Uniformity'], rows.size)
+    for row, col in zip(rows, cols):
+        df.loc[row, col] = np.nan
+
+Because we are using data from another research team, there isn't much we can do with respect to steps 1 and 2 in the guidelines above. So we start with step 3, looking for patterns in the missingness in our dataset, by constructing an indicator for missing values:
+
+.. code-block:: python
+
+    df['has_nulls'] = pd.isnull(df).sum(axis=1)
+
+and then running a correlation against the variables of our dataset (Fig. :ref:`corr-with-null`). There is a large correlation (r=0.8) between the number of missing values and the overall burrito quality, and moderate correlations (0.4 < r < 0.6) with other key rankings, including the quality of the meat and salsa in the burrito.
+
+.. figure:: img/corr_with_null.png
+   :figclass: bht
+
+   Pearson correlation strength of model features with count number of missing values per observation. :label:`corr-with-null`
+
+These correlations indicate that our data are not MCAR, and so we will procede with multiple imputation. We create five imputed datasets, and train the same untuned decision tree regressor on each of them as above, recording the important features and model scores for each trial. For comparison, we will also run train the model on data using single imputation and listwise deletion.
+
+.. table:: Features from one trial of a dataset using multiple imputation (here, the expectation maximization procedure found in impyute).   :label:`em-burrito-model`
+
+   +---------------+---------------+
+   | feature       | importance    |
+   +===============+===============+
+   | Meat          | 0.42690684148 |
+   +---------------+---------------+
+   | Salsa         | 0.14982927778 |
+   +---------------+---------------+
+   | Uniformity    | 0.21762993715 |
+   +---------------+---------------+
+
+The multiple imputation dataset returns feature importances that are similar to those found in the model run on the fully attested data, where the meat quality was the most important feature, followed by uniformity and salsa, in that order (Table :ref:`em-burrito-model`). The single imputation and listwise deletion models both fail to recover the importance of meat quality in the burrito, and compensate for this by overestimating the importance of either the salsa, the uniformity, or the cost.
+
+.. figure:: img/case_study_comparison.png
+   :figclass: bht
+
+   Distribution of model score (higher is better) for models trained under multiple imputation, single imputation, and listwise deletion. The score obtained on the fully attested model is reference line in blue. :label:`model-score-comparison`
+
+When comparing model scores (here, the coefficient of determination), none of the models which have had data removed reliably perform as well as the fully attested model (Fig. :ref:`model-score-comparison`). However, the score on the best model only falls within the range of models trained on multiple imputation data, and not those trained on deleted or singly imputed data. Listwise deletion is the worst perfoming model here, largely because of the reduced size of the dataset (76 observations).
 
 Conclusion
 ----------
@@ -205,6 +272,7 @@ Missing values are a widespread issue in many analytical fields. To handle them 
 
 .. [#] An auxiliary feature is one which measures a related variable but is not necessarily included in the final model.
 
+.. [#] Licensed under MIT, and available at https://github.com/srcole/burritos. You can watch Scott's lightning talk about this dataset from SciPy 2017 at https://youtu.be/f-Vcq_anPaY?t=47m44s.
 
 References
 ----------
