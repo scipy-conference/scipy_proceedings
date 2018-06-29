@@ -48,12 +48,12 @@ could, in principle, offer substantial speedups.
 
 But the complexity and learning curve associated with a transition to
 cloud computing make it inaccessible to beginners. This transition cost
-has been improving. For example, Dask :cite:`Rocklin2015-ra` used to
-be difficult to run in parallel but it is now more accessible, thanks
-in part to tools such as dask-ec2 :cite:`dask-ec2` and kubernetes/helm
-:cite:`helm`. Yet despite these improvements, the cloud remains
-inaccessible to many researchers who have not had previous exposure to
-distributed computing.
+has been improving. For example, Dask :cite:`Rocklin2015-ra` used to be
+difficult to run in parallel but it is now more accessible, thanks in
+part to tools such as dask-ec2 :cite:`dask-ec2` and kubernetes/helm
+:cite:`helm`. Yet despite these improvements, computation in the cloud
+remains inaccessible to many researchers who have not had previous
+exposure to distributed computing.
 
 A number of Python libraries have sought to close this gap
 by allowing users to interact seamlessly with AWS resources
@@ -110,16 +110,16 @@ interface that can control the execution of computational tasks in AWS
 Batch, but it is not currently designed to offer an accessible single
 point of access to these resources.
 
-Here, we introduce a new Python library with support for Python 2.7
-and 3.5+: Cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`,
-that launches Python functions as jobs on the AWS Batch service,
-thereby lifting these limitations. Rather than introducing its own
-set of terms and abstractions, Cloudknot attempts to mimic Pythons
-concurrent futures’ :code:`Executor` objects. Users of Cloudknot have to
-familiarize themselves with one new object: the :code:`Knot`. While some
-of its functionality will initially be new to users of Cloudknot (e.g.,
-the way that resources on AWS are managed), its :code:`map` method
-should be familiar to most Python users.
+Here, we introduce a new Python library with support for Python 2.7 and
+3.5+: Cloudknot :cite:`cloudknot-docs` :cite:`cloudknot-repo`, that
+launches Python functions as jobs on the AWS Batch service, thereby
+lifting these limitations. Rather than introducing its own set of terms
+and abstractions, Cloudknot provides a simple abstraction on top of
+:code:`Executor` objects whose results are returned by concurrent
+futures. Users of Cloudknot have to familiarize themselves with one new
+object: the :code:`Knot`. While some of its functionality will initially
+be new to users of Cloudknot (e.g., the way that resources on AWS are
+managed), its :code:`map` method should be familiar to most Python users.
 
 The next section discusses Cloudknot's approach to parallelism and the
 API section describes Cloudknot's user interface. In the Examples
@@ -174,7 +174,7 @@ location of the Docker container on AWS ECR to its job definition
 so that all jobs execute the SP. The user may ask :code:`Knot` to
 restrict its compute environment to only certain instance types (e.g.
 ``c4.2xlarge``) or may choose a specific Amazon Machine Image (AMI)
-to be loaded on each compute resource. Or they may simply request a
+to be loaded on each compute resource. Or, they may simply request a
 minimum, desired, and maximum number of virtual CPUs and let AWS Batch
 select and manage the EC2 instances.
 
@@ -215,10 +215,12 @@ types, or AMIs. This might be necessary if the jobs require special
 hardware (e.g. GPGPU computing) or if the user wants more fine-grained
 control over which resources are launched.
 
-One of the most complex aspects of AWS is its permissions model. Here,
-we assume that the user has the permissions needed to run AWS Batch
+One of the most complex aspects of AWS is its permissions model [#]_.
+Here, we assume that the user has the permissions needed to run AWS Batch
 in the console. We also provide users with the minimal necessary
 permissions in the documentation.
+
+  .. [#] https://docs.aws.amazon.com/IAM/latest/UserGuide
 
 Finally, :code:`Knot` exposes AWS resource tags :cite:`aws-tags` to
 the user, allowing the user to assign metadata key-value pairs to each
@@ -232,13 +234,13 @@ Multiple Data (MD)
 
 To operate on the MD, the :code:`Knot.map()` method uses a simple for
 loop to iterate over the outer-most dimension of the input array and
-assign each element to a separate AWS Batch job. It serializes each
-element and sends it to S3, organizing the data in a schema that is
-internally consistent with the expectations of the CLI. It then launches
-an AWS Batch array job (or optionally, separate individual Batch jobs)
-to execute the program over these data. When run, each batch job selects
-its own input, executes the UDF, and returns its serialized output to
-S3.
+assign each element to a separate AWS Batch job. The Knot serializes each
+element in the array and sends it to S3, organizing the data in a schema
+that is internally consistent with the expectations of the CLI. It then
+launches an AWS Batch array job (or optionally, separate individual Batch
+jobs) to execute the program over these data. When run, each batch job
+selects its own input, executes the UDF, and returns its serialized
+output to S3.
 
 If the instances and S3 bucket are in the same region, then users do not
 pay for transfer from S3 to the EC2 instances and back. They pay only
@@ -623,21 +625,21 @@ only partial information about the time that it takes to reach a
 computational result. This is because all the distributed systems
 currently available require some amount of systems administration and
 often incur non-trivial setup time. In addition, most of the existing
-systems currently require some amount of rewriting of the original
-code :cite:`mehta2017comparative`. We believe an increase in execution
-time may be acceptable in some situations, if it can reduce the time
-spent on systems administration, setup and particularly on rewriting
-of existing code. For example, if the amount of time that a user will
-spend learning a new queueing system or batch processing language,
-and the amount of time that the user will spend rewriting their code
-for this system exceeds the time savings due to reduced execution time,
-then it will be advantageous to accept Cloudknot's suboptimal execution
-time in order to use its simplified API. Beginning Cloudknot users
-simply add an extra import statement, instantiate a :code:`Knot` object,
-call the :code:`map()` method, and wait for results. And because
-Cloudknot is built using Docker and the AWS Batch infrastructure, it
-can accomodate the needs of more advanced users who want to augment their
-Dockerfiles or specify instance types.
+systems currently require some amount of rewriting of the original code
+:cite:`mehta2017comparative`. We believe an increase in execution time
+may be acceptable in some situations, if it can reduce the time spent on
+systems administration, setup and particularly on rewriting of existing
+code. For example, if the amount of time that a user will spend learning
+a new queueing system or batch processing language, and the amount of
+time that the user will spend rewriting their code for this system
+exceeds the time savings due to reduced execution time, then it will be
+advantageous to accept Cloudknot's suboptimal execution time in order to
+use its simplified API. Once they gain access to AWS Batch, beginning
+Cloudknot users simply add an extra import statement, instantiate a
+:code:`Knot` object, call the :code:`map()` method, and wait for results.
+And because Cloudknot is built using Docker and the AWS Batch
+infrastructure, it can accomodate the needs of more advanced users who
+want to augment their Docker files or specify instance types.
 
 Cloudknot trades runtime performance for development performance and
 is best used when development speed matters most. Its simple API makes
@@ -651,7 +653,7 @@ exploratory analysis would benefit from short development times.
 Future Work
 -----------
 
-Cloudknot can benefit from several approaches to enhancement:
+Cloudknot can benefit from several enhancements:
 
 - We will focus our attention on domain-specific applications (in
   neuroimaging, for example) and include enhancements and bug-fixes that
@@ -684,15 +686,15 @@ Cloudknot can benefit from several approaches to enhancement:
        process the input data.
 
 In addition to these capability enhancements, Cloudknot could benefit
-from performance enhancements designed to address the performance
-gap with other distributed computing platforms. This might involve
-prebuilding certain Docker containers or intelligently selecting an
-AWS region to minimize cost or queueing time. Lastly, we claimed that
+from performance enhancements designed to address the performance gap
+with other distributed computing platforms. This might involve
+prebuilding certain Docker containers or intelligently selecting an AWS
+region to minimize cost or queueing time. Lastly, we claimed that
 Cloudknot's simple API likely gives it a gentler learning curve than
-other distributed computing platforms. But we did not rigorously
-quantify the time investment required to start using Cloudknot with
-that of other systems. Future work may seek to fill this gap with a
-comparative human-computer interaction (HCI) study.
+other distributed computing platforms, but we did not rigorously compare
+the time investment required to learn how to use Cloudknot, relative to
+other systems. Future work may seek to fill this gap with a comparative
+human-computer interaction (HCI) study.
 
 
 Acknowledgements
