@@ -20,24 +20,24 @@ Safe handling instructions for missing data
 Introduction
 ------------
 
-It is common in data analytics tasks to encounter missing values in datasets, where by *missing* we mean that some particular values does or should exist, and failed to be observed or recorded [little-rubin-2002]_. There are several causes for missingness in datasets, which in vary in theoretical difficulty from bit flipping (less problematic) to participant dropout in extended experimental studies (more problematic). According to the Inglis Conjecture [#]_, the best way to handle missing data is to apply corrections to the acquisition of that data. Because strategies for doing this tend to be domain specific, we will not be addressing this topic further in this paper.
+It is common in data analytics tasks to encounter missing values in datasets, where by *missing* we mean that some particular values does or should exist, and failed to be observed or recorded [little-rubin-2002]_. There are several causes for missingness in datasets, which vary in theoretical difficulty from bit flipping (less problematic) to participant dropout in extended experimental studies (more problematic). According to the Inglis Conjecture [#]_, the best way to handle missing data is to apply corrections to the acquisition of that data. Because strategies for doing this tend to be domain specific, we will not be addressing this topic further in this paper.
 
-In a similar vein, there are several different strategies for handling the presence of missing values which tend to vary between fields, although they should not [newman-2014]_. At one end of this spectrum is the epidemiological community, who are both unusual and commendable for their principled stance and clear guidelines regarding the handling and reporting of missingness [perkins-et-al-2018]_. At the other end of the spectrum are research communities who handle missingness ad hoc often fail to report the presence of missingess at all.
+In a similar vein, different research fields tend to have idiosyncratic methods for statistical correction of missing data, although they should not [newman-2014]_. At one end of this spectrum is the epidemiology community, who are both unusual and commendable for their principled stance and clear guidelines regarding the handling and reporting of missingness [perkins-et-al-2018]_. At the other end of the spectrum are research communities who handle missingness ad hoc, and frequently fail to report the presence of missingess at all.
 
-Safe handling instructions are needed because the presence of unobserved data causes two theoretical problems with statistical models [schafer-graham-2002]_. One of these is inferential: when data are missing from a particular feature or variable, estimates of the variance of that feature are unreliable and therefore so are any tests that use those variances. The second of these is descriptive: when data are missing according to a particular pattern, model parameters that learn from the remaining data become biased.
+Safe handling instructions are needed because the presence of unobserved data causes two theoretical problems with statistical models [schafer-graham-2002]_. One of these is inferential: when data are missing from a particular feature or variable, estimates of the variance of that feature are unreliable and therefore so are any tests that use those variances. The second of these is descriptive: when data are missing according to a particular pattern, model parameters that learn from the remaining data become biased by that pattern.
 
-Anecdotally, the machine learning community appears less concerned with statistical inference, and feels relatively comfortable with the idea of replacing missing values with the mean value for each feature. The justification appears to be that mean imputing (called single imputation in the missingness literature) preserves the central tendency for that feature. However, statistical learning procedures are not determined by the mean values of their features |---| indeed, we often scale these down to zero |---| but rather by the the relationship between variability between two features, which is modified by the presence of missing values.
+Anecdotally, the machine learning community appears less concerned with statistical inference, and feels relatively comfortable with the idea of replacing missing values with the mean value for each feature. The justification appears to be that mean imputing (called single imputation in the missingness literature) preserves the central tendency for that feature. However, statistical learning procedures are not determined by the mean values of their features |---| indeed, we often scale these down to zero |---| but rather by the the relationship between the variance of two features, which is modified by the presence of missing values and collapsed by single imputation.
 
-This is the key theoretical problem with missing values: that they modify the covariance in datasets. To illustrate this, let's imagine that we have a dataset with no missing values and a linear relationship between one feature and one target. We'll remove 30% of the data, specifically the records at low values of our target, and then run a few models on the fully attested dataset and the dataset with missingness to see how the models compare.
+This is the key theoretical problem with missing values: that they modify the covariance in datasets. To illustrate this, let's imagine that we have a dataset with no missing values and a linear relationship between one feature and one target. We'll remove 30% of the data (specifically the records at low values of our target) and then run a few models on the fully attested dataset and the dataset with missingness to see how the models compare.
 
 .. figure:: img/prediction_lines.png
    :figclass: bht
 
-   Best fit lines across experiments for a fully-attested dataset compared to best fit lines and for a dataset with missigness imposed at random. Note the bias in the differences in slope. :label:`prediction-lines`
+   Best fit lines across experiments for a fully-attested dataset compared to best fit lines and for a dataset with missingness imposed at random. Note the bias in the differences in slope. :label:`prediction-lines`
 
-What we see in Fig. :ref:`prediction-lines` is that the models run over the dataset with missing values have a very particular kind of error. Specifically, the error in estimating the coefficient of the feature is not distributed as a gaussian around the true value, but is always a reduction in the true value. This is bias, and it's being caused by a specific missingness process that we imposed on our data.
+What we see in Fig. :ref:`prediction-lines` is that the models run over the dataset with missing values have a very particular kind of error. Specifically, the error in estimating the coefficient of the feature is not distributed as a Gaussian around the true value, but is always a reduction of the true value. This is bias, and it was created by the missingness process that we imposed on our data.
 
-There are a theoretically infinite number of physical process that generate missingness in datasets, so in practice we will bin them into one of three categories that characterizes the input to the process which generates missing values [rubin-1976]_. If the probability that a value is missing is independent of any input, the process is stochastic and we call it Missing Completely At Random (MCAR). If the probability that a value is missing depends on another feature in our dataset, we call this Missing At Random (MAR) [#]_. If the probability that a value is missing depends on that value itself, we call this Missing Not At Random (MNAR). In theory, it is impossible to be certain whether values are MAR or MNAR, so they tend to be handled together.
+There are a theoretically infinite number of physical process that generate missingness in datasets, so in practice we will bin them into one of three categories that characterizes the input to the process which generates those missing values [rubin-1976]_. If the probability that a value is missing is independent of any input, the process is stochastic and we call it Missing Completely At Random (MCAR). If the probability that a value is missing depends on another feature in our dataset, we call this Missing At Random (MAR) [#]_. If the probability that a value is missing depends on that value itself, we call this Missing Not At Random (MNAR). In theory, it is not possible to be certain whether values are MAR or MNAR, so they tend to be treated similarly.
 
 Methods
 -------
@@ -60,9 +60,9 @@ To demonstrate when and how this bias appears, 1890 datasets were randomly gener
    t = 2 * sin(x) - y + \varepsilon
 
 
-A fractional amount of values was removed from the principal feature for each of the three missingness regimes, MCAR, MAR, and MNAR. For data missing completely at random, this was done with np.random.choice. For data missing at random and not at random, this was done by using the index of the N smallest values of the target and the principle feature, respectively. The amount of data removed varied between 0% (no missingness) and 50% of attested values, which is typical of the amount of missingness reported in experimental studies (50% is on the high end, more likely to be observed in longitudinal studies [sullivan-et-al-2017]_).
+A fractional amount of values was removed from the principal feature for each of the three missingness regimes, MCAR, MAR, and MNAR. For data missing completely at random, this was done with ``np.random.choice``. For data missing at random and not at random, this was done by using the index of the N smallest values of the target and the principle feature, respectively. The amount of data removed varied between 0% (no missingness) and 50% of attested values, which is typical of the amount of missingness reported in experimental studies (50% is on the high end, more likely to be observed in longitudinal studies [sullivan-et-al-2017]_).
 
-Missing values were corrected using three different strategies. The first of these was to remove entire rows where any data is nonpresent |---| this is called listwise deletion. The second was single imputation. We used the mean imputer from scikit-learn, but prior research shows that more complicated single imputation has the same theoretical problems. The third strategy was an expectation maximizatino routine implemented in impyute [impyute]_, which estimates replacements for missing values given the full information in the dataset.
+Missing values were corrected using three different strategies. The first of these was to remove entire rows where any data is non present |---| this is called listwise deletion. The second was single imputation. We used the mean imputer from scikit-learn, but prior research shows that more complicated single imputation (like using the per sample grouped mean) has the same theoretical problems. The third strategy was an expectation maximization routine implemented in impyute [impyute]_, which estimates replacements for missing values that maximize the probability of the rest of the data.
 
 These datasets were fit with four models |---| linear regression, lasso regression, ridge regression, and support vector regression from scikit-learn. For stability when generating statistical summaries, each experimental combination for datasets with less than 10,000 rows was run through ten trials. This resulted in a total of 3,628,800 experiments.
 
@@ -126,7 +126,7 @@ Pairwise t-tests conducted on the coefficients of the primary feature show signi
   +----------+---------------+----------+----------+
 
 
-Pairwise t-tests conducted on the difference scores for the secondary coefficient show a similar pattern of results (Table :ref:`df-y-table`). Specifically, the only case in which the estimated parameter for the feature without any missingness applied to it was close to zero was when data were missing completely at random, and the missing cases were removed listwise. The largest differences in the coefficient for the secondary feature were observed for data missing at random or missing not at random, also when the missingness strategy employed was listwise deletion. Listwise deletion tends to cause the coefficient for the secondary feature to be underestimated, while both imputation strategies tend to cause the coefficient to be overestimated.
+Pairwise t-tests conducted on the difference scores for the secondary coefficient show a similar pattern of results (Table :ref:`df-y-table`). Specifically, the only case in which the estimated parameter for the feature without any missingness applied to it was close to zero was when data were missing completely at random, and the missing cases were removed listwise. The largest differences in the coefficient for the secondary feature were observed for data missing at random or missing not at random, when the missingness strategy employed was listwise deletion. Listwise deletion tends to cause the coefficient for the secondary feature to be underestimated, while both imputation strategies tend to cause the coefficient to be overestimated.
 
 .. table:: Results of pairwise t-tests comparing difference scores for the model error. :label:`df-error-table`
 
@@ -171,33 +171,33 @@ We find that deleting records with missing values is only safe when data are mis
 
 Single imputation, or using a feature mean or median as replacement for missing data, results in biased coefficients and significantly larger model errors no matter what kind of process created the missingness in the dataset (Fig. :ref:`mean-imputing`). As such, it is our recommendation that it not be used. However, in this set of experiments single imputation did produce smaller biases in model features that were not missing any data.
 
-We were surprised by the poor performance of expectation maximization during the experiment given the widespread evidence of its effectiveness in prior literature [shah-et-al-2014]_. This discrepancy could be due to a mistake in the design of the experiment, or due to the algorithms implementation in impyute. As far as we are aware, well-tested multiple imputation libraries like MICE [vanbuuren-groothuisoudshoorn-2011]_, Amelia  [blackwell-honaker-king-2017]_, and MissForest [stekhoven-buhlmann-2012]_, have yet to be directly ported to Python.
+We were surprised by the poor performance of expectation maximization during the experiment given the widespread evidence of its effectiveness in prior literature [shah-et-al-2014]_. This discrepancy could be due to a mistake in the design of the experiment, or due to the algorithm's implementation in impyute. As far as we are aware, well-tested multiple imputation libraries like MICE [vanbuuren-groothuisoudshoorn-2011]_, Amelia  [blackwell-honaker-king-2017]_, and MissForest [stekhoven-buhlmann-2012]_, have yet to be directly ported to Python [#]_.
 
 .. figure:: img/df_x_by_size.png
    :figclass: bht
 
    Changes in the coefficient of x by the size of the total dataset. :label:`df-x-by-size`
 
-As a final comment, we often hear that the solution for missing values is simply to collect more data. However, unless this additional data collection explcitly addresses missingness by correcting the acquisition process (per Inglis), the additional data has the paradoxical effect of making the biases *worse*. The expected magnitude of the bias does not change with data size |---| this is goverened by the missingness regime and the fraction of missing data. However, the variance in the bias across repeated experiments will shrink, leading to confidence in the estimated coefficients that is both misplaced and inflated (fig. :ref:`df-x-by-size`).
+As a final comment, we often hear that the solution for missing values is simply to collect more data. However, unless this additional data collection explicitly addresses missingness by correcting the acquisition process (per Inglis), the additional data has the paradoxical effect of making the biases *worse*. The expected magnitude of the bias does not change with data size |---| this is governed by the missingness regime and the fraction of missing data. However, the variance in the bias across repeated experiments will shrink, leading to confidence in the estimated coefficients that is both misplaced and inflated (fig. :ref:`df-x-by-size`).
 
 
 Guidelines
 ----------
 
-We include here guidelines for researchers to use when handling missing data to ensure that it is done safey.
+We include here guidelines for researchers to use when handling missing data to ensure that it is done safely.
 
-1. Try to construct your acquisition step such that there will not be missing values. This may involve following up with individual cases to find why they are nonpresent, so plan to track to provenance of your data.
+1. Try to construct your acquisition step such that there will not be missing values. This may involve following up with individual cases to find why they are non present, so plan to track to provenance of your data.
 2. In addition to your primary features of interest, collect data that are known to be causally related or correlated. These are called auxiliary features and will help you establish the missingness regime for your data and generate realistic estimates for missing values if needed.
-3. Once your data have been collected, examine them for patterns of missingness. A common approach is to build a missingness indicator for each feature with missing values, and run pairwise correlations against other features in the dataset. This is more effective with good auxilliary features.
+3. Once your data have been collected, examine them for patterns of missingness. A common approach is to build a missingness indicator for each feature with missing values, and run pairwise correlations against other features in the dataset. This is more effective with good auxiliary features.
 4. If you are 100% sure that your missingness is MCAR, you have the option of using listwise deletion, keeping in mind that this should not be done for analyses with low statistical power.
-5. Otherwise use a modern multiple imputation technique like MICE or MO, and generate 5-10 imputed datasets. Be sure to create any derived features that you plan on including in your final model before you do this.
+5. Otherwise use a modern multiple imputation technique like MICE or MO, and generate 5-10 imputed datasets. Be sure to create any derived features that you plan on including in your final model before the imputation step.
 6. Run the rest of your analysis as planned for each of the imputed datasets, and report the average parameters of all of the imputed models.
 7. When you report your results, include the fraction of missing values, the pattern of missing values, and the strategy used to handle them. If your imputed models have widely diverging results, you should report descriptive statistics for any parameters that are highly variable.
 
 Case Study
 ----------
 
-We can illustrate the use of these guidelines with a real-world case study. The data we'll use is from Scott Cole's open source dataset on burrito quality in San Diego[#]_. The dataset consists of approximately 400 ratings of burritos from a variety of establishments within San Diego, where the ratings for each burrito include five point Likert scores for overall quality, cost, mean, uniformity, salsa, and wrap. The dataset also includes indicator variables for the various ingredients in the burritos, including ones you might expect like beans and avocado, and others that are more surprising, like sushi and taquitos.
+We can illustrate the use of these guidelines with a real-world case study. The data we'll use is from Scott Cole's open source dataset on burrito quality in San Diego[#]_. The dataset consists of approximately 400 ratings of burritos from different restaurants within San Diego, where the ratings for each burrito include five point Likert scores for overall quality, cost, mean, uniformity, salsa, and wrap (the tortilla). The dataset also includes indicator variables for the presence of various ingredients in the burritos, including common ingredients like beans and avocado, and uncommon ones, like sushi and taquitos.
 
 The indicator variables were recoded to work with scikit-learn, and the Likert scores were normalized on a per-rater basis to increase the inter-rater reliability. This brought the dataset down to an effective size of 231 observations. We then used a decision tree (with no hyperparameter tuning) to generate a reference model for predicting overall burrito quality given the individual ratings and presence/absence of ingredients.
 
@@ -238,7 +238,7 @@ and then running a correlation against the variables of our dataset (Fig. :ref:`
 
    Pearson correlation strength of model features with count number of missing values per observation. :label:`corr-with-null`
 
-These correlations indicate that our data are not MCAR, and so we will procede with multiple imputation. We create five imputed datasets, and train the same untuned decision tree regressor on each of them as above, recording the important features and model scores for each trial. For comparison, we will also run train the model on data using single imputation and listwise deletion.
+These correlations indicate that our data are not MCAR, and so we will proceed with multiple imputation. We create five imputed datasets, and train the same untuned decision tree regressor on each of them as above, recording the important features and model scores for each trial. For comparison, we will also run train the model on data using single imputation and listwise deletion.
 
 .. table:: Features from one trial of a dataset using multiple imputation (here, the expectation maximization procedure found in impyute).   :label:`em-burrito-model`
 
@@ -257,9 +257,11 @@ The multiple imputation dataset returns feature importances that are similar to 
 .. figure:: img/case_study_comparison.png
    :figclass: bht
 
-   Distribution of model score (higher is better) for models trained under multiple imputation, single imputation, and listwise deletion. The score obtained on the fully attested model is reference line in blue. :label:`model-score-comparison`
+   Distribution of model score for decision trees trained under multiple imputation, single imputation, and listwise deletion. The score obtained on the fully attested model is the reference line in blue. :label:`model-score-comparison`
 
-When comparing model scores (here, the coefficient of determination), none of the models which have had data removed reliably perform as well as the fully attested model (Fig. :ref:`model-score-comparison`). However, the score on the best model only falls within the range of models trained on multiple imputation data, and not those trained on deleted or singly imputed data. Listwise deletion is the worst perfoming model here, largely because of the reduced size of the dataset (76 observations).
+When comparing model scores (here, the coefficient of determination), none of the models which have had data removed perform as well as the fully attested model (Fig. :ref:`model-score-comparison`). However, the score on the best model only falls within the range of models trained on multiple imputation data, and not those trained on deleted or singly imputed data. Listwise deletion is the worst performing model here, largely because of the reduced size of the dataset (76 observations).
+
+In our final report, we would include in our methods section that 70% of observations were missing data for at least one feature. We would say that the presence of missing values showed a strong correlation with overall burrito quality, meat quality, and salsa quality, leading us to speculate that people are less likely to fill out surveys when thoroughly relishing a good burrito. We would say that we imputed values using expectation maximization, and that we are reporting averaged results from five separate imputations.
 
 Conclusion
 ----------
@@ -271,6 +273,8 @@ Missing values are a widespread issue in many analytical fields. To handle them 
 .. [#] *Random* in the sense of a random variable, which is a statistical designation roughly corresponding to a dependent variable.
 
 .. [#] An auxiliary feature is one which measures a related variable but is not necessarily included in the final model.
+
+.. [#] impyute has an imputing function called MICE, but implements a modification of the original algorithm.
 
 .. [#] Licensed under MIT, and available at https://github.com/srcole/burritos. You can watch Scott's lightning talk about this dataset from SciPy 2017 at https://youtu.be/f-Vcq_anPaY?t=47m44s.
 
