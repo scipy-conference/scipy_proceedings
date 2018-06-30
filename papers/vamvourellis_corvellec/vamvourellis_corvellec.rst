@@ -937,7 +937,7 @@ the community.
 
 .. [#] See https://conda.io/docs/.
 
-At the moment, all the analysis takes place in one long Jupyter notebook. We
+At the moment, all the analysis takes place in one long Jupyter notebook [#]_. We
 could break it down into smaller notebooks (and name them with number prefixes,
 for ordering). This way, someone new to the project could identify the various
 modelling and computing steps, in order, only by looking at the
@@ -949,6 +949,7 @@ creating a build file [#]_
 which would chain all operations together and generate results for our specific
 project. Reaching this stage is referred to as *automation*.
 
+.. [#] See https://github.com/bayesways/mixed-data/blob/d2fc4ea72466a4884dc2a5c46510129fac602f1f/notebooks/rosi_py.ipynb.
 .. [#] See https://swcarpentry.github.io/make-novice/reference#build-file.
 
 In data analysis, the first of these operations usually consists in accessing
