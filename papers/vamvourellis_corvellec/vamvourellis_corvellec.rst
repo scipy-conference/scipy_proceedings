@@ -396,7 +396,7 @@ the dataset looks like Table :ref:`mtable`.
    +------------+------------+------------------+-----------+--------+
    | 224        | Control    | -0.11            | 1         | 0      |
    +------------+------------+------------------+-----------+--------+
-   | 224        | Treatment  | 2.42             | 1         | 1      |
+   | 233        | Treatment  | 2.42             | 1         | 1      |
    +------------+------------+------------------+-----------+--------+
 
 The fact that the effects are of mixed data types, binary and
@@ -783,7 +783,7 @@ Carlo (HMC) under the hood.
 
 Stan and PyMC3 are the same insofar as they serve exactly the same purpose.
 They both are expressive languages and allow flexible model specification in code.
-PyMC3 is leveraging Theano to implement automatic differentiation whereas Stan
+PyMC3 leverages Theano to implement automatic differentiation, whereas Stan relies
 on its own algorithm. Practitioners report that PyMC3 is easier to get started with (hence, more
 suitable for prototyping), while Stan is more robust (hence, more suitable for
 production). For example, Prophet [#]_ is a timeseries forecasting package by
