@@ -26,8 +26,8 @@ review criteria are enthusiastically welcomed via discussion or pull request.
 
 ## Novelty and Impact
 
-- The work should employ new or innovative methods or approaches to a problem.
-- The work should advance the state of a scientific domain, the practice 
+- Assume that the novelty of the conceptual work described in the paper has been assessed by the Program Committee.
+  The paper should advance the state of a scientific domain, the practice 
   of scientific computing itself, or another subject area within the scope of 
   the conference.
 
