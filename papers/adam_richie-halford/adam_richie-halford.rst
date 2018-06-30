@@ -14,22 +14,22 @@ Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 
 .. class:: abstract
 
-   We introduce Cloudknot, a software library that simplifies
-   cloud-based distributed computing by programmatically executing
-   user-defined functions (UDFs) in AWS Batch. It takes as input
-   a Python function, packages it as a container, creates all the
-   necessary AWS constituent resources to submit jobs, monitors their
-   execution and gathers the results, all from within the Python
-   environment. Cloudknot minimizes the cognitive load of learning a
-   new API by introducing only one new object and using the familiar
-   :code:`map` method. It overcomes limitations of previous similar
-   libraries, such as Pywren, that runs UDFs on AWS Lambda, because most
-   data science workloads exceed the AWS Lambda limits on execution
-   time, RAM, and local storage.
+   We introduce Cloudknot, a software library that simplifies cloud-based
+   distributed computing by programmatically executing user-defined
+   functions (UDFs) in AWS Batch. It takes as input a Python function,
+   packages it as a container, creates all the necessary AWS constituent
+   resources to submit jobs, monitors their execution and gathers the
+   results, all from within the Python environment. Cloudknot minimizes
+   the cognitive load of learning a new API by introducing only one new
+   object and using the familiar :code:`map` method. It overcomes
+   limitations of previous similar libraries, such as Pywren, that runs
+   UDFs on AWS Lambda, because most data science workloads exceed the
+   current limits of AWS Lambda on execution time, RAM, and local
+   storage.
 
 .. class:: keywords
 
-   Cloud computing, Amazon AWS
+   Cloud computing, Amazon Web Services, Distributed computing
 
 
 Introduction
@@ -62,7 +62,7 @@ allows users to store and access numpy array data on Amazon S3
 :cite:`anwar_o_nunez_elizalde_2017_1034342`. Pywren :cite:`jonas2017`
 enables users to run their existing Python code on AWS Lambda,
 providing convenient distributed execution for jobs that fall within
-the limits of this service [#]_. These limitations are impractical
+the limits of this service [#]_. However, these limitations are impractical
 for many data-oriented workloads, which require more RAM and local
 storage, longer compute times, and complex dependencies. The AWS Batch
 service offers a platform for workloads with these requirements.
@@ -124,8 +124,8 @@ managed), its :code:`map` method should be familiar to most Python users.
 The next section discusses Cloudknot's approach to parallelism and the
 API section describes Cloudknot's user interface. In the Examples
 section, we demonstrate a few of Cloudknot's use cases, including
-examples with data in the hundreds of GB to TB range. We then summarize
-the the trade-offs between performance and accessibility in the Conclusion.
+examples with data ranging from hundreds of GB to several TB. We then summarize
+the trade-offs between performance and accessibility in the Conclusion.
 
 
 Design
@@ -153,7 +153,7 @@ in Figure :ref:`fig.workflow`.
 Single Program (SP)
 ~~~~~~~~~~~~~~~~~~~
 
-:code:`Knot` creates the single program on initialization, taking a
+The :code:`Knot` object creates the single program on initialization, taking a
 user-defined function (UDF) as input and wrapping it in a command line
 interface (CLI), which downloads data from an Amazon Simple Storage
 Service (S3) bucket specified by an input URL. The UDF is also wrapped in
@@ -205,7 +205,7 @@ select and manage the EC2 instances.
          resources that will be used to run jobs.
 
 :code:`Knot` uses job definition and compute environment
-defaults conservative enough to run most simple jobs, with the goal of
+defaults that are conservative enough to run most simple jobs, with the goal of
 minimizing errors due to insufficient resources. The casual user may
 never need to concern themselves with selecting an instance type or
 specifying an AMI. Users who want to minimize costs by specifying the
@@ -266,7 +266,7 @@ thread intermittently queries S3 for its returned output. The results
 are encapsulated in :code:`concurrent.futures.Future` objects, allowing
 asynchronous execution. The user can use :code:`Future` methods such
 as :code:`done()` and :code:`result()` to test for success or view the
-results. This also allows them to attach callbacks to the results using
+results. This also allows attaching callbacks to the results using
 the :code:`add_done_callback()` method. For example a user may want to
 perform a local reduction on results generated on AWS Batch.
 
@@ -516,7 +516,7 @@ Here, we reused this pipeline. This allows us to compare the performance
 of Cloudknot directly against the performance of several alternative
 systems for distributed computing that were studied in our previous
 work: Spark :cite:`Zaharia2010-rp`, Myria :cite:`Halperin2014-vu` and
-Dask.
+Dask :cite:`Rocklin2015-ra`.
 
 In Cloudknot, we used the reference implementation from this
 previous study written in Python and using methods from Dipy
@@ -529,12 +529,12 @@ of individual subjects, and a naive serial approach was taken at the
 level of each individual.
 
 We found that with a small number of subjects this reference
-implementation is significantly slower with Cloudknot compared with the
+implementation is significantly slower with Cloudknot compared to the
 parallelized implementation in these other systems. But the relative
 advantage of these systems diminshes substantially as the number of
 subjects grows larger (Figure :ref:`fig.mribenchmark`), and the benefits
 of parallelization across subjects starts to be more substantial. With
-the largest number of subjects used, Cloudknot processed 25 subjectss
+the largest number of subjects used, Cloudknot processed 25 subjects
 10% slower than Spark and Myria; however, it was 25% slower than Dask,
 the fastest of the tools that we previously benchmarked.
 
@@ -592,7 +592,7 @@ ImageJ and Trackmate are written in Java and can be scripted using
 Jython. This implies complex software dependencies, because the software
 requires installation of the ImageJ Jython runtime. Because Cloudknot
 relies on docker, this installation can be managed using the command
-line interface (i.e. :code:`wget`). Once a docker image is created that
+line interface (i.e., :code:`wget`). Once a docker image is created that
 contains the software dependencies for a particular analysis, Python
 code can be written on top of it to execute system calls that will run
 the analysis. This approach was recently implemented in :cite:`Curtis2018`.
@@ -626,19 +626,16 @@ computational result. This is because all the distributed systems
 currently available require some amount of systems administration and
 often incur non-trivial setup time. In addition, most of the existing
 systems currently require some amount of rewriting of the original code
-:cite:`mehta2017comparative`. We believe an increase in execution time
-may be acceptable in some situations, if it can reduce the time spent on
-systems administration, setup and particularly on rewriting of existing
-code. For example, if the amount of time that a user will spend learning
-a new queueing system or batch processing language, and the amount of
-time that the user will spend rewriting their code for this system
+:cite:`mehta2017comparative`. If the amount of time that a user will
+spend learning a new queueing system or batch processing language,
+administering this system, and rewriting their code for this system
 exceeds the time savings due to reduced execution time, then it will be
 advantageous to accept Cloudknot's suboptimal execution time in order to
 use its simplified API. Once they gain access to AWS Batch, beginning
 Cloudknot users simply add an extra import statement, instantiate a
 :code:`Knot` object, call the :code:`map()` method, and wait for results.
 And because Cloudknot is built using Docker and the AWS Batch
-infrastructure, it can accomodate the needs of more advanced users who
+infrastructure, it can accommodate the needs of more advanced users who
 want to augment their Docker files or specify instance types.
 
 Cloudknot trades runtime performance for development performance and
@@ -655,7 +652,7 @@ Future Work
 
 Cloudknot can benefit from several enhancements:
 
-- We will focus our attention on domain-specific applications (in
+- In future developments, we will focus our attention on domain-specific applications (in
   neuroimaging, for example) and include enhancements and bug-fixes that
   arise from use in our own research.
 
@@ -666,7 +663,7 @@ Cloudknot can benefit from several enhancements:
 
 - Cloudknot could also provide a simple way to connect to EC2 instances
   to allow in-situ monitoring of running jobs. To do this now, a user
-  must lookup an EC2 instance's address in the AWS console and connect
+  must look up an EC2 instance's address in the AWS console and connect
   to that instance using an SSH client. Future releases may launch this
   SSH terminal from within the Python session.
 
