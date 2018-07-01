@@ -24,7 +24,7 @@
     Numerical integration is used to evolve the system as it interacts with several electric fields in the course of a multidimensional experiment.
     This numerical approach allows ``WrightSim`` to fully account for finite pulse
     effects that are commonly ignored.
-    ``WrightSim`` is made using modules that can be exchanged to accomidate many
+    ``WrightSim`` is made using modules that can be exchanged to accomodate many
     different experimental setups.
     Simulations are accomplished through a Python interface that is designed
     to be intuitive for experimentalists and theorists.
@@ -49,7 +49,7 @@ Introduction
 
 Nonlinear multidimensional spectroscopy (MDS) is an increasingly important
 analytical technique for the analysis of complex chemical material systems.
-MDS can directly observe fundemental physics that are not possible to record in
+MDS can directly observe fundamental physics that are not possible to record in
 any other way.
 With recent advancements in lasers and optics, MDS experiments are becoming
 routine.
@@ -87,7 +87,7 @@ The system that we have chosen for this simulation is very simple, with a single
 resonance.
 This two-dimensional simulation is representative of ``WrightSim``'s ability
 to traverse through many aspects of experimental space.
-Every concievable pulse paramater (delay, fluence, frequency, chirp etc.) can
+Every conceivable pulse parameter (delay, fluence, frequency, chirp etc.) can
 become an axis in the simulation.
 
 ``WrightSim`` is designed with the experimentalist in mind, allowing users
@@ -106,7 +106,7 @@ significantly more computational time.
 We have focused on performance as a critical component of ``WrightSim``.
 Here we report algorithmic improvements which have significantly decreased
 computational time (i.e. wall clock time) relative to prior implementations.
-We also discuss parallelzation approaches we have taken, and show how the
+We also discuss parallelization approaches we have taken, and show how the
 symmetry of the simulation can be exploited.
 While nascent, ``WrightSim`` has already shown itself to be a powerful tool,
 greatly improving execution time over prior implementation.
@@ -144,13 +144,13 @@ interact and create superpositions or populations in the material system
 We are restricting this simulation to have two positive interactions (solid up
 arrows or dashed down arrows) and one negative interaction (dashed up arrow or
 solid down arrow).
-Experimentalists isolate this condition spatially, by placing an aperature
+Experimentalists isolate this condition spatially, by placing an aperture
 where this condition is met.
 This results in 16 possible pathways which result in a productive emission.
 Experimentalists can isolate the time orderings by introducing delays between
 pulses.
 Simulation allows us to fully separate each pathway, leading to insight into
-the nature of pathway interference in the total signal lineshape.
+the nature of pathway interference in the total signal line shape.
 
 .. figure:: WMELs.png
 
@@ -238,7 +238,7 @@ These variables can then be used to populate the matrix:
    \label{eq:single_Q}
 
 The :math:`\Gamma` values along the diagonal represent loss terms such as
-depahsing (loss of coherence) and population relaxation.
+dephasing (loss of coherence) and population relaxation.
 To isolate a given time ordering, we can simply set the value of elements which
 do not correspond to that time ordering to zero.
 
@@ -265,7 +265,7 @@ friendly to experimentalists and theorists alike.
 The key steps to running a basic simulation are:
 
 - Define the experimental space
-- Select a hamiltonian for propagation
+- Select a Hamiltonian for propagation
 - Run the scan
 - Process the results
 
@@ -340,9 +340,9 @@ recorded element parameters:
 
 
 Finally, all that is left is to run the experiment itself.
-The run method takes the hamiltonian object and a keyword argument ``mp``, short for "multiprocess".
+The run method takes the Hamiltonian object and a keyword argument ``mp``, short for "multiprocess".
 In general, any value that evaluates to ``False`` will run non-multiprocessed (i.e. single threaded).
-Almost all values that evalueates to ``True`` with run CPU - multiprocessed with the number of processes
+Almost all values that evaluates to ``True`` with run CPU - multiprocessed with the number of processes
 determined by the number of cores of the machine.
 The exception is the special string ``'gpu'``, which will cause ``WrightSim`` to run using ``PyCUDA``.
 
@@ -373,7 +373,7 @@ Performance is a key consideration in the implementation of ``WrightSim``.
 Careful analysis of the algorithms, identifying and measuring the bottlenecks, and working
 to implement strategies to avoid them are key to achieving the best performance possible.
 Another key is taking advantage of modern hardware for parallelization.
-These implementations have their advantages and tradeoffs, which are quantified and
+These implementations have their advantages and trade-offs, which are quantified and
 examined in detail herein.
 
 ``NISE`` :cite:`nise` is the package written by Kohler and Thompson while
@@ -414,7 +414,7 @@ insights. We simplified the code for matrix generation and propagation by
 only having the one 9 by 9 element matrix rather than two 7 by 7
 matrices. The function that took up almost one third the time (``ix_``)
 was removed entirely in favor of a simpler scheme for denoting which values to
-record, simply storing a list of the indicies directly.
+record, simply storing a list of the indices directly.
 We used variables to store the values needed for matrix
 generation, rather than recalculating each element. As a result, solely
 by algorithmic improvements, almost an order of magnitude speedup was
@@ -444,7 +444,7 @@ the operating system scheduling other tasks than by Amdahl’s law). This
 implementation required little adjustment outside of minor API tweaks.
 
 In order to capitalize as much as possible on the amount of parallelism
-possible, the algorithm was re-implementated using Nvidia CUDA :cite:`Nickolls_2008`.
+possible, the algorithm was re-implemented using Nvidia CUDA :cite:`Nickolls_2008`.
 In order to make the implementation as easy to use as possible, and maintainable over the
 lifetime of ``WrightSim``, ``PyCUDA`` :cite:`Klockner_2012` was used to integrate the call
 to a CUDA kernel from within Python. ``PyCUDA`` allows the source code
@@ -590,7 +590,7 @@ Usability
 
 One of the primary reasons for reimplementing the simulation package is
 to really think about how users interact with the package. As much as
-possible, the end user shouldn’t need to be an experienced programmer to
+possible, the end user should not need to be an experienced programmer to
 be able to get a simulation. One of the next steps for ``WrightSim`` is
 to take a step back and ensure that our API is sensible and easy to
 follow. We wish to, as much as possible, provide ways of communicating
