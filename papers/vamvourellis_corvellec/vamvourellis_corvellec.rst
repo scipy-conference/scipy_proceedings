@@ -582,9 +582,10 @@ The Stan program encoding this model is the following:
    }
 
    generated quantities {
-     matrix[K, K] R = multiply_lower_tri_self_transpose(L_R);
+     matrix[K, K] R = \
+     multiply_lower_tri_self_transpose(L_R);
      vector[K] full_sigma = append_row(sigma, \
-                                       rep_vector(1, Kb));
+                                   rep_vector(1, Kb));
      matrix[K, K] Sigma = \
      multiply_lower_tri_self_transpose(\
      diag_pre_multiply(full_sigma, L_R));
