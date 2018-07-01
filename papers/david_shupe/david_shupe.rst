@@ -59,7 +59,7 @@ includes subpackages for representing and manipulating space and time coordinate
 I/O for astronomical file formats; world coordinate systems in images (e.g. converting
 between celestial coordinates and image pixels); cosmological calculations; and
 manipulating numerical quantities with units. Most astronomers using the astropy
-core package have used it for interactive analyses. In this paper we highlight use
+core package use it for interactive analyses. In this paper, we highlight the importance
 of astropy in two production environments: the data system for the Zwicky Transient
 Facility (ZTF), and a web application for the proposed Origins Space Telescope.
 
@@ -70,18 +70,18 @@ The Zwicky Transient Facility (ZTF) is a new robotic survey now underway, using 
 Samuel Oschin Telescope at Palomar Observatory in southern California. This telescope
 was originally constructed to take images with photographic plates, in large part to
 provide targets for the 200-inch Hale Telescope at the same observatory. The ZTF camera
-fills the focal plane of the 48-inch telescope with sixteen 6000x6000 charge-coupled
+fills the focal plane of the 48-inch telescope with sixteen 6k:math:`\times`6k charge-coupled
 devices (CCDs) with an active detector area of 47 square degrees (Dekany et al in prep;
 :cite:`ztf_camera_2016`).
 ZTF is conducting a fast, wide-area time-domain survey (Bellm et al in prep) designed
 to discover fast, young and rare flux transients;
 counterparts to gravitational wave sources; low-redshift Type Ia supernovae for cosmology;
 variable stars and eclipsing binaries; and moving objects in our Solar System such as
-asteroids (Graham et al in prep). The entire visible sky
-can be imaged each night to declinations about -30 degrees. The survey began in March
+asteroids (Graham et al in prep). The entire sky visible to Palomar
+can be imaged each night to declinations above -30 degrees. The survey began in March
 2018 and will continue for three years. Figure :ref:`size` shows a field-of-view
 comparison of ZTF with its predecessor at Palomar, the Palomar Transient Factory
-(PTF), and the forthcoming Large Synoptic Survey Telescope (LSST).
+(PTF; :cite:`ptf_2009`), and the forthcoming Large Synoptic Survey Telescope (LSST).
 
 .. figure:: ztf_size_comparison.png
 
@@ -123,12 +123,13 @@ Astromatics suite (:cite:`Bertin2006`) to match star positions from the Gaia Dat
 catalog (:cite:`gaia_mission`, :cite:`gaia_dr1`) and ultimately fit a 4th-order polynomial to the image distortions.
 *Scamp* is written in C and requires inputs in a very specialized format. We have
 developed a procedure that has significantly reduced the rate of incorrect solutions
-in crowded fields, by providing *Scamp* with an accurate starting point.
+in crowded fields, by providing *Scamp* with an accurate starting point (see Figure
+:ref:`astrometryflow`).
 
 *Scamp* requires both the input catalog of detections and the reference catalog to
 be provided in LDAC (Leiden Data Analysis Center) [#]_ FITS format. This format consists of header information encoded in
-a binary format in an image extension, followed by a table extension. Recent versions
-of *Scamp* will use a prior World Coordinate System (WCS; :cite:`wcs_paper_ii`) solution provided to the program. Providing a distortion
+a binary format in a table extension, followed by another table extension of detections. Recent versions
+of *Scamp* will start from a prior World Coordinate System (WCS; :cite:`wcs_paper_ii`) solution provided to the program. Providing a distortion
 prior derived from many observations makes it much easier for *Scamp* to converge on
 the global minimum, i.e. the correct distortion solution. Our efforts to include
 the WCS in the LDAC file of detections using astropy.io.fits were unsuccessful.
@@ -136,6 +137,17 @@ However, the WCS information in the LDAC file can be overridden by a text file
 of header information provided separately to *Scamp*.
 
 .. [#] https://marvinweb.astro.uni-bonn.de/data_products/THELIWWW/LDAC/LDAC_concepts.html
+
+.. figure:: ztf_astrometry_flow.png
+
+   Processing diagrams for ZTF astrometry. An offline analysis (top) is performed on
+   a few exposures to make a prior model for each of the 64 quadrants in the focal
+   plane. These terms are combined with telescope pointing to make an accurate prior
+   for *Scamp* in the realtime pipeline (bottom), resulting in a calibrated header
+   text file with the full coordinate solution including distortions, and a catalog
+   of the detected stars with assigned RA and Dec coordinates. These outputs of the
+   astrometric fitting are matched again with the Gaia reference catalog to produce
+   metrics for assessing the quality of the astrometric fit. :label:`astrometryflow`
 
 Our distortion prior is constructed from an offline analysis of images taken at high
 elevations (low airmasses), the same conditions used in the ZTF survey. For selected
@@ -184,7 +196,7 @@ transfers the pointing to the center of each individual quadrant-image.
 
 The CD-matrix, CRPIX1, CRPIX2, and :math:`\xi`, :math:`\eta` values
 for each quadrant are saved to be used by the astrometry pipeline. The
-parameters are read and inserted into a text file that initializes *Scamp*. For each
+parameters are read and inserted into a text file (.ahead file) that initializes *Scamp*. For each
 image, a first run of *Scamp* is made using 'PRE-DISTORTED' mode. This performs
 pattern-matching of detected stars and reference stars from Gaia DR1. *Scamp* is allowed only a little
 freedom to rotate and change scale. A second pass of *Scamp* skips the pattern-matching
@@ -402,7 +414,7 @@ Configuration file issue
 In the course of running the ZTF pipeline in production, we encountered a serious
 problem caused by the $HOME/.astropy/config file. This file would randomly corrupt,
 causing every Astropy import to fail. The cause of the problem was different
-Astropy versions installed in our Python 2 & 3 virtual environments. The config
+Astropy versions installed in our Python 2 & 3 virtual environments. The configuration
 file is overwritten every time a different versions of Astropy version is imported.
 Our pipeline contained a mixture of Python 2 and Python 3 code, running in parallel
 at enough scale, that a collision would eventually occur. The problem was solved by
@@ -578,6 +590,11 @@ handling configuration files that assume a single package version is in use.
 
 Acknowledgments
 ---------------
+
+We are grateful to D. Levitan, W. Landry, S. Groom, B. Sesar, J. Surace, E. Bellm,
+A. Miller, S. Kulkarni, T. Prince and many other contributors to the PTF and ZTF projects.
+The Origins Space Telescope app includes significant contributions from C.M Bradford, K. Pontopiddan,
+K. Larson, J. Marshall, and T. Diaz-Santos.
 
 ZTF is led by the California Institute of Technology, US and includes IPAC, US;
 the Joint Space-Science Institute (via the University of Maryland, College Park), US;
