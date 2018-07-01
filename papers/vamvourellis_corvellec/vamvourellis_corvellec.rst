@@ -52,6 +52,12 @@ including effects of different types. As a result, we can find the predictive
 distribution of the treatment effects on a new patient accounting for
 uncertainty in all the parameters, including the correlation between the effects.
 
+The analysis is implemented in PyStan, the Python interface to Stan, which is
+the state-of-the-art, free and open-source Bayesian inference engine. Stan and
+the researchers behind it provide users with guidance that make Bayesian
+inference easier to use. We discuss aspects of this ecosystem in the
+second-to-last section.
+
 Although this case study is by no means the ideal introductory example of
 computational modeling, it provides us with a real-world problem from which we
 can share practical lessons. We believe this paper can be of help to a number
@@ -688,7 +694,7 @@ Stan is a powerful tool which “mitigates the challenges of programming and
 tuning” HMC to do statistical inference. Stan is a compiled language written in C++.
 It includes various useful tools and integrations which make the researcher's life easier.
 It can be accessed from different languages via interfaces.
-This case study was created with the Python interface, called Pystan.
+This case study was created with the Python interface, Pystan.
 Note that, at the time of writing, the most developed interfaced is the R one, called RStan.
 Although the underlying algorithm and speed is the same throughout the different
 interfaces, differences in user experience can be meaningful.
@@ -701,9 +707,6 @@ code blocks called  `model` (lines 37–45),
 Stan code is passed in via a character
 string or a plain-text `.stan` file, which is compiled down to C++ when the
 computation happens. Results are returned to the interface as objects.
-
-Aside from the implementation of HMC, Stan and the researchers behind it, provide users
-with guidance that make Bayesian inference easier to use.
 
 *Choice of priors*
 
