@@ -76,8 +76,8 @@ We propose a simple workflow made of the following steps:
 
 1. Scope the problem;
 2. Specify the likelihood and priors;
-3. Generate fake data that resemble the true data to a reasonable degree;
-4. Fit the model to the fake data;
+3. Generate synthetic data that resemble the true data to a reasonable degree;
+4. Fit the model to the synthetic data;
 
    a. Check that the true values are recovered;
    b. Check the model fit;
@@ -202,7 +202,7 @@ Also, it is important to remember that, in a scientific research context,
 we rarely have absolutely no prior knowledge and
 we typically do not consider any parameter value to be equally likely.
 
-*3) Generate fake data*
+*3) Generate synthetic data*
 
 Once we have agreed on a generative process, i.e., a model :math:`M`,
 we can use it to simulate data :math:`D'`.
@@ -216,14 +216,14 @@ these values from the prior distribution
 
    \theta_0 \sim p(\theta).
 
-The fake data
+The synthetic data
 :math:`D'`
 can then be interpreted as our prior distribution of the data.
-Hence, by inspecting the fake data, we can reflect back on our choices for the
+Hence, by inspecting the synthetic data, we can reflect back on our choices for the
 likelihood and priors. However,
 if we do use our priors to generate parameter values, we should make
 sure that our priors are not uninformative, which would likely produce
-unreasonable fake data.
+unreasonable synthetic data.
 
 Note how the model :math:`M` is a hypothesized process and comes with
 necessary assumptions and simplifications. It is highly unlikely that the real
@@ -232,7 +232,7 @@ world would follow exactly :math:`M`. That being said, if
 still be very useful to help us understand something about the world.
 As the phrase goes, “all models are wrong, but some models are useful.”
 
-*4) Fit the model to the fake data*
+*4) Fit the model to the synthetic data*
 
 If simulating data using our generative process :math:`M` is the forward
 direction, statistical inference is the reverse direction by which we find what
@@ -251,12 +251,12 @@ generally a hard problem. In most cases, we cannot derive the mathematical form
 of the posterior distribution; instead, we settle for an algorithm that returns
 samples from the posterior distribution.
 
-When we fit the model to fake data, we want to check two things, i.e., the correctness
+When we fit the model to synthetic data, we want to check two things, i.e., the correctness
 of the inference algorithm and the quality of our model.
 
 a. Much like in software testing, we want to check if the inference process
 works by starting simple and advance progressively to the real challenge. By
-fitting the model to fake data generated from the same model, we effectively
+fitting the model to synthetic data generated from the same model, we effectively
 rule out issues of mismatch between our model and the real data. Testing the
 inference algorithm under these ideal conditions allows us to perfect the
 inference algorithm in a controlled environment, before trying it on the real data. In
@@ -268,11 +268,11 @@ we critique the fit of our model :math:`M` to the real data
 allows us to attribute any mismatch issues to the choice of the model,
 as opposed to the inference algorithm.
 
-By fitting the model to fake data, we recover samples from the posterior
+By fitting the model to synthetic data, we recover samples from the posterior
 distribution of the model parameters. There are various model fit tests to
 choose from. At a minimum,
 we need to check that the 95% posterior confidence intervals cover the true
-parameter values :math:`\theta_0` that were used to generate the fake data. We should
+parameter values :math:`\theta_0` that were used to generate the synthetic data. We should
 tolerate a few misses, since 95% intervals will not cover the true values 5% of the
 time, even if the algorithm is perfectly calibrated. Success at this stage is
 not sufficient guarantee that the model will fit well to the real data, but it is
@@ -292,7 +292,7 @@ probably should, wait until we check how the model fits the real data as well.
 *5. Fit the model to the real data*
 
 This is the time we have been waiting for. Once we have finalized the design of
-our model and have tested it on fake data, we are ready to fit it to the real
+our model and have tested it on synthetic data, we are ready to fit it to the real
 data and get the results. Usually, we focus our attention on a specific
 quantity of interest to our problem, that is derived from the posterior samples
 (see our case study in the next section for an example). If we are satisfied
@@ -506,14 +506,14 @@ the choice of priors.
 Let us note that our data contain a lot of information, so the final outcome
 will be relatively insensitive to the priors.
 
-*3) Generate fake data*
+*3) Generate synthetic data*
 
-To generate fake data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
+To generate synthetic data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
 and generate 200 samples of underlying latent variables
 :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_.
 We picked :math:`\mu = (0.3, 0.5, 0.7)`, :math:`\sigma = (1.3, 1, 1)`, and
 :math:`R(1, 2) = -0.5, \; R(1, 3) = -0.3, \; R(2, 3) = 0.7`.
-The observed fake data :math:`Y_{ij}` are defined to be equal to
+The observed synthetic data :math:`Y_{ij}` are defined to be equal to
 :math:`Z_{ij}` for the effects that are continuous. For the binary effects, we sample
 Bernoulli variables with probability equal to the inverse logit of the
 corresponding :math:`Z_{ij}` value.
@@ -524,11 +524,11 @@ corresponding :math:`Z_{ij}` value.
        the pdf of :math:`\mathcal{N}_{K}(\mu, \Sigma)`.
 
 A Bayesian model with proper informative priors, such as the one above, can also
-be used directly to sample fake data. As explained in the previous section,
+be used directly to sample synthetic data. As explained in the previous section,
 we can sample all the parameters according to the prior distributions.
-The fake data can then be interpreted as our prior distribution on the data.
+The synthetic data can then be interpreted as our prior distribution on the data.
 
-*4) Fit the model to the fake data*
+*4) Fit the model to the synthetic data*
 
 The Stan program encoding this model is the following:
 
@@ -594,7 +594,7 @@ The Stan program encoding this model is the following:
 
 Figures :ref:`mean`, :ref:`sd`, and :ref:`corr`,
 we plot the posterior samples on top of the true values and check visually that
-the confidence intervals cover the true values we used to generate the fake
+the confidence intervals cover the true values we used to generate the synthetic
 data.
 
 .. figure:: mean.png
@@ -651,7 +651,7 @@ the data to predict the effect of the treatment on a new patient, i.e.,
 the posterior predictive distribution.
 
 In this case study, we may not share real data but, for demonstration purposes,
-we created two other sets of fake data, one representing the control group and
+we created two other sets of synthetic data, one representing the control group and
 the other the treatment group.
 For each posterior sample of parameters :math:`(\mu_i, \Sigma_i)`, we generate
 a latent variable :math:`Z_{i \cdot} \sim N(\mu_i, \Sigma_i)`.
@@ -776,8 +776,8 @@ between PyStan and PyMC3, which is another state-of-the-art FLOSS [#]_ implement
 of automatic Bayesian inference in Python. By ‘automatic,’ we mean that the
 user only needs to specify the model and the data and the software takes care of the
 Bayesian inference. Both PyStan and
-PyMC3 let users fit highly complex Bayesian models, by using Hamiltonian Monte
-Carlo (HMC) under the hood.
+PyMC3 let users fit highly complex Bayesian models, by using HMC
+under the hood.
 
 .. [#] FLOSS stands for “Free/Libre and Open Source Software.”
 
