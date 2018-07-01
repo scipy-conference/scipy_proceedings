@@ -817,7 +817,7 @@ packages without leaving Python, at least briefly, as most of the packages above
 are not available in Python. As a result, we think that PyMC3 seems to be a more
 complete solution from a Python perspective. PyMC3 is native to Python and hence
 more integrated into Python than PyStan. PyMC3 also offers more integrated
-plotting capabilities than PyStan.
+plotting capabilities than PyStan [#]_.
 
 The value of Stan, in the authors' view, should be considered beyond the mere
 software implementation of HMC. Stan consists of a dynamic research community that aims
@@ -825,6 +825,15 @@ at making Bayesian inference more accessible and robust. This is achieved throug
 open discussion of all Bayesian topics, many of which are areas of active research.
 Interested users can learn more about Bayesian inference in general, not just Stan,
 by reading online and participating in the discussion (see next subsection).
+
+.. [#] For additional sources on PyMC3 vs Stan comparisons, see:
+
+       * https://github.com/jonsedar/pymc3_vs_pystan
+       * http://discourse.mc-stan.org/t/jonathan-sedar-hierarchical-bayesian-modelling-with-pymc3-and-pystan/3207
+       * http://andrewgelman.com/2017/05/31/compare-stan-pymc3-edward-hello-world/
+       * https://towardsdatascience.com/stan-vs-pymc3-vs-edward-1d45c5d6da77
+       * https://pydata.org/london2016/schedule/presentation/30/
+       * https://github.com/jonsedar/pymc3_vs_pystan
 
 *Further reading*
 
@@ -835,15 +844,6 @@ history of Bayesian inference programs and the advantages of HMC, see
 For examples of other case studies and tutorials in Stan, see
 http://mc-stan.org/users/documentation/. For active discussions and advice on
 how to use Stan, see the Stan forum at http://discourse.mc-stan.org/.
-
-For additional sources on PyMC3 vs Stan comparisons, see:
-
-* https://github.com/jonsedar/pymc3_vs_pystan
-* http://discourse.mc-stan.org/t/jonathan-sedar-hierarchical-bayesian-modelling-with-pymc3-and-pystan/3207
-* http://andrewgelman.com/2017/05/31/compare-stan-pymc3-edward-hello-world/
-* https://towardsdatascience.com/stan-vs-pymc3-vs-edward-1d45c5d6da77
-* https://pydata.org/london2016/schedule/presentation/30/
-* https://github.com/jonsedar/pymc3_vs_pystan
 
 Reproducibility
 ---------------
