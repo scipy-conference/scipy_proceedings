@@ -618,9 +618,10 @@ of the inference results. One of the basic tests is the :math:`\hat{R}`
 which is a general summary of the convergence of the Hamiltonian Monte Carlo
 (HMC) chains. Another measure is the
 number of effective samples, denoted by :code:`n_eff`.
-These metrics, along with other basic information on the Stan :code:`fit` object,
-are shown below. We shall come back to the topic of fit diagnostics in the
-next section.
+Below, we show an excerpt from Stan's summary of the :code:`fit` object,
+displaying :code:`Rhat` and :code:`n_eff`, along with other metrics (mean and
+standard deviation), for various parameters.
+We shall come back to the topic of fit diagnostics in the next section.
 
 .. code-block:: c++
 
@@ -630,20 +631,20 @@ next section.
     post-warmup draws per chain=500,
     total post-warmup draws=2000.
 
-               mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
-    mu[0]      0.36  2.1e-3   0.09   0.17    0.3   0.36   0.42   0.54   2000    1.0
-    mu[1]      0.56  4.1e-3   0.18    0.2   0.44   0.56   0.69   0.94   2000    1.0
-    mu[2]      0.67  4.0e-3   0.18   0.33   0.55   0.68   0.79   1.02   2000    1.0
-    R[0,0]      1.0     0.0    0.0    1.0    1.0    1.0    1.0    1.0   2000    nan
-    R[1,0]    -0.24  3.6e-3   0.16  -0.55  -0.35  -0.24  -0.13    0.1   2000    1.0
-    R[2,0]    -0.38  3.6e-3   0.16  -0.69  -0.49  -0.39  -0.28  -0.05   2000    1.0
-    R[0,1]    -0.24  3.6e-3   0.16  -0.55  -0.35  -0.24  -0.13    0.1   2000    1.0
-    R[1,1]      1.0 2.1e-189.3e-17    1.0    1.0    1.0    1.0    1.0   1958    nan
-    R[2,1]      0.1    0.01   0.32  -0.52  -0.12   0.11   0.32   0.69    550    1.0
-    R[0,2]    -0.38  3.6e-3   0.16  -0.69  -0.49  -0.39  -0.28  -0.05   2000    1.0
-    R[1,2]      0.1    0.01   0.32  -0.52  -0.12   0.11   0.32   0.69    550    1.0
-    R[2,2]      1.0 1.7e-187.8e-17    1.0    1.0    1.0    1.0    1.0   2000    nan
-    sigma[0]   1.28  1.4e-3   0.06   1.16   1.24   1.28   1.32   1.41   2000    1.0
+               mean      sd  ...  n_eff   Rhat
+    mu[0]      0.36    0.09  ...   2000    1.0
+    mu[1]      0.56    0.18  ...   2000    1.0
+    mu[2]      0.67    0.18  ...   2000    1.0
+    R[0,0]      1.0     0.0  ...   2000    nan
+    R[1,0]    -0.24    0.16  ...   2000    1.0
+    R[2,0]    -0.38    0.16  ...   2000    1.0
+    R[0,1]    -0.24    0.16  ...   2000    1.0
+    R[1,1]      1.0 9.3e-17  ...   1958    nan
+    R[2,1]      0.1    0.32  ...    550    1.0
+    R[0,2]    -0.38    0.16  ...   2000    1.0
+    R[1,2]      0.1    0.32  ...    550    1.0
+    R[2,2]      1.0 7.8e-17  ...   2000    nan
+    sigma[0]   1.28    0.06  ...   2000    1.0
 
 *5. Fit the model to the real data*
 
