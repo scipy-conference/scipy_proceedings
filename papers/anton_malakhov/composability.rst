@@ -300,7 +300,7 @@ Intel |R| Distribution for Python [IntelPy]_ installed from anaconda.org/intel
     # activate miniconda
     source <path to miniconda3>/bin/activate.sh
     # create & activate environment from the Intel channel
-    conda create -n intel3 -c intel numpy dask tbb smp
+    conda create -n intel3 -c intel numpy dask tbb4py smp
     source activate.sh intel3
     # this setting is used for default runs
     export KMP_BLOCKTIME=0
@@ -312,7 +312,7 @@ Here is an example of how to run the benchmark programs in different modes:
 
 .. code-block:: sh
 
-    # Default mode
+    # Default mode (with KMP_BLOCKTIME=0 in effect)
     python bench.py
     # Serialized OpenMP mode
     env OMP_NUM_THREADS=1 python bench.py
@@ -420,7 +420,7 @@ it cannot fully utilize all available CPU cores.
 The additional level of parallelism we use here significantly improves the overall benchmark performance.
 
 Figure :ref:`snumpy` shows benchmark execution time using the same modes as in the QR decomposition example.
-The best choice for this benchmark was to limit number of threads statically either using manual settings or the *smp* module, and obtained a more than 7x speed-up.
+The best choice for this benchmark was to limit number of threads statically either using manual settings or the *smp* module, and obtained about 10x speed-up.
 Also, Intel |R| TBB based approach performed much better than composable OpenMP.
 The reason for this was that there was insufficient parallelism present in each separate chunk.
 In fact, exclusive composability mode in OpenMP leads to serial matrix processing, so a significant part of the CPU stays unused.
@@ -457,9 +457,6 @@ The code below shows this *unbalanced* version of QR decomposition workload:
     x22 = da.random.random(sz, chunks=(20000, 1000))
     x44 = da.random.random(sz, chunks=(10000, 1000))
     qr(x01); qr(x22); qr(x44)
-
-To run this benchmark, we used the four approaches: default, with smp module, composable OpenMP and Intel |R| TBB.
-We do not show results for ``OMP_NUM_THREADS=1`` since they are very close to the results for the SMP approach.
 
 .. figure:: dask_dynamic.png
    :figclass: t
@@ -521,11 +518,10 @@ The second and the third stage computes eigenvalues and the first one performs m
 The reason we do not use eigenvalues search for the first stage as well is that it cannot fully load the CPU as we intended.
 
 From figure :ref:`dnumpy` we can see that the best solution for this workload is Intel |R| TBB mode,
-which reduces execution time to 67% of the default mode.
+which reduces execution time to 85% of the default mode.
 SMP module works even slower than the default version due to the same issues
 as described for the unbalanced QR decomposition example.
-Composable OpenMP works significantly slower than the default version
-since there is not enough work for each parallel region, which leads to CPU underutilization.
+Composable OpenMP works slower as well since there is not enough work for each parallel region, which leads to CPU underutilization.
 
 
 3.5. Impact of nested parallelism and oversubscription
