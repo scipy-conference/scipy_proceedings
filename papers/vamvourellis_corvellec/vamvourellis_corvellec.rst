@@ -594,7 +594,8 @@ The Stan program encoding this model is the following:
 *Model Fit Checks*
 
 Figures :ref:`mean`, :ref:`sd`, and :ref:`corr`,
-we plot the posterior samples on top of the true values and check visually that
+we plot the posterior samples on top of the true values (vertical black lines)
+and check visually that
 the confidence intervals cover the true values we used to generate the synthetic
 data.
 
@@ -611,7 +612,7 @@ data.
 
    Histogram of values sampled from the posterior correlation of effects. :label:`corr`
 
-With Stan, we can also utilize the built-in checks to inspect the correctness of
+With Stan, we can also utilize the built-in checks to inspect the correctness
 of the inference results. One of the basic tests is the :math:`\hat{R}`
 (:code:`Rhat`),
 which is a general summary of the convergence of the Hamiltonian Monte Carlo
