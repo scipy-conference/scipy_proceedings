@@ -59,7 +59,7 @@ The dynamics between fission and fusion creates a spectrum of mitochondrial morp
 
 Recently, several bacterial species have been shown to cause mitochondrial perturbations during infection :cite:`SBSRC11`:cite:`FGQR15`. Through social network modeling, we hope to build a more rapid and efficient method for identifying changes in size, shape, and distribution of mitochondria as well as other diffuse organelles.
 
-.. figure:: pipeline.png
+.. figure:: pipeline.PNG
 
   An abstract representation of our proposed pipeline. The first frame represents the raw unsegmented image of three cells' proteins. The next frame demonstrates the simultaneous segmentation, as a border is drawn around each cell. The third frame represents a single cell being extracted for analysis using the determined Segmentation. The fourth cell shows a characteristic set of nodes determined by applying a mixture model to the distribution of mitochondrial protein. The final image shows edges added to the nodes to complete the network structure. At this point in the pipeline Network analysis can be applied to the created graph in hopes for meaningful quantitative information. These steps are applied to each frame of video allowing for fully temporal analysis. :label:`fig0`.
 
