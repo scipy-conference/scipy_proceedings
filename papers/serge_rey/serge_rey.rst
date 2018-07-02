@@ -23,10 +23,11 @@
 
 
 
-------------------------------------------------------------------------
-Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source
-Longitudinal Neighborhood Analysis Package (OSLNAP)
-------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------------------------
+Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source Longitudinal Neighborhood Analysis Package (OSLNAP) [#]_
+---------------------------------------------------------------------------------------------------------------------------------
+
+.. [#] This research was supported by NSF grant SES-1733705.
 
 .. class:: abstract
 
@@ -127,6 +128,7 @@ points in time, it is impossible to compare directly a single neighborhood with
 itself over time.
 
 .. figure:: tractchange.png
+   
 
    Enumeration Unit Changes :cite:`Census_2010`. :label:`f:harm`
 
@@ -350,19 +352,19 @@ dependence and spatial heterogeneity.
 
 In a prototypical workflow, the ``change`` module permits the end user to
 explore the nature of neighborhood change. From a dynamic perspective,
-\textit{transition analysis} can be used to apply a first-order Markov chain
+transition analysis can be used to apply a first-order Markov chain
 model to look at probabilities of transitioning between neighborhood types over
 time. It also supports the use of a spatial Markov chains model to interrogate
 the role of spatial interactions in shaping neighborhood dynamics or the
 application of a spatial regime Markov chains model to explore spatially
 heterogeneous neighborhood dynamics. From a holistic perspective,
-(\textit{sequence analysis}) involves the application of the OM algorithm with
+sequence analysis involves the application of the OM algorithm with
 chosen cost functions for substitution, insertion, deletion and transposition,
 by applying the spatially explicit OM algorithm which takes account of potential
 spatial dependence and spatial heterogeneity in the operation costs.
 Finally, a combined holistic \& dynamic perspective is gained by incorporating
-the similarity matrix produced by the \textit{sequence analysis} in the
-\textit{transition analysis} to explore potential interactions and heterogeneity
+the similarity matrix produced by the sequence analysis in the
+transition analysis to explore potential interactions and heterogeneity
 in the underlying dynamics of neighborhood change.
 
 
@@ -416,6 +418,9 @@ consumption of the information nonetheless. The resulting clusters are presented
 in Figure :ref:`f:ward`.
 
 .. figure:: la_ward_all.png
+   :align: center
+   :scale: 30%
+   :figclass: w
 
    Neighborhood Types in LA using Ward Clustering. :label:`f:ward`
 
@@ -470,6 +475,9 @@ find it useful to present stylized labels to describe each neighborhood
 type:
 
 .. figure:: la_ap_all.png
+   :align: center
+   :scale: 30%
+   :figclass: w
 
    Neighborhood Types in LA using Affinity Propagation. :label:`f:ap`
 
@@ -520,6 +528,7 @@ spatial configuration and connectivity structure at any given time.
 
 .. figure:: la_skater_all.png
    :align: center
+   :scale: 30%
    :figclass: w
 
    Neighborhood Types in LA using SKATER. :label:`f:skater`
@@ -643,17 +652,6 @@ context plays an important role in shaping the neighborhood dynamics.
 Sequence Analysis to Neighborhood Change
 ========================================
 
-We now turn to a clustering of the sequences of neighborhood transitions. 
-The departure point is the trajectories of neighborhoods as shown in Figure
-:ref:`f:ward`. Given how the neighborhood characteristics can change over
-time, a neighborhood's socioeconomic classification can change over time. 
-Identifying areas where these shifts happen in the same way in the same point
-in time, a neighborhood experiencing gentrification may move from minority
-working class to integrated middle class, terminating in white upper class
-as the process of demographic and economic shift matures. Identifying areas
-that experience the same trajectories since 1980 allows us to examine spaces 
-with similar aligned histories, rather than areas that may have experienced
-similar transitions at some point in their history. 
 
 .. figure:: hamming_and_weighted.png
    :align: center
@@ -700,18 +698,9 @@ possible change is often quite constrained as well. Thus, the move from
 unweighted to weighted edit distances may make even more of a difference in some
 cases.
 
-In general, since decisions about how to operationalize these distance metrics, which initial
-clusterings to use to generate sequences, and the final clustering algorithms all may have 
-a significant effect on the resulting clusters discovered, it becomes important to support many
-different options, configurations, and analysis workflows. As discussed above, 
-the differences in "final" results can also impact the substantive understandings of how 
-neighborhood dynamics are operating in an area under study. Thus, providing the user with 
-many ways to flexibly reparameterize these complex questions about space-time similarity
-will  improve the usefulness of ``OSLNAP`` for reproducible urban science.
 
-
-Conclusion
-----------
+Future Directions
+-----------------
 
 In this paper we have presented the motivation for, and initial design and
 implementation of OSLNAP. At present, we are in the early phases of the project
@@ -749,7 +738,9 @@ maps over time and an associated stacked line plot is shown below in Figure :ref
 
 .. figure:: ward_viz.png
    :align: center
+   :scale: 25%
    :figclass: w
+
 
    Interactive Vizualizations of Ward Clustering in Los Angeles :label:`f:viz`
 
