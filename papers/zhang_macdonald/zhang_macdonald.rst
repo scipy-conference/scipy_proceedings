@@ -11,29 +11,22 @@
 :bibliography: mybib
 
 --------------------------------------------------
-Pulp as a Tool to create Reproducible Environments
+Reproducible Environments for Reproducible Results
 --------------------------------------------------
 
 .. class:: abstract
 
    Trustworthy results require reproducibility, which must include the full computational
-   environment used to produce and analyze the data.  Publishing source code is necessary but not
-   sufficient for complete reproducibility because complex software often depends on external code.
-   Various techniques and tools can be used to manage environments, but each has inherrent
-   limitations and none are well suited for all situations. Additionally, each tool has distinct
-   workflows, assumed knowledge, and interface.
-
-   This talk provides an overview to the basic concepts and tools to manage environments optimized
-   for reproducibility with a focus on best practices for managing reproducible Python environments
-   with an open source package-agnostic repository manager called Pulp_.
-
-   Attendees of any skill level can come learn best practices for creating
-   reproducible environments, and managing them with Pulp.
+   environment used to produce and analyze the data. Creating perfectly reproducible
+   environments is difficult because of fundamental challenges in the software packaging
+   domain, and understanding these problems is necessary to mitigate them. Focusing on the Python
+   ecosystem and a univeral package manager called Pulp_, this paper explores various approaches
+   to software packaging and distribution from the angle of reproducibility.
 
 
 .. class:: keywords
 
-   dependency-hell, reproducibility
+   dependency-hell, reproducibility, packaging
 
 
 Introduction
@@ -48,8 +41,8 @@ fundamental problems of environmental differences and code entropy impact resear
 Fortunately for scientists, software development as a whole has comparable needs. For each software
 ecosystem, tools and best practice workflows have been developed to encourage rapid development,
 simplify maintainance, and improve long term stability.  This paper will demonstrate how to apply
-software industry workflows to research code, focusing on the Pulp project and the Python
-community.
+software industry tools and workflows to research code, focusing on the Pulp project and the Python
+ecosystem.
 
 Software Packaging Basics
 =========================
@@ -93,655 +86,180 @@ to guarantee, particularly across platforms.
 
 Python Packaging Ecosystem
 ==========================
-[
-  Introduce the ecosystem
-  Explain tools and the workflows that use them
-  Demonstrate problems, and if necessary, add a little history
-  From the gaps, lead to introduction ofPulp
-]
+
+Python has a strong community that facilitates packaging with many open source tools. The Python
+Package Index (PyPI) is a community repository that allows package authors to contribute their
+work and users to find and install whatever packages they need. Currently, the standard tool to
+install Python software from PyPI is pip_, which also installs any dependencies. PyPI is not a
+curated repository like Fedora, so dependency problems can be frequent. To address this, it is
+generally recommended by the community to use virtual environments [0]_. A "virtualenv" is used to
+to isolate installed Python projects (along with their dependencies), which allows the user to
+install software which might otherwise have conflicts. Additionally, each virtualenv can use a
+different Python version, which frees users from the restrictions of system-wide installations.
+
+The current best practice for indicating dependencies is to list them in a `requirements.txt` [TODO
+link] file, which is used by pip or comparable tools at installation time. This file offers some
+powerful options to promote stability, and if used carefully, it can be used to ensure a degree
+of reproducibility. Each requirement specifier can be "pinned" to an exact version (or even hash)
+of a dependency. If more flexibility is needed, `requirements.txt` can specify minimum versions, or
+even be configured to install the most recent version that maintains backwards compatibility.
+
+During development, keeping dependencies flexible is ideal because the latest versions of a
+dependency will have a longer life before they become obsolete. However, after development is
+complete and final analysis begins, the need for reproducibility overtakes the benefits of
+keeping dependencies up to date. Semantic versioning is considered a best practice in the Python
+community, and uses X.Y.Z version numbers. Even for backwards compatible release (Y or Z releases),
+a researcher would not want to use numpy-1.13.1 for part of their analysis and numpy-1.14.2 for
+another. The risk that subtle changes could affect the results is too great, so it is recommended
+that researchers pin their versions.
 
 
-
-
-## Reproducibility of a Computational Environment
-Trustworthy results require reproducibility. Publishing code is necessary but
-not sufficient for complete reproducibility. Complex programs often depend on
-external code. “An article […] in a scientific publication is not the
-scholarship itself, it is merely advertising of the scholarship. The actual
-scholarship is the complete software development environment and the complete
-set of instructions which generated the figures” :cite:`Buckheit` .
-
-
-#### Can I just publish the source code?
-Scholarly research containing descriptions of methodology is no longer
-sufficient.  For standalone scripts, publishing source code might be
-acceptable, but as computational systems grow more complex, this method becomes
-more unreliable. Nontrivial research often depends on other external
-libraries for everything from left-padding a line to building scalable machine
-learning. This "has led to an ever larger and more complex black box between
-what was actually done and what is described in literature." :cite:`Boettiger`
-
-
-#### Hello, Pulp
-Fortunately, this is a common problem and there are a number of best practices
-and tools that can make this easier. However these tools require different
-techniques and workflows to manage. This talk seeks to summarize these tools
-and techniques including workflows, best practices, and potential pitfalls.
-And will then introduce Pulp_ as a potential environment manager to work in
-conjunction with these tools, to provide easily manageable and maintainable environments.
-
-
-..Note::
-    Tools include things such as requirements.txt and pipfile.lock for Python, Docker Images,
-    and Ansible Roles.
-
-    Managers are used to manage the environment for these tools such as: Package indexes for
-    python packages, Dockerhub for docker Images, Ansible Galaxy for Ansible roles and Pulp.
-
-    Workflows are ...
-
-
-Measuring Reproducibility
--------------------------
-
-Two factors have to be considered when we think about published environments:
-
-1.  Reproducibility is the ability to have the researcher and reviewer share identical
-    'bits' of the necessary system, program, and dependencies.
-
-    Vandewalle identifies several necessities for complete reproducibility
-    :cite:`Vandewalle`: the program's source code, package dependencies, system
-    requirements and configuration, data source used, and documentation on running
-    the provided the source code.
-
-2.  Code entropy is the tendency of code systems to move fast. Programs and environments need to be
-    flexible to change. Software moves fast, and even widely used programs become
-    legacy and eventually deprecated. Pinning dependencies might accelerate this
-    process. This is the guarantee that code that works today, can also be ran 10 years from now.
-
-A good tool, and management system will balance reproducibility and
-code entropy.
-
-## Packaging: Lots of problems lots of flawed solutions
-
-#### Stand-alone packages
-   examples
-   benefits and drawbacks
-   workflows
-
-#### Modular packages
-   examples
-   benefits and drawbacks
-   workflows
-
-   Depsolving
-   Updates
-   Depenency hell
-
-#### Python Packaging
-
-- modular
-- flaws list ( go deeper into modular problems )
-    - metadata
-    - python vs system packages
-    - lack of curation
-    - People who pronounce it "Pie Pie", ugh
-- depsolving and dependency hell
-
-
-
-
-Existing Tools and Techniques
-=============================
-
-This is a quick introduction to the existing tools used to create reproducible environments.
-
-# move to intro
 Published Source Code
 ---------------------
 
-Publishing source code used to be the only thing necessary to
-Publishing source code in papers makes them inflexible to change-- bugs fixed
-after publication cannot be communicated to the readers of the paper. Code is
-not versioned and even if the source code is updated and made available it is
-hard to communicate what issues were fixed.
+Scholarly research containing descriptions of methodology is no longer sufficient. For standalone
+scripts, publishing source code might be acceptable, but as computational systems grow more
+complex, this method becomes more unreliable. Nontrivial research often depends on other external
+libraries for everything from left-padding a line to a framework for scalable machine learning.
+This "has led to an ever larger and more complex black box between what was actually done and what
+is described in literature." :cite:`Boettiger`
 
-GitHub and Other Version Control Software
------------------------------------------
+Using an online git repository is a great way to keep track of source code :cite:`Wilson`.  With
+git you can easily track changes to data and software. Git identifies commits by a unique hash,
+which can be used to reference a specific point in the source code, practically guaranteeing the
+correct bits. This approach is incomplete however, because git lacks the ability to do
+environmental management, it is not a package manager. System dependencies in git can only be
+documented-- it is the responsibility of the user to determine if the entire environment is
+identical, and the documentation may not contain enough information to verify. Instead, we
+recommend using git to store source code in addition to a package manager.
 
-Using an online git repository is a great way to keep track of source code
-:cite:`Wilson`.  With git you can easily track changes you make to data and
-software. Git identifies commits by a unique hash, which can be used to
-reference a specific point in the source code.
+Python requirements files can also specify urls to import packages from a variety of version
+control systems, including git. When combined with virtual environments, developers can implement a
+clever workflow that treats a git as a personally curated repository. This gives developers a
+significant amount of control over their dependency pipeline, but can be difficult to manage. One
+problem is that because all requirements are pinned in the project source, dependency updates have
+similar difficulties as monolithic packages-- any dependency update requires a new version for the
+whole project. This control also requires the maintainers to be actively engaged in each of the
+dependencies to know when updates are necessary. Also like monolithic packages, security is a
+concern because the maintainers may not be able to rerelease, or they may not be aware of important
+patches.
 
-What git lacks is the ability to do environmental management, it is not a
-package manager. System dependencies in git can only be documented-- and need
-the user to install them following instructions.  It is recommended that git be
-used to store the source code, and that some other package manager be used to
-manage the system environment.
+A general concern with most packaging workflows is dependence on 3rd party services. These services
+can go down or introduce backwards incompatible changes. Some services, like PyPI allow package
+authors to remove content at any time. If reproducibility is critical, the entire dependency
+pipeline should be under the control of the maintainers.
 
-Python Packaging
-----------------
+Introducing Pulp
+================
 
-Python has a strong community, and many libraries and tools are hosted on the
-Python Package Index.  Currently, the standard tool for installing packages is
-pip_, which installs Python packages and their Python dependencies. For
-development, it is strongly recommended to use pip with virtual environments
-[0]_. Doing so will allow the developed projects to use the newest stable
-versions of their dependencies, and well maintained dependencies should work
-correctly together.
+Each of the approaches discussed offer a fundamental tradeoff when choosing a package management
+strategy. Strategies that increase control can improve reliability, but put significantly more
+responsibility on the maintainers. Even if a particular strategy well works for a specific project
+in its ecosystem, another ecosystem with a different tool set may not fit the strategy the same
+way, and will also come with a new learning curve.
 
-.. code-block:: bash
+An alternative to the eclectic strategies native to various ecosystems is a universal package
+manager like Pulp. Pulp is a fully open source Python project that manages packages of any type by
+leveraging a plugin architecture. With the python plugin, for example, Pulp is able to
+fetch content from PyPI and publish content that can be consumed by pip_, allowing Pulp users to
+implement reproducibility focused workflows that transfer across packaging ecosystems.
 
-   $ mkvirtualenv venv-demo (venv-demo)
-   $ pip install scipy
+Pulp 3, which recently entered beta offers additional features that simplify reproducibility, such
+as versioned repositories and immutable publications. When combining Pulp 3's promotion/rollback
+workflows with the strategies discussed above, researchers can achieve the rigorous stability of
+monolithic packages/curated repositories (via a hosted, immutable publication) and the flexibility
+and short development cycle of a community repository like PyPI. Pulp users host their own servers,
+and therefore own their entire dependency pipeline.
 
-After development is complete and analysis begins, the need for reproducibility
-often overtakes the benefits of keeping dependencies up to date. Though many
-projects strive to maintain backwards compatibility, a researcher would not
-want to use numpy-1.13.1 for part of their analysis and numpy-1.14.2 for
-another, the stakes are simply too high. At this point, it is recommended that
-researchers “pin” their versions.
+Example Workflow
+================
 
-.. code-block:: bash
+With the rich feature set provided by the Python ecosystem and the powerful workflows enabled by
+Pulp, it is necessary to demonstrate how they can be used together to achieve flexible development
+while also ensuring reproducibility. This section discusses workflows at a very high level and
+does not include all steps for brevity. The Pulp documentation should be referenced for
+comprehensive workflows and specific commands.
 
-   $ workon venv-demo (venv-demo)
-   $ pip freeze > scipy-requirements.txt
+When developing a new tool, it is ideal to work with the latest versions of dependencies. A Pulp
+server can be set up and configured to fetch these dependencies from PyPI, and pip can be
+configured to install from a hosted Pulp publication. Each time Pulp fetches new content, it
+creates a new repository version. Development is never blocked because the administrator can
+instantly (without downtime) roll back to a stable version whenever there is a problem.
 
-Pip can use a requirements_ file to achieve more
-stability. Creating a requirements file in this way specifies the exact version
-of each dependency.
+When the project matures enough to be used in publishable research, a curated repository is created
+containing only the desired versions of packages. Source code should be packaged with twine,
+uploaded into the curated repository, and the repository should be published. When the publication
+of a curated repository is shared, it can be used to create a Python environment with exactly the
+same bits; the procedure documentation of the research should include instructions for configuring
+pip to use this publication.
 
-.. code-block:: bash
+Even as research proceeds through peer review and publication, development can still continue
+against recently updated dependencies. Each Pulp publication is isolated and immutable, allowing
+legacy publications that ensure reproducibility to be served parallel to new publications used for
+flexible, up-to-date development.
 
-   numpy==1.14.3 scipy==1.1.0
+If a security flaw is discovered in a dependency that was used in published research, a new
+"hotfix" publication can be created that bumps the version of a single dependency. This hotfix
+publication can be hosted in parallel at a testing location, allowing researchers to carefully
+verify identical results before seamlessly replacing the original publication at the advertised
+location.
 
-The requirements file can now be used to recreate the same environment using
-the same versions.
+Beyond Python
+=============
 
-.. code-block:: bash
-
-   $ mkvirtualenv separate-env
-   (separate-env) $ pip install -r scipy-requirements.txt
-
-For Python users who need to guarantee deterministic builds, another step is
-suggested. Adding hashes to a requirements.txt provides the guarantee that the
-exact bits are installed. PyPI now supports sha256, which is strongly
-recommended over md5, which has known vulnerabilities. Pip can be used to
-calculate the hashes, which are then added to the requirements file.
-
-.. code-block:: bash
-
-   $ pip download numpy==1.14.3
-   Collecting numpy==1.14.3
-   Saved ./numpy-1.14.3-cp27-cp27mu-manylinux1_x86_64.whl
-   Successfully downloaded numpy
-
-.. code-block:: bash
-
-   $ pip hash ./numpy-1.14.3-cp27-cp27mu-
-   manylinux1_x86_64.whl
-   ./numpy-1.14.3-cp27-cp27mu-
-   manylinux1_x86_64.whl:
-   --hash=sha256:0db6301324d0568089663ef2701ad90ebac0e97
-   5742c97460e89366692bd0563
-
-Add these hashes to your requirements file, and use the `--require-hashes`
-option. Note that these files are specific to architecture and python package type.
-For code that should run in more than one environment, multiple hashes can be
-specified.
-
-.. code-block:: bash
-
-   numpy==1.14.3 \
-       --hash=sha256:0db6301324d0568089663ef2701ad90eba
-       c0e975742c97460e89366692bd0563
-   scipy==1.1.0 \
-       --hash=sha256:08237eda23fd8e4e54838258b124f1cd14
-       1379a5f281b0a234ca99b38918c07a
-
-.. code-block:: bash
-
-   $ mkvirtualenv deterministic-venv (deterministic-venv)
-   $ pip install --require-hashes -r
-   scipy_requirements.txt
-
-Guarantees:
- - All Python dependencies installed this way will contain exactly the same
-   bits
- - Hashes safeguard against man in the middle attacks
- - Hashes safeguard against malicious modification of packages on PyPI
-
-Limitations: Packages on PyPI can be removed at any time by their maintainer.
-pip is only useful for managing python dependencies, and cannot be used for
-system dependencies and environment configuration.
-
-Pip was selected because it is the standard tool, and it is most likely to
-maintain backward compatibility. However, there are other tools with rich
-feature sets that simplify the process. In particular,
-pipenv_ uses hashing and virtual environments by
-default for a smooth experience.
-
+Computational environments created with Python tools cannot be 100% reproducible because many
+aspects of the complete environment are not managed by Python packaging. Vandewalle identifies
+several necessities for complete reproducibility :cite:`Vandewalle`: the program's source code,
+package dependencies, system requirements and configuration, data source used, and documentation on
+running the provided the source code. Together, Python tools, Pulp, and pulp_python can be used to
+preserve source code and dependencies, but system requirements and configuration are outside of the
+scope of Python packaging.
 
 Ansible
 -------
 
-Ansible_ is an IT automation tool. It can configure systems, deploy software,
-and orchestrate more advanced tasks. With ansible it is possible to install
-Python dependencies and system dependencies.
+Ansible_ is an IT automation tool that can be used to configure systems, deploy software, and
+orchestrate arbitrary advanced tasks. It has an active community, well established idioms, and a
+large set of community extensions called Ansible modules. With Ansible it is possible to install
+system dependencies in addition to Python dependencies.
 
 "The approach is characterized by scripting, rather than documenting, a
 description of the necessary dependencies for software to run, usually from the
 Operating System [...] on up" :cite:`Clark`
 
-
-With ansible you write a "playbook" that executes a set of tasks. It is
-generally expected that each task is idempotent.
-
-
-.. code-block:: yaml
-
-   - name: Install python3-virtualenvwrapper (Fedora)
-     package:
-     name:
-       - which
-       - python3-virtualenvwrapper
-     when:
-       - pulp_venv is defined
-       - ansible_distribution == 'Fedora'
-
-   - name: Create a virtualenv
-     command: 'python3 -m venv my_venv'
-     args:
-       creates: 'my_venv'
-     register: result
-
-   - pip:
-     name: scipy
-     version: 1.1.0
-
-
-Ansible is only as good as your playbook. To make your environment
-reproducible, your playbook has to follow best practices like pinning packages
-to a version. A default host OS also should be specified when the playbook is
-written: ansible uses separate plugins to install system dependencies, and to
-be multiplatform the researcher needs to do some ansible host checking to use
-the right plugins.
-
-Ansible playbook and roles are yaml files that can be called with:
-
-.. code-block:: bash
-
-    ansible-playbook playbook.yml
+Ansible tasks can be grouped into "Roles" and published to a community repository called "Ansible
+Galaxy". Pulp and pulp_ansible can be used to manage these roles. Researchers can use pulp_ansible
+to manage systems, and when used with pulp_python they are enabled to take another step toward
+complete reproducibility.
 
 Containers
 ----------
 
-Containers_ [1]_ "are technologies that allow you to package and isolate
-applications with their entire runtime environment—all of the files
-necessary to run." Applied to the scientific field this means that each
-container will contain an image of your system, a copy of your source code,
-installed dependencies, and data used. These are stored in a static file called
-an Image.
-
-This Image can be given to peer reviewers and other collaborators as a baseline
-to run your research. However the Image itself is opaque, and it is hard to
-tell what dependencies have been installed on the image without substantial
-inspection.  It is recommended that the Image is built from a Dockerfile for
-full transparency.
-
-A Dockerfile is a text document that contains all the commands a user could call
-on the command line to assemble an image
-[https://docs.docker.com/engine/reference/builder/].
-
-This example dockerfile creates an ubuntu image and installs scipy and numpy on
-it.
-
-.. code-block:: text
-
-   FROM ubuntu:16.04
-   RUN pip install scipy --hash=sha256:0db6301324d05680
-   89663ef2701ad90ebac\
-   0e975742c97460e89366692bd0563
-
-
-An Dockerfile can be built by running
-
-.. code-block:: bash
-
-   docker build
-
-
-Note that while the Docker image is immutable, running `docker build` on the
-same Dockerfile does not guarantee an identical image, unless best practices
-were followed.
-
-Dockerfiles can be kept in GitHub, and linked to DockerHub so that the
-image is rebuilt with every change to the Dockerfile. This is the best of both
-worlds- an immutable image is managed by DockerHub, but documentation on how
-that image was built is kept under version control.
-
-DockerHub identifies images by their digest, so the chance of collision is low.
-Sharing a DockerHub managed image can be done by providing your docker repository
-and a digest.
-
-.. code-block:: bash
-
-    docker pull internal-registry/my-project@sha256:b2ea
-    388fdbabb22f10f2e9ecccaccf9efc3a11fbd987cf299c79825a
-    65b62751
-
-
-The downside of Docker Images is that docker is high in entropy. The Docker
-Engine has no long-term support version [3]_.
-This could result in `docker load` suddenly not working [4]_ after upgrading
-the system docker to a later version.
-
-
-
-Environmental Managers
-======================
-
-No matter which tool you are working with, even if you follow the best
-practices, you are at the mercy of the upstream repository. For packages that
-are user managed and exist on 3rd party platforms, such as PyPI, content can be
-modified or removed making it difficult or impossible to guarantee
-reproducibility. The only way to guarantee reproducibility is to create and
-host your own repositories.
-
-Given all these tools one needs to manage, it be more efficient to do so
-from a centralized place. It is a lot easier to learn one tool, rather than a
-tool for each content type. Package management is inherently complicated.
-Each content type handles the complexities in a different way- usually tools
-are built and optimized for a single content type. Context switching between
-these tools consume human RAM cycles.
-
-There are a multitude of environmental managers each with their benefits and downsides,
-This paper will primarily focus on Pulp, and have a summary of other managers at the end.
-
-
-Pulp
-====
-
-Pulp is an open source repository manager[2]_ that can be used to create
-immutable computational environments that can be easily verified and shared.
-With Pulp you can host and manage multiple registries (think PyPI or Ansible
-Galaxy), each containing your packages and their dependencies.
-
-Pulp v.2 has plugins (python, rpm, docker, debian, ostree, puppet) and has been
-used in large production environments for about 4 years. Pulp v.2 is useful for
-owning a pipe, and versioned repositories can be implemented by the user.
-
-Pulp v.3 is currently in beta, and supports python and ansible plugins.
-Pulp v.3 natively versions repositories, which makes it ideal for careful
-management optimized for reproducibility.
-
-
-TODO: add a diagram illustrating these concepts
-
-Pulp stores *content units* (e.g. Python Wheel, Ansible Role) into collections
-called *repositories*.
-
-Repositories are versioned: content units (like Python Wheel, or Ansible Role)
-in Pulp are organized by their membership in repositories over time.
-Plugin users can add or remove content units to a repository by *uploading*
-them individually, or *syncing* from a remote source like PyPI.
-
-All content that is managed by Pulp can be hosted. Users create
-type-specific *publishers* that provide the settings necessary to generate a
-*publication* for a content set in a repository version. A publication
-consists of the metadata of the content set and the *artifacts* of each
-content unit in the content set. To host a publication, it must be assigned
-to a *distribution*, which determines how and where a publication is served.
-
-It is easy to add content types to pulp that is currently doesn't support, plugin
-development is easy and well documented. [5]_
-
-Architecture
-------------
-
-.. image:: pulp.png
-    :align: center
-    :alt: Architecture of Pulp
-
-
-Pulp’s architecture has four components to it. Each of these can be horizontally
-scaled independently for both high availability and/or additional capacity for
-that part of the architecture.
-
-
-1.  WSGI application
-    Pulp’s web application is served by one or more WSGI webservers. See the
-    WSGI Application docs for more info on deploying and scaling this component.
-
-2.  Task Runner
-    Pulp’s tasking system requires running rq. Additional rq workers can be
-    added to add capacity to the tasking system.
-
-3.  Database
-
-4.  Plugins
-    The content units Pulp manages is dependent on the plugins that are installed.
-
-
-Workflow to Manage Content
---------------------------
-
-TODO: diagram for this workflow.
-
-1. Set up a pulp repository to mirror a subset of packages from PyPI that
-are used by your lab.
-
-Create a Repository
-
-.. code-block:: bash
-
-    http POST http://trypulp.org/pulp/api/v3/repositories/
-    name=top-secret-project-dev
-
-
-.. code-block:: json
-
-    {
-       "_href": "http://trypulp.org/pulp/api/v3/repositories/
-       e81221c3-9c7a-4681-a435-aa74020753f2/",
-        ...
-    }
-
-
-Create a Remote Source
-
-.. code-block:: bash
-
-    http POST http://trypulp.org//pulp/api/v3/remotes/python/ \
-    name='pypi-secret-subset' \
-    url='https://pypi.org/' \
-    projects='{"name":"scipy", "version":"~=1.0.0"}'
-
-
-.. code-block:: json
-
-    {
-        "_href": "http://trypulp.org/pulp/api/v3/repositories/
-        e81221c3-9c7a-4681-a435-aa74020753f2/remotes/python/
-        3750748b-781f-48df-9734-df014b2a11b4/",
-        ...
-    }
-
-
-2. You can sync as often as you want, and publish as rarely as you want.
-
-Sync the remote source to the created repository
-
-.. code-block:: bash
-
-    http POST http://trypulp.org/pulp/api/v3/repositories/e81221c3-
-    9c7a-4681-a435-aa74020753f2/remotes/python/3750748b-781f-48df-
-    9734-df014b2a11b4/'sync/'
-    repository=http://trypulp.org/pulp/
-    api/v3/repositories/e81221c3-9c7a-4681-a435-aa74020753f2/
-
-
-Publish a repository
-
-.. code-block:: bash
-
-    http POST http://http://trypulp.org/pulp/api/v3/publishers/
-    python/fd4cbecd-6c6a-4197-9cbe-4e45b0516309/publish/'
-    repository=http://trypulp.org/pulp/api/v3/repositories/
-    e81221c3-9c7a-4681-a435-aa74020753f2/
-
-
-3. Your custom packages can be uploaded to Pulp and added to repositories.
-
-Upload an artifact
-
-.. code-block:: bash
-
-    http POST http://trypulp.org/pulp/api/v3/artifacts/
-    file@./top-secret-project-0.1-py2-none-any.whl
-
-
-.. code-block:: bash
-
-    {
-        "_href": "http://trypulp.org/pulp/api/v3/artifacts/
-        7d39e3f6-535a-4b6e-81e9-c83aa56aa19e/",
-        ...
-    }
-
-
-Create a manageable unit from the artifact
-
-.. code-block:: bash
-
-    http POST http://trypulp.org/pulp/api/v3/content/python/
-    packages/ artifact=http://trypulp.org/pulp/api/v3/
-    artifacts/7d39e3f6-535a-4b6e-81e9-c83aa56aa19e/
-    filename=top-secret-project-0.1-py2-none-any.whl
-
-
-.. code-block:: bash
-
-    {
-        "_href": "http://localhost:8000/pulp/api/v3/
-        content/python/packages/a9578a5f-c59f-4920-
-        9497-8d1699c112ff/",
-        ...
-    }
-
-
-Add your content to a repository
-
-.. code-block:: bash
-
-    http POST http://trypulp.org/pulp/api/v3/repositories/
-    e81221c3-9c7a-4681-a435-aa74020753f2/ add_content_units:=
-    "[\"http://localhost:8000/pulp/api/v3/content/python/
-    packages/a9578a5f-c59f-4920-9497-8d1699c112ff/"]"
-
-
-4. Create a publication and assign it to a distribution to host the repository.
-
-Create a publisher
-
-.. code-block:: bash
-
-     http POST http://trypulp.org/pulp/api/v3/pulp/api/v3/
-     publishers/python/
-     name=python-publisher
-
-
-.. code-block:: bash
-
-    {
-        "_href": "http://http://trypulp.org/pulp/api/v3/
-        publishers/python/fd4cbecd-6c6a-4197-9cbe-4e45b0516309/",
-        ...
-    }
-
-
-Publish the repository
-
-.. code-block:: bash
-
-    http POST http://http://trypulp.org/pulp/api/v3/
-    publishers/python/fd4cbecd-6c6a-4197-9cbe-4e45b0516309/
-    publish/' repository=http://trypulp.org/pulp/
-    api/v3/repositories/e81221c3-9c7a-4681-a435-aa74020753f2/
-
-
-Host (distribute) the repository
-
-.. code-block:: bash
-
-    http POST http://http://trypulp.org/pulp/api/v3/distributions/
-    name='dev' base_path='top-secret-development'
-    publication=http://trypulp.org/pulp/api/
-    v3/publications/b787e6ad-d6b6-4e3d-ab12-73eba19b42fb/
-
-
-5. Configure pip.conf to install dependencies from the distribution
-
-.. code-block:: bash
-
-    [global]
-    index-url = http://trypulp.org/pulp/content/top-secret-
-    development/simple/
-
-
-6. Update the repository periodically, changes are not served until giving you
-   control of when the dependencies might change.
-
-7. At crucial points, note the repository version so you can roll back if
-   necessary.
-
-Preservation
-------------
-
-1. As development comes to an end, use pip freeze or pipenv to get a curated
-list of specific packages. Create a new repository and add only this
-known good set to it.
-
-2. Publish the new repository and distribute it.
-
-3. This distribution URL can then be sent to collaborators, reviewers, and
-editors
-
-    .. code-block:: bash
-
-        http://trypulp.org/pulp/content/
-        top-secret-development/simple/
-
-
-Adding a Plugin to Pulp
------------------------
-
-
-
-Downsides to Using Pulp
------------------------
-
-There is no hosted instance of Pulp. An instance has to be set up by a
-individual or university.
-
-Other Environmental Managers
-----------------------------
-
-
-Future Work
------------
+Containers_ [1]_ "are technologies that allow you to package and isolate applications with their
+entire runtime environment—all of the files necessary to run." Containers are particularly well
+suited for reproducibility, each container contains a system image, a copy of source code,
+installed dependencies, and data to be used. These are stored in a static file called an Image.
+
+This Image can be shared with reviewers, collaborators, and reproducers, preserving a computational
+environment in its entirety. However the Image itself is opaque, and it is hard to tell what
+dependencies have been installed on the image without substantial inspection.  It is recommended
+that the Image is built from a Dockerfile or Ansible roles for full transparency.
+
+Docker images can also be managed by Pulp and pulp_docker, following workflows that are nearly
+identical to those of pulp_python.
+
+Extending Pulp with a new Plugin
+--------------------------------
 
 
 Summary
 =======
 
-For researches who use code in their methods, it is crucial to consider the
-reproducibility of the software environments they use. Excellent research can
-become nearly impossible to replicate because of the difficulty of maintaining
-a reliable dependency chain. By using the tools best practices developed for
-software engineering, researchers can take steps to prevent code entropy and
-preserve the efficacy of their work.
+For researches who use code in their methods, it is crucial to consider the reproducibility of the
+software environments they use. Excellent research can become nearly impossible to replicate
+because of the difficulty of maintaining a reliable dependency chain. By using the tools and best
+practices developed for software engineering, researchers can take steps to prevent code entropy
+and preserve the efficacy of their work.
 
 Acknowledgements
 ================
