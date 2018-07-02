@@ -620,7 +620,7 @@ compared to other distributed computing frameworks. On one hand, scaling
 charts like the ones in Figures :ref:`fig.nargsscaling`,
 :ref:`fig.syssizescaling`, and :ref:`fig.mribenchmark` are important because
 they show potential users the relative cost in execution time of using
-Cloudknot in comparison to other distributed computing platforms.
+Cloudknot compared to other distributed computing platforms.
 
 On the other hand, the timing results in this paper, indeed most
 benchmark results in general, measure the bare execution time, capturing
