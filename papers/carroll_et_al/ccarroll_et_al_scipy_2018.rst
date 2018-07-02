@@ -56,7 +56,9 @@ valuable research time. The Econ-ARK project addresses these concerns by providi
 a set of well-documented code modules that can be composed together to solve a 
 range of heterogeneous-agent models. Methodological advances in the computational 
 literature allow many types of models to be solved using similar approaches.
-The Econ-ARK project simply brings these pieces together in one place.
+The Econ-ARK project simply brings these pieces together in one place. HARK is 
+written in Python 2.7, with a pull request underway at the time of this writing 
+to make it fully compatible with both Python 2.7 and 3.6.
 
 
 Relation to Other Scientific Fields
@@ -116,9 +118,7 @@ such as physics and ecology.
 
 The Heterogeneous-Agent Resources toolKit (HARK) is a modular
 programming framework for solving, estimating, and simulating
-macroeconomic models with heterogeneous agents. HARK is written in Python 2.7, 
-with a pull request underway at the time of this writing to make it fully 
-compatible with both Python 2.7 and 3.6. Agents in HARK can be heterogeneous in 
+macroeconomic models with heterogeneous agents. Agents in HARK can be heterogeneous in 
 a large number of ways, such as in wealth, income processes, preferences, or 
 expectations. Models with heterogeneity among agents have
 proven to be increasingly useful for policy and research purposes. 
