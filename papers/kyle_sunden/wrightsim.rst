@@ -33,6 +33,8 @@
     To our knowledge, ``WrightSim`` is the first openly licensed software package for these kinds of simulations.
     Potential further improvements are discussed.
 
+.. class:: keywords
+    Simulation, spectroscopy, PyCUDA, numerical integration, Quantum Mechanics, multidimensional
 
 Introduction
 ============
