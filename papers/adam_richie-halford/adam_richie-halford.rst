@@ -436,7 +436,7 @@ for a larger range of argument sizes.
    for Pywren, the default Cloudknot configuration, and a Cloudknot
    configuration with more available vCPUs. Pywren outperforms Cloudknot
    in all cases. We posit that the additional overhead associated with
-   building the Docker image, along with EC2 service limits limited
+   building the Docker image, along with EC2 service limits affected
    Cloudknot's throughput.
    :label:`fig.nargsscaling`
 
