@@ -420,3 +420,10 @@ Motivated by the need for managing the dynamic, heterogeneous data spaces charac
 The framework has strived to achieve high ease of use and interoperability by emphasizing simple interfaces, minimizing external requirements, and employing open data formats like JSON.
 By doing so, the framework aims to minimize the initial barriers for new users, making it easy for researchers to begin using ``signac`` with little effort.
 The framework frees computational scientists from repeatedly solving common data and workflow problems throughout their research, and at a higher level, reduces the burden of data sharing and provenance tracking, both of which are critical to accelerating the production of reproducible and reusable scientific results.
+
+Acknowledgments
+---------------
+We would like to thank all contributors to the development of the framework's components, J.A. Anderson, M.E. Irrgang and P. Damasceno for fruitful discussion, feedback and support, and B. Swerdlow for his contributions and feedback and coming up with the name.
+We would also like to thank all early adopters that provided feedback and thus helped in guiding and improving the development process.
+Development and deployment supported by MICCoM, as part of the Computational Materials Sciences Program funded by the U.S. Department of Energy, Office of Science, Basic Energy Sciences, Materials Sciences and Engineering Division, under Subcontract No. 6F-30844.
+Project conceptualization and implementation supported by the National Science Foundation, Award # DMR 1409620.
