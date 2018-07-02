@@ -16,18 +16,16 @@ Pulp as a Tool to create Reproducible Environments
 
 .. class:: abstract
 
-   Trustworthy results require reproducibility. Publishing source code is
-   necessary but not sufficient for complete reproducibility since complex
-   programs often depend on external code. Techniques and tools for managing
-   complex environments include but are not limited to requirements.txt files,
-   docker images, and ansible roles. These tools are necessary to create
-   reproducible environments, but managing these tools require different
-   techniques and workflows.
+   Trustworthy results require reproducibility, which must include the full computational
+   environment used to produce and analyze the data.  Publishing source code is necessary but not
+   sufficient for complete reproducibility because complex software often depends on external code.
+   Various techniques and tools can be used to manage environments, but each has inherrent
+   limitations and none are well suited for all situations. Additionally, each tool has distinct
+   workflows, assumed knowledge, and interface.
 
-   This talk seeks to provide an overview to the basic tools to manage
-   environments, including workflows, best practices, and potential
-   downfalls.This also provides and overview to Pulp_ as a way to
-   manage and maintain maintain reproducible computational environments.
+   This talk provides an overview to the basic concepts and tools to manage environments optimized
+   for reproducibility with a focus on best practices for managing reproducible Python environments
+   with an open source package-agnostic repository manager called Pulp_.
 
    Attendees of any skill level can come learn best practices for creating
    reproducible environments, and managing them with Pulp.
@@ -41,7 +39,71 @@ Pulp as a Tool to create Reproducible Environments
 Introduction
 ============
 
+Reliability of research, and therefore reproducibility, is the backbone of cummulative knowledge,
+and it has been identified as a bottleneck for efficient scientific progress.[citation needed] Open
+data, reproducibility incentives, and comprehensive experimental procedures are all key areas for
+improvement[citation], but the subtle problem of environmental reproducibility is in need of more
+attention. Because software is an integral part of modern science, software distrubution and its
+fundamental problems of environmental differences and code entropy impact researchers directly.
+Fortunately for scientists, software development as a whole has comparable needs. For each software
+ecosystem, tools and best practice workflows have been developed to encourage rapid development,
+simplify maintainance, and improve long term stability.  This paper will demonstrate how to apply
+software industry workflows to research code, focusing on the Pulp project and the Python
+community.
 
+Software Packaging Basics
+=========================
+
+Software packaging and distribution is an inherrently complex problem domain because software is
+dependent on other software. Ensuring that code can be installed with compatible requirements is a
+fundamental problem in the packaging domain. The needs of users, developers, and administrators
+frequently interfere, leading to increasingly complex solutions. Various communities (often formed
+around a single programming language) address the problem with their own tool set and workflows, each
+optimizing for a different balance of needs. Rapid evolution within these communities can increase
+the already significant learning curve, and it can be difficult to keep up, especially for those
+with an unrelated primary interest.
+
+Broadly, there have been two high level approaches to packaging, and comparing them is useful to
+demonstrate the challenges to improving environmental reproducibility (TODO define?). The simplest
+approach, (which will be refered to as "monolithic"), is to bundle code with all dependencies and
+distribute it together as a single software package. This pattern is most common for user-centric
+platforms like Windows and OSX. Monolithic packages are simple to install, but can sacrifice
+transparency and flexibility for initial user convenience. The administrators and the developers
+become responsible for maintanance of the whole environment. For cross-platform applications,
+packages may need to be built for every combination of hardwares, operating systems, and language
+versions. This process can be difficult and time consuming, leading to long development cycles and
+infrequent updates. This pattern is leads to chronicly outdated software, and when security is an
+important consideration, it can be costly to compensate.
+
+A different approach commonly used by Linux communities is called the "modular" approach. Code is
+packaged independently and any dependencies are resolved at installation time, usually with the
+aid of a smart package manager. This pattern allows each component to be maintained and updated on
+its own schedule, and the entire ecosystem tends to stay current. Project maintainers do not need
+to be directly involved in every dependency update, but the responsibility of the user is
+increased. Especially for software with complex dependency trees, this pattern can lead to
+dependency conflicts which can be notoriously difficult to resolve. Some communities, (e.g. Fedora)
+offer an additional component to address this problem, curated repositories. Curated repositories
+can be thought of as a hybrid approach; the community as a whole maintains the interoperability of the
+software in the repository, releaving some of the user respoonsibility. However, this
+option also has problems; it can be less flexible because projects need to use dependency versions
+that are available in specific repositories. This can be particularly troublesome for developers
+when different repositories have different major versions of software. [seealso: semver] Because
+code is run with different dependency versions in different environments, reproducibility is hard
+to guarantee, particularly across platforms.
+
+Python Packaging Ecosystem
+==========================
+[
+  Introduce the ecosystem
+  Explain tools and the workflows that use them
+  Demonstrate problems, and if necessary, add a little history
+  From the gaps, lead to introduction ofPulp
+]
+
+
+
+
+## Reproducibility of a Computational Environment
 Trustworthy results require reproducibility. Publishing code is necessary but
 not sufficient for complete reproducibility. Complex programs often depend on
 external code. “An article […] in a scientific publication is not the
@@ -50,6 +112,7 @@ scholarship is the complete software development environment and the complete
 set of instructions which generated the figures” :cite:`Buckheit` .
 
 
+#### Can I just publish the source code?
 Scholarly research containing descriptions of methodology is no longer
 sufficient.  For standalone scripts, publishing source code might be
 acceptable, but as computational systems grow more complex, this method becomes
@@ -59,6 +122,7 @@ learning. This "has led to an ever larger and more complex black box between
 what was actually done and what is described in literature." :cite:`Boettiger`
 
 
+#### Hello, Pulp
 Fortunately, this is a common problem and there are a number of best practices
 and tools that can make this easier. However these tools require different
 techniques and workflows to manage. This talk seeks to summarize these tools
@@ -98,11 +162,41 @@ Two factors have to be considered when we think about published environments:
 A good tool, and management system will balance reproducibility and
 code entropy.
 
+## Packaging: Lots of problems lots of flawed solutions
+
+#### Stand-alone packages
+   examples
+   benefits and drawbacks
+   workflows
+
+#### Modular packages
+   examples
+   benefits and drawbacks
+   workflows
+
+   Depsolving
+   Updates
+   Depenency hell
+
+#### Python Packaging
+
+- modular
+- flaws list ( go deeper into modular problems )
+    - metadata
+    - python vs system packages
+    - lack of curation
+    - People who pronounce it "Pie Pie", ugh
+- depsolving and dependency hell
+
+
+
+
 Existing Tools and Techniques
 =============================
 
 This is a quick introduction to the existing tools used to create reproducible environments.
 
+# move to intro
 Published Source Code
 ---------------------
 
