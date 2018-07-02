@@ -71,11 +71,14 @@ workflows and how to build better models.
 A Bayesian Workflow
 -------------------
 
-We present a Bayesian workflow for statistical modeling. We recognize that each
-project is unique and the research process can be too complex to summarize
-in a recipe-style list. However, we believe that following a workflow, such as
-suggested here, can help researchers, especially beginners. We have found that
-setting up a workflow increases productivity. It also helps make research
+We present a Bayesian workflow for statistical modeling. We recognize that the
+research process is too complex to summarize in a recipe-style list. However,
+we find that there are a few building blocks that are common to every Bayesian
+statistical analysis. In this paper, we focus on these and break them down to
+a few basic steps. To avoid over-simplification, we hint to possible
+connections with more advanced aspects where appropriate. We believe that
+following a workflow, such as suggested here, can help researchers avoid
+mistakes and increase productivity. It also helps make research
 projects more reproducible, as we discuss in the last section.
 
 We propose a simple workflow made of the following steps:
