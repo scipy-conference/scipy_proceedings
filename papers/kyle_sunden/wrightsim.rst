@@ -663,6 +663,8 @@ highly parallelizable, enabling easy CPU level parallelism. A new
 implementation provides further improvement than the CPU parallel code,
 taking advantage of the General Purpose-GPU Computation CUDA library. This implementation
 provides approximately 2.5 orders of magnitude improvement over the
-existing ``NISE`` serial implementation. There are still ways that this
-code can be improved, both in performance and functionality, but it is a
-truly amazing start to this project.
+existing ``NISE`` serial implementation.
+There are still ways that this code can be improved, both in performance and functionality.
+With ``WrightSim``, we aim to lead by example among the spectroscopic community by providing an open-source package for general-purpose MDS simulation.
+
+
