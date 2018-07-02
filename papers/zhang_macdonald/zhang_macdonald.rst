@@ -20,7 +20,7 @@ Reproducible Environments for Reproducible Results
    environment used to produce and analyze the data. Creating perfectly reproducible
    environments is difficult because of fundamental challenges in the software packaging
    domain, and understanding these problems is necessary to mitigate them. Focusing on the Python
-   ecosystem and a univeral package manager called Pulp_, this paper explores various approaches
+   ecosystem and a universal package manager called Pulp_, this paper explores various approaches
    to software packaging and distribution from the angle of reproducibility.
 
 
@@ -57,7 +57,7 @@ the already significant learning curve, and it can be difficult to keep up, espe
 with an unrelated primary interest.
 
 Broadly, there have been two high level approaches to packaging, and comparing them is useful to
-demonstrate the challenges to improving environmental reproducibility (TODO define?). The simplest
+demonstrate the challenges to improving environmental reproducibility. The simplest
 approach, (which will be referred to as "monolithic"), is to bundle code with all dependencies and
 distribute it together as a single software package. This pattern is most common for user-centric
 platforms like Windows and OSX. Monolithic packages are simple to install, but can sacrifice
@@ -75,12 +75,12 @@ its own schedule, and the entire ecosystem tends to stay current. Project mainta
 to be directly involved in every dependency update, but the responsibility of the user is
 increased. Especially for software with complex dependency trees, this pattern can lead to
 dependency conflicts which can be notoriously difficult to resolve. Some communities, (e.g. Fedora)
-offer an additional component to address this problem, curated repositories. Curated repositories
+offer an additional component to address this problem; curated repositories. Curated repositories
 can be thought of as a hybrid approach; the community as a whole maintains the interoperability of the
 software in the repository, relieving some of the user responsibility. However, this
 option also has problems; it can be less flexible because projects need to use versions of dependencies
 that are available in specific repositories. This can be particularly troublesome for developers
-when different repositories have different major versions of software. [seealso: semver] Because
+when different repositories have different major versions of software (see semver_). Because
 code is run with different dependency versions in different environments, reproducibility is hard
 to guarantee, particularly across platforms.
 
@@ -97,12 +97,13 @@ to isolate installed Python projects (along with their dependencies), which allo
 install software which might otherwise have conflicts. Additionally, each virtualenv can use a
 different Python version, which frees users from the restrictions of system-wide installations.
 
-The current best practice for indicating dependencies is to list them in a `requirements.txt` [TODO
-link] file, which is used by pip or comparable tools at installation time. This file offers some
-powerful options to promote stability, and if used carefully, it can be used to ensure a degree
+The current best practice for indicating dependencies is to list them in a requirements_
+file, which is used by pip or comparable tools at installation time. This file offers some
+powerful options to promote stability. If used carefully, it can be used to ensure a degree
 of reproducibility. Each requirement specifier can be "pinned" to an exact version (or even hash)
 of a dependency. If more flexibility is needed, `requirements.txt` can specify minimum versions, or
-even be configured to install the most recent version that maintains backwards compatibility.
+even be configured to install the most recent version that maintains backwards semantic version
+compatibility.
 
 During development, keeping dependencies flexible is ideal because the latest versions of a
 dependency will have a longer life before they become obsolete. However, after development is
@@ -114,8 +115,8 @@ another. The risk that subtle changes could affect the results is too great, so 
 that researchers pin their versions.
 
 
-Published Source Code
----------------------
+A Basic Workflow with Python and Git
+------------------------------------
 
 Scholarly research containing descriptions of methodology is no longer sufficient. For standalone
 scripts, publishing source code might be acceptable, but as computational systems grow more
@@ -128,21 +129,21 @@ Using an online git repository is a great way to keep track of source code :cite
 git you can easily track changes to data and software. Git identifies commits by a unique hash,
 which can be used to reference a specific point in the source code, practically guaranteeing the
 correct bits. This approach is incomplete however, because git lacks the ability to do
-environmental management, it is not a package manager. System dependencies in git can only be
+environmental management; it is not a package manager. System dependencies in git can only be
 documented-- it is the responsibility of the user to determine if the entire environment is
 identical, and the documentation may not contain enough information to verify. Instead, we
-recommend using git to store source code in addition to a package manager.
+recommend a package manager to resolve dependencies, and git as a storage of source code.
 
-Python requirements files can also specify urls to import packages from a variety of version
-control systems, including git. When combined with virtual environments, developers can implement a
-clever workflow that treats a git as a personally curated repository. This gives developers a
-significant amount of control over their dependency pipeline, but can be difficult to manage. One
-problem is that because all requirements are pinned in the project source, dependency updates have
-similar difficulties as monolithic packages-- any dependency update requires a new version for the
-whole project. This control also requires the maintainers to be actively engaged in each of the
-dependencies to know when updates are necessary. Also like monolithic packages, security is a
-concern because the maintainers may not be able to rerelease, or they may not be aware of important
-patches.
+Python interoperates well with Git. Python requirements files can specify urls to import packages
+from a variety of version control systems, including git. When combined with virtual environments,
+developers can implement a clever workflow that treats a git as a personally curated repository.
+This gives developers a significant amount of control over their dependency pipeline, but can be
+difficult to manage. One problem is that because all requirements are pinned in the project source,
+dependency updates have similar difficulties as monolithic packages-- any dependency update requires
+a new version for the whole project. This control also requires the maintainers to be actively
+engaged in each of the dependencies to know when updates are necessary. Also like monolithic
+packages, security is a concern because the maintainers may not be able to re-release, or they
+may not be aware of important patches.
 
 A general concern with most packaging workflows is dependence on 3rd party services. These services
 can go down or introduce backwards incompatible changes. Some services, like PyPI allow package
@@ -159,29 +160,73 @@ in its ecosystem, another ecosystem with a different tool set may not fit the st
 way, and will also come with a new learning curve.
 
 An alternative to the eclectic strategies native to various ecosystems is a universal package
-manager like Pulp. Pulp is a fully open source Python project that manages packages of any type by
+manager like Pulp [2]_. Pulp is a fully open source Python project that manages packages of any type by
 leveraging a plugin architecture. With the python plugin, for example, Pulp is able to
 fetch content from PyPI and publish content that can be consumed by pip_, allowing Pulp users to
 implement reproducibility focused workflows that transfer across packaging ecosystems.
 
-Pulp 3, which recently entered beta offers additional features that simplify reproducibility, such
+Pulp v3, which recently entered beta offers additional features that simplify reproducibility, such
 as versioned repositories and immutable publications. When combining Pulp 3's promotion/rollback
 workflows with the strategies discussed above, researchers can achieve the rigorous stability of
 monolithic packages/curated repositories (via a hosted, immutable publication) and the flexibility
 and short development cycle of a community repository like PyPI. Pulp users host their own servers,
 and therefore own their entire dependency pipeline.
 
+
+Pulp Concepts
+-------------
+
+Pulp stores *content units* (e.g. Python Wheel, Ansible Role) into collections
+called *repositories*.
+
+Repositories are versioned: content units (like Python Wheel, or Ansible Role)
+in Pulp are organized by their membership in repositories over time.
+Plugin users can add or remove content units to a repository by *uploading*
+them individually, or *syncing* from a remote source like PyPI.
+
+All content that is managed by Pulp can be hosted. Users create
+type-specific *publishers* that provide the settings necessary to generate a
+*publication* for a content set in a repository version. A publication
+consists of the metadata of the content set and the *artifacts* of each
+content unit in the content set. To host a publication, it must be assigned
+to a *distribution*, which determines how and where a publication is served.
+
+Architecture
+------------
+
+.. image:: pulp.png
+    :align: center
+    :alt: Architecture of Pulp
+
+
+Pulp’s architecture has four components to it. Each of these can be horizontally
+scaled independently for both high availability and/or additional capacity for
+that part of the architecture.
+
+1.  WSGI application
+    Pulp’s web application is served by one or more WSGI webservers. See the
+    WSGI Application docs for more info on deploying and scaling this component.
+
+2.  Task Runner
+    Pulp’s tasking system requires running rq. Additional rq workers can be
+    added to add capacity to the tasking system.
+
+3.  Database
+
+4.  Plugins
+    The content units Pulp manages is dependent on the plugins that are installed.
+    To manage python packages (eggs, wheels, sdists) the pulp_python plugin must be installed.
+
+
 Example Workflow
 ================
 
-With the rich feature set provided by the Python ecosystem and the powerful workflows enabled by
-Pulp, it is necessary to demonstrate how they can be used together to achieve flexible development
-while also ensuring reproducibility. This section discusses workflows at a very high level and
-does not include all steps for brevity. The Pulp documentation should be referenced for
-comprehensive workflows and specific commands.
+The rich feature set provided by the Python ecosystem and the powerful workflows enabled by
+Pulp can be used in conjunction to achieve flexible development while also ensuring reproducibility.
+This section discusses workflows at a very high level and does not include all steps for brevity.
+The Pulp documentation should be referenced for comprehensive workflows and specific commands [3]_.
 
-When developing a new tool, it is ideal to work with the latest versions of dependencies. A Pulp
-server can be set up and configured to fetch these dependencies from PyPI, and pip can be
+A Pulp server can be set up and configured to fetch the latest dependencies from PyPI, and pip can be
 configured to install from a hosted Pulp publication. Each time Pulp fetches new content, it
 creates a new repository version. Development is never blocked because the administrator can
 instantly (without downtime) roll back to a stable version whenever there is a problem.
@@ -251,6 +296,14 @@ identical to those of pulp_python.
 Extending Pulp with a new Plugin
 --------------------------------
 
+Pulp does not manage content itself, but instead relies on plugins to add support for one
+content type or another. Research labs with custom package types can create a plugin for Pulp
+to manage those artifacts. A basic plugin can be created by defining the custom content type.
+Just by defining the basic content type, the lab gains the ability to upload content, and manage
+it through curated repositories. More complex features such as syncing from a remote source,
+dependency solving, and custom publications can be optionally added for a feature rich
+content management platform. Plugin development is well documented [4]_, and the pulp_plugin package
+is semantically versioned.
 
 Summary
 =======
@@ -292,11 +345,9 @@ References
 .. [2] There are several closed sourced alternatives; Artifactory and Nexus are
     the two that are most commonly used.
 
-.. [3] https://github.com/moby/moby/issues/20424
+.. [3] pulp_python workflows, http://pulp-python.readthedocs.io/en/latest/workflows/sync/
 
-.. [4] https://github.com/moby/moby/issues/20380
-
-.. [5] https://docs.pulpproject.org/en/3.0/nightly/plugins/plugin-writer/index.html
+.. [4] https://docs.pulpproject.org/en/3.0/nightly/plugins/plugin-writer/index.html
 
 .. [#Pulp] Pulp Project, 2018, A Red Hat Community Project, https://pulpproject.org/
 
@@ -304,11 +355,8 @@ References
 
 .. [#requirements] requirements.txt, 2008-2017, PyPA, https://pip.readthedocs.io/en/1.1/requirements.html
 
-.. [#pipenv] pipenv, Kenneth Reitz, https://docs.pipenv.org/
-
 .. [#Ansible] Ansible, 2018, Red Hat, Inc, https://www.ansible.com/
 
 .. [#Containers] containers, 2018 Red Hat, Inc, https://www.redhat.com/en/topics/containers
 
-.. [#concepts] concepts, 2018, A Red Hat Community Project,
-    https://docs.pulpproject.org/en/3.0/nightly/overview/concepts.html
+.. [#semver] semver, Semantic Versioning 2.0.0, https://semver.org/
