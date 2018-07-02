@@ -34,6 +34,7 @@
     Potential further improvements are discussed.
 
 .. class:: keywords
+
     Simulation, spectroscopy, PyCUDA, numerical integration, Quantum Mechanics, multidimensional
 
 Introduction
