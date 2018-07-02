@@ -53,14 +53,14 @@ For social scientists in a wide variety of disciplines, neighborhoods are
 central thematic topics, focal units of analysis, and first-class objects of
 inquiry. Despite their centrality in public health, sociology, geography, political
 science, economics, psychology, and urban planning, however, neighborhoods
-remain understudied because researchers lack appropriate analytical tools for
-understanding their evolution through time and space. Towards this goal we are
-developing the *open source longitudinal neighborhood analysis program*
-``(OSLNAP)``. We envisage OSLNAP as a toolkit for better, more open and
-reproducible science focused on neighborhoods and their sociospatial ecology. In
-this paper we first provide an overview of the main components of OSLNAP. Next,
-we present an illustration of selected OSLNAP functionality. We conclude the
-paper with a road map for future developments.
+remain understudied. One of the reasons for that is because researchers lack
+appropriate analytical tools for understanding neighborhood evolution through time and
+space. Towards this goal we are developing the *open source longitudinal
+neighborhood analysis program* ``(OSLNAP)``. We envisage OSLNAP as a toolkit for
+better, more open and reproducible science focused on neighborhoods and their
+sociospatial ecology. In this paper we first provide an overview of the main
+components of OSLNAP. Next, we present an illustration of selected OSLNAP
+functionality. We conclude the paper with a road map for future developments.
 
 OSLNAP
 ------
@@ -162,7 +162,7 @@ To overcome the issues outlined above, ``OSLNAP`` provides a suite of
 methods for conducting areal interpolation and boundary
 harmonization in the ``harmonize`` module. It leverages ``geopandas``
 and ``PySAL`` for managing data and performing geospatial operations,
-and the pydata stack for attribute calculations :cite:`rey2009`. The
+and the PyData stack for attribute calculations :cite:`rey2009`. The
 ``harmonize`` module allows a researcher to specify a set of input data
 (drawn from the space-time database described in the prior section), a
 set of target geographic units to remain constant over time, and an
@@ -174,22 +174,15 @@ researcher may wish to treat rates and counts separately, but also
 because different auxiliary information might be applicable for
 different types of variables.
 
-In a prototypical workflow, ``harmonize`` permits the end-user to:
-
--  compile and query a spatiotemporal database using either local data or
-   connections to  pubilic data services
-
-   -  queries may have spatial, temporal, and attribute filters
-
--  define the relevant variables to be harmonized and optionally apply a
-   different (spatial and/or temporal) interpolation function to each;
--  harmonize temporal data to consistent spatial units by either:
-
-   -  selecting an existing native unit (e.g. zip codes in 2016)
-   -  inputting a user-defined unit (e.g. a theoretical or newly
-      proposed boundary)
-   -  developing new primitive units (e.g. the intersection of all
-      polygons)
+In a prototypical workflow, ``harmonize`` permits the end-user to carry out a
+number of tasks: [a] compile and query a spatiotemporal database using either
+local data or connections to public data services; [b] define the relevant
+variables to be harmonized and optionally apply a different (spatial and/or
+temporal) interpolation function to each; [c]  harmonize temporal data to
+consistent spatial units by either selecting an existing native unit (e.g. zip
+codes in 2016), inputting a user-defined unit (e.g. a theoretical or newly
+proposed boundary), or developing new primitive units (e.g. the intersection of
+all polygons).
 
 
 Neighborhood Identification
@@ -238,21 +231,23 @@ and PySAL :cite:`Rey14`. Using input from the Data Layer, the ``cluster`` module
 allows researchers to develop neighborhood typologies based on either attribute
 similarity (the geodemographic approach) or attribute similarity with
 incorporated spatial dependence (the regionalization approach). Given a
-space-time data set, the ``cluster`` module allows users to cluster (a) a single
-time period, (b) a set of time periods cross-sectionally, or (c) a set of
-periods pooled as a time series. In (b), neighborhood clusters are independent
-from one time period to the next. This can be a useful approach if researchers
-are interested in the durability and permanence of certain kinds of
-neighborhoods. If similar types reappear in multiple cross sections (e.g. if the
-k-means algorithm places the k-centers in approximately similar locations each
-time period), then it may be inferred that the metropolitan dynamics are
-somewhat stable, at least at the macro level, since new kinds of neighborhoods
-do not appear to be evolving and old, established neighborhood types remain
-prominent. The drawback of this approach is the type of a single neighborhood
-cannot be compared between two different time periods because the types are
-independent in each period.
+space-time data set, the ``cluster`` module permits three different treatments
+of time when defining neighborhoods. The first focuses on the case where only a
+single cross-section is available, and the clustering is carried out to define
+neighborhoods for that one point in time. In the second case, multiple waves or
+periods of observations are available and the clustering is repeated for each
+time slice of observations. This can be a useful approach if researchers are
+interested in the durability and permanence of certain kinds of neighborhoods.
+If similar types reappear in multiple cross sections (e.g. if the k-means
+algorithm places the k-centers in approximately similar locations each time
+period), then it may be inferred that the metropolitan dynamics are somewhat
+stable, at least at the macro level, since new kinds of neighborhoods do not
+appear to be evolving and old, established neighborhood types remain prominent.
+The drawback of this approach is the type of a single neighborhood cannot be
+compared between two different time periods because the types are independent in
+each period.
 
-In the third approach (c), clusters are defined from all observations in all
+In the third approach, clusters are defined from all observations in all
 time periods. The universe of potential neighborhood types is held
 constant over time, the neighborhood types are consistent across time periods,
 and researchers can examine how particular neighborhoods get classified into
@@ -270,27 +265,16 @@ applied . Beyond these, however, it also provides wrappers for several
 of state-of-the art algorithms that have recently been developed
 :cite:`wolf2018`.
 
-In a prototypical workflow, ``cluster`` permits the end-user to:
-
--  query the (tidy) space-time dataset created via the ``harmonize``
-   module
-
-   -  queries may have spatial, temporal, and attribute filters
-
--  define the neighborhood attributes and time periods and on which to
-   develop a typology
--  run one or more clustring algorithms on the space-time dataset to
-   derive neighborhood cluster membership
-
-   -  clustering may be applied cross-sectionally or on the pooled
-      time-series
-   -  clustering may incorporate spatial dependence, in which case
-      ``cluster`` provides options for users to parameterize a spatial
-      contiguity matrix
-
--  clustering results may be reviewed quickly via the builtin ``plot()``
-   method, or interactively by leveraging the planned ``geovisualization``
-   module.
+In a prototypical workflow, ``cluster`` permits the end-user to: [a] query the
+(tidy) space-time dataset created via the ``harmonize`` module; [b] define the
+neighborhood attributes and time periods and on which to develop a typology; [c]
+run one or more clustering algorithms on the space-time dataset to derive
+neighborhood cluster membership.  Clustering may be applied cross-sectionally
+or on the pooled time-series,  and clustering may incorporate spatial dependence, in
+which case ``cluster`` provides options for users to parameterize a spatial
+contiguity matrix.  Clustering results may be reviewed quickly via the built-in
+``plot()`` method, or interactively by leveraging the planned
+``geovisualization`` module.
 
 Longitudinal Analysis
 =====================
@@ -309,7 +293,7 @@ processes and the interaction between these processes and geographic structure.
 
 Both sets of analytics operate on time series of neighborhood types; they each take
 as input a set of spatial units of analysis (e.g. census tracts) that have
-been assigned a categorical variable for each point in time (e.g.the output of
+been assigned a categorical variable for each point in time (e.g. the output of
 the ``cluster`` module). They differ, however, in how the time series
 are modeled and analyzed. The first set centers on *transition analysis*, which
 treats each time series as stochastically generated from time point to time
@@ -355,50 +339,31 @@ happening in a particular order :cite:`delmelle2016`.
 It should be noted here that the operation costs are not necessarily
 identical. Rather, they can be manipulated so that the resulted similarity
 measure reflects the exact characteristics of the neighborhood sequence we are
-interested in. For example, the cost of substution may capture units' socioeconomic
+interested in. For example, the cost of substitution may capture units' socioeconomic
 dissimilarity in contemporary experience :cite:`li2018` while operations
 including insertion, deletion and
 transposition can be assigned such an expensive cost that it is highly unlikely
 they will be allowed in the OM process .
-We allows for various cost functions and further extend the definition
+We allow for various cost functions and further extend the definition
 of operation costs to incorporate potential spatial
 dependence and spatial heterogeneity.
 
-In a prototypical workflow, the ``change`` module permits the end user to explore
-the nature of neighborhood change:
-
-.. raw:: latex
-
-   \begin{itemize}
-        \item from a dynamic perspective (\textit{transition analysis})
-             \begin{itemize}
-             \item by applying a first-order Markov chain model to look at probabilities of
-   transitioning between neighborhood types over time.
-             \item by applying a spatial Markov chains model to interrogate the role of
-   spatial interactions in shaping neighborhood dynamics.
-             \item by applying a spatial regime Markov chains model to explore spatially
-   heterogeneous neighborhood dynamics.
-             \end{itemize}
-        \item from a holistic perspective (\textit{sequence analysis})
-             \begin{itemize}
-             \item by applying the OM algorithm with chosen cost functions for
-   substitution, insertion, deletion and transposition.
-             \item by applying the spatially explicit OM algorithm which takes
-   account of potential spatial dependence and spatial heterogeneity in the operation
-   costs.
-             \end{itemize}
-        \item from a combined holistic \& dynamic perspective
-             \begin{itemize}
-             \item by incorporating the similarity matrix produced by the
-   \textit{sequence analysis} in the \textit{transition analysis} to explore
-   potential interactions and heterogeneity in the underlying dynamics of
-   neighborhood change.
-             \item by incorporating the transition matrix or matrices (from
-   spatial extensions to a Markov chain model) produced by the
-   \textit{transition analysis} in the \textit{sequence analysis} to better
-   cost functions of operations.
-             \end{itemize}
-   \end{itemize}
+In a prototypical workflow, the ``change`` module permits the end user to
+explore the nature of neighborhood change. From a dynamic perspective,
+\textit{transition analysis} can be used to apply a first-order Markov chain
+model to look at probabilities of transitioning between neighborhood types over
+time. It also supports the use of a spatial Markov chains model to interrogate
+the role of spatial interactions in shaping neighborhood dynamics or the
+application of a spatial regime Markov chains model to explore spatially
+heterogeneous neighborhood dynamics. From a holistic perspective,
+(\textit{sequence analysis}) involves the application of the OM algorithm with
+chosen cost functions for substitution, insertion, deletion and transposition,
+by applying the spatially explicit OM algorithm which takes account of potential
+spatial dependence and spatial heterogeneity in the operation costs.
+Finally, a combined holistic \& dynamic perspective is gained by incorporating
+the similarity matrix produced by the \textit{sequence analysis} in the
+\textit{transition analysis} to explore potential interactions and heterogeneity
+in the underlying dynamics of neighborhood change.
 
 
 
@@ -564,7 +529,7 @@ Despite the fact that clusters are independent from one year to the next
 SKATER results for each year) comparing the results over time
 nonetheless yield some interesting insights. Regardless of the changing
 spatial and demographic structure of the Los Angeles region, some of the
-of the neighborhood boundaries identified are remarkably stable, such as
+neighborhood boundaries identified are remarkably stable, such as
 the area of concentrated affluence in Beverly Hills and its nearby
 communities that jut out to the region’s West. Conversely, there is
 considerable change among the predominantly minority communities in the
@@ -582,7 +547,7 @@ people and places.
 In each of the sample analyses presented above, we use ``OSLNAP`` to
 derive a set of neighborhood clusters or types that can be used to
 analyze the demographic makeup of places over time. In some cases, these
-maps can serve as foundations for descriptive analyses or analyzed as
+maps can serve as foundations for descriptive analyses or be analyzed as
 research projects in their own right. In other cases, in which social
 processes rather than the demographic makeup of communities are the focus
 of study, the neighborhood types derived here can be used as input to
@@ -618,13 +583,13 @@ the maximum likelihood estimator for the first-order Markov transition
 probability as shown in Equation (:ref:`mle`), a :math:`(k,k)` transition
 probability matrix can thus be constructed providing the insights in the
 underlying dynamics of neighborhood change. The :math:`(6,6)` and the
-:math:`(14,14)` transition probability matrices for ward and affinity
+:math:`(14,14)` transition probability matrices for Ward and affinity
 propagation clusters are estimated and visualized in Fig. :ref:`f:wardapm` where
 the color in grid :math:`(i,j)` represents the probability of transitioning from
 neighborhood type :math:`i` to :math:`j` in the next census year. It is obvious
 that both transition probability matrices are characterized by large diagonal
 entries, indicating a certain level of neighborhood stability for the focal four
-census years. This is especially true for the ward neighborhood type 4 which is
+census years. This is especially true for the Ward neighborhood type 4 which is
 characterized by racially concentrated (Hispanic) poverty. The probability of
 staying at this type is 0.876 meaning that there is only 12.4% chance of
 changing to other neighborhood types once the census tract enters into type 4.
@@ -657,7 +622,7 @@ It should be noted that the interpretation with these conditional transition pro
 should proceed with caution as the increased number of parameters to be estimated
 here could lead to large standard errors for some estimates. For example, the
 :math:`(0,0)` entry in the subplot of Spatial Lag 3 is :math:`1`. The tendency
-of interpreting the 100 percent to be tracts "perfectly stuck at" ward neighborhood type 0 if the spatial lag
+of interpreting the 100 percent to be tracts "perfectly stuck at" Ward neighborhood type 0 if the spatial lag
 is type 3 should be compromised by the fact that there is only :math:`1`
 observation transitioning from type 0 which has the spatial lag
 of type 3 at :math:`t` and this very observation happens to stay at type 0.
@@ -722,12 +687,12 @@ transitions from white working class to white upper class will be treated the
 same: observations that are "almost" white upper class but not quite will be
 considered more similar to white upper class tracts. But, since a reassignment
 is still involved, there will still be a cost associated with that edit.
-Clusterings for both the raw hamming edit distance and the weighted hamming edit
+Clusterings for both the raw Hamming edit distance and the weighted Hamming edit
 distances over sociodemographic sequences are shown in Figure :ref:`f:trajclust`
 using :cite:`wolf2018`. Broadly speaking, the assignments between the two
 clustering methods are strongly related (with an adjusted Rand index of .68),
 but macro-level distinctions between assignment structures are visible,
-particularly in in the areas of central northern LA near the Hollywood Hills, as
+particularly in the areas of central northern LA near the Hollywood Hills, as
 well as the areas of east LA, near Fullerton. This means that, when the
 sub-classification information is taken into account, clusterings can change.
 However, when examining spatially-contiguous clusters, the total amount of
@@ -742,7 +707,7 @@ different options, configurations, and analysis workflows. As discussed above,
 the differences in "final" results can also impact the substantive understandings of how 
 neighborhood dynamics are operating in an area under study. Thus, providing the user with 
 many ways to flexibly reparameterize these complex questions about space-time similarity
-will enhance and improve the usefulness of ``OSLNAP`` for reproducible urban science.
+will  improve the usefulness of ``OSLNAP`` for reproducible urban science.
 
 
 Conclusion
