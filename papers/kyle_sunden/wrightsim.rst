@@ -25,11 +25,11 @@
     Numerical integration is used to evolve the system as it interacts with several electric fields in the course of a multidimensional experiment.
     This numerical approach allows ``WrightSim`` to fully account for finite pulse effects that are commonly ignored.
     ``WrightSim`` is made up of modules that can be exchanged to accommodate many different experimental setups.
-    Simulations are accomplished through a Python interface that is designed to be intuitive for experimentalists and theorists.
+    Simulations are defined through a Python interface that is designed to be intuitive for experimentalists and theorists alike.
     We report several algorithmic improvements that make ``WrightSim`` faster than previous implementations.
-    We demonstrated the effect of parallelizing the simulation, both with CPU multiprocessing and GPU (CUDA).
-    Taken together, algorithmic improvements and parallelization has made ``WrightSim`` multiple orders of magnitude faster than previous implementations.
-    ``WrightSim`` represents a large step forward towards the goal of a fast, accurate, and easy to use general purpose simulation package for multidimensional spectroscopy.
+    We demonstrated the effect of parallelizing the simulation, both with CPU multiprocessing and GPU (CUDA) multithreading.
+    Taken together, algorithmic improvements and parallelization have made ``WrightSim`` multiple orders of magnitude faster than previous implementations.
+    ``WrightSim`` represents a large step towards the goal of a fast, accurate, and easy to use general purpose simulation package for multidimensional spectroscopy.
     To our knowledge, ``WrightSim`` is the first openly licensed software package for these kinds of simulations.
     Potential further improvements are discussed.
 
@@ -71,13 +71,12 @@ We present a general-purpose simulation package for MDS: ``WrightSim`` [#]_.
 
     Simulated spectrum at normalized coordinates :label:`fig:examplespectrum`
 
-Figure :ref:`fig:examplespectrum` shows an example visualization of a
+Figure :ref:`fig:examplespectrum` is a visualization of a
 spectrum in 2-dimensional frequency-frequency space.
-The axes are two different frequencies for two different input electric fields.
-The axes are normalized such that there is a resonance around :math:`0.0` in both
+The axes are two different frequencies for two separate input electric fields.
+The system that we have chosen for this simulation is very simple, with a single resonance.
+The axes are translated such that there is a resonance around :math:`0.0` in both
 frequencies.
-The system that we have chosen for this simulation is very simple, with a single
-resonance.
 This two-dimensional simulation is representative of ``WrightSim``'s ability
 to traverse through many aspects of experimental space.
 Every conceivable pulse parameter (delay, fluence, frequency, chirp etc.) can
@@ -89,11 +88,11 @@ a similar spectrum in the laboratory.
 ``WrightSim`` is modular and flexible.
 It is capable of simulating different kinds of MDS, and it is easy to extend to
 new kinds.
+
 ``WrightSim`` uses a numerical integration approach that captures the full
 interaction between material and electric field without making common limiting
 assumptions.
 This approach makes ``WrightSim`` flexible, accurate, and interpretable.
-
 While the numerical approach we use is more accurate, it does demand
 significantly more computational time.
 We have focused on performance as a critical component of ``WrightSim``.
@@ -105,13 +104,13 @@ While nascent, ``WrightSim`` has already shown itself to be a powerful tool,
 greatly improving execution time over prior implementation.
 
 
-A Brief Introduction on Relevant Quantum Mechanics
+A Brief Introduction of Relevant Quantum Mechanics
 ==================================================
 
 This introduction is intended to very quickly introduce *what* is being done,
 but not *why*.
 If you are interested in a more complete description, please refer to
-Kohler, Thompson, and Wright :cite:`Kohler_2017`.
+Kohler, Thompson, and Wright. :cite:`Kohler_2017`
 
 ``WrightSim`` uses the density matrix formulation of quantum mechanics.
 This formulation allows us to describe mixed states (coherences) which are key
@@ -119,28 +118,27 @@ players in light-matter-interaction and spectroscopy.
 This involves numerically integrating the Liouville-von Neumann equation :cite:`Gibbs1902`.
 This strategy has been described before :cite:`Gelin_2009`, so we are brief in our
 description here.
+
 ``WrightSim`` calculates multidimensional spectra for a given well-defined Hamiltonian.
 We do not make common limiting assumptions that allow reduction to analytical expressions.
 Instead, we propagate all of the relevant density matrix elements, including
 populations and coherences, in a numerical integration.
 This package does **not** perform *ab initio* computations.
-This places ``WrightSim`` at an intermediate level of theory where the Hamiltonian is known, but accurately computing the corresponding multidimensional spectrum requires complex numerical analysis.
+This places ``WrightSim`` at an intermediate level of theory where the Hamiltonian is known, but accurately computing the corresponding multidimensional spectrum requires complicated numerical analysis.
 
-Here, we are simulating the interactions of three electric fields to
+Now, we focus on one representative experiment and Hamiltonian.
+In this case, we are simulating the interactions of three electric fields to
 induce an output electric field.
-These fields can interact with our sample via several different pathways.
-Figure :ref:`fig:WMELs` shows a series of wave mixing energy level (WMEL)
-diagrams :cite:`Lee_1985` representing each of these 16 pathways.
-For three fields, there are six possible time orderings for the pulses to
+For three fields, there are :math:`3! = 6` possible time orderings for the pulses to
 interact and create superpositions or populations in the material system
-(columns in Figure :ref:`fig:WMELs`).
+(Figure :ref:`fig:WMELs`, columns).
+Within each time ordering, there are several different pathways (Figure :ref:`fig:WMELs`, rows).
+In total, there are 16 pathways, represented in Figure :ref:`fig:WMELs` as a series of wave mixing energy level (WMEL) diagrams :cite:`Lee_1985`.
 We are restricting this simulation to have two positive interactions (solid up
 arrows or dashed down arrows) and one negative interaction (dashed up arrow or
 solid down arrow).
-Experimentalists isolate this condition spatially, by placing an aperture
-where this condition is met.
-This results in 16 possible pathways which result in a productive emission.
-Experimentalists can isolate the time orderings by introducing delays between
+Experimentalists isolate this condition spatially using an aperture.
+They can isolate the time orderings by introducing delays between
 pulses.
 Simulation allows us to fully separate each pathway, leading to insight into
 the nature of pathway interference in the total signal line shape.
@@ -155,7 +153,7 @@ the nature of pathway interference in the total signal line shape.
 
 .. figure:: flow_diagram.pdf
 
-    Finite state automata of the interactions with the density matrix
+    Finite state automaton of the interactions with the density matrix
     elements. Matrix elements are denoted by their coherence/population
     state (the subscript) and the pulses which they have already interacted
     with (the superscript). Arrows indicate interactions with
@@ -163,15 +161,15 @@ the nature of pathway interference in the total signal line shape.
     :math:`\omega_2` (green). Figure was originally published as Figure S1
     of Kohler, Thompson, and Wright :cite:`Kohler_2017` :label:`fig:fsa`
 
-Figure :ref:`fig:fsa` shows a finite state automata, starting at
-the ground state (:math:`\rho_{00}`). The nodes are the density matrix
-elements themselves. Encoded within each node is both
-the quantum mechanical state and the fields with which the system has
-already interacted. Interactions occur along the arrows, which generate
+Figure :ref:`fig:fsa` shows a finite state automaton for the same system as Figure :ref:`fig:WMELs`.
+The nodes are the density matrix elements themselves.
+All pathways start at the ground state (:math:`\rho_{00}`). 
+Encoded within each node is both the quantum mechanical state and the fields with which the system has already interacted. Interactions occur along the arrows, which generate
 density in the resulting state. Here, the fields must each interact exactly once.
 Output is generated by the rightmost two nodes, which have interacted with all
 three fields. These nine states represent all possible states which
 match the criterion described by the process we are simulating.
+
 We take these nine states and collect them into a state density vector,
 :math:`\overline{\rho}` (Equation 1.1):
 
@@ -264,17 +262,19 @@ The key steps to running a basic simulation are:
 
 Experimental spaces are defined in an INI format that defines a set of parameters and specifies their defaults and relationships.
 This can be thought of as a particular experimental setup or instrument.
+
+We use the same experiment and Hamiltonian described above to demonstrate usage.
 Here, we are using a space called ``trive`` which provides, among other settings,
 two independent frequency axes and two independent delay axes, controlling a total of
 three incident pulses.
-The frequency axes are called ``w1`` and ``w2`` [#]_, the delays are termed ``d1`` and ``d2``.
-To scan a particular axis, simply set the ``points`` array to a ``NumPy`` array and set it's ``active`` attribute to ``True``.
+The frequency axes are called ``w1`` and ``w2`` [#]_, the delays are ``d1`` and ``d2``.
+To scan a particular axis, simply set the ``points`` array to a ``NumPy`` :cite:`numpy` array and set it's ``active`` attribute to ``True``.
 You can also set a static value for any available axis, by setting the ``points`` attribute to a single number (and keeping ``active`` set to ``False``).
-Finally, the ``experiment`` class tracks the timing in the simulation.
+Finally, the ``experiment`` class defines the timing of the simulation.
 Three main parameters control this: ``timestep``, which controls the size of each numerical integration step,
 ``early_buffer``, which defines how long to integrate before the first pulse maximum, and
 ``late_buffer``, which defines how long to integrate after the last pulse maximum.
-Here is an example of setting up a 3-D (shape :math:`64x64x32`) scan with an additional static parameter set:
+Here is an example of setting up a 3D (shape :math:`64x64x32`) scan with an additional static parameter set:
 
 .. [#]  Note, while the Latin character ``w`` is used here because it is easier to type in code,
         it actually represents the Greek letter :math:`\omega`, conventionally, a frequency.
@@ -308,9 +308,6 @@ Here is an example of setting up a 3-D (shape :math:`64x64x32`) scan with an add
     exp.late_buffer  = 400.0  # fs
 
 
-Hamiltonians define a time-dependant matrix used to propagate electric fields and their
-effect on the density matrix elements.
-The matrix can also be used to obtain a subset of the time orderings by holding particular elements at 0.
 The Hamiltonian object is responsible for the density vector and holding on to the propagation function
 used when the experiment is run.
 Included in the density vector responsibility is the identity of which columns will be returned
@@ -334,7 +331,7 @@ recorded element parameters:
 
 Finally, all that is left is to run the experiment itself.
 The run method takes the Hamiltonian object and a keyword argument ``mp``, short for "multiprocess".
-In general, any value that evaluates to ``False`` will run non-multiprocessed (i.e. single threaded).
+Any value that evaluates to ``False`` will run non-multiprocessed (i.e. single threaded).
 Almost all values that evaluates to ``True`` with run CPU - multiprocessed with the number of processes
 determined by the number of cores of the machine.
 The exception is the special string ``'gpu'``, which will cause ``WrightSim`` to run using ``PyCUDA``.
@@ -347,13 +344,13 @@ The exception is the special string ``'gpu'``, which will cause ``WrightSim`` to
     # obtain results as a NumPy array
     gpuSig = scan.sig.copy()
 
-Running returns a ``Scan`` object, which allows for interrogation of several
+Running returns a ``Scan`` object, which contains several
 internal features of the scan including the electric field values themselves.
 The important part, however is the signal array that is generated.
 In this example, the complex floating point number array is of shape
 :math:`(2x64x64x32)` (i.e. the number of ``recorded_elements`` followed by the
 shape of the experiment itself).
-These numbers can be manipulated and visualized to produce spectra like that
+These numbers can be easily manipulated and visualized to produce spectra like that
 seen in :ref:`fig:examplespectrum`.
 The Wright Group also maintains a library for working with multidimensional data, ``WrightTools`` :cite:`WrightTools`.
 This library will be integrated more fully to provide even easier access to visualization and
@@ -362,7 +359,7 @@ archival storage of simulation results.
 Performance
 ===========
 
-Performance is a key consideration in the implementation of ``WrightSim``.
+Performance is a critical consideration in the implementation of ``WrightSim``.
 Careful analysis of the algorithms, identifying and measuring the bottlenecks, and working
 to implement strategies to avoid them are key to achieving the best performance possible.
 Another key is taking advantage of modern hardware for parallelization.
@@ -381,7 +378,7 @@ simulations of this kind.
 Algorithmic Improvements
 ------------------------
 
-When first translating the code from ``NISE`` into the paradigm of
+When first translating the code from ``NISE`` into
 ``WrightSim``, we sought to understand why it took so long to compute. We
 used Python’s standard library package ``cProfile`` to produce traces of
 execution, and visualized them with
@@ -436,8 +433,7 @@ times speedup on a machine with four processing cores (limited more by
 the operating system scheduling other tasks than by Amdahl’s law). This
 implementation required little adjustment outside of minor API tweaks.
 
-In order to capitalize as much as possible on the amount of parallelism
-possible, the algorithm was re-implemented using Nvidia CUDA :cite:`Nickolls_2008`.
+In order to capitalize on the highly parallelizable nature of our multidimensional simulation, the algorithm was re-implemented using Nvidia CUDA :cite:`Nickolls_2008`.
 In order to make the implementation as easy to use as possible, and maintainable over the
 lifetime of ``WrightSim``, ``PyCUDA`` :cite:`Klockner_2012` was used to integrate the call
 to a CUDA kernel from within Python. ``PyCUDA`` allows the source code
@@ -453,7 +449,7 @@ metaprogramming).
 The CUDA implementation is slightly different from the pure Python
 implementation. It only holds in memory the Hamiltonian matrices for the
 current and next step, where the Python implementation computes all of
-the Matrices prior to entering the loop. This was done to conserve
+the matrices prior to entering the loop. This was done to conserve
 memory on the GPU. Similarly, the electric fields are computed in the
 loop, rather than computing all ahead of time. These two optimizations
 reduce the memory overhead, and allow for easier to write functions,
@@ -527,7 +523,7 @@ Features
 --------
 
 ``NISE`` had implemented a few additional features which were not
-carried over to ``WrightSim`` during the development efforts which
+carried over to ``WrightSim`` during the initial development efforts which
 focused on performance thus far.
 
 There was support for chirped electric field pulses, which behave in
@@ -545,14 +541,13 @@ simulation multiple times, where that is not needed as a simple
 translation will do. At one point we considered generating a library of
 responses in well known coordinates and saving them for future use,
 avoiding the expensive calculation all together. That seems to be less
-needed, given the speed of the CUDA code.
+urgent, given the speed of the CUDA code.
 
 ``NISE`` provided a powerful and flexible set of tools to “Measure" the
 signal, using Fourier transforms and produce arrays that even further
 mimic what is observed experimentally. That system needs to be added to
 ``WrightSim`` for it to be feature-complete. More naïve methods of
-visualizing work in this case, but a true measurement would allow for more
-complex, detailed analysis and interpretation.
+visualizing work in this case, but a true measurement would allow for richer, more detailed analysis and interpretation.
 
 Some new features could be added, including saving intermediate
 responses using an HDF5 based file format. The CUDA implementation
@@ -563,7 +558,7 @@ before or not. If performing many simulations in quick succession (e.g.
 a simulation larger than the memory allows in a single kernel call) with
 the same C code, the savings would add up.
 
-The just-in-time compilation enables some fancy metaprogramming
+The just-in-time compilation enables some special metaprogramming
 techniques which could be explored. The simple case is using separately
 programmed functions which have the same signature to do tasks in
 different ways. Currently there is a small shortcut in the propagation
@@ -582,7 +577,7 @@ Usability
 ---------
 
 One of the primary reasons for reimplementing the simulation package is
-to really think about how users interact with the package. As much as
+to really think about our interface. As much as
 possible, the end user should not need to be an experienced programmer to
 be able to get a simulation. One of the next steps for ``WrightSim`` is
 to take a step back and ensure that our API is sensible and easy to
@@ -630,9 +625,7 @@ searches for this same purpose.
 
 The CUDA implementation does not currently take full advantage of shared
 cache. Most of the data needed is completely separated, but there are
-still a few areas where it could be useful. The Hamiltonian itself is
-shared, and if the electric field parameters array is sent in a more
-compressed format, it would be shared as well.
+still a few areas where it could be useful.
 
 The current CUDA implementation fills the Hamiltonian with zeros at
 every time step. The values which are nonzero after the first call are
