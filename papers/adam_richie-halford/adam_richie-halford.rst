@@ -89,14 +89,14 @@ straight-forward abstractions:
 
 - a *job*, which is an atomic, independent task to repeat on multiple
   inputs, encapsulated in a linux executable, a bash script or a Docker
-  container,
+  container;
 
 - a *job definition*, which connects the job with the compute resources
-  it requires,
+  it require;
 
 - a *compute environment*, which defines the configuration of the
   computational resources needed, such as number of processors, or
-  amount of RAM,
+  amount of RAM;
 
 - a *job queue*, where jobs reside until they are run in a compute
   environment.
