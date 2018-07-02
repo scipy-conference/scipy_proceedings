@@ -33,9 +33,9 @@ Introduction
 ============
 
 Reliability of research, and therefore reproducibility, is the backbone of cumulative knowledge,
-and has been identified as a bottleneck for efficient scientific progress.[citation needed] Open
+and has been identified as a bottleneck for efficient scientific progress. Open
 data, reproducibility incentives, and comprehensive experimental procedures are all key areas for
-improvement[citation], but the subtle problem of environmental reproducibility is in need of more
+improvement, but the subtle problem of environmental reproducibility is in need of more
 attention. Because software is an integral part of modern science, software distributions and its
 fundamental problems of environmental differences and code entropy impact researchers directly.
 Fortunately, software development as a whole has comparable needs. For each software
@@ -176,10 +176,10 @@ and therefore own their entire dependency pipeline.
 Pulp Concepts
 -------------
 
-Pulp stores *content units* (e.g. Python Wheel, Ansible Role) into collections
+Pulp stores *content units* (e.g. Python Wheels) into collections
 called *repositories*.
 
-Repositories are versioned: content units (like Python Wheel, or Ansible Role)
+Repositories are versioned: content units (like Python Wheels)
 in Pulp are organized by their membership in repositories over time.
 Plugin users can add or remove content units to a repository by *uploading*
 them individually, or *syncing* from a remote source like PyPI.
@@ -203,17 +203,17 @@ Pulp’s architecture has four components to it. Each of these can be horizontal
 scaled independently for both high availability and/or additional capacity for
 that part of the architecture.
 
-1.  WSGI application
+1.  WSGI application-
     Pulp’s web application is served by one or more WSGI webservers. See the
     WSGI Application docs for more info on deploying and scaling this component.
 
-2.  Task Runner
-    Pulp’s tasking system requires running rq. Additional rq workers can be
+2.  Task Runner-
+    Pulp’s tasking system requires running rq [3]_. Additional rq workers can be
     added to add capacity to the tasking system.
 
 3.  Database
 
-4.  Plugins
+4.  Plugins-
     The content units Pulp manages is dependent on the plugins that are installed.
     To manage python packages (eggs, wheels, sdists) the pulp_python plugin must be installed.
 
@@ -221,10 +221,14 @@ that part of the architecture.
 Example Workflow
 ================
 
+.. image:: pulp-workflow.png
+    :align: center
+    :alt: Pulp Workflow
+
 The rich feature set provided by the Python ecosystem and the powerful workflows enabled by
 Pulp can be used in conjunction to achieve flexible development while also ensuring reproducibility.
 This section discusses workflows at a very high level and does not include all steps for brevity.
-The Pulp documentation should be referenced for comprehensive workflows and specific commands [3]_.
+The Pulp documentation should be referenced for comprehensive workflows and specific commands [4]_.
 
 A Pulp server can be set up and configured to fetch the latest dependencies from PyPI, and pip can be
 configured to install from a hosted Pulp publication. Each time Pulp fetches new content, it
@@ -280,8 +284,8 @@ complete reproducibility.
 Containers
 ----------
 
-Containers_ [1]_ "are technologies that allow you to package and isolate applications with their
-entire runtime environment—all of the files necessary to run." Containers are particularly well
+Containers_ [1]_ are technologies that allow you to package and isolate applications with their
+entire runtime environment—all of the files necessary to run. Containers are particularly well
 suited for reproducibility, each container contains a system image, a copy of source code,
 installed dependencies, and data to be used. These are stored in a static file called an Image.
 
@@ -302,7 +306,7 @@ to manage those artifacts. A basic plugin can be created by defining the custom 
 Just by defining the basic content type, the lab gains the ability to upload content, and manage
 it through curated repositories. More complex features such as syncing from a remote source,
 dependency solving, and custom publications can be optionally added for a feature rich
-content management platform. Plugin development is well documented [4]_, and the pulp_plugin package
+content management platform. Plugin development is well documented [5]_, and the pulp_plugin package
 is semantically versioned.
 
 Summary
@@ -345,9 +349,11 @@ References
 .. [2] There are several closed sourced alternatives; Artifactory and Nexus are
     the two that are most commonly used.
 
-.. [3] pulp_python workflows, http://pulp-python.readthedocs.io/en/latest/workflows/sync/
+.. [3] rq, http://python-rq.org/
 
-.. [4] https://docs.pulpproject.org/en/3.0/nightly/plugins/plugin-writer/index.html
+.. [4] pulp_python workflows, http://pulp-python.readthedocs.io/en/latest/workflows/sync/
+
+.. [5] https://docs.pulpproject.org/en/3.0/nightly/plugins/plugin-writer/index.html
 
 .. [#Pulp] Pulp Project, 2018, A Red Hat Community Project, https://pulpproject.org/
 
