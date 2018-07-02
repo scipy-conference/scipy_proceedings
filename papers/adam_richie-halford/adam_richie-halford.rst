@@ -373,10 +373,9 @@ summary of the status of all jobs submitted with this :code:`Knot` using
 Examples
 --------
 
-In this section, we will present a few real use cases of Cloudknot,
-including real life uses of the software in data analysis. We will
-start with examples that have minimal software and data dependencies,
-and increase the complexity by adding first data dependencies and
+In this section, we will present a few use cases of Cloudknot. We will
+start with examples that have minimal software and data dependencies, and
+increase the complexity by adding first data dependencies and
 subsequently complex software and resource dependencies. These and other
 examples are available in Jupyter Notebooks in the Cloudknot repository
 :cite:`cloudknot-examples`.
