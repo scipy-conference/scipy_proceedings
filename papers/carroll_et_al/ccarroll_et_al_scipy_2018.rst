@@ -68,9 +68,9 @@ Academic research in statistics has standardized on the use of the ‘R’ model
 
 The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit for solving representative agent dynamic stochastic general equilibrium models.
 
-Our aim is to provide a high quality set of tools and standards whose
-existence will help bring the rest of economics out of the (comparative)
-wilderness. Part of the reason we are confident our goal is feasible is
+Our aim is to provide a high quality set of computational economic tools and 
+standards whose existence will help bring the rest of economics out of the 
+(comparative) wilderness. Part of the reason we are confident our goal is feasible is
 that the tools now available – Python, GitHub, and Jupyter
 notebooks among them – have finally reached a stage of maturity that can
 handle the communication of almost any message an economist might want
@@ -78,8 +78,9 @@ to compose. (See the recent blog post by Paul Romer, `“Jupyter,
 Mathematica, and the Future of the Research
 Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
 for a fuller argument). `QuantEcon <https://quantecon.org/>`__ is the most similar 
-open project to Econ-ARK, but focuses largely on non-heterogeneous introductory 
-foundational graduate macroeconomic methods.
+open project to Econ-ARK and makes use of these tools, however that project 
+focuses largely on non-heterogeneous introductory foundational graduate 
+macroeconomic methods.
 
 We face two challenges. The first is to develop a set of resources and
 examples and standards of practice for communication that are
@@ -123,7 +124,7 @@ a large number of ways, such as in wealth, income processes, preferences, or
 expectations. Models with heterogeneity among agents have
 proven to be increasingly useful for policy and research purposes. 
 
-For example, recent work by has shown that changes in interest rates affect the 
+For example, recent work [Kaplan2018] has shown that changes in interest rates affect the 
 economy in large part by reallocating income flows across different types of 
 households rather than by causing every household to change their behavior in 
 the same way. The latter implicitly occurs in a traditional rational expectations 
@@ -640,6 +641,9 @@ Economic Quarterly, Federal Reserve Bank of Richmond 97 (3): 255-326.
 
 [Hommes2018] Hommes, Cars, and Blake LeBaron, eds. 2018. "Handbook of Computational Economics, 
 Vol 4: Heterogeneous Agent Modeling," *Handbook of Computational Economics*, Elsevier, Vol 4: 2-796.
+
+[Kaplan2018] Kaplan, Greg, Benjamin Moll, and Giovanni L. Violante. 2018. "Monetary Policy 
+According to HANK." *American Economic Review* 108 (3): 697-743.
 
 [Kirman1992] Kirman, Alan P. 1992. “Whom or What Does the Representative 
 Individual Represent?” *Journal of Economic Perspectives* 6 (2): 117-136.
