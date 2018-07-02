@@ -76,25 +76,53 @@ Biomedical Imaging, Graph Theory, Social Networks
 Introduction
 ------------
 
-Given the recent rise of fluorescence microscopy, live cell footage has become much more accessible. This increase in subcellular biomedical imaging data has lead to a heavy analysis of organelles with solid structure. However, the growth in modeling and classification of solid morphologies has created a large and growing gap in our ability to autonomously quantify subcellular structures of diffuse morphology, organelles and proteins like mitochondria and actin.
+Given the recent rise of fluorescence microscopy, and the subsequent proliferation
+of biomedical imaging data, live cell imaging has become much more accessible.
+However, the growth in quantification and modeling of biological and biomedical
+phenomena has been uneven; "solid" morphologies such as cells and nuclei are much
+easier to automatically segment, track, and quantify than diffuse patterns induced
+by mitochondria or actin. There is a need for methodologies and software capable
+of autonomous tracking, segmentation, and quantification of spatiotemporal changes
+in these structures.
 
-Being able to not only quantify the structure of a protein, but also it’s change over time using both spatial and temporal covariance, can lead to understanding the protein’s relationship with environmental variables like toxins or bacteriophages. Recently, spatial covariance has been used to quantify gene expression correlation in image like matrices representing sequenced RNA :cite:`Svensson143321`. We look to focus on both spatial and temporal covariance to achieve our goal of protein behavior quantification through the novel employ of social network analogues. A recent study of brain activity used networks to create a quantitative measure of correlated activity in fMRI images which could then easily be clustered :cite:`Drysdale4246`. There are many advantages of using a social network metric to model diffuse structures. It allows for not only the overall form of the morphology to impact the quantitative analysis, but also for the diffuseness property to influence the connectivity of the network. The heavily studied field of social network and graph theory also opens opportunity for a varied analysis of the analogue once it has been modeled.
+Understanding the spatiotemporal evolution of subcellular organelles in
+response to external stimuli and modeling this behavior is critical to understanding
+the effects of the stimuli on the internal state and configuration of the cell.
+This can have downstream implications in the development of targeted therapies.
+Recently, spatial covariance has been used to quantify gene expression correlation
+in image like matrices representing sequenced RNA :cite:`Svensson143321`. Other
+recent work demonstrates the benefits of measuring covariance between subcellular
+structures to observe how coherent portions of the cells respond in tandem to
+external stimuli :cite:`valm2017applying`. While this work used hand-crafted
+pixel-level thresholds and manual labeling of pixels into organelle groupings,
+it nonetheless represents the spirit of our work: developing quantifiable, data-driven
+spatiotemporal models of subcellular structures.
 
-We have begun by modeling the subcellular patterns of mitochondria in epithelial cells. Mitochondria are dynamic organelles, which undergo continual rounds of fission and fusion. These fission and fusion events are important for maintaining proper function and overall mitochondrial health :cite:`ZLN13` :cite:`WT16`. Mitochondrial fission allows for the turnover of damaged and the protection of healthy organelles. Additionally, mitochondrial fusion leads to the mixing of internal contents, which is important for responding to environmental needs :cite:`ZLN13` :cite:`KPSB08`.
+Our work focuses on both spatial and temporal covariance to better model and
+understand the response of subcellular structures to stimuli. To do this, we
+draw on graph theory and cast the punctate subcellular morphologies as instances
+of a social network. A recent study of brain activity used networks to create a
+quantitative measure of correlated activity in functional MRI (fMRI) images
+which could then easily be clustered :cite:`Drysdale4246`. There are many advantages of using a social
+network model for representing diffuse structures. It captures not only the overall
+spatial morphology and distribution of the protein pattern, but also intrinsically
+captures relationships between different spatial components of the pattern. Finally, by permitting the network to evolve over time, the changing properties of the social network can be interpreted biologically to describe different observed phenomena: just as "traditional" social networks evolve through the addition and deletion of connections between individuals, so do such events describe precisely how the morphology, both locally in one part of the cell, and globally across multiple cells, changes in response to stimuli.
 
-The dynamics between fission and fusion creates a spectrum of mitochondrial morphologies. Further, imbalances between fission and fusion events generate phenotypes associated with mitochondrial dysfunction :cite:`ZLN13`. An excess of fission or dearth of fusion events results in fragmented mitochondria. In the fragmented phenotype, the mitochondrial network is fractured, and individual mitochondria exist in small spheres. However, an overabundance of fusion or a lack of fission events generate hyperfused mitochondria. In the hyperfusion phenotype, the mitochondrial network is overconnected, and composed of long interconnected tubules :cite:`CCI08`.
+We have begun by modeling the subcellular patterns of mitochondria in cervical epithelial (HeLa) cells. Mitochondria are dynamic organelles, which undergo continual rounds of fission and fusion. These fission and fusion events are important for maintaining proper function and overall mitochondrial health :cite:`ZLN13` :cite:`WT16`. Mitochondrial fission allows for the turnover of damaged and the protection of healthy organelles. Additionally, mitochondrial fusion leads to the mixing of internal contents, which is important for responding to environmental needs :cite:`ZLN13` :cite:`KPSB08`.
 
-Recently, several bacterial species have been shown to cause mitochondrial perturbations during infection :cite:`SBSRC11`:cite:`FGQR15`. Through social network modeling, we hope to build a more rapid and efficient method for identifying changes in size, shape, and distribution of mitochondria as well as other diffuse organelles.
+The dynamics between fission and fusion creates a spectrum of mitochondrial morphologies.  Imbalances between fission and fusion events generate phenotypes associated with mitochondrial dysfunction :cite:`ZLN13`. An excess of fission or dearth of fusion events results in fragmented mitochondria; in this phenotype, the mitochondrial network is fractured, and individual mitochondria exist in small spheres. Conversely, an overabundance of fusion or a lack of fission events generate hyperfused mitochondria; in this phenotype, the mitochondrial network is overconnected, and composed of long interconnected tubules :cite:`CCI08`. Recently, several bacterial species have been shown to cause mitochondrial perturbations during infection :cite:`SBSRC11`:cite:`FGQR15`. Such unique morphologies should be detectable at a quantitative level using social network modeling.
+
+Through social network modeling, we hope to build a more rapid and efficient method for identifying changes in size, shape, and distribution of mitochondria as well as other diffuse organelles. In this work, we present a proof-of-concept pipeline which segments cells with fluorescent stains on the mitochondria for individual analysis. Once the cells are segmented, we use a custom-built Gaussian Mixture Model (GMM) to parameterize the spatial distribution of the mitochondrial protein patterns at evenly-spaced time intervals, and allow the GMM parameters to update smoothly from the previous time point to the next. Finally, we demonstrate how the learned parameters of the GMM can be used to construct social networks for representing the mitochondria.
 
 .. figure:: pipeline.PNG
 
-  An abstract representation of our proposed pipeline. The first frame represents the raw unsegmented image of three cells' proteins. The next frame demonstrates the simultaneous segmentation, as a border is drawn around each cell. The third frame represents a single cell being extracted for analysis using the determined Segmentation. The fourth cell shows a characteristic set of nodes determined by applying a mixture model to the distribution of mitochondrial protein. The final image shows edges added to the nodes to complete the network structure. At this point in the pipeline Network analysis can be applied to the created graph in hopes for meaningful quantitative information. These steps are applied to each frame of video allowing for fully temporal analysis. :label:`fig0`.
+  An abstract representation of our proposed pipeline. The first frame represents the raw unsegmented image of mitochondria in three cells. The second frame demonstrates simultaneous segmentation, as a border is drawn around each cell. The third frame represents a single cell being extracted for analysis using the determined segmentation. The fourth frame shows a characteristic set of nodes determined by applying a mixture model to the distribution of fluorescent mitochondria. The final frame shows edges added to the nodes to complete the network structure. At this point in the pipeline, network analysis can be applied to the induced graph. These steps are applied to each frame of video allowing for fully temporal analysis. :label:`fig0`.
 
 
 Data
 ----
 
-We have constructed a library of live imaging videos that display the full spectrum of mitochondrial morphologies in HeLa cells, from fragmented to hyperfused. To visualize the mitochondria, HeLa cells were stably transfected with DsRed2-Mito-7 (DsRed2-HeLa), which fluorescently labels mitochondria red (a gift from Michael Davidson, Addgene plasmid #55838). All of our videos were taken using a Nikon A1R Confocal. Cells were kept in an imaging chamber that maintained 37 degrees C and 5% CO2 for the duration of imaging. The resonant scanning head was utilized to capture an image every ten seconds for the length of the video. The resulting  raw videos  have more than 20,000 frames per video. Each frame is of dimensions of 512x512 pixels :ref:`fig1`.
+We have constructed a library of live confocal imaging videos that display the full spectrum of mitochondrial morphologies in HeLa cells, from fragmented to hyperfused. To visualize the mitochondria, HeLa cells were stably transfected with DsRed2-Mito-7 (DsRed2-HeLa), which fluorescently labels mitochondria with red emission spectra (a gift from Michael Davidson, Addgene plasmid #55838). All of our videos were taken using a Nikon A1R Confocal. Cells were kept in an imaging chamber that maintained 37 degrees C and 5% CO2 for the duration of imaging. The resonant scanning head was used to capture an image every ten seconds for the length of the video. The resulting time series videos have more than 20,000 frames per video. Each frame is of dimensions of 512x512 pixels :ref:`fig1`.
 
 .. figure:: morpho.png
 
