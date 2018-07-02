@@ -351,22 +351,21 @@ of operation costs to incorporate potential spatial
 dependence and spatial heterogeneity.
 
 In a prototypical workflow, the ``change`` module permits the end user to
-explore the nature of neighborhood change. From a dynamic perspective,
-transition analysis can be used to apply a first-order Markov chain
+explore the nature of neighborhood change from a dynamic, holistic or combined 
+holistic \& dynamic perspective. From a dynamic perspective,
+*transition analysis* can be used to apply a first-order Markov chain
 model to look at probabilities of transitioning between neighborhood types over
 time. It also supports the use of a spatial Markov chains model to interrogate
 the role of spatial interactions in shaping neighborhood dynamics or the
 application of a spatial regime Markov chains model to explore spatially
 heterogeneous neighborhood dynamics. From a holistic perspective,
-sequence analysis involves the application of the OM algorithm with
-chosen cost functions for substitution, insertion, deletion and transposition,
-by applying the spatially explicit OM algorithm which takes account of potential
-spatial dependence and spatial heterogeneity in the operation costs.
-Finally, a combined holistic \& dynamic perspective is gained by incorporating
-the similarity matrix produced by the sequence analysis in the
-transition analysis to explore potential interactions and heterogeneity
-in the underlying dynamics of neighborhood change.
-
+*sequence analysis* involves the application of the OM algorithm with
+classic cost functions for substitution, insertion, deletion and transposition, 
+or those explicitly taking account of potential spatial dependence and spatial heterogeneity.
+Finally, a combined holistic \& dynamic perspective is gained by 
+feeding the output from *transiton analysis*, which is the empical transition 
+probability matrix, or spatially dependent transition 
+probability matrices into *sequence analysis* to help set operation costs. 
 
 
 Empirical Illustration
