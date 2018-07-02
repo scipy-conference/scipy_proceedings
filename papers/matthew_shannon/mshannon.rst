@@ -95,7 +95,7 @@ newly-forming star and budding planetary systems.
 They play important roles in circumstellar processes and the diffuse ISM by
 modulating radiation fields and influencing charge balance. Once
 incorporated into dense molecular clouds, they can dominate cloud
-cooling and promote H\ :sub:`2`\ -formation. PAHs also control the
+cooling and promote H\ :sub:`2` formation. PAHs also control the
 large-scale ionization balance and thereby the coupling of magnetic
 fields to the gas. Through their influence on the forces supporting
 clouds against gravity, PAHs also affect the process of star formation
@@ -200,7 +200,7 @@ alike to analyze and interpret astronomical PAH emission spectra.
    \setlength{\tablewidth}{0.7\textwidth}
 
 
-.. table:: Feature comparision between pyPAHdb and the full suites of
+.. table:: Feature comparison between pyPAHdb and the full suites of
            off-line IDL/Python tools. Note: NNLS is non-negative
            least squares; FWHM is full-width at half-maximum of an
            emission profile; "uncertainties" in this context
@@ -263,25 +263,25 @@ presented in Figure :ref:`fig:flowchart` and is as follows:
 
 (1) Read-in a file containing spectroscopic PAH observations of an
     astronomical object. This functionality is provided by the class
-    ``observation``, which is implemented in observation.py. It is the
+    ``observation``, which is implemented in ``observation.py``. It is the
     responsibility of the user to ensure all non-PAH emission
     components have been removed from the spectrum. The class uses a
     fall-through try-except chain to attempt to read the given
     filename using the facilities provided by ``astropy.io``. The
-    spectroscopic data is stored as a class-attribute as a
-    ``spectrum``-object, which holds the data in terms of absissa and
-    ordinate values using ``numpy``-arrays. The units associated with
-    the absissa and ordinate values are, in the case of a FITS-file,
+    spectroscopic data is stored as a class attribute as a
+    ``spectrum`` object, which holds the data in terms of abscissa and
+    ordinate values using ``numpy`` arrays. The units associated with
+    the abscissa and ordinate values are, in the case of a FITS file,
     determined from the accompanying header, which itself is also
-    stored as a class-attribute. The spectral coordinate system is
-    interpreted from FITS-header keywords following the specification
+    stored as a class attribute. The spectral coordinate system is
+    interpreted from FITS header keywords following the specification
     by :cite:`2006A&A...446..747G`. The ``spectrum`` class is
-    implemented in spectrum.py and provides functionality to convert
+    implemented in ``spectrum.py`` and provides functionality to convert
     between different coordinate representations. Below is example
     Python code demonstrating the use of the class. The file
-    'NGC7023-NW-BRIGHT.txt_pahs.txt' in this demonstration can be
-    found in the examples-directory that is part of the
-    pyPAHdb-package. The output of the code-block is shown in Figure
+    ``NGC7023-NW-BRIGHT.txt_pahs.txt`` in this demonstration can be
+    found in the ``examples`` directory that is part of the
+    pyPAHdb package. The output of the following code-block is shown in Figure
     :ref:`fig:flowchart`.
 
 .. code-block:: python
@@ -299,13 +299,12 @@ presented in Figure :ref:`fig:flowchart` and is as follows:
 (2) Decompose the observed PAH emission into contributions from
     different PAH subclasses, here charge and size. This functionality
     is provided by the class ``decomposer``, which is implemented in
-    decomposer.py. The class takes as input a ``spectrum``-object, of
+    ``decomposer.py``. The class takes as input a ``spectrum`` object, of
     which it creates a deep copy and calls its
-    ``spectrum.convertunitsto``-method to convert the abscissa units
-    to wavenumber. Subsequently, a pre-computed ``numpy``\-matrix of
+    ``spectrum.convertunitsto`` method to convert the abscissa units
+    to wavenumber. Subsequently, a pre-computed ``numpy`` matrix of
     highly oversampled PAH emission spectra stored as a ``pickle``
-    (see the Section "The underlying PAH-photo physics" for more
-    details) is loaded from file. Utilizing ``numpy.interp``, each of
+    is loaded from file. Utilizing ``numpy.interp``, each of
     the PAH emission spectra, represented by a single column in the
     pre-computed matrix, is interpolated onto the frequency grid (in
     wavenumber) of the input spectrum. This process is parallelized
@@ -332,15 +331,15 @@ presented in Figure :ref:`fig:flowchart` and is as follows:
     plt.plot(s.abscissa, result.fit[:,0,0])
     plt.show()
 
-(3) Produce output to file given a ``decomposer``-object. This
+(3) Produce output to file given a ``decomposer`` object. This
     functionality is provided by the class ``writer``, which is
-    implemented in writer.py, and serves to summarize the results from
-    the ``decomposer``-class so that a user may assess the quality of
+    implemented in ``writer.py``, and serves to summarize the results from
+    the ``decomposer`` class so that a user may assess the quality of
     the fit and store the PAH characteristics of their astronomical
     observations. The class uses ``astropy.fits`` to write the PAH
-    characteristics to a FITS-file and the ``matplotlib``-package to
+    characteristics to a FITS file and the ``matplotlib`` package to
     generate a PDF summarizing the results. The class will attempt to
-    incorporate relevant information from any (FITS-)header
+    incorporate relevant information from any (FITS) header
     provided. Below is example code demonstrating the use of the
     class, which extends the previous code-block. The size breakdown
     part of the generated PDF output is shown in Figure
@@ -369,7 +368,7 @@ To analyze astronomical PAH *emission* spectra with the *absorption*
 data contained in PAHdb's libraries, the PAHdb data need to be turned
 into emission spectra. As discussed in the previous section, pyPAHdb
 hides the underlying photo-physics in a pre-computed matrix that is
-read-in by the ``decomposer``-class. The pre-computed matrix is
+read-in by the ``decomposer`` class. The pre-computed matrix is
 constructed using the full Python suite and takes modeled,
 highly-over-sampled PAH emission spectra from version 3.00 of the
 library of computed spectra.
