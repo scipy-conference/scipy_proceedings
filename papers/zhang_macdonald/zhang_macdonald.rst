@@ -19,7 +19,7 @@ Pulp as a Tool to create Reproducible Environments
    Trustworthy results require reproducibility, which must include the full computational
    environment used to produce and analyze the data.  Publishing source code is necessary but not
    sufficient for complete reproducibility because complex software often depends on external code.
-   Various techniques and tools can be used to manage environments, but each has inherrent
+   Various techniques and tools can be used to manage environments, but each has inherent
    limitations and none are well suited for all situations. Additionally, each tool has distinct
    workflows, assumed knowledge, and interface.
 
@@ -39,22 +39,22 @@ Pulp as a Tool to create Reproducible Environments
 Introduction
 ============
 
-Reliability of research, and therefore reproducibility, is the backbone of cummulative knowledge,
-and it has been identified as a bottleneck for efficient scientific progress.[citation needed] Open
+Reliability of research, and therefore reproducibility, is the backbone of cumulative knowledge,
+and has been identified as a bottleneck for efficient scientific progress.[citation needed] Open
 data, reproducibility incentives, and comprehensive experimental procedures are all key areas for
 improvement[citation], but the subtle problem of environmental reproducibility is in need of more
-attention. Because software is an integral part of modern science, software distrubution and its
+attention. Because software is an integral part of modern science, software distributions and its
 fundamental problems of environmental differences and code entropy impact researchers directly.
-Fortunately for scientists, software development as a whole has comparable needs. For each software
+Fortunately, software development as a whole has comparable needs. For each software
 ecosystem, tools and best practice workflows have been developed to encourage rapid development,
-simplify maintainance, and improve long term stability.  This paper will demonstrate how to apply
-software industry workflows to research code, focusing on the Pulp project and the Python
+simplify maintenance, and improve long term stability.  This paper will demonstrate how to apply
+software industry workflows to scientific code, focusing on the Pulp project and the Python
 community.
 
 Software Packaging Basics
 =========================
 
-Software packaging and distribution is an inherrently complex problem domain because software is
+Software packaging and distribution is an inherently complex problem domain because software is
 dependent on other software. Ensuring that code can be installed with compatible requirements is a
 fundamental problem in the packaging domain. The needs of users, developers, and administrators
 frequently interfere, leading to increasingly complex solutions. Various communities (often formed
@@ -65,14 +65,14 @@ with an unrelated primary interest.
 
 Broadly, there have been two high level approaches to packaging, and comparing them is useful to
 demonstrate the challenges to improving environmental reproducibility (TODO define?). The simplest
-approach, (which will be refered to as "monolithic"), is to bundle code with all dependencies and
+approach, (which will be referred to as "monolithic"), is to bundle code with all dependencies and
 distribute it together as a single software package. This pattern is most common for user-centric
 platforms like Windows and OSX. Monolithic packages are simple to install, but can sacrifice
 transparency and flexibility for initial user convenience. The administrators and the developers
-become responsible for maintanance of the whole environment. For cross-platform applications,
-packages may need to be built for every combination of hardwares, operating systems, and language
-versions. This process can be difficult and time consuming, leading to long development cycles and
-infrequent updates. This pattern is leads to chronicly outdated software, and when security is an
+become responsible for maintenance of the whole environment. For cross-platform applications,
+packages may need to be built for every combination of hardware, operating system, and language
+version. This process can be difficult and time consuming, leading to long development cycles and
+infrequent updates. This pattern is leads to chronically outdated software, and when security is an
 important consideration, it can be costly to compensate.
 
 A different approach commonly used by Linux communities is called the "modular" approach. Code is
@@ -84,8 +84,8 @@ increased. Especially for software with complex dependency trees, this pattern c
 dependency conflicts which can be notoriously difficult to resolve. Some communities, (e.g. Fedora)
 offer an additional component to address this problem, curated repositories. Curated repositories
 can be thought of as a hybrid approach; the community as a whole maintains the interoperability of the
-software in the repository, releaving some of the user respoonsibility. However, this
-option also has problems; it can be less flexible because projects need to use dependency versions
+software in the repository, relieving some of the user responsibility. However, this
+option also has problems; it can be less flexible because projects need to use versions of dependencies
 that are available in specific repositories. This can be particularly troublesome for developers
 when different repositories have different major versions of software. [seealso: semver] Because
 code is run with different dependency versions in different environments, reproducibility is hard
