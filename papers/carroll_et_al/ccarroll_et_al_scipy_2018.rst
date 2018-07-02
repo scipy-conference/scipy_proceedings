@@ -141,7 +141,7 @@ impact over the past few years. But the literature remains small, and
 contributions have come mostly from a few small groups of researchers
 with close connections to each other. An excellent overview of this literature 
 can be found in the most recent volume of the Handbooks of Computational 
-Economics and works cited therein. 
+Economics [Hommes2018] and works cited therein. 
 
 In large part, this reflects the formidable technical challenges
 involved in constructing such models. In each case cited above, the
