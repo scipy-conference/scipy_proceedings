@@ -155,7 +155,7 @@ convenient Jupyter based interface. Instead, Yaksh offers instant feedback and
 grading, supports a variety of different languages, and also allows one to
 host a full course.
 
- .. _nbgrader: https://github.com/jupyter/nbgrader
+.. _nbgrader: https://github.com/jupyter/nbgrader
 
 relate_ is similar to Yaksh in scope and goals. It allows a user to create a
 web based course with a grading interface quite similar to Yaksh. However,
@@ -325,6 +325,13 @@ The two essential pieces of Yaksh are:
 
 Fig :ref:`fig:codeevaluation-flow` shows the workflow for code evaluation.
 
+.. figure:: flow_diagram.png
+   :alt:  Flow Diagram of code evaluation
+
+   Flow diagram for code evaluation procedure
+   :label:`fig:codeevaluation-flow`
+
+
 Django Server
 -------------
 
@@ -350,7 +357,7 @@ Authentication system
   with a second layer of security while creating user accounts. To create an
   account on Yaksh, one can either go to the website and sign-up or can
   sign-up via the OAuth system provided for Google and Facebook accounts.
-  By default the user is logged-in as **student**, although the user can
+  By default the user is logged-in as a **student**, although the user can
   become a moderator if the user is added to the **moderator** group.
   Fig. :ref:`fig:yaksh-login` shows the login screen for Yaksh.
 
@@ -479,26 +486,33 @@ This settings file contains information such as:
 
 
 A Tornado HTTP server is started with the specified server hostname and
-pool port from the settings. The server handles POST requests which are
-submitted with a unique id, along with a JSON string containing programming
-language of the question, the user answer, files (if any), test case data i.e.
-test case type and test cases. Each submitted answer has a unique id
-associated with it which makes it easy to keep the track if the evaluation is
-completed or not. The server then takes the JSON data and creates a suitable
-process to evaluate the code as specified in the settings. A separate
-dictionary is maintained which stores the data such as process status, and the
-result (success, test case weightage, error, error message etc.). The Django
-client then polls the server asking for a result after a wait time and
-displays the result when one is available until a hard timeout.
+pool port from the settings. The server takes the following arguments -
 
-The JSON meta data is sent to a ``Grader`` instance which is responsible for
-the actual code evaluation.
+- UID of an answer
 
-.. figure:: flow_diagram.png
-   :alt:  Flow Diagram of code evaluation
+  This is the unique ID associated to an answer submitted. This is
+  specifically required to poll the server for the status of the
+  submitted answer.
 
-   Flow diagram for code evaluation procedure
-   :label:`fig:codeevaluation-flow`
+- JSON Data
+  This contains all the data required for evaluation of a code answer, namely,
+  user answer, language of the question, test cases associated to the question,
+  and files required by the code, if any.
+
+- User directory
+  Every user is allotted a user directory, in which script files are
+  executed. The path of this user directory is passed to the server.
+
+The aforementioned arguments are passed to the Tornado server which takes the
+JSON data, sends it to ``Grader`` for unpacking. The ``Grader`` unpacks the
+data, selects a language evaluator using ``language registry`` and sends it
+to that language evaluator for evaluation.
+The language evaluator takes the user answer and evaulates it in the specified
+user directory. The evaluator then sends the output of the evaluation back to
+the Tornado server through the ``Grader``. The Django server, meanwhile, keeps
+polling the Tornado server for the status of the evaluation. As soon as the
+Tornado server gets the output from the evaluator, it hands over the data to
+the Django server for saving and displaying.
 
 
 Grader
@@ -586,7 +600,7 @@ Workflow of Yaksh
   A sample Python question along with its test case is shown in the
   Fig. :ref:`fig:yaksh-question` and Fig. :ref:`fig:yaksh-testcase`.
   The instructor can set minimum time for a question if it is part of an
-  exercise. A question can have partial grading which depends on a weight
+  exercise. A question can have partial grading which depends on a weightage
   assigned to each test case. A question can have a solution which can be
   either a video or any code.  This allows us to pose a question, ask the
   student to attempt it for a while and then show a solution.
@@ -618,14 +632,15 @@ Workflow of Yaksh
   The moderator can also import and export questions. The moderator then
   creates a quiz and an associated question paper. A quiz can have a passing
   criterion. Quizzes have active durations and each question paper will have a
-  particular time within which it must be completed. For example one could
+  particular time within which it must be completed. For example, one could
   conduct a 15 minute quiz with a 30 minute activity window.
   Questions are automatically graded. A user either gets the full marks or
   zero if the tests fail. If a question is allowed to have partial grading
   then during evaluation the user gets partial marks based on passing
   test cases.
 
-  The moderator can then create lessons and modules. A lesson can have
+  The moderator can then create learning modules. A module encapsulates
+  learning units,i.e., lessons and quizzes. A lesson can have
   description either as a markdown text or a video or both. After lesson
   creation, the moderator can create modules. A module can have its own
   description either as a markdown text or a video or both. All the lessons
@@ -784,7 +799,7 @@ The ``check_code`` method must return three values -
 - success (``bool``) - indicating if code was executed successfully and
   the student answer is correct
 
-- weight (``float``) - indicating total weight of all successful test cases
+- weight (``float``) - indicating total weightage of all successful test cases
 
 - error (``str``) - error message if success is false
 
