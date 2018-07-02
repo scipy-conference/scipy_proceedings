@@ -613,14 +613,14 @@ programmatically executing UDFs in AWS Batch. This lowers the barrier to
 cloud computing and allows users to launch massive workloads at
 scale from within their Python environment.
 
-We have demonstrated Cloudknot's ability to handle complicated data and
-software dependencies using real-world examples from neuroimaging and
-microscopy. And we've included analyses that show Cloudknot's performance
-compared to other distributed computing frameworks. On one hand, scaling
-charts like the ones in Figures :ref:`fig.nargsscaling`,
-:ref:`fig.syssizescaling`, and :ref:`fig.mribenchmark` are important because
-they show potential users the relative cost in execution time of using
-Cloudknot compared to other distributed computing platforms.
+We have demonstrated Cloudknot's ability to execute complex algorithms
+over vast quantities of data using real-world examples from neuroimaging
+and microscopy. And we've included analyses that show Cloudknot's
+performance compared to other distributed computing frameworks. On one
+hand, scaling charts like the ones in Figures :ref:`fig.nargsscaling`,
+:ref:`fig.syssizescaling`, and :ref:`fig.mribenchmark` are important
+because they show potential users the relative cost in execution time of
+using Cloudknot compared to other distributed computing platforms.
 
 On the other hand, the timing results in this paper, indeed most
 benchmark results in general, measure the bare execution time, capturing
