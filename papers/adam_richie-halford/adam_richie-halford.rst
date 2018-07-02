@@ -170,13 +170,13 @@ near-immediate deployment of these dependencies :cite:`Boettiger14`.
 
 Separately, :code:`Knot` uses an AWS CloudFormation template to create
 the AWS resources required by AWS Batch [#]_. :code:`Knot` passes the
-location of the Docker container on AWS ECR to its job definition
-so that all jobs execute the SP. The user may ask :code:`Knot` to
-restrict its compute environment to only certain instance types (e.g.
-``c4.2xlarge``) or may choose a specific Amazon Machine Image (AMI)
-to be loaded on each compute resource. Or, they may simply request a
-minimum, desired, and maximum number of virtual CPUs and let AWS Batch
-select and manage the EC2 instances.
+location of the Docker container on AWS ECR to its job definition so that
+all jobs execute the SP. The user may restrict the compute environment of
+the :code:`Knot` to only certain instance types (e.g. ``c4.2xlarge``) or
+may choose a specific Amazon Machine Image (AMI) to be loaded on each
+compute resource. Or, they may simply request a minimum, desired, and
+maximum number of virtual CPUs and let AWS Batch select and manage the
+EC2 instances.
 
 .. [#] The required resources are
 
