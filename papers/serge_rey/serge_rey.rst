@@ -23,9 +23,10 @@
 
 
 
--------------------------------------------------------
-Spatio-temporal analysis of socioeconomic neighborhoods
--------------------------------------------------------
+------------------------------------------------------------------------
+Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source
+Longitudinal Neighborhood Analysis Package (OSLNAP)
+------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -36,9 +37,9 @@ built environment and health outcomes, to the impact of concentrated poverty on
 social efficacy, neighborhoods are a central construct in empirical work. From a
 dynamic lens, neighborhoods experience changes not only in their socioeconomic
 composition, but also in spatial extent; however, the literature has ignored the
-latter source of change. In this paper, we discuss the development of novel,
-spatially explicit approaches to the study of longitudinal neighborhood dynamics
-using the scientific Python ecosystem.
+latter source of change. In this paper, we discuss the development of a novel,
+spatially explicit tool: the Open Source Longitudinal Neighborhood Analysis
+Package (OSLNAP) using the scientific Python ecosystem.
 
 .. class:: keywords
 
