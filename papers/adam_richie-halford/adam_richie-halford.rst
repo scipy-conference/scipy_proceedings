@@ -49,11 +49,11 @@ could, in principle, offer substantial speedups.
 But the complexity and learning curve associated with a transition to
 cloud computing make it inaccessible to beginners. This transition cost
 has been improving. For example, Dask :cite:`Rocklin2015-ra` used to be
-difficult to run in parallel but it is now more accessible, thanks in
-part to tools such as dask-ec2 :cite:`dask-ec2` and kubernetes/helm
-:cite:`helm`. Yet despite these improvements, computation in the cloud
-remains inaccessible to many researchers who have not had previous
-exposure to distributed computing.
+difficult to run in parallel in a cloud computing environment, but it is
+now more accessible, thanks in part to tools such as dask-ec2
+:cite:`dask-ec2` and kubernetes/helm :cite:`helm`. Yet despite these
+improvements, computation in the cloud remains inaccessible to many
+researchers who have not had previous exposure to distributed computing.
 
 A number of Python libraries have sought to close this gap
 by allowing users to interact seamlessly with AWS resources
