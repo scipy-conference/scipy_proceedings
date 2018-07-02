@@ -50,7 +50,7 @@ easily solved with existing toolkits such as DYNARE, [Adjemian2011].
 
 In contrast, models with  extensive heterogeneity among agents have no central 
 toolkit and must be solved in a bespoke way. This requires a significant 
-investment of time and human capital before a researcher can produce  usable work. 
+investment of time and human capital before a researcher can produce usable work. 
 This results in needless code duplication, increasing the chance for error and wasting 
 valuable research time. The Econ-ARK project addresses these concerns by providing 
 a set of well-documented code modules that can be composed together to solve a 
