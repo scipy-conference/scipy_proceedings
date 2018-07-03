@@ -52,10 +52,11 @@ Jupyter notebook, uses the matrix math commonly found in textbooks, but it is ea
 as we make use of the PEP 465 @ infix operator for matrix multiplication. 
 As the final step, the data set is played through the Kalman filter in earth-centered 
 earth-fixed (ECEF) coordinates. The User trajectory is input in local east-north-up (ENU) 
-coordinates, and the SVs used to form the location estimate specified by the coarse 
-acquisition (C/A) code pseudo-random noise (PRN) number, of the SVs in view by the User. The ECEF coordinates 
-of the SVs are then propagated along with the User trajectory using [SGP4]_ and the two-line 
-element (TLE) data available from [Celestrak]_. The relationship between ECEF and ENU is 
+coordinates, and the SVs in view by the User to form the location estimate, are specified by the coarse 
+acquisition (C/A) code pseudo-random noise (PRN) number. The ECEF coordinates 
+of the SVs are then propagated  using [SGP4]_ using the two-line 
+element (TLE) data available from [Celestrak]_, in time step with the User trajectory. 
+The relationship between ECEF and ENU is 
 explained in Figure :ref:`ECEFENU`. For convenience, this computational tool, is housed in a Jupyter 
 notebook. Data set generation and 3D trajectory plotting is provided with the assistance of a 
 single module, [GPS_helper]_. 
@@ -349,11 +350,11 @@ where
    :type: eqnarray
 
    \frac{\partial\rho_i}{\partial x} &=& \frac{-(x_i - \hat{x}_1^-)}
-   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}} \\
-   \frac{\partial\rho_i}{\partial y} &=& \frac{-(x_i - \hat{x}_3^-)}
-   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}} \\
-   \frac{\partial\rho_i}{\partial z} &=& \frac{-(x_i - \hat{x}_5^-)}
-   {\sqrt{(x_i-\hat{x}_1^-)^2+(x_i-\hat{x}_3^-)^2+(x_i-\hat{x}_5^-)^2}}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(y_i-\hat{x}_3^-)^2+(z_i-\hat{x}_5^-)^2}} \\
+   \frac{\partial\rho_i}{\partial y} &=& \frac{-(y_i - \hat{x}_3^-)}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(y_i-\hat{x}_3^-)^2+(z_i-\hat{x}_5^-)^2}} \\
+   \frac{\partial\rho_i}{\partial z} &=& \frac{-(z_i - \hat{x}_5^-)}
+   {\sqrt{(x_i-\hat{x}_1^-)^2+(y_i-\hat{x}_3^-)^2+(z_i-\hat{x}_5^-)^2}}
 
 for :math:`i = 1, 2, 3` and 4.
 
