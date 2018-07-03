@@ -132,7 +132,8 @@ operations.
 
 These turn out to be simple for NumPy arrays, but are surprisingly complex for sparse arrays.
 The first problem to overcome was that there was no dependency on Numba :cite:`numba`/Cython
-:cite:`cython`/C++ at the time that this algorithm was to be implemented. I, therefore wished
+:cite:`cython`/C++ at the time that this algorithm was to be implemented, and a discussion was
+ongoing about which algorithm to use. :cite:`sparse-lib-decision` I, therefore wished
 to solve the problem in pure NumPy, therefore looping over all possible nonzero coordinates
 was not an option, and we had to process the coordinates and data in batches. The batches that
 made sense at the time were something like the following:
@@ -322,7 +323,9 @@ So we used a hybrid approach where the second method is used until there are a s
 number of coordinates left for filtering, then we fall back to simple filtering. Where we do the
 switch is determined by a heuristic: will the expected number of binary searches be faster in a
 specific case, or directly filtering the number of left-over coordinates? The overall algorithm
-is implemented in Numba.
+is implemented in Numba, because when this algorithm was implemented, the discussion in
+:cite:`sparse-lib-decision` had been resolved. However, it has since been reopened due to further
+missing features in Numba.
 
 After getting the required coordinates and corresponding data, we apply some simple transformations
 to it to get the output coordinates and data.
