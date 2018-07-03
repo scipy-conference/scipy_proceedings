@@ -363,7 +363,7 @@ beyond the scope of this contribution.
 
 For a concise overview of statistical modeling and inference, including a high-level
 comparison with the frequentist approach, see :cite:`Wood15`. For a more
-extended treatment of the Bayesian approach, including utility functions, see
+extended treatment of the Bayesian approach see
 :cite:`robert2007bayesian`. For an accessible Bayesian modeling primer,
 especially for beginner Bayesians, see :cite:`McElreath15` and
 :cite:`Marin2006`. For a complete treatment of Bayesian data analysis, including
