@@ -850,7 +850,7 @@ Conclusions and Future Work
 ---------------------------
 
 In this paper we have described an approach to implement real-time DSP in the Jupyter notebook. 
-This real-time capability rests on top of PyAudio and the wrapper class :code:`DSP_streaming_io` 
+This real-time capability rests on top of PyAudio and the wrapper class :code:`DSP_io_stream` 
 contained in :code:`sk_dsp_comm.pyaudio_helper`. The :code:`ipywidgets` allow for interactivity 
 while real-time DSP code is running. The *callback* function does the work using frame-based 
 algorithms, which takes some getting used to. By working through examples we have shown that much 
