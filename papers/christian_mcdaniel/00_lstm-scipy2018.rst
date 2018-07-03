@@ -276,7 +276,12 @@ and :math:`p(a|b)` is the conditional probability of :math:`a` given event :math
 
 The ranges of hyperparameters were devised to include all ranges explored by the various reports reviewed in the above section of this paper, as well as any other well-defined range or setting used in the field. The hyperparameters tested are listed in Table :ref:`hyperparameters`. Due to constraints in the Python package used for hyperparameter optimization (i.e., hyperas from hyperopt), the window size, stride length and number of layers were optimized on the highest performing combination of all other hyperparameters via randomized grid search. Thus, for initial optimization, data was partitioned using a window size of 128 with 50% stride length and fed into a 2-layer LSTM network.
 
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.5\linewidth}
+   
 .. table:: The various hyperparameters addressed in this experiement, and their respective ranges. :label:`hyperparameters`
+  :class: w
 
   +--------------------+------------------------------------------------+------------------------------------------------------------------------------------------------------------------+
   | Category           | Hyperparameter                                 | Range                                                                                                            |
