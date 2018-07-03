@@ -151,16 +151,22 @@ the parameter values. We shall come back to this at the end of this section.
 *2) Specify the likelihood and priors*
 
 Once we have defined the scope of the problem, we need to specify the design of
-the model which is captured in the *likelihood* function
-:math:`f(D | \theta, M)`.
-Usually, argument :math:`M` is dropped for notational
-simplicity, the model being chosen and assumed known.
-Note, however, that when the model includes covariates, the more accurate
-expression is
-:math:`f(y | \theta, x)`.
+the model which is captured in the *likelihood* function :math:`f(D | \theta,
+M)`. Usually, argument :math:`M` is dropped for notational simplicity, the model
+being chosen and assumed known [#]_. Note, however, that when the model
+includes covariates, the more accurate expression is :math:`f(y | \theta, x)`.
 This function ties together the ingredients of
 statistical inference and allows information to flow from the data
-:math:`D` to the parameters :math:`\theta`.
+:math:`D` to the parameters :math:`\theta`. The following formula, known as
+the Bayes rule,
+
+.. math::
+
+   p(\theta | D) = \frac{p(D | \theta)p(\theta)}{p(D)}
+
+gives us a way to calculate the desired posterior distribution.
+
+.. [#] This is a good point to highlight the fact that the choice of the model is a constant assumption in everything we do from now on. In research projects it is common to work with a few different models in parallel.
 
 The second ingredient of Bayesian inference is the prior distribution
 :math:`p(\theta)`. Priors are inescapably part of the Bayesian approach and, hence,
