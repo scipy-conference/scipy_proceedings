@@ -24,10 +24,9 @@
 
 
 ---------------------------------------------------------------------------------------------------------------------------------
-Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source Longitudinal Neighborhood Analysis Package (OSLNAP) [#]_
+Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source Longitudinal Neighborhood Analysis Package (OSLNAP) 
 ---------------------------------------------------------------------------------------------------------------------------------
 
-.. [#] This research was supported by NSF grant SES-1733705.
 
 .. class:: abstract
 
@@ -740,7 +739,9 @@ reproducible workflows as part of OSLNAP. Here we envisage leveraging our
 earlier work on provenance for spatial analytical workflows :cite:`Anselin_2014` and
 extending it to the full longitudinal neighborhood analysis pipeline.
 
-
+Acknowledgment
+--------------
+This research was supported by NSF grant SES-1733705.
 
 References
 ----------
