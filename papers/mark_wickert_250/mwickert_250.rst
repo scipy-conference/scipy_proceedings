@@ -255,7 +255,7 @@ or processing time delay of at least two times the :code:`frame_length` times th
 Moving along with this top level discussion, the central block of Figure :ref:`pyaudioDSPio` is 
 labeled Frame-Based DSP Callback, and as we have alluded to already, is where the real-time DSP 
 code resides. Global variables are needed inside the callback, as the input/output 
-signature is fixed by [pyAudio]_. The globals allow algorithm parameters to be available inside 
+signature is fixed by [pyaudio]_. The globals allow algorithm parameters to be available inside 
 the callback, e.g., filter coefficients, and in the case of a digital filter, the filter state 
 must be maintained from frame-to-frame. We will see in the examples section how 
 :code:`scipy.signal.lfilter()`, which implements (:ref:`LCCDE`), conveniently supports frame-based digital filtering. To allow 
