@@ -528,7 +528,8 @@ Composable OpenMP works slower as well since there is not enough work for each p
 ------------------------------------------------------
 The experiments in this section demonstrate the benefits of using nested parallelism and
 determine what degree of oversubscription impacts performance.
-We took our balanced eigenvalues search workload (section 3.2) and ran it in default and the best performing SMP modes.
+We took our balanced eigenvalues search workload (section 3.2) and ran it in default and
+the best performing SMP modes.
 Then we ran it with various sizes for the top level thread and process pool, from 1 to 88 workers.
 
 .. figure:: scalability_multithreading.png
@@ -548,7 +549,8 @@ The difference in execution time between these two methods starts from 8 threads
 and becomes larger as the pool size increases.
 
 The multi-processing scalability results are shown in figure :ref:`smp`.
-They can be obtained from the same example by replacing :code:`ThreadPool` by :code:`Pool`.
+Multi-processing version differs from multi-threading one by using :code:`multiprocessing.Pool`
+and returning no result out of the mapped function in order to exclude copying from the measurements.
 The results are very similar to the multi-threading case:
 oversubscription effects become visible starting from 8 processes at the top level of parallelization.
 
