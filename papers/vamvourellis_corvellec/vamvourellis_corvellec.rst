@@ -65,7 +65,7 @@ of different audiences. Firstly, it can help non-Bayesian statisticians, or
 beginning Bayesians, get a a sense of how to apply Bayesian statistics to their
 work. Secondly, it can provide computational scientists with advice on building
 a reproducible and efficient research workflow. And, thirdly, it can spark
-discussions with advanced Bayesians about the complexities of Bayesian
+discussions among advanced Bayesians about the complexities of Bayesian
 workflows and how to build better models.
 
 A Bayesian Workflow
@@ -410,12 +410,12 @@ the dataset looks like Table :ref:`mtable`.
 
 The fact that the effects are of mixed data types, binary and
 continuous, makes it harder to model their interdependencies. To address this
-challenge, we propose a latent variable  structure. Then, the expected value of
+challenge, we use a latent variable structure. Then, the expected value of
 the latent variables will correspond to the average effect of the treatment.
 Similarly, the correlations between the latent variables will correspond to the
 the correlations between the effects. Knowing the distribution of the latent
 variables will give us a way to predict what the effect will be on a new
-patient.
+patient, conditioned on the observed data.
 
 *2) Specify the model, likelihood, and priors*
 
@@ -428,11 +428,7 @@ control subjects by considering separately :math:`Y^T` (resp. :math:`Y^{C}`),
 the subset of :math:`Y` containing only treatment subjects (resp. control subjects).
 Since the model for :math:`Y^T` and :math:`Y^{C}` is identical, for convenience,
 we suppress the notation into :math:`Y` in the
-remainder of this section. Recall that the important feature of
-the data is that each column in :math:`Y` may be measured on different scales, i.e.,
-binary, count, continuous, etc. The main purpose of this work is to extend the
-current framework so that it can incorporate interdependencies between
-different features, both discrete and continuous.
+remainder of this section.
 
 We consider the following general latent variable framework. We assume subjects
 are independent and wish to model the dependencies between the effects.
@@ -450,9 +446,10 @@ measured on the binary scale, the model is
    Y_{ij} &\sim& \text{Bernoulli}(\eta_{ij})\\
    h_{j}(\eta_{ij}) &=& Z_{ij},
 
-where the link function can be the logit, probit, or any other bijection from
-:math:`[0, 1]` to the real line. Continuous data are assumed to be observed
-directly and accurately (without measurement error), and modeled as follows:
+where the link function :math:`h_{j}(\cdot)` can be the logit, probit, or any
+other bijection from :math:`[0, 1]` to the real line. Continuous data are
+assumed to be observed directly and accurately (without measurement error), and
+modeled as follows:
 
 .. math::
 
@@ -461,25 +458,26 @@ directly and accurately (without measurement error), and modeled as follows:
 In order to complete the model, we need to define the
 :math:`N\times K` matrix :math:`Z`.
 Here, we use a :math:`K`-variate normal distribution
-:math:`\mathcal{N}_K(\cdot)` on each :math:`Z_{i \cdot}` row, such that
+:math:`N_K(\cdot)` on each :math:`Z_{i \cdot}` row, such that
 
 .. math::
 
-   Z_{i\cdot} \sim \mathcal{N}_{K}(\mu, \Sigma),
+   Z_{i\cdot} \sim N_{K}(\mu, \Sigma),
 
 where :math:`\Sigma` is a :math:`K\times K` covariance matrix, :math:`\mu` is a row
 :math:`K`-dimensional vector, and :math:`Z_{i\cdot}` are independent for all :math:`i`.
 
-In the model above, the vector :math:`\mu=(\mu_{1},\dots,\mu_K)` represents
-the average treatment effect in the common scale. In our example, the first
-effect is directly observed whereas the other effects can only be
-inferred via the corresponding binary observations. Note that the variance of
-the non-observed latent variables is non-identifiable :cite:`Chib1998a,Talhouk2012a`,
-so we need to fix it to a known constant to fully specify
-the model. We do this by decomposing the covariance into correlation and
-variance: :math:`\Sigma = DRD`, where :math:`R` is the correlation matrix and :math:`D` is a
-diagonal matrix of variances :math:`D_{jj} = \sigma_j^2` for the :math:`j`-th effect.
-
+In the model above, the vector :math:`\mu=(\mu_{1},\dots,\mu_K)` represents the
+average treatment effect in the common scale. In our example, the first effect
+(Hemoglobin Level) is continuous and hence its latent value directly observed.
+For the remaining two effects (Dyspepsia and Nausea) their latent values can
+only be inferred via their binary observations. Note that the variance of
+the non-observed latent variables is non-identifiable
+:cite:`Chib1998a,Talhouk2012a`, so we need to fix it to a known constant (here we use 1) to
+fully specify the model. We do this by decomposing the covariance into
+correlation and variance: :math:`\Sigma = DRD`, where :math:`R` is the
+correlation matrix and :math:`D` is a diagonal matrix of variances :math:`D_{jj} =
+\sigma_j^2` for the :math:`j`-th effect.
 b. Likelihood
 
 The likelihood function can be expressed as
@@ -488,8 +486,8 @@ The likelihood function can be expressed as
    :type: eqnarray
 
    f(Y | Z, \mu, \Sigma) &=& f(Y|Z) \cdot p(Z| \mu, \Sigma)\\
-   &=& \prod_{j \in J_b} \prod_{i=1}^N h_j^{-1}(Z_{ij})^{Y_{ij}} (1-h_j^{-1}(Z_{ij}))^{(1-Y_{ij})} \cdot p(Z| \mu, \Sigma)\\
-   &=& \prod_{j \in J_b} \prod_{i=1}^N \eta_{ij}^{Y_{ij}} (1-\eta_{ij})^{(1-Y_{ij})} \cdot N(Z| \mu , \Sigma),\\
+   &=& [\prod_{j \in J_b} \prod_{i=1}^N h_j^{-1}(Z_{ij})^{Y_{ij}} (1-h_j^{-1}(Z_{ij}))^{(1-Y_{ij})}] \cdot p(Z| \mu, \Sigma)\\
+   &=& [\prod_{j \in J_b} \prod_{i=1}^N \eta_{ij}^{Y_{ij}} (1-\eta_{ij})^{(1-Y_{ij})}] \cdot N(Z| \mu , \Sigma),\\
 
 where :math:`J_b` is the index of effects that are binary and
 :math:`N(Z| \mu , \Sigma)` is the probability density function (pdf)
@@ -517,25 +515,30 @@ will be relatively insensitive to the priors.
 
 *3) Generate synthetic data*
 
-To generate synthetic data, we choose reasonable parameter values :math:`(\mu, \Sigma)`
-and generate 200 samples of underlying latent variables
-:math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_.
-We picked :math:`\mu = (0.3, 0.5, 0.7)`, :math:`\sigma = (1.3, 1, 1)`, and
-:math:`R(1, 2) = -0.5, \; R(1, 3) = -0.3, \; R(2, 3) = 0.7`.
-The observed synthetic data :math:`Y_{ij}` are defined to be equal to
-:math:`Z_{ij}` for the effects that are continuous. For the binary effects, we sample
-Bernoulli variables with probability equal to the inverse logit of the
-corresponding :math:`Z_{ij}` value.
+To generate synthetic data, given some values for the parameters :math:`(\mu,
+\Sigma)` we only need to follow the recipe given by the model. To fix the
+parameter values we could sample from the priors we chose, or just choose some
+reasonable values. Here we picked :math:`\mu = (0.3, 0.5, 0.7)`, :math:`\sigma =
+(1.3, 1, 1)`, and :math:`R(1, 2) = -0.5, \; R(1, 3) = -0.3, \; R(2, 3) = 0.7`.
+Then, as the model dictates, we use these values to generate samples of
+underlying latent variables :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_. Each
+:math:`Z_{i \cdot}` corresponds to a subject, here we choose to generate 200
+subjects. Each  The observed synthetic data :math:`Y_{ij}` are defined to be
+equal to :math:`Z_{ij}` for the effects that are continuous. For the binary
+effects, we sample Bernoulli variables with probability equal to the inverse
+logit of the corresponding :math:`Z_{ij}` value.
 
-.. [#] Both :math:`Z_{i\cdot} \sim \mathcal{N}_{K}(\mu, \Sigma)` and
+
+.. [#] Both :math:`Z_{i\cdot} \sim N_{K}(\mu, \Sigma)` and
        :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` hold, since the :math:`\sim`
        symbol means “is distributed as” and :math:`N(\mu,\Sigma)` is
-       the pdf of :math:`\mathcal{N}_{K}(\mu, \Sigma)`.
+       the pdf of :math:`N_{K}(\mu, \Sigma)`.
 
-A Bayesian model with proper informative priors, such as the one above, can also
-be used directly to sample synthetic data. As explained in the previous section,
-we can sample all the parameters according to the prior distributions.
-The synthetic data can then be interpreted as our prior distribution on the data.
+Recall that a Bayesian model with proper informative priors, such as the ones we
+use in this model, can also be used directly to sample synthetic data. As
+explained in the previous section, we can sample all the parameters according to
+the prior distributions. The synthetic data can then be interpreted as our prior
+distribution on the data.
 
 *4) Fit the model to the synthetic data*
 
@@ -559,7 +562,6 @@ The Stan program encoding this model is the following:
 
    parameters {
      vector[Kb] zb[N];
-     // first continuous, then binary
      cholesky_factor_corr[K] L_R;
      vector<lower=0>[Kc] sigma;
      vector[K] mu;
@@ -758,7 +760,7 @@ Although finding the right model parameterization does not admit a simple
 recipe, the Stan manual :cite:`StanManual` provides recommendations to common
 problems. For example, we can usually improve the sampling performance for
 normally distributed parameters of the form :math:`x \sim N(\mu, \sigma^2)`
-if we use the non-center parameterization :math:`x = \mu + \sigma^2 z` for
+if we use the non-center parameterization :math:`x = \mu + \sigma z` for
 :math:`z \sim N(0, 1)`.
 In our case study, we use this trick, or rather its multivariate version, by
 targeting the non-centered parts of the latent variable :code:`Z`
@@ -978,4 +980,3 @@ section, we are showcasing the analysis only with synthetic input data.
 
 References
 ----------
-
