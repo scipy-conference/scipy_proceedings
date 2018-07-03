@@ -231,7 +231,7 @@ This can be improved in the future in the following ways:
 
 * Introducing multidimensional CSR/CSC.
 
-You can see the current performance of the code in table :ref:`tab:bench`.
+You can see the current performance of the code in Table :ref:`tab:bench`.
 
 Currently, the implementation raises a :code:`ValueError` if :code:`ndarray` s are mixed with sparse
 arrays, or if the operation produces a dense array, such as operations like :code:`y = x + 5` where
@@ -249,7 +249,7 @@ was zero, :code:`y.fill_value` will be five). :cite:`sparse-arbitrary-fill-value
 Reductions
 ..........
 
-We implemented reductions by the simple concept of a "grouped reduce". The idea is to first group the
+We implemented reductions by the elegant concept of a "grouped reduce". The idea is to first group the
 coordinates by the non-selected axes, and then reduce along the selected axes. This is simple to
 implement in practice, and also works quite well. Here is some psuedocode that we use for reductions::
 
@@ -281,7 +281,7 @@ reductions to COO arrays. Notable unsupported reductions are :code:`argmin` and 
 they cannot be implemented in the form :code:`ufunc.reduce`.
 
 This is nearly as fast as the reductions in :code:`scipy.sparse` when reducing along C-contiguous axes,
-but is slow otherwise. Performance results can be seen in table :ref:`tab:bench`. Profiling reveals
+but is slow otherwise. Performance results can be seen in Table :ref:`tab:bench`. Profiling reveals
 that most of the time in the slow case is taken up by sorting, as :code:`ufunc.reduceat` expects all
 "groups" to be right next to each other. This can be improved in the following ways:
 
@@ -345,7 +345,7 @@ Reshaping corresponds to linearizing the coordinates and then doing the reverse 
 :code:`np.ravel_multi_index` and :code:`np.unravel_index`. However, we write our own custom implementation for
 this.
 
-:code:`dot` and :code:`tensordot`
+Matrix and tensor multiplication
 .................................
 
 For :code:`tensordot`, we currently just use the NumPy implementation, replacing :code:`np.dot` with
@@ -369,7 +369,7 @@ Because of our desire for clean and generic code as well as using mainly pure Py
 Cython/C/C++ in most places, our code is not as fast as :code:`scipy.sparse.csr_matrix`. It, however,
 does beat :code:`numpy.ndarray`, provided the sparsity of the array is small enough. The benchmarks
 were performed on a laptop with a Core i7-3537U processor and 16 GB of memory. Any arrays used had a
-shape of :code:`(10000, 10000)` with a density of :code:`0.001`. The results are tabulated in table
+shape of :code:`(10000, 10000)` with a density of :code:`0.001`. The results are tabulated in Table
 :ref:`tab:bench`.
 
 The NumPy results are given only for comparison, and for the purposes of illustrating that using sparse
