@@ -418,7 +418,7 @@ in Figure :ref:`f:ward`.
 
 .. figure:: la_ward_all.png
    :align: center
-   :scale: 30%
+   :scale: 40%
    :figclass: w
 
    Neighborhood Types in LA using Ward Clustering. :label:`f:ward`
@@ -475,7 +475,7 @@ type:
 
 .. figure:: la_ap_all.png
    :align: center
-   :scale: 30%
+   :scale: 40%
    :figclass: w
 
    Neighborhood Types in LA using Affinity Propagation. :label:`f:ap`
@@ -519,15 +519,15 @@ of neighborhoods that are similar in composition, but groups them
 together if and only if they also satisfy the criteria for a particular
 geographic relationship :cite:`wolf2018`. As such, the family of clustering
 algorithms that incorporate spatial constraints (from the tradition
-known as “regionalization”) must be applied cross-sectionally, and yield
-an independent set of clusters for each time period. The clusters, thus,
-depend not only on the composition of the census units, but also their
-spatial configuration and connectivity structure at any given time.
+known as “regionalization”) must be applied cross-sectionally, and yield an
+independent set of clusters for each time period, as shown in Figure :ref:`f:skater`.
+The clusters, thus, depend not only on the composition of the census units, but
+also their spatial configuration and connectivity structure at any given time.
 
 
 .. figure:: la_skater_all.png
    :align: center
-   :scale: 30%
+   :scale: 40%
    :figclass: w
 
    Neighborhood Types in LA using SKATER. :label:`f:skater`
@@ -576,7 +576,7 @@ census years identified by selected clustering algorithms in
 the former section as the input for the ``change`` module. Among the
 three clustering algorithms, SKATER was applied to each cross
 section of census tracts independently yielding clusters which are not
-directly comparable over time. Thus, we focuses only on the
+directly comparable over time. Thus, we focus only on the
 six neighborhood types identified by the agglomerative Ward method
 (Fig. :ref:`f:ward`) and the fourteen neighborhood types identified by
 the affinity propagation method (Fig. :ref:`f:ap`).
@@ -671,12 +671,13 @@ classifications, nor does it consider how well an area fits into its demographic
 Conceptually, this is important; even though the gist of the demographic
 classifications stay consistent over time, the members of these classes may
 shift around significantly over time. As a tract drifts from one classification
-to another classification over time, it may move within the class before it hops classifications
-if the movement is slow. This means that, at each point in time, tracts are 
-more or less representative of their clusters; a transition of one area from 
-"white working class" to "white upper class" may not necessarily reflect the same amount
-of social/spatial volatility as a move from "minority working class" to "white upper class,"
-as might happen during rapid gentrification.
+to another classification over time, it may move within the class before it hops
+classifications if the movement is slow. This means that, at each point in time,
+tracts are more or less representative of their clusters; a transition of one
+area from "white working class" to "white upper class" may not necessarily
+reflect the same amount of social/spatial volatility as a move from "minority
+working class" to "white upper class," as might happen during rapid
+gentrification.
 
 As such, we can also weight the edit distance based on how "expensive" the edit
 is in terms of the clustering distance. Using this weighting method, not all
@@ -732,17 +733,7 @@ extent.  By allowing the chart to change dynamically according to the current
 map view, investigators may examine the temporal change of neighborhoods in both
 global (e.g. Los Angeles metropolitan area) and local scales (e.g. downtown of
 Los Angeles), and determine the robustness of the spatial patterns that
-materialize. An example of the current visualization module showing linked cluster 
-maps over time and an associated stacked line plot is shown below in Figure :ref:`f:viz`.
-
-.. figure:: ward_viz.png
-   :align: center
-   :scale: 25%
-   :figclass: w
-
-
-   Interactive Vizualizations of Ward Clustering in Los Angeles :label:`f:viz`
-
+materialize.
 
 Reproducible Urban Science: A final direction for future research is the development of
 reproducible workflows as part of OSLNAP. Here we envisage leveraging our
