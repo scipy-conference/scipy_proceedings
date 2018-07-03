@@ -2,14 +2,14 @@
 :email: clm121@uga.edu
 :institution: University of Georgia
 
-:author: Shannon Quinn, PhD
+:author: Shannon Quinn
 :email: spq@uga.edu
 :institution: University of Georgia
 :bibliography: citations
 
---------------------------------------------------
-Developing an LSTM Pipeline for Accelerometer data
---------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------
+Developing a Start-to-Finish Pipeline for Accelerometer-Based Activity Recognition Using Long Short-Term Memory Recurrent Neural Networks
+-----------------------------------------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -280,7 +280,7 @@ The ranges of hyperparameters were devised to include all ranges explored by the
 
 .. raw:: latex
 
-   \setlength{\tablewidth}{0.9\linewidth}
+   \setlength{\tablewidth}{1.0\linewidth}
 
 .. table:: The various hyperparameters addressed in this experiement, and their respective ranges. :label:`hyperparameters`
   :class: w
@@ -336,9 +336,9 @@ We ran 5-fold CV on the optimized model and computed the overall and class-wise 
   +-----------+---------------------+-----------------+-----------+
   |           | Model               | Performance     | Features  |
   +===========+=====================+=================+===========+
-  | Classical | MC-SVM              | 0.96^*          | 551 HC    |
+  | Classical | MC-SVM              | 0.96*           | 551 HC    |
   +           +---------------------+-----------------+-----------+
-  |           | HF-MC-SVM           | 0.89^*          | 551 HC    |
+  |           | HF-MC-SVM           | 0.89*           | 551 HC    |
   +           +---------------------+-----------------+-----------+
   |           | OVO SVM             | 96.5%           | 551 HC    |
   +           +---------------------+-----------------+-----------+
@@ -372,7 +372,7 @@ We ran 5-fold CV on the optimized model and computed the overall and class-wise 
   |           +---------------------+-----------------+-----------+
   |           | Ours (Single best)  | 95.25%          | 3         |
   |           |                     +-----------------+-----------+
-  |           |                     | 0.9572^*        | 3         |
+  |           |                     | 0.9572*         | 3         |
   +-----------+---------------------+-----------------+-----------+
 
 Discussion
