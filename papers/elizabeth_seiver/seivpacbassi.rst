@@ -55,15 +55,16 @@ What is allofplos?
 
 ``allofplos`` is a Python package for downloading and maintaining up-to-date
 scientific article corpora, as well as parsing PLOS XML articles in the JATS
-format. It's available on PyPI as well as a GitHub repository. Many existing
+(Journal Article Tag Suite)[jats]
+format. It is available on PyPI[allofplospypi] as well as a GitHub repository[allofplosgh]. Many existing
 Python packages for parsing XML and/or JATS focus on defensive parsing, where
 the structure is assumed not to be reliable or the document is immediately
 converted to another intermediate format (often JSON) and XML is just a
-temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for
+temporary stepping stone. allofplos uses lxml[lxml05], which is compiled in C, for
 fast XML parsing and conversion to familiar Python data structures like lists,
 dictionaries, and datetime objects. The intended audience is researchers who are
 familiar with scientific articles and Python, but may not be familiar with JATS
-XML.
+XML. Other related tools include one from fellow Open Access publisher eLife[elife]. 
 
 Functionality
 -------------
@@ -96,7 +97,7 @@ download of the full corpus. This is a 4.6 GB zip file stored on Google Drive,
 updated daily via an internal PLOS server, that then is unzipped in that
 location to around 25 GB of 230,000+ XML articles. For incremental updates of
 the corpus, allofplos first scans the corpus directory for all DOIs (Digital Object
-Identifiers) of all articles (constructed from filenames) and compares that with
+Identifiers)[doi] of all articles (constructed from filenames) and compares that with
 every article DOI from the PLOS search API. The missing articles are then downloaded individually in a rate-limited fashion from links that are constructed using the DOIs.
 Those files are identical to the ones in the .zip file. The .zip file prevents users
 from needing to scrape the entire PLOS website for the XML files, and "smartly"
@@ -155,9 +156,9 @@ called without needing to re-read the XML file.
     >>> type(art.tree)
     lxml.etree._ElementTree
     
-``allofplos``'s article parsing focuses on metadata (e.g., article title, author
+Article parsing in ``allofplos`` focuses on metadata (e.g., article title, author
 names and institutions, date of publication, Creative Commons copyright
-license[CITE], JATS version/DTD), which are conveniently located in the ``front``
+license[cc], JATS version/DTD), which are conveniently located in the ``front``
 section of the XML. We designed the parsing API to quickly locate and parse XML
 elements as properties:
 
@@ -187,15 +188,18 @@ Using XPath
 ~~~~~~~~~~~
 
 You can also do XPath searches on `art.tree`, which works well for finding
-article elements that aren't Article class properties.
+article elements that are not Article class properties.
 
 .. code-block:: python
   
     >>> acknowledge = art.tree.xpath('//ack/p')[0]
     >>> acknowledge.text
     'We thank all contributors to the Performance Curve Database (pcdb.santafe.edu).'
+
+Use case: searching Methods sections
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-Let's put these pieces together to make a list of articles that use PCR in their
+We can put these pieces together to make a list of articles that use PCR in their
 Methods section (``pcr_list``). The body of an article is divided into sections
 (with the element tag 'sec') and the element attributes of Methods sections are
 either ``{'sec-type': 'materials|methods'}`` or ``{'sec-type': 'methods'}``. The
@@ -230,3 +234,16 @@ Query with peewee & SQLite
 -  Query the corpus using *peewee* ORM
 -  Included "starter" SQLite database
 -  SQLite database constructor available
+
+References
+----------
+.. [lxml05] Behnel, S., Faassen, M. et al. (2005),
+            lxml: XML and HTML with Python, http://lxml.de.
+.. [cc] Creative Commons Licenses. https://creativecommons.org/licenses/
+.. [allofplosgh] allofplos GitHub repository. https://github.com/PLOS/allofplos
+.. [allofplospypi] allofplos PyPI repository. https://pypi.org/project/allofplos/
+.. [jats] JATS NIH/NISO standard.
+          https://jats.nlm.nih.gov/publishing/tag-library/1.1d3/chapter/how-to-read.html
+.. [elife] elife-tools GitHub repository. https://github.com/elifesciences/elife-tools
+.. [doi] Digital Object Identifiers.
+         https://www.doi.org/doi_handbook/1_Introduction.html
