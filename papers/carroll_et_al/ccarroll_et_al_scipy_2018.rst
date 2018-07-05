@@ -504,9 +504,9 @@ demonstrates that these two functions converge as the x-axis of this
 plot is extended.
 
 .. figure:: ./consumption_functions.png
- :alt: Consumption Functions[fig:consumption-functions]
+ :alt: Consumption Functions
 
- Consumption Functions[fig:consumption-functions]
+ Consumption Functions
 
 Macroeconomics: the Market Class
 --------------------------------
@@ -614,7 +614,7 @@ for getting started contributing.
 Bibliography
 ============
 
-[Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." Dynare Working Papers 1, CEPREMAP.
+[Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
 
 
 [Carroll2017a] Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
@@ -637,7 +637,7 @@ Chun-Yi Yang. 2012. “Getting at Systemic Risk via an Agent-Based Model
 of the Housing Market.” *American Economic Review* 102 (3): 53-58.
 
 [Guvenen2011] Guvenen, Fatih. 2011. "Macroeconomics with Heterogeneity: A Practical Guide," 
-Economic Quarterly, Federal Reserve Bank of Richmond 97 (3): 255-326.
+*Economic Quarterly, Federal Reserve Bank of Richmond* 97 (3): 255-326.
 
 [Hommes2018] Hommes, Cars, and Blake LeBaron, eds. 2018. "Handbook of Computational Economics, 
 Vol 4: Heterogeneous Agent Modeling," *Handbook of Computational Economics*, Elsevier, Vol 4: 2-796.
