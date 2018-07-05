@@ -46,9 +46,9 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    proprietary desktop tools that do not interoperate well. In this work, we demonstrate building
    flexible, lightweight workflows entirely in Jupyter notebooks. We demonstrate these capabilities
    through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics) and
-   GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal of this work is 
-   to provide a set of tools that work well together and with the existing scientific python ecosystem, 
-   that can be used in browser based environments and that can easily be reconfigured and repurposed 
+   GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal of this work is
+   to provide a set of tools that work well together and with the existing scientific python ecosystem,
+   that can be used in browser based environments and that can easily be reconfigured and repurposed
    as needed to rapidly solve specific emerging issues such as hurricanes or dam failures.
 
    As part of this work, extensive improvements were made to several general-purpose open source 
@@ -70,14 +70,14 @@ primary interest are weather, hydrology, hydrodynamics, soil moisture and ground
 combine various material properties such as soil porosity and vegetation types with topology such as land surface 
 elevation and bathymetry, along with forcing functions such as rainfall, tide, and wind, to predict quantities of
 interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct 
-these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS)
-and Computational Model Builder (CMB) that are tied to certain platforms and do not interoperate [cite SMS & CMB]
+these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS) [Aquaveo]_
+and Computational Model Builder (CMB) [Hines09]_, [CMB]_ that are tied to certain platforms and do not interoperate
 well with each other. 
 
 The process of building and running environmental simulations using these tools is time consuming, requiring
 a large amount of manual effort and a fair amount of expertise. Typically, the time required to build a 
 reasonable model is measured in months. These workflows support some use cases well, especially multi-year projects 
-where there is often the need for highly accurate, high-resolution physical modeling. But these existing tools and workflows 
+where there is often the need for highly accurate, high-resolution physical modeling. But these existing tools and workflows
 are too heavyweight for other potential applications, such as making short-term operational decisions in novel 
 locations. They also make it difficult to flexibly switch between desktop and remote high-performance-computing (HPC)
 systems as needed for scaling up and for interactive use.
@@ -85,27 +85,27 @@ systems as needed for scaling up and for interactive use.
 An additional limitation of the existing desktop tools (i.e. CMB and SMS) are that the users are limited to the functionality
 and algorithms that are available in the tool. Adding new functionality requires expensive development efforts as well as
 cooperation of the tool vendors. For example, adding a coastline extraction tool to CMB based on the grabcut algorithm 
-[cite grabcut] required contracting with the vendor and several months of development time. As shown later in this paper, the 
+[Carsten04]_ required contracting with the vendor and several months of development time. As shown later in this paper, the
 functionality can be quickly put together using existing packages within the scientific python ecosystem.
 
 In this work, we demonstrate building flexible, lightweight workflows entirely in Jupyter notebooks with the aim of
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
-for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with 
+for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with
 local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples
-in hydrology and hydrodynamics using the AdH and GSSHA simulators [cite adh & gssha]. The goal of this work is to provide
-a set of tools that work well together and with the existing scientific python ecosystem, can be used in browser based 
-environments and that can easily be reconfigured and repurposed as needed to rapidly solve specific emerging issues. A 
-recent example of this was during Hurricane Harvey when ERDC was required at short notice to provide flood inundation 
-simulations of the cities of San Antonio, Houston and Corpus Christi to emergency response personel. This required rapid 
-assembly of available data from disparate sources, generation of computational grids, model setup and execution as well 
+in hydrology and hydrodynamics using the AdH [McAplin17]_ and GSSHA [Downer08]_ simulators. The goal of this work is to provide
+a set of tools that work well together and with the existing scientific python ecosystem, can be used in browser based
+environments and that can easily be reconfigured and repurposed as needed to rapidly solve specific emerging issues. A
+recent example of this was during Hurricane Harvey when ERDC was required at short notice to provide flood inundation
+simulations of the cities of San Antonio, Houston and Corpus Christi to emergency response personel. This required rapid
+assembly of available data from disparate sources, generation of computational grids, model setup and execution as well
 as generation of custom output visualizations.
 
 An explicit decision was made to avoid creation of new special-purpose libraries as much as possible and to instead enhance existing
 tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several 
 general-purpose open source packages, including support for annotating and editing plots and maps in Bokeh and 
 HoloViews, rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and Datashader, 
-and widget libraries for Param [cite all software]. In addition, two new open source projects are being released for 
-triangular mesh generation and environmental data access [cite filigree & quest].
+and widget libraries for Param [Bokeh]_, [Holoviews]_, [Geoviews]_, [Datashader]_, [Param]_. In addition, two new open source projects are being released for
+triangular mesh generation and environmental data access [Filigree]_, [Quest]_.
 
 Background
 ----------
@@ -159,20 +159,20 @@ space, such as:
 This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
 operational decisions.  Most of these stages are also locked into particular Windows-based GUI applications that are
-typically tied to execution only on specific desktop machines where they are installed. In most cases, once the model 
+typically tied to execution only on specific desktop machines where they are installed. In most cases, once the model
 input files are generated, they can be manually moved to an HPC cluster and run from the command line, but then no GUI is
-available.  This linkage of computation and visualization can be very problematic, because the local machine may not 
-have enough processing power to simulate the model in a reasonable time, but if the model is simulated remotely, the 
+available.  This linkage of computation and visualization can be very problematic, because the local machine may not
+have enough processing power to simulate the model in a reasonable time, but if the model is simulated remotely, the
 resulting data files can be too large to be practical to transfer to the local machine for analysis. To give an example of
-the data sizes and timescales involved, simple example/tutorial hydrodynamic model runs on idealized domains using AdH 
-can take upto an hour. The largest simulation that can be run on a local workstation generate files of the order of a few 
-gigabytes and can take several days to run. Realistic, regional scale models are almost always run on HPC systems typically using 
-500 to a 1000 processors and generate upto a terabyte worth of data. HPC runs typically take anywhere from several hours to a day 
-to complete. An example of the type of HPC systems used for AdH model runs are the Department of Defences supercomputers Topaz and Onyx. 
+the data sizes and timescales involved, simple example/tutorial hydrodynamic model runs on idealized domains using AdH
+can take upto an hour. The largest simulation that can be run on a local workstation generate files of the order of a few
+gigabytes and can take several days to run. Realistic, regional scale models are almost always run on HPC systems typically using
+500 to a 1000 processors and generate upto a terabyte worth of data. HPC runs typically take anywhere from several hours to a day
+to complete. An example of the type of HPC systems used for AdH model runs are the Department of Defences supercomputers Topaz and Onyx.
 Topaz is an SGI ICE X System. Standard compute nodes have two 2.3-GHz Intel Xeon Haswell 18-core processors (36 cores) and 128 GBytes of DDR4 memory.
 Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx is a Cray XC40/50. Standard compute nodes have
 two 2.8-GHz Intel Xeon Broadwell 22-core processors (44 cores) and 128 GBytes of DDR4 memory. Compute nodes are interconnected
-by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [cite
+by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [ERDCHPC]_
 
 Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide 
 set of assumptions and architectural decisions specific to the application domain (environmental simulation), and 
@@ -198,10 +198,10 @@ new tools before moving them into other more general purpose python libraries as
 to solve the common Earth Science simulation workflow and visualization problems outlined above. EarthSim aims to demonstrate building
 flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational 
 decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
-The overall goal is to provide a set of tools that work well together and with the wider scientific python ecosystem. 
-EarthSim is not meant to be a one-size-fits-all solution for environmental simulation workflows but a library of tools 
-that can be mixed and matched with other tools within the python ecosystem to solve problems flexibly and quickly. To that 
-end, the specific enhancements we describe are targeted towards areas where existing tools were not available or were 
+The overall goal is to provide a set of tools that work well together and with the wider scientific python ecosystem.
+EarthSim is not meant to be a one-size-fits-all solution for environmental simulation workflows but a library of tools
+that can be mixed and matched with other tools within the python ecosystem to solve problems flexibly and quickly. To that
+end, the specific enhancements we describe are targeted towards areas where existing tools were not available or were
 insufficient for setting up an end to end simulation.
 
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
@@ -215,9 +215,9 @@ other new open source tools Filigree and Quest. Short descriptions of these tool
 
 **Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
 
-All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches). 
-The key is concept is that the local client system is will always be cabable of performing the visualization, i.e. can deliver it to the user in a browser, regardless of the dataset size.  The assumption is that the remote server will be able to handle the datasets, but because datashader is based on the dask parallel library, it is possible to  assemble a remote system out of as many nodes as required need to handle a given dataset, also work can be done out of core if the user is prepared to wait.  
-Based on this architecture, this software stack will not be a limiting factor, only the users ability to procure nodes or the time taken to render. This is in contrast to other software stacks that typically have a hard size limit. It can be clarified that we have achieved this claim by a three-level implementation: dask, which can distribute the computation across arbitrarily many user-selected nodes (or multiplexed over time using the same node) to achieve the required computational power and memory, datashader, which can make use of data and compute managed by dask to reduce the data into a fixed-size raster for display, and bokeh, to render the resulting raster along with other relevant data like maps.  
+All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches).
+The key is concept is that the local client system is will always be cabable of performing the visualization, i.e. can deliver it to the user in a browser, regardless of the dataset size.  The assumption is that the remote server will be able to handle the datasets, but because datashader is based on the dask parallel library, it is possible to  assemble a remote system out of as many nodes as required need to handle a given dataset, also work can be done out of core if the user is prepared to wait.
+Based on this architecture, this software stack will not be a limiting factor, only the users ability to procure nodes or the time taken to render. This is in contrast to other software stacks that typically have a hard size limit. It can be clarified that we have achieved this claim by a three-level implementation: dask, which can distribute the computation across arbitrarily many user-selected nodes (or multiplexed over time using the same node) to achieve the required computational power and memory, datashader, which can make use of data and compute managed by dask to reduce the data into a fixed-size raster for display, and bokeh, to render the resulting raster along with other relevant data like maps.
 
 In addition, the data is not encoded, compressed, modeled, or subsampled, it's just aggregated (no data is thrown away, it's simply summed or averaged), and the aggregation is done on the fly to fit the resolution of the screen. So it provides the experience of having the dataset locally, without actually having it and allows for responsive interactive exploration of very large datasets.
 
@@ -227,7 +227,7 @@ In addition, the data is not encoded, compressed, modeled, or subsampled, it's j
 
 **Quest** is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
 
-**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
+**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [Aquaveo]_. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
 
 In surveying the landscape of existing python tools to conduct environmental simulations entirely within a Jupyter notebook
 environment, four areas were found to be deficient:
@@ -250,7 +250,19 @@ The Bokeh plotting library has long supported extensive interactive operations f
   - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
 To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
-further processing. As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
+further processing.
+
+.. figure:: images/drawing_tools.png
+
+   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawingtools`
+
+.. figure:: images/drawing_tools_python.png
+
+   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawingtoolspython`
+
+Similar tools allow editing points, polygons, and polylines.
+
+As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
 
 .. code-block:: python
 
@@ -261,7 +273,7 @@ further processing. As a simple motivating example, drawing a bounding box on a 
    gv.extension('bokeh')
    box = gv.Polygons(hv.Box(0, 0, 1000000))
    roi = hvs.BoxEdit(source=box)
-   gts.StamenTerrain.options(width=600) * box
+   gts.StamenTerrain.options(width=900, height=500) * box
 
 In a Jupyter notebook, this code will display a world map and let the user move or edit a box to cover the region of interest (ROI), which can then be accessed from Python as:
 
@@ -275,9 +287,10 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
 
    import quest
    import xarray as xr
+   import holoviews as hv
    import cartopy.crs as ccrs
 
-   element = gv.operation.project(roi.element, projection=ccrs.PlateCarree())
+   element = gv.operation.project(hv.Polygons(roi.element), projection=ccrs.PlateCarree())
    xs, ys = element.array().T
    bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
 
@@ -294,16 +307,9 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
    img = gv.Image(elevation_raster, ['x', 'y'])
    gts.StamenTerrain.options(width=600) * img
 
-.. figure:: images/drawing_tools.png
+.. figure:: images/drawing_tools_output_data.png
 
-   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawingtools`
-
-.. figure:: images/drawing_tools_python.png
-
-   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawingtoolspython`
-
-Similar tools allow editing points, polygons, and polylines.
-
+   Visualization data downloaded with quest for a ROI specified with the drawing tools. :label:`drawingtoolsoutputdata`
 
 Enhancements: Annotations
 -------------------------
@@ -359,7 +365,7 @@ Crucially, note that very little of the code involved here is customized for hyd
 
 GSSHA Hydrology Workflow Example
 --------------------------------
-Using many of the tools described here, we have created a notebook workflow to setup, execute, and visualize the results of the GSSHA hydrology model. This workflow uses the drawing tools to specify an area of interest, and then Quest to download elevation and landuse data. Param is used to specify the model inputs, and finally GeoViews and Datashader are used to visualize the results. This flexible workflow can easily be applied to any location in the globe, and the specific output visualizations can easily be modified to meed specific project needs.
+Using many of the tools described here, we have created a notebook workflow to setup, execute, and visualize the results of the GSSHA hydrology model. This workflow uses the drawing tools to specify an area of interest, and then Quest to download elevation and landuse data. Param is used to specify the model inputs, and finally GeoViews and Datashader are used to visualize the results. This flexible workflow can easily be applied to any location in the globe, and the specific output visualizations can easily be modified to meet specific project needs.
 
 AdH Dambreak Workflow Example
 -----------------------------
@@ -405,22 +411,24 @@ References
 
 .. [Carsten04] Carsten Rother, Vladimir Kolmogorov, and Andrew Blake. 2004. "GrabCut": interactive foreground extraction using iterated graph cuts. ACM Trans. Graph. 23, 3 (August 2004), 309-314. DOI: https://doi.org/10.1145/1015706.1015720
 
-.. [SMS] SMS Website https://www.aquaveo.com
+.. [Aquaveo] “Introduction | Aquaveo.com.” [Online]. Available: https://www.aquaveo.com/. [Accessed: 05-Jul-2018].
 
-.. [CMB] CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
+.. [CMB] “CMB Hydro | CMB.” [Online]. Available: https://www.computationalmodelbuilder.org/cmb-hydro/. [Accessed: 05-Jul-2018].
 
-.. [Bokeh] Bokeh Website https://bokeh.pydata.org
+.. [Bokeh] “Welcome to Bokeh — Bokeh 0.13.0 documentation.” [Online]. Available: https://bokeh.pydata.org/en/latest/. [Accessed: 05-Jul-2018].
 
-.. [Holoviews] Holoviews Website http://holoviews.org
+.. [Holoviews] “HoloViews — HoloViews.” [Online]. Available: http://holoviews.org/. [Accessed: 05-Jul-2018].
 
-.. [Geoviews] Geoviews Website http://geoviews.org
+.. [Geoviews] “GeoViews — GeoViews 1.5.0+g63ddd7c-dirty documentation.” [Online]. Available: http://geoviews.org/. [Accessed: 05-Jul-2018].
 
-.. [Param] Param Website https://ioam.github.io/param
+.. [Datashader] “Installation — Datashader 0.6.6+geb9218c-dirty documentation.” [Online]. Available: http://datashader.org/. [Accessed: 05-Jul-2018].
+
+.. [Param] “Param — Param 1.4.1-dev documentation.” [Online]. Available: http://param.pyviz.org/. [Accessed: 05-Jul-2018].
 
 .. [Filigree] TODO talk to Aquaveo for correct Filigree reference
 
-.. [Quest] Quest Website https://quest.readthedocs.io/
+.. [Quest] “Welcome to Quest’s documentation! — Quest 0.5 documentation.” [Online]. Available: https://quest.readthedocs.io/en/latest/. [Accessed: 05-Jul-2018].
 
-.. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
+.. [EarthSim] “EarthSim — EarthSim 0.0.1 documentation.” [Online]. Available: http://earthsim.pyviz.org/. [Accessed: 05-Jul-2018].
 
-.. [ERDCHPC] ERDC HPC Hardware https://www.erdc.hpc.mil/hardware/index.html
+.. [ERDCHPC] “ERDC DSRC - Hardware.” [Online]. Available: https://www.erdc.hpc.mil/hardware/index.html. [Accessed: 05-Jul-2018].
