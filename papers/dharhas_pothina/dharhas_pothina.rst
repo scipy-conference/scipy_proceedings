@@ -82,6 +82,12 @@ are too heavyweight for other potential applications, such as making short-term 
 locations. They also make it difficult to flexibly switch between desktop and remote high-performance-computing (HPC)
 systems as needed for scaling up and for interactive use.
 
+An additional limitation of the existing desktop tools (i.e. CMB and SMS) are that the users are limited to the functionality
+and algorithms that are available in the tool. Adding new functionality requires expensive development efforts as well as
+cooperation of the tool vendors. For example, adding a coastline extraction tool to CMB based on the grabcut algorithm 
+[cite grabcut] required contracting with the vendor and several months of development time. As shown later in this paper, the 
+functionality can be quickly put together using existing packages within the scientific python ecosystem.
+
 In this work, we demonstrate building flexible, lightweight workflows entirely in Jupyter notebooks with the aim of
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
 for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples in hydrology and hydrodynamics using 
@@ -349,6 +355,8 @@ References
 .. [McAplin17] McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
 
 .. [Hines09] A. Hines et al., "Computational Model Builder (CMB): A Cross-Platform Suite of Tools for Model Creation and Setup," 2009 DoD High Performance Computing Modernization Program Users Group Conference, San Diego, CA, 2009, pp. 370-373.
+
+.. [Carsten04] Carsten Rother, Vladimir Kolmogorov, and Andrew Blake. 2004. "GrabCut": interactive foreground extraction using iterated graph cuts. ACM Trans. Graph. 23, 3 (August 2004), 309-314. DOI: https://doi.org/10.1145/1015706.1015720
 
 .. [SMS] SMS Website https://www.aquaveo.com
 
