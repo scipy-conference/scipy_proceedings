@@ -235,6 +235,24 @@ Query with peewee & SQLite
 -  Included "starter" SQLite database
 -  SQLite database constructor available
 
+Future directions
+-----------------
+We also have plans for future updates to allofplos. First, we plan to make the article
+parsing publisher-neutral, allowing for reading JATS content from other publishers
+in addition to PLOS. Second, we want to improve incremental corpus updates so that all
+changes can be downloaded and updated via a standardized mechanism such as a hash
+table. This includes 'silent republications', where articles are updated online without
+an official correction notice (the substance of the article is unchanged but
+the XML has been updated). While the local allofplos server has methods for
+catching these changes and updating the zip file appropriately, there is not currently
+a way to make sure a user's local corpus copy reflects all of those changes. Third, we
+want to expand the possibilities of multiple corpora and allow for article versioning,
+such as for comparing older and newer versions of articles instead of just replacing
+them entirely. And finally, we want to expand and integrate the functionality of the
+sqlite database so that selecting a subset of articles based on metadata criteria such
+as journal, publication date, or author is faster and easier than looping through each
+XML file individually.
+
 References
 ----------
 .. [lxml05] Behnel, S., Faassen, M. et al. (2005),
