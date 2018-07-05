@@ -160,11 +160,19 @@ This overall pipeline can give very high quality results, but it takes 3-6 month
 both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
 operational decisions.  Most of these stages are also locked into particular Windows-based GUI applications that are
 typically tied to execution only on specific desktop machines where they are installed. In most cases, once the model 
-input files are generated, they can be moved to an HPC cluster and run from the command line, but then no GUI is
-available.  This linkage of 
-computation and visualization can be very problematic, because the local machine may not have enough processing 
-power to simulate the model in a reasonable time, but if the model is simulated remotely, the resulting data files 
-can be too large to be practical to transfer to the local machine for analysis. 
+input files are generated, they can be manually moved to an HPC cluster and run from the command line, but then no GUI is
+available.  This linkage of computation and visualization can be very problematic, because the local machine may not 
+have enough processing power to simulate the model in a reasonable time, but if the model is simulated remotely, the 
+resulting data files can be too large to be practical to transfer to the local machine for analysis. To give an example of
+the data sizes and timescales involved, simple example/tutorial hydrodynamic model runs on idealized domains using AdH 
+can take upto an hour. The largest simulation that can be run on a local workstation generate files of the order of a few 
+gigabytes and can take several days to run. Realistic, regional scale models are almost always run on HPC systems typically using 
+500 to a 1000 processors and generate upto a terabyte worth of data. HPC runs typically take anywhere from several hours to a day 
+to complete. An example of the type of HPC systems used for AdH model runs are the Department of Defences supercomputers Topaz and Onyx. 
+Topaz is an SGI ICE X System. Standard compute nodes have two 2.3-GHz Intel Xeon Haswell 18-core processors (36 cores) and 128 GBytes of DDR4 memory.
+Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx is a Cray XC40/50. Standard compute nodes have
+two 2.8-GHz Intel Xeon Broadwell 22-core processors (44 cores) and 128 GBytes of DDR4 memory. Compute nodes are interconnected
+by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [cite ERDCHPC]
 
 Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide 
 set of assumptions and architectural decisions specific to the application domain (environmental simulation), and 
@@ -381,3 +389,14 @@ References
 .. [Quest] Quest Website https://quest.readthedocs.io/
 
 .. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
+.. [Geoviews] Geoviews Website http://geoviews.org
+
+.. [Param] Param Website https://ioam.github.io/param
+
+.. [Filigree] TODO talk to Aquaveo for correct Filigree reference
+
+.. [Quest] Quest Website https://quest.readthedocs.io/
+
+.. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
+
+.. [ERDCHPC] ERDC HPC Hardware https://www.erdc.hpc.mil/hardware/index.html
