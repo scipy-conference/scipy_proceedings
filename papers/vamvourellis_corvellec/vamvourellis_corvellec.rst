@@ -99,8 +99,7 @@ extended to include the following steps:
 6. Check the predictive accuracy of the model;
 7. Evaluate the model fit;
 8. Select best model among different candidates (model selection);
-9. Specify and integrate the utility function over the posterior distribution;
-10. Perform a sensitivity analysis.
+9. Perform a sensitivity analysis.
 
 In what follows, we will use :math:`M(\theta)` to denote the model as
 a function of its parameter :math:`\theta` (:math:`\theta` is either a scalar
@@ -157,14 +156,8 @@ being chosen and assumed known [#]_. Note, however, that when the model
 includes covariates, the more accurate expression is :math:`f(y | \theta, x)`.
 This function ties together the ingredients of
 statistical inference and allows information to flow from the data
-:math:`D` to the parameters :math:`\theta`. The following formula, known as
-the Bayes rule,
-
-.. math::
-
-   p(\theta | D) = \frac{p(D | \theta)p(\theta)}{p(D)}
-
-gives us a way to calculate the desired posterior distribution.
+:math:`D` to the parameters :math:`\theta`. With Bayes' rule, :math:`p(\theta | D) = p(D | \theta)p(\theta)/p(D)`
+we can calculate the posterior distribution.
 
 .. [#] This is a good point to highlight the fact that the choice of the model is a constant assumption in everything we do from now on. In research projects it is common to work with a few different models in parallel.
 
@@ -225,14 +218,8 @@ To do that, we choose reasonable
 parameter values :math:`\theta_0` and use :math:`M` to generate data
 based on these values. Alternatively,
 instead of coming up with reasonable parameter values, we can sample
-these values from the prior distribution
-
-.. math::
-
-   \theta_0 \sim p(\theta).
-
-The synthetic data
-:math:`D'`
+these values from the prior distribution :math:`\theta_0 \sim p(\theta).`
+The synthetic data :math:`D'`
 can then be interpreted as our prior distribution of the data.
 Hence, by inspecting the synthetic data, we can reflect back on our choices for the
 likelihood and priors. However,
@@ -341,17 +328,7 @@ by the following formula:
    &=& \int p( \tilde{y} |  \theta) p(\theta | D) d\theta
 
 In practice, we approximate the integral using samples from the posterior
-distributions, by mapping each parameter posterior sample
-
-.. math::
-
-   \tilde{\theta} \sim p(\theta|D)
-
-to the corresponding sample of the posterior predictive distribution
-
-.. math::
-
-   \tilde{y} \sim p (\tilde{y} | D).
+distributions.
 
 Posterior predictive accuracy is useful even outside the strict scope of a
 predictive task. Posterior predictive checks, evaluating the predictive accuracy
