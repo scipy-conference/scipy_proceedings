@@ -253,7 +253,7 @@ generally a hard problem. In most cases, we cannot derive the mathematical form
 of the posterior distribution; instead, we settle for an algorithm that returns
 samples from the posterior distribution.
 
-When we fit the model to synthetic data, we want to check two things, i.e., the correctness
+When we fit the model to synthetic data, we want to check two things, the correctness
 of the inference algorithm and the quality of our model.
 
 a. Much like in software testing, we want to check if the inference process
@@ -273,52 +273,55 @@ as opposed to the inference algorithm.
 By fitting the model to synthetic data, we recover samples from the posterior
 distribution of the model parameters. There are various model fit tests to
 choose from. At a minimum,
-we need to check that the 95% posterior confidence intervals cover the true
-parameter values :math:`\theta_0` that were used to generate the synthetic data. We should
-tolerate a few misses, since 95% intervals will not cover the true values 5% of the
-time, even if the algorithm is perfectly calibrated. Success at this stage is
-not sufficient guarantee that the model will fit well to the real data, but it is
+we need to check that the true parameter :math:`\theta_0` values are within
+the range implied by the posterior distributions [#]_. Success at this stage is
+not a sufficient guarantee that the model will fit well to the real data, but it is
 a necessary condition for proceeding further.
 
-b. Equipped with a correct inferential algorithm for our model :math:`M`,
-it is time to critique the model and ask if it is appropriate for the application.
-More generally, this is a good time to check the model fit and decide if we
-need to make any changes to it. This step is usually specific to each
-application. There is no limit as to how many tests we can do at this stage. It is
-up to us to decide which tests are necessary to build confidence in
-the model. If we choose a different model :math:`M'`, we need to go
-back to step 2 and start again.
-Note that for a more comprehensive evaluation of the model, we can, and
-probably should, wait until we check how the model fits the real data as well.
+.. [#] A common test is to construct an interval that includes 95 % of the most likely values, called highest posterior density interval, and check that it covers the true parameter values :math:`\theta_0` that were used to generate the synthetic data. We should tolerate a few misses, since 95% intervals will not cover the true values 5% of the time, even if the algorithm is perfectly calibrated.
+
+b. Fitting the model to synthetic data is the first opportunity to critique the
+model :math:`M` and, if necessary, calibrate it to better suit our needs. This is a good
+time to catch any issues that affect the quality of the model irrespective of
+how well it captures reality. For example, an issue that comes up often
+is non-identifiability, the situation where the likelihood and the data is specified in
+a way such that there is not enough information to identify the correct parameter values, no
+matter how big the sample size is. It is also a
+good time to check if small variations to the model (such as  replacing a Normal
+with a heavier tail distribution) fit our needs better. For instance,
+calibrating a model to make inferences about the center of a distribution, such
+as the mean, is relatively easy. On the other hand, we might need to do more
+extensive calibration if we are interested in the tail behavior of
+the distribution, such as maximum values. If we do choose to use a different
+model :math:`M'`, we need to go back to step 2 and start again.
+
+Model evaluation is an essential part of a good workflow. It is a complex task
+that can be used both with synthetic and real data, providing possibly different
+insights each time. We do not have space to go into more  details in this paper
+but we provide pointers in the further reading section.
 
 *5. Fit the model to the real data*
 
-This is the time we have been waiting for. Once we have finalized the design of
-our model and have tested it on synthetic data, we are ready to fit it to the real
-data and get the results. Usually, we focus our attention on a specific
-quantity of interest to our problem, that is derived from the posterior samples
-(see our case study in the next section for an example). If we are satisfied
-with the fit of the model and the results, we are done.
-
-In most cases, though, at this stage we are expected to evaluate the model to
-revise it as necessary, depending on the application.
-For example, the model
-may capture the average of the quantity but fail to capture the behavior at
-the tails of the distribution.  This step is highly application-specific and
-requires a combination of statistical expertise and subject-matter expertise. It is
-important to build confidence in the power of our inference algorithm before we
-proceed to interpreting the results, in order to be able to separate, to the extent
-possible, inference issues from model issues. At this stage, it is likely that we
-will come up with a slightly updated model :math:`M'`. We then have to go
+This is the moment we have been waiting for, we are ready to fit it our model to
+the real data and get the final results. Usually, we focus our attention on a
+specific quantity of interest that is derived from the posterior samples (see
+further reading for pointers). If we are satisfied with the
+fit of the model, we are done. In most cases, though, at this
+stage we are expected to evaluate the model again,  this time focusing on how
+well it captures reality. This step is highly application-specific and requires
+a combination of statistical expertise and subject-matter expertise (we refer
+the interested reader to sources later). We note that it is important to build
+confidence in the power of our inference algorithm before proceeding on to
+interpreting the results. This helps us separate, to the extent
+possible, inference issues from model issues. At this stage, it is likely that
+we will come up with a slightly updated model :math:`M'`. We then have to go
 back and start again from the beginning.
 
 *Posterior Predictive Checks and Model Evaluation*
 
 In this subsection, we would like to touch briefly on two topics for more
-advanced workflows, predictive accuracy and model evaluation.
-One way to evaluate a model is to check how well it predicts unknown observable
-data :math:`\tilde{y}`, where unknown means that the model was not fit
-to :math:`\tilde{y}`. The Bayesian posterior predictive distribution is given
+advanced workflows, prediction and model evaluation.
+The Bayesian posterior predictive distribution is given
 by the following formula:
 
 .. math::
@@ -330,12 +333,11 @@ by the following formula:
 In practice, we approximate the integral using samples from the posterior
 distributions.
 
-Posterior predictive accuracy is useful even outside the strict scope of a
-predictive task. Posterior predictive checks, evaluating the predictive accuracy
-of a model [#]_, can be a good method to evaluate a model, especially in exploratory
-analyses. A model that predicts well is a model that fits the data well. Model
-evaluation is an extensive area of research with a rich literature, which is
-beyond the scope of this contribution.
+Posterior predictive checks, evaluating the predictive accuracy
+of a model, can also be used to evaluate a model.
+To do that we check how well it predicts unknown observable
+data :math:`\tilde{y}`, where unknown means that the model was not fit
+to :math:`\tilde{y}` [#]_.
 
 .. [#] To check the predictive accuracy of the model, we need to measure our
        predictions :math:`\tilde{y}` against real data. To do this, we usually
