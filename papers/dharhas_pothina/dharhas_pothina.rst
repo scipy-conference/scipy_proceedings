@@ -429,6 +429,6 @@ References
 
 .. [Quest] “Welcome to Quest’s documentation! — Quest 0.5 documentation.” [Online]. Available: https://quest.readthedocs.io/en/latest/. [Accessed: 05-Jul-2018].
 
-.. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
+.. [EarthSim] “EarthSim — EarthSim 0.0.1 documentation.” [Online]. Available: http://earthsim.pyviz.org/. [Accessed: 05-Jul-2018].
 
 .. [ERDCHPC] “ERDC DSRC - Hardware.” [Online]. Available: https://www.erdc.hpc.mil/hardware/index.html. [Accessed: 05-Jul-2018].
