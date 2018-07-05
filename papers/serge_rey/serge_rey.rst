@@ -701,8 +701,7 @@ cases.
 Future Directions
 -----------------
 
-In this paper we have presented the motivation for, and initial design and
-implementation of OSLNAP. At present, we are in the early phases of the project
+At present, we are in the early phases of the project
 and moving forward we will be focusing on the following directions.
 
 Parameter sweeps: In the definition of neighborhoods, a researcher faces a
@@ -726,18 +725,18 @@ paper, OSLNAP is being designed  with a web-based, interactive front-end that
 allows users to explore the results of  different neighborhood analyses with the
 assistance of linked maps, charts, and tables. Together, these linked "views"
 allow a researcher to interrogate their results in a manner far richer than
-creating a series of static maps. Users may change the map extent, and the
-associated charts are redrawn using only the data that falls within the map
-extent.  By allowing the chart to change dynamically according to the current
-map view, investigators may examine the temporal change of neighborhoods in both
-global (e.g. Los Angeles metropolitan area) and local scales (e.g. downtown of
-Los Angeles), and determine the robustness of the spatial patterns that
-materialize.
+creating a series of static maps. 
 
-Reproducible Urban Science: A final direction for future research is the development of
+Reproducible Urban Data Science: A final direction for future research is the development of
 reproducible workflows as part of OSLNAP. Here we envisage leveraging our
 earlier work on provenance for spatial analytical workflows :cite:`Anselin_2014` and
 extending it to the full longitudinal neighborhood analysis pipeline.
+
+Conclusion
+----------
+
+In this paper we have presented the motivation for, and initial design and
+implementation of OSLNAP. We feel that, even at this early stage in the project, OSLNAP has benefitted from the scope and deep nature of the PyData stack as we have been able to move from conceptualization to prototyping in fairly short order. At the same time, we see OSLNAP playing an important role in widening the use of Python in urban and spatial data science. We are looking forward to the future development of OSLNAP and interaction with both the PyDATA community and the broader community of computational social sciences.
 
 Acknowledgment
 --------------
