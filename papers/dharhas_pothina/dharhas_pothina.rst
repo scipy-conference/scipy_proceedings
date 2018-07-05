@@ -179,7 +179,10 @@ to solve the common Earth Science simulation workflow and visualization problems
 flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational 
 decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
 The overall goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
-as needed to rapidly solve specific emerging issues.
+as needed to rapidly solve specific emerging issues. A recent example of this was during Hurricane Harvey when ERDC was 
+required at short notice to provide flood inundation simulations of the cities of San Antonio, Houston and Corpus Christi 
+to emergency response personel. This required rapid assembly of available data from disparate sources, generation of 
+computational grids, model setup and execution as well as generation of custom output visualizations.
 
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other new open source tools Filigree and Quest. Short descriptions of these tools follow:
