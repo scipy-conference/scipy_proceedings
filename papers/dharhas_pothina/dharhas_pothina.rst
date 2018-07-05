@@ -348,6 +348,8 @@ References
 
 .. [McAplin17] McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
 
+.. [Hines09] A. Hines et al., "Computational Model Builder (CMB): A Cross-Platform Suite of Tools for Model Creation and Setup," 2009 DoD High Performance Computing Modernization Program Users Group Conference, San Diego, CA, 2009, pp. 370-373.
+
 .. [SMS] SMS Website https://www.aquaveo.com
 
 .. [CMB] CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
