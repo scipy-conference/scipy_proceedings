@@ -307,7 +307,7 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
    img = gv.Image(elevation_raster, ['x', 'y'])
    gts.StamenTerrain.options(width=600) * img
 
-.. figure:: images/drawing_tools_output_data.png
+.. figure:: images/drawing_tools_example_output_data.png
 
    Visualization data downloaded with quest for a ROI specified with the drawing tools. :label:`drawingtoolsoutputdata`
 
