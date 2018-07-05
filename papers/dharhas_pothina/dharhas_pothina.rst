@@ -70,8 +70,8 @@ primary interest are weather, hydrology, hydrodynamics, soil moisture and ground
 combine various material properties such as soil porosity and vegetation types with topology such as land surface 
 elevation and bathymetry, along with forcing functions such as rainfall, tide, and wind, to predict quantities of
 interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct 
-these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS)
-and Computational Model Builder (CMB) that are tied to certain platforms and do not interoperate [cite SMS & CMB]
+these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS) [Aquaveo]_
+and Computational Model Builder (CMB) [Hines09]_, [CMB]_ that are tied to certain platforms and do not interoperate
 well with each other. 
 
 The process of building and running environmental simulations using these tools is time consuming, requiring
@@ -85,14 +85,14 @@ systems as needed for scaling up and for interactive use.
 An additional limitation of the existing desktop tools (i.e. CMB and SMS) are that the users are limited to the functionality
 and algorithms that are available in the tool. Adding new functionality requires expensive development efforts as well as
 cooperation of the tool vendors. For example, adding a coastline extraction tool to CMB based on the grabcut algorithm 
-[cite grabcut] required contracting with the vendor and several months of development time. As shown later in this paper, the 
+[Carsten04]_ required contracting with the vendor and several months of development time. As shown later in this paper, the
 functionality can be quickly put together using existing packages within the scientific python ecosystem.
 
 In this work, we demonstrate building flexible, lightweight workflows entirely in Jupyter notebooks with the aim of
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
 for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with
 local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples
-in hydrology and hydrodynamics using the AdH and GSSHA simulators [cite adh & gssha]. The goal of this work is to provide
+in hydrology and hydrodynamics using the AdH [McAplin17]_ and GSSHA [Downer08]_ simulators. The goal of this work is to provide
 a set of tools that work well together and with the existing scientific python ecosystem, can be used in browser based
 environments and that can easily be reconfigured and repurposed as needed to rapidly solve specific emerging issues. A
 recent example of this was during Hurricane Harvey when ERDC was required at short notice to provide flood inundation
@@ -104,8 +104,8 @@ An explicit decision was made to avoid creation of new special-purpose libraries
 tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several 
 general-purpose open source packages, including support for annotating and editing plots and maps in Bokeh and 
 HoloViews, rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and Datashader, 
-and widget libraries for Param [cite all software]. In addition, two new open source projects are being released for 
-triangular mesh generation and environmental data access [cite filigree & quest].
+and widget libraries for Param [Bokeh]_, [Holoviews]_, [Geoviews]_, [Datashader]_, [Param]_. In addition, two new open source projects are being released for
+triangular mesh generation and environmental data access [Filigree]_, [Quest]_.
 
 Background
 ----------
@@ -172,7 +172,7 @@ to complete. An example of the type of HPC systems used for AdH model runs are t
 Topaz is an SGI ICE X System. Standard compute nodes have two 2.3-GHz Intel Xeon Haswell 18-core processors (36 cores) and 128 GBytes of DDR4 memory.
 Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx is a Cray XC40/50. Standard compute nodes have
 two 2.8-GHz Intel Xeon Broadwell 22-core processors (44 cores) and 128 GBytes of DDR4 memory. Compute nodes are interconnected
-by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [cite
+by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [ERDCHPC]_
 
 Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide 
 set of assumptions and architectural decisions specific to the application domain (environmental simulation), and 
@@ -227,7 +227,7 @@ In addition, the data is not encoded, compressed, modeled, or subsampled, it's j
 
 **Quest** is a library that provides a standard API to search, publish and download data (both geographical and non-geographical) across multiple data sources including both local repositories and web based services. The library also allows provides tools to manipulate and manage the data that the user is working with.
 
-**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
+**Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [Aquaveo]_. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
 
 In surveying the landscape of existing python tools to conduct environmental simulations entirely within a Jupyter notebook
 environment, four areas were found to be deficient:
@@ -411,22 +411,24 @@ References
 
 .. [Carsten04] Carsten Rother, Vladimir Kolmogorov, and Andrew Blake. 2004. "GrabCut": interactive foreground extraction using iterated graph cuts. ACM Trans. Graph. 23, 3 (August 2004), 309-314. DOI: https://doi.org/10.1145/1015706.1015720
 
-.. [SMS] SMS Website https://www.aquaveo.com
+.. [Aquaveo] “Introduction | Aquaveo.com.” [Online]. Available: https://www.aquaveo.com/. [Accessed: 05-Jul-2018].
 
-.. [CMB] CMB Website https://www.computationalmodelbuilder.org/cmb-hydro
+.. [CMB] “CMB Hydro | CMB.” [Online]. Available: https://www.computationalmodelbuilder.org/cmb-hydro/. [Accessed: 05-Jul-2018].
 
-.. [Bokeh] Bokeh Website https://bokeh.pydata.org
+.. [Bokeh] “Welcome to Bokeh — Bokeh 0.13.0 documentation.” [Online]. Available: https://bokeh.pydata.org/en/latest/. [Accessed: 05-Jul-2018].
 
-.. [Holoviews] Holoviews Website http://holoviews.org
+.. [Holoviews] “HoloViews — HoloViews.” [Online]. Available: http://holoviews.org/. [Accessed: 05-Jul-2018].
 
-.. [Geoviews] Geoviews Website http://geoviews.org
+.. [Geoviews] “GeoViews — GeoViews 1.5.0+g63ddd7c-dirty documentation.” [Online]. Available: http://geoviews.org/. [Accessed: 05-Jul-2018].
 
-.. [Param] Param Website https://ioam.github.io/param
+.. [Datashader] “Installation — Datashader 0.6.6+geb9218c-dirty documentation.” [Online]. Available: http://datashader.org/. [Accessed: 05-Jul-2018].
+
+.. [Param] “Param — Param 1.4.1-dev documentation.” [Online]. Available: http://param.pyviz.org/. [Accessed: 05-Jul-2018].
 
 .. [Filigree] TODO talk to Aquaveo for correct Filigree reference
 
-.. [Quest] Quest Website https://quest.readthedocs.io/
+.. [Quest] “Welcome to Quest’s documentation! — Quest 0.5 documentation.” [Online]. Available: https://quest.readthedocs.io/en/latest/. [Accessed: 05-Jul-2018].
 
 .. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
 
-.. [ERDCHPC] ERDC HPC Hardware https://www.erdc.hpc.mil/hardware/index.html
+.. [ERDCHPC] “ERDC DSRC - Hardware.” [Online]. Available: https://www.erdc.hpc.mil/hardware/index.html. [Accessed: 05-Jul-2018].
