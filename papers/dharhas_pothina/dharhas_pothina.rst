@@ -215,7 +215,13 @@ other new open source tools Filigree and Quest. Short descriptions of these tool
 
 **Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
 
-All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches).  The other libraries involved are specialized for geographic applications:
+All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches). 
+The key is concept is that the local client system is will always be cabable of performing the visualization, i.e. can deliver it to the user in a browser, regardless of the dataset size.  The assumption is that the remote server will be able to handle the datasets, but because datashader is based on the dask parallel library, it is possible to  assemble a remote system out of as many nodes as required need to handle a given dataset, also work can be done out of core if the user is prepared to wait.  
+Based on this architecture, this software stack will not be a limiting factor, only the users ability to procure nodes or the time taken to render. This is in contrast to other software stacks that typically have a hard size limit. It can be clarified that we have achieved this claim by a three-level implementation: dask, which can distribute the computation across arbitrarily many user-selected nodes (or multiplexed over time using the same node) to achieve the required computational power and memory, datashader, which can make use of data and compute managed by dask to reduce the data into a fixed-size raster for display, and bokeh, to render the resulting raster along with other relevant data like maps.  
+
+In addition, the data is not encoded, compressed, modeled, or subsampled, it's just aggregated (no data is thrown away, it's simply summed or averaged), and the aggregation is done on the fly to fit the resolution of the screen. So it provides the experience of having the dataset locally, without actually having it and allows for responsive interactive exploration of very large datasets.
+
+ The other libraries involved are specialized for geographic applications:
 
 **GeoViews** extends HoloViews to support geographic projections using the Cartopy library, making it easy to explore and visualize geographical, meteorological, and oceanographic datasets.
 
@@ -271,9 +277,9 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
    import xarray as xr
    import cartopy.crs as ccrs
 
-    element = gv.operation.project(roi.element, projection=ccrs.PlateCarree())
-    xs, ys = element.array().T
-    bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
+   element = gv.operation.project(roi.element, projection=ccrs.PlateCarree())
+   xs, ys = element.array().T
+   bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
 
    collection_name = 'elevation_data'
    quest.api.new_collection(name=collection_name)
