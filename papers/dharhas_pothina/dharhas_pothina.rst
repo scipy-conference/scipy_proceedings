@@ -48,8 +48,8 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics) and
    GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal of this work is 
    to provide a set of tools that work well together and with the existing scientific python ecosystem, 
-   can be used in browser based environments and that can easily be reconfigured and repurposed as 
-   needed to rapidly solve specific emerging issues.
+   that can be used in browser based environments and that can easily be reconfigured and repurposed 
+   as needed to rapidly solve specific emerging issues such as hurricanes or dam failures.
 
    As part of this work, extensive improvements were made to several general-purpose open source 
    packages, including support for annotating and editing plots and maps in Bokeh and HoloViews, 
@@ -126,7 +126,7 @@ and local-data stores.
 simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an 
 unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers.
 Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process.
-After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical 
+After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical
 algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
 .. figure:: images/mesh.png
@@ -243,7 +243,7 @@ The Bokeh plotting library has long supported extensive interactive operations f
   - **PolyDrawTool**: Drawing, selecting and deleting Polygon (patch) and Path (polyline) glyphs.
   - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
-To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for 
+To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
 further processing. As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
 
 .. code-block:: python
@@ -251,7 +251,7 @@ further processing. As a simple motivating example, drawing a bounding box on a 
    import geoviews as gv
    import geoviews.tile_sources as gts
    import holoviews.streams as hvs
-   
+
    gv.extension('bokeh')
    box = gv.Polygons(hv.Box(0, 0, 1000000))
    roi = hvs.BoxEdit(source=box)
@@ -263,12 +263,29 @@ In a Jupyter notebook, this code will display a world map and let the user move 
 
    roi.data
 
-For example, LANDSAT data can then be retrieved for the ROI as:
+For example, USGS National Elevation Dataset (NED) data can then be retrieved for the ROI as:
 
 .. code-block:: python
 
    import quest
-   img = gv.Image(quest....(roi.data))  # Dharhas: fill in
+   import xarray as xr
+   import cartopy.crs as ccrs
+
+    element = gv.operation.project(roi.element, projection=ccrs.PlateCarree())
+    xs, ys = element.array().T
+    bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
+
+   collection_name = 'elevation_data'
+   quest.api.new_collection(name=collection_name)
+   service_features = quest.api.get_features(uris='svc://usgs-ned:19-arc-second', filters={'bbox': bbox})
+   collection_features = quest.api.add_features(collection=collection_name, features=service_features)
+   datasets = quest.api.stage_for_download(uris=collection_features)
+   quest.api.download_datasets(datasets=datasets)
+   elevation_dataset = quest.api.apply_filter(name='raster-merge', options={'datasets': datasets, 'bbox': bbox})['datasets'][0]
+   elevation_file = quest.api.get_metadata(elevation_dataset)[elevation_dataset]['file_path']
+
+   elevation_raster = xr.open_rasterio(elevation_file).isel(band=0)
+   img = gv.Image(elevation_raster, ['x', 'y'])
    gts.StamenTerrain.options(width=600) * img
 
 .. figure:: images/drawing_tools.png
@@ -281,7 +298,7 @@ For example, LANDSAT data can then be retrieved for the ROI as:
 
 Similar tools allow editing points, polygons, and polylines.
 
-   
+
 Enhancements: Annotations
 -------------------------
 
@@ -325,17 +342,18 @@ The drawing tools allow for specification of source data as key dimensions (inde
 
    Dynamic interaction with drawing via interactive widgets. :label:`dashboardsweep`
 
-Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure 9, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path. 
+Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure 9, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path.
 
 .. figure:: images/dashboard_cross_section.png
 
    Dynamic linking provides interaction between drawings as both sender and receiver. :label:`dashboardcrosssection`
 
-Crucially, note that very little of the code involved here is customized for hydrology or geographic applications specifically, which means that the same techniques can be applied to different problems as they arise in practice, even if they require changing the domain-specific assumptions involved. 
-   
+Crucially, note that very little of the code involved here is customized for hydrology or geographic applications specifically, which means that the same techniques can be applied to different problems as they arise in practice, even if they require changing the domain-specific assumptions involved.
+
 
 GSSHA Hydrology Workflow Example
 --------------------------------
+Using many of the tools described here, we have created a notebook workflow to setup, execute, and visualize the results of the GSSHA hydrology model. This workflow uses the drawing tools to specify an area of interest, and then Quest to download elevation and landuse data. Param is used to specify the model inputs, and finally GeoViews and Datashader are used to visualize the results. This flexible workflow can easily be applied to any location in the globe, and the specific output visualizations can easily be modified to meed specific project needs.
 
 AdH Dambreak Workflow Example
 -----------------------------
@@ -359,7 +377,7 @@ We can trigger an update in the extracted contour by pressing the Update contour
 
   Final image with extracted coastline show in red. :label:`grabcut2`
 
-The full coastline extraction with grabcut jupyter notebook is available at the EarthSim website: https://pyviz.github.io/EarthSim/topics/GrabCut.html 
+The full coastline extraction with grabcut jupyter notebook is available at the EarthSim website: https://pyviz.github.io/EarthSim/topics/GrabCut.html
 
 Future Work
 -----------
