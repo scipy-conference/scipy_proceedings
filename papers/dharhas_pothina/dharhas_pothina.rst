@@ -172,7 +172,7 @@ to complete. An example of the type of HPC systems used for AdH model runs are t
 Topaz is an SGI ICE X System. Standard compute nodes have two 2.3-GHz Intel Xeon Haswell 18-core processors (36 cores) and 128 GBytes of DDR4 memory.
 Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx is a Cray XC40/50. Standard compute nodes have
 two 2.8-GHz Intel Xeon Broadwell 22-core processors (44 cores) and 128 GBytes of DDR4 memory. Compute nodes are interconnected
-by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [cite ERDCHPC]
+by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [cite
 
 Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide 
 set of assumptions and architectural decisions specific to the application domain (environmental simulation), and 
@@ -198,11 +198,11 @@ new tools before moving them into other more general purpose python libraries as
 to solve the common Earth Science simulation workflow and visualization problems outlined above. EarthSim aims to demonstrate building
 flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational 
 decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
-The overall goal is to provide a set of tools that work well together and can easily be reconfigured and repurposed
-as needed to rapidly solve specific emerging issues. A recent example of this was during Hurricane Harvey when ERDC was 
-required at short notice to provide flood inundation simulations of the cities of San Antonio, Houston and Corpus Christi 
-to emergency response personel. This required rapid assembly of available data from disparate sources, generation of 
-computational grids, model setup and execution as well as generation of custom output visualizations.
+The overall goal is to provide a set of tools that work well together and with the wider scientific python ecosystem. 
+EarthSim is not meant to be a one-size-fits-all solution for environmental simulation workflows but a library of tools 
+that can be mixed and matched with other tools within the python ecosystem to solve problems flexibly and quickly. To that 
+end, the specific enhancements we describe are targeted towards areas where existing tools were not available or were 
+insufficient for setting up an end to end simulation.
 
 EarthSim primarily consists of the core PyViz tools (Bokeh, HoloViews, GeoViews, Datashader, and Param) as well as two
 other new open source tools Filigree and Quest. Short descriptions of these tools follow:
@@ -223,6 +223,15 @@ All of the above tools are fully general, applicable to *any* data-analysis or v
 
 **Filigree** is a library version of the computational mesh generator from Aquaveo's XMS software suite [cite XMS]. It allows for the generation of high quality irregular triangular meshes that conform to the constraints set up by the user.
 
+In surveying the landscape of existing python tools to conduct environmental simulations entirely within a Jupyter notebook
+environment, four areas were found to be deficient:
+
+1. Interactively drawing and editing of glyphs (Points, Lines, Polygons etc) over an image or map.
+2. Interactive annotation of objects on an image or map.
+3. Efficient visualization of large structured and unstructured grid data in the browser.
+4. Setup of interactive dashboards.
+
+In the next few sections, we describe how this functionality is now available from Python without requiring custom Javascript code.
 
 Enhancements: Drawing Tools
 ---------------------------
@@ -380,15 +389,6 @@ References
 
 .. [Holoviews] Holoviews Website http://holoviews.org
 
-.. [Geoviews] Geoviews Website http://geoviews.org
-
-.. [Param] Param Website https://ioam.github.io/param
-
-.. [Filigree] TODO talk to Aquaveo for correct Filigree reference
-
-.. [Quest] Quest Website https://quest.readthedocs.io/
-
-.. [EarthSim] EarthSim Website https://pyviz.github.io/EarthSim/
 .. [Geoviews] Geoviews Website http://geoviews.org
 
 .. [Param] Param Website https://ioam.github.io/param
