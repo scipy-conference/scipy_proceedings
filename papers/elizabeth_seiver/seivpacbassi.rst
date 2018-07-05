@@ -21,7 +21,7 @@ Text and data mining scientific articles with allofplos
    Open Access science publisher of the single largest journal (*PLOS
    ONE*), whose articles are all freely available to read and re-use.
    allofplos is a Python package for maintaining a constantly growing
-   collection of PLOS's 230,000+ articles. It also quickly and easily
+   collection of PLOS's 230,000+ articles. It also efficiently
    parses these article files into Python data structures. This article will
    cover how allofplos keeps your articles up-to-date, and how to use it to
    easily access common article metadata and fuel your meta-research, with
@@ -61,8 +61,9 @@ the structure is assumed not to be reliable or the document is immediately
 converted to another intermediate format (often JSON) and XML is just a
 temporary stepping stone. allofplos uses lxml[CITE], which is compiled in C, for
 fast XML parsing and conversion to familiar Python data structures like lists,
-dictionaries, and datetime objects. It's geared at researchers who are familiar
-with scientific articles and Python, but may not be familiar with the JATS XML.
+dictionaries, and datetime objects. The intended audience is researchers who are
+familiar with scientific articles and Python, but may not be familiar with JATS
+XML.
 
 How allofplos maintains corpora
 -------------------------------
@@ -71,11 +72,11 @@ How allofplos maintains corpora
 includes commands for downloading a 10,000 article demo corpus as well. The
 default path to a corpus is stored as the variable ``corpusdir`` in the Python
 program, and first checks for the environment variable ``$PLOS_CORPUS`` which
-overrides that default location. If you've used pip to install the program,
-specifying ``$PLOS_CORPUS`` will ensure that the article data won't get overwritten
+overrides that default location. If you have used pip to install the program,
+specifying ``$PLOS_CORPUS`` will ensure that the article data will not be overwritten
 when you update the ``allofplos`` package, as the default location is within the
-package. (Forking/cloning the GitHub repository doesn't have the same problem,
-because the default corpus location is in the ``.gitignore`` file.)
+package. (Forking/cloning the GitHub repository avoids this problem, because the
+default corpus location is in the ``.gitignore`` file.)
   
 
 .. code-block:: python
@@ -94,15 +95,14 @@ If no articles are found at the specified corpus location, it will initiate a
 download of the full corpus. This is a 4.6 GB zip file stored on Google Drive,
 updated daily via an internal PLOS server, that then is unzipped in that
 location to around 25 GB of 230,000+ XML articles. For incremental updates of
-the corpus, allofplos first scans the corpus directory for all DOIs of all
-articles (constructed from filenames) and diffs that with every article DOI from
-the PLOS search API. That list of missing articles are downloaded individually
-in a rate-limited fashion from links that are constructed using the DOIs. Those
-files are identical to the ones in the .zip file. The .zip file prevents users
+the corpus, allofplos first scans the corpus directory for all DOIs (Digital Object
+Identifiers) of all articles (constructed from filenames) and compares that with
+every article DOI from the PLOS search API. The missing articles are then downloaded individually in a rate-limited fashion from links that are constructed using the DOIs.
+Those files are identical to the ones in the .zip file. The .zip file prevents users
 from needing to scrape the entire PLOS website for the XML files, and "smartly"
-scrapes only the latest articles. It also checks for a subset of provisional
-articles called "uncorrected proofs" if the final version is available and
-downloads a new version if so.
+scrapes only the latest articles. For a subset of provisional articles called
+"uncorrected proofs", it checks whether the final version is available, and
+downloads the updated version if so.
 
 
 How allofplos uses corpora and parses articles
@@ -121,7 +121,7 @@ The number of articles in the corpus can be found with ``len(corpus)``. The list
 of every DOI for every article in the corpus can be found at ``corpus.dois``, and
 the path to every XML file in the corpus directory at ``corpus.filenames``. To
 select a random Article object, use ``corpus.random_article``. To select a random
-list of 10 Article objects, use ``corpus.random_sample(10)``. You can also iterate
+list of ten Article objects, use ``corpus.random_sample(10)``. You can also iterate
 through articles as such:
 
 
@@ -131,8 +131,8 @@ through articles as such:
         print(article.title)
 
 Because DOIs contain semantic meaning and XML filenames are based on the DOI, if
-you're trying to loop through the corpus, it won't be a representative sample
-but rather will implicitly progress by journal name and then by publication
+you systematically loop through the corpus, it won't be a representative sample
+but rather will implicitly progress first by journal name and then by publication
 date. The iterator for ``Corpus()`` puts the articles in a random order to avoid
 this problem.
 
