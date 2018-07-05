@@ -36,7 +36,7 @@ Introduction
 We present a research workflow for Bayesian statistical analysis. We
 demonstrate lessons we learned from our own computational research that other
 scientists, not necessarily Bayesian, could find useful when they manage their
-own work. To illustrate these lessons we use a specific case study in clinical
+work. To illustrate these lessons, we use a specific case study in clinical
 trial modeling.
 
 Clinical trial data are presented to experts and clinicians to assess the
@@ -50,7 +50,7 @@ We propose a Bayesian approach to model clinical trial data. We use latent
 variables to account for the whole joint distribution of the treatment effects,
 including effects of different types. As a result, we can find the predictive
 distribution of the treatment effects on a new patient accounting for
-uncertainty in all the parameters, including the correlation between the effects.
+uncertainty in all the parameters, including correlation between the effects.
 
 The analysis is implemented in PyStan, the Python interface to Stan, which is
 the state-of-the-art, free and open-source Bayesian inference engine. Stan and
@@ -156,10 +156,13 @@ being chosen and assumed known [#]_. Note, however, that when the model
 includes covariates, the more accurate expression is :math:`f(y | \theta, x)`.
 This function ties together the ingredients of
 statistical inference and allows information to flow from the data
-:math:`D` to the parameters :math:`\theta`. With Bayes' rule, :math:`p(\theta | D) = p(D | \theta)p(\theta)/p(D)`
+:math:`D` to the parameters :math:`\theta`. With Bayes’ rule,
+:math:`p(\theta | D) = p(D | \theta)p(\theta)/p(D)`,
 we can calculate the posterior distribution.
 
-.. [#] This is a good point to highlight the fact that the choice of the model is a constant assumption in everything we do from now on. In research projects it is common to work with a few different models in parallel.
+.. [#] This is a good time to highlight that the choice of the model is a
+       constant assumption in everything we do from now on. In research
+       projects, it is common to work with a few different models in parallel.
 
 The second ingredient of Bayesian inference is the prior distribution
 :math:`p(\theta)`. Priors are inescapably part of the Bayesian approach and, hence,
@@ -187,8 +190,8 @@ brought in by the likelihood.  In fact, Bayesian inference technically works
 even when the prior is not a proper distribution but a function that assumes all
 values are equally likely, referred to as *improper prior*. However, it is
 generally advisable to avoid improper priors, especially in settings beyond
-just inference, such as the more advanced workflow of steps 6)–10).
-If no prior knowledge is available, a very vague normal
+just inference, such as the more advanced workflow of steps 6)–9).
+If no prior knowledge is available, a normal
 distribution with large variance is still a better default prior than a uniform
 distribution. It is important to note that improper or even vague priors are not
 appropriate for model selection.
@@ -198,7 +201,7 @@ especially when chosen together with the likelihood.
 From a computational perspective, the most convenient priors are called
 *conjugate priors*, because they mimic the structure of the likelihood function
 and lead to a closed-form posterior distribution. Priors can have additional
-benefits when used deliberately with a certain goal in mind. For example,
+benefits when used with a certain goal in mind. For example,
 priors can be used to guard against overfitting by pulling the
 parameters away from improbable values, or help with feature selection (e.g., see
 horse-shoe priors).
@@ -247,13 +250,13 @@ To reiterate, under the Bayesian approach, we treat the parameters
 :math:`\theta` as random variables and express our prior knowledge about :math:`\theta` with
 the prior probability distribution :math:`p(\theta)`. Bayesian inference is the process of
 updating our beliefs about :math:`\theta` in light of the data :math:`D`. The
-updating process uses Bayes’ theorem and results in the conditional distribution :math:`p(\theta|
+updating process uses Bayes’ rule and results in the conditional distribution :math:`p(\theta|
 D)`, the posterior distribution. Bayesian inference is
 generally a hard problem. In most cases, we cannot derive the mathematical form
 of the posterior distribution; instead, we settle for an algorithm that returns
 samples from the posterior distribution.
 
-When we fit the model to synthetic data, we want to check two things, the correctness
+When we fit the model to synthetic data, we want to check two things: the correctness
 of the inference algorithm and the quality of our model.
 
 a. Much like in software testing, we want to check if the inference process
@@ -278,7 +281,12 @@ the range implied by the posterior distributions [#]_. Success at this stage is
 not a sufficient guarantee that the model will fit well to the real data, but it is
 a necessary condition for proceeding further.
 
-.. [#] A common test is to construct an interval that includes 95 % of the most likely values, called highest posterior density interval, and check that it covers the true parameter values :math:`\theta_0` that were used to generate the synthetic data. We should tolerate a few misses, since 95 % intervals will not cover the true values 5% of the time, even if the algorithm is perfectly calibrated.
+.. [#] A common test is to construct an interval that includes 95% of the most
+       likely values, called highest posterior density interval, and check that
+       it covers the true parameter values :math:`\theta_0` that were used to
+       generate the synthetic data. We should tolerate a few misses, since 95%
+       intervals will not cover the true values 5% of the time, even if the
+       algorithm is perfectly calibrated.
 
 b. Fitting the model to synthetic data is the first opportunity to critique the
 model :math:`M` and, if necessary, calibrate it to better suit our needs. This is a good
@@ -590,10 +598,10 @@ The Stan program encoding this model is the following:
 *Model Fit Checks*
 
 Figures :ref:`mean`, :ref:`sd`, and :ref:`corr`,
-we plot the posterior samples on top of the true values (vertical black lines)
-and check visually that
-the confidence intervals cover the true values we used to generate the synthetic
-data.
+we plot the posterior samples on top of the true values (vertical black lines).
+We check visually that the intervals containing 95% of samples (around their
+respective means)
+cover the true values we used to generate the synthetic data.
 
 .. figure:: mean.png
 
