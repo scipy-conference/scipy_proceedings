@@ -223,7 +223,19 @@ The Bokeh plotting library has long supported extensive interactive operations f
   - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
 To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
-further processing. As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
+further processing.
+
+.. figure:: images/drawing_tools.png
+
+   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawingtools`
+
+.. figure:: images/drawing_tools_python.png
+
+   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawingtoolspython`
+
+Similar tools allow editing points, polygons, and polylines.
+
+As a simple motivating example, drawing a bounding box on a map now becomes a simple 7-line program:
 
 .. code-block:: python
 
@@ -234,7 +246,7 @@ further processing. As a simple motivating example, drawing a bounding box on a 
    gv.extension('bokeh')
    box = gv.Polygons(hv.Box(0, 0, 1000000))
    roi = hvs.BoxEdit(source=box)
-   gts.StamenTerrain.options(width=600) * box
+   gts.StamenTerrain.options(width=900, height=500) * box
 
 In a Jupyter notebook, this code will display a world map and let the user move or edit a box to cover the region of interest (ROI), which can then be accessed from Python as:
 
@@ -248,11 +260,12 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
 
    import quest
    import xarray as xr
+   import holoviews as hv
    import cartopy.crs as ccrs
 
-    element = gv.operation.project(roi.element, projection=ccrs.PlateCarree())
-    xs, ys = element.array().T
-    bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
+   element = gv.operation.project(hv.Polygons(roi.element), projection=ccrs.PlateCarree())
+   xs, ys = element.array().T
+   bbox = list(gv.util.project_extents((xs[0], ys[0], xs[2], ys[1]), ccrs.GOOGLE_MERCATOR, ccrs.PlateCarree()))
 
    collection_name = 'elevation_data'
    quest.api.new_collection(name=collection_name)
@@ -267,16 +280,9 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
    img = gv.Image(elevation_raster, ['x', 'y'])
    gts.StamenTerrain.options(width=600) * img
 
-.. figure:: images/drawing_tools.png
+.. figure:: images/drawing_tools_output_data.png
 
-   Visualization of drawing tools showing drawn polygons, points, paths, and boundary boxes overlaying a web tile service. :label:`drawingtools`
-
-.. figure:: images/drawing_tools_python.png
-
-   Drawing tools provide a dynamic link to source data accessible via python backend. :label:`drawingtoolspython`
-
-Similar tools allow editing points, polygons, and polylines.
-
+   Visualization data downloaded with quest for a ROI specified with the drawing tools. :label:`drawingtoolsoutputdata`
 
 Enhancements: Annotations
 -------------------------
@@ -332,7 +338,7 @@ Crucially, note that very little of the code involved here is customized for hyd
 
 GSSHA Hydrology Workflow Example
 --------------------------------
-Using many of the tools described here, we have created a notebook workflow to setup, execute, and visualize the results of the GSSHA hydrology model. This workflow uses the drawing tools to specify an area of interest, and then Quest to download elevation and landuse data. Param is used to specify the model inputs, and finally GeoViews and Datashader are used to visualize the results. This flexible workflow can easily be applied to any location in the globe, and the specific output visualizations can easily be modified to meed specific project needs.
+Using many of the tools described here, we have created a notebook workflow to setup, execute, and visualize the results of the GSSHA hydrology model. This workflow uses the drawing tools to specify an area of interest, and then Quest to download elevation and landuse data. Param is used to specify the model inputs, and finally GeoViews and Datashader are used to visualize the results. This flexible workflow can easily be applied to any location in the globe, and the specific output visualizations can easily be modified to meet specific project needs.
 
 AdH Dambreak Workflow Example
 -----------------------------
