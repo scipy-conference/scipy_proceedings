@@ -735,8 +735,14 @@ extending it to the full longitudinal neighborhood analysis pipeline.
 Conclusion
 ----------
 
-In this paper we have presented the motivation for, and initial design and
-implementation of OSLNAP. We feel that, even at this early stage in the project, OSLNAP has benefitted from the scope and deep nature of the PyData stack as we have been able to move from conceptualization to prototyping in fairly short order. At the same time, we see OSLNAP playing an important role in widening the use of Python in urban and spatial data science. We are looking forward to the future development of OSLNAP and interaction with both the PyDATA community and the broader community of computational social sciences.
+In this paper we have presented the motivation for, initial design, and
+implementation of OSLNAP. We feel that, even at this early stage in the project,
+OSLNAP has benefitted from the scope and deep nature of the PyData stack as we
+have been able to move from conceptualization to prototyping in fairly short
+order. At the same time, we see OSLNAP playing an important role in widening the
+use of Python in urban and spatial data science. We are looking forward to the
+future development of OSLNAP and interaction with both the PyDATA community and
+the broader community of computational social sciences.
 
 Acknowledgment
 --------------
