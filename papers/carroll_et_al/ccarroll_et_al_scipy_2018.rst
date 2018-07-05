@@ -1,4 +1,4 @@
-:author: Christopher D. Carroll
+﻿:author: Christopher D. Carroll
 :email: ccarroll@jhu.edu
 :institution: Johns Hopkins University
 :corresponding:
@@ -20,7 +20,7 @@
 :institution: Econ-ARK
 
 :author: Matthew N. White
-:email: mnwhite@gmail.com
+:email: mnwecon@udel.edu
 :institution: University of Delaware
 
 
@@ -30,11 +30,26 @@ The Econ-ARK and HARK: Open Source Tools for Computational Economics
 
 .. class:: abstract
 
-The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims to become a focal resource for computational economics. Its first ‘framework,’ the Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__), provides a modern, robust, transparent set of tools to solve a class of macroeconomic models whose usefulness has become increasingly apparent both for economic policy and for research purposes, but whose adoption has been limited because the existing literature derives from idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK frameworks (e.g., for analysis of the transmission of beliefs through agents' social networks) will draw heavily on key elements of the existing HARK framework, including the API, the structure, and documentation standards (articulated below).
+The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims
+to become a focal resource for computational economics. Its first ‘framework,’ the
+Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__),
+provides a modern, robust, transparent set of tools to solve a class of macroeconomic models
+whose usefulness has become increasingly apparent both for economic policy and for research
+purposes, but whose adoption has been limited because the existing literature derives from
+idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK
+frameworks (e.g., for analysis of the transmission of beliefs through agents' social networks)
+will draw heavily on key elements of the existing HARK framework, including the API, the
+structure, and documentation standards.
 
 .. class:: keywords
 
  Heterogeneous-Agent Resources toolKit, econ-ark, computational economics, economic modeling
+
+.. class:: acknowledgements
+
+The Econ-ARK project is supported by a generous grant from the Alfred P. Sloan Foundation,
+with fiscal sponsorship from NumFOCUS.  The authors would like to thank both organizations
+for their time, resources, and expertise.
 
 Introduction
 =============
@@ -43,10 +58,10 @@ The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org
 is a modular programming framework for solving and estimating macroeconomic 
 and macro-financial models in which economic agents can be heterogeneous in a 
 large number of ways. Models with extensive heterogeneity among agents can be 
-extremely useful for policy and research purposes. However the most commonly 
+extremely useful for policy and research purposes. However, the most commonly 
 published macroeconomic and macro-finance models have very limited heterogeneity 
 or none at all, in large part because these are the only models that can be 
-easily solved with existing toolkits such as DYNARE, [Adjemian2011].
+easily solved with existing toolkits such as DYNARE [Adjemian2011].
 
 In contrast, models with  extensive heterogeneity among agents have no central 
 toolkit and must be solved in a bespoke way. This requires a significant 
@@ -60,11 +75,13 @@ The Econ-ARK project simply brings these pieces together in one place. HARK is
 written in Python 2.7, with a pull request underway at the time of this writing 
 to make it fully compatible with both Python 2.7 and 3.6.
 
-
-Relation to Other Scientific Fields
------------------------------------
-
-Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed suites of tools that allow scholars to easily and transparently exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
+Academic research in statistics has standardized on the use of the ‘R’ modeling language
+for scholarly communication, and on a suite of tools and standards of practice (the use
+of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each
+other. Many other scholarly fields have similarly developed suites of tools that allow
+scholars to easily and transparently exchange quantitative ideas and computational results
+without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer
+code.
 
 The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE [Adjemian2011] toolkit for solving representative agent dynamic stochastic general equilibrium models.
 
@@ -81,9 +98,10 @@ that is a field where the need for improvement in standards of
 transparency, openness, and reproducibility is particularly manifested,
 and partly because it is a field where important progress seems particularly
 feasible.  `QuantEcon <https://quantecon.org/>`__ is the most similar 
-open project to Econ-ARK and makes use of open source coding tools, however 
-that project focuses largely on non-heterogeneous introductory foundational 
-graduate macroeconomic methods.
+open project to Econ-ARK and makes use of open source coding tools. However, 
+that project focuses largely on foundational material appropriate for an
+introductory graduate course on numeric methods in macroeconomics, whereas
+the Econ-ARK is geared toward the production of new research.
 
 The traditional approach in macroeconomics has been to assume that
 aggregate behavior can be understood by modeling the behavior
@@ -101,7 +119,7 @@ heterogeneous-agent economic modeling, see the discussion by
 [Guvenen2011] and [Kirman1992]. More broadly, the branch of agent-based 
 macroeconomics explores the issues of emergence and complexity more broadly. 
 The interested reader is directed to the Handbooks of Computational Economics, 
-Volumes 4 and 2: [Hommes2018] and [Tesfatsion2006]. The most recent volume in 
+Volumes 2 and 4: [Tesfatsion2006] and [Hommes2018]. The most recent volume in 
 particular outlines similarities and differences between more traditional 
 heterogeneous-agent macroeconomics and agent-based methods, inspired from fields 
 such as physics and ecology.
@@ -602,7 +620,7 @@ wheels. The HARK toolkit already provides a useful set of industrial strength,
 reliable, reusable wheels, constructed using a simple and easily extensible 
 framework with clear documentation, testing, and estimation frameworks.
 
-art of the reason we are confident our goal is feasible is
+Part of the reason we are confident our goal is feasible is
 that the tools now available – Python, GitHub, and Jupyter
 notebooks among them – have finally reached a stage of maturity that can
 handle the communication of almost any message an economist might want
@@ -621,7 +639,7 @@ user should check the Econ-ARK GitHub page, particularly the `HARK sub-page <htt
 There you will find a README and documentation. For the interested contributor, 
 the `issues page <https://github.com/econ-ark/HARK/issues>`__ outlines the future 
 improvements in progress. Issues labeled with "help wanted" are particularly good
-for getting started contributing.
+for getting started with contributing.
 
 
 
