@@ -25,7 +25,7 @@
 
 
 ------------------------------------------------------------------------------------------
-The Econ-ARK: Open Source Tools for Computational Economics
+The Econ-ARK and HARK: Open Source Tools for Computational Economics
 ------------------------------------------------------------------------------------------
 
 .. class:: abstract
@@ -66,21 +66,7 @@ Relation to Other Scientific Fields
 
 Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed suites of tools that allow scholars to easily and transparently exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
 
-The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE toolkit for solving representative agent dynamic stochastic general equilibrium models.
-
-Our aim is to provide a high quality set of computational economic tools and 
-standards whose existence will help bring the rest of economics out of the 
-(comparative) wilderness. Part of the reason we are confident our goal is feasible is
-that the tools now available – Python, GitHub, and Jupyter
-notebooks among them – have finally reached a stage of maturity that can
-handle the communication of almost any message an economist might want
-to compose. (See the recent blog post by Paul Romer, `“Jupyter,
-Mathematica, and the Future of the Research
-Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
-for a fuller argument). `QuantEcon <https://quantecon.org/>`__ is the most similar 
-open project to Econ-ARK and makes use of these tools, however that project 
-focuses largely on non-heterogeneous introductory foundational graduate 
-macroeconomic methods.
+The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE [Adjemian2011] toolkit for solving representative agent dynamic stochastic general equilibrium models.
 
 We face two challenges. The first is to develop a set of resources and
 examples and standards of practice for communication that are
@@ -94,7 +80,10 @@ toolkit for Heterogeneous Agent (HA) macroeconomics, in part because
 that is a field where the need for improvement in standards of
 transparency, openness, and reproducibility is particularly manifested,
 and partly because it is a field where important progress seems particularly
-feasible.
+feasible.  `QuantEcon <https://quantecon.org/>`__ is the most similar 
+open project to Econ-ARK and makes use of open source coding tools, however 
+that project focuses largely on non-heterogeneous introductory foundational 
+graduate macroeconomic methods.
 
 The traditional approach in macroeconomics has been to assume that
 aggregate behavior can be understood by modeling the behavior
@@ -104,10 +93,10 @@ constructing models of the behavior of individual microeconomic agents
 borrowers and others are savers, say) from the rich microeconomic evidence
 about the behavior and circumstances of such agents. With that solid
 foundation in place, macroeconomic outcomes are constructed by
-aggregating the behavior of the idiosyncratic agents subject to sensible
-requirements on the characteristics of the aggregate (such as, in a
-stock market, that the number of shares sold must match the number of
-shares bought). For a broad review of representative-agent and 
+aggregating the behavior of the individual agents subject to sensible
+requirements on the characteristics of the aggregate (such as the aggregate 
+amount borrowed cannot exceed a function of the aggregate amount saved). For a 
+broad review of representative-agent and 
 heterogeneous-agent economic modeling, see the discussion by 
 [Guvenen2011] and [Kirman1992]. More broadly, the branch of agent-based 
 macroeconomics explores the issues of emergence and complexity more broadly. 
@@ -156,7 +145,7 @@ incomprehensible to anyone but the original authors and their
 collaborators. Researchers with no connections to the pioneering
 scholars have therefore faced an unpalatable choice between investing
 years of their time reinventing the wheel, or investing years of their
-time deciphering someone else’s peculiar and idiosycratic code.
+time deciphering someone else’s peculiar and idiosyncratic code.
 
 Researchers who must review the scientific and technical code written by others 
 are keenly aware that the time required to review and understand another’s code 
@@ -171,8 +160,13 @@ heterogeneous-agent models. Methodological advances in the computational
 literature allow many types of models to be solved using similar
 approaches – the HARK project simply brings these together in one place.
 The key is identifying methodologies that are both “modular” (in a sense
-to be described below) as well as robust to model misspecification.
-These include both solution methods as well as estimation methods.
+to be described below) as well as robust to model misspecification. 
+All models are simplifications of a complex reality and thus "incorrect" -- 
+"model misspecification" is the formal term for this. Some methods of estimation, 
+particularly Simulated Method of Moments, are more robust to this because they 
+allow the researcher to choose the moments that are most important to match well.
+(For a useful and approachable discussion of this property the interested reader 
+should see this blog entry by Francis Diebold on `this estimator <https://fxdiebold.blogspot.com/2013/07/more-on-strange-american-estimator-gmm.html>`__ .)
 
 In addition to these methodological advances, the HARK project adopts
 modern software development practices to ease the burden of code
@@ -219,20 +213,31 @@ rational heterogeneous-agents model:
 
 #. Solve the individual agent problem
 
-#. For general equilibrium, also solve for aggregate iterations and
+#. For rational general equilibrium, also solve for aggregate iterations and
    beliefs
 
 #. Estimate the model using Simulated Method of Moments (SMM)
 
-Under the solution and estimation method used by HARK, each of these
-steps is highly modular. The structure of the solution method suggests a
-natural division of the code. 
+The third step above makes the agents "rational:" agent beliefs about statistical 
+processes in their world actually match the statistical processes in their world. 
+This is obtained via the fixed point iterations described in step 3 above. The 
+bullet list above outlines the broad steps to execute both a "microeconomic" 
+models (steps 1, 2, and 4) and a "macroeconomic" model (steps 1, 2, 3 and 4). In 
+the section further below titled "Sample Model: Perfect Foresight Consumption-Saving," 
+we directly illustrate the microeconomic model in HARK. A full example of a 
+macroeconomic model is outlined in [Carroll2017b].
 
-The following example will illustrate the usage of some key commands in
-HARK. ``CRRAutility`` is the function object for calculating CRRA
-utility supplied by ``HARK.utilities`` module. In order to calculate CRRA
-utility with a consumption of 1 and a coefficient of risk aversion of 2
-we run:
+Under the solution and estimation method used by HARK each of the solution and 
+estimation steps are highly modular. The structure of the solution method 
+suggests a natural division of the code. (The solution method is dynamic programming and fixed point 
+iteration, and the estimation method is Simulated Method of Moments. These are 
+described in detail in [Carroll2012].)
+
+The following example will illustrate the basic importation of a module 
+for researchers who are new to this process. ``CRRAutility`` is the function object 
+for calculating constant relative risk aversion (CRRA) utility supplied by 
+``HARK.utilities`` module. In order to calculate CRRA utility with a consumption 
+of 1 and a coefficient of risk aversion of 2 we run:
 
 .. code-block:: python
 
@@ -597,6 +602,15 @@ wheels. The HARK toolkit already provides a useful set of industrial strength,
 reliable, reusable wheels, constructed using a simple and easily extensible 
 framework with clear documentation, testing, and estimation frameworks.
 
+art of the reason we are confident our goal is feasible is
+that the tools now available – Python, GitHub, and Jupyter
+notebooks among them – have finally reached a stage of maturity that can
+handle the communication of almost any message an economist might want
+to compose. (See the recent blog post by Paul Romer, `“Jupyter,
+Mathematica, and the Future of the Research
+Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
+for a fuller argument).
+
 The longer-term goals of the Econ-ARK project are to create a collaborative
 codebase that can serve the entire discipline of economics, employing the best
 of modern software development tools to accelerate understanding and
@@ -616,6 +630,8 @@ Bibliography
 
 [Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
 
+
+[Carroll2012] Carroll, Christopher. 2012. "Solving Microeconomic Dynamic Stochastic Optimization Problems." *Lecture Notes, Johns Hopkins University.*
 
 [Carroll2017a] Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
 White. 2017. “The Distribution of Wealth and the Marginal Propensity to
