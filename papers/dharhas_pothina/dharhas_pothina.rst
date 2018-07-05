@@ -46,16 +46,16 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    proprietary desktop tools that do not interoperate well. In this work, we demonstrate building
    flexible, lightweight workflows entirely in Jupyter notebooks. We demonstrate these capabilities
    through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics) and
-   GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal is 
-   to provide a set of tools that can easily be reconfigured and repurposed as needed to rapidly 
-   solve specific emerging issues.
+   GSSHA (Gridded Surface Subsurface Hydrologic Analysis) simulators. The goal of this work is 
+   to provide a set of tools that work well together and with the existing scientific python ecosystem, 
+   can be used in browser based environments and that can easily be reconfigured and repurposed as 
+   needed to rapidly solve specific emerging issues.
 
    As part of this work, extensive improvements were made to several general-purpose open source 
    packages, including support for annotating and editing plots and maps in Bokeh and HoloViews, 
    rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and 
    Datashader, and widget libraries for Param. In addition, two new open source projects are being 
-   released, one for triangular mesh generation (Filigree) and one for
-   environmental data access (Quest).
+   released, one for triangular mesh generation (Filigree) and one for environmental data access (Quest).
 
 .. class:: keywords
 
@@ -77,7 +77,7 @@ well with each other.
 The process of building and running environmental simulations using these tools is time consuming, requiring
 a large amount of manual effort and a fair amount of expertise. Typically, the time required to build a 
 reasonable model is measured in months. These workflows support some use cases well, especially multi-year projects 
-where there is often the need for highly accurate, high-resolution physical modeling. But the existing tools and workflows 
+where there is often the need for highly accurate, high-resolution physical modeling. But these existing tools and workflows 
 are too heavyweight for other potential applications, such as making short-term operational decisions in novel 
 locations. They also make it difficult to flexibly switch between desktop and remote high-performance-computing (HPC)
 systems as needed for scaling up and for interactive use.
@@ -90,9 +90,15 @@ functionality can be quickly put together using existing packages within the sci
 
 In this work, we demonstrate building flexible, lightweight workflows entirely in Jupyter notebooks with the aim of
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
-for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples in hydrology and hydrodynamics using 
-the AdH and GSSHA simulators [cite adh & gssha]. The goal is to provide a set of flexible, high-performance tools that can easily be reconfigured and repurposed 
-as needed to rapidly solve specific emerging issues. 
+for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with 
+local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples
+in hydrology and hydrodynamics using the AdH and GSSHA simulators [cite adh & gssha]. The goal of this work is to provide
+a set of tools that work well together and with the existing scientific python ecosystem, can be used in browser based 
+environments and that can easily be reconfigured and repurposed as needed to rapidly solve specific emerging issues. A 
+recent example of this was during Hurricane Harvey when ERDC was required at short notice to provide flood inundation 
+simulations of the cities of San Antonio, Houston and Corpus Christi to emergency response personel. This required rapid 
+assembly of available data from disparate sources, generation of computational grids, model setup and execution as well 
+as generation of custom output visualizations.
 
 An explicit decision was made to avoid creation of new special-purpose libraries as much as possible and to instead enhance existing
 tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several 
