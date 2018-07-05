@@ -273,12 +273,12 @@ as opposed to the inference algorithm.
 By fitting the model to synthetic data, we recover samples from the posterior
 distribution of the model parameters. There are various model fit tests to
 choose from. At a minimum,
-we need to check that the true parameter :math:`\theta_0` values are within
+we need to check that the true parameter values :math:`\theta_0` are within
 the range implied by the posterior distributions [#]_. Success at this stage is
 not a sufficient guarantee that the model will fit well to the real data, but it is
 a necessary condition for proceeding further.
 
-.. [#] A common test is to construct an interval that includes 95 % of the most likely values, called highest posterior density interval, and check that it covers the true parameter values :math:`\theta_0` that were used to generate the synthetic data. We should tolerate a few misses, since 95% intervals will not cover the true values 5% of the time, even if the algorithm is perfectly calibrated.
+.. [#] A common test is to construct an interval that includes 95 % of the most likely values, called highest posterior density interval, and check that it covers the true parameter values :math:`\theta_0` that were used to generate the synthetic data. We should tolerate a few misses, since 95 % intervals will not cover the true values 5% of the time, even if the algorithm is perfectly calibrated.
 
 b. Fitting the model to synthetic data is the first opportunity to critique the
 model :math:`M` and, if necessary, calibrate it to better suit our needs. This is a good
