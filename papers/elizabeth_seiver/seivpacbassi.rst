@@ -65,8 +65,8 @@ dictionaries, and datetime objects. The intended audience is researchers who are
 familiar with scientific articles and Python, but may not be familiar with JATS
 XML.
 
-How allofplos maintains corpora
--------------------------------
+Functionality
+-------------
 
 ``allofplos`` ships with a starter directory of 122 articles (``starterdir``), and
 includes commands for downloading a 10,000 article demo corpus as well. The
@@ -105,8 +105,8 @@ scrapes only the latest articles. For a subset of provisional articles called
 downloads the updated version if so.
 
 
-How allofplos uses corpora and parses articles
-----------------------------------------------
+Article corpora and parsing
+---------------------------
 
 To initialize a corpus (defaults to ``corpusdir``, or the location set by the
 ``$PLOS_CORPUS`` environmental variable), use the ``Corpus`` class.
@@ -131,13 +131,13 @@ through articles as such:
         print(article.title)
 
 Because DOIs contain semantic meaning and XML filenames are based on the DOI, if
-you systematically loop through the corpus, it won't be a representative sample
+you systematically loop through the corpus, it will not be a representative sample
 but rather will implicitly progress first by journal name and then by publication
 date. The iterator for ``Corpus()`` puts the articles in a random order to avoid
 this problem.
 
-Parsing articles with ``Article``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The ``Article`` class
+~~~~~~~~~~~~~~~~~~~~~
 
 As mentioned above, you can use the Corpus class to initialize an Article()
 object without calling it directly. An Article takes a DOI and the location of
@@ -230,4 +230,3 @@ Query with peewee & SQLite
 -  Query the corpus using *peewee* ORM
 -  Included "starter" SQLite database
 -  SQLite database constructor available
-
