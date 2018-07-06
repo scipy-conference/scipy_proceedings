@@ -268,7 +268,7 @@ In a Jupyter notebook, this code will display a world map and let the user move 
 
    roi.data
 
-For example, Figure :ref:`drawing_tools_example_output_data` demonstrates how USGS National Elevation Dataset (NED) data can then be retrieved for the ROI as:
+For example, Figure :ref:`drawingtoolsoutputdata` demonstrates how USGS National Elevation Dataset (NED) data can then be retrieved for the ROI as:
 
 .. code-block:: python
 
