@@ -122,7 +122,7 @@ macroeconomics explores the issues of emergence and complexity.
 The interested reader is directed to the Handbooks of Computational Economics, 
 Volumes 2 and 4: [Tesfatsion2006] and [Hommes2018]. The most recent volume in 
 particular outlines similarities and differences between more traditional 
-heterogeneous agents macroeconomics and so-called ``agent-based methods,'' inspired
+heterogeneous agents macroeconomics and so-called "agent-based methods," inspired
 from fields such as physics and ecology.
 
 The Heterogeneous-Agent Resources toolKit (HARK) is a modular
@@ -227,7 +227,7 @@ rational heterogeneous agents model:
 
 #. For given beliefs about aggregate processes, solve the individual agent's problem
 
-#. Simulate the behavior of agents, generating a ``history'' of aggregate outcomes
+#. Simulate the behavior of agents, generating a "history" of aggregate outcomes
 
 #. Formulate new beliefs about the aggregate processes based on that history
 
@@ -240,8 +240,8 @@ model, requiring consistency among agents' individual behavior, the outcomes tha
 from the aggregation of these choices, and agents' beliefs about aggregate processes.
 The assumption of rationality is imposed by having the beliefs formulated in step 5 be
 justified given the history of aggregate outcomes; agents correctly interpret (a hypothetical)
-history when forming their new beliefs.  Economists call such a solution a ``rational
-expectations equilibrium'', as agents' expectations are fulfilled by reality, and they
+history when forming their new beliefs.  Economists call such a solution a "rational
+expectations equilibrium", as agents' expectations are fulfilled by reality, and they
 have no reason to update these expectations or beliefs. [2]_
 
 In the section below titled "Sample Model: Perfect Foresight Consumption-Saving," 
