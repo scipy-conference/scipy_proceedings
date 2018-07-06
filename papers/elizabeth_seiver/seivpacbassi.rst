@@ -36,6 +36,7 @@ Introduction
 
 Why mine scientific articles?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Scientific articles are the standard mechanism of communication in science.
 They embody a clear way by which human minds across centuries and continents
 are able to communicate with one another, growing the total sum of knowledge.
@@ -56,16 +57,16 @@ What is allofplos?
 
 ``allofplos`` is a Python package for downloading and maintaining up-to-date
 scientific article corpora, as well as parsing PLOS XML articles in the JATS
-(Journal Article Tag Suite)[jats]
-format. It is available on PyPI[allofplospypi] as well as a GitHub repository[allofplosgh]. Many existing
+(Journal Article Tag Suite) [jats]_ format. It is available on PyPI [allofplospypi]_ 
+as well as a GitHub repository [allofplosgh]_. Many existing
 Python packages for parsing XML and/or JATS focus on defensive parsing, where
 the structure is assumed not to be reliable or the document is immediately
 converted to another intermediate format (often JSON) and XML is just a
-temporary stepping stone. allofplos uses lxml[lxml05], which is compiled in C, for
+temporary stepping stone. allofplos uses lxml [lxml05]_, which is compiled in C, for
 fast XML parsing and conversion to familiar Python data structures like lists,
 dictionaries, and datetime objects. The intended audience is researchers who are
 familiar with scientific articles and Python, but may not be familiar with JATS
-XML. Other related tools include one from fellow Open Access publisher eLife[elife]. 
+XML. Other related tools include one from fellow Open Access publisher eLife [elife]_. 
 
 Functionality
 -------------
@@ -99,15 +100,16 @@ If no articles are found at the specified corpus location, it will initiate a
 download of the full corpus. This is a 4.6 GB zip file stored on Google Drive,
 updated daily via an internal PLOS server, that then is unzipped in that
 location to around 25 GB of 230,000+ XML articles. For incremental updates of
-the corpus, allofplos first scans the corpus directory for all DOIs (Digital Object
-Identifiers)[doi] of all articles (constructed from filenames) and compares that with
-every article DOI from the PLOS search API. The missing articles are then downloaded individually in a rate-limited fashion from links that are constructed using the DOIs.
-Those files are identical to the ones in the .zip file. The .zip file prevents users
-from needing to scrape the entire PLOS website for the XML files, and "smartly"
-scrapes only the latest articles. For a subset of provisional articles called
-"uncorrected proofs", it checks whether the final version is available, and
-downloads the updated version if so. The files are then ready for parsing and
-analysis.
+the corpus, allofplos first scans the corpus directory for all DOIs (Digital
+Object Identifiers) [doi]_ of all articles (constructed from filenames) and
+compares that with every article DOI from the PLOS search API. The missing
+articles are then downloaded individually in a rate-limited fashion from links
+that are constructed using the DOIs. Those files are identical to the ones in
+the .zip file. The .zip file prevents users from needing to scrape the entire
+PLOS website for the XML files, and "smartly" scrapes only the latest articles.
+For a subset of provisional articles called "uncorrected proofs", it checks
+whether the final version is available, and downloads the updated version if so.
+The files are then ready for parsing and analysis.
 
 
 Article corpora and parsing
@@ -123,12 +125,13 @@ allofplos at the directory of articles to be analyzed.
    from allofplos import Corpus
    corpus = Corpus()
    
-To analyze the starter directory, also import ``starterdir`` and set
-``corpus = Corpus(starterdir)``. The number of articles in the corpus can be found
-with ``len(corpus)``. The list of every DOI for every article in the corpus can be
-found at ``corpus.dois``, and the path to every XML file in the corpus directory at ``corpus.filenames``. To select a random Article object, use ``corpus.random_article``.
-To select a random list of ten Article objects, use ``corpus.random_sample(10)``.
-You can also iterate through articles as such:
+To analyze the starter directory, also import ``starterdir`` and set ``corpus =
+Corpus(starterdir)``. The number of articles in the corpus can be found with
+``len(corpus)``. The list of every DOI for every article in the corpus can be
+found at ``corpus.dois``, and the path to every XML file in the corpus directory
+at ``corpus.filenames``. To select a random Article object, use
+``corpus.random_article``. To select a random list of ten Article objects, use
+``corpus.random_sample(10)``. You can also iterate through articles as such:
 
 
 .. code-block:: python
@@ -151,7 +154,7 @@ the corpus directory to read the accompanying XML document into lxml.
 
 .. code-block:: python
 
-   art = Article('10.1371/journal.pone.0052669')
+   art = Article('10.1371/journal.pcbi.1004692')
 
 The lxml tree of the article is memoized in ``art.tree`` so it can be repeatedly
 called without needing to re-read the XML file.
@@ -163,27 +166,28 @@ called without needing to re-read the XML file.
     
 Article parsing in ``allofplos`` focuses on metadata (e.g., article title, author
 names and institutions, date of publication, Creative Commons copyright
-license[cc], JATS version/DTD), which are conveniently located in the ``front``
+license [cc]_, JATS version/DTD), which are conveniently located in the ``front``
 section of the XML. We designed the parsing API to quickly locate and parse XML
 elements as properties without needing to know the JATS tagging format.
 
 .. code-block:: python
     
     >>> art.doi
-    '10.1371/journal.pone.0052669'
+    '10.1371/journal.pcbi.1004692'
     >>> art.title
-    'Statistical Basis for Predicting Technological Progress'
+    'Ensemble Tractography'
     >>> art.journal
-    'PLOS ONE'
+    'PLOS Computational Biology'
     >>> art.pubdate
-    datetime.datetime(2013, 2, 28, 0, 0)
+    datetime.datetime(2016, 2, 4, 0, 0)
     >>> art.license
     {'license': 'CC-BY 4.0',
-     'license_link': 'https://creativecommons.org/licenses/by/4.0/',
-     'copyright_holder': 'Nagy et al',
-     'copyright_year': 2013}
+     'license_link': 
+         'https://creativecommons.org/licenses/by/4.0/',
+     'copyright_holder': 'Takemura et al',
+     'copyright_year': 2016}
     >>> art.dtd
-    'NLM 3.0'
+    'JATS 1.1d3'
 
 For author information, ``Article`` reconciles and combines data from multiple
 elements within the article into a clean standard form, including author email
@@ -203,8 +207,8 @@ properties, such as the acknowledgments, which have the tag ``<ack>``.
 .. code-block:: python
   
     >>> acknowledge = art.tree.xpath('//ack/p')[0]
-    >>> acknowledge.text
-    'We thank all contributors to the Performance Curve Database (pcdb.santafe.edu).'
+    >>> acknowledge.text[:41]
+    'We thank Ariel Rokem and Jason D. Yeatman'
 
 For users who are more familiar with XML or want to perform quality control checks on
 XML files, XPath searches can find articles that match a particular XML structure. For
@@ -230,14 +234,17 @@ elements into Python strings via the ``tostring()`` method.
     for article in corpus.random_sample(20):
 
         # Step 1: find Method sections
-        methods_sections = article.root.xpath("//sec[@sec-type='materials|methods']")
+        methods_sections = article.root.xpath(
+            "//sec[@sec-type='materials|methods']")
         if not methods_sections:
-            methods_sections = article.root.xpath("//sec[@sec-type='methods']")
+            methods_sections = article.root.xpath(
+                "//sec[@sec-type='methods']")
 
         for sec in methods_sections:
 
             # Step 2: turn the method sections into strings
-            method_string = et.tostring(sec, method='text', encoding='unicode')
+            method_string = et.tostring(sec, method='text', 
+                                        encoding='unicode')
 
             # Step 3: add DOI if 'PCR' in string
             if 'PCR' in method_string:
@@ -251,7 +258,11 @@ Included SQLite database
 
 The *allofplos* code includes a SQLite database with all the articles in starter directory. In this release there are 122 records that represents a wide range of papers. In order to use the database, the user needs a SQLite client. The official client is command line based and can be downloaded from https://www.sqlite.org/download.html. There are graphical viewers like `DB Browser for SQLite <https://sqlitebrowser.org/>`_ and `SQLiteStudio <https://sqlitestudio.pl/index.rvt>`_. There is also some options to query the database online, without installing any software, like https://sqliteonline.com/ and http://inloop.github.io/sqlite-viewer/.
 
-The main table of the database is *plosarticle*, it has the DOI, the title, the abstract, the published date and other fields that are foreign key that link to other child tables, like *articletype*, *journal_id*. The corresponding author information is stored at *correspondingauthor* table and is linked to *plosarticle* table using the relation tabled called *coauthorplosarticle*.
+The main table of the database is *plosarticle*, it has the DOI, the title, the
+abstract, the published date and other fields that are foreign key that link to
+other child tables, like *articletype*, *journal_id*. The corresponding author
+information is stored at *correspondingauthor* table and is linked to
+*plosarticle* table using the relation tabled called *coauthorplosarticle*.
 
 For example, to get all papers whose corresponding author are from France:
 
@@ -261,21 +272,30 @@ For example, to get all papers whose corresponding author are from France:
     JOIN coauthorplosarticle ON
     coauthorplosarticle.article_id = plosarticle.id
     JOIN correspondingauthor ON
-    correspondingauthor.id = coauthorplosarticle.corr_author_id
+    (correspondingauthor.id = 
+    coauthorplosarticle.corr_author_id)
     JOIN country ON
     country.id = correspondingauthor.country_id
     WHERE country.country = 'France';
 
-This will return the DOIs from three papers from the starter database:
+This will return the DOIs from three papers from the starter database::
 
-    10.1371/journal.pcbi.1004152
-    10.1371/journal.ppat.1000105
-    10.1371/journal.pgen.1002912
+    10.1371/journal.pcbi.1004152  
+    10.1371/journal.ppat.1000105  
+    10.1371/journal.pgen.1002912  
     10.1371/journal.pcbi.1004082
 
-The researcher can avoid using SQL queries by using the included Object-relational mapping (ORM) models. The ORM library used is *peewee*. A file with sample queries is stored in the repository with the name of allofplos/dbtoorm.py. In this file, there is a part that defines all Python classes that corresponds to the SQLite Database. These classes definition are from the begining of the file until the comment marked as ``# End of ORM classes creation.``
+The researcher can avoid using SQL queries by using the included
+Object-relational mapping (ORM) models. The ORM library used is *peewee*. A file
+with sample queries is stored in the repository with the name of
+allofplos/dbtoorm.py. In this file, there is a part that defines all Python
+classes that corresponds to the SQLite Database. These classes definition are
+from the begining of the file until the comment marked as ``# End of ORM classes
+creation.``
 
-After this comment, there is an example on how to built a query. The following query is the *peewee* compatible syntax that construct the same SQL query as outlined before:
+After this comment, there is an example on how to built a query. The following
+query is the *peewee* compatible syntax that construct the same SQL query as
+outlined before:
 
 .. code-block:: python
 
@@ -284,11 +304,13 @@ After this comment, there is an example on how to built a query. The following q
          .join(Coauthorplosarticle)
          .join(Correspondingauthor)
          .join(Country)
-         .join(Journal, on=(Plosarticle.journal == Journal.id))
+         .join(Journal, 
+               on=(Plosarticle.journal == Journal.id))
          .where(Country.country == 'France')
          )
 
-This will return a *query* object. This object can be walked over with a for loop as any Python iterable:
+This will return a *query* object. This object can be walked over with a for
+loop as any Python iterable:
 
 .. code-block:: python
 
@@ -299,19 +321,25 @@ This will return a *query* object. This object can be walked over with a for loo
 SQLite database constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There is an script at allofplos/makedb.py that can be used to generate the SQLite Database out of a directory full of XML articles. This script was used to generate the included **starter.db**. If the user wants to make another version, from another subset (or from the whole corpus), this script come handy.
+There is an script at allofplos/makedb.py that can be used to generate the
+SQLite Database out of a directory full of XML articles. This script was used to
+generate the included **starter.db**. If the user wants to make another version,
+from another subset (or from the whole corpus), this script come handy.
 
-To generate a SQLite DB with all the files currently in the *Corpus* directory, and save the DB as *mydb.db*::
+To generate a SQLite DB with all the files currently in the *Corpus* directory,
+and save the DB as *mydb.db*::
 
     $ python makedb.py --db mydb.db
 
-There is an option to generate a DB with only a random subset of articles. For a DB with 500 articles randomly selected, use::
+There is an option to generate a DB with only a random subset of articles. For a
+DB with 500 articles randomly selected, use::
 
     $ python makedb.py --random 500 --db mydb.db
 
 
 Future directions
 -----------------
+
 We also have plans for future updates to allofplos. First, we plan to make the article
 parsing publisher-neutral, allowing for reading JATS content from other publishers
 in addition to PLOS. Second, we want to improve incremental corpus updates so that all
