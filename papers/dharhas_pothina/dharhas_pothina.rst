@@ -92,11 +92,11 @@ In this work, we demonstrate building flexible, lightweight workflows entirely i
 timely support for operational decisions, providing basic predictions of environmental conditions quickly and flexibly
 for any region of the globe.  For small datasets these notebooks can operate entirely locally, or they can be run with
 local display and remote computation and storage for larger datasets. We demonstrate these capabilities through examples
-in hydrology and hydrodynamics using the AdH [McAplin17]_ and GSSHA [Downer08]_ simulators. The goal of this work is to provide
+in hydrology and hydrodynamics using the AdH [McAlpin17]_ and GSSHA [Downer08]_ simulators. The goal of this work is to provide
 a set of tools that work well together and with the existing scientific python ecosystem, can be used in browser based
 environments and that can easily be reconfigured and repurposed as needed to rapidly solve specific emerging issues. A
 recent example of this was during Hurricane Harvey when ERDC was required at short notice to provide flood inundation
-simulations of the cities of San Antonio, Houston and Corpus Christi to emergency response personel. This required rapid
+simulations of the cities of San Antonio, Houston and Corpus Christi to emergency response personnel. This required rapid
 assembly of available data from disparate sources, generation of computational grids, model setup and execution as well
 as generation of custom output visualizations.
 
@@ -133,7 +133,6 @@ The traditional workflow for building environmental simulations can be broken do
      
 6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows. For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space, such as:
 
-
      - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
      - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
      - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
@@ -153,9 +152,9 @@ available.  This linkage of computation and visualization can be very problemati
 have enough processing power to simulate the model in a reasonable time, but if the model is simulated remotely, the
 resulting data files can be too large to be practical to transfer to the local machine for analysis. To give an example of
 the data sizes and timescales involved, simple example/tutorial hydrodynamic model runs on idealized domains using AdH
-can take upto an hour. The largest simulation that can be run on a local workstation generate files of the order of a few
+can take up to an hour. The largest simulation that can be run on a local workstation generate files of the order of a few
 gigabytes and can take several days to run. Realistic, regional scale models are almost always run on HPC systems typically using
-500 to a 1000 processors and generate upto a terabyte worth of data. HPC runs typically take anywhere from several hours to a day
+500 to a 1000 processors and generate up to a terabyte worth of data. HPC runs typically take anywhere from several hours to a day
 to complete. An example of the type of HPC systems used for AdH model runs are the Department of Defences supercomputers Topaz and Onyx.
 Topaz is an SGI ICE X System. Standard compute nodes have two 2.3-GHz Intel Xeon Haswell 18-core processors (36 cores) and 128 GBytes of DDR4 memory.
 Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx is a Cray XC40/50. Standard compute nodes have
@@ -201,13 +200,13 @@ other new open source tools Filigree and Quest. Short descriptions of these tool
 
 **Datashader** allows arbitrarily large datasets to be rendered into a fixed-size raster for display, making it feasible to work with large and remote datasets in a web browser, either in batch mode using Datashader alone or interactively when combined with HoloViews and Bokeh.
 
-**Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations.
+**Param** allows the declaration of user-modifiable values called Parameters that are Python attributes extended to have features such as type and range checking, dynamically generated values, documentation strings, and default values. Param allows code to be concise yet robustly validated, while supporting automatic generation of widgets for configuration setting and for controlling visualizations (e.g. using ParamBokeh).
 
 All of the above tools are fully general, applicable to *any* data-analysis or visualization project, and establish a baseline capability for running analysis and visualization of arbitrarily large datasets locally or remotely, with fully interactive visualization in the browser regardless of dataset size (which is not true of most browser-based approaches).
-The key is concept is that the local client system is will always be cabable of performing the visualization, i.e. can deliver it to the user in a browser, regardless of the dataset size.  The assumption is that the remote server will be able to handle the datasets, but because datashader is based on the dask parallel library, it is possible to  assemble a remote system out of as many nodes as required need to handle a given dataset, also work can be done out of core if the user is prepared to wait.
-Based on this architecture, this software stack will not be a limiting factor, only the users ability to procure nodes or the time taken to render. This is in contrast to other software stacks that typically have a hard size limit. It can be clarified that we have achieved this claim by a three-level implementation: dask, which can distribute the computation across arbitrarily many user-selected nodes (or multiplexed over time using the same node) to achieve the required computational power and memory, datashader, which can make use of data and compute managed by dask to reduce the data into a fixed-size raster for display, and bokeh, to render the resulting raster along with other relevant data like maps.
+The key is concept is that the local client system is will always be cabable of performing the visualization, i.e. can deliver it to the user in a browser, regardless of the dataset size.  The assumption is that the remote server will be able to handle the datasets, but because Datashader is based on the Dask parallel library, it is possible to  assemble a remote system out of as many nodes as required need to handle a given dataset, also work can be done out of core if the user is prepared to wait.
+Based on this architecture, this software stack will not be a limiting factor, only the users' ability to procure nodes or the time taken to render. This is in contrast to other software stacks that typically have a hard size limit. It can be clarified that we have achieved this claim by a three-level implementation: Dask, which can distribute the computation across arbitrarily many user-selected nodes (or multiplexed over time using the same node) to achieve the required computational power and memory, Datashader, which can make use of data and compute managed by dask to reduce the data into a fixed-size raster for display, and Bokeh, to render the resulting raster along with other relevant data like maps.
 
-In addition, the data is not encoded, compressed, modeled, or subsampled, it's just aggregated (no data is thrown away, it's simply summed or averaged), and the aggregation is done on the fly to fit the resolution of the screen. So it provides the experience of having the dataset locally, without actually having it and allows for responsive interactive exploration of very large datasets.
+In addition, the data is not encoded, compressed, modeled, or subsampled, it's just aggregated (no data is thrown away, it's simply summed or averaged), and the aggregation is done on the fly to fit the resolution of the screen. This provides the experience of having the dataset locally, without actually having it and allows for responsive interactive exploration of very large datasets.
 
 The other libraries involved are specialized for geographic applications:
 
@@ -231,7 +230,6 @@ Enhancements: Drawing Tools
 ---------------------------
 
 The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools (See Figure :ref:`drawingtools`), which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
-
 
   - **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
   - **PointDrawTool**: Adding, dragging and deleting point-like glyphs.
@@ -270,7 +268,7 @@ In a Jupyter notebook, this code will display a world map and let the user move 
 
    roi.data
 
-For example, USGS National Elevation Dataset (NED) data can then be retrieved for the ROI as:
+For example, Figure :ref:`drawing_tools_example_output_data` demonstrates how USGS National Elevation Dataset (NED) data can then be retrieved for the ROI as:
 
 .. code-block:: python
 
@@ -324,7 +322,7 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
 Enhancements: Annotations
 -------------------------
 
-The drawing tools allow glyphs to be created graphically, which is an essential first step in designing a simulation.  The next step is then typically to associate specific values with each such glyph, so that the user can declare boundary conditions, parameter values, or other associated labels or quantities to control the simulation. Examples of how to do this are provided in EarthSim as "annotators", which show an editable table alongside the plot that has drawing tools (See Figure :ref:`annotationtools`), allowing users to input text or numerical values to associate with each glyph. The table and plots are interlinked, so that editing either one will update the other, making it simple to edit data however is most convenient.
+The drawing tools allow glyphs to be created graphically, which is an essential first step in designing a simulation.  The next step is then typically to associate specific values with each such glyph, so that the user can declare boundary conditions, parameter values, or other associated labels or quantities to control the simulation. Examples of how to do this are provided in EarthSim as "annotators", which show an editable table alongside the plot that has drawing tools (See Figure :ref:`annotationtools`), allowing users to input text or numerical values to associate with each glyph. The table and plots are interlinked, such that editing either one will update the other, making it simple to edit data however is most convenient.
 
 .. figure:: images/annotation_tools.png
 
@@ -344,7 +342,7 @@ The Datashader code does not currently provide reprojection of the data into a d
 Enhancements: Triangular mesh visualization
 -------------------------------------------
 
-Although Earth imaging data is typically measured on a regular grid, how quickly the values change across the Earth's surface is highly non-uniform.  For instance, elevation changes slowly in many regions, but very quickly in others, and thus when simulating phenomena like water runoff it is often necessary to use very high resolution in some locations and relatively sparse sampling in others.  To facilitate working with irregularly gridded data, the Bokeh, HoloViews, GeoViews, and Datashader libraries were extended to support "TriMesh" data, i.e., irregular triangle grids. For very large such grids, Datashader allows them to be rendered into much smaller rectangular grids for display, making it feasible to explore meshes with hundreds of millions of datapoints interactively.  The other libraries provide additional interactivity for smaller meshes without requiring Datashader, while being able to use Datashader for the larger versions.
+Although Earth imaging data is typically measured on a regular grid, how quickly the values change across the Earth's surface is highly non-uniform.  For instance, elevation changes slowly in many regions, but very quickly in others, and thus when simulating phenomena like water runoff it is often necessary to use very high resolution in some locations and relatively sparse sampling in others.  To facilitate working with irregularly gridded data, the Bokeh, HoloViews, GeoViews, and Datashader libraries were extended to support "TriMesh" data, i.e., irregular triangle grids. For very large such grids, Datashader allows them to be rendered into much smaller rectangular grids for display, making it feasible to explore meshes with hundreds of millions of datapoints interactively.  The other libraries provide additional interactivity for smaller meshes without requiring Datashader, while being able to use Datashader for the larger versions (Figure :ref:`chesbay_detail`).
 
 .. figure:: images/chesbay_detail.png
 
@@ -398,7 +396,7 @@ Coastline Extraction (GrabCut) Workflow Example
 
 The GrabCut algorithm provides a way to annotate an image using polygons or lines to demark the foreground and background. The algorithm estimates the color distribution of the target object and that of the background using a Gaussian mixture model. This is used to construct a Markov random field over the pixel labels, with an energy function that prefers connected regions having the same label, and running a graph cut based optimization to infer their values. This procedure is repeated until convergence, resulting in an image mask denoting the foreground and background.
 
-In this example this algorithm is applied to satellite imagery to automatically extract a coast- and shoreline contour. First we load an Image or RGB and wrap it in a HoloViews element, then we can declare a GrabCutDashboard (See Figure :ref:`grabcut1`). Once we have created the object we can display the widgets using parambokeh, and call the view function to display some plots.
+In this example this algorithm is applied to satellite imagery to automatically extract a coast- and shoreline contour. First we load an Image or RGB and wrap it in a HoloViews element, then we can declare a GrabCutDashboard (See Figure :ref:`grabcut1`). Once we have created the object we can display the widgets using ParamBokeh, and call the view function to display some plots.
 
 The toolbar in the plot on the left contains two polygon/polyline drawing tools to annotate the image with foreground and background regions respectively. To demonstrate this process in a static paper there are already two polygons declared, one marking the sea as the foreground and one marking the land as the background.
 
@@ -406,13 +404,13 @@ The toolbar in the plot on the left contains two polygon/polyline drawing tools 
 
    Demonstration of a interactive widget for coastline extraction using the grabcut algorithm. :label:`grabcut1`
 
-We can trigger an update in the extracted contour by pressing the Update contour button. To speed up the calculation we can also downsample the image before applying the Grabcut algorithm. Once we are done we can view the result in a separate cell. See figure :ref:`grabcut2`
+We can trigger an update in the extracted contour by pressing the Update contour button. To speed up the calculation we can also downsample the image before applying the Grabcut algorithm. Once we are done we can view the result in a separate cell. See Figure :ref:`grabcut2`
 
 .. figure:: images/grabcut2.png
 
   Final image with extracted coastline show in red. :label:`grabcut2`
 
-The full coastline extraction with grabcut jupyter notebook is available at the EarthSim website: https://pyviz.github.io/EarthSim/topics/GrabCut.html
+The full coastline extraction with Grabcut Jupyter notebook is available at the EarthSim website: https://pyviz.github.io/EarthSim/topics/GrabCut.html
 
 Future Work
 -----------
@@ -420,18 +418,18 @@ Future Work
 Through the work presented here, we have shown that it is possible to build flexible, lightweight workflows entirely within Jupyter notebooks. However, there is still room for improvement.
 Current areas being targeted for development are:
 
-  - Performance enhancements for GIS & Unstructured mesh datasets
+  - Performance enhancements for GIS & unstructured mesh datasets
   - Making annotation and drawing tools easier to use (i.e. requiring less custom code)
   - Layout of Jupyter Notebooks in Dashboard type form factors with code hidden
   - Integration with non Jupyter notebook web frontends (i.e. Tethys Platform [Swain14]_ )
-  - Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
+  - Prototype bidirectional visual programing environment (e.g. ArcGIS Model Builder)
 
 References
 ----------
 
 .. [Downer08] Downer, C. W., Ogden, F. L., and Byrd, A.R. 2008, GSSHAWIKI User’s Manual, Gridded Surface Subsurface Hydrologic Analysis Version 4.0 for WMS 8.1, ERDC Technical Report, Engineer Research and Development Center, Vicksburg, Mississippi.
 
-.. [McAplin17] McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
+.. [McAlpin17] McAlpin, J. T. 2017, Adaptive Hydraulics 2D Shallow Water (AdHSW2D) User Manual (Version 4.6), Engineer Research and Development Center, Vicksburg, Mississippi. Available at https://chl.erdc.dren.mil/chladh
 
 .. [Hines09] A. Hines et al., "Computational Model Builder (CMB): A Cross-Platform Suite of Tools for Model Creation and Setup," 2009 DoD High Performance Computing Modernization Program Users Group Conference, San Diego, CA, 2009, pp. 370-373.
 
