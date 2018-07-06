@@ -1,4 +1,4 @@
-:author: Christopher D. Carroll
+﻿:author: Christopher D. Carroll
 :email: ccarroll@jhu.edu
 :institution: Johns Hopkins University
 :corresponding:
@@ -20,7 +20,7 @@
 :institution: Econ-ARK
 
 :author: Matthew N. White
-:email: mnwhite@gmail.com
+:email: mnwecon@udel.edu
 :institution: University of Delaware
 
 
@@ -30,81 +30,100 @@ The Econ-ARK and HARK: Open Source Tools for Computational Economics
 
 .. class:: abstract
 
-The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims to become a focal resource for computational economics. Its first ‘framework,’ the Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__), provides a modern, robust, transparent set of tools to solve a class of macroeconomic models whose usefulness has become increasingly apparent both for economic policy and for research purposes, but whose adoption has been limited because the existing literature derives from idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK frameworks (e.g., for analysis of the transmission of beliefs through agents' social networks) will draw heavily on key elements of the existing HARK framework, including the API, the structure, and documentation standards (articulated below).
+The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) aims
+to become a focal resource for computational economics. Its first ‘framework,’ the
+Heterogeneous Agent Resources and Toolkit (`HARK <http://github.com/econ-ark/HARK>`__),
+provides a modern, robust, transparent set of tools to solve a class of macroeconomic models
+whose usefulness has become increasingly apparent both for economic policy and for research
+purposes, but whose adoption has been limited because the existing literature derives from
+idiosyncratic, hand-crafted, and often impenetrable legacy code. We expect future Econ-ARK
+frameworks (e.g., for analysis of the transmission of beliefs through agents' social networks)
+will draw heavily on key elements of the existing HARK framework, including the API, the
+structure, and documentation standards.
 
 .. class:: keywords
 
  Heterogeneous-Agent Resources toolKit, econ-ark, computational economics, economic modeling
+
+.. class:: acknowledgements
+
+The Econ-ARK project is supported by a generous grant from the Alfred P. Sloan Foundation,
+with fiscal sponsorship from NumFOCUS.  The authors would like to thank both organizations
+for their time, resources, and expertise.
 
 Introduction
 =============
 
 The Economics Algorithmic Repository and toolKit (`Econ-ARK <http://econ-ark.org>`__) 
 is a modular programming framework for solving and estimating macroeconomic 
-and macro-financial models in which economic agents can be heterogeneous in a 
-large number of ways. Models with extensive heterogeneity among agents can be 
-extremely useful for policy and research purposes. However the most commonly 
-published macroeconomic and macro-finance models have very limited heterogeneity 
-or none at all, in large part because these are the only models that can be 
-easily solved with existing toolkits such as DYNARE, [Adjemian2011].
+and macro-financial models in which economic agents can exhibit significant heterogeneity. [1]_
+Models with extensive heterogeneity among agents can be  extremely useful for policy and
+research purposes. However, the most commonly published macroeconomic and macro-finance
+models have very limited heterogeneity or none at all, in large part because these are
+the only models that can be easily solved with existing toolkits such as DYNARE [Adjemian2011].
 
-In contrast, models with  extensive heterogeneity among agents have no central 
+In contrast, models with extensive heterogeneity among agents have no central 
 toolkit and must be solved in a bespoke way. This requires a significant 
 investment of time and human capital before a researcher can produce usable work. 
 This results in needless code duplication, increasing the chance for error and wasting 
 valuable research time. The Econ-ARK project addresses these concerns by providing 
 a set of well-documented code modules that can be composed together to solve a 
 range of heterogeneous-agent models. Methodological advances in the computational 
-literature allow many types of models to be solved using similar approaches.
-The Econ-ARK project simply brings these pieces together in one place. HARK is 
+literature allow many types of models to be solved using similar approaches;
+the Econ-ARK project simply brings these pieces together in one place. HARK is 
 written in Python 2.7, with a pull request underway at the time of this writing 
 to make it fully compatible with both Python 2.7 and 3.6.
 
+Academic research in statistics has standardized on the use of the ‘R’ modeling language
+for scholarly communication, and on a suite of tools and standards of practice (the use
+of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each
+other. Many other scholarly fields have similarly developed suites of tools that allow
+scholars to easily and transparently exchange quantitative ideas and computational results
+without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer
+code.
 
-Relation to Other Scientific Fields
------------------------------------
+The only branch of economics in which anything similar has happened is representative agent
+(RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE [Adjemian2011] 
+toolkit for solving representative agent dynamic stochastic general equilibrium models.
 
-Academic research in statistics has standardized on the use of the ‘R’ modeling language for scholarly communication, and on a suite of tools and standards of practice (the use of R-markdown, e.g.) that allow statisticians to communicate their ideas easily to each other. Many other scholarly fields have similarly developed suites of tools that allow scholars to easily and transparently exchange quantitative ideas and computational results without anyone having to master idiosyncratic details of anyone else’s hand-crafted computer code.
-
-The only branch of economics in which anything similar has happened is representative agent (RA) macroeconomics, which (to some degree) has standardized on the use of the DYNARE [Adjemian2011] toolkit for solving representative agent dynamic stochastic general equilibrium models.
-
-We face two challenges. The first is to develop a set of resources and
+We face two primary challenges. The first is to develop a set of resources and
 examples and standards of practice for communication that are
 self-evidently a major improvement on the way economists exchange ideas
-now. The second is to persuade scholars to adopt those
-tools.
+now. The second is to persuade scholars to adopt those tools.
 
 The `Econ-ARK <http://econ-ark.org>`__ is the vehicle by which we hope
 to achieve these objectives. We have begun with the creation of a
-toolkit for Heterogeneous Agent (HA) macroeconomics, in part because
+toolkit for heterogeneous agents (HA) macroeconomics, in part because
 that is a field where the need for improvement in standards of
 transparency, openness, and reproducibility is particularly manifested,
 and partly because it is a field where important progress seems particularly
 feasible.  `QuantEcon <https://quantecon.org/>`__ is the most similar 
-open project to Econ-ARK and makes use of open source coding tools, however 
-that project focuses largely on non-heterogeneous introductory foundational 
-graduate macroeconomic methods.
+project to Econ-ARK and makes use of open source coding tools. However, 
+that project focuses largely on foundational material appropriate for an
+introductory graduate course on numeric methods in macroeconomics, whereas
+the Econ-ARK is geared toward the production of new research.
 
 The traditional approach in macroeconomics has been to assume that
 aggregate behavior can be understood by modeling the behavior
-of a single ‘representative agent.’ HA macroeconomics instead starts by
+of a single ‘representative agent’-- the `representative consumer' or
+`representative firm'. HA macroeconomics instead starts by
 constructing models of the behavior of individual microeconomic agents
-(a firm or a consumer, e.g.) that match key facts (some people are
-borrowers and others are savers, say) from the rich microeconomic evidence
+(a firm or a consumer, e.g.) that match key facts (say, that some people are
+borrowers and others are savers) from the rich microeconomic evidence
 about the behavior and circumstances of such agents. With that solid
 foundation in place, macroeconomic outcomes are constructed by
 aggregating the behavior of the individual agents subject to sensible
-requirements on the characteristics of the aggregate (such as the aggregate 
+requirements on the characteristics of the aggregate (such as that the aggregate 
 amount borrowed cannot exceed a function of the aggregate amount saved). For a 
-broad review of representative-agent and 
-heterogeneous-agent economic modeling, see the discussion by 
+broad review of representative agent and 
+heterogeneous agents economic modeling, see the discussion by 
 [Guvenen2011] and [Kirman1992]. More broadly, the branch of agent-based 
-macroeconomics explores the issues of emergence and complexity more broadly. 
+macroeconomics explores the issues of emergence and complexity. 
 The interested reader is directed to the Handbooks of Computational Economics, 
-Volumes 4 and 2: [Hommes2018] and [Tesfatsion2006]. The most recent volume in 
+Volumes 2 and 4: [Tesfatsion2006] and [Hommes2018]. The most recent volume in 
 particular outlines similarities and differences between more traditional 
-heterogeneous-agent macroeconomics and agent-based methods, inspired from fields 
-such as physics and ecology.
+heterogeneous agents macroeconomics and so-called ``agent-based methods,'' inspired
+from fields such as physics and ecology.
 
 The Heterogeneous-Agent Resources toolKit (HARK) is a modular
 programming framework for solving, estimating, and simulating
@@ -113,12 +132,12 @@ a large number of ways, such as in wealth, income processes, preferences, or
 expectations. Models with heterogeneity among agents have
 proven to be increasingly useful for policy and research purposes. 
 
-For example, recent work [Kaplan2018] has shown that changes in interest rates affect the 
+For example, recent work by [Kaplan2018] has shown that changes in interest rates affect the 
 economy in large part by reallocating income flows across different types of 
 households rather than by causing every household to change their behavior in 
 the same way. The latter implicitly occurs in a traditional rational expectations 
-model but may be misleading regarding the underlying channel of effect. 
-[Carroll2017a] shows that the response to fiscal policy such as stimulus payments
+model, but may be misleading regarding the underlying channel of the effect. 
+[Carroll2017a] shows that the response to fiscal policy (such as stimulus payments
 or tax cuts) depends crucially on how such payments are distributed across 
 different groups. For example, an extension of unemployment benefits has a bigger 
 effect on spending than a cut in the capital gains tax. [Geanakoplos2010] outlines how
@@ -138,7 +157,7 @@ involved in constructing such models. In each case cited above, the
 codebase underlying the results is the result of many years of
 construction of hand-crafted code that has not been meaningfully vetted
 by researchers outside of the core group of contributors. This is not
-mostly because researchers have refused to share their code; instead, it
+because researchers have refused to share their code; instead, it
 is because the codebases are so large, so idiosyncratic, and (in many
 cases) so poorly documented and organized as to be nearly
 incomprehensible to anyone but the original authors and their
@@ -157,16 +176,9 @@ parts of the same codebase, either across time or distance.
 The HARK project addresses these concerns by providing a set of
 well-documented code modules that can be combined to solve a range of
 heterogeneous-agent models. Methodological advances in the computational
-literature allow many types of models to be solved using similar
-approaches – the HARK project simply brings these together in one place.
-The key is identifying methodologies that are both “modular” (in a sense
-to be described below) as well as robust to model misspecification. 
-All models are simplifications of a complex reality and thus "incorrect" -- 
-"model misspecification" is the formal term for this. Some methods of estimation, 
-particularly Simulated Method of Moments, are more robust to this because they 
-allow the researcher to choose the moments that are most important to match well.
-(For a useful and approachable discussion of this property the interested reader 
-should see this blog entry by Francis Diebold on `this estimator <https://fxdiebold.blogspot.com/2013/07/more-on-strange-american-estimator-gmm.html>`__ .)
+economics literature allow many types of models to be solved using similar
+approaches; the key for HARK is to identify methodologies that are “modular”
+(in a sense to be described below).
 
 In addition to these methodological advances, the HARK project adopts
 modern software development practices to ease the burden of code
@@ -175,7 +187,7 @@ researchers dealing with computational methods.
 
 Because these problems are generic (and not specific to computational
 economics), the software development community, and particularly the
-open-source community, has spent decades perfecting tools for
+open-source community, has spent decades developing tools for
 programmers to quickly consume and understand code written by others,
 verify that it is correct, and to contribute back to a large and diverse
 codebase without fear of introducing bugs. The tools used by these
@@ -186,7 +198,7 @@ as interactive programming notebooks that combine formatted mathematics
 with executable code and descriptive content. These tools operate
 particularly well in concert with one another, constituting an
 environment that can greatly accelerate project development for both
-individuals and collaborative teams. These technical tools are not new –
+individuals and collaborative teams. These technical tools are not new--
 the HARK project simply aims to apply the best of them to the
 development of code in computational economics in order to increase
 researcher productivity, particularly when interacting with other
@@ -195,55 +207,60 @@ researchers’ code.
 The rest of this paper will first outline the useful concepts we adopt
 from software development, with examples of each, and then demonstrate
 how these concepts are applied in turn to the key solution and
-estimation methods required to solve general heterogeneous-agent models.
+estimation methods required to solve heterogeneous-agent models.
 The sections are organized as follows: Section 1 discusses the natural modular
 structure of the types of problems HARK solves and provides an overview
 of the code structure that implements these solutions. Section 2 provides 
-details of the core code modules used by HARK. Section 3 outlines two examples 
+details of the core code modules in HARK. Section 3 outlines two examples 
 that illustrate models in the HARK framework. Section 4 summarizes and concludes.
 
 1. HARK Structure
 =================
 
 The class of problems that HARK solves is highly modular by
-construction. There are approximately these steps in creating a
-rational heterogeneous-agents model:
+construction. There are approximately these steps in solving a
+rational heterogeneous agents model:
 
-#. Write down individual agent problem
+#. Specify the problem faced by an individual agent
 
-#. Solve the individual agent problem
+#. Specify how the actions and states of individual agents collectively generate aggregate outcomes or processes
 
-#. For rational general equilibrium, also solve for aggregate iterations and
-   beliefs
+#. For given beliefs about aggregate processes, solve the individual agent's problem
 
-#. Estimate the model using Simulated Method of Moments (SMM)
+#. Simulate the behavior of agents, generating a ``history'' of aggregate outcomes
 
-The third step above makes the agents "rational:" agent beliefs about statistical 
-processes in their world actually match the statistical processes in their world. 
-This is obtained via the fixed point iterations described in step 3 above. The 
-bullet list above outlines the broad steps to execute both a "microeconomic" 
-models (steps 1, 2, and 4) and a "macroeconomic" model (steps 1, 2, 3 and 4). In 
-the section further below titled "Sample Model: Perfect Foresight Consumption-Saving," 
-we directly illustrate the microeconomic model in HARK. A full example of a 
+#. Formulate new beliefs about the aggregate processes based on that history
+
+#. Iterate on steps 3-5 until beliefs converge
+
+In isolation, steps 1 and 3 constitute the solution to a "microeconomic" model in HARK:
+how an individual agent should optimally act, treating all inputs to his problem as fixed.
+The inclusion of steps 2, 4, 5, and 6 embeds the microeconomic model in a "macroeconomic"
+model, requiring consistency among agents' individual behavior, the outcomes that result
+from the aggregation of these choices, and agents' beliefs about aggregate processes.
+The assumption of rationality is imposed by having the beliefs formulated in step 5 be
+justified given the history of aggregate outcomes; agents correctly interpret (a hypothetical)
+history when forming their new beliefs.  Economists call such a solution a ``rational
+expectations equilibrium'', as agents' expectations are fulfilled by reality, and they
+have no reason to update these expectations or beliefs. [2]_
+
+In the section below titled "Sample Model: Perfect Foresight Consumption-Saving," 
+we directly illustrate a microeconomic model in HARK; a full example of a 
 macroeconomic model is outlined in [Carroll2017b].
 
-Under the solution and estimation method used by HARK each of the solution and 
-estimation steps are highly modular. The structure of the solution method 
-suggests a natural division of the code. (The solution method is dynamic programming and fixed point 
-iteration, and the estimation method is Simulated Method of Moments. These are 
-described in detail in [Carroll2012].)
+To *estimate* a model for some research purpose, the economist tries to find the "deep"
+or "structural" parameters that make model outcomes best match particular features of
+some dataset.  That is, the model is mathematically specified in steps 1 and 2 above,
+but the economist does not know the values of some vector of model parameters; the objective
+of the estimation is to find the parameters that make the model best "match" real data.
+As the dataset, features or moments to match, and particular estimation method (e.g.
+simulated method of moments or maximum likelihood estimation) are idiosyncratic to each
+research project, we will not elaborate further here.
 
-The following example will illustrate the basic importation of a module 
-for researchers who are new to this process. ``CRRAutility`` is the function object 
-for calculating constant relative risk aversion (CRRA) utility supplied by 
-``HARK.utilities`` module. In order to calculate CRRA utility with a consumption 
-of 1 and a coefficient of risk aversion of 2 we run:
-
-.. code-block:: python
-
-  import HARK.utilities as Hutil
-
-  Hutil.CRRAutility(1,2)
+In HARK, each of the solution steps is highly modular, and the structure of the solution method 
+suggests a natural division of the code. (The solution method is dynamic programming
+and fixed point iteration, and the estimation method is Simulated Method of Moments.
+These are described in detail in [Carroll2012].)
 
 Python modules in HARK can generally be categorized into three types:
 tools, models, and applications. **Tool modules** contain functions and
@@ -254,14 +271,14 @@ blocks or utilities. Tools might include functions for data analysis
 non-parametric kernel regression), functions to create and manipulate
 discrete approximations to continuous distributions, or classes for
 constructing interpolated approximations to non-parametric functions.
-Tool modules generally reside in HARK’s root directory and have names
-like ``HARK.simulation`` and ``HARK.interpolation``. The core
+Tool modules reside in the "top level" of HARK and have names like
+``HARK.simulation`` and ``HARK.interpolation``. The core
 functionality of HARK is in the tools modules; these will be discussed
 in detail in the following section.
 
 **Model modules** specify particular economic models, including classes
-to represent agents in the model (and the “market structure” in which
-they interact) and functions for solving the “one period problem” of
+to represent agents in the model and the “market structure” in which
+they interact, and functions for solving the “one period problem” of
 those models. For example, ``ConsIndShockModel.py`` concerns
 consumption-saving models in which agents have CRRA utility over
 consumption and face idiosyncratic (**Ind**\ ividual) shocks to
@@ -275,14 +292,14 @@ consumer with a particular discount factor, permanent income growth
 rate, coefficient of relative risk aversion and other parameters, who
 faces lognormal shocks to permanent and transitory income each period
 with a particular standard deviation; it then solves this consumer’s
-problem and graphically displays the results. [1]_ Model modules
+problem and graphically displays the results. [3]_ Model modules
 generally have ``Model`` in their name. There are two broad types of models 
 solved by HARK, "microeconomic" models and aggregate or "macroeconomic" models. 
 In a microeconomic problem, agents solve their problem taking their environment
-as a given -- the "macro" environment is typically set by exogenous statistical 
-distributions. A macroeconomic problem is typically composed of a number of agents 
-solving their own microeconomic problems, whose interactions affect the macroeconomic 
-environment. Thus the statistical distributions that describe the agents' environment
+as a given -- the "macro" environment is fixed exogenously. A macroeconomic
+problem is typically composed of a number of agents solving their own
+microeconomic problems, whose interactions affect the macroeconomic 
+environment. Thus the aggregate processes that describe the agents' environment
 is endogenous to the individual-level decisions made by each agent. The two 
 examples illustrate this in the “microeconomic” and “macroeconomic” sections below.
 
@@ -300,7 +317,8 @@ sequence of discount factors that best fits simulated wealth profiles to
 empirical data from the Survey of Consumer Finance. A particular
 application might have multiple modules associated with it, all of which
 generally reside in one directory. Particular application modules will
-not be discussed in this paper further; please see `the GitHub page and associated documentation <https://github.com/econ-ark/HARK>`__ 
+not be discussed in this paper further; please see `the GitHub page and
+associated documentation <https://github.com/econ-ark/HARK>`__ 
 for references to the application modules.
 
 2. Tool Modules
@@ -321,20 +339,19 @@ ecosystem. A key goal of the project is to create modularity and
 interoperability between models, making them easy to combine, adapt, and
 extend. To this end, the ``HARK.core`` module specifies a framework for
 economic models in HARK, creating a common structure for them on two
-levels that can be called “microeconomic” and “macroeconomic”, which are
-described in detail in the next section.
+levels that can be called “microeconomic” and “macroeconomic”.
 
 Beyond the model frameworks, ``HARK.core`` also defines a
-“supersuperclass” called ``HARK.object``. When solving a dynamic
+"superclass" called ``HARKobject``. When solving a dynamic
 economic model, it is often required to consider whether two solutions
 are sufficiently close to each other to warrant stopping the process
 (i.e. approximate convergence). HARK specifies that classes should have
 a ``distance`` method that takes a single input and returns a
 non-negative value representing the (generally dimensionless) distance
 between the object in question and the input to the method. As a
-convenient default, ``HARK.object`` provides a “universal distance
-metric” that should be useful in many contexts. [2]_ When defining a new
-subclass of ``HARK.object``, the user simply defines the attribute
+convenient default, ``HARKobject`` provides a “universal distance
+metric” that should be useful in many contexts. [4]_ When defining a new
+subclass of ``HARKobject``, the user simply defines the attribute
 distance\_criteria as a list of strings naming the attributes of the
 class that should be compared when calculating the distance between two
 instances of that class. See
@@ -353,8 +370,8 @@ constant relative risk aversion (CRRA) and constant absolute risk
 aversion (CARA). Other functions in ``HARK.utilities`` include data
 manipulation tools, functions for constructing discrete state space
 grids, and basic plotting tools. The module also includes functions for
-constructing discrete approximations to continuous distributions as well
-as manipulating these representations.
+constructing discrete approximations to continuous distributions and
+manipulating these representations.
 
 HARK.interpolation
 ------------------
@@ -363,10 +380,8 @@ The ``HARK.interpolation`` module defines classes for representing
 interpolated function approximations. Interpolation methods in HARK all
 inherit from a superclass such as ``HARKinterpolator1D`` or
 ``HARKinterpolator2D``, wrapper classes that ensure interoperability
-across interpolation methods. Each interpolator class in HARK must
-define a ``distance`` method that takes as an input another instance of
-the same class and returns a non-negative real number representing the
-“distance” between the two. [3]_
+across interpolation methods. These classes all inherit from ``HARKobject'',
+so that they come equipped with the default distance metric. [5]_
 
 **HARK.simulation**
 `````````````````````
@@ -383,7 +398,7 @@ Methods for optimizing an objective function for the purposes of
 estimating a model can be found in ``HARK.estimation``. As of this
 writing, the implementation includes minimization by the Nelder-Mead
 simplex method, minimization by a derivative-free Powell method variant,
-and two tools for resampling data (i.e., for a bootstrap). Future
+and two tools for resampling data (e.g., for a bootstrap). Future
 functionality will include global search methods, including genetic
 algorithms, simulated annealing, and differential evolution.
 
@@ -399,36 +414,31 @@ The ``AgentType`` class has a ``solve`` method that acts as a “universal
 microeconomic solver” for any properly formatted model, making it easier
 to set up a new model and to combine elements from different models; the
 solver is intended to encompass any model that can be framed as a
-sequence of one period problems. [4]_
+sequence of one period problems. [6]_
 
 *Macroeconomic* models in HARK use the ``Market`` class to represent a
-market or other mechanisms by which agents' interactions are aggregated
-to produce “macro-level” outcomes. For example, the market in a
-consumption-saving model might combine the individual asset holdings of
+market or other mechanisms by which agents' (i.e. instances of ``AgentType`` subclasses)
+interactions are aggregated to produce “macro-level” outcomes. For example,
+the market in a consumption-saving model might combine the individual asset holdings of
 all agents in the market to generate aggregate savings and capital in
 the economy, which in turn produces the interest rate that agents care
 about. Agents then learn the aggregate capital level and interest rate,
-which affects their future actions. Thus objects that *microeconomic*
+which affects their future actions. In this way, objects that *microeconomic*
 agents treat as exogenous when solving their individual-level problems
 (such as the interest rate) are made *endogenous* at at the
 macroeconomic level through the ``Market`` aggregator. Like
 ``AgentType``, the ``Market`` class also has a ``solve`` method, which
-seeks out a dynamic general equilibrium rule governing the dynamic
-evolution of the macroeconomic object. [5]_
-
-Each of these are explored via example in the following.
+seeks out a dynamic general equilibrium rule governing the
+aggregate processes.
 
 Microeconomics: the AgentType Class
 -----------------------------------
 
 The core of our microeconomic dynamic optimization framework is a
-flexible object-oriented representation of economic agents. The
-``HARK.core`` module defines a superclass called ``AgentType``; each
+flexible object-oriented representation of economic agents. Each microeconomic
 model defines a subclass of ``AgentType``, specifying additional
 model-specific features and methods while inheriting the methods of the
-superclass. Most importantly, the method ``solve`` acts as a “universal
-solver” applicable to any (properly formatted) discrete time model. This
-section provides a brief example of a problem solved by a microeconomic
+superclass. This section provides a brief example of a problem solved by a microeconomic
 instance of ``AgentType``. [6]_
 
 **Sample Model: Perfect Foresight Consumption-Saving**
@@ -437,7 +447,7 @@ instance of ``AgentType``. [6]_
 To provide a concrete example of how the AgentType class works, consider
 the very simple case of a perfect foresight consumption-saving model.
 The agent has time-separable, additive CRRA preferences over consumption
-:math:`C_t`. Discounting future utility at a constant rate, he receives
+:math:`C_t`, discounting future utility at a constant rate. He receives
 a particular stream of labor income :math:`Y_t` each period and knows
 the interest rate :math:`{R}` on assets :math:`A_t` that he holds
 from one period to the next. His decision about how much to consume :math:`C_t` in a
@@ -447,7 +457,7 @@ can be expressed in Bellman form as:
 .. math::
 
  \begin{aligned}
- V_t(M_t) &= \max_{C_t} \; \mathrm{u}(C_t)  + \beta  (1-{D})_t E [V_{t+1}(M_{t+1}) ], \\
+ V_t(M_t) &= \max_{C_t} \; \mathrm{u}(C_t)  + \beta  (1-{D}_{t+1}) E [V_{t+1}(M_{t+1}) ], \\
  A_t &= M_t - C_t, \\
  M_{t+1} &= {R} A_t + Y_{t+1}, \\
  Y_{t+1} &= \Gamma_{t+1} Y_t, \\
@@ -456,14 +466,13 @@ can be expressed in Bellman form as:
 
 The agent’s problem is thus characterized by values of :math:`\rho`,
 :math:`{R}`, and :math:`\beta`, plus sequences of survival
-probabilities :math:`(1-{D}_t)` and income growth factors
-:math:`\Gamma_t` for :math:`t = 0, ... ,T`. This problem has an
-analytical solution for both the value function and the consumption
-function.
+probabilities :math:`(1-{D}_{t+1})` and income growth factors
+:math:`\Gamma_{t+1}` for :math:`t = 0, ... ,T-1`. This problem has an
+analytical solution for both the value function and the consumption function.
 
-The ``ConsIndShockModel`` module defines the class
+The ``ConsIndShockModel.py`` module defines the class
 ``PerfForesightConsumerType`` as a subclass of ``AgentType`` and
-provides ``solver`` functions for several variations of a
+provides ``solver`` classes for several variations of a
 consumption-saving model, including the perfect foresight problem. A
 HARK user could specify and solve a ten period perfect foresight model
 with the following two commands (the first command is split over
@@ -472,7 +481,7 @@ multiple lines) :
 .. code-block:: python
 
   MyConsumer = PerfForesightConsumerType(
-      time_flow=True, cycles=1, Nagents = 1000,
+      time_flow=True, cycles=1, AgentCount = 1000,
       CRRA = 2.7, Rfree = 1.03, DiscFac = 0.98,
       LivPrb = [0.99,0.98,0.97,0.96,0.95,0.94,0.93,
                 0.92,0.91,0.90],
@@ -483,29 +492,29 @@ multiple lines) :
 
 The first line makes a new instance of ConsumerType, specifies that time
 is currently “flowing” forward, specifies that the sequence of periods
-happens exactly once, and that the simulation-based solution will use
-1,000 agents. The next five lines (all part of the same command) set the
-time invariant (CRRA is :math:`\rho`, Rfree is :math:`{R}`, and
-DiscFac is :math:`\beta`) and time varying parameters (LivPrb is
-:math:`(1-{D})_t`, PermGroFac is :math:`\Gamma_{t}`). After
+happens exactly once, and that, if the model is simulated after it is solved,
+there are 1000 agents with these exact characteristics. The next five lines
+(all part of the same command) set the time-invariant (``CRRA`` is :math:`\rho`,
+``Rfree`` is :math:`{R}`, and ``DiscFac`` is :math:`\beta`) and time-varying
+parameters (``LivPrb`` is :math:`(1-{D}_{t+1})`, ``PermGroFac`` is :math:`\Gamma_{t+1}`). After
 running the ``solve method``, ``MyConsumer`` will have an attribute
 called ``solution``, which will be a list with eleven
 ``ConsumerSolution`` objects, representing the period-by-period solution
 to the model. [7]_
 
 The consumption function for a perfect foresight consumer is a linear
-function of market resources – not terribly exciting. The marginal
+function of market resources-- not terribly exciting. The marginal
 propensity to consume out of wealth doesn’t change whether the consumer
 is rich or poor. When facing *uncertain* income, however, the
-consumption function is concave – the marginal propensity to consume is
-very high when agents are poor, and lower when they are rich. In
-addition, agents facing uncertainty save more than agents under
+consumption function is concave: the marginal propensity to consume is
+very high when agents are poor, and lower when they are rich. Moreover, 
+agents facing income risk save more than agents under
 certainty. However, as agents facing uncertainty get richer, their
 consumption function converges to the perfect foresight consumption
-function – rich but uncertain agents act like agents who have certainty.
+function-- rich but uncertain agents act like agents who face no income risk.
 In Figure 1, the solid blue line is consumption under certainty, while the
 dashed orange line is consumption under uncertainty. The inset plot
-demonstrates that these two functions converge as the x-axis of this
+demonstrates that these two functions converge as the horizontal axis of this
 plot is extended.
 
 .. figure:: ./consumption_functions.png
@@ -525,12 +534,12 @@ determined by the collective states and choices of other agents in the
 model. In a rational dynamic general equilibrium, there must be
 consistency between agents’ beliefs about these macroeconomic objects,
 their individual behavior, and the realizations of the macroeconomic
-objects that result from individual choices.
+objects or processes that result from individual choices.
 
-The Market class in ``HARK.core`` provides a framework for such
+The ``Market`` class in ``HARK.core`` provides a framework for such
 macroeconomic models, with a ``solve`` method that searches for a
 rational dynamic general equilibrium. An instance of ``Market`` includes
-a list of ``AgentTypes`` that compose the economy, a method for
+as an attribute a list of ``AgentType``s that compose the economy, a method for
 transforming microeconomic outcomes (states, controls, and/or shocks)
 into macroeconomic outcomes, and a method for interpreting a history or
 sequence of macroeconomic outcomes into a new “dynamic rule” for agents
@@ -546,7 +555,7 @@ equilibrium rule.
 
 The ``Market`` class uses a farming metaphor to conceptualize the
 process for generating a history of macroeconomic outcomes in a model.
-Suppose all ``AgentTypes`` in the economy believe in some dynamic rule
+Suppose all ``AgentType``s in the economy believe in some dynamic rule
 (i.e. the rule is stored as attributes of each ``AgentType``, which
 directly or indirectly enters their dynamic optimization problem), and
 that they have each found the solution to their microeconomic model
@@ -560,7 +569,7 @@ repeatedly loops over the following steps a set number of times:
    ``AgentTypes`` in the market.
 
 #. ``cultivate``: Each ``AgentType`` executes their ``marketAction``
-   method, likely corresponding to simulating one period of the
+   method, often corresponding to simulating one period of the
    microeconomic model.
 
 #. ``reap``: Microeconomic outcomes are gathered from each ``AgentType``
@@ -576,11 +585,19 @@ This procedure is conducted by the ``makeHistory`` method of ``Market``
 as a subroutine of its ``solve`` method. After making histories of the
 relevant macroeconomic variables, the market then executes its
 ``calcDynamics`` function with the macroeconomic history as inputs,
-generating a new dynamic rule to distribute to the ``AgentTypes`` in the
+generating a new dynamic rule to distribute to the ``AgentType``s in the
 market. The process then begins again, with the agents solving their
 updated microeconomic models given the new dynamic rule; the ``solve``
 loop continues until the “distance” between successive dynamic rules is
 sufficiently small.
+
+Each subclass of ``Market`` has its own ``mill`` and ``calcDynamics`` methods, and designates which variables
+are to be ``reap``ed and ``sow``n, specifying what it means to generate "aggregate 
+outcomes" and "form beliefs" in that particular model. We believe that the ``Market``
+framework is general enough to encompass a very wide range of disparate models, from
+standard models in which individual assets are aggregated into productive capital,
+to models of choice over health insurance contracts with adverse selection and moral hazard,
+to models of direct agent-to-agent interaction more commonly seen in other scientific fields.
 
 4. Summary and Conclusion
 =========================
@@ -600,16 +617,13 @@ tools are often reinvented by different researchers working on similar problems.
 Researchers should spend their valuable time producing research, not reinventing 
 wheels. The HARK toolkit already provides a useful set of industrial strength, 
 reliable, reusable wheels, constructed using a simple and easily extensible 
-framework with clear documentation, testing, and estimation frameworks.
+framework with clear documentation and testing regimens.
 
-art of the reason we are confident our goal is feasible is
+Part of the reason we are confident our goal is feasible is
 that the tools now available – Python, GitHub, and Jupyter
 notebooks among them – have finally reached a stage of maturity that can
 handle the communication of almost any message an economist might want
-to compose. (See the recent blog post by Paul Romer, `“Jupyter,
-Mathematica, and the Future of the Research
-Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
-for a fuller argument).
+to convey. [8]_
 
 The longer-term goals of the Econ-ARK project are to create a collaborative
 codebase that can serve the entire discipline of economics, employing the best
@@ -621,15 +635,15 @@ user should check the Econ-ARK GitHub page, particularly the `HARK sub-page <htt
 There you will find a README and documentation. For the interested contributor, 
 the `issues page <https://github.com/econ-ark/HARK/issues>`__ outlines the future 
 improvements in progress. Issues labeled with "help wanted" are particularly good
-for getting started contributing.
+for getting started with contributing.
 
 
 
 Bibliography
 ============
 
-[Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
 
+[Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
 
 [Carroll2012] Carroll, Christopher. 2012. "Solving Microeconomic Dynamic Stochastic Optimization Problems." *Lecture Notes, Johns Hopkins University.*
 
@@ -669,36 +683,51 @@ Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economic
 
 
 .. [1]
+ In this context, ``heterogeneity'' refers to both ex post heterogeneity--
+ agents attaining different states or making different choices because
+ they have experienced different random shocks in the model-- and ex ante
+ heterogeneity-- agents differing in their preferences, beliefs, or other
+ innate attribute before the model ``begins''.
+
+.. [2]
+ HARK does not impose the assumption of rationality; we use it here for
+ exposition because it is the standard assumption in economics.  The
+ modular structure of the toolkit makes it easy to remove this assumption
+ by, e.g., having agents misperceive their own problem, imperfectly process
+ information, or form beliefs about aggregate processes that are not
+ "justified" by the history.
+
+.. [3]
  Running ``ConsIndShockModel.py`` also demonstrates other variations
  of the consumption-saving problem, but their description is omitted
  here for brevity.
 
-.. [2]
+.. [4]
  Roughly speaking, the universal distance metric is a recursive
  supnorm, returning the largest distance between two instances, among
  attributes named in ``distance_criteria``. Those attributes might be
  complex objects themselves rather than real numbers, generating a
  recursive call to the universal distance metric.
 
-.. [3]
+.. [5]
  Interpolation methods currently implemented in HARK include
  (multi)linear interpolation up to 4D, 1D cubic spline interpolation,
  2D curvilinear interpolation over irregular grids, a 1D “lower
  envelope” interpolator, and others.
 
-.. [4]
- See [Carroll2017b] for a much more thorough
- discussion.
-
-.. [5]
- See [Carroll2017b] for a much more thorough
- discussion.
-
 .. [6]
- For a much more detailed discussion please see [Carroll2017b].
+ See [Carroll2017b] for a much more thorough discussion.
 
 .. [7]
  The solution to a dynamic optimal control problem is a set of policy
- functions and a value functions, one for each period. The policy
- function for this consumption-savings problem is how much to consume
+ functions and a value function, for each period. The policy
+ function for this consumption-saving problem is how much to consume
  :math:`C_t` for a given amount of market resources :math:`M_t`.
+ The eleventh and final element of ``solution`` represents the trivial
+ solution to the terminal period of the problem. For a much more detailed
+ discussion, please see [Carroll2017b]. 
+
+.. [8]
+ See the recent blog post by Paul Romer, `“Jupyter, Mathematica, and the
+ Future of the Research Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
+ for a fuller argument).
