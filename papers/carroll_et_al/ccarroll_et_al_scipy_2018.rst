@@ -639,47 +639,46 @@ with fiscal sponsorship from NumFOCUS.  The authors would like to thank both org
 for their time, resources, and expertise.
 
 
+
 Bibliography
 ============
 
 
-:math:`\;\;\;\;\;\;` [Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
+:math:`\;\;\;\;\;\;` [Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP. `RePEc: cpmdynare/001 <https://econpapers.repec.org/paper/cpmdynare/001.htm>`__ .
 
-[Carroll2012] Carroll, Christopher. 2012. "Solving Microeconomic Dynamic Stochastic Optimization Problems." *Lecture Notes, Johns Hopkins University.*
+[Carroll2012] Carroll, Christopher. 2012. "Solving Microeconomic Dynamic Stochastic Optimization Problems." *Lecture Notes, Johns Hopkins University.* `url <https://www.econ2.jhu.edu/people/ccarroll/SolvingMicroDSOPs/>`__ 
 
 [Carroll2017a] Carroll, Christopher, Jiri Slacalek, Kiichi Tokuoka, and Matthew N
-White. 2017. “The Distribution of Wealth and the Marginal Propensity to
-Consume.” *Quantitative Economics* 8 (3). Wiley Online Library:
-977–1020.
+White. 2017. "The Distribution of Wealth and the Marginal Propensity to
+Consume." *Quantitative Economics* 8 (3). Wiley Online Library:
+977–1020. `doi:10.3982/QE694 <https://doi.org/10.3982/QE694>`__ 
 
 [Carroll2017b] Carroll, Christopher, Alexander Kaufman, David Low, Nathan Palmer, and
-Matthew White. 2017. “A User’s Guide for Hark: Heterogeneous Agents
-Resources and toolKit.”
-https://github.com/econ-ark/HARK/blob/master/Documentation/HARKmanual.pdf:
-Econ ARK.
+Matthew White. 2017. "A User’s Guide for Hark: Heterogeneous Agents
+Resources and toolKit." *Econ ARK.* `url <https://github.com/econ-ark/HARK/blob/master/Documentation/HARKmanual.pdf>`__
 
-[Geanakoplos2010] Geanakoplos, John. 2010. “The Leverage Cycle.” *NBER Macroeconomics
-Annual* 24 (1). The University of Chicago Press: 1-66.
+[Geanakoplos2010] Geanakoplos, John. 2010. "The Leverage Cycle." *NBER Macroeconomics
+Annual* 24 (1). The University of Chicago Press: 1-66. `doi:10.1086/648285 <https://doi.org/10.1086/648285>`__
 
 [Geanakoplos2012] Geanakoplos, John, Robert Axtell, J Doyne Farmer, Peter Howitt, Benjamin
 Conlee, Jonathan Goldstein, Matthew Hendrey, Nathan M. Palmer, and
-Chun-Yi Yang. 2012. “Getting at Systemic Risk via an Agent-Based Model
-of the Housing Market.” *American Economic Review* 102 (3): 53-58.
+Chun-Yi Yang. 2012. "Getting at Systemic Risk via an Agent-Based Model
+of the Housing Market." *American Economic Review* 102 (3): 53-58. `doi:10.1257/aer.102.3.53 <https://www.aeaweb.org/articles?id=10.1257/aer.102.3.53>`__
 
 [Guvenen2011] Guvenen, Fatih. 2011. "Macroeconomics with Heterogeneity: A Practical Guide," 
-*Economic Quarterly, Federal Reserve Bank of Richmond* 97 (3): 255-326.
+*Economic Quarterly, Federal Reserve Bank of Richmond* 97 (3): 255-326. `doi:10.3386/w17622 <https://www.nber.org/papers/w17622>`__ 
 
 [Hommes2018] Hommes, Cars, and Blake LeBaron, eds. 2018. "Handbook of Computational Economics, 
-Vol 4: Heterogeneous Agent Modeling," *Handbook of Computational Economics*, Elsevier, Vol 4: 2-796.
+Vol 4: Heterogeneous Agent Modeling," *Handbook of Computational Economics*, Elsevier, Vol 4: 2-796. `doi:10.1016/S1574-0021(18)30018-2 <https://doi.org/10.1016/S1574-0021(18)30018-2>`__ 
 
 [Kaplan2018] Kaplan, Greg, Benjamin Moll, and Giovanni L. Violante. 2018. "Monetary Policy 
-According to HANK." *American Economic Review* 108 (3): 697-743.
+According to HANK." *American Economic Review* 108 (3): 697-743. `doi:10.1257/aer.20160042 <https://www.aeaweb.org/articles?id=10.1257/aer.20160042>`__
 
-[Kirman1992] Kirman, Alan P. 1992. “Whom or What Does the Representative 
-Individual Represent?” *Journal of Economic Perspectives* 6 (2): 117-136.
+[Kirman1992] Kirman, Alan P. 1992. "Whom or What Does the Representative 
+Individual Represent?" *Journal of Economic Perspectives* 6 (2): 117-136. `doi:10.1257/jep.6.2.117 <https://www.aeaweb.org/articles?id=10.1257/jep.6.2.117>`__ 
 
 [Tesfatsion2006] Tesfatsion, Leigh, Kenneth L. Judd, eds. 2006. "Handbook of Computational Economics, 
-Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economics*, Elsevier, Vol 2: 829-1660.
+Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economics*, Elsevier, Vol 2: 829-1660. `doi:10.1016/S1574-0021(05)02039-3 <https://doi.org/10.1016/S1574-0021(05)02039-3>`__
 
 
 .. [1]
