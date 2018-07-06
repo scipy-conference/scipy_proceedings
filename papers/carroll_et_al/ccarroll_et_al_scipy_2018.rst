@@ -639,7 +639,6 @@ with fiscal sponsorship from NumFOCUS.  The authors would like to thank both org
 for their time, resources, and expertise.
 
 
-https://econpapers.repec.org/RePEc:cpm:dynare:001
 
 Bibliography
 ============
