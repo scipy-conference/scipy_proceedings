@@ -1,4 +1,4 @@
-﻿:author: Christopher D. Carroll
+:author: Christopher D. Carroll
 :email: ccarroll@jhu.edu
 :institution: Johns Hopkins University
 :corresponding:
@@ -105,8 +105,8 @@ the Econ-ARK is geared toward the production of new research.
 
 The traditional approach in macroeconomics has been to assume that
 aggregate behavior can be understood by modeling the behavior
-of a single ‘representative agent’-- the `representative consumer' or
-`representative firm'. HA macroeconomics instead starts by
+of a single 'representative agent' -- the 'representative consumer' or
+'representative firm'. HA macroeconomics instead starts by
 constructing models of the behavior of individual microeconomic agents
 (a firm or a consumer, e.g.) that match key facts (say, that some people are
 borrowers and others are savers) from the rich microeconomic evidence
@@ -380,7 +380,7 @@ The ``HARK.interpolation`` module defines classes for representing
 interpolated function approximations. Interpolation methods in HARK all
 inherit from a superclass such as ``HARKinterpolator1D`` or
 ``HARKinterpolator2D``, wrapper classes that ensure interoperability
-across interpolation methods. These classes all inherit from ``HARKobject'',
+across interpolation methods. These classes all inherit from ``HARKobject``,
 so that they come equipped with the default distance metric. [5]_
 
 **HARK.simulation**
@@ -539,7 +539,7 @@ objects or processes that result from individual choices.
 The ``Market`` class in ``HARK.core`` provides a framework for such
 macroeconomic models, with a ``solve`` method that searches for a
 rational dynamic general equilibrium. An instance of ``Market`` includes
-as an attribute a list of ``AgentType``s that compose the economy, a method for
+as an attribute a list of ``AgentType`` objects that compose the economy, a method for
 transforming microeconomic outcomes (states, controls, and/or shocks)
 into macroeconomic outcomes, and a method for interpreting a history or
 sequence of macroeconomic outcomes into a new “dynamic rule” for agents
@@ -555,7 +555,7 @@ equilibrium rule.
 
 The ``Market`` class uses a farming metaphor to conceptualize the
 process for generating a history of macroeconomic outcomes in a model.
-Suppose all ``AgentType``s in the economy believe in some dynamic rule
+Suppose all ``AgentType`` agents in the economy believe in some dynamic rule
 (i.e. the rule is stored as attributes of each ``AgentType``, which
 directly or indirectly enters their dynamic optimization problem), and
 that they have each found the solution to their microeconomic model
@@ -585,7 +585,7 @@ This procedure is conducted by the ``makeHistory`` method of ``Market``
 as a subroutine of its ``solve`` method. After making histories of the
 relevant macroeconomic variables, the market then executes its
 ``calcDynamics`` function with the macroeconomic history as inputs,
-generating a new dynamic rule to distribute to the ``AgentType``s in the
+generating a new dynamic rule to distribute to the ``AgentType`` agents in the
 market. The process then begins again, with the agents solving their
 updated microeconomic models given the new dynamic rule; the ``solve``
 loop continues until the “distance” between successive dynamic rules is
@@ -643,7 +643,7 @@ Bibliography
 ============
 
 
-[Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
+:math:`\;\;\;\;\;\;` [Adjemian2011] Adjemian, Stephane, Houtan Bastani, Michel Juillard, Ferhat Mihoubi, George Perendia, Marco Ratto, and Sebastien Villemot. 2011. "Dynare: Reference Manual, Version 4." *Dynare Working Papers* 1, CEPREMAP.
 
 [Carroll2012] Carroll, Christopher. 2012. "Solving Microeconomic Dynamic Stochastic Optimization Problems." *Lecture Notes, Johns Hopkins University.*
 
@@ -683,11 +683,11 @@ Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economic
 
 
 .. [1]
- In this context, ``heterogeneity'' refers to both ex post heterogeneity--
+ In this context, ``heterogeneity`` refers to both ex post heterogeneity--
  agents attaining different states or making different choices because
  they have experienced different random shocks in the model-- and ex ante
  heterogeneity-- agents differing in their preferences, beliefs, or other
- innate attribute before the model ``begins''.
+ innate attribute before the model ``begins``.
 
 .. [2]
  HARK does not impose the assumption of rationality; we use it here for
