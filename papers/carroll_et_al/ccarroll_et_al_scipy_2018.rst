@@ -45,12 +45,6 @@ structure, and documentation standards.
 
  Heterogeneous-Agent Resources toolKit, econ-ark, computational economics, economic modeling
 
-.. class:: acknowledgements
-
-The Econ-ARK project is supported by a generous grant from the Alfred P. Sloan Foundation,
-with fiscal sponsorship from NumFOCUS.  The authors would like to thank both organizations
-for their time, resources, and expertise.
-
 Introduction
 =============
 
@@ -592,7 +586,7 @@ loop continues until the “distance” between successive dynamic rules is
 sufficiently small.
 
 Each subclass of ``Market`` has its own ``mill`` and ``calcDynamics`` methods, and designates which variables
-are to be ``reap``ed and ``sow``n, specifying what it means to generate "aggregate 
+are to be gathered ``reap`` and distributed by ``sow``, thus specifying what it means to generate "aggregate 
 outcomes" and "form beliefs" in that particular model. We believe that the ``Market``
 framework is general enough to encompass a very wide range of disparate models, from
 standard models in which individual assets are aggregated into productive capital,
@@ -637,6 +631,12 @@ the `issues page <https://github.com/econ-ark/HARK/issues>`__ outlines the futur
 improvements in progress. Issues labeled with "help wanted" are particularly good
 for getting started with contributing.
 
+Acknowledgements
+================
+
+The Econ-ARK project is supported by a generous grant from the Alfred P. Sloan Foundation,
+with fiscal sponsorship from NumFOCUS.  The authors would like to thank both organizations
+for their time, resources, and expertise.
 
 
 Bibliography
