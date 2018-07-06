@@ -117,40 +117,26 @@ The traditional workflow for building environmental simulations can be broken do
    Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
 
 
-1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure `materials`. 
+1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure [materials]_. 
  
-2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based 
-and local-data stores.
+2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based and local-data stores.
 
-3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental 
-simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an 
-unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers.
-Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process.
-After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical
-algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
+3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers. Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process. After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
 .. figure:: images/mesh.png
 
    Example of an unstructured 2D triangular computational mesh of a river that is transected by a roadway embankment with culvert and bridge openings. :label:`mesh`
 
-4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and 
-time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the 
-computational mesh.
+4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the computational mesh.
      
-5. Simulation: The computational mesh along with the re-gridded data, plus any model parameters (turbulence model, etc.) 
-and forcings required (rainfall, etc.) needed for a specific simulation are written to files formatted for a particular 
-environmental simulation engine. This model is then run with the simulation engine (i.e. AdH, GSSHA). For larger simulations, this 
-is run on an HPC system. 
+5. Simulation: The computational mesh along with the re-gridded data, plus any model parameters (turbulence model, etc.) and forcings required (rainfall, etc.) needed for a specific simulation are written to files formatted for a particular environmental simulation engine. This model is then run with the simulation engine (i.e. AdH, GSSHA). For larger simulations, this is run on an HPC system. 
      
-6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and 
-vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall 
-animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows.
-For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional
-space, such as:
+6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows. For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space, such as:
 
-   - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
-   - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
-   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
+
+    - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
+    - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
+    - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
 .. figure:: images/velocity_field.png
 
@@ -221,7 +207,7 @@ Based on this architecture, this software stack will not be a limiting factor, o
 
 In addition, the data is not encoded, compressed, modeled, or subsampled, it's just aggregated (no data is thrown away, it's simply summed or averaged), and the aggregation is done on the fly to fit the resolution of the screen. So it provides the experience of having the dataset locally, without actually having it and allows for responsive interactive exploration of very large datasets.
 
- The other libraries involved are specialized for geographic applications:
+The other libraries involved are specialized for geographic applications:
 
 **GeoViews** extends HoloViews to support geographic projections using the Cartopy library, making it easy to explore and visualize geographical, meteorological, and oceanographic datasets.
 
@@ -243,6 +229,7 @@ Enhancements: Drawing Tools
 ---------------------------
 
 The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools, which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
+
 
   - **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
   - **PointDrawTool**: Adding, dragging and deleting point-like glyphs.
