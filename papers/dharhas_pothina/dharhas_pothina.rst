@@ -344,7 +344,9 @@ Enhancements: Triangular mesh visualization
 
 Although Earth imaging data is typically measured on a regular grid, how quickly the values change across the Earth's surface is highly non-uniform.  For instance, elevation changes slowly in many regions, but very quickly in others, and thus when simulating phenomena like water runoff it is often necessary to use very high resolution in some locations and relatively sparse sampling in others.  To facilitate working with irregularly gridded data, the Bokeh, HoloViews, GeoViews, and Datashader libraries were extended to support "TriMesh" data, i.e., irregular triangle grids. For very large such grids, Datashader allows them to be rendered into much smaller rectangular grids for display, making it feasible to explore meshes with hundreds of millions of datapoints interactively.  The other libraries provide additional interactivity for smaller meshes without requiring Datashader, while being able to use Datashader for the larger versions.
 
-# Add figure from http://datashader.org/topics/bay_trimesh.html ?
+.. figure:: images/chesbay_detail.png
+
+   Example of a datashader visualization of triangular unstructured mesh of a portion of Chesapeake Bay :label:`trimesh`
 
 
 Interactive Dashboards
