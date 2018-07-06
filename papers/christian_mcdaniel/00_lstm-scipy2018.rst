@@ -212,7 +212,7 @@ The number of epochs specified ranged from 100 :cite:`Bro17` to 10,000 :cite:`HD
 
 *Benchmark Performances* We focus on the performances of models trained and tested using the the UCI HAR dataset, publicly available on the University of California at Irvine (UCI) Machine Learning Repository, as that is the dataset we utilize in our study. Initial benchmark results are produced from classical methods trained on 551 hand crafted features. Anguita, et. al. released three studies in 2013 following their release of the dataset. Using a multi-class SVM (MC-SVM) classifier, they reach F1 score of 0.96 :cite:`AGO+13b`. They also reached an F1 score of 89.0 using a hardware-friendly MC-SVM (HF-MC-SVM) :cite:`AGO+13a`. Finally, a competition using the dataset yielded accuracies of 96.5% by a one-vs-one SVM (OVO SVM), 96.35% by a kernelized matrix learning vector quantized (LVQ) model, 94.33% by a confidence-based model (Conf-AdaBoost.M1), 93.7% by one-vs-all SVM (OVA SVM), and 90.6% by KNN :cite:`ROGA+13`.
 
-As LSTMs rise in usage, we see competitive results using lower dimensional data. Most models make use of acceleration data (total signal and body-only signal with the gravity component removed - 6 axes/features in total) alongside gyroscope data (3 features). Reported accuracies consist of 96.7% by a four-layer LSTM model :cite:`MP17`, 96.71% by a multivariate LSTM + fully convoluted network (MLSTM-FCN), 96.71% by multivariate squeeze-and-excite ALSTM with fully convoluted network (MALSTM-FCN) :cite:`KMDH18`, 93.57% by the Deep-Res-Bidir LSTM, and 90.77% by the baseline LSTM :cite:`ZYCG17`, and 85.34% by a baseline LSTM that may have been trained solely on accelerometer data like in our experiment, although the exact number of features used is not specified :cite:`U18`. See Table :ref:`results` for a summary of these results.
+As LSTMs rise in usage, we see competitive results using lower dimensional data. Most models make use of acceleration data (total signal and body-only signal with the gravity component removed - 6 axes/features in total) alongside gyroscope data (3 features). Reported accuracies consist of 96.7% by a four-layer LSTM model :cite:`MP17`, 96.71% by a multivariate LSTM + fully convoluted network (MLSTM-FCN), 96.71% by multivariate squeeze-and-excite ALSTM with fully convoluted network (MALSTM-FCN) :cite:`KMDH18`, 93.57% by the Deep-Res-Bidir LSTM, and 90.77% by the baseline LSTM :cite:`ZYCG17`, and 85.34% by a baseline LSTM that may have been trained solely on accelerometer data like in our experiment, although the exact number of features used is not specified :cite:`U18`. See Table :ref:`compare` for a summary of these results.
 
 As this meta-analysis style overview has shown, there are many different model constructions being employed for HAR tasks. The work by the aforementioned studies as well as others have laid the groundwork for this field of research.
 
@@ -320,42 +320,10 @@ During preliminary testing, we found that the model performed better on the tota
 
 The hyperparameter optimization explored a search space with trillions of possible parameter combinations. Due to time constraints, we stopped the search after six full days (hundreds of training iterations), during which time the suggested models' accuracies on test sets had ranged from 12.66% to 94.96%. The algorithm found several high-performing models and had used at least once all the values possible for each activation function, initialization strategy, regularization strategy, learning rate, and optimizer in the search space. The algorithm had tested models that both used and omitted batch normalization and bias, and it had tested dropout values between 0.005 and 0.991, batch sizes between 35 and 441 samples per batch, and from 10 to 508 units at both of the two layers.
 
-Due to limited time to run our experiments, we conducted part two of the experiment concurrently with part one using a baseline LSTM architecture we felt would be a good starting point based on notes throughout the literature. The hyperparameter settings are depicted in Table :ref:`model`. We ran 5-fold CV on the model and computed the overall and class-wise F1 scores and accuracies. Cross validation yielded an average accuracy of 90.97% and F1 score of 0.90968, with a single best run of 95.25% accuracy and 0.9572 F1 score. We include the single best run for comparison with other reports, many of which do not report evidence of using cross validation or repeated trials.
-
-.. table:: Hyperparameter settings for our proof of concept baseline LSTM model using solely triaxial accelerometer data with minimal preprocessing. :label:`model`
-
-  +------------------------------+-----------------+
-  | Hyperparameter               | Setting         |
-  +==============================+=================+
-  | Window size                  | 128 time steps  |
-  +------------------------------+-----------------+
-  | Step size                    | 50% window size |
-  +------------------------------+-----------------+
-  | Num. Layers                  | 2               |
-  +------------------------------+-----------------+
-  | Units (layer1)               | 128             |
-  +------------------------------+-----------------+
-  | Units (layer2)               | 114             |
-  +------------------------------+-----------------+
-  | Batch Size                   | 64              |
-  +------------------------------+-----------------+
-  | Cell Activation              | tanh            |
-  +------------------------------+-----------------+
-  | Recurrent Activation         | sigmoid         |
-  +------------------------------+-----------------+
-  | Dropout (Cell and Recurrent) | 0.5             |
-  +------------------------------+-----------------+
-  | Weight Initialization        | Glorot Uniform  |
-  +------------------------------+-----------------+
-  | Regularization               | None            |
-  +------------------------------+-----------------+
-  | Optimizer                    | RMSProp         |
-  +------------------------------+-----------------+
-  | Bias (Y/N)                   | Yes             |
-  +------------------------------+-----------------+
+Due to limited time to run our experiments, we conducted part two of the experiment concurrently with part one using a baseline LSTM architecture we felt would be a good starting point based on notes throughout the literature. The hyperparameter settings used in the model are as follows: window size, 128 time steps; step size, 50% of window size; number of layers, 2; units (layer1), 128; units (layer2), 114; batch size, 64; cell activation, tanh; recurrent activation, sigmoid; dropout, 0.5; weight initialization, Glorot Uniform; regularization, None; optimizer, RMSProp; bias, yes. We ran 5-fold CV on the model and computed the overall and class-wise F1 scores and accuracies. Cross validation yielded an average accuracy of 90.97% and F1 score of 0.90968, with a single best run of 95.25% accuracy and 0.9572 F1 score. We include the single best run for comparison with other reports, many of which do not report evidence of using cross validation or repeated trials.
 
 
-.. table:: Results table including results from baseline LSTM models trained on all 9 features provided in the dataset - total accelerometer signals (T), body accelerometer signals (gravity component removed, B), gyroscope signals (G). One of the baseline LSTM's did not explicitly specify the number of features used but only mentioned accelerometer signals. We provide results from Part 1 (P1, Hyperparameter Optimization) and Part 2 (P2, Cross-Validation) of our Pipeline. P2 scores include accuracies as percentages and F1 scores as decimals. :label:`results`
+.. table:: Results table including results from baseline LSTM models trained on all 9 features provided in the dataset - total accelerometer signals (T), body accelerometer signals (gravity component removed, B), gyroscope signals (G). One of the baseline LSTM's did not explicitly specify the number of features used but only mentioned accelerometer signals. We provide results from Part 1 (P1, Hyperparameter Optimization) and Part 2 (P2, Cross-Validation) of our Pipeline. P2 scores include accuracies as percentages and F1 scores as decimals. :label:`compare`
 
   +--------------------------+-----------------+-----------+
   | Model                    | Performance     | Features  |
@@ -387,7 +355,7 @@ We do feel standardization is justified for this data due to its complexity and 
 
 *Hyperparameter Optimization and Data Analysis Pipeline* We structured our experiments with the objective of maintaining simplicity, relying as much as possible on the baseline model itself, maximizing generalizability and reproducibility of our methods and results, and unifying the existing methods and results in literature.
 
-We saw very promising results from the hyperparameter optimization portion of the experiment. The TPE algorithm, although not run to completion in this experiment, was able to navigate the search space and find several well-performing models. We chose to err on the side of caution by using very granular ranges over the numerical hyperparameters, and as a result we ran out of time even using the heuristic-based TPE algorithm. We suggest further experiments to reduce the search space by using less granular ranges over the numeric hyperparameters, and exploring more advanced heuristic search methods. Doing so will decrease the search time and allow completion of the entire Pipeline in a more reasonable amount of time. Nonetheless, the TPE's so-far-best model at the time of termination and our baseline model from Part 2 outperformed other baseline LSTMs trained on higher dimensional data from the same dataset :cite:`U2018,ZYCG17`; see Table :ref:`results`.
+We saw very promising results from the hyperparameter optimization portion of the experiment. The TPE algorithm, although not run to completion in this experiment, was able to navigate the search space and find several well-performing models. We chose to err on the side of caution by using very granular ranges over the numerical hyperparameters, and as a result we ran out of time even using the heuristic-based TPE algorithm. We suggest further experiments to reduce the search space by using less granular ranges over the numeric hyperparameters, and exploring more advanced heuristic search methods. Doing so will decrease the search time and allow completion of the entire Pipeline in a more reasonable amount of time. Nonetheless, the TPE's so-far-best model at the time of termination and our baseline model from Part 2 outperformed other baseline LSTMs trained on higher dimensional data from the same dataset :cite:`U2018,ZYCG17`; see Table :ref:`compare`.
 
 We also compare our performance with other benchmark experiments on the UCI HAR dataset. Compared with more complex LSTMs trained using more features, our averaged cross validation results scored competitively with the b-LSTM (91.09%), the residual LSTM (91.55%), and the deep res-bidir-LSTM (93.57%) :cite:`ZYCG17`. As we found no evidence of cross validation in these other reports, we compare our single best-performing test's accuracy of 95.25% and F1 score of 0.9572 and find it to compete with the highest scoring models found in literature: 4 layer LSTM (96.7% accuracy, 0.96 F1score), MLSTM-FCN and MALSTM-FCN (96.71% accuracy), and OVO SVM (96.4% accuracy, 551 features).
 
