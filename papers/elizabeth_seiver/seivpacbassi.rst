@@ -66,7 +66,9 @@ temporary stepping stone. allofplos uses lxml [lxml05]_, which is compiled in C,
 fast XML parsing and conversion to familiar Python data structures like lists,
 dictionaries, and datetime objects. The intended audience is researchers who are
 familiar with scientific articles and Python, but may not be familiar with JATS
-XML. Other related tools include one from fellow Open Access publisher eLife [elife]_. 
+XML. Other related tools include a parser from fellow Open Access publisher eLife [elife]_
+as well as the Open Access subset for downloading OA articles in bulk from PubMed Commons
+(PMC) [pmc]_.
 
 Functionality
 -------------
@@ -385,3 +387,4 @@ References
 .. [elife] elife-tools GitHub repository. https://github.com/elifesciences/elife-tools
 .. [doi] Digital Object Identifiers.
          https://www.doi.org/doi_handbook/1_Introduction.html
+.. [pmc] PMC Open Access Subset. https://www.ncbi.nlm.nih.gov/pmc/tools/openftlist/
