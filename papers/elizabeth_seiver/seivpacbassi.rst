@@ -356,6 +356,23 @@ sqlite database so that selecting a subset of articles based on metadata criteri
 as journal, publication date, or author is faster and easier than looping through each
 XML file individually.
 
+Conclusions
+-----------
+
+As more scientific articles are published, it will become more important that
+these articles can be analysed in aggregate. Tools like ``allofplos`` make such
+an effort much easier. With an intuitive and straightforward ``Corpus()`` and
+``Article()`` APIs, ``allofplos`` avoids much of the complexity of parsing xml
+for new users, while still enabling XML experts the flexibility and power needed
+to accomplish their aims. By building in the ability to automatically update and
+maintain the corpus, people can trust that they have the most state-of-the-art
+data without needing to manually check the >230,000 articles (a task few would
+undertake). By connecting this information to database technologies,
+``allofplos`` enables quickly accessing data when that efficient access is
+needed. By making strides in all of these  directions ``allofplos`` demonstrates
+itself to be a valuable tool in the scientific python toolkit.
+
+
 References
 ----------
 .. [lxml05] Behnel, S., Faassen, M. et al. (2005),
