@@ -405,11 +405,14 @@ The full coastline extraction with grabcut jupyter notebook is available at the 
 Future Work
 -----------
 
-Performance enhancements for GIS & Unstructured mesh datasets
-Making annotation and drawing tools easier to use (i.e. less code)
-Layout of Jupyter Notebooks in Dashboard type form factor
-Integration with Tethys platform & other web frontends
-Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
+Through the work presented here, we have shown that it is possible to build flexible, lightweight workflows entirely within Jupyter notebooks. However, there is still room for improvement.
+Current areas being targeted for development are:
+
+  - Performance enhancements for GIS & Unstructured mesh datasets
+  - Making annotation and drawing tools easier to use (i.e. requiring less custom code)
+  - Layout of Jupyter Notebooks in Dashboard type form factors with code hidden
+  - Integration with non Jupyter notebook web frontends (i.e. Tethys Platform [Swain14]_ )
+  - Prototype bidirectional visual programing environment (a.k.a ArcGIS Model Builder)
 
 References
 ----------
@@ -443,3 +446,5 @@ References
 .. [EarthSim] “EarthSim — EarthSim 0.0.1 documentation.” [Online]. Available: http://earthsim.pyviz.org/. [Accessed: 05-Jul-2018].
 
 .. [ERDCHPC] “ERDC DSRC - Hardware.” [Online]. Available: https://www.erdc.hpc.mil/hardware/index.html. [Accessed: 05-Jul-2018].
+
+.. [Swain14] Swain, N., S. Christensen, N. Jones, and E. Nelson (2014), Tethys: A Platform for Water Resources Modeling and Decision Support Apps, paper presented at AGU Fall Meeting Abstracts.
