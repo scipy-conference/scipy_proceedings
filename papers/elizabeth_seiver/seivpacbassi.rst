@@ -246,11 +246,69 @@ elements into Python strings via the ``tostring()`` method.
             else:
                 pass
 
-Query with peewee & SQLite
-~~~~~~~~~~~~~~~~~~~~~~~~~~
--  Query the corpus using *peewee* ORM
--  Included "starter" SQLite database
--  SQLite database constructor available
+Included SQLite database
+------------------------
+
+The *allofplos* code includes a SQLite database with all the articles in starter directory. In this release there are 122 records that represents a wide range of papers. In order to use the database, the user needs a SQLite client. The official client is command line based and can be downloaded from https://www.sqlite.org/download.html. There are graphical viewers like `DB Browser for SQLite <https://sqlitebrowser.org/>`_ and `SQLiteStudio <https://sqlitestudio.pl/index.rvt>`_. There is also some options to query the database online, without installing any software, like https://sqliteonline.com/ and http://inloop.github.io/sqlite-viewer/.
+
+The main table of the database is *plosarticle*, it has the DOI, the title, the abstract, the published date and other fields that are foreign key that link to other child tables, like *articletype*, *journal_id*. The corresponding author information is stored at *correspondingauthor* table and is linked to *plosarticle* table using the relation tabled called *coauthorplosarticle*.
+
+For example, to get all papers whose corresponding author are from France:
+
+.. code-block:: mysql
+
+    SELECT DOI FROM plosarticle
+    JOIN coauthorplosarticle ON
+    coauthorplosarticle.article_id = plosarticle.id
+    JOIN correspondingauthor ON
+    correspondingauthor.id = coauthorplosarticle.corr_author_id
+    JOIN country ON
+    country.id = correspondingauthor.country_id
+    WHERE country.country = 'France';
+
+This will return the DOIs from three papers from the starter database:
+
+    10.1371/journal.pcbi.1004152
+    10.1371/journal.ppat.1000105
+    10.1371/journal.pgen.1002912
+    10.1371/journal.pcbi.1004082
+
+The researcher can avoid using SQL queries by using the included Object-relational mapping (ORM) models. The ORM library used is *peewee*. A file with sample queries is stored in the repository with the name of allofplos/dbtoorm.py. In this file, there is a part that defines all Python classes that corresponds to the SQLite Database. These classes definition are from the begining of the file until the comment marked as ``# End of ORM classes creation.``
+
+After this comment, there is an example on how to built a query. The following query is the *peewee* compatible syntax that construct the same SQL query as outlined before:
+
+.. code-block:: python
+
+    query = (Plosarticle
+         .select()
+         .join(Coauthorplosarticle)
+         .join(Correspondingauthor)
+         .join(Country)
+         .join(Journal, on=(Plosarticle.journal == Journal.id))
+         .where(Country.country == 'France')
+         )
+
+This will return a *query* object. This object can be walked over with a for loop as any Python iterable:
+
+.. code-block:: python
+
+    for papers in query:
+      print(papers.doi)
+    
+
+SQLite database constructor
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There is an script at allofplos/makedb.py that can be used to generate the SQLite Database out of a directory full of XML articles. This script was used to generate the included **starter.db**. If the user wants to make another version, from another subset (or from the whole corpus), this script come handy.
+
+To generate a SQLite DB with all the files currently in the *Corpus* directory, and save the DB as *mydb.db*::
+
+    $ python makedb.py --db mydb.db
+
+There is an option to generate a DB with only a random subset of articles. For a DB with 500 articles randomly selected, use::
+
+    $ python makedb.py --random 500 --db mydb.db
+
 
 Future directions
 -----------------
