@@ -496,9 +496,12 @@ the following priors for demonstration purposes:
    Z_{ij} \; & \sim \; N(0,1) \; \text{for} \; j \in J_b. \\
 
 This will become more transparent in the next section, when we come back to
-the choice of priors.
+the choice of priors [#]_.
 Let us note that our data contain a lot of information, so the final outcome
 will be relatively insensitive to the priors.
+
+.. [#] On the LKJ distribution, see
+       https://www.sciencedirect.com/science/article/pii/S0047259X09000876.
 
 *3) Generate synthetic data*
 
