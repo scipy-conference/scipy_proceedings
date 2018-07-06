@@ -70,7 +70,7 @@ The Zwicky Transient Facility (ZTF) is a new robotic survey now underway, using 
 Samuel Oschin Telescope at Palomar Observatory in southern California. This telescope
 was originally constructed to take images with photographic plates, in large part to
 provide targets for the 200-inch Hale Telescope at the same observatory. The ZTF camera
-fills the focal plane of the 48-inch telescope with sixteen 6k:math:`\times`6k charge-coupled
+fills the focal plane of the 48-inch telescope with sixteen 6k :math:`\times` 6k charge-coupled
 devices (CCDs) with an active detector area of 47 square degrees (Dekany et al in prep;
 :cite:`ztf_camera_2016`).
 ZTF is conducting a fast, wide-area time-domain survey (Bellm et al in prep) designed
