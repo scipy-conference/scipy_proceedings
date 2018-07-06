@@ -1,4 +1,4 @@
-:author: Christopher D. Carroll
+﻿:author: Christopher D. Carroll
 :email: ccarroll@jhu.edu
 :institution: Johns Hopkins University
 :corresponding:
@@ -101,7 +101,7 @@ feasible.  `QuantEcon <https://quantecon.org/>`__ is the most similar
 project to Econ-ARK and makes use of open source coding tools. However, 
 that project focuses largely on foundational material appropriate for an
 introductory graduate course on numeric methods in macroeconomics, whereas
-the Econ-ARK is geared toward the production of new research.
+the Econ-ARK is geared toward the production of new research. [2]_
 
 The traditional approach in macroeconomics has been to assume that
 aggregate behavior can be understood by modeling the behavior
@@ -242,7 +242,7 @@ The assumption of rationality is imposed by having the beliefs formulated in ste
 justified given the history of aggregate outcomes; agents correctly interpret (a hypothetical)
 history when forming their new beliefs.  Economists call such a solution a "rational
 expectations equilibrium", as agents' expectations are fulfilled by reality, and they
-have no reason to update these expectations or beliefs. [2]_
+have no reason to update these expectations or beliefs. [3]_
 
 In the section below titled "Sample Model: Perfect Foresight Consumption-Saving," 
 we directly illustrate a microeconomic model in HARK; a full example of a 
@@ -292,7 +292,7 @@ consumer with a particular discount factor, permanent income growth
 rate, coefficient of relative risk aversion and other parameters, who
 faces lognormal shocks to permanent and transitory income each period
 with a particular standard deviation; it then solves this consumer’s
-problem and graphically displays the results. [3]_ Model modules
+problem and graphically displays the results. [4]_ Model modules
 generally have ``Model`` in their name. There are two broad types of models 
 solved by HARK, "microeconomic" models and aggregate or "macroeconomic" models. 
 In a microeconomic problem, agents solve their problem taking their environment
@@ -350,7 +350,7 @@ a ``distance`` method that takes a single input and returns a
 non-negative value representing the (generally dimensionless) distance
 between the object in question and the input to the method. As a
 convenient default, ``HARKobject`` provides a “universal distance
-metric” that should be useful in many contexts. [4]_ When defining a new
+metric” that should be useful in many contexts. [5]_ When defining a new
 subclass of ``HARKobject``, the user simply defines the attribute
 distance\_criteria as a list of strings naming the attributes of the
 class that should be compared when calculating the distance between two
@@ -381,7 +381,7 @@ interpolated function approximations. Interpolation methods in HARK all
 inherit from a superclass such as ``HARKinterpolator1D`` or
 ``HARKinterpolator2D``, wrapper classes that ensure interoperability
 across interpolation methods. These classes all inherit from ``HARKobject``,
-so that they come equipped with the default distance metric. [5]_
+so that they come equipped with the default distance metric. [6]_
 
 **HARK.simulation**
 `````````````````````
@@ -414,7 +414,7 @@ The ``AgentType`` class has a ``solve`` method that acts as a “universal
 microeconomic solver” for any properly formatted model, making it easier
 to set up a new model and to combine elements from different models; the
 solver is intended to encompass any model that can be framed as a
-sequence of one period problems. [6]_
+sequence of one period problems. [7]_
 
 *Macroeconomic* models in HARK use the ``Market`` class to represent a
 market or other mechanisms by which agents' (i.e. instances of ``AgentType`` subclasses)
@@ -439,7 +439,7 @@ flexible object-oriented representation of economic agents. Each microeconomic
 model defines a subclass of ``AgentType``, specifying additional
 model-specific features and methods while inheriting the methods of the
 superclass. This section provides a brief example of a problem solved by a microeconomic
-instance of ``AgentType``. [6]_
+instance of ``AgentType``.
 
 **Sample Model: Perfect Foresight Consumption-Saving**
 ``````````````````````````````````````````````````````````
@@ -500,7 +500,7 @@ parameters (``LivPrb`` is :math:`(1-{D}_{t+1})`, ``PermGroFac`` is :math:`\Gamma
 running the ``solve method``, ``MyConsumer`` will have an attribute
 called ``solution``, which will be a list with eleven
 ``ConsumerSolution`` objects, representing the period-by-period solution
-to the model. [7]_
+to the model. [8]_
 
 The consumption function for a perfect foresight consumer is a linear
 function of market resources-- not terribly exciting. The marginal
@@ -623,7 +623,7 @@ Part of the reason we are confident our goal is feasible is
 that the tools now available – Python, GitHub, and Jupyter
 notebooks among them – have finally reached a stage of maturity that can
 handle the communication of almost any message an economist might want
-to convey. [8]_
+to convey. [9]_
 
 The longer-term goals of the Econ-ARK project are to create a collaborative
 codebase that can serve the entire discipline of economics, employing the best
@@ -683,13 +683,18 @@ Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economic
 
 
 .. [1]
- In this context, ``heterogeneity`` refers to both ex post heterogeneity--
+ In this context, "heterogeneity" refers to both ex post heterogeneity--
  agents attaining different states or making different choices because
  they have experienced different random shocks in the model-- and ex ante
  heterogeneity-- agents differing in their preferences, beliefs, or other
- innate attribute before the model ``begins``.
+ innate attribute before the model "begins".
 
 .. [2]
+ It is possible that some of the foundational tools from QuantEcon could
+ be incorporated into the Econ-ARK, with the permission of its project leads.
+ Our teams are in communication, and their advice has been valuable.
+
+.. [3]
  HARK does not impose the assumption of rationality; we use it here for
  exposition because it is the standard assumption in economics.  The
  modular structure of the toolkit makes it easy to remove this assumption
@@ -697,28 +702,28 @@ Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economic
  information, or form beliefs about aggregate processes that are not
  "justified" by the history.
 
-.. [3]
+.. [4]
  Running ``ConsIndShockModel.py`` also demonstrates other variations
  of the consumption-saving problem, but their description is omitted
  here for brevity.
 
-.. [4]
+.. [5]
  Roughly speaking, the universal distance metric is a recursive
  supnorm, returning the largest distance between two instances, among
  attributes named in ``distance_criteria``. Those attributes might be
  complex objects themselves rather than real numbers, generating a
  recursive call to the universal distance metric.
 
-.. [5]
+.. [6]
  Interpolation methods currently implemented in HARK include
  (multi)linear interpolation up to 4D, 1D cubic spline interpolation,
  2D curvilinear interpolation over irregular grids, a 1D “lower
  envelope” interpolator, and others.
 
-.. [6]
+.. [7]
  See [Carroll2017b] for a much more thorough discussion.
 
-.. [7]
+.. [8]
  The solution to a dynamic optimal control problem is a set of policy
  functions and a value function, for each period. The policy
  function for this consumption-saving problem is how much to consume
@@ -727,7 +732,7 @@ Vol 2: Agent-Based Computational Economics," *Handbook of Computational Economic
  solution to the terminal period of the problem. For a much more detailed
  discussion, please see [Carroll2017b]. 
 
-.. [8]
+.. [9]
  See the recent blog post by Paul Romer, `“Jupyter, Mathematica, and the
  Future of the Research Paper” <https://paulromer.net/jupyter-mathematica-and-the-future-of-the-research-paper/>`__
  for a fuller argument).
