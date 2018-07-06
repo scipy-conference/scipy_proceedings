@@ -295,22 +295,22 @@ how well it captures reality. For example, an issue that comes up often
 is non-identifiability, the situation where the likelihood and the data is specified in
 a way such that there is not enough information to identify the correct parameter values, no
 matter how big the sample size is. It is also a
-good time to check if small variations to the model (such as  replacing a Normal
-with a heavier tail distribution) fit our needs better. For instance,
+good time to check if small variations to the model (such as replacing a normal
+with a heavier-tail distribution) fit our needs better. For instance,
 calibrating a model to make inferences about the center of a distribution, such
 as the mean, is relatively easy. On the other hand, we might need to do more
 extensive calibration if we are interested in the tail behavior of
 the distribution, such as maximum values. If we do choose to use a different
-model :math:`M'`, we need to go back to step 2 and start again.
+model :math:`M'`, we need to go back to step 2) and start again.
 
 Model evaluation is an essential part of a good workflow. It is a complex task
-that can be used both with synthetic and real data, providing possibly different
+that can be used with both synthetic and real data, providing possibly different
 insights each time. We do not have space to go into more  details in this paper
 but we provide pointers in the further reading section.
 
 *5. Fit the model to the real data*
 
-This is the moment we have been waiting for, we are ready to fit it our model to
+This is the moment we have been waiting for: We are ready to fit our model to
 the real data and get the final results. Usually, we focus our attention on a
 specific quantity of interest that is derived from the posterior samples (see
 further reading for pointers). If we are satisfied with the
@@ -320,7 +320,7 @@ well it captures reality. This step is highly application-specific and requires
 a combination of statistical expertise and subject-matter expertise (we refer
 the interested reader to sources later). We note that it is important to build
 confidence in the power of our inference algorithm before proceeding on to
-interpreting the results. This helps us separate, to the extent
+interpreting results. This helps us separate, to the extent
 possible, inference issues from model issues. At this stage, it is likely that
 we will come up with a slightly updated model :math:`M'`. We then have to go
 back and start again from the beginning.
@@ -340,10 +340,9 @@ by the following formula:
 
 In practice, we approximate the integral using samples from the posterior
 distributions.
-
 Posterior predictive checks, evaluating the predictive accuracy
 of a model, can also be used to evaluate a model.
-To do that we check how well it predicts unknown observable
+To do this, we check how well it predicts unknown observable
 data :math:`\tilde{y}`, where unknown means that the model was not fit
 to :math:`\tilde{y}` [#]_.
 
@@ -356,7 +355,7 @@ to :math:`\tilde{y}` [#]_.
 
 For a concise overview of statistical modeling and inference, including a high-level
 comparison with the frequentist approach, see :cite:`Wood15`. For a more
-extended treatment of the Bayesian approach see
+extended treatment of the Bayesian approach, see
 :cite:`robert2007bayesian`. For an accessible Bayesian modeling primer,
 especially for beginner Bayesians, see :cite:`McElreath15` and
 :cite:`Marin2006`. For a complete treatment of Bayesian data analysis, including
@@ -380,7 +379,7 @@ Regulators focus on a few key effects when deciding whether a drug is fit for
 market. In our case we will assume, for simplicity, that there are three
 effects, where two are binary variables and the other is a continuous variable.
 
-Our data is organized as a table, with one patient (subject) per row and one effect per column. For
+Our dataset is organized as a table, with one patient (subject) per row and one effect per column. For
 example, if our clinical trial dataset records three effects per subject,
 ‘Hemoglobin Levels’ (continuous), ‘Nausea’ (yes/no), and ‘Dyspepsia’ (yes/no),
 the dataset looks like Table :ref:`mtable`.
@@ -405,20 +404,18 @@ The fact that the effects are of mixed data types, binary and
 continuous, makes it harder to model their interdependencies. To address this
 challenge, we use a latent variable structure. Then, the expected value of
 the latent variables will correspond to the average effect of the treatment.
-Similarly, the correlations between the latent variables will correspond to the
-the correlations between the effects. Knowing the distribution of the latent
-variables will give us a way to predict what the effect will be on a new
-patient, conditioned on the observed data.
+Similarly, the correlations between the latent variables will correspond to
+the correlations between effects. Knowing the distribution of the latent
+variables will give us a way to predict what the effect on a new
+patient will be, conditioned on the observed data.
 
 *2) Specify the model, likelihood, and priors*
 
-a. Model
-
-Let :math:`Y` be a :math:`N\times K` matrix where each column represents an effect and each
+a. Model: Let :math:`Y` be a :math:`N\times K` matrix where each column represents an effect and each
 row refers to an individual subject. This matrix contains our observations,
 it is our clinical trial dataset. We distinguish between treatment and
 control subjects by considering separately :math:`Y^T` (resp. :math:`Y^{C}`),
-the subset of :math:`Y` containing only treatment subjects (resp. control subjects).
+the subset of :math:`Y` containing only treatment (resp. control) subjects.
 Since the model for :math:`Y^T` and :math:`Y^{C}` is identical, for convenience,
 we suppress the notation into :math:`Y` in the
 remainder of this section.
@@ -463,7 +460,7 @@ where :math:`\Sigma` is a :math:`K\times K` covariance matrix, :math:`\mu` is a 
 In the model above, the vector :math:`\mu=(\mu_{1},\dots,\mu_K)` represents the
 average treatment effect in the common scale. In our example, the first effect
 (Hemoglobin Level) is continuous and hence its latent value directly observed.
-For the remaining two effects (Dyspepsia and Nausea) their latent values can
+Regarding the remaining two effects (Dyspepsia and Nausea), their latent values can
 only be inferred via their binary observations. Note that the variance of
 the non-observed latent variables is non-identifiable
 :cite:`Chib1998a,Talhouk2012a`, so we need to fix it to a known constant (here we use 1) to
@@ -471,9 +468,8 @@ fully specify the model. We do this by decomposing the covariance into
 correlation and variance: :math:`\Sigma = DRD`, where :math:`R` is the
 correlation matrix and :math:`D` is a diagonal matrix of variances :math:`D_{jj} =
 \sigma_j^2` for the :math:`j`-th effect.
-b. Likelihood
 
-The likelihood function can be expressed as
+b. Likelihood: The likelihood function can be expressed as
 
 .. math::
    :type: eqnarray
@@ -486,9 +482,7 @@ where :math:`J_b` is the index of effects that are binary and
 :math:`N(Z| \mu , \Sigma)` is the probability density function (pdf)
 of the multivariate normal distribution.
 
-c. Priors
-
-In this case study, the priors should come from previous studies of the treatment
+c. Priors: In this case study, the priors should come from previous studies of the treatment
 in question or from clinical judgment. If there was no such option,
 then it would be up to us to decide on an appropriate prior. We use
 the following priors for demonstration purposes:
