@@ -45,10 +45,11 @@ They offer a unique source of insight into the history of carefully argued,
 hard-won knowledge. Accordingly because they are made of annotated text, they
 offer unique opportunities for well-defined text and data mining problems.
 Importantly because PLOS represents the largest single journal in the history
-of publishing it has collected an excellent corpus for this study. Equally
-importantly because PLOS is Open Access the opportunity to use this data set is
-available to everyone capable of downloading and analyzing it. The allofplos
-library enables more people to do that more easily.
+of publishing it has collected an excellent corpus for this study, spanning
+seven journals that specialize in biology and medicine. Equally importantly
+because PLOS is Open Access the opportunity to use this data set is available
+to everyone capable of downloading and analyzing it. The allofplos library
+enables more people to do that more easily.
 
 What is allofplos?
 ------------------
@@ -69,7 +70,9 @@ XML. Other related tools include one from fellow Open Access publisher eLife[eli
 Functionality
 -------------
 
-``allofplos`` ships with a starter directory of 122 articles (``starterdir``), and
+The primary function of ``allofplos`` is to download and maintain a corpus of PLOS
+articles. To enable users to jump right into parsing without downloading 230,000 XML
+files, allofplos ships with a starter directory of 122 articles (``starterdir``), and
 includes commands for downloading a 10,000 article demo corpus as well. The
 default path to a corpus is stored as the variable ``corpusdir`` in the Python
 program, and first checks for the environment variable ``$PLOS_CORPUS`` which
@@ -103,14 +106,16 @@ Those files are identical to the ones in the .zip file. The .zip file prevents u
 from needing to scrape the entire PLOS website for the XML files, and "smartly"
 scrapes only the latest articles. For a subset of provisional articles called
 "uncorrected proofs", it checks whether the final version is available, and
-downloads the updated version if so.
+downloads the updated version if so. The files are then ready for parsing and
+analysis.
 
 
 Article corpora and parsing
 ---------------------------
 
 To initialize a corpus (defaults to ``corpusdir``, or the location set by the
-``$PLOS_CORPUS`` environmental variable), use the ``Corpus`` class.
+``$PLOS_CORPUS`` environmental variable), use the ``Corpus`` class. This points
+allofplos at the directory of articles to be analyzed.
 
 
 .. code-block:: python
@@ -118,12 +123,12 @@ To initialize a corpus (defaults to ``corpusdir``, or the location set by the
    from allofplos import Corpus
    corpus = Corpus()
    
-The number of articles in the corpus can be found with ``len(corpus)``. The list
-of every DOI for every article in the corpus can be found at ``corpus.dois``, and
-the path to every XML file in the corpus directory at ``corpus.filenames``. To
-select a random Article object, use ``corpus.random_article``. To select a random
-list of ten Article objects, use ``corpus.random_sample(10)``. You can also iterate
-through articles as such:
+To analyze the starter directory, also import ``starterdir`` and set
+``corpus = Corpus(starterdir)``. The number of articles in the corpus can be found
+with ``len(corpus)``. The list of every DOI for every article in the corpus can be
+found at ``corpus.dois``, and the path to every XML file in the corpus directory at ``corpus.filenames``. To select a random Article object, use ``corpus.random_article``.
+To select a random list of ten Article objects, use ``corpus.random_sample(10)``.
+You can also iterate through articles as such:
 
 
 .. code-block:: python
@@ -141,7 +146,7 @@ The ``Article`` class
 ~~~~~~~~~~~~~~~~~~~~~
 
 As mentioned above, you can use the Corpus class to initialize an Article()
-object without calling it directly. An Article takes a DOI and the location of
+object without calling Article directly. An Article takes a DOI and the location of
 the corpus directory to read the accompanying XML document into lxml.
 
 .. code-block:: python
@@ -160,7 +165,7 @@ Article parsing in ``allofplos`` focuses on metadata (e.g., article title, autho
 names and institutions, date of publication, Creative Commons copyright
 license[cc], JATS version/DTD), which are conveniently located in the ``front``
 section of the XML. We designed the parsing API to quickly locate and parse XML
-elements as properties:
+elements as properties without needing to know the JATS tagging format.
 
 .. code-block:: python
     
@@ -181,14 +186,19 @@ elements as properties:
     'NLM 3.0'
 
 For author information, ``Article`` reconciles and combines data from multiple
-elements within the article into a clean standard form. Property names match XML
-tags whenever possible.
+elements within the article into a clean standard form, including author email
+addresses and institutions. Property names match XML tags whenever possible.
 
 Using XPath
 ~~~~~~~~~~~
 
-You can also do XPath searches on `art.tree`, which works well for finding
-article elements that are not Article class properties.
+While the Article class handles most basic metadata within the XML files, users
+may also wish to analyze the content of the article more directly. The XPath query
+language is built into lxml and provides a way to search for particular XML tags or
+attributes.  (Note that xpath will always return a list of results, as element
+tags and locations are not unique.) You can perform XPath searches on ``art.tree``,
+which also works well for finding article elements that are not Article class
+properties, such as the acknowledgments, which have the tag ``<ack>``.
 
 .. code-block:: python
   
@@ -196,15 +206,22 @@ article elements that are not Article class properties.
     >>> acknowledge.text
     'We thank all contributors to the Performance Curve Database (pcdb.santafe.edu).'
 
+For users who are more familiar with XML or want to perform quality control checks on
+XML files, XPath searches can find articles that match a particular XML structure. For
+example, PLOS's production team needed to find articles that had a ``<list>``
+item anywhere within a ``<boxed-text>`` element. They used 
+``art.tree.xpath('//boxed-text//list')``.
+
 Use case: searching Methods sections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   
-We can put these pieces together to make a list of articles that use PCR in their
-Methods section (``pcr_list``). The body of an article is divided into sections
-(with the element tag 'sec') and the element attributes of Methods sections are
-either ``{'sec-type': 'materials|methods'}`` or ``{'sec-type': 'methods'}``. The
-``lxml.etree`` module needs to be imported to turn XML elements into strings via
-the ``tostring()`` method.
+We can put these pieces together to make a list of articles that use PCR (Polymerase
+Chain Reaction, a common molecular biology technique) in their Methods section
+(``pcr_list``). The body of an article is divided into sections
+(with the element tag ``<sec>``) and the element attributes of Methods sections are
+either ``{'sec-type': 'materials|methods'}`` or ``{'sec-type': 'methods'}``. In addition
+to importing allofplos, the ``lxml.etree`` module needs to be imported to turn XML
+elements into Python strings via the ``tostring()`` method.
 
 .. code-block:: python
 
