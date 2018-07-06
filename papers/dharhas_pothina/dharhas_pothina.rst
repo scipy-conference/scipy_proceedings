@@ -133,9 +133,9 @@ The traditional workflow for building environmental simulations can be broken do
      
 6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows. For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space, such as:
 
-     - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
-     - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
-     - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
+   - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
+   - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
+   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
    Figure :ref:`velocityfield` shows an example visualization of a water circulation field.
 
@@ -231,10 +231,10 @@ Enhancements: Drawing Tools
 
 The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools (See Figure :ref:`drawingtools`), which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
 
-  - **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
-  - **PointDrawTool**: Adding, dragging and deleting point-like glyphs.
-  - **PolyDrawTool**: Drawing, selecting and deleting Polygon (patch) and Path (polyline) glyphs.
-  - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
+-  **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
+-  **PointDrawTool**: Adding, dragging and deleting point-like glyphs.
+-  **PolyDrawTool**: Drawing, selecting and deleting Polygon (patch) and Path (polyline) glyphs.
+-  **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
 To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python (See Figure :ref:`drawingtoolspython`). This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
 further processing.
@@ -418,11 +418,11 @@ Future Work
 Through the work presented here, we have shown that it is possible to build flexible, lightweight workflows entirely within Jupyter notebooks. However, there is still room for improvement.
 Current areas being targeted for development are:
 
-  - Performance enhancements for GIS & unstructured mesh datasets
-  - Making annotation and drawing tools easier to use (i.e. requiring less custom code)
-  - Layout of Jupyter Notebooks in Dashboard type form factors with code hidden
-  - Integration with non Jupyter notebook web frontends (i.e. Tethys Platform [Swain14]_ )
-  - Prototype bidirectional visual programing environment (e.g. ArcGIS Model Builder)
+-  Performance enhancements for GIS & unstructured mesh datasets
+-  Making annotation and drawing tools easier to use (i.e. requiring less custom code)
+-  Layout of Jupyter Notebooks in Dashboard type form factors with code hidden
+-  Integration with non Jupyter notebook web frontends (i.e. Tethys Platform [Swain14]_ )
+-  Prototype bidirectional visual programing environment (e.g. ArcGIS Model Builder)
 
 References
 ----------
