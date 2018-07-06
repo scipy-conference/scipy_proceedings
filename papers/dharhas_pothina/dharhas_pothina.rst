@@ -117,7 +117,7 @@ The traditional workflow for building environmental simulations can be broken do
    Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
 
 
-1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure [materials]_. 
+1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure :ref:`material`. 
  
 2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based and local-data stores.
 
