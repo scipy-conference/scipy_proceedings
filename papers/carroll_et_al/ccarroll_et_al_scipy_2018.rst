@@ -1,4 +1,4 @@
-﻿:author: Christopher D. Carroll
+:author: Christopher D. Carroll
 :email: ccarroll@jhu.edu
 :institution: Johns Hopkins University
 :corresponding:
