@@ -279,39 +279,39 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
 
    element = gv.operation.project(hv.Polygons(
         roi.element), projection=ccrs.PlateCarree()
-      )
+     )
    xs, ys = element.array().T
    bbox = list(gv.util.project_extents(
-      (xs[0], ys[0], xs[2], ys[1]), 
-      ccrs.GOOGLE_MERCATOR,
-      ccrs.PlateCarree())
-    )
+       (xs[0], ys[0], xs[2], ys[1]), 
+       ccrs.GOOGLE_MERCATOR,
+       ccrs.PlateCarree())
+     )
 
    collection_name = 'elevation_data'
    quest.api.new_collection(name=collection_name)
    service_features = quest.api.get_features(
-        uris='svc://usgs-ned:19-arc-second', 
-        filters={'bbox': bbox}
-      )
+       uris='svc://usgs-ned:19-arc-second', 
+       filters={'bbox': bbox}
+     )
    collection_features = quest.api.add_features(
        collection=collection_name, 
        features=service_features
-      )
+     )
    datasets = quest.api.stage_for_download(
-      uris=collection_features
-    )
+       uris=collection_features
+     )
    quest.api.download_datasets(datasets=datasets)
    elevation_dataset = quest.api.apply_filter(
        name='raster-merge', 
        options={'datasets': datasets, 'bbox': bbox}
-    )['datasets'][0]
+     )['datasets'][0]
    elevation_file = quest.api.get_metadata(
-     elevation_dataset
-    )[elevation_dataset]['file_path']
+       elevation_dataset
+     )[elevation_dataset]['file_path']
 
    elevation_raster = xr.open_rasterio(
-     elevation_file
-    ).isel(band=0)
+       elevation_file
+     ).isel(band=0)
    img = gv.Image(elevation_raster, ['x', 'y'])
    gts.StamenTerrain.options(width=600) * img
 
