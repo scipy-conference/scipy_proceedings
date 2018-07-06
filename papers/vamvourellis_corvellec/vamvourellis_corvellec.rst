@@ -513,7 +513,7 @@ reasonable values. Here we picked :math:`\mu = (0.3, 0.5, 0.7)`, :math:`\sigma =
 Then, as the model dictates, we use these values to generate samples of
 underlying latent variables :math:`Z_{i \cdot} \sim N(\mu,\Sigma)` [#]_. Each
 :math:`Z_{i \cdot}` corresponds to a subject, here we choose to generate 200
-subjects. Each  The observed synthetic data :math:`Y_{ij}` are defined to be
+subjects. The observed synthetic data :math:`Y_{ij}` are defined to be
 equal to :math:`Z_{ij}` for the effects that are continuous. For the binary
 effects, we sample Bernoulli variables with probability equal to the inverse
 logit of the corresponding :math:`Z_{ij}` value.
