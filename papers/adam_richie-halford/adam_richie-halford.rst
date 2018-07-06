@@ -291,7 +291,7 @@ in the source code of the UDF itself.
 
    import cloudknot as ck
 
-   def monte_pi_count(b):
+   def monte_pi_count(n):
        import numpy as np
        x = np.random.rand(n)
        y = np.random.rand(n)
