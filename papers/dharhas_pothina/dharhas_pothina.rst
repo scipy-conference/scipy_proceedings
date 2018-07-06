@@ -117,11 +117,11 @@ The traditional workflow for building environmental simulations can be broken do
    Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
 
 
-1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure :ref:`material`. 
+1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure :ref:`materials`. 
  
 2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based and local-data stores.
 
-3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an unstructured 2D triangular mesh. 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers. Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process. After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
+3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an unstructured 2D triangular mesh (See Figure :ref:`mesh`). 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers. Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process. After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
 
 .. figure:: images/mesh.png
 
@@ -134,10 +134,12 @@ The traditional workflow for building environmental simulations can be broken do
 6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows. For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space, such as:
 
 
-    - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
-    - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
-    - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
+     - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
+     - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
+     - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
  
+   Figure :ref:`velocityfield` shows an example visualization of a water circulation field.
+
 .. figure:: images/velocity_field.png
 
    Water velocity color contours overlain with velocity quiver plot showing river flow bypassing roadway embankment. :label:`velocityfield`
@@ -228,7 +230,7 @@ In the next few sections, we describe how this functionality is now available fr
 Enhancements: Drawing Tools
 ---------------------------
 
-The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools, which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
+The Bokeh plotting library has long supported extensive interactive operations for exploring existing data.  However, it did not previously offer any facilities for generating or editing new data interactively, which is required when constructing inputs for running new simulations.  In this project, we added a set of Bokeh editing/drawing tools (See Figure :ref:`drawingtools`), which are sophisticated multi-gesture tools that can add, delete, or modify glyphs on a plot. The edit tools provide functionality for drawing and editing glyphs client-side (in the user's local browser) and synchronizing the changes with data sources on the Python server that can then be accessed in Python. The individual tools can be enabled as needed for each particular plot:
 
 
   - **BoxEditTool**: Drawing, dragging and deleting rectangular glyphs.
@@ -236,7 +238,7 @@ The Bokeh plotting library has long supported extensive interactive operations f
   - **PolyDrawTool**: Drawing, selecting and deleting Polygon (patch) and Path (polyline) glyphs.
   - **PolyEditTool**: Editing the vertices of one or more Polygon or Path glyphs.
 
-To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python. This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
+To make working with these tools easy, HoloViews was extended to define "streams" that provide an easy bidirectional connection between the JavaScript plots and Python (See Figure :ref:`drawingtoolspython`). This allows for definition of geometries in Python and editing in the interactive plot, or creation/modification of geometries in the interactive plot with subsequent access of the data from Python for
 further processing.
 
 .. figure:: images/drawing_tools.png
@@ -322,7 +324,7 @@ For example, USGS National Elevation Dataset (NED) data can then be retrieved fo
 Enhancements: Annotations
 -------------------------
 
-The drawing tools allow glyphs to be created graphically, which is an essential first step in designing a simulation.  The next step is then typically to associate specific values with each such glyph, so that the user can declare boundary conditions, parameter values, or other associated labels or quantities to control the simulation. Examples of how to do this are provided in EarthSim as "annotators", which show an editable table alongside the plot that has drawing tools, allowing users to input text or numerical values to associate with each glyph. The table and plots are interlinked, so that editing either one will update the other, making it simple to edit data however is most convenient.
+The drawing tools allow glyphs to be created graphically, which is an essential first step in designing a simulation.  The next step is then typically to associate specific values with each such glyph, so that the user can declare boundary conditions, parameter values, or other associated labels or quantities to control the simulation. Examples of how to do this are provided in EarthSim as "annotators", which show an editable table alongside the plot that has drawing tools (See Figure :ref:`annotationtools`), allowing users to input text or numerical values to associate with each glyph. The table and plots are interlinked, so that editing either one will update the other, making it simple to edit data however is most convenient.
 
 .. figure:: images/annotation_tools.png
 
@@ -352,19 +354,19 @@ Although Earth imaging data is typically measured on a regular grid, how quickly
 Interactive Dashboards
 ----------------------
 
-The drawing tools make it possible to generate interactive dashboards quickly and easily to visualize and interact with source data. Figure 7 shows hydrodynamic model simulation results displayed in an animation on the left. Users are able to query the results by annotating paths directly on the results visualization. As annotations are added, the drawing on the right dynamically updates to show the depth results along the annotated paths. The animation tool is dynamically linked to both drawings to demonstrate changes over time.
+The drawing tools make it possible to generate interactive dashboards quickly and easily to visualize and interact with source data. Figure :ref:`dashboardanimation` shows hydrodynamic model simulation results displayed in an animation on the left. Users are able to query the results by annotating paths directly on the results visualization. As annotations are added, the drawing on the right dynamically updates to show the depth results along the annotated paths. The animation tool is dynamically linked to both drawings to demonstrate changes over time.
 
 .. figure:: images/dashboard_animation.png
 
    Dashboard with animation demonstrating the ability to dynamically visualize multiple looks at a single source dataset. :label:`dashboardanimation`
 
-The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized using widgets that are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure 8).
+The drawing tools allow for specification of source data as key dimensions (independent variables or indices) or as value dimensions (dependent values or results data). Value dimensions can be visualized using widgets that are dynamically linked to the drawing. This allows for simplified visualizations of multi-dimensional datasets such as parameter sweeps (Figure :ref:`dashboardsweep`).
 
 .. figure:: images/dashboard_sweep.png
 
    Dynamic interaction with drawing via interactive widgets. :label:`dashboardsweep`
 
-Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure 9, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path.
+Drawings can be both the sender and receiver of dynamic information. Dashboards can be created that visualize data, allow users to specify paths in which to query data (e.g. river cross-sections), and visualize the results of the query in a dynamic manner. In Figure :ref:`dashboardcrosssection`, the user-drawn cross-sections on the image on the left query the underlying depth data and generate the image on the right. Users can then interact with the right image sliding the vertical black bar along the image which simultaneously updates the left image with a marker to denote the location along the path.
 
 .. figure:: images/dashboard_cross_section.png
 
@@ -381,7 +383,7 @@ Using many of the tools described here, we have created a notebook workflow to s
 AdH Dambreak Workflow Example
 -----------------------------
 
-The drawing tools, coupled with AdH, allow for rapid development of dambreak simulations to analyze potential hazard situations. In this example, the Polygon tool is used to delineate the boundary of a watershed, a dam centerline is specified with the Path tool, and a reservoir level specified with the Point tool. 
+The drawing tools, coupled with AdH, allow for rapid development of dambreak simulations to analyze potential hazard situations. In this example, as seen in Figure :ref:`dambreak`, the Polygon tool is used to delineate the boundary of a watershed, a dam centerline is specified with the Path tool, and a reservoir level specified with the Point tool. 
 
 .. figure:: images/dambreak.png
 
@@ -396,7 +398,7 @@ Coastline Extraction (GrabCut) Workflow Example
 
 The GrabCut algorithm provides a way to annotate an image using polygons or lines to demark the foreground and background. The algorithm estimates the color distribution of the target object and that of the background using a Gaussian mixture model. This is used to construct a Markov random field over the pixel labels, with an energy function that prefers connected regions having the same label, and running a graph cut based optimization to infer their values. This procedure is repeated until convergence, resulting in an image mask denoting the foreground and background.
 
-In this example this algorithm is applied to satellite imagery to automatically extract a coast- and shoreline contour. First we load an Image or RGB and wrap it in a HoloViews element, then we can declare a GrabCutDashboard . Once we have created the object we can display the widgets using parambokeh, and call the view function to display some plots.
+In this example this algorithm is applied to satellite imagery to automatically extract a coast- and shoreline contour. First we load an Image or RGB and wrap it in a HoloViews element, then we can declare a GrabCutDashboard (See Figure :ref:`grabcut1`). Once we have created the object we can display the widgets using parambokeh, and call the view function to display some plots.
 
 The toolbar in the plot on the left contains two polygon/polyline drawing tools to annotate the image with foreground and background regions respectively. To demonstrate this process in a static paper there are already two polygons declared, one marking the sea as the foreground and one marking the land as the background.
 
@@ -404,7 +406,7 @@ The toolbar in the plot on the left contains two polygon/polyline drawing tools 
 
    Demonstration of a interactive widget for coastline extraction using the grabcut algorithm. :label:`grabcut1`
 
-We can trigger an update in the extracted contour by pressing the Update contour button. To speed up the calculation we can also downsample the image before applying the Grabcut algorithm. Once we are done we can view the result in a separate cell. See figure blah
+We can trigger an update in the extracted contour by pressing the Update contour button. To speed up the calculation we can also downsample the image before applying the Grabcut algorithm. Once we are done we can view the result in a separate cell. See figure :ref:`grabcut2`
 
 .. figure:: images/grabcut2.png
 
