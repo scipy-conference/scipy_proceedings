@@ -34,21 +34,21 @@ Background
 -------------
 This section is intended to give the reader a digestible introduction to ANNs, RNNs, and the LSTM cell. The networks will be discussed as they relate to multi-class classification problems as is the task in HAR.
 
-*Artificial Neural Networks* The first ANN architecture was proposed by Drs. Warren McCulloch and Walter Pitts in 1943 as a means to emulate the cumulative semantic functioning of groups of neurons via propositional logic :cite:`MP43,Ger17`. Frank Rosenblatt subsequently developed the Perceptron in 1957 :cite:`Ros57`. This ANN variation carries out its step-wise operations via mathematical constructs known as linear threshold units (LTUs). The LTU operates by aggregating multiple weighted inputs and feeding this summation u through an activation function :math:`f(u)` or step function :math:`\text{step}(u)`, generating an interpretable output :math:`yp` (e.g. 0 or 1) :cite:`Ger17`.
+*Artificial Neural Networks* The first ANN architecture was proposed by Drs. Warren McCulloch and Walter Pitts in 1943 as a means to emulate the cumulative semantic functioning of groups of neurons via propositional logic :cite:`MP43,Ger17`. Frank Rosenblatt subsequently developed the Perceptron in 1957 :cite:`Ros57`. This ANN variation carries out its step-wise operations via mathematical constructs known as linear threshold units (LTUs). The LTU operates by aggregating multiple weighted inputs and feeding this summation u through an activation function :math:`f(u)` or step function :math:`\text{step}(u)`, generating an interpretable output :math:`\tilde{y}` (e.g. 0 or 1) :cite:`Ger17`.
 
 .. math::
   :type: eqnarray
 
-  yp &=& f(u) \\
-     &=& f(w^T \cdot x)
+  \tilde{y} &=& f(u) \\
+            &=& f(w \cdot x)
 
-where :math:`w^T` is the transpose of the weight vector :math:`w` and :math:`\cdot` is the dot product operation from vector calculus. :math:`x` is a single instance of the training data, containing values for all :math:`n` attributes of the data. As such, :math:`w` is also of length :math:`n`, and the entire training data set for all :math:`m` instances is a matrix :math:`X` of dimensions :math:`m` by :math:`n` (i.e., :math:`m` x :math:`n`).
+where :math:`\cdot` is the dot product operation from vector calculus. :math:`x` is a single instance of the training data, containing values for all :math:`n` attributes of the data. As such, :math:`w` is also of length :math:`n`, and the entire training data set for all :math:`m` instances is a matrix :math:`X` of dimensions :math:`m` by :math:`n` (i.e., :math:`m` x :math:`n`).
 
-A 2-layer ANN can be found in Figure :ref:`ANN` A. Each attribute in instance :math:`x(i)` represents a node in the perceptron's input layer, which simply provides the raw data to the the output layer - where the LTU resides. To represent :math:`k` target classes, :math:`k` LTU nodes are included in the output layer, each corresponding to a single class in :math:`y`. Each LTU's prediction :math:`yp` indicates the predicted probability that the training instance belongs to the corresponding class. The LTU output with the largest value - :math:`\text{max}(yp)` - is taken as the overall predicted class for the instance of the data being analyzed. Taken over the entire dataset, each LTU has a prediction vector :math:`yp_{k}` length :math:`m` and the entire output layer produces a prediction matrix :math:`Yp` with dimensions :math:`m` x :math:`k`. Additionally, each LTU contains its own weight vector :math:`w_{k}` of length :math:`n` (i.e., a fully-connected network), resulting in a weight matrix :math:`W` of dimensions :math:`n` x :math:`k`.
+A 2-layer ANN can be found in Figure :ref:`ANN` A. Each attribute in instance :math:`x(i)` represents a node in the perceptron's input layer, which simply provides the raw data to the the output layer - where the LTU resides. To represent :math:`k` target classes, :math:`k` LTU nodes are included in the output layer, each corresponding to a single class in :math:`y`. Each LTU's prediction :math:`\tilde{y}` indicates the predicted probability that the training instance belongs to the corresponding class. The LTU output with the largest value - :math:`\text{max}(\tilde{y})` - is taken as the overall predicted class for the instance of the data being analyzed. Taken over the entire dataset, each LTU has a prediction vector :math:`\tilde{y}_{k}` length :math:`m` and the entire output layer produces a prediction matrix :math:`\tilde{Y}` with dimensions :math:`m` x :math:`k`. Additionally, each LTU contains its own weight vector :math:`w_{k}` of length :math:`n` (i.e., a fully-connected network), resulting in a weight matrix :math:`W` of dimensions :math:`n` x :math:`k`.
 
-ANNs often contain complex architectures with additional layers, which allow for nonlinear transformations of the data and increase the flexibility and robustness of the model. If we look at a simple three-layer neural network (see Figure :ref:`ANN` B), we see input and output layers as described above, as well as a layer in the middle, termed a *hidden layer*. This layer acts much like the output layer, except that its outputs :math:`z` for each training instance are fed into the output layer, which then generates predictions :math:`yp` from :math:`z` alone. The complete processing of all instances of the dataset, or all instances of a portion of the dataset called a *mini-batch*, through the input layer, the hidden layer, and the output layer marks the completion of a single *forward pass*.
+ANNs often contain complex architectures with additional layers, which allow for nonlinear transformations of the data and increase the flexibility and robustness of the model. If we look at a simple three-layer neural network (see Figure :ref:`ANN` B), we see input and output layers as described above, as well as a layer in the middle, termed a *hidden layer*. This layer acts much like the output layer, except that its outputs :math:`z` for each training instance are fed into the output layer, which then generates predictions :math:`\tilde{y}` from :math:`z` alone. The complete processing of all instances of the dataset, or all instances of a portion of the dataset called a *mini-batch*, through the input layer, the hidden layer, and the output layer marks the completion of a single *forward pass*.
 
-For the model to improve, the outputs generated by this forward pass must be evaluated and the model updated in an attempt to improve the model's predictive power on the data. An error term (e.g., sum of squared error (:math:`sse`)) is calculated by comparing individual predictions :math:`yp_{k}` to corresponding ground truth target values in :math:`y_{k}`. Thus, an error matrix :math:`E` is generated containing error terms over all :math:`k` classes for all :math:`m` training instances. This error matrix is used as an indicator for how to adjust the weight matrix in the output layer so as to yield more accurate predictions, and the corrections made to the output layer give an indication of how to adjust the weights in the hidden layer. This process of carrying the error backward from the output layer through the hidden layer(s) is known as *backpropogation*. One forward pass and subsequent backpropogation makes up a single *epoch*, and the training process consists of many epochs repeated in succession to iteratively improve the model.
+For the model to improve, the outputs generated by this forward pass must be evaluated and the model updated in an attempt to improve the model's predictive power on the data. An error term (e.g., sum of squared error (:math:`sse`)) is calculated by comparing individual predictions :math:`\tilde{y}_{k}` to corresponding ground truth target values in :math:`y_{k}`. Thus, an error matrix :math:`E` is generated containing error terms over all :math:`k` classes for all :math:`m` training instances. This error matrix is used as an indicator for how to adjust the weight matrix in the output layer so as to yield more accurate predictions, and the corrections made to the output layer give an indication of how to adjust the weights in the hidden layer. This process of carrying the error backward from the output layer through the hidden layer(s) is known as *backpropagation*. One forward pass and subsequent backpropagation makes up a single *epoch*, and the training process consists of many epochs repeated in succession to iteratively improve the model.
 
 .. figure:: ANN.png
 
@@ -72,13 +72,13 @@ optimization:
 
 .. math::
 
-  \frac{\partial hsse} {\partial w_{k}} = X^T*[ f'( X \cdot w_{k} )*e_{k} ]* \eta = -X^T*\delta_{k}* \eta
+  \frac{\partial hsse} {\partial w_{k}} = X*[ f'( X \cdot w_{k} )*e_{k} ]* \eta = -X*\delta_{k}* \eta
 
 where :math:`f(...)` represents the activation function, :math:`min_{W}` represents the objective function of minimizing with respect to :math:`W`, and :math:`\|E\|_{F}` stands for the Frobenius norm on the error matrix :math:`E`. :math:`\text{hsse}_{W}` represents the halved (for mathematical convenience) sum of squared error, calculated for all :math:`k` nodes in the output layer. :math:`f'(...)` represents the derivative of the activation function over the term in the parentheses.
 
 Looking at our three-layer neural network depicted in Figure :ref:`ANN`, a single epoch would proceed as follows:
 
-1. Conduct a forward pass, compute :math:`yp` and compare with :math:`y` to generate the error term:
+1. Conduct a forward pass, compute :math:`\tilde{y}` and compare with :math:`y` to generate the error term:
 
 .. math::
 
@@ -86,15 +86,15 @@ Looking at our three-layer neural network depicted in Figure :ref:`ANN`, a singl
 
 .. math::
 
-  y_{pk} = f_{2} ( b_{_k} \cdot z )
+  \tilde{y}_{k} = f_{2} ( b_{_k} \cdot z )
 
 .. math::
 
-  e_{k} = y_{k} - yp_{k}
+  e_{k} = y_{k} - \tilde{y}_{k}
 
-2. Backpropogate the error regarding the correction needed for :math:`yp`.
+2. Backpropagate the error regarding the correction needed for :math:`\tilde{y}`.
 
-3. Backpropogate the correction to the hidden layer.
+3. Backpropagate the correction to the hidden layer.
 
 4. update weight matrices :math:`A` and :math:`B` via :math:`\delta^y` and :math:`\delta^z`:
 
@@ -116,7 +116,7 @@ Looking at our three-layer neural network depicted in Figure :ref:`ANN`, a singl
 
   \text{cross entropy} = -\displaystyle\sum_{i=1}^m \displaystyle\sum_{c=1}^k y_ic * log( f_{c}(x_{i}))
 
-The high flexibility of neural networks increases the chances of overfitting, and there are various ways to avoid this. *Early stopping* is a technique that monitors the change in performance on a validation set (subset of the training set) and stops training once improvement slows sufficiently. *Weight decay* helps counter large updates to the weights during backpropogation and slowly shrinks the weights toward zero in proportion to their relative sizes. Similarly, the *dropout* technique "forgets" a specified proportion of the outputs from a layer's neurons by not passing those values on to the next layer. *Standardizing* the input is important, as it encourages all inputs to be treated equally during the forward pass by scaling and mitigating outliers' effects :cite:`Ger17,Mil18`.
+The high flexibility of neural networks increases the chances of overfitting, and there are various ways to avoid this. *Early stopping* is a technique that monitors the change in performance on a validation set (subset of the training set) and stops training once improvement slows sufficiently. *Weight decay* helps counter large updates to the weights during backpropagation and slowly shrinks the weights toward zero in proportion to their relative sizes. Similarly, the *dropout* technique "forgets" a specified proportion of the outputs from a layer's neurons by not passing those values on to the next layer. *Standardizing* the input is important, as it encourages all inputs to be treated equally during the forward pass by scaling and mitigating outliers' effects :cite:`Ger17,Mil18`.
 
 Other hyperparameters tend to affect training efficiency and effectiveness and tend to differ with different datasets and types of data. Hammerla, et. al. found *learning rate* :math:`\eta` to be an important hyperparameter in terms of its effect on performance :cite:`HHP16`. Too small a learning rate and the model will exhibit slow convergence during training, while too large a value will lead to wild oscillations during optimization :cite:`Mil18`. Hammerla, et. al. also find the *number of units* per layer :math:`n` to be important, and Miller adds that too many hidden units is better than too few, leading to sparse layers of weight matrices versus restricting flexibility of the model, respectively. *Bias* helps account for irreducible error in the data and is implemeneted via a node whose inputs are always :math:`1`'s (top node in the input layer of Figure :ref:`ANN` A). Reimers and Gurevych emphasize the importance of weight initialization for model performance in their survey of the importance of hyperparameter tuning for using LSTMs for language modeling :cite:`RG17`. Jozefowicz, et. al. cite the initialization of the forget gate bias to 1 as a major factor in LSTM performance :cite:`JZS15`.
 
@@ -132,13 +132,13 @@ Outputs of the recurrent layer:
 
 .. math::
 
-  y_{(t)} = \phi(W_{x}^T \cdot x_{(t)} + W_{y}^T \cdot Y_{(t-1)} + b)
+  y_{(t)} = \phi(W_{x} \cdot x_{(t)} + W_{y} \cdot Y_{(t-1)} + b)
 
 where :math:`\phi` is the activation function and :math:`b` is the bias vector of length :math:`n` (the number of neurons).
 
 The *hidden state*, or the *state*, of the cell (:math:`h_{(t)}`) is the information that is kept in memory over time.
 
-To train these neurons, we "unroll" them after a complete forward pass to reveal a chain of linked cells the length of time steps :math:`t` in a single input. We then apply standard backpropogation to these links, calling the process backpropogation through time (BPTT). This works relatively well for very short time series, but once the number of time steps increases to tens or hundreds of time steps, the network essentially becomes very deep during BPTT and problems arise such as very slow training and exploding and vanishing gradients :cite:`Ger17`. Various hyperparameter and regularization schemes exist to alleviate exploding/vanishing gradients, including *gradient clipping* :cite:`PMB13`, *batch normalization*, dropout, and the long short-term memory (LSTM) cell originally developed by Sepp Hochreiter and Jurgen Schmidhuber in 1997 :cite:`HS97`.
+To train these neurons, we "unroll" them after a complete forward pass to reveal a chain of linked cells the length of time steps :math:`t` in a single input. We then apply standard backpropagation to these links, calling the process backpropagation through time (BPTT). This works relatively well for very short time series, but once the number of time steps increases to tens or hundreds of time steps, the network essentially becomes very deep during BPTT and problems arise such as very slow training and exploding and vanishing gradients :cite:`Ger17`. Various hyperparameter and regularization schemes exist to alleviate exploding/vanishing gradients, including *gradient clipping* :cite:`PMB13`, *batch normalization*, dropout, and the long short-term memory (LSTM) cell originally developed by Sepp Hochreiter and Jurgen Schmidhuber in 1997 :cite:`HS97`.
 
 *Long Short-Term Memory (LSTM) RNNs* The LSTM cell achieves faster training and better long-term memory than vanilla RNN neurons by maintaining two state vectors, the short-term state :math:`h_{(t)}` and the long-term state :math:`c_{(t)}`, mediated by a series of inner gates, layers, and other functions. These added features allow the cell to process the time series in a deliberate manner, recognizing meaningful input to store long-term and later extract when needed, and forget unimportant information or that which is no longer needed :cite:`Ger17`.
 
@@ -150,19 +150,19 @@ As can be seen in Figure :ref:`LSTM`, when the forward pass advances by one time
 
 .. math::
 
-  i_{(t)} = \sigma (W){xi}^T . x_{(t)} + W_{hi}^T . h_{(t-1)} + b_{i}
+  i_{(t)} = \sigma (W){xi} \cdot x_{(t)} + W_{hi} \cdot h_{(t-1)} + b_{i}
 
 .. math::
 
-  f_{(t)} = \sigma (W){xf}^T . x_{(t)} + W_{hf}^T . h_{(t-1)} + b_{f}
+  f_{(t)} = \sigma (W){xf} \cdot x_{(t)} + W_{hf} \cdot h_{(t-1)} + b_{f}
 
 .. math::
 
-  o_{(t)} = \sigma (W){xo}^T . x_{(t)} + W_{ho}^T . h_{(t-1)} + b_{o}
+  o_{(t)} = \sigma (W){xo} \cdot x_{(t)} + W_{ho} \cdot h_{(t-1)} + b_{o}
 
 .. math::
 
-  g_{(t)} = \sigma (W){xg}^T . x_{(t)} + W_{hg}^T . h_{(t-1)} + b_{g}
+  g_{(t)} = \sigma (W){xg} \cdot x_{(t)} + W_{hg} \cdot h_{(t-1)} + b_{g}
 
 .. math::
 
@@ -352,7 +352,7 @@ We do feel standardization is justified for this data due to its complexity and 
 
 We saw very promising results from the hyperparameter optimization portion of the experiment. The TPE algorithm, although not run to completion in this experiment, was able to navigate the search space and find several well-performing models. We chose to err on the side of caution by using very granular ranges over the numerical hyperparameters, and as a result we ran out of time even using the heuristic-based TPE algorithm. We suggest further experiments to reduce the search space by using less granular ranges over the numeric hyperparameters, and exploring more advanced heuristic search methods. Doing so will decrease the search time and allow completion of the entire Pipeline in a more reasonable amount of time. Nonetheless, the TPE's so-far-best model at the time of termination and our baseline model from Part 2 outperformed other baseline LSTMs trained on higher dimensional data from the same dataset :cite:`U18,ZYCG17`; see Table :ref:`compare`.
 
-We also compare our performance with other benchmark experiments on the UCI HAR dataset. Compared with more complex LSTMs trained using more features, our averaged cross validation results scored competitively with the b-LSTM (91.09%), the residual LSTM (91.55%), and the deep res-bidir-LSTM (93.57%) :cite:`ZYCG17`. As we found no evidence of cross validation in these other reports, we compare our single best-performing test's accuracy of 95.25% and F1 score of 0.9572 and find it to compete with the highest scoring models found in literature: 4 layer LSTM (96.7% accuracy, 0.96 F1score), MLSTM-FCN and MALSTM-FCN (96.71% accuracy), and OVO SVM (96.4% accuracy, 551 features).
+We also compare our performance with other benchmark experiments on the UCI HAR dataset. Compared with more complex LSTMs trained using more features, our averaged cross validation results scored competitively with the b-LSTM (91.09%), the residual LSTM (91.55%), and the deep res-bidir-LSTM (93.57%) all from Zhao, et. al. :cite:`ZYCG17`. As we found no evidence of cross validation in these other reports, we compare our single best-performing test's accuracy of 95.25% and F1 score of 0.9572 and find it to compete with the highest scoring models found in literature: 4 layer LSTM (96.7% accuracy, 0.96 F1score) :cite:`MP17`, MLSTM-FCN and MALSTM-FCN (96.71% accuracy) :cite:`KMDH18`, and one-vs-one (OVO) SVM (96.4% accuracy, 551 features) :cite:`ROGA+13`.
 
 Conclusion/Future Work
 --------------------------------
