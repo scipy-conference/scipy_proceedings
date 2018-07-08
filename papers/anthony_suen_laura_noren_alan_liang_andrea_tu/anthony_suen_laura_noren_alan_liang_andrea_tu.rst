@@ -1,10 +1,19 @@
+:author: Anthony Suen
+:email: anthonysuen@berkeley.edu
+:institution: University of California, Berkeley
+
 :author: Laura Norén
 :email: laura.noren@nyu.edu
 :institution: New York University 
 
-:author: Anthony Suen
-:email: anthonysuen@berkeley.edu
+:author: Alan Liang
+:email: alanliang@berkeley.edu
 :institution: University of California, Berkeley
+
+:author: Andrea Tu
+:email: andrea.tu@berkeley.edu
+:institution: University of California, Berkeley
+
 
 ------------------------------------------------------------------------------------
 Equity, Scalability, and Sustainability of Data Science Infrastructure
@@ -64,7 +73,7 @@ Compared to smaller liberal arts universities, the conditions are vastly differe
 
 Most of the classes that have deployed JupyterHub are still relatively small, with most having 12-50 students. At Harvard, JupyterHub was deployed on AWS for two classes in the School of Engineering, which provided significant customization. The Signal Processing class used a Docker-based JupyterHub, where each user was provisioned with a docker container notebook. For the Decision Theory class, JupyterHub used a dedicated EC2 instance per user’s notebook, providing better scalability, reliability and cost efficiency [5]_. Its School of Engineering and Applied Science (SEAS) further announced in October 2017 for a schoolwide JupyterHub deployment [6]_. In addition to SEAS’s JupyterHub, the Harvard Medical School has its own JupyterHub deployment.
 
-Instead of deploying and maintaining their own JupyterHubs, other universities have found success by contracting a third-party vendor to make their JupyterHub deployment experience completely hassle free. Vocareum [7]_, an example of one company that specializing in this space, helps to set up and manage environments like Jupyter and hosts labs for students to access. Currently, their data sciences lab is used by many wealthy private universities including Cornell, Columbia, and the University of Notre Dame. Others firms that provide similar services include CoCalc and Gryd.
+Instead of deploying and maintaining their own JupyterHubs, other universities have found success by contracting a third-party vendor to make their JupyterHub deployment experience completely hassle free. Vocareum [7]_, an example of one company specializing in this space, helps to set up and manage environments like Jupyter and hosts labs for students to access. Currently, their data sciences lab is used by many wealthy private universities including Cornell, Columbia, and the University of Notre Dame. Others firms that provide similar services include CoCalc and Gryd.
 
 Despite the hassle-free experiences, this model runs into major issues in replicability and scalability. Other universities generally have less experience with cloud computing or cannot rely on their university’s operating budget to support this type of teaching expense, especially if classes are relatively small (12-50 students). Furthermore, this model is very costly to scale as costs will grow with each instance, especially when factoring in deployment costs of contractors. This includes beyond just potential costs for the cloud provider, but also hiring outside consultants to setup JupyterHub. Setting up multiple individual hubs that nominally create the same type of service is wasteful, and long term costs could potentially sky rocket if there is no unified plan. One potential solution is to adopt Berkeley’s strategy of utilizing Kubernetes, which allows the JupyterHub to host thousands of students across many courses. 
 
@@ -95,7 +104,7 @@ When considering the future plans of Jupyterhub in higher data science education
 
 - **A National JupyterHub** - A national Jupyterhub would offer cost benefits such as utilizing existing federally funded national supercomputing centers. However a single national hub is difficult to realize due to high coordination costs with thousands of universities and the current political climate would not support adding more federal employees to manage this platform. As attractive as a national level JupyterHub may be, there are other scalable solutions that might be easier to coordinate and implement.  
 
-- **Regional Hubs Models** - Establishing several regional hubs can reduce the burden of deployment and maintenance costs that individual universities experience today. For each regional network, by deploying a large Kubernetes cluster that can support many thousands of users, individual universities can then deploy their own JupyterHubs on the cluster. 
+- **Regional Hubs Model** - Establishing several regional hubs can reduce the burden of deployment and maintenance costs that individual universities experience today. For each regional network, by deploying a large Kubernetes cluster that can support many thousands of users, individual universities can then deploy their own JupyterHubs on the cluster. 
 
 One proposal that scaffolds onto existing infrastructure the cloud credits from partners like Microsoft [9]_. The West Big Data Innovation Hub and UC Berkeley proposes to conduct a pilot program by setting up a Kubernetes cluster using Microsoft Azure for a small group of Western U.S. universities to pilot their JupyterHubs starting in the Summer of 2018. This will lower the administrative burden while providing a scalable infrastructure at a very low cost for many universities. Further integration of regional computing facilities at major research universities should be investigated. 
 
