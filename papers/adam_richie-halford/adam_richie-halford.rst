@@ -310,7 +310,7 @@ We submit jobs with the :code:`Knot.map()` method:
 
 .. code-block:: python
 
-   import numpy as np  # for np.linspace
+   import numpy as np  # for np.ones
    n_jobs, n_samples = 1000, 100000000
    args = np.ones(n_jobs, dtype=np.int32) * n_samples
    future = knot.map(args)
