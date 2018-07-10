@@ -42,7 +42,7 @@ I. Background
 
 Mapbox is the location data platform for mobile and web applications. We
 provide building blocks to add location features like maps, search, and
-navigation into any experience you create.
+navigation into any experience software developers create.
 
 In particular, our navigation products are focused on providing smart
 turn-by-turn routing based on real-time traffic. Valuable Assets For
@@ -80,8 +80,8 @@ and parking lot segmentation with aerial and satellite imagery.
    Computer Vision Pipeline. 
 
 We design these pipelines with two things in mind. We not only ensured scalability
-in the amount of data we process, but also how easily it is to expand 
-our problem space to new objects of interests or other navigation assets.
+in the amount of data we process, but also how easily it is to expand to perform
+computer vision tasks on new objects of interests or other navigation assets.
 
 
 1. Data
@@ -90,8 +90,8 @@ our problem space to new objects of interests or other navigation assets.
 **Data Preparation.** Before we explain the data involved in creating
 our training set, we would first like to
 explain the difference between object detection and semantic
-segmentation. These are two different problem spaces in computer vision.
-Object detection is the problem of locating and classifying a variable
+segmentation. These are two different tasks in computer vision.
+Object detection involves locating and classifying a variable
 number of objects in an image. Figure 2 demonstrates how we use object
 detection models to classify and locate turn lane markings from satellite
 imagery. We are not just distinguishing five left-turn only lane markings
@@ -107,9 +107,11 @@ counting, visual search engine.
 
    Turn lane markings detection.
 
-For semantic segmentation on the other hand, we are not only interested in locating and classifying
-objects, but we also want to understand the image at pixel level. For example, in addition to
-recognizing the road from the buildings, we also have to delineate the
+Semantic segmentation on the other hand, attempts to partition the image
+into semantically meaningful parts, and to classify each part into one of
+the pre-determined classes. One can also achieve the same goal by
+classifying and labeling each pixel. For example, in addition to
+recognizing the road from the buildings, we have also delineated the
 boundaries of each object shown in Figure 3.
 
 .. figure:: fig3.png
@@ -117,7 +119,7 @@ boundaries of each object shown in Figure 3.
    :width: 200 px
    :scale: 22 %
 
-   Semantic segmentation on roads, buildings and greens
+   Semantic segmentation on roads, buildings and vegetation
 
 To prepare training data for detecting turn lane markings, we first find
 where the turn lane markings are. OpenStreetMap is a collaborative
@@ -176,9 +178,9 @@ which are also stored as GeoJSON polygons, into single channel numpy arrays.
 We then stack each of these single channel numpy arrays with its respective aerial
 image tile, a three channel numpy array - Red, Green, and Blue.
 
-In either of these cases, we wrote
-scripts for our data preparation steps (Python library and CLI). These
-scripts were then ran at large scale in parallel (multiple cities at
+In either of these cases, we first developed Python command line tools and libraries for our data preparation steps.
+Examples of these command line tools can be found on our segmentation GitHub repository [robosat]_. These
+scripts are then ran at large scale in parallel (multiple cities at
 once) on Amazon Elastic Container Service. Amazon Elastic Container Service is a
 highly scalable, fast, container management service that makes it easy
 to run, terminate, and manage Docker containers on a cluster (grouping of
@@ -224,12 +226,9 @@ detection system and is the improved version of YOLO [yolo]_, which was
 introduced in 2015. YOLOv2 outperforms all other state-of-the-art
 methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD)
 in both speed and detection
-accuracy. In general, object detection models are
-pre-trained on ImageNet for classification. The network is then resized
-for higher resolution for detection. This has worked particular well on
-detecting smaller objects in a scene. Fully convolutional models jointly
-trains these two steps. Our YOLOv2 was first pre-trained on
-ImageNet 224x224 resolution imagery and then fine-tuned on 448x448 resolution imagery. A major feature of
+accuracy [cite1]_. Our YOLOv2 was first pre-trained on
+ImageNet 224x224 resolution imagery and then the network was resized and finetuned
+for classification on higher resolution 448x448 turn lane marking imagery. A major feature of
 the YOLO family is the use of anchor boxes to run prediction. There are
 two ways of predicting the bounding boxes- directly predicting the
 bounding box of the object or using a set of predefined bounding boxes
@@ -251,8 +250,8 @@ of a contracting path to capture context and a symmetric expanding path that ena
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
 best method such as the sliding-window convolutional network. This first part is 
-called down or you may think it as the encoder part
-where you apply convolution blocks followed by a maxpool downsampling to
+called down or one may think it as the encoder part
+where one apples convolution blocks followed by a maxpool downsampling to
 encode the input image into feature representations at multiple
 different levels. The second part of the network consists of upsample
 and concatenation followed by regular convolution operations. Upsampling
@@ -274,20 +273,20 @@ segmentation distinguishing parking lots from the background.
 
 We also experimented with Pyramid Scene Parsing Network (PSPNet) [pspnet]_. PSPNet
 is effective to produce good quality results on scenes that are complex, contain
-multi-class and won dataset with great
-diversity. It’s redundant when the number of categories are less and
-dataset are more simple (such as self-driving car). PSPNet adds a
+multi-class and on dataset with great
+diversity. We found that it was redundant with our parking lot segmenation where the
+the number of categories are only binary - parking lot versus background. PSPNet adds a
 multi-scale pooling on top of the backend model to aggregate different
 scale of global information. The upsample layer is implemented by
-bilinear interpolation. After concatenation, PSP fuse different level of
+bilinear interpolation. After concatenation, PSP fuses different levels of
 feature with a 3x3 convolution.
 
 **Hard Negative Mining.** This is a technique we used to improve model
 performance by reducing the negative samples. A hard negative is when we
 take that falsely detected patch, and explicitly create a negative
 example out of that patch, and add that negative to our training set.
-When we retrain your model it should perform better with this extra
-knowledge, and not make as many false positives.
+When we retrain our models with this extra
+knowledge, they usually perform better and not make as many false positives.
 
 Figure 7 shows probability mask over what our models believe are pixels
 belonging to parking lots
@@ -400,8 +399,10 @@ References
 .. [josm] JOSM, https://josm.openstreetmap.de/
 .. [osm-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
-.. [s3] Amazon S3, https://aws.amazon.com/s3/
+.. [robosat] Robosat, https://github.com/mapbox/robosat#rs-extract
+.. [s3] Amazon Simple Storage Service, https://aws.amazon.com/s3/
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
+.. [cite1] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun arXiv:1512.03385 [cs.CV], Dec 2015.
