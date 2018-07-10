@@ -45,6 +45,11 @@ structure, and documentation standards.
 
  Heterogeneous-Agent Resources toolKit, econ-ark, computational economics, economic modeling
 
+.. class:: disclaimer
+
+ *Disclaimer:* Views expressed herein do not necessarily reflect the views of the respective institutions that employ the respective authors.
+
+
 Introduction
 =============
 
