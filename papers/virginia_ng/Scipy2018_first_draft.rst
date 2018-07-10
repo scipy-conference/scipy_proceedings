@@ -16,10 +16,11 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 
    Computer vision has been one of the most rapidly growing fields in deep learning.
    It powers a variety of emerging technologies—from facial recognition to
-   augmented reality to self-driving cars. In this paper we present the steps to developing
-   deep learning pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite
-   imagery at large scale. Practical applications of these pipelines
-   include detection and automatically mapping turn lane markings , parking lots, roads, water,
+   augmented reality to self-driving cars. The remote sensing and mapping communities are
+   particularly interested in extracting, understanding and mapping real and current features of the real world. A feature is a physical element in the landscape and can include both natural and man made objects. In this paper we present the steps to developing
+   deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite
+   imagery at large scale. We present the practical applications of these pipelines
+   including detection and automatic mapping of turn lane markings, parking lots, roads, water,
    and buildings etc.
 
    We first present the process of collecting, cleaning, pre-processing imagery-based data at scale by constructing data engineering pipelines.
@@ -29,6 +30,8 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
    We then discuss the implementation of state-of-the-art detection and semantic segmentation systems such as
    YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as
    specific adaptations for the aerial and satellite imagery domain in our pipelines.
+
+   We conclude this paper by discussing our ongoing efforts in improving the quality, resolution and coverage of our imagery layer - Mapbox Satellite. We believe this significantly lowers the barrier to entry into deep learning and computer vision. For our pipelines, we will continue to improve our models, expand our work to other features like buildings and roads, other geographical regions of interest, as well as other data sources such as drone imagery.
 
 
 .. class:: keywords
@@ -110,8 +113,8 @@ counting, visual search engine.
 Semantic segmentation on the other hand, attempts to partition the image
 into semantically meaningful parts, and to classify each part into one of
 the pre-determined classes. One can also achieve the same goal by
-classifying and labeling each pixel. For example, in addition to
-recognizing the road from the buildings, we have also delineated the
+classifying and labeling each pixel with the class of it's enclosing object or region.
+For example, in addition to recognizing the road from the buildings, we also delineate the
 boundaries of each object shown in Figure 3.
 
 .. figure:: fig3.png
@@ -131,10 +134,11 @@ from OpenStreetMap that have one of the following attributes - “\turn:lane=*�
 “\turn:lane:forward=*”, “\turn:lane:backward=*” - and
 created a custom layer over the `mapbox.satellite
 layer` [mapbox]_.
-We have humans manually draw and verify bounding boxes around the turn lane markings six
+To ensure the highest quality for our training set, we have humans manually
+draw and verify bounding boxes around the turn lane markings six
 classes of turn lane markings using JOSM [josm]_, a process called annotation.
-The six classes of turn lane markings are “\Left”, “\Right”, “\Through”,
-“\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, over 53,000 turn
+We annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”,
+“\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, resulting in over 53,000 turn
 lane markings. We included turn lane markings of
 all shapes and sizes, as well as ones that are partially covered by cars
 and/or shadows. We excluded turn lane markings that are erased or fully
@@ -157,7 +161,7 @@ generate polygons from tags with attributes “\building=*” except
 construction, houseboat, static_caravan, stadium, conservatory ,
 digester, greenhouse, ruins. We then use a tool called
 Osmium [osmium]_ to annotate
-these parking lots.
+these parking lots. We annotated 55,710 images for parking lot segmentation.
 
 **Data Engineering.** We built a data engineering pipeline within the
 larger object detection pipeline to create our training datasets. 
@@ -179,7 +183,7 @@ We then stack each of these single channel numpy arrays with its respective aeri
 image tile, a three channel numpy array - Red, Green, and Blue.
 
 In either of these cases, we first developed Python command line tools and libraries for our data preparation steps.
-Examples of these command line tools can be found on our segmentation GitHub repository [robosat]_. These
+All of command line tools we developed for the segmentation task can be found on our GitHub repository [robosat]_. These
 scripts are then ran at large scale in parallel (multiple cities at
 once) on Amazon Elastic Container Service. Amazon Elastic Container Service is a
 highly scalable, fast, container management service that makes it easy
@@ -235,14 +239,13 @@ bounding box of the object or using a set of predefined bounding boxes
 (anchor box) to predict the actual bounding box of the object. YOLO
 predicts the coordinates of bounding boxes directly using fully
 connected layers on top of the convolutional feature extractor. But, it
-makes a significant amount of localization error. It is easier to
+makes a significant amount of localization error [yolo-drawbacks]_. It is easier to
 predict the offset based on anchor boxes than to predict the coordinates
-directly. Instead of using pre-defined anchor boxes, YOLOv2 authors
-performed K-means clustering on bounding boxes from the training data
-set. In addition to using clustering on bounding boxes, YOLOv2 was able to
+directly. Instead of using pre-defined anchor boxes, we performed K-means clustering
+on bounding boxes from the training data set as suggested by the YOLOv2 authors.
+In addition to using clustering on bounding boxes, our YOLOv2 was able to
 converge and regularize well through the use of batch normalization,
 
- 
 
 **Segmentation Models.** We implemented U-Net [unet]_ for parking lot
 segmentation. The U-Net architecture can be found in Figure 6. It consists
@@ -274,8 +277,8 @@ segmentation distinguishing parking lots from the background.
 We also experimented with Pyramid Scene Parsing Network (PSPNet) [pspnet]_. PSPNet
 is effective to produce good quality results on scenes that are complex, contain
 multi-class and on dataset with great
-diversity. We found that it was redundant with our parking lot segmenation where the
-the number of categories are only binary - parking lot versus background. PSPNet adds a
+diversity. We found that it was redundant with our parking lot segmenation where there are
+only two categories - parking lot versus background. PSPNet adds a
 multi-scale pooling on top of the backend model to aggregate different
 scale of global information. The upsample layer is implemented by
 bilinear interpolation. After concatenation, PSP fuses different levels of
@@ -289,7 +292,8 @@ When we retrain our models with this extra
 knowledge, they usually perform better and not make as many false positives.
 
 Figure 7 shows probability mask over what our models believe are pixels
-belonging to parking lots
+belonging to parking lots. The average over multiple IoU (AP)
+of our baseline model U-Net is 46.7 for a test set of 900 samples.
 
 
 .. figure:: fig7.png
@@ -346,9 +350,14 @@ We get simple polygons that can be ingested by OpenStreetMap as feature type “
 space back into GeoJSONs (world coordinate).
 
 **Removing tile border artifacts.** Query and match neighboring image
-tiles.
+tiles. This step reads in the segmentation mask, do cleanup and simplification,
+and turn tile images and pixels into a GeoJSON file with extracted parking lot features.
 
-**Deduplication.** Deduplicate by matching GeoJSONs with data that already exist on OpenStreetMap.
+**Merging multiple polygons.** Handles and merges GeoJSON features crossing tile boundaries
+into a single feature [visualize]_.
+
+**Deduplication.** Deduplicates by matching GeoJSONs with data that already exist on
+OpenStreetMap, so that we only upstream detections that are not already mapped.
 
 After performing all these post-processing steps, we have a clean mask
 that is also a polygon in the form of GeoJSON. An example of such a mask can be
@@ -364,7 +373,10 @@ scale (on the world). The output of these processing pipelines are turn
 lane markings and parking lots in the form of GeoJSONs. We can then add
 these GeoJSONs back into OpenStreetMap as turn lane and parking lot
 features. Our routing engines then take these OpenStreetMap features
-into account when calculating routes. Shown in Figure 10 is a front-end UI that
+into account when calculating routes. We are still in the process of
+making various improvements to our baseline model, therefore we include two manual steps
+performed by humans as a stopgap. First is verification and inspection of our model results. Second is
+to manually map the true positive results in OpenStreetMap. Shown in Figure 10 is a front-end UI that
 allows users to pan around for instant turn lane markings detection.
 
 
@@ -376,24 +388,22 @@ allows users to pan around for instant turn lane markings detection.
    Front-end UI for instant turn lane markings detection
 
 
-IV. Future Work
----------------
+IV. Ongoing Work
+----------------
+We demonstrate the scalability of our computer vision pipelines which enables us to run object detection and segmentation tasks. We built our tools and pipelines so that users can easily expand to other physical elements in the landscape or to other geographical regions of interest. Going forward, we will continue to improve the quality, resolution and coverage of our imagery layer - Mapbox Satellite. We believe this significantly lowers the barrier to entry into deep learning and computer vision.
 
-We have made Robosat[*]_, our end-to-end semantic segmantion pipeline publicly available in June 2018. 
 
-We are in the process of making several improvements to our models. We are currently working on
-replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions
-with upsampling and uses nearest neaighbor upsampling followed by a convolution for refinement instead.
+For turn lane marking detection, we plan on experimenting with the new and improved YOLOv3 [yolov3]_, which was published in April 2018.
 
-We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
+We ran the first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacremanto, and Seattle. The next steps is to run predictions over all of North America where we have high resolution imagery. We open sourced Robosat[*]_, our end-to-end semantic segmantion pipeline, along with all its tools in June 2018. Users have already started experiementing with building detection on drone imagery from the OpenAerialMap project in the area of Tanzania [tanzania]_. We are in the process of making several improvements to our models. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions with upsampling and uses nearest neaighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
 
-.. [*] Robosat is generic ecosystem for feature extraction from aerial and satellite imagery https://github.com/mapbox/robosat
+.. [*] Robosat is an end-to-end pipeline for extracting physical elements in the landscape that can be mapped from aerial and satellite imagery https://github.com/mapbox/robosat
 
 
 References
 ----------
 .. [osm] OpenStreetMap, https://www.openstreetmap.org
-.. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps
+.. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps, https://www.openstreetmap.org/user/pratikyadav/diary/43954
 .. [osm-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Overpass, https://overpass-turbo.eu/
 .. [josm] JOSM, https://josm.openstreetmap.de/
@@ -401,12 +411,16 @@ References
 .. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
 .. [robosat] Robosat, https://github.com/mapbox/robosat#rs-extract
 .. [s3] Amazon Simple Storage Service, https://aws.amazon.com/s3/
+.. [yolo-drawbacks] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [cite1] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun arXiv:1512.03385 [cs.CV], Dec 2015.
 .. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
+.. [visualize] https://s3.amazonaws.com/robosat-public/3339d9df-e8bc-4c78-82bf-cb4a67ec0c8e/features/index.html#16.37/33.776449/-84.41297
+.. [yolov3]    Joseph Redmon, Ali Farhadi. *YOLOv3: An Incremental Improvement*, arXiv:1804.02767 [cs.CV], Apr 2018
+.. [tanzania] daniel-j-h, https://www.openstreetmap.org/user/daniel-j-h/diary/44321
 
 
 
