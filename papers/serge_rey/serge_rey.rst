@@ -337,17 +337,6 @@ The similarity matrix is then used as the input for another round of clustering
 to derive a typology of neighborhood trajectory to produce several sequences
 of neighborhood types typically
 happening in a particular order :cite:`delmelle2016`.
-It should be noted here that the operation costs are not necessarily
-identical. Rather, they can be manipulated so that the resulted similarity
-measure reflects the exact characteristics of the neighborhood sequence we are
-interested in. For example, the cost of substitution may capture units' socioeconomic
-dissimilarity in contemporary experience :cite:`li2018` while operations
-including insertion, deletion and
-transposition can be assigned such an expensive cost that it is highly unlikely
-they will be allowed in the OM process .
-We allow for various cost functions and further extend the definition
-of operation costs to incorporate potential spatial
-dependence and spatial heterogeneity.
 
 In a prototypical workflow, the ``change`` module permits the end user to
 explore the nature of neighborhood change from a dynamic, holistic or combined 
@@ -652,8 +641,6 @@ Sequence Analysis to Neighborhood Change
 
 
 .. figure:: hamming_and_weighted.png
-   :align: center
-   :figclass: w
 
    Neighborhoods with similar spatial-social histories since 1980 :label:`f:trajclust`
 
