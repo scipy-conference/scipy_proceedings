@@ -9,7 +9,7 @@
 
 
 --------------------------------------------------------------
-Developing Scalable Deep Learning Pipelines with Aerial and Satellite Imagery
+Scalable Feature Extraction with Aerial and Satellite Imagery
 --------------------------------------------------------------
 
 .. class:: abstract
@@ -222,7 +222,7 @@ apply.
 **Object Detection Models.**\ We implemented YOLOv2 [yolov2]_, a real-time object
 detection system and is the improved version of YOLO [yolo]_, which was
 introduced in 2015. YOLOv2 outperforms all other state-of-the-art
-methods like Faster R-CNN with ResNet and Single Shot MultiBox Detector (SSD)
+methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD)
 in both speed and detection
 accuracy. In general, object detection models are
 pre-trained on ImageNet for classification. The network is then resized
