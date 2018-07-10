@@ -11,10 +11,6 @@
 :email: jacqueline.kazil@capitalone.com
 :institution: Capital One
 
-:author: David C. Low
-:email: david.c.low@cfpb.gov
-:institution: Bureau of Consumer Financial Protection
-
 :author: Nathan M. Palmer
 :email: npalmer.professional@gmail.com
 :institution: Econ-ARK
