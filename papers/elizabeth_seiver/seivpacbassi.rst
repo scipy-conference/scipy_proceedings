@@ -7,7 +7,7 @@
 :institution: Netflix
 
 :author: Sebastian Bassi
-:email: sbassi@gmail.com
+:email: sebastian.bassi@globant.com
 :institution: Globant
 
 -------------------------------------------------------
@@ -40,16 +40,16 @@ Why mine scientific articles?
 Scientific articles are the standard mechanism of communication in science.
 They embody a clear way by which human minds across centuries and continents
 are able to communicate with one another, growing the total sum of knowledge.
-Scientific articles are unique resources in that they are the material
+Scientific articles are unique resources, in that they are the material
 artifacts by which this cultural exchange is made concrete and persistent.
 They offer a unique source of insight into the history of carefully argued,
 hard-won knowledge. Accordingly because they are made of annotated text, they
 offer unique opportunities for well-defined text and data mining problems.
-Importantly because PLOS represents the largest single journal in the history
-of publishing it has collected an excellent corpus for this study, spanning
-seven journals that specialize in biology and medicine. Equally importantly
-because PLOS is Open Access the opportunity to use this data set is available
-to everyone capable of downloading and analyzing it. The allofplos library
+Importantly, because PLOS represents the largest single journal in the history
+of publishing, it has collected an excellent corpus for this study, spanning
+seven journals that specialize in biology and medicine. Equally importantly,
+because PLOS is Open Access, the opportunity to use this data set is available
+to anyone capable of downloading and analyzing it. The allofplos library
 enables more people to do that more easily.
 
 What is allofplos?
@@ -74,7 +74,7 @@ Functionality
 -------------
 
 The primary function of ``allofplos`` is to download and maintain a corpus of PLOS
-articles. To enable users to jump right into parsing without downloading 230,000 XML
+articles. To enable users to parse articles without downloading 230,000 XML
 files, allofplos ships with a starter directory of 122 articles (``starterdir``), and
 includes commands for downloading a 10,000 article demo corpus as well. The
 default path to a corpus is stored as the variable ``corpusdir`` in the Python
@@ -193,7 +193,7 @@ elements as properties without needing to know the JATS tagging format.
 
 For author information, ``Article`` reconciles and combines data from multiple
 elements within the article into a clean standard form, including author email
-addresses and institutions. Property names match XML tags whenever possible.
+addresses and affiliated institutions. Property names match XML tags whenever possible.
 
 Using XPath
 ~~~~~~~~~~~
@@ -201,7 +201,7 @@ Using XPath
 While the Article class handles most basic metadata within the XML files, users
 may also wish to analyze the content of the article more directly. The XPath query
 language is built into lxml and provides a way to search for particular XML tags or
-attributes.  (Note that xpath will always return a list of results, as element
+attributes.  (Note that XPath will always return a list of results, as element
 tags and locations are not unique.) You can perform XPath searches on ``art.tree``,
 which also works well for finding article elements that are not Article class
 properties, such as the acknowledgments, which have the tag ``<ack>``.
@@ -215,7 +215,7 @@ properties, such as the acknowledgments, which have the tag ``<ack>``.
 For users who are more familiar with XML or want to perform quality control checks on
 XML files, XPath searches can find articles that match a particular XML structure. For
 example, PLOS's production team needed to find articles that had a ``<list>``
-item anywhere within a ``<boxed-text>`` element. They used 
+item anywhere within a ``<boxed-text>`` element. They iterated through the corpus using 
 ``art.tree.xpath('//boxed-text//list')``.
 
 Use case: searching Methods sections
@@ -258,15 +258,22 @@ elements into Python strings via the ``tostring()`` method.
 Included SQLite database
 ------------------------
 
-The *allofplos* code includes a SQLite database with all the articles in starter directory. In this release there are 122 records that represents a wide range of papers. In order to use the database, the user needs a SQLite client. The official client is command line based and can be downloaded from https://www.sqlite.org/download.html. There are graphical viewers like `DB Browser for SQLite <https://sqlitebrowser.org/>`_ and `SQLiteStudio <https://sqlitestudio.pl/index.rvt>`_. There is also some options to query the database online, without installing any software, like https://sqliteonline.com/ and http://inloop.github.io/sqlite-viewer/.
+The *allofplos* code includes a SQLite database with all articles in starter
+directory. In this release there are 122 records that represents a wide range
+of papers. In order to use the database, the user needs a SQLite client. The
+official client is command line based and can be downloaded from
+https://www.sqlite.org/download.html. The database can also be displayed on
+graphical viewers such as `DB Browser for SQLite <https://sqlitebrowser.org/>`_
+and `SQLiteStudio <https://sqlitestudio.pl/index.rvt>`_. There are also some
+options to query the database online, without installing any software, like
+https://sqliteonline.com/ and http://inloop.github.io/sqlite-viewer/.
 
-The main table of the database is *plosarticle*, it has the DOI, the title, the
-abstract, the published date and other fields that are foreign key that link to
-other child tables, like *articletype*, *journal_id*. The corresponding author
-information is stored at *correspondingauthor* table and is linked to
-*plosarticle* table using the relation tabled called *coauthorplosarticle*.
+The main table of the database is *plosarticle*. It has the DOI, title, abstract, publication date and other fields that link to other child tables, like
+*articletype* and *journal_id*. The corresponding author information is stored in
+the *correspondingauthor* table and is linked to the *plosarticle* table using the
+relation table called *coauthorplosarticle*.
 
-For example, to get all papers whose corresponding author are from France:
+For example, to get all papers whose corresponding authors are from France:
 
 .. code-block:: mysql
 
@@ -290,13 +297,12 @@ This will return the DOIs from three papers from the starter database::
 The researcher can avoid using SQL queries by using the included
 Object-relational mapping (ORM) models. The ORM library used is *peewee*. A file
 with sample queries is stored in the repository with the name of
-allofplos/dbtoorm.py. In this file, there is a part that defines all Python
-classes that corresponds to the SQLite Database. These classes definition are
-from the begining of the file until the comment marked as ``# End of ORM classes
-creation.``
+allofplos/dbtoorm.py. Part of this file defines all Python classes that corresponds
+to the SQLite Database. These class definitions are from the beginning of the file
+until the comment marked as ``# End of ORM classes creation.``
 
-After this comment, there is an example on how to built a query. The following
-query is the *peewee* compatible syntax that construct the same SQL query as
+After this comment, there is an example of how to build a query. The following
+query is the *peewee* compatible syntax that constructs the same SQL query as
 outlined before:
 
 .. code-block:: python
@@ -323,10 +329,10 @@ loop as any Python iterable:
 SQLite database constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-There is an script at allofplos/makedb.py that can be used to generate the
-SQLite Database out of a directory full of XML articles. This script was used to
+There is a script at allofplos/makedb.py that can be used to generate the
+SQLite Database from a directory full of XML articles. This script was used to
 generate the included **starter.db**. If the user wants to make another version,
-from another subset (or from the whole corpus), this script come handy.
+from another subset (or from the whole corpus), this script will be useful.
 
 To generate a SQLite DB with all the files currently in the *Corpus* directory,
 and save the DB as *mydb.db*::
@@ -342,12 +348,12 @@ DB with 500 articles randomly selected, use::
 Future directions
 -----------------
 
-We also have plans for future updates to allofplos. First, we plan to make the article
+We also have plans for future updates to allofplos. First, we plan to make the article 
 parsing publisher-neutral, allowing for reading JATS content from other publishers
 in addition to PLOS. Second, we want to improve incremental corpus updates so that all
 changes can be downloaded and updated via a standardized mechanism such as a hash
 table. This includes 'silent republications', where articles are updated online without
-an official correction notice (the substance of the article is unchanged but
+an official correction notice (the substance of the article is unchanged, but
 the XML has been updated). While the local allofplos server has methods for
 catching these changes and updating the zip file appropriately, there is not currently
 a way to make sure a user's local corpus copy reflects all of those changes. Third, we
@@ -362,7 +368,7 @@ Conclusions
 -----------
 
 As more scientific articles are published, it will become more important that
-these articles can be analysed in aggregate. Tools like ``allofplos`` make such
+these articles can be analyzed in aggregate. Tools like ``allofplos`` make such
 an effort much easier. With an intuitive and straightforward ``Corpus()`` and
 ``Article()`` APIs, ``allofplos`` avoids much of the complexity of parsing xml
 for new users, while still enabling XML experts the flexibility and power needed
