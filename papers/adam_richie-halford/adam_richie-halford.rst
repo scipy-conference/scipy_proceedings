@@ -291,7 +291,7 @@ in the source code of the UDF itself.
 
    import cloudknot as ck
 
-   def monte_pi_count(b):
+   def monte_pi_count(n):
        import numpy as np
        x = np.random.rand(n)
        y = np.random.rand(n)
@@ -310,7 +310,7 @@ We submit jobs with the :code:`Knot.map()` method:
 
 .. code-block:: python
 
-   import numpy as np  # for np.linspace
+   import numpy as np  # for np.ones
    n_jobs, n_samples = 1000, 100000000
    args = np.ones(n_jobs, dtype=np.int32) * n_samples
    future = knot.map(args)
