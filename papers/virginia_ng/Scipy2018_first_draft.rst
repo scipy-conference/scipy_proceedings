@@ -32,9 +32,9 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 I. Background
 -------------
 
-Location data is built into the fabric of our daily experiences and is more important than ever with the introduction of new technologies such as self-driving cars. Mapping communities, open sourced or proprietary, work to extract, understand and map real and current physical elements in the landscape. However, mappable physical elements in the landscape are constantly evolving. Each day new roads, buildings, and parks — everything that matters for cities and towns across the globe - are added. Therefore the two biggest challenges faced by the mapping communities are maintaining recency while expanding worldwide coverage. We propose integrating artificial intellegence (AI) and new mapping techniques, such as deep neural network models, into the mapping workflow in order to keep up with these changes. In particular, we have developed tools and pipelines to detect various geospatial features from satellite and aerial imagery at scale. We collaborate with the OpenStreetMap community to create quality geospatial datasets, validated by trained mappers and local OSM communities. We present two usecases to demonstrates our workflow for extracting valuable navigation assets like turn restrictions signs, turn lane markings, parking lots to improve our routing engines. We designed our processing pipelines and tools with open source libraries like Scipy, Rasterio, Fiona, Osium, JSOM[*]_, Keras, PyTorch, OpenCV etc, while our training data was compiled from OpenStreetMap [osm]_ and Mapbox Maps API [mapbox_api]_. Our pipelines and tools are generalizable to extracting other geospatial features as well as other data sources.
+Location data is built into the fabric of our daily experiences and is more important than ever with the introduction of new technologies such as self-driving cars. Mapping communities, open sourced or proprietary, work to extract, understand and map real and current physical elements in the landscape. However, mappable physical elements in the landscape are constantly evolving. Each day new roads, buildings, and parks — everything that matters for cities and towns across the globe - are added. Therefore the two biggest challenges faced by the mapping communities are maintaining recency while expanding worldwide coverage. We propose integrating artificial intellegence (AI) and new mapping techniques, such as deep neural network models, into the mapping workflow in order to keep up with these changes. In particular, we have developed tools and pipelines to detect various geospatial features from satellite and aerial imagery at scale. We collaborate with the OpenStreetMap community to create quality geospatial datasets, validated by trained mappers and local OSM communities. We present two usecases to demonstrates our workflow for extracting valuable navigation assets like turn restrictions signs, turn lane markings, parking lots to improve our routing engines. We designed our processing pipelines and tools with open source libraries like Scipy, Rasterio, Fiona, Osium, JOSM [#]_, Keras, PyTorch, OpenCV etc, while our training data was compiled from OpenStreetMap [osm]_ and Mapbox Maps API [mapbox_api]_. Our pipelines and tools are generalizable to extracting other geospatial features as well as other data sources.
 
-.. [*] JOSM is an extensible editor for OpenStreetMap (OSM) for Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data from local sources as well as from online sources and allows to edit the OpenStreetMap data (nodes, ways, and relations) and their metadata tags. It is open source and licensed under GPL. 
+.. [#] JOSM is an extensible editor for OpenStreetMap (OSM) for Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data from local sources as well as from online sources and allows to edit the OpenStreetMap data (nodes, ways, and relations) and their metadata tags. It is open source and licensed under GPL. 
 
 
 II. Scalable Computer Vision Pipelines
@@ -64,35 +64,35 @@ The general design for our deep learning based computer vision pipelines can be 
 
    Turn lane markings detection.
 
-The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 4, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4b shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
+The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 3, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
+
+.. figure:: fig3a.png
+   :height: 75 px
+   :width: 150 px
+   :scale: 25 %
+
+   Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
+
+.. figure:: fig3b.jpg
+   :height: 30 px
+   :width: 75 px
+   :scale: 10 %
+   
+   Annotating turn lane markings - Draw bounding box around the turn lane markings.
+
+
+To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 5.
+
+.. figure:: fig3c.png
+   :height: 75 px
+   :width: 150 px
+   :scale: 22 %
+
+   Data Cleaning - Excluding turn lane arrows that are fully covered by car.
+
+Semantic segmentation on the other hand, is the computer vision task that attempts to partition the image into semantically meaningful parts, and to classify each part into one of the pre-determined classes. One can also achieve the same goal by classifying and labeling each pixel with the class of its enclosing object or region. For example, in addition to recognizing the road from the buildings, we also delineate the boundaries of each object shown in Figure 6.
 
 .. figure:: fig4.png
-   :height: 75 px
-   :width: 150 px
-   :scale: 22 %
-
-   Figure 4: Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
-
-.. figure:: fig4b.jpg
-   :height: 75 px
-   :width: 150 px
-   :scale: 22 %
-   
-   Figure 4b: Annotating turn lane markings - Draw bounding box around the turn lane markings.
-
-
-To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 4b.
-
-.. figure:: fig4c.png
-   :height: 75 px
-   :width: 150 px
-   :scale: 22 %
-
-   Figure 4c: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
-
-Semantic segmentation on the other hand, is the computer vision task that attempts to partition the image into semantically meaningful parts, and to classify each part into one of the pre-determined classes. One can also achieve the same goal by classifying and labeling each pixel with the class of its enclosing object or region. For example, in addition to recognizing the road from the buildings, we also delineate the boundaries of each object shown in Figure 3.
-
-.. figure:: fig3.png
    :height: 100 px
    :width: 200 px
    :scale: 22 %
@@ -160,7 +160,7 @@ converge and regularize well through the use of batch normalization,
 
 
 **Segmentation Models.** We implemented U-Net [unet]_ for parking lot
-segmentation. The U-Net architecture can be found in Figure 6. It consists
+segmentation. The U-Net architecture can be found in Figure 7. It consists
 of a contracting path to capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
@@ -203,7 +203,7 @@ example out of that patch, and add that negative to our training set.
 When we retrain our models with this extra
 knowledge, they usually perform better and not make as many false positives.
 
-Figure 7 shows probability mask over what our models believe are pixels
+Figure 8 shows probability mask over what our models believe are pixels
 belonging to parking lots. The average over multiple IoU (AP)
 of our baseline model U-Net is 46.7 for a test set of 900 samples.
 
@@ -219,7 +219,7 @@ of our baseline model U-Net is 46.7 for a test set of 900 samples.
 3. Post-Processing
 ------------------
 
-Figure 8 shows an example of the raw segmentation mask derived
+Figure 9 shows an example of the raw segmentation mask derived
 from our U-Net model. It cannot be used directly as input into
 OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
@@ -273,7 +273,7 @@ OpenStreetMap, so that we only upstream detections that are not already mapped.
 
 After performing all these post-processing steps, we have a clean mask
 that is also a polygon in the form of GeoJSON. An example of such a mask can be
-found in Figure 9. This can now be added to
+found in Figure 10. This can now be added to
 OpenStreetMap as a parking lot feature.
 
 
@@ -288,7 +288,7 @@ features. Our routing engines then take these OpenStreetMap features
 into account when calculating routes. We are still in the process of
 making various improvements to our baseline model, therefore we include two manual steps
 performed by humans as a stopgap. First is verification and inspection of our model results. Second is
-to manually map the true positive results in OpenStreetMap. Shown in Figure 10 is a front-end UI that
+to manually map the true positive results in OpenStreetMap. Shown in Figure 11 is a front-end UI that
 allows users to pan around for instant turn lane markings detection.
 
 
