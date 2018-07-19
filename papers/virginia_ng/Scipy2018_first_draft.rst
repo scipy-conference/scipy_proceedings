@@ -14,24 +14,13 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 
 .. class:: abstract
 
-   Computer vision has been one of the most rapidly growing fields in deep learning.
-   It powers a variety of emerging technologies—from facial recognition to
-   augmented reality to self-driving cars. The remote sensing and mapping communities are
-   particularly interested in extracting, understanding and mapping real and current features of the real world. A feature is a physical element in the landscape and can include both natural and man made objects. In this paper we present the steps to developing
-   deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite
-   imagery at large scale. We present the practical applications of these pipelines
-   including detection and automatic mapping of turn lane markings, parking lots, roads, water,
-   and buildings etc.
+   Deep learning techniques has greatly advanced the performance to the already rapidly developing field of computer vision, powering a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping real and current physical elements in the landscape. These mappable physical elements are called features and can include both natural and man made objects. For example, a single polygon representing a recreational park is one example of a feature that can belong to an editable collection of GeoJSON features containing city park polygons. In this paper we present the steps to developing deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite imagery at large scale. Practical applications of these deep learning based computer vision pipelines include classification, detection, localization and automatic mapping of turn lane markings, parking lots, roads, water, and buildings etc.
 
-   We first present the process of collecting, cleaning, pre-processing imagery-based data at scale by constructing data engineering pipelines.
-   We also demonstrate how these training sets can be built with little or no human annotations
-   needed making use of available data such as OpenStreetMap.
+   We first discuss the main challenges to sourcing high-resolution satellite and aerial imagery and our efforts to lower the barrier to entry for performing computer vision tasks on such data sources. We give an overview of our data prepation process in which imagery data collected from Mapbox Satellite is annotated with labels created from OpenStreetMap dataa using very little manual effort.
 
-   We then discuss the implementation of state-of-the-art detection and semantic segmentation systems such as
-   YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as
-   specific adaptations for the aerial and satellite imagery domain in our pipelines.
+   We then discuss the implementation of various state-of-the-art detection and semantic segmentation systems such as YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as specific adaptations for the aerial and satellite imagery domain in our pipelines.
 
-   We conclude this paper by discussing our ongoing efforts in improving the quality, resolution and coverage of our imagery layer - Mapbox Satellite. We believe this significantly lowers the barrier to entry into deep learning and computer vision. For our pipelines, we will continue to improve our models, expand our work to other features like buildings and roads, other geographical regions of interest, as well as other data sources such as drone imagery.
+   We conclude this paper by discussing our ongoing efforts in improveing our models and expanding our work to other geospatial features like buildings and roads, geographical regions of the world, and data sources such as street-level and drone imagery.
 
 
 .. class:: keywords
@@ -43,37 +32,15 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 I. Background
 -------------
 
-Mapbox is the location data platform for mobile and web applications. We
-provide building blocks to add location features like maps, search, and
-navigation into any experience software developers create.
-
-In particular, our navigation products are focused on providing smart
-turn-by-turn routing based on real-time traffic. Valuable Assets For
-Routing, Maps, and Geocoding include turn Restrictions, turn lane markings,
-parking lots, buildings, grass, trees, parks, water, bridges. We identify and map these assets, 
-which in turn powers our routing engines to help determine the most optimal routes. 
-
-We can manually map them, or we can abstract these navigation assets from imagery.
-
-
-II. Designed with Open-Source Tools
--------------------------------------
-
-We designed our processing pipelines and tools with open-source
-libraries like Scipy, Rasterio, Fiona, Osium, JSOM[*]_, Keras, PyTorch,
-OpenCV etc, while our training data was compiled from
-OpenStreetMap [osm]_ and Mapbox Maps
-API [mapbox]_.
+Location data is built into the fabric of our daily experiences and is more important than ever with the introduction of new technologies such as self-driving cars. Mapping communities, open sourced or proprietary, work to extract, understand and map real and current physical elements in the landscape. However, mappable physical elements in the landscape are constantly evolving. Each day new roads, buildings, and parks — everything that matters for cities and towns across the globe - are added. Therefore the two biggest challenges faced by the mapping communities are maintaining recency while expanding worldwide coverage. We propose integrating artificial intellegence (AI) and new mapping techniques, such as deep neural network models, into the mapping workflow in order to keep up with these changes. In particular, we have developed tools and pipelines to detect various geospatial features from satellite and aerial imagery at scale. We collaborate with the OpenStreetMap community to create quality geospatial datasets, validated by trained mappers and local OSM communities. We present two usecases to demonstrates our workflow for extracting valuable navigation assets like turn restrictions signs, turn lane markings, parking lots to improve our routing engines. We designed our processing pipelines and tools with open source libraries like Scipy, Rasterio, Fiona, Osium, JSOM[*]_, Keras, PyTorch, OpenCV etc, while our training data was compiled from OpenStreetMap [osm]_ and Mapbox Maps API [mapbox_api]_. Our pipelines and tools are generalizable to extracting other geospatial features as well as other data sources.
 
 .. [*] JOSM is an extensible editor for OpenStreetMap (OSM) for Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data from local sources as well as from online sources and allows to edit the OpenStreetMap data (nodes, ways, and relations) and their metadata tags. It is open source and licensed under GPL. 
 
 
-III. Scalable Computer Vision Pipelines
+II. Scalable Computer Vision Pipelines
 -----------------------------------------
 
-The general workflow for our computer vision pipeline can be found in
-Figure 1. Two examples we will present in this paper are turn lane markings
-and parking lot segmentation with aerial and satellite imagery.
+The general design for our deep learning based computer vision pipelines can be found in Figure 1 and is applicable to both object detection and semantic segmantation tasks. We design these pipelines with two things in mind. We not only ensured scalability in the amount of data we process, but also how easily it is to expand to perform computer vision tasks on other geospatial features. We present turn lane markings as an example to our object detection pipeline and parking lot segmentation as an example to semantic segmantation pipeline.
 
 .. figure:: fig1.png
    :height: 100 px
@@ -82,26 +49,13 @@ and parking lot segmentation with aerial and satellite imagery.
 
    Computer Vision Pipeline. 
 
-We design these pipelines with two things in mind. We not only ensured scalability
-in the amount of data we process, but also how easily it is to expand to perform
-computer vision tasks on new objects of interests or other navigation assets.
+
 
 
 1. Data
 --------
 
-**Data Preparation.** Before we explain the data involved in creating
-our training set, we would first like to
-explain the difference between object detection and semantic
-segmentation. These are two different tasks in computer vision.
-Object detection involves locating and classifying a variable
-number of objects in an image. Figure 2 demonstrates how we use object
-detection models to classify and locate turn lane markings from satellite
-imagery. We are not just distinguishing five left-turn only lane markings
-from two right-turn only lane markings like we would do in a classification problem,
-but we also want to know where in the image these markings are located. Other
-practical applications of object detection include face detection,
-counting, visual search engine.
+**Data Preparation.** The actual data that is needed to create our training sets depends on the computer vision task at hand. Object detection and semantic segmentation are two different tasks in computer vision. Object detection involves locating and classifying a variable number of objects in an image. Figure 2 demonstrates how we use object detection models to classify and locate turn lane markings from satellite imagery. We are not just distinguishing left-turn only lane markings from right-turn only lane markings like we would do in a classification problem, but we also want to know where in the image each of these markings are located. There are many other practical applications of object detection such as face detection, counting, visual search engine. In our case, detected turn lane markings become valuable navigation assets to our routing engines when determining the most optimal routes.
 
 .. figure:: fig2.png
    :height: 75 px
@@ -110,12 +64,33 @@ counting, visual search engine.
 
    Turn lane markings detection.
 
-Semantic segmentation on the other hand, attempts to partition the image
-into semantically meaningful parts, and to classify each part into one of
-the pre-determined classes. One can also achieve the same goal by
-classifying and labeling each pixel with the class of it's enclosing object or region.
-For example, in addition to recognizing the road from the buildings, we also delineate the
-boundaries of each object shown in Figure 3.
+The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 4, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4b shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
+
+.. figure:: fig4.png
+   :height: 75 px
+   :width: 150 px
+   :scale: 22 %
+
+   Figure 4: Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
+
+.. figure:: fig4b.jpg
+   :height: 75 px
+   :width: 150 px
+   :scale: 22 %
+   
+   Figure 4b: Annotating turn lane markings - Draw bounding box around the turn lane markings.
+
+
+To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 4b.
+
+.. figure:: fig4c.png
+   :height: 75 px
+   :width: 150 px
+   :scale: 22 %
+
+   Figure 4c: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
+
+Semantic segmentation on the other hand, is the computer vision task that attempts to partition the image into semantically meaningful parts, and to classify each part into one of the pre-determined classes. One can also achieve the same goal by classifying and labeling each pixel with the class of its enclosing object or region. For example, in addition to recognizing the road from the buildings, we also delineate the boundaries of each object shown in Figure 3.
 
 .. figure:: fig3.png
    :height: 100 px
@@ -124,84 +99,21 @@ boundaries of each object shown in Figure 3.
 
    Semantic segmentation on roads, buildings and vegetation
 
-To prepare training data for detecting turn lane markings, we first find
-where the turn lane markings are. OpenStreetMap is a collaborative
-project to create a free editable map of the world. Turn lane markings
-on OpenStreetMap are recorded as “ways” [osm-lanes]_. We used a tool
-called Overpass Turbo [overpass]_ to query
-OpenStreetMap turn lane markings. We then extracted GeoJSONs in five cities
-from OpenStreetMap that have one of the following attributes - “\turn:lane=*”,
-“\turn:lane:forward=*”, “\turn:lane:backward=*” - and
-created a custom layer over the `mapbox.satellite
-layer` [mapbox]_.
-To ensure the highest quality for our training set, we have humans manually
-draw and verify bounding boxes around the turn lane markings six
-classes of turn lane markings using JOSM [josm]_, a process called annotation.
-We annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”,
-“\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, resulting in over 53,000 turn
-lane markings. We included turn lane markings of
-all shapes and sizes, as well as ones that are partially covered by cars
-and/or shadows. We excluded turn lane markings that are erased or fully
-covered by cars seen in Figure 4b.
 
-.. figure:: fig4.png
-   :height: 75 px
-   :width: 150 px
-   :scale: 22 %
+The training data for parking lot segmentation was created by combining imagery collected from Mapbox Satellite with binary masks for parking lots. The binary masks for parking lots were generated from OpenStreetMap polygons with the attributes “\tag:amenity=parking=*” except ones tagged as underground, sheds, carports, garage_boxes using a tool called Osmium [osmium]_. These binary masks were stored as single channel numpy arrays.Each of these single channel numpy arrays are then stacked with its respective aerial image tile, a three channel numpy array - Red, Green, and Blue. We annotated 55,710 masks for parking lot segmentation.
 
-   Annotating turn lane markings - Draw bounding box around the turn lane markings.
-   Figure 4b: Data Cleaning - Excluding turn lane arrows that are fully covered by car.
+**Data Engineering.** We built a data engineering pipeline within the larger object detection pipeline, so that we can create and process training sets in large quantities. This data engineering pipeline is capable of streaming any set of prefixes off of Amazon S3 into prepared training sets. Several pre-processing steps were taken to convert turn lane marking annotations to the appropriate data storage format before combining them with real imagery. As mentioned earlier, turn lane marking annotations were initially stored as GeoJSON polygons group by class. Each of these polygons had to be streamed out of the GeoJSON files on S3, converted to image pixel coordinates, and stored as JSON image attributes to actract tiles [tile]_. The pre-processed annotations were then randomly assigned to training and testing datasets, following the classic 80/20 split rule. Annotations were written to disk and joined by imagery fetched from the Satellite layer of Mapbox Maps API. During this step the abstract tiles in the pipeline is replaced by real image tiles. Finally, the training and test sets are zipped and uploaded to Amazon S3. 
 
-To prepare training data for parking lot segmentation, we first generate
-polygons from OpenStreetMap tags [osm-parking]_ excluding features that are not visible
-in aerial imagery. Explicitly, these are OpenStreetMap features with the
-attributes “\tag:amenity=parking=*” except underground, sheds, carports,
-garage_boxes. To prepare training data for building segmentation, we
-generate polygons from tags with attributes “\building=*” except
-construction, houseboat, static_caravan, stadium, conservatory ,
-digester, greenhouse, ruins. We then use a tool called
-Osmium [osmium]_ to annotate
-these parking lots. We annotated 55,710 images for parking lot segmentation.
-
-**Data Engineering.** We built a data engineering pipeline within the
-larger object detection pipeline to create our training datasets. 
-This data engineering pipeline is capable of streaming
-any set of prefixes off of Amazon Simple Storage Service (Amazon S3)[s3]_ into prepared training sets. 
-For turn lane marking detection, we first stream these turn lane markings,
-which are stored as OpenStreetMap features, out of the GeoJSON files on S3
-and merge classes and bounding boxes into feature
-attributes. Next, we convert these into JSON image annotations grouped by
-tile. During this step, the annotated bounding boxes are converted to
-image pixel coordinates. The annotations are then randomly assigned to
-training and testing datasets, following the classic 80/20 split rule. They
-are then written to disk and joined by
-imagery fetched from the Satellite layer of Mapbox Maps API. This is where the abstract
-tile in the pipeline is replaced by real imagery. Finally, the training and test
-data are zipped and uploaded to Amazon S3. For parking lot segmentation, we convert the annotated parking lots,
-which are also stored as GeoJSON polygons, into single channel numpy arrays.
-We then stack each of these single channel numpy arrays with its respective aerial
-image tile, a three channel numpy array - Red, Green, and Blue.
-
-In either of these cases, we first developed Python command line tools and libraries for our data preparation steps.
-All of command line tools we developed for the segmentation task can be found on our GitHub repository [robosat]_. These
-scripts are then ran at large scale in parallel (multiple cities at
-once) on Amazon Elastic Container Service. Amazon Elastic Container Service is a
-highly scalable, fast, container management service that makes it easy
-to run, terminate, and manage Docker containers on a cluster (grouping of
-container instances). This pipeline is shown in Figure 5.
+Before we scale up processing, we first developed Python command line tools and libraries for our data preparation steps. All of command line tools we developed for the segmentation task can be found on our GitHub repository [robosat]_. These scripts were then ran at large scale, multiple cities in parallel on Amazon Elastic Container Service [ecs]_. Amazon Elastic Container Service is a highly scalable, fast, container management service that makes it easy to run, terminate, and manage Docker containers on a cluster - grouping of container instances. This data engineering pipeline is shown in Figure 5.
 
 .. figure:: fig5.png
    :height: 200 px
    :width: 400 px
    :scale: 47 %
 
-   Data engineering pipeline combines OpenStreetMap GeoJSON features with imagery fetched from Mapbox Maps API.
+   Data engineering pipeline converts OpenStreetMap GeoJSON features to image pixel space and combines each feature with imagery fetched from Mapbox Maps API.
 
-Our data engineering pipelines are generalizable to any OpenStreetMap
-feature. Examples of other features we have implemented include buildings. 
-Users can generate training sets with any OpenStreetMap feature
-simply by writing their own Osmium handler to turn OpenStreetMap geometries into
-polygons.
+Our data engineering pipelines are generalizable to any OpenStreetMap feature. Buildings is another example of an OpenStreetMap feature that we experimented with .Users can generate training sets with any OpenStreetMap feature simply by writing their own Osmium handler to turn OpenStreetMap geometries into polygons.
 
 2. Model
 ---------
@@ -343,7 +255,7 @@ use this operator to deal with polygons within polygons.
 that have same color or intensity.
 
 **Simplification.** Douglas-Peucker Simplification takes a curve
-compared of line segments and finds a similar curve with fewer points.
+composed of line segments and finds a similar curve with fewer points.
 We get simple polygons that can be ingested by OpenStreetMap as feature type “nodes” and “ways”
 
 **Transform Data.** Convert detection or segmentation results from pixel
@@ -395,7 +307,12 @@ We demonstrate the scalability of our computer vision pipelines which enables us
 
 For turn lane marking detection, we plan on experimenting with the new and improved YOLOv3 [yolov3]_, which was published in April 2018.
 
-We ran the first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacremanto, and Seattle. The next steps is to run predictions over all of North America where we have high resolution imagery. We open sourced Robosat[*]_, our end-to-end semantic segmantion pipeline, along with all its tools in June 2018. Users have already started experiementing with building detection on drone imagery from the OpenAerialMap project in the area of Tanzania [tanzania]_. We are in the process of making several improvements to our models. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions with upsampling and uses nearest neaighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
+We ran the first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacremanto, and Seattle. The next steps is to run predictions over all of North America where we have high resolution imagery. We open sourced Robosat[*]_, our end-to-end semantic segmantion pipeline, along with all its tools in June 2018. Users have already started experiementing with building detection on drone imagery from the OpenAerialMap project in the area of Tanzania [tanzania]_. We are in the process of making several improvements to our models. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions with nearest neighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
+
+
+
+
+The training data for building segmentation, we generated polygons from tags with attributes “\building=*” except ones tagged as construction, houseboat, static_caravan, stadium, conservatory, digester, greenhouse, ruins. 
 
 .. [*] Robosat is an end-to-end pipeline for extracting physical elements in the landscape that can be mapped from aerial and satellite imagery https://github.com/mapbox/robosat
 
@@ -403,14 +320,17 @@ We ran the first round of large-scale parking lot segmentation over Atlanta, Bal
 References
 ----------
 .. [osm] OpenStreetMap, https://www.openstreetmap.org
-.. [mapbox] Mapbox, https://www.mapbox.com/api-documentation/#maps, https://www.openstreetmap.org/user/pratikyadav/diary/43954
+.. [mapbox] Mapbox, https://www.mapbox.com/about/
+.. [mapbox_api] Mapbox Maps API, https://www.mapbox.com/api-documentation/#maps, https://www.openstreetmap.org/user/pratikyadav/diary/43954
 .. [osm-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Overpass, https://overpass-turbo.eu/
 .. [josm] JOSM, https://josm.openstreetmap.de/
 .. [osm-parking] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [osmium] Osmium, https://wiki.openstreetmap.org/wiki/Osmium
+.. [tile] tile scheme, https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 .. [robosat] Robosat, https://github.com/mapbox/robosat#rs-extract
 .. [s3] Amazon Simple Storage Service, https://aws.amazon.com/s3/
+.. [ecs] Amazon Elastic Container Service, https://aws.amazon.com/ecs/
 .. [yolo-drawbacks] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [cite1] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
