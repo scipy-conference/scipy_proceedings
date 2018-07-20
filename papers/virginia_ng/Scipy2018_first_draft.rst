@@ -121,50 +121,17 @@ Our data engineering pipelines are generalizable to any OpenStreetMap feature. B
 **Fully Convolutional Neural Networks.** Fully convolutional are neural networks composed of convolutional layers without any fully-connected
 layers or MLP usually found at the end of the network. This means that all learning layers in the network are convolutional, including the decision-making layers at the end. There are a few advantages of using fully convolutional neural networks. This type of network can handle variable input image sizes. Convolutional layers are capable of managing different input sizes and are faster at this task, while fully connected layer expects inputs of a certain size. Therefore, by leaving it out of a network architecture, one can apply the network to images of virtually any size. Convolutions also enable computation of predictions at different positions in an image in an optimized way. Fully convolutional neural networks used for object detection tasks are therefore more computational efficient than sliding window approaches [cite0]_, which compute predictions separately at every potential position. Another advantage is that one would no longer be contrained by the number of object categories or complexity of the scenes when performing spatially dense prediction tasks like segmentation using fully convolutional networks. All output neurons are connected to all input neurons in fully connected layers and therefore generally cause loss of spatial information [cite1]_. 
 
-**Object Detection Models.** Many of our applications require and rely on low latency prediction from their object detection algorithms. We implemented YOLOv2 [yolov2]_, the improved version of the real-time object detection system You Look Only Once (YOLO) in our turn lane markings detection pipeline. YOLOv2 outperforms all other state-of-the-art methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD) in both speed and detection accuracy [cite0]_. YOLOv2 divides the input image into an 13 × 13 grid. For each grid cell, 
+**Object Detection Models.** Many of our applications require low latency prediction from their object detection algorithms. We implemented YOLOv2 [yolov2]_, the improved version of the real-time object detection system You Look Only Once (YOLO) in our turn lane markings detection pipeline. YOLOv2 outperforms all other state-of-the-art methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD) in both speed and detection accuracy [cite0]_. YOLOv2 divides the input image into an 13 × 13 grid cells. Each grid cell is responsible for generating 5 bounding boxes. Each boundary box contains x, y, w, h, a box confidence score for objectness, and a C class probabilities. x and y are offsets to the corresponding cell. Bounding box width w and height h are normalized by the image width and height. The confidence score, or the objectness reflects how likely the box contains an object and how accurate the boundary box is. More specifically, it predicts the IOU of the ground truth and the proposed box. The class probabilities predict the conditional probability of that class given that there is an object. In our turn lane markings example, we defined 6 classes of turn lane markings. The output of our YOLOv2 network is therefore 13 x 13 x 13 x 55. i.e. to 5 boundary boxes with 11 parameters: 55 parameters per grid cell. The base feature extractor of YOLOv2 is called Darknet-19, a fully convolutional neural network composed of 19 convolutional layers and 5 max-pooling layers. Detection is done by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 output channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. We followed two suggestions proposed by the YOLO authors when designing our YOLOv2 model. The first was incorporating batch normalization after every convolutional layer. Batch Normalization stabilizes training, improves the model convergence, and regularizing the model [yolov2_batch]_. The authors saw a 2% improvement in mAP from YOLO on the VOC2007 dataset [yolov2]_. The second suggestion that we implemented was dimension clusers. Figure 8 shows the k-means clustering results of ground truth labels from the turn lane marking training set. The ground truth bounding boxes follow specific height-width ratios. Instead of directly predicting a bounding box, our YOLOv2 model predicts off-sets from a predetermined set of boxes called anchor boxes with particular height-width ratios.
 
 
-Each grid cell predicts only one object whose center falls inside that grid cell. Each boundary box contains 5 elements: (x, y, w, h) and a box confidence score. 
+.. figure:: figk.png
+   :height: 200 px
+   :width: 200 px
+   :scale: 25 %
 
+   Clustering box dimensions on turn lane marking training set. We run k-means clustering on the dimensions of bounding boxes to get anchor boxes for our model. We used the suggested k = 5 as suggested by the YOLO authors, who found that k = 5 gives a good tradeoff for recall vs. complexity of the model.
 
-
-it predicts B boundary boxes and each box has one box confidence score,
-it detects one object only regardless of the number of boxes B,
-it predicts C conditional class probabilities (one per class for the likeliness of the object class).
-
-The base network of YOLOv2 is called Darknet-19, a fully convolutional neural network composed of 19 convolutional layers and 5 max-pooling layers. Our YOLOv2 model performs detection by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 output channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. (5 boundary boxes each with 4 parameters for the box, 1 objectness score and 6 conditional class probabilities for our 6 types of turn lane markings).
-
-Batch normalization to stabilize training, speed up convergence, and regularize the model
-Dimension clusters: After doing some clustering studies on ground truth labels, it turns out that most bounding boxes have certain height-width ratios. So instead of directly predicting a bounding box, our YOLOv2 predicts off-sets from a predetermined set of boxes called anchor boxes with particular height-width ratios.
-
-
-
-Our YOLOv2 model was first pre-trained on ImageNet 224x224 resolution imagery. The network was then resized and finetuned for classification on higher resolution 448x448 turn lane marking imagery. 
-
-
-
-For localization, the original YOLO model predicts the coordinates of bounding boxes directly using fully connected layers on top of the convolutional feature extractor. However, it makes a significant amount of localization error [yolo-drawbacks]_.
-
-
-
-
-
-
-
-YOLO authors first proposed  two ways of predicting the bounding boxes - directly predicting the bounding box of the object or using a set of predefined bounding boxes (anchor box) to predict the actual bounding box of the object. T 
-
-
-For every positive position, the network predicts a regression on the bounding box precise position and dimension.
-
-In the second version of Yolo, these predictions are relative to the grid position and anchor size (instead of the full image) as in the Faster-RCNN models for better performance:
-
-
-
-It is easier to predict the offset based on anchor boxes than to predict the coordinates directly. Instead of using pre-defined anchor boxes, we performed K-means clustering on bounding boxes from the training data set as suggested by the YOLOv2 authors. In addition to using clustering on bounding boxes, our YOLOv2 was able to converge and regularize well through the use of batch normalization,
-
-
-An important concept for the YOLO family is the use of anchor boxes to run prediction. 
-
+Our YOLOv2 model was first pre-trained on ImageNet 224x224 resolution imagery. The network was then resized and finetuned for classification on higher resolution 448x448 turn lane marking imagery to ensure that smaller objects like turn lane markings in a scene are detected.
 
 **Segmentation Models.** We implemented U-Net [unet]_ for parking lot segmentation. The U-Net architecture can be found in Figure 8. It consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. This type of network can be trained end-to-end with very few training images and yields more precise segmentations than prior best method such as the sliding-window convolutional network. This first part is called down or one may think it as the encoder part where one apples convolution blocks followed by a maxpool downsampling to
 encode the input image into feature representations at multiple different levels. The second part of the network consists of upsample and concatenation followed by regular convolution operations. Upsampling in convolutional neural networks is equivalently to expanding the feature dimensions to meet the same size with the corresponding concatenation blocks from the left. While upsampling and going deeper in the network, we are simultaneously concatenating the higher resolution features from down part with the upsampled features in order to better localize and learn representations with following convolutions. For parking lot segmentation, we performed binary segmentation distinguishing parking lots from the background.
@@ -320,6 +287,7 @@ References
 .. [ecs] Amazon Elastic Container Service, https://aws.amazon.com/ecs/
 .. [yolo-drawbacks] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
+.. [yolov2_batch] S. Ioffe and C. Szegedy. *Batch normalization: Accelerating deep network training by reducing internal covariate shift*, arXiv preprint arXiv:1502.03167, 2015. 2, 5
 .. [cite0] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [cite1] Jonathan Long, Evan Shelhamer, Trevor Darrell *Fully Convolutional Networks for Semantic Segmentation*, https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Long_Fully_Convolutional_Networks_2015_CVPR_paper.pdf, 2015 
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
