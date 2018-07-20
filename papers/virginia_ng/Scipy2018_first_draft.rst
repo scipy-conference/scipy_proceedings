@@ -14,7 +14,7 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 
 .. class:: abstract
 
-   Deep learning techniques has greatly advanced the performance to the already rapidly developing field of computer vision, powering a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping real and current physical elements in the landscape. These mappable physical elements are called features and can include both natural and man made objects. For example, a single polygon representing a recreational park is one example of a feature that can belong to an editable collection of GeoJSON features containing city park polygons. In this paper we present the steps to developing deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite imagery at large scale. Practical applications of these deep learning based computer vision pipelines include classification, detection, localization and automatic mapping of turn lane markings, parking lots, roads, water, and buildings etc.
+   Deep learning techniques has greatly advanced the performance of the already rapidly developing field of computer vision, which powers a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping real and current physical elements in the landscape. These mappable physical elements are called features and can include both natural and man made objects. For example, a single polygon representing a recreational park is one example of a feature that can belong to an editable collection of GeoJSON features containing city park polygons. In this paper we present the steps to developing deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite imagery at large scale. Practical applications of these deep learning based computer vision pipelines include classification, detection, localization and automatic mapping of turn lane markings, parking lots, roads, water, and buildings etc.
 
    We first discuss the main challenges to sourcing high-resolution satellite and aerial imagery and our efforts to lower the barrier to entry for performing computer vision tasks on such data sources. We give an overview of our data prepation process in which imagery data collected from Mapbox Satellite is annotated with labels created from OpenStreetMap dataa using very little manual effort.
 
@@ -66,14 +66,14 @@ The general design for our deep learning based computer vision pipelines can be 
 
 The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 3, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
 
-.. figure:: fig3a.png
+.. figure:: fig3.png
    :height: 75 px
    :width: 150 px
    :scale: 25 %
 
    Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
 
-.. figure:: fig3b.jpg
+.. figure:: fig4.jpg
    :height: 30 px
    :width: 75 px
    :scale: 10 %
@@ -83,7 +83,7 @@ The training data for turn lane marking detection was created by collecting imag
 
 To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 5.
 
-.. figure:: fig3c.png
+.. figure:: fig5.png
    :height: 75 px
    :width: 150 px
    :scale: 22 %
@@ -92,7 +92,7 @@ To ensure the highest quality for our training set, we had a separate group and 
 
 Semantic segmentation on the other hand, is the computer vision task that attempts to partition the image into semantically meaningful parts, and to classify each part into one of the pre-determined classes. One can also achieve the same goal by classifying and labeling each pixel with the class of its enclosing object or region. For example, in addition to recognizing the road from the buildings, we also delineate the boundaries of each object shown in Figure 6.
 
-.. figure:: fig4.png
+.. figure:: fig6.png
    :height: 100 px
    :width: 200 px
    :scale: 22 %
@@ -104,9 +104,9 @@ The training data for parking lot segmentation was created by combining imagery 
 
 **Data Engineering.** We built a data engineering pipeline within the larger object detection pipeline, so that we can create and process training sets in large quantities. This data engineering pipeline is capable of streaming any set of prefixes off of Amazon S3 into prepared training sets. Several pre-processing steps were taken to convert turn lane marking annotations to the appropriate data storage format before combining them with real imagery. As mentioned earlier, turn lane marking annotations were initially stored as GeoJSON polygons group by class. Each of these polygons had to be streamed out of the GeoJSON files on S3, converted to image pixel coordinates, and stored as JSON image attributes to actract tiles [tile]_. The pre-processed annotations were then randomly assigned to training and testing datasets, following the classic 80/20 split rule. Annotations were written to disk and joined by imagery fetched from the Satellite layer of Mapbox Maps API. During this step the abstract tiles in the pipeline is replaced by real image tiles. Finally, the training and test sets are zipped and uploaded to Amazon S3. 
 
-Before we scale up processing, we first developed Python command line tools and libraries for our data preparation steps. All of command line tools we developed for the segmentation task can be found on our GitHub repository [robosat]_. These scripts were then ran at large scale, multiple cities in parallel on Amazon Elastic Container Service [ecs]_. Amazon Elastic Container Service is a highly scalable, fast, container management service that makes it easy to run, terminate, and manage Docker containers on a cluster - grouping of container instances. This data engineering pipeline is shown in Figure 5.
+Before we scale up processing, we first developed Python command line tools and libraries for our data preparation steps. All of command line tools we developed for the segmentation task can be found on our GitHub repository [robosat]_. These scripts were then ran at large scale, multiple cities in parallel on Amazon Elastic Container Service [ecs]_. Amazon Elastic Container Service is a highly scalable, fast, container management service that makes it easy to run, terminate, and manage Docker containers on a cluster - grouping of container instances. This data engineering pipeline is shown in Figure 7.
 
-.. figure:: fig5.png
+.. figure:: fig7.png
    :height: 200 px
    :width: 400 px
    :scale: 47 %
@@ -120,29 +120,15 @@ Our data engineering pipelines are generalizable to any OpenStreetMap feature. B
 
 **Fully Convolutional Neural Networks.** Fully convolutional are neural
 networks composed of convolutional layers without any fully-connected
-layers or MLP usually found at the end of the network. A convolutional
-neural network (CNN, or ConvNet)  with fully connected layers is just
-as end-to-end learnable as a fully
-convolutional one. The main difference is that the fully convolutional
-net is learning filters everywhere. Even the decision-making layers at
-the end of the network are filters. Traditional Convolutional neural
-networks containing fully connected layers cannot manage different input
-sizes , whereas fully convolutional networks can have only convolutional
-layers or layers which can manage different input sizes and are faster
-at that task.
+layers or MLP usually found at the end of the network. This means that all learning layers in the network are convolutional, including the decision-making layers at the end. There are two advantages of using fully convolutional neural networks. This type of network can handle variable input image sizes. Convolutional layers are capable of managing different input sizes and are faster at this task, while fully connected layer expects inputs of a certain size. Therefore, by leaving it out of a network architecture, one can apply the network to images of virtually any size.Another advantage fully convolutional networks has over networks with fully connected layers is that one is no longer contrained by the number of object categories or complexity of the scenes when performing spatially dense prediction tasks like segmentation. This is due to the fact that the fully connected nature of fully connected layers, where all output neurons are connected to all input neurons, generally causes loss of spatial information [cite1]_.
 
-A fully convolutional net tries to learn representations and make
-decisions based on local spatial input. Appending a fully connected
-layer enables the network to learn something using global information
-where the spatial arrangement of the input falls away and need not
-apply.
 
-**Object Detection Models.**\ We implemented YOLOv2 [yolov2]_, a real-time object
+**Object Detection Models.** We implemented YOLOv2 [yolov2]_, a real-time object
 detection system and is the improved version of YOLO [yolo]_, which was
 introduced in 2015. YOLOv2 outperforms all other state-of-the-art
 methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD)
 in both speed and detection
-accuracy [cite1]_. Our YOLOv2 was first pre-trained on
+accuracy [cite2]_. Our YOLOv2 was first pre-trained on
 ImageNet 224x224 resolution imagery and then the network was resized and finetuned
 for classification on higher resolution 448x448 turn lane marking imagery. A major feature of
 the YOLO family is the use of anchor boxes to run prediction. There are
@@ -160,7 +146,7 @@ converge and regularize well through the use of batch normalization,
 
 
 **Segmentation Models.** We implemented U-Net [unet]_ for parking lot
-segmentation. The U-Net architecture can be found in Figure 7. It consists
+segmentation. The U-Net architecture can be found in Figure 8. It consists
 of a contracting path to capture context and a symmetric expanding path that enables precise
 localization. This type of network can be trained end-to-end with very
 few training images and yields more precise segmentations than prior
@@ -179,7 +165,7 @@ order to better localize and learn representations with following
 convolutions. For parking lot segmentation, we perform binary
 segmentation distinguishing parking lots from the background.
 
-.. figure:: fig6.png
+.. figure:: fig8.png
    :height: 150 px
    :width: 300 px
    :scale: 37 %
@@ -203,12 +189,12 @@ example out of that patch, and add that negative to our training set.
 When we retrain our models with this extra
 knowledge, they usually perform better and not make as many false positives.
 
-Figure 8 shows probability mask over what our models believe are pixels
+Figure 9 shows probability mask over what our models believe are pixels
 belonging to parking lots. The average over multiple IoU (AP)
 of our baseline model U-Net is 46.7 for a test set of 900 samples.
 
 
-.. figure:: fig7.png
+.. figure:: fig9.png
    :height: 150 px
    :width: 300 px
    :scale: 37 %
@@ -219,27 +205,19 @@ of our baseline model U-Net is 46.7 for a test set of 900 samples.
 3. Post-Processing
 ------------------
 
-Figure 9 shows an example of the raw segmentation mask derived
+Figure 10 shows an example of the raw segmentation mask derived
 from our U-Net model. It cannot be used directly as input into
 OpenStreetMap. We performed a series of post-processing to improve the
 quality of the segmentation mask and to transform the mask into the
 right data format for OpenStreetMap.
 
 
-.. figure:: fig8.png
+.. figure:: fig10.png
    :height: 200 px
    :width: 200 px
    :scale: 38 %
 
-   Raw segmentation mask derived from our U-Net model
-
-
-.. figure:: fig9.png
-   :height: 200 px
-   :width: 200 px
-   :scale: 39 %
-
-   Clean polygon in the form of GeoJSON
+   An example of border artifacts and holes observed in raw segmentation masks derived from our U-Net model
 
 
 **Noise Removal.** We remove noise in the data by performing two
@@ -265,16 +243,35 @@ space back into GeoJSONs (world coordinate).
 tiles. This step reads in the segmentation mask, do cleanup and simplification,
 and turn tile images and pixels into a GeoJSON file with extracted parking lot features.
 
-**Merging multiple polygons.** Handles and merges GeoJSON features crossing tile boundaries
-into a single feature [visualize]_.
+**Merging multiple polygons.** Shown in Figure 11, this tool merges GeoJSON features crossing tile boundaries as well as adjacent features
+into a single polygon [merge]_.
 
 **Deduplication.** Deduplicates by matching GeoJSONs with data that already exist on
 OpenStreetMap, so that we only upstream detections that are not already mapped.
 
 After performing all these post-processing steps, we have a clean mask
 that is also a polygon in the form of GeoJSON. An example of such a mask can be
-found in Figure 10. This can now be added to
+found in Figure 12. This can now be added to
 OpenStreetMap as a parking lot feature.
+
+
+.. figure:: fig11.png
+   :height: 200 px
+   :width: 200 px
+   :scale: 39 %
+
+   GeoJSON features crossing tile boundaries as well as adjacent features are merged into a single polygon
+
+
+
+.. figure:: fig12.png
+   :height: 200 px
+   :width: 200 px
+   :scale: 39 %
+
+   Clean mask in the form of GeoJSON polygon
+
+
 
 
 4. Output
@@ -288,11 +285,11 @@ features. Our routing engines then take these OpenStreetMap features
 into account when calculating routes. We are still in the process of
 making various improvements to our baseline model, therefore we include two manual steps
 performed by humans as a stopgap. First is verification and inspection of our model results. Second is
-to manually map the true positive results in OpenStreetMap. Shown in Figure 11 is a front-end UI that
+to manually map the true positive results in OpenStreetMap. Shown in Figure 12 is a front-end UI that
 allows users to pan around for instant turn lane markings detection.
 
 
-.. figure:: fig10.png
+.. figure:: fig13.png
    :height: 200 px
    :width: 400 px
    :scale: 42 %
@@ -333,12 +330,13 @@ References
 .. [ecs] Amazon Elastic Container Service, https://aws.amazon.com/ecs/
 .. [yolo-drawbacks] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
-.. [cite1] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
+.. [cite1] Jonathan Long, Evan Shelhamer, Trevor Darrell *Fully Convolutional Networks for Semantic Segmentation*, https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Long_Fully_Convolutional_Networks_2015_CVPR_paper.pdf, 2015 
+.. [cite2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun arXiv:1512.03385 [cs.CV], Dec 2015.
 .. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
-.. [visualize] https://s3.amazonaws.com/robosat-public/3339d9df-e8bc-4c78-82bf-cb4a67ec0c8e/features/index.html#16.37/33.776449/-84.41297
+.. [merge] https://s3.amazonaws.com/robosat-public/3339d9df-e8bc-4c78-82bf-cb4a67ec0c8e/features/index.html#16.37/33.776449/-84.41297
 .. [yolov3]    Joseph Redmon, Ali Farhadi. *YOLOv3: An Incremental Improvement*, arXiv:1804.02767 [cs.CV], Apr 2018
 .. [tanzania] daniel-j-h, https://www.openstreetmap.org/user/daniel-j-h/diary/44321
 
