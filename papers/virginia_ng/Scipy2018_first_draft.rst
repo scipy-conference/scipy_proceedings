@@ -45,7 +45,7 @@ The general design for our deep learning based computer vision pipelines can be 
 .. figure:: fig1.png
    :height: 100 px
    :width:  200 px
-   :scale: 39 %
+   :scale: 40 %
 
    Computer Vision Pipeline. 
 
@@ -58,25 +58,25 @@ The general design for our deep learning based computer vision pipelines can be 
 **Data Preparation.** The actual data that is needed to create our training sets depends on the computer vision task at hand. Object detection and semantic segmentation are two different tasks in computer vision. Object detection involves locating and classifying a variable number of objects in an image. Figure 2 demonstrates how we use object detection models to classify and locate turn lane markings from satellite imagery. We are not just distinguishing left-turn only lane markings from right-turn only lane markings like we would do in a classification problem, but we also want to know where in the image each of these markings are located. There are many other practical applications of object detection such as face detection, counting, visual search engine. In our case, detected turn lane markings become valuable navigation assets to our routing engines when determining the most optimal routes.
 
 .. figure:: fig2.png
-   :height: 75 px
-   :width:  150 px
-   :scale: 22 %
+   :height: 100 px
+   :width:  200 px
+   :scale: 25 %
 
    Turn lane markings detection.
 
 The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 3, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
 
 .. figure:: fig3.png
-   :height: 75 px
-   :width: 150 px
+   :height: 200 px
+   :width: 400 px
    :scale: 25 %
 
    Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
 
-.. figure:: fig4.jpg
-   :height: 30 px
-   :width: 75 px
-   :scale: 10 %
+.. figure:: fig4.png
+   :height: 200 px
+   :width: 200 px
+   :scale: 40 %
    
    Annotating turn lane markings - Draw bounding box around the turn lane markings.
 
@@ -84,9 +84,9 @@ The training data for turn lane marking detection was created by collecting imag
 To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 5.
 
 .. figure:: fig5.png
-   :height: 75 px
-   :width: 150 px
-   :scale: 22 %
+   :height: 100 px
+   :width: 200 px
+   :scale: 25 %
 
    Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
@@ -95,7 +95,7 @@ Semantic segmentation on the other hand, is the computer vision task that attemp
 .. figure:: fig6.png
    :height: 100 px
    :width: 200 px
-   :scale: 22 %
+   :scale: 25 %
 
    Semantic segmentation on roads, buildings and vegetation
 
@@ -118,88 +118,78 @@ Our data engineering pipelines are generalizable to any OpenStreetMap feature. B
 2. Model
 ---------
 
-**Fully Convolutional Neural Networks.** Fully convolutional are neural
-networks composed of convolutional layers without any fully-connected
-layers or MLP usually found at the end of the network. This means that all learning layers in the network are convolutional, including the decision-making layers at the end. There are two advantages of using fully convolutional neural networks. This type of network can handle variable input image sizes. Convolutional layers are capable of managing different input sizes and are faster at this task, while fully connected layer expects inputs of a certain size. Therefore, by leaving it out of a network architecture, one can apply the network to images of virtually any size.Another advantage fully convolutional networks has over networks with fully connected layers is that one is no longer contrained by the number of object categories or complexity of the scenes when performing spatially dense prediction tasks like segmentation. This is due to the fact that the fully connected nature of fully connected layers, where all output neurons are connected to all input neurons, generally causes loss of spatial information [cite1]_.
+**Fully Convolutional Neural Networks.** Fully convolutional are neural networks composed of convolutional layers without any fully-connected
+layers or MLP usually found at the end of the network. This means that all learning layers in the network are convolutional, including the decision-making layers at the end. There are a few advantages of using fully convolutional neural networks. This type of network can handle variable input image sizes. Convolutional layers are capable of managing different input sizes and are faster at this task, while fully connected layer expects inputs of a certain size. Therefore, by leaving it out of a network architecture, one can apply the network to images of virtually any size. Convolutions also enable computation of predictions at different positions in an image in an optimized way. Fully convolutional neural networks used for object detection tasks are therefore more computational efficient than sliding window approaches [cite0]_, which compute predictions separately at every potential position. Another advantage is that one would no longer be contrained by the number of object categories or complexity of the scenes when performing spatially dense prediction tasks like segmentation using fully convolutional networks. All output neurons are connected to all input neurons in fully connected layers and therefore generally cause loss of spatial information [cite1]_. 
+
+**Object Detection Models.** Many of our applications require and rely on low latency prediction from their object detection algorithms. We implemented YOLOv2 [yolov2]_, the improved version of the real-time object detection system You Look Only Once (YOLO) in our turn lane markings detection pipeline. YOLOv2 outperforms all other state-of-the-art methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD) in both speed and detection accuracy [cite0]_. YOLOv2 divides the input image into an 13 × 13 grid. For each grid cell, 
 
 
-**Object Detection Models.** We implemented YOLOv2 [yolov2]_, a real-time object
-detection system and is the improved version of YOLO [yolo]_, which was
-introduced in 2015. YOLOv2 outperforms all other state-of-the-art
-methods like Faster R-CNN with ResNet [resnet]_ and Single Shot MultiBox Detector (SSD)
-in both speed and detection
-accuracy [cite2]_. Our YOLOv2 was first pre-trained on
-ImageNet 224x224 resolution imagery and then the network was resized and finetuned
-for classification on higher resolution 448x448 turn lane marking imagery. A major feature of
-the YOLO family is the use of anchor boxes to run prediction. There are
-two ways of predicting the bounding boxes- directly predicting the
-bounding box of the object or using a set of predefined bounding boxes
-(anchor box) to predict the actual bounding box of the object. YOLO
-predicts the coordinates of bounding boxes directly using fully
-connected layers on top of the convolutional feature extractor. But, it
-makes a significant amount of localization error [yolo-drawbacks]_. It is easier to
-predict the offset based on anchor boxes than to predict the coordinates
-directly. Instead of using pre-defined anchor boxes, we performed K-means clustering
-on bounding boxes from the training data set as suggested by the YOLOv2 authors.
-In addition to using clustering on bounding boxes, our YOLOv2 was able to
-converge and regularize well through the use of batch normalization,
+Each grid cell predicts only one object whose center falls inside that grid cell. Each boundary box contains 5 elements: (x, y, w, h) and a box confidence score. 
 
 
-**Segmentation Models.** We implemented U-Net [unet]_ for parking lot
-segmentation. The U-Net architecture can be found in Figure 8. It consists
-of a contracting path to capture context and a symmetric expanding path that enables precise
-localization. This type of network can be trained end-to-end with very
-few training images and yields more precise segmentations than prior
-best method such as the sliding-window convolutional network. This first part is 
-called down or one may think it as the encoder part
-where one apples convolution blocks followed by a maxpool downsampling to
-encode the input image into feature representations at multiple
-different levels. The second part of the network consists of upsample
-and concatenation followed by regular convolution operations. Upsampling
-in convolutional neural networks may be a new concept to some but the idea is
-fairly simple: we are expanding the feature dimensions to meet the same
-size with the corresponding concatenation blocks from the left. While
-upsampling and going deeper in the network, we are simultaneously concatenating the
-higher resolution features from down part with the upsampled features in
-order to better localize and learn representations with following
-convolutions. For parking lot segmentation, we perform binary
-segmentation distinguishing parking lots from the background.
+
+it predicts B boundary boxes and each box has one box confidence score,
+it detects one object only regardless of the number of boxes B,
+it predicts C conditional class probabilities (one per class for the likeliness of the object class).
+
+The base network of YOLOv2 is called Darknet-19, a fully convolutional neural network composed of 19 convolutional layers and 5 max-pooling layers. Our YOLOv2 model performs detection by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 output channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. (5 boundary boxes each with 4 parameters for the box, 1 objectness score and 6 conditional class probabilities for our 6 types of turn lane markings).
+
+Batch normalization to stabilize training, speed up convergence, and regularize the model
+Dimension clusters: After doing some clustering studies on ground truth labels, it turns out that most bounding boxes have certain height-width ratios. So instead of directly predicting a bounding box, our YOLOv2 predicts off-sets from a predetermined set of boxes called anchor boxes with particular height-width ratios.
+
+
+
+Our YOLOv2 model was first pre-trained on ImageNet 224x224 resolution imagery. The network was then resized and finetuned for classification on higher resolution 448x448 turn lane marking imagery. 
+
+
+
+For localization, the original YOLO model predicts the coordinates of bounding boxes directly using fully connected layers on top of the convolutional feature extractor. However, it makes a significant amount of localization error [yolo-drawbacks]_.
+
+
+
+
+
+
+
+YOLO authors first proposed  two ways of predicting the bounding boxes - directly predicting the bounding box of the object or using a set of predefined bounding boxes (anchor box) to predict the actual bounding box of the object. T 
+
+
+For every positive position, the network predicts a regression on the bounding box precise position and dimension.
+
+In the second version of Yolo, these predictions are relative to the grid position and anchor size (instead of the full image) as in the Faster-RCNN models for better performance:
+
+
+
+It is easier to predict the offset based on anchor boxes than to predict the coordinates directly. Instead of using pre-defined anchor boxes, we performed K-means clustering on bounding boxes from the training data set as suggested by the YOLOv2 authors. In addition to using clustering on bounding boxes, our YOLOv2 was able to converge and regularize well through the use of batch normalization,
+
+
+An important concept for the YOLO family is the use of anchor boxes to run prediction. 
+
+
+**Segmentation Models.** We implemented U-Net [unet]_ for parking lot segmentation. The U-Net architecture can be found in Figure 8. It consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. This type of network can be trained end-to-end with very few training images and yields more precise segmentations than prior best method such as the sliding-window convolutional network. This first part is called down or one may think it as the encoder part where one apples convolution blocks followed by a maxpool downsampling to
+encode the input image into feature representations at multiple different levels. The second part of the network consists of upsample and concatenation followed by regular convolution operations. Upsampling in convolutional neural networks is equivalently to expanding the feature dimensions to meet the same size with the corresponding concatenation blocks from the left. While upsampling and going deeper in the network, we are simultaneously concatenating the higher resolution features from down part with the upsampled features in order to better localize and learn representations with following convolutions. For parking lot segmentation, we performed binary segmentation distinguishing parking lots from the background.
 
 .. figure:: fig8.png
-   :height: 150 px
-   :width: 300 px
-   :scale: 37 %
+   :height: 200 px
+   :width: 400 px
+   :scale: 47 %
 
    U-Net Architecture
 
-We also experimented with Pyramid Scene Parsing Network (PSPNet) [pspnet]_. PSPNet
-is effective to produce good quality results on scenes that are complex, contain
-multi-class and on dataset with great
-diversity. We found that it was redundant with our parking lot segmenation where there are
-only two categories - parking lot versus background. PSPNet adds a
-multi-scale pooling on top of the backend model to aggregate different
-scale of global information. The upsample layer is implemented by
-bilinear interpolation. After concatenation, PSP fuses different levels of
-feature with a 3x3 convolution.
+We also experimented with Pyramid Scene Parsing Network (PSPNet) [pspnet]_. PSPNet is effective to produce good quality results on scenes that are complex, contain multi-class and on dataset with great diversity. We found that it was redundant with our parking lot segmenation where there are only two categories - parking lot versus background. PSPNet adds a multi-scale pooling on top of the backend model to aggregate different scale of global information. The upsample layer is implemented by bilinear interpolation. After concatenation, PSP fuses different levels of feature with a 3x3 convolution.
 
-**Hard Negative Mining.** This is a technique we used to improve model
-performance by reducing the negative samples. A hard negative is when we
-take that falsely detected patch, and explicitly create a negative
-example out of that patch, and add that negative to our training set.
-When we retrain our models with this extra
-knowledge, they usually perform better and not make as many false positives.
+**Hard Negative Mining.** This is a technique we used to improve model performance by reducing the negative samples. A hard negative is when we
+take that falsely detected patch, and explicitly create a negative example out of that patch, and add that negative to our training set. When we retrain our models with this extra knowledge, they usually perform better and not make as many false positives.
 
-Figure 9 shows probability mask over what our models believe are pixels
-belonging to parking lots. The average over multiple IoU (AP)
-of our baseline model U-Net is 46.7 for a test set of 900 samples.
+Figure 9 shows an example of a probability mask over what our model believes are pixels belonging to parking lots. The average over multiple IoU (AP) of our baseline model U-Net is 46.7 for a test set of 900 samples.
 
 
 .. figure:: fig9.png
-   :height: 150 px
-   :width: 300 px
-   :scale: 37 %
+   :height: 200 px
+   :width: 200 px
+   :scale: 40 %
 
-   Probability Mask
+   Probability mask specifying the pixels that our model believes belong to parking lots.
 
 
 3. Post-Processing
@@ -215,7 +205,7 @@ right data format for OpenStreetMap.
 .. figure:: fig10.png
    :height: 200 px
    :width: 200 px
-   :scale: 38 %
+   :scale: 40 %
 
    An example of border artifacts and holes observed in raw segmentation masks derived from our U-Net model
 
@@ -256,9 +246,9 @@ OpenStreetMap as a parking lot feature.
 
 
 .. figure:: fig11.png
-   :height: 200 px
+   :height: 100 px
    :width: 200 px
-   :scale: 39 %
+   :scale: 25 %
 
    GeoJSON features crossing tile boundaries as well as adjacent features are merged into a single polygon
 
@@ -292,7 +282,7 @@ allows users to pan around for instant turn lane markings detection.
 .. figure:: fig13.png
    :height: 200 px
    :width: 400 px
-   :scale: 42 %
+   :scale: 25 %
 
    Front-end UI for instant turn lane markings detection
 
@@ -330,8 +320,8 @@ References
 .. [ecs] Amazon Elastic Container Service, https://aws.amazon.com/ecs/
 .. [yolo-drawbacks] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
+.. [cite0] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [cite1] Jonathan Long, Evan Shelhamer, Trevor Darrell *Fully Convolutional Networks for Semantic Segmentation*, https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Long_Fully_Convolutional_Networks_2015_CVPR_paper.pdf, 2015 
-.. [cite2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun arXiv:1512.03385 [cs.CV], Dec 2015.
