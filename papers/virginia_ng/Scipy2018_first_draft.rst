@@ -45,7 +45,7 @@ The general design for our deep learning based computer vision pipelines can be 
 .. figure:: fig1.png
    :height: 100 px
    :width:  200 px
-   :scale: 40 %
+   :scale: 37 %
 
    Computer Vision Pipeline. 
 
@@ -69,23 +69,23 @@ The general design for our deep learning based computer vision pipelines can be 
 .. figure:: fig2.png
    :height: 75 px
    :width:  150 px
-   :scale: 25 %
+   :scale: 21 %
 
    Turn lane markings detection.
 
 The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 3, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
 
 .. figure:: fig3.png
-   :height: 300 px
-   :width: 500 px
-   :scale: 60 %
+   :height: 200 px
+   :width: 400 px
+   :scale: 32 %
 
    Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
 
 .. figure:: fig4.png
    :height: 150 px
    :width: 150 px
-   :scale: 40 %
+   :scale: 37 %
    
    Annotating turn lane markings - Draw bounding box around the turn lane markings.
 
@@ -95,7 +95,7 @@ To ensure the highest quality for our training set, we had a separate group and 
 .. figure:: fig5.png
    :height: 75 px
    :width: 150 px
-   :scale: 25 %
+   :scale: 21 %
 
    Data Cleaning - Excluding turn lane arrows that are fully covered by car.
 
@@ -104,7 +104,7 @@ Semantic segmentation on the other hand, is the computer vision task that attemp
 .. figure:: fig6.png
    :height: 75 px
    :width: 150 px
-   :scale: 25 %
+   :scale: 21 %
 
    Semantic segmentation on roads, buildings and vegetation
 
@@ -135,7 +135,7 @@ layers or MLP usually found at the end of the network. This means that all learn
 .. figure:: fig8.png
    :height: 150 px
    :width: 150 px
-   :scale: 25 %
+   :scale: 38 %
 
    Clustering box dimensions on turn lane marking training set. We run k-means clustering on the dimensions of bounding boxes to get anchor boxes for our model. We used the suggested k = 5 as suggested by the YOLO authors, who found that k = 5 gives a good tradeoff for recall vs. complexity of the model.
 
@@ -147,7 +147,7 @@ encode the input image into feature representations at multiple different levels
 .. figure:: fig9.png
    :height: 125 px
    :width: 200 px
-   :scale: 30 %
+   :scale: 38 %
 
    U-Net Architecture
 
@@ -161,7 +161,7 @@ Figure 10 shows an example of a probability mask over what our model believes ar
 .. figure:: fig10.png
    :height: 150 px
    :width: 150 px
-   :scale: 40 %
+   :scale: 48 %
 
    Probability mask specifying the pixels that our model believes belong to parking lots.
 
@@ -179,7 +179,7 @@ right data format for OpenStreetMap.
 .. figure:: fig11.png
    :height: 150 px
    :width: 150 px
-   :scale: 40 %
+   :scale: 47 %
 
    An example of border artifacts and holes observed in raw segmentation masks derived from our U-Net model
 
@@ -222,7 +222,7 @@ OpenStreetMap as a parking lot feature.
 .. figure:: fig12.png
    :height: 400 px
    :width: 800 px
-   :scale: 40 %
+   :scale: 35 %
 
    GeoJSON features crossing tile boundaries as well as adjacent features are merged into a single polygon
 
@@ -231,7 +231,7 @@ OpenStreetMap as a parking lot feature.
 .. figure:: fig13.png
    :height: 250 px
    :width: 250 px
-   :scale: 40 %
+   :scale: 49 %
 
    Clean mask in the form of GeoJSON polygon
 
@@ -268,14 +268,14 @@ We demonstrate the scalability of our computer vision pipelines which enables us
 
 For turn lane marking detection, we plan on experimenting with the new and improved YOLOv3 [yolov3]_, which was published in April 2018.
 
-We ran the first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacremanto, and Seattle. The next steps is to run predictions over all of North America where we have high resolution imagery. We open sourced Robosat[*]_, our end-to-end semantic segmantion pipeline, along with all its tools in June 2018. Users have already started experiementing with building detection on drone imagery from the OpenAerialMap project in the area of Tanzania [tanzania]_. We are in the process of making several improvements to our models. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions with nearest neighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
+We ran the first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacremanto, and Seattle. The next steps is to run predictions over all of North America where we have high resolution imagery. We open sourced Robosat[#]_, our end-to-end semantic segmantion pipeline, along with all its tools in June 2018. Users have already started experiementing with building detection on drone imagery from the OpenAerialMap project in the area of Tanzania [tanzania]_. We are in the process of making several improvements to our models. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition, we are replacing learned deconvolutions with nearest neighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
 
 
 
 
 The training data for building segmentation, we generated polygons from tags with attributes “\building=*” except ones tagged as construction, houseboat, static_caravan, stadium, conservatory, digester, greenhouse, ruins. 
 
-.. [*] Robosat is an end-to-end pipeline for extracting physical elements in the landscape that can be mapped from aerial and satellite imagery https://github.com/mapbox/robosat
+.. [#] Robosat is an end-to-end pipeline for extracting physical elements in the landscape that can be mapped from aerial and satellite imagery https://github.com/mapbox/robosat
 
 
 References
