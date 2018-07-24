@@ -14,9 +14,9 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 
 .. class:: abstract
 
-   Deep learning techniques has greatly advanced the performance of the already rapidly developing field of computer vision, which powers a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping real and current physical elements in the landscape. These mappable physical elements are called features and can include both natural and man made objects. For example, a single polygon representing a recreational park is one example of a feature that can belong to an editable collection of GeoJSON features containing city park polygons. In this paper we present the steps to developing deep learning tools and pipelines, which allow us to perform object detection and semantic segmentation on aerial and satellite imagery at large scale. Practical applications of these deep learning based computer vision pipelines include classification, detection, localization and automatic mapping of turn lane markings, parking lots, roads, water, and buildings etc.
+   Deep learning techniques have greatly advanced the performance of the already rapidly developing field of computer vision, which powers a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping physical elements in the landscape. These mappable physical elements are called features, and can include both natural and synthetic objects of any scale, complexity and character. Points or polygons representing sidewalks, glaciers, playgrounds, entire cities, and bicycles are all examples of features. In this paper we present a method to develop deep learning tools and pipelines that generate features from aerial and satellite imagery at large scale. Practical applications include object detection, semantic segmentation and classification, and automatic mapping of general-interest features such as turn lane markings on roads, parking lots, roads, water, building footprints.
 
-   We give an overview of our data prepation process in which imagery data collected from Mapbox Satellite is annotated with labels created from OpenStreetMap dataa using very little manual effort. We then discuss the implementation of various state-of-the-art detection and semantic segmentation systems such as YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as specific adaptations for the aerial and satellite imagery domain in our pipelines. We conclude this paper by discussing our ongoing efforts in improveing our models and expanding our work to other geospatial features like buildings and roads, geographical regions of the world, and data sources such as street-level and drone imagery.
+   We give an overview of our data preparation process, in which data from the Mapbox Satellite layer, a global imagery collection, is annotated with labels created from OpenStreetMap data using minimal manual effort. We then discuss the implementation of various state-of-the-art detection and semantic segmentation systems, such as YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as specific adaptations for the aerial and satellite imagery domain. We conclude by discussing our ongoing efforts in improving our models and expanding their applicability across classes of features, geographical regions, and relatively novel data sources such as street-level and drone imagery.
 
 
 .. class:: keywords
@@ -28,15 +28,17 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 I. Background
 -------------
 
-Location data is built into the fabric of our daily experiences and is more important than ever with the introduction of new technologies such as self-driving cars. Mapping communities, open sourced or proprietary, work to extract, understand and map real and current physical elements in the landscape. However, mappable physical elements in the landscape are constantly evolving. Each day new roads, buildings, and parks — everything that matters for cities and towns across the globe - are added. Therefore the two biggest challenges faced by the mapping communities are maintaining recency while expanding worldwide coverage. We propose integrating artificial intellegence (AI) and new mapping techniques, such as deep neural network models, into the mapping workflow in order to keep up with these changes. In particular, we have developed tools and pipelines to detect various geospatial features from satellite and aerial imagery at scale. We collaborate with the OpenStreetMap community to create quality geospatial datasets, validated by trained mappers and local OSM communities. We present two usecases to demonstrates our workflow for extracting valuable navigation assets like turn restrictions signs, turn lane markings, parking lots to improve our routing engines. We designed our processing pipelines and tools with open source libraries like Scipy, Rasterio, Fiona, Osium, JOSM [#]_, Keras, PyTorch, OpenCV etc, while our training data was compiled from OpenStreetMap [osm]_ and Mapbox Maps API [mapbox_api]_. Our pipelines and tools are generalizable to extracting other geospatial features as well as other data sources.
+Location data is built into the fabric of our daily experiences, and is more important than ever with the introduction of new location-based technologies such as self-driving cars. Mapping communities, open source or proprietary, work to find, understand and map elements of the physical landscape. However, mappable physical elements are continually appearing, changing, and disappearing. For example, more than 1.2 million residential units were built in the United States alone in 2017 [buildings]_. Therefore, a major challenge faced by mapping communities is maintaining recency while expanding worldwide coverage. To increase the speed and accuracy of mapping, allowing better pace-keeping with change in the mappable landscape, we propose integrating deep neural network models into the mapping workflow. In particular, we have developed tools and pipelines to detect various geospatial features from satellite and aerial imagery at scale. We collaborate with the OpenStreetMap [osm]_ (OSM) community to create reliable geospatial datasets, validated by trained and local mappers.
 
-.. [#] JOSM is an extensible editor for OpenStreetMap (OSM) for Java 8+. It supports loading GPX tracks, background imagery and OpenStreetMap data from local sources as well as from online sources and allows to edit the OpenStreetMap data (nodes, ways, and relations) and their metadata tags. It is open source and licensed under GPL. 
+Here we present two usecases to demonstrate our workflow for extracting street navigation indicators such as turn restrictions signs, turn lane markings, and parking lots, in order to improve our routing engines. We designed our processing pipelines and tools with open source libraries including Scipy, Rasterio, Fiona, Osium, JOSM [#]_, Keras, PyTorch, and OpenCV, while our training data was compiled from OpenStreetMap and the Mapbox Maps API [mapbox_api]_. Our tools are designed to be generalizable across geospatial feature classes and across data sources.
+
+.. [#] JOSM [josm]_ is an extensible OpenStreetMap editor for Java 8+. At its core, it is an interface for editing OSM, i.e., manipulating the nodes, ways, relations, and tags that compose the OSM database. Compared to other OSM editors, JOSM is notable for its range of features, such as allowing the user to load arbitrary GPX tracks, background imagery, and OpenStreetMap data from local and online sources. It is open source and licensed under GPL.
 
 
 II. Scalable Computer Vision Pipelines
 -----------------------------------------
 
-The general design for our deep learning based computer vision pipelines can be found in Figure 1 and is applicable to both object detection and semantic segmantation tasks. We design these pipelines with two things in mind. We not only ensured scalability in the amount of data we process, but also how easily it is to expand to perform computer vision tasks on other geospatial features. We present turn lane markings as an example to our object detection pipeline and parking lot segmentation as an example to semantic segmantation pipeline.
+The general design for our deep learning based computer vision pipelines can be found in Figure 1, and is applicable to both object detection and semantic segmantation tasks. We design such pipelines with two things in mind: we must allow scalability to very large data volumes, which requires processing efficiency; and we must allow repurposability towards computer vision tasks on other geospatial features, which requires a general-purpose design. We present turn lane markings as an example of an object detection pipeline, and parking lot segmentation as an example of a semantic segmantation pipeline.
 
 .. figure:: fig1.png
    :height: 100 px
@@ -49,7 +51,7 @@ The general design for our deep learning based computer vision pipelines can be 
 1. Data
 --------
 
-The data needed to create training sets depends on the specific computer vision task. Object detection and semantic segmentation are two different tasks in computer vision. Object detection involves locating and classifying a variable number of objects in an image. Figure 2 demonstrates how object detection models are used to classify and locate turn lane markings from satellite imagery. There are many other practical applications of object detection such as face detection, counting, visual search engine. In our case, detected turn lane markings become valuable navigation assets to our routing engines when determining the most optimal routes.
+The data needed to create training sets depends on the type of task: object detection or semantic segmentation. We first present our data preparation process for object detection, which means locating and classifying a variable number of objects in an image. Figure 2 demonstrates how object detection models are used to classify and locate turn lane markings from satellite imagery. There are many other practical applications of object detection such as face detection, counting, and visual search engines. In our case, detected turn lane markings become valuable navigation assets to our routing engines when determining the most optimal routes.
 
 .. figure:: fig2.png
    :height: 75 px
@@ -58,33 +60,33 @@ The data needed to create training sets depends on the specific computer vision 
 
    Turn lane markings detection.
 
-**Data Preparation For Object Detection.** The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and drawing bounding doxes around each marking. OpenStreetMap is a collaborative project to create a free editable map of the world. We used a tool called Overpass Turbo [overpass]_ to query OpenStreetMap streets containing turn lane markings, which were tagged as one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. As shown in Figure 3, extracted locations of the roads containing turn lane markings were labeled in red, stored as GeoJSON features and clipped to the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a guide to manually draw bounding boxes around each turn lane markings using JOSM [josm]_, a process called annotation. Each of these bounding boxes were stored as GeoJSON polygons on Amazon S3 [s3]_.
+**Data Preparation For Object Detection.** The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and manually drawing a bounding box around each marking. We used Overpass Turbo [overpass]_ to query the OpenStreetMap database for streets containing turn lane markings, i.e., those tagged with one of the following attributes - “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. The marked street segments, as shown in Figure 3, were stored as GeoJSON features clipped into the tiling scheme of the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a cue to manually draw bounding boxes around each turn lane marking using JOSM, a process called annotation. Each of these bounding boxes was stored as a GeoJSON polygon on Amazon S3 [s3]_.
 
 .. figure:: fig3.png
    :height: 200 px
    :width: 400 px
    :scale: 32 %
 
-   Visualize streets containing turn lane markings. Custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite.
+   A custom layer created by clipping the locations of roads with turn lane markings to Mapbox Satellite. Streets with turn lane markings are rendered in red.
 
 .. figure:: fig4.png
    :height: 150 px
    :width: 150 px
    :scale: 37 %
    
-   Annotating turn lane markings - Draw bounding box around the turn lane markings.
+   Annotating turn lane markings by drawing bounding boxes.
 
 
-To ensure the highest quality for our training set, we had a separate group and mappers verify each of the bounding boxes drawn. Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. We excluded turn lane markings that are erased or fully covered by cars seen in Figure 5.
+Mappers annotated six classes of turn lane markings - “\Left”, “\Right”, “\Through”, “\ThroughLeft”, “\ThroughRight”, and “\Other” in five cities, creating a training set consists of over 54,000 turn lane markings. Turn lane markings of all shapes and sizes, as well as ones that are partially covered by cars and/or shadows were included in this training set. To ensure a high-quality training set, we had a separate group of mappers verify each of the bounding boxes drawn. We excluded turn lane markings that are erased or fully covered by cars, seen in Figure 5.
 
 .. figure:: fig5.png
    :height: 75 px
    :width: 150 px
    :scale: 21 %
 
-   Data Cleaning - Excluding turn lane arrows that are fully covered by car.
+   Obscured turn lane markings, such as those covered by cars, are excluded.
 
-Semantic segmentation on the other hand, is the computer vision task that attempts to partition the image into semantically meaningful parts, and to classify each part into one of the pre-determined classes. One can also achieve the same goal by classifying and labeling each pixel with the class of its enclosing object or region. For example, in addition to recognizing the road from the buildings, we also delineate the boundaries of each object shown in Figure 6.
+Semantic segmentation, on the other hand, is the computer vision task that partitions an image into semantically meaningful parts, and classifies each part into one of any pre-determined classes. This can be understood as assinging a class to each pixel in the image, or equivalently as drawing non-overlapping polygons with associated classes over the image. For example, in addition to distinguishing the road from the buildings, we also delineate the boundaries of each object shown in Figure 6.
 
 .. figure:: fig6.png
    :height: 75 px
@@ -229,6 +231,7 @@ We demonstrated the steps to building deep learning-based computer vision pipeli
 
 References
 ----------
+.. [buildings] United States Census Bureau. *New Residential Construction*, Jul 2018.
 .. [osm] OpenStreetMap, https://www.openstreetmap.org
 .. [mapbox] Mapbox, https://www.mapbox.com/about/
 .. [mapbox_api] Mapbox Maps API, https://www.mapbox.com/api-documentation/#maps, https://www.openstreetmap.org/user/pratikyadav/diary/43954
