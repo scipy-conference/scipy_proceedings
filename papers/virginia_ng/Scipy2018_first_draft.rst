@@ -14,9 +14,9 @@ Scalable Feature Extraction with Aerial and Satellite Imagery
 
 .. class:: abstract
 
-   Deep learning techniques have greatly advanced the performance of the already rapidly developing field of computer vision, which powers a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping physical elements in the landscape. These mappable physical elements are called features, and can include both natural and synthetic objects of any scale, complexity and character. Points or polygons representing sidewalks, glaciers, playgrounds, entire cities, and bicycles are all examples of features. In this paper we present a method to develop deep learning tools and pipelines that generate features from aerial and satellite imagery at large scale. Practical applications include object detection, semantic segmentation and classification, and automatic mapping of general-interest features such as turn lane markings on roads, parking lots, roads, water, building footprints.
+   Deep learning techniques have greatly advanced the performance of the already rapidly developing field of computer vision, which powers a variety of emerging technologies—from facial recognition to augmented reality to self-driving cars. The remote sensing and mapping communities are particularly interested in extracting, understanding and mapping physical elements in the landscape. These mappable physical elements are called features, and can include both natural and synthetic objects of any scale, complexity and character. Points or polygons representing sidewalks, glaciers, playgrounds, entire cities, and bicycles are all examples of features. In this paper we present a method to develop deep learning tools and pipelines that generate features from aerial and satellite imagery at large scale. Practical applications include object detection, semantic segmentation and automatic mapping of general-interest features such as turn lane markings on roads, parking lots, roads, water, building footprints.
 
-   We give an overview of our data preparation process, in which data from the Mapbox Satellite layer, a global imagery collection, is annotated with labels created from OpenStreetMap data using minimal manual effort. We then discuss the implementation of various state-of-the-art detection and semantic segmentation systems, such as YOLOv2, U-Net, Residual Network, and Pyramid Scene Parsing Network (PSPNet), as well as specific adaptations for the aerial and satellite imagery domain. We conclude by discussing our ongoing efforts in improving our models and expanding their applicability across classes of features, geographical regions, and relatively novel data sources such as street-level and drone imagery.
+   We give an overview of our data preparation process, in which data from the Mapbox Satellite layer, a global imagery collection, is annotated with labels created from OpenStreetMap data using minimal manual effort. We then discuss the implementation of various state-of-the-art detection and semantic segmentation systems, such as YOLOv2, modified U-Net and Pyramid Scene Parsing Network (PSPNet), as well as specific adaptations for the aerial and satellite imagery domain. We conclude by discussing our ongoing efforts in improving our models and expanding their applicability across classes of features, geographical regions, and relatively novel data sources such as street-level and drone imagery.
 
 
 .. class:: keywords
@@ -131,7 +131,7 @@ The base feature extractor of YOLOv2 is Darknet-19, an FCN composed of 19 convol
 
 Our model was first pre-trained on ImageNet 224 × 224 resolution imagery. The network was then resized and fine-tuned for classification on 448 × 448 turn lane marking imagery, to ensure that the relatively small features of interest were still reliably detected.
 
-**Segmentation Models.** For parking lot segmentation, we selected an approach of binary segmentation (distinguishing parking lots from the background), and found U-Net [unet]_ to be a suitable architecture. The U-Net architecture can be found in Figure 9. It consists of a contracting path, to capture context, and a symmetric expanding path, which allows precise localization. This type of network can be trained end-to-end with very few training images and can yield more precise segmentations than prior state-of-the-art methods such as sliding-window convolutional networks. The first part of the U-Net network downsamples, and is similar in design and purpose to the encoding part of an autoencoder. It repeatedly applies convolution blocks followed by maxpool downsamplings, encoding the input image into increasingly abstract representations at successively deeper levels. The second part of the network consists of upsampling and concatenation, followed by ordinary convolution operations. Concatenation combines relatively “raw” information with relatively “processed” information. This can be understood as allowing the network to assign a class to a pixel with sensitivity to small-scale, less-abstract information about the pixel and its immediate neighborhood (e.g., whether it is gray) and simultaneously with sensitivity to large-scale, more-abstract information about the pixel’s context (e.g., whether there are nearby cars aligned in the patterns typical of parking lots).
+**Segmentation Models.** For parking lot segmentation, we selected an approach of binary segmentation (distinguishing parking lots from the background), and found U-Net [unet]_ to be a suitable architecture. The U-Net architecture can be found in Figure 9. It consists of a contracting path, to capture context, and a symmetric expanding path, which allows precise localization. This type of network can be trained end-to-end with very few training images and can yield more precise segmentations than prior state-of-the-art methods such as sliding-window convolutional networks. The first part of the U-Net network downsamples, and is similar in design and purpose to the encoding part of an autoencoder. It repeatedly applies convolution blocks followed by maxpool downsamplings, encoding the input image into increasingly abstract representations at successively deeper levels. The second part of the network consists of upsampling and concatenation, followed by ordinary convolution operations. Concatenation combines relatively “raw” information with relatively “processed” information. This can be understood as allowing the network to assign a class to a pixel with sensitivity to small-scale, less-abstract information about the pixel and its immediate neighborhood (e.g., whether it is gray) and simultaneously with sensitivity to large-scale, more-abstract information about the pixel’s context (e.g., whether there are nearby cars aligned in the patterns typical of parking lots). We have recently replaced the standard U-Net encoder with pre-trained ResNet50 [resnet]_ encoder. We have also replaced learned deconvolutions with nearest neighbor upsampling followed by a convolution for refinement. We saw a 1% improvement in accuracy after making these changes.
 
 .. figure:: fig9.png
    :height: 125 px
@@ -173,13 +173,13 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
 
 **Fill in holes.** The converse of the previous step, removing "lakes" (small false or topologically inconvenient negatives) in the mask.
 
-**Contouring.** During this step, mask polygons are drawn following the raster mask’s contours (i.e., the enclosing paths of pixels with the same intensity).
+**Contouring.** During this step, continuous pixels, having same color or intensity, along the boundary of the mask are joined. The output is a binary mask with contours.
 
 **Simplification.** We apply Douglas-Peucker simplification, which takes a curve composed of line segments and gives a similar curve with fewer vertexes. OpenStreetMap favors polygons with the least number of vertexes necessary to represent the ground truth accurately, so this step is important to increase the data's quality as percieved by its end users.
 
 **Transform Data.** Polygons are converted from in-tile pixel coordinates to GeoJSONs in geographic coordinates (longitude and latitude).
 
-**Merging multiple polygons.** The merge tool [merge]_ combines polygons that are nearly overlapping, such as those that represent a single feature broken by tile boundaries, into a single polygon. See Figure 12 and Figure 13.
+**Merging multiple polygons.** The merge tool [merge]_ combines polygons that are nearly overlapping, such as those that represent a single feature broken by tile boundaries, into a single polygon. See Figure 12.
 
 **Deduplication.** Cleaned GeoJSON polygons are compared against parking lot polygons that already exist in OpenStreetMap, so that only previously unmapped features are uploaded.
 
@@ -190,16 +190,6 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
    :scale: 35 %
 
    Polygons crossing tile boundaries, and other adjacent polygons, are combined.
-
-
-
-.. figure:: fig13.png
-   :height: 250 px
-   :width: 250 px
-   :scale: 49 %
-
-   A clean mask rendered from a GeoJSON polygon.
-
 
 
 
@@ -219,9 +209,20 @@ With these pipeline designs, we are able to run batch feature prediction on mill
 
 IV. Ongoing Work
 ----------------
-Here we demonstrated the steps to building deep learning-based computer vision pipelines that can run object detection and segmentation tasks at scale. We designed our tools and pipelines with the intent that other practitioners would find it straightforward to adapt them to landscapes and landscape features that we have not anticipated. We now plan to experiment with the newly published YOLOv3 [yolov3]_ architecture for our object detection pipelines. For segmentation, we open sourced an end-to-end semantic segmantion pipeline, Robosat [#]_, along with all its tools in June 2018. We ran our first round of large-scale parking lot segmentation over Atlanta, Baltimore, Sacramento, and Seattle; we are now refining the model and preparing to run it over all of North America. We are also experimenting with building segmentation in UAV imagery from the OpenAerialMap project in Tanzania [tanzania]_, to explore the challenges of very high-resolution imagery and a landscape unlike the ones we have trained on thus far. We recently performed one round of hard negative mining and added 49,969 negative samples to our training set. We are also currently working on replacing the standard U-Net encoder with pre-trained ResNet50 encoder. In addition to these improvements, we are replacing learned deconvolutions with nearest neighbor upsampling followed by a convolution for refinement instead. We believe that this approach gives us more accurate results, while speeding up training and prediction, lowering memory usage. The drawback to such an approach is that it only works for three-channel inputs (RGB) and not with arbitrary channels.
+Here we demonstrated the steps to building deep learning-based computer vision pipelines that can run object detection and segmentation tasks at scale. We open sourced an end-to-end semantic segmantion pipeline, Robosat [robosat]_, along with all its tools in June 2018 and ran parking lot segmentation over Atlanta, Baltimore, Sacramento, and Seattle. We designed our tools and pipelines with the intent that other practitioners would find it straightforward to adapt them to other landscapes, landscape features, and imagery data sources. We are now working on refining the post-processing steps as mentioned in the previous section. Currently our post-processing handler specifically designed for parking lot features is tuned with thresholds for zoom level 18 imagery [osm_zoom]_. We are working on generalizing these thresholds, base them on meters so we are able to expand to multiple resolutions.
+We also need to reorder the simplication and merging steps. Currently, we perform simplication first and then run buffering, unioning, then unbuffering to merge polygons across tile boundaries. This leads to polygons that are no longer simplified. We also need a more sophisticated simplication besides Douglas-Peucker.
 
-.. [#] Robosat is an end-to-end pipeline for extracting physical elements in the landscape that can be mapped from aerial and satellite imagery https://github.com/mapbox/robosat
+
+ We also plan to implement a feature pyramid-based deep convolutional network called Feature Pyramid Networks [FPN]. It sits on top of ResNet and is a practical and accurate solution to multi-scale object detection.
+
+
+We will continue looking for ways to bring different sources and structures of data together to build better computer vision pipelines.
+
+
+For future work we hope to use similar techniques for building footprint extraction. We experimented with building segmentation in unmanned aerial vehicle (UAV) imagery from the OpenAerialMap project in Tanzania [tanzania]_, to explore the challenges of very high-resolution imagery and a landscape unlike the ones we have trained on thus far.
+
+
+
 
 
 References
@@ -246,11 +247,12 @@ References
 .. [cite1] Jonathan Long, Evan Shelhamer, Trevor Darrell *Fully Convolutional Networks for Semantic Segmentation*, https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Long_Fully_Convolutional_Networks_2015_CVPR_paper.pdf, 2015 
 .. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi, *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], June 2015
 .. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
-.. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun arXiv:1512.03385 [cs.CV], Dec 2015.
+.. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. *Deep Residual Learning for Image Recognition*, arXiv:1512.03385 [cs.CV], Dec 2015.
 .. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
 .. [merge] https://s3.amazonaws.com/robosat-public/3339d9df-e8bc-4c78-82bf-cb4a67ec0c8e/features/index.html#16.37/33.776449/-84.41297
-.. [yolov3]    Joseph Redmon, Ali Farhadi. *YOLOv3: An Incremental Improvement*, arXiv:1804.02767 [cs.CV], Apr 2018
-.. [tanzania] daniel-j-h, https://www.openstreetmap.org/user/daniel-j-h/diary/44321
+.. [robosat] Mapbox 2018
+.. [osm_zoom] https://wiki.openstreetmap.org/wiki/Zoom_levels
+.. [FPN] Tsung-Yi Lin, Piotr Dollár, Ross Girshick, Kaiming He, Bharath Hariharan, Serge Belongie. *Feature Pyramid Networks for Object Detection*, arXiv:1612.03144 [cs.CV] Dec 2016
 
 
 
