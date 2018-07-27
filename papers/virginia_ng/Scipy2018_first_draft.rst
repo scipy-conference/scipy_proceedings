@@ -38,7 +38,7 @@ Here we present two usecases to demonstrate our workflow for extracting street n
 II. Scalable Computer Vision Pipelines
 -----------------------------------------
 
-The general design for our deep learning based computer vision pipelines can be found in Figure 1, and is applicable to both object detection and semantic segmantation tasks. We design such pipelines with two things in mind: we must allow scalability to very large data volumes, which requires processing efficiency; and we must allow repurposability towards computer vision tasks on other geospatial features, which requires a general-purpose design. We present turn lane markings as an example of an object detection pipeline, and parking lots as an example of a semantic segmantation pipeline.
+The general design for our deep learning based computer vision pipelines can be found in Figure 1, and is applicable to both object detection and semantic segmantation tasks. We design such pipelines with two things in mind: we must allow scalability to very large data volumes, which requires processing efficiency; and we must allow repurposability towards computer vision tasks on other geospatial features, which requires a general-purpose design. We present turn lane markings as an example of an object detection pipeline, and parking lots as an example of a semantic segmentation pipeline.
 
 .. figure:: fig1.png
    :height: 100 px
@@ -130,7 +130,7 @@ The design of our data engineering pipelines can be generalized to any OpenStree
 
 6 classes were defined for the turn lane markings detection project. With 4 coordinates defining each box's geometry, the "objectness" confidence, and 6 class probabilities, each bounding box object is comprised of 11 numbers. Multiplying by boxes per grid cell and grid cells per image, this project's YOLOv2 network therefore always yields 13 x 13 x 5 x 11 = 9,295 outputs per image.
 
-The base feature extractor of YOLOv2 is Darknet-19, a FCN composed of 19 convolutional layers and 5 maxpooling layers. Detection is done by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. We followed two suggestions proposed by the YOLO authors when designing our model. The first was incorporating batch normalization after every convolutional layer. Batch normalization stabilizes training, improves the model convergence, and regularizes the model [yolov2_batch]_. The authors saw a 2% improvement in mAP from YOLO on the VOC2007 dataset [yolov2]_. The second suggestion that we implemented was the use of anchor boxes and dimension clusters to predict the actual bounding box of the object. This step was acheieved by running k-means clustering on the turn lane marking training set bounding boxes. As seen in Figure 8, the ground truth bounding boxes for turn lane markings follow specific height-width ratios. Instead of directly predicting bounding box coordinates, our model predicts the width and height of the box as offsets from cluster centroids. The center coordinates of the box relative to the location of filter application is predicted by using a sigmoid function.
+The base feature extractor of YOLOv2 is Darknet-19, a FCN composed of 19 convolutional layers and 5 maxpooling layers. Detection is done by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. We followed two suggestions proposed by the YOLO authors when designing our model. The first was incorporating batch normalization after every convolutional layer. Batch normalization stabilizes training, improves the model convergence, and regularizes the model [yolov2_batch]_. The YOLO authors saw a 2% improvement in mAP from YOLO on the VOC2007 dataset [yolov2]_. The second suggestion that we implemented was the use of anchor boxes and dimension clusters to predict the actual bounding box of the object. This step was acheieved by running k-means clustering on the turn lane marking training set bounding boxes. As seen in Figure 8, the ground truth bounding boxes for turn lane markings follow specific height-width ratios. Instead of directly predicting bounding box coordinates, our model predicts the width and height of the box as offsets from cluster centroids. The center coordinates of the box relative to the location of filter application is predicted by using a sigmoid function.
 
 .. figure:: fig8.png
    :height: 150 px
@@ -150,7 +150,7 @@ Our model was first pre-trained on ImageNet 224 × 224 resolution imagery. The n
 
    U-Net architecture.
 
-We experimented with a Pyramid Scene Parsing Network (PSPNet) [pspnet]_ architecture for a 4-class segmentation task on buildings, roads, water, and vegetation. PSPNet is one of the few pixel-wise segmentation methods that focuses on global priors, while most methods fuse low-level, high resolution features with high-level, low resolution ones to develope comprehensive feature representations. Global priors can be especially useful for objects that have similar spatial features. For instance, runways and freeways have similar color and texture features, but they belong to different classes, which can be discriminated by adding car and building information. PSPNet uses pre-trained ResNet to generate a feature map that is 1/8 the size of the input image. The feature map is then fed through the pyramid parsing module, a hierarchical global prior that aggregates different scales of information. After upsampling and concatenation, the final feature representatation is fused with a 3 x 3 convolution to produce the final prediction map. As seen in Figure 6, PSPNet produced good-quality segmentation masks in our tests on scenes with complex features. For the 2-class parking lot task, however, we found PSPNet unnecessarily complex.
+We experimented with a Pyramid Scene Parsing Network (PSPNet) [pspnet]_ architecture for a 4-class segmentation task on buildings, roads, water, and vegetation. PSPNet is one of the few pixel-wise segmentation methods that focuses on global priors, while most methods fuse low-level, high resolution features with high-level, low resolution ones to develope comprehensive feature representations. Global priors can be especially useful for objects that have similar spatial features. For instance, runways and freeways have similar color and texture features, but they belong to different classes, which can be discriminated by adding car and building information. PSPNet uses pre-trained ResNet to generate a feature map that is 1/8 the size of the input image. The feature map is then fed through the pyramid parsing module, a hierarchical global prior that aggregates different scales of information. After upsampling and concatenation, the final feature representatation is fused with a 3 x 3 convolution to produce the final prediction map. As seen in Figure 6, PSPNet produced good-quality segmentation masks in our tests on scenes with complex features. For the 2-class parking lot task, however, we found PSPNet unnecessarily complex and time-consuming.
 
 **Hard Negative Mining.** This is a technique we have applied to improve model accuracy [hnm]_ . We first train a model with an initial subset of negative examples, and collect negative examples that are incorrectly classified by this initial model to form a set of hard negatives. A new model is then trained with the hard negative examples and the process may be repeated a few times.
 
@@ -184,7 +184,7 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
 
 **Contouring.** During this step, continuous pixels having same color or intensity along the boundary of the mask are joined. The output is a binary mask with contours.
 
-**Simplification.** We apply Douglas-Peucker simplification, which takes a curve composed of line segments and gives a similar curve with fewer vertexes. OpenStreetMap favors polygons with the least number of vertexes necessary to represent the ground truth accurately, so this step is important to increase the data's quality as percieved by its end users.
+**Simplification.** We apply Douglas-Peucker simplification [DP]_, which takes a curve composed of line segments and gives a similar curve with fewer vertexes. OpenStreetMap favors polygons with the least number of vertexes necessary to represent the ground truth accurately, so this step is important to increase the data's quality as percieved by its end users.
 
 **Transform Data.** Polygons are converted from in-tile pixel coordinates to GeoJSONs in geographic coordinates (longitude and latitude).
 
@@ -205,15 +205,14 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
 4. Output
 ----------
 
-With these pipeline designs, we are able to run batch feature prediction on millions of image tiles. The outputs of the processing pipelines discussed are turn lane markings and parking lots in the form of GeoJSON features suitable for adding to OpenStreetMap. Mapbox routing engines then take these OpenStreetMap features into account when calculating optimal navigation routes. As we make various improvements to our baseline model and post-processing algorithms (see below), we keep human control over the final decision to add a given feature to OpenStreetMap.
+With these pipeline designs, we are able to run batch feature prediction on millions of image tiles. The outputs of the processing pipelines discussed are turn lane markings and parking lots in the form of GeoJSON features suitable for adding to OpenStreetMap. Mapbox routing engines then take these OpenStreetMap features into account when calculating optimal navigation routes. As we make various improvements to our baseline model and post-processing algorithms (see below), we keep human control over the final decision to add a given feature to OpenStreetMap. Figure 13 shows a front-end user interface (UI) we built which allows users to run instant turn lane marking detection and visualize the results on top of Mapbox Satellite. Users can select a model, adjust the level of confidence for the model, choose from any Mapbox map styles [mapbox_style]_, and determine the area on the map to run inference on [mapbox_zoom]_.
 
-
-.. figure:: fig14.png
+.. figure:: fig13.png
    :height: 200 px
    :width: 400 px
    :scale: 25 %
 
-   Front-end UI for instant turn lane marking detection.
+   Front-end UI for instant turn lane marking detection on Mapbox Satellite layer, a global imagery collection.
 
 
 IV. Ongoing Work
@@ -232,7 +231,7 @@ References
 ----------
 .. [buildings] United States Census Bureau. *New Residential Construction* Jul 2018, https://www.census.gov/construction/nrc/index.html
 .. [osm] OpenSteetMap. OpenStreetMap contributors. April 2018, https://www.openstreetmap.org
-.. [mapbox] Mapbox. https://www.mapbox.com/about/
+.. [mapbox] Mapbox. About Mapbox. https://www.mapbox.com/about/
 .. [mapbox_api] Mapbox. Maps API Documentation. May 2018, https://www.mapbox.com/api-documentation/#maps
 .. [osm-lanes] OpenStreetMap Wiki. Tags. Feb 2018, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Martin Raifer. Overpass Turbo. Jan 2017, https://overpass-turbo.eu/
@@ -253,5 +252,8 @@ References
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. *Deep Residual Learning for Image Recognition*, arXiv:1512.03385 [cs.CV], Dec 2015.
 .. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
 .. [hnm] N. Dalal and B. Triggs, “Histograms of oriented gradients for human detection,” in IEEE Conference on Computer Vision and Pattern Recognition, 2005.
+.. [DP] Shin-Ting Wu, Adler C. G. da Silva, Mercedes R. G. Márquez. *A non-self-intersection Douglas-Peucker Algorithm*, 2003.
+.. [mapbox_style] Mapbox. Styles. https://www.mapbox.com/help/studio-manual-styles/
+.. [mapbox_zoom] Mapbox. Zoom Level. https://www.mapbox.com/help/define-zoom-level/
 .. [osm_zoom] OpenStreetMap Wiki. Zoom Levels. 20 June 2018, https://wiki.openstreetmap.org/wiki/Zoom_levels
 .. [FPN] Tsung-Yi Lin, Piotr Dollár, Ross Girshick, Kaiming He, Bharath Hariharan, Serge Belongie. *Feature Pyramid Networks for Object Detection*, arXiv:1612.03144 [cs.CV] Dec 2016
