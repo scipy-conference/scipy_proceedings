@@ -188,7 +188,7 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
 
 **Transform Data.** Polygons are converted from in-tile pixel coordinates to GeoJSONs in geographic coordinates (longitude and latitude).
 
-**Merging multiple polygons.** The merge tool [merge]_ combines polygons that are nearly overlapping, such as those that represent a single feature broken by tile boundaries, into a single polygon. See Figure 12.
+**Merging multiple polygons.** This tool combines polygons that are nearly overlapping, such as those that represent a single feature broken by tile boundaries, into a single polygon. See Figure 12.
 
 **Deduplication.** Cleaned GeoJSON polygons are compared against parking lot polygons that already exist in OpenStreetMap, so that only previously unmapped features are uploaded.
 
@@ -234,10 +234,10 @@ References
 .. [osm] OpenSteetMap. OpenStreetMap contributors. April 2018, https://www.openstreetmap.org
 .. [mapbox] Mapbox. https://www.mapbox.com/about/
 .. [mapbox_api] Mapbox. Maps API Documentation. May 2018, https://www.mapbox.com/api-documentation/#maps
-.. [osm-lanes] OpenStreetMap tags, https://wiki.openstreetmap.org/wiki/Lanes
+.. [osm-lanes] OpenStreetMap Wiki. Tags. Feb 2018, https://wiki.openstreetmap.org/wiki/Lanes
 .. [overpass] Martin Raifer. Overpass Turbo. Jan 2017, https://overpass-turbo.eu/
 .. [josm] Immanuel Scholz, Dirk Stöcker. Java OpenStreetMap Editor. May 2017, https://josm.openstreetmap.de/
-.. [osm-parking] OpenStreetMap Wiki. Tags, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
+.. [osm-parking] OpenStreetMap Wiki. Tags. April 2018, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
 .. [osmium] Jochen Topf. Osmium. April 2018, https://github.com/osmcode/libosmium
 .. [tile] OpenStreetMap Wiki. Tile Scheme. 1 June 2018, https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
 .. [tanzania] Daniel Hofmann. RoboSat loves Tanzania. July 2018, https://www.openstreetmap.org/user/daniel-j-h/diary/44321
@@ -253,9 +253,5 @@ References
 .. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. *Deep Residual Learning for Image Recognition*, arXiv:1512.03385 [cs.CV], Dec 2015.
 .. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
 .. [hnm] N. Dalal and B. Triggs, “Histograms of oriented gradients for human detection,” in IEEE Conference on Computer Vision and Pattern Recognition, 2005.
-.. [merge] https://s3.amazonaws.com/robosat-public/3339d9df-e8bc-4c78-82bf-cb4a67ec0c8e/features/index.html#16.37/33.776449/-84.41297
 .. [osm_zoom] OpenStreetMap Wiki. Zoom Levels. 20 June 2018, https://wiki.openstreetmap.org/wiki/Zoom_levels
 .. [FPN] Tsung-Yi Lin, Piotr Dollár, Ross Girshick, Kaiming He, Bharath Hariharan, Serge Belongie. *Feature Pyramid Networks for Object Detection*, arXiv:1612.03144 [cs.CV] Dec 2016
-
-
-
