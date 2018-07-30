@@ -60,7 +60,7 @@ The data needed to create training sets depends on the type of task: object dete
 
    Turn lane markings detection.
 
-**Data Preparation For Object Detection.** The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and manually drawing a bounding box around each marking. We used Overpass Turbo [#]_ to query the OpenStreetMap database for streets containing turn lane markings, i.e., those tagged with one of the following attributes: “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. The marked street segments, as shown in Figure 3, were stored as GeoJSON features clipped into the tiling scheme [tile]_ of the Mapbox Satellite basemap [mapbox]_.. Figure 4 shows how skilled mappers used this map layer as a cue to manually draw bounding boxes around each turn lane marking using JOSM, a process called annotation. Each of these bounding boxes was stored as a GeoJSON polygon on Amazon S3 [s3]_.
+**Data Preparation For Object Detection.** The training data for turn lane marking detection was created by collecting imagery of various types of turn lane markings and manually drawing a bounding box around each marking. We used Overpass Turbo [#]_ to query the OpenStreetMap database for streets containing turn lane markings, i.e., those tagged with one of the following attributes: “\turn:lane=*”, “\turn:lane:forward=*”, “\turn:lane:backward=*” in OpenStreetMap. The marked street segments, as shown in Figure 3, were stored as GeoJSON features clipped into the tiling scheme [tile]_ of the Mapbox Satellite basemap [mapbox]_. Figure 4 shows how skilled mappers used this map layer as a cue to manually draw bounding boxes around each turn lane marking using JOSM, a process called annotation. Each of these bounding boxes was stored as a GeoJSON polygon on Amazon S3 [s3]_.
 
 .. [#] Overpass Turbo [overpass]_ is a web based data mining tool for OpenStreetMap. It runs any kind of Overpass API query and shows the results on an interactive map.
 
@@ -130,14 +130,14 @@ The design of our data engineering pipelines can be generalized to any OpenStree
 
 6 classes were defined for the turn lane markings detection project. With 4 coordinates defining each box's geometry, the "objectness" confidence, and 6 class probabilities, each bounding box object is comprised of 11 numbers. Multiplying by boxes per grid cell and grid cells per image, this project's YOLOv2 network therefore always yields 13 x 13 x 5 x 11 = 9,295 outputs per image.
 
-The base feature extractor of YOLOv2 is Darknet-19, a FCN composed of 19 convolutional layers and 5 maxpooling layers. Detection is done by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. We followed two suggestions proposed by the YOLO authors when designing our model. The first was incorporating batch normalization after every convolutional layer. Batch normalization stabilizes training, improves the model convergence, and regularizes the model [yolov2_batch]_. The YOLO authors saw a 2% improvement in mAP from YOLO on the VOC2007 dataset [yolov2]_. The second suggestion that we implemented was the use of anchor boxes and dimension clusters to predict the actual bounding box of the object. This step was acheieved by running k-means clustering on the turn lane marking training set bounding boxes. As seen in Figure 8, the ground truth bounding boxes for turn lane markings follow specific height-width ratios. Instead of directly predicting bounding box coordinates, our model predicts the width and height of the box as offsets from cluster centroids. The center coordinates of the box relative to the location of filter application is predicted by using a sigmoid function.
+The base feature extractor of YOLOv2 is Darknet-19 [darknet]_, a FCN composed of 19 convolutional layers and 5 maxpooling layers. Detection is done by replacing the last convolutional layer of Darknet-19 with three 3 × 3 convolutional layers, each outputting 1024 channels. A final 1 × 1 convolutional layer is then applied to convert the 13 × 13 × 1024 output into 13 × 13 × 55. We followed two suggestions proposed by the YOLOv2 authors when designing our model. The first was incorporating batch normalization after every convolutional layer. Batch normalization stabilizes training, improves the model convergence, and regularizes the model [yolov2_batch]_. By including batch normalization, YOLOv2 authors saw a 2% improvement in mAP on the VOC2007 dataset [yolov2]_ compared to the original YOLO model. The second suggestion that we implemented was the use of anchor boxes and dimension clusters to predict the actual bounding box of the object. This step was acheieved by running k-means clustering on the turn lane marking training set bounding boxes. As seen in Figure 8, the ground truth bounding boxes for turn lane markings follow specific height-width ratios. Instead of directly predicting bounding box coordinates, our model predicts the width and height of the box as offsets from cluster centroids. The center coordinates of the box relative to the location of filter application is predicted by using a sigmoid function.
 
 .. figure:: fig8.png
    :height: 150 px
    :width: 150 px
    :scale: 38 %
 
-   Clustering of box dimensions in the turn lane marking training set. We ran k-means clustering on the dimensions of bounding boxes to get anchor boxes for our model. We used k = 5, as suggested by the YOLO authors, who found that this cluster count gives a good tradeoff for recall v. complexity of the model.
+   Clustering of box dimensions in the turn lane marking training set. We ran k-means clustering on the dimensions of bounding boxes to get anchor boxes for our model. We used k = 5, as suggested by the YOLOv2 authors, who found that this cluster count gives a good tradeoff for recall v. complexity of the model.
 
 Our model was first pre-trained on ImageNet 224 × 224 resolution imagery. The network was then resized and fine-tuned for classification on 448 × 448 turn lane marking imagery, to ensure that the relatively small features of interest were still reliably detected.
 
@@ -146,7 +146,7 @@ Our model was first pre-trained on ImageNet 224 × 224 resolution imagery. The n
 .. figure:: fig9.png
    :height: 125 px
    :width: 200 px
-   :scale: 38 %
+   :scale: 36 %
 
    U-Net architecture.
 
@@ -202,10 +202,10 @@ Figure 11 shows an example of the raw segmentation mask derived from our U-Net m
 
 
 
-4. Output
-----------
+4. Conclusion
+-------------
 
-With these pipeline designs, we are able to run batch feature prediction on millions of image tiles. The outputs of the processing pipelines discussed are turn lane markings and parking lots in the form of GeoJSON features suitable for adding to OpenStreetMap. Mapbox routing engines then take these OpenStreetMap features into account when calculating optimal navigation routes. As we make various improvements to our baseline model and post-processing algorithms (see below), we keep human control over the final decision to add a given feature to OpenStreetMap. Figure 13 shows a front-end user interface (UI) we built which allows users to run instant turn lane marking detection and visualize the results on top of Mapbox Satellite. Users can select a model, adjust the level of confidence for the model, choose from any Mapbox map styles [mapbox_style]_, and determine the area on the map to run inference on [mapbox_zoom]_.
+Here we demonstrated the steps to building deep learning-based computer vision pipelines that can run object detection and segmentation tasks at scale. We open sourced an end-to-end semantic segmantion pipeline, Robosat [robosat]_, along with all its tools in June 2018 and ran parking lot segmentation over Atlanta, Baltimore, Sacramento, and Seattle. With these pipeline designs, we are able to run batch feature prediction on millions of image tiles. The outputs of the processing pipelines discussed are turn lane markings and parking lots in the form of GeoJSON features suitable for adding to OpenStreetMap. Mapbox routing engines then take these OpenStreetMap features into account when calculating optimal navigation routes. As we make various improvements to our baseline model and post-processing algorithms (see below), we keep human control over the final decision to add a given feature to OpenStreetMap. Figure 13 shows a front-end user interface (UI) we built which allows users to run instant turn lane marking detection and visualize the results on top of Mapbox Satellite. Users can select a model, adjust the level of confidence for the model, choose from any Mapbox map styles [mapbox_style]_, and determine the area on the map to run inference on [mapbox_zoom]_.
 
 .. figure:: fig13.png
    :height: 200 px
@@ -215,13 +215,12 @@ With these pipeline designs, we are able to run batch feature prediction on mill
    Front-end UI for instant turn lane marking detection on Mapbox Satellite layer, a global imagery collection.
 
 
-IV. Ongoing Work
+IV. Future Work
 ----------------
-Here we demonstrated the steps to building deep learning-based computer vision pipelines that can run object detection and segmentation tasks at scale. We open sourced an end-to-end semantic segmantion pipeline, Robosat [robosat]_, along with all its tools in June 2018 and ran parking lot segmentation over Atlanta, Baltimore, Sacramento, and Seattle.
 
 We are now working on making a few improvements to this Robosat pipeline so that it becomes more flexible in handling input image of different resolutions. For instance, our existing post-processing handler was designed for parking lot features and was specifically tuned with thresholds set for zoom level 18 imagery [osm_zoom]_. We are replacing these hard-coded thresholds with generalized ones that are calculated based on resolution in meters per pixel. We also plan to experiment with a feature pyramid-based deep convolutional network called Feature Pyramid Network (FPN) [FPN]_. It is a practical and accurate solution to multi-scale object detection. Similar to U-Net, the FPN has lateral connections between the bottom-up pyramid (left) and the top-down pyramid (right). The main difference is where U-net only copies features and appends them, FPN applies a 1x1 convolution layer before adding the features. We will most likely follow the authors' footsteps and use ResNet as the backbone of this network.
 
-There two other modifications planned for the post-processing steps. First, we want to experiement with a more sophisticated polygon simplication algorithm besides Douglas-Peucker. Second, we are rethinking the ordering of doing simplication then merging. The current post-process workflow performs simplication on individual extracted polygons and then merges polygons that are across imagery tiles together. The resulting polygons may no longer be in the simplest shape.
+There two other modifications planned for the post-processing steps. First, we want to experiment with a more sophisticated polygon simplication algorithm besides Douglas-Peucker. Second, we are rethinking the ordering of doing simplication then merging. The current post-process workflow performs simplication on individual extracted polygons and then merges polygons that are across imagery tiles together. The resulting polygons may no longer be in the simplest shape.
 
 We design our tools and pipelines with the intent that other practitioners would find it straightforward to adapt them to other landscapes, landscape features, and imagery data sources. For future work we will continue to look for ways to bring different sources and structures of data together to build better computer vision pipelines.
 
@@ -229,31 +228,32 @@ We design our tools and pipelines with the intent that other practitioners would
 
 References
 ----------
-.. [buildings] United States Census Bureau. *New Residential Construction* Jul 2018, https://www.census.gov/construction/nrc/index.html
-.. [osm] OpenSteetMap. OpenStreetMap contributors. April 2018, https://www.openstreetmap.org
-.. [mapbox] Mapbox. About Mapbox. https://www.mapbox.com/about/
-.. [mapbox_api] Mapbox. Maps API Documentation. May 2018, https://www.mapbox.com/api-documentation/#maps
-.. [osm-lanes] OpenStreetMap Wiki. Tags. Feb 2018, https://wiki.openstreetmap.org/wiki/Lanes
-.. [overpass] Martin Raifer. Overpass Turbo. Jan 2017, https://overpass-turbo.eu/
-.. [josm] Immanuel Scholz, Dirk Stöcker. Java OpenStreetMap Editor. May 2017, https://josm.openstreetmap.de/
-.. [osm-parking] OpenStreetMap Wiki. Tags. April 2018, https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
-.. [osmium] Jochen Topf. Osmium. April 2018, https://github.com/osmcode/libosmium
-.. [tile] OpenStreetMap Wiki. Tile Scheme. 1 June 2018, https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
-.. [tanzania] Daniel Hofmann. RoboSat loves Tanzania. July 2018, https://www.openstreetmap.org/user/daniel-j-h/diary/44321
-.. [robosat] Mapbox. Robosat. June 2018, https://github.com/mapbox/robosat
-.. [s3] Amazon. Amazon Simple Storage Service, https://aws.amazon.com/s3/
-.. [ecs] Amazon. Amazon Elastic Container Service, https://aws.amazon.com/ecs/
-.. [yolo] Joseph Redmon, Santosh Divvala, Ross Girshick, Ali Farhadi. *You Only Look Once: Unified, Real-Time Object Detection*, arXiv:1506.02640 [cs.CV], Jun 2015
-.. [ssd] Wei Liu, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott Reed, Cheng-Yang Fu, Alexander C. Berg *SSD: Single Shot MultiBox Detector*, arXiv:1512.02325 [cs.CV], Dec 2015
-.. [yolov2] Joseph Redmon, Ali Farhadi. *YOLO9000: Better, Faster, Stronger*, arXiv:1612.08242 [cs.CV], Dec 2016
-.. [yolov2_batch] S. Ioffe and C. Szegedy. *Batch normalization: Accelerating deep network training by reducing internal covariate shift*, arXiv preprint arXiv:1502.03167, Feb 2015.
-.. [FCN] Jonathan Long, Evan Shelhamer, Trevor Darrell *Fully Convolutional Networks for Semantic Segmentation*. 2015, https://www.cv-foundation.org/openaccess/content_cvpr_2015/papers/Long_Fully_Convolutional_Networks_2015_CVPR_paper.pdf
-.. [unet] Olaf Ronneberger, Philipp Fischer, Thomas Brox. *U-Net: Convolutional Networks for Biomedical Image Segmentation*, arXiv:1505.04597 [cs.CV], May 2015.
-.. [resnet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. *Deep Residual Learning for Image Recognition*, arXiv:1512.03385 [cs.CV], Dec 2015.
-.. [pspnet] Hengshuang Zhao, Jianping Shi, Xiaojuan Qi, Xiaogang Wang, Jiaya Jia, *Pyramid Scene Parsing Network*, arXiv:1612.01105 [cs.CV], Dec 2016.
-.. [hnm] N. Dalal and B. Triggs, “Histograms of oriented gradients for human detection,” in IEEE Conference on Computer Vision and Pattern Recognition, 2005.
-.. [DP] Shin-Ting Wu, Adler C. G. da Silva, Mercedes R. G. Márquez. *A non-self-intersection Douglas-Peucker Algorithm*, 2003.
-.. [mapbox_style] Mapbox. Styles. https://www.mapbox.com/help/studio-manual-styles/
-.. [mapbox_zoom] Mapbox. Zoom Level. https://www.mapbox.com/help/define-zoom-level/
-.. [osm_zoom] OpenStreetMap Wiki. Zoom Levels. 20 June 2018, https://wiki.openstreetmap.org/wiki/Zoom_levels
-.. [FPN] Tsung-Yi Lin, Piotr Dollár, Ross Girshick, Kaiming He, Bharath Hariharan, Serge Belongie. *Feature Pyramid Networks for Object Detection*, arXiv:1612.03144 [cs.CV] Dec 2016
+.. [buildings] Cornish, C., Cooper, S., Jenkins, S., & US Census Bureau. (2011, August 23). US Census Bureau New Residential Construction. Retrieved from https://www.census.gov/construction/nrc/index.html
+.. [osm] OpenStreetMap Contributors. (2017). OpenStreetMap. Retrieved May 30, 2018, from https://www.openstreetmap.org/
+.. [mapbox] Mapbox. (n.d.). About. Retrieved June 30, 2018, from https://www.mapbox.com/about/
+.. [mapbox_api] Mapbox. (n.d.). Mapbox API Documentation. Retrieved May 30, 2018, from https://www.mapbox.com/api-documentation/#maps
+.. [osm-lanes] OpenStreetMap Contributors. (2018, February 27). Lanes. Retrieved May 30, 2018, from https://wiki.openstreetmap.org/wiki/Lanes
+.. [overpass] Raifer, M. (2017, January).  Overpass Turbo. Retrieved from https://overpass-turbo.eu/
+.. [josm] Scholz, I., & Stöcker, D. (2017, May). Java OpenStreetMap Editor. Retrieved from https://josm.openstreetmap.de/
+.. [osm-parking] OpenStreetMap Contributors. (2018, April). Tag:amenity=parking. Retrieved from https://wiki.openstreetmap.org/wiki/Tag:amenity%3Dparking
+.. [osmium] Topf, J. (2018, April). Osmcode/libosmium. Retrieved May 11, 2018, from https://github.com/osmcode/libosmium
+.. [tile] OpenStreetMap Contributors. (2018, June). Tile Scheme. Retrieved from https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames
+.. [tanzania] Hofmann, D. (2018, July 5). Daniel-j-h's diary | RoboSat loves Tanzania. Retrieved from https://www.openstreetmap.org/user/daniel-j-h/diary/44321
+.. [robosat] Mapbox. (2018, June). Robosat. Retrieved from https://github.com/mapbox/robosat
+.. [s3] Amazon. (n.d.). Cloud Object Storage | Store & Retrieve Data Anywhere | Amazon Simple Storage Service. Retrieved from https://aws.amazon.com/s3/
+.. [ecs] Amazon. (n.d.). Amazon ECS - run containerized applications in production. Retrieved from https://aws.amazon.com/ecs/
+.. [yolo] Redmon, J., Divvala, S., Girshick, R., & Farhadi, A. (2016, June). You Only Look Once: Unified, Real-Time Object Detection. 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/cvpr.2016.91
+.. [ssd] Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C., & Berg, A. C. (2016, September 17). SSD: Single Shot MultiBox Detector. Computer Vision – ECCV 2016 Lecture Notes in Computer Science, 21-37. doi:10.1007/978-3-319-46448-0_2
+.. [darknet] Redmon, J. (2013-2016). Darknet: Open Source Neural Networks in C. Retrieved from https://pjreddie.com/darknet/
+.. [yolov2] Redmon, J., & Farhadi, A. (2017, July). YOLO9000: Better, Faster, Stronger. 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/cvpr.2017.690
+.. [yolov2_batch] Ioffe, S., & Szegedy, C. (2015, February 11). Batch normalization: Accelerating deep network training by reducing internal covariate shift.arXiv:1502.03167
+.. [FCN] Long, J., Shelhamer, E., & Darrell, T. (2015, June). Fully Convolutional Networks for Semantic Segmentation. 2015 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/CVPR.2015.7298965
+.. [unet] Ronneberger, O., Fischer, P., & Brox, T. (2015, May 18) U-Net: Convolutional Networks for Biomedical Image Segmentation. 2015 MICCAI. arXiv:1505.04597
+.. [resnet] He, K., Zhang, X., Ren, S., & Sun, J. (2016, June). Deep Residual Learning for Image Recognition. 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/cvpr.2016.90
+.. [pspnet] Zhao, H., Shi, J., Qi, X., Wang, X., & Jia, J. (2017, July). Pyramid Scene Parsing Network. 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/cvpr.2017.660
+.. [hnm] Dalal, N., & Triggs, B. (2005, June). Histograms of oriented gradients for human detection. 2005 IEEE Conference on Computer Vision and Pattern Recognition. 10.1109/CVPR.2005.177
+.. [DP] Wu, S., & Marquez, M. (2003, October). A non-self-intersection Douglas-Peucker algorithm. 16th Brazilian Symposium on Computer Graphics and Image Processing (SIBGRAPI 2003). doi:10.1109/sibgra.2003.1240992
+.. [mapbox_style] Mapbox. (n.d.). Styles. Retrieved from https://www.mapbox.com/help/studio-manual-styles/
+.. [mapbox_zoom] Mapbox. (n.d.). Zoom Level. Retrieved from https://www.mapbox.com/help/define-zoom-level/
+.. [osm_zoom] OpenStreetMap Contributors. (2018, June 20). Zoom Levels. Retrieved June 30, 2018, from https://wiki.openstreetmap.org/wiki/Zoom_levels
+.. [FPN] Lin, T., Dollar, P., Girshick, R., He, K., Hariharan, B., & Belongie, S. (2017, July). Feature Pyramid Networks for Object Detection. 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR). doi:10.1109/cvpr.2017.106
