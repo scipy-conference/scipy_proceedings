@@ -1,30 +1,30 @@
 :author: Sergio Rey
 :email: sergio.rey@ucr.edu
-:institution: Center for Geospatial Sciences, University of California, Riverside 
+:institution: Center for Geospatial Sciences, University of California, Riverside
 :corresponding:
 
 :author: Elijah Knaap
-:email: 
-:institution: Center for Geospatial Sciences, University of California, Riverside 
+:email:
+:institution: Center for Geospatial Sciences, University of California, Riverside
 
 :author: Su Han
-:email: 
-:institution: Center for Geospatial Sciences, University of California, Riverside 
+:email:
+:institution: Center for Geospatial Sciences, University of California, Riverside
 
 :author: Levi Wolf
-:email: levi.john.wolf@bristol.ac.uk 
+:email: levi.john.wolf@bristol.ac.uk
 :institution: School of Geographical Sciences, University of Bristol
 
-:author: Wei Kang 
-:email: 
-:institution: Center for Geospatial Sciences, University of California, Riverside 
+:author: Wei Kang
+:email:
+:institution: Center for Geospatial Sciences, University of California, Riverside
 
 :bibliography: reference
 
-
+:video: https://youtu.be/VWMj_rNb0io
 
 ---------------------------------------------------------------------------------------------------------------------------------
-Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source Longitudinal Neighborhood Analysis Package (OSLNAP) 
+Spatio-temporal analysis of socioeconomic neighborhoods: The Open Source Longitudinal Neighborhood Analysis Package (OSLNAP)
 ---------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -45,8 +45,8 @@ Package (OSLNAP) using the scientific Python ecosystem.
 
    neighborhoods, GIS, clustering, dynamics
 
-  
-Introduction 
+
+Introduction
 ------------
 
 For social scientists in a wide variety of disciplines, neighborhoods are
@@ -127,7 +127,7 @@ points in time, it is impossible to compare directly a single neighborhood with
 itself over time.
 
 .. figure:: tractchange.png
-   
+
 
    Enumeration Unit Changes :cite:`Census_2010`. :label:`f:harm`
 
@@ -308,7 +308,7 @@ interrogate potential spatial interactions by conditioning transition matrices
 on neighboring context while the spatial regime Markov approach allows several
 transition matrices to be formed for different spatial regimes which are
 constituted by contiguous spatial units. Both approaches together with
-inferences have been implemented in Python Spatial Analysis Library (PySAL) 
+inferences have been implemented in Python Spatial Analysis Library (PySAL)
 :cite:`Rey14` and Geospatial Distribution Dynamics (giddy) package :cite:`giddy`. The
 ``change`` module considers these packages as dependencies and wraps relevant
 classes and functions to make them consistent and efficient for longitudinal
@@ -339,7 +339,7 @@ of neighborhood types typically
 happening in a particular order :cite:`delmelle2016`.
 
 In a prototypical workflow, the ``change`` module permits the end user to
-explore the nature of neighborhood change from a dynamic, holistic or combined 
+explore the nature of neighborhood change from a dynamic, holistic or combined
 holistic \& dynamic perspective. From a dynamic perspective,
 *transition analysis* can be used to apply a first-order Markov chain
 model to look at probabilities of transitioning between neighborhood types over
@@ -348,12 +348,12 @@ the role of spatial interactions in shaping neighborhood dynamics or the
 application of a spatial regime Markov chains model to explore spatially
 heterogeneous neighborhood dynamics. From a holistic perspective,
 *sequence analysis* involves the application of the OM algorithm with
-classic cost functions for substitution, insertion, deletion and transposition, 
+classic cost functions for substitution, insertion, deletion and transposition,
 or those explicitly taking account of potential spatial dependence and spatial heterogeneity.
-Finally, a combined holistic \& dynamic perspective is gained by 
-feeding the output from *transiton analysis*, which is the empical transition 
-probability matrix, or spatially dependent transition 
-probability matrices into *sequence analysis* to help set operation costs. 
+Finally, a combined holistic \& dynamic perspective is gained by
+feeding the output from *transiton analysis*, which is the empical transition
+probability matrix, or spatially dependent transition
+probability matrices into *sequence analysis* to help set operation costs.
 
 
 Empirical Illustration
@@ -644,8 +644,8 @@ Sequence Analysis to Neighborhood Change
 
    Neighborhoods with similar spatial-social histories since 1980 :label:`f:trajclust`
 
-Armed with the sequences of sociodemographic classifications for every harmonized 
-tract in LA, the distance between these sequences can be computed. Since these 
+Armed with the sequences of sociodemographic classifications for every harmonized
+tract in LA, the distance between these sequences can be computed. Since these
 sequences are intrinsically aligned in time, the Hamming distance between classifications
 yields an effective metric for how different places' demographic changes
 have been. The pairwise Hamming distance matrix for demographic transitions in LA
@@ -712,7 +712,7 @@ paper, OSLNAP is being designed  with a web-based, interactive front-end that
 allows users to explore the results of  different neighborhood analyses with the
 assistance of linked maps, charts, and tables. Together, these linked "views"
 allow a researcher to interrogate their results in a manner far richer than
-creating a series of static maps. 
+creating a series of static maps.
 
 Reproducible Urban Data Science: A final direction for future research is the development of
 reproducible workflows as part of OSLNAP. Here we envisage leveraging our

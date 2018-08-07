@@ -36,13 +36,15 @@
 :institution: Anaconda, Inc.
 :equal-contributor:
 
+:video: https://youtu.be/KTbd_oUkP4Q
+
 ---------------------------------------------------------------------------------------
 EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter Notebooks
 ---------------------------------------------------------------------------------------
 
 .. class:: abstract
 
-   Building environmental simulation workflows is typically a slow process involving multiple 
+   Building environmental simulation workflows is typically a slow process involving multiple
    proprietary desktop tools that do not interoperate well. In this work, we demonstrate building
    flexible, lightweight workflows entirely in Jupyter notebooks. We demonstrate these capabilities
    through examples in hydrology and hydrodynamics using the AdH (Adaptive Hydraulics) and
@@ -51,10 +53,10 @@ EarthSim: Flexible Environmental Simulation Workflows Entirely Within Jupyter No
    that can be used in browser based environments and that can easily be reconfigured and repurposed
    as needed to rapidly solve specific emerging issues such as hurricanes or dam failures.
 
-   As part of this work, extensive improvements were made to several general-purpose open source 
-   packages, including support for annotating and editing plots and maps in Bokeh and HoloViews, 
-   rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and 
-   Datashader, and widget libraries for Param. In addition, two new open source projects are being 
+   As part of this work, extensive improvements were made to several general-purpose open source
+   packages, including support for annotating and editing plots and maps in Bokeh and HoloViews,
+   rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and
+   Datashader, and widget libraries for Param. In addition, two new open source projects are being
    released, one for triangular mesh generation (Filigree) and one for environmental data access (Quest).
 
 .. class:: keywords
@@ -65,26 +67,26 @@ Introduction
 ------------
 
 Environmental Simulation consists of using historical, current and forecasted environmental data in conjunction
-with physics-based numerical models to simulate conditions at locations across the globe. The simulations of 
+with physics-based numerical models to simulate conditions at locations across the globe. The simulations of
 primary interest are weather, hydrology, hydrodynamics, soil moisture and groundwater transport. These simulations
-combine various material properties such as soil porosity and vegetation types with topology such as land surface 
+combine various material properties such as soil porosity and vegetation types with topology such as land surface
 elevation and bathymetry, along with forcing functions such as rainfall, tide, and wind, to predict quantities of
-interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct 
+interest such as water depth, soil moisture, and various fluxes. Currently, the primary methodology to conduct
 these simulations requires a combination of heavy proprietary desktop tools such as Surface-water Modeling System (SMS) [Aquaveo]_
 and Computational Model Builder (CMB) [Hines09]_, [CMB]_ that are tied to certain platforms and do not interoperate
-well with each other. 
+well with each other.
 
 The process of building and running environmental simulations using these tools is time consuming, requiring
-a large amount of manual effort and a fair amount of expertise. Typically, the time required to build a 
-reasonable model is measured in months. These workflows support some use cases well, especially multi-year projects 
+a large amount of manual effort and a fair amount of expertise. Typically, the time required to build a
+reasonable model is measured in months. These workflows support some use cases well, especially multi-year projects
 where there is often the need for highly accurate, high-resolution physical modeling. But these existing tools and workflows
-are too heavyweight for other potential applications, such as making short-term operational decisions in novel 
+are too heavyweight for other potential applications, such as making short-term operational decisions in novel
 locations. They also make it difficult to flexibly switch between desktop and remote high-performance-computing (HPC)
 systems as needed for scaling up and for interactive use.
 
 An additional limitation of the existing desktop tools (i.e. CMB and SMS) are that the users are limited to the functionality
 and algorithms that are available in the tool. Adding new functionality requires expensive development efforts as well as
-cooperation of the tool vendors. For example, adding a coastline extraction tool to CMB based on the grabcut algorithm 
+cooperation of the tool vendors. For example, adding a coastline extraction tool to CMB based on the grabcut algorithm
 [Carsten04]_ required contracting with the vendor and several months of development time. As shown later in this paper, the
 functionality can be quickly put together using existing packages within the scientific python ecosystem.
 
@@ -101,9 +103,9 @@ assembly of available data from disparate sources, generation of computational g
 as generation of custom output visualizations.
 
 An explicit decision was made to avoid creation of new special-purpose libraries as much as possible and to instead enhance existing
-tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several 
-general-purpose open source packages, including support for annotating and editing plots and maps in Bokeh and 
-HoloViews, rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and Datashader, 
+tools with the capabilities required. Hence, as part of this work, extensive improvements were made to several
+general-purpose open source packages, including support for annotating and editing plots and maps in Bokeh and
+HoloViews, rendering large triangular meshes and regridding large raster data in HoloViews, GeoViews, and Datashader,
 and widget libraries for Param [Bokeh]_, [Holoviews]_, [Geoviews]_, [Datashader]_, [Param]_. In addition, two new open source projects are being released for
 triangular mesh generation and environmental data access [Filigree]_, [Quest]_.
 
@@ -117,34 +119,34 @@ The traditional workflow for building environmental simulations can be broken do
    Example of a Region of Interest sectioned into multiple polygons each with a specific material property. :label:`materials`
 
 
-1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure :ref:`materials`. 
- 
+1. Model specification: Building a human-specified conceptual model that denotes regions of interest (ROIs) and their properties. Typically, this involves drawing of points, lines and polygons to define the ROIs and define features, boundary types and material properties (land surface elevation, soil type, bottom friction, permeability, etc.). See Figure :ref:`materials`.
+
 2. Data Retrieval: Material properties, hydrology and climatology datasets are retrieved from various public web-based and local-data stores.
 
-3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an unstructured 2D triangular mesh (See Figure :ref:`mesh`). 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers. Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process. After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually. 
+3. Computational mesh generation: The ROIs are partitioned into a computational mesh that is used by the environmental simulation engine. The simulation types that we are focused on in this work use a 2D structured/regular rectangular grid or an unstructured 2D triangular mesh (See Figure :ref:`mesh`). 3D meshes are obtained by extruding the 2D mesh in the z direction in the form of layers. Initial generation of a computational mesh is typically automated and controlled by attributes in the model specification process. After this an iterative approach is used to build a high-quality mesh based on the needs of the numerical algorithms and to resolve key physical properties in certain regions. Often mesh vertices and elements need to be adjusted manually.
 
 .. figure:: images/mesh.png
 
    Example of an unstructured 2D triangular computational mesh of a river that is transected by a roadway embankment with culvert and bridge openings. :label:`mesh`
 
 4. Data gridding: Based on the model specification, any spatially varying material properties, initial conditions and time-varying forcing functions (i.e. boundary conditions) are regridded from the original data sources to the computational mesh.
-     
-5. Simulation: The computational mesh along with the re-gridded data, plus any model parameters (turbulence model, etc.) and forcings required (rainfall, etc.) needed for a specific simulation are written to files formatted for a particular environmental simulation engine. This model is then run with the simulation engine (i.e. AdH, GSSHA). For larger simulations, this is run on an HPC system. 
-     
+
+5. Simulation: The computational mesh along with the re-gridded data, plus any model parameters (turbulence model, etc.) and forcings required (rainfall, etc.) needed for a specific simulation are written to files formatted for a particular environmental simulation engine. This model is then run with the simulation engine (i.e. AdH, GSSHA). For larger simulations, this is run on an HPC system.
+
 6. Visualization/analysis: The results of environmental simulations typically consist of time varying scalar and vector fields defined on the computational mesh, stored in binary or ASCII files. Analysts first render an overall animation of each quantity as a sanity check, typically in 2D or 3D via a VTK-based Windows app in current workflows. For more detailed  analysis, analysts typically specify certain lower-dimensional subsets of this multidimensional space, such as:
 
    - Virtual measurement stations: A specific point on the Earth's surface where e.g. water level can be computed for every time point and then compared with historical data from nearby actual measurement stations
    - Cross-sections: A 1D curve across the surface of the Earth, where a vertical slice can be extracted and plotted in 2D
-   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color. 
- 
+   - Iso-surfaces: Slices through the multidimensional data where a certain value is held constant, such as salinity. Associated quantities (e.g. temperature) can then be plotted in 2D as a color.
+
    Figure :ref:`velocityfield` shows an example visualization of a water circulation field.
 
 .. figure:: images/velocity_field.png
 
    Water velocity color contours overlain with velocity quiver plot showing river flow bypassing roadway embankment. :label:`velocityfield`
 
-This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is 
-both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect 
+This overall pipeline can give very high quality results, but it takes 3-6 months to build and run a model, which is
+both expensive and also precludes the use of this approach for modeling emergent issues quickly enough to affect
 operational decisions.  Most of these stages are also locked into particular Windows-based GUI applications that are
 typically tied to execution only on specific desktop machines where they are installed. In most cases, once the model
 input files are generated, they can be manually moved to an HPC cluster and run from the command line, but then no GUI is
@@ -161,30 +163,30 @@ Compute nodes are interconnected by a 4x FDR InfiniBand Hypercube network. Onyx 
 two 2.8-GHz Intel Xeon Broadwell 22-core processors (44 cores) and 128 GBytes of DDR4 memory. Compute nodes are interconnected
 by a Cray Aries high-speed network. Both systems have dedicated GPU compute nodes available. [ERDCHPC]_
 
-Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide 
-set of assumptions and architectural decisions specific to the application domain (environmental simulation), and 
-changing any of these assumptions or decisions will typically require an extensive vendor-implemented project of 
-C/C++ software development.  These constraints make it difficult for end users who are experts in the application 
-domain (but not necessarily full-time software developers) to develop and test architectural improvements and the 
+Moreover, the tools that implement the current workflow are primarily "heavyweight" approaches that encode a wide
+set of assumptions and architectural decisions specific to the application domain (environmental simulation), and
+changing any of these assumptions or decisions will typically require an extensive vendor-implemented project of
+C/C++ software development.  These constraints make it difficult for end users who are experts in the application
+domain (but not necessarily full-time software developers) to develop and test architectural improvements and the
 effects of different modeling approaches that could be suitable for specific applications.
 
-Because much of the functionality required to implement the above workflow is already available as general-purpose 
-libraries in the Python software ecosystem, we realized that it was feasible to provide a lightweight, flexible alternative 
-for most of these stages, with rapid iterative refinement of a conceptual model, simulation on whatever hardware 
-is available, and fast, flexible, primarily 2D visualization of remote or local data in a local browser.  The idea 
-is to put power and flexibility into the hands of domain experts so that they can respond quickly and easily to 
-emerging issues that require input to help decision making throughout their organizations, without requiring a 
-lengthy period of model development and without requiring external software contractors to make basic changes to 
+Because much of the functionality required to implement the above workflow is already available as general-purpose
+libraries in the Python software ecosystem, we realized that it was feasible to provide a lightweight, flexible alternative
+for most of these stages, with rapid iterative refinement of a conceptual model, simulation on whatever hardware
+is available, and fast, flexible, primarily 2D visualization of remote or local data in a local browser.  The idea
+is to put power and flexibility into the hands of domain experts so that they can respond quickly and easily to
+emerging issues that require input to help decision making throughout their organizations, without requiring a
+lengthy period of model development and without requiring external software contractors to make basic changes to
 assumptions and modeling mechanisms. In this paper, we show how we have built such a system.
 
 EarthSim
 --------
 
 EarthSim is a website and associated GitHub repository that serves two purposes. First, it is a location to work on
-new tools before moving them into other more general purpose python libraries as they mature. Second, it contains examples of how 
+new tools before moving them into other more general purpose python libraries as they mature. Second, it contains examples of how
 to solve the common Earth Science simulation workflow and visualization problems outlined above. EarthSim aims to demonstrate building
-flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational 
-decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe. 
+flexible, lightweight workflows entirely in Jupyter notebooks with the goal of timely support for operational
+decisions, providing basic predictions of environmental conditions quickly and flexibly for any region of the globe.
 The overall goal is to provide a set of tools that work well together and with the wider scientific python ecosystem.
 EarthSim is not meant to be a one-size-fits-all solution for environmental simulation workflows but a library of tools
 that can be mixed and matched with other tools within the python ecosystem to solve problems flexibly and quickly. To that
@@ -282,7 +284,7 @@ For example, Figure :ref:`drawingtoolsoutputdata` demonstrates how USGS National
      )
    xs, ys = element.array().T
    bbox = list(gv.util.project_extents(
-       (xs[0], ys[0], xs[2], ys[1]), 
+       (xs[0], ys[0], xs[2], ys[1]),
        ccrs.GOOGLE_MERCATOR,
        ccrs.PlateCarree())
      )
@@ -290,11 +292,11 @@ For example, Figure :ref:`drawingtoolsoutputdata` demonstrates how USGS National
    collection_name = 'elevation_data'
    quest.api.new_collection(name=collection_name)
    service_features = quest.api.get_features(
-       uris='svc://usgs-ned:19-arc-second', 
+       uris='svc://usgs-ned:19-arc-second',
        filters={'bbox': bbox}
      )
    collection_features = quest.api.add_features(
-       collection=collection_name, 
+       collection=collection_name,
        features=service_features
      )
    datasets = quest.api.stage_for_download(
@@ -302,7 +304,7 @@ For example, Figure :ref:`drawingtoolsoutputdata` demonstrates how USGS National
      )
    quest.api.download_datasets(datasets=datasets)
    elevation_dataset = quest.api.apply_filter(
-       name='raster-merge', 
+       name='raster-merge',
        options={'datasets': datasets, 'bbox': bbox}
      )['datasets'][0]
    elevation_file = quest.api.get_metadata(
@@ -381,7 +383,7 @@ Using many of the tools described here, we have created a notebook workflow to s
 AdH Dambreak Workflow Example
 -----------------------------
 
-The drawing tools, coupled with AdH, allow for rapid development of dambreak simulations to analyze potential hazard situations. In this example, as seen in Figure :ref:`dambreak`, the Polygon tool is used to delineate the boundary of a watershed, a dam centerline is specified with the Path tool, and a reservoir level specified with the Point tool. 
+The drawing tools, coupled with AdH, allow for rapid development of dambreak simulations to analyze potential hazard situations. In this example, as seen in Figure :ref:`dambreak`, the Polygon tool is used to delineate the boundary of a watershed, a dam centerline is specified with the Path tool, and a reservoir level specified with the Point tool.
 
 .. figure:: images/dambreak.png
 
@@ -389,7 +391,7 @@ The drawing tools, coupled with AdH, allow for rapid development of dambreak sim
 
 Data from all three user-specified data sources can also be accessed and described via tables that are dynamically linked to the drawing. Additionally, Param widgets allow for users to specify the reservoir level as either a water depth or an elevation and whether to use an existing inital water depth file.
 
-Available elevation data to describe the watershed is collected via Quest. Filigree is then called to develop a unstructured 2D triangular mesh within the boundary polygon. Using the basic information about the dam and the dynamically generated mesh, a reservoir is created behind the dam centerline. This is achieved by setting AdH water depths on the mesh to reflect the reservoir level. AdH then simulates the instantaneous breaching of the dam. The resulting simulation of water depths over time can then be visualized in the drawing tools as an animation. 
+Available elevation data to describe the watershed is collected via Quest. Filigree is then called to develop a unstructured 2D triangular mesh within the boundary polygon. Using the basic information about the dam and the dynamically generated mesh, a reservoir is created behind the dam centerline. This is achieved by setting AdH water depths on the mesh to reflect the reservoir level. AdH then simulates the instantaneous breaching of the dam. The resulting simulation of water depths over time can then be visualized in the drawing tools as an animation.
 
 Coastline Extraction (GrabCut) Workflow Example
 -----------------------------------------------

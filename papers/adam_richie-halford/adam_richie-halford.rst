@@ -8,6 +8,8 @@
 
 :bibliography: mybib
 
+:video: https://youtu.be/D9LPzqoZ3f8
+
 ------------------------------------------------------------------
 Cloudknot: A Python Library to Run your Existing Code on AWS Batch
 ------------------------------------------------------------------

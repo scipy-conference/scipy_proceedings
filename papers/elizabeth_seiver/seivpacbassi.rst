@@ -57,7 +57,7 @@ What is allofplos?
 
 ``allofplos`` is a Python package for downloading and maintaining up-to-date
 scientific article corpora, as well as parsing PLOS XML articles in the JATS
-(Journal Article Tag Suite) [jats]_ format. It is available on PyPI [allofplospypi]_ 
+(Journal Article Tag Suite) [jats]_ format. It is available on PyPI [allofplospypi]_
 as well as a GitHub repository [allofplosgh]_. Many existing
 Python packages for parsing XML and/or JATS focus on defensive parsing, where
 the structure is assumed not to be reliable or the document is immediately
@@ -84,7 +84,7 @@ specifying ``$PLOS_CORPUS`` will ensure that the article data will not be overwr
 when you update the ``allofplos`` package, as the default location is within the
 package. (Forking/cloning the GitHub repository avoids this problem, because the
 default corpus location is in the ``.gitignore`` file.)
-  
+
 
 .. code-block:: python
 
@@ -93,8 +93,8 @@ default corpus location is in the ``.gitignore`` file.)
     from allofplos import update
     update.main()
 
-Downloading new articles can also be accessed via the command line:: 
-  
+Downloading new articles can also be accessed via the command line::
+
     $ export PLOS_CORPUS="path/to/corpus_directory"
     $ python -m allofplos.update
 
@@ -123,10 +123,10 @@ allofplos at the directory of articles to be analyzed.
 
 
 .. code-block:: python
-  
+
    from allofplos import Corpus
    corpus = Corpus()
-   
+
 To analyze the starter directory, also import ``starterdir`` and set ``corpus =
 Corpus(starterdir)``. The number of articles in the corpus can be found with
 ``len(corpus)``. The list of every DOI for every article in the corpus can be
@@ -162,10 +162,10 @@ The lxml tree of the article is memoized in ``art.tree`` so it can be repeatedly
 called without needing to re-read the XML file.
 
 .. code-block:: python
-    
+
     >>> type(art.tree)
     lxml.etree._ElementTree
-    
+
 Article parsing in ``allofplos`` focuses on metadata (e.g., article title, author
 names and institutions, date of publication, Creative Commons copyright
 license [cc]_, JATS version/DTD), which are conveniently located in the ``front``
@@ -173,7 +173,7 @@ section of the XML. We designed the parsing API to quickly locate and parse XML
 elements as properties without needing to know the JATS tagging format.
 
 .. code-block:: python
-    
+
     >>> art.doi
     '10.1371/journal.pcbi.1004692'
     >>> art.title
@@ -184,7 +184,7 @@ elements as properties without needing to know the JATS tagging format.
     datetime.datetime(2016, 2, 4, 0, 0)
     >>> art.license
     {'license': 'CC-BY 4.0',
-     'license_link': 
+     'license_link':
          'https://creativecommons.org/licenses/by/4.0/',
      'copyright_holder': 'Takemura et al',
      'copyright_year': 2016}
@@ -207,7 +207,7 @@ which also works well for finding article elements that are not Article class
 properties, such as the acknowledgments, which have the tag ``<ack>``.
 
 .. code-block:: python
-  
+
     >>> acknowledge = art.tree.xpath('//ack/p')[0]
     >>> acknowledge.text[:41]
     'We thank Ariel Rokem and Jason D. Yeatman'
@@ -215,12 +215,12 @@ properties, such as the acknowledgments, which have the tag ``<ack>``.
 For users who are more familiar with XML or want to perform quality control checks on
 XML files, XPath searches can find articles that match a particular XML structure. For
 example, PLOS's production team needed to find articles that had a ``<list>``
-item anywhere within a ``<boxed-text>`` element. They iterated through the corpus using 
+item anywhere within a ``<boxed-text>`` element. They iterated through the corpus using
 ``art.tree.xpath('//boxed-text//list')``.
 
 Use case: searching Methods sections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  
+
 We can put these pieces together to make a list of articles that use PCR (Polymerase
 Chain Reaction, a common molecular biology technique) in their Methods section
 (``pcr_list``). The body of an article is divided into sections
@@ -245,7 +245,7 @@ elements into Python strings via the ``tostring()`` method.
         for sec in methods_sections:
 
             # Step 2: turn the method sections into strings
-            method_string = et.tostring(sec, method='text', 
+            method_string = et.tostring(sec, method='text',
                                         encoding='unicode')
 
             # Step 3: add DOI if 'PCR' in string
@@ -281,7 +281,7 @@ For example, to get all papers whose corresponding authors are from France:
     JOIN coauthorplosarticle ON
     coauthorplosarticle.article_id = plosarticle.id
     JOIN correspondingauthor ON
-    (correspondingauthor.id = 
+    (correspondingauthor.id =
     coauthorplosarticle.corr_author_id)
     JOIN country ON
     country.id = correspondingauthor.country_id
@@ -289,9 +289,9 @@ For example, to get all papers whose corresponding authors are from France:
 
 This will return the DOIs from three papers from the starter database::
 
-    10.1371/journal.pcbi.1004152  
-    10.1371/journal.ppat.1000105  
-    10.1371/journal.pgen.1002912  
+    10.1371/journal.pcbi.1004152
+    10.1371/journal.ppat.1000105
+    10.1371/journal.pgen.1002912
     10.1371/journal.pcbi.1004082
 
 The researcher can avoid using SQL queries by using the included
@@ -312,7 +312,7 @@ outlined before:
          .join(Coauthorplosarticle)
          .join(Correspondingauthor)
          .join(Country)
-         .join(Journal, 
+         .join(Journal,
                on=(Plosarticle.journal == Journal.id))
          .where(Country.country == 'France')
          )
@@ -324,7 +324,7 @@ loop as any Python iterable:
 
     for papers in query:
       print(papers.doi)
-    
+
 
 SQLite database constructor
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -348,7 +348,7 @@ DB with 500 articles randomly selected, use::
 Future directions
 -----------------
 
-We also have plans for future updates to allofplos. First, we plan to make the article 
+We also have plans for future updates to allofplos. First, we plan to make the article
 parsing publisher-neutral, allowing for reading JATS content from other publishers
 in addition to PLOS. Second, we want to improve incremental corpus updates so that all
 changes can be downloaded and updated via a standardized mechanism such as a hash

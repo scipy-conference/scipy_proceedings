@@ -3,6 +3,8 @@
 :institution: Johns Hopkins Applied Physics Laboratory
 :bibliography: mybib
 
+:video: https://youtu.be/1ndo6C1KWjI
+
 ----------------------------------------
 Bringing ipywidgets Support to plotly.py
 ----------------------------------------

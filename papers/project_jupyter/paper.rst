@@ -74,6 +74,7 @@
 :equal-contributor:
 :bibliography: binderbib
 
+:video: https://youtu.be/KcC0W5LP9GM
 
 ===================================================================================
 Binder 2.0 - Reproducible, interactive, sharable environments for science at scale

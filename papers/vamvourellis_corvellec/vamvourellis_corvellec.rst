@@ -9,6 +9,8 @@
 
 :bibliography: library
 
+:video: https://youtu.be/piQvcVala9I
+
 --------------------------------------------------
 A Bayesian’s journey to a better research workflow
 --------------------------------------------------

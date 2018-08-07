@@ -17,7 +17,8 @@
 :institution: Intel Corporation
 
 :year: 2018
-:video: Unknown yet
+
+:video: https://youtu.be/HKjM3peINtw
 
 ---------------------------------------------------------------------
 Composable Multi-Threading and Multi-Processing for Numeric Libraries
@@ -282,7 +283,7 @@ The TBB IPC module should be enabled manually via explicit command line key :cod
 
 3. Evaluation
 -------------
-The results for this paper were acquired on a 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4 @ 
+The results for this paper were acquired on a 2-socket system with Intel |R| Xeon |R| CPU E5-2699 v4 @
 2.20GHz (22 cores * 2 hyper-threads) and 256GB DDR4 @ 2400 MHz. This system consists of 88 hardware threads in total.
 
 For our experiments, we used [Miniconda]_ distribution along with the packages of

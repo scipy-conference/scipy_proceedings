@@ -7,6 +7,7 @@
 :email: hofmann@mapbox.com
 :institution: Mapbox
 
+:video: https://youtu.be/3AuRW9kq89g
 
 --------------------------------------------------------------
 Scalable Feature Extraction with Aerial and Satellite Imagery
@@ -43,7 +44,7 @@ The general design for our deep learning based computer vision pipelines can be 
    :width:  200 px
    :scale: 32 %
 
-   Computer Vision Pipeline. 
+   Computer Vision Pipeline.
 
 
 1. Data
@@ -77,7 +78,7 @@ The turn lane marking training set is created by collecting imagery of various t
    :height: 150 px
    :width: 150 px
    :scale: 37 %
-   
+
    Annotating turn lane markings by drawing bounding boxes.
 
 

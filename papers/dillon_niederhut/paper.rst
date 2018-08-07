@@ -3,7 +3,7 @@
 :institution: Enthought, Inc.
 :corresponding:
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://youtu.be/2gkw2T5jAfo
 
 -------------------------------------------
 Safe handling instructions for missing data
@@ -197,7 +197,7 @@ We include here guidelines for researchers to use when handling missing data to 
 Case Study
 ----------
 
-We can illustrate the use of these guidelines with a real-world case study. The data we'll use is from Scott Cole's open source dataset on burrito quality in San Diego[#]_. The dataset consists of approximately 400 ratings of burritos from different restaurants within San Diego, where the ratings for each burrito include five point Likert scores for overall quality, cost, mean, uniformity, salsa, and wrap (the tortilla). The dataset also includes indicator variables for the presence of various ingredients in the burritos, including common ingredients like beans and avocado, and uncommon ones, like sushi and taquitos.
+We can illustrate the use of these guidelines with a real-world case study. The data we'll use is from Scott Cole's open source dataset on burrito quality in San Diego [#]_. The dataset consists of approximately 400 ratings of burritos from different restaurants within San Diego, where the ratings for each burrito include five point Likert scores for overall quality, cost, mean, uniformity, salsa, and wrap (the tortilla). The dataset also includes indicator variables for the presence of various ingredients in the burritos, including common ingredients like beans and avocado, and uncommon ones, like sushi and taquitos.
 
 The indicator variables were recoded to work with scikit-learn, and the Likert scores were normalized on a per-rater basis to increase the inter-rater reliability. This brought the dataset down to an effective size of 231 observations. We then used a decision tree (with no hyperparameter tuning) to generate a reference model for predicting overall burrito quality given the individual ratings and presence/absence of ingredients.
 
