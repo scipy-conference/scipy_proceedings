@@ -22,6 +22,7 @@
 
 :bibliography: mybib
 
+:video: https://youtu.be/2GTLkH5sfJc
 
 ---------------------------------
 Practical Applications of Astropy
@@ -519,7 +520,7 @@ the frequency, bandwidth and photon occupation number at that frequency:
 
     NEP = h\nu \sqrt{\Delta\nu \bar{n} (\bar{n} + 1)}
 
-where the bandwidth :math:`\Delta\nu = \nu / R` and :math:`R` is the 
+where the bandwidth :math:`\Delta\nu = \nu / R` and :math:`R` is the
 spectrometer resolution.
 In the instrument sensitivity function, this is implemented with an
 assertion to check units at an intermediate stage:
@@ -614,4 +615,3 @@ This work has made use of data from the European Space Agency (ESA) mission Gaia
 Analysis Consortium (DPAC, https://www.cosmos.esa.int/web/gaia/dpac/consortium).
 Funding for the DPAC has been provided by national institutions, in particular
 the institutions participating in the Gaia Multilateral Agreement.
-

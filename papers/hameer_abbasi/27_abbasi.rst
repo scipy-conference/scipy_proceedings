@@ -4,7 +4,7 @@
 :corresponding:
 :bibliography: references
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://youtu.be/xH5eVcb1SlA
 
 ------------------------------------------
 Sparse: A more modern sparse array library

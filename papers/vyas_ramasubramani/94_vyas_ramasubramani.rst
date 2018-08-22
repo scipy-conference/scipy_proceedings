@@ -23,6 +23,8 @@
 
 :bibliography: paper
 
+:video: https://youtu.be/CCKQH1M2uR4
+
 -----------------------------------------------------------
 signac: A Python framework for data and workflow management
 -----------------------------------------------------------
@@ -100,7 +102,7 @@ Overview and Examples
    In this example, all work is conducted inside a Jupyter :cite:`PER-GRA:2007,Kluyver:2016aa` notebook to indicate how easily this can be done.
    Note how fewer than ten lines of code are required to initialize a database and add data.
    :label:`fig:data`
-   
+
 .. TODO not sure the Jupyter references are shown as intended. I'd expect [..., ...]
 
 To demonstrate how ``signac`` works, we take a simple, concrete example of the scenario described above.
@@ -166,7 +168,7 @@ For example, searching the database using the command line can be very useful fo
     22fa30ddf3cc90b1b79d19fa7385bc95
     9fa1900a378aa05b9fd3d89f11ef0e5b
 
-    $ # More complex queries can be constructed 
+    $ # More complex queries can be constructed
     $ # using JSON directly
     $ signac find '{"theta": {"$in": [0, 0.78]}}'
     2faf0f76bde3af984a91b5e42e0d6a0b
@@ -200,7 +202,7 @@ Workflows
 The ``signac`` database is intended to be usable as a drop-in solution for data management issues.
 The ``signac`` framework, however, is designed to simplify the entire process of data generation, which includes clearly defining the processes that generate and operate on the data cleanly and concisely.
 To manage workflows, the ``signac-flow`` component of the framework provides the ``FlowProject`` class (not to be confused with the ``signac`` ``Project`` class that interfaces with the data in a ``signac`` project).
-The ``FlowProject`` encodes operations acting on ``signac`` data spaces as well as the sequence information required to string these operations together into a complete workflow. 
+The ``FlowProject`` encodes operations acting on ``signac`` data spaces as well as the sequence information required to string these operations together into a complete workflow.
 In Fig. :ref:`fig:ops`, we demonstrate how ``signac-flow`` can be used to automate our projectile investigation.
 
 .. figure:: run_ops.pdf
@@ -221,7 +223,7 @@ In this case, we simply look for the ``tmax`` key in the job document using the 
 Note the ``FlowProject.label`` decorator for this function; we will discuss this in further detail below.
 
 Although this particular example is quite simple, in principle any workflow that can be represented by a directed graph may be encoded and executed using ``signac-flow``.
-In the context of ``signac-flow``, individual operations are the nodes of a graph, and the pre- or post-conditions associated with each operation determine the vertices. 
+In the context of ``signac-flow``, individual operations are the nodes of a graph, and the pre- or post-conditions associated with each operation determine the vertices.
 To simplify running such workflows, by default the ``project.py run`` interface demonstrated in Fig. :ref:`fig:ops` will automatically run the entire workflow for every job in the workspace.
 When conditions are defined in the manner shown above, ``signac-flow`` will ensure that only incomplete tasks are run, i.e., in this example, once ``tmax`` has been calculated for a particular job, the ``calculate`` operation will not run again for that job.
 Rather than running everything at once, it is also possible to exercise more fine-grained control over which operations to run using ``signac-flow``:
