@@ -22,6 +22,7 @@ proc_conf  = conf.proc_conf
 dirs       = conf.dirs
 xref_conf = conf.xref_conf
 papers_dir = conf.papers_dir
+is_final = conf.status_file_base == 'ready'
 
 
 
@@ -40,7 +41,7 @@ def paper_stats(paper_id, start, doi_prefix=None):
     stats.update({'page': {'start': start,
                            'stop': stop},
                   'paper_id': paper_id,
-                  'doi': paper_doi
+                  'doi': paper_doi if is_final else ''
                  })
 
     return stats
@@ -72,7 +73,7 @@ if __name__ == "__main__":
     # load completed TOC
     toc = {'toc': toc_entries}
     # make doi for this year's proceedings and for whole conference (static)
-    scipy_entry['proceedings']['doi'] = make_doi(doi_prefix)
+    scipy_entry['proceedings']['doi'] = make_doi(doi_prefix) if is_final else ''
     scipy_entry['series']['doi'] = make_series_doi(doi_prefix, issn)
 
     # persist metadata
