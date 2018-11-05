@@ -1,275 +1,267 @@
 {
- "proceedings": {
-  "volume": 4,
-  "number": 1,
-  "year": "2018",
-  "editor": [
-   "Fatih Akici",
-   "David Lippa",
-   "Dillon Niederhut",
-   "M Pacer"
+  "proceedings": {
+     "citation_key": "proc-scipy-2016",
+     "title": {
+       "acronym": "SciPy",
+       "conference": "Python in Science Conference",
+       "ordinal": "15th",
+       "short": "PROC. OF THE 15th PYTHON IN SCIENCE CONF. (SCIPY 2016)",
+       "full": "Proceedings of the 15th Python in Science Conference"
+     },
+     "year": "2016",
+     "editor": [
+        "Sebastian Benthall",
+        "Scott Rostrup"
+     ],
+     "volume": 1,
+     "number": 1,
+     "isbn": "value",
+     "location": "Austin, Texas",
+     "dates": "July 11 - July 17",
+     "copyright": {
+       "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+       "proceedings": ["The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+                       "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+                       "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"],
+       "license": "Creative Commons Attribution License (CCAL)"}
+  },
+  "organization": [
+
+      {
+            "name": "Conference Chairs",
+            "members": [
+                {"name": "Aric Hagberg",
+                 "org": "Los Alamos National Laboratory"},
+                {"name": "Prabhu Ramanchandran",
+                 "org": "Enthought, Inc. & IIT Bombay"}
+                ]
+        },
+
+        {
+            "name": "Program",
+            "members": [
+                {"name": "Serge Rey",
+                 "org": "Arizona State University"},
+                {"name": "Nelle Varoquaux",
+                 "org": "Mines ParisTech, Institut Curie, INSERM"}
+                ]
+        },
+
+        {
+            "name": "Communications",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+
+        {
+            "name": "Birds of a Feather",
+            "members": [
+                {"name": "Aashish Chaudhary",
+                 "org": "Kitware"},
+                {"name": "Mike Hearne",
+                 "org": "USGS"}
+                ]
+        },
+
+        {
+            "name": "Proceedings",
+            "members": [
+                {"name": "Sebastian Benthall",
+                 "org": "University of Califronia - Berkeley"},
+                {"name": "Scott Rostrup",
+                 "org": "AI and Robotics Startup"}
+                ]
+        },
+
+        {
+            "name": "Financial Aid",
+            "members": [
+                {"name": "Scott Collis",
+                 "org": "Argonne National Laboratory"},
+                {"name": "Eric Ma",
+                 "org": "MIT"}
+                ]
+        },
+
+        {
+            "name": "Tutorials",
+            "members": [
+                {"name": "Ben Root",
+                 "org": "Atmospheric and Environmental Research, Inc."},
+                {"name": "Justin Vincent",
+                 "org": "Google"}
+                ]
+        },
+
+        {
+            "name": "Sprints",
+            "members": [
+                {"name": "Andrew Collette",
+                 "org": "Enthough Inc."},
+                {"name": "Dharhas Pothina",
+                 "org": "US Army Corps of Engineers, ERDC"}
+                ]
+        },
+
+        {
+            "name": "Diversity",
+            "members": [
+                {"name": "Julie Krugler Hollek",
+                 "org": "Twitter"}
+                ]
+        },
+
+        {
+            "name": "Activities",
+            "members": [
+                {"name": "Chris Niemira",
+                 "org": "AOL"},
+                {"name": "Randy Paffenroth",
+                 "org": "Worcester Polytechnic Institute"
+                }
+                ]
+        },
+
+        {
+            "name": "Sponsors",
+            "members": [
+                {"name": "Jill Cowan",
+                 "org": "Enthought"}
+                ]
+        },
+
+        {
+            "name": "Financial",
+            "members": [
+                {"name": "Bill Cowan",
+                 "org": "Enthought"},
+                {"name": "Jodi Havranek",
+                 "org": "Enthought"}
+                ]
+        },
+
+      {
+          "name" : "Logistics",
+          "members" : [
+              {"name": "Jill Cowan",
+               "org": "Enthought"},
+              {"name": "Leah Jones",
+               "org": "Enthought"}
+              ]
+      },
+      {
+          "name" : "Proceedings Reviewers",
+          "members" : [
+              {"name" : "Tom Aldcroft"},
+              {"name" : "Ankur Ankan"},
+              {"name" : "Dani Arribas-Bel"},
+              {"name" : "Kyle Barbary"},
+              {"name" : "Sebastian Benthall"},
+              {"name" : "Matthias Bussonier"},
+              {"name" : "Chris Calloway"},
+              {"name" : "Ondrej Certík"},
+              {"name" : "Dav Clark"},
+              {"name" : "Matthew Collier"},
+              {"name" : "Jean Connelly"},
+              {"name" : "Ben Darwin"},
+              {"name" : "Juan Duque"},
+              {"name" : "Carson Farmer"},
+              {"name" : "David Folch"},
+              {"name" : "Chris Fonnesbeck"},
+              {"name" : "Matt Hall"},
+              {"name" : "Katy Huff"},
+              {"name" : "Hans Peter Langtangen"},
+              {"name" : "Dan Lewis"},
+              {"name" : "David Lippa"},
+              {"name" : "Matthew McCormick"},
+              {"name" : "Kyle Niemeyer"},
+              {"name" : "Mike Pacer"},
+              {"name" : "Randy Paffenroth"},
+              {"name" : "Florian Rathgeber"},
+              {"name" : "Thomas Robitaille"},
+              {"name" : "Matthew Rocklin"},
+              {"name" : "Scott Rostrup"},
+              {"name" : "Dan Schult"},
+              {"name" : "Skipper Seabold"},
+              {"name" : "Bill Spotz"},
+              {"name" : "Jordan Suchow"},
+              {"name" : "Erik Tollerud"},
+              {"name" : "Jake Vanderplas"},
+              {"name" : "Bryan W. Weber"}
+          ]
+      }
   ],
-  "doi": "10.25080/dniederhut-mbp-96aba8a-012",
-  "editor_email": [
-   "akicifatih@gmail.com",
-   "dalippa@gmail.com",
-   "dillon.niederhut@gmail.com",
-   "mpacer.phd@gmail.com"
-  ],
-  "citation_key": "proc-scipy-2018",
-  "title": {
-   "conference": "Python in Science Conference",
-   "acronym": "SciPy",
-   "short": "PROC. OF THE 17th PYTHON IN SCIENCE CONF. (SCIPY 2018)",
-   "ordinal": "17th",
-   "full": "Proceedings of the 17th Python in Science Conference"
-  },
-  "xref": {
-   "depositor_name": "Dillon Niederhut",
-   "depositor_email": "dniederhut@enthought.com",
-   "registrant": "Crossref",
-   "resource_url": "https://conference.scipy.org/proceedings",
-   "prefix": "10.25080"
-  },
-  "dates": "July 9 - July 15",
-  "isbn": "noisbn",
-  "location": "Austin, Texas",
-  "copyright": {
-   "proceedings": [
-    "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
-    "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-    "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
-   ],
-   "license": "Creative Commons Attribution License (CCAL)",
-   "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited."
-  }
- },
- "organization": [
-  {
-   "name": "Conference Chairs",
-   "members": [
-    {
-     "org": "Enthought Inc. & IIT Bombay",
-     "name": "Prabhu Ramachandran"
-    },
-    {
-     "org": "Arizona State University",
-     "name": "Serge Rey"
-    }
-   ]
-  },
-  {
-   "name": "Program Chairs",
-   "members": [
-    {
-     "org": "George Washington University",
-     "name": "Lorena Barba"
-    },
-    {
-     "org": "George Washington University",
-     "name": "Gil Forsyth"
-    }
-   ]
-  },
-  {
-   "name": "Communications",
-   "members": [
-    {
-     "org": "Bloomberg",
-     "name": "Paul Ivanov"
-    }
-   ]
-  },
-  {
-   "name": "Birds of a Feather",
-   "members": [
-    {
-     "org": "Berkeley Institute for Data Science",
-     "name": "Nelle Varoquaux"
-    },
-    {
-     "org": "Deep Mind",
-     "name": "Jessica Hamrick"
-    }
-   ]
-  },
-  {
-   "name": "Proceedings",
-   "members": [
-    {
-     "org": "ACE Cash Express",
-     "name": "Fatih Akici"
-    },
-    {
-     "org": "Amazon",
-     "name": "David Lippa"
-    },
-    {
-     "org": "Enthought",
-     "name": "Dillon Niederhut"
-    },
-    {
-     "org": "Netflix",
-     "name": "M Pacer"
-    }
-   ]
-  },
-  {
-   "name": "Financial Aid",
-   "members": [
-    {
-     "org": "CONICET",
-     "name": "Celia Cintas"
-    },
-    {
-     "org": "Argonne National Laboratory",
-     "name": "Scott Collis"
-    },
-    {
-     "org": "Los Alamos National Laboratory",
-     "name": "Pat Kelly"
-    },
-    {
-     "org": "MIT",
-     "name": "Eric Ma"
-    }
-   ]
-  },
-  {
-   "name": "Tutorials",
-   "members": [
-    {
-     "org": "Enthought",
-     "name": "Alexandre Chabot-Leclerc"
-    },
-    {
-     "org": "USGS",
-     "name": "Mike Hearne"
-    },
-    {
-     "org": "Atmospheric and Environmental Research, Inc.",
-     "name": "Ben Root"
-    }
-   ]
-  },
-  {
-   "name": "Sprints",
-   "members": [
-    {
-     "org": "University Corporation for Atmospheric Research",
-     "name": "Ryan May"
-    },
-    {
-     "org": "KBI Biopharma",
-     "name": "Jonathan Rocher"
-    },
-    {
-     "org": "Lewis University and The Recurse Center",
-     "name": "Charlye Tran"
-    }
-   ]
-  },
-  {
-   "name": "Diversity",
-   "members": [
-    {
-     "org": "Capital One",
-     "name": "Jackie Kazil"
-    },
-    {
-     "org": "Twitter",
-     "name": "Julie Krugler Hollek"
-    }
-   ]
-  },
-  {
-   "name": "Activities",
-   "members": [
-    {
-     "org": "Oregon State University",
-     "name": "Kyle Niemeyer"
-    },
-    {
-     "org": "Enthought",
-     "name": "Julia Pasquarella"
-    }
-   ]
-  },
-  {
-   "name": "Sponsors",
-   "members": [
-    {
-     "org": "Enthought",
-     "name": "Jill Cowan"
-    }
-   ]
-  },
-  {
-   "name": "Financial",
-   "members": [
-    {
-     "org": "Enthought",
-     "name": "Bill Cowan"
-    },
-    {
-     "org": "Enthought",
-     "name": "Jodi Havranek"
-    }
-   ]
-  },
-  {
-   "name": "Logistics",
-   "members": [
-    {
-     "org": "Enthought",
-     "name": "Jill Cowan"
-    },
-    {
-     "org": "Enthought",
-     "name": "Leah Jones"
-    }
-   ]
-  },
-  {
-   "name": "Proceedings Reviewers",
-   "members": [
-    {
-     "name": ""
-    },
-    {
-     "name": ""
-    }
-   ]
-  }
- ],
- "scipy_scholarship": [
-  {
-   "org": "",
-   "name": ""
-  },
-  {
-   "org": "",
-   "name": ""
-  }
- ],
- "diversity_scholarship": [
-  {
-   "org": "",
-   "name": ""
-  },
-  {
-   "org": "",
-   "name": ""
-  }
- ],
- "series": {
-  "xref": {
-   "issn": "2575-9752",
-   "resource_url": "https://conference.scipy.org/proceedings"
-  },
-  "title": {
-   "full": "Proceedings of the Python in Science Conference"
-  },
-  "doi": "10.25080/issn.2575-9752"
- }
+
+  "sponsored_students": [
+      {
+          "name": "Filipe Fernandes",
+          "org": "SECOORA",
+      },
+      {
+          "name": "Isuru Fernando",
+          "org": "University of Moratuwa",
+      },
+      {
+          "name": "Gilbert Forsyth",
+          "org": "George Washington University",
+      },
+      {
+          "name": "Kestrel Gorlick",
+          "org": "Northern Arizona University",
+      },
+      {
+          "name": "Deborah Hanus",
+          "org": "Harvard University",
+      },
+      {
+          "name": "Matar Haller",
+          "org": "UC Berkeley",
+      },
+      {
+          "name": "Noelle Held",
+          "org": "MIT-WHOI Joint Program in Oceanography",
+      },
+      {
+          "name": "Amit Kumar",
+          "org": "SymPy",
+      },
+      {
+          "name": "Nelson Liu",
+          "org": "University of Washington",
+      },
+      {
+          "name": "Taylor Oshan",
+          "org": "Arizona State University/Python Spatial Analysis Library",
+      },
+      {
+          "name": "Thomas Robitaille",
+          "org": "Freelance",
+      },
+      {
+          "name": "Sartaj Singh",
+          "org": "SymPy",
+      },
+      {
+          "name": "Aman Singh",
+          "org": "Scipy",
+      },
+      {
+          "name": "Lois Smith",
+          "org": "University of Michigan",
+      },
+      {
+          "name": "Elizabeth Wickes",
+          "org": "University of Illinois at Urbana-Champaign",
+      },
+      {
+          "name": "Pamela Wu",
+          "org": "NYU Medical Center",
+      },
+      {
+          "name": "V. Zachary",
+          "org": "Golkhou ASU",
+      }
+  ]
 }
