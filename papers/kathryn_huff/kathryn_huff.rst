@@ -599,11 +599,11 @@ Minimal Example: Input Parameters
 *********************************
 
 The parameters used to configure the simulation were
-retrieved from :ref:`Ragusa2009` and :ref:`Sofu2015`.  The detailed input is 
+retrieved from :ref:`Ragusa2009` and :ref:`Sofu2015`.  The detailed input is
 listed in the full input file with illuminating comments as
 follows:
 
-.. include:: ../papers/kathryn_huff/min_ex.txt
+.. include:: papers/kathryn_huff/min_ex.txt
 
 Minimal Example Results
 ***********************
