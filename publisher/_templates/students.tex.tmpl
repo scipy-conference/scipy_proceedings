@@ -11,20 +11,7 @@
 
 \begin{itemize}
 
-{{for student in scipy_scholarship}}
-      \item[] \normalsize\textsc{%
-{{student['name']}}}, \small{%
-{{student['org']}}}
-{{endfor}}
-
-\end{itemize}
-
-\section*{Jump Trading and NumFOCUS Diversity Scholarship Recipients}
-\vspace{4mm}
-
-\begin{itemize}
-
-{{for student in diversity_scholarship}}
+{{for student in sponsored_students}}
       \item[] \normalsize\textsc{%
 {{student['name']}}}, \small{%
 {{student['org']}}}
