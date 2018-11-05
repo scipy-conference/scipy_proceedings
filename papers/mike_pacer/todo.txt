@@ -1,0 +1,9 @@
+todo.txt
+
+Need to edit the probabilistic sampling examples
+
+reduce length
+
+possibly add figures?
+
+add section on techniques for probabilsitic sampling from discrete BNs in NetworkX
