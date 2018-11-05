@@ -1,13 +1,11 @@
 {
   "proceedings": {
-    "isbn": "value",
-    "number": 1,
-    "xref": {
-      "registrant": "Crossref",
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_email": "dniederhut@enthought.com",
-      "prefix": "10.25080",
-      "depositor_name": "Dillon Niederhut"
+    "title": {
+      "short": "PROC. OF THE 14th PYTHON IN SCIENCE CONF. (SCIPY 2015)",
+      "conference": "Python in Science Conference",
+      "acronym": "SciPy",
+      "full": "Proceedings of the 14th Python in Science Conference",
+      "ordinal": "14th"
     },
     "copyright": {
       "proceedings": [
@@ -18,188 +16,33 @@
       "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
       "license": "Creative Commons Attribution License (CCAL)"
     },
-    "editor_email": [],
-    "dates": "July 6 - 12",
-    "title": {
-      "full": "Proceedings of the 14th Python in Science Conference",
-      "conference": "Python in Science Conference",
-      "acronym": "SciPy",
-      "short": "PROC. OF THE 14th PYTHON IN SCIENCE CONF. (SCIPY 2015)",
-      "ordinal": "14th"
+    "xref": {
+      "registrant": "Crossref",
+      "depositor_email": "dniederhut@enthought.com",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "prefix": "10.25080",
+      "depositor_name": "Dillon Niederhut"
     },
-    "location": "Austin, Texas",
+    "doi": "10.25080/Majora-7b98e3ed-01e",
+    "year": "2015",
+    "isbn": "value",
+    "dates": "July 6 - 12",
+    "editor_email": [],
+    "volume": 8,
+    "number": 1,
+    "citation_key": "proc-scipy-2015",
     "editor": [
       "Kathryn Huff",
       "James Bergstra"
     ],
-    "citation_key": "proc-scipy-2015",
-    "year": "2015",
-    "volume": 8,
-    "doi": "10.25080/Majora-075e9791-01e"
-  },
-  "sponsored_students": [
-    {
-      "org": "University of California - Davis",
-      "name": "Azalee Bostroem",
-      "location": ""
-    },
-    {
-      "org": "University of Texas - Tyler",
-      "name": "Pilar Brist",
-      "location": ""
-    },
-    {
-      "org": "VisPy",
-      "name": "Luke Campagnola",
-      "location": ""
-    },
-    {
-      "org": "University of Rochester Medical Center",
-      "name": "Lesley Chapman",
-      "location": ""
-    },
-    {
-      "org": "Federal University of Espirito Santo",
-      "name": "Roberto Colistete Junior",
-      "location": ""
-    },
-    {
-      "org": "EDSPI France",
-      "name": "Yannick Congo",
-      "location": ""
-    },
-    {
-      "org": "University of Minnesota",
-      "name": "Mellissa Cross",
-      "location": ""
-    },
-    {
-      "org": "SECOORA",
-      "name": "Filipe Fernandes",
-      "location": ""
-    },
-    {
-      "org": "RepsWith.us",
-      "name": "Gabriel Grant",
-      "location": ""
-    },
-    {
-      "org": "SymPy",
-      "name": "Harsh Gupta",
-      "location": ""
-    },
-    {
-      "org": "Brigham Young University",
-      "name": "Ian Henriksen",
-      "location": ""
-    },
-    {
-      "org": "European Molecular Biology Laboratory",
-      "name": "Jaime Huerta-Cepas",
-      "location": ""
-    },
-    {
-      "org": "Universite de Montreal",
-      "name": "Kyle Kastner",
-      "location": ""
-    },
-    {
-      "org": "Universidade Federal de Bahia",
-      "name": "Juliana Leonel",
-      "location": ""
-    },
-    {
-      "org": "Massachusetts Institute of Technology",
-      "name": "Eric Ma",
-      "location": ""
-    },
-    {
-      "org": "George Mason University",
-      "name": "Shaylyn Scott",
-      "location": ""
-    },
-    {
-      "org": "PyLadies",
-      "name": "Liz Streckert",
-      "location": ""
-    },
-    {
-      "org": "NetworkX",
-      "name": "Jordi Torrents",
-      "location": ""
-    },
-    {
-      "org": "University of Texas at Dallas",
-      "name": "David Urbina",
-      "location": ""
-    },
-    {
-      "org": "University of Chicago",
-      "name": "Alexander Vostrikov",
-      "location": ""
-    },
-    {
-      "org": "Universite de Montreal",
-      "name": "David Warde-Farley",
-      "location": ""
-    },
-    {
-      "org": "Mayo Clinic",
-      "name": "Joshua Warner",
-      "location": ""
-    },
-    {
-      "org": "The Salk Institute for Biological Studies",
-      "name": "Avani Wildani",
-      "location": ""
-    },
-    {
-      "org": "Arizona State University",
-      "name": "Levi Wolf",
-      "location": ""
-    },
-    {
-      "org": "Shengjing Hospital of China Medical University",
-      "name": "Chuan Yang",
-      "location": ""
-    },
-    {
-      "org": "Girl Scouts of Eastern Mass.",
-      "name": "Amy Prager",
-      "location": ""
-    },
-    {
-      "org": "University of Minnesota",
-      "name": "Dana Engebretson",
-      "location": ""
-    },
-    {
-      "org": "PyLadies",
-      "name": "Leena P",
-      "location": ""
-    },
-    {
-      "org": "University of San Francisco",
-      "name": "Nikhil Haas",
-      "location": ""
-    }
-  ],
-  "series": {
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
-    },
-    "xref": {
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "issn": "2575-9752"
-    },
-    "doi": "10.25080/issn.2575-9752"
+    "location": "Austin, Texas"
   },
   "organization": [
     {
       "members": [
         {
-          "org": "Enthought, Inc.",
-          "name": "Kelsey Jordahl"
+          "name": "Kelsey Jordahl",
+          "org": "Enthought, Inc."
         }
       ],
       "name": "Conference Chair"
@@ -207,12 +50,12 @@
     {
       "members": [
         {
-          "org": "Nelle Varoquaux, Mines ParisTech, Institut Curie, INSERM",
-          "name": "Nelle Varoquaux"
+          "name": "Nelle Varoquaux",
+          "org": "Nelle Varoquaux, Mines ParisTech, Institut Curie, INSERM"
         },
         {
-          "org": "Arizona State University",
-          "name": "Serge Ray"
+          "name": "Serge Ray",
+          "org": "Arizona State University"
         }
       ],
       "name": "Program"
@@ -220,12 +63,12 @@
     {
       "members": [
         {
-          "org": " Enthought Inc.",
-          "name": "Courtenay Godshall"
+          "name": "Courtenay Godshall",
+          "org": " Enthought Inc."
         },
         {
-          "org": " PyLadies Austin",
-          "name": "Irma Kramer"
+          "name": "Irma Kramer",
+          "org": " PyLadies Austin"
         }
       ],
       "name": "Communications"
@@ -233,12 +76,12 @@
     {
       "members": [
         {
-          "org": " University of Texas at Austin",
-          "name": "Kyle Mandli"
+          "name": "Kyle Mandli",
+          "org": " University of Texas at Austin"
         },
         {
-          "org": " Kitware Inc.",
-          "name": "Matt McCormick"
+          "name": "Matt McCormick",
+          "org": " Kitware Inc."
         }
       ],
       "name": "Birds of a Feather"
@@ -246,12 +89,12 @@
     {
       "members": [
         {
-          "org": " University of Waterloo",
-          "name": "James Bergstra"
+          "name": "James Bergstra",
+          "org": " University of Waterloo"
         },
         {
-          "org": " University of California at Berkeley",
-          "name": "Kathryn Huff"
+          "name": "Kathryn Huff",
+          "org": " University of California at Berkeley"
         }
       ],
       "name": "Proceedings"
@@ -259,12 +102,12 @@
     {
       "members": [
         {
-          "org": " University of Oklahoma",
-          "name": "Ben Root"
+          "name": "Ben Root",
+          "org": " University of Oklahoma"
         },
         {
-          "org": " XFEL",
-          "name": "John Wiggins"
+          "name": "John Wiggins",
+          "org": " XFEL"
         }
       ],
       "name": "Financial Aid"
@@ -272,12 +115,12 @@
     {
       "members": [
         {
-          "org": " Texas A&M University",
-          "name": "Kristen Thyng"
+          "name": "Kristen Thyng",
+          "org": " Texas A&M University"
         },
         {
-          "org": " Google Inc.",
-          "name": "Justin Vincent"
+          "name": "Justin Vincent",
+          "org": " Google Inc."
         }
       ],
       "name": "Tutorials"
@@ -285,12 +128,12 @@
     {
       "members": [
         {
-          "org": " US Army Corps of Engineers, ERDC",
-          "name": "Dharhas Pothina"
+          "name": "Dharhas Pothina",
+          "org": " US Army Corps of Engineers, ERDC"
         },
         {
-          "org": " Enthought Inc.",
-          "name": "Jonathan Rocher"
+          "name": "Jonathan Rocher",
+          "org": " Enthought Inc."
         }
       ],
       "name": "Sprints"
@@ -298,8 +141,8 @@
     {
       "members": [
         {
-          "org": " Enthought Inc.",
-          "name": "Jill Cowan"
+          "name": "Jill Cowan",
+          "org": " Enthought Inc."
         }
       ],
       "name": "Sponsors"
@@ -307,12 +150,12 @@
     {
       "members": [
         {
-          "org": " Enthought Inc.",
-          "name": "Bill Cowan"
+          "name": "Bill Cowan",
+          "org": " Enthought Inc."
         },
         {
-          "org": " Enthought Inc.",
-          "name": "Jodi Havranek"
+          "name": "Jodi Havranek",
+          "org": " Enthought Inc."
         }
       ],
       "name": "Financial"
@@ -320,12 +163,12 @@
     {
       "members": [
         {
-          "org": " Enthought Inc.",
-          "name": "Jill Cowan"
+          "name": "Jill Cowan",
+          "org": " Enthought Inc."
         },
         {
-          "org": " Enthought Inc.",
-          "name": "Leah Jones"
+          "name": "Leah Jones",
+          "org": " Enthought Inc."
         }
       ],
       "name": "Logistics"
@@ -646,32 +489,32 @@
     {
       "members": [
         {
-          "org": "Astronomy and Astrophysics",
-          "name": "Jake Vanderplas"
+          "name": "Jake Vanderplas",
+          "org": "Astronomy and Astrophysics"
         },
         {
-          "org": "Computational Life and Medical Sciences",
-          "name": "Greg Caporaso"
+          "name": "Greg Caporaso",
+          "org": "Computational Life and Medical Sciences"
         },
         {
-          "org": "Engineering",
-          "name": "Lorena Barba"
+          "name": "Lorena Barba",
+          "org": "Engineering"
         },
         {
-          "org": "Geophysics",
-          "name": "Matt Hall"
+          "name": "Matt Hall",
+          "org": "Geophysics"
         },
         {
-          "org": "GIS",
-          "name": "Carson Farmer"
+          "name": "Carson Farmer",
+          "org": "GIS"
         },
         {
-          "org": "Oceanography and Meteorology",
-          "name": "Chris Barker"
+          "name": "Chris Barker",
+          "org": "Oceanography and Meteorology"
         },
         {
-          "org": "Vision, Visualization, and Imaging",
-          "name": "Damon McDougall"
+          "name": "Damon McDougall",
+          "org": "Vision, Visualization, and Imaging"
         }
       ],
       "name": "Mini Symposium Committee"
@@ -679,20 +522,20 @@
     {
       "members": [
         {
-          "org": " Rackspace Inc.",
-          "name": "Sara Safavi"
+          "name": "Sara Safavi",
+          "org": " Rackspace Inc."
         },
         {
-          "org": " Rackspace Inc.",
-          "name": "Jeremy Price"
+          "name": "Jeremy Price",
+          "org": " Rackspace Inc."
         },
         {
-          "org": " US Army Engineer Research and Development Center",
-          "name": "Dharhas Pothina"
+          "name": "Dharhas Pothina",
+          "org": " US Army Engineer Research and Development Center"
         },
         {
-          "org": " Continuum Analytics",
-          "name": "Aron Ahmadia"
+          "name": "Aron Ahmadia",
+          "org": " Continuum Analytics"
         }
       ],
       "name": "Tutorial Review Committee"
@@ -700,27 +543,184 @@
     {
       "members": [
         {
-          "org": "University of San Francisco",
-          "name": "Patricia Francis-Lyon"
+          "name": "Patricia Francis-Lyon",
+          "org": "University of San Francisco"
         },
         {
-          "org": "NumFOCUS",
-          "name": "Leah Silen"
+          "name": "Leah Silen",
+          "org": "NumFOCUS"
         },
         {
-          "org": "",
-          "name": "Cindy Sridharan"
+          "name": "Cindy Sridharan",
+          "org": ""
         },
         {
-          "org": "Autodesk ",
-          "name": "Matt Davis"
+          "name": "Matt Davis",
+          "org": "Autodesk "
         },
         {
-          "org": "University of Texas at Austin",
-          "name": "April Wright"
+          "name": "April Wright",
+          "org": "University of Texas at Austin"
         }
       ],
       "name": "Diversity Committee"
     }
-  ]
+  ],
+  "sponsored_students": [
+    {
+      "name": "Azalee Bostroem",
+      "org": "University of California - Davis",
+      "location": ""
+    },
+    {
+      "name": "Pilar Brist",
+      "org": "University of Texas - Tyler",
+      "location": ""
+    },
+    {
+      "name": "Luke Campagnola",
+      "org": "VisPy",
+      "location": ""
+    },
+    {
+      "name": "Lesley Chapman",
+      "org": "University of Rochester Medical Center",
+      "location": ""
+    },
+    {
+      "name": "Roberto Colistete Junior",
+      "org": "Federal University of Espirito Santo",
+      "location": ""
+    },
+    {
+      "name": "Yannick Congo",
+      "org": "EDSPI France",
+      "location": ""
+    },
+    {
+      "name": "Mellissa Cross",
+      "org": "University of Minnesota",
+      "location": ""
+    },
+    {
+      "name": "Filipe Fernandes",
+      "org": "SECOORA",
+      "location": ""
+    },
+    {
+      "name": "Gabriel Grant",
+      "org": "RepsWith.us",
+      "location": ""
+    },
+    {
+      "name": "Harsh Gupta",
+      "org": "SymPy",
+      "location": ""
+    },
+    {
+      "name": "Ian Henriksen",
+      "org": "Brigham Young University",
+      "location": ""
+    },
+    {
+      "name": "Jaime Huerta-Cepas",
+      "org": "European Molecular Biology Laboratory",
+      "location": ""
+    },
+    {
+      "name": "Kyle Kastner",
+      "org": "Universite de Montreal",
+      "location": ""
+    },
+    {
+      "name": "Juliana Leonel",
+      "org": "Universidade Federal de Bahia",
+      "location": ""
+    },
+    {
+      "name": "Eric Ma",
+      "org": "Massachusetts Institute of Technology",
+      "location": ""
+    },
+    {
+      "name": "Shaylyn Scott",
+      "org": "George Mason University",
+      "location": ""
+    },
+    {
+      "name": "Liz Streckert",
+      "org": "PyLadies",
+      "location": ""
+    },
+    {
+      "name": "Jordi Torrents",
+      "org": "NetworkX",
+      "location": ""
+    },
+    {
+      "name": "David Urbina",
+      "org": "University of Texas at Dallas",
+      "location": ""
+    },
+    {
+      "name": "Alexander Vostrikov",
+      "org": "University of Chicago",
+      "location": ""
+    },
+    {
+      "name": "David Warde-Farley",
+      "org": "Universite de Montreal",
+      "location": ""
+    },
+    {
+      "name": "Joshua Warner",
+      "org": "Mayo Clinic",
+      "location": ""
+    },
+    {
+      "name": "Avani Wildani",
+      "org": "The Salk Institute for Biological Studies",
+      "location": ""
+    },
+    {
+      "name": "Levi Wolf",
+      "org": "Arizona State University",
+      "location": ""
+    },
+    {
+      "name": "Chuan Yang",
+      "org": "Shengjing Hospital of China Medical University",
+      "location": ""
+    },
+    {
+      "name": "Amy Prager",
+      "org": "Girl Scouts of Eastern Mass.",
+      "location": ""
+    },
+    {
+      "name": "Dana Engebretson",
+      "org": "University of Minnesota",
+      "location": ""
+    },
+    {
+      "name": "Leena P",
+      "org": "PyLadies",
+      "location": ""
+    },
+    {
+      "name": "Nikhil Haas",
+      "org": "University of San Francisco",
+      "location": ""
+    }
+  ],
+  "series": {
+    "xref": {
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "issn": "2575-9752"
+    },
+    "doi": "10.25080/issn.2575-9752",
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    }
+  }
 }
