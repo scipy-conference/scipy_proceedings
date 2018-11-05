@@ -1,12 +1,12 @@
 {
   "series": {
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
-    },
     "doi": "10.25080/issn.2575-9752",
     "xref": {
       "resource_url": "https://conference.scipy.org/proceedings",
       "issn": "2575-9752"
+    },
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
     }
   },
   "organization": [
@@ -281,6 +281,44 @@
       "name": "Proceedings Reviewers"
     }
   ],
+  "proceedings": {
+    "volume": 1,
+    "location": "Austin, Texas",
+    "copyright": {
+      "proceedings": [
+        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
+      ],
+      "license": "Creative Commons Attribution License (CCAL)",
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited."
+    },
+    "citation_key": "proc-scipy-2016",
+    "title": {
+      "acronym": "SciPy",
+      "ordinal": "15th",
+      "short": "PROC. OF THE 15th PYTHON IN SCIENCE CONF. (SCIPY 2016)",
+      "conference": "Python in Science Conference",
+      "full": "Proceedings of the 15th Python in Science Conference"
+    },
+    "dates": "July 11 - July 17",
+    "year": "2016",
+    "editor": [
+      "Sebastian Benthall",
+      "Scott Rostrup"
+    ],
+    "xref": {
+      "prefix": "10.25080",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "depositor_name": "Dillon Niederhut",
+      "depositor_email": "dniederhut@enthought.com",
+      "registrant": "Crossref"
+    },
+    "isbn": "value",
+    "number": 1,
+    "editor_email": [],
+    "doi": "10.25080/Majora-629e541a-014"
+  },
   "sponsored_students": [
     {
       "name": "Filipe Fernandes",
@@ -350,43 +388,5 @@
       "name": "V. Zachary",
       "org": "Golkhou ASU"
     }
-  ],
-  "proceedings": {
-    "volume": 1,
-    "citation_key": "proc-scipy-2016",
-    "location": "Austin, Texas",
-    "editor": [
-      "Sebastian Benthall",
-      "Scott Rostrup"
-    ],
-    "xref": {
-      "depositor_email": "dniederhut@enthought.com",
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_name": "Dillon Niederhut",
-      "prefix": "10.25080",
-      "registrant": "Crossref"
-    },
-    "isbn": "value",
-    "copyright": {
-      "license": "Creative Commons Attribution License (CCAL)",
-      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-      "proceedings": [
-        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
-        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
-      ]
-    },
-    "doi": "10.25080/Majora-74758f8c-014",
-    "editor_email": [],
-    "title": {
-      "short": "PROC. OF THE 15th PYTHON IN SCIENCE CONF. (SCIPY 2016)",
-      "conference": "Python in Science Conference",
-      "full": "Proceedings of the 15th Python in Science Conference",
-      "ordinal": "15th",
-      "acronym": "SciPy"
-    },
-    "number": 1,
-    "year": "2016",
-    "dates": "July 11 - July 17"
-  }
+  ]
 }
