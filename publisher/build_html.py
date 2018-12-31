@@ -3,6 +3,7 @@
 import os
 import glob
 import shutil
+from copy import deepcopy
 
 from conf import bib_dir, template_dir, html_dir, static_dir, pdf_dir
 from options import get_config, mkdir_p
@@ -21,17 +22,21 @@ citation_key = config['proceedings']['citation_key'] # e.g. proc-scipy-2010
 
 bib_from_tmpl('proceedings', config, citation_key)
 
-proc_dict = dict(config.items() +
-                {'pdf': 'pdfs/proceedings.pdf'}.items() +
-                {'bibtex': 'bib/' + citation_key}.items())
+proc_dict = deepcopy(config)
+proc_dict.update({
+    'pdf': 'pdfs/proceedings.pdf',
+    'bibtex': 'bib/' + citation_key
+    })
 
 for dest_fn in ['index', 'organization', 'students']:
     html_from_tmpl(dest_fn+'.html', proc_dict, dest_fn)
 
 for article in config['toc']:
-    art_dict = dict(config.items() +
-                    {'article': article}.items() +
-                    {'pdf': 'pdfs/'+article['paper_id']+'.pdf'}.items() +
-                    {'bibtex': 'bib/'+article['paper_id']+'.bib'}.items())
+    art_dict = deepcopy(config)
+    art_dict.update({
+        'article': article,
+        'pdf': 'pdfs/'+article['paper_id']+'.pdf',
+        'bibtex': 'bib/'+article['paper_id']+'.bib',
+        })
     bib_from_tmpl('article', art_dict, article['paper_id'])
     html_from_tmpl('article.html',art_dict, article['paper_id'])

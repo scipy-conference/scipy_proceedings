@@ -1,27 +1,41 @@
 #!/usr/bin/env python
 
+
 import os
 import sys
-import shlex, subprocess
+import shlex
+import subprocess
+import io
+import shutil
+
+
+from distutils import dir_util
 
 import tempita
-from conf import bib_dir, build_dir, template_dir, html_dir
+from conf import (bib_dir, build_dir, template_dir, html_dir,
+                  static_dir, status_file)
 from options import get_config
 
 class TeXTemplate(tempita.Template):
     def _repr(self, value, pos):
-        if isinstance(value, unicode):
+        if sys.version_info[0] < 3 and isinstance(value, unicode):
             value = value.replace('&', '\&')
+        elif sys.version_info[0] >= 3 and isinstance(value, str):
+            value = value.replace('&', '\&')
+        elif sys.version_info[0] < 3 :
+            value = unicode(value)
         else:
             value = str(value)
-        return value.encode('utf-8')
+        return value
 
 def _from_template(tmpl_basename, config, use_html=True):
     tmpl = os.path.join(template_dir, tmpl_basename + '.tmpl')
     if use_html:
-        template = tempita.HTMLTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r', encoding='utf-8') as f:
+            template = tempita.HTMLTemplate(f.read())
     else:
-        template = TeXTemplate(open(tmpl, 'r').read())
+        with io.open(tmpl, mode='r', encoding='utf-8') as f:
+            template = TeXTemplate(f.read())
     return template.substitute(config)
 
 def from_template(tmpl_basename, config, dest_fn):
@@ -31,7 +45,7 @@ def from_template(tmpl_basename, config, dest_fn):
     outfile = _from_template(tmpl_basename, config, use_html=use_html)
     outname = os.path.join(build_dir, extension, dest_fn)
 
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w', encoding='utf-8') as f:
         f.write(outfile)
 
 def bib_from_tmpl(bib_type, config, target):
@@ -57,21 +71,29 @@ def html_from_tmpl(src, config, target):
     dest_fn = os.path.join(html_dir, target + '.html')
     extension = os.path.splitext(dest_fn)[1][1:]
     outname = os.path.join(build_dir, extension, dest_fn)
-    with open(outname, mode='w') as f:
+    with io.open(outname, mode='w', encoding='utf-8') as f:
         f.write(outfile)
+
+def copy_static_files(dest_fn):
+    extension = os.path.splitext(dest_fn)[1][1:]
+    outdir = os.path.join(build_dir, extension, "static")
+    dir_util.copy_tree(static_dir, outdir)
+    style_fn = os.path.join(outdir, 'status.sty')
+    shutil.copy(status_file, style_fn)
 
 if __name__ == "__main__":
 
     if not len(sys.argv) == 2:
-        print "Usage: build_template.py destination_name"
+        print("Usage: build_template.py destination_name")
         sys.exit(-1)
 
     dest_fn = sys.argv[1]
     template_fn = os.path.join(template_dir, dest_fn+'.tmpl')
 
     if not os.path.exists(template_fn):
-        print "Cannot find template."
+        print("Cannot find template.")
         sys.exit(-1)
 
     config = get_config()
     from_template(dest_fn, config, dest_fn)
+    copy_static_files(dest_fn)

@@ -1,4 +1,14 @@
 {
+  "series": {
+    "xref": {
+      "issn": "2575-9752",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    },
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    },
+    "doi": "10.25080/issn.2575-9752"
+  },
   "proceedings": {
      "citation_key": "proc-scipy-2014",
      "title": {
@@ -15,7 +25,14 @@
      ],
      "volume": 7,
      "number": 1,
-     "isbn": "value",
+     "xref": {
+      "depositor_name": "Dillon Niederhut",
+      "depositor_email": "dniederhut@enthought.com",
+      "registrant": "Crossref",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "prefix": "10.25080"
+     },
+     "isbn": "noisbn",
      "location": "Austin, Texas",
      "dates": "July 6 - 12",
      "copyright": {

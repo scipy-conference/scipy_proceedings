@@ -2,11 +2,13 @@
 
 <div id="content">
 
-{{for auth, inst in zip(article['author'], article['author_institution'])}}
+{{for auth in article['author']}}
   <!---------------------------------------------------------->
   <p>
   <span class="auth"><b>{{html_quote(auth) | html}}</b></span><br/>
+  {{for inst in article['author_institution_map'][auth]}}
   <span class="authors">{{html_quote(inst) | html}}</span><br/>
+  {{endfor}}
   </p>
   <!---------------------------------------------------------->
 {{endfor}}
@@ -42,6 +44,9 @@
 <!---------------------------------------------------------->
 <strong><big>Keywords</big></strong>
 <p> <span class="keywords"> {{html_quote(article['keywords']) | html}}</span>
+</p>
+<strong><big>DOI</big></strong>
+<p> <span class="doi"> {{html_quote(article['doi']) | html}}</span>
 </p>
 <!---------------------------------------------------------->
 

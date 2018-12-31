@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 __all__ = ['writer']
 
 import docutils.core as dc
@@ -7,8 +9,8 @@ from docutils import nodes
 from docutils.writers.latex2e import (Writer, LaTeXTranslator,
                                       PreambleCmds)
 
-from rstmath import mathEnv
-import code_block
+from .rstmath import mathEnv
+from . import code_block
 
 from options import options
 
@@ -30,14 +32,25 @@ class Translator(LaTeXTranslator):
 
         self.current_field = ''
 
+        self.copyright_holder = None
         self.author_names = []
         self.author_institutions = []
+        self.author_institution_map = dict()
         self.author_emails = []
+        self.corresponding = []
+        self.equal_contributors = []
         self.paper_title = ''
         self.abstract_text = []
         self.keywords = ''
         self.table_caption = []
         self.video_url = ''
+        self.latex_video_url = ''
+        self.bibliography = ''
+
+        # This gets read by the underlying docutils implementation.
+        # If present, it is a list with the first entry the style name
+        # and the second entry the BiBTeX file (see `visit_field_body`)
+        self.bibtex = None
 
         self.abstract_in_progress = False
         self.non_breaking_paragraph = False
@@ -45,8 +58,7 @@ class Translator(LaTeXTranslator):
         self.figure_type = 'figure'
         self.figure_alignment = 'left'
         self.table_type = 'table'
-
-        self.active_table.set_table_style('booktabs')
+        self.settings.table_style = ['booktabs']
 
     def visit_docinfo(self, node):
         pass
@@ -56,6 +68,7 @@ class Translator(LaTeXTranslator):
 
     def visit_author(self, node):
         self.author_names.append(self.encode(node.astext()))
+        self.author_institution_map[self.author_names[-1]] = []
         raise nodes.SkipNode
 
     def depart_author(self, node):
@@ -72,14 +85,30 @@ class Translator(LaTeXTranslator):
         raise nodes.SkipNode
 
     def visit_field_body(self, node):
-        text = node.astext()
+        try:
+            text = self.encode(node.astext())
+        except TypeError:
+            text = ''
 
         if self.current_field == 'email':
             self.author_emails.append(text)
+        elif self.current_field == 'corresponding':
+            self.corresponding.append(self.author_names[-1])
+        elif self.current_field == 'equal-contributor':
+            self.equal_contributors.append(self.author_names[-1])
         elif self.current_field == 'institution':
             self.author_institutions.append(text)
+            self.author_institution_map[self.author_names[-1]].append(text)
+        elif self.current_field == 'copyright_holder':
+            self.copyright_holder = text
         elif self.current_field == 'video':
-            self.video_url = text
+            self.latex_video_url = text
+            self.video_url = node.astext() if text else ''
+        elif self.current_field == 'bibliography':
+            self.bibtex = ['alphaurl', text]
+            self._use_latex_citations = True
+            self._bibitems = ['', '']
+            self.bibliography = text
 
         self.current_field = ''
 
@@ -88,6 +117,16 @@ class Translator(LaTeXTranslator):
     def depart_field_body(self, node):
         raise nodes.SkipNode
 
+
+    def footmark(self, n):
+        '''Insert footmark #n.  Footmark 1 is reserved for
+        the corresponding author. Footmark 2 is reserved for
+        the equal contributors.\
+        '''
+        return ('\\setcounter{footnotecounter}{%d}' % n,
+                '\\fnsymbol{footnotecounter}')
+
+
     def depart_document(self, node):
         LaTeXTranslator.depart_document(self, node)
 
@@ -95,57 +134,76 @@ class Translator(LaTeXTranslator):
 
         # build map: institution -> (author1, author2)
         institution_authors = OrderedDict()
-        for auth, inst in zip(self.author_names, self.author_institutions):
-            institution_authors.setdefault(inst, []).append(self.encode(auth))
+        for auth in self.author_institution_map:
+            for inst in self.author_institution_map[auth]:
+                institution_authors.setdefault(inst, []).append(auth)
 
-        def footmark(n):
-            """Insert footmark #n.  Footmark 1 is reserved for
-            the corresponding author.\
-            """
-            return ('\\setcounter{footnotecounter}{%d}' % n,
-                    '\\fnsymbol{footnotecounter}')
+
+        # Build a footmark for the corresponding author
+        corresponding_footmark = self.footmark(1)
+
+        # Build a footmark for equal contributors
+        equal_footmark = self.footmark(2)
 
         # Build one footmark for each institution
         institute_footmark = {}
         for i, inst in enumerate(institution_authors):
-            institute_footmark[inst] = footmark(i + 2)
+            institute_footmark[inst] = self.footmark(i + 3)
 
         footmark_template = r'\thanks{%(footmark)s %(instutions)}'
         corresponding_auth_template = r'''%%
           %(footmark_counter)s\thanks{%(footmark)s %%
           Corresponding author: \protect\href{mailto:%(email)s}{%(email)s}}'''
 
+        equal_contrib_template = r'''%%
+          %(footmark_counter)s\thanks{%(footmark)s %%
+          These authors contributed equally.}'''
+
         title = self.paper_title
         authors = []
         institutions_mentioned = set()
-        for n, (auth, inst) in enumerate(zip(self.author_names,
-                                             self.author_institutions)):
-            # Corresponding author
-            if n == 0:
-                authors += [r'%(author)s$^{%(footmark)s}$' % \
-                            {'author': self.encode(auth),
-                             'footmark': ''.join(footmark(1)) + ''.join(institute_footmark[inst])}]
+        equal_authors_mentioned = False
+        corr_emails = []
+        if len(self.corresponding) == 0:
+            self.corresponding = [self.author_names[0]]
+        for n, auth in enumerate(self.author_names):
+            if auth in self.corresponding:
+                corr_emails.append(self.author_emails[n])
 
-                fm_counter, fm = footmark(1)
+        for n, auth in enumerate(self.author_names):
+            # get footmarks
+            footmarks = ''.join([''.join(institute_footmark[inst]) for inst in self.author_institution_map[auth]])
+            if auth in self.equal_contributors:
+                footmarks += ''.join(equal_footmark)
+            if auth in self.corresponding:
+                footmarks += ''.join(corresponding_footmark)
+            authors += [r'%(author)s$^{%(footmark)s}$' %
+                        {'author': auth,
+                        'footmark': footmarks}]
+
+            if auth in self.equal_contributors and equal_authors_mentioned==False:
+                fm_counter, fm = equal_footmark
+                authors[-1] += equal_contrib_template % \
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm}
+                equal_authors_mentioned = True
+
+            if auth in self.corresponding:
+                fm_counter, fm = corresponding_footmark
                 authors[-1] += corresponding_auth_template % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'email': self.encode(self.author_emails[0])}
+                    {'footmark_counter': fm_counter,
+                     'footmark': fm,
+                     'email': ', '.join(corr_emails)}
 
-            else:
-                authors += [r'%(author)s$^{%(footmark)s}$' %
-                            {'author': auth,
-                             'footmark': ''.join(institute_footmark[inst])}]
+            for inst in self.author_institution_map[auth]:
+                if not inst in institutions_mentioned:
+                    fm_counter, fm = institute_footmark[inst]
+                    authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
+                                {'footmark_counter': fm_counter,
+                                 'footmark': fm,
+                                 'institution': inst}
 
-            if not inst in institutions_mentioned:
-                fm_counter, fm = institute_footmark[inst]
-                authors[-1] += r'%(footmark_counter)s\thanks{%(footmark)s %(institution)s}' % \
-                               {'footmark_counter': fm_counter,
-                                'footmark': fm,
-                                'institution': self.encode(inst)}
-
-            institutions_mentioned.add(inst)
-
+                institutions_mentioned.add(inst)
 
         ## Add copyright
 
@@ -157,7 +215,7 @@ class Translator(LaTeXTranslator):
             self.author_emails = ['john@doe.com']
             authors = ['']
 
-        copyright_holder = self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.')
+        copyright_holder = self.copyright_holder or (self.author_names[0] + ('.' if len(self.author_names) == 1 else ' et al.'))
         author_notes = r'''%%
 
           \noindent%%
@@ -173,10 +231,10 @@ class Translator(LaTeXTranslator):
 
         ## Set up title and page headers
 
-        if not self.video_url:
+        if not self.latex_video_url:
             video_template = ''
         else:
-            video_template = r'\\\vspace{5mm}\tt\url{%s}\vspace{-5mm}' % self.video_url
+            video_template = '\\\\\\vspace{5mm}\\tt\\url{%s}\\vspace{-5mm}' % self.latex_video_url
 
         title_template = r'\newcounter{footnotecounter}' \
                 r'\title{%s}\author{%s' \
@@ -198,11 +256,15 @@ class Translator(LaTeXTranslator):
                                'author': self.author_names,
                                'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
+                               'author_institution_map' : self.author_institution_map,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
-                               'video': self.video_url}
+                               'video': self.video_url,
+                               'bibliography':self.bibliography}
 
+        if hasattr(self, 'bibtex') and self.bibtex:
+            self.document.stats.update({'bibliography': self.bibtex[1]})
 
     def end_open_abstract(self, node):
         if 'abstract' not in node['classes'] and self.abstract_in_progress:
@@ -218,9 +280,9 @@ class Translator(LaTeXTranslator):
         if self.section_level == 1:
             if self.paper_title:
                 import warnings
-                warnings.warn(RuntimeWarning("Title set twice--ignored. "
-                                             "Could be due to ReST"
-                                             "error.)"))
+                warnings.warn(RuntimeWarning('Title set twice--ignored. '
+                                             'Could be due to ReST'
+                                             'error.)'))
             else:
                 self.paper_title = self.encode(node.astext())
             raise nodes.SkipNode
@@ -304,9 +366,9 @@ class Translator(LaTeXTranslator):
             node.append(nodes.label(text='_abcdefghijklmno_'))
 
         # Work-around for a bug in docutils where
-        # "%" is prepended to footnote text
+        # '%' is prepended to footnote text
         LaTeXTranslator.visit_footnote(self, node)
-        self.out[-1] = self.out[1].strip('%')
+        self.out[-1] = self.out[-1].strip('%')
 
         self.non_breaking_paragraph = True
 
@@ -372,8 +434,8 @@ class Translator(LaTeXTranslator):
                                            linenostart=linenostart,
                                            verboptions=extra_opts))
 
-            self.out.append("\\vspace{1mm}\n" + tex +
-                            "\\vspace{1mm}\n")
+            self.out.append('\\vspace{1mm}\n' + tex +
+                            '\\vspace{1mm}\n')
             raise nodes.SkipNode
         else:
             LaTeXTranslator.visit_literal_block(self, node)
@@ -394,24 +456,24 @@ class Translator(LaTeXTranslator):
     # Math directives from rstex
 
     def visit_InlineMath(self, node):
-        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.requirements['amsmath'] = '\\usepackage{amsmath}'
         self.out.append('$' + node['latex'] + '$')
         raise nodes.SkipNode
 
     def visit_PartMath(self, node):
-        self.requirements['amsmath'] = r'\usepackage{amsmath}'
+        self.requirements['amsmath'] = '\\usepackage{amsmath}'
         self.out.append(mathEnv(node['latex'], node['label'], node['type']))
         self.non_breaking_paragraph = True
         raise nodes.SkipNode
 
     def visit_PartLaTeX(self, node):
-        if node["usepackage"]:
-            for package in node["usepackage"]:
-                self.requirements[package] = r'\usepackage{%s}' % package
-        self.out.append("\n" + node['latex'] + "\n")
+        if node['usepackage']:
+            for package in node['usepackage']:
+                self.requirements[package] = '\\usepackage{%s}' % package
+        self.out.append('\n' + node['latex'] + '\n')
         raise nodes.SkipNode
 
-    
+
 
 
 writer = Writer()
