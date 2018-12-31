@@ -1,4 +1,4 @@
-﻿:author: Dav Clark
+:author: Dav Clark
 :email: davclark@berkeley.edu
 :institution: UC Berkeley
 
@@ -860,4 +860,3 @@ References
 .. [Army] Army Corps of Engineers, “Army Corps of Engineers Wetlands Regulatory
      program,” presented at the FOSS4G, 2007.
 .. [boot] https://github.com/dlab-berkeley/collaboratool/blob/master/provisioning/bootstrap-bce.sh
-
