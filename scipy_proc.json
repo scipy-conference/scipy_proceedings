@@ -1,4 +1,49 @@
 {
+  "proceedings": {
+    "citation_key": "proc-scipy-2014",
+    "isbn": "noisbn",
+    "volume": 7,
+    "doi": "10.25080/Majora-14bd3278-011",
+    "dates": "July 6 - 12",
+    "year": "2014",
+    "location": "Austin, Texas",
+    "editor": [
+      "Stéfan van der Walt",
+      "James Bergstra"
+    ],
+    "editor_email": [],
+    "xref": {
+      "depositor_email": "dillon.niederhut@gmail.com",
+      "registrant": "Crossref",
+      "prefix": "10.25080",
+      "depositor_name": "Dillon Niederhut",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    },
+    "title": {
+      "ordinal": "13th",
+      "conference": "Python in Science Conference",
+      "full": "Proceedings of the 13th Python in Science Conference",
+      "short": "PROC. OF THE 13th PYTHON IN SCIENCE CONF. (SCIPY 2014)",
+      "acronym": "SciPy"
+    },
+    "copyright": {
+      "proceedings": [
+        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
+        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
+      ],
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+      "license": "Creative Commons Attribution License (CCAL)"
+    },
+    "number": 1
+  },
+  "sponsored_students": [
+    {
+      "name": "First name",
+      "location": "Where from",
+      "org": "University"
+    }
+  ],
   "organization": [
     {
       "name": "Conference Chairs",
@@ -439,57 +484,13 @@
     }
   ],
   "series": {
-    "doi": "10.25080/issn.2575-9752",
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
-    },
     "xref": {
       "resource_url": "https://conference.scipy.org/proceedings",
       "issn": "2575-9752"
-    }
-  },
-  "sponsored_students": [
-    {
-      "name": "First name",
-      "org": "University",
-      "location": "Where from"
-    }
-  ],
-  "proceedings": {
-    "volume": 7,
-    "citation_key": "proc-scipy-2014",
-    "editor": [
-      "Stéfan van der Walt",
-      "James Bergstra"
-    ],
-    "xref": {
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "registrant": "Crossref",
-      "prefix": "10.25080",
-      "depositor_email": "dillon.niederhut@gmail.com",
-      "depositor_name": "Dillon Niederhut"
     },
-    "doi": "10.25080/Majora-430165d6-011",
-    "location": "Austin, Texas",
-    "isbn": "noisbn",
-    "copyright": {
-      "license": "Creative Commons Attribution License (CCAL)",
-      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-      "proceedings": [
-        "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
-        "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
-        "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
-      ]
-    },
-    "dates": "July 6 - 12",
     "title": {
-      "short": "PROC. OF THE 13th PYTHON IN SCIENCE CONF. (SCIPY 2014)",
-      "ordinal": "13th",
-      "acronym": "SciPy",
-      "full": "Proceedings of the 13th Python in Science Conference",
-      "conference": "Python in Science Conference"
+      "full": "Proceedings of the Python in Science Conference"
     },
-    "number": 1,
-    "year": "2014"
+    "doi": "10.25080/issn.2575-9752"
   }
 }
