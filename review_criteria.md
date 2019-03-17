@@ -1,6 +1,6 @@
 # Suggested Review Criteria for SciPy Proceedings
 
-A small subcommittee of the SciPy 2017 organizing committee has created this 
+A small subcommittee of the SciPy 2019 organizing committee has created this 
 set of suggested review criteria
 to help guide authors and reviewers alike. Suggestions and amendments to these 
 review criteria are enthusiastically welcomed via discussion or pull request.
@@ -71,3 +71,34 @@ review criteria are enthusiastically welcomed via discussion or pull request.
   paper; it's the authoritative view of how your paper will appear.
 - If not in Python, the language in the code snippet should be mentioned.
 - Code snippets should follow a common style guide. PEP8 is preferred.
+
+# Suggestions for Writing Great Feedback
+
+* Use summary feedback for overarching themes of your feedback. In-line feedback gives
+  greater context to your comments; treat the paper as a code review.
+* Great feedback is respectful, direct, and actionable. You needn't provide examples of
+  how to correct the paper for repeated issues (e.g. tense, narrative clarity), but
+  providing suggestions for the first few incidents and then referencing them later
+  will help authors while reducing reviewer time.
+  * Instead of: "Sentence is too long and wordy."
+  * Consider: "The entire paragraph is comprised of 2 sentences, making it hard to follow.
+    Either consolidate it into the previous or next paragraph or flesh out the existing
+    paragraph more."
+  * Ideally (and time permitting): Provide phrasing and word fragments such as "Consider
+    rewording first sentence to avoid ending with a preposition. Instead of `First, we
+    identified essays that we wanted to run analysis on`, consider `First, we identified
+    essays for analysis`".
+* Consider using M. Pacer's [Proselint](https://github.com/amperser/Proselint) tool to help
+  automate identification of some of the more common errors so you can focus more on content
+  and less on style.
+* Familiarize yourself with [Github's markdown guide](https://guides.github.com/features/mastering-markdown/)
+  if this is your first time as a reviewer.
+* If you are not a domain expert in the field of the paper, make sure to let the authors
+  know and focus on the structure and narrative of the paper. Good papers should be layered
+  such that someone new to the domain can follow the narrative, but an expert can grasp its
+  details.
+
+# Proceedings Committee 2019
+
+* Feel free to engage the SciPy Proceedings Committee (dalippa@, @dniederhut, @cbcunc, and
+  @stargaser) with questions, or if you need a replacement or additional reviewer.
