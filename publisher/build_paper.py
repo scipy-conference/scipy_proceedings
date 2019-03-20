@@ -161,7 +161,7 @@ def tex2pdf_singlepass(out_path):
     # Compile BiBTeX if available
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
-    bib_file = os.path.join(out_path, d["bibliography"] + '.bib')
+    bib_file = os.path.join(out_path, d.get("bibliography", "nobib") + '.bib')
 
     if os.path.exists(bib_file):
         bibtex_cmd = 'bibtex paper && ' + command_line
@@ -219,7 +219,41 @@ def build_paper(paper_id, start=1):
     with io.open(page_number_file, 'w', encoding='utf-8') as f:
         f.write('\setcounter{page}{%s}' % start)
 
-    rst2tex(in_path, out_path)
+    print('in_path is {}'.format(in_path))
+    print('out_path is {}'.format(out_path))
+
+    rstfiles = glob.glob(os.path.join(in_path, '*rst'))
+    if len(rstfiles) > 1:
+        raise RuntimeError("Found more than one input .rst--not sure which "
+                           "one to use.")
+    elif len(rstfiles) == 0:
+        texfiles = glob.glob(os.path.join(in_path, '*tex'))
+        if len(texfiles) == 0:
+            raise RuntimeError("Could not find a .rst or .tex file in {}"
+                               .format(in_path))
+        elif len(texfiles) == 1:
+            base_dir = os.path.dirname(__file__)
+            dir_util.copy_tree(in_path, out_path)
+            shutil.copy(texfiles[0], os.path.join(out_path, 'paper.tex'))
+            out_file = shutil.copy(status_file, out_path)
+            os.rename(out_file, os.path.join(out_path, 'status.sty'))
+            scipy_style = os.path.join(base_dir, '_static/scipy.sty')
+            shutil.copy(scipy_style, os.path.join(out_path, 'scipy.sty'))
+            stats_file = os.path.join(out_path, 'paper_stats.json')
+            d = options.cfg2dict(stats_file)
+            try:
+                d.update(writer.document.stats)
+                options.dict2cfg(d, stats_file)
+            except AttributeError:
+                print("Error: no paper configuration found")
+
+        else:
+            raise RuntimeError("Found no .rst files and more than one .tex "
+                               "file in input directory.")
+
+    else:
+        rst2tex(in_path, out_path)
+
     pdflatex_stdout = tex2pdf(out_path)
     page_count(pdflatex_stdout, out_path)
 
