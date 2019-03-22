@@ -35,7 +35,7 @@ students-pdf: $(TEXDIR)/students.pdf
 
 front-pdf: title-pdf copyright-pdf organization-pdf students-pdf
 
-papers:
+papers: clean
 	./build_papers.py
 
 proceedings: papers $(TEXDIR)/proceedings.tex front-pdf
