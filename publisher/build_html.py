@@ -28,7 +28,7 @@ proc_dict.update({
     'bibtex': 'bib/' + citation_key
     })
 
-for dest_fn in ['index', 'organization', 'students']:
+for dest_fn in ['index', 'organization', 'slides', 'students']:
     html_from_tmpl(dest_fn+'.html', proc_dict, dest_fn)
 
 for article in config['toc']:
