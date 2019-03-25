@@ -37,7 +37,7 @@ else:
                    for d in glob.glob('%s/*' % papers_dir)
                    if os.path.isdir(d) and not any(e in d for e in excludes)])
 
-other_dirs = {dir: sorted([os.path.basename(subdir) 
+other_dirs = {dir: sorted([os.path.basename(subdir)
                      for subdir in glob.glob('%s/*' % dir)
                      if os.path.isdir(subdir) and not any(e in subdir for e in excludes)])
                      for dir in (slides_dir, posters_dir, lightning_dir, tools_dir)}
