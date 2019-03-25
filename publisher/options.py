@@ -15,10 +15,12 @@ from contextlib import contextmanager
 import conf
 toc_conf   = conf.toc_conf
 proc_conf  = conf.proc_conf
+other_conf = conf.other_conf
 
 def get_config():
     config = cfg2dict(proc_conf)
     config.update(cfg2dict(toc_conf))
+    config.update(cfg2dict(other_conf))
     return config
 
 def cfg2dict(filename):
