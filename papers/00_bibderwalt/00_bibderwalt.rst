@@ -86,6 +86,37 @@ If you wish to have a block quote, you can just indent the text, as in
 
     When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
 
+Dois in bibliographies
+++++++++++++++++++++++
+
+In order to include a doi in your bibliography, add the doi to your bibliography
+entry as a string. For example:
+
+.. code-block:: bibtex
+
+   @Book{hume48,
+     author =  "David Hume",
+     year =    "1748",
+     title =   "An enquiry concerning human understanding",
+     address =     "Indianapolis, IN",
+     publisher =   "Hackett",
+     doi = "10.1017/CBO9780511808432",
+   }
+
+
+If there are errors when adding it due to non-alphanumeric characters, see if
+wrapping the doi in ``\detokenize`` works to solve the issue.
+
+.. code-block:: bibtex
+
+   @Book{hume48,
+     author =  "David Hume",
+     year =    "1748",
+     title =   "An enquiry concerning human understanding",
+     address =     "Indianapolis, IN",
+     publisher =   "Hackett",
+     doi = \detokenize{10.1017/CBO9780511808432},
+   }
 
 Source code examples
 --------------------

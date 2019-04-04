@@ -14,6 +14,11 @@ from build_template import _from_template
 args = None
 password = None
 
+def author_greeting(names):
+    if len(names) == 1:
+        return names[0]
+    else:
+        return ', '.join(names[:-1]) + ', and ' + names[-1]
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Invite reviewers.")
