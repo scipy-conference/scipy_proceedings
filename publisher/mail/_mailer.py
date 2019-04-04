@@ -14,6 +14,11 @@ from build_template import _from_template
 args = None
 password = None
 
+def author_greeting(names):
+    if len(names) == 1:
+        return names[0]
+    else:
+        return ', '.join(names[:-1]) + ', and ' + names[-1]
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Invite reviewers.")
@@ -25,7 +30,7 @@ def parse_args():
     args.dry_run = not args.send
 
     if args.dry_run:
-        print '*** This is a dry run.  Use --send to send emails.'
+        print('*** This is a dry run.  Use --send to send emails.')
 
     return args
 
@@ -47,18 +52,18 @@ def email_addr_from(name_email):
 def send_template(sender, recipient, template, template_data,
                   smtp_server='smtp.gmail.com', smtp_port=587):
     if args.dry_run:
-        print 'Dry run -> not sending mail to %s' % recipient
+        print('Dry run -> not sending mail to %s' % recipient)
     else:
         get_password(sender['login'])
-        print '-> %s' % recipient
+        print('-> %s' % recipient)
 
     template_data['email'] = recipient
     message = _from_template('../mail/templates/' + template, template_data)
 
     if args.dry_run:
-        print "=" * 80
-        print message
-        print "=" * 80
+        print("=" * 80)
+        print(message)
+        print("=" * 80)
 
         return
 

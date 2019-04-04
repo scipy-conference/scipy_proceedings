@@ -39,7 +39,7 @@ def coerce_text(v):
         else:
             attr = '__str__'
         if hasattr(v, attr):
-            return unicode(v)
+            return str(v)
         else:
             return bytes(v)
     return v

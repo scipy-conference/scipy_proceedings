@@ -1,16 +1,20 @@
 #!/usr/bin/env python
-from __future__ import print_function
+from __future__ import print_function, unicode_literals
 
 import docutils.core as dc
+import os
 import os.path
 import sys
 import re
 import tempfile
 import glob
 import shutil
+import io
+
+from distutils import dir_util
 
 from writer import writer
-from conf import papers_dir, output_dir
+from conf import papers_dir, output_dir, status_file, static_dir
 
 import options
 
@@ -19,13 +23,15 @@ header = r'''
 
 .. role:: label
 
-.. role:: cite
+.. role:: cite(raw)
+   :format: latex
 
 .. raw::  latex
 
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
+    \newcommand*\DUrolecode[1]{#1}
     \providecommand*\DUrolecite[1]{\cite{#1}}
 
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
@@ -39,16 +45,14 @@ header = r'''
 
 def rst2tex(in_path, out_path):
 
-    options.mkdir_p(out_path)
-    for file in glob.glob(os.path.join(in_path, '*')):
-        shutil.copy(file, out_path)
+    dir_util.copy_tree(in_path, out_path)
 
     base_dir = os.path.dirname(__file__)
-    scipy_status = os.path.join(base_dir, '_static/status.sty')
-    shutil.copy(scipy_status, out_path)
+    out_file = shutil.copy(status_file, out_path)
+    os.rename(out_file, os.path.join(out_path, 'status.sty'))
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
-    preamble = r'''\usepackage{scipy}'''
+    preamble = u'''\\usepackage{scipy}'''
 
     # Add the LaTeX commands required by Pygments to do syntax highlighting
 
@@ -81,12 +85,11 @@ def rst2tex(in_path, out_path):
         raise RuntimeError("Found more than one input .rst--not sure which "
                            "one to use.")
 
-
-    content = header + open(rst, 'r').read()
-
+    with io.open(rst, mode='r', encoding='utf-8') as f:
+        content = header + f.read()
+    
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
-
 
     stats_file = os.path.join(out_path, 'paper_stats.json')
     d = options.cfg2dict(stats_file)
@@ -97,11 +100,35 @@ def rst2tex(in_path, out_path):
         print("Error: no paper configuration found")
 
     tex_file = os.path.join(out_path, 'paper.tex')
-    with open(tex_file, 'w') as f:
+    with io.open(tex_file, mode='wb') as f:
+        try:
+            tex = tex.encode('utf-8')
+        except (AttributeError, UnicodeDecodeError):
+            pass
         f.write(tex)
 
 
 def tex2pdf(out_path):
+
+    # Sometimes Latex want us to rebuild because labels have changed.
+    # We will try at most 5 times.
+    for i in range(5):
+        out, retry = tex2pdf_singlepass(out_path)
+        if not retry:
+            # Building succeeded or failed outright
+            break
+    return out
+
+
+def tex2pdf_singlepass(out_path):
+    """
+    Returns
+    -------
+    out : str
+        LaTeX output.
+    retry : bool
+        Whether another round of building is needed.
+    """
 
     import subprocess
     command_line = 'pdflatex -halt-on-error paper.tex'
@@ -110,6 +137,7 @@ def tex2pdf(out_path):
     #    from asking for any missing files via stdin prompts,
     #    which mess up our build process.
     dummy = tempfile.TemporaryFile()
+
     run = subprocess.Popen(command_line, shell=True,
             stdin=dummy,
             stdout=subprocess.PIPE,
@@ -118,18 +146,17 @@ def tex2pdf(out_path):
             )
     out, err = run.communicate()
 
-    if "Fatal" in out or run.returncode:
+    if b"Fatal" in out or run.returncode:
         print("PDFLaTeX error output:")
         print("=" * 80)
-        print(out)
+        print(out.decode('utf-8'))
         print("=" * 80)
         if err:
-            print(err)
+            print(err.decode('utf-8'))
             print("=" * 80)
 
         # Errors, exit early
-        return out
-
+        return out, False
 
     # Compile BiBTeX if available
     stats_file = os.path.join(out_path, 'paper_stats.json')
@@ -144,25 +171,19 @@ def tex2pdf(out_path):
                 stderr=subprocess.PIPE,
                 cwd=out_path,
                 )
-        out, err = run.communicate()
-
-        if err:
+        out_bib, err = run.communicate()
+        if err or b'Error' in out_bib:
             print("Error compiling BiBTeX")
-            return out
+            print("bibtex error output:")
+            print("=" * 80)
+            print(out_bib)
+            print("=" * 80)
+            return out_bib, False
 
+    if b"Label(s) may have changed." in out:
+        return out, True
 
-    # -- returncode always 0, have to check output for error
-    if not run.returncode:
-        # -- pdflatex has to run twice to actually work
-        run = subprocess.Popen(command_line, shell=True,
-                stdin=dummy,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                cwd=out_path,
-                )
-        out, err = run.communicate()
-
-    return out
+    return out, False
 
 
 def page_count(pdflatex_stdout, paper_dir):
@@ -173,7 +194,7 @@ def page_count(pdflatex_stdout, paper_dir):
         print("*** WARNING: PDFLaTeX failed to generate output.")
         return
 
-    regexp = re.compile('Output written on paper.pdf \((\d+) pages')
+    regexp = re.compile(b'Output written on paper.pdf \((\d+) pages')
     cfgname = os.path.join(paper_dir, 'paper_stats.json')
 
     d = options.cfg2dict(cfgname)
@@ -184,14 +205,19 @@ def page_count(pdflatex_stdout, paper_dir):
             pages = m.groups()[0]
             d.update({'pages': int(pages)})
             break
-
     options.dict2cfg(d, cfgname)
 
 
-def build_paper(paper_id):
+def build_paper(paper_id, start=1):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
+    
+    
+    options.mkdir_p(out_path)
+    page_number_file = os.path.join(out_path, 'page_numbers.tex')
+    with io.open(page_number_file, 'w', encoding='utf-8') as f:
+        f.write('\setcounter{page}{%s}' % start)
 
     rst2tex(in_path, out_path)
     pdflatex_stdout = tex2pdf(out_path)

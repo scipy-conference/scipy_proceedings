@@ -1,13 +1,14 @@
 <h1>Sponsored Attendees</h1>
 
-<div id="content">
+<div id="scipy_scholarship">
 
   <ul>
 
     {{for student in sponsored_students}}
       <li>{{html_quote(student['name']) | html}},
-      <em>{{html_quote(student['org']) | html}},
-          {{html_quote(student['location']) | html}}</em>
+      <em>{{html_quote(student['org']) | html}}
+          {{if student.get('location')}},
+          {{html_quote(student['location']) | html}} {{endif}}</em>
       </li>
     {{endfor}}
 
