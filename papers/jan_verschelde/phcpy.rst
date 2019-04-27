@@ -30,8 +30,8 @@ Solving Polynomial Systems with phcpy
 Introduction
 ------------
 
-The python package phcpy [Ver14]_ provides an alternative to the
-command line executable of PHCpack [Ver99]_ to solve polynomial systems
+The Python package phcpy [Ver14]_ provides an alternative to the
+command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial systems
 by homotopy continuation methods.  
 Scripts replace command line options and text menus.
 Data remains persistent in a session, decreasing the dependency on files.
@@ -42,8 +42,15 @@ of the solution set.  The numerical irreducible decomposition includes
 not only the isolated solutions, but also representations for all
 positive dimensional solution sets.  Such representations consist
 of sets of *generic points*, partitioned along the irreducible factors.
+Polynomial homotopy continuation is at the origin of many of the algorithms
+in numerical algebraic geometry [SVW05]_.
 Parallel versions of the software described in [SVW03]_
 were recently developed [Ver18]_ and added to phcpy.
+
+The focus of this paper is on the application of new technology
+to solve polynomial systems, in particular, cloud computing [BSVY15]_
+and multicore shared memory parallelism
+accelerated with graphics processing units [VY15]_.
 
 Although phcpy is only a couple of years out,
 three instances in the research literature mention its application
@@ -63,14 +70,41 @@ Code Snippets
 
 Code snippets suggest typical applications and guide novice user.
 
-The figure below shows the code snippet
+The screen shot in Fig. :ref:`figsnippet` shows the code snippet
 with an example of use of the blackbox solver.
 
 .. figure:: ./bbsolvesnippet2.png
    :align: center
    :figclass: h
 
-   The code snipped for the blackbox solver.
+   The code snippet for the blackbox solver.  :label:`figsnippet`
+
+CGI Scripting
+-------------
+
+In our first design of a web interface to ``phc``,
+we developed a collection of Python scripts.
+Below is a listing of the key ingredients.
+
+1. Posting and processing of HTML forms:
+
+   * pure Python code prints the HTML code; and 
+
+   * the input of the forms is processed with Python functions.
+
+2. MySLQdb does the management of user data:
+
+   * names and encrypted passwords,
+
+   * generic, random folder names to store data files,
+
+   * file names with polynomial systems solved.
+
+3. With the module smtplib we define email exchanges:
+
+   * automatic 2-step registration process,
+
+   * automatic password recovery protocol.
 
 Acknowledgments
 ---------------
@@ -86,12 +120,22 @@ References
             rigid graphs*.
             In the Proceedings of the 2018 International Symposium on Symbolic 
             and Algebraic Computation (ISSAC 2018), pages 55-62, ACM 2018. 
-            DOI 10.1145/3208976.3208994
+            DOI 10.1145/3208976.3208994.
+
+.. [BSVY15] N. Bliss, J. Sommars, J. Verschelde, X. Yu.
+            *Solving polynomial systems in the cloud with polynomial
+            homotopy continuation.*
+            In the Proceedings of the 17th International Workshop on Computer 
+            Algebra in Scientific Computing (CASC 2015),
+            edited by V. P. Gerdt, W. Koepf, W. M. Seiler,
+            and E. V. Vorozhtsov, volume 9301 of Lecture Notes in 
+            Computer Science, pages 87-100, Springer-Verlag, 2015. 
+            DOI 10.1007/978-3-319-24021-3_7.
 
 .. [CD18] M. Culler and N. M. Dunfield.
           *Orderability and Dehn filling.*
           Geometry and Topology, 22:1405--1457, 2018.
-          DOI 10.2140/gt.2018.22.1405
+          DOI 10.2140/gt.2018.22.1405.
 
 .. [SWM16] H. Sidky, J. K. Whitmer, and D. Mehta.
            *Reliable mixture critical point computation using 
@@ -136,3 +180,9 @@ References
            volume 11077 of Lecture Notes in Computer Science, pages 361--375.
            Springer-Verlag, 2018.
            DOI 10.1007/978-3-319-99639-4_25.
+
+.. [VY15] J. Verschelde and X. Yu
+          *Polynomial Homotopy Continuation on GPUs.*
+          ACM Communications in Computer Algebra, volume 49, issue 4, 
+          pages 130-133, 2015. 
+          DOI 10.1145/2893803.2893810.
