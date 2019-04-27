@@ -26,7 +26,7 @@
 :email: Bob_Mankoff@newyorker.com
 :institution: The New Yorker
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://www.youtube.com/watch?v=blPjDYCvppY
 :bibliography: refs
 
 
