@@ -10,6 +10,9 @@
 :email: jan@math.uic.edu
 :institution: University of Illinois at Chicago
 
+.. |eacute| unicode:: U+00E9 .. eacute
+   :trim:
+
 -------------------------------------
 Solving Polynomial Systems with phcpy
 -------------------------------------
@@ -51,6 +54,8 @@ The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
 and multicore shared memory parallelism
 accelerated with graphics processing units [VY15]_.
+Our web interface offers phcpy in a SageMath [Sage]_, [SJ05]_ kernel
+or in a Python kernel of a Jupyter notebook [Klu16]_.
 
 Although phcpy is only a couple of years out,
 three instances in the research literature mention its application
@@ -83,8 +88,9 @@ CGI Scripting
 -------------
 
 In our first design of a web interface to ``phc``,
-we developed a collection of Python scripts.
-Below is a listing of the key ingredients.
+we developed a collection of Python scripts,
+following common programming patterns [Chu06]_.
+Below is a listing of the key ingredients in our first web interface.
 
 1. Posting and processing of HTML forms:
 
@@ -105,6 +111,26 @@ Below is a listing of the key ingredients.
    * automatic 2-step registration process,
 
    * automatic password recovery protocol.
+
+Jupyter and JupyterHub
+----------------------
+
+The Jupyter notebook supports language agnostic computations,
+supporting execution environments in several dozen languages.
+With JupyterHub, we can run the code in a Python Terminal session,
+in a Jupyter notebook running Python, or in a SageMath session.
+
+For the user administration, we recycled our first web interface.
+
+With JupyterHub, we provide user accounts on our server.
+
+* At login time, a new process is spawned.
+
+* Users have generic, random login names.
+
+* Actions of users must be isolated from each other.
+
+The setup requires some system administration expertise.
 
 Acknowledgments
 ---------------
@@ -132,16 +158,40 @@ References
             Computer Science, pages 87-100, Springer-Verlag, 2015. 
             DOI 10.1007/978-3-319-24021-3_7.
 
+.. [Chu06] W. J. Chun. *Core Python Programming.*
+           Prentice Hall, 2nd Edition, 2006.
+
 .. [CD18] M. Culler and N. M. Dunfield.
           *Orderability and Dehn filling.*
-          Geometry and Topology, 22:1405--1457, 2018.
+          Geometry and Topology, 22: 1405-1457, 2018.
           DOI 10.2140/gt.2018.22.1405.
+
+.. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
+           M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
+           S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing,
+           and Jupyter Development Team.
+           *Jupyter Notebooks -- a publishing format for reproducible
+           computational workflows*.
+           In Positioning and Power in Academic Publishing: Players, Agents, 
+           and Agendas, edited by F. Loizides and B. Schmidt, 
+           pages 87-90. IOS Press, 2016.
+           DOI 10.3233/978-1-61499-649-1-87.
+
+.. [Sage] The Sage Developers.
+          *SageMath, the Sage Mathematics Software System, Version 7.6*.
+          https://www.sagemath.org, 2016.
+          DOI 10.5281/zenodo.820864.
+
+.. [SJ05] W. Stein and D. Joyner.
+          *Sage: System for algebra and geometry experimentation.*
+          ACM SIGSAM Bulletin 39(2): 61-64, 2005.
+          DOI 10.1145/1101884.1101889.
 
 .. [SWM16] H. Sidky, J. K. Whitmer, and D. Mehta.
            *Reliable mixture critical point computation using 
            polynomial homotopy continuation.*
            AIChE Journal. Thermodynamics and Molecular-Scale Phenomena,
-           62(12):4497--4507, 2016.  DOI 10.1002/aic.15319.
+           62(12): 4497-4507, 2016.  DOI 10.1002/aic.15319.
 
 .. [SVW03] A. J. Sommese, J. Verschelde, and C. W. Wampler.
            *Numerical irreducible decomposition using PHCpack.*
@@ -168,7 +218,7 @@ References
            *Modernizing PHCpack through phcpy.*
            Proceedings of the 6th
            European Conference on Python in Science (EuroSciPy 2013),
-           edited by P. de Buyl and N. Varoquaux, pages 71--76, 2014.
+           edited by P. de Buyl and N. Varoquaux, pages 71-76, 2014.
 
 .. [Ver18] J. Verschelde.
            *A Blackbox Polynomial System Solver for Shared Memory Parallel
@@ -177,7 +227,7 @@ References
            20th International Workshop, CASC 2018, Lille, France, 
            edited by
            V. P. Gerdt, W. Koepf, W. M. Seiler, and E. V. Vorozhtsov,
-           volume 11077 of Lecture Notes in Computer Science, pages 361--375.
+           volume 11077 of Lecture Notes in Computer Science, pages 361-375.
            Springer-Verlag, 2018.
            DOI 10.1007/978-3-319-99639-4_25.
 
