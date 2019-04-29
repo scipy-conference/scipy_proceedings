@@ -70,6 +70,25 @@ in the computation of the following:
 The cited publications above appear respectively in symbolic computation,
 geometry and topology, chemical engineering.
 
+Mechanism Design
+----------------
+
+Fig. :ref:`fig4barcoupler` illustration a reproduction
+of a result in the mechanism design literature [MW90]_.
+Given five points, the problem is to determine the length of two bars
+so their couple curve passes through the five given points.
+
+.. figure:: ./fbarcoupler.png
+   :align: center
+   :figclass: h
+
+   The design of a 4-bar mechanism.  :label:`fig4barcoupler`
+
+This example is part of the tutorial of phcpy and the scripts 
+to reproduce the results are in the source code distribution.
+The equations are generated with sympy [SymPy]_
+and the plots are made with matplotlib [Hun07]_.
+
 Code Snippets
 -------------
 
@@ -166,6 +185,14 @@ References
           Geometry and Topology, 22: 1405-1457, 2018.
           DOI 10.2140/gt.2018.22.1405.
 
+.. [Hun07] J. D. Hunter.
+           *Matplotlib: A 2D Graphics Environment.*
+           Computing in Science and Engineering 9(3): 90-95, 2007.
+
+.. [SymPy] D. Joyner, O. Certik, A. Meurer, and B. E. Granger.
+           *Open source computer algebra systems: SymPy.*
+           ACM Communications in Computer Algebra 45(4): 225-234 , 2011.
+
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
            S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing,
@@ -176,6 +203,10 @@ References
            and Agendas, edited by F. Loizides and B. Schmidt, 
            pages 87-90. IOS Press, 2016.
            DOI 10.3233/978-1-61499-649-1-87.
+
+.. [MW90] A. P. Morgan and C. W. Wampler.
+          *Solving a Planar Four-Bar Design Using Continuation.*
+          Journal of Mechanical Design, 112: 544-550, 1990.
 
 .. [Sage] The Sage Developers.
           *SageMath, the Sage Mathematics Software System, Version 7.6*.
