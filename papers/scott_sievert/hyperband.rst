@@ -10,7 +10,7 @@
 :email: mrocklin@gmail.com
 :institution: NVIDIA
 
-.. :bibliography: refs
+:bibliography: refs
 
 -------------------------------------------
 Better and faster model selection with Dask
@@ -76,25 +76,32 @@ influence the performance of the model. At the most basic level, these
 hyper-parameters help adapt the model to the data. For example, the model might
 have one hyper-parameter that adapts the prediction to the amount of noise
 present in the data (e.g., the regularization parameter in ridge regression
-:cite:`TODO` or LASSO :cite:`TODO`).
+:cite:`marquardt1975` or LASSO :cite:`tibshirani1996`).
 
-Model performance strongly depends on the hyper-parameters provided.
+Model performance strongly depends on the hyper-parameters provided, even for
+the examples above. Performance depends strongly on the number of possible
+hyper-parameter combinations, which grows exponentially as the number of
+hyper-parameters grows. For example in a recent study of a particular
+visualization tool input combinations of three different hyper-parameters, and
+the first section is titled "Those hyper-parameters really matter"
+:cite:`wattenberg2016`.
 
-.. cite "those hyper-parameters really matter"
-
-These hyper-parameters are typically assumed to be given. However, this often
-requires solving the problem.
-
-.. cite step size
-.. cite lagrangian. Gubner's textbook (or notes).
-
-In practice, this means that hyper-parameters have to be searched or tuned to
-find the value that provides the highest performance.
+These hyper-parameters are typically assumed to be given. Even in the simple
+ridge regression case above, a brute force search is required
+:cite:`marquardt1975`. This gets more complex with many different
+hyper-parameter values to input, and especially because there's often an
+interplay between hyper-parameters. In practice, this means that
+hyper-parameters have to be searched or tuned to find the value that provides
+the highest performance.
 
 Model selection has become more complicated as data has grown, especially with
-the growth of deep learning.
+the growth of deep learning. A good example is with the simplest optimization
+hyper-parameter: learning rate. For convex problems with few data, a technique
+called line search can be performed every iteration. However, with many data
+this becomes too expensive to compute and the learning rate is another
+hyper-parameter that needs to be tuned.
 
-.. cite automl, bayesian, etc
+.. cite Steven Wright's book TODO
 
 Contributions
 =============
@@ -117,18 +124,16 @@ are simple to use. This work
 
 * implements a particular model selection algorithm, Hyperband, in Dask-ML.
   This algorithm returns models with a high validation score and is moderately
-  amendable to parallelism.
+  amendable to parallelism, making a Dask implementation attractive.
 * makes some simple modifications to increase amenability to parallelism
-* provides an simple method to determine the parameters to Hyperband, which
+* provides an simple heuristic to determine the parameters to Hyperband, which
   only requires knowing how many examples the model should observe and a rough
   estimate on how many parameters to sample
 
 This algorithm treats each computation as a scarce resource. If computation is
 not a scarce resource, there is no benefit from this algorithm. At it's core,
-this algorithm is a fancy early-stopping scheme for a random search
-:cite:`TODO`.
-
-.. cite ben recht paper on randomized search
+this algorithm is a fancy early-stopping scheme for a random selection of
+hyper-parameters.
 
 This paper will review other existing work for model selection before
 detailing the Hyperband implementation in Dask. A realistic set of experiments
@@ -140,9 +145,46 @@ Related work
 Software for model selection
 ----------------------------
 
+A commonly used method for hyper-parameter selection is a random selection of
+hyper-parameters followed by training each model to completion.  This offers
+several advantages, including sampling "important parameters" more densely over
+unimportant parameters :cite:`bergstra2012random` and being very amendable to
+parallelism. This randomized search is implemented in Scikit-Learn
+:cite:`pedregosa2011` and mirrored in Dask-ML.
+
+These implementations are by definition passive: they do not adapt to previous
+training. One popular class of adaptive algorithms are Bayesian model selection
+algorithms. These algorithms treat the model as a black box and scores as a
+noisy evaluation of that black box. These methods try to find the optimal set
+of a hyper-parameters given a minimal number of observations by adapting to
+previous evaluations.
+
+Popular Bayesian searches include sequential model-based algorithm
+configuration (SMAC) :cite:`hutter2011`, tree-structure Parzen estimator (TPE)
+:cite:`bergstra2011`, and Spearmint :cite:`snoek2012`. Many of these are
+available through the "robust Bayesian optimization" package RoBo
+:cite:`kleinbayesopt17` through AutoML [#automl]_. This package also includes
+Fabolas, a method that takes data-set size as input and allows for some
+computational control :cite:`klein2016`.
+
+.. [#automl] https://github.com/automl/
+
 Hyperband
 ---------
-This section is a short review of :cite:`TODO`. Hyperband
+
+Hyperband is an adaptive model selection algorithm. It can rely on each model
+being iterative because it's grounded in a multi-armed bandit theoretical
+framework. Hyperband treats model fitting as a scarce resource. One application of Hyperband is to assume the models are iterative. [#future-work]_
+
+.. TODO cite bandits
+
+.. [#future-work] One other application is mentioned as future work.
+
+In this application, Hyperband is a principled early-stopping scheme for
+randomized searches. Hyperband evaluates many models with different
+hyper-parameters and selects to stop particular models at select times.
+
+The Hyperband algorithm :cite:`li2016hyperband`
 
 * returns high performing models. It adapts to all the scores received to help
   choose which models to train further.
@@ -150,14 +192,25 @@ This section is a short review of :cite:`TODO`. Hyperband
   work performed, and has an optional input parameter that controls how
   aggressive the search is.
 
+Bayesian searches and Hyperband can be combined by using the Hyperband bracket
+framework `sequentially` and progressively tuning a Bayesian prior to select
+parameters for each bracket :cite:`falkner2018`. This work is also available
+through AutoML.
+
 High performing models
 ^^^^^^^^^^^^^^^^^^^^^^
+
+TODO
 
 Input parameters
 ^^^^^^^^^^^^^^^^
 
+TODO
+
+
 Hyperband in Dask
 =================
+
 Hyperband architecture
 ----------------------
 
