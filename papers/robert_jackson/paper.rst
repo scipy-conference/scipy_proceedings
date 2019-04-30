@@ -29,15 +29,15 @@ A Numerical Perspective to Terraforming a Desert
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
+   PyDDA is a new community framework aimed at wind retrievals that depends
+   only upon utilities in the SciPy ecosystem such as scipy, numpy, and dask.
+   It can support retrievals of winds using information from weather radar
+   networks constrained by high resolution forecast models over grids that
+   cover thousands of kilometers at kilometer-scale resolution.
+   Unlike past wind retrieval packages, this package can be installed using
+   anaconda for easy installation and, with a focus on ease of use can retrieve
+   winds from gridded radar and model data with just a few lines of code.
 
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
 
 .. class:: keywords
 
@@ -46,67 +46,245 @@ A Numerical Perspective to Terraforming a Desert
 Introduction
 ------------
 
-   Wind measurements
+The retrieval of three dimensional winds from weather radars is a nontrivial
+task. Given that the radar measures the speed of scatterers in the direction
+of the radar beam rather than the full wind velocity, retrieving these
+winds requires more information than the doppler velocities measured by a
+single weather radar.
 
-   (Paragraph about methods used for wind retrievals)
+(Paragraph about methods used for wind retrievals)
+Currently existing software for wind retrievals includes software based
+off of the strong constraint technique such as CEDRIC (citation) as well
+as software based off of the weak variational technique such as MultiDop
+:cite:`Langetal2017`. Since CEDRIC uses a strong constraint
+from mass continuity equation to retrieve winds, the addition of constraints
+from other data sources is not possible with CEDRIC. Also, while CEDRIC was
+revolutionary for its time, it is difficult to use as it uses a scripting
+language as inputs for the retrieval. While MultiDop is based off of the
+more customizable 3D variational technique, it is fixed to 2 or 3 radars and
+is not scalable. In addition, the addition of constraints from other 3D
+fields such as models is not supported. Finally, Multidop is a wrapper
+around a program written in C which introduces issues related to packaging
+in frameworks such as anaconda and scalability due to the non-threadsafe
+nature of the wrapper.
 
-   Currently existing software for wind retrievals includes software based
-   off of the strong constraint technique such as CEDRIC (citation) as well
-   as software based off of the weak variational technique such as MultiDop
-   :cite:`Langetal2017`. Since CEDRIC is based off of a strong constraint
-   on the mass continuity equation, the addition of constraints from other
-   data sources is not possible with CEDRIC. Also, while CEDRIC was
-   re
-   However, CEDRIC is difficult to use as it uses a
-   scripting language as inputs for the retrieval. While MultiDop is based
-   off of the more customizable 3D variational technique, it is fixed to 2 or
-   3 radars and is not scalable. In addition, the addition of constraints
-   from other 3D fields such as models is not supported and the code is not
-   threadsafe.
-
-   The limitations in current wind retrieval software motivated development
-   an open source, entirely Pythonic wind retrieval package called PyDDA.
-   PyDDA is based entirely on the scientific Python ecosystem. This therefore
-   permits the easy installation of PyDDA using pip or anaconda. As will
-   be shown later, PyDDA can retrieve winds from multiple radars combined with
-   data from model reanalyses with just a few lines of code.
+The limitations in current wind retrieval software motivated development
+an open source, entirely Pythonic wind retrieval package called PyDDA.
+PyDDA is based entirely on the scientific Python ecosystem. This therefore
+permits the easy installation of PyDDA using pip or anaconda. As will
+be shown later, PyDDA can retrieve winds from multiple radars combined with
+data from model reanalyses with just a few lines of code. In addition, the
+open source nature of PyDDA encourages contributions by users in order
+to
 
 Three dimensional variational technique
 ---------------------------------------
 
-   The technique that PyDDA uses to create a wind retrieval is based off of
-   the optimization of a cost function :math:`J(\vec{v})`. This cost function
-   is the weighted sum of many different cost functions related to various
-   constraints.
+The technique that PyDDA uses to create a wind retrieval is based off of
+finding the wind vector field :math:`\vec{\textbf{V}}` of a cost function
+that minimizes :math:`J(\textbf{V})`. This cost function is the weighted
+sum of many different cost functions related to various constraints.
 
-   +-----------------------+-------------------------------+
-   | Cost function         | Basis of constraint           |
-   +=======================+===============================+
-   | :math:`J_{o}(\vec{v})`| Radar observations            |
-   +-----------------------+-------------------------------+
-   | :math:`J_{c}(\vec{v})`| Mass continuity equation      |
-   +-----------------------+-------------------------------+
-   | :math:`J_{v}(\vec{v})`| Vertical vorticity equation   |
-   +-----------------------+-------------------------------+
-   | :math:`J_{m}(\vec{v})`| Model field constraint        |
-   +-----------------------+-------------------------------+
-   | :math:`J_{b}(\vec{v})`| Background constraint         |
-   |                       | (rawinsonde data)             |
-   +-----------------------+-------------------------------+
-   | :math:`J_{s}(\vec{v})`| Smoothness constraint         |
-   +-----------------------+-------------------------------+
++--------------------------------+-------------------------------+
+| Cost function                  | Basis of constraint           |
++================================+===============================+
+| :math:`J_{o}(\vec{\textbf{V}})`| Radar observations            |
++--------------------------------+-------------------------------+
+| :math:`J_{c}(\vec{\textbf{V}})`| Mass continuity equation      |
++--------------------------------+-------------------------------+
+| :math:`J_{v}(\vec{\textbf{V}})`| Vertical vorticity equation   |
++--------------------------------+-------------------------------+
+| :math:`J_{m}(\vec{\textbf{V}})`| Model field constraint        |
++--------------------------------+-------------------------------+
+| :math:`J_{b}(\vec{\textbf{V}})`| Background constraint         |
+|                                | (rawinsonde data)             |
++--------------------------------+-------------------------------+
+| :math:`J_{s}(\vec{\textbf{V}})`| Smoothness constraint         |
++--------------------------------+-------------------------------+
 
-   The detailed formulas behind these cost functions can be found in
-   :cite:`Shapiroetal2009` and :cite:`Potvinetal2012`
+The detailed formulas behind these cost functions can be found in
+:cite:`Shapiroetal2009` and :cite:`Potvinetal2012`. The cost function
+:math:`\vec{\textbf{V}}` is then typically expressed as:
 
-Retrieval code examples
------------------------
+.. math::
 
-Hurricane Florence winds
-------------------------
+     J(\vec{\textbf{V}}) = J_{o}(\vec{\textbf{V}}) + J_{c}(\vec{\textbf{V}}) +
+                           J_{v}(\vec{\textbf{V}}) + J_{m}(\vec{\textbf{V}}) +
+                           J_{b}(\vec{\textbf{V}}) + J_{s}(\vec{\textbf{V}})
 
-Tornado in Sydney, Australia
-----------------------------
+In order to find the :math:`\vec{\textbf{V}}` that minimizes
+:math:`\vec{J(\textbf{V})}` an iterative optimization technique must be used.
+A commonly used technique to minimize :math:`J(\textbf{V})` by iterating
+:math:`\vec{\textbf{V_{n}}} = \vec{\textbf{V_{n-1}}} - \alpha\nabla{\vec{\textbf{V}}}`
+for an :math:`\alpha > 0` until there is convergence to a solution. This first
+requires the user to provide an initial guess :math:`\vec{\textbf{V_{0}}}`.
+This is called the gradient descent method that finds the minimum by
+decrementing :math:`\vec{\textbf{V}}` in the direction of steepest descent.
+Multidop used the gradient descent method to minimize the cost function
+:math:`\vec{J(\textbf{V})}`.
+
+However, convergence can be slow with gradient descent. Therefore, in
+order to ensure faster convergence, PyDDA uses the limited memory
+Broyden–Fletcher–Goldfarb–Shanno (L-BGFS-B) technique that optimizes the gradient
+descent method by using the inverse Hessian of the cost function to find an
+optimal search direction and :math:`\alpha` for each retrieval. Since there
+are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
+box (L-BFGS-B) variant of this technique can take advantage of this by only
+using L-BFGS on what the algorithm identifies as free variables, optimizing
+the retrieval further. The L-BFGS-B algorithm is implemented in SciPy. After
+the initial wind field is set up, PyDDA calls the L-BFGS-B algorithm with this
+line of code
+
+.. code-block:: python
+
+    from scipy.optimize import fmin_l_bfgs_b
+
+    winds = fmin_l_bfgs_b(
+            J_function, winds, args=(vrs, azs, els, wts, u_back, v_back,
+            u_model, v_model, w_model, Co, Cm, Cx, Cy, Cz, Cb,
+            Cv, Cmod, Ut, Vt, grid_shape,
+            dx, dy, dz, z, rmsVr, weights, bg_weights, mod_weights,
+            upper_bc, False), maxiter=10, pgtol=1e-3, bounds=bounds,
+            fprime=grad_J, disp=0, iprint=-1)
+
+This line of code is rather complex for the end user. Therefore, in order
+to simplify this retrieval, PyDDA includes a wrapper function in its
+retrieval module called get_dd_wind_field. With this line of code, if one
+has grids that they have loaded using the Python ARM-Radar Toolkit into
+list_of_grids and initial states of the wind field into arrays called
+u_init, v_init, and w_init, retrieval of winds is as easy as
+
+.. code-block:: python
+
+    winds = pydda.retrieval.get_dd_wind_field(
+        list_of_grids, u_init, v_init, w_init)
+
+PyDDA even includes an intialization module that will generate
+u_init, v_init, w_init for the user. For example, in order to generate an
+initial wind field of :math:`\vec{\textbf{V}} = \vec{\textbf{0}}` in the
+shape of any one of the grids in list_of_grids, simply do
+
+.. code-block:: python
+
+    u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
+        list_of_grids[0], wind=(0.0, 0.0, 0.0))
+
+Available features in PyDDA
+---------------------------
+
+In addition, PyDDA also supports 3 types of basic visualizations: wind barb
+plots, quiver plots, and streamline plots. These plots are created using
+matplotlib and return a matplotlib axis handle so that the user can use
+matplotlib to make further customizations to the plots that they desire.
+
+(Go over custom constraints and initalizations)
+
+Hurricane Florence winds using NEXRAD and HRRR
+----------------------------------------------
+
+.. figure:: Figure1.png
+   :align: center
+
+   A streamline plot of the wind field retrieved by PyDDA from 2 NEXRAD
+   radars and the HRRR in Hurricane Florence. The blue contour represents the
+   region containing gale force winds, while the red contour represents the
+   regions where hurricane force winds are present. :label:`small_hurricane`
+
+.. code-block:: python
+
+    import pyart
+    import pydda
+
+    from distributed import Client
+
+    def load_file_and_grid(file_name):
+        """
+        Processes a radar file by filtering and dealiasing
+        velocities using Py-ART
+
+        Parameters
+        ----------
+        file_name: str
+            The name of the file to process.
+
+        Returns
+        -------
+        my_grid: Py-ART Grid
+            The Py-ART Grid for the corresponding radar
+        """
+
+        my_radar = pyart.io.read(file_name)
+
+        # Filter out noise
+        gf = pyart.filters.GateFilter(mhx_radar)
+        gf.exclude_below('cross_correlation_ratio', 0.5)
+        gf.exclude_below('reflectivity', -20)
+
+        # Dealias velocities
+        dealiased_vel = pyart.correct.dealias_region_based(
+            my_radar, gatefilter=gf)
+
+        # Convert to Cartesian coordinates (z, y, x in m)
+        grid_spec = (31, 1101, 1101)
+        grid_z = (0., 15000.)
+        grid_y = (-650000., 650000.)
+        grid_x = (-650000., 650000.)
+        my_grid = pyart.map.grid_from_radars(
+           my_radar, grid_spec, (grid_z, grid_y, grid_x),
+           fields=['reflectivity','corrected_velocity'],
+           refl_field='reflectivity',roi_func='dist_beam',
+           h_factor=0.,nb=0.6,bsp=1.,min_radius=200.,
+           grid_origin=(mhx_radar.latitude['data'], mhx_radar.longitude['data']))
+
+        return my_grid
+
+    # Initialize dask client for your cluster
+    client = Client(json_file='my_cluster_json.json')
+
+    file_list = ['radar1.nc', 'radar2.nc']
+    # Load radar grids using Py-ART
+    pyart_grid1 = pyart.io.read_grid('first_radar.nc')
+    pyart_grid2 = pyart.io.read_grid('second_radar.nc')
+    my_grids = [pyart_grid1, pyart_grid2]
+
+    # Add HRRR GRIB file
+    hrrr_path = 'my_hrrr_file.grib'
+    my_grids[0] = pydda.constraints.add_hrrr_constraint_to_grid(my_grids[0],
+            hrrr_path)
+
+    # Download and add ERA Interim data
+    my_grids[0] = pydda.constraints.make_constraint_from_era_interim(
+        my_grids[0])
+
+    # Make the output grids
+    u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
+        grid_mhx, (0.0, 0.0, 0.0))
+    out_grids = pydda.retrieval.get_dd_wind_field_nested(
+        my_grids, u_init, v_init, w_init, Co=1.0, Cm=100.0,
+        Cmod=1e-5, model_fields=["hrrr", "erainterim"],
+        client=client)
+
+Another example of the power of PyDDA is its ability to retrieve winds from
+networks of radars over areas spanning thousands of kilometers with ease.
+:ref:`big_hurricane` shows an example of a retrieval from PyDDA using 6
+NEXRAD radars combined with the HRRR and ERA-Interim. Using a multigrid method
+that first retrieves the wind field on a coarse grid and then splits the
+fine grid retrieval into chunks, this technique can use dask to retrieve
+the wind field in Figure :ref:`big_hurricane` about 30 minutes. The code to
+retrieve the wind field from many radars and both models is as simple as
+
+.. figure:: Figure2.png
+   :align: center
+
+   A wind barb plot showing the winds retrieved by PyDDA from 6 NEXRAD
+   radars, the HRRR and the ERA-Interim. Contours are as in Figure
+   :ref:`small_hurricane`. :label:`big_hurricane`
+
+Tornado in Sydney, Australia using 4 radars
+-------------------------------------------
+
+Combining single weather radars with ERA-Interim
+------------------------------------------------
 
 Contributor Information
 -----------------------
