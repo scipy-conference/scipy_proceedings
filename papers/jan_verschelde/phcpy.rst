@@ -76,7 +76,7 @@ Mechanism Design
 Fig. :ref:`fig4barcoupler` illustration a reproduction
 of a result in the mechanism design literature [MW90]_.
 Given five points, the problem is to determine the length of two bars
-so their couple curve passes through the five given points.
+so their coupler curve passes through the five given points.
 
 .. figure:: ./fbarcoupler.png
    :align: center
@@ -85,9 +85,23 @@ so their couple curve passes through the five given points.
    The design of a 4-bar mechanism.  :label:`fig4barcoupler`
 
 This example is part of the tutorial of phcpy and the scripts 
-to reproduce the results are in the source code distribution.
+to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
+
+Mission and Realization
+-----------------------
+
+The mission of phcpy is to bring Polynomial Homotopy Continuation
+into Python's computational ecosystem.
+The realization of phcpy happens by wrapping the compiled code
+provided as shared object files by PHCpack.
+This approach has two benefits.
+First, the wrapping transfers the implementation of the many
+available homotopy algorithms in a direct way into Python modules.
+Second, we do not sacrifice the efficiency of the compiled code.
+Scripts replace the input/output movements and interactions with
+the user, but not the computationally intensive algorithms.
 
 Code Snippets
 -------------
@@ -188,6 +202,7 @@ References
 .. [Hun07] J. D. Hunter.
            *Matplotlib: A 2D Graphics Environment.*
            Computing in Science and Engineering 9(3): 90-95, 2007.
+           DOI  10.1109/MCSE.2007.55.
 
 .. [SymPy] D. Joyner, O. Certik, A. Meurer, and B. E. Granger.
            *Open source computer algebra systems: SymPy.*
@@ -206,7 +221,8 @@ References
 
 .. [MW90] A. P. Morgan and C. W. Wampler.
           *Solving a Planar Four-Bar Design Using Continuation.*
-          Journal of Mechanical Design, 112: 544-550, 1990.
+          Journal of Mechanical Design, 112(4): 544-550, 1990.
+          DOI 10.1115/1.2912644.
 
 .. [Sage] The Sage Developers.
           *SageMath, the Sage Mathematics Software System, Version 7.6*.
