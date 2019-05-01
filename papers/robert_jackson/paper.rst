@@ -50,9 +50,10 @@ The retrieval of three dimensional winds from weather radars is a nontrivial
 task. Given that the radar measures the speed of scatterers in the direction
 of the radar beam rather than the full wind velocity, retrieving these
 winds requires more information than the doppler velocities measured by a
-single weather radar.
+single weather radar. Typically constraints based on physical concepts such as
+conservation of mass or data from models and rawinsondes are used to create
 
-(Paragraph about methods used for wind retrievals)
+
 Currently existing software for wind retrievals includes software based
 off of the strong constraint technique such as CEDRIC (citation) as well
 as software based off of the weak variational technique such as MultiDop
@@ -74,8 +75,8 @@ PyDDA is based entirely on the scientific Python ecosystem. This therefore
 permits the easy installation of PyDDA using pip or anaconda. As will
 be shown later, PyDDA can retrieve winds from multiple radars combined with
 data from model reanalyses with just a few lines of code. In addition, the
-open source nature of PyDDA encourages contributions by users in order
-to
+open source nature of PyDDA encourages contributions by users for further
+enhancement.
 
 Three dimensional variational technique
 ---------------------------------------
