@@ -169,13 +169,6 @@ unimportant parameters :cite:`bergstra2012random` and being very amendable to
 parallelism. This randomized search is implemented in Scikit-Learn
 :cite:`pedregosa2011` and mirrored in Dask-ML.
 
-Dask-ML has an implementation of the random selection
-scheme that trains models until completion for randomly selected
-hyper-parameters. This implementation has drop-in replacements for the
-Scikit-Learn model selection algorithms. The Dask-ML implementation caches
-trained sections of pipelines, which can result in much lower time to the same
-solution as Scikit-Learn.
-
 These implementations are passive by definition: they do not adapt to previous
 training. One popular class of adaptive algorithms are Bayesian model selection
 algorithms. These algorithms treat the model as a black box and scores as a
@@ -245,7 +238,7 @@ importance is illustrated by the algorithm:
        return best_model(final_models)
 
 Each bracket indicates a value in the tradeoff between hyper-parameter and
-training time importance. With `max_iter=243`, the least adaptive bracket runs
+training time importance. With ``max_iter=243``, the least adaptive bracket runs
 5 models until completion and the most adaptive bracket aggressively prunes off
 81 models.
 
@@ -329,11 +322,75 @@ progressively tuning a Bayesian prior to select parameters for each bracket
 Model selection in Dask
 =======================
 
+Model selection searches can be compute and/or memory constrained. Memory
+constrained problems include data not fitting in memory. Compute constrained
+involve searches of many hyper-parameters (e.g., in neural nets).  This paper
+is focused on searches that are compute constrained searches and is agnostic to
+if they're memory constrained.
+
+Dask-ML has a prior implementation that alleviate some computational effort
+though it can not be applied to memory-constrained problems. This
+implementation has a drop-in replacement for Scikit-Learn's randomized search.
+The Dask-ML implementation caches trained sections of pipelines, which can
+result in much lower time to the same solution as Scikit-Learn. However, it
+requires that the entire dataset fit into the memory of a single machine.
+
+The implementation of Hyperband in Dask-ML is follows the Scikit-Learn API. It
+expects the model passed to have ``partial_fit``, ``score`` and ``{get,
+set}_params`` methods. The requirement of a ``partial_fit`` implementation is
+natural because all optimization algorithms are iterative to the author's
+knowledge.
 
 Hyperband architecture
 ----------------------
+
+The Hyperband algorithm involves two "embarassingly parallel" for-loops:
+
+* the sweep over the possible values of hyper-parameter vs. training time
+  importance
+* in each call to successive halving, the models are trained completely
+  independently
+
+The one downside to the amount of parallelism is that the number of models
+decays approximately in each call to the successive halving algorithm,
+approximately like :math:`1 / k` (but rather quantized).
+
+This lends itself well to Dask, an advanced distributed scheduler that can
+handle many concurrent jobs. Dask Distributed is required because the
+computation graph is not static: training stops on particular models. This
+wouldn't be a problem if only one successive halving bracket ran; however,
+those are also run in parallel.
+
 Input parameters
 ----------------
+
+Hyperband requires two input parameters:
+
+1. the number of ``partial_fit`` calls for the best estimator (via ``max_iter``)
+2. the number of examples that each ``partial_fit`` call sees (which is implicit
+   via ``chunks``, the chunk size of the Dask array).
+
+These two parameters rely on knowing how long to train the estimator
+[#examples]_ and having a rough idea on the number of parameters to evaluate.
+Trying twice as many parameters with the same amount of computation requires
+halving ``chunks`` and doubling ``max_iter``.
+
+In comparison, random searches require three inputs:
+
+1. the number of ``partial_fit`` calls for `every` estimator (via ``max_iter``)
+2. how many parameters to try (via ``num_params``).
+3. the number of examples that each ``partial_fit`` call sees (which is implicit
+   via ``chunks``, the chunk size of the Dask array).
+
+Trying twice as many parameters with the same amount of computation requires
+doubling ``num_params`` and halving either ``max_iter`` or ``chunks``, so every
+estimator will see half as many data. This means a balance between training
+time and hyper-parameter importance is implicitly being decided upon.
+Hyperband has one fewer input because it sweeps over this balance's importance.
+
+.. [#examples] e.g., something in the form "the most trained model should see 100 times the number of examples (aka 100 epochs)"
+.. [#tolerance] Tolerance (typically via ``tol``) is a proxy for ``max_iter`` because smaller tolerance typically means more iterations are run.
+
 Dwindling number of models
 --------------------------
 
