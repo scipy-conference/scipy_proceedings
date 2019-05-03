@@ -41,7 +41,7 @@ PyDDA: A new Pythonic Wind Retrieval Package
 
 .. class:: keywords
 
-   wind, retrieval, hurricane,
+   wind, retrieval, hurricane, tornado, radar
 
 Introduction
 ------------
@@ -58,7 +58,8 @@ scanning weather radars. The first method prescribes a strong constraint
 on the wind field according to the mass continuity equation. The second
 method is a variational technique that places weak constraints on the
 wind field by finding the wind field that minimizes a cost function according
-to deviance from physical laws or from observations.
+to deviance from physical laws or from observations (:cite:`Shapiroetal2009`,
+:cite:`Potvinetal2012`).
 
 Currently existing software for wind retrievals includes software based
 off of the strong constraint technique such as CEDRIC (citation) as well
@@ -76,24 +77,34 @@ in frameworks such as anaconda and scalability due to the non-threadsafe
 nature of the wrapper.
 
 The limitations in current wind retrieval software motivated development
-of PyDDA. PyDD is entirely written in Python and based off of the Scientific
+of PyDDA. PyDDA is entirely written in Python and based off of the Scientific
 Python ecosystem. This therefore permits the easy installation of PyDDA using
 pip or anaconda. Given that this alone is a major hurdle to using currently
 existing retrieval software, this makes it easier for those who are not
-radar scientists to be able to use the software. As will be shown later,
-PyDDA can retrieve winds from multiple radars combined with data from model
-reanalyses with just a few lines of code. In addition, the open source nature
-of PyDDA encourages contributions by users for further enhancement.
+radar scientists to be able to use the software. Unlike currently existing software,
+a suite of unit tests are built into PyDDA that are executed whenever a user
+make a contribution to PyDDA, ensuring that the package will function for the
+user. With regards to ease of use, PyDDA can retrieve winds from multiple radars
+combined with data from model reanalyses with just a few lines of code.
+In addition, the open source nature of PyDDA encourages contributions by
+users for further enhancement. PyDDA was created with a goal in mind: to
+make radar wind retrievals more accessible to the scientific community
+through both ease of installation and use.
 
-(Put some sentences in here about usability by broad community)
+This paper will first show the implementation of the variational technique used
+in PyDDA. After that, this paper shows examples of retrieving and visualizing
+gridded radar data with PyDDA. Finally, several use cases in severe convection
+such as Hurricane Florence and a tornado in Sydney, Australia are shown in order
+to provide examples on how this software can be used by those interested in validating
+severe weather forecasts and assessing wind damage.
 
 Three dimensional variational technique
 ---------------------------------------
 
-The technique that PyDDA uses to create a wind retrieval is based off of
-finding the wind vector field :math:`\vec{\textbf{V}}` of a cost function
-that minimizes :math:`J(\textbf{V})`. This cost function is the weighted
-sum of many different cost functions related to various constraints.
+The wind retrieval used by PyDDA is the The technique that PyDDA uses to create a
+wind retrieval is based off of finding the wind vector field :math:`\vec{\textbf{V}}`
+of a cost function that minimizes :math:`J(\textbf{V})`. This cost function is
+the weighted sum of many different cost functions related to various constraints.
 
 +--------------------------------+-------------------------------+
 | Cost function                  | Basis of constraint           |
@@ -227,7 +238,7 @@ u_init, v_init, and w_init, retrieval of winds is as easy as
     winds = pydda.retrieval.get_dd_wind_field(
         list_of_grids, u_init, v_init, w_init)
 
-PyDDA even includes an intialization module that will generate
+PyDDA even includes an initialization module that will generate
 u_init, v_init, w_init for the user. For example, in order to generate an
 initial wind field of :math:`\vec{\textbf{V}} = \vec{\textbf{0}}` in the
 shape of any one of the grids in list_of_grids, simply do
@@ -237,23 +248,46 @@ shape of any one of the grids in list_of_grids, simply do
     u_init, v_init, w_init = pydda.initialization.make_constant_wind_field(
         list_of_grids[0], wind=(0.0, 0.0, 0.0))
 
-The user can add their own custom constraints and initalizations into PyDDA.
-Since the pydda.retriveal.get_dd_wind_field has 3D NumPy arrays as inputs
+The user can add their own custom constraints and initializations into PyDDA.
+Since the pydda.retrieval.get_dd_wind_field has 3D NumPy arrays as inputs
 for the initialization, this allows the user to enter in an arbitrary NumPy
-array with the same shape as the analysis grid as the initalization field.
-In addition, PyDDA includes 4 different initalization routines that will
-create this field for you from various data sources.
+array with the same shape as the analysis grid as the initialization field.
+In addition, PyDDA includes 4 different initialization routines that will
+create this field for you from various data sources. In particular,
+PyDDA even supports the ECMWF web API for the automatic retrieval
+of ERA-Interim reanalysis data. These various routines are listed in the
+following table with similar routines existing in the constraints module.
 
-For custom constraints, the model constraint is based off of any 3D field
-with the same grid specification as the input
++--------------------+--------------------------------------+
+| Data source        | Routine in initalization module      |
++--------------------+--------------------------------------+
+| Weather Research   | make_background_from_wrf             |
+| and Forecasting    |                                      |
+| (WRF)              |                                      |
++--------------------+--------------------------------------+
+| High Resolution    | make_initialization_from_hrrr        |
+| Rapid Refresh      |                                      |
+| (HRRR)             |                                      |
++--------------------+--------------------------------------+
+| ERA Interim        | make_intiialization_from_era_interim |
++--------------------+--------------------------------------+
+| Rawinsonde         | make_wind_field_from_profile         |
++--------------------+--------------------------------------+
+| Constant field     | make_constant_wind_field             |
++--------------------+--------------------------------------+
+
+The model constraint is based off of any 3D field with the same
+grid specification as the input. Therefore, this list can be
+easily expanded with user routines that interpolate the model
+or other observational data to the analysis grid.
 
 Visualization module
 --------------------
 
-In addition, PyDDA also supports 3 types of basic visualizations: wind barb
-plots, quiver plots, and streamline plots. These plots are created using
-matplotlib and return a matplotlib axis handle so that the user can use
-matplotlib to make further customizations to the plots that they desire.
+For easy use by the scientific community, In addition, PyDDA also supports
+3 types of basic visualizations: wind barb plots, quiver plots, and streamline
+plots. These plots are created using matplotlib and return a matplotlib axis
+handle so that the user can use matplotlib to make further customizations to the plots.
 For example, creating a plot of winds on a geographical map with contours
 overlaid on it such as what is shown in Figure `streamline_plot` is as simple as:
 
@@ -287,13 +321,21 @@ overlaid on it such as what is shown in Figure `streamline_plot` is as simple as
     ax.set_yticks(np.arange(33, 35.8, 0.5))
     ax.set_title(ltx_grid.time["units"][-20:])
 
+This therefore makes it very easy to create quicklook plots from the data.
+In addition to horizontal cross sections, PyDDA can also plot wind cross sections
+in the x-z and y-z planes so that one can view a vertical cross section of winds.
 
 .. figure:: Figure_streamline.png
    :align: center
 
-   An example streamline plot of winds in Hurricane Florence. The blue contour
-   represents the region containing gale force winds, while the red contour
-   represents the regions where hurricane force winds are present. :label:`streamline_plot`
+   An example streamline plot of winds in Hurricane Florence overlaid over
+   radar estimated rainfall rate. The blue contour represents the region containing
+   gale force winds, while the red contour represents the regions where hurricane
+   force winds are present. :label:`streamline_plot`
+
+In addition to streamline plots, PyDDA also supports visualization through quiver
+plots. Creating a quiver plot from a dataset that looks like Figure :ref:`barb_plot`,
+in this case a single Doppler retrieval, is as easy as:
 
 .. code-block:: python
 
@@ -307,11 +349,13 @@ overlaid on it such as what is shown in Figure `streamline_plot` is as simple as
                                         quiver_spacing_y_km=10.0)
 
 
-.. figure:: Figure_barbs.png
-   An example wind barb plot from a retrieval from the C-band Polarization
-   Radar and ERA-Interim over Darwin on 20 Jan 2006. :label:`barb_plot`
+.. figure:: Figure_quiver.png
+   An example wind quiver plot from a retrieval from the C-band Polarization
+   Radar and ERA-Interim over Darwin on 20 Jan 2006. The background colors
+   represent the radar reflectivity. :label:`quiver_plot`
 
-
+In a similar regard, one can also make wind barb plots using a similar code
+snippet::
 .. code-block:: python
 
    import pyart
@@ -323,9 +367,8 @@ overlaid on it such as what is shown in Figure `streamline_plot` is as simple as
                                        barb_spacing_x_km=15.0,
                                        barb_spacing_y_km=15.0)
 
-.. figure:: Figure_quiver.png
-   As Figure :ref:`quiver_plot`, but using quivers.
-
+.. figure:: Figure_barbs.png
+   As Figure :ref:`quiver_plot`, but using wind barbs.
 
 
 Hurricane Florence winds using NEXRAD and HRRR
@@ -388,274 +431,72 @@ radars and both models is as simple as
    radars, the HRRR and the ERA-Interim. Contours are as in Figure
    :ref:`small_hurricane`. :label:`big_hurricane`
 
-Given
+
+Given that hurricanes can span hundreds of kilometers and yet have kilometer
+scale variations in wind speed, having the ability to create such high resolution
+retrievals is important for those using high resolution wind data for forecast
+validation and damage assessment. In this example, the coverage of both the
+tropical storm force and damaging hurricane force winds are examined. Figure
+:ref:`small_hurricane` and :ref:`big_hurricane` both show kilometer-scale
+regions of hurricane force winds that may otherwise not have been forecasted
+to occur simply because they are outside of the primary region of damaging winds.
+This therefore shows the importance of having a high resolution, three dimensional
+wind retrieval when examining the effects of storm wind damage.
+
+
 Tornado in Sydney, Australia using 4 radars
 -------------------------------------------
 
+In addition to
 
-Combining single weather radars with ERA-Interim
-------------------------------------------------
+Combining winds from 3 scanning radars with HRRR in Oklahoma
+-------------------------------------------------------------
+
+A final example here shows how easily data from multiple radars and models
+can be combined together. In this example, the XSAPR radars are at X-band
+and therefore have lower coverage but greater resolution than the S-band
+KVNX radar. Figure :ref:`so_many_radars` shows the resulting wind field
+of such a retrieval during a case in stratiform rain. Generally, weaker winds
+and fewer variations are seen compared to the past two cases which would
+generally be expected in such conditions.
+
+.. figure::`Figure_3radar_hrrr.png`
+    :align: center
+
+    A wind barb plot of a wind retrieval from 2 XSAPR radars and the KVNX
+    NEXRAD radar in Oklahoma. In addition, the HRRR was used as a constaint.
+    The wind barbs are plotted over the reflectivity derived from the maximum
+    of the reflectivity from the 3 radars. :label:`so_many_radars`
 
 Contributor Information
 -----------------------
 
-Bibliographies, citations and block quotes
-------------------------------------------
-
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
-
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
-
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
-
-However, if you use a bibtex file, this will overwrite any manually written references. 
-
-So what would previously have registered as a in text reference ``[Atr03]_`` for 
-
-:: 
-
-     [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-what you actually see will be an empty reference rendered as **[?]**.
-
-E.g., [Atr03]_.
-
-
-If you wish to have a block quote, you can just indent the text, as in 
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-Dois in bibliographies
-++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
-
-If there are errors when adding it due to non-alphanumeric characters, see if
-wrapping the doi in ``\detokenize`` works to solve the issue.
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = \detokenize{10.1017/CBO9780511808432},
-   }
-
-Source code examples
---------------------
-
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
---------------
-
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
+We are currently welcoming contributions from the community into PyDDA. A PyDDA roadmap
+demonstrates what kinds of contributions to PyDDA would be useful. As of the writing
+of this paper, the road map states that the current goals of PyDDA are to implement:
+
+* Support for a greater number of high resolution (LES) models such as CM1
+* Support for integrating in data from the Rapid Refresh
+* Coarser resolution reanalyses such as the NCEP reanalysis as initalizations and constraints.
+* Support for individual point analyses, such as those from wind profilers and METARs
+* Support for radar data in antenna coordinates
+* Improvements in visualizations
+* Documentation improvements, including better descriptions in the current English version of the documentation
+and versions of the documentation in non-English languages.
+
+All contributions to PyDDA will have to be submitted by a pull request to the master branch
+on https://github.com/openradar/PyDDA. From there, the main developers will examine the pull
+request to see if unit tests are needed and if the contribution both helps contribute to the
+goals of the road map and if it passes a suite of unit tests in order to ensure the functionality
+of PyDDA. In addition, we also require that the user provide documentation for the code they
+contribute. For the full information on how to make a contribution, go to the contributor's
+guide at https://openradarscience.org/PyDDA/contributors_guide/index.html.
+
+Acknowledgments
+---------------
+
+The HRRR data were downloaded from the University of Utah archive (citation needed).
+In addition, the authors would like to thank Alain Protat for providing the Sydney tornado
+wind data. PyDDA was partially supported by the Climate Model Development and Validation
+Activity of the Department of Energy Office of Science.
 
