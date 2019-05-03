@@ -117,6 +117,40 @@ with an example of use of the blackbox solver.
 
    The code snippet for the blackbox solver.  :label:`figsnippet`
 
+Speedup and Quality Up
+----------------------
+
+An obvious benefit of running on many cores is the speedup.
+The *quality up* question asks the following:
+if we can afford to spend the same time,
+by how much can we improve the solution using *p* processors?
+
+The function defined below returns the elapsed performance
+of the blackbox solver on the cyclic 7-roots benchmark problem,
+for a number of tasks and a precision equal to double, double double,
+or quad double arithmetic.
+
+.. code-block:: python
+
+    def qualityup(nbtasks=0, precflag='d'):
+        """
+        Runs the blackbox solver on a system.
+        The default uses no tasks and no multiprecision.
+        The elapsed performance is returned.
+        """
+        from phcpy.families import cyclic
+        from phcpy.solver import solve
+        from time import perf_counter
+        c7 = cyclic(7)
+        tstart = perf_counter()
+        s = solve(c7, verbose=False, tasks=nbtasks, \
+                  precision=precflag, checkin=False)
+        return perf_counter() - tstart
+
+If the quality of the solutions is defined as the working precision,
+then the quality up question ask for the number of processors needed
+to compensate for the overhead of the multiprecision arithmetic.
+
 CGI Scripting
 -------------
 
