@@ -13,6 +13,12 @@
 .. |eacute| unicode:: U+00E9 .. eacute
    :trim:
 
+.. |iacute| unicode:: U+00ED .. iacute
+   :trim:
+
+.. |Ccaron| unicode:: U+010C .. Ccaron
+   :trim:
+
 -------------------------------------
 Solving Polynomial Systems with phcpy
 -------------------------------------
@@ -49,6 +55,11 @@ Polynomial homotopy continuation is at the origin of many of the algorithms
 in numerical algebraic geometry [SVW05]_.
 Parallel versions of the software described in [SVW03]_
 were recently developed [Ver18]_ and added to phcpy.
+
+For its fast mixed volume computation,
+the software incorporates MixedVol [GLW05]_ and DEMiCs [MT08]_.
+The double double and quad double arithmetic is performed by
+the algorithms in QDlib [HLB01]_.
 
 The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
@@ -233,14 +244,28 @@ References
           Geometry and Topology, 22: 1405-1457, 2018.
           DOI 10.2140/gt.2018.22.1405.
 
+.. [HLB01] Y. Hida, X. S. Li, and D. H. Bailey.
+           *Algorithms for quad-double precision floating point arithmetic.*
+           In the Proceedings  of the 15th IEEE Symposium on Computer 
+           Arithmetic (Arith-15 2001), pages 155--162. IEEE Computer Society,
+           2001.  DOI 10.1109/ARITH.2001.930115.
+
 .. [Hun07] J. D. Hunter.
            *Matplotlib: A 2D Graphics Environment.*
            Computing in Science and Engineering 9(3): 90-95, 2007.
-           DOI  10.1109/MCSE.2007.55.
+           DOI 10.1109/MCSE.2007.55.
 
-.. [SymPy] D. Joyner, O. Certik, A. Meurer, and B. E. Granger.
+.. [GLW05] T. Gao, T.Y. Li, and M. Wu.
+           *Algorithm 846: MixedVol: a software package for mixed-volume
+           computation.*
+           ACM Trans. Math. Softw., 31(4):555-560, 2005.
+	   DOI 10.1145/1114268.1114274.
+
+.. [SymPy] D. Joyner, O. :math:`~\!` |Ccaron| ert |iacute| k, 
+           A. Meurer, and B. E. Granger.
            *Open source computer algebra systems: SymPy.*
            ACM Communications in Computer Algebra 45(4): 225-234 , 2011.
+           DOI 10.1145/2110170.2110185.
 
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
@@ -252,6 +277,15 @@ References
            and Agendas, edited by F. Loizides and B. Schmidt, 
            pages 87-90. IOS Press, 2016.
            DOI 10.3233/978-1-61499-649-1-87.
+
+.. [MT08] T. Mizutani and A. Takeda.
+          *DEMiCs: A software package for computing the mixed volume via
+          dynamic enumeration of all mixed cells.*
+          In Software for Algebraic Geometry, edited by M. E. Stillman,
+          N. Takayama, and J. Verschelde,
+          volume 148 of The IMA Volumes in Mathematics and its Applications,
+          pages 59-79. Springer-Verlag, 2008.
+          DOI 10.1007/978-0-387-78133-4.
 
 .. [MW90] A. P. Morgan and C. W. Wampler.
           *Solving a Planar Four-Bar Design Using Continuation.*
