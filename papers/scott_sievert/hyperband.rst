@@ -20,7 +20,15 @@ Better and faster model selection with Dask
 
 .. class:: abstract
 
-   TODO
+   Nearly every machine learning estimator has parameters assumed to be given.
+   Finding the optimal set of these values is a difficult and time-consuming
+   process for most modern estimators and is called "model selection". A recent
+   breakthrough algorithm, Hyperband addresses this problem by finding high
+   performing estimators with minimal training and has theoretical backing.
+   This paper will explain why Hyperband is well-suited for Dask, the required
+   input parameters and the rationale behind some minor modifications.
+   Experiments with a neural network will be used for illustration and
+   comparison.
 
 .. class:: keywords
 
@@ -265,8 +273,9 @@ performing model than the randomized search without early stopping returns:
    c\parens{\frac{\Log(T)^3 \cdot a}{T}}^{1/\max(\alpha,~\beta)}$$ for some constant
    $c$ and $a = \Log(\log(T) / \delta)$ where $\Log(x) = \log(x \log(x))$.
 
-    By comparison, the best model without early stopping (i.e., randomized
-    searches) after $T$ resources have been used to train models only has loss
+   By comparison, finding the best model without the early stopping Hyperband
+   performs (i.e., randomized searches) after $T$ resources have been used to
+   train models has loss
    $$\nu_{\widehat{i}_T} \le \nu_* + c \parens{\frac{\log(T) \cdot a}{T}}^{1 / (\alpha + \beta)}$$
    \end{thm}
 
@@ -279,15 +288,15 @@ than the uniform allocation scheme. [#sizes]_
 
 .. [#finite] To prove results about the finite horizon algorithm Li et. al.
    only need the result in Corollary 9 :cite:`li2016hyperband`.
-   In the discussion afterwards, they remark that with Corollary 9
-   they can show a similar result to Theorem :ref:`thm:hyperband` but leave
-   it as an exercise for the reader.
+   In the discussion afterwards they remark that with Corollary 9
+   they can show a similar result to Theorem :ref:`thm:hyperband` but it's
+   left as an exercise for the reader.
 
 .. [#sizes] This is clear by examining :math:`\log(\nu_{\widehat{i}_T} -
    \nu_*)` for Hyperband and uniform allocation. For Hyperband, the slope
    approximately decays
-   like :math:`-1 / \max(\alpha,~\beta)`, much faster than the approximate
-   uniform allocation slope of :math:`-1 / (\alpha + \beta)`
+   like :math:`-1 / \max(\alpha,~\beta)`, much faster than the
+   uniform allocation's approximate slope of :math:`-1 / (\alpha + \beta)`.
 
 This shows a definite advantage to performing early stopping on randomized
 searches. In addition, Li et. al. note that the probability the best model is
@@ -329,18 +338,11 @@ implementations include
 
 .. TODO should Jim be an author?
 
-A brief summary is provided in Table :ref:`table`.
-
-The rest of this paper will be spent describing the details of the most complex
-algorithm, ``HyperbandSearchCV``. Points to cover include
-
-* the Hyperband architecture and why it's well-suited for Dask
-* the input parameters required for Hyperband, and how it requires one less
-  input than most other searches
-* the dwindling number of models present in the Hyperband architecture, and
-  modifications to address this
-
-These will be detailed below.
+A brief summary is provided in Table :ref:`table`. The rest of this paper will
+be spent describing the details of the most complex algorithm,
+``HyperbandSearchCV``. The following sections will cover the Hyperband
+architecture and why it's well-suited for Dask, the input parameters required,
+and some modifications to address the dwindling number of models.
 
 .. latex::
    :usepackage: caption
@@ -350,24 +352,22 @@ These will be detailed below.
    \setlength{\tablewidth}{0.9\linewidth}
    \captionsetup{justification=raggedright}
 
-.. table:: A non-exhaustive and non-complete listing of the currently available
-          implementations for
+.. table:: A brief listing of the currently availab implementations for
            model selection searches available in Dask-ML and the types of
-           problems they handle best.
-           The ``{Randomized, Grid}SearchCV`` classes implemented in
-           Dask-ML cache stages of a pipeline.
-           This is especially useful when data preprocessing takes a long time and have hyper-parameters that require tuning.
+           problems they handle best. ``IncrementalSearchCV`` can be
+           configured to be adaptive and then would address compute
+           constrained problems.
            :label:`table`
 
-   +----------------------+---------------------+-------------------------------------------------------------------+
-   | Compute constrained? | Memory constrained? | Dask Implementation(s)                                            |
-   +======================+=====================+===================================================================+
-   | No                   | Yes                 | ``IncrementalSearchCV``                                           |
-   +----------------------+---------------------+-------------------------------------------------------------------+
-   | Yes                  | No                  |  ``GridSearchCV``, ``RandomizedSearchCV``, ``HyperbandSearchCV``  |
-   +----------------------+---------------------+-------------------------------------------------------------------+
-   | Yes                  | Yes                 | ``HyperbandSearchCV``                                             |
-   +----------------------+---------------------+-------------------------------------------------------------------+
+   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
+   | Compute constrained? | Memory constrained? | Dask Implementation(s)                                                                           |
+   +======================+=====================+==================================================================================================+
+   | No                   | Yes                 | ``IncrementalSearchCV``                                                                          |
+   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
+   | Yes                  | No                  |  ``GridSearchCV``, ``RandomizedSearchCV``, ``HyperbandSearchCV``                                 |
+   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
+   | Yes                  | Yes                 | ``HyperbandSearchCV``                                                                            |
+   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
 
 
 Hyperband architecture
@@ -378,34 +378,40 @@ embarrassingly parallel for-loops:
 
 * the sweep over the different brackets of the hyper-parameter vs. training
   time importance tradeoff
-* in each call to successive halving, the models are trained completely
-  independently
+* in each bracket, the models are trained completely independently
 
 Of course, the number of models in each bracket decrease over time because
 Hyperband is an early stopping strategy. For each bracket, the number of models
-is (for example) halved. This is best illustrated by the algorithm:
+is (for example) halved. This is best illustrated by the algorithm's
+pseudo-code:
 
 .. code-block:: python
 
    from sklearn.base import BaseEstimator
 
-   def sha(num_models: int, calls: int) -> BaseEstimator:
+   def sha(n_models: int, calls: int) -> BaseEstimator:
        """Successive halving algorithm"""
-       models = [get_model_w_random_params()
-                 for _ in range(num_models)]
+       # (model and params are specified by the user)
+       models = [get_model(random_params())
+                 for _ in range(n_models)]
        while True:
            models = [train(m, calls) for m in models]
            models = top_k(len(models) // 3, models)
            calls *= 3
-           if len(models) == 1:
-               return models[0]
+           if len(models) <  3:
+               return best_model(models)
 
    def hyperband(max_iter: int) -> BaseEstimator:
-       # Brackets createad so that more models
-       # means more aggressive pruning
+       # Different brackets have different values of
+       # "training" and "hyper-parameter" importance.
+       # => more models means more aggressive pruning
        brackets = [(get_num_models(b, max_iter),
                     get_initial_calls(b, max_iter))
                    for b in range(formula(max_iter))]
+       if max_iter == 243:
+           assert brackets == [(81, 3), (34, 9),
+                               (15, 27), (8, 81),
+                               (5, 243)]
        final_models = [sha(n, r) for n, r in brackets]
        return best_model(final_models)
 
@@ -414,11 +420,14 @@ training time importance. With ``max_iter=243``, the least adaptive bracket runs
 5 models until completion and the most adaptive bracket aggressively prunes off
 81 models.
 
-This architecture lends itself well to Dask, an advanced distributed scheduler
-that can handle many concurrent jobs. Dask Distributed is required because the
-computation graph is not static: training stops on particular models. This
-wouldn't be a problem if only one successive halving bracket ran; however,
-those are also run in parallel.
+This architecture with many embarassingly parallel for-loops and nested
+parallelism lends itself well to Dask, an advanced distributed scheduler that
+can handle many concurrent jobs. Dask can exploit the parallelism present in
+this algorithm and train models from different brackets concurrently.
+
+Dask Distributed is required because of the nested parallelism and the decision
+to stop training low-performing models. That is, the computational graph is
+dynamic and depends on other nodes in the graph.
 
 Input parameters
 ----------------
@@ -487,12 +496,10 @@ control there by design. However, stopping when training when validation score
 decreases is a commonly used technique :cite:`prechelt1998automatic`. Setting
 ``patience`` to be high but not infinite address these concerns.
 
-How should ``patience`` be by default? The current implementation uses
-``patience=True`` to let Hyperband be layered with stop on plateau with a
-patience of ``max_iter // 3``.
-
-This choice is validated by the experiments. The most salient results are shown
-in Figure :ref:`fig:activity`.
+What should the default value of ``patience`` be? The current implementation
+uses ``patience=True`` to let Hyperband be layered with stop on plateau with a
+patience of ``max_iter // 3``. This choice is validated by the experiments. The
+most salient results are shown in Figure :ref:`fig:activity`.
 
 
 Experiments
