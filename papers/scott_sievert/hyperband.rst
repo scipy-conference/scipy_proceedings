@@ -1,6 +1,7 @@
 :author: Scott Sievert
 :email: scott@stsievert.com
 :institution: University of Wisconsin–Madison
+:institution: Relevant work performed while interning for Anaconda, Inc.
 
 :author: Tom Augspurger
 :email: taugspurger@anaconda.com
@@ -9,6 +10,7 @@
 :author: Matthew Rocklin
 :email: mrocklin@gmail.com
 :institution: NVIDIA
+:institution: Work performed while employed for Anaconda, Inc.
 
 :bibliography: refs
 
@@ -29,19 +31,29 @@ Introduction
 
 .. Introduction
    Hyperparameters are input to machine learning workflow
-   They require tuning
-   For modern classifier: Difficult problem (continuous variables, deep learning, etc)
+   Performance strongly depends on hyperparameters
+   They require searching
+   Has gotten more complex. Growth of hyper-parameters
 
 .. Problem statement
-   Question 1: how good?
-   Question 2: how fast?
-   Question 3: inputs to selection?
+   * Hyper-parameter search is pain for data scientist
+   * Often takes a long time to complete
+   * Goals for model selection:
+     * primary goal: high performing models
+     * secondary goal: quick
+   * Most model selection algorithms require inputs of how long to train each
+     model and how many models to evaluate. It'd be convienent to have minimal
+     inputs.
 
 .. Contributions
-   A high performing algorithm, Hyperband, is implemented in Dask-ML
-   * Has mathematical justification; specifically it performs well with high probability
-   * Amendable to parallelism
-   * Easy to use
+    * implements particular model selection algorithm in Dask-ML. This
+      algorithm returns high performing models and has minimal inputs.
+    * makes some modifications to make Hyperband more amendable to
+      parallelism
+    * provides a simple heuristic to determine the inputs for Hyperband,
+      which only requires knowing how many examples to feed the model and a
+      rough estimate of how many parameters to sample
+    * An expirement is performed to validate the parallelism claims
    These provide progress towards all 3 questions above.
    We will walk through each of these sections.
 
@@ -100,6 +112,8 @@ called line search can be performed every iteration. However, with many data
 this becomes too expensive to compute and the learning rate is another
 hyper-parameter that needs to be tuned.
 
+.. TODO: reformat above paragraph
+
 .. cite Steven Wright's book TODO
 
 Contributions
@@ -145,17 +159,19 @@ Dask
 ----
 
 Dask is a distributed computation framework for Python. It integrates nicely
-with Python, and especially with NumPy :cite:`vanderwalt2011` and Pandas
-:cite:`mckinney2012`. It provides easy methods to easily scale Python data
-analysis, either "up" to "more data" or "out" to "more machines".
+with Python, and especially with NumPy, Pandas and the PyData stack. It
+provides easy methods to easily scale Python data analysis, either "up" to
+"more data" or "out" to "more machines". Dask works equally well on a laptop or
+a large cluster and presents the same interface.
 
 Dask is a declarative distributed computation framework that works with many
-distributed schedulers including SLURM, Spark and SGE. The data analyst describes
-the distributed computation to perform, and Dask communicates with the
-distributed scheduler to determine what communication and computation to
-perform to compute the desired result.
+distributed schedulers. It has it's own, Dask Distributed, and also worked with
+SLURM, Spark and SGE to name a few. The programmer describes the distributed
+computation to perform, and Dask determines and communicates with the
+distributed scheduler which communication and computation operations to
+perform.
 
-Dask provides a host of convenient diagnostics, including a dashboard that
+Dask also provides a host of convenient diagnostics, including a dashboard that
 reports diagnostic information on memory and CPU usage, a timeline of running
 tasks and profiling information.
 
@@ -163,14 +179,18 @@ Software for model selection
 ----------------------------
 
 A commonly used method for hyper-parameter selection is a random selection of
-hyper-parameters followed by training each model to completion.  This offers
+hyper-parameters followed by training each model to completion. This offers
 several advantages, including sampling "important parameters" more densely over
 unimportant parameters :cite:`bergstra2012random` and being very amendable to
 parallelism. This randomized search is implemented in Scikit-Learn
 :cite:`pedregosa2011` and mirrored in Dask-ML.
 
 These implementations are passive by definition: they do not adapt to previous
-training. One popular class of adaptive algorithms are Bayesian model selection
+training. Adaptive algorithms can return a higher quality solution in less time
+by choosing which hyper-parameters to sample. This is especially useful for
+difficult problems with many possible hyper-parameters.
+
+One popular class of adaptive algorithms are Bayesian model selection
 algorithms. These algorithms treat the model as a black box and scores as a
 noisy evaluation of that black box. These methods try to find the optimal set
 of a hyper-parameters given a minimal number of observations by adapting to
@@ -189,32 +209,181 @@ computational control :cite:`klein2016`.
 Hyperband
 ---------
 
+.. TODO rewrite this section to only explain first goal: high performing
+   models.
+
 Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`.
-Hyperband is a principled early-stopping scheme for randomized searches in one
-application of the algorithm. Hyperband trains many models in parallel and
-decides to stop models at particular times to preserve computation. By
-contrast, Bayesian searches tweak a set of hyper-parameters based on serial
-evaluations of a model that's assumed to be a black box.
+Hyperband is a principled early-stopping scheme for randomized searches, at
+least in one application of the algorithm. Hyperband trains many models in
+parallel and decides to stop models at particular times to preserve
+computation. By contrast, most Bayesian searches tweak a set of
+hyper-parameters based on serial evaluations of a model that's assumed to be a
+black box.
 
-.. TODO cite bandits
+The analysis underlying Hyperband relies on sweeping over the tradeoff between
+training time and hyper-parameter importance. If training time only matters a
+little, it makes sense to aggressively stop training models. On the flip side,
+if only training time influence the score, it only makes sense to let all
+models train for as long as possible.
 
-The Hyperband algorithm
+This allows a mathematical proof that Hyperband is will return a much higher
+performing model than the randomized search without early stopping returns:
 
-* returns high performing models. It adapts to all the scores received to help
-  choose which models to train further.
-* has minimal inputs. It requires one input parameter to control the amount of
-  work performed, and has an optional input parameter that controls how
-  aggressive the search is.
+.. latex::
+   :usepackage: amsthm
 
-Hyperband is constructed to identify the best model with high probability. The
-analysis relies on sweeping over the tradeoff between training time
-and hyper-parameter importance. If training time only matters a little, it
-makes sense to aggressively stop training models. On the flip side, if only
-training time influence the score, it only makes sense to let the models finish
-training.
 
-This sweep of possible values for the hyper-parameter vs. training time
-importance is illustrated by the algorithm:
+.. raw:: latex
+
+   \newtheorem{thm}{Theorem}
+   \newcommand{\Log}{\overline{\log}}
+   \newcommand{\parens}[1]{\left( #1 \right)}
+   \begin{thm}
+   \label{thm:hyperband}
+   (informal presentation of Theorem 5 from \cite{li2016hyperband})
+   Assume the loss at iteration $k$ decays like $(1/k)^{1/\alpha}$, and
+   the validation losses approximately follow the cumulative distribution
+   function $F(\nu) = (\nu - \nu_*)^\beta$ for $\nu\in[0, 1]$ with optimal
+   validation loss $\nu_*$.
+
+   Higher values of $\alpha$ mean slower
+   convergence, and higher values of $\beta$ represent more difficult model
+   selection problems because it's harder to obtain a validation loss close to
+   the optimal validation loss $\nu_*$.
+   If $\beta > 1$, the validation losses are not uniformly
+   distributed. The commonly used stochastic gradient
+   descent has convergence rates with $1 \le \alpha \le 2$ with lower values
+   implying more structure and regularity
+   \cite{bottou2012stochastic} \cite{shamir2013}.
+
+   Then for any $T\in\mathbb{N}$, let $\widehat{i}_T$ be the empirically best
+   performing model when models are stopped early according to the infinite
+   horizon Hyperband
+   algorithm when $T$ resources have been used to train models. Then
+   with probability $1 -\delta$, the empirically best performing model
+   $\widehat{i}_T$ has loss $$\nu_{\widehat{i}_T} \le \nu_* +
+   c\parens{\frac{\Log(T)^3 \cdot a}{T}}^{1/\max(\alpha,~\beta)}$$ for some constant
+   $c$ and $a = \Log(\log(T) / \delta)$ where $\Log(x) = \log(x \log(x))$.
+
+    By comparison, the best model without early stopping (i.e., randomized
+    searches) after $T$ resources have been used to train models only has loss
+   $$\nu_{\widehat{i}_T} \le \nu_* + c \parens{\frac{\log(T) \cdot a}{T}}^{1 / (\alpha + \beta)}$$
+   \end{thm}
+
+For simplicity, only the infinite horizon case is presented though much of the
+analysis carries over to the practical finite horizon Hyperband. [#finite]_
+Because of this, it only makes sense to compare the loss when the number of
+resources used :math:`T` is large. When this happens, the validation loss of
+the best model Hyperband produces :math:`\nu_{\widehat{i}_T}` is much smaller
+than the uniform allocation scheme. [#sizes]_
+
+.. [#finite] To prove results about the finite horizon algorithm Li et. al.
+   only need the result in Corollary 9 :cite:`li2016hyperband`.
+   In the discussion afterwards, they remark that with Corollary 9
+   they can show a similar result to Theorem :ref:`thm:hyperband` but leave
+   it as an exercise for the reader.
+
+.. [#sizes] This is clear by examining :math:`\log(\nu_{\widehat{i}_T} -
+   \nu_*)` for Hyperband and uniform allocation. For Hyperband, the slope
+   approximately decays
+   like :math:`-1 / \max(\alpha,~\beta)`, much faster than the approximate
+   uniform allocation slope of :math:`-1 / (\alpha + \beta)`
+
+This shows a definite advantage to performing early stopping on randomized
+searches. In addition, Li et. al. note that the probability the best model is
+identified with a (near) minimal number of pulls, within log factors of the
+lower bound on number of resources required as noted by Kaufmann et. al.
+:cite:`kaufmann2015complexity`.
+
+More relevant work involves combining Bayesian searches and Hyperband, which
+can be combined by using the Hyperband bracket framework `sequentially` and
+progressively tuning a Bayesian prior to select parameters for each bracket
+:cite:`falkner2018`. This work is also available through AutoML.
+
+Model selection in Dask
+=======================
+
+Model selection searches problems can be compute constrained or memory
+constrained or neither. Memory constrained problems include data not fitting in
+memory.  Compute constrained involve searches of many hyper-parameters (e.g.,
+in neural nets).
+
+Briefly, the three classes in Dask-ML for model selection search are in the
+``dask_ml.model_selection``. They follow the Scikit-Learn API. The
+implementations include
+
+- ``RandomizedSearchCV`` and ``GridSearchCV``. These mirror the Scikit-Learn
+  learn API. This class is designed for searches that are compute constrained
+  but not memory constrained because these classes call ``fit`` on the model.
+  These classes cache stages of a pipeline, which is remarkably useful with
+  expensive pre-processing stages. [#jim]_
+- ``IncrementalSearchCV``. By default, this mirrors either of the passive
+  searches above. This class is designed to handle large datasets for searches
+  that are not compute constrained. It calls ``partial_fit`` on each "chunk" or
+  partition of the provided Dask array.
+- ``HyperbandSearchCV``. This class is designed for all compute constrained
+  searches. It inherits all of the features of ``IncrementalSearchCV`` and
+  implements a principled early stopping scheme.
+
+.. [#jim] Jim Crist from Anaconda, Inc. implemented these classes.
+
+.. TODO should Jim be an author?
+
+A brief summary is provided in Table :ref:`table`.
+
+The rest of this paper will be spent describing the details of the most complex
+algorithm, ``HyperbandSearchCV``. Points to cover include
+
+* the Hyperband architecture and why it's well-suited for Dask
+* the input parameters required for Hyperband, and how it requires one less
+  input than most other searches
+* the dwindling number of models present in the Hyperband architecture, and
+  modifications to address this
+
+These will be detailed below.
+
+.. latex::
+   :usepackage: caption
+
+.. raw:: latex
+
+   \setlength{\tablewidth}{0.9\linewidth}
+   \captionsetup{justification=raggedright}
+
+.. table:: A non-exhaustive and non-complete listing of the currently available
+          implementations for
+           model selection searches available in Dask-ML and the types of
+           problems they handle best.
+           The ``{Randomized, Grid}SearchCV`` classes implemented in
+           Dask-ML cache stages of a pipeline.
+           This is especially useful when data preprocessing takes a long time and have hyper-parameters that require tuning.
+           :label:`table`
+
+   +----------------------+---------------------+-------------------------------------------------------------------+
+   | Compute constrained? | Memory constrained? | Dask Implementation(s)                                            |
+   +======================+=====================+===================================================================+
+   | No                   | Yes                 | ``IncrementalSearchCV``                                           |
+   +----------------------+---------------------+-------------------------------------------------------------------+
+   | Yes                  | No                  |  ``GridSearchCV``, ``RandomizedSearchCV``, ``HyperbandSearchCV``  |
+   +----------------------+---------------------+-------------------------------------------------------------------+
+   | Yes                  | Yes                 | ``HyperbandSearchCV``                                             |
+   +----------------------+---------------------+-------------------------------------------------------------------+
+
+
+Hyperband architecture
+----------------------
+
+There are two levels of parallelism in Hyperband, which result in two
+embarrassingly parallel for-loops:
+
+* the sweep over the different brackets of the hyper-parameter vs. training
+  time importance tradeoff
+* in each call to successive halving, the models are trained completely
+  independently
+
+Of course, the number of models in each bracket decrease over time because
+Hyperband is an early stopping strategy. For each bracket, the number of models
+is (for example) halved. This is best illustrated by the algorithm:
 
 .. code-block:: python
 
@@ -242,121 +411,8 @@ training time importance. With ``max_iter=243``, the least adaptive bracket runs
 5 models until completion and the most adaptive bracket aggressively prunes off
 81 models.
 
-This allows a mathematical proof that Hyperband is near optimal in the number
-of iterations in the optimization algorithm:
-
-.. latex::
-   :usepackage: amsthm
-
-
-.. raw:: latex
-
-   \newtheorem{thm}{Theorem}
-   \newcommand{\Log}{\overline{\log}}
-   \newcommand{\parens}[1]{\left( #1 \right)}
-   \begin{thm}
-   \label{thm:hyperband}
-   (informal presentation of Theorem 5 from \cite{li2016hyperband})
-   Assume the loss at iteration $k$ decays like $(1/k)^{1/\alpha}$, and
-   the validation losses approximately follow the cumulative distribution
-   function $F(\nu) = (\nu - \nu_*)^\beta$ with optimal validation loss $\nu_*$.
-
-   Higher values of $\alpha$ mean slower
-   convergence, and higher values of $\beta$ represent more difficult model
-   selection problems because it's harder to obtain a validation loss close to
-   the optimal validation loss $\nu_*$.
-   If $\beta > 1$, the validation losses are not uniformly
-   distributed. The commonly used stochastic gradient
-   descent has convergence rates with $1 \le \alpha \le 2$ with lower values
-   implying more structure and regularity
-   \cite{bottou2012stochastic} \cite{shamir2013}.
-
-   Then for any $T\in\mathbb{N}$, let $\widehat{i}_T$ be the empirically best
-   performing model from the last round of the infinite horizon Hyperband
-   algorithm when $T$ resources have been used to train models. Then,
-   model $\widehat{i}_T$ has loss $$\nu_{\widehat{i}_T} \le \nu_* +
-   c\parens{\frac{\Log(T)^3 b}{T}}^{1/\max(\alpha,~\beta)}$$ for some constant
-   $c$ and $b = \Log(\log(T) / \delta)$ where $\Log(x) = \log(x \log(x))$.
-
-    By comparison, the best model without early stopping (i.e., randomized
-    searches) after $T$ resources have been used to train models only has loss
-   $$\nu_{\widehat{i}_T} \le \nu_* + c \parens{\frac{\log(T) b}{T}}^{1 / (\alpha + \beta)}$$
-   \end{thm}
-
-For simplicity, only the infinite horizon case is presented though the finite
-horizon case is implemented in Dask-ML. [#finite]_ Theorem :ref:`thm:hyperband`
-only applies to the "infinite horizon" case when model selection continues
-indefinitely, so it only makes sense to compare for large values of the number
-of resources used :math:`T` is large. When this happens, the loss
-:math:`\nu_{\widehat{i}_T}` of Hyperband is much smaller than the uniform
-allocation scheme. [#sizes]_
-
-
-.. [#finite] To prove results about the finite horizon algorithm Li et. al.
-   only need the result in Corollary 9 :cite:`li2016hyperband`.
-   In the discussion afterwards, they remark that with Corollary 9
-   they can show a similar result to Theorem :ref:`thm:hyperband` but leave
-   it as an exercise for the reader.
-
-.. [#sizes] This is clear by examining :math:`\log(\nu_{\widehat{i}_T} -
-   \nu_*)` for Hyperband and uniform allocation. For Hyperband, the slope
-   approximately decays
-   like :math:`-1 / \max(\alpha,~\beta)`, much faster than the approximate
-   uniform allocation slope of :math:`-1 / (\alpha + \beta)`
-
-This shows a definite advantage to performing early stopping on randomized
-searches. In addition, Li et. al. note that the probability the best model is
-identified with a (near) minimal number of pulls, within log factors of the
-lower bound on number of resources required as noted by Kaufmann et. al.
-:cite:`kaufmann2015complexity`.
-
-Theorem :ref:`thm:hyperband` only applies to the infinite budget setting when
-training continues indefinitely. They also analyze the finite budget setting
-when training is limited, and much of their analysis carries over.
-
-More relevant work involves combining Bayesian searches and Hyperband, which
-can be combined by using the Hyperband bracket framework `sequentially` and
-progressively tuning a Bayesian prior to select parameters for each bracket
-:cite:`falkner2018`. This work is also available through AutoML.
-
-Model selection in Dask
-=======================
-
-Model selection searches can be compute and/or memory constrained. Memory
-constrained problems include data not fitting in memory. Compute constrained
-involve searches of many hyper-parameters (e.g., in neural nets).  This paper
-is focused on searches that are compute constrained searches and is agnostic to
-if they're memory constrained.
-
-Dask-ML has a prior implementation that alleviate some computational effort
-though it can not be applied to memory-constrained problems. This
-implementation has a drop-in replacement for Scikit-Learn's randomized search.
-The Dask-ML implementation caches trained sections of pipelines, which can
-result in much lower time to the same solution as Scikit-Learn. However, it
-requires that the entire dataset fit into the memory of a single machine.
-
-The implementation of Hyperband in Dask-ML is follows the Scikit-Learn API. It
-expects the model passed to have ``partial_fit``, ``score`` and ``{get,
-set}_params`` methods. The requirement of a ``partial_fit`` implementation is
-natural because all optimization algorithms are iterative to the author's
-knowledge.
-
-Hyperband architecture
-----------------------
-
-The Hyperband algorithm involves two "embarassingly parallel" for-loops:
-
-* the sweep over the possible values of hyper-parameter vs. training time
-  importance
-* in each call to successive halving, the models are trained completely
-  independently
-
-The one downside to the amount of parallelism is that the number of models
-decays approximately in each call to the successive halving algorithm,
-approximately like :math:`1 / k` (but rather quantized).
-
-This lends itself well to Dask, an advanced distributed scheduler that can
-handle many concurrent jobs. Dask Distributed is required because the
+This architecture lends itself well to Dask, an advanced distributed scheduler
+that can handle many concurrent jobs. Dask Distributed is required because the
 computation graph is not static: training stops on particular models. This
 wouldn't be a problem if only one successive halving bracket ran; however,
 those are also run in parallel.
@@ -394,11 +450,100 @@ Hyperband has one fewer input because it sweeps over this balance's importance.
 Dwindling number of models
 --------------------------
 
+At first, Hyperband evaluates many models. The number of models decay because
+Hyperband is a principled early stopping scheme. Hyperband varies how
+aggressively it stops models per bracket: the most aggressive bracket performs
+something like a binary search and the least aggressive bracket lets a couple
+models run without any stopping.
+
+This can present a problem. Towards the end of the computation, there can be a
+small number of models that take an exceedingly long time to finish. This is
+especially a problem when computational resources have to be paid for (e.g.,
+with cloud platforms like Amazon AWS or Google Cloud Engine).
+
+Performing additional stopping on top of Hyperband will reduce the score:
+there's less training happening. However, if the correct models are stopped
+that is not an issue. There are two cases to protect against:
+
+1. When training time continues too long, and the models all converge long
+   before training finishes
+2. When poor hyper-parameters are selected and model quality either plateaus or
+   decreases over time. This is especially prevalent in the brackets of
+   Hyperband that are less adaptive because there's less control.
+
+Both of these are addressed by a "stop on plateau" algorithm that monitors the
+model's score and stops training if it doesn't increase enough. This requires
+two additional parameters: ``patience`` to determine how long to wait before
+stopping a model, and ``tol`` which determines how much the score should
+increase by.
+
+Both of the cases to protect against are addressed by setting ``patience`` to
+be high. Both issues are addressed by setting ``patience`` high because
+
+1. We don't think it's more likely that the programmer specified the training
+   time to be slight too short rather than drastically too short. Setting
+   ``patience`` to be high provides a measure to control for this.
+2. Two concerns: there is little control over the least adaptive brackets of
+   Hyperband by design. However, stopping when training when validation score
+   decreases is a commonly used technique :cite:`prechelt1998automatic`.
+   Setting ``patience`` to be high but not infinite address these concerns.
+
+How should ``patience`` be by default? The current implementation uses
+``patience=True`` to let Hyperband be layered with stop on plateau with a
+patience of ``max_iter // 3``.
+
+This choice is validated by the experiments. The most salient results are shown
+in Figure :ref:`fig:activity`.
+
+
 Experiments
 ===========
+Problem
+-------
+
+Model architecture & Parameters
+-------------------------------
+
+Performance
+-----------
+
+.. figure:: 2019-03-24-calls.png
+   :align: center
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`fig:calls`
+
+.. figure:: 2019-03-24-time.png
+   :align: center
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`fig:time`
+
+
+.. figure:: 2019-03-24-activity.png
+   :align: center
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`fig:activity`
+
 
 Future work
 ===========
+
+The biggest area for improvement is using another application of the Hyperband
+algorithm. Currently, it's applied to the case where computation is controlled
+by number of ``partial_fit`` calls to the algorithm. However, it can also
+control dataset size as the controlling variable. This would treat every model
+as a black box and only require the model implement ``fit``.
+
+Another area of future work is ensuring ``IncrementalSearchCV`` and all of it's
+inheritants (including ``HyperbandSearchCV``) work well with large models.
+Modern models often consume most of GPU memory, and currently
+``IncrementalSearchCV`` requires making a copy the model. How much does this
+hurt performance and can it be avoided?
 
 References
 ==========
