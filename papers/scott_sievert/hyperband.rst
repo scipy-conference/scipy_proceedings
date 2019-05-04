@@ -10,7 +10,7 @@
 :author: Matthew Rocklin
 :email: mrocklin@gmail.com
 :institution: NVIDIA
-:institution: Work performed while employed for Anaconda, Inc.
+:institution: Relevant work performed while employed for Anaconda, Inc.
 
 :bibliography: refs
 
@@ -387,22 +387,25 @@ is (for example) halved. This is best illustrated by the algorithm:
 
 .. code-block:: python
 
-   def sha(n_models, calls):
+   from sklearn.base import BaseEstimator
+
+   def sha(num_models: int, calls: int) -> BaseEstimator:
        """Successive halving algorithm"""
        models = [get_model_w_random_params()
-                 for _ in range(n_models)]
+                 for _ in range(num_models)]
        while True:
            models = [train(m, calls) for m in models]
            models = top_k(len(models) // 3, models)
-           if len(models) == 1:
-               break
            calls *= 3
-       return models
+           if len(models) == 1:
+               return models[0]
 
-   def hyperband(max_iter):
-       # More models => more aggressive pruning of models
-       brackets = [num_models_initial_calls(b, max_iter)
-                   for b in range(f(max_iter))]
+   def hyperband(max_iter: int) -> BaseEstimator:
+       # Brackets createad so that more models
+       # means more aggressive pruning
+       brackets = [(get_num_models(b, max_iter),
+                    get_initial_calls(b, max_iter))
+                   for b in range(formula(max_iter))]
        final_models = [sha(n, r) for n, r in brackets]
        return best_model(final_models)
 
@@ -478,15 +481,11 @@ stopping a model, and ``tol`` which determines how much the score should
 increase by.
 
 Both of the cases to protect against are addressed by setting ``patience`` to
-be high. Both issues are addressed by setting ``patience`` high because
-
-1. We don't think it's more likely that the programmer specified the training
-   time to be slight too short rather than drastically too short. Setting
-   ``patience`` to be high provides a measure to control for this.
-2. Two concerns: there is little control over the least adaptive brackets of
-   Hyperband by design. However, stopping when training when validation score
-   decreases is a commonly used technique :cite:`prechelt1998automatic`.
-   Setting ``patience`` to be high but not infinite address these concerns.
+be high. The second issue requires some careful thought. The primary brackets
+to be concerned with are the least adaptive brackets because there's little
+control there by design. However, stopping when training when validation score
+decreases is a commonly used technique :cite:`prechelt1998automatic`. Setting
+``patience`` to be high but not infinite address these concerns.
 
 How should ``patience`` be by default? The current implementation uses
 ``patience=True`` to let Hyperband be layered with stop on plateau with a
