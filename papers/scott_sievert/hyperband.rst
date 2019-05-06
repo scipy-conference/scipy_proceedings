@@ -504,23 +504,111 @@ most salient results are shown in Figure :ref:`fig:activity`.
 
 Experiments
 ===========
+
+This section will highlight a practical use of ``HyperbandSearchCV``. This
+involves a neural network using a popular library (PyTorch through the wrapper
+Skorch), so there are 7 hyper-parameters to tune.
+
 Problem
 -------
+
+Let's denoise some images. The inputs and desired outputs are given in Figure
+:ref:`fig:io`.This is an especially difficult problem because the noise variance
+varies slightly between images. This requires a model that's at least a little
+complex.
+
+
+.. figure:: imgs/io.png
+   :align: center
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`fig:io`
 
 Model architecture & Parameters
 -------------------------------
 
+To address that complexity, let's use an autoencoder. These are a type of neural
+network that reduce the dimensionality of the input before expanding to the
+original dimension. This can be thought of a lossy compression. Let's create
+that model:
+
+.. code-block:: python
+
+   # custom model definition with PyTorch
+   from autoencoder import Autoencoder
+   import skorch  # scikit-learn API wrapper for PyTorch
+
+   est = skorch.NeuralNetRegressor(Autoencoder, ...)
+
+Of course, this is a neural network so there are many hyper-parameters to tune:
+
+* ``estimator__activation``: which activation function should this neural net use?
+* ``optimizer``: optimization method should be used for training?
+* ``estimator__init``: how should the estimator be initialized before training?
+* ``batch_size``: how many examples should the optimizer use to approximate the gradient?
+* ``optimizer__lr``, the most basic hyper-parameter for the optimizer.
+* ``weight_decay``, which controls the amount of regularization
+* ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer.
+
+Let's create the parameters to search over:
+
+.. code-block:: python
+
+   params = {'optimizer': ['SGD', 'Adam'], ...}
+
+Complete details on these hyper-parameters can be found in the Appendix,
+including the values searched. Only one of these affect the global optimum,
+``estimator__activation``. The others are all hyper-parameters that control
+obtaining the global optima.  The two most basic ones are ``estimator__init``
+and ``optimizer__lr``.
+
+The goal is to find a high performing model by finding optimal values for these
+hyper-parameters, or close to optimal.
+
+Usage
+-----
+
+First, let's create a ``HyperbandSearachCV`` object:
+
+.. code-block:: python
+
+    from dask_ml.model_selection import HyperbandSearchCV
+    search = HyperbandSearchCV(est, params, max_iter=243)
+    search.fit(X_train, y_train)
+    search.best_score_
+    # -0.0929. Best of hand tuning: -0.098
+
+The model has denoised a sample of the test set in Figure :ref:`fig:io+est`.
+
+.. figure:: imgs/io+est.png
+   :align: center
+
+   This is a wide figure, specified by adding "w" to the figclass.  It is also
+   center aligned, by setting the align keyword (can be left, right or center).
+   :label:`fig:io+est`
+
+First, ``HyperbandSearchCV`` beat hand-tuning by a considerable margin. While
+manually tuning, I considered any scores about :math:`-0.10` to be pretty good.
+``HyperbandSearchCV`` finds very good models.
+
+Second, ``HyperbandSearchCV`` only requires `one` parameter besides the model
+and data as discussed above. This number controls the amount of computation
+that will be performed, and does not require balancing between the number of
+models and how long to train each model.
+
 Performance
 -----------
 
-.. figure:: 2019-03-24-calls.png
+
+.. figure:: imgs/2019-03-24-calls.png
    :align: center
 
    This is a wide figure, specified by adding "w" to the figclass.  It is also
    center aligned, by setting the align keyword (can be left, right or center).
    :label:`fig:calls`
 
-.. figure:: 2019-03-24-time.png
+.. figure:: imgs/2019-03-24-time.png
    :align: center
 
    This is a wide figure, specified by adding "w" to the figclass.  It is also
@@ -528,7 +616,7 @@ Performance
    :label:`fig:time`
 
 
-.. figure:: 2019-03-24-activity.png
+.. figure:: imgs/2019-03-24-activity.png
    :align: center
 
    This is a wide figure, specified by adding "w" to the figclass.  It is also
@@ -554,3 +642,13 @@ hurt performance and can it be avoided?
 References
 ==========
 
+Appendix
+========
+
+.. code-block:: python
+
+    import noisy_mnist
+    noisy, clean = noisy_mnist.dataset()
+
+    from dask_ml.model_selection import train_test_split
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
