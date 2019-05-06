@@ -62,7 +62,7 @@ to deviance from physical laws or from observations (:cite:`Shapiroetal2009`,
 :cite:`Potvinetal2012`).
 
 Currently existing software for wind retrievals includes software based
-off of the strong constraint technique such as CEDRIC (citation) as well
+off of the strong constraint technique such as CEDRIC :cite:`MillerandFredrick1998` as well
 as software based off of the weak variational technique such as MultiDop
 :cite:`Langetal2017`. Since CEDRIC uses a strong constraint
 from mass continuity equation to retrieve winds, the addition of constraints
