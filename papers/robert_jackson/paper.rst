@@ -190,6 +190,9 @@ and can be reduced to a few Numpy calls:
 Since NumPy takes advantage of open source mathematics libraries that
 parallelize the calculation, this also extends the capability of the retrieval
 to use the available cores on the machine in addition to simplifying the code.
+Each cost function and its gradient can be expressable in an analytical form
+using variational calculus, so the addition of more cost functions is possible due to
+the modular nature of each constraint.
 
 These calculations are then done in order to find the :math:`\vec{\textbf{V}}`
 that minimizes :math:`\vec{J(\textbf{V})}`. A commonly used technique to
@@ -431,7 +434,6 @@ radars and both models is as simple as
    radars, the HRRR and the ERA-Interim. Contours are as in Figure
    :ref:`small_hurricane`. :label:`big_hurricane`
 
-
 Given that hurricanes can span hundreds of kilometers and yet have kilometer
 scale variations in wind speed, having the ability to create such high resolution
 retrievals is important for those using high resolution wind data for forecast
@@ -443,28 +445,50 @@ to occur simply because they are outside of the primary region of damaging winds
 This therefore shows the importance of having a high resolution, three dimensional
 wind retrieval when examining the effects of storm wind damage.
 
-
 Tornado in Sydney, Australia using 4 radars
 -------------------------------------------
 
-In addition to
+(More information about the radar network - Figure with location
+of 4 radars)
+In addition to retrieving winds in hurricanes PyDDA can also integrate
+data from radar networks in order to retrieve the winds inside tornadoes.
+For example, a network of four scanning radars in the vicinity of Sydney,
+Australia captured a supercell within the vicinity of Sydney.  Figure
+:ref:`tornado` shows the winds retrieved by PyDDA inside this supercell.
+Using data from the radars, PyDDA is able to provide a complete picture of
+the rotation inside the supercell and even resolves the updraft in the
+vicinty of the mesocyclone. Such datasets can be of use for estimating the
+winds inside a tornado at altitudes as low as 500 m above ground level. This
+therefore is capable of providing wind datasets that can be used to both provide
+an estimated wind speed for wind damage assessments as well as for verification
+of supercell simulations from weather forecasting models.
+
+.. figure:: Sydney_tornado.png
+    :align: center
+
+A quiver plot inside a supercell that spawned a tornado in the vicinity of
+Sydney, Australia. The contours represent vertical velocity. :label:`tornado`
 
 Combining winds from 3 scanning radars with HRRR in Oklahoma
 -------------------------------------------------------------
 
-A final example here shows how easily data from multiple radars and models
+(Figure providing a map of the 3 XSAPR's and KVNX)
+
+A final example shows how easily data from multiple radars and models
 can be combined together. In this example, the XSAPR radars are at X-band
 and therefore have lower coverage but greater resolution than the S-band
 KVNX radar. Figure :ref:`so_many_radars` shows the resulting wind field
 of such a retrieval during a case in stratiform rain. Generally, weaker winds
 and fewer variations are seen compared to the past two cases which would
-generally be expected in such conditions.
+generally be expected in such conditions. However, this also demonstrates
+the success in integrating radar data from 3 radars and a high resolution
+reanalysis to provide the most complete wind retrieval possible.
 
 .. figure::`Figure_3radar_hrrr.png`
     :align: center
 
     A wind barb plot of a wind retrieval from 2 XSAPR radars and the KVNX
-    NEXRAD radar in Oklahoma. In addition, the HRRR was used as a constaint.
+    NEXRAD radar in Oklahoma. In addition, the HRRR was used as a constraint.
     The wind barbs are plotted over the reflectivity derived from the maximum
     of the reflectivity from the 3 radars. :label:`so_many_radars`
 
