@@ -40,10 +40,12 @@ Introduction
 ------------
 
 The Python package phcpy [Ver14]_ provides an alternative to the
-command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial systems
-by homotopy continuation methods.  
+command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial 
+systems by homotopy continuation methods.  
 Scripts replace command line options and text menus.
 Data remains persistent in a session, decreasing the dependency on files.
+This paper is based on the current version 0.9.4 of phcpy.
+At the time of [Ver14]_, version 0.1.5 was the current version.
 
 The meaning of *solving* evolved from computing approximations to
 all isolated solution into the numerical irreducible decomposition
