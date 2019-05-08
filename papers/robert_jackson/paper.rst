@@ -342,15 +342,13 @@ in this case a single Doppler retrieval, is as easy as:
 
 .. code-block:: python
 
-   import pyart
-   import pydda
+    import pyart
+    import pydda
 
-   Grids = [pyart.io.read_grid('cpolwinds.20060120.005008.nc')]
-   plt.figure(figsize=(7,7))
-   pydda.vis.plot_horiz_xsection_quiver(Grids, None, 'reflectivity', level=6,
-                                        quiver_spacing_x_km=10.0,
-                                        quiver_spacing_y_km=10.0)
-
+    Grids = [pyart.io.read_grid('cpolwinds.20060120.005008.nc')]
+    plt.figure(figsize=(7,7))
+    pydda.vis.plot_horiz_xsection_quiver(
+        Grids, None, 'reflectivity', level=6, quiver_spacing_x_km=10.0, quiver_spacing_y_km=10.0)
 
 .. figure:: Figure_quiver.png
    An example wind quiver plot from a retrieval from the C-band Polarization
@@ -358,17 +356,17 @@ in this case a single Doppler retrieval, is as easy as:
    represent the radar reflectivity. :label:`quiver_plot`
 
 In a similar regard, one can also make wind barb plots using a similar code
-snippet::
+snippet:
+
 .. code-block:: python
 
-   import pyart
-   import pydda
+    import pyart
+    import pydda
 
-   Grids = [pyart.io.read_grid('cpolwinds.20060120.005008.nc')]
-   plt.figure(figsize=(7,7))
-   pydda.vis.plot_horiz_xsection_barbs(Grids, None, 'reflectivity', level=6,
-                                       barb_spacing_x_km=15.0,
-                                       barb_spacing_y_km=15.0)
+    Grids = [pyart.io.read_grid('cpolwinds.20060120.005008.nc')]
+    plt.figure(figsize=(7,7))
+    pydda.vis.plot_horiz_xsection_barbs(
+        Grids, None, 'reflectivity', level=6, barb_spacing_x_km=15.0, barb_spacing_y_km=15.0)
 
 .. figure:: Figure_barbs.png
    As Figure :ref:`quiver_plot`, but using wind barbs.
@@ -430,8 +428,9 @@ radars and both models is as simple as
 .. figure:: Figure2.png
    :align: center
 
-   A wind barb plot showing the winds retrieved by PyDDA from 6 NEXRAD
-   radars, the HRRR and the ERA-Interim. Contours are as in Figure
+   A wind barb plot showing the winds retrieved by PyDDA from 6 NEXRADs,
+   the HRRR and the ERA-Interim. The locations of the 6 NEXRADs are marked by
+   their location code. Contours are as in Figure
    :ref:`small_hurricane`. :label:`big_hurricane`
 
 Given that hurricanes can span hundreds of kilometers and yet have kilometer
@@ -448,8 +447,6 @@ wind retrieval when examining the effects of storm wind damage.
 Tornado in Sydney, Australia using 4 radars
 -------------------------------------------
 
-(More information about the radar network - Figure with location
-of 4 radars)
 In addition to retrieving winds in hurricanes PyDDA can also integrate
 data from radar networks in order to retrieve the winds inside tornadoes.
 For example, a network of four scanning radars in the vicinity of Sydney,
