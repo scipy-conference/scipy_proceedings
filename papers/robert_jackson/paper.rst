@@ -18,10 +18,8 @@
 :author: Todd Munson
 :email: tmunson@anl.gov
 :institution: Argonne National Laboratory, Argonne, IL, USA
+
 :bibliography: mybib
-
-
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------
 PyDDA: A new Pythonic Wind Retrieval Package
@@ -190,14 +188,13 @@ and can be reduced to a few Numpy calls:
 Since NumPy takes advantage of open source mathematics libraries that
 parallelize the calculation, this also extends the capability of the retrieval
 to use the available cores on the machine in addition to simplifying the code.
-Each cost function and its gradient can be expressable in an analytical form
+Each cost function and its gradient can be expressed in an analytical form
 using variational calculus, so the addition of more cost functions is possible due to
 the modular nature of each constraint.
 
 These calculations are then done in order to find the :math:`\vec{\textbf{V}}`
-that minimizes :math:`\vec{J(\textbf{V})}`. A commonly used technique to
-minimize :math:`J(\textbf{V})` iterates
-:math:`\vec{\textbf{V_{n}}} = \vec{\textbf{V_{n-1}}} - \alpha\nabla\vec{\textbf{V}}`
+that minimizes :math:`\vec{J(\textbf{V})}`. A common technique to
+minimize :math:`J(\textbf{V})` calculates :math:`\vec{\textbf{V_n}} = \vec{\textbf{V_{n-1}}} - \alpha\nabla\vec{\textbf{V}}`
 for an :math:`\alpha > 0` until there is convergence to a solution, given that
 an initial guess :math:`\vec{\textbf{V_{0}}}` is provided. This is called the
 gradient descent method that finds the minimum by decrementing
@@ -207,10 +204,10 @@ Multidop used the gradient descent method to minimize the cost function
 
 However, convergence can be slow or even not guaranteed for certain cost functions.
 Therefore, in order to ensure faster convergence, PyDDA uses the limited memory
-Broyden–Fletcher–Goldfarb–Shanno (L-BGFS-B) technique that optimizes the gradient
+Broyden–Fletcher–Goldfarb–Shanno (L-BGFS) technique that optimizes the gradient
 descent method by using the inverse Hessian of the cost function to find an
-optimal search direction and :math:`\alpha` for each retrieval. Since there
-are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
+optimal search direction and :math:`\alpha` for each retrieval :cite:`Byrdetal1995`.
+Since there are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
 box (L-BFGS-B) variant of this technique can take advantage of this by only
 using L-BFGS on what the algorithm identifies as free variables, optimizing
 the retrieval further. The L-BFGS-B algorithm is implemented in SciPy. After
@@ -232,9 +229,9 @@ line of code
 This line of code is rather complex for the end user. Therefore, in order
 to simplify this retrieval, PyDDA includes a wrapper function in its
 retrieval module called get_dd_wind_field. With this line of code, if one
-has grids that they have loaded using the Python ARM-Radar Toolkit into
-list_of_grids and initial states of the wind field into arrays called
-u_init, v_init, and w_init, retrieval of winds is as easy as
+has a list of Py-ART grids :code:`list_of_grids` that they have loaded
+using the Python ARM-Radar Toolkit initial states of the wind field into arrays called
+:code:`u_init`, :code:`v_init`, and :code:`w_init`, retrieval of winds is as easy as
 
 .. code-block:: python
 
@@ -252,7 +249,7 @@ shape of any one of the grids in list_of_grids, simply do
         list_of_grids[0], wind=(0.0, 0.0, 0.0))
 
 The user can add their own custom constraints and initializations into PyDDA.
-Since the pydda.retrieval.get_dd_wind_field has 3D NumPy arrays as inputs
+Since :code:`pydda.retrieval.get_dd_wind_field` has 3D NumPy arrays as inputs
 for the initialization, this allows the user to enter in an arbitrary NumPy
 array with the same shape as the analysis grid as the initialization field.
 In addition, PyDDA includes 4 different initialization routines that will
@@ -262,7 +259,7 @@ of ERA-Interim reanalysis data. These various routines are listed in the
 following table with similar routines existing in the constraints module.
 
 +--------------------+--------------------------------------+
-| Data source        | Routine in initalization module      |
+| Data source        | Routine in initialization module     |
 +--------------------+--------------------------------------+
 | Weather Research   | make_background_from_wrf             |
 | and Forecasting    |                                      |
@@ -272,7 +269,7 @@ following table with similar routines existing in the constraints module.
 | Rapid Refresh      |                                      |
 | (HRRR)             |                                      |
 +--------------------+--------------------------------------+
-| ERA Interim        | make_intiialization_from_era_interim |
+| ERA Interim        | make_intialization_from_era_interim  |
 +--------------------+--------------------------------------+
 | Rawinsonde         | make_wind_field_from_profile         |
 +--------------------+--------------------------------------+
@@ -292,7 +289,7 @@ For easy use by the scientific community, In addition, PyDDA also supports
 plots. These plots are created using matplotlib and return a matplotlib axis
 handle so that the user can use matplotlib to make further customizations to the plots.
 For example, creating a plot of winds on a geographical map with contours
-overlaid on it such as what is shown in Figure `streamline_plot` is as simple as:
+overlaid on it such as what is shown in Figure :ref:`streamline_plot` is as simple as:
 
 .. code-block:: python
 
@@ -371,7 +368,6 @@ snippet:
 .. figure:: Figure_barbs.png
    As Figure :ref:`quiver_plot`, but using wind barbs.
 
-
 Hurricane Florence winds using NEXRAD and HRRR
 ----------------------------------------------
 
@@ -447,12 +443,19 @@ wind retrieval when examining the effects of storm wind damage.
 Tornado in Sydney, Australia using 4 radars
 -------------------------------------------
 
+.. figure:: australian_radar_layout.png
+    :align: center
+
+The locations of the four operational radars operated by the
+Bureau of Meteorology in the vicinity of Sydney, Australia.
+The circles represent the maximum unambiguous range of each radar.:label:`bom_layout`
+
 In addition to retrieving winds in hurricanes PyDDA can also integrate
 data from radar networks in order to retrieve the winds inside tornadoes.
 For example, a network of four scanning radars in the vicinity of Sydney,
-Australia captured a supercell within the vicinity of Sydney.  Figure
-:ref:`tornado` shows the winds retrieved by PyDDA inside this supercell.
-Using data from the radars, PyDDA is able to provide a complete picture of
+Australia captured a supercell within the vicinity of Sydney as shown in
+Figure :ref:`bom_layout`.  Figure :ref:`tornado` shows the winds retrieved by
+PyDDA inside this supercell. Using data from the radars, PyDDA is able to provide a complete picture of
 the rotation inside the supercell and even resolves the updraft in the
 vicinty of the mesocyclone. Such datasets can be of use for estimating the
 winds inside a tornado at altitudes as low as 500 m above ground level. This
@@ -469,19 +472,27 @@ Sydney, Australia. The contours represent vertical velocity. :label:`tornado`
 Combining winds from 3 scanning radars with HRRR in Oklahoma
 -------------------------------------------------------------
 
-(Figure providing a map of the 3 XSAPR's and KVNX)
+.. figure:: arm_site_layout.png
+    :align: center
+
+The locations of the two X-band Scanning Precipitation Radars (XSAPRs) I5 and
+I6 as well as the KVNX NEXRAD. The two circles represent the maximum unambiguous
+range of the XSAPR radars. The maximum unambiguous range of KVNX covers the entire
+figure. :label:`arm_site`
 
 A final example shows how easily data from multiple radars and models
-can be combined together. In this example, the XSAPR radars are at X-band
-and therefore have lower coverage but greater resolution than the S-band
+can be combined together. In this case, we integrate data from three scanning
+radars whose locations are shown in Figure :ref:`arm_site` in the vicinity of the
+Atmospheric Radiation Measurement (ARM) Southern Great Plains (SGP) site. In this example,
+the XSAPR radars are at X-band and therefore have lower coverage but greater resolution than the S-band
 KVNX radar. Figure :ref:`so_many_radars` shows the resulting wind field
-of such a retrieval during a case in stratiform rain. Generally, weaker winds
+of such a retrieval during a case in stratiform rain over the SGP site. Generally, weaker winds
 and fewer variations are seen compared to the past two cases which would
 generally be expected in such conditions. However, this also demonstrates
 the success in integrating radar data from 3 radars and a high resolution
 reanalysis to provide the most complete wind retrieval possible.
 
-.. figure::`Figure_3radar_hrrr.png`
+.. figure:: Figure_3radar_hrrr.png
     :align: center
 
     A wind barb plot of a wind retrieval from 2 XSAPR radars and the KVNX
@@ -503,7 +514,7 @@ of this paper, the road map states that the current goals of PyDDA are to implem
 * Support for radar data in antenna coordinates
 * Improvements in visualizations
 * Documentation improvements, including better descriptions in the current English version of the documentation
-and versions of the documentation in non-English languages.
+  and versions of the documentation in non-English languages.
 
 All contributions to PyDDA will have to be submitted by a pull request to the master branch
 on https://github.com/openradar/PyDDA. From there, the main developers will examine the pull
@@ -520,4 +531,3 @@ The HRRR data were downloaded from the University of Utah archive (citation need
 In addition, the authors would like to thank Alain Protat for providing the Sydney tornado
 wind data. PyDDA was partially supported by the Climate Model Development and Validation
 Activity of the Department of Energy Office of Science.
-
