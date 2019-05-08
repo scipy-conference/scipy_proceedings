@@ -44,10 +44,14 @@ PyDDA: A new Pythonic Wind Retrieval Package
 Introduction
 ------------
 
-The retrieval of three dimensional winds from weather radars is a nontrivial
-task. Given that the radar measures the speed of scatterers in the direction
-of the radar beam rather than the full wind velocity, retrieving these
-winds requires more information than the doppler velocities measured by a
+Three dimensional wind retrievals are important for examining the dynamics
+that drive severe weather such as tornadoes and hurricanes. In addition, spatial
+wind retrievals inside severe convection are important for assessing the wind
+damage they cause. Scanning radars provide the best opportunity for providing three dimensional
+volumes of winds inside severe weather. However, the retrieval of three dimensional
+winds from weather radars is a nontrivial task. Given that the radar measures the
+speed of scatterers in the direction of the radar beam rather than the full wind velocity,
+retrieving these winds requires more information than the doppler velocities measured by a
 single weather radar. Typically, the 3D wind field is derived based on constraints
 with regards to physical laws such as conservation of mass or wind data from
 other sources such as model reanalyses, wind profilers, and rawinsondes. In
@@ -56,12 +60,13 @@ scanning weather radars. The first method prescribes a strong constraint
 on the wind field according to the mass continuity equation. The second
 method is a variational technique that places weak constraints on the
 wind field by finding the wind field that minimizes a cost function according
-to deviance from physical laws or from observations [SPG09, PSX12].
+to deviance from physical laws or from observations (:cite:`Shapiroetal2009`,
+:cite:`Potvinetal2012`).
 
 Currently existing software for wind retrievals includes software based
-off of the strong constraint technique such as CEDRIC [MF98] as well
+off of the strong constraint technique such as CEDRIC :cite:`CEDRIC` as well
 as software based off of the weak variational technique such as MultiDop
-[LSKJ17]. Since CEDRIC uses a strong constraint
+:cite:`Langetal2017`. Since CEDRIC uses a strong constraint
 from mass continuity equation to retrieve winds, the addition of constraints
 from other data sources is not possible with CEDRIC. Also, while CEDRIC was
 revolutionary for its time, it is difficult to use as it uses a scripting
@@ -74,19 +79,22 @@ in frameworks such as anaconda and scalability due to the non-threadsafe
 nature of the wrapper.
 
 The limitations in current wind retrieval software motivated development
-of PyDDA. PyDDA is entirely written in Python and based off of the Scientific
-Python ecosystem. This therefore permits the easy installation of PyDDA using
+of Pythonic Direct Data Assimilation (PyDDA). PyDDA is entirely written in Python
+and uses only tools in the Scientific Python ecosystem such as NumPy :cite:`NumPy`,
+SciPy :cite:`SciPy`, and :cite:`Cartopy`. This therefore permits the easy installation of PyDDA using
 pip or anaconda. Given that this alone is a major hurdle to using currently
 existing retrieval software, this makes it easier for those who are not
 radar scientists to be able to use the software. Unlike currently existing software,
 a suite of unit tests are built into PyDDA that are executed whenever a user
 make a contribution to PyDDA, ensuring that the package will function for the
 user. With regards to ease of use, PyDDA can retrieve winds from multiple radars
-combined with data from model reanalyses with just a few lines of code.
-In addition, the open source nature of PyDDA encourages contributions by
-users for further enhancement. PyDDA was created with a goal in mind: to
-make radar wind retrievals more accessible to the scientific community
-through both ease of installation and use.
+combined with data from model reanalyses with just a few lines of code. In addition,
+PyDDA is built upon the Python ARM Radar Toolkit (Py-ART) :cite:`HelmusandCollis2016`.
+Since Py-ART is already used by hundreds of users in the radar meteorology community, these
+users would be able to learn how to use PyDDA easily. In addition, the open source nature
+of PyDDA encourages contributions by users for further enhancement. In essence,
+PyDDA was created with a goal in mind: to make radar wind retrievals more accessible
+to the scientific community through both ease of installation and use.
 
 This paper will first show the implementation of the variational technique used
 in PyDDA. After that, this paper shows examples of retrieving and visualizing
@@ -122,7 +130,7 @@ technique (3DVAR). 3DVAR retrieves winds by finding the wind vector field
 :math:`\vec{\textbf{V}}` that minimizes the cost function :math:`J(\textbf{V})`.
 This cost function is the weighted sum of many different cost functions related
 to various constraints. The detailed formulas behind these cost functions can be found in
-[SPG09], [PSX12] as well as in the source code of the
+:cite:`Shapiroetal2009`, :cite:`Potvinetal2012` as well as in the source code of the
 :code:`cost_functions` module of PyDDA. The cost function
 :math:`\vec{\textbf{V}}` is then typically expressed as:
 
@@ -136,7 +144,7 @@ where each addend is as in Table :ref:`costfunctions`.
 
 The evaluation of :math:`J(\textbf{V})` can be done entirely using calls
 from NumPy and SciPy. For example, evaluating :math:`J_{c}(\vec{\textbf{V}}) =
-\nabla\dot\\vec{\textbf{V}})` with an optional anelastic term be reduced to a few Numpy calls:
+\nabla\cdot\vec{\textbf{V}})` with an optional anelastic term be reduced to a few NumPy calls:
 
 .. code-block:: python
 
@@ -187,11 +195,11 @@ from NumPy and SciPy. For example, evaluating :math:`J_{c}(\vec{\textbf{V}}) =
         if(anel == 1):
             rho = np.exp(-z/10000.0)
             drho_dz = np.gradient(rho, dz, axis=0)
-            anel_term = w/rho*drho_dz
+            anel = w/rho*drho_dz
         else:
-            anel_term = np.zeros(w.shape)
+            anel = np.zeros(w.shape)
         return coeff*np.sum(
-            np.square(dudx + dvdy + dwdz + anel_term))/2.0
+            np.square(dudx + dvdy + dwdz + anel))/2.0
 
 Since NumPy takes advantage of open source mathematics libraries that
 parallelize the calculation, this also extends the capability of the retrieval
@@ -219,32 +227,14 @@ However, convergence can be slow or even not guaranteed for certain cost functio
 Therefore, in order to ensure faster convergence, PyDDA uses the limited memory
 Broyden–Fletcher–Goldfarb–Shanno (L-BGFS) technique that optimizes the gradient
 descent method by using the inverse Hessian of the cost function to find an
-optimal search direction and :math:`\alpha` for each retrieval [BLNZ95].
+optimal search direction and :math:`\alpha` for each retrieval :cite:`Byrdetal1995`.
 Since there are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
 box (L-BFGS-B) variant of this technique can take advantage of this by only
 using L-BFGS on what the algorithm identifies as free variables, optimizing
 the retrieval further. The L-BFGS-B algorithm is implemented in SciPy. After
-the initial wind field is provided, PyDDA calls 10 iterations of L-BFGS-B with
-this line of code
-
-.. code-block:: python
-
-    from scipy.optimize import fmin_l_bfgs_b
-
-    winds = fmin_l_bfgs_b(
-            J_function, winds, args=(vrs, azs, els, wts,
-            u_back, v_back, u_model, v_model, w_model, Co,
-            Cm, Cx, Cy, Cz, Cb, Cv, Cmod, Ut, Vt, grid_shape,
-            dx, dy, dz, z, rmsVr, weights, bg_weights,
-            mod_weights, upper_bc, False),
-            maxiter=10, pgtol=1e-3, bounds=bounds,
-            fprime=grad_J, disp=0, iprint=-1)
-
-This line of code is rather complex for the end user. Therefore, in order
-to simplify this retrieval, PyDDA includes a wrapper function in its
-retrieval module called :code:`get_dd_wind_field`. :code:`get_dd_wind_field`
-will call this line of code and then test for convergence of a solution by
-either detecting whether the maximum change in vertical velocity between
+the initial wind field is provided, PyDDA calls 10 iterations of L-BFGS-B using
+:code:`scipy.optimize.fmin_l_bfgs_b`. PyDDA will then then test for convergence
+of a solution by either detecting whether the maximum change in vertical velocity between
 the current solution and the previous 10 iterations is less than :math:`0.02 m\ s^{-1}` or
 if :math:`\left\Vert\vec{\textbf{V}}\right\Vert < 10^{-3}`, signifying that
 we have reached a local minimum in :math:`\vec{\textbf{V}}`.
@@ -252,25 +242,27 @@ we have reached a local minimum in :math:`\vec{\textbf{V}}`.
 Executing the 3DVAR technique with just a few lines of code
 -----------------------------------------------------------
 
-With PyDDA, executing the aforementioned retrieval steps can be done with
-one line of code. Tf one has a list of Py-ART grids :code:`list_of_grids` that they have loaded
-using the Python ARM-Radar Toolkit initial states of the wind field into arrays called
-:code:`u_init`, :code:`v_init`, and :code:`w_init` that represent :math:`\vec{\textbf{V}_{0}}`,
-retrieval of winds is as easy as
+With one line of code, one can use the 3DVAR technique to retrieve winds using the
+:code:`pydda.retrieval.get_dd_wind_field` procedure.
+If one has a list of Py-ART grids :code:`list_of_grids` that they have loaded
+and provide :math:`\vec{\textbf{V}_{0}}` into arrays called
+:code:`u_init`, :code:`v_init`, and :code:`w_init`, retrieval of winds is as easy as
 
 .. code-block:: python
 
     winds = pydda.retrieval.get_dd_wind_field(
-        list_of_grids, u_init, v_init, w_init)
+        list_of_grids, ui, vi, wi)
 
 PyDDA even includes an initialization module that will generate example
-:code:`u_init`, :code:`v_init`, and :code:`w_init` for the user. For example,
-in order to generate an initial wind field of :math:`\vec{\textbf{V}} = \vec{\textbf{0}}` in the
+:code:`ui`, :code:`vi`, and :code:`wi` for the user. For example,
+in order to generate a simple initial wind field of :math:`\vec{\textbf{V}} = \vec{\textbf{0}}` in the
 shape of any one of the grids in :code:`list_of_grids`, simply do
 
 .. code-block:: python
 
-    ui, vi, wi = pydda.initialization.make_constant_wind_field(
+    import pydda.initialization as init
+
+    ui, vi, wi = init.make_constant_wind_field(
         list_of_grids[0], wind=(0.0, 0.0, 0.0))
 
 The user can add their own custom constraints and initializations into PyDDA.
@@ -280,23 +272,25 @@ array with the same shape as the analysis grid as the initialization field.
 
 .. table:: The differing initalizations PyDDA can provide to the user. :label:`inits`
 
-    +------------------+----------------------------------------------+
-    | Data source      | Routine in initialization module             |
-    +==================+==============================================+
-    | Weather Research | :code:`make_background_from_wrf`             |
-    | and Forecasting  |                                              |
-    | (WRF)            |                                              |
-    +------------------+----------------------------------------------+
-    | High Resolution  | :code:`make_initialization_from_hrrr`        |
-    | Rapid Refresh    |                                              |
-    | (HRRR)           |                                              |
-    +------------------+----------------------------------------------+
-    | ERA Interim      | :code:`make_intialization_from_era_interim`  |
-    +------------------+----------------------------------------------+
-    | Rawinsonde       | :code:`make_wind_field_from_profile`         |
-    +------------------+----------------------------------------------+
-    | Constant field   | :code:`make_constant_wind_field`             |
-    +------------------+----------------------------------------------+
+    +-----------------+----------------------------------------------+
+    | Data source     | Routine in initialization module             |
+    +=================+==============================================+
+    | Weather         |                                              |
+    | Research        | :code:`make_background_from_wrf`             |
+    | and Forecasting |                                              |
+    | (WRF)           |                                              |
+    +-----------------+----------------------------------------------+
+    | High Resolution | :code:`make_initialization_from_hrrr`        |
+    | Rapid Refresh   |                                              |
+    | (HRRR)          |                                              |
+    +-----------------+----------------------------------------------+
+    | ERA Interim     | :code:`make_initialization_from`             |
+    |                 | :code:`_era_interim`                         |
+    +-----------------+----------------------------------------------+
+    | Rawinsonde      | :code:`make_wind_field_from_profile`         |
+    +-----------------+----------------------------------------------+
+    | Constant field  | :code:`make_constant_wind_field`             |
+    +-----------------+----------------------------------------------+
 
 In addition, PyDDA includes 4 different initialization routines that will
 create this field for you from various data sources. In particular,
@@ -328,12 +322,14 @@ when executing the constraint against the model field.
 
 .. code-block:: python
 
+    import pydda.constraints as const
+
     # Add HRRR GRIB file
     hrrr_path = 'my_hrrr_file.grib'
-    mygrid = pydda.constraints.add_hrrr_constraint_to_grid(
-            mygrid, hrrr_path)
+    mygrid = const.add_hrrr_constraint_to_grid(
+             mygrid, hrrr_path)
 
-The model constraints and retrieval initalizations are based off of any 3D
+The model constraints and retrieval initializations are based off of any 3D
 field with the same array size and grid specification as the input radar grids.
 Therefore, this list can be easily expanded with user routines that interpolate the model
 or other observational data to the analysis grid.
@@ -412,11 +408,12 @@ in this case a single Doppler retrieval, is as easy as:
     import pyart
     import pydda
 
-    Grids = [pyart.io.read_grid('cpolwinds.20060120.005008.nc')]
+    Grids = [pyart.io.read_grid('mywinds.nc')]
     plt.figure(figsize=(7,7))
     pydda.vis.plot_horiz_xsection_quiver(
         Grids, None, 'reflectivity', level=6,
-        quiver_spacing_x_km=10.0, quiver_spacing_y_km=10.0)
+        quiver_spacing_x_km=10.0,
+        quiver_spacing_y_km=10.0)
 
 .. figure:: Figure_barbs.png
    :align: center
@@ -440,20 +437,17 @@ Figure :label:`barb` using a similar code snippet:
 Hurricane Florence winds using NEXRAD and HRRR
 ----------------------------------------------
 
-.. figure:: Figure1.png
-   :align: center
-
-   A streamline plot of the wind field retrieved by PyDDA from the KLTX and KMHX NEXRAD
-   radars and the HRRR in Hurricane Florence. The blue contour represents the
-   region containing gale force winds, while the red contour represents the
-   regions where hurricane force winds are present. :label:`smallhurricane`
-
 Another example of the power of PyDDA is its ability to retrieve winds from
-networks of radars over areas spanning thousands of kilometers with ease.
-:ref:`bighurricane` shows an example of a retrieval from PyDDA using 6
-NEXRAD radars combined with the HRRR and ERA-Interim. Using a multigrid method
-that first retrieves the wind field on a coarse grid and then splits the
-fine grid retrieval into chunks, this technique can use dask to retrieve
+networks of radars over areas spanning thousands of kilometers with ease. An
+example retrieval in Hurricane Florence using 2 NEXRAD radars and HRRR was shown
+in Figure :ref:`streamline`. While there is already hundreds of kilometers in coverage,
+not all of the hurricane is covered within the retrieval domain. This therefore
+motivated a feature in PyDDA to use dask :cite:`Dask2016` to manage retrievals that are too large to
+execute on one single machine. :ref:`bighurricane` shows an example of a retrieval
+from PyDDA using 6 NEXRAD radars combined with the HRRR and ERA-Interim. The total horizontal coverage
+of the domain in Figure :ref:`bighurricane` is 1200 km by 1200 km.
+Using a multigrid method that first retrieves the wind field on a coarse grid
+and then splits the fine grid retrieval into chunks, this technique can use dask to retrieve
 the wind field in Figure :ref:`bighurricane` about 30 minutes on 4 nodes with
 36-core Intel Broadwell CPUs. The code to retrieve the wind field from many
 radars and both models is as simple as
@@ -462,29 +456,31 @@ radars and both models is as simple as
 
     import pyart
     import pydda
+    import pydda.constraints as const
+    import pydda.initalization as init
 
     from distributed import Client
 
     # Initialize dask client for your cluster
     client = Client(json_file='my_cluster_json.json')
 
-    # Load radar grids in Cartesian coordinates using Py-ART
+    # Load radar grids using Py-ART
     pyart_grid1 = pyart.io.read_grid('first_radar.nc')
     pyart_grid2 = pyart.io.read_grid('second_radar.nc')
     mygs = [pyart_grid1, pyart_grid2]
 
     # Add HRRR GRIB file
     hrrr_path = 'my_hrrr_file.grib'
-    mygs[0] = pydda.constraints.add_hrrr_constraint_to_grid(
+    mygs[0] = const.add_hrrr_constraint_to_grid(
             my_grids[0], hrrr_path)
 
     # Download and add ERA Interim data
     # This adds fields called u_, v_, and w_erainterim
-    mygs[0] = pydda.constraints.make_constraint_from_era_interim(
+    mygs[0] = const.make_constraint_from_era_interim(
         my_grids)
 
     # Make the output grids
-    ui, vi, wi = pydda.initialization.make_constant_wind_field(
+    ui, vi, wi = init.make_constant_wind_field(
         grid_mhx, (0.0, 0.0, 0.0))
     out_grids = pydda.retrieval.get_dd_wind_field_nested(
         mygs, ui, vi, wi, Co=1.0, Cm=100.0,
@@ -532,11 +528,10 @@ Figure :ref:`bomlayout`.
     A quiver plot inside a supercell that spawned a tornado in the vicinity of
     Sydney, Australia. The contours represent vertical velocity. :label:`tornado`
 
-Figure :ref:`tornado` shows the winds retrieved by
-PyDDA inside this supercell. Using data from the radars, PyDDA is able to provide
-a complete picture of the rotation inside the supercell and even resolves the
-updraft in the vicinty of the mesocyclone. Such datasets can be of use for estimating the
-winds inside a tornado at altitudes as low as 500 m above ground level. This
+Figure :ref:`tornado` shows the winds retrieved by PyDDA inside this supercell.
+Using data from the radars, PyDDA is able to provide a complete picture of the rotation inside
+the supercell and even resolves the updraft in the vicinty of the mesocyclone. Such datasets can be
+of use for estimating the winds inside a tornado at altitudes as low as 500 m above ground level. This
 therefore is capable of providing wind datasets that can be used to both provide
 an estimated wind speed for wind damage assessments as well as for verification
 of supercell simulations from weather forecasting models.
@@ -598,10 +593,13 @@ of PyDDA. In addition, we also require that the user provide documentation for t
 contribute. For the full information on how to make a contribution, go to the contributor's
 guide at https://openradarscience.org/PyDDA/contributors_guide/index.html.
 
+In addition, for further information about how to use PyDDA, please consult the documentation at
+https://openradarscience.org/PyDDA.
+
 Acknowledgments
 ---------------
 
-The HRRR data were downloaded from the University of Utah archive [BHL17].
+The HRRR data were downloaded from the University of Utah archive :cite:`Blaylocketal2017`.
 In addition, the authors would like to thank Alain Protat for providing the Sydney tornado
 wind data. PyDDA was partially supported by the Climate Model Development and Validation
 Activity of the Department of Energy Office of Science.
