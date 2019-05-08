@@ -56,13 +56,12 @@ scanning weather radars. The first method prescribes a strong constraint
 on the wind field according to the mass continuity equation. The second
 method is a variational technique that places weak constraints on the
 wind field by finding the wind field that minimizes a cost function according
-to deviance from physical laws or from observations (:cite:`Shapiroetal2009`,
-:cite:`Potvinetal2012`).
+to deviance from physical laws or from observations [SPG09, PSX12].
 
 Currently existing software for wind retrievals includes software based
-off of the strong constraint technique such as CEDRIC :cite:`MillerandFredrick1998` as well
+off of the strong constraint technique such as CEDRIC [MF98] as well
 as software based off of the weak variational technique such as MultiDop
-:cite:`Langetal2017`. Since CEDRIC uses a strong constraint
+[LSKJ17]. Since CEDRIC uses a strong constraint
 from mass continuity equation to retrieve winds, the addition of constraints
 from other data sources is not possible with CEDRIC. Also, while CEDRIC was
 revolutionary for its time, it is difficult to use as it uses a scripting
@@ -96,8 +95,8 @@ such as Hurricane Florence and a tornado in Sydney, Australia are shown in order
 to provide examples on how this software can be used by those interested in validating
 severe weather forecasts and assessing wind damage.
 
-Three dimensional variational technique
----------------------------------------
+Three dimensional variational (3DVAR) technique
+-----------------------------------------------
 
 ..  table:: List of cost functions implemented in PyDDA. :label:`costfunctions`
 
@@ -123,7 +122,7 @@ technique (3DVAR). 3DVAR retrieves winds by finding the wind vector field
 :math:`\vec{\textbf{V}}` that minimizes the cost function :math:`J(\textbf{V})`.
 This cost function is the weighted sum of many different cost functions related
 to various constraints. The detailed formulas behind these cost functions can be found in
-:cite:`Shapiroetal2009`, :cite:`Potvinetal2012` as well as in the source code of the
+[SPG09], [PSX12] as well as in the source code of the
 :code:`cost_functions` module of PyDDA. The cost function
 :math:`\vec{\textbf{V}}` is then typically expressed as:
 
@@ -220,7 +219,7 @@ However, convergence can be slow or even not guaranteed for certain cost functio
 Therefore, in order to ensure faster convergence, PyDDA uses the limited memory
 Broyden–Fletcher–Goldfarb–Shanno (L-BGFS) technique that optimizes the gradient
 descent method by using the inverse Hessian of the cost function to find an
-optimal search direction and :math:`\alpha` for each retrieval :cite:`Byrdetal1995`.
+optimal search direction and :math:`\alpha` for each retrieval [BLNZ95].
 Since there are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
 box (L-BFGS-B) variant of this technique can take advantage of this by only
 using L-BFGS on what the algorithm identifies as free variables, optimizing
@@ -246,12 +245,12 @@ to simplify this retrieval, PyDDA includes a wrapper function in its
 retrieval module called :code:`get_dd_wind_field`. :code:`get_dd_wind_field`
 will call this line of code and then test for convergence of a solution by
 either detecting whether the maximum change in vertical velocity between
-the current solution and the previous 10 iterations is less than 0.02 m/s or
+the current solution and the previous 10 iterations is less than :math:`0.02 m\ s^{-1}` or
 if :math:`\left\Vert\vec{\textbf{V}}\right\Vert < 10^{-3}`, signifying that
 we have reached a local minimum in :math:`\vec{\textbf{V}}`.
 
-Executing the 3DVAR technique with 1 to 3 lines of code
--------------------------------------------------------
+Executing the 3DVAR technique with just a few lines of code
+-----------------------------------------------------------
 
 With PyDDA, executing the aforementioned retrieval steps can be done with
 one line of code. Tf one has a list of Py-ART grids :code:`list_of_grids` that they have loaded
@@ -346,7 +345,8 @@ Visualization module
    :align: center
 
    An example streamline plot of winds in Hurricane Florence overlaid over
-   radar estimated rainfall rate. The blue contour represents the region containing
+   radar estimated rainfall rate. The LKTX and KMHX NEXt Generation Radars (NEXRADS) were
+   used to derive the winds and rainfall rates. The blue contour represents the region containing
    gale force winds, while the red contour represents the regions where hurricane
    force winds are present. :label:`streamline`
 
@@ -443,7 +443,7 @@ Hurricane Florence winds using NEXRAD and HRRR
 .. figure:: Figure1.png
    :align: center
 
-   A streamline plot of the wind field retrieved by PyDDA from 2 NEXRAD
+   A streamline plot of the wind field retrieved by PyDDA from the KLTX and KMHX NEXRAD
    radars and the HRRR in Hurricane Florence. The blue contour represents the
    region containing gale force winds, while the red contour represents the
    regions where hurricane force winds are present. :label:`smallhurricane`
@@ -541,8 +541,6 @@ therefore is capable of providing wind datasets that can be used to both provide
 an estimated wind speed for wind damage assessments as well as for verification
 of supercell simulations from weather forecasting models.
 
-
-
 Combining winds from 3 scanning radars with HRRR in Oklahoma
 -------------------------------------------------------------
 
@@ -603,7 +601,7 @@ guide at https://openradarscience.org/PyDDA/contributors_guide/index.html.
 Acknowledgments
 ---------------
 
-The HRRR data were downloaded from the University of Utah archive :cite:`Blaylocketal2017`.
+The HRRR data were downloaded from the University of Utah archive [BHL17].
 In addition, the authors would like to thank Alain Protat for providing the Sydney tornado
 wind data. PyDDA was partially supported by the Climate Model Development and Validation
 Activity of the Department of Energy Office of Science.
