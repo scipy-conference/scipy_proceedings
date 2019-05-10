@@ -96,7 +96,23 @@ and forward propagation neural networks (Feedforward NN)
 will be used at the second level of learning.
 
 Depending on the user :math:`u` and the user purchase history
-(shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included in the next shop :math:`_{t+1}` of :math:`u`
+(shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included 
+in the next shop :math:`_{t+1}` of :math:`u`
+
+
+Dataset
+-------
+We used the data from CircuitPromo.ca as basic data. The features is described as follow:
+- **user :math:`\_id`**: user number. user :math:`\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
+- **order\_id**: unique number of the basket. $order\_id \in \mathbb{Z}$
+- **store :math:`\_id`**: unique number of the store. $store\_id \in \{1 \cdots 10\}$ 
+- **distance**: distance to the store. $distance \in \mathbb{R}^+$
+- **product :math:`\_id`**: unique number of the product.
+- **category :math:`\_id`**: unique category number for a product. $aisle\_id \in \{1 \cdots 24\}$  
+- **reorder**: 1 if this product has been ordered by this user in the past, 0 else. $reorders \in \{0,1\}$
+- **special**: discount percentage applied to the product price at the time of purchase. $special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}$
+	 
+
 
 Table 1 summarizes top-level models used by our algorithm
 
@@ -122,16 +138,6 @@ Table 1 summarizes top-level models used by our algorithm
 
    \end{table}
 
-   
-.. figure:: figures/mygrocerytour_circuit.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`circuit`
-   
-.. figure:: figures/smartshopping_1.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
    
 .. figure:: figures/products_F1.png
 
