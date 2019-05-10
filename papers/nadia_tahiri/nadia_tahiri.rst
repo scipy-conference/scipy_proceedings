@@ -130,12 +130,12 @@ Table 1 summarizes top-level models used by our algorithm
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
    
-.. figure:: figures/product_barplot.png
+.. figure:: figures/products_F1.png
 
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
    
-.. figure:: figures/order_lens.png
+.. figure:: figures/order_frequency.png
 
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
@@ -145,26 +145,11 @@ Table 1 summarizes top-level models used by our algorithm
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
    
-.. figure:: figures/product_hex.png
+.. figure:: figures/pearsonr.png
 
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
- 
-.. figure:: figures/user_hex.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
-
-.. figure:: figures/special_violin.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
-
-.. figure:: figures/store_violin.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
- 
+   
 .. figure:: figures/violon.png
    :align: center
    :scale: 20%
