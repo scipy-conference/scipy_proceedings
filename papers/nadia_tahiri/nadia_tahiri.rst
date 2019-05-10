@@ -78,7 +78,7 @@ This list will also include recommendations regarding the optimal quantity of ea
 where these products are to be purchased. We will also calculate the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm.
 
-The F1 statistics maximization algorithm (Ye et al., 2012), 
+F1 statistics maximization algorithm (Ye et al., 2012), 
 based on dynamic programming, will be used to meet the objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method (Goodfellow et al., 2016), based on recurrent neuron networks (RNN) 
@@ -94,6 +94,9 @@ these models as features of the second-level models.
 Recurrent neural networks and convolutional neural networks will be used at the first learning level 
 and forward propagation neural networks (Feedforward NN) 
 will be used at the second level of learning.
+
+Depending on the user :math:`u` and the user purchase history
+(shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included in the next shop :math:`_{t+1}` of :math:`u`
 
 Table 1 summarizes top-level models used by our algorithm
 
@@ -146,9 +149,20 @@ Table 1 summarizes top-level models used by our algorithm
    spectral extraction throughput. :label:`site`
    
 .. figure:: figures/pearsonr.png
+   :align: center
+   
+   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
+   spectral extraction throughput. :label:`pearsonr`
+   
+.. figure:: figures/lstm.png
 
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
+   spectral extraction throughput. :label:`lstm`
+   
+.. figure:: figures/workflow.png
+
+   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
+   spectral extraction throughput. :label:`workflow`
    
 .. figure:: figures/violon.png
    :align: center
