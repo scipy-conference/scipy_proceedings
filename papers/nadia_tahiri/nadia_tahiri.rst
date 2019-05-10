@@ -102,18 +102,28 @@ in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
 -------
-We used the data from CircuitPromo.ca as basic data. The features is described as follow:
 
-1. **user :math:`\_id`**: user number. user :math:`\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
-2. **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
-3. **store :math:`\_id`**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
-4. **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
-5. **product :math:`\_id`**: unique number of the product.
-6. **category :math:`\_id`**: unique category number for a product. $aisle\_id \in \{1 \cdots 24\}`  
-7. **reorder**: 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
-8. **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
+We used the data from CircuitPromo.ca as basic data. 
+
+*Features*
+
+The features is described as follow:
+
+- **user\_id**: user number. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
+- **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
+- **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
+- **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
+- **product\_id**: unique number of the product.
+- **category\_id**: unique category number for a product. :math:`aisle\_id \in \{1 \cdots 24\}`  
+- **reorder**: 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
+- **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
 	 
+*Consumer profile*
 
+We found that there are 3 consumer profiles ({walters2003exploring, walters2002measuring, tanusondjaja2016understanding}). 
+The first group is consumer who buy only the products on promotion. 
+The second group is consumer who always buy the same products (without considering promotions).
+The third group is consumer who buy products as well on promotion or not.
 
 Table 1 summarizes top-level models used by our algorithm
 
