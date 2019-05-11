@@ -40,31 +40,19 @@ Solving Polynomial Systems with phcpy
    through a JupyterHub featuring Python2, Python3, and SageMath kernels.
 
 Introduction
-------------
+============
 
 The Python package phcpy [Ver14]_ provides an alternative to the
 command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial 
-systems by homotopy continuation methods.  
-Scripts replace command line options and text menus.
-Data remains persistent in a session, decreasing the dependency on files.
-This paper is based on the current version 0.9.4 of phcpy.
-At the time of [Ver14]_, version 0.1.5 was the current version.
+systems by homotopy continuation methods.
+In the phcpy interface, Python scripts replace command line options and text menus, and data persists in a session without temporary files. This also makes PHCpack accessible from Jupyter notebooks, including a JupyterHub available online [Pascal]_.
 
 The meaning of *solving* evolved from computing approximations to
-all isolated solution into the numerical irreducible decomposition
+all isolated solutions into the numerical irreducible decomposition
 of the solution set.  The numerical irreducible decomposition includes
 not only the isolated solutions, but also representations for all
-positive dimensional solution sets.  Such representations consist
+positive dimensional solution sets. Such representations consist
 of sets of *generic points*, partitioned along the irreducible factors.
-Polynomial homotopy continuation is at the origin of many of the algorithms
-in numerical algebraic geometry [SVW05]_.
-Parallel versions of the software described in [SVW03]_
-were recently developed [Ver18]_ and added to phcpy.
-
-For its fast mixed volume computation,
-the software incorporates MixedVol [GLW05]_ and DEMiCs [MT08]_.
-The double double and quad double arithmetic is performed by
-the algorithms in QDlib [HLB01]_.
 
 The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
@@ -73,65 +61,76 @@ accelerated with graphics processing units [VY15]_.
 Our web interface offers phcpy in a SageMath [Sage]_, [SJ05]_ kernel
 or in a Python kernel of a Jupyter notebook [Klu16]_.
 
-Although phcpy is only a couple of years out,
-three instances in the research literature mention its application
-in the computation of the following:
+Although phcpy has been released for only five years,
+three instances in the research literature of symbolic computation, geometry and topology, and chemical engineering (respectively) mention its application to their computations.
 
 * The number of embeddings of minimally rigid graphs [BELT18]_.
-
 * Roots of Alexander polynomials [CD18]_.
+* Critical points of equilibrium problems [SWM16]_.
 
-* Critical points of equilibrium problems [SWM16]_ .
+phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.4 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
 
-The cited publications above appear respectively in symbolic computation,
-geometry and topology, chemical engineering.
+Mission
+-------
 
-Mechanism Design
-----------------
-
-Fig. :ref:`fig4barcoupler` illustration a reproduction
-of a result in the mechanism design literature [MW90]_.
-Given five points, the problem is to determine the length of two bars
-so their coupler curve passes through the five given points.
-
-.. figure:: ./fbarcoupler.png
-   :align: center
-   :figclass: h
-
-   The design of a 4-bar mechanism.  :label:`fig4barcoupler`
-
-This example is part of the tutorial of phcpy and the scripts 
-to reproduce the results are in its source code distribution.
-The equations are generated with sympy [SymPy]_
-and the plots are made with matplotlib [Hun07]_.
-
-Mission and Realization
------------------------
-
-The mission of phcpy is to bring Polynomial Homotopy Continuation
+The mission of phcpy is to bring polynomial homotopy continuation,
+which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_,
 into Python's computational ecosystem.
-The realization of phcpy happens by wrapping the compiled code
-provided as shared object files by PHCpack.
-This approach has two benefits.
-First, the wrapping transfers the implementation of the many
-available homotopy algorithms in a direct way into Python modules.
-Second, we do not sacrifice the efficiency of the compiled code.
-Scripts replace the input/output movements and interactions with
-the user, but not the computationally intensive algorithms.
+
+phcpy wraps the compiled code provided as shared object files by PHCpack, an approach which benefits accessibility of the methods without sacrificing their efficiency.
+First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
+Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
+
+User Interaction
+================
+
+CGI Scripting
+-------------
+
+We previously developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_, as a web interface to ``phc``. MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+
+Jupyter and JupyterHub
+----------------------
+
+With JupyterHub, we provide user accounts on our server,
+which has both phcpy and SageMath pre-installed.
+
+The hub's notebook environment supports language-agnostic computations,
+supporting execution environments in several dozen languages.
+We can also run the code in a Python Terminal session.
+
+For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner
+that isolates the actions of users to separate processes and logins in generic home folders.
+
+The account management prompts by e-mail were hooked to a new Tornado Handler.
+
 
 Code Snippets
 -------------
 
-Code snippets suggest typical applications and guide novice user.
+We use the extension [...] to provide code snippets suggesting typical applications to guide the novice user.
 
 The screen shot in Fig. :ref:`figsnippet` shows the code snippet
-with an example of use of the blackbox solver.
+with an example of using the blackbox solver.
 
 .. figure:: ./bbsolvesnippet2.png
    :align: center
+   :height: 400 px
    :figclass: h
 
    The code snippet for the blackbox solver.  :label:`figsnippet`
+
+
+Direct Manipulation
+-------------------
+
+[Discuss Javascript and d3.js support in Jupyter Notebook. Relevance to computational geometry.]
+
+
+Intensive Methods
+=================
+
+For its fast mixed volume computation, the software incorporates MixedVol [GLW05]_ and DEMiCs [MT08]_. High-precision double double and quad double arithmetic is performed by the algorithms in QDlib [HLB01]_.
 
 Speedup and Quality Up
 ----------------------
@@ -166,6 +165,7 @@ or quad double arithmetic.
 If the quality of the solutions is defined as the working precision,
 then the quality up question ask for the number of processors needed
 to compensate for the overhead of the multiprecision arithmetic.
+
 
 Positive Dimensional Solution Sets
 ----------------------------------
@@ -207,53 +207,61 @@ The output of the script is
     number of factors :  16
     number of isolated solutions : 1152
 
-CGI Scripting
--------------
+Survey of Applications
+======================
 
-In our first design of a web interface to ``phc``,
-we developed a collection of Python scripts,
-following common programming patterns [Chu06]_.
-Below is a listing of the key ingredients in our first web interface.
+We consider five examples from various literatures which apply polynomial constraint solving, two of which are tutorialized for phcpy.
 
-1. Posting and processing of HTML forms:
+[DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
 
-   * pure Python code prints the HTML code; and 
+Belief Propagation
+------------------
 
-   * the input of the forms is processed with Python functions.
+https://ieeexplore.ieee.org/abstract/document/8027142
 
-2. MySLQdb does the management of user data:
+Real-Time Interaction
+---------------------
 
-   * names and encrypted passwords,
+Another example from the phcpy tutorial is the circle problem of Apollonius...
 
-   * generic, random folder names to store data files,
+[cite scipy poster]
 
-   * file names with polynomial systems solved.
+Rigid Graph Theory
+------------------
 
-3. With the module smtplib we define email exchanges:
+[BELT18]_
 
-   * automatic 2-step registration process,
+Also, a simpler example of mechanism design:
 
-   * automatic password recovery protocol.
+Fig. :ref:`fig4barcoupler` illustration a reproduction
+of a result in the mechanism design literature [MW90]_.
+Given five points, the problem is to determine the length of two bars
+so their coupler curve passes through the five given points.
 
-Jupyter and JupyterHub
-----------------------
+.. figure:: ./fbarcoupler.png
+   :align: center
+   :figclass: h
+   :height: 300 px
 
-The Jupyter notebook supports language agnostic computations,
-supporting execution environments in several dozen languages.
-With JupyterHub, we can run the code in a Python Terminal session,
-in a Jupyter notebook running Python, or in a SageMath session.
+   The design of a 4-bar mechanism.  :label:`fig4barcoupler`
 
-For the user administration, we recycled our first web interface.
+This example is part of the tutorial of phcpy and the scripts 
+to reproduce the results are in its source code distribution.
+The equations are generated with sympy [SymPy]_
+and the plots are made with matplotlib [Hun07]_.
 
-With JupyterHub, we provide user accounts on our server.
+Critical Point Computation
+--------------------------
 
-* At login time, a new process is spawned.
+[SWM16]_
 
-* Users have generic, random login names.
+(Consider also methods not implemented with phcpack that could be. multiobjective optimization? 
+http://www-leland.stanford.edu/group/SOL/reports/SOL-2010-1.pdf
+)
 
-* Actions of users must be isolated from each other.
+Conclusion
+==========
 
-The setup requires some system administration expertise.
 
 Acknowledgments
 ---------------
@@ -316,10 +324,9 @@ References
            DOI 10.1109/MCSE.2007.55.
 
 .. [GLW05] T. Gao, T.Y. Li, and M. Wu.
-           *Algorithm 846: MixedVol: a software package for mixed-volume
-           computation.*
+           *Algorithm 846: MixedVol: a software package for mixed-volume computation.*
            ACM Trans. Math. Softw., 31(4):555-560, 2005.
-	   DOI 10.1145/1114268.1114274.
+           DOI 10.1145/1114268.1114274.
 
 .. [SymPy] D. Joyner, O. :math:`~\!` |Ccaron| ert |iacute| k, 
            A. Meurer, and B. E. Granger.
@@ -411,3 +418,7 @@ References
           ACM Communications in Computer Algebra, volume 49, issue 4, 
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
+
+.. [Pascal] 
+          *JupyterHub deployment of phcpy.*
+          https://pascal.math.uic.edu, 2017
