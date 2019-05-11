@@ -19,6 +19,9 @@
 .. |Ccaron| unicode:: U+010C .. Ccaron
    :trim:
 
+.. |oumlaut| unicode:: U+00F6 .. oumlaut
+   :trim:
+
 -------------------------------------
 Solving Polynomial Systems with phcpy
 -------------------------------------
@@ -138,8 +141,8 @@ The *quality up* question asks the following:
 if we can afford to spend the same time,
 by how much can we improve the solution using *p* processors?
 
-The function defined below returns the elapsed performance
-of the blackbox solver on the cyclic 7-roots benchmark problem,
+The function defined below returns the elapsed performance of the
+blackbox solver on the cyclic 7-roots benchmark problem [BF91]_,
 for a number of tasks and a precision equal to double, double double,
 or quad double arithmetic.
 
@@ -163,6 +166,46 @@ or quad double arithmetic.
 If the quality of the solutions is defined as the working precision,
 then the quality up question ask for the number of processors needed
 to compensate for the overhead of the multiprecision arithmetic.
+
+Positive Dimensional Solution Sets
+----------------------------------
+
+As solving evolved from approximating all isolated solutions
+of a polynomial system into computing a numerical irreducible decomposition,
+the meaning of a solution expanded as well.
+To illustrate this expansion, 
+we consider again the family of cyclic *n*-roots problems, 
+now for :math:`n = 8`, [BF94]_.
+While for :math:`n = 7` all roots are isolated points,
+there is a one dimensional solution curve of cyclic 8-roots of degree 144.
+This curve decomposes in 16 irreducible factors,
+eight factors of degree 16 and eight quadratic factors,
+adding up to :math:`8 \times 16 + 8 \times 2 = 144`.
+
+Consider the following code snippet.
+
+.. code-block:: python
+
+    from phcpy.phcpy2c3 import py2c_set_seed
+    from phcpy.factor import solve
+    from phcpy.families import cyclic
+    py2c_set_seed(201905091)
+    c8 = cyclic(8)
+    sols = solve(8, 1, c8, verbose=False)
+    witpols, witsols, factors = sols[1]
+        deg = len(witsols)
+    print('degree of solution set at dimension 1 :', deg)
+    print('number of factors : ', len(factors))
+    _, isosols = sols[0]
+    print('number of isolated solutions :', len(isosols))
+
+The output of the script is
+
+::
+
+    degree of solution set at dimension 1 : 144
+    number of factors :  16
+    number of isolated solutions : 1152
 
 CGI Scripting
 -------------
@@ -227,6 +270,21 @@ References
             In the Proceedings of the 2018 International Symposium on Symbolic 
             and Algebraic Computation (ISSAC 2018), pages 55-62, ACM 2018. 
             DOI 10.1145/3208976.3208994.
+
+.. [BF91] J. Backelin and R. Fr |oumlaut| berg.
+          *How we proved that there are exactly 924 cyclic 7-roots.*
+          In the Proceedings of the 1991 International Symposium on
+          Symbolic and Algebraic Computation (ISSAC'91), pages 103-111,
+          ACM, 1991.  DOI 10.1145/120694.120708.
+
+.. [BF94] G. Bj |oumlaut| rck and R. Fr |oumlaut| berg.
+          *Methods to ``divide out'' certain solutions from systems of 
+          algebraic equations, applied to find all cyclic 8-roots.*
+          In Analysis, Algebra and Computers in Mathematical Research,
+          Proceedings of the twenty-first Nordic congress of
+          mathematicians, edited by M. Gyllenberg and L. E. Persson, 
+          volume 564 of Lecture Notes in Pure and Applied Mathematics,
+          pages 57-70.  Dekker, 1994.
 
 .. [BSVY15] N. Bliss, J. Sommars, J. Verschelde, X. Yu.
             *Solving polynomial systems in the cloud with polynomial
