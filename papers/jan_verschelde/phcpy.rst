@@ -19,6 +19,9 @@
 .. |Ccaron| unicode:: U+010C .. Ccaron
    :trim:
 
+.. |oumlaut| unicode:: U+00F6 .. oumlaut
+   :trim:
+
 -------------------------------------
 Solving Polynomial Systems with phcpy
 -------------------------------------
@@ -78,8 +81,8 @@ phcpy wraps the compiled code provided as shared object files by PHCpack, an app
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
 
-User Interactions
-=================
+User Interaction
+================
 
 CGI Scripting
 -------------
@@ -89,18 +92,17 @@ We previously developed a collection of Python scripts (mediated through HTML fo
 Jupyter and JupyterHub
 ----------------------
 
-The Jupyter notebook supports language agnostic computations,
+With JupyterHub, we provide user accounts on our server,
+which has both phcpy and SageMath pre-installed.
+
+The hub's notebook environment supports language-agnostic computations,
 supporting execution environments in several dozen languages.
-With JupyterHub, we can run the code in a Python Terminal session,
-in a Jupyter notebook running Python, or in a SageMath session.
+We can also run the code in a Python Terminal session.
 
-For the user administration, we refreshed our first web interface. Interfacing the existing MySQL database required a custom AuthManager, and the e-mail prompts were hooked to a new Tornado page. The setup requires some system administration expertise. [FIXME]
+For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner
+that isolates the actions of users to separate processes and logins in generic home folders.
 
-With JupyterHub, we provide user accounts on our server.
-
-* At login time, a new process is spawned.
-* Users have generic, random login names.
-* Actions of users must be isolated from each other.
+The account management prompts by e-mail were hooked to a new Tornado Handler.
 
 
 Code Snippets
@@ -119,6 +121,12 @@ with an example of using the blackbox solver.
    The code snippet for the blackbox solver.  :label:`figsnippet`
 
 
+Direct Manipulation
+-------------------
+
+[Discuss Javascript and d3.js support in Jupyter Notebook. Relevance to computational geometry.]
+
+
 Intensive Methods
 =================
 
@@ -132,8 +140,8 @@ The *quality up* question asks the following:
 if we can afford to spend the same time,
 by how much can we improve the solution using *p* processors?
 
-The function defined below returns the elapsed performance
-of the blackbox solver on the cyclic 7-roots benchmark problem,
+The function defined below returns the elapsed performance of the
+blackbox solver on the cyclic 7-roots benchmark problem [BF91]_,
 for a number of tasks and a precision equal to double, double double,
 or quad double arithmetic.
 
@@ -158,11 +166,72 @@ If the quality of the solutions is defined as the working precision,
 then the quality up question ask for the number of processors needed
 to compensate for the overhead of the multiprecision arithmetic.
 
-Applications
-============
 
-Mechanism Design
-----------------
+Positive Dimensional Solution Sets
+----------------------------------
+
+As solving evolved from approximating all isolated solutions
+of a polynomial system into computing a numerical irreducible decomposition,
+the meaning of a solution expanded as well.
+To illustrate this expansion, 
+we consider again the family of cyclic *n*-roots problems, 
+now for :math:`n = 8`, [BF94]_.
+While for :math:`n = 7` all roots are isolated points,
+there is a one dimensional solution curve of cyclic 8-roots of degree 144.
+This curve decomposes in 16 irreducible factors,
+eight factors of degree 16 and eight quadratic factors,
+adding up to :math:`8 \times 16 + 8 \times 2 = 144`.
+
+Consider the following code snippet.
+
+.. code-block:: python
+
+    from phcpy.phcpy2c3 import py2c_set_seed
+    from phcpy.factor import solve
+    from phcpy.families import cyclic
+    py2c_set_seed(201905091)
+    c8 = cyclic(8)
+    sols = solve(8, 1, c8, verbose=False)
+    witpols, witsols, factors = sols[1]
+        deg = len(witsols)
+    print('degree of solution set at dimension 1 :', deg)
+    print('number of factors : ', len(factors))
+    _, isosols = sols[0]
+    print('number of isolated solutions :', len(isosols))
+
+The output of the script is
+
+::
+
+    degree of solution set at dimension 1 : 144
+    number of factors :  16
+    number of isolated solutions : 1152
+
+Survey of Applications
+======================
+
+We consider five examples from various literatures which apply polynomial constraint solving, two of which are tutorialized for phcpy.
+
+[DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
+
+Belief Propagation
+------------------
+
+https://ieeexplore.ieee.org/abstract/document/8027142
+
+Real-Time Interaction
+---------------------
+
+Another example from the phcpy tutorial is the circle problem of Apollonius...
+
+[cite scipy poster]
+
+Rigid Graph Theory
+------------------
+
+[BELT18]_
+
+Also, a simpler example of mechanism design:
 
 Fig. :ref:`fig4barcoupler` illustration a reproduction
 of a result in the mechanism design literature [MW90]_.
@@ -172,6 +241,7 @@ so their coupler curve passes through the five given points.
 .. figure:: ./fbarcoupler.png
    :align: center
    :figclass: h
+   :height: 300 px
 
    The design of a 4-bar mechanism.  :label:`fig4barcoupler`
 
@@ -180,15 +250,17 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
-Biodynamics
------------
+Critical Point Computation
+--------------------------
 
+[SWM16]_
 
+(Consider also methods not implemented with phcpack that could be. multiobjective optimization? 
+http://www-leland.stanford.edu/group/SOL/reports/SOL-2010-1.pdf
+)
 
-Tangent Circles
----------------
-
-Another example from the phcpy tutorial, that runs in real-time.
+Conclusion
+==========
 
 
 Acknowledgments
@@ -206,6 +278,21 @@ References
             In the Proceedings of the 2018 International Symposium on Symbolic 
             and Algebraic Computation (ISSAC 2018), pages 55-62, ACM 2018. 
             DOI 10.1145/3208976.3208994.
+
+.. [BF91] J. Backelin and R. Fr |oumlaut| berg.
+          *How we proved that there are exactly 924 cyclic 7-roots.*
+          In the Proceedings of the 1991 International Symposium on
+          Symbolic and Algebraic Computation (ISSAC'91), pages 103-111,
+          ACM, 1991.  DOI 10.1145/120694.120708.
+
+.. [BF94] G. Bj |oumlaut| rck and R. Fr |oumlaut| berg.
+          *Methods to ``divide out'' certain solutions from systems of 
+          algebraic equations, applied to find all cyclic 8-roots.*
+          In Analysis, Algebra and Computers in Mathematical Research,
+          Proceedings of the twenty-first Nordic congress of
+          mathematicians, edited by M. Gyllenberg and L. E. Persson, 
+          volume 564 of Lecture Notes in Pure and Applied Mathematics,
+          pages 57-70.  Dekker, 1994.
 
 .. [BSVY15] N. Bliss, J. Sommars, J. Verschelde, X. Yu.
             *Solving polynomial systems in the cloud with polynomial
@@ -237,10 +324,9 @@ References
            DOI 10.1109/MCSE.2007.55.
 
 .. [GLW05] T. Gao, T.Y. Li, and M. Wu.
-           *Algorithm 846: MixedVol: a software package for mixed-volume
-           computation.*
+           *Algorithm 846: MixedVol: a software package for mixed-volume computation.*
            ACM Trans. Math. Softw., 31(4):555-560, 2005.
-	       DOI 10.1145/1114268.1114274.
+           DOI 10.1145/1114268.1114274.
 
 .. [SymPy] D. Joyner, O. :math:`~\!` |Ccaron| ert |iacute| k, 
            A. Meurer, and B. E. Granger.
@@ -335,4 +421,4 @@ References
 
 .. [Pascal] 
           *JupyterHub deployment of phcpy.*
-          https://pascal.math.uic.edu, 20
+          https://pascal.math.uic.edu, 2017
