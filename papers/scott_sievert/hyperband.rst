@@ -23,10 +23,10 @@ Better and faster model selection with Dask
    Nearly every machine learning estimator has parameters assumed to be given.
    Finding the optimal set of these values is a difficult and time-consuming
    process for most modern estimators and is called "model selection". A recent
-   breakthrough algorithm, Hyperband addresses this problem by finding high
-   performing estimators with minimal training and has theoretical backing.
-   This paper will explain why Hyperband is well-suited for Dask, the required
-   input parameters and the rationale behind some minor modifications.
+   breakthrough model selection algorithm Hyperband addresses this problem by
+   finding high performing estimators with minimal training and has theoretical
+   backing. This paper will explain why Hyperband is well-suited for Dask, the
+   required input parameters and the rationale behind some minor modifications.
    Experiments with a neural network will be used for illustration and
    comparison.
 
@@ -37,12 +37,13 @@ Better and faster model selection with Dask
 Introduction
 ============
 
-Training any machine learning pipeline requires data, an untrained model and
-parameters that change the model and data, a.k.a. "hyper-parameters". These
-hyper-parameters greatly influence the performance of the model but are
-typically assumed to be given. A good example is with adapting the ridge
-regression or LASSO models to the amount of noise in the data with the
-regularization parameter :cite:`marquardt1975` :cite:`tibshirani1996`.
+Training any machine learning pipeline requires data, an untrained model or
+estimator and parameters that change the model and data, a.k.a.
+"hyper-parameters". These hyper-parameters greatly influence the performance of
+the model but are typically assumed to be given. A good example is with
+adapting the ridge regression or LASSO models to the amount of noise in the
+data with the regularization parameter :cite:`marquardt1975`
+:cite:`tibshirani1996`.
 
 Model performance strongly depends on the hyper-parameters provided, even for
 the simple examples above. This gets much more complex when more
@@ -54,11 +55,10 @@ tool effectively is titled "Those hyper-parameters really matter"
 
 These hyper-parameters are typically assumed to be given. This requires
 searching over the possible values to find the best value by some measure
-(typically by a cross-validation search which scores hyper-parameters on unseen
-data). These searches are referred to as "model selection" in the literature
-and software because hyper-parameters are considered part of the model. Even in
-the simple ridge regression case above, a brute force search is required
-:cite:`marquardt1975`.
+Typically models are scored on unseen data through a "cross-validation" search.
+These searches are part of a "model selection" process because hyper-parameters
+are considered part of the model. Even in the simple ridge regression case
+above, a brute force search is required :cite:`marquardt1975`.
 
 This gets more complex with many different hyper-parameter values to input, and
 especially because there's often an interplay between hyper-parameters. A good
@@ -67,7 +67,7 @@ many data :cite:`bottou2010large`. However, these optimization methods can't
 provide basic hyper-parameters because there are too many data. For example,
 the most basic hyper-parameter "learning rate" or "step size" is
 straightforward with few data but infeasible with many data
-:cite:`gilbert1992global`.
+:cite:`maren2015prob`.
 
 Contributions
 =============
@@ -86,35 +86,34 @@ selection.
 
 This work
 
-* provides implementation of an advanced model selection algorithm, Hyperband
-  in Dask, a Python library that provides advanced parallelism. This algorithm
-  returns models with a high validation score and has mathematical foundations.
-  This means that Dask can take advantage Hyperband's amenability to
-  parallelism.
+* provides implementation of a particular model selection algorithm, Hyperband
+  in Dask, a Python library that provides advanced parallelism. Hyperband
+  returns models with a high validation score with minimal training.  A Dask
+  implementation is attractive because Hyperband is amenable to parallelism.
 * makes a simple modifications to increase Hyperband's amenability to
   parallelism.
 * provides an simple heuristic to determine the parameters to Hyperband, which
   only requires knowing how many examples the model should observe and a rough
   estimate on how many parameters to sample
+* provides validating experiments
 
-This implementation can be found on the machine learning for Dask, Dask-ML. The
-documentation for Dask-ML is available at https://ml.dask.org.
+Hyperband treats computation as a scarce resource [#scarce]_ and has parallel
+underpinnings. Hyperband can only return high performing models with minimal
+training because it evaluate models in parallel.
 
-In experiments, Hyperband returns high performing models fairly quickly, though
-the simple modification returns models nearly as good and only require about
-70% of time. The simple heuristic for determining input parameter to Hyperband
-make it easy to use.
-
-This is enabled because of Hyperband treats computation as a scarce resource
-[#scarce]_ and has parallel underpinnings. The mathematical proof that
-Hyperband will return high performing models requires that Hyperband evaluate
-models in parallel.
+In the experiments, Hyperband returns high performing models fairly quickly,
+though the simple modification returns models nearly as good and only require
+about 70% of time. The simple heuristic for determining input parameter to
+Hyperband make it easy to use. The implementation can be found on the machine
+learning for Dask, Dask-ML. The documentation for Dask-ML is available at
+https://ml.dask.org.
 
 This paper will review other existing work for model selection before
 detailing the Hyperband implementation in Dask. A realistic set of experiments
 will be presented before mentioning ideas for future work.
 
-.. [#scarce] If computation is not a scarce resource, there is no benefit from this algorithm.
+.. [#scarce] If computation is not a scarce resource, there is no benefit from
+   this algorithm.
 
 Related work
 ============
@@ -282,7 +281,7 @@ effort. Combining Dask with advanced model selection is a natural fit and calls
 for an implementation.
 
 This work implements Hyperband in Dask's machine learning library, Dask-ML.
-The implementation's documentation can be found on htts://ml.dask.org.
+The implementation's documentation can be found on https://ml.dask.org.
 This section will detail the Hyperband architecture, the input arguments
 required and some modifications to reduce time to solution.
 
@@ -548,15 +547,15 @@ lower and more aggressive of ``patience``.
            stop increasing or plateau, hence the label.
            :label:`table:legend`
 
-   +---------------------------------------------------+---------------------+
-   | Class                                             | Label               |
-   +===================================================+=====================+
-   | ``HyperbandSearchCV``                             | ``hyperband``       |
-   +---------------------------------------------------+---------------------+
-   | ``IncrementalSearchCV``, ``patience=24``          | ``stop-on-plateau`` |
-   +---------------------------------------------------+---------------------+
-   | ``HyperbandSearchCV``, ``patience=True``          | ``hyperband+sop``   |
-   +---------------------------------------------------+---------------------+
+   +---------------------+---------------------------------------------------+
+   | Label               | Class                                             |
+   +=====================+===================================================+
+   | ``hyperband``       | ``HyperbandSearchCV``                             |
+   +---------------------+---------------------------------------------------+
+   | ``stop-on-plateau`` | ``IncrementalSearchCV``, ``patience=24``          |
+   +---------------------+---------------------------------------------------+
+   | ``hyperband+sop``   | ``HyperbandSearchCV``, ``patience=True``          |
+   +---------------------+---------------------------------------------------+
 
 Figure :ref:`fig:calls` supports the claim that Hyperband will high performing
 models with minimal ``partial_fit`` calls. Each ``partial_fit`` call uses 1/3
