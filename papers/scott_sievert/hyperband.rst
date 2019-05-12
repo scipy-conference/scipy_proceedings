@@ -37,45 +37,45 @@ Better and faster model selection with Dask
 Introduction
 ============
 
-Any machine learning pipeline requires data, an untrained model and
-"hyper-parameters". Hyper-parameters are parameters that are required for
-training and greatly influence the performance of the model but are typically
-assumed to be given. A good example is with adapting the ridge regression or
-LASSO models to the amount of noise in the data with the regularization
-parameter :cite:`marquardt1975` :cite:`tibshirani1996`.
+Training any machine learning pipeline requires data, an untrained model and
+parameters that change the model and data, a.k.a. "hyper-parameters". These
+hyper-parameters greatly influence the performance of the model but are
+typically assumed to be given. A good example is with adapting the ridge
+regression or LASSO models to the amount of noise in the data with the
+regularization parameter :cite:`marquardt1975` :cite:`tibshirani1996`.
 
 Model performance strongly depends on the hyper-parameters provided, even for
-the simple examples above with a convex optimization and one hyper-parameter.
-This gets much more complex when more hyper-parameters are required.
-For example, in a recent study of a particular visualization tool input
-combinations of three different hyper-parameters and the the first section is
-titled "Those hyper-parameters really matter" :cite:`wattenberg2016`.
+the simple examples above. This gets much more complex when more
+hyper-parameters are required. For example, a particular visualization tool
+(t-SNE) requires (at least) three different hyper-parameters
+:cite:`maaten2008visualizing`. The first section of a study on how to use this
+tool effectively is titled "Those hyper-parameters really matter"
+:cite:`wattenberg2016`.
 
-These hyper-parameters are typically assumed to be given, so they require some
-cross-validation search to find an estimate of the optimal value. Even in the
-simple ridge regression case above, a brute force search is required
-:cite:`marquardt1975`. This gets more complex with many different
-hyper-parameter values to input, and especially because there's often an
-interplay between hyper-parameters. In practice, this means that
-hyper-parameters have to be searched or tuned to find the value that provides
-the highest performance.
+These hyper-parameters are typically assumed to be given. This requires
+searching over the possible values to find the best value by some measure
+(typically by a cross-validation search which scores hyper-parameters on unseen
+data). These searches are referred to as "model selection" in the literature
+and software because hyper-parameters are considered part of the model. Even in
+the simple ridge regression case above, a brute force search is required
+:cite:`marquardt1975`.
 
-Model selection has become more complicated as data has grown. A good example
-is with deep learning, which has specialized techniques for handling many data
-:cite:`bottou2010large`. However, these optimization methods can't provide basic
-hyper-parameters because there are too many data. For example, the most basic
-hyper-parameter "learning rate" or "step size" is straightforward with few
-data but infeasible with many data :cite:`TODO`.
-
-.. TODO cite line search
+This gets more complex with many different hyper-parameter values to input, and
+especially because there's often an interplay between hyper-parameters. A good
+example is with deep learning, which has specialized techniques for handling
+many data :cite:`bottou2010large`. However, these optimization methods can't
+provide basic hyper-parameters because there are too many data. For example,
+the most basic hyper-parameter "learning rate" or "step size" is
+straightforward with few data but infeasible with many data
+:cite:`gilbert1992global`.
 
 Contributions
 =============
 
-Model selection is required if high performance is desired. In practice, it's a
-burden for machine learning researchers and practitioners. Ideally, model
-selection algorithms return high performing models quickly and are simple to
-use.
+A hyper-parameter search a.k.a "model selection" is required if high
+performance is desired. In practice, it's a burden for machine learning
+researchers and practitioners. Ideally, model selection algorithms return high
+performing models quickly and are simple to use.
 
 Returning high performing models quickly will allow the user (e.g., a data
 scientist) to more easily use model selection. Having a better search method
@@ -84,7 +84,7 @@ repeating model selection searches to obtain a better model. Returning this
 high performing model quickly would lower the barrier to performing model
 selection.
 
-This work...
+This work
 
 * provides implementation of an advanced model selection algorithm, Hyperband
   in Dask, a Python library that provides advanced parallelism. This algorithm
@@ -96,6 +96,9 @@ This work...
 * provides an simple heuristic to determine the parameters to Hyperband, which
   only requires knowing how many examples the model should observe and a rough
   estimate on how many parameters to sample
+
+This implementation can be found on the machine learning for Dask, Dask-ML. The
+documentation for Dask-ML is available at https://ml.dask.org.
 
 In experiments, Hyperband returns high performing models fairly quickly, though
 the simple modification returns models nearly as good and only require about
@@ -119,8 +122,8 @@ Related work
 Dask
 ----
 
-Dask provides advanced parallelism for analytics, especially for
-NumPy, Pandas and Scikit-Learn. It is familiar to Python users and does not
+Dask provides advanced parallelism for analytics, especially for NumPy, Pandas
+and Scikit-Learn :cite:`dask`. It is familiar to Python users and does not
 require rewriting code or retraining models to scale to larger datasets or to
 more machines. It can scale up to clusters or to massive dataset but also works
 on laptops and presents the same interface. Dask provides two components:
@@ -212,13 +215,12 @@ performing model than the randomized search without early stopping returns:
    function $F(\nu) = (\nu - \nu_*)^\beta$ for $\nu\in[0, 1]$ with optimal
    validation loss $\nu_*$.
 
-   Higher values of $\alpha$ mean slower
-   convergence, and higher values of $\beta$ represent more difficult model
-   selection problems because it's harder to obtain a validation loss close to
-   the optimal validation loss $\nu_*$.
-   If $\beta > 1$, the validation losses are not uniformly
-   distributed. The commonly used stochastic gradient
-   descent has convergence rates with $\alpha= 2$
+   Higher values of $\alpha$ mean slower convergence, and higher values of
+   $\beta$ represent more difficult model selection problems because it's
+   harder to obtain a validation loss close to the optimal validation loss
+   $\nu_*$.  Taking $\beta > 1$ means the validation losses are not uniformly
+   distributed and higher losses are more common. The commonly used stochastic
+   gradient descent has convergence rates with $\alpha= 2$
    \cite{bottou2012stochastic} \cite[Corollary 6]{li2016hyperband}.
 
    Then for any $T\in\mathbb{N}$, let $\widehat{i}_T$ be the empirically best
@@ -266,27 +268,23 @@ can be combined by using the Hyperband bracket framework `sequentially` and
 progressively tuning a Bayesian prior to select parameters for each bracket
 :cite:`falkner2018`. This work is also available through AutoML.
 
-Model selection in Dask
-=======================
+There is little to no gain from adaptive searches if the passive search
+requires little computational effort. Adaptive searches spends choosing which
+models to evaluate to minimize the computational effort required; if that's not
+a concern there's not much value the value in any adaptive search is limited.
 
-Dask is a tool for scaling Python to more data or parallel computation. What
-problems arise in model selection where this is relevant? Model selection
-searches problems can be compute constrained or memory constrained or neither.
-Memory constrained problems include data not fitting in memory. Compute
-constrained involve searches of many hyper-parameters (e.g., in neural nets).
+Adaptive model selection in Dask
+================================
 
-This work focuses on compute constrained model selection problems, though
-Dask's machine learning library Dask-ML has classes that handle each case of
-compute or memory constrained problems [#future]_. More information is in the
-Appendix.
+Dask can scale up to clusters or to massive dataset. Model selection searches
+can involve large datasets or require significant amounts of computational
+effort. Combining Dask with advanced model selection is a natural fit and calls
+for an implementation.
 
-.. [#future] Future work is to provide an implementation of Hyperband suited
-   for memory constrained problems
-
-The rest of this paper will be spent describing the details of the most complex
-algorithm, ``HyperbandSearchCV``. The following sections will cover the
-Hyperband architecture and why it's well-suited for Dask, the input parameters
-required, and some modifications to address the dwindling number of models.
+This work implements Hyperband in Dask's machine learning library, Dask-ML.
+The implementation's documentation can be found on htts://ml.dask.org.
+This section will detail the Hyperband architecture, the input arguments
+required and some modifications to reduce time to solution.
 
 Hyperband architecture
 ----------------------
@@ -379,57 +377,63 @@ means every model will see half as many data. An balance between training time
 and hyper-parameter importance is implicitly being decided upon. Hyperband has
 one fewer input because it sweeps over this balance's importance.
 
-.. [#examples] e.g., something in the form "the most trained model should see 100 times the number of examples (aka 100 epochs)"
-.. [#tolerance] Tolerance (typically via ``tol``) is a proxy for ``max_iter`` because smaller tolerance typically means more iterations are run.
+.. [#examples] e.g., something in the form "the most trained model should see
+   100 times the number of examples (aka 100 epochs)"
+.. [#tolerance] Tolerance (typically via ``tol``) is a proxy for ``max_iter``
+   because smaller tolerance typically means more iterations are run.
 
 Dwindling number of models
 --------------------------
 
 At first, Hyperband evaluates many models. As time progresses, the number of
-models decay because Hyperband is a principled early stopping scheme. Hyperband
-varies how aggressively it stops model training per bracket: the most
-aggressive bracket performs something like a binary search and the least
-aggressive bracket lets a couple models run without any stopping.
+models decay because Hyperband is a (principled) early stopping scheme.
+Hyperband varies how aggressively to stop model training per bracket. Each
+bracket performs something like a binary search but varies the amount of
+training between each decision. The least aggressive bracket lets a few models
+run without any stopping.
 
-This means towards the end of the computation, a few models can be finishing
-training while most of the computational hardware is free. This is especially a
-problem when computational resources have to be paid for (e.g., with cloud
-platforms like Amazon AWS or Google Cloud Engine).
+This means towards the end of the computation, a few models can be training
+while most of the computational hardware is free. This is especially a problem
+when computational resources are not free (e.g., with cloud platforms like
+Amazon AWS or Google Cloud Engine).
 
-Performing additional stopping on top of Hyperband will reduce the score:
-there's less training happening. However, if the correct models are stopped
-that is not an issue. In our implementation, we tried to stop two models:
-models that...
+Hyperband is a principled early stopping scheme, but doesn't protect against at
+least two common cases:
 
-1. continue too long and have converged long before the amount of training the
-   user specifies is reached
-2. have poor hyper-parameters, so model quality either flattens or
-   decreases over time.
+1. when models have converged before training completes (i.e., the score stays
+   constant)
+2. when models have not converged and poor hyper-parameters are chosen (so the
+   scores are decreasing).
 
-Both of these are addressed by a "stop on plateau" algorithm that monitors the
-model's score and stops training if it doesn't increase enough, a commonly used
-technique :cite:`prechelt1998automatic`. This requires two additional
-parameters: ``patience`` to determine how long to wait before stopping a model,
-and ``tol`` which determines how much the score should increase by.
+These common use cases happen when the user specifies a poor set of
+hyper-parameters or that training continue for too long. Regardless,
+the scores of the models above will not increase too much with high
+probability.
 
-The second case is only an issue in the less adaptive brackets of Hyperband
-because there's less control: they don't have an aggressive early stopping
-scheme and only evaluate a few hyper-parameters. Setting ``patience`` high but
-not infinite will provide some measure of control and not interfere with
-Hyperband's adaptive algorithm.
+Providing a "stop on plateau" scheme will protect against these cases because
+training will be stopped if a model's score stops increasing
+:cite:`prechelt1998automatic`. This will require two additional parameters:
+``patience`` to determine how long to wait before stopping a model, and ``tol``
+which determines how much the score should increase.
 
-Then, the ``patience`` parameter should have a default because some knowledge
-is required about Hyperband's adaptive algorithm. The current implementation
-uses ``patience=True`` to choose ``patience=max_iter // 3``. This choice is
-validated by the experiments.
+Hyperband's early stopping is designed to identify the highest performing model
+with minimal training. Setting ``patience`` to be high avoids interference with
+this scheme, protects against both cases above, and errs on the side of giving
+models more training time. In particular, it also provides a basic early
+stopping mechanism for the least adaptive bracket of Hyperband.
+
+The current implementation uses ``patience=True`` to choose a high value of
+``patience=max_iter // 3``. This choice is validated by the experiments.
 
 Experiments
 ===========
 
 This section will highlight a practical use of ``HyperbandSearchCV``. This
 involves a neural network using a popular library (PyTorch [#pytorch]_
-:cite:`ketkar2017introduction` through the wrapper Skorch [#skorch]_). This is
+:cite:`paszke2017automatic` through the wrapper Skorch [#skorch]_). This is
 a difficult model selection problem even for this relatively simple model.
+The complete implementation behind these experiments can be found at
+https://github.com/stsievert/dask-hyperband-comparison.
 
 .. [#pytorch] https://pytorch.org
 .. [#skorch] https://github.com/skorch-dev/skorch
@@ -437,10 +441,10 @@ a difficult model selection problem even for this relatively simple model.
 Problem
 -------
 
-Let's denoise some images. The inputs and desired outputs are given in Figure
-:ref:`fig:io+est`. This is an especially difficult problem because the noise
-variance varies slightly between images, which requires a model that's at least
-a little complex.
+This section will walk through an image denoising task. The inputs and desired
+outputs are given in Figure :ref:`fig:io+est`. This is an especially difficult
+problem because the noise variance varies slightly between images, which
+requires a model that's at least a little complex.
 
 Model architecture & Parameters
 -------------------------------
@@ -459,6 +463,8 @@ that model:
    # definition in Appendix
    est = skorch.NeuralNetRegressor(Autoencoder, ...)
 
+.. This autoencoder has two layers that compress
+
 Of course, this is a neural network so there are many hyper-parameters to tune.
 Only one effects the global optimum:
 
@@ -474,9 +480,9 @@ global optimum:
 * ``weight_decay``, which controls the amount of regularization
 * ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer.
 
-There are 4 discrete variables with :math:`160 = 2\cdot 5 \cdot 4 \cdot 4`
-possible combinations. For each one of this combinations, there are 3
-continuous variables to tune. Let's create the parameters to search over:
+There are 4 discrete variables with :math:`160` possible combinations. For each
+one of this combinations, there are 3 continuous variables to tune. Let's
+create the parameters to search over:
 
 .. code-block:: python
 
@@ -510,8 +516,8 @@ This model has denoised series of image it's never seen before in Figure
    finds. :label:`fig:io+est`
 
 ``HyperbandSearchCV`` beat hand-tuning by a considerable margin. While manually
-tuning, I considered any scores about :math:`-0.10` to be pretty good, and the
-I obtained scores no higher than :math:`-0.098`. By that measure, a score of
+tuning, I considered any scores about :math:`-0.10` to be pretty good, and I
+obtained scores no higher than :math:`-0.098`. By that measure, a score of
 :math:`-0.093` is fantastic.
 
 ``HyperbandSearchCV`` only requires `one` parameter besides the model and data
@@ -613,114 +619,4 @@ hurt performance and can it be avoided?
 
 References
 ==========
-
-Appendix
-========
-
-.. code-block:: python
-
-    import noisy_mnist
-    noisy, clean = noisy_mnist.dataset()
-
-    from dask_ml.model_selection import train_test_split
-    X_train, X_test, y_train, y_test = train_test_split(X, y)
-
-Briefly, the three classes in Dask-ML for model selection search are in the
-``dask_ml.model_selection``. They follow the Scikit-Learn API. The
-implementations include
-
-- ``RandomizedSearchCV`` and ``GridSearchCV``. These mirror the Scikit-Learn
-  learn API. This class is designed for searches that are compute constrained
-  but not memory constrained because these classes call ``fit`` on the model.
-  These classes cache stages of a pipeline, which is remarkably useful with
-  expensive pre-processing stages. [#jim]_
-- ``IncrementalSearchCV``. By default, this mirrors either of the passive
-  searches above. This class is designed to handle large datasets for searches
-  that are not compute constrained. It calls ``partial_fit`` on each "chunk" or
-  partition of the provided Dask array.
-- ``HyperbandSearchCV``. This class is designed for all compute constrained
-  searches. It inherits all of the features of ``IncrementalSearchCV`` and
-  implements a principled early stopping scheme.
-
-.. [#jim] Jim Crist from Anaconda, Inc. implemented these classes.
-
-A brief summary is provided in Table :ref:`table:implementations`.
-
-.. latex::
-   :usepackage: caption
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.9\linewidth}
-   \captionsetup{justification=raggedright}
-
-.. table:: A brief listing of the currently availab implementations for
-           model selection searches available in Dask-ML and the types of
-           problems they handle best by default. ``IncrementalSearchCV`` can be
-           configured to be adaptive and then would address compute constrained
-           problems.  :label:`table:implementations`
-
-   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
-   | Compute constrained? | Memory constrained? | Dask Implementation(s)                                                                           |
-   +======================+=====================+==================================================================================================+
-   | No                   | Yes                 | ``IncrementalSearchCV``                                                                          |
-   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
-   | Yes                  | No                  |  ``GridSearchCV``, ``RandomizedSearchCV``, ``HyperbandSearchCV``                                 |
-   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
-   | Yes                  | Yes                 | ``HyperbandSearchCV``                                                                            |
-   +----------------------+---------------------+--------------------------------------------------------------------------------------------------+
-
-.. code-block:: python
-
-   import torch.nn as nn
-
-   class Autoencoder(nn.Module):
-       def __init__(self, activation='ReLU', init='xavier_uniform_',
-           super().__init__()
-
-           self.activation = activation
-           self.init = init
-
-           Actvation = getattr(nn, activation)
-           self.encoder = nn.Sequential(
-               nn.Linear(28 * 28, inter_dim),
-               Activation(),
-               nn.Linear(inter_dim, latent_dim),
-               Activation()
-           )
-           self.decoder = nn.Sequential(
-               nn.Linear(latent_dim, 28 * 28),
-               nn.Sigmoid()
-           )
-           # code to handle initialization
-
-       def forward(self, x):
-           self._iters += 1
-           shape = x.size()
-           x = x.view(x.shape[0], -1)
-           x = self.encoder(x)
-           x = self.decoder(x)
-           return x.view(shape)
-
-.. code-block:: python
-
-   params = {
-       'optimizer': ['SGD', 'Adam'],
-       'batch_size': [32, 64, 128, 256, 512],
-       'estimator__init': ['xavier_uniform_',
-                           'xavier_normal_',
-                           'kaiming_uniform_',
-                           'kaiming_normal_'],
-       'estimator__activation': ['ReLU',
-                                 'LeakyReLU',
-                                 'ELU',
-                                 'PReLU'],
-       'optimizer__lr': \
-              np.logspace(1, -1.5, num=1000),
-       'optimizer__weight_decay': \
-              np.logspace(-5, -3, num=1000),
-       'optimizer__momentum': \
-              np.linspace(0, 1, num=1000)
-   }
-
 
