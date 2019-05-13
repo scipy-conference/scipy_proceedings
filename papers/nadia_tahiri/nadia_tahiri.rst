@@ -78,7 +78,7 @@ This list will also include recommendations regarding the optimal quantity of ea
 where these products are to be purchased. We will also calculate the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm.
 
-F1 statistics maximization algorithm (Ye et al., 2012), 
+:math:`F_1` statistics maximization algorithm (Ye et al., 2012), 
 based on dynamic programming, will be used to meet the objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method (Goodfellow et al., 2016), based on recurrent neuron networks (RNN) 
@@ -213,7 +213,7 @@ This score is frequently used especially when the relevant elements are scarce.
 
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1`if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
-   
+
 .. figure:: figures/workflow.png
 	 
 	 Model used in the classification. :label:`workflow`
@@ -269,6 +269,14 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    :scale: 15%
    
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
+
+.. figure:: figures/smartshopping_1.png
+   
+	 CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
+
+.. figure:: figures/mygrocerytour_circuit.png
+	 
+	 Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
 .. raw:: latex
 	
