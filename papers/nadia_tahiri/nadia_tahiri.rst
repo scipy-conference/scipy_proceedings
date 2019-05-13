@@ -86,8 +86,6 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
 	 
 	 Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
-See Table :ref:`circuit`
-
 :math:`F_1` statistics maximization algorithm (Ye et al., 2012), 
 based on dynamic programming, will be used to meet the objective (i), 
 which will be of major interest to retailers and distributors. 
@@ -279,14 +277,6 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    :scale: 15%
    
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
-
-.. figure:: figures/smartshopping_1.png
-   
-	 CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
-
-.. figure:: figures/mygrocerytour_circuit.png
-	 
-	 Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
 .. raw:: latex
 	
