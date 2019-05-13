@@ -10,6 +10,9 @@
 :email: jan@math.uic.edu
 :institution: University of Illinois at Chicago
 
+.. |cacute| unicode:: U+0107 .. cacute
+   :trim:
+
 .. |eacute| unicode:: U+00E9 .. eacute
    :trim:
 
@@ -88,6 +91,11 @@ Limiting to free and open source software, currently under development,
 with a presence on github, we can list three related software packages:
 Bertini 2.0 [Bertini2.0]_, HomotopyContinuation.jl [HCJL]_,
 and NAG4M2 [NAG4M2]_.
+
+NAG4M2 as a Macaulay2 [M2]_ package, described in [Ley11]_,
+provided the starting point for the development of PHCpack.m2 [GPV13]_.
+The Julia package [HCJL]_ was presented at ICMS 2018 [BT18]_.
+An earlier version to [Bertini2.0]_ is explained in [BHSW13]_.
 
 User Interaction
 ================
@@ -218,7 +226,8 @@ The output of the script is
 Survey of Applications
 ======================
 
-We consider five examples from various literatures which apply polynomial constraint solving, two of which are tutorialized for phcpy.
+We consider some examples from various literatures which apply polynomial 
+constraint solving, two of which are tutorialized for phcpy.
 
 [DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
 
@@ -275,6 +284,10 @@ Foundation under Grant No. 1440534.
 References
 ----------
 
+.. [BHSW13] D. J. Bates, J. D. Hauenstein, A. J. Sommese, and C. W. Wampler.
+            *Numerically solving polynomial systems with Bertini*, 
+            volume 25 of Software, Environments, and Tools, SIAM, 2013.
+
 .. [BELT18] E. Bartzos, I. Z. Emiris, J. Legersky, and E. Tsigaridas.
             *On the maximal number of real embeddings of spatial minimally
             rigid graphs*.
@@ -310,6 +323,15 @@ References
             Computer Science, pages 87-100, Springer-Verlag, 2015. 
             DOI 10.1007/978-3-319-24021-3_7.
 
+.. [BT18] P. Breiding and S. Timme.
+          *HomotopyContinuation.jl: A package for homotopy continuation in
+          Julia.*
+          In the proceedings of ICMS 2018, the 6th International Conference
+          on Mathematical Software, South Bend, IN, USA, July 24-27, 2018,
+          edited by J. H. Davenport, M. Kauers, G. Labahn, and J. Urban,
+          volume 10931 of Lecture Notes in Computer Science, pages 458-465.
+          Springer-Verlag, 2018.  DOI 10.1007/978-3-319-96418-8.
+
 .. [Chu06] W. J. Chun. *Core Python Programming.*
            Prentice Hall, 2nd Edition, 2006.
 
@@ -338,6 +360,11 @@ References
            ACM Trans. Math. Softw., 31(4):555-560, 2005.
            DOI 10.1145/1114268.1114274.
 
+.. [GPV13] E. Gross, S. Petrovi |cacute|, and J. Verschelde.
+           *Interfacing with PHCpack.*
+           The Journal of Software for Algebra and Geometry: Macaulay2,
+           5:20-25, 2013.  DOI 10.2140/jsag.2013.5.20.
+
 .. [SymPy] D. Joyner, O. :math:`~\!` |Ccaron| ert |iacute| k, 
            A. Meurer, and B. E. Granger.
            *Open source computer algebra systems: SymPy.*
@@ -354,6 +381,14 @@ References
            and Agendas, edited by F. Loizides and B. Schmidt, 
            pages 87-90. IOS Press, 2016.
            DOI 10.3233/978-1-61499-649-1-87.
+
+.. [Ley11] A. Leykin.  *Numerical algebraic geometry.*
+           The Journal of Software for Algebra and Geometry: Macaulay2,
+           3:5-10, 2011.  DOI 10.2140/jsag.2011.3.5.
+
+.. [M2] D. R. Grayson and M. E. Stillman.
+        Macaulay2, a software system for research in algebraic geometry.
+        http://www.math.uiuc.edu/Macaulay2
 
 .. [MT08] T. Mizutani and A. Takeda.
           *DEMiCs: A software package for computing the mixed volume via
