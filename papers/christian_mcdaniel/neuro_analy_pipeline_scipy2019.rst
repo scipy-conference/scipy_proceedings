@@ -160,9 +160,9 @@ where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}\tilde{A}\tilde{D}^{\frac{-1}{2}`.
   a_{ij} = exp(LeakyReLU(a^{T}[\textbf{W}h_{i}||\textbf{W}h_{j}])) / \sum(k \in \mathcal{N}_{i}) exp(LeakyReLU(a^{T}[\textbf{W}h_{i}||\textbf{W}h_{k}])),
 where :math:`||` is concatenation.
 
-`GCN.py` contains these and helper classes as well as our GCNetwork class, which implements the multi-view GCN on the features derived from multiple tractography algorithms (and function data?), pools the multi-view features and calls the GAT class on the pooled data. The weighted attention assigned to each node’s feature is used to compute a weighted average across all the nodes’ output feature (of the same size as the number of classes). Figure :ref:`GCNetwork_fig` C shows an outline of the network architecture.  Finally `train.py` trains the network. For a given epoch, the network computes a forward pass on all acquisitions, calculates and backpropagates the loss using all the predictions, and updates the weights accordingly.
+`GCN.py` contains these and helper classes as well as our GCNetwork class, which implements the multi-view GCN on the features derived from multiple tractography algorithms (and function data?), pools the multi-view features and calls the GAT class on the pooled data. The weighted attention assigned to each node’s feature is used to compute a weighted average across all the nodes’ output feature (of the same size as the number of classes). Figure :ref:`GCN_fig` C shows an outline of the network architecture.  Finally `train.py` trains the network. For a given epoch, the network computes a forward pass on all acquisitions, calculates and backpropagates the loss using all the predictions, and updates the weights accordingly.
 
-.. figure:: GCNetwork_fig.png
+.. figure:: GCN_fig.png
 
 	A depiction of the novel GCN architecture is shown. First, a GCN is trained for each “view” of the data, corresponding to a specific tractography algorithm. The GCN shares weights, and the resulting features are pooled for each node. This composite graph is then used to train a multi-head graph attention network, which outputs features that have the same size as the number of classes. The attention weight assigned to each node is used to compute a weighted sum of each feature, yielding the predicted class :math:`\hat{y}` of the input acquisition.
 
