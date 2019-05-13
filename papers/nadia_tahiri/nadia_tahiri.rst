@@ -213,19 +213,21 @@ This score is frequently used especially when the relevant elements are scarce.
 
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1`if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
+   
+.. figure:: figures/workflow.png
+	 
+	 Model used in the classification. :label:`workflow`
+
+.. figure:: figures/order_frequency.png
+	 
+	 Basket size distribution. :label:`frequency`
+
+.. figure:: figures/product_pca.png
+	 
+	 Embeddings of 20 random products projected in 2 dimensions. :label:`pca`
 
 .. figure:: figures/products_F1.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
    
-.. figure:: figures/order_frequency.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
-   
-.. figure:: figures/product_pca.png
-
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`site`
    
@@ -236,14 +238,9 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    spectral extraction throughput. :label:`pearsonr`
    
 .. figure:: figures/lstm.png
-
+   
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`lstm`
-   
-.. figure:: figures/workflow.png
-
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`workflow`
    
 .. figure:: figures/violon.png
    :align: center
