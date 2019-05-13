@@ -220,34 +220,79 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
 .. figure:: figures/order_frequency.png
 	 
-	 Basket size distribution. :label:`frequency`
+	 Basket size distribution. :label:`orderfrequency`
 
 .. figure:: figures/product_pca.png
 	 
-	 Embeddings of 20 random products projected in 2 dimensions. :label:`pca`
+	 Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
-.. figure:: figures/products_F1.png
-   
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`site`
-   
+
+.. raw:: latex
+	
+	\begin{table}
+
+		\begin{longtable}{|l|c|}
+		\hline
+           \textbf{Product} &  \textbf{Number of baskets} \\
+		\hline
+                     Banana &   6138 \\
+               Strawberries &   3663 \\
+       Organic Baby Spinach &   1683 \\
+                      Limes &   1485 \\
+                 Cantaloupe &   1089 \\
+              Bing Cherries &    891 \\
+         Small Hass Avocado &    891 \\
+         Organic Whole Milk &    891 \\
+                Large Lemon &    792 \\
+ Sparkling Water Grapefruit &    792 \\
+		\hline
+		\end{longtable}
+		\caption{The 10 most popular products included in the predicted baskets.}
+  \end{table}
+
 .. figure:: figures/pearsonr.png
    :align: center
    
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
-   spectral extraction throughput. :label:`pearsonr`
+   Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
    
 .. figure:: figures/lstm.png
    
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`lstm`
+
+.. figure:: figures/products_F1.png
+	 
+	 Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
    
 .. figure:: figures/violon.png
    :align: center
-   :scale: 20%
-   :figclass: wt
- 
+   :scale: 15%
    
+   Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
+
+.. raw:: latex
+	
+	\begin{table}
+
+		\begin{longtable}{lc}
+		\hline
+                                      \textbf{Product} &        \textbf{F} \\
+		\hline
+    Gogo Squeez Organic Apple Strawberry Applesauce &  0.042057 \\
+            Organic AppleBerry Applesauce on the Go &  0.042057 \\
+                           Carrot And Celery Sticks &  0.042057 \\
+             Gluten Free Peanut Butter Berry  Chewy &  0.042057 \\
+                   Organic Italian Balsamic Vinegar &  0.049325 \\ 
+		\hline
+                         Diet Cranberry Fruit Juice &  0.599472 \\
+                                     Purified Water &  0.599472 \\
+     Vanilla Chocolate Peanut Butter Ice Cream Bars &  0.599472 \\
+  Total 0\% with Honey Nonfat Greek Strained Yogurt &  0.590824 \\
+              Total 0\% Blueberry Acai Greek Yogurt &  0.590824 \\
+		\hline
+		\end{longtable}
+	\end{table}   
+
 Conclusions and Future Work
 ---------------------------
 
