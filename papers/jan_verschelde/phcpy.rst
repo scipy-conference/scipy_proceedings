@@ -105,6 +105,9 @@ CGI Scripting
 
 We previously developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_, as a web interface to ``phc``. MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
+As of the middle of May 2019,
+our web server has 145 user accounts.
+
 Jupyter and JupyterHub
 ----------------------
 
@@ -119,7 +122,6 @@ For the user administration, we refreshed our first web interface. A custom Jupy
 that isolates the actions of users to separate processes and logins in generic home folders.
 
 The account management prompts by e-mail were hooked to a new Tornado Handler.
-
 
 Code Snippets
 -------------
@@ -151,6 +153,10 @@ For its fast mixed volume computation, the software incorporates MixedVol [GLW05
 Speedup and Quality Up
 ----------------------
 
+The solution paths defined by polynomial homotopies can be tracked
+independently, providing obvious opportunities for parallel execution.
+This section reports on computations on our server, a 44-core computer.
+
 An obvious benefit of running on many cores is the speedup.
 The *quality up* question asks the following:
 if we can afford to spend the same time,
@@ -178,10 +184,60 @@ or quad double arithmetic.
                   precision=precflag, checkin=False)
         return perf_counter() - tstart
 
+The function above is applied in an interactive Python script,
+prompting the user for the number of tasks and precision,
+This scripts runs in a Terminal window and prints the elapsed performance
+returned by the function.
 If the quality of the solutions is defined as the working precision,
 then the quality up question ask for the number of processors needed
 to compensate for the overhead of the multiprecision arithmetic.
 
+Although cyclic 7-roots is a small system for modern computers,
+the cost of tracking all solution paths in double double and 
+quad double arithmetic causes significant overhead.
+The script above was executed on a 2.2 GHz Intel Xeon E5-2699 processor
+in a CentOS Linux workstation with 256 GB RAM
+and the elapsed performance is in Table :ref:`perfcyc7overhead`.
+
+.. table:: Elapsed performance of the blackbox solver in double,
+           double double, and quad double precision. :label:`perfcyc7overhead`
+
+   +------------------+------+-------+--------+
+   | precision        |  d   |   dd  |   qd   |
+   +==================+======+=======+========+
+   | elapsed perform. | 5.45 | 42.41 | 604.91 |
+   +------------------+------+-------+--------+
+   | overhead factor  | 1.00 |  7.41 | 110.99 |
+   +------------------+------+-------+--------+
+
+Table :ref:`perfcyc7parallel` demonstrates the reduction of the
+overhead caused by the multiprecision arithmetic by multitasking.
+
+.. table:: Elapsed performance of the blackbox solver 
+           with 8, 16, and 32 path tracking tasks, in double double
+           and quad double precision.  :label:`perfcyc7parallel`
+
+   +-------+-------+-------+-------+
+   | tasks |   8   |   16  |   32  |
+   +=======+=======+=======+=======+
+   |  dd   | 42.41 |  5.07 |  3.88 |
+   +-------+-------+-------+-------+
+   |  qd   | 96.08 | 65.82 | 44.35 |
+   +-------+-------+-------+-------+
+
+Notice that the 5.07 in Table :ref:`perfcyc7parallel`
+is less than the 5.45 of Table :ref:`perfcyc7overhead`:
+with 16 tasks we doubled the precision and finished the computations
+in about the same time.
+The 42.41 and 44.35 in Table :ref:`perfcyc7parallel` are similar enough
+to state that with 32 instead of 8 tasks we doubled the precision from 
+double double to quad double precision in about the same time.
+
+Precision is a crude measure of quality.
+Another motivation for quality up by parallelism is to compensate
+for the cost overhead caused by arithmetic with power series.
+Power series are hybrid symbolic-numeric representations
+for algebraic curves.
 
 Positive Dimensional Solution Sets
 ----------------------------------
