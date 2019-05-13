@@ -10,7 +10,7 @@
 :author: Stephen J. Bailey
 :email: stephenbailey@lbl.gov
 :institution: LBL
-:bibliography: scipy_bib
+:bibliography: scipybib
 
 -----------------------------------------------------------------------------
 Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
@@ -53,21 +53,21 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
 
 .. class:: keywords
 
-   numpy, scipy, numba, compiling, spectroscopy, hpc
+   NumPy, SciPy, Numba, JIT compile, spectroscopy, HPC, MPI, Dask
 
 Introduction
 ------------
 
 Though dark energy is estimated to comprise over 70 percent of our universe, it
-is not currently well-understood (stephen which papers should i cite for
-this?). Many experiments are seeking to uncover more information about the
+is not currently well-understood :cite:`peebles_cosmological_2003,mortonson_dark_2013`. 
+Many experiments are seeking to uncover more information about the
 nature of dark energy; once such experiment is DESI (the Dark Energy
 Spectroscopic Instrument) :cite:`noauthor_dark_nodate`. The goal of the DESI
 experiment is, over 5 years, to map 30 million galaxies and use
 spectroscopically obtained redshift data to obtain their distances. This
-information will allow create the most detailed 3D map of the universe to be
-constructed. It is hoped that this 3D map will help support or rule out some of
-the current theories of dark energy. An image of the Mayall telescope, in Kitt
+information will allow the most detailed 3D map of the universe to be
+constructed, which will help better understand the role of dark energy
+throughout the history of the universe. An image of the Mayall telescope, in Kitt
 Peak, Arizona, where the DESI instrument is installed, is shown in Figure
 :ref:`kittpeak`
 
@@ -77,22 +77,20 @@ Peak, Arizona, where the DESI instrument is installed, is shown in Figure
    image), where the DESI instrument has been installed, in Kitt Peak, Arizona.
    :label:`kittpeak`
 
+NERSC is the National Energy Research Scientific Computing center. It provides
+resources for the DOE scientists who need a facility to run their
+large-scale simulations, data processing, and machine learning. Through a program
+called the NERSC Exascale Science Applications Program (NESAP) 
+:cite:`noauthor_nesap_nodate`, NERSC collaborates with scientific teams
+to adapt their applications to run efficiently and robustly on
+NERSC systems. The case detailed in this work is one such collaboration
+between NERSC and a DOE science project (the DESI experiment). Other
+NESAP projects are described in :cite:`ronaghi_python_2017`.
+
 In late 2019 DESI will begin sending batches of CCD images nightly to NERSC for
 data processing. The CCD images contain many spectra; one for each object at
-which the fiber was pointed. Through the DESI extraction pipeline, the
-redshifts of many objects like galaxies and quasars will be determined,
-ultimately yielding the information to construct the 3D map.
-
-Five years worth of image processing on a shared supercomputer should be as
-efficient as possible, both for the sake of the DESI project but also the many
-other users who share the NERSC systems. Through a collaborative effort between
-the NERSC NESAP program :cite:`ronaghi_python_2017` and DESI, NESAP was tasked
-with improving the efficiency of the DESI code without rewriting the code in
-another language like C. An image of the Mayall telescope, in Kitt Peak,
-Arizona, where the DESI instrument is installed, is shown in Figure
-:ref:`kittpeak`.
-
-DESI has a large and complex image processing pipeline to transform raw images
+which the fiber was pointed. DESI has a large and complex image processing 
+pipeline to transform raw images
 from the CCD into meaningful scientific results. This study focuses on only a
 small portion of this pipeline: that part that obtains the spectral extraction.
 The spectral extraction is performed in two dimensions using a technique
@@ -108,21 +106,25 @@ manage the spectral data in each exposure (30 frames, which total about 6GB).
    often 2D in nature, a full 2-D fitting is required to accurately capture their
    shape. Image courtesy of S. J. Bailey. :label:`spectroperfectionism`
 
-The purpose of this paper is to provide a case study that describes how a
+Five years worth of image processing on a shared supercomputer should be as
+efficient as possible, both for the sake of the DESI project but also the many
+other users who share the NERSC systems. NESAP was tasked
+with improving the efficiency of the DESI code without rewriting the code in
+another language like C. In what follows we will present a case study that
+describes how a
 Python image processing pipeline was optimized for increased throughput of 5-7x
 on a high-performance system.  The workflow of using profiling tools to find
 candidate kernels for optimization and the techniques for speeding up these
-kernels will be described. The most successful method used to obtain speedup
-was just-in-time compiling using Numba; several successful examples will be
-provided.  Parallelization strategies using MPI and Dask will be compared, and
-preliminary considerations for moving the code to GPUs will be discussed.
+kernels will be described. Two approaches to speeding up the code will be described:
+using Numba for Just in Time compilation, and restructuring the code
+to minimize the impact of calling expensive kernels.  Parallelization strategies using MPI and Dask will be compared, and preliminary considerations for moving the code to GPUs will be discussed.
 
 
 Profiling the code to find problem spots
 ----------------------------------------
 
-Our first step in this study was to use profiling tools to take data on the
-code to determine places where it was worthwhile to spend our time. We made
+Our first step in this study was to use profiling tools
+to determine places in the DESI code where it was worthwhile to spend our time. We made
 heavy use of tools designed especially for Python. In general our process was
 to start with the simplest tools and then, when we knew what we were looking
 for, use the more complex tools.
@@ -136,7 +138,8 @@ cProfile
    :figclass: wt
 
    This is an example image created from data collected using cProfile and
-   visualized using gprof2dot. This profile was obtained from an early stage in
+   visualized using gprof2dot :cite:`fonseca_converts_2019`. 
+   This profile was obtained from an early stage in
    the DESI python optimization effort. :label:`gprof2dot`
 
 Python's built-in cProfile :cite:`noauthor_26.3._nodate` was the first tool we
@@ -181,14 +184,6 @@ themselves through JIT-compiling, or by restructuring the code to avoid calling
 these expensive functions as often. We will describe both approaches in the
 sections that follow.
 
-.. figure:: figures/line_profiler_xypix.png
-
-   Here is a sample output window from line_profiler for the function "xypix".
-   :label:`lineprofiler`
-
-Vtune and Tau
-~~~~~~~~~~~~~
-
 Using a combination of cProfile and line_profiler were sufficient for almost
 all of the performance optimization work that we performed during the course of
 this work. However, because the DESI extraction code is an MPI code, these
@@ -197,8 +192,18 @@ data for each MPI rank, but visualizing and using the information in a
 meaningful way is challenging, especially when there are 68 outputs from a KNL
 core, for example.
 
-In the situation where we began to care about what all the MPI were doing and
-whether they were being appropriately utilized and load-balanced, we needed
+.. figure:: figures/line_profiler_xypix.png
+
+   Here is a sample output window from line_profiler 
+   :cite:`kern_line-by-line_2019` for the function "xypix".
+   :label:`lineprofiler`
+
+Vtune and Tau
+~~~~~~~~~~~~~
+
+Once we reached the point where we needed information about what all the MPI ranks
+were doing and
+whether they were being appropriately load-balanced, we needed
 more powerful profiling tools like Intel Vtune :cite:`admin_python*_nodate` and
 Tau :cite:`noauthor_tau_nodate`.  Because only a subset of the Vtune
 capabilities are available for Python codes, we ultimately found the Tau
@@ -211,7 +216,8 @@ this Tau visualization that we were not making good use of processor resources.
 
 .. figure:: figures/tau_main.png
 
-   A sample Tau profiling output for the DESI spectral extraction code on a
+   A sample Tau :cite:`noauthor_tau_nodate` output for the DESI spectral 
+   extraction code on a
    Haswell processor (which has 32 ranks). It is clear from this output that only
    20 of the ranks are being utilized. This motivated the re-structure to allow
    parallelization of subbundles, rather than bundles, which could more flexibly
@@ -230,7 +236,7 @@ detail in the two sections that follow.
 Just-in-time (JIT) compilation with Numba
 ------------------------------------------
 
-The other major approach to achieve speedups in this work has been to
+The first major approach to achieve speedups in this work has been to
 focus on making expensive functions run more quickly. To achieve this,
 we have used Numba :cite:`lam_numba:_2015` is a just-in-time compiler for Python.
 
@@ -274,6 +280,12 @@ speedup from JIT compiling scipy hermitenorm was approximately 40 percent.
 Restructuring the code
 ----------------------
 
+The second major optimization strategy we used was to intelligently re-structure the code.
+This meant that we 1) tried to call expensive functions fewer times, which often
+meant that we 2) tried
+to call expensive functions with vectors rather than scalars, and 3) had to add
+machinery to store these results and use them as necessary. 
+
 Implement subbundles
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -310,7 +322,7 @@ most cumbersome that we made, but it also resulted in the greatest incremental
 speedup of this project thus far: 1.7x faster.
 
 
-Parallelize over bundles instead of subbundles
+Parallelize over subbundles instead of bundles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The current DESI MPI framework is to split the original communicator into n
@@ -321,9 +333,6 @@ available processors on either a Haswell or KNL. To process additional frames
 carefully chosen to fill the processors as much as possible. This means to
 process a full exposure of 30 frames (600 bundles), 19 Haswell nodes and 9 KNL
 nodes are required to efficiently use the processors.
-
-show subbundle scan that shows we can get away with this
-make nice subbundle scan plot
 
 In this case, the goal was to restructure the code to
 divide the spectral extraction into smaller, more flexible pieces. This would
@@ -341,15 +350,7 @@ orchestrates all 30 frames within a single exposure, and the frame level
 communicator orchestrates the subbundle processing within the frame.
 Implementing this change was nontrivial but the speedup and flexibility gains
 made it worthwhile to the DESI team. Using all processors more efficiently 
-resulted in a per-frame speedup for both Haswell and KNL. For Haswell, 
-the previous runtime was approximately 2 minutes and is now about 1 minute
-and 15 seconds, which is almost exactly consistent with using all 32 Haswel
-l cores as compared to the previous 20 (a factor of 1.6 improvement). 
-For KNL, the previous
-runtime was approximately 9 minutes and it is now 4 minutes, again roughly
-consistent with increasing the number of processors from 20 to 68 but with
-somewhat more overhead than for Haswell. 
-
+resulted in a per-frame speedup for both Haswell and KNL. 
 need to actually run a desi exposure with subbundle division
 how fast?
 
@@ -361,60 +362,27 @@ need to actually tau profile the new code
 Optimization results
 --------------------
 
-Several speedup metrics were of interest to DESI. The first speedup metric
-on which we focused what the time it took to process a single frame. We tracked
-this processing time over the course of our optimization effort. The runtime
-of the frame processing is plotted against our various efforts.
-
-Table 1 summarizes these efforts in the order in which they were performed.
-It also categorizes them by type (either JIT compile or restructure). The speedups
-that were obtained from each optimzation are plotted in Figures :ref:`singlenode`,
-:ref:`incremental`, and :ref:`framespernodehour`.
-
-.. raw:: latex
-
-   \begin{table}
-
-     \begin{longtable}{|c|c|}
-     \hline
-     \textbf{Optimization}  & \textbf{Type}\tabularnewline
-     \hline
-     Add subbundles & Restructure\tabularnewline
-     \hline
-     Fix legval & JIT compile\tabularnewline
-     \hline
-     Add caching & Restructure\tabularnewline
-     \hline
-     Fix pgh & JIT compile\tabularnewline
-     \hline
-     Fix xypix & JIT compile\tabularnewline
-     \hline
-     Divide by subbundles & Restructure\tabularnewline
-     \hline
-     \end{longtable}
-
-     \caption{Optimization efforts performed in this study.}
-
-   \end{table}
-
-Perhaps the most straightforward benchmark is one in which raw speed is
+How effective were all these different optimization efforts? We have several
+ways to consider and examine our results. Perhaps the most straightforward 
+benchmark is one in which raw speed is
 measured. In this case, it is the time to complete the processing of a single
-DESI frame on Edison, Cori Haswell, and Cori KNL. Over the course of this work
-the runtime for a single frame was decreased from 4000 s to 240 s for KNL and
-from ? to 75 seconds for Haswell. However, DESI will need to process many
-frames at a time, so a single frame isn't a very representative test of how
-much their processing capabilities have improved.  Figure :ref:`singlenode`
+DESI frame on Edison, Cori Haswell, and Cori KNL, on a single node. 
+Over the course of this work
+the runtime for a single frame was decreased from 4000 s to 525 s for KNL, 
+from 862 to 130 seconds for Haswell, and from 1146 s to 116 s for Ivy Bridge.
+Figure :ref:`singlenode`
 shows how the processing time per frame on a single node was affected by each
-change we made to the code. This figure shows that the first few changes we
+chronological change we made to the code. This figure shows that the first few changes we
 made had the largest overall effect: the later optimizations exhibited some
 diminishing returns as we continued to implement them. One major goal of the
-NERSC NESAP program was to reduce the DESI runtime on KNL to below the original
-NERSC Edison benchmark, which is indicated by the red dotted line. Once we
+NESAP program was to reduce the DESI runtime on KNL to below the original
+NERSC Ivy Bridge benchmark, which is indicated by the red dotted line. Once we
 implemented our xypix fix, we achieved this goal.
 
 .. figure:: figures/single_node_benchmark.png
 
-   have to play with it. :label:`singlenode`
+   The single-node speedup achieved on Intel Ivy Bridge, Haswell, and KNL architectures
+   throughout the course of this study. :label:`singlenode`
 
 A more meaningful benchmark for DESI is the number of frames they can process
 during a given amount of time using a given number of nodes.  We call this
@@ -423,8 +391,8 @@ be processed per node per hour.  We performed these frames per node hour
 benchmarks with a full exposure (30 frames) instead of a single frame on either
 19 or 9 nodes for Haswell and KNL, respectively. Though a single exposure is
 still a relatively small test because DESI expects to collect 50 or more
-exposures per night (is this right stephen?) it much more closely approaches
-the real DESI workload than the single exposure.  One feature encoded in this
+exposures per night, it much more closely approaches
+the real DESI workload than the single exposure test.  One feature encoded in this
 benchmark which is not captured in the speed benchmark is the increasingly
 important role that MPI overhead begins to play in multi-node jobs, which is a
 real factor the DESI will have to contend with during its large processing
@@ -441,28 +409,49 @@ in throughput we have obtained are more modest than the raw speedup,
 we emphasize these values because they are a more accurate representation of the
 actual improvements in DESI's processing capability. 
 
-
-.. figure:: figures/incremental_speedup.png
-
-   This plot compares the incremental speedups obtained by the various
-   optimizations that were implemented in this study. :label:`incremental`
-
 Finally, we have have one additional metric which is perhaps more generally applicable. 
 We have examined the incremental improvements in speedup
 for each of the optimizations we implemented. This plot gives us some insight
 into which types of optimizations were more and less effective. These results
-are shown in Figure :ref:`incremental`. It is clear from this plot that though
+are shown in Table 1. It is clear from this table that though
 our JIT compiled functions were relatively painless, they were also not as
 valuable in terms of speedup. Conversely, our more painful restructuring optimizations
-were in fact very valuable in terms of speedup. The takeaway from this plot might
+were in fact very valuable in terms of speedup. The takeaway from these results might
 be that if a developer has enough time, the larger, more complex restructuring
 optimizations may be extremely worthwhile. The flip side is that if the developer
 has limited time, small fixes like JIT compiling can still provide reasonable gains
 without a major time investment. 
 
+.. raw:: latex
+
+   \begin{table*}
+
+     \begin{longtable}{|c|c|c|c|c|c|}
+     \hline
+     \textbf{Optimization}  & \textbf{Type} & \textbf{Mean Speedup} & Ivy Bridge Speedup & Haswell Speedup & KNL Speedup \tabularnewline
+     \hline
+     Add subbundles & Restructure & 1.55106 & 1.62882 & 1.73696 & 1.28741 \tabularnewline
+     \hline
+     Fix legval & JIT compile & 1.11607 & 1.16106 & 1.06005 & 1.12709 \tabularnewline
+     \hline
+     Add caching & Restructure & 1.70416 & 1.72505 & 1.70197 & 1.68546 \tabularnewline
+     \hline
+     Fix pgh & JIT compile & 1.28906 & 1.33125 & 1.15036 & 1.38556 \tabularnewline
+     \hline
+     Fix xypix & JIT compile & 1.49806 & 1.51875 & 1.31501 & 1.66042 \tabularnewline
+     \hline
+     \end{longtable}
+
+     \caption{Types of optimization efforts performed in this study and their 
+        resulting speedups on Intel Ivy Bridge, Haswell, and Knights Landing architectures.
+        The geometric mean speedup achieved on all three architectures is displayed in
+        the third column. The order of these optimizations is displayed chronologically.}
+
+   \end{table*}
+
    
-Dask considerations
--------------------
+What about using Dask instead of MPI?
+-------------------------------------
 
 A few problems with the current MPI implementation of the DESI spectral
 extraction code prompted us to take a step back and consider if perhaps Dask
@@ -502,12 +491,12 @@ code had been written from the start with Dask-type parellelism in mind it
 would have been a good choice, but converting existing MPI code into Dask was
 unfortunately not a reasonable solution for us.
 
-Thinking about the future: GPUs
--------------------------------
+Does it make sense to run DESI on GPUs?
+---------------------------------------
 
 Because HPC systems are becoming increasingly heterogeneous, it is important to
 consider how the DESI code will run on future architectures. The next NERSC
-system Perlmutter "cite:`noauthor_perlmutter_nodate` will include a CPU and GPU
+system Perlmutter :cite:`noauthor_perlmutter_nodate` will include a CPU and GPU
 partition that will provide a large fraction of the system's overall FLOPS, so
 it is pertinent to examine if and how the DESI code could take advantage of
 these accelerated nodes.
@@ -528,11 +517,12 @@ from a major overhaul. From profiling information we expect that the
 scipy.linalg.eigh function will constitute a major part of the workload as
 matrix sizes increase.
 
-idea: test eigh solve for several sizes of matrices on cpu vs gpu
-see how the gpu is able to handle this with cupy
-gives us some idea if refactoring in this way for gpu is advantageous
+Can we show these data? If so here they are...
 
-get some testing done before we submit the paper...
+.. figure:: figures/eigh.png
+
+   Data from performing an eigh matrix decomposition of various sizes on Edison
+   Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. :label:`eigh`
 
 
 Conclusions and Future Work
