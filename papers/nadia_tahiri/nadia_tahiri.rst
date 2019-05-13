@@ -53,7 +53,7 @@ shopping lists interactively (Newcomb et al., 2003, Fazliu 2017).
 Methods
 -------
 
-By using the grocery shopping database in Canada MyGroceryTour.ca, 
+By using the grocery shopping database in Canada MyGroceryTour.ca (see Figure :ref:`circuitpromo`), 
 we will first look for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
 This classification will then be used in the prediction stage. 
@@ -76,7 +76,17 @@ or will try to buy for the first time, and in which store(s) in the area he will
 with a weekly shopping list customized based on their purchase history and known preferences. 
 This list will also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
 where these products are to be purchased. We will also calculate the consumer's optimal weekly commute 
-using the generalized commercial traveller algorithm.
+using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
+
+.. figure:: figures/trois_magasins.png
+   
+	 CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
+
+.. figure:: figures/mygrocerytour_circuit.png
+	 
+	 Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
+
+See Table :ref:`circuit`
 
 :math:`F_1` statistics maximization algorithm (Ye et al., 2012), 
 based on dynamic programming, will be used to meet the objective (i), 
