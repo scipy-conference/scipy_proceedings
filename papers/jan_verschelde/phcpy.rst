@@ -81,6 +81,14 @@ phcpy wraps the compiled code provided as shared object files by PHCpack, an app
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
 
+Related Software
+----------------
+
+Limiting to free and open source software, currently under development,
+with a presence on github, we can list three related software packages:
+Bertini 2.0 [Bertini2.0]_, HomotopyContinuation.jl [HCJL]_,
+and NAG4M2 [NAG4M2]_.
+
 User Interaction
 ================
 
@@ -214,11 +222,6 @@ We consider five examples from various literatures which apply polynomial constr
 
 [DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
 
-Belief Propagation
-------------------
-
-https://ieeexplore.ieee.org/abstract/document/8027142
-
 Real-Time Interaction
 ---------------------
 
@@ -279,6 +282,9 @@ References
             and Algebraic Computation (ISSAC 2018), pages 55-62, ACM 2018. 
             DOI 10.1145/3208976.3208994.
 
+.. [Bertini2.0] Bertini 2.0: The redevelopment of Bertini in C++.
+                https://github.com/bertiniteam/b2
+
 .. [BF91] J. Backelin and R. Fr |oumlaut| berg.
           *How we proved that there are exactly 924 cyclic 7-roots.*
           In the Proceedings of the 1991 International Symposium on
@@ -317,6 +323,10 @@ References
            In the Proceedings  of the 15th IEEE Symposium on Computer 
            Arithmetic (Arith-15 2001), pages 155--162. IEEE Computer Society,
            2001.  DOI 10.1109/ARITH.2001.930115.
+
+.. [HCJL] A Julia package for solving systems of 
+          polynomials via homotopy continuation.
+          https://github.com/JuliaHomotopyContinuation
 
 .. [Hun07] J. D. Hunter.
            *Matplotlib: A 2D Graphics Environment.*
@@ -358,6 +368,9 @@ References
           *Solving a Planar Four-Bar Design Using Continuation.*
           Journal of Mechanical Design, 112(4): 544-550, 1990.
           DOI 10.1115/1.2912644.
+
+.. [NAG4M2] Branch NAG of M2 repository.
+            https://github.com/antonleykin/M2/tree/NAG
 
 .. [Sage] The Sage Developers.
           *SageMath, the Sage Mathematics Software System, Version 7.6*.
