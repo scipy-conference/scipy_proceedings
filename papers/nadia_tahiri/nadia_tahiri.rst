@@ -123,9 +123,29 @@ The features is described as follow:
 We found that there are 3 consumer profiles ({walters2003exploring, walters2002measuring, tanusondjaja2016understanding}). 
 The first group is consumer who buy only the products on promotion. 
 The second group is consumer who always buy the same products (without considering promotions).
-The third group is consumer who buy products as well on promotion or not.
+Finally, the third group is consumer who buy products as well on promotion or not.
 
-Table 1 summarizes top-level models used by our algorithm
+*Data increase*
+
+We considered that our dataset is not enougth, and we decided to increase them by following statitic rules. 
+For :math:`store_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
+The strategy, we used for computed :math:`distance` if we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
+the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution with the :math:`\sigma` parameter.
+Finally, we increased `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution.
+
+
+Models
+------
+
+In this section, we described the workflow and models we used.
+The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
+The final model has two neuron networks and a Gradient Boosted Tree (GBT) classifier ({friedman2002stochastic}).
+Once trained, it can be used to predict in real time what will be the consumer's basket, based on the history of purchases and current promotions in neighborhood stores.
+Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size.
+
+*First level model (feature extraction)*
+Our goal is to find a diverse set of representations using neural networks (see Table 1). 
+Table 1 summarizes top-level models used by our algorithm and we described each type of model used for each representation (e.g. Products, Category, Size of basket, Products and Users).
 
 .. raw:: latex
 
@@ -146,10 +166,51 @@ Table 1 summarizes top-level models used by our algorithm
      \end{longtable}
 
      \caption{Top-level models used.}
+		 \label{tab:model1}
 
    \end{table}
 
-   
+
+*Latent representations of entities (embeddings)*
+
+For each :math:`a \in \mathcal{A}`, an embedding :math:`T:\mathcal{A} \rightarrow \mathbb{R}^{d}` returns a vector :math:`d`-dimensionel.
+If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathcal{A}|\times d` learned by backpropagation.
+
+.. raw:: latex
+
+	\begin{table}
+		
+		\begin{longtable}{lcc}
+		\hline
+		\textbf{Model} & \textbf{Embedding} & \textbf{Dimensions}\tabularnewline
+		\hline
+		LSTM Products & Products & $49,684 \times 300$\\
+		\hline
+		LSTM Products & Catégories & $24 \times 50$\\
+		\hline
+		LSTM Products & Departments & $50 \rightarrow 10$\\
+		\hline
+		LSTM Products & Users & $1,374 \times 300$\\
+		\hline
+		NNMF & Users & $1,374 \times 25$\\
+		\hline
+		NNMF & Products & $49,684 \times 25$\\
+		\hline		
+		\end{longtable}
+
+		\caption{Dimensions of the representations learned by different models.}
+		\label{tab:model2}
+
+	\end{table}
+
+*Second level model: Composition of baskets*
+
+The final basket is chosen according to the final reorganization probabilities, choosing the subset of products with the expected maximum :math:`F_1` score ({lipton2014optimal} and {nan2012optimizing}).
+This score is frequently used especially when the relevant elements are scarce.
+
+.. math::
+	\max_\mathcal{P} \mathbb{E}_{p'\in \mathcal{P}}[F_1(\mathcal{P})]=\max_\mathcal{P}\mathbb{E}_{p'\in \mathcal{P}}\bigg[\frac{2\sum_{i\in \mathcal{P}}\text{VP}(i)}{\sum_{i\in \mathcal{P}}(2\text{VP}(i)+\text{FN}(i)+\text{FP}(i))}\bigg],
+
 .. figure:: figures/products_F1.png
 
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
