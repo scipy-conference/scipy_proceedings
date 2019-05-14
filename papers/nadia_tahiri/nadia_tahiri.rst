@@ -222,6 +222,53 @@ This score is frequently used especially when the relevant elements are scarce.
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1`if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
+*Script Python*
+
+The final reorder probabilities are a weighted average of the outputs from the second-level models. The final basket is chosen by using these probabilities and choosing the product subset with maximum expected F1-score.
+
+.. code-block:: python
+	:linenos:
+	
+	from multiprocessing import Pool, cpu_count
+
+	import numpy as np
+	import pandas as pd
+
+	from f1_optimizer import F1Optimizer
+
+	def select_products(x):
+		series = pd.Series()
+
+		true_products = [str(prod) if prod != 0 else 'None' for prod in x['product_id'][x['label'] > 0.5].values]
+		true_products = ' '.join(true_products) if true_products else 'None'
+
+		prod_preds_dict = dict(zip(x['product_id'].values, x['prediction'].values))
+		none_prob = prod_preds_dict.get(0, None)
+		del prod_preds_dict[0]
+
+		other_products = np.array(prod_preds_dict.keys())
+		other_probs = np.array(prod_preds_dict.values())
+
+		idx = np.argsort(-1*other_probs)
+		other_products = other_products[idx]
+		other_probs = other_probs[idx]
+
+		opt = F1Optimizer.maximize_expectation(other_probs, none_prob)
+		best_prediction = ['None'] if opt[1] else []
+		best_prediction += list(other_products[:opt[0]])
+
+		if best_prediction:
+			predicted_products = ' '.join(map(str, best_prediction))
+		else:
+			predicted_products = 'None'
+
+		series['products'] = predicted_products
+		series['true_products'] = true_products
+
+		return true_products, predicted_products, opt[-1]
+
+*Results*
+
 .. figure:: figures/workflow.png
 	 
 	 Model used in the classification. :label:`workflow`
@@ -274,7 +321,7 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    
 .. figure:: figures/violon.png
    :align: center
-   :scale: 15%
+   :scale: 11%
    
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
 
