@@ -42,10 +42,12 @@ Solving Polynomial Systems with phcpy
 Introduction
 ============
 
-The Python package phcpy [Ver14]_ provides an alternative to the
-command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial 
-systems by homotopy continuation methods.
-In the phcpy interface, Python scripts replace command line options and text menus, and data persists in a session without temporary files. This also makes PHCpack accessible from Jupyter notebooks, including a JupyterHub available online [Pascal]_.
+The mission of phcpy is to bring polynomial homotopy continuation,
+which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_,
+into Python's computational ecosystem.
+
+Contribution
+------------
 
 The meaning of *solving* evolved from computing approximations to
 all isolated solutions into the numerical irreducible decomposition
@@ -70,14 +72,14 @@ three instances in the research literature of symbolic computation, geometry and
 
 phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.4 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
 
-Mission
--------
+Distribution
+------------
 
-The mission of phcpy is to bring polynomial homotopy continuation,
-which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_,
-into Python's computational ecosystem.
+The Python package phcpy [Ver14]_ provides an alternative to the
+command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial 
+systems by homotopy continuation methods. In the phcpy interface, Python scripts replace command line options and text menus, and data persists in a session without temporary files. This also makes PHCpack accessible from Jupyter notebooks, including a JupyterHub available online [Pascal]_.
 
-phcpy wraps the compiled code provided as shared object files by PHCpack, an approach which benefits accessibility of the methods without sacrificing their efficiency.
+phcpy wraps the shared object files of a compiled PHCpack, which makes the methods more accessible without sacrificing their efficiency.
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
 
