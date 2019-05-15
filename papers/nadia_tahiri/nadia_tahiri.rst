@@ -3,7 +3,7 @@
 :institution: University of Quebec at Montreal
 :corresponding:
 
-:bibliography: nadiaTahiriSciPy
+:bibliography: scipybib
 
 -----------------------------------------------------------------------------------------------------
 An intelligent shopping list based on the application of partitioning and machine learning algorithms
@@ -30,7 +30,7 @@ An intelligent shopping list based on the application of partitioning and machin
 Introduction
 ------------
 
-See :cite:`hume48` A typical grocery retailer offers consumers thousands of promotions every week 
+A typical grocery retailer offers consumers thousands of promotions every week 
 to attract more consumers and thus improve their economic performance (Tanusondjaja et al., 2016). 
 Studies by Walters and Jamil (2002, 2003) found that about 39% of all items purchased 
 during an inter-category grocery were specials of the week and about 30% of consumers 
@@ -396,6 +396,7 @@ between these stores and the consumer's home.
 
 Acknowledgments
 ---------------
+
 The authors thank PyCon Canada for their valuable comments on this project. This work used
 resources of the Calcul Canada. This work was supported by Natural Sciences 
 and Engineering Research Council of Canada and Fonds de Recherche sur la Nature et Technologies of Quebec. 
@@ -403,5 +404,3 @@ The funds provided by these funding institutions have been used.
 We thank also reviewers and SciPy.
 
 
-References
-----------
