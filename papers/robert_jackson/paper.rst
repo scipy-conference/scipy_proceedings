@@ -51,7 +51,7 @@ damage they cause. Scanning radars provide the best opportunity for providing th
 volumes of winds inside severe weather. However, the retrieval of three dimensional
 winds from weather radars is a nontrivial task. Given that the radar measures the
 speed of scatterers in the direction of the radar beam rather than the full wind velocity,
-retrieving these winds requires more information than the doppler velocities measured by a
+retrieving these winds requires more information than the Doppler velocities measured by a
 single weather radar. Typically, the 3D wind field is derived based on constraints
 with regards to physical laws such as conservation of mass or wind data from
 other sources such as model reanalyses, wind profilers, and rawinsondes. In
@@ -81,7 +81,7 @@ nature of the wrapper.
 The limitations in current wind retrieval software motivated development
 of Pythonic Direct Data Assimilation (PyDDA). PyDDA is entirely written in Python
 and uses only tools in the Scientific Python ecosystem such as NumPy :cite:`NumPy`,
-SciPy :cite:`SciPy`, and :cite:`Cartopy`. This therefore permits the easy installation of PyDDA using
+SciPy :cite:`SciPy`, and Cartopy :cite:`Cartopy`. This therefore permits the easy installation of PyDDA using
 pip or anaconda. Given that this alone is a major hurdle to using currently
 existing retrieval software, this makes it easier for those who are not
 radar scientists to be able to use the software. Unlike currently existing software,
@@ -226,7 +226,8 @@ Multidop used the gradient descent method to minimize the cost function
 However, convergence can be slow or even not guaranteed for certain cost functions.
 Therefore, in order to ensure faster convergence, PyDDA uses the limited memory
 Broyden–Fletcher–Goldfarb–Shanno (L-BGFS) technique that optimizes the gradient
-descent method by using the inverse Hessian of the cost function to find an
+descent method by approximating the Hessian from previous iterations.
+The inverse of the approximate Hessian is then used to find the
 optimal search direction and :math:`\alpha` for each retrieval :cite:`Byrdetal1995`.
 Since there are physically realistic constraints to :math:`\vec{\textbf{V}}`, the L-BFGS
 box (L-BFGS-B) variant of this technique can take advantage of this by only
@@ -443,7 +444,7 @@ example retrieval in Hurricane Florence using 2 NEXRAD radars and HRRR was shown
 in Figure :ref:`streamline`. While there is already hundreds of kilometers in coverage,
 not all of the hurricane is covered within the retrieval domain. This therefore
 motivated a feature in PyDDA to use dask :cite:`Dask2016` to manage retrievals that are too large to
-execute on one single machine. :ref:`bighurricane` shows an example of a retrieval
+execute on one single machine. Figure :ref:`bighurricane` shows an example of a retrieval
 from PyDDA using 6 NEXRAD radars combined with the HRRR and ERA-Interim. The total horizontal coverage
 of the domain in Figure :ref:`bighurricane` is 1200 km by 1200 km.
 Using a multigrid method that first retrieves the wind field on a coarse grid
@@ -493,14 +494,14 @@ radars and both models is as simple as
    A wind barb plot showing the winds retrieved by PyDDA from 6 NEXRADs,
    the HRRR and the ERA-Interim. The locations of the 6 NEXRADs are marked by
    their location code. Contours are as in Figure
-   :ref:`smallhurricane`. :label:`bighurricane`
+   :ref:`streamline`. :label:`bighurricane`
 
 Given that hurricanes can span hundreds of kilometers and yet have kilometer
 scale variations in wind speed, having the ability to create such high resolution
 retrievals is important for those using high resolution wind data for forecast
 validation and damage assessment. In this example, the coverage of both the
 tropical storm force and damaging hurricane force winds are examined. Figure
-:ref:`smallhurricane` and :ref:`bighurricane` both show kilometer-scale
+:ref:`streamline` and :ref:`bighurricane` both show kilometer-scale
 regions of hurricane force winds that may otherwise not have been forecast
 to occur simply because they are outside of the primary region of damaging winds.
 This therefore shows the importance of having a high resolution, three dimensional
@@ -526,7 +527,9 @@ Figure :ref:`bomlayout`.
     :align: center
 
     A quiver plot inside a supercell that spawned a tornado in the vicinity of
-    Sydney, Australia. The contours represent vertical velocity. :label:`tornado`
+    Sydney, Australia. The area inside the contour represents regions
+    where the updraft velocity is greater than 3 m/s to highlight
+    regions of intense updrafts. :label:`tornado`
 
 Figure :ref:`tornado` shows the winds retrieved by PyDDA inside this supercell.
 Using data from the radars, PyDDA is able to provide a complete picture of the rotation inside
@@ -602,4 +605,6 @@ Acknowledgments
 The HRRR data were downloaded from the University of Utah archive :cite:`Blaylocketal2017`.
 In addition, the authors would like to thank Alain Protat for providing the Sydney tornado
 wind data. PyDDA was partially supported by the Climate Model Development and Validation
-Activity of the Department of Energy Office of Science.
+Activity of the Department of Energy Office of Science. Dr. Tsengdar Lee of the NASA Weather
+program provided funds that supported the development of MultiDop, a critical intermediate
+step toward the development of PyDDA.
