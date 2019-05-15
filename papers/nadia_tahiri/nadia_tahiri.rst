@@ -80,11 +80,11 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
 
 .. figure:: figures/trois_magasins.png
    
-	 CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
+     CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
 
 .. figure:: figures/mygrocerytour_circuit.png
-	 
-	 Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
+     
+     Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm (Ye et al., 2012), 
 based on dynamic programming, will be used to meet the objective (i), 
@@ -125,7 +125,7 @@ The features is described as follow:
 - **category\_id**: unique category number for a product. :math:`aisle\_id \in \{1 \cdots 24\}`  
 - **reorder**: 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
-	 
+     
 *Consumer profile*
 
 We found that there are 3 consumer profiles ({walters2003exploring, walters2002measuring, tanusondjaja2016understanding}). 
@@ -169,12 +169,12 @@ Table 1 summarizes top-level models used by our algorithm and we described each 
      \hline
      Size & Predict the size of the order$_{t+1}$. & \begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}\\
      \hline
-     \textcolor{blue}{\begin{tabular}{@{}c@{}}Users \\ Products \end{tabular}} & \textcolor{blue}{Decomposed $V_{(u \times p)}=W_{(u \times d)}	H^T_{(p \times d)}$} & \textcolor{blue}{\begin{tabular}{@{}c@{}}Dense\\ (50 neurons)\end{tabular}}\\
+     \textcolor{blue}{\begin{tabular}{@{}c@{}}Users \\ Products \end{tabular}} & \textcolor{blue}{Decomposed $V_{(u \times p)}=W_{(u \times d)} H^T_{(p \times d)}$} & \textcolor{blue}{\begin{tabular}{@{}c@{}}Dense\\ (50 neurons)\end{tabular}}\\
      \hline
      \end{longtable}
 
      \caption{Top-level models used.}
-		 \label{tab:model1}
+         \label{tab:model1}
 
    \end{table}
 
@@ -186,30 +186,30 @@ If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathca
 
 .. raw:: latex
 
-	\begin{table}
-		
-		\begin{longtable}{lcc}
-		\hline
-		\textbf{Model} & \textbf{Embedding} & \textbf{Dimensions}\tabularnewline
-		\hline
-		LSTM Products & Products & $49,684 \times 300$\\
-		\hline
-		LSTM Products & Catégories & $24 \times 50$\\
-		\hline
-		LSTM Products & Departments & $50 \rightarrow 10$\\
-		\hline
-		LSTM Products & Users & $1,374 \times 300$\\
-		\hline
-		NNMF & Users & $1,374 \times 25$\\
-		\hline
-		NNMF & Products & $49,684 \times 25$\\
-		\hline		
-		\end{longtable}
+    \begin{table}
+        
+        \begin{longtable}{lcc}
+        \hline
+        \textbf{Model} & \textbf{Embedding} & \textbf{Dimensions}\tabularnewline
+        \hline
+        LSTM Products & Products & $49,684 \times 300$\\
+        \hline
+        LSTM Products & Catégories & $24 \times 50$\\
+        \hline
+        LSTM Products & Departments & $50 \rightarrow 10$\\
+        \hline
+        LSTM Products & Users & $1,374 \times 300$\\
+        \hline
+        NNMF & Users & $1,374 \times 25$\\
+        \hline
+        NNMF & Products & $49,684 \times 25$\\
+        \hline        
+        \end{longtable}
 
-		\caption{Dimensions of the representations learned by different models.}
-		\label{tab:model2}
+        \caption{Dimensions of the representations learned by different models.}
+        \label{tab:model2}
 
-	\end{table}
+    \end{table}
 
 *Second level model: Composition of baskets*
 
@@ -217,7 +217,7 @@ The final basket is chosen according to the final reorganization probabilities, 
 This score is frequently used especially when the relevant elements are scarce.
 
 .. math::
-	\max_\mathcal{P} \mathbb{E}_{p'\in \mathcal{P}}[F_1(\mathcal{P})]=\max_\mathcal{P}\mathbb{E}_{p'\in \mathcal{P}}\bigg[\frac{2\sum_{i\in \mathcal{P}}\text{TP}(i)}{\sum_{i\in \mathcal{P}}(2\text{VP}(i)+\text{FN}(i)+\text{FP}(i))}\bigg],
+    \max_\mathcal{P} \mathbb{E}_{p'\in \mathcal{P}}[F_1(\mathcal{P})]=\max_\mathcal{P}\mathbb{E}_{p'\in \mathcal{P}}\bigg[\frac{2\sum_{i\in \mathcal{P}}\text{TP}(i)}{\sum_{i\in \mathcal{P}}(2\text{VP}(i)+\text{FN}(i)+\text{FP}(i))}\bigg],
 
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1`if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
@@ -227,69 +227,83 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 The final reorder probabilities are a weighted average of the outputs from the second-level models. The final basket is chosen by using these probabilities and choosing the product subset with maximum expected F1-score.
 
 .. code-block:: python
-	:linenos:
-	
-	from multiprocessing import Pool, cpu_count
+    :linenos:
 
-	import numpy as np
-	import pandas as pd
+    
+    from multiprocessing import Pool, cpu_count
 
-	from f1_optimizer import F1Optimizer
+    import numpy as np
+    import pandas as pd
 
-	def select_products(x):
-		series = pd.Series()
+    from f1_optimizer import F1Optimizer
 
-		true_products = [str(prod) if prod != 0 else 'None' for prod in x['product_id'][x['label'] > 0.5].values]
-		true_products = ' '.join(true_products) if true_products else 'None'
+    def select_products(x):
+     series = pd.Series()
 
-		prod_preds_dict = dict(zip(x['product_id'].values, x['prediction'].values))
-		none_prob = prod_preds_dict.get(0, None)
-		del prod_preds_dict[0]
+     for prod in x['product_id'][x['label'] > 0.5:
+       if prod != 0:
+        true_products = [str(prod)].values]
+       else:
+        true_products = ['None'].values]
 
-		other_products = np.array(prod_preds_dict.keys())
-		other_probs = np.array(prod_preds_dict.values())
+     if true_products:
+      true_products = ' '.join(true_products)
+     else:
+      true_products = 'None'
 
-		idx = np.argsort(-1*other_probs)
-		other_products = other_products[idx]
-		other_probs = other_probs[idx]
+     prod_preds_dict = dict(zip(x['product_id'].values,
+                                x['prediction'].values))
+     none_prob = prod_preds_dict.get(0, None)
+     del prod_preds_dict[0]
 
-		opt = F1Optimizer.maximize_expectation(other_probs, none_prob)
-		best_prediction = ['None'] if opt[1] else []
-		best_prediction += list(other_products[:opt[0]])
+     other_products = np.array(prod_preds_dict.keys())
+     other_probs = np.array(prod_preds_dict.values())
 
-		if best_prediction:
-			predicted_products = ' '.join(map(str, best_prediction))
-		else:
-			predicted_products = 'None'
+     idx = np.argsort(-1*other_probs)
+     other_products = other_products[idx]
+     other_probs = other_probs[idx]
 
-		series['products'] = predicted_products
-		series['true_products'] = true_products
+     opt = F1Optimizer.max_expectation(other_probs,
+                                       none_prob)
 
-		return true_products, predicted_products, opt[-1]
+     best_prediction = ['None'] if opt[1] else []
+     best_prediction += list(other_products[:opt[0]])
+
+     if best_prediction:
+      predicted_products = ' '.join(map(str, 
+                                    best_prediction))
+     else:
+      predicted_products = 'None'
+
+     series['products'] = predicted_products
+     series['true_products'] = true_products
+
+     return true_products, predicted_products, opt[-1]
+
 
 *Results*
 
 .. figure:: figures/workflow.png
-	 
-	 Model used in the classification. :label:`workflow`
+     
+     Model used in the classification. :label:`workflow`
 
 .. figure:: figures/order_frequency.png
-	 
-	 Basket size distribution. :label:`orderfrequency`
+     
+     Basket size distribution. :label:`orderfrequency`
 
 .. figure:: figures/product_pca.png
-	 
-	 Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
+     
+     Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
 
 .. raw:: latex
-	
-	\begin{table}
+    
+    \begin{table}
 
-		\begin{longtable}{|l|c|}
-		\hline
+        \begin{longtable}{|l|c|}
+        \hline
            \textbf{Product} &  \textbf{Number of baskets} \\
-		\hline
+        \hline
                      Banana &   6138 \\
                Strawberries &   3663 \\
        Organic Baby Spinach &   1683 \\
@@ -300,9 +314,9 @@ The final reorder probabilities are a weighted average of the outputs from the s
          Organic Whole Milk &    891 \\
                 Large Lemon &    792 \\
  Sparkling Water Grapefruit &    792 \\
-		\hline
-		\end{longtable}
-		\caption{The 10 most popular products included in the predicted baskets.}
+        \hline
+        \end{longtable}
+        \caption{The 10 most popular products included in the predicted baskets.}
   \end{table}
 
 .. figure:: figures/pearsonr.png
@@ -316,8 +330,8 @@ The final reorder probabilities are a weighted average of the outputs from the s
    spectral extraction throughput. :label:`lstm`
 
 .. figure:: figures/products_F1.png
-	 
-	 Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
+     
+     Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
    
 .. figure:: figures/violon.png
    :align: center
@@ -326,27 +340,27 @@ The final reorder probabilities are a weighted average of the outputs from the s
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
 
 .. raw:: latex
-	
-	\begin{table}
+    
+    \begin{table}
 
-		\begin{longtable}{lc}
-		\hline
+        \begin{longtable}{lc}
+        \hline
                                       \textbf{Product} &        \textbf{F} \\
-		\hline
+        \hline
     Gogo Squeez Organic Apple Strawberry Applesauce &  0.042057 \\
             Organic AppleBerry Applesauce on the Go &  0.042057 \\
                            Carrot And Celery Sticks &  0.042057 \\
              Gluten Free Peanut Butter Berry  Chewy &  0.042057 \\
                    Organic Italian Balsamic Vinegar &  0.049325 \\ 
-		\hline
+        \hline
                          Diet Cranberry Fruit Juice &  0.599472 \\
                                      Purified Water &  0.599472 \\
      Vanilla Chocolate Peanut Butter Ice Cream Bars &  0.599472 \\
   Total 0\% with Honey Nonfat Greek Strained Yogurt &  0.590824 \\
               Total 0\% Blueberry Acai Greek Yogurt &  0.590824 \\
-		\hline
-		\end{longtable}
-	\end{table}   
+        \hline
+        \end{longtable}
+    \end{table}   
 
 Conclusions and Future Work
 ---------------------------
@@ -359,6 +373,20 @@ known preferences.
 The originality of our approach, compared to the existing algorithms, is that in addition to the
 purchase history we also consider promotions, possible purchases in different stores and the
 distance between these stores and the home of consumer.
+
+
+We have modeled the habits of the site's consumers
+CircuitPromo.ca with the help of deep neural networks.
+We used two types of neural networks during
+Learning: Recurrent Neural Networks (RNN) and Networks
+forward-propagating neurons (Feedforward NN).
+The value of the :math:`F_1` statistic that represents the quality of our model
+is 0.22. The constant influx of new data on *CircuitPromo*
+will improve the model over time.
+The originality of our approach, compared to existing algorithms,
+is that in addition to the purchase history we also consider the
+promotions, possible purchases in different stores and distance
+between these stores and the consumer's home.
 
 
 Acknowledgments
