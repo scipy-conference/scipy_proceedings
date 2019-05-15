@@ -24,32 +24,34 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
 
    The goal of the Dark Energy Spectroscopic Instrument (DESI) experiment is to
    better understand dark energy by making the most detailed 3D map of the
-   universe to date. The images (many spectra on a CCD) obtained nightly over a
-   period of 5 years starting this year (2019) will be sent to the NERSC Cori
-   and Perlmutter supercomputers for processing and scientific analysis.
-
+   universe to date. Over a five-year period starting this year (2019), around 
+   1000 CCD frames per night (30 per exposure) will be read out from the 
+   instrument and transferred to NERSC for processing analysis on the Cori and 
+   Perlmutter supercomputers in near-real time. This fast turnaround helps DESI 
+   monitor survey progress and update the next night's observing schedule.
+ 
    The DESI spectroscopic pipeline for processing these data is written almost
-   exclusively in Python. Writing in Python allows the DESI scientists to write
-   very readable scientific code in a relatively short amount of time, which is
-   important due to limited DESI developer resources. However, the drawback is
-   that Python can be substantially slower than more traditional high performance
-   computing languages like C and Fortran.
+   exclusively in Python. Using Python allows the DESI scientists to write
+   very readable and maintainable scientific code in a relatively short amount of 
+   time, which is important due to limited DESI developer resources. However, the 
+   drawback is that Python can be substantially slower than more traditional high 
+   performance computing languages like C, C++, and Fortran.
 
    The goal of this work is to increase the efficiency of the DESI
    spectroscopic data processing at NERSC while satisfying their requirement that
    the software remain in Python. Within this space we have obtained throughput
-   improvements of over 5x and 6x on the Cori Haswell and KNL partitions,
+   improvements of over 5x and 6x on the Cori Haswell and Knights Landing partitions,
    respectively. Several profiling techniques were used to determine potential
-   areas for improvement including Python's cProfile, line_profiler, Intel Vtune,
-   and Tau. Once we identified expensive kernels, we used the following
-   techniques: 1) JIT-compiling hotspots using Numba (the most successful strategy
-   so far) and 2) re-structuring the code to compute and store important data
-   rather than repeatedly calling expensive functions. We have considered Dask as
-   a more flexible and robust alternative to MPI for parallelism in the DESI
-   extraction code, but have found that once a code has been designed with MPI in
-   mind, it is non-trivial to transition to another kind of parallelism. We will
-   also explore the requirements for transitioning the DESI image processing to
-   GPUs (coming in the next NERSC system, Perlmutter, in 2020).
+   areas for improvement including Python's cProfile and line_profiler packages, 
+   and other tools like Intel Vtune and Tau. Once we identified expensive kernels, 
+   we used the following techniques: 1) JIT-compiling hotspots using Numba (the most 
+   successful strategy so far) and 2) re-structuring the code to compute and store 
+   key data structures rather than repeatedly calling expensive functions. We have 
+   considered Dask as a more flexible and robust alternative to MPI for parallelism 
+   in the DESI extraction code, but have found that once a code has been designed 
+   with MPI in mind, it is non-trivial to transition to another kind of parallelism. 
+   We will also explore the requirements for transitioning DESI spectroscopic 
+   extraction to GPUs (coming in the next NERSC system, Perlmutter, in 2020).
 
 .. class:: keywords
 
