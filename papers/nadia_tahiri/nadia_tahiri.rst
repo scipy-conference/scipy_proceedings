@@ -3,7 +3,7 @@
 :institution: University of Quebec at Montreal
 :corresponding:
 
-:bibliography: scipy
+:bibliography: nadiaTahiriSciPy
 
 -----------------------------------------------------------------------------------------------------
 An intelligent shopping list based on the application of partitioning and machine learning algorithms
@@ -30,7 +30,7 @@ An intelligent shopping list based on the application of partitioning and machin
 Introduction
 ------------
 
-A typical grocery retailer offers consumers thousands of promotions every week 
+See :cite:`hume48` A typical grocery retailer offers consumers thousands of promotions every week 
 to attract more consumers and thus improve their economic performance (Tanusondjaja et al., 2016). 
 Studies by Walters and Jamil (2002, 2003) found that about 39% of all items purchased 
 during an inter-category grocery were specials of the week and about 30% of consumers 
@@ -128,7 +128,7 @@ The features is described as follow:
      
 *Consumer profile*
 
-We found that there are 3 consumer profiles ({walters2003exploring, walters2002measuring, tanusondjaja2016understanding}). 
+We found that there are 3 consumer profiles :cite:`walters2003exploring`, see :cite:`walters2002measuring`, and :cite:`tanusondjaja2016understanding`. 
 The first group is consumer who buy only the products on promotion. 
 The second group is consumer who always buy the same products (without considering promotions).
 Finally, the third group is consumer who buy products as well on promotion or not.
@@ -151,7 +151,10 @@ The final model has two neuron networks and a Gradient Boosted Tree (GBT) classi
 Once trained, it can be used to predict in real time what will be the consumer's basket, based on the history of purchases and current promotions in neighborhood stores.
 Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size.
 
+
 *First level model (feature extraction)*
+
+
 Our goal is to find a diverse set of representations using neural networks (see Table 1). 
 Table 1 summarizes top-level models used by our algorithm and we described each type of model used for each representation (e.g. Products, Category, Size of basket, Products and Users).
 
@@ -211,6 +214,7 @@ If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathca
 
     \end{table}
 
+
 *Second level model: Composition of baskets*
 
 The final basket is chosen according to the final reorganization probabilities, choosing the subset of products with the expected maximum :math:`F_1` score ({lipton2014optimal} and {nan2012optimizing}).
@@ -221,6 +225,7 @@ This score is frequently used especially when the relevant elements are scarce.
 
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1`if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
+
 
 *Script Python*
 
@@ -345,7 +350,7 @@ The final reorder probabilities are a weighted average of the outputs from the s
 
         \begin{longtable}{lc}
         \hline
-                                      \textbf{Product} &        \textbf{F} \\
+                                      \textbf{Product} &        \textbf{$F_1$} \\
         \hline
     Gogo Squeez Organic Apple Strawberry Applesauce &  0.042057 \\
             Organic AppleBerry Applesauce on the Go &  0.042057 \\
