@@ -31,16 +31,9 @@ Solving Polynomial Systems with phcpy
 
 .. class:: abstract
 
-   The solutions of a system of polynomials in several variables are often 
-   needed, e.g.: in the design of mechanical systems, and 
-   in phase-space analyses of nonlinear biological dynamics. 
-   Reliable, accurate, and comprehensive numerical solutions are available 
-   through PHCpack, a FOSS package for solving polynomial systems with 
-   homotopy continuation.
+   The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with    homotopy continuation.
 
-   This paper explores the development of phcpy, a scripting interface for 
-   PHCpack, over the past five years. One result is the availability of phcpy
-   through a JupyterHub featuring Python2, Python3, and SageMath kernels.
+   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years. One result is the availability of phcpy   through a JupyterHub featuring Python2, Python3, and SageMath kernels.
 
 Introduction
 ============
@@ -74,19 +67,14 @@ three instances in the research literature of symbolic computation, geometry and
 phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.4 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
 
 Mission
--------
+---------
 
-The mission of phcpy is to bring polynomial homotopy continuation,
-which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_,
-into Python's computational ecosystem.
+The mission of phcpy is to bring polynomial homotopy continuation, which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_, into Python's computational ecosystem.
 
-phcpy wraps the compiled code provided as shared object files by PHCpack, an approach which benefits accessibility of the methods without sacrificing their efficiency.
-First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
-Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
+phcpy wraps the compiled code provided as shared object files by PHCpack, an approach which benefits accessibility of the methods without sacrificing their efficiency. First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules. Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
 
 Related Software
 ----------------
-
 Limiting to free and open source software, currently under development,
 with a presence on github, we can list three related software packages:
 Bertini 2.0 [Bertini2.0]_, HomotopyContinuation.jl [HCJL]_,
@@ -103,10 +91,9 @@ User Interaction
 CGI Scripting
 -------------
 
-We previously developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_, as a web interface to ``phc``. MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.  MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
-As of the middle of May 2019,
-our web server has 145 user accounts.
+As of the middle of May 2019, our web server has 145 user accounts.
 
 Jupyter and JupyterHub
 ----------------------
@@ -118,18 +105,16 @@ The hub's notebook environment supports language-agnostic computations,
 supporting execution environments in several dozen languages.
 We can also run the code in a Python Terminal session.
 
-For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner
-that isolates the actions of users to separate processes and logins in generic home folders.
+For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner that isolates the actions of users to separate processes and logins in generic home folders.
 
 The account management prompts by e-mail were hooked to a new Tornado Handler.
 
 Code Snippets
 -------------
 
-We use the extension [...] to provide code snippets suggesting typical applications to guide the novice user.
+In our JupyterHub deployment, we use the snippets menu provided by nbextensions [JUP15]_ to suggest typical applications to guide the novice user.
 
-The screen shot in Fig. :ref:`figsnippet` shows the code snippet
-with an example of using the blackbox solver.
+The screen shot in Fig. :ref:`figsnippet` shows the code snippet with an example of use of the blackbox solver.
 
 .. figure:: ./bbsolvesnippet2.png
    :align: center
@@ -137,7 +122,6 @@ with an example of using the blackbox solver.
    :figclass: h
 
    The code snippet for the blackbox solver.  :label:`figsnippet`
-
 
 Direct Manipulation
 -------------------
@@ -157,15 +141,9 @@ The solution paths defined by polynomial homotopies can be tracked
 independently, providing obvious opportunities for parallel execution.
 This section reports on computations on our server, a 44-core computer.
 
-An obvious benefit of running on many cores is the speedup.
-The *quality up* question asks the following:
-if we can afford to spend the same time,
-by how much can we improve the solution using *p* processors?
+An obvious benefit of running on many cores is the speedup. The *quality up* question asks the following: if we can afford to spend the same time, by how much can we improve the solution using *p* processors?
 
-The function defined below returns the elapsed performance of the
-blackbox solver on the cyclic 7-roots benchmark problem [BF91]_,
-for a number of tasks and a precision equal to double, double double,
-or quad double arithmetic.
+The function defined below returns the elapsed performance of the blackbox solver on the cyclic 7-roots benchmark problem, for a number of tasks and a precision equal to double, double double, or quad double arithmetic.
 
 .. code-block:: python
 
@@ -183,6 +161,7 @@ or quad double arithmetic.
         s = solve(c7, verbose=False, tasks=nbtasks, \
                   precision=precflag, checkin=False)
         return perf_counter() - tstart
+
 
 The function above is applied in an interactive Python script,
 prompting the user for the number of tasks and precision,
@@ -334,8 +313,7 @@ Conclusion
 Acknowledgments
 ---------------
 
-This material is based upon work supported by the National Science
-Foundation under Grant No. 1440534.
+This material is based upon work supported by the National Science Foundation under Grant No. 1440534.
 
 References
 ----------
@@ -523,6 +501,61 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
+
 .. [Pascal] 
           *JupyterHub deployment of phcpy.*
           https://pascal.math.uic.edu, 2017
+
+.. [JUP15] Jupyter Contrib Team
+      *Jupyter notebook snippets menu - jupyter_contrib_nbextensions 0.5.0 documentation*
+      https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html
+
+.. [BNN16] D. J. Bates, A. J. Newell, & M. Niemerg
+  *BertiniLab: A MATLAB interface for solving systems of polynomial equations.*
+  Numerical Algorithms, 71, pages 229–244, 2016.
+  https://doi.org/10.1007/s11075-015-0014-6.
+
+.. [BNN17] D. J. Bates, A. J. Newell, & M. E. Niemerg
+  *Decoupling highly structured polynomial systems.*
+  Journal of Symbolic Computation, 79, pages 508–515, 2017.
+  https://doi.org/10.1016/j.jsc.2016.07.016.
+
+.. [BM16] E. Bogart & C. R. Myers
+  *Multiscale Metabolic Modeling of C4 Plants: Connecting Nonlinear Genome-Scale Models to Leaf-Scale Metabolism in Developing Maize Leaves.*
+  PLOS ONE, 11, e0151722, 2016.
+  https://doi.org/10.1371/journal.pone.0151722.
+
+.. [D3] M. Bostock, V. Ogievetsky, & J. Heer
+  *D3 Data-Driven Documents.*
+  IEEE Transactions on Visualization and Computer Graphics, 17, pages 2301–2309, 2011.
+  https://doi.org/10.1109/TVCG.2011.185.
+
+.. [DSG18] S. Dura-Bernal, B. A. Suter, P. Gleeson, M. Cantarelli, A. Quintana, F. Rodriguez, D. J. Kedziora, G. L. Chadderdon, C. C. Kerr, S. A. Neymotin, R. McDougal, M. Hines, G. M. G. Shepherd, & W. W. Lytton
+  *NetPyNE: a tool for data-driven multiscale modeling of brain circuits.*
+  bioRxiv, 461137, 2018.
+  https://doi.org/10.1101/461137.
+
+.. [FSC13] T. Fischbacher & F. Synatschke-Czerwonka
+  *FlowPy—A numerical solver for functional renormalization group equations.*
+  Computer Physics Communications, 184, pages 1931–1945, 2013.
+  https://doi.org/10.1016/j.cpc.2013.03.002.
+
+.. [GWW09] J. E. Guyer, D. Wheeler, & J. A. Warren
+  *FiPy: Partial Differential Equations with Python.*
+  Computing in Science Engineering, 11, pages 6–15, 2009.
+  https://doi.org/10.1109/MCSE.2009.52.
+
+.. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
+  *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
+  IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
+  https://doi.org/10.1109/TPAMI.2017.2749575.
+
+.. [LBC10] J. Liepe, C. Barnes, E. Cule, K. Erguler, P. Kirk, T. Toni, & M. P. H. Stumpf
+  *ABC-SysBio—approximate Bayesian computation in Python with GPU support.*
+  Bioinformatics, 26, pages 1797–1799, 2010.
+  https://doi.org/10.1093/bioinformatics/btq278.
+
+.. [SBS18] D. G. A. Smith, L. A. Burns, D. A. Sirianni, D. R. Nascimento, A. Kumar, A. M. James, J. B. Schriber, T. Zhang, B. Zhang, A. S. Abbott, E. J. Berquist, M. H. Lechner, L. A. Cunha, A. G. Heide, J. M. Waldrop, T. Y. Takeshita, A. Alenaizan, D. Neuhauser, R. A. King, A. C. Simmonett, J. M. Turney, H. F. Schaefer, F. A. Evangelista, A. E. DePrince, T. D. Crawford, K. Patkowski, & C. D. Sherrill
+  *Psi4NumPy: An Interactive Quantum Chemistry Programming Environment for Reference Implementations and Rapid Development.*
+  Journal of Chemical Theory and Computation, 14, pages 3504–3511, 2018.
+  https://doi.org/10.1021/acs.jctc.8b00286.
