@@ -142,13 +142,79 @@ with an example of using the blackbox solver.
 Direct Manipulation
 -------------------
 
-[Discuss Javascript and d3.js support in Jupyter Notebook. Relevance to computational geometry.]
+[Discuss Javascript and d3.js support in Jupyter Notebook.
+ Relevance to computational geometry.]
 
+Solving Polynomial Systems
+==========================
 
-Intensive Methods
-=================
+Our input is a list of polynomials in several variables.
+This input list represents a polynomial system.
+By default, the coefficients of the polynomials are considered
+as complex floating point numbers.
+The system is then solved over the field of complex numbers.
 
-For its fast mixed volume computation, the software incorporates MixedVol [GLW05]_ and DEMiCs [MT08]_. High-precision double double and quad double arithmetic is performed by the algorithms in QDlib [HLB01]_.
+For general polynomial systems,
+the complexity of the solution set can be expected to grow
+exponentially in the dimensions 
+(number of polynomials and variables) of the system.
+The complexity of computing all solutions of a polynomial system is #P-hard.
+The complexity class #P is the class of counting problems.
+Formulating instances of polynomial systems that will occupy
+fast computers for a long time is not hard.
+
+Polynomial Homotopy Continuation
+--------------------------------
+
+As we compute over the field of complex numbers,
+the continuity of the solution set in function of changing
+coefficients of the polynomials in the system is exploited.
+Continuation methods are numerical algorithms which track
+solution paths defined by a one parameter family of polynomial systems.
+This family is called the homotopy.  Homotopy methods take a polynomial
+system on input and construct a suitable embedding of the input system
+into a family which contains a start system with known solutions.
+
+We say that a homotopy is *optimal* if for generic instances of
+the coefficients of the input system no solution paths diverge.
+Even as the complexity of the solution set is very hard,
+the problem of computing the next solution, or just one random solution,
+has a much lower complexity.  phcpy offers optimal homotopies for
+three classes of polynomial systems:
+
+1. dense polynomial systems
+
+   A polynomial of degree *d* can be deformed into a product of *d*
+   linear polynomials.  If we do this for all polynomials in the system,
+   then the solutions of the deformed system are solutions of linear systems.
+   Continuation methods track the paths originating at the solutions of
+   the deformed system to the given problem.
+
+2. sparse polynomial systems
+
+   A system is sparse if relatively few monomials appear with nonzero
+   coefficient.  The convex hulls of the exponent vectors of the monomials
+   that appear are called Newton polytopes.  The mixed volume of the
+   tuple of Newton polytopes associated to the system is a sharp upper
+   bound for the number of isolated solutions.
+   Polyhedral homotopies start a solutions of systems that are sparser
+   and extend those solutions to the solutions of the given problem.
+
+3. Schubert problems in enumerative geometry
+
+   The classical example is to compute all lines in 3-space that
+   meet four given lines nontrivially.
+   Homotopies to solve geometric problems move the input data
+   to special position, solve the special configuration, and then
+   deform the solutions of the special problem into those of the
+   original problem.
+
+All classes of homotopies share the introduction of random constants.
+
+For its fast mixed volume computation, 
+the software incorporates MixedVol [GLW05]_ and DEMiCs [MT08]_. 
+High-precision double double and quad double arithmetic is performed 
+by the algorithms in QDlib [HLB01]_.
 
 Speedup and Quality Up
 ----------------------
@@ -261,11 +327,11 @@ Consider the following code snippet.
     from phcpy.phcpy2c3 import py2c_set_seed
     from phcpy.factor import solve
     from phcpy.families import cyclic
-    py2c_set_seed(201905091)
+    py2c_set_seed(201905091)  # for a reproducible run
     c8 = cyclic(8)
     sols = solve(8, 1, c8, verbose=False)
     witpols, witsols, factors = sols[1]
-        deg = len(witsols)
+    deg = len(witsols)
     print('degree of solution set at dimension 1 :', deg)
     print('number of factors : ', len(factors))
     _, isosols = sols[0]
