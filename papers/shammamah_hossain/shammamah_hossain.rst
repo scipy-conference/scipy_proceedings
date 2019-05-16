@@ -11,16 +11,13 @@ Visualization of Bioinformatics Data with Dash Bio
 
 .. class:: abstract
 
-   Plotly's Dash is a popular tool used by data scientists worldwide
-   to create interactive and responsive web applications to suit their
-   data-visualization needs. Dash components are used to construct the
-   interfaces of these web applications. The most recent addition to
-   the set of Dash component libraries is Dash Bio, a suite of several
-   components and auxiliary tools related heavily to common
-   visualizations and analyses characteristic to the field of
-   bioinformatics. This paper provides an overview of the motivations
-   behind creating the Dash Bio library, as well as brief descriptions
-   of its constituent components.
+   Plotly's Dash is a library that empowers data scientists to create
+   interactive web applications declaratively in Python. Dash Bio is a
+   bioinformatics-oriented suite of components that are compatible
+   with Dash. Common data visualizations characteristic to the field
+   of bioinformatics can now be integrated into Dash applications. We
+   present the Dash Bio suite of components and its auxiliary file
+   parsers.
 
 .. class:: keywords
 
@@ -29,17 +26,28 @@ Visualization of Bioinformatics Data with Dash Bio
 Introduction
 ------------
 
-Bioinformatics as a field is experiencing rapid growth as a result of
-technological advances that allow for collection of more and more
-informative data sets.
+The emergent field of bioinformatics is an amalgamation of computer
+science, statistics, and biology; it has proved revolutionary in
+biomedical research.  As scientific techniques in areas such as
+genomics and proteomics improve, they can yield larger volumes of
+valuable data that require processing in order to provide solutions to
+biological problems.
 
-Dash Bio brings the flexibility and ease of use provided by Dash to
-the bioinformatics community. In addition to single-line declarations
-of complex chart types, we provide parsers for some of the most common
-genomics and proteomics databases that allow for direct
-database-to-visualization workflows.
+Many bioinformaticians have already created analysis and visualization
+tools with Dash and plotly.py, but only through significant
+workarounds and modifications made to preexisting graph types. In
+addition to permitting single-line declarations of charts for complex
+datasets such as hierarchical clustering and multiple sequence
+alignment, we introduce several new chart types, three-dimensional and
+interactive molecule visualization tools, and components that are
+specifically related to genomic and proteomic sequences. In addition
+to these components, we present a set of simple parsing scripts that
+handle some of the most common file types found in
+bioinformatics-related databases.
 
-This paper outlines the contents of the Dash Bio package.
+This paper outlines the contents of the Dash Bio package, which
+imparts the powerful data-visualization tools and flexibility of Dash
+to the flourishing bioinformatics community.
 
 Dash
 ----
@@ -55,18 +63,17 @@ a simple Dash application might look like this:
    app = dash.Dash()
    app.layout = html.Div('Hello world!')
 
-   if __name__ == '__main__':
-       app.run_server()
+   app.run_server()
 
 The :code:`dash-html-components` and :code:`dash-core-components`
 packages comprise the building blocks of a Dash
-app. :code:`dash-html-components` provides an interface for
-building the layout of a Dash application that mimics the process of
-building the layout of a website; :code:`dash-core-components` is a
-suite of common tools used for interactions with an application (e.g.,
-dropdowns, text inputs, and sliders).
-
-TODO include an image
+app. :code:`dash-html-components` provides an interface for building
+the layout of a Dash application that mimics the process of building
+the layout of a website; :code:`dash-core-components` is a suite of
+common tools used for interactions with an application (e.g.,
+dropdowns, text inputs, and sliders) and additionally provides a
+:code:`dcc.Graph` component for interactive graphs made with
+plotly.py.
 
 Dash Bio Components
 -------------------
@@ -77,7 +84,11 @@ React.js and Python
 Some of the components in the Dash Bio package are wrappers around
 pre-existing JavaScript or React components; an example is
 :code:`Molecule3DViewer`, which is based on
-:code:`molecule-3d-for-react` [Mol3D]_.
+:code:`molecule-3d-for-react` [Mol3D]_. The development process for
+JavaScript-based components is fairly straightforward; the only thing
+that needs to be added in many cases is an interface for Dash to
+access the state of the component and read or write to it. This
+provides an avenue for interactions with the components.
 
 The package also contains three Python-based components: Clustergram,
 Manhattan Plot, and Volcano Plot. Clustergram uses the
@@ -99,15 +110,28 @@ Custom Chart Types
 Specialized chart types allow for intuitive visualizations of complex
 datasets.
 
-**Dash Circos** is a circular representation of data based on the
- CircosJS library. [TODO add citation] It supports features such as
- chords, which are used to annotate relationships between different
- data.
+**Circos** is a circular representation of data based on the
+ CircosJS library. [TODO add citation] Within its circular layout, it
+ can display a multitude of different plot types. Circos can be used
+ to denote relationships between, for example, different genes with
+ the "chords" property; an organism's genome can be wrapped around the
+ circle, and a chord can connect one part the circle, or one gene, to
+ another. [TODO add pic of chords] Circos also can display heatmaps,
+ scatter plots, histograms, and stacked charts. [TODO add pic of all
+ other types of circos plots]
 
 **Clustergram** is a combination heatmap-dendrogram that is commonly
  used in gene expression data. The hierarchical clustering that is
  represented by the dendrograms can be used to identify groups of
- genes with related expression levels.
+ genes with related expression levels. [TODO include image of
+ clustergram] It also supports creating annotations for specific
+ clusters from within a Dash application. This makes use of the
+ :code:`clickData` property of the :code:`dash_core_components.Graph`
+ component to determine which cluster has been clicked, and reads data
+ from a color picker and a text input to, respectively, color and
+ label the annotation. [TODO add image of annotation] Calculation of
+ hierarchical clustering for a dataset happens within the component
+ itself and uses the :code:`scikit-learn` and :code:`scipy` libraries.
 
 **Ideogram** is a graphical representation of chromosomal
  data. Annotations can be made to different portions of each
@@ -150,7 +174,7 @@ data about genomic and proteomic sequences.
 
 **Alignment Chart** is a tool for viewing multiple sequence
  alignments. Given an input FASTA file, it can compute and display the
- alignments of the sequences from the file.
+ alignments of the sequences from the file. [TODO add image]
 
 **Onco Print** is a visualization of genomic alteration events that
  can distinguish between different types of alterations that can
@@ -165,7 +189,14 @@ File Parsers
 ------------
 
 The Dash Bio package also includes utilities that can parse common
-file types for use with Dash Bio components. For instance,
+file types for use with Dash Bio components.
+
+FASTA file are commonly used to represent one or more genomic or
+proteomic sequences. Each sequence may be preceded by a line starting
+with the :code:`>` character and contains information about the
+sequence, such as the name of the gene or organism.
+
+Different databases (e.g., neXtProt, GenBank, and SWISS-PROT) encode this metadata in different ways. Writing a parser
 
 References
 ----------
