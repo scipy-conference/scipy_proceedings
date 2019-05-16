@@ -37,59 +37,17 @@ Parameter Estimation Using the Python Package pymcmcstat
 Introduction
 ------------
 
-The Python package pymcmcstat :cite:`pymcmcstat2018v1.6.0` provides a robust
-platform for a variety of engineering inverse problems.  Bayesian
-statistical analysis is a powerful tool for parameter estimation,
-and many algorithms exist for numerical approaches that utilize
-Markov Chain Monte Carlo (MCMC) methods :cite:`smith2014uncertainty`.
+The Python package pymcmcstat :cite:`pymcmcstat2018v1.6.0` provides a robust platform for a variety of engineering inverse problems.  Bayesian statistical analysis is a powerful tool for parameter estimation, and many algorithms exist for numerical approaches that utilize Markov Chain Monte Carlo (MCMC) methods :cite:`smith2014uncertainty`.
    
-In pymcmcstat, the user is provided with a suite of Metropolis based
-algorithms, with the primary approach being Delayed Rejection Adaptive
-Metropolis (DRAM) :cite:`haario2006dram`, :cite:`haario2001adaptive`.  A simple
-procedure of adding data, defining model parameters and settings, and
-setting up simulation options provides the user with a wide variety of
-computational tools for considering inverse problem.  This approach to
-inverse problems utilizes data to provide insight into model limitations
-and provide accurate estimation of the underlying model and observation
-uncertainty. 
+In pymcmcstat, the user is provided with a suite of Metropolis based algorithms, with the primary approach being Delayed Rejection Adaptive Metropolis (DRAM) :cite:`haario2006dram`, :cite:`haario2001adaptive`.  A simple procedure of adding data, defining model parameters and settings, and setting up simulation options provides the user with a wide variety of computational tools for considering inverse problem.  This approach to inverse problems utilizes data to provide insight into model limitations and provide accurate estimation of the underlying model and observation uncertainty. 
 
-As many Python packages currently exist for performing MCMC simulations,
-we had several goals in developing this code.  To our knowledge, no
-current package contains the :math:`n`-stage delayed rejection algorithm,
-so pymcmcstat was intended to fill this gap.  Furthermore, many
-researchers in our community have extensive experience using the MATLAB
-toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_.  Our implementation provides a similar user environment,
-while exploiting Python structures.  We hope to decrease dependence on
-MATLAB in academic communities by advertising comparable tools in Python.
+As many Python packages currently exist for performing MCMC simulations, we had several goals in developing this code.  To our knowledge, no current package contains the :math:`n`-stage delayed rejection algorithm, so pymcmcstat was intended to fill this gap.  Furthermore, many researchers in our community have extensive experience using the MATLAB toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_.  Our implementation provides a similar user environment, while exploiting Python structures.  We hope to decrease dependence on MATLAB in academic communities by advertising comparable tools in Python.
 
-This package has been applied to a wide variety of engineering problems,
-including radiation source localization as well as constitutive model
-development of smart material systems.  This is not an exhaustive listing
-of scientific problems that could be analyzed using pymcmcstat, and more
-details regarding the program methodology can be found via the `project
-homepage <https://github.com/prmiles/pymcmcstat/wiki>`_.
+This package has been applied to a wide variety of engineering problems, including radiation source localization as well as constitutive model development of smart material systems.  This is not an exhaustive listing of scientific problems that could be analyzed using pymcmcstat, and more details regarding the program methodology can be found via the `project homepage <https://github.com/prmiles/pymcmcstat/wiki>`_.
 
-Localization of special nuclear material in urban environments poses a
-very important task with many challenges.  Accurate representation of
-radiation transport in a three-dimensional domain that includes various
-forms of construction materials presents many computational challenges.
-For a representative domain in Ann Arbor, Michigan we can construct
-surrogate models using machine learning algorithms based on Monte Carlo
-N-Particle (MCNP) simulations.  The surrogate models provide a
-computationally efficient approach for subsequent inverse model
-calibration, where we consider the source location (:math:`x, y, z`) as our
-model parameters.  We will demonstrate the viability of using pymcmcstat
-for localization problems of this nature.
+Localization of special nuclear material in urban environments poses a very important task with many challenges.  Accurate representation of radiation transport in a three-dimensional domain that includes various forms of construction materials presents many computational challenges. For a representative domain in Ann Arbor, Michigan we can construct surrogate models using machine learning algorithms based on Monte Carlo N-Particle (MCNP) simulations.  The surrogate models provide a computationally efficient approach for subsequent inverse model calibration, where we consider the source location (:math:`x, y, z`) as our model parameters.  We will demonstrate the viability of using pymcmcstat for localization problems of this nature.
 
-Many smart material systems depend on robust constitutive relations for
-applications in robotics, flow control, and energy harvesting.  To fully
-characterize the material or system behavior, uncertainty in the model must
-be accurately represented.  By using experimental data in conjunction with
-pymcmcstat, we can estimate the model parameter distributions and visualize
-how that uncertainty propagates through the system.  We will consider
-specific examples in viscoelastic modeling of dielectric elastomers and
-also continuum approximations of ferroelectric monodomain crystal
-structures.
+Many smart material systems depend on robust constitutive relations for applications in robotics, flow control, and energy harvesting.  To fully characterize the material or system behavior, uncertainty in the model must be accurately represented.  By using experimental data in conjunction with pymcmcstat, we can estimate the model parameter distributions and visualize how that uncertainty propagates through the system.  We will consider specific examples in viscoelastic modeling of dielectric elastomers and also continuum approximations of ferroelectric monodomain crystal structures.
 
 Methodology
 -----------
@@ -117,7 +75,7 @@ We expect the observations :math:`F_i^{obs}` (experimental data or high-fidelity
 
     \mathcal{L}(F^{obs}(i)|q) = \exp\Big(-\frac{SS_q}{2\sigma^2}\Big),
 
-where :math:`SS_q=\sum_{i=1}^N(F^{obs}(i) - F(i, q))^2` is the sum-of-squares error.  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
+where :math:`SS_q=\sum_{i=1}^N[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error.  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
 There are a wide variety of Metropolis algorithms that may be used within MCMC.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
 
@@ -137,19 +95,9 @@ There are a wide variety of Metropolis algorithms that may be used within MCMC. 
 
 Radiation Source Localization
 -----------------------------
-Efficient and accurate localization of special nuclear material (SNM) in
-urban environments is a vitally important task to national security and
-presents many unique computational challenges. A realistic problem requires
-accounting for radiation transport in 3D, using representative nuclear
-cross-sections for construction materials, and simulating the expected
-interaction with a network of detectors.  The details of this research
-are discussed elsewhere :cite:`miles2019radiation`.  For the purpose of this
-proceeding, we will simply focus on the MCMC implementation.
+Efficient and accurate localization of special nuclear material (SNM) in urban environments is a vitally important task to national security and presents many unique computational challenges. A realistic problem requires accounting for radiation transport in 3D, using representative nuclear cross-sections for construction materials, and simulating the expected interaction with a network of detectors.  The details of this research are discussed elsewhere :cite:`miles2019radiation`, and the basic.  For the purpose of this proceeding, we will simply focus on the MCMC implementation.
 
-We can utilize MCMC methods in inferring the source location and intensity,
-providing us with the posterior estimates.  Given the challenges of modeling
-the radiation transport physics in 3D, it is extremely useful to visualize
-the potential source locations in light of the underlying uncertainty.
+We can utilize MCMC methods in inferring the source location and intensity, providing us with the posterior estimates.  Given the challenges of modeling the radiation transport physics in 3D, it is extremely useful to visualize the potential source locations in light of the underlying uncertainty.
 
 .. figure:: figures/annarbor_python.png
 
@@ -251,13 +199,7 @@ the potential source locations in light of the underlying uncertainty.
 Viscoelastic Modeling of Dielectric Elastomers
 ----------------------------------------------
 
-Dielectric elastomers as part of adaptive structures provide unique capabilities for control
-of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  Many of
-these materials exhibit viscoelastic behavior which varies significantly with the
-rate of deformation :cite:`rubinstein2003polymer`.  Figure :ref:`figfinalcycles` shows
-uni-axial experimental data for the elastomer Very High Bond (VHB) 4910, which highlights
-how the hysteretic behavior increases with the rate of deformation.  For more details
-regarding the experimental procedure, the reader is referred to :cite:`miles2015bayesian`.
+Dielectric elastomers as part of adaptive structures provide unique capabilities for control of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  Many of these materials exhibit viscoelastic behavior which varies significantly with the rate of deformation :cite:`rubinstein2003polymer`.  Figure :ref:`figfinalcycles` shows uni-axial experimental data for the elastomer Very High Bond (VHB) 4910, which highlights how the hysteretic behavior increases with the rate of deformation.  For more details regarding the experimental procedure, the reader is referred to :cite:`miles2015bayesian`.
 
 .. figure:: figures/final_cycle_for_each_rate.png
    
@@ -333,12 +275,9 @@ regarding the experimental procedure, the reader is referred to :cite:`miles2015
 Monodomain Crystal Structure Modeling in Ferroelectric Ceramics
 ---------------------------------------------------------------
 
-Ferroelectric materials are used in a wide variety of engineering applications
-:cite:`smith2005smart`, necessitating methodologies that can account for
-uncertainty across multi-scale physics models.  Bayesian statistics allow us to
-quantify model parameter uncertainty associated with approximating lattice strain and full-field electron density from density functional theory calculations as a homogenized, electromechanical continuum.
+Ferroelectric materials are used in a wide variety of engineering applications :cite:`smith2005smart`, necessitating methodologies that can account for uncertainty across multi-scale physics models.  Bayesian statistics allow us to quantify model parameter uncertainty associated with approximating lattice strain and full-field electron density from density functional theory calculations as a homogenized, electromechanical continuum.
 
-Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = [\alpha_{1},\alpha_{11},\alpha_{111},\alpha_{12},\alpha_{112},\alpha_{123}]`. The Landau energy is a function of 3-dimensional polarization space, :math:`{\bf P}=[P_1, P_2, P_3]`. For the purpose of this example, we consider the case where :math:`P_1 = 0`.  Often times we are interested in using information calculated from Density Functional Theory (DFT) calculations in order to inform our continuum approximations, such as our Landau function. For this example, we will assume we have a set of energy calculations corresponding to different values of :math:`P_2` and :math:`P_3` which were found using DFT. For more details regarding this type of research, the reader is referred to :cite:`miles2018analysis` and :cite:`leon2018analysis`.
+Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = [\alpha_{1},\alpha_{11}, \alpha_{111},\alpha_{12},\alpha_{112},\alpha_{123}]`. The Landau energy is a function of 3-dimensional polarization space, :math:`{\bf P}=[P_1, P_2, P_3]`. For the purpose of this example, we consider the case where :math:`P_1 = 0`.  Often times we are interested in using information calculated from Density Functional Theory (DFT) calculations in order to inform our continuum approximations, such as our Landau function. For this example, we will assume we have a set of energy calculations corresponding to different values of :math:`P_2` and :math:`P_3` which were found using DFT. For more details regarding this type of research, the reader is referred to :cite:`miles2018analysis` and :cite:`leon2018analysis`.
 
 .. figure:: figures/monodomain_pairwise.png
 
@@ -348,37 +287,18 @@ Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = 
  
 Concluding Remarks
 ------------------
-In this paper we have demonstrated two distinct areas of scientific study
-where MCMC methods provide enhanced understanding of the underlying physics.
-The pymcmcstat package presents a robust platform from which to perform
-a wide array of Bayesian inverse problems.  Several Metropolis algorithms
-are available, including Delayed Rejection Adaptive Metropolis (DRAM).
+In this paper we have demonstrated two distinct areas of scientific study where MCMC methods provide enhanced understanding of the underlying physics.  The pymcmcstat package presents a robust platform from which to perform a wide array of Bayesian inverse problems.  Several Metropolis algorithms are available, including Delayed Rejection Adaptive Metropolis (DRAM).
 
-With regarding to radiation transport, the resulting posterior
-distributions illuminate potential source locations with higher probability.
-In practice, isolating a source location to within the span of a few buildings
-is a very useful result which can be used to motivate future detector
-placement.
+With regarding to radiation transport, the resulting posterior distributions illuminate potential source locations with higher probability. In practice, isolating a source location to within the span of a few buildings is a very useful result which can be used to motivate future detector placement.
 
-In considering viscoelasticity models, we calibrated the
-parameters and propagated the uncertainty through the model to generate
-credible and prediction intervals.  This provided insight regarding model
-limitations and led to the implementation of the fractional-order approach.
+In considering viscoelasticity models, we calibrated the parameters and propagated the uncertainty through the model to generate credible and prediction intervals.  This provided insight regarding model limitations and led to the implementation of the fractional-order approach.
 
-The pymcmcstat is currently limited to Gaussian likelihood and prior
-functions.  To improve the overall usefulness of the code will require
-expanding its functionality to allow for user-defined likelihood and prior
-functions.  We designed the package to serve as a Python
-replacement for the MATLAB toolbox `mcmcstat`, so it is important to
-maintain the features of the original user interface for ease of transition
-from one platform to another.
+The pymcmcstat is currently limited to Gaussian likelihood and prior functions.  To improve the overall usefulness of the code will require expanding its functionality to allow for user-defined likelihood and prior functions.  We designed the package to serve as a Python replacement for the MATLAB toolbox `mcmcstat`, so it is important to maintain the features of the original user interface for ease of transition from one platform to another.
 
 Acknowledgments
 ---------------
 
-This research was supported by the Department of Energy National Nuclear
-Security Administration (NNSA) under the Award Number DE-NA0002576 through
-the Consortium for Nonproliferation Enabling Capabilities (CNEC).
+This research was supported by the Department of Energy National Nuclear Security Administration (NNSA) under the Award Number DE-NA0002576 through the Consortium for Nonproliferation Enabling Capabilities (CNEC).
 
 References
 ----------
