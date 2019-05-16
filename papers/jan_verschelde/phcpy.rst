@@ -96,8 +96,8 @@ In our first design of a web interface to ``phc``, we developed a collection of 
 
 As of the middle of May 2019, our web server has 145 user accounts.
 
-Jupyter and JupyterHub
-----------------------
+JupyterHub
+----------
 
 With JupyterHub, we provide user accounts on our server,
 which has both phcpy and SageMath pre-installed.
@@ -502,61 +502,70 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-
-.. [Pascal] 
-          *JupyterHub deployment of phcpy.*
-          https://pascal.math.uic.edu, 2017
-
-.. [JUP15] Jupyter Contrib Team
-      *Jupyter notebook snippets menu - jupyter_contrib_nbextensions 0.5.0 documentation*
-      https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html
-
 .. [BNN16] D. J. Bates, A. J. Newell, & M. Niemerg
   *BertiniLab: A MATLAB interface for solving systems of polynomial equations.*
   Numerical Algorithms, 71, pages 229–244, 2016.
-  https://doi.org/10.1007/s11075-015-0014-6.
+  DOI 10.1007/s11075-015-0014-6.
 
 .. [BNN17] D. J. Bates, A. J. Newell, & M. E. Niemerg
   *Decoupling highly structured polynomial systems.*
   Journal of Symbolic Computation, 79, pages 508–515, 2017.
-  https://doi.org/10.1016/j.jsc.2016.07.016.
+  DOI 10.1016/j.jsc.2016.07.016.
 
 .. [BM16] E. Bogart & C. R. Myers
   *Multiscale Metabolic Modeling of C4 Plants: Connecting Nonlinear Genome-Scale Models to Leaf-Scale Metabolism in Developing Maize Leaves.*
   PLOS ONE, 11, e0151722, 2016.
-  https://doi.org/10.1371/journal.pone.0151722.
+  DOI 10.1371/journal.pone.0151722.
 
 .. [D3] M. Bostock, V. Ogievetsky, & J. Heer
   *D3 Data-Driven Documents.*
   IEEE Transactions on Visualization and Computer Graphics, 17, pages 2301–2309, 2011.
-  https://doi.org/10.1109/TVCG.2011.185.
+  DOI 10.1109/TVCG.2011.185.
 
 .. [DSG18] S. Dura-Bernal, B. A. Suter, P. Gleeson, M. Cantarelli, A. Quintana, F. Rodriguez, D. J. Kedziora, G. L. Chadderdon, C. C. Kerr, S. A. Neymotin, R. McDougal, M. Hines, G. M. G. Shepherd, & W. W. Lytton
   *NetPyNE: a tool for data-driven multiscale modeling of brain circuits.*
   bioRxiv, 461137, 2018.
-  https://doi.org/10.1101/461137.
+  DOI 10.1101/461137.
 
 .. [FSC13] T. Fischbacher & F. Synatschke-Czerwonka
   *FlowPy—A numerical solver for functional renormalization group equations.*
   Computer Physics Communications, 184, pages 1931–1945, 2013.
-  https://doi.org/10.1016/j.cpc.2013.03.002.
+  DOI 10.1016/j.cpc.2013.03.002.
 
 .. [GWW09] J. E. Guyer, D. Wheeler, & J. A. Warren
   *FiPy: Partial Differential Equations with Python.*
   Computing in Science Engineering, 11, pages 6–15, 2009.
-  https://doi.org/10.1109/MCSE.2009.52.
+  DOI 10.1109/MCSE.2009.52.
 
 .. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
   *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
   IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
-  https://doi.org/10.1109/TPAMI.2017.2749575.
+  DOI 10.1109/TPAMI.2017.2749575.
 
 .. [LBC10] J. Liepe, C. Barnes, E. Cule, K. Erguler, P. Kirk, T. Toni, & M. P. H. Stumpf
   *ABC-SysBio—approximate Bayesian computation in Python with GPU support.*
   Bioinformatics, 26, pages 1797–1799, 2010.
-  https://doi.org/10.1093/bioinformatics/btq278.
+  DOI 10.1093/bioinformatics/btq278.
 
 .. [SBS18] D. G. A. Smith, L. A. Burns, D. A. Sirianni, D. R. Nascimento, A. Kumar, A. M. James, J. B. Schriber, T. Zhang, B. Zhang, A. S. Abbott, E. J. Berquist, M. H. Lechner, L. A. Cunha, A. G. Heide, J. M. Waldrop, T. Y. Takeshita, A. Alenaizan, D. Neuhauser, R. A. King, A. C. Simmonett, J. M. Turney, H. F. Schaefer, F. A. Evangelista, A. E. DePrince, T. D. Crawford, K. Patkowski, & C. D. Sherrill
   *Psi4NumPy: An Interactive Quantum Chemistry Programming Environment for Reference Implementations and Rapid Development.*
   Journal of Chemical Theory and Computation, 14, pages 3504–3511, 2018.
-  https://doi.org/10.1021/acs.jctc.8b00286.
+  DOI 10.1021/acs.jctc.8b00286.
+
+.. [AD18] A. Dickenstein
+    *Algebraic geometry in the interface of pure and applied mathematics.*
+    Rio Intelligencer, ICM, 2018.
+    http://mate.dm.uba.ar/~alidick/DickensteinIntelligencerWithoutFigures.
+
+.. [DB15] D. Brake
+    *Advances in Software in Numerical Algebraic Geometry.*
+    Slides presented at Advances @ SIAM AG15, U Notre Dame, 2015.
+    https://danielleamethyst.org/resources/presentations/talks/siam_AG2015_numerical_AG_overview.pdf.
+
+.. [Pascal] *JupyterHub deployment of phcpy.*
+    Website, accessed May 2019, 2017.
+    https://pascal.math.uic.edu.
+
+.. [JUP15] *Jupyter notebook snippets menu.*
+     jupyter contrib nbextensions 0.5.0 documentation, 2015.
+     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
