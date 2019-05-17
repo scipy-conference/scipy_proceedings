@@ -196,12 +196,14 @@ in gene expression data. The hierarchical clustering that is
 represented by the dendrograms can be used to identify groups of genes
 with related expression levels.
 
-The Dash Bio Clustergram component takes as input a two-dimensional
-numpy array of floating-point values. Imputation of missing data and
-computation of hierarchical clustering both occur within the component
-itself. Clusters that are past a user-defined threshold of similarity
-comprise a single trace in the corresponding dendrogram, and can be
-highlighted with annotations (see Fig. :ref:`clustergram`).
+The Dash Bio Clustergram component is a Python-based component that
+uses plotly.py to generate a figure. It takes as input a
+two-dimensional numpy array of floating-point values. Imputation of
+missing data and computation of hierarchical clustering both occur
+within the component itself. Clusters that are past a user-defined
+threshold of similarity comprise a single trace in the corresponding
+dendrogram, and can be highlighted with annotations (see
+Fig. :ref:`clustergram`).
 
 The user can specify additional parameters to customize the metrics
 and methods used to compute parts of the clustering, such as the
@@ -244,13 +246,11 @@ A Manhattan plot is a plot commonly used in genome-wide association
 studies; it can highlight specific nucleotides that, when changed, are
 associated with certain genetic conditions.
 
-Input data to the Dash Bio ManhattanPlot component take the form of a
-pandas dataframe.  The two lines on the plot (see
-Fig. :ref:`manhattan`) represent, respectively, the threshold level
-and the suggestive line. [#]_ The y-values of these lines are
-controlled by the parameters :code:`genomewideline_value` and
-:code:`suggestiveline_value` that are supplied to the
-:code:`ManhattanPlot` object.
+The Dash Bio ManhatanPlot component is built with plotly.py. Input
+data take the form of a pandas dataframe. The two lines on the plot
+(see Fig. :ref:`manhattan`) represent, respectively, the threshold
+level and the suggestive line. [#]_ The y-values of these lines can be
+controlled by the user.
 
 .. [#] Information about the meaning of these two lines can be found
        in [ER15]_.
@@ -271,10 +271,10 @@ can look "busy" when represented with a bar plot. In bioinformatics, a
 needle plot may be used to annotate the positions on a genome at which
 genetic mutations happen (see Fig. :ref:`needle`).
 
-The Dash Bio NeedlePlot component receives input data in a
-dictionary. It can distinguish between different types of mutations
-with different colors and marker styles, and can demarcate the domains
-of specific genes.
+The Dash Bio NeedlePlot component was built using plotly.js. It
+receives input data in a dictionary. It can distinguish between
+different types of mutations with different colors and marker styles,
+and can demarcate the domains of specific genes.
 
 Volcano Plot
 ============
@@ -296,10 +296,11 @@ statistical significance and a large effect.
 .. [#] This refers to the ratio of a measurement to its preceding
        measurement.
 
-The Dash Bio VolcanoPlot component takes a pandas dataframe as input
-data. Lines that represent the threshold for effect size (both
-positive and negative) and a threshold for statistical significance
-can be defined by the user (see Fig. :ref:`volcano`).
+The Dash Bio VolcanoPlot component was built using plotly.py. It takes
+a pandas dataframe as input data. Lines that represent the threshold
+for effect size (both positive and negative) and a threshold for
+statistical significance can be defined by the user (see
+Fig. :ref:`volcano`).
 
 Molecule 3D Viewer
 ==================
@@ -312,17 +313,19 @@ Molecule 3D Viewer
    structure of a section of DNA. A selected residue is highlighted in
    cyan. :label:`mol3d`
 
-The Dash Bio Molecule3DViewer component can be used to display
-molecular structures. These types of visualizations can
-be useful when communicating the mechanics of a biomolecular
-mechanism, as it can display the shapes of proteins and provide
-insight into the way that they bind to other biomolecules.
+The Dash Bio Molecule3DViewer component was built on top of the
+:code:`molecule-3d-for-react` [Mol3D]_ library. Its purpose is to
+display molecular structures.  These types of visualizations can be
+useful when communicating the mechanics of biomolecular process, as it
+can show the shapes of proteins and provide insight into the way that
+they bind to other molecules.
 
 Molecule3DViewer receives input data as a dictionary which specifies
-the layout and style of each atom in the molecule. It can render a
-variety of styles, such as stick diagrams, arrangements of spheres
-that correspond to atoms, or ribbon diagrams (see
-Fig. :label:`mol3d`).
+the layout and style of each atom in the molecule. It can render
+molecules in a variety of styles, such as ribbon diagrams, and allows
+for mouse-click selection of specific atoms or residues (see
+Fig. :label:`mol3d`) that can be read from or written to within a Dash
+app.
 
 Speck
 =====
@@ -332,11 +335,12 @@ Speck
 
    A Dash Bio Speck component displaying the atomic structure of a
    strand of DNA in a ball-and-stick representation. Ambient occlusion
-   is used to provide realistic shading on the atoms.
+   is used to provide realistic shading on the atoms. :label:`speck`
 
-Speck is a WebGL-based 3D renderer that uses techniques like
-ambient occlusion and outlines to provide a rich view of molecular
-structures (see Fig. :ref:`speck`).
+The Dash Bio Speck component is a WebGL-based 3D renderer that is
+built on top of :code:`Speck` [Speck]_. It uses techniques like ambient
+occlusion and outlines to provide a rich view of molecular structures
+(see Fig. :ref:`speck`).
 
 The Dash Bio Speck component receives input data as a dictionary that
 contains, for each atom, the atomic symbol and the position in space
@@ -345,20 +349,46 @@ rendering of the molecule, such as the atom sizes, levels of ambient
 occlusion, and outlines, can optionally be specified in another
 dictionary supplied as an argument.
 
-Sequence Analysis Tools
+Alignment Chart
 =======================
 
-Sequence analysis tools can be used in a multitide of ways to
-highlight important genes and proteins, as well as extract meaningful
-data about genomic and proteomic sequences.
+.. figure:: alignment.png
+   :figclass: bht
 
-**Alignment Chart** is a tool for viewing multiple sequence
- alignments. Given an input FASTA file, it can compute and display the
- alignments of the sequences from the file. [TODO add image]
+   A Dash Bio AlignmentChart component displaying the P53 protein's
+   amino acid sequences from different organisms. A conservation
+   barplot is displayed on top, and the bottom row of the heatmap
+   contains the consensus sequence. :label:`alignment`
 
-**Onco Print** is a visualization of genomic alteration events that
- can distinguish between different types of alterations that can
- occur.
+An alignment chart is a tool for viewing multiple sequence
+alignment. Multiple related sequences of nucleotides or amino acids
+(e.g., the amino acid sequences of proteins from different organisms
+that appear to serve the same function) are displayed in the chart to
+show their similarities.
+
+The Dash Bio AlignmentChart component is built on top of
+:code:`react-alignment-viewer` [Align]_. It takes a FASTA file as input
+and computes the alignment. It can optionally display a barplot that
+represents the level of conservation of a particular amino acid or
+nucleotide across each sequence defined in the input file (see
+Fig. :ref:`alignment`).
+
+Onco Print
+==========
+
+.. figure:: onco.png
+   :figclass: bht
+
+   A Dash Bio OncoPrint component that shows mutation events for the
+   genomic sequences that encode different proteins. :label:`onco`
+
+Onco Print is a type of heatmap that facilitates the visualization of
+multiple genomic alteration events (see Fig. :ref:`onco`).
+
+The Dash Bio OncoPrint component is built on top of
+:code:`react-oncoprint` [Onco]_. Input data for the component takes
+the form of a list of dictionaries that define a sample, gene,
+alteration, and mutation type.
 
 **Sequence Viewer** is a simple tool that allows for annotating
  genomic or proteomic sequences. It allows for highlighting
@@ -368,22 +398,37 @@ data about genomic and proteomic sequences.
 File Parsers
 ------------
 
-The Dash Bio package also includes utilities that can parse common
-file types for use with Dash Bio components.
+The `dash-bio-utils` package was developed in tandem with the
+`dash-bio` package. It contains parsers for many common bioinformatics
+databases that translate the data encoded in those files to inputs
+that are compatible with Dash Bio components.
 
-FASTA file are commonly used to represent one or more genomic or
+FASTA files
+===========
+
+FASTA files are commonly used to represent one or more genomic or
 proteomic sequences. Each sequence may be preceded by a line starting
 with the :code:`>` character and contains information about the
 sequence, such as the name of the gene or organism.
 
-Different databases (e.g., neXtProt, GenBank, and SWISS-PROT) encode this metadata in different ways. Writing a parser
+Different databases (e.g., neXtProt, GenBank, and SWISS-PROT) encode
+this metadata in different ways.
+
+PDB files
+=========
+
+SOFT files
+=========
 
 References
 ----------
 
-.. [Mol3D] Autodesk. *Molecule 3D for React*. GitHub repository:
+.. [Mol3D] Autodesk. *Molecule 3D for React*. URL:
 	     `<https://github.com/plotly/molecule-3d-for-react>`_
-.. [Circos] Girault, Nic. *circosJS: d3 library to build circular graphs*. GitHub repository: `<https://github.com/nicgirault/circosJS>`_
+.. [Circos] Girault, Nic. *circosJS: d3 library to build circular graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
 .. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global gene expression analysis reveals specific patterns of cell junctions in non-small cell lung cancer subtypes.* Lung Cancer 2009 Jan;63(1):32-8. PMID: 18486272
-.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with JavaScript*. GitHub repository: `<https://github.com/eweitz/ideogram>`_
+.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with JavaScript*. URL: `<https://github.com/eweitz/ideogram>`_
 .. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and Foulkes, A. S. (2015) *A guide to genome‐wide association analysis and post‐analytic interrogation.* Statist. Med., 34: 3769– 3792. doi: 10.1002/sim.6605.
+.. [Speck] Terrell, Rye. *Speck*. URL: `<https://github.com/wwwtyro/speck>`_
+.. [Align] Plotly. *React Alignment Viewer*. URL: `<https://github.com/plotly/react-alignment-viewer>`_
+.. [Onco] Plotly. *React OncoPrint*. URL: `<https://github.com/plotly/react-oncoprint>`_
