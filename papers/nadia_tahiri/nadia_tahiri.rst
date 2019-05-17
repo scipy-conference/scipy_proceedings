@@ -3,7 +3,7 @@
 :institution: University of Quebec at Montreal
 :corresponding:
 
-:bibliography: scipybib
+:bibliography: nTahiriSciPy
 
 -----------------------------------------------------------------------------------------------------
 An intelligent shopping list based on the application of partitioning and machine learning algorithms
@@ -24,15 +24,15 @@ An intelligent shopping list based on the application of partitioning and machin
 
 .. class:: keywords
 
-   machine learning, prediction, pandas, numpy, scipy, sklearn, tensorflow
+   Machine Learning, prediction, python, Long short-term memory, Convolutional Neural Network, Gradient Tree Boosting, F1, sklearn, tensorflow
    
 
 Introduction
 ------------
 
 A typical grocery retailer offers consumers thousands of promotions every week 
-to attract more consumers and thus improve their economic performance (Tanusondjaja et al., 2016). 
-Studies by Walters and Jamil (2002, 2003) found that about 39% of all items purchased 
+to attract more consumers and thus improve their economic performance :cite:`tanusondjaja2016exploring`. 
+Studies by Walters and Jamil (2002, 2003) of :cite:`walters2002measuring` and :cite:`walters2003exploring` found that about 39% of all items purchased 
 during an inter-category grocery were specials of the week and about 30% of consumers 
 surveyed were very sensitive to product prices, buying more promotional items than regular items. 
 With the recent expansion of machine learning methods, including deep learning, 
@@ -47,7 +47,7 @@ Shopping lists serve, for example, as a reminder, a budgeting tool,
 or an effective way to organize weekly grocery shopping. 
 In addition, several mobile retail studies indicate that potential customers place 
 the highest priority on features that help them create and manage personalized 
-shopping lists interactively (Newcomb et al., 2003, Fazliu 2017).
+shopping lists interactively :cite:`newcomb2003mobile` and :cite:`fazliu2017utforskande`.
 
 
 Methods
@@ -65,6 +65,10 @@ The application of efficient partitioning methods, such as K-means and X-means,
 will make it possible to determine the number of classes of consumers, 
 as well as their distribution by class.
 
+.. figure:: figures/trois_magasins.png
+   
+   CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
+
 Secondly, we will develop a statistical model to predict which products previously purchased will be 
 in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
@@ -78,19 +82,15 @@ This list will also include recommendations regarding the optimal quantity of ea
 where these products are to be purchased. We will also calculate the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
 
-.. figure:: figures/trois_magasins.png
-   
-     CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
-
 .. figure:: figures/mygrocerytour_circuit.png
-     
-     Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
+  
+   Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
-:math:`F_1` statistics maximization algorithm (Ye et al., 2012), 
+:math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
 based on dynamic programming, will be used to meet the objective (i), 
 which will be of major interest to retailers and distributors. 
-A deep learning method (Goodfellow et al., 2016), based on recurrent neuron networks (RNN) 
-and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool (Dean et al., 2015), 
+A deep learning method :cite:`goodfellow2016deep`, based on recurrent neuron networks (RNN) 
+and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool :cite:`girija2016tensorflow`, 
 will be used to meet objective (ii), which will be of major interest to consumers.
 
 The problem will be reformulated as a binary prediction task: given a consumer, 
@@ -110,8 +110,8 @@ in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
 -------
-
-We used the data from CircuitPromo.ca as basic data. 
+In this section we discuss the details of our set synthetic and real datasets.
+Note, the real datasets was obtained from CircuitPromo.ca as basic data.
 
 *Features*
 
@@ -133,10 +133,14 @@ The first group is consumer who buy only the products on promotion.
 The second group is consumer who always buy the same products (without considering promotions).
 Finally, the third group is consumer who buy products as well on promotion or not.
 
+Our real dataset was not enough to complete correctly our project, we increased it.
+We described the sets of data simulated in our study, 
+and we presented in detail the results of our simulations
+
 *Data increase*
 
 We considered that our dataset is not enougth, and we decided to increase them by following statitic rules. 
-For :math:`store_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
+For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 The strategy, we used for computed :math:`distance` if we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution with the :math:`\sigma` parameter.
 Finally, we increased `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution.
@@ -147,16 +151,20 @@ Models
 
 In this section, we described the workflow and models we used.
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
-The final model has two neuron networks and a Gradient Boosted Tree (GBT) classifier ({friedman2002stochastic}).
+The final model has two neuron networks and a Gradient Boosted Tree (GBT) classifier (:cite:`friedman2002stochastic`).
 Once trained, it can be used to predict in real time what will be the consumer's basket, based on the history of purchases and current promotions in neighborhood stores.
 Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size.
 
 
 *First level model (feature extraction)*
 
-
 Our goal is to find a diverse set of representations using neural networks (see Table 1). 
 Table 1 summarizes top-level models used by our algorithm and we described each type of model used for each representation (e.g. Products, Category, Size of basket, Products and Users).
+We estimated the probability of the :math:`product_i` to be include to 
+the next basket :math:`order_{t+1}` with :math:`orders_{t-h}`, 
+with :math:`t` represents the actual time, 
+:math:`t+1` represents the next time,
+and :math:`t-h` represents all previous time (i.e. historical time).
 
 .. raw:: latex
 
@@ -217,7 +225,7 @@ If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathca
 
 *Second level model: Composition of baskets*
 
-The final basket is chosen according to the final reorganization probabilities, choosing the subset of products with the expected maximum :math:`F_1` score ({lipton2014optimal} and {nan2012optimizing}).
+The final basket is chosen according to the final reorganization probabilities, choosing the subset of products with the expected maximum :math:`F_1` score (:cite:`lipton2014optimal` and :cite:`nan2012optimizing`).
 This score is frequently used especially when the relevant elements are scarce.
 
 .. math::
@@ -233,7 +241,6 @@ The final reorder probabilities are a weighted average of the outputs from the s
 
 .. code-block:: python
     :linenos:
-
     
     from multiprocessing import Pool, cpu_count
 
@@ -288,17 +295,20 @@ The final reorder probabilities are a weighted average of the outputs from the s
 
 *Results*
 
+In this section we presented the results of our simulations.
+
 .. figure:: figures/workflow.png
      
-     Model used in the classification. :label:`workflow`
+   Model used in the classification. :label:`workflow`
 
 .. figure:: figures/order_frequency.png
+   :align: center
      
-     Basket size distribution. :label:`orderfrequency`
+   Basket size distribution. :label:`orderfrequency`
 
 .. figure:: figures/product_pca.png
      
-     Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
+   Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
 
 .. raw:: latex
@@ -330,13 +340,15 @@ The final reorder probabilities are a weighted average of the outputs from the s
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
    
 .. figure:: figures/lstm.png
-   
+   :align: center 
+  
    This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
    spectral extraction throughput. :label:`lstm`
 
 .. figure:: figures/products_F1.png
+   :align: center
      
-     Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
+   Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
    
 .. figure:: figures/violon.png
    :align: center
@@ -404,3 +416,16 @@ The funds provided by these funding institutions have been used.
 We thank also reviewers and SciPy.
 
 
+Abbreviations
+-------------
+
+- ML - Machine Learning
+- LSTM - Long short-term memory
+- CNN - Convolutional Neural Network
+- GBT  - Gradient Tree Boosting
+- PCA - Principal Component Analysis
+
+.. raw:: latex
+
+ \bibliographystyle{alpha}
+ \bibliography{nTahiriSciPy.bib}
