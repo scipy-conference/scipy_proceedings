@@ -29,7 +29,7 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
    instrument and transferred to NERSC for processing analysis on the Cori and 
    Perlmutter supercomputers in near-real time. This fast turnaround helps DESI 
    monitor survey progress and update the next night's observing schedule.
- 
+
    The DESI spectroscopic pipeline for processing these data is written almost
    exclusively in Python. Using Python allows the DESI scientists to write
    very readable and maintainable scientific code in a relatively short amount of 
@@ -44,8 +44,8 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
    respectively. Several profiling techniques were used to determine potential
    areas for improvement including Python's cProfile and line_profiler packages, 
    and other tools like Intel Vtune and Tau. Once we identified expensive kernels, 
-   we used the following techniques: 1) JIT-compiling hotspots using Numba (the most 
-   successful strategy so far) and 2) re-structuring the code to compute and store 
+   we used the following techniques: 1) JIT-compiling hotspots using Numba
+   and 2) re-structuring the code to compute and store 
    key data structures rather than repeatedly calling expensive functions. We have 
    considered Dask as a more flexible and robust alternative to MPI for parallelism 
    in the DESI extraction code, but have found that once a code has been designed 
@@ -60,67 +60,93 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
 Introduction
 ------------
 
+DESI is the Dark Energy Spectroscopic Instrument :cite:`noauthor_dark_nodate`.
 Though dark energy is estimated to comprise over 70 percent of our universe, it
 is not currently well-understood
-:cite:`peebles_cosmological_2003,mortonson_dark_2013`.  Many experiments are
-seeking to uncover more information about the nature of dark energy; once such
-experiment is DESI (the Dark Energy Spectroscopic Instrument)
-:cite:`noauthor_dark_nodate`. The goal of the DESI experiment is, over 5 years,
-to map 30 million galaxies and use spectroscopically obtained redshift data to
-obtain their distances. This information will allow the most detailed 3D map of
-the universe to be constructed, which will help better understand the role of
-dark energy throughout the history of the universe. An image of the Mayall
+:cite:`peebles_cosmological_2003,mortonson_dark_2013`.  Many experiments,
+including DESI, are seeking to uncover more information about the nature of
+dark energy. The goal of the DESI experiment is, over 5 years, to map 30
+million galaxies and use spectroscopically obtained redshift data to obtain
+their distances. This information will allow the most detailed 3D map of the
+universe to be constructed, which will help better understand the role of dark
+energy throughout the history of the universe. An image of the Mayall
 telescope, in Kitt Peak, Arizona, where the DESI instrument is installed, is
-shown in Figure :ref:`kittpeak`
+shown in Figure :ref:`kittpeak`.
 
 .. figure:: figures/desi_kitt_peak.png
 
    A photograph of the Mayall telescope (large dome in the center of the
    image), where the DESI instrument has been installed, in Kitt Peak, Arizona.
-   Image credit?
    :label:`kittpeak`
 
-NERSC is the National Energy Research Scientific Computing center. It provides
-HPC resources for the DOE scientists who run large-scale simulations, data
-processing, and machine learning. Through a program called the NERSC Exascale
-Science Applications Program (NESAP) :cite:`noauthor_nesap_nodate`, NERSC
-collaborates with scientific teams to adapt their applications to run
-efficiently and robustly on NERSC systems. The case detailed in this work is
-one such collaboration between NERSC and a DOE science project (the DESI
-experiment). Other NESAP projects are described in :cite:`ronaghi_python_2017`.
+In a typical night of observing, DESI expects to obtain roughly 1000 CCD
+images. In late 2019, DESI will begin sending these images to NERSC for nightly
+data processing and will continue sending image data for five years. The sooner
+these images can be processed to determine if the data quality was acceptable
+(perhaps the weather was poor or the exposure time was not long enough), the
+better. The DESI team will examine these results before they can plan their
+next night of observing, so in a very real sense every minute counts. 
 
-In late 2019 DESI will begin sending batches of CCD images nightly to NERSC for
-data processing. The CCD images contain many spectra; one for each object at
-which the fiber was pointed. DESI has a large and complex image processing
-pipeline to transform raw images from the CCD into meaningful scientific
-results. This study focuses on only a small portion of this pipeline: that part
-that obtains the spectral extraction.  The spectral extraction is performed in
-two dimensions using a technique known as "spectroperfectionism"
-:cite:`bolton_spectro-perfectionism:_2010`. The DESI spectral extraction code
-performs a variety of eigenvalue decomposition, evaluating special functions,
-and all the necessary bookkeeping required to manage the spectral data in each
-exposure (30 frames, which total about 6GB).
+The DESI instrument is comprised of 5000 robotically controlled optical fibers.
+In each patch of sky, every fiber will be positioned to image a target like a
+galaxy or quasar. The light from each fiber will be passed into one of 10
+spectrographs with three channels: one in the infrared, one in the red, and one
+in the blue, which results in a total of 30 frames obtained per exposure. The
+5000 individual spectra are stacked on the CCD in a pattern like that shown in
+Figure :ref:`ccdpsfexample` (a), where the y-axis is wavelength and
+the x-axis is each individual fiber.
 
-.. figure:: figures/spectroperfectionism.png
+.. figure:: figures/ccd_psf_example.png
 
-   A cartoon that demonstrates the spectroperfectionism technique that is used
-   in the DESI spectral extraction code. Since the point spread functions are
-   often 2D in nature, a full 2-D fitting is required to accurately capture their
-   shape. Image courtesy of S. J. Bailey. :label:`spectroperfectionism`
+   (a) This is an example of a DESI CCD image, where the x-axis are the individual fibers
+   and the y-axis is wavelength. (b) Since the point spread functions are 2D 
+   in nature (note the difference in shapes between the red and green profiles),
+   a full 2D fitting is required to accurately capture their
+   shape. Image courtesy of S. J. Bailey. :label:`ccdpsfexample`
 
-Five years worth of image processing on a shared supercomputer should be as
-efficient as possible, both for the sake of the DESI project but also the many
-other users who share the NERSC systems. NESAP was tasked with improving the
-efficiency of the DESI code without rewriting the code in another language like
-C. In what follows we will present a case study that describes how a Python
-image processing pipeline was optimized for increased throughput of 5-7x on a
-high-performance system.  The workflow of using profiling tools to find
-candidate kernels for optimization and the techniques for speeding up these
-kernels will be described. Two approaches to speeding up the code will be
-described: using Numba for Just in Time compilation, and restructuring the code
-to minimize the impact of calling expensive kernels.  Parallelization
-strategies using MPI and Dask will be compared, and preliminary considerations
-for moving the code to GPUs will be discussed.
+The data from each fiber spectra have some 2D extent: these 2D elipses are
+called point-spread functions (PSFs). One of these PSFs is shown in Figure
+:ref:`ccdpsfexample` (b). This figure demonstrates that because the PSF is
+elliptical rather than perfectly circular, a 2D fitting is necessary to capture
+all of the PSF information. The DESI spectral extraction is performed in two
+dimensions using a technique known as "spectroperfectionism"
+:cite:`bolton_spectro-perfectionism:_2010`, which is only computationally
+feasible due to a divide-and-conquer approach developed by S. J. Bailey and
+collaborators. The DESI spectral extraction code performs a variety of eigenvalue
+decomposition, evaluating special functions, and all the necessary bookkeeping
+required to manage the spectral data in each exposure (about 6GB).
+
+The overarching goal of this work is to speed up the DESI experiment's Python
+spectroscopic data processing on the NERSC Cori KNL partition. NERSC is the
+National Energy Research Scientific Computing center
+:cite:`noauthor_national_nodate`. It is the largest Department of Energy
+computing facility in terms of number of users (7000) and scientific output
+:cite:`noauthor_publications_nodate`. Cori is NERSC's current flagship system,
+a Cray XC40 with a theoretical peak of 28 PF, comprised of approximately 20
+percent Intel Haswell nodes and 80 percent manycore Intel Knights Landing (KNL)
+nodes.  Achieving good performance with the manycore KNL nodes has proven
+difficult for many science teams; for this reason NERSC established a program
+called NESAP (NERSC Exascale Science Applications Program,
+:cite:`noauthor_nesap_nodate`). NESAP provides technical expertise from NERSC
+staff and vendors like Intel and Cray to a select set of science teams to
+improve the performance of their application on the Cori KNL partition.
+Achieving optimal Python peformance on KNL is especially challenging due a
+slower clock speed and difficulty taking advantage of the KNL AVX-512 vector
+units (which is not possible in native Python). A more detailed discussion of
+the difficulties of extracting Python performance on KNL can be found in
+:cite:`ronaghi_python_2017`. Desipite these difficulties, DESI requested
+that their code should not be re-written in another language like C due
+to their own limited developer resources.
+
+In what follows we will present a case study that describes how a Python image
+processing pipeline was optimized *without re-writing the code in another language like C*
+for increased throughput of 5-7x on a
+high-performance system. We will describe our workflow of using profiling tools
+to find candidate kernels for optimization, we will describe how we used just
+in time compiling to speed up these kernels. We will also describe our efforts
+to restructure the code to minimize the impact of calling expensive kernels. We
+will compare parallelization strategies using MPI and Dask, and we will discuss
+preliminary considerations for moving the code to GPUs.
 
 Profiling the code
 ------------------
