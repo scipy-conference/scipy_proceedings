@@ -27,11 +27,11 @@ Introduction
 ------------
 
 The emergent field of bioinformatics is an amalgamation of computer
-science, statistics, and biology; it has proved revolutionary in
-biomedical research.  As scientific techniques in areas such as
+science, statistics, and biology; it has proven itself revolutionary
+in biomedical research.  As scientific techniques in areas such as
 genomics and proteomics improve, they can yield larger volumes of
-valuable data that require processing in order to provide solutions to
-biological problems.
+valuable data that require processing in order to efficiently provide
+meaningful solutions to biological problems.
 
 Many bioinformaticians have already created analysis and visualization
 tools with Dash and plotly.py, but only through significant
@@ -50,23 +50,12 @@ imparts the powerful data-visualization tools and flexibility of Dash
 to the flourishing bioinformatics community.
 
 Dash
-----
+====
 
-Dash applications are written declaratively with Python. For instance,
-a simple Dash application might look like this:
-
-.. code-block:: python
-
-   import dash
-   import dash_html_components as html
-
-   app = dash.Dash()
-   app.layout = html.Div('Hello world!')
-
-   app.run_server()
-
-The :code:`dash-html-components` and :code:`dash-core-components`
-packages comprise the building blocks of a Dash
+Dash applications are web applications that are written declaratively
+with Python. In addition to the main :code:`dash` library, the
+:code:`dash-html-components` and :code:`dash-core-components` packages
+comprise the building blocks of a Dash
 app. :code:`dash-html-components` provides an interface for building
 the layout of a Dash application that mimics the process of building
 the layout of a website; :code:`dash-core-components` is a suite of
@@ -75,95 +64,219 @@ dropdowns, text inputs, and sliders) and additionally provides a
 :code:`dcc.Graph` component for interactive graphs made with
 plotly.py.
 
+For instance, a simple Dash application might look like
+this:
+
+.. code-block:: python
+
+   import dash
+   import dash_html_components as html
+
+   app = dash.Dash()
+   app.layout = html.Div('Hello, world!')
+
+   app.run_server()
+
+Upon running the above code, a :code:`localhost` address is specified
+in the console. Visiting this address in the browser yields a simple
+webpage that contains the text "Hello, world!" (see
+Fig. :ref:`helloworld`).
+
+.. figure:: helloworld.png
+
+   A simple Dash application. :label:`helloworld`
+
+Interactivity is implemented with callbacks. These allow for reading
+the values of inputs in the application (e.g., text inputs, dropdowns,
+and sliders), which can subsequently be used to compute the value of a
+property of another component in the app. The function that computes
+the output is wrapped in a decorator function that connects the
+specified inputs and outputs to user interactions with the app.  For
+instance, this :code:`dash_core_components.Input()` component controls
+the :code:`children` property of a :code:`dash_html_components.Div()`
+component:
+
+.. code-block:: python
+
+   import dash
+   import dash_html_components as html
+   import dash_core_components as dcc
+
+   app = dash.Dash()
+   app.layout = html.Div(children=[
+	html.Div(id='output-div'),
+	dcc.Input(id='text-input')
+   ])
+
+   @app.callback(
+       dash.dependencies.Output('output-div', 'children'),
+       [dash.dependencies.Input('text-input', 'value')]
+   )
+   def capitalize_user_input(text):
+	return text.upper()
+
+   app.run_server()
+
+The output of the code is shown in Fig. :ref:`helloworld`.
+
+.. figure:: helloworld_interactive.png
+
+   A simple Dash application that showcases interactivity. Text that
+   is entered into the input component is converted to uppercase and
+   displayed in the app. :label:`helloworld`
+
+React.js and Python
+===================
+
+Some of the components in the Dash Bio package are wrappers around
+pre-existing JavaScript or React libraries. The development process
+for JavaScript-based components is fairly straightforward; the only
+thing that needs to be added in many cases is an interface for Dash to
+access the state of the component and read or write to its
+properties. This provides an avenue for interactions with the
+components from within a Dash application.
+
+The package also contains three Python-based components: Clustergram,
+Manhattan Plot, and Volcano Plot. Unlike the
+React components, the Python-based components are essentially
+functions that return JSON data that is in the format of the
+:code:`figure` argument for a :code:`dash_core_components.Graph`
+component.
+
 Dash Bio Components
 -------------------
 
-React.js and Python
-###################
+Dash Bio components fall into one of three categories.
 
-Some of the components in the Dash Bio package are wrappers around
-pre-existing JavaScript or React components; an example is
-:code:`Molecule3DViewer`, which is based on
-:code:`molecule-3d-for-react` [Mol3D]_. The development process for
-JavaScript-based components is fairly straightforward; the only thing
-that needs to be added in many cases is an interface for Dash to
-access the state of the component and read or write to it. This
-provides an avenue for interactions with the components.
+Custom chart types
+  Specialized chart types that allow for intuitive
+  visualizations of complex data.
 
-The package also contains three Python-based components: Clustergram,
-Manhattan Plot, and Volcano Plot. Clustergram uses the
-:code:`plotly.py` library and popular machine-learning libraries such
-as :code:`scikit-learn` to compute hierarchical clustering. Unlike the
-React components, the Python-based components return JSON data that is
-in the format of the :code:`figure` argument for a
-:code:`dash_core_components.Graph` component.
+Three-dimensional visualization tools
+  Structural diagrams of biomolecules that support a wide variety of
+  user interactions.
 
-Component Categories
-####################
+Sequence analysis tools
+  Interactive and searchable genomic and proteomic sequences, with
+  additional features such as multiple sequence alignment.
 
-Dash Bio components fall into one of three categories: custom chart
-types, 3D visualization tools, and sequence analysis tools.
 
-Custom Chart Types
+Circos
+======
+
+.. figure:: circos.png
+   :scale: 25%
+   :figclass: bht
+
+   A simple Circos graph with chords connecting pairs of data
+   points. :label:`circos`
+
+Circos is a circular graph. It can be used to highlight relationships
+between, for example, different genes by drawing chords that connect
+the two (see Fig. :ref:`circos`).
+
+The Dash Bio Circos component is a wrapper of the [CircosJS]_ library,
+which supports additional graph types like heatmaps, scatter plots,
+histograms, and stacked charts. Input data to the component take the
+form of a dictionary, and are supplied to the :code:`tracks` property
+of the component.
+
+Clustergram
+===========
+
+.. figure:: clustergram.png
+   :figclass: bht
+
+   A Dash Bio clustergram displaying hierarchical clustering of gene
+   expression data from two lung cancer subtypes. Data taken from
+   [KR09]_. :label:`clustergram`
+
+A clustergram is a combination heatmap-dendrogram that is commonly used
+in gene expression data. The hierarchical clustering that is
+represented by the dendrograms can be used to identify groups of genes
+with related expression levels.
+
+The Dash Bio Clustergram component takes as input a two-dimensional
+numpy array of floating-point values. Imputation of missing data and
+computation of hierarchical clustering both occur within the component
+itself. Clusters that are past a user-defined threshold of similarity
+comprise a single trace in the corresponding dendrogram, and can be
+highlighted with annotations (see Fig. :ref:`clustergram`).
+
+The user can specify additional parameters to customize the metrics
+and methods used to compute parts of the clustering, such as the
+pairwise distance between observations and the linkage matrix.
+
+Ideogram
+========
+
+.. figure:: ideogram.png
+   :figclass: bht
+
+   A Dash Bio ideogram demonstrating the homology feature. :label:`ideogram`
+
+Ideogram is a graphical representation of chromosomal
+data. Annotations can be made to different portions of each chromosome
+and displayed in the form of bands, and relationships between
+different chromosomes can be highlighted by using the homology feature
+to connect a region on one chromosome to a region on another (see
+Fig. :ref:`ideogram`). The ideogram component is based on the
+:code:`ideogram.js` library [Ideo]_.
+
+Manhattan Plot
+==============
+
+.. figure:: manhattan.png
+   :figclass: bht
+
+   A Manhattan plot. The threshold level is denoted by the red line;
+   all points of interest are colored red. The purple line is the
+   suggestive line. :label:`manhattan`
+
+A Manhattan plot is a plot commonly used in genome-wide association
+studies; it can highlight specific nucleotides that, when changed, are
+associated with certain genetic conditions.
+
+The Dash Bio Manhattan Plot uses a pandas dataframe as input data. The
+two lines on the plot (see Fig. :ref:`manhattan`) represent,
+respectively, the threshold level and the suggestive line. [#]_ The
+y-values of these lines are controlled by the parameters
+:code:`genomewideline_value` and :code:`suggestiveline_value` that are
+supplied to the :code:`ManhattanPlot` object.
+
+.. [#] Information about the meaning of these two lines can be found
+       in [ER15]_.
+
+Needle Plot
+===========
+
+.. figure:: needle.png
+   :figclass: bht
+
+   A needle plot.
+
+Needle Plot is essentially a bar plot for which the bars have been
+replaced with a marker at the top of the bar and a line from the
+x-axis to the aforementioned marker. It is useful when visualizing
+dense datasets that can look "busy" when represented with a bar plot.
+
+Volcano Plot
+============
+Volcano Plot is a plot used to concurrently display the
+statistical significance and the "fold change" (i.e., the ratio of a
+measurement to its preceding measurement) of data.
+
+Molecule 3D Viewer
 ==================
+Molecule 3D Viewer is a tool that can be used to display molecular
+structures. It can render a variety of styles, including ribbon
+diagrams.
 
-Specialized chart types allow for intuitive visualizations of complex
-datasets.
-
-**Circos** is a circular representation of data based on the
- CircosJS library. [TODO add citation] Within its circular layout, it
- can display a multitude of different plot types. Circos can be used
- to denote relationships between, for example, different genes with
- the "chords" property; an organism's genome can be wrapped around the
- circle, and a chord can connect one part the circle, or one gene, to
- another. [TODO add pic of chords] Circos also can display heatmaps,
- scatter plots, histograms, and stacked charts. [TODO add pic of all
- other types of circos plots]
-
-**Clustergram** is a combination heatmap-dendrogram that is commonly
- used in gene expression data. The hierarchical clustering that is
- represented by the dendrograms can be used to identify groups of
- genes with related expression levels. [TODO include image of
- clustergram] It also supports creating annotations for specific
- clusters from within a Dash application. This makes use of the
- :code:`clickData` property of the :code:`dash_core_components.Graph`
- component to determine which cluster has been clicked, and reads data
- from a color picker and a text input to, respectively, color and
- label the annotation. [TODO add image of annotation] Calculation of
- hierarchical clustering for a dataset happens within the component
- itself and uses the :code:`scikit-learn` and :code:`scipy` libraries.
-
-**Ideogram** is a graphical representation of chromosomal
- data. Annotations can be made to different portions of each
- chromosome and displayed in the form of bands.
-
-**Manhattan Plot** is a plot commonly used in genome-wide association
- studies; it can highlight specific nucleotides that, when changed,
- are associated with certain genetic conditions.
-
-**Needle Plot** is essentially a bar plot for which the bars have been
- replaced with a marker at the top of the bar and a line from the
- x-axis to the aforementioned marker. It is useful in dense data sets
- that can look "busy" when represented with a bar plot.
-
-**Volcano Plot** is a plot used to concurrently display the
- statistical significance and the "fold change" (i.e., the ratio of a
- measurement to its preceding measurement) of data.
-
-3D Visualization Tools
-======================
-
-Three-dimensional visualizations of biomolecules are beautiful and can
-additionally shed insight into certain biological mechanisms (e.g.,
-protein binding).
-
-**Molecule 3D Viewer** is a tool that can be used to display molecular
- structures. It can render a variety of styles, including ribbon
- diagrams.
-
-**Speck** is a WebGL-based 3D renderer that uses techniques like
- ambient occlusion and outlines to provide a rich view of molecular
- structures.
+Speck
+=====
+Speck is a WebGL-based 3D renderer that uses techniques like
+ambient occlusion and outlines to provide a rich view of molecular
+structures.
 
 Sequence Analysis Tools
 =======================
@@ -203,3 +316,7 @@ References
 
 .. [Mol3D] Autodesk. *Molecule 3D for React*. GitHub repository:
 	     `<https://github.com/plotly/molecule-3d-for-react>`_
+.. [CircosJS] Girault, Nic. *circosJS: d3 library to build circular graphs*. GitHub repository: `<https://github.com/nicgirault/circosJS>`_
+.. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global gene expression analysis reveals specific patterns of cell junctions in non-small cell lung cancer subtypes.* Lung Cancer 2009 Jan;63(1):32-8. PMID: 18486272
+.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with JavaScript*. GitHub repository: `<https://github.com/eweitz/ideogram>`_
+.. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and Foulkes, A. S. (2015) *A guide to genome‐wide association analysis and post‐analytic interrogation.* Statist. Med., 34: 3769– 3792. doi: 10.1002/sim.6605.
