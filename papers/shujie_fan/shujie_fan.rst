@@ -31,15 +31,12 @@ A Numerical Perspective to Terraforming a Desert
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
-
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+   PMDA is a Python library that provides parallel analysis algorithms based 
+   on MDAnalysis. With a simple map-reduce scheme from Dask library, PMDA 
+   provides pre-defined analysis tasks and a common interface to create 
+   user-defined analysis taks. Although still in alpha stage, it is already 
+   used on resources ranging from multi-core laptops to XSEDE supercomputers 
+   to speed up analysis of molecular dynamics trajectories.
 
 .. class:: keywords
 
