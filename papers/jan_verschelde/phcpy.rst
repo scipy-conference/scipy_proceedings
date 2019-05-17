@@ -63,7 +63,7 @@ three instances in the research literature of symbolic computation, geometry and
 * Roots of Alexander polynomials [CD18]_.
 * Critical points of equilibrium problems [SWM16]_.
 
-phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.4 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
+phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.5 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
 
 Mission
 ---------
@@ -98,7 +98,7 @@ CGI Scripting
 
 In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.  MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
-As of the middle of May 2019, our web server has 145 user accounts.
+As of the middle of May 2019, our web server has 146 user accounts.
 
 JupyterHub
 ----------
