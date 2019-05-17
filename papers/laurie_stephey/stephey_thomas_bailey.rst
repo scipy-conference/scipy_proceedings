@@ -70,7 +70,7 @@ million galaxies and use spectroscopically obtained redshift data to obtain
 their distances. This information will allow the most detailed 3D map of the
 universe to be constructed, which will help better understand the role of dark
 energy throughout the history of the universe. An image of the Mayall
-telescope, in Kitt Peak, Arizona, where the DESI instrument is installed, is
+telescope, on Kitt Peak, Arizona, where the DESI instrument is installed, is
 shown in Figure :ref:`kittpeak`.
 
 .. figure:: figures/desi_kitt_peak.png
@@ -121,7 +121,7 @@ spectroscopic data processing on the NERSC Cori KNL partition. NERSC is the
 National Energy Research Scientific Computing center
 :cite:`noauthor_national_nodate`. It is the largest Department of Energy
 computing facility in terms of number of users (7000) and scientific output
-:cite:`noauthor_publications_nodate`. Cori is NERSC's current flagship system,
+:cite:`noauthor_publications_nodate`. Cori is NERSC's current flagship supercomputer,
 a Cray XC40 with a theoretical peak of 28 PF, comprised of approximately 20
 percent Intel Haswell nodes and 80 percent manycore Intel Knights Landing (KNL)
 nodes.  Achieving good performance with the manycore KNL nodes has proven
@@ -130,11 +130,11 @@ called NESAP (NERSC Exascale Science Applications Program,
 :cite:`noauthor_nesap_nodate`). NESAP provides technical expertise from NERSC
 staff and vendors like Intel and Cray to a select set of science teams to
 improve the performance of their application on the Cori KNL partition.
-Achieving optimal Python peformance on KNL is especially challenging due a
+Achieving optimal Python performance on KNL is especially challenging due a
 slower clock speed and difficulty taking advantage of the KNL AVX-512 vector
 units (which is not possible in native Python). A more detailed discussion of
 the difficulties of extracting Python performance on KNL can be found in
-:cite:`ronaghi_python_2017`. Desipite these difficulties, DESI requested
+:cite:`ronaghi_python_2017`. Despite these difficulties, DESI requested
 that their code should not be re-written in another language like C due
 to their own limited developer resources.
 
@@ -181,11 +181,17 @@ because it didn't require any additions or changes to the DESI code. cProfile
 can write data to a human-readable file, but we found that using either
 Snakeviz :cite:`noauthor_snakeviz_nodate` or gprof2dot
 :cite:`fonseca_converts_2019` to visualize the profiling data was substantially
-more clear and useful.  An example of data collected using cProfile and
-visualized with gprof2dot is shown in Figure :ref:`gprof2dot`. We prefer
-gprof2dot visualizations to Snakeviz because they are static images instead of
-browser-based. However, if you prefer accessing the cProfile data interactively,
-Snakeviz can provide this functionality.
+more clear and useful.
+
+An example of data collected using cProfile and visualized with gprof2dot is
+shown in Figure :ref:`gprof2dot`. We prefer gprof2dot to Snakeviz
+visualizations because they are static images instead of browser-based. This
+makes them easier to store, share, quickly view, and embed in papers and talks.
+If you prefer accessing the cProfile data interactively, and clicking on a
+function to see all of its children, for example, Snakeviz can provide this
+functionality. However, we found the several extra steps required to use
+Snakeviz, and the difficulty storing and sharing the visualizations, made it
+less appealing than gprof2dot. 
 
 Examining the visualized cProfile data allowed us to identify expensive kernels
 in the DESI calculation. In Figure :ref:`gprof2dot`, the functions are
@@ -210,9 +216,9 @@ functions that he or she wishes to profile. For a small code this exercise
 might be trivial, but for the many thousand line DESI code 1) hand-decorating
 every function would have been both extremely time-consuming and 2) searching
 through the line_profiler output data to find expensive functions would have
-also been cumbersome. For this reason we recommend starting with cProfile and
-then moving to line_profiler once the user has identified a few key functions
-of interest.
+also been cumbersome and potentially error-prone. For this reason we recommend
+starting with cProfile and then moving to line_profiler once the user has
+identified a few key functions of interest.
 
 Once decorated, line_profiler provides a great deal of information
 for each line of the function, including how many times each line was invoked
@@ -222,16 +228,16 @@ information was vital to our optimization efforts because it could point to
 functions that were particularly expensive, such as numpy's legval or scipy's
 erf. Once we had this information, we could make decisions about how to try to
 reduce the time spent in these functions, either by speeding up the functions
-themselves through JIT-compiling, or by restructuring the code to avoid calling
+themselves by JIT-compiling, or by restructuring the code to avoid calling
 these expensive functions as often. We will describe both approaches in the
 sections that follow.
 
 Together, cProfile and line_profiler were sufficient for almost all of the
-performance optimization work that we performed in this case study. However,
+performance optimization work in this case study. However,
 because the DESI extraction code is an MPI code, these profiling tools do have
 some limitations.  Both of these tools can be used to collect data for each MPI
 rank, but visualizing and using the information in a meaningful way is
-challenging, especially when there are 68 outputs from a KNL core, for example.
+challenging, especially when there are 68 outputs from a KNL node, for example.
 
 .. figure:: figures/line_profiler_xypix.png
 
@@ -247,14 +253,23 @@ Vtune and Tau
 Once we reached the point where we wanted to investigate 1) each individual MPI
 rank and 2) whether all ranks were appropriately load-balanced, we needed more
 powerful profiling tools like Intel Vtune :cite:`admin_python*_nodate` and Tau
-:cite:`noauthor_tau_nodate`. Because only a subset of the Vtune capabilities
-are currently available for Python codes, we ultimately found the Tau profiler
-more useful and well-suited for our application. Tau provided clear information
-about how each MPI rank was occupied and how each rank compared to the others.
-A sample Tau output window is shown in Figure :ref:`tau`. These profiling data
-were obtained before the DESI frame was parallelized over subbundles, leaving
-12 of the 32 Haswell ranks unoccupied. It is clear from this Tau visualization
-that we were not making good use of processor resources.
+:cite:`noauthor_tau_nodate`. We started with Vtune but ultimately found this
+was an unsatisfying tool for several reasons. We found that it was difficult to
+get the information we wanted in a clear, understandable format. For example,
+Vtune would often display extremely low-level information that obfuscated the
+higher-level Python calls we were trying to investigate. It also offered almost
+no helpful visualizations. We ultimately found the Tau profiler more useful and
+well-suited for our application, although we should note that we required the
+help of the Tau developers to build it. (Tau works best when it is built for
+the type of application you will profile. In our case it was a Python MPI code
+running on a Cray system, all of which are configurations that Tau supports.)
+Though building a profiling tool from scratch was non-trivial, it was also very
+possible with the help of the Tau team. Once built, Tau provided clear
+information about how each MPI rank was occupied and how each rank compared to
+the others.  A sample Tau output window is shown in Figure :ref:`tau`. These
+profiling data were obtained before the DESI frame was parallelized over
+subbundles, leaving 12 of the 32 Haswell ranks unoccupied. It is clear from
+this Tau visualization that we were not making good use of processor resources.
 
 .. figure:: figures/tau_main.png
 
@@ -265,18 +280,8 @@ that we were not making good use of processor resources.
    parallelization of subbundles, rather than bundles, which could more flexibly
    utilize the whole processor's resources. :label:`tau`
 
-Optimization strategies
------------------------
-
-We have employed two overarching strategies to make the DESI spectral
-extraction code run faster. The first has been to make the expensive functions
-we identified through profiling themselves faster through just-in-time (JIT)
-compiling. The second has been to restructure the code in ways that mitigate
-the impact of these expensive functions. We will discuss both of these
-strategies in greater detail in the two sections that follow.
-
 Just-in-time (JIT) compilation with Numba
-------------------------------------------
+-----------------------------------------
 
 The first major approach to achieve speedups in this work has been to focus on
 making expensive functions run more quickly. To achieve this, we have used
@@ -290,7 +295,8 @@ expensive. These functions were 1) numpy.polynomial.legendre.legval
 these functions as legval, erf, and hermitenorm.
 
 legval was perhaps the most straightforward of these three to JIT compile.
-Unlike Python, Numba will note tolerate type inference. The types and sizes of
+Unlike Python, Numba will allow all variables and arrays to have only a single type.
+The types and sizes of
 all variables must be known prior to compile time. This required several small
 changes to the legval algorithm to put it in the form required by Numba.
 Several other lines of the function that performed type checking were removed.
@@ -316,17 +322,24 @@ scipy functions. This meant that we needed to extract the core part of these
 scipy functions and mold them into a form that Numba will accept. For scipy
 erf, this meant translating the Fortran source code into Python. For scipy
 hermitenorm which was fortunately already in Python, algorithmic changes
-similar to those we made in legval were necessary to remove all type inference
-and prevent variables/arrays from changing size.
+similar to those we made in legval were necessary to ensure all variables
+were a constant type and size.
+
+We should note that we tried to cache the compiled Numba functions with the cache=True
+option to save time, but with larger numbers of MPI ranks, we found that this sometimes caused
+a data race between the Numba caches written by each rank. To avoid this problem we
+considered using ahead of time (AOT) instead of JIT compiling but since this change
+was somewhat cumbersome, for now we removed the cache=True setting and will consider
+using AOT in the future.
 
 Restructuring the code
 ----------------------
 
 The second major optimization strategy we used was to intelligently
-re-structure the code. This meant that we 1) tried to call expensive functions
+restructure the code. This meant that we 1) tried to call expensive functions
 fewer times, which often meant that we 2) tried to call expensive functions
 with vectors rather than scalars, and 3) had to add machinery to store these
-results and use them as necessary.
+results and reuse them as necessary.
 
 Implement subbundles
 ~~~~~~~~~~~~~~~~~~~~
@@ -369,7 +382,7 @@ values stored in the dictionary.
 Parallelize over subbundles instead of bundles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The current DESI MPI framework is to split the original communicator into n
+The current DESI MPI framework is to split COMM_WORLD into n
 bundle communicators where n is the number of processors per chip. This is
 inefficient on a single processor because 20 bundles only use a fraction of the
 available processors on either a Haswell or KNL. To process additional frames
@@ -388,7 +401,7 @@ this number is 19 (ceil 600/32), and on KNL, this number is 9 (ceil 600/68).
 
 Dividing the workload into subbundles (smaller bundles) means that about 500
 spectra are now more evenly doled out to 32 processors (about 16 spectra each)
-or 68 processors (about 7 spectra each). The comm.world communicator
+or 68 processors (about 7 spectra each). The COMM_WORLD communicator
 orchestrates all 30 frames within a single exposure, and the frame level
 communicator orchestrates the subbundle processing within the frame.
 Implementing this change was nontrivial but the speedup and flexibility gains
@@ -414,7 +427,7 @@ to 130 seconds for Haswell, and from 1146 s to 116 s for Ivy Bridge. The
 overall increases in raw speed varied between 7-10x for each architecture. One
 major goal of the NESAP program was to reduce the DESI runtime on KNL to below
 the original Edison Ivy Bridge benchmark, which is indicated by the red dotted
-line. Once we implemented our xypix fix, we achieved this goal.
+line. Once we implemented our legval cache fix, we achieved this goal.
 
 .. figure:: figures/single_node_benchmark.png
 
@@ -423,7 +436,7 @@ line. Once we implemented our xypix fix, we achieved this goal.
 
 A more meaningful benchmark for DESI is the number of frames that can be
 processed during a given amount of time using a given number of nodes. We call
-this metric "frames per node hour". We performed these frames per node hour
+this throughput metric "frames per node hour". We performed these frames per node hour
 benchmarks with a full exposure (30 frames), instead of a single frame, on
 either 19 or 9 nodes for Haswell and KNL, respectively. Though a single
 exposure is still a relatively small test because DESI expects to collect 50 or
@@ -434,7 +447,7 @@ that MPI overhead begins to play in multi-node jobs, which is a real factor the
 DESI will have to contend with during its large processing runs. The frames per
 node hour results are plotted in Figure :ref:`framespernodehour`. While the
 increases in throughput we have obtained are more modest than the raw speedup,
-these values a more accurate representation of the actual improvements in
+these values are a more accurate representation of the actual improvements in
 DESI's processing capability. For this reason we emphasize that we were able to
 achieve a 5-7x throughput increase instead of the (more exciting but less
 meaningful) 7-10x in raw processing speed.
@@ -450,7 +463,7 @@ according to their type. Perhaps these results are the most generally
 instructive. First, they demonstrate the restructuring-based optimizations were
 more valuable the JIT-based optimizations. For example, the overall speedup of
 adding the legval cached values was approximately 1.7x, although this was also
-the most cumbersome of all the optimizations in this study. In contrast, our
+the most difficult of all the optimizations in this study. In contrast, our
 relatively painless JIT compiled optimizations were not as effective in terms
 of speedup, averaging between a factor of 1.1-1.5x improvement. The takeaway
 from these results might be that if a developer has enough time, the larger,
@@ -496,7 +509,7 @@ within DESI. The first was the relative inflexibility of the division of work
 between bundles (although this has been addressed now in the subbundle
 division). The second was the issue of resiliency: if a node goes down, it will
 take the entire MPI job with it. (This is not an issue in Dask, in which dead
-workers can be revived and the calculation can continue.) An additional feature
+workers can be seamlessly revived while the calculation continues.) An additional feature
 we liked about Dask is the ability to monitor Dask jobs in real time with their
 Bokeh status page. We thought Dask seemed promising enough that it was worth
 taking a careful look at what it would mean to replace the DESI MPI with Dask.
@@ -505,9 +518,9 @@ Dask is a task-based parallelization system for Python. It is comprised of a
 scheduler and some number of workers which communicate with each other via a
 client. Dask is more flexible than traditional MPI because it can start workers
 and collect their results via a concurrent futures API. (It should be noted
-that this is also possible in MPI with dynamic process management, but we
-haven't tried this yet. is it even officially supported? Rollin what should I
-say here?)
+that this is also possible in MPI with dynamic process management, but since
+Cray does not officially support this due to problems with SLURM functionality,
+we haven't been able to try this API.)
 
 During this process, we discovered that is that it is non-trivial to convert a
 code already written in MPI to Dask, and it would likely be difficult to
@@ -558,7 +571,7 @@ matrix sizes increase. We have measured the runtime of scipy.lialg.eigh and
 cupy.linalg.eigh :cite:`noauthor_cupy.linalg.eigh_nodate` on Edison Ivy Bridge
 and Cori Haswell, KNL, and the new Cori Volta GPUs. Figure :ref:`eigh` shows
 the eigh runtime for various sizes of positive definite input matrices. These
-results show that at low matrix sizes, perhaps unsurprinsgly, the Volta
+results show that at low matrix sizes, perhaps unsurprisingly, the Volta
 performs poorly, but at larger matrix sizes (above 1000) the Volta performance
 dominates by an order of magnitude. This demonstrates, at least for scipy eigh,
 that breaking the DESI frame into fewer, larger pieces for a GPU could result
@@ -582,46 +595,50 @@ vendor, is still an open question for us.
 Conclusions and Future Work
 ---------------------------
 
-Over the course of this work, we have achieved our goal of speeding up the DESI
-spectral extraction code on NERSC Cori Haswell and KNL processors. Our
-strategy was as follows: we employed profiling tools, starting with the most
-simple tools and progressing as necessary to more complex tools, to get an idea
-of which kernels are most expensive and what types of structural changes could
-help improve runtime and flexibility. We used Numba to JIT compile several
-expensive functions. This was a relatively quick way to obtain some speedup
-without changing many lines of code. We also made larger structural changes to
-avoid calling expensive functions and also to increase the flexibility and
-efficiency of the parallelism. In general these larger structural changes were
-more complex to implement, as well as more time consuming, but also resulted in
-the biggest payoff in terms of speedup. We considered changing the parallelism
-strategy from MPI to Dask, but ultimately found that changing an existing code
-is non-trivial due to the fundamentally different strategies of dividing the
-workload, and decided to continue using MPI. Finally, we are now investigating
-how the DESI code could run effectively on GPUs since the next NERSC system
-will include a large CPU and GPU partition. Exploratory studies on how the DESI
-code can be optimized for this new architecture are being performed now and
-will continue as future work.
+Over the course of this work, we have achieved our goal of speeding up the
+throughput of the DESI spectral extraction code on NERSC Cori Haswell and KNL
+processors by a factor of 5-7x. Our strategy was as follows: we employed
+profiling tools, starting with the most simple tools (cProfile + gprof2dot) and
+progressing as necessary to more complex tools (line_profiler and Tau), to get
+an idea of which kernels are most expensive and what types of structural
+changes could help improve runtime and flexibility. We used Numba to JIT
+compile several expensive functions. This was a relatively quick way to obtain
+some speedup without changing many lines of code. We also made larger
+structural changes to avoid calling expensive functions and also to increase
+the flexibility and efficiency of the parallelism. In general these larger
+structural changes were more complex to implement, as well as more time
+consuming, but also resulted in the biggest payoff in terms of speedup. We
+considered changing the parallelism strategy from MPI to Dask, but ultimately
+found that changing an existing code is non-trivial due to the fundamentally
+different strategies of dividing the workload, and decided to continue using
+MPI. Finally, we are now investigating how the DESI code could run effectively
+on GPUs by since the next NERSC system Perlmutter will include a large CPU and
+GPU partition. Exploratory studies for how the DESI code can be optimized are
+being performed using scipy.linalg.eigh and cupy.linlg.eigh as a test case now
+and will continue as future work.
 
 Acknowledgments
 ---------------
 
 The authors thank their partners at Intel, the Intel Python Team, Intel tools
-developers, performance engineers, and their management. This work used
-resources of the National Energy Research Scientific Computing Center, a DOE
-Office of Science User Facility supported by the Office of Science of the U.S.
-Department of Energy under Contract No. DE-AC02-05CH11231. Additionally, this
-research is supported by the Director, Office of Science, Office of High Energy
-Physics of the U.S. Department of Energy under Contract No.  DE–AC02–05CH1123,
-and by the National Energy Research Scientific Computing Center, a DOE Office
-of Science User Facility under the same contract; additional support for DESI
-is provided by the U.S. National Science Foundation, Division of Astronomical
-Sciences under Contract No.  AST-0950945 to the National Optical Astronomy
-Observatory; the Science and Technologies Facilities Council of the United
-Kingdom; the Gordon and Betty Moore Foundation; the Heising-Simons Foundation;
-the National Council of Science and Technology of Mexico, and by the DESI
-Member Institutions.  The authors are honored to be permitted to conduct
-astronomical research on Iolkam Du’ag (Kitt Peak), a mountain with particular
-significance to the Tohono O’odham Nation.
+developers, performance engineers, and their management. The authors also would
+like to thank the Tau Performance System team at the University of Oregon for
+their help in building Tau for our application. This work used resources of the
+National Energy Research Scientific Computing Center, a DOE Office of Science
+User Facility supported by the Office of Science of the U.S.  Department of
+Energy under Contract No. DE-AC02-05CH11231. Additionally, this research is
+supported by the Director, Office of Science, Office of High Energy Physics of
+the U.S.  Department of Energy under Contract No.  DE–AC02–05CH1123, and by the
+National Energy Research Scientific Computing Center, a DOE Office of Science
+User Facility under the same contract; additional support for DESI is provided
+by the U.S. National Science Foundation, Division of Astronomical Sciences
+under Contract No.  AST-0950945 to the National Optical Astronomy Observatory;
+the Science and Technologies Facilities Council of the United Kingdom; the
+Gordon and Betty Moore Foundation; the Heising-Simons Foundation; the National
+Council of Science and Technology of Mexico, and by the DESI Member
+Institutions.  The authors are honored to be permitted to conduct astronomical
+research on Iolkam Du’ag (Kitt Peak), a mountain with particular significance
+to the Tohono O’odham Nation.
 
 
 
