@@ -628,6 +628,19 @@ References
   Journal of Chemical Theory and Computation, 14, pages 3504–3511, 2018.
   DOI 10.1021/acs.jctc.8b00286.
 
+.. [Pascal] *JupyterHub deployment of phcpy.*
+    Website, accessed May 2019, 2017.
+    https://pascal.math.uic.edu.
+
+.. [JUP15] *Jupyter notebook snippets menu.*
+     jupyter contrib nbextensions 0.5.0 documentation, 2015.
+     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
+
+.. [HS15] H. Schenck
+    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
+    Bulletin of the American Mathematical Society, 53.1, 179–86, 2015.
+    DOI: 10.1090/bull/1520
+
 .. [AD18] A. Dickenstein
     *Algebraic geometry in the interface of pure and applied mathematics.*
     Rio Intelligencer, ICM, 2018.
@@ -638,15 +651,37 @@ References
     Slides presented at Advances @ SIAM AG15, U Notre Dame, 2015.
     https://danielleamethyst.org/resources/presentations/talks/siam_AG2015_numerical_AG_overview.pdf.
 
-.. [HS15] H. Schenck
-    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
-    Bulletin of the American Mathematical Society, 53.1 (2015), 179–86
-    DOI: 10.1090/bull/1520
+.. [GBH16] E. Gross, D. Brent, K. L. Ho, D. J. Bates, & H. A. Harrington
+    *Numerical algebraic geometry for model selection and its application to the life sciences.*
+    Journal of The Royal Society Interface, 13: 20160256. 2016.
+    DOI: 10.1098/rsif.2016.0256.
 
-.. [Pascal] *JupyterHub deployment of phcpy.*
-    Website, accessed May 2019, 2017.
-    https://pascal.math.uic.edu.
+.. [GHR16] E. Gross, H. A. Harrington, Z. Rosen, & B. Sturmfels
+    *Algebraic Systems Biology: A Case Study for the Wnt Pathway. Bulletin of Mathematical Biology.*
+    Bulletin of Mathematical Biology 78, pages 21–51, 2016.
+    DOI: 10.1007/s11538-015-0125-1.
 
-.. [JUP15] *Jupyter notebook snippets menu.*
-     jupyter contrib nbextensions 0.5.0 documentation, 2015.
-     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
+.. [HHS13] W. Hao, J. D. Hauenstein, C.-W. Shu, A. J. Sommese, Z. Xu, & Y.-T. Zhang
+    *A homotopy method based on WENO schemes for solving steady state problems of hyperbolic conservation laws.*
+    Journal of Computational Physics, 250, pages 332–346. 2013.
+    DOI: 10.1016/j.jcp.2013.05.008.
+
+.. [HHM13] J. Hauenstein, Y.-H. He, & D. Mehta
+    *Numerical elimination and moduli space of vacua.*
+    Journal of High Energy Physics, 83. 2013.
+    DOI: 10.1007/JHEP09(2013)083.
+
+.. [PSC13] V. Pereyra, M. Saunders, & J. Castillo
+    *Equispaced Pareto front construction for constrained bi-objective optimization.*
+    Mathematical and Computer Modelling, 57, pages 2122–2131. 2013.
+    DOI: 10.1016/j.mcm.2010.12.044.
+
+.. [SWM16] H. Sidky, J. K. Whitmer, & D. Mehta
+    *Reliable mixture critical point computation using polynomial homotopy continuation.*
+    AIChE Journal, 62, pages 4497–4507. 2016.
+    DOI: 10.1002/aic.15319.
+
+.. [WS11] C. W. Wampler & A. J. Sommese
+    *Numerical algebraic geometry and algebraic kinematics.*
+    Acta Numerica, 20, pages 469–567. 2011.
+    DOI: 10.1017/S0962492911000067.
