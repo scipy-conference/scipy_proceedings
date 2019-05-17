@@ -74,17 +74,21 @@ phcpy wraps the shared object files of a compiled PHCpack, which makes the metho
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
 
+Owing to the ubiquity of polynomial systems with interesting roots, many applications of numerical algebraic geometry to STEM problems exist in the literature. But these are often too compute-hungry for symbolic computation (e.g. via Groebner bases), so numerical solution is valuable.
+
+Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2). In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
+
 Related Software
 ----------------
-Limiting to free and open source software, currently under development,
-with a presence on github, we can list three related software packages:
-Bertini 2.0 [Bertini2.0]_, HomotopyContinuation.jl [HCJL]_,
-and NAG4M2 [NAG4M2]_.
 
-NAG4M2 as a Macaulay2 [M2]_ package, described in [Ley11]_,
-provided the starting point for the development of PHCpack.m2 [GPV13]_.
-The Julia package [HCJL]_ was presented at ICMS 2018 [BT18]_.
-An earlier version to [Bertini2.0]_ is explained in [BHSW13]_.
+PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences. Bertini 1 is documented in a monograph (as mentioned above), which is not widely available.
+
+HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
+
+NAG4M2 [NAG4M2]_ is a package for Macaulay2 (a standard computational algebra system [M2]_), which can also act an interface to PHCpack or Bertini. As described in [Ley11]_, it provided the starting point for PCHpack's Macaulay2 bindings [GPV13]_.
+
+The proprietary software Hom4PS-3 [TODO] features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
+
 
 User Interaction
 ================
@@ -129,6 +133,9 @@ Direct Manipulation
 
 [Discuss Javascript and d3.js support in Jupyter Notebook.
  Relevance to computational geometry.]
+
+One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of the circle problem of Apollonius. The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017.
+
 
 Solving Polynomial Systems
 ==========================
@@ -333,19 +340,8 @@ constraint solving, two of which are tutorialized for phcpy.
 
 [DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
 
-Real-Time Interaction
----------------------
-
-Another example from the phcpy tutorial is the circle problem of Apollonius...
-
-[cite scipy poster]
-
-Rigid Graph Theory
-------------------
-
-[BELT18]_
-
-Also, a simpler example of mechanism design:
+Motion Planning & Mechanism Design
+----------------------------------
 
 Fig. :ref:`fig4barcoupler` illustration a reproduction
 of a result in the mechanism design literature [MW90]_.
@@ -364,14 +360,28 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
+Rigid Graph Theory
+------------------
+
+[BELT18]_
+
+
+Systems Biology & Model Selection
+---------------------------------
+
+[AD18]_
+
+
 Critical Point Computation
 --------------------------
 
 [SWM16]_
 
-(Consider also methods not implemented with phcpack that could be. multiobjective optimization? 
-http://www-leland.stanford.edu/group/SOL/reports/SOL-2010-1.pdf
-)
+
+Statistics & Physics
+--------------------------
+
+expand [HS15]_
 
 Conclusion
 ==========
@@ -627,6 +637,11 @@ References
     *Advances in Software in Numerical Algebraic Geometry.*
     Slides presented at Advances @ SIAM AG15, U Notre Dame, 2015.
     https://danielleamethyst.org/resources/presentations/talks/siam_AG2015_numerical_AG_overview.pdf.
+
+.. [HS15] H. Schenck
+    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
+    Bulletin of the American Mathematical Society, 53.1 (2015), 179–86
+    DOI: 10.1090/bull/1520
 
 .. [Pascal] *JupyterHub deployment of phcpy.*
     Website, accessed May 2019, 2017.
