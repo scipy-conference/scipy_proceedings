@@ -168,18 +168,18 @@ Circos
    :scale: 25%
    :figclass: bht
 
-   A simple Circos graph with chords connecting pairs of data
-   points. :label:`circos`
+   A simple Dash Bio Circos component with chords connecting pairs of
+   data points. :label:`circos`
 
 Circos is a circular graph. It can be used to highlight relationships
 between, for example, different genes by drawing chords that connect
 the two (see Fig. :ref:`circos`).
 
-The Dash Bio Circos component is a wrapper of the [CircosJS]_ library,
-which supports additional graph types like heatmaps, scatter plots,
-histograms, and stacked charts. Input data to the component take the
-form of a dictionary, and are supplied to the :code:`tracks` property
-of the component.
+The Dash Bio Circos component is a wrapper of the :code:`CircosJS`
+[Circos]_ library, which supports additional graph types like
+heatmaps, scatter plots, histograms, and stacked charts. Input data to
+the component take the form of a dictionary, and are supplied to the
+:code:`tracks` property of the component.
 
 Clustergram
 ===========
@@ -187,7 +187,7 @@ Clustergram
 .. figure:: clustergram.png
    :figclass: bht
 
-   A Dash Bio clustergram displaying hierarchical clustering of gene
+   A Dash Bio clustergram component displaying hierarchical clustering of gene
    expression data from two lung cancer subtypes. Data taken from
    [KR09]_. :label:`clustergram`
 
@@ -213,15 +213,22 @@ Ideogram
 .. figure:: ideogram.png
    :figclass: bht
 
-   A Dash Bio ideogram demonstrating the homology feature. :label:`ideogram`
+   A Dash Bio ideogram component demonstrating the homology feature
+   with two human chromosomes. :label:`ideogram`
 
-Ideogram is a graphical representation of chromosomal
-data. Annotations can be made to different portions of each chromosome
-and displayed in the form of bands, and relationships between
-different chromosomes can be highlighted by using the homology feature
-to connect a region on one chromosome to a region on another (see
-Fig. :ref:`ideogram`). The ideogram component is based on the
-:code:`ideogram.js` library [Ideo]_.
+An ideogram is a schematic representation of genomic data. Chromosomes
+are represented as strands, and the location of specific genes is
+denoted by bands on the chromosomes.
+
+The Dash Bio Ideogram component is built on top of the
+:code:`ideogram.js` library [Ideo]_, and includes features like
+annotations, histograms, and homology (see
+Fig. :ref:`ideogram`). Annotations can be made to different portions
+of each chromosome and displayed in the form of bands, and
+relationships between different chromosomes can be highlighted by
+using the homology feature to connect a region on one chromosome to a
+region on another (see Fig. :ref:`ideogram`). The ideogram component
+is based on the
 
 Manhattan Plot
 ==============
@@ -237,12 +244,13 @@ A Manhattan plot is a plot commonly used in genome-wide association
 studies; it can highlight specific nucleotides that, when changed, are
 associated with certain genetic conditions.
 
-The Dash Bio Manhattan Plot uses a pandas dataframe as input data. The
-two lines on the plot (see Fig. :ref:`manhattan`) represent,
-respectively, the threshold level and the suggestive line. [#]_ The
-y-values of these lines are controlled by the parameters
-:code:`genomewideline_value` and :code:`suggestiveline_value` that are
-supplied to the :code:`ManhattanPlot` object.
+Input data to the Dash Bio ManhattanPlot component take the form of a
+pandas dataframe.  The two lines on the plot (see
+Fig. :ref:`manhattan`) represent, respectively, the threshold level
+and the suggestive line. [#]_ The y-values of these lines are
+controlled by the parameters :code:`genomewideline_value` and
+:code:`suggestiveline_value` that are supplied to the
+:code:`ManhattanPlot` object.
 
 .. [#] Information about the meaning of these two lines can be found
        in [ER15]_.
@@ -253,30 +261,89 @@ Needle Plot
 .. figure:: needle.png
    :figclass: bht
 
-   A needle plot.
+   A needle plot that shows the properties of mutations in a genomic
+   strand. :label:`needle`
 
-Needle Plot is essentially a bar plot for which the bars have been
-replaced with a marker at the top of the bar and a line from the
-x-axis to the aforementioned marker. It is useful when visualizing
-dense datasets that can look "busy" when represented with a bar plot.
+A needle plot is a bar plot for which each bar has been replaced with
+a marker at the top and a line from the x-axis to the aforementioned
+marker. Its primary use-case is visualization of dense datasets that
+can look "busy" when represented with a bar plot. In bioinformatics, a
+needle plot may be used to annotate the positions on a genome at which
+genetic mutations happen (see Fig. :ref:`needle`).
+
+The Dash Bio NeedlePlot component receives input data in a
+dictionary. It can distinguish between different types of mutations
+with different colors and marker styles, and can demarcate the domains
+of specific genes.
 
 Volcano Plot
 ============
-Volcano Plot is a plot used to concurrently display the
-statistical significance and the "fold change" (i.e., the ratio of a
-measurement to its preceding measurement) of data.
+
+.. figure:: volcano.png
+   :figclass: bht
+
+   A Dash Bio VolcanoPlot component. Points of interest are colored in
+   red, and the effect size and statistical significance thresholds
+   are represented by dashed lines. :label:`volcano`
+
+A volcano plot is a plot used to concurrently display the statistical
+significance and a defined "effect size" (e.g., the fold change [#]_)
+of a dataset. This type of plot is incredibly useful when visualizing
+a large number of data points that represent replicate data; it
+facilitates identification of data that simultaneously have
+statistical significance and a large effect.
+
+.. [#] This refers to the ratio of a measurement to its preceding
+       measurement.
+
+The Dash Bio VolcanoPlot component takes a pandas dataframe as input
+data. Lines that represent the threshold for effect size (both
+positive and negative) and a threshold for statistical significance
+can be defined by the user (see Fig. :ref:`volcano`).
 
 Molecule 3D Viewer
 ==================
-Molecule 3D Viewer is a tool that can be used to display molecular
-structures. It can render a variety of styles, including ribbon
-diagrams.
+
+.. figure:: mol3d.png
+   :scale: 35%
+   :figclass: bht
+
+   A Dash Bio Molecule3DViewer component displaying the ribbon
+   structure of a section of DNA. A selected residue is highlighted in
+   cyan. :label:`mol3d`
+
+The Dash Bio Molecule3DViewer component can be used to display
+molecular structures. These types of visualizations can
+be useful when communicating the mechanics of a biomolecular
+mechanism, as it can display the shapes of proteins and provide
+insight into the way that they bind to other biomolecules.
+
+Molecule3DViewer receives input data as a dictionary which specifies
+the layout and style of each atom in the molecule. It can render a
+variety of styles, such as stick diagrams, arrangements of spheres
+that correspond to atoms, or ribbon diagrams (see
+Fig. :label:`mol3d`).
 
 Speck
 =====
+
+.. figure:: speck.png
+   :figclass: bht
+
+   A Dash Bio Speck component displaying the atomic structure of a
+   strand of DNA in a ball-and-stick representation. Ambient occlusion
+   is used to provide realistic shading on the atoms.
+
 Speck is a WebGL-based 3D renderer that uses techniques like
 ambient occlusion and outlines to provide a rich view of molecular
-structures.
+structures (see Fig. :ref:`speck`).
+
+The Dash Bio Speck component receives input data as a dictionary that
+contains, for each atom, the atomic symbol and the position in space
+(given as x, y, and z coordinates). Parameters related to the
+rendering of the molecule, such as the atom sizes, levels of ambient
+occlusion, and outlines, can optionally be specified in another
+dictionary supplied as an argument.
 
 Sequence Analysis Tools
 =======================
@@ -316,7 +383,7 @@ References
 
 .. [Mol3D] Autodesk. *Molecule 3D for React*. GitHub repository:
 	     `<https://github.com/plotly/molecule-3d-for-react>`_
-.. [CircosJS] Girault, Nic. *circosJS: d3 library to build circular graphs*. GitHub repository: `<https://github.com/nicgirault/circosJS>`_
+.. [Circos] Girault, Nic. *circosJS: d3 library to build circular graphs*. GitHub repository: `<https://github.com/nicgirault/circosJS>`_
 .. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global gene expression analysis reveals specific patterns of cell junctions in non-small cell lung cancer subtypes.* Lung Cancer 2009 Jan;63(1):32-8. PMID: 18486272
 .. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with JavaScript*. GitHub repository: `<https://github.com/eweitz/ideogram>`_
 .. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and Foulkes, A. S. (2015) *A guide to genome‐wide association analysis and post‐analytic interrogation.* Statist. Med., 34: 3769– 3792. doi: 10.1002/sim.6605.
