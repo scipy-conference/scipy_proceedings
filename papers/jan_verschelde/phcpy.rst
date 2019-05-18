@@ -96,30 +96,28 @@ User Interaction
 CGI Scripting
 -------------
 
-In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.  MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
 
-As of the middle of May 2019, our web server has 146 user accounts.
+MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+
+As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance.
 
 JupyterHub
 ----------
 
-With JupyterHub, we provide user accounts on our server,
-which has both phcpy and SageMath pre-installed.
-
-The hub's notebook environment supports language-agnostic computations,
-supporting execution environments in several dozen languages.
-We can also run the code in a Python Terminal session.
+With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
 
 For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner that isolates the actions of users to separate processes and logins in generic home folders.
 
-The account management prompts by e-mail were hooked to a new Tornado Handler.
+The account management prompts by e-mail were hooked to new Tornado Handler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each pathway serves HTML seamlessly with the JupyterHub interface, with their forms living in new extensions of its Jinja templates.
+
 
 Code Snippets
 -------------
 
-In our JupyterHub deployment, we use the snippets menu provided by nbextensions [JUP15]_ to suggest typical applications to guide the novice user.
+Learning a new API is daunting enough without also being a crash course in algebraic geometry. Therefore, the user's manual of phcpy [TODO] begins with a tutorial section using only the blackbox solver ``phcpy.solver.solve(system, ...)``. In this API, ``system`` is a list of strings representing polynomials, terminated by semicolons, and containing as many variables as equations.
 
-The screen shot in Fig. :ref:`figsnippet` shows the code snippet with an example of use of the blackbox solver.
+The code snippets from these tutorials are available in our JupyterHub deployment, via the snippets menu provided by nbextensions [JUP15]_. This menu suggests typical applications to guide the novice user. The screen shot in Fig. :ref:`figsnippet` shows the code snippet reproduced below.
 
 .. figure:: ./bbsolvesnippet2.png
    :align: center
@@ -128,13 +126,31 @@ The screen shot in Fig. :ref:`figsnippet` shows the code snippet with an example
 
    The code snippet for the blackbox solver.  :label:`figsnippet`
 
+.. code-block:: python
+
+  # PHCpy > blackbox solver > solving trinomials > solving a specific case
+  from phcpy.solver import solve
+
+  f = ['x^2*y^2 + 2*x - 1;', 'x^2*y^2 - 3*y + 1;']
+  sols = solve(f)
+  for sol in sols: print sol
+
+The first solution of the given trinomial can be read off as (0.48613… + 0.0i, 0.34258… - 0.0i), where the imaginary part of x_0 is exactly zero, and that of y_0 negligibly small. Programmatically, these can be accessed using either ``solve(f, dictionary_output=True)``, or equivalently by parsing strings through ``[phcpy.solutions.strsol2dict(sol) for sol in solve(f)]``.
+
+
 Direct Manipulation
 -------------------
 
-[Discuss Javascript and d3.js support in Jupyter Notebook.
- Relevance to computational geometry.]
+One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of the circle problem of Apollonius. The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017 [TODO].
 
-One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of the circle problem of Apollonius. The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017.
+In fact, JupyterHub is also well-suited to mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations. For instance, the Problem of Apollonius is to construct all circles tangent to three given circles in a plane. Following the tutorial of phcpy, this forms a system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations), which we have solved interactively (Fig. :ref:`apollonius`).
+
+.. figure:: ./apollonius.png
+  :figclass: h
+
+  Tangent circles calculated by phcpy in response to user reparameterization of the system. :label:`apollonius`
+
+This approach makes use of the real-time solution of small polynomial systems, demonstrating the low latency of phcpy. It complements static input conditions by investigating their continous deformation, especially across singular solutions (which PHCpack handles more robustly than naive homotopy methods).
 
 
 Solving Polynomial Systems
@@ -335,10 +351,7 @@ The output of the script is
 Survey of Applications
 ======================
 
-We consider some examples from various literatures which apply polynomial 
-constraint solving, two of which are tutorialized for phcpy.
-
-[DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
+We consider some examples from various literatures which apply polynomial constraint solving. The first two examples use phcpy in particular as a research tool. The remaining three are broader examples representing current uses of numerical algebraic geometry in other STEM fields.
 
 Motion Planning & Mechanism Design
 ----------------------------------
@@ -371,6 +384,19 @@ Systems Biology & Model Selection
 
 [AD18]_
 
+It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities.
+
+These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, to be obtained numerically via polynomial homotopy continuation.
+
+Following the survey of Gross et. al [GBH16]_, one might:
+
+* determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states.
+* evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state.
+* describe all the states accessible from a given state of the model, i.e. that state's stoichiometric compatibility class (or basin of attraction).
+* determine whether rate parameters of the given model are identifiable from concentration measurements, or at least constrained.
+
+For large real-world models in systems biology, these questions of algebraic geometry are only tractable numerically.
+
 
 Critical Point Computation
 --------------------------
@@ -383,8 +409,13 @@ Statistics & Physics
 
 expand [HS15]_
 
+
 Conclusion
 ==========
+
+From these examples, we see that polynomial homotopy continuation has wide applicability to STEM fields. Moreover, phcpy is an accessible interface to the technique.
+
+For details on the operation of phcpy, ...
 
 
 Acknowledgments
@@ -630,7 +661,7 @@ References
 
 .. [Pascal] *JupyterHub deployment of phcpy.*
     Website, accessed May 2019, 2017.
-    https://pascal.math.uic.edu.
+    https://phcpack.org
 
 .. [JUP15] *Jupyter notebook snippets menu.*
      jupyter contrib nbextensions 0.5.0 documentation, 2015.
@@ -675,11 +706,6 @@ References
     *Equispaced Pareto front construction for constrained bi-objective optimization.*
     Mathematical and Computer Modelling, 57, pages 2122–2131. 2013.
     DOI: 10.1016/j.mcm.2010.12.044.
-
-.. [SWM16] H. Sidky, J. K. Whitmer, & D. Mehta
-    *Reliable mixture critical point computation using polynomial homotopy continuation.*
-    AIChE Journal, 62, pages 4497–4507. 2016.
-    DOI: 10.1002/aic.15319.
 
 .. [WS11] C. W. Wampler & A. J. Sommese
     *Numerical algebraic geometry and algebraic kinematics.*
