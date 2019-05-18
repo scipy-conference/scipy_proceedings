@@ -285,6 +285,7 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 We present the obtained results using proposed method in this section. 
 As well as the metrics (see Equations 1-6) that are used to evaluate the performance of methods.
 
+*Statistic score*
 The *accuracy* of a test is its capability to recognize the classes properly. 
 To evaluate the accuracy of our model, we should define the percentage 
 of true positive and true negative in all estimated cases, 
@@ -395,53 +396,32 @@ The select_products function in Python script is the following:
 
 Results
 -------
-
-We obtained Precision value egal to  0.779, Recall egal to 0.967, and F1-score = 0.871.
+Figure :ref:`productpca` illustrates PCA of 20 random products projected in 2 dimensions. 
+We can see cluster of Pasta sauce with Pasta group.
 
 .. figure:: figures/product_pca.png
    :align: center
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
-.. raw:: latex
-    
-    \begin{table}
+:math:`F_1` in Figure :ref:`violon` (a) shows that the profiles of all promotions are similar. 
+In the perspective of this work, it will be interesting to include weight base on statistic value. 
+In Statistic Canada - 2017, only 5% of all promotions are more than 50% promoted, 95% of all promotions are less than 50%. 
+Weightings are needed to give our model more robust. 
+Figure :ref:`violon` (a) indicates that all shops follow the same profiles in our model. 
 
-        \begin{longtable}{|l|c|}
-        \hline
-           \textbf{Product} &  \textbf{Number of baskets} \\
-        \hline
-                     Banana &   6138 \\
-               Strawberries &   3663 \\
-       Organic Baby Spinach &   1683 \\
-                      Limes &   1485 \\
-                 Cantaloupe &   1089 \\
-              Bing Cherries &    891 \\
-         Small Hass Avocado &    891 \\
-         Organic Whole Milk &    891 \\
-                Large Lemon &    792 \\
- Sparkling Water Grapefruit &    792 \\
-        \hline
-        \end{longtable}
-        \caption{The 10 most popular products included in the predicted baskets.}
-  \end{table}
-
-.. figure:: figures/pearsonr.png
-   :align: center
-   
-   Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
-
-.. figure:: figures/products_F1.png
-   :align: center
-     
-   Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
-   
 .. figure:: figures/violon.png
    :align: center
    :scale: 20%
    :figclass: wt
    
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
+
+Figure :ref:`productsF1` and Table 3 indicates :math:`F_1` to all products. 
+Some products are easy to predict with value of :math:`F_1` >0 and 
+some products are so hard to predict with value of :math:`F_1` <0. 
+For the first group, they are products includes on restriction regime 
+such as diet cranberry fruit juice, purified water, and total 0% blueberry acai greek yogurt.
 
 .. raw:: latex
     
@@ -464,8 +444,45 @@ We obtained Precision value egal to  0.779, Recall egal to 0.967, and F1-score =
               Total 0\% Blueberry Acai Greek Yogurt &  0.590824 \\
         \hline
         \end{longtable}
+		\caption{The average value of $F_1$ for all products considered.}
     \end{table}   
 
+.. figure:: figures/products_F1.png
+   :align: center
+     
+   Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
+	
+.. raw:: latex
+    
+    \begin{table}
+
+        \begin{longtable}{|l|c|}
+        \hline
+           \textbf{Product} &  \textbf{Number of baskets} \\
+        \hline
+                     Banana &   6138 \\
+               Strawberries &   3663 \\
+       Organic Baby Spinach &   1683 \\
+                      Limes &   1485 \\
+                 Cantaloupe &   1089 \\
+              Bing Cherries &    891 \\
+         Small Hass Avocado &    891 \\
+         Organic Whole Milk &    891 \\
+                Large Lemon &    792 \\
+ Sparkling Water Grapefruit &    792 \\
+        \hline
+        \end{longtable}
+        \caption{The 10 most popular products included in the predicted baskets.}
+  \end{table}
+	
+.. figure:: figures/pearsonr.png
+   :align: center
+   
+   Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
+
+We evaluated our model with the statistics score given in Section 'Statistic score'.
+We obtained Precision value equal to  0.779, Recall equal to 0.967, and F1-score = 0.871.
+	
 Conclusions and Future Work
 ---------------------------
 
