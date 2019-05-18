@@ -358,7 +358,15 @@ We consider some examples from various literatures which apply polynomial constr
 Rigid Graph Theory
 ------------------
 
-[BELT18]_
+The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_ (which we gloss in this section).
+
+Consider a graph :math:`G` whose edges each have a given length. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`d`, and an upper bound over :math:`d` (for which it isn't infinite) and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices) can be computed. In particular, the Cayley-Menger matrix of :math:`d` (the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, including square subsystems (where the # variables equals the # equations).
+
+Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration s.t. vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
+
+``phcpy`` was used specifically to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing from the solutions of previous systems to find new one.
+
+In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
 
 
 Critical Point Computation
@@ -368,7 +376,7 @@ Critical Point Computation
 
 
 Algebraic Kinematics & Mechanism Design
-----------------------------------------------------------------
+----------------------------------------
 
 [WS11]_
 
@@ -723,3 +731,13 @@ References
 
 .. [APP] *explorable circle tangency*
     https://github.com/JazzTap/mcs563/tree/master/Apollonius]
+
+.. [LML14] L. Liberti, B. Masson, J. Lee, C. Lavor, and A. Mucherino.
+  *On the number of realizations of certain henneberg graphs arising in protein conformation.*  
+  Discrete Applied Mathematics, 165, page 213–232, 2014.
+  DOI: 10.1016/j.dam.2013.01.020
+
+.. [EM99] I.Z. Emiris and B. Mourrain.
+  *Computer algebra methods for studying and computing molecular conformations.*
+  Algorithmica 25, pages 372–402, 1999.
+  DOI: 10.1007/PL00008283
