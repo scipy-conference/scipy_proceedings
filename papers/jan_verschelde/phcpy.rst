@@ -87,7 +87,7 @@ HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at 
 
 NAG4M2 [NAG4M2]_ is a package for Macaulay2 (a standard computational algebra system [M2]_), which can also act an interface to PHCpack or Bertini. As described in [Ley11]_, it provided the starting point for PCHpack's Macaulay2 bindings [GPV13]_.
 
-The proprietary software Hom4PS-3 [TODO] features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
+The proprietary software Hom4PS-3 [HOM4]_ features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
 
 
 User Interaction
@@ -115,7 +115,7 @@ The account management prompts by e-mail were hooked to new Tornado Handler inst
 Code Snippets
 -------------
 
-Learning a new API is daunting enough without also being a crash course in algebraic geometry. Therefore, the user's manual of phcpy [TODO] begins with a tutorial section using only the blackbox solver ``phcpy.solver.solve(system, ...)``. In this API, ``system`` is a list of strings representing polynomials, terminated by semicolons, and containing as many variables as equations.
+Learning a new API is daunting enough without also being a crash course in algebraic geometry. Therefore, the user's manual of phcpy [PHCPY]_ begins with a tutorial section using only the blackbox solver ``phcpy.solver.solve(system, ...)``. In this API, ``system`` is a list of strings representing polynomials, terminated by semicolons, and containing as many variables as equations.
 
 The code snippets from these tutorials are available in our JupyterHub deployment, via the snippets menu provided by nbextensions [JUP15]_. This menu suggests typical applications to guide the novice user. The screen shot in Fig. :ref:`figsnippet` shows the code snippet reproduced below.
 
@@ -141,9 +141,11 @@ The first solution of the given trinomial can be read off as (0.48613… + 0.0i,
 Direct Manipulation
 -------------------
 
-One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of the circle problem of Apollonius. The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017 [TODO].
+One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
-In fact, JupyterHub is also well-suited to mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations. For instance, the Problem of Apollonius is to construct all circles tangent to three given circles in a plane. Following the tutorial of phcpy, this forms a system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations), which we have solved interactively (Fig. :ref:`apollonius`).
+The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
+
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations), which we solved interactively (Fig. :ref:`apollonius`). In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
 
 .. figure:: ./apollonius.png
   :figclass: h
@@ -353,8 +355,20 @@ Survey of Applications
 
 We consider some examples from various literatures which apply polynomial constraint solving. The first two examples use phcpy in particular as a research tool. The remaining three are broader examples representing current uses of numerical algebraic geometry in other STEM fields.
 
-Motion Planning & Mechanism Design
-----------------------------------
+Rigid Graph Theory
+------------------
+
+[BELT18]_
+
+
+Critical Point Computation
+--------------------------
+
+[SWM16]_
+
+
+Algebraic Kinematics & Mechanism Design
+----------------------------------------------------------------
 
 Fig. :ref:`fig4barcoupler` illustration a reproduction
 of a result in the mechanism design literature [MW90]_.
@@ -373,14 +387,8 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
-Rigid Graph Theory
-------------------
-
-[BELT18]_
-
-
 Systems Biology & Model Selection
----------------------------------
+-----------------------------------------------------
 
 [AD18]_
 
@@ -396,12 +404,6 @@ Following the survey of Gross et. al [GBH16]_, one might:
 * determine whether rate parameters of the given model are identifiable from concentration measurements, or at least constrained.
 
 For large real-world models in systems biology, these questions of algebraic geometry are only tractable numerically.
-
-
-Critical Point Computation
---------------------------
-
-[SWM16]_
 
 
 Statistics & Physics
@@ -660,11 +662,10 @@ References
   DOI 10.1021/acs.jctc.8b00286.
 
 .. [Pascal] *JupyterHub deployment of phcpy.*
-    Website, accessed May 2019, 2017.
+    Website, accessed May 2019. 2017.
     https://phcpack.org
 
-.. [JUP15] *Jupyter notebook snippets menu.*
-     jupyter contrib nbextensions 0.5.0 documentation, 2015.
+.. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
      https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
 
 .. [HS15] H. Schenck
@@ -711,3 +712,14 @@ References
     *Numerical algebraic geometry and algebraic kinematics.*
     Acta Numerica, 20, pages 469–567. 2011.
     DOI: 10.1017/S0962492911000067.
+
+.. [HOM4] T. Chen, T.L. Lee, T.Y. Li.
+    *Hom4PS-3: A Parallel Numerical Solver for Systems of Polynomial Equations Based on Polyhedral Homotopy Continuation Methods.*
+    Mathematical Software - ICMS 2014, Lecture Notes in Computer Science, vol 8592, pages 183-190. 2014.
+    DOI: 10.1007/978-3-662-44199-2_30
+
+.. [PHCPY] *phcpy 0.9.5 documentation*
+    http://homepages.math.uic.edu/~jan/phcpy_doc_html/
+
+.. [APP] *explorable circle tangency*
+    https://github.com/JazzTap/mcs563/tree/master/Apollonius]
