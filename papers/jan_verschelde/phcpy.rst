@@ -370,6 +370,8 @@ Critical Point Computation
 Algebraic Kinematics & Mechanism Design
 ----------------------------------------------------------------
 
+[WS11]_
+
 Fig. :ref:`fig4barcoupler` illustration a reproduction
 of a result in the mechanism design literature [MW90]_.
 Given five points, the problem is to determine the length of two bars
@@ -416,8 +418,6 @@ Conclusion
 ==========
 
 From these examples, we see that polynomial homotopy continuation has wide applicability to STEM fields. Moreover, phcpy is an accessible interface to the technique.
-
-For details on the operation of phcpy, ...
 
 
 Acknowledgments
