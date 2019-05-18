@@ -17,9 +17,9 @@ An intelligent shopping list based on the application of partitioning and machin
    First, we propose to develop a new model of machine learning written in Python3.6 
    and plan to predict which grocery products the consumer in buy again or 
    will try to buy for the first time, and in which store(s) will the area he will shop. 
-   Second, we will develop a smart shopping list template to provide consumers with a 
+   Second, we developped a smart shopping list template to provide consumers with a 
    personalized weekly shopping list based on their historical shopping history and 
-   known preferences. As explanatory variables, we will use available grocery shopping histories, 
+   known preferences. As explanatory variables, we used available grocery shopping histories, 
    store promotion information for the given region, as well as product price statistics.
 
 .. class:: keywords
@@ -47,16 +47,19 @@ In addition, several mobile retail studies indicate that potential customers pla
 the highest priority on features that help them create and manage personalized 
 shopping lists interactively :cite:`newcomb2003mobile` and :cite:`fazliu2017utforskande`.
 
+Our proposal
+------------
+
 By using the grocery shopping database in Canada MyGroceryTour.ca (see Figure :ref:`circuitpromo`), 
-we will first look for the partitioning of consumers into classes that will group 
+first we looked for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
-This classification will then be used in the prediction stage. 
+Then, this classification was used in the prediction stage. 
 Since real consumer data contains thousands of individual articles, 
 we focus primarily on categories of articles. 
-The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) will first be performed to better visualize the initial data 
+The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first be performed to better visualize the initial data 
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means :cite:`jain2010data` and X-means :cite:`pelleg2000x`, 
-will make it possible to determine the number of classes of consumers, 
+made it possible to determine the number of classes of consumers, 
 as well as their distribution by class.
 
 .. figure:: figures/trois_magasins.png
@@ -64,16 +67,16 @@ as well as their distribution by class.
    
    CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
 
-Secondly, we will develop a statistical model to predict which products previously purchased will be 
+Secondly, we developed a statistical model to predict which products previously purchased will be 
 in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
-we will develop a model of machine learning and able to:
+we developed a model of machine learning and able to:
 
 1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, and in which store(s) in the area he will shop;
 2. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
-This list will also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
-where these products are to be purchased. We will also calculate the consumer's optimal weekly commute 
+This list was also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
+where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
@@ -82,21 +85,21 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
    Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
-based on dynamic programming, will be used to meet the objective (i), 
+based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method :cite:`goodfellow2016deep`, based on recurrent neuron networks (RNN) 
 and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool :cite:`girija2016tensorflow`, 
-will be used to meet objective (ii), which will be of major interest to consumers.
+was used to achieve objectives (ii), which will be of major interest to consumers.
 
-The problem will be reformulated as a binary prediction task: given a consumer, 
+The problem can be reformulated as a binary prediction task: given a consumer, 
 the history of his previous purchases and a product with his price history, 
 to predict whether or not the given product will be included in the grocery list of the consumer. 
-Our approach will be to adapt a variety of generative models to existing data, i.e., 
+Our approach adapted a variety of generative models to existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
-Recurrent neural networks and convolutional neural networks will be used at the first learning level 
+Recurrent neural networks and convolutional neural networks was used at the first learning level 
 and forward propagation neural networks (Feedforward NN) 
-will be used at the second level of learning.
+was used at the second level of learning.
 
 Depending on the user :math:`u` and the user purchase history
 (shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included 
@@ -135,7 +138,7 @@ and we presented in detail the results of our simulations
 
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
-the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution with the :math:`\sigma` parameter.
+the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution :cite:`kundu2005generalized` with the :math:`\sigma` parameter.
 Finally, we increased the `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution.
 We observed that our baskets generated follow the same distribution that original basket in term of the basket size 
 (see Figure :ref:`orderfrequency`).
@@ -152,7 +155,7 @@ In this section, we described the workflow (see Figure :ref:`workflow`) and mode
 
 *Long short-term memory (LSTM) network*
 
-The LSTM is a recurrent neural network (RNN) that has an input, hidden (memory block), and an output layer. 
+The LSTM :cite:`hochreiter1997long` is a recurrent neural network (RNN) that has an input, hidden (memory block), and an output layer. 
 The memory block contains 3 gate units namely the input, forget, 
 and output with a self-recurrent connection neuron :cite:`hochreiter1997long`.
 
@@ -186,7 +189,7 @@ Finally, missing values in the collected data can be easily managed.
 
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
 The final model has two neuron networks and a GBT classifier.
-Once trained, it can be used to predict in real time what will be the consumer's basket, based on the history of purchases and current promotions in neighboring stores.
+Once trained, it was used to predict in real time what will be the consumer's basket, based on the history of purchases and current promotions in neighboring stores.
 Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size (see Figure :ref:`lstm`).
 
 *First level model (feature extraction)*
@@ -230,7 +233,7 @@ Finally, we estimated the size of the next order minimizing root mean square err
 *Latent representations of entities (embeddings)*
 
 For each :math:`a \in \mathcal{A}`, an embedding :math:`T:\mathcal{A} \rightarrow \mathbb{R}^{d}` returns a vector :math:`d`-dimensionel.
-If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathcal{A}|\times d` learned by backpropagation.
+If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathcal{A}|\times d` learned by backpropagation. We represented in Table 2 all dimensions of each model used.
 
 .. raw:: latex
 
@@ -335,6 +338,7 @@ Python Script
 -------------
 
 The final reorder probabilities are a weighted average of the outputs from the second-level models. The final basket is chosen by using these probabilities and choosing the product subset with maximum expected F1-score.
+The select_products function in Python script is the following:
 
 .. code-block:: python
     :linenos:
@@ -481,7 +485,7 @@ Learning: Recurrent Neural Networks (RNN) and Networks
 forward-propagating neurons (Feedforward NN).
 The value of the :math:`F_1` statistic that represents the quality of our model
 is 0.22. The constant influx of new data on *CircuitPromo*
-will improve the model over time.
+improved the model over time.
 The originality of our approach, compared to existing algorithms,
 is that in addition to the purchase history we also consider the
 promotions, possible purchases in different stores and distance
@@ -506,5 +510,6 @@ Abbreviations
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
 - RNN - recurrent neuron networks
+
 
 
