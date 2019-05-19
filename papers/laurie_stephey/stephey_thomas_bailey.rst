@@ -71,7 +71,7 @@ obtain their distances. This information will allow the most detailed 3D map of
 the universe to be constructed, which will help better understand the role of
 dark energy throughout the history of the universe. An image of the Mayall
 telescope, in Kitt Peak, Arizona, where the DESI instrument is installed, is
-shown in Figure :ref:`kittpeak`
+shown in Figure :ref:`kittpeak`.
 
 .. figure:: figures/desi_kitt_peak.png
 
@@ -81,7 +81,8 @@ shown in Figure :ref:`kittpeak`
    :label:`kittpeak`
 
 NERSC is the National Energy Research Scientific Computing center. It provides
-HPC resources for the DOE scientists who run large-scale simulations, data
+High Performance Computing (HPC) resources for the Department of Energy (DOE)
+scientists who run large-scale simulations, data
 processing, and machine learning. Through a program called the NERSC Exascale
 Science Applications Program (NESAP) :cite:`noauthor_nesap_nodate`, NERSC
 collaborates with scientific teams to adapt their applications to run
@@ -89,28 +90,55 @@ efficiently and robustly on NERSC systems. The case detailed in this work is
 one such collaboration between NERSC and a DOE science project (the DESI
 experiment). Other NESAP projects are described in :cite:`ronaghi_python_2017`.
 
-In late 2019 DESI will begin sending batches of CCD images nightly to NERSC for
-data processing. The CCD images contain many spectra; one for each object at
-which the fiber was pointed. DESI has a large and complex image processing
-pipeline to transform raw images from the CCD into meaningful scientific
-results. This study focuses on only a small portion of this pipeline: that part
-that obtains the spectral extraction.  The spectral extraction is performed in
-two dimensions using a technique known as "spectroperfectionism"
-:cite:`bolton_spectro-perfectionism:_2010`. The DESI spectral extraction code
-performs a variety of eigenvalue decomposition, evaluating special functions,
+In fall 2019 DESI will begin sending batches of CCD images nightly to NERSC for
+data processing. Each exposure contains the data from 5000 galaxies, quasars,
+stars, and reference calibrators, routed by fiber optic cables from the
+telescope to 10 spectrographs with 3 CCDs and 500 spectra each.
+A small subset of example data are shown in Figure
+:ref:`exampledata` with 21 spectra distributed horizontally
+and different wavelengths of light dispersed vertically.  This image represents
+less than one millionth of the DESI data obtained per night.  Most spectra
+look the same since all fibers see the same night sky.  The slight excess
+in the middle of the leftmost fiber is the signal from a distant galaxy.
+Even though this is faint compared to the sky background, this example is
+in the brightest 15% of galaxies that DESI will observe.
+
+.. figure:: figures/example_data.png
+
+   Example DESI data showing spectra from 21 of the 5000 fibers distributed
+   horizontally, with wavelengths dispersed vertically.  Most spectra look the
+   same since they all see the same sky background light.  The slight excess
+   of light in the middle of the leftmost spectrum is the signal from a distant
+   galaxy.
+   :label:`exampledata`
+
+Compared to prior galaxy redshift surveys, DESI will observe fainter, more
+distant objects at lower signal-to-noise, necessitating more sophisticated
+algorithms to optimally extract the signal from the data.  This requires a
+full 2D modeling of the data, fitting multiple spectra and wavelengths
+simultaneously using the "spectroperfectionism" algorithm
+:cite:`bolton_spectro-perfectionism:_2010`.  This study focuses on this
+portion of the DESI data processing pipeline since it is the algorithmically
+most expensive step, involving eigenvalue decomposition,
+evaluating special functions,
 and all the necessary bookkeeping required to manage the spectral data in each
 exposure (30 frames, which total about 6GB).
 
-.. figure:: figures/spectroperfectionism.png
+DESI processes its data at NERSC in semi-realtime as each exposure is
+transferred from the telescope.  Additionally, it will reprocess all of its
+data each year with the latest pipeline version.  At the start of this work,
+the final data processing would take 33 million CPU hours.  The work presented
+in this study has reduced that to 6.5 million hours, making much more efficient
+use of the resources available at NERSC, thus benefitting both the DESI project
+and also the many other users who share the NERSC systems.
 
-   A cartoon that demonstrates the spectroperfectionism technique that is used
-   in the DESI spectral extraction code. Since the point spread functions are
-   often 2D in nature, a full 2-D fitting is required to accurately capture their
-   shape. Image courtesy of S. J. Bailey. :label:`spectroperfectionism`
+Additionally, this algorithm speedup lets DESI process a night's
+data in a matter of hours instead of days, enabling the ability to use one
+night of data as feedback to the survey operations the following night.
+This results in more efficient survey operations, reducing the time to
+completion.
 
-Five years worth of image processing on a shared supercomputer should be as
-efficient as possible, both for the sake of the DESI project but also the many
-other users who share the NERSC systems. NESAP was tasked with improving the
+NESAP was tasked with improving the
 efficiency of the DESI code without rewriting the code in another language like
 C. In what follows we will present a case study that describes how a Python
 image processing pipeline was optimized for increased throughput of 5-7x on a
@@ -264,7 +292,7 @@ expensive. These functions were 1) numpy.polynomial.legendre.legval
 these functions as legval, erf, and hermitenorm.
 
 legval was perhaps the most straightforward of these three to JIT compile.
-Unlike Python, Numba will note tolerate type inference. The types and sizes of
+Unlike Python, Numba will not tolerate type inference. The types and sizes of
 all variables must be known prior to compile time. This required several small
 changes to the legval algorithm to put it in the form required by Numba.
 Several other lines of the function that performed type checking were removed.
