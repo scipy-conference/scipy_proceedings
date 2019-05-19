@@ -76,7 +76,7 @@ Second, we do not sacrifice the efficiency of the compiled code. Scripts replace
 
 Owing to the ubiquity of polynomial systems with interesting roots, many applications of numerical algebraic geometry to STEM problems exist in the literature. But these are often too compute-hungry for symbolic computation (e.g. via Groebner bases), so numerical solution is valuable.
 
-Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2). In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
+Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2), which we update below. In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
 
 Related Software
 ----------------
@@ -374,7 +374,7 @@ Consider a graph :math:`G` whose edges each have a given length. A graph embeddi
 
 Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration s.t. vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
-``phcpy`` was used specifically to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing from the solutions of previous systems to find new one.
+``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing from the solutions of previous systems to find new one.
 
 In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
 
@@ -392,11 +392,12 @@ Critical Point Computation
 
 Polynomial homotopy continuation has also been adapted to the field of chemical engineering to locate critical points of multicomponent mixtures [SWM16]_, i.e. temperature and pressure satisfying a multi-phase equilibrium.
 
+A remarkable variety of systems of constraint also take on polynomial form, or can be approximated thereby, in various sciences. Diverse problems in the analysis of belief propagation (in graphical models) [KMC18]_, hyperbolic conservation laws (in PDEs) [HHS13]_, and vacuum moduli spaces (in supersymmetric field theory) [HHM13]_ have been addressed using polynomial homotopy continuation.
 
 Algebraic Kinematics
 --------------------
 
-Determining the reachable poses of a mechanism (in terms of fixed-length bones and various kinds of joint) is but one problem in applied algebraic geometry. Above, we have discussed an application of numerics to a counting problem. Following Wampler and Sommese [WS11]_, other geometric problems arising from robots include **analysis** of specific mechanisms e.g.:
+We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.:
 
 * Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility)
 * Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock)
@@ -423,17 +424,12 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
-Continuation homotopies were developed as a substitute for algebraic elimination that was more robust to special cases, yet still tractable to numerical techniques. Research in kinematics increasingly relies on such algorithms.
-
-Besides the special historical relationship of kinematics and numerical algebraic geometry, other systems of constraint with interesting scientific applications also take on polynomial form. Collision-free motion planning, nonlinear control synthesis, and load flow problems in 
-
+Continuation homotopies were developed as a substitute for algebraic elimination that was more robust to special cases, yet still tractable to numerical techniques. Research in kinematics increasingly relies on such algorithms [WS11]_.
 
 Systems Biology
 ---------------
 
-Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus.
-
-Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
 
 * determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states.
 * evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state.
@@ -442,17 +438,10 @@ Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebr
 
 For large real-world models in systems biology, these questions of algebraic geometry are only tractable to numerical methods scaling to many dozens of simultaneous equations.
 
-Not necessarily related to the zero locus, but also formulated [AD18]_ in terms of algebraic geometry:
-
-* Discrete dynamical systems, to determine whether a healthy state is reachable from a diseased one via small interventions
-* Neural codes, to characterize the combinatorial structure of e.g. place cells based on firing patterns
-* Phylogenetic varieties, to perform non-parametric inference of descent based on molecular evolution
-
-
 Conclusion
 ==========
 
-From these examples, we see that polynomial homotopy continuation has wide applicability to STEM fields. Moreover, phcpy is an accessible interface to the technique.
+From these examples, we see that polynomial homotopy continuation has wide applicability to STEM fields. Moreover, phcpy is an accessible interface to the technique, capable of high performance whilst producing certifiable and reproducible results.
 
 
 Acknowledgments
@@ -646,55 +635,10 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-.. [BNN16] D. J. Bates, A. J. Newell, & M. Niemerg
-  *BertiniLab: A MATLAB interface for solving systems of polynomial equations.*
-  Numerical Algorithms, 71, pages 229–244, 2016.
-  DOI 10.1007/s11075-015-0014-6.
-
-.. [BNN17] D. J. Bates, A. J. Newell, & M. E. Niemerg
-  *Decoupling highly structured polynomial systems.*
-  Journal of Symbolic Computation, 79, pages 508–515, 2017.
-  DOI 10.1016/j.jsc.2016.07.016.
-
-.. [BM16] E. Bogart & C. R. Myers
-  *Multiscale Metabolic Modeling of C4 Plants: Connecting Nonlinear Genome-Scale Models to Leaf-Scale Metabolism in Developing Maize Leaves.*
-  PLOS ONE, 11, e0151722, 2016.
-  DOI 10.1371/journal.pone.0151722.
-
 .. [D3] M. Bostock, V. Ogievetsky, & J. Heer
   *D3 Data-Driven Documents.*
   IEEE Transactions on Visualization and Computer Graphics, 17, pages 2301–2309, 2011.
   DOI 10.1109/TVCG.2011.185.
-
-.. [DSG18] S. Dura-Bernal, B. A. Suter, P. Gleeson, M. Cantarelli, A. Quintana, F. Rodriguez, D. J. Kedziora, G. L. Chadderdon, C. C. Kerr, S. A. Neymotin, R. McDougal, M. Hines, G. M. G. Shepherd, & W. W. Lytton
-  *NetPyNE: a tool for data-driven multiscale modeling of brain circuits.*
-  bioRxiv, 461137, 2018.
-  DOI 10.1101/461137.
-
-.. [FSC13] T. Fischbacher & F. Synatschke-Czerwonka
-  *FlowPy—A numerical solver for functional renormalization group equations.*
-  Computer Physics Communications, 184, pages 1931–1945, 2013.
-  DOI 10.1016/j.cpc.2013.03.002.
-
-.. [GWW09] J. E. Guyer, D. Wheeler, & J. A. Warren
-  *FiPy: Partial Differential Equations with Python.*
-  Computing in Science Engineering, 11, pages 6–15, 2009.
-  DOI 10.1109/MCSE.2009.52.
-
-.. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
-  *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
-  IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
-  DOI 10.1109/TPAMI.2017.2749575.
-
-.. [LBC10] J. Liepe, C. Barnes, E. Cule, K. Erguler, P. Kirk, T. Toni, & M. P. H. Stumpf
-  *ABC-SysBio—approximate Bayesian computation in Python with GPU support.*
-  Bioinformatics, 26, pages 1797–1799, 2010.
-  DOI 10.1093/bioinformatics/btq278.
-
-.. [SBS18] D. G. A. Smith, L. A. Burns, D. A. Sirianni, D. R. Nascimento, A. Kumar, A. M. James, J. B. Schriber, T. Zhang, B. Zhang, A. S. Abbott, E. J. Berquist, M. H. Lechner, L. A. Cunha, A. G. Heide, J. M. Waldrop, T. Y. Takeshita, A. Alenaizan, D. Neuhauser, R. A. King, A. C. Simmonett, J. M. Turney, H. F. Schaefer, F. A. Evangelista, A. E. DePrince, T. D. Crawford, K. Patkowski, & C. D. Sherrill
-  *Psi4NumPy: An Interactive Quantum Chemistry Programming Environment for Reference Implementations and Rapid Development.*
-  Journal of Chemical Theory and Computation, 14, pages 3504–3511, 2018.
-  DOI 10.1021/acs.jctc.8b00286.
 
 .. [Pascal] *JupyterHub deployment of phcpy.*
     Website, accessed May 2019. 2017.
@@ -708,16 +652,6 @@ References
     Bulletin of the American Mathematical Society, 53.1, 179–86, 2015.
     DOI: 10.1090/bull/1520
 
-.. [AD18] A. Dickenstein
-    *Algebraic geometry in the interface of pure and applied mathematics.*
-    Rio Intelligencer, ICM, 2018.
-    http://mate.dm.uba.ar/~alidick/DickensteinIntelligencerWithoutFigures.
-
-.. [DB15] D. Brake
-    *Advances in Software in Numerical Algebraic Geometry.*
-    Slides presented at Advances @ SIAM AG15, U Notre Dame, 2015.
-    https://danielleamethyst.org/resources/presentations/talks/siam_AG2015_numerical_AG_overview.pdf.
-
 .. [GBH16] E. Gross, D. Brent, K. L. Ho, D. J. Bates, & H. A. Harrington
     *Numerical algebraic geometry for model selection and its application to the life sciences.*
     Journal of The Royal Society Interface, 13: 20160256. 2016.
@@ -728,6 +662,11 @@ References
     Bulletin of Mathematical Biology 78, pages 21–51, 2016.
     DOI: 10.1007/s11538-015-0125-1.
 
+.. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
+  *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
+  IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
+  DOI 10.1109/TPAMI.2017.2749575.
+
 .. [HHS13] W. Hao, J. D. Hauenstein, C.-W. Shu, A. J. Sommese, Z. Xu, & Y.-T. Zhang
     *A homotopy method based on WENO schemes for solving steady state problems of hyperbolic conservation laws.*
     Journal of Computational Physics, 250, pages 332–346. 2013.
@@ -737,11 +676,6 @@ References
     *Numerical elimination and moduli space of vacua.*
     Journal of High Energy Physics, 83. 2013.
     DOI: 10.1007/JHEP09(2013)083.
-
-.. [PSC13] V. Pereyra, M. Saunders, & J. Castillo
-    *Equispaced Pareto front construction for constrained bi-objective optimization.*
-    Mathematical and Computer Modelling, 57, pages 2122–2131. 2013.
-    DOI: 10.1016/j.mcm.2010.12.044.
 
 .. [WS11] C. W. Wampler & A. J. Sommese
     *Numerical algebraic geometry and algebraic kinematics.*
