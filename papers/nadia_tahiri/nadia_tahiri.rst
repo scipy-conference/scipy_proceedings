@@ -14,12 +14,12 @@ An intelligent shopping list based on the application of partitioning and machin
    A shopping list is an integral part of the shopping experience for many consumers. 
    Several mobile retail studies indicate that potential customers place the highest 
    priority on features that help them create and manage personalized shopping lists. 
-   First, we propose to develop a new model of machine learning written in Python3.6 
-   and plan to predict which grocery products the consumer in buy again or 
+   First, we propose the development of a new machine learning model that will be written
+   in Python 3 and plan to predict which grocery products the consumer in buy again or 
    will try to buy for the first time, and in which store(s) will the area he will shop. 
-   Second, we developped a smart shopping list template to provide consumers with a 
+   Second, we developed a smart shopping list template to provide consumers with a 
    personalized weekly shopping list based on their historical shopping history and 
-   known preferences. As explanatory variables, we used available grocery shopping histories, 
+   known preferences. As explanatory variables, we used available grocery shopping history, 
    store promotion information for the given region, as well as product price statistics.
 
 .. class:: keywords
