@@ -68,7 +68,7 @@ as well as their distribution by class.
    CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
 
 Secondly, we developed a statistical model to predict which products previously purchased will be 
-in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
+in the next order of the consumer. By using explanatory variables such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
 we developed a machine learning model that is able to:
 
@@ -527,6 +527,5 @@ Abbreviations
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
 - RNN - recurrent neuron networks
-
 
 
