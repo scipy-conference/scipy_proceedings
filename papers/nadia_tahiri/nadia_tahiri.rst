@@ -526,6 +526,5 @@ Abbreviations
 - GBT  - Gradient Tree Boosting
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
-- RNN - recurrent neuron networks
-
+- RNN - Recurrent Neuron Networks
 
