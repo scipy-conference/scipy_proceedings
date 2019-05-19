@@ -32,7 +32,7 @@ Introduction
 A typical grocery retailer offers consumers thousands of promotions every week 
 to attract more consumers and thus improve their economic performance :cite:`tanusondjaja2016exploring`. 
 Studies by Walters and Jamil (2002, 2003) of :cite:`walters2002measuring` and :cite:`walters2003exploring` found that about 39% of all items purchased 
-during an inter-category grocery were specials of the week and about 30% of consumers 
+during an inter-category grocery were weekly specials and promotions, and about 30% of consumers 
 surveyed were very sensitive to product prices, buying more promotional items than regular items. 
 With the recent expansion of machine learning methods, including deep learning, 
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
@@ -56,7 +56,7 @@ them efficiently based on purchases made.
 Then, this classification was used in the prediction stage. 
 Since real consumer data contains thousands of individual articles, 
 we focus primarily on categories of articles. 
-The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first be performed to better visualize the initial data 
+The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first computed to visualize the initial data 
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means :cite:`jain2010data` and X-means :cite:`pelleg2000x`, 
 made it possible to determine the number of classes of consumers, 
@@ -70,12 +70,12 @@ as well as their distribution by class.
 Secondly, we developed a statistical model to predict which products previously purchased will be 
 in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
-we developed a model of machine learning and able to:
+we developed a machine learning model that is able to:
 
-1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, and in which store(s) in the area he will shop;
+1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
 2. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
-This list was also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
+This list also includes recommendations regarding the optimal quantity of each product suggested and the store(s) 
 where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
 
@@ -87,19 +87,19 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
 :math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
 based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
-A deep learning method :cite:`goodfellow2016deep`, based on recurrent neuron networks (RNN) 
-and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool :cite:`girija2016tensorflow`, 
+A deep learning method :cite:`goodfellow2016deep`, based on Recurrent Neural Networks (RNN) 
+and Convolutional Neural Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow`, 
 was used to achieve objectives (ii), which will be of major interest to consumers.
 
 The problem can be reformulated as a binary prediction task: given a consumer, 
-the history of his previous purchases and a product with his price history, 
+the history of their previous purchases and a product with their price history, 
 to predict whether or not the given product will be included in the grocery list of the consumer. 
 Our approach adapted a variety of generative models to existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
-Recurrent neural networks and convolutional neural networks was used at the first learning level 
-and forward propagation neural networks (Feedforward NN) 
-was used at the second level of learning.
+RNNs and CNNs were used at the first learning level 
+and forward propagation neural networks (Feed-forward NN) 
+was used at the second learning level.
 
 Depending on the user :math:`u` and the user purchase history
 (shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included 
