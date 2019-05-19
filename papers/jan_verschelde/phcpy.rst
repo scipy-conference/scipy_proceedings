@@ -215,9 +215,19 @@ The solution paths defined by polynomial homotopies can be tracked
 independently, providing obvious opportunities for parallel execution.
 This section reports on computations on our server, a 44-core computer.
 
-An obvious benefit of running on many cores is the speedup. The *quality up* question asks the following: if we can afford to spend the same time, by how much can we improve the solution using *p* processors?
+An obvious benefit of running on many cores is the speedup. 
+The *quality up* question asks the following: if we can afford to spend 
+the same time, by how much can we improve the solution using *p* processors?
 
-The function defined below returns the elapsed performance of the blackbox solver on the cyclic 7-roots benchmark problem, for a number of tasks and a precision equal to double, double double, or quad double arithmetic.
+We illustrate the quality up question on the cyclic 7-roots
+benchmark problem [BF91]_.
+The online SymPy documentation uses the cyclic 4-roots problem
+to illustrate its ``nonlinsolve`` method.
+
+The function defined below returns the elapsed performance 
+of the blackbox solver on the cyclic 7-roots benchmark problem,
+for a number of tasks and a precision equal to double, double double, 
+or quad double arithmetic.
 
 .. code-block:: python
 
