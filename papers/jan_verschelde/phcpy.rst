@@ -342,6 +342,9 @@ The output of the script is
     number of factors :  16
     number of isolated solutions : 1152
 
+This numerical output is the essence of the blackbox solver
+for positive dimensional solution sets [Ver18]_.
+
 Survey of Applications
 ======================
 
