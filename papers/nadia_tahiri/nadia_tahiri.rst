@@ -107,8 +107,8 @@ in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
 -------
-In this section we discuss the details of our set synthetic and real datasets.
-The real datasets was obtained from CircuitPromo.ca as basic data.
+In this section we discuss the details of our set of synthetic and real datasets,
+the latter obtained from CircuitPromo.ca.
 
 *Features*
 
@@ -126,15 +126,15 @@ The features are described as follow:
 *Consumer profile*
 
 We found that there are 3 consumer profiles see :cite:`walters2003exploring`, :cite:`walters2002measuring`, and :cite:`tanusondjaja2016understanding`. 
-The first group is consumers who buy only the products on promotion. 
+The first group is consumers who only buy products on promotion.
 The second group is consumers who always buy the same products (without considering promotions).
-Finally, the third group is consumers who buy products on promotion or not.
+Finally, the third group is consumers who buy products whether there is a promotion or not.
 
 Since our real dataset was not enough to complete correctly our project, we increased it.
 We described the sets of data simulated in our study, 
-and we presented in detail the results of our simulations
+and we presented in detail the results of our simulations.
 
-*Data increase*
+*Data Synthesis*
 
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
