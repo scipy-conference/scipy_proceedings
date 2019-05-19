@@ -81,7 +81,7 @@ Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another pol
 Related Software
 ----------------
 
-PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences. Bertini 1 is documented in a monograph (as mentioned above), which is not widely available.
+PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences.
 
 HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
 
@@ -378,20 +378,36 @@ Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 
 
 In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
 
+Model Selection & Parameter Inference
+--------------------------------------
+
+It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities. These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, that can be explored numerically via polynomial homotopy continuation.
+
+
+Parameter hopotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
+
 
 Critical Point Computation
 --------------------------
 
-[SWM16]_
+Polynomial homotopy continuation has also been adapted to the field of chemical engineering to locate critical points of multicomponent mixtures [SWM16]_, i.e. temperature and pressure satisfying a multi-phase equilibrium.
 
 
-Algebraic Kinematics & Mechanism Design
-----------------------------------------
+Algebraic Kinematics
+--------------------
 
-[WS11]_
+Determining the reachable poses of a mechanism (in terms of fixed-length bones and various kinds of joint) is but one problem in applied algebraic geometry. Above, we have discussed an application of numerics to a counting problem. Following Wampler and Sommese [WS11]_, other geometric problems arising from robots include **analysis** of specific mechanisms e.g.:
 
-Fig. :ref:`fig4barcoupler` illustration a reproduction
-of a result in the mechanism design literature [MW90]_.
+* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility)
+* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock)
+* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation)
+* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity)
+* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses.
+
+...as well as the **synthesis** of mechanisms that can reach certain sets of outputs, or that can be controlled by a certain input/output relationship.
+
+Fig. :ref:`fig4barcoupler` illustrates a reproduction
+of one synthesis result in the mechanism design literature [MW90]_.
 Given five points, the problem is to determine the length of two bars
 so their coupler curve passes through the five given points.
 
@@ -407,29 +423,30 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
-Systems Biology & Model Selection
------------------------------------------------------
+Continuation homotopies were developed as a substitute for algebraic elimination that was more robust to special cases, yet still tractable to numerical techniques. Research in kinematics increasingly relies on such algorithms.
 
-[AD18]_
+Besides the special historical relationship of kinematics and numerical algebraic geometry, other systems of constraint with interesting scientific applications also take on polynomial form. Collision-free motion planning, nonlinear control synthesis, and load flow problems in 
 
-It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities.
 
-These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, to be obtained numerically via polynomial homotopy continuation.
+Systems Biology
+---------------
 
-Following the survey of Gross et. al [GBH16]_, one might:
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus.
+
+Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
 
 * determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states.
 * evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state.
 * describe all the states accessible from a given state of the model, i.e. that state's stoichiometric compatibility class (or basin of attraction).
 * determine whether rate parameters of the given model are identifiable from concentration measurements, or at least constrained.
 
-For large real-world models in systems biology, these questions of algebraic geometry are only tractable numerically.
+For large real-world models in systems biology, these questions of algebraic geometry are only tractable to numerical methods scaling to many dozens of simultaneous equations.
 
+Not necessarily related to the zero locus, but also formulated [AD18]_ in terms of algebraic geometry:
 
-Statistics & Physics
---------------------------
-
-expand [HS15]_
+* Discrete dynamical systems, to determine whether a healthy state is reachable from a diseased one via small interventions
+* Neural codes, to characterize the combinatorial structure of e.g. place cells based on firing patterns
+* Phylogenetic varieties, to perform non-parametric inference of descent based on molecular evolution
 
 
 Conclusion
