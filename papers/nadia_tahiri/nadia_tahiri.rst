@@ -82,7 +82,7 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    
-   Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
+   Screenshot of *CircuitPromo.ca* website with an optimal shopping journey using the generalized commercial traveller algorithm. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
 based on dynamic programming, was used to achieve objectives (i), 
@@ -173,7 +173,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 .. figure:: figures/lstm.png
    :align: center 
   
-   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
+   This figure shows a chain-structured LSTM network. 
    spectral extraction throughput. :label:`lstm`
 
 *Gradient Boosted Tree (GBT) network*
