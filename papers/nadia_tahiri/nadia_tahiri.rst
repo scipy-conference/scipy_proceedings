@@ -180,7 +180,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 
 GBT :cite:`friedman2002stochastic` is an iterative algorithm that combines simple parameterized functions with “poor” performance 
 (high prediction error) to produce a highly accurate prediction rule. GBT utilizes an ensemble of weak
-learners to boost performance; this makes it a good candidate model for predicting credit card fraud. 
+learners to boost performance; this makes it a good candidate model for predicting grocery shopping list. 
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple fashion and be used in both classification and 
