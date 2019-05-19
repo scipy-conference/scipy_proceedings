@@ -173,8 +173,10 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 .. figure:: figures/lstm.png
    :align: center 
   
-   This figure shows a chain-structured LSTM network. 
-   spectral extraction throughput. :label:`lstm`
+   This figure shows a chain-structured LSTM network. An LSTM rchitecture contains forget, learn, remember and use gates that determine whether an input is so important  that  it  can  be  saved.  
+   In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
+   which make it easier to update the weights during the back propagation process. 
+   :label:`lstm`
 
 *Gradient Boosted Tree (GBT) network*
 
