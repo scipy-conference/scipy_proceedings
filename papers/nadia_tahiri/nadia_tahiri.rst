@@ -88,8 +88,8 @@ using the generalized commercial traveller algorithm (see Figure :ref:`circuit`)
 based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method :cite:`goodfellow2016deep`, based on Recurrent Neural Networks (RNN) 
-and Convolutional Neural Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow`, 
-was used to achieve objectives (ii), which will be of major interest to consumers.
+and Convolutional Neural Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow` 
+to reach the requirements of objective (ii). Those implementations are going to create significant interest from consumers.
 
 The problem can be reformulated as a binary prediction task: given a consumer, 
 the history of their previous purchases and a product with their price history, 
