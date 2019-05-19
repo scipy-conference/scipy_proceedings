@@ -314,6 +314,16 @@ The 42.41 and 44.35 in Table :ref:`perfcyc7parallel` are similar enough
 to state that with 32 instead of 8 tasks we doubled the precision from 
 double double to quad double precision in about the same time.
 
+The data in Table :ref:`perfcyc7parallel` is 
+visualized in Fig.  :ref:`figqualityup`.
+
+.. figure:: ./figqualityup.png
+   :align: center
+   :height: 400 px
+   :figclass: h
+
+   Interpolated elapsed performances.  :label:`figqualityup`
+
 Precision is a crude measure of quality.
 Another motivation for quality up by parallelism is to compensate
 for the cost overhead caused by arithmetic with power series.
@@ -359,6 +369,9 @@ The output of the script is
     degree of solution set at dimension 1 : 144
     number of factors :  16
     number of isolated solutions : 1152
+
+This numerical output is the essence of the blackbox solver
+for positive dimensional solution sets [Ver18]_.
 
 Survey of Applications
 ======================
