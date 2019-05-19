@@ -76,18 +76,18 @@ Second, we do not sacrifice the efficiency of the compiled code. Scripts replace
 
 Owing to the ubiquity of polynomial systems with interesting roots, many applications of numerical algebraic geometry to STEM problems exist in the literature. But these are often too compute-hungry for symbolic computation (e.g. via Groebner bases), so numerical solution is valuable.
 
-Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2). In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
+Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2), which we update below. In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
 
 Related Software
 ----------------
 
-PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences. Bertini 1 is documented in a monograph (as mentioned above), which is not widely available.
+PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences.
 
 HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
 
 NAG4M2 [NAG4M2]_ is a package for Macaulay2 (a standard computational algebra system [M2]_), which can also act an interface to PHCpack or Bertini. As described in [Ley11]_, it provided the starting point for PCHpack's Macaulay2 bindings [GPV13]_.
 
-The proprietary software Hom4PS-3 [TODO] features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
+The proprietary software Hom4PS-3 [HOM4]_ features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
 
 
 User Interaction
@@ -96,31 +96,28 @@ User Interaction
 CGI Scripting
 -------------
 
-In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.  MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
 
-As of the middle of May 2019, our web server has 146 user accounts.
+MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+
+As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance.
 
 JupyterHub
 ----------
 
-With JupyterHub, we provide user accounts on our server,
-which has both phcpy and SageMath pre-installed.
-
-The hub's notebook environment supports language-agnostic computations,
-supporting execution environments in several dozen languages.
-We can also run the code in a Python Terminal session.
+With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
 
 For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner that isolates the actions of users to separate processes and logins in generic home folders.
 
-The account management prompts by e-mail were hooked to a new Tornado Handler.
+The account management prompts by e-mail were hooked to new Tornado Handler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each pathway serves HTML seamlessly with the JupyterHub interface, with their forms living in new extensions of its Jinja templates.
+
 
 Code Snippets
 -------------
 
-In our JupyterHub deployment, we use the snippets menu provided by nbextensions [JUP15]_ to suggest typical applications to guide the novice user.
+Learning a new API is daunting enough without also being a crash course in algebraic geometry. Therefore, the user's manual of phcpy [PHCPY]_ begins with a tutorial section using only the blackbox solver ``phcpy.solver.solve(system, ...)``. In this API, ``system`` is a list of strings representing polynomials, terminated by semicolons, and containing as many variables as equations.
 
-The screen shot in Fig. :ref:`figsnippet` shows the code snippet 
-with an example of use of the blackbox solver.
+The code snippets from these tutorials are available in our JupyterHub deployment, via the snippets menu provided by nbextensions [JUP15]_. This menu suggests typical applications to guide the novice user. The screen shot in Fig. :ref:`figsnippet` shows the code snippet reproduced below.
 
 .. figure:: ./bbsolvesnippet2.png
    :align: center
@@ -129,13 +126,33 @@ with an example of use of the blackbox solver.
 
    The code snippet for the blackbox solver.  :label:`figsnippet`
 
+.. code-block:: python
+
+  # PHCpy > blackbox solver > solving trinomials > solving a specific case
+  from phcpy.solver import solve
+
+  f = ['x^2*y^2 + 2*x - 1;', 'x^2*y^2 - 3*y + 1;']
+  sols = solve(f)
+  for sol in sols: print sol
+
+The first solution of the given trinomial can be read off as (0.48613… + 0.0i, 0.34258… - 0.0i), where the imaginary part of x_0 is exactly zero, and that of y_0 negligibly small. Programmatically, these can be accessed using either ``solve(f, dictionary_output=True)``, or equivalently by parsing strings through ``[phcpy.solutions.strsol2dict(sol) for sol in solve(f)]``.
+
+
 Direct Manipulation
 -------------------
 
-[Discuss Javascript and d3.js support in Jupyter Notebook.
- Relevance to computational geometry.]
+One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
-One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of the circle problem of Apollonius. The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017.
+The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
+
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations), which we solved interactively (Fig. :ref:`apollonius`). In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
+
+.. figure:: ./apollonius.png
+  :figclass: h
+
+  Tangent circles calculated by phcpy in response to user reparameterization of the system. :label:`apollonius`
+
+This approach makes use of the real-time solution of small polynomial systems, demonstrating the low latency of phcpy. It complements static input conditions by investigating their continous deformation, especially across singular solutions (which PHCpack handles more robustly than naive homotopy methods).
 
 
 Solving Polynomial Systems
@@ -359,16 +376,52 @@ for positive dimensional solution sets [Ver18]_.
 Survey of Applications
 ======================
 
-We consider some examples from various literatures which apply polynomial 
-constraint solving, two of which are tutorialized for phcpy.
+We consider some examples from various literatures which apply polynomial constraint solving. The first two examples use phcpy in particular as a research tool. The remaining three are broader examples representing current uses of numerical algebraic geometry in other STEM fields.
 
-[DRAFT NOTE: None of these run on the public phcpy deployment, except possibly Apollonius circles. However, they do all seem to use the Python bindings.]
+Rigid Graph Theory
+------------------
 
-Motion Planning & Mechanism Design
-----------------------------------
+The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_ (which we gloss in this section).
 
-Fig. :ref:`fig4barcoupler` illustration a reproduction
-of a result in the mechanism design literature [MW90]_.
+Consider a graph :math:`G` whose edges each have a given length. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`d`, and an upper bound over :math:`d` (for which it isn't infinite) and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices) can be computed. In particular, the Cayley-Menger matrix of :math:`d` (the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, including square subsystems (where the # variables equals the # equations).
+
+Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration s.t. vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
+
+``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing from the solutions of previous systems to find new one.
+
+In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
+
+Model Selection & Parameter Inference
+--------------------------------------
+
+It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities. These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, that can be explored numerically via polynomial homotopy continuation.
+
+
+Parameter hopotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
+
+
+Critical Point Computation
+--------------------------
+
+Polynomial homotopy continuation has also been adapted to the field of chemical engineering to locate critical points of multicomponent mixtures [SWM16]_, i.e. temperature and pressure satisfying a multi-phase equilibrium.
+
+A remarkable variety of systems of constraint also take on polynomial form, or can be approximated thereby, in various sciences. Diverse problems in the analysis of belief propagation (in graphical models) [KMC18]_, hyperbolic conservation laws (in PDEs) [HHS13]_, and vacuum moduli spaces (in supersymmetric field theory) [HHM13]_ have been addressed using polynomial homotopy continuation.
+
+Algebraic Kinematics
+--------------------
+
+We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.:
+
+* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility)
+* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock)
+* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation)
+* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity)
+* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses.
+
+...as well as the **synthesis** of mechanisms that can reach certain sets of outputs, or that can be controlled by a certain input/output relationship.
+
+Fig. :ref:`fig4barcoupler` illustrates a reproduction
+of one synthesis result in the mechanism design literature [MW90]_.
 Given five points, the problem is to determine the length of two bars
 so their coupler curve passes through the five given points.
 
@@ -384,31 +437,24 @@ to reproduce the results are in its source code distribution.
 The equations are generated with sympy [SymPy]_
 and the plots are made with matplotlib [Hun07]_.
 
-Rigid Graph Theory
-------------------
+Continuation homotopies were developed as a substitute for algebraic elimination that was more robust to special cases, yet still tractable to numerical techniques. Research in kinematics increasingly relies on such algorithms [WS11]_.
 
-[BELT18]_
+Systems Biology
+---------------
 
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
 
-Systems Biology & Model Selection
----------------------------------
+* determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states.
+* evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state.
+* describe all the states accessible from a given state of the model, i.e. that state's stoichiometric compatibility class (or basin of attraction).
+* determine whether rate parameters of the given model are identifiable from concentration measurements, or at least constrained.
 
-[AD18]_
-
-
-Critical Point Computation
---------------------------
-
-[SWM16]_
-
-
-Statistics & Physics
---------------------------
-
-expand [HS15]_
+For large real-world models in systems biology, these questions of algebraic geometry are only tractable to numerical methods scaling to many dozens of simultaneous equations.
 
 Conclusion
 ==========
+
+From these examples, we see that polynomial homotopy continuation has wide applicability to STEM fields. Moreover, phcpy is an accessible interface to the technique, capable of high performance whilst producing certifiable and reproducible results.
 
 
 Acknowledgments
@@ -602,75 +648,70 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-.. [BNN16] D. J. Bates, A. J. Newell, & M. Niemerg
-  *BertiniLab: A MATLAB interface for solving systems of polynomial equations.*
-  Numerical Algorithms, 71, pages 229–244, 2016.
-  DOI 10.1007/s11075-015-0014-6.
-
-.. [BNN17] D. J. Bates, A. J. Newell, & M. E. Niemerg
-  *Decoupling highly structured polynomial systems.*
-  Journal of Symbolic Computation, 79, pages 508–515, 2017.
-  DOI 10.1016/j.jsc.2016.07.016.
-
-.. [BM16] E. Bogart & C. R. Myers
-  *Multiscale Metabolic Modeling of C4 Plants: Connecting Nonlinear Genome-Scale Models to Leaf-Scale Metabolism in Developing Maize Leaves.*
-  PLOS ONE, 11, e0151722, 2016.
-  DOI 10.1371/journal.pone.0151722.
-
 .. [D3] M. Bostock, V. Ogievetsky, & J. Heer
   *D3 Data-Driven Documents.*
   IEEE Transactions on Visualization and Computer Graphics, 17, pages 2301–2309, 2011.
   DOI 10.1109/TVCG.2011.185.
 
-.. [DSG18] S. Dura-Bernal, B. A. Suter, P. Gleeson, M. Cantarelli, A. Quintana, F. Rodriguez, D. J. Kedziora, G. L. Chadderdon, C. C. Kerr, S. A. Neymotin, R. McDougal, M. Hines, G. M. G. Shepherd, & W. W. Lytton
-  *NetPyNE: a tool for data-driven multiscale modeling of brain circuits.*
-  bioRxiv, 461137, 2018.
-  DOI 10.1101/461137.
+.. [Pascal] *JupyterHub deployment of phcpy.*
+    Website, accessed May 2019. 2017.
+    https://phcpack.org
 
-.. [FSC13] T. Fischbacher & F. Synatschke-Czerwonka
-  *FlowPy—A numerical solver for functional renormalization group equations.*
-  Computer Physics Communications, 184, pages 1931–1945, 2013.
-  DOI 10.1016/j.cpc.2013.03.002.
+.. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
+     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
 
-.. [GWW09] J. E. Guyer, D. Wheeler, & J. A. Warren
-  *FiPy: Partial Differential Equations with Python.*
-  Computing in Science Engineering, 11, pages 6–15, 2009.
-  DOI 10.1109/MCSE.2009.52.
+.. [HS15] H. Schenck
+    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
+    Bulletin of the American Mathematical Society, 53.1, 179–86, 2015.
+    DOI: 10.1090/bull/1520
+
+.. [GBH16] E. Gross, D. Brent, K. L. Ho, D. J. Bates, & H. A. Harrington
+    *Numerical algebraic geometry for model selection and its application to the life sciences.*
+    Journal of The Royal Society Interface, 13: 20160256. 2016.
+    DOI: 10.1098/rsif.2016.0256.
+
+.. [GHR16] E. Gross, H. A. Harrington, Z. Rosen, & B. Sturmfels
+    *Algebraic Systems Biology: A Case Study for the Wnt Pathway. Bulletin of Mathematical Biology.*
+    Bulletin of Mathematical Biology 78, pages 21–51, 2016.
+    DOI: 10.1007/s11538-015-0125-1.
 
 .. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
   *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
   IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
   DOI 10.1109/TPAMI.2017.2749575.
 
-.. [LBC10] J. Liepe, C. Barnes, E. Cule, K. Erguler, P. Kirk, T. Toni, & M. P. H. Stumpf
-  *ABC-SysBio—approximate Bayesian computation in Python with GPU support.*
-  Bioinformatics, 26, pages 1797–1799, 2010.
-  DOI 10.1093/bioinformatics/btq278.
+.. [HHS13] W. Hao, J. D. Hauenstein, C.-W. Shu, A. J. Sommese, Z. Xu, & Y.-T. Zhang
+    *A homotopy method based on WENO schemes for solving steady state problems of hyperbolic conservation laws.*
+    Journal of Computational Physics, 250, pages 332–346. 2013.
+    DOI: 10.1016/j.jcp.2013.05.008.
 
-.. [SBS18] D. G. A. Smith, L. A. Burns, D. A. Sirianni, D. R. Nascimento, A. Kumar, A. M. James, J. B. Schriber, T. Zhang, B. Zhang, A. S. Abbott, E. J. Berquist, M. H. Lechner, L. A. Cunha, A. G. Heide, J. M. Waldrop, T. Y. Takeshita, A. Alenaizan, D. Neuhauser, R. A. King, A. C. Simmonett, J. M. Turney, H. F. Schaefer, F. A. Evangelista, A. E. DePrince, T. D. Crawford, K. Patkowski, & C. D. Sherrill
-  *Psi4NumPy: An Interactive Quantum Chemistry Programming Environment for Reference Implementations and Rapid Development.*
-  Journal of Chemical Theory and Computation, 14, pages 3504–3511, 2018.
-  DOI 10.1021/acs.jctc.8b00286.
+.. [HHM13] J. Hauenstein, Y.-H. He, & D. Mehta
+    *Numerical elimination and moduli space of vacua.*
+    Journal of High Energy Physics, 83. 2013.
+    DOI: 10.1007/JHEP09(2013)083.
 
-.. [AD18] A. Dickenstein
-    *Algebraic geometry in the interface of pure and applied mathematics.*
-    Rio Intelligencer, ICM, 2018.
-    http://mate.dm.uba.ar/~alidick/DickensteinIntelligencerWithoutFigures.
+.. [WS11] C. W. Wampler & A. J. Sommese
+    *Numerical algebraic geometry and algebraic kinematics.*
+    Acta Numerica, 20, pages 469–567. 2011.
+    DOI: 10.1017/S0962492911000067.
 
-.. [DB15] D. Brake
-    *Advances in Software in Numerical Algebraic Geometry.*
-    Slides presented at Advances @ SIAM AG15, U Notre Dame, 2015.
-    https://danielleamethyst.org/resources/presentations/talks/siam_AG2015_numerical_AG_overview.pdf.
+.. [HOM4] T. Chen, T.L. Lee, T.Y. Li.
+    *Hom4PS-3: A Parallel Numerical Solver for Systems of Polynomial Equations Based on Polyhedral Homotopy Continuation Methods.*
+    Mathematical Software - ICMS 2014, Lecture Notes in Computer Science, vol 8592, pages 183-190. 2014.
+    DOI: 10.1007/978-3-662-44199-2_30
 
-.. [HS15] H. Schenck
-    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
-    Bulletin of the American Mathematical Society, 53.1 (2015), 179–86
-    DOI: 10.1090/bull/1520
+.. [PHCPY] *phcpy 0.9.5 documentation*
+    http://homepages.math.uic.edu/~jan/phcpy_doc_html/
 
-.. [Pascal] *JupyterHub deployment of phcpy.*
-    Website, accessed May 2019, 2017.
-    https://pascal.math.uic.edu.
+.. [APP] *explorable circle tangency*
+    https://github.com/JazzTap/mcs563/tree/master/Apollonius]
 
-.. [JUP15] *Jupyter notebook snippets menu.*
-     jupyter contrib nbextensions 0.5.0 documentation, 2015.
-     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
+.. [LML14] L. Liberti, B. Masson, J. Lee, C. Lavor, and A. Mucherino.
+  *On the number of realizations of certain henneberg graphs arising in protein conformation.*  
+  Discrete Applied Mathematics, 165, page 213–232, 2014.
+  DOI: 10.1016/j.dam.2013.01.020
+
+.. [EM99] I.Z. Emiris and B. Mourrain.
+  *Computer algebra methods for studying and computing molecular conformations.*
+  Algorithmica 25, pages 372–402, 1999.
+  DOI: 10.1007/PL00008283
