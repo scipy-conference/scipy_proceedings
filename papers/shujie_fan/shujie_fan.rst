@@ -26,17 +26,12 @@
 
 
 ------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
+PMDA - Parallel Molecular Dynamics Analysis
 ------------------------------------------------
 
 .. class:: abstract
 
-   PMDA is a Python library that provides parallel analysis algorithms based 
-   on MDAnalysis. With a simple map-reduce scheme from Dask library, PMDA 
-   provides pre-defined analysis tasks and a common interface to create 
-   user-defined analysis taks. Although still in alpha stage, it is already 
-   used on resources ranging from multi-core laptops to XSEDE supercomputers 
-   to speed up analysis of molecular dynamics trajectories.
+PMDA is a Python library that provides parallel analysis algorithms based on MDAnalysis. With a simple split-apply-combine scheme from Dask library, PMDA provides pre-defined analysis tasks and a common interface to create user-defined analysis taks. Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
 
 .. class:: keywords
 
@@ -47,259 +42,171 @@ Introduction
 
 
 
-Bibliographies, citations and block quotes
-------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
-
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
-
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
-
-However, if you use a bibtex file, this will overwrite any manually written references. 
-
-So what would previously have registered as a in text reference ``[Atr03]_`` for 
-
-:: 
-
-     [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
-
-what you actually see will be an empty reference rendered as **[?]**.
-
-E.g., [Atr03]_.
-
-
-If you wish to have a block quote, you can just indent the text, as in 
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-Dois in bibliographies
-++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
-
-If there are errors when adding it due to non-alphanumeric characters, see if
-wrapping the doi in ``\detokenize`` works to solve the issue.
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = \detokenize{10.1017/CBO9780511808432},
-   }
-
-Source code examples
+Method
 --------------------
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
+``pmda.parallel.ParallelAnalysisBase`` is the base class for defining a split-apply-combine parallel multi frame analysis in PMDA. This class will automatically take care of setting up the trajectory reader for iterating in parallel. The class is based on the following libraries: MDAnalysis 0.20.0, Dask 1.1.1, NumPy 1.15.4.
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+    import MDAnalysis as mda
+    from dask.delayed import delayed
+    import dask
+    import dask.distributed
+    import numpy as np
 
-       return a + b
+The parallel analysis algorithms are performed on ``Universe`` and tuple of ``AtomGroups``. The topology, trajectory filenames and the list of AtomGroup indices are passed as attributes to make them accessiable to each block. 
 
-Maybe also in another language, and with line numbers:
+.. code-block:: python
 
-.. code-block:: c
-   :linenos:
+    class ParallelAnalysisBase(object):
+	def __init__(self, universe, atomgroups):
+	    self._trajectory = universe.trajectory 
+	    self._top = universe.filename
+	    self._traj = universe.trajectory.filename
+	    self._indices = [ag.indices 
+                             for ag in atomgroups]
 
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
+``run()`` performs the split-apply-combine parallel analysis. The trajectory is split into n_blocks blocks by :code:`make_balanced_slices` with first frame start, final frame stop and step length step (corresponding to the split step).  :code:`make_balanced_slices` is a function defined in pmda.util. It generates blocks in such a way that they contain equal numbers of frames when possible, but there are also no empty blocks. The final start and stop frames for each block are restored in a list slices. ``n_jobs`` is the number of jobs to start, this argument will be ignored when the distributed scheduler used. After the additional preparation defined in :code:`_prepare`, the analysis jobs (the apply step, defined in :code:`_dask_helper()`)  on each block are delayed with the :code:`delayed()` function in dask. Finally, the results from all blocks are gathered and combined in the :code:`_conclude()` function.
 
-Or a snippet from the above code, starting at the correct line number:
+``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
 
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
+.. code-block:: python
 
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
+        def run(self, start=None, stop=None, step=None,
+            n_jobs=1, n_blocks=None):
+	
+            # Get the indices of the start, stop 
+            # and step frames.
+            start, stop, step = 
+                   self._trajectory.check_slice_indices(
+                       start, stop, step)
+            n_frames = len(range(start, stop, step))
+            slices = make_balanced_slices(n_frames, 
+                                  n_blocks, start=start,
+                                  stop=stop, step=step)
+            with timeit() as total:
+                with timeit() as prepare:
+                    self._prepare()
+                time_prepare = prepare.elapsed
+                blocks = []
+                with self.readonly_attributes():
+                    for bslice in slices:
+                        task = delayed(
+                             self._dask_helper, 
+                             pure=False)(
+                                 bslice,
+                                 self._indices,
+                                 self._top,
+                                 self._traj, )
+                        blocks.append(task)
+                    blocks = delayed(blocks)
+                    # record the time when scheduler
+                    # starts working
+                    wait_start = time.time()
+                    res = blocks.compute(**scheduler_kwargs)
+                with timeit() as conclude:
+                    self._results = np.asarray(
+                                      [el[0] for el in res])
+                    self._conclude()
+            self.timing = Timing(
+                np.hstack([el[1] for el in res]),
+                np.hstack([el[2] for el in res]), 
+                total.elapsed,
+                np.array([el[3] for el in res]), 
+                time_prepare,
+                conclude.elapsed,
+                # waiting time = wait_end - wait_start
+                np.array([el[4]-wait_start for el in res]))
+            return self
+
+:code:`_dask_helper()` is the single block analysis function. It first reconstructs the Universe and the tuple of AtomGroups. Then the single-frame analysis :code:`_single_frame()` is performed on each trajectory frame by iterating  over ``u.trajectory[bslice.start:bslice.stop]``. 
+
+.. code-block:: python
+
+        def _dask_helper(self, bslice, indices, top, traj):
+            # wait_end needs to be first line 
+            # for accurate timing
+            wait_end = time.time()
+            with timeit() as b_universe:
+                u = mda.Universe(top, traj)
+                agroups = [u.atoms[idx] for idx in indices]
+            res = []
+            times_io = []
+            times_compute = []
+            for i in range(bslice.start, 
+                           bslice.stop, bslice.step):
+                with timeit() as b_io:
+                ts = u.trajectory[i]
+                with timeit() as b_compute:
+                    res = self._reduce(res, 
+                       self._single_frame(ts, agroups))
+                times_io.append(b_io.elapsed)
+                times_compute.append(b_compute.elapsed)
+            return np.asarray(res), np.asarray(times_io),
+                np.asarray(times_compute), 
+                b_universe.elapsed, wait_end
+
+Accumulation of frames within a block happens in the :code:`_reduce` function. It is called for every frame. ``res`` contains all the results before current time step, and ``result_single_frame`` is the result of ``_single_frame`` for the current time step. The return value is the updated ``res``. The default is to append results to a python list. This approach is sufficient for time-series data, such as the root mean square distance(RMSD) of the :math:`C_{\alpha}` atoms of a protein. 
+
+.. code-block:: python
+
+        @staticmethod
+        def _reduce(res, result_single_frame):
+            # 'append' action for a time series
+            res.append(result_single_frame)
+            return res
+
+
+
+Basic Usage 
 --------------
 
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
+PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks. In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules. Here, we will introduce some basic usages of PMDA.
 
-.. math::
+Pre-defined Analysis
+++++++++++++++++++++++
+PMDA contains a number of pre-defined analysis classes that are modelled after functionality in ``MDAnalysis.analysis`` and that can be used right away. PMDA currently has four predefined analysis tasks to use:
 
-   g(x) = \int_0^\infty f(x) dx
+``pmda.rms``: RMSD analysis tools
 
-or on multiple, aligned lines:
+``pmda.comtacts``: Native contacts analysis tools
 
-.. math::
-   :type: eqnarray
+``pmda.rdf``: Radial distribution function tools
 
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
+``pmda.leaflet``: LeafletFinder analysis tool
 
-The area of a circle and volume of a sphere are given as
+The usage of these tools is similar to ``MDAnalysis.analysis``. The simplest example is calculating root mean square distance(RMSD) of :math:`C_{\alpha}` atoms of the protein with ``pmda.rms``.
 
-.. math::
-   :label: circarea
+.. code-block:: python
 
-   A(r) = \pi r^2.
+    import MDAnalysis as mda
+    from pmda import rms
+    # Create a Universe based on simulation topology
+    # and trajectory
+    u = mda.Universe(top, trj)
 
-.. math::
-   :label: spherevol
+    # Select all the C alpha atoms
+    ca = u.select_atoms('name CA')
 
-   V(r) = \frac{4}{3} \pi r^3
+    # Take the initial frame as the reference
+    u.trajectory[0]
+    ref = u.select_atoms('name CA')
 
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
+    # Build the parallel rms object, and run 
+    # the analysis with 4 workers and 4 blocks.
+    rmsd = rms.RMSD(ca, ref)
+    rmsd.run(n_jobs=4, n_blocks=4)
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
+    # The results can be accessed in rmsd.rmsd.
+    print(rmsd.rmsd)
 
 
-We show the different quantities of materials required in Table
-:ref:`mtable`.
+User-defined Analysis
+++++++++++++++++++++++
 
 
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
-
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
