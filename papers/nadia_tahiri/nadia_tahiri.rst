@@ -14,12 +14,12 @@ An intelligent shopping list based on the application of partitioning and machin
    A shopping list is an integral part of the shopping experience for many consumers. 
    Several mobile retail studies indicate that potential customers place the highest 
    priority on features that help them create and manage personalized shopping lists. 
-   First, we propose the development of a new machine learning model that will be written
-   in Python 3 and plan to predict which grocery products the consumer in buy again or 
+   First, we propose to develop a new model of machine learning written in Python3.6 
+   and plan to predict which grocery products the consumer in buy again or 
    will try to buy for the first time, and in which store(s) will the area he will shop. 
-   Second, we developed a smart shopping list template to provide consumers with a 
+   Second, we developped a smart shopping list template to provide consumers with a 
    personalized weekly shopping list based on their historical shopping history and 
-   known preferences. As explanatory variables, we used available grocery shopping history, 
+   known preferences. As explanatory variables, we used available grocery shopping histories, 
    store promotion information for the given region, as well as product price statistics.
 
 .. class:: keywords
@@ -32,7 +32,7 @@ Introduction
 A typical grocery retailer offers consumers thousands of promotions every week 
 to attract more consumers and thus improve their economic performance :cite:`tanusondjaja2016exploring`. 
 Studies by Walters and Jamil (2002, 2003) of :cite:`walters2002measuring` and :cite:`walters2003exploring` found that about 39% of all items purchased 
-during an inter-category grocery were weekly specials and promotions, and about 30% of consumers 
+during an inter-category grocery were specials of the week and about 30% of consumers 
 surveyed were very sensitive to product prices, buying more promotional items than regular items. 
 With the recent expansion of machine learning methods, including deep learning, 
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
@@ -56,7 +56,7 @@ them efficiently based on purchases made.
 Then, this classification was used in the prediction stage. 
 Since real consumer data contains thousands of individual articles, 
 we focus primarily on categories of articles. 
-The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first computed to visualize the initial data 
+The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first be performed to better visualize the initial data 
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means :cite:`jain2010data` and X-means :cite:`pelleg2000x`, 
 made it possible to determine the number of classes of consumers, 
@@ -68,38 +68,38 @@ as well as their distribution by class.
    CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
 
 Secondly, we developed a statistical model to predict which products previously purchased will be 
-in the next order of the consumer. By using explanatory variables such as available grocery shopping histories, 
+in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
-we developed a machine learning model that is able to:
+we developed a model of machine learning and able to:
 
-1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
+1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, and in which store(s) in the area he will shop;
 2. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
-This list also includes recommendations regarding the optimal quantity of each product suggested and the store(s) 
+This list was also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
 where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
 using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    
-   Screenshot of *CircuitPromo.ca* website with an optimal shopping journey using the generalized commercial traveller algorithm. :label:`circuit`
+   Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
 based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
-A deep learning method :cite:`goodfellow2016deep`, based on Recurrent Neural Networks (RNN) 
-and Convolutional Neural Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow` 
-to reach the requirements of objective (ii). Those implementations are going to create significant interest from consumers.
+A deep learning method :cite:`goodfellow2016deep`, based on recurrent neuron networks (RNN) 
+and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool :cite:`girija2016tensorflow`, 
+was used to achieve objectives (ii), which will be of major interest to consumers.
 
 The problem can be reformulated as a binary prediction task: given a consumer, 
-the history of their previous purchases and a product with their price history, 
+the history of his previous purchases and a product with his price history, 
 to predict whether or not the given product will be included in the grocery list of the consumer. 
 Our approach adapted a variety of generative models to existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
-RNNs and CNNs were used at the first learning level 
-and forward propagation neural networks (Feed-forward NN) 
-was used at the second learning level.
+Recurrent neural networks and convolutional neural networks was used at the first learning level 
+and forward propagation neural networks (Feedforward NN) 
+was used at the second level of learning.
 
 Depending on the user :math:`u` and the user purchase history
 (shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included 
@@ -107,8 +107,8 @@ in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
 -------
-In this section we discuss the details of our set of synthetic and real datasets,
-the latter obtained from CircuitPromo.ca.
+In this section we discuss the details of our set synthetic and real datasets.
+The real datasets was obtained from CircuitPromo.ca as basic data.
 
 *Features*
 
@@ -126,15 +126,15 @@ The features are described as follow:
 *Consumer profile*
 
 We found that there are 3 consumer profiles see :cite:`walters2003exploring`, :cite:`walters2002measuring`, and :cite:`tanusondjaja2016understanding`. 
-The first group is consumers who only buy products on promotion.
+The first group is consumers who buy only the products on promotion. 
 The second group is consumers who always buy the same products (without considering promotions).
-Finally, the third group is consumers who buy products whether there is a promotion or not.
+Finally, the third group is consumers who buy products on promotion or not.
 
 Since our real dataset was not enough to complete correctly our project, we increased it.
 We described the sets of data simulated in our study, 
-and we presented in detail the results of our simulations.
+and we presented in detail the results of our simulations
 
-*Data Synthesis*
+*Data increase*
 
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
@@ -146,7 +146,7 @@ We observed that our baskets generated follow the same distribution that origina
 .. figure:: figures/order_frequency.png
    :align: center
      
-   Basket size distribution. :label:`orderfrequency`
+   Difference of basket size distribution between `Baskets generated` in blue and `Original baskets` in red.  :label:`orderfrequency`
 
 Models
 ------
@@ -173,16 +173,14 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 .. figure:: figures/lstm.png
    :align: center 
   
-   This figure shows a chain-structured LSTM network. An LSTM rchitecture contains forget, learn, remember and use gates that determine whether an input is so important  that  it  can  be  saved.  
-   In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
-   which make it easier to update the weights during the back propagation process. 
-   :label:`lstm`
+   This figure shows circuit using generalized commercial traveller algorithm. the improvement over the course of this study in the DESI 
+   spectral extraction throughput. :label:`lstm`
 
 *Gradient Boosted Tree (GBT) network*
 
 GBT :cite:`friedman2002stochastic` is an iterative algorithm that combines simple parameterized functions with “poor” performance 
 (high prediction error) to produce a highly accurate prediction rule. GBT utilizes an ensemble of weak
-learners to boost performance; this makes it a good candidate model for predicting grocery shopping list. 
+learners to boost performance; this makes it a good candidate model for predicting credit card fraud. 
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple fashion and be used in both classification and 
@@ -528,5 +526,7 @@ Abbreviations
 - GBT  - Gradient Tree Boosting
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
-- RNN - Recurrent Neuron Networks
+- RNN - recurrent neuron networks
+
+
 
