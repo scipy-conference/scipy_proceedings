@@ -171,7 +171,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 
 *Gradient Boosted Tree (GBT) network*
 
-GBT :cite:`friedman2002stochastic` is an iterative algorithm that combines simple parameterized functions with “poor” performance 
+GBT :cite:`friedman2002stochastic` is an iterative algorithm that combines simple parameterized functions with low performance 
 (high prediction error) to produce a highly accurate prediction rule. GBT utilizes an ensemble of weak
 learners to boost performance; this makes it a good candidate model for predicting credit card fraud. 
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
@@ -271,7 +271,7 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    :align: center
    :scale: 25%
    
-   Model used in the classification. :label:`workflow`
+   The graphical illustration of the proposed model trying to predict the next basket in term of list of product. :label:`workflow`
 
 *Results*
 
@@ -292,10 +292,10 @@ Statistically, this can be identified as follow:
 
 where:
 
-- *TP* is True Positive, i.e. the number of positively labeled data, which have been classified as "True", correct class,
-- *FP* is False Positive, i.e. the number of negatively labeled data, which falsely have been classified as "Positive",
-- *TN* is True Negative, i.e. the number of negatively labeled data, which have been classified as "Negative", correct class, and 
-- *FN* is False Negative, i.e.  the number of positively labeled data, which falsely have been classified as "Negative".
+- *TP* is True Positive, i.e. the number of positively labeled data, which have been classified as `True`, correct class,
+- *FP* is False Positive, i.e. the number of negatively labeled data, which falsely have been classified as `Positive`,
+- *TN* is True Negative, i.e. the number of negatively labeled data, which have been classified as `Negative`, correct class, and 
+- *FN* is False Negative, i.e.  the number of positively labeled data, which falsely have been classified as `Negative`.
 
 The *precision* is a description of random errors, a measure of statistical variability.
 The formula of precision is the ratio between TP with all truth data (positive or negative). 
@@ -337,11 +337,6 @@ The select_products function in Python script is the following:
 .. code-block:: python
     :linenos:
     
-    from multiprocessing import Pool, cpu_count
-
-    import numpy as np
-    import pandas as pd
-
     from f1_optimizer import F1Optimizer
 
     def select_products(x):
