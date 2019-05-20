@@ -33,14 +33,18 @@ Solving Polynomial Systems with phcpy
 
    The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with    homotopy continuation.
 
-   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years. One result is the availability of phcpy   through a JupyterHub featuring Python2, Python3, and SageMath kernels.
+   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years.  One result is the availability of phcpy   through a JupyterHub featuring Python2, Python3, and SageMath kernels.
 
 Introduction
 ============
 
 The Python package phcpy [Ver14]_ provides an alternative to the
-command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial 
-systems by homotopy continuation methods. In the phcpy interface, Python scripts replace command line options and text menus, and data persists in a session without temporary files. This also makes PHCpack accessible from Jupyter notebooks, including a JupyterHub available online [Pascal]_.
+command line executable ``phc`` of PHCpack [Ver99]_ to solve polynomial
+systems by homotopy continuation methods. In the phcpy interface, 
+Python scripts replace command line options and text menus, 
+and data persists in a session without temporary files. 
+This also makes PHCpack accessible from Jupyter notebooks, 
+including a JupyterHub available online [Pascal]_.
 
 The meaning of *solving* evolved from computing approximations to
 all isolated solutions into the numerical irreducible decomposition
@@ -57,26 +61,40 @@ Our web interface offers phcpy in a SageMath [Sage]_, [SJ05]_ kernel
 or in a Python kernel of a Jupyter notebook [Klu16]_.
 
 Although phcpy has been released for only five years,
-three instances in the research literature of symbolic computation, geometry and topology, and chemical engineering (respectively) mention its application to their computations.
+three instances in the research literature of symbolic computation, 
+geometry and topology, and chemical engineering (respectively) 
+mention its application to their computations.
 
 * The number of embeddings of minimally rigid graphs [BELT18]_.
 * Roots of Alexander polynomials [CD18]_.
 * Critical points of equilibrium problems [SWM16]_.
 
-phcpy is in ongoing development. At the time of writing, this paper is based on version 0.9.5 of phcpy, whereas version 0.1.5 was current at the time of [Ver14]_. An example of these changes is that the software described in [SVW03]_ was recently parallelized for phcy [Ver18]_.
+phcpy is in ongoing development. At the time of writing, 
+this paper is based on version 0.9.5 of phcpy,
+whereas version 0.1.5 was current at the time of [Ver14]_.
+An example of these changes is that the software described in [SVW03]_ 
+was recently parallelized for phcy [Ver18]_.
 
 Mission
 ---------
 
-The mission of phcpy is to bring polynomial homotopy continuation, which is at the origin of many of the algorithms in numerical algebraic geometry [SVW05]_, into Python's computational ecosystem.
+The mission of phcpy is to bring polynomial homotopy continuation
+into Python's computational ecosystem.
 
-phcpy wraps the shared object files of a compiled PHCpack, which makes the methods more accessible without sacrificing their efficiency.
+phcpy wraps the shared object files of a compiled PHCpack, 
+which makes the methods more accessible without sacrificing their efficiency.
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
-Second, we do not sacrifice the efficiency of the compiled code. Scripts replace the input/output movements and interactions with the user, but not the computationally intensive algorithms.
+Second, we do not sacrifice the efficiency of the compiled code. 
+Scripts replace the input/output movements and interactions with the user, 
+but not the computationally intensive algorithms.
 
-Owing to the ubiquity of polynomial systems with interesting roots, many applications of numerical algebraic geometry to STEM problems exist in the literature. But these are often too compute-hungry for symbolic computation (e.g. via Groebner bases), so numerical solution is valuable.
-
-Henry Schenk's review [HS15_] of the monograph describing Bertini 1 (another polynomial homotopy continuation solver [BHSW13]_) includes a primer on numerical algebraic geometry and its applications (in section 2), which we update below. In particular, biochemical reaction networks and their characterization also appear in this paper's survey of STEM applications, beyond those phcpy-specific works above.
+Numerical algebraic geometry [SVW05]_ was introduced in 1995 as a pun on
+numerical linear algebra.
+PHCpack prototyped the first algorithms to compute 
+a numerical irreducible decomposition of the solution set
+of a polynomial system.
+phcpy aims to bring the algorithms of numerical algebraic geometry
+into the computational ecosystem of Python.
 
 Related Software
 ----------------
@@ -85,10 +103,11 @@ PHCpack is one of three FOSS packages for polynomial homotopy computation curren
 
 HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
 
-NAG4M2 [NAG4M2]_ is a package for Macaulay2 (a standard computational algebra system [M2]_), which can also act an interface to PHCpack or Bertini. As described in [Ley11]_, it provided the starting point for PCHpack's Macaulay2 bindings [GPV13]_.
-
-The proprietary software Hom4PS-3 [HOM4]_ features Python bindings, GPU acceleration, and polyhedral homotopy, as phcpy does. It also has a web interface implemented on the Sage Notebook.
-
+NAG4M2 [NAG4M2]_ is a package for Macaulay2 
+(a standard computational algebra system [M2]_), 
+which can also act an interface to PHCpack or Bertini. 
+As described in [Ley11]_, it provided the starting point 
+for PHCpack's Macaulay2 bindings [GPV13]_.
 
 User Interaction
 ================
@@ -128,12 +147,13 @@ The code snippets from these tutorials are available in our JupyterHub deploymen
 
 .. code-block:: python
 
-  # PHCpy > blackbox solver > solving trinomials > solving a specific case
-  from phcpy.solver import solve
+   # PHCpy > blackbox solver > solving trinomials
+   #       > solving a specific case
+   from phcpy.solver import solve
 
-  f = ['x^2*y^2 + 2*x - 1;', 'x^2*y^2 - 3*y + 1;']
-  sols = solve(f)
-  for sol in sols: print sol
+   f = ['x^2*y^2 + 2*x - 1;', 'x^2*y^2 - 3*y + 1;']
+   sols = solve(f)
+   for sol in sols: print(sol)
 
 The first solution of the given trinomial can be read off as (0.48613… + 0.0i, 0.34258… - 0.0i), where the imaginary part of x_0 is exactly zero, and that of y_0 negligibly small. Programmatically, these can be accessed using either ``solve(f, dictionary_output=True)``, or equivalently by parsing strings through ``[phcpy.solutions.strsol2dict(sol) for sol in solve(f)]``.
 
@@ -153,7 +173,9 @@ This system of 3 nonlinear constraints in 5 parameters for each of 8 possible ta
   Tangent circles calculated by phcpy in response to user reparameterization of the system. :label:`apollonius`
 
 This approach makes use of the real-time solution of small polynomial systems, demonstrating the low latency of phcpy. It complements static input conditions by investigating their continous deformation, especially across singular solutions (which PHCpack handles more robustly than naive homotopy methods).
-
+Singular solutions of polynomial systems are handled by deflation [LVZ06]_,
+which restores quadratic convergence of Newton's method by the addition of
+sufficiently many higher order derivatives to the original system.
 
 Solving Polynomial Systems
 ==========================
@@ -192,7 +214,7 @@ the problem of computing the next solution, or just one random solution,
 has a much lower complexity.  phcpy offers optimal homotopies for
 three classes of polynomial systems:
 
-1. dense polynomial systems
+1. *dense polynomial systems*
 
    A polynomial of degree *d* can be deformed into a product of *d*
    linear polynomials.  If we do this for all polynomials in the system,
@@ -200,7 +222,7 @@ three classes of polynomial systems:
    Continuation methods track the paths originating at the solutions of
    the deformed system to the given problem.
 
-2. sparse polynomial systems
+2. *sparse polynomial systems*
 
    A system is sparse if relatively few monomials appear with nonzero
    coefficient.  The convex hulls of the exponent vectors of the monomials
@@ -210,7 +232,7 @@ three classes of polynomial systems:
    Polyhedral homotopies start a solutions of systems that are sparser
    and extend those solutions to the solutions of the given problem.
 
-3. Schubert problems in enumerative geometry
+3. *Schubert problems in enumerative geometry*
 
    The classical example is to compute all lines in 3-space that
    meet four given lines nontrivially.
@@ -270,7 +292,8 @@ prompting the user for the number of tasks and precision,
 This scripts runs in a Terminal window and prints the elapsed performance
 returned by the function.
 If the quality of the solutions is defined as the working precision,
-then the quality up question ask for the number of processors needed
+then to answer the quality up question,
+one considers how many processors are needed
 to compensate for the overhead of the multiprecision arithmetic.
 
 Although cyclic 7-roots is a small system for modern computers,
@@ -316,6 +339,13 @@ double double to quad double precision in about the same time.
 
 The data in Table :ref:`perfcyc7parallel` is 
 visualized in Fig.  :ref:`figqualityup`.
+The interpolation allows to estimate running times for a number
+of tasks different from the measured run times.
+To answer the original quality up question, 
+One could interpolate between the sizes of working precision 
+to answer the following quality up question.
+If we can afford to spend the same time as on one path tracking task,
+then how many extra decimal places can we gain with *p* path tracking tasks?
 
 .. figure:: ./figqualityup.png
    :align: center
@@ -412,11 +442,11 @@ Algebraic Kinematics
 
 We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.:
 
-* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility)
-* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock)
-* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation)
-* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity)
-* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses.
+* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility);
+* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock);
+* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation);
+* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity);
+* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses;
 
 ...as well as the **synthesis** of mechanisms that can reach certain sets of outputs, or that can be controlled by a certain input/output relationship.
 
@@ -444,9 +474,9 @@ Systems Biology
 
 Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
 
-* determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states.
-* evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state.
-* describe all the states accessible from a given state of the model, i.e. that state's stoichiometric compatibility class (or basin of attraction).
+* determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states;
+* evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state;
+* describe all the states accessible from a given state of the model, i.e. that state's stoichiometric compatibility class (or basin of attraction);
 * determine whether rate parameters of the given model are identifiable from concentration measurements, or at least constrained.
 
 For large real-world models in systems biology, these questions of algebraic geometry are only tractable to numerical methods scaling to many dozens of simultaneous equations.
@@ -504,6 +534,11 @@ References
             Computer Science, pages 87-100, Springer-Verlag, 2015. 
             DOI 10.1007/978-3-319-24021-3_7.
 
+.. [D3] M. Bostock, V. Ogievetsky, and J. Heer
+        *D3 Data-Driven Documents.*
+        IEEE Transactions on Visualization and Computer Graphics, 17, 
+        pages 2301–2309, 2011.  DOI 10.1109/TVCG.2011.185.
+
 .. [BT18] P. Breiding and S. Timme.
           *HomotopyContinuation.jl: A package for homotopy continuation in
           Julia.*
@@ -521,6 +556,26 @@ References
           Geometry and Topology, 22: 1405-1457, 2018.
           DOI 10.2140/gt.2018.22.1405.
 
+.. [EM99] I.Z. Emiris and B. Mourrain.
+          *Computer algebra methods for studying and computing molecular
+          conformations.*  Algorithmica 25, pages 372–402, 1999.
+          DOI: 10.1007/PL00008283.
+
+.. [APP] *explorable circle tangency*
+         https://github.com/JazzTap/mcs563/tree/master/Apollonius]
+
+.. [HHM13] J. Hauenstein, Y.-H. He, and D. Mehta.
+           *Numerical elimination and moduli space of vacua.*
+           Journal of High Energy Physics, 83. 2013.
+           DOI: 10.1007/JHEP09(2013)083.
+
+.. [HHS13] W. Hao, J. D. Hauenstein, C.-W. Shu, A. J. Sommese, Z. Xu, 
+           and Y.-T. Zhang.
+           *A homotopy method based on WENO schemes for solving steady
+           state problems of hyperbolic conservation laws.*
+           Journal of Computational Physics, 250, pages 332–346. 2013.
+           DOI: 10.1016/j.jcp.2013.05.008.
+
 .. [HLB01] Y. Hida, X. S. Li, and D. H. Bailey.
            *Algorithms for quad-double precision floating point arithmetic.*
            In the Proceedings  of the 15th IEEE Symposium on Computer 
@@ -537,9 +592,21 @@ References
            DOI 10.1109/MCSE.2007.55.
 
 .. [GLW05] T. Gao, T.Y. Li, and M. Wu.
-           *Algorithm 846: MixedVol: a software package for mixed-volume computation.*
+           *Algorithm 846: MixedVol: a software package for mixed-volume
+           computation.*
            ACM Trans. Math. Softw., 31(4):555-560, 2005.
            DOI 10.1145/1114268.1114274.
+
+.. [GBH16] E. Gross, D. Brent, K. L. Ho, D. J. Bates, and H. A. Harrington.
+           *Numerical algebraic geometry for model selection
+           and its application to the life sciences.*
+           Journal of The Royal Society Interface, 13: 20160256. 2016.
+           DOI: 10.1098/rsif.2016.0256.
+
+.. [GHR16] E. Gross, H. A. Harrington, Z. Rosen, and B. Sturmfels.
+           *Algebraic Systems Biology: A Case Study for the Wnt Pathway.*
+           Bulletin of Mathematical Biology 78, pages 21–51, 2016.
+           DOI: 10.1007/s11538-015-0125-1.
 
 .. [GPV13] E. Gross, S. Petrovi |cacute|, and J. Verschelde.
            *Interfacing with PHCpack.*
@@ -552,6 +619,12 @@ References
            ACM Communications in Computer Algebra 45(4): 225-234 , 2011.
            DOI 10.1145/2110170.2110185.
 
+.. [Pascal] *JupyterHub deployment of phcpy.*
+            Website, accessed May 2019. 2017.  https://phcpack.org
+
+.. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
+           https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
+
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
            S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing,
@@ -563,9 +636,27 @@ References
            pages 87-90. IOS Press, 2016.
            DOI 10.3233/978-1-61499-649-1-87.
 
+.. [KMC18] C. Knoll, D. Mehta, T. Chen, and F. Pernkopf.
+           *Fixed Points of Belief Propagation—An Analysis
+           via Polynomial Homotopy Continuation.*
+           IEEE Transactions on Pattern Analysis and Machine Intelligence,
+           40, pages 2124–2136, 2018.  DOI 10.1109/TPAMI.2017.2749575.
+
 .. [Ley11] A. Leykin.  *Numerical algebraic geometry.*
            The Journal of Software for Algebra and Geometry: Macaulay2,
            3:5-10, 2011.  DOI 10.2140/jsag.2011.3.5.
+
+.. [LVZ06] A. Leykin, J. Verschelde, and A. Zhao.
+           *Newton's method with deflation for isolated singularities of
+           polynomial systems.*
+           Theoretical Computer Science, 359(1-3):111-122, 2006.
+           DOI 10.1016/j.tcs.2006.02.018.
+
+.. [LML14] L. Liberti, B. Masson, J. Lee, C. Lavor, and A. Mucherino.
+           *On the number of realizations of certain henneberg graphs
+           arising in protein conformation.*  
+           Discrete Applied Mathematics, 165, page 213–232, 2014.
+           DOI: 10.1016/j.dam.2013.01.020.
 
 .. [M2] D. R. Grayson and M. E. Stillman.
         Macaulay2, a software system for research in algebraic geometry.
@@ -587,6 +678,9 @@ References
 
 .. [NAG4M2] Branch NAG of M2 repository.
             https://github.com/antonleykin/M2/tree/NAG
+
+.. [PHCPY] *phcpy 0.9.5 documentation*
+           http://homepages.math.uic.edu/~jan/phcpy_doc_html/
 
 .. [Sage] The Sage Developers.
           *SageMath, the Sage Mathematics Software System, Version 7.6*.
@@ -642,76 +736,13 @@ References
            Springer-Verlag, 2018.
            DOI 10.1007/978-3-319-99639-4_25.
 
-.. [VY15] J. Verschelde and X. Yu
+.. [VY15] J. Verschelde and X. Yu.
           *Polynomial Homotopy Continuation on GPUs.*
           ACM Communications in Computer Algebra, volume 49, issue 4, 
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-.. [D3] M. Bostock, V. Ogievetsky, & J. Heer
-  *D3 Data-Driven Documents.*
-  IEEE Transactions on Visualization and Computer Graphics, 17, pages 2301–2309, 2011.
-  DOI 10.1109/TVCG.2011.185.
-
-.. [Pascal] *JupyterHub deployment of phcpy.*
-    Website, accessed May 2019. 2017.
-    https://phcpack.org
-
-.. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
-     https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
-
-.. [HS15] H. Schenck
-    *Book Review: Numerically Solving Polynomial Systems with Bertini.*
-    Bulletin of the American Mathematical Society, 53.1, 179–86, 2015.
-    DOI: 10.1090/bull/1520
-
-.. [GBH16] E. Gross, D. Brent, K. L. Ho, D. J. Bates, & H. A. Harrington
-    *Numerical algebraic geometry for model selection and its application to the life sciences.*
-    Journal of The Royal Society Interface, 13: 20160256. 2016.
-    DOI: 10.1098/rsif.2016.0256.
-
-.. [GHR16] E. Gross, H. A. Harrington, Z. Rosen, & B. Sturmfels
-    *Algebraic Systems Biology: A Case Study for the Wnt Pathway. Bulletin of Mathematical Biology.*
-    Bulletin of Mathematical Biology 78, pages 21–51, 2016.
-    DOI: 10.1007/s11538-015-0125-1.
-
-.. [KMC18] C. Knoll, D. Mehta, T. Chen, & F. Pernkopf
-  *Fixed Points of Belief Propagation—An Analysis via Polynomial Homotopy Continuation.*
-  IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, pages 2124–2136, 2018.
-  DOI 10.1109/TPAMI.2017.2749575.
-
-.. [HHS13] W. Hao, J. D. Hauenstein, C.-W. Shu, A. J. Sommese, Z. Xu, & Y.-T. Zhang
-    *A homotopy method based on WENO schemes for solving steady state problems of hyperbolic conservation laws.*
-    Journal of Computational Physics, 250, pages 332–346. 2013.
-    DOI: 10.1016/j.jcp.2013.05.008.
-
-.. [HHM13] J. Hauenstein, Y.-H. He, & D. Mehta
-    *Numerical elimination and moduli space of vacua.*
-    Journal of High Energy Physics, 83. 2013.
-    DOI: 10.1007/JHEP09(2013)083.
-
-.. [WS11] C. W. Wampler & A. J. Sommese
-    *Numerical algebraic geometry and algebraic kinematics.*
-    Acta Numerica, 20, pages 469–567. 2011.
-    DOI: 10.1017/S0962492911000067.
-
-.. [HOM4] T. Chen, T.L. Lee, T.Y. Li.
-    *Hom4PS-3: A Parallel Numerical Solver for Systems of Polynomial Equations Based on Polyhedral Homotopy Continuation Methods.*
-    Mathematical Software - ICMS 2014, Lecture Notes in Computer Science, vol 8592, pages 183-190. 2014.
-    DOI: 10.1007/978-3-662-44199-2_30
-
-.. [PHCPY] *phcpy 0.9.5 documentation*
-    http://homepages.math.uic.edu/~jan/phcpy_doc_html/
-
-.. [APP] *explorable circle tangency*
-    https://github.com/JazzTap/mcs563/tree/master/Apollonius]
-
-.. [LML14] L. Liberti, B. Masson, J. Lee, C. Lavor, and A. Mucherino.
-  *On the number of realizations of certain henneberg graphs arising in protein conformation.*  
-  Discrete Applied Mathematics, 165, page 213–232, 2014.
-  DOI: 10.1016/j.dam.2013.01.020
-
-.. [EM99] I.Z. Emiris and B. Mourrain.
-  *Computer algebra methods for studying and computing molecular conformations.*
-  Algorithmica 25, pages 372–402, 1999.
-  DOI: 10.1007/PL00008283
+.. [WS11] C. W. Wampler and A. J. Sommese.
+          *Numerical algebraic geometry and algebraic kinematics.*
+          Acta Numerica, 20, pages 469–567. 2011.
+          DOI: 10.1017/S0962492911000067.
