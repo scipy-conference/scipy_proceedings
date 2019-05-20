@@ -100,6 +100,8 @@ Related Software
 ----------------
 
 PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences.
+Version 1.4 of Bertini (released under a too restrictive license)
+is described in [BHSW13]_.
 
 HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
 
