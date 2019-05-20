@@ -460,7 +460,7 @@ human-readable. This is a feature that supplements the ease-of-use of
 the :code:`dash-bio` package.
 
 For instance, a string with the contents of a FASTA file, e.g., the
-sequence for albumin [Nxp]_:
+sequence for albumin: [Nxp]_
 
 .. code-block:: python
 
@@ -619,10 +619,9 @@ creates a list of dictionaries, each of which contains information
 about the aforementioned properties for each atom in the PDB file.
 
 The :code:`parmed` library [Par]_ was used to read the bond
-information from the PDB file and creates a list of dictionaries, each
-of which corresponds to a bond in the molecular structure. Each
-dictionary contains the indices of the pair of atoms that form the
-bond.
+information from the PDB file. Using the bond information from
+:code:`parmed`, a list of dictionaries is created; each dictionary
+contains the indices of the pair of atoms that form a bond.
 
 For instance, parsing a PDB file that contains structural information
 for a small section of DNA: [1bna]_
