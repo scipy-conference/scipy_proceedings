@@ -117,13 +117,13 @@ component:
 
    app.run_server()
 
-The output of the code is shown in Fig. :ref:`helloworld`.
+The output of the code is shown in Fig. :ref:`helloworld2`.
 
 .. figure:: helloworld_interactive.png
 
    A simple Dash application that showcases interactivity. Text that
    is entered into the input component is converted to uppercase and
-   displayed in the app. :label:`helloworld`
+   displayed in the app. :label:`helloworld2`
 
 React.js and Python
 ===================
@@ -599,6 +599,58 @@ For instance, parsing a dataset related to the miR-221 RNA molecule:
    array([[22.7604, 23.0321],
 	  [21.416 , 21.0107]])
 
+Molecule Structural Data
+========================
+
+The Protein Data Bank (PDB) [PDB]_ is a database of files that
+describe macromolecular structural data. All of the files on PDB are
+in the PDB format.
+
+In the :code:`dash_bio_utils` package, the :code:`pdb_parser` file
+accepts a path to a PDB file and parses it to generate a JSON string
+containing information about the atoms and the bonds in the molecular
+structure.
+
+The PDB format is standardized; properties of each atom such as its
+position in space or the chain and residue to which it belongs are
+found within specific column indices for each row. [PdbF]_
+:code:`pdb_parser` uses this information to parse each line, and
+creates a list of dictionaries, each of which contains information
+about the aforementioned properties for each atom in the PDB file.
+
+The :code:`parmed` library [Par]_ was used to read the bond
+information from the PDB file and creates a list of dictionaries, each
+of which corresponds to a bond in the molecular structure. Each
+dictionary contains the indices of the pair of atoms that form the
+bond.
+
+For instance, parsing a PDB file that contains structural information
+for a small section of DNA: [1bna]_
+
+.. code-block:: python
+
+   >>> import json
+   >>> from dash_bio_utils import pdb_parser
+   >>> pdb_string = pdb_parser.create_data('1bna.pdb')
+   >>> 1bna = json.loads(pdb_string)
+   >>> 1bna['atoms'][:3]
+   [{'name': "O5'", 'chain': 'A',
+   'positions': [18.935, 34.195, 25.617],
+   'residue_index': 1, 'element': 'O',
+   'residue_name': 'DC1', 'serial': 0},
+   {'name': "C5'", 'chain': 'A',
+   'positions': [19.13, 33.921, 24.219],
+   'residue_index': 1, 'element': 'C',
+   'residue_name': 'DC1', 'serial': 1},
+   {'name': "C4'", 'chain': 'A',
+   'positions': [19.961, 32.668, 24.1],
+   'residue_index': 1, 'element': 'C',
+   'residue_name': 'DC1', 'serial': 2}]
+   >>> 1bna['bonds'][:3]
+   [{'atom2_index': 0, 'atom1_index': 1},
+   {'atom2_index': 1, 'atom1_index': 2},
+   {'atom2_index': 2, 'atom1_index': 3}]
+
 
 References
 ----------
@@ -619,3 +671,7 @@ References
 .. [GEO] Edgar R, Domrachev M, Lash AE. *Gene Expression Omnibus: NCBI gene expression and hybridization array data repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10
 .. [GEOP] Gumienny, Rafal. *GEOparse*. URL: `<https://github.com/guma44/GEOparse>`_
 .. [miR] Kneitz B, Krebs M, Kalogirou C, Schubert M et al. *Survival in patients with high-risk prostate cancer is predicted by miR-221, which regulates proliferation, apoptosis, and invasion of prostate cancer cells by inhibiting IRF2 and SOCS3*. Cancer Res 2014 May 1;74(9):2591-603. PMID: 24607843
+.. [PDB] H.M. Berman, J. Westbrook, Z. Feng, G. Gilliland, T.N. Bhat, H. Weissig, I.N. Shindyalov, P.E. Bourne. (2000) *The Protein Data Bank*. Nucleic Acids Research, 28: 235-242. URL: `<https://www.rcsb.org>`_
+.. [Par] Swails, Jason. *ParmEd*. URL: `<https://github.com/ParmEd/ParmEd>`_
+.. [PdbF] wwwPDB. *Protein Data Bank Contents Guide: Atomic Coordinate Entry Format Description Version 3.30* (2008). 185-197.
+.. [1bna] PDB ID: 1BNA. Drew, H.R., Wing, R.M., Takano, T., Broka, C., Tanaka, S., Itakura, K., Dickerson, R.E.. *Structure of a B-DNA dodecamer: conformation and dynamics.*. (1981) Proc.Natl.Acad.Sci.USA 78: 2179-2183
