@@ -488,15 +488,6 @@ sequence for albumin [Nxp]_:
 		     'isoform name': 'Iso 1'},
      'sequence': 'MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAH...'}]
 
-XYZ Data
-=========
-
-XYZ files are used to specify molecular structures. Each line in an
-XYZ file contains the symbol for the atom at that position, as well as
-the x, y, and z coordinates of the atom.
-
-The :code:`xyz_reader` file in the :code:`dash-bio-utils` package can parse an XYZ file and
-
 Gene Expression Data
 ====================
 
