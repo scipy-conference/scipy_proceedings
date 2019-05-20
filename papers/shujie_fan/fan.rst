@@ -3,11 +3,13 @@
 :author: Shujie Fan
 :email: sfan19@asu.edu
 :institution: Arizona State University
+:equal-contributor:	      
 
 :author: Max Linke
 :email: max.linke88@gmail.com
 :institution: Max Planck Institute of Biophysics
-
+:equal-contributor:
+	      
 :author: Ioannis Paraskevakos
 :email: i.paraskev@rutgers.edu
 :institution: Rutgers University
