@@ -382,43 +382,232 @@ Onco Print
    A Dash Bio OncoPrint component that shows mutation events for the
    genomic sequences that encode different proteins. :label:`onco`
 
-Onco Print is a type of heatmap that facilitates the visualization of
-multiple genomic alteration events (see Fig. :ref:`onco`).
+An OncoPrint graph is a type of heatmap that facilitates the
+visualization of multiple genomic alteration events (see
+Fig. :ref:`onco`).
 
 The Dash Bio OncoPrint component is built on top of
 :code:`react-oncoprint` [Onco]_. Input data for the component takes
 the form of a list of dictionaries that define a sample, gene,
 alteration, and mutation type.
 
-**Sequence Viewer** is a simple tool that allows for annotating
- genomic or proteomic sequences. It allows for highlighting
- subsequences and applying sequence coverages, and supports regex
- search within the sequence.
+Sequence Viewer
+===============
+
+.. figure:: seqv.png
+   :figclass: bht
+
+   A Dash Bio SequenceViewer component that is showing the amino acid
+   sequence for insulin. A coverage has been applied to the sequence
+   to emphasize subsequences of amino acids that form certain
+   structures, like alpha helices or beta sheets. :label:`seqv`
+
+The Dash Bio SequenceViewer component is a simple tool that allows for
+annotating genomic or proteomic sequences. It is based on the
+:code:`react-sequence-viewer` library [SeqV]_.
+
+It includes a search function that allows the user to search the
+sequence using regular expressions. In addition, the sequence can be
+annotated using a selection defined by a starting point, an end point,
+and a color, or a coverage that can encode additional information that
+is revealed once a subsequence is clicked. The selection and coverage
+are available for reading from and writing to in the Dash app, and the
+mouse selection and search results can be read from.
+
 
 File Parsers
 ------------
 
 The `dash-bio-utils` package was developed in tandem with the
-`dash-bio` package. It contains parsers for many common bioinformatics
-databases that translate the data encoded in those files to inputs
-that are compatible with Dash Bio components.
+`dash-bio` package. It contains parsers for common filetypes used in
+bioinformatics analyses. The parsers in the package translate the data
+encoded in those files to inputs that are compatible with Dash Bio
+components.
 
-FASTA files
+FASTA data
 ===========
 
 FASTA files are commonly used to represent one or more genomic or
 proteomic sequences. Each sequence may be preceded by a line starting
 with the :code:`>` character and contains information about the
-sequence, such as the name of the gene or organism.
+sequence, such as the name of the gene or organism; this is the
+description of the sequence. Sections of the description are separated
+with pipes (:code:`|`).
+
+The :code:`protein_reader` file in the :code:`dash-bio-utils` package
+accepts a filepath to, or a string representation of, a FASTA file,
+and returns a dictionary that contains the sequence and any metadata
+that are specified in the file. :code:`SeqIO` from the
+:code:`Biopython` [BioP]_ package was used to extract all of the
+sequences from the file into a list of dictionaries, each of which
+contained the sequence description and the sequence itself, both in
+string format.
 
 Different databases (e.g., neXtProt, GenBank, and SWISS-PROT) encode
-this metadata in different ways.
+the sequence description metadata in different ways. The database from
+which a FASTA file is retrieved is specified in the first line. In the
+:code:`protein_reader` file, the code for the database is translated
+into the information that is encoded in the first line for that
+particular database. [NCBI]_
 
-PDB files
+From there, string splitting (or, if necessary, regex) is used on the
+description line of the file to generate a dictionary of the sequence
+metadata.
+
+This parser enables quick access to all of the information contained
+in a FASTA file, which in turn can make the information more
+human-readable. This is a feature that supplements the ease-of-use of
+the :code:`dash-bio` package.
+
+For instance, a string with the contents of a FASTA file, e.g., the
+sequence for albumin [Nxp]_:
+
+.. code-block:: python
+
+   >>> from dash_bio_utils import protein_reader as pr
+   >>> fasta_string = \
+   '''>nxp|NX_P02768-1|ALB|Serum albumin|Iso 1
+   MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAHRFKDLGEENFKALVLIAFAQY
+   LQQCPFEDHVKLVNEVTEFAKTCVADESAENCDKSLHTLFGDKLCTVATLRETY
+   GEMADCCAKQEPERNECFLQHKDDNPNLPRLVRPEVDVMCTAFHDNEETFLKKY
+   LYEIARRHPYFYAPELLFFAKRYKAAFTECCQAADKAACLLPKLDELRDEGKAS
+   SAKQRLKCASLQKFGERAFKAWAVARLSQRFPKAEFAEVSKLVTDLTKVHTECC
+   HGDLLECADDRADLAKYICENQDSISSKLKECCEKPLLEKSHCIAEVENDEMPA
+   DLPSLAADFVESKDVCKNYAEAKDVFLGMFLYEYARRHPDYSVVLLLRLAKTYE
+   TTLEKCCAAADPHECYAKVFDEFKPLVEEPQNLIKQNCELFEQLGEYKFQNALL
+   VRYTKKVPQVSTPTLVEVSRNLGKVGSKCCKHPEAKRMPCAEDYLSVVLNQLCV
+   LHEKTPVSDRVTKCCTESLVNRRPCFSALEVDETYVPKEFNAETFTFHADICTL
+   SEKERQIKKQTALVELVKHKPKATKEQLKAVMDDFAAFVEKCCKADDKETCFA
+   EEGKKLVAASQAALGL'''
+   >>> albumin = pr.read_fasta(data_string=fasta_string)
+   >>> albumin
+
+   [{'description': {'identifier': 'NX_P02768-1',
+		     'gene name': 'ALB',
+		     'protein name': 'Serum albumin',
+		     'isoform name': 'Iso 1'},
+     'sequence': 'MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAH...'}]
+
+XYZ Data
 =========
 
-SOFT files
-=========
+XYZ files are used to specify molecular structures. Each line in an
+XYZ file contains the symbol for the atom at that position, as well as
+the x, y, and z coordinates of the atom.
+
+The :code:`xyz_reader` file in the :code:`dash-bio-utils` package can parse an XYZ file and
+
+Gene Expression Data
+====================
+
+Gene expression data take the form of two-dimensional arrays that
+measure levels of gene expression under different conditions.
+
+A common format that is used to represent gene expression data is the
+SOFT format. These files can be found in large databases such as the
+Gene Expression Omnibus (GEO), [GEO]_ which contains gene expression
+data from thousands of experiments. SOFT files contain the expression
+data, as well as descriptive information pertaining to the specific
+genes and conditions that are in the dataset.
+
+The :code:`gene_expression_reader` file in the :code:`dash-bio-utils`
+package accepts a path to, or a string representation of, a SOFT file
+or TSV file containing gene expression data. It can parse the contents
+of SOFT files and TSV files, and return the numerical data and
+metadata that are in the file. In addition, selection of a subset of
+the data (given by lists of selected rows and selected columns
+supplied to the parser) can be returned.
+
+The :code:`GEOparse` package [GEOP]_ was used to extract the numeric
+gene expression data, in addition to the metadata, in SOFT files:
+
+.. code-block:: python
+
+   geo_file = gp.get_GEO(filepath=filepath,
+			 geotype='GDS')
+   df = geo_file.table
+
+:code:`pandas` was used to do the same with TSV files:
+
+.. code-block:: python
+
+   df = pd.read_csv(filepath, sep='\t',
+		    skiprows=skiprows)
+
+Both file parsers by default return a tuple comprising the file
+metadata, all of the row names, and all of the column names.
+
+If the parameter :code:`return_filtered_data` is set to :code:`True`,
+the parameters :code:`rows` and :code:`columns` (lists that contain
+the names of, respectively, the selected rows and selected columns)
+must be specified. The dataframe :code:`df` is then filtered according
+to these selections, and a two-dimensional :code:`numpy` array
+containing the filtered data is returned.
+
+In the case of SOFT files, there is additional information about
+subsets of the dataset (e.g., the expression data that are recorded
+with and without inducing a particular gene). This information becomes
+another element in the tuple.
+
+For instance, parsing a dataset related to the miR-221 RNA molecule:
+[miR]_
+
+.. code-block:: python
+
+   >>> from dash_bio_utils import gene_expression_reader as ger
+   >>> data = ger.read_soft_file(filepath='GDS5373.soft')
+   >>> data[0]
+   {'title': [
+   '''miR-221 expression effect on prostate cancer
+    cell line'''
+   ],
+   'description': [
+   '''Analysis of PC-3 prostate cancer cells
+      expressing pre-miR-221. miR-221 is frequently
+      downregulated in primary prostate cancer.
+      Results provide insight into the role of
+      miR-221 in the pathogenesis of prostate
+      cancer.'''
+   ],
+   'type': ['Expression profiling by array'],
+   'pubmed_id': ['24607843'],
+   'platform': ['GPL570'],
+   'platform_organism': ['Homo sapiens'],
+   'platform_technology_type': ['in situ oligonucleotide'],
+   'feature_count': ['54675'],
+   'sample_organism': ['Homo sapiens'],
+   'sample_type': ['RNA'],
+   'channel_count': ['1'],
+   'sample_count': ['4'],
+   'value_type': ['count'],
+   'reference_series': ['GSE45627'],
+   'order': ['none'],
+   'update_date': ['Nov 03 2014']}
+   >>> data[1]
+   {'GDS5373_1': {'dataset_id': ['GDS5373'],
+		  'description': ['miR-122 expression'],
+		  'sample_id': ['GSM1110879,GSM1110880'],
+		  'type': ['protocol']},
+   'GDS5373_2': {'dataset_id': ['GDS5373'],
+		 'description': ['control'],
+		 'sample_id': ['GSM1110881,GSM1110882'],
+		 'type': ['protocol']}}
+   >>> data[2][:10]
+   ['1007_s_at', '1053_at', '117_at', '121_at',
+    '1255_g_at', '1294_at', '1316_at', '1320_at',
+    '1405_i_at', '1431_at']
+   >>> data[3]
+   ['GSM1110879', 'GSM1110880', 'GSM1110881', 'GSM1110882']
+   >>> expression_data = ger.read_soft_file(
+		filepath='GDS5373.soft',
+		rows=['1255_g_at', '1316_at'],
+		columns=['GSM1110879', 'GSM1110881'],
+		return_filtered_data=True
+   )
+   >>> expression_data
+   array([[22.7604, 23.0321],
+	  [21.416 , 21.0107]])
+
 
 References
 ----------
@@ -432,3 +621,10 @@ References
 .. [Speck] Terrell, Rye. *Speck*. URL: `<https://github.com/wwwtyro/speck>`_
 .. [Align] Plotly. *React Alignment Viewer*. URL: `<https://github.com/plotly/react-alignment-viewer>`_
 .. [Onco] Plotly. *React OncoPrint*. URL: `<https://github.com/plotly/react-oncoprint>`_
+.. [SeqV] FlyBase. *react-sequence-viewer*. URL: `<https://github.com/FlyBase/react-sequence-viewer>`_
+.. [BioP] Peter J. A. Cock, Tiago Antao, Jeffrey T. Chang, Brad A. Chapman, Cymon J. Cox, Andrew Dalke, Iddo Friedberg, Thomas Hamelryck, Frank Kauff, Bartek Wilczynski, Michiel J. L. de Hoon: *Biopython: freely available Python tools for computational molecular biology and bioinformatics*. Bioinformatics 25 (11), 1422–1423 (2009). `<https://doi.org/10.1093/bioinformatics/btp163>`_
+.. [NCBI] The NCBI C++ Toolkit (https://ncbi.github.io/cxx-toolkit/) by the National Center for Biotechnology Information, U.S. *Fasta Sequence ID Format*. National Library of Medicine; Bethesda MD, 20894 USA.
+.. [Nxp] NeXtprot. *ALB - Serum albumin - proteomics*. URL: `<https://www.nextprot.org/entry/NX_P02768/proteomics>`_
+.. [GEO] Edgar R, Domrachev M, Lash AE. *Gene Expression Omnibus: NCBI gene expression and hybridization array data repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10
+.. [GEOP] Gumienny, Rafal. *GEOparse*. URL: `<https://github.com/guma44/GEOparse>`_
+.. [miR] Kneitz B, Krebs M, Kalogirou C, Schubert M et al. *Survival in patients with high-risk prostate cancer is predicted by miR-221, which regulates proliferation, apoptosis, and invasion of prostate cancer cells by inhibiting IRF2 and SOCS3*. Cancer Res 2014 May 1;74(9):2591-603. PMID: 24607843
