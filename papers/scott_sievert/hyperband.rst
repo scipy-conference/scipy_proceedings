@@ -275,15 +275,30 @@ a concern there's not much value the value in any adaptive search is limited.
 Adaptive model selection in Dask
 ================================
 
-Dask can scale up to clusters or to massive dataset. Model selection searches
-can involve large datasets or require significant amounts of computational
-effort. Combining Dask with advanced model selection is a natural fit and calls
-for an implementation.
+Dask can scale up to clusters or to massive datasets. Model selection searches
+often require significant amounts of computation and can involve large
+datasets. Combining Dask with advanced model selection is a natural fit.  This
+work focuses on the case when the computation required is not insignificant.
+Then, the existing `passive` model selection algorithms in Dask-ML have limited
+use because they don't `adapt` to previous training to reduce the amount of
+training required. [#dasksearchcv]_
 
-This work implements Hyperband in Dask's machine learning library, Dask-ML.
-The implementation's documentation can be found on https://ml.dask.org.
-This section will detail the Hyperband architecture, the input arguments
-required and some modifications to reduce time to solution.
+This work implements an adaptive model selection algorithm, Hyperband, in
+Dask's machine learning library, Dask-ML.  [#docs]_ This algorithm adapts to
+previous training to minimize the amount of computation required. This section
+will detail the Hyperband architecture, the input arguments required and some
+modifications to reduce time to solution.
+
+
+.. [#dasksearchcv] Though the existing implementation can reduce the
+   computation required when pipelines are used. This is particularly useful
+   when tuning data preprocessing (e.g., with natural language processing).
+   More detail at https://ml.dask.org/hyper-parameter-search.html.
+
+.. [#docs] The documentation the Hyperband implementation can be found at
+   https://ml.dask.org.
+
+.. TODO: add link to Hyperband docs
 
 Hyperband architecture
 ----------------------
