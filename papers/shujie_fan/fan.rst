@@ -1,6 +1,6 @@
 .. -*- mode: rst; mode: visual-line; fill-column: 9999; coding: utf-8 -*-
 
-   author: Shujie Fan
+:author: Shujie Fan
 :email: sfan19@asu.edu
 :institution: Arizona State University
 
@@ -25,7 +25,7 @@
 :institution: Arizona State University 
 :corresponding:
 
-:bibliography: ``pmda``
+:bibliography: pmda
 
 
 .. STYLE GUIDE
@@ -54,27 +54,27 @@
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 .. |Ncores| replace:: :math:`N`
 
--------------------------------------------------------------------------
-Parallel Analysis in MDAnalysis using the Dask Parallel Computing Library
--------------------------------------------------------------------------
+---------------------------------------------
+ PMDA - Parallel Molecular Dynamics Analysis
+---------------------------------------------
 
 .. class:: abstract
 
-MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to terabyte size.
-Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
-To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
-PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
-We implement a simple split-apply-combine scheme for parallel trajectory analysis.
-The trajectory is split into blocks and analysis is performed separately and in parallel on each block (“apply”).
-The results from each block are gathered and combined.
-PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
-In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
-PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
-We tested the performance of PMDA on single node and multiple nodes on local supercomputing resources and workstations.
-The results show that parallelization improves the performance of trajectory analysis.
-Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
-PMDA is available under the GNU General Public License, version 2.
+   MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
+   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to terabyte size.
+   Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
+   To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
+   PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
+   We implement a simple split-apply-combine scheme for parallel trajectory analysis.
+   The trajectory is split into blocks and analysis is performed separately and in parallel on each block (“apply”).
+   The results from each block are gathered and combined.
+   PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
+   In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
+   PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
+   We tested the performance of PMDA on single node and multiple nodes on local supercomputing resources and workstations.
+   The results show that parallelization improves the performance of trajectory analysis.
+   Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
+   PMDA is available under the GNU General Public License, version 2.
 
 .. class:: Keywords
 
@@ -84,12 +84,12 @@ PMDA is available under the GNU General Public License, version 2.
 Introduction
 ============
 
-MDAnalysis  :cite:`Gowers2016`
+MDAnalysis  :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa`
 
-Dask :cite:`Rocklin2015`
+Dask :cite:`Rocklin:2015aa`
 
 
-split-apply-combine for trajectory analysis :cite:`Khoshlessan2017` :cite:`Paraskevakos2018`
+split-apply-combine for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
 
 Methods
 =======
