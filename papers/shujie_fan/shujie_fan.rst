@@ -26,7 +26,31 @@
 
 :bibliography: ``pmda``
 
+.. STYLE GUIDE
+.. ===========
+.. .
+.. Writing
+..  - use past tense to report results
+..  - use present tense for intro/general conclusions
+.. .
+.. Formatting
+..  - restructured text
+..  - hard line breaks after complete sentences (after period)
+..  - paragraphs: empty line (two hard line breaks)
+.. .
+.. Workflow
+..  - use PRs (keep them small and manageable)
 
+.. definitions (like \newcommand)
+
+.. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
+.. |tN| replace:: :math:`t_N`
+.. |tcomp| replace:: :math:`t_\text{comp}`
+.. |tIO| replace:: :math:`t_\text{I/O}`
+.. |tcomptIO| replace:: :math:`t_\text{comp}+t_\text{I/O}`
+.. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
+.. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
+.. |Ncores| replace:: :math:`N`
 
 ------------------------------------------------
 PMDA - Parallel Molecular Dynamics Analysis
@@ -170,7 +194,7 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
                 np.asarray(times_compute), 
                 b_universe.elapsed, wait_end
 
-Accumulation of frames within a block happens in the :code:`_reduce` function. It is called for every frame. ``res`` contains all the results before current time step, and ``result_single_frame`` is the result of ``_single_frame`` for the current time step. The return value is the updated ``res``. The default is to append results to a python list. This approach is sufficient for time-series data, such as the root mean square distance(RMSD) of the :math:`C_{\alpha}` atoms of a protein. 
+Accumulation of frames within a block happens in the :code:`_reduce` function. It is called for every frame. ``res`` contains all the results before current time step, and ``result_single_frame`` is the result of ``_single_frame`` for the current time step. The return value is the updated ``res``. The default is to append results to a python list. This approach is sufficient for time-series data, such as the root mean square distance(RMSD) of the |Calpha| atoms of a protein. 
 
 .. code-block:: python
 
