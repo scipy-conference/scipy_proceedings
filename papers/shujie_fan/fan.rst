@@ -42,7 +42,12 @@
 .. .
 .. Workflow
 ..  - use PRs (keep them small and manageable)
-
+..  - build the paper locally from the top level
+..       rm -r output/shujie_fan      # sometimes needed to recover from errors
+..       make_paper.sh papers/shujie_fan/
+..       open  output/shujie_fan/paper.pdf
+..   
+   
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
@@ -66,7 +71,7 @@
    To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
    PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
    We implement a simple split-apply-combine scheme for parallel trajectory analysis.
-   The trajectory is split into blocks and analysis is performed separately and in parallel on each block (“apply”).
+   The trajectory is split into blocks and analysis is performed separately and in parallel on each block ("apply").
    The results from each block are gathered and combined.
    PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
    In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
@@ -96,6 +101,7 @@ Methods
 
 
 
+
 Results and Discussion
 ======================
 
@@ -105,6 +111,8 @@ Results and Discussion
 
 Conclusions
 ===========
+
+
 
 
 Acknowledgments
@@ -117,6 +125,7 @@ Computational resources were in provided the Extreme Science and Engineering Dis
 
 References
 ==========
+
 .. We use a bibtex file ``pmda.bib`` and use
 .. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
 .. citations
