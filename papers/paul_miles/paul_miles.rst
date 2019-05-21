@@ -26,7 +26,7 @@ Parameter Estimation Using the Python Package pymcmcstat
 Introduction
 ------------
 
-The Python package pymcmcstat :cite:`pymcmcstat2019v1.7.0` provides a robust platform for a variety of engineering inverse problems.  Bayesian statistical analysis is a powerful tool for parameter estimation, and many algorithms exist for numerical approaches that utilize Markov Chain Monte Carlo (MCMC) methods :cite:`smith2014uncertainty`.
+The Python package pymcmcstat :cite:`pymcmcstat2019v1.7.1` provides a robust platform for a variety of engineering inverse problems.  Bayesian statistical analysis is a powerful tool for parameter estimation, and many algorithms exist for numerical approaches that utilize Markov Chain Monte Carlo (MCMC) methods :cite:`smith2014uncertainty`.
 
 In pymcmcstat, the user is provided with a suite of Metropolis based algorithms, with the primary approach being Delayed Rejection Adaptive Metropolis (DRAM) :cite:`haario2006dram`, :cite:`haario2001adaptive`.  A simple procedure of adding data, defining model parameters and settings, and setting up simulation options provides the user with a wide variety of computational tools for considering inverse problems.  This approach to inverse problems utilizes data to provide insight into model limitations and provide accurate estimation of the underlying model and observation uncertainty.
 
