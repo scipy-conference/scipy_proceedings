@@ -102,7 +102,8 @@ Processing and analyzing these trajectories is increasingly becoming a rate limi
 Modern MD packages are highly optimized to perform well on current HPC clusters with hundreds of cores such as the XSEDE supercomputers :cite:`XSEDE` but current general purpose trajectory analysis packages :cite:`Giorgino:2019aa` were not designed with HPC in mind.
 
 In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with the distributed scheduler, and created the *Parallel MDAnalysis* (PMDA_) library.
-By default, PMDA follows a simple split-apply-combine :cite:`Wickham:2011aa` approach for trajectory analysis, whereby each task analyzes a single trajectory segment and reports back the individual results that are then combined into the final result :cite:`Khoshlessan:2017ab, Paraskevakos:2018aa`.
+By default, PMDA follows a simple split-apply-combine :cite:`Wickham:2011aa` approach for trajectory analysis, whereby each task analyzes a single trajectory segment and reports back the individual results that are then combined into the final result :cite:`Khoshlessan:2017ab`.
+Our previous work established that Dask worked well with MDAnalysis :cite:`Khoshlessan:2017ab` and that this approach was competitive with other task-parallel approaches :cite:`Paraskevakos:2018aa`.
 
 
 
