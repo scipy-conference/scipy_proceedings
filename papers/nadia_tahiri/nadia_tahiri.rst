@@ -11,9 +11,11 @@ An intelligent shopping list based on the application of partitioning and machin
 
 .. class:: abstract
    
-  A shopping list is an integral part of the shopping experience for many consumers. Several mobile retail studies indicate that potential customers place the highest priority on features that help them to create and to manage personalized shopping lists. 
+  A grocery list is an integral part of the shopping experience for many consumers. Several mobile retail studies indicate that potential customers place the highest priority on features that help them to create and to manage personalized shopping lists. 
   First, we propose the development of a new machine learning model that was written in Python 3 and predicted which grocery products the consumer will buy again or will try to buy for the first time, and in which store(s) he or she will shop. 
-  Second, we developed a smart shopping list template to provide consumers with a personalized weekly shopping list based on their shopping history and known preferences. As the explanatory variables, we used available grocery shopping history, store promotion information for the given region, as well as product price statistics.
+  Second, we developed a smart shopping list template to provide consumers with a personalized weekly shopping list based on their shopping history and known preferences. 
+  As the explanatory variables, we used available grocery shopping history, store promotion information for the given region, 
+  as well as product price statistics.
 
 .. class:: keywords
 
@@ -24,84 +26,85 @@ Introduction
 
 A typical grocery retailer offers consumers thousands of promotions every week 
 to attract more consumers and thus improve their economic performance :cite:`tanusondjaja2016exploring`. 
-Studies by Walters and Jamil (2002, 2003) of :cite:`walters2002measuring` and :cite:`walters2003exploring` found that about 39% of all items purchased 
-during an inter-category grocery were specials of the week and about 30% of consumers 
-surveyed were very sensitive to product prices, buying more promotional items than regular items. 
+The studies by Walters and Jamil (2002, 2003) of :cite:`walters2002measuring` and :cite:`walters2003exploring` found that about 39% of all items purchased 
+during an inter-category grocery were weekly specials and promotions, and about 30% of consumers 
+surveyed were very sensitive to product prices, buying more promotional items than regular ones. 
 With the recent expansion of machine learning methods, including deep learning, 
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
-and cost-effective shopping baskets, as well as to offer consumers tools 
+and cost-effective shopping baskets, as well as to propose consumers tools 
 to create smart personalized weekly shopping lists based on historical purchases, 
 known preferences and specials available in local stores.
 
-A shopping list is an integral part of the shopping experience for many consumers. 
-Shopping lists serve, for example, as a reminder, a budgeting tool, 
+A grocery list is an integral part of the shopping experience for many consumers. 
+The lists serve, for example, as a reminder, a budgeting tool, 
 or an effective way to organize weekly grocery shopping. 
 In addition, several mobile retail studies indicate that potential customers place 
-the highest priority on features that help them create and manage personalized 
+the highest priority on features that help them to create and to manage personalized 
 shopping lists interactively :cite:`newcomb2003mobile` and :cite:`fazliu2017utforskande`.
 
-Our proposal
-------------
+Problem statement and our proposal
+----------------------------------
 
-By using the grocery shopping database in Canada MyGroceryTour.ca (see Figure :ref:`circuitpromo`), 
+In this section, we present our problem statement and describe our considered machine learning architecture.
+Firstly, by using the grocery shopping database in Canada `MyGroceryTour` [#]_ (see Figure :ref:`MyGroceryTour`), 
 first we looked for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
 Then, this classification was used in the prediction stage. 
-Since real consumer data contains thousands of individual articles, 
-we focus primarily on categories of articles. 
-The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first be performed to better visualize the initial data 
+Since the real consumer data contains thousands of individual articles; we focus primarily on product categories. 
+The principal component analysis (linear and polynomial PCA :cite:`jolliffe2011principal`) was first computed to visualize the initial data  
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means :cite:`jain2010data` and X-means :cite:`pelleg2000x`, 
-made it possible to determine the number of classes of consumers, 
-as well as their distribution by class.
+made it possible to determine the number of classes of consumers, as well as their distribution by class.
 
 .. figure:: figures/trois_magasins.png
    :align: center
    
-   CircuitPromo.ca website for the postal code H2Y 1C6 in Montreal. :label:`circuitpromo` 
+   MyGroceryTour website for the postal code H2Y 1C6 in Montreal. :label:`MyGroceryTour` 
+
+.. [#] MyGroceryTour.ca
 
 Secondly, we developed a statistical model to predict which products previously purchased will be 
 in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
-we developed a model of machine learning and able to:
+we developed a machine learning model that is able to:
 
-1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, and in which store(s) in the area he will shop;
+1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
 2. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
-This list was also include recommendations regarding the optimal quantity of each product suggested and the store(s) 
+This list also includes recommendations regarding the optimal quantity of each product suggested and the store(s)  
 where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
-using the generalized commercial traveller algorithm (see Figure :ref:`circuit`).
+using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    
-   Screenshot of CircuitPromo.ca website with an optimal shopping journey. :label:`circuit`
+   Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized commercial traveler algorithm. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm :cite:`nan2012optimizing`, 
 based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
-A deep learning method :cite:`goodfellow2016deep`, based on recurrent neuron networks (RNN) 
-and convolutional neuron network (CNN), and implemented in Google's TensorFlow tool :cite:`girija2016tensorflow`, 
+A deep learning method :cite:`goodfellow2016deep`, based on Recurrent Neuron Networks (RNN) 
+and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow`, 
 was used to achieve objectives (ii), which will be of major interest to consumers.
 
 The problem can be reformulated as a binary prediction task: given a consumer, 
-the history of his previous purchases and a product with his price history, 
+the history of their previous purchases and a product with their price history, 
 to predict whether or not the given product will be included in the grocery list of the consumer. 
 Our approach adapted a variety of generative models to existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
-Recurrent neural networks and convolutional neural networks was used at the first learning level 
-and forward propagation neural networks (Feedforward NN) 
-was used at the second level of learning.
+RNNs and CNNs were used at the first learning level 
+and forward propagation neural networks (Feed-forward NN) 
+was used at the second learning level.
 
 Depending on the user :math:`u` and the user purchase history
-(shop :math:`_{t-h:t}`, :math:`h>0`), we predict the probability that a product :math:`i` is included 
+(shop :math:`_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included 
 in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
 -------
-In this section we discuss the details of our set synthetic and real datasets.
-The real datasets was obtained from CircuitPromo.ca as basic data.
+In this section we discuss the details of our set of synthetic and real datasets,
+the latter obtained from MyGroceryTour.
 
 *Features*
 
@@ -119,15 +122,15 @@ The features are described as follow:
 *Consumer profile*
 
 We found that there are 3 consumer profiles see :cite:`walters2003exploring`, :cite:`walters2002measuring`, and :cite:`tanusondjaja2016understanding`. 
-The first group is consumers who buy only the products on promotion. 
+The first group is consumers who only buy products on promotion.
 The second group is consumers who always buy the same products (without considering promotions).
-Finally, the third group is consumers who buy products on promotion or not.
+Finally, the third group is consumers who buy products whether there is a promotion or not.
 
 Since our real dataset was not enough to complete correctly our project, we increased it.
 We described the sets of data simulated in our study, 
-and we presented in detail the results of our simulations
+and we presented in detail the results of our simulations.
 
-*Data increase*
+*Data Synthesis*
 
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
@@ -270,7 +273,7 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
 .. figure:: figures/workflow.png
    :align: center
-   :scale: 25%
+   :scale: 27%
    
    The graphical illustration of the proposed model trying to predict the next basket in term of list of product. :label:`workflow`
 
@@ -328,6 +331,8 @@ Finally, we evaluated our model by *FP Rate* which corresponds to the ratio betw
    :label: e:matrix
    
    FP Rate = FPR = \frac{FP}{(TN+FP)} 
+   
+We examined these six evaluation scores.
 
 Python Script
 -------------
@@ -390,6 +395,7 @@ We can see cluster of Pasta sauce with Pasta group.
 
 .. figure:: figures/product_pca.png
    :align: center
+   :scale: 25%
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
@@ -407,8 +413,8 @@ Figure :ref:`violon` (a) indicates that all shops follow the same profiles in ou
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
 
 Figure :ref:`productsF1` and Table 3 indicates :math:`F_1` to all products. 
-Some products are easy to predict with value of :math:`F_1` >0 and 
-some products are so hard to predict with value of :math:`F_1` <0. 
+Some products are easy to predict with value of :math:`F_1` > 0 and 
+some products are so hard to predict with value of :math:`F_1` < 0. 
 For the first group, they are products includes on restriction regime 
 such as diet cranberry fruit juice, purified water, and total 0% blueberry acai greek yogurt.
 
@@ -438,8 +444,9 @@ such as diet cranberry fruit juice, purified water, and total 0% blueberry acai 
 
 .. figure:: figures/products_F1.png
    :align: center
-     
-   Distribution of :math:`F_1` measures relative to products, around average. :label:`productsF1`
+   :scale: 20%
+   
+   Distribution of :math:`F_1` measures relative to products around average. :label:`productsF1`
 	
 .. raw:: latex
     
@@ -470,12 +477,12 @@ such as diet cranberry fruit juice, purified water, and total 0% blueberry acai 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
 We evaluated our model with the statistics score given in Section 'Statistic score'.
-We obtained Precision value equal to  0.779, Recall equal to 0.967, and F1-score = 0.871.
+We obtained Precision value equal to 0.779, Recall equal to 0.967, and F1-score = 0.871.
 	
 Conclusions and Future Work
 ---------------------------
 
-We analyzed grocery shopping data generated by the consumers of the site MyGroceryTour.ca.
+We analyzed grocery shopping data generated by the consumers of the site `MyGroceryTour`.
 We developed a new machine learning model to predict which grocery products the consumer will
 buy and in which store(s) of the region he/she will do grocery shopping.
 We created an intelligent shopping list based on the shopping history of consumer and his/her
@@ -484,13 +491,13 @@ The originality of our approach, compared to the existing algorithms, is that in
 purchase history we also consider promotions, possible purchases in different stores and the
 distance between these stores and the home of consumer.
 
-We have modeled the habits of the site's consumers
-CircuitPromo.ca with the help of deep neural networks.
+We have modelled the habits of the site's consumers
+MyGroceryTour with the help of deep neural networks.
 We used two types of neural networks during
 Learning: Recurrent Neural Networks (RNN) and Networks
 forward-propagating neurons (Feedforward NN).
 The value of the :math:`F_1` statistic that represents the quality of our model
-is 0.22. The constant influx of new data on *CircuitPromo*
+is 0.22. The constant influx of new data on *MyGroceryTour*
 improved the model over time.
 The originality of our approach, compared to existing algorithms,
 is that in addition to the purchase history we also consider the
@@ -509,13 +516,13 @@ and anonymous reviewers for their valuable comments on this manuscript.
 Abbreviations
 -------------
 
-- ML - Machine Learning
-- LSTM - Long short-term memory
 - CNN - Convolutional Neural Network
 - GBT  - Gradient Tree Boosting
+- LSTM - Long short-term memory
+- ML - Machine Learning
+- NN - Neuron Networks
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
 - RNN - Recurrent Neuron Networks
-- NN - Neuron Networks
 
 
