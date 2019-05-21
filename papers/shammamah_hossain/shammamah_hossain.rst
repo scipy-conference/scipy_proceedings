@@ -1,6 +1,7 @@
 :author: Shammamah Hossain
 :email: shammamah@plot.ly
-:institution: Plotly, Inc.
+:institution: Plotly, Inc., 118 - 5555 Avenue de Gaspe, Montreal QC
+              H2T 2A3
 :corresponding:
 
 
@@ -14,7 +15,7 @@ Visualization of Bioinformatics Data with Dash Bio
    Plotly's Dash is a library that empowers data scientists to create
    interactive web applications declaratively in Python. Dash Bio is a
    bioinformatics-oriented suite of components that are compatible
-   with Dash. Common data visualizations characteristic to the field
+   with Dash. Visualizations of data that are often found in the field
    of bioinformatics can now be integrated into Dash applications. We
    present the Dash Bio suite of components and parts of an auxiliary
    library that contains tools that parse files from common
@@ -22,33 +23,35 @@ Visualization of Bioinformatics Data with Dash Bio
 
 .. class:: keywords
 
-   visualization, bioinformatics
+   visualization, bioinformatics, sequence analysis, Dash
 
 Introduction
 ------------
 
 The emergent field of bioinformatics is an amalgamation of computer
 science, statistics, and biology; it has proven itself revolutionary
-in biomedical research.  As scientific techniques in areas such as
-genomics and proteomics improve, they can yield larger volumes of
-valuable data that require processing in order to efficiently provide
-meaningful solutions to biological problems.
+in biomedical research. As scientific techniques in areas such as
+genomics and proteomics improve, experimentalists in bioinformatics
+may find themselves needing to interpret large volumes of data. In
+order to use this data to efficiently provide meaningful solutions to
+biological problems, it is important to have robust data visualization
+tools.
 
 Many bioinformaticians have already created analysis and visualization
 tools with Dash and plotly.py, but only through significant
-workarounds and modifications made to preexisting graph types. In
-addition to permitting single-line declarations of charts for complex
-datasets such as hierarchical clustering and multiple sequence
-alignment, we introduce several new chart types, three-dimensional and
-interactive molecule visualization tools, and components that are
-specifically related to genomic and proteomic sequences. In a separate
-library, we present a set of simple parsing scripts that handle some
-of the most common file types found in bioinformatics-related
-databases.
+workarounds and modifications made to preexisting graph types. We
+present an interface to create single-line declarations of charts for
+complex datasets such as hierarchical clustering and multiple sequence
+alignment. In addition, we introduce several new chart types,
+three-dimensional and interactive molecule visualization tools, and
+components that are specifically related to genomic and proteomic
+sequences. In a separate library, we present a set of simple parsing
+scripts that handle some of the most common file types found in
+bioinformatics-related databases.
 
-This paper outlines the contents of the Dash Bio package, which
-imparts the powerful data-visualization tools and flexibility of Dash
-to the flourishing bioinformatics community.
+This paper outlines the contents of the Dash Bio package. With this
+package, we hope to impart the powerful data-visualization tools and
+flexibility of Dash to the flourishing bioinformatics community.
 
 Dash
 ====
@@ -219,7 +222,8 @@ The user can specify additional parameters to customize the metrics
 and methods used to compute parts of the clustering, such as the
 pairwise distance between observations and the linkage matrix. Hover
 data and click data are accessible from within the Dash app for the
-heatmap and both dendrograms.
+heatmap and both dendrograms that are shown in
+Fig. :ref:`clustergram`.
 
 Ideogram
 ========
@@ -238,7 +242,7 @@ denoted by bands on the chromosomes.
 The Dash Bio Ideogram component is built on top of the
 :code:`ideogram.js` library [Ideo]_, and includes features like
 annotations, histograms, and homology (see
-Fig. :ref:`ideo`). Annotations can be made to different portions of
+Fig. :ref:`ideo`). Annotations can be made to different segments of
 each chromosome and displayed in the form of bands, and relationships
 between different chromosomes can be highlighted by using the homology
 feature to connect a region on one chromosome to a region on another
@@ -248,7 +252,7 @@ app. Additionally, information from the the "brush" feature, which
 allows the user to highlight a subset of the chromosome, is accessible
 from within the Dash application. This information includes the
 starting position and ending position of the brush, as well as the
-length (in base pairs) of the selection made with the brush..
+length (in base pairs) of the selection made with the brush.
 
 Manhattan Plot
 ==============
@@ -256,9 +260,10 @@ Manhattan Plot
 .. figure:: manhattan.png
    :figclass: bht
 
-   A Manhattan plot. The threshold level is denoted by the red line;
-   all points of interest are colored red. The purple line is the
-   suggestive line. Data taken from the :code:`manhattanly` repository [Man]_. :label:`manhattan`
+   A Dash Bio ManhattanPlot component. The threshold level is denoted
+   by the red line; all points of interest are colored red. The purple
+   line is the suggestive line. Data taken from the
+   :code:`manhattanly` repository [Man]_. :label:`manhattan`
 
 A Manhattan plot is a plot commonly used in genome-wide association
 studies; it can highlight specific nucleotides that, when changed to a
@@ -280,16 +285,17 @@ Needle Plot
 .. figure:: needle.png
    :figclass: bht
 
-   A needle plot that shows the properties of mutations in a genomic
-   strand. Data taken from the :code:`muts-needle-plot` repository
-   [Muts]_. :label:`needle`
+   A Dash Bio NeedlePlot component that shows the properties of
+   mutations in a genomic strand. Data taken from the
+   :code:`muts-needle-plot` repository [Muts]_. :label:`needle`
 
 A needle plot is a bar plot in which each bar has been replaced with a
 marker at the top and a line from the x-axis to the aforementioned
 marker. Its primary use-case is visualization of dense datasets that
-can look "busy" when represented with a bar plot. In bioinformatics, a
-needle plot may be used to annotate the positions on a genome at which
-genetic mutations happen (see Fig. :ref:`needle`).
+would appear too crowded to be interpreted effectively when
+represented with a bar plot. In bioinformatics, a needle plot may be
+used to annotate the positions on a genome at which genetic mutations
+happen (see Fig. :ref:`needle`).
 
 The Dash Bio NeedlePlot component was built using plotly.js. It
 receives input data as a dictionary. Different colors and marker
@@ -338,10 +344,10 @@ Molecule 3D Viewer
 
 The Dash Bio Molecule3dViewer component was built on top of the
 :code:`molecule-3d-for-react` [Mol3D]_ library. Its purpose is to
-display molecular structures.  These types of visualizations can be
-useful when communicating the mechanics of biomolecular processes, as
-they can show the shapes of proteins and provide insight into the way
-that they bind to other molecules.
+display molecular structures.  These types of visualizations can show
+the shapes of proteins and provide insight into the way that they bind
+to other molecules. This renders them invaluable when communicating
+the mechanics of biomolecular processes.
 
 Molecule3dViewer receives input data as a dictionary which specifies
 the layout and style of each atom in the molecule. It can render
@@ -487,34 +493,38 @@ in a FASTA file, which in turn can make the information more
 human-readable. This is a feature that supplements the ease-of-use of
 the :code:`dash-bio` package.
 
-For instance, a string with the contents of a FASTA file, e.g., the
-sequence for albumin: [nXP]_
+For instance, in the code snippet below, the parser is used on a
+string with the contents of a FASTA file for the albumin protein
+[nXP]_:
 
 .. code-block:: python
 
    >>> from dash_bio_utils import protein_reader as pr
    >>> fasta_string = \
    '''>nxp|NX_P02768-1|ALB|Serum albumin|Iso 1
-   MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAHRFKDLGEENFKALVLIAFAQY
-   LQQCPFEDHVKLVNEVTEFAKTCVADESAENCDKSLHTLFGDKLCTVATLRETY
-   GEMADCCAKQEPERNECFLQHKDDNPNLPRLVRPEVDVMCTAFHDNEETFLKKY
-   LYEIARRHPYFYAPELLFFAKRYKAAFTECCQAADKAACLLPKLDELRDEGKAS
-   SAKQRLKCASLQKFGERAFKAWAVARLSQRFPKAEFAEVSKLVTDLTKVHTECC
-   HGDLLECADDRADLAKYICENQDSISSKLKECCEKPLLEKSHCIAEVENDEMPA
-   DLPSLAADFVESKDVCKNYAEAKDVFLGMFLYEYARRHPDYSVVLLLRLAKTYE
-   TTLEKCCAAADPHECYAKVFDEFKPLVEEPQNLIKQNCELFEQLGEYKFQNALL
-   VRYTKKVPQVSTPTLVEVSRNLGKVGSKCCKHPEAKRMPCAEDYLSVVLNQLCV
-   LHEKTPVSDRVTKCCTESLVNRRPCFSALEVDETYVPKEFNAETFTFHADICTL
-   SEKERQIKKQTALVELVKHKPKATKEQLKAVMDDFAAFVEKCCKADDKETCFA
-   EEGKKLVAASQAALGL'''
-   >>> albumin = pr.read_fasta(data_string=fasta_string)
-   >>> albumin
 
-   [{'description': {'identifier': 'NX_P02768-1',
-		     'gene name': 'ALB',
-		     'protein name': 'Serum albumin',
-		     'isoform name': 'Iso 1'},
-     'sequence': 'MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAH...'}]
+   MKWVTFISLLFLFSSAYSRGVFRRDAHKSEVAHRFKDLGEENFKALVLIAF
+   AQYLQQCPFEDHVKLVNEVTEFAKTCVADESAENCDKSLHTLFGDKLCTVA
+   TLRETYGEMADCCAKQEPERNECFLQHKDDNPNLPRLVRPEVDVMCTAFHD
+   NEETFLKKYLYEIARRHPYFYAPELLFFAKRYKAAFTECCQAADKAACLLP
+   KLDELRDEGKASSAKQRLKCASLQKFGERAFKAWAVARLSQRFPKAEFAEV
+   SKLVTDLTKVHTECCHGDLLECADDRADLAKYICENQDSISSKLKECCEKP
+   LLEKSHCIAEVENDEMPADLPSLAADFVESKDVCKNYAEAKDVFLGMFLYE
+   YARRHPDYSVVLLLRLAKTYETTLEKCCAAADPHECYAKVFDEFKPLVEEP
+   QNLIKQNCELFEQLGEYKFQNALLVRYTKKVPQVSTPTLVEVSRNLGKVGS
+   KCCKHPEAKRMPCAEDYLSVVLNQLCVLHEKTPVSDRVTKCCTESLVNRRP
+   CFSALEVDETYVPKEFNAETFTFHADICTLSEKERQIKKQTALVELVKHKP
+   KATKEQLKAVMDDFAAFVEKCCKADDKETCFAEEGKKLVAASQAALGL'''
+   >>> albumin = pr.read_fasta(
+   ...     data_string=fasta_string
+   ... )[0]
+   >>> albumin['description']
+   {'identifier': 'NX_P02768-1',
+    'gene name': 'ALB',
+    'protein name': 'Serum albumin',
+    'isoform name': 'Iso 1'}
+   >>> albumin['sequence'][:10]
+   'MKWVTFISLL'
 
 Gene Expression Data
 ====================
@@ -532,8 +542,8 @@ genes and conditions that are in the dataset.
 The :code:`gene_expression_reader` file in the :code:`dash-bio-utils`
 package accepts a path to, or a string representation of, a SOFT file
 or TSV file containing gene expression data. It can parse the contents
-of SOFT files and TSV files, and returns the numerical data and
-metadata that are in the file. In addition, selection of a subset of
+of SOFT and TSV files, and return the numerical data and
+metadata that they contain. In addition, selection of a subset of
 the data (given by lists of selected rows and selected columns
 supplied to the parser) can be returned.
 
@@ -543,16 +553,19 @@ metadata, in SOFT files:
 
 .. code-block:: python
 
-   geo_file = gp.get_GEO(filepath=filepath,
-			 geotype='GDS')
+   geo_file = gp.get_GEO(
+       filepath=filepath,
+       geotype='GDS'
+   )
    df = geo_file.table
 
 :code:`pandas` was used to do the same with TSV files:
 
 .. code-block:: python
 
-   df = pd.read_csv(filepath, sep='\t',
-		    skiprows=skiprows)
+   df = pd.read_csv(
+       filepath, sep='\t'
+   )
 
 Both file parsers by default return a tuple comprising the file
 metadata, all of the row names, and all of the column names.
@@ -569,13 +582,15 @@ subsets of the dataset (e.g., the expression data that are recorded
 with and without inducing a particular gene). This information becomes
 another element in the tuple.
 
-For instance, parsing a dataset related to the miR-221 RNA molecule:
-[miR]_
+In the code snippet below, the parser is used to extract information
+from a dataset related to the miR-221 RNA molecule [miR]_:
 
 .. code-block:: python
 
-   >>> from dash_bio_utils import gene_expression_reader as ger
-   >>> data = ger.read_soft_file(filepath='GDS5373.soft')
+   >>> from dash_bio_utils import gene_expression_reader
+   >>> data = gene_expression_reader.read_soft_file(
+   ...     filepath='GDS5373.soft'
+   ... )
    >>> data[0]
    {'title': [
    '''miR-221 expression effect on prostate cancer
@@ -618,13 +633,13 @@ For instance, parsing a dataset related to the miR-221 RNA molecule:
     '1405_i_at', '1431_at']
    >>> data[3]
    ['GSM1110879', 'GSM1110880', 'GSM1110881', 'GSM1110882']
-   >>> expression_data = ger.read_soft_file(
-		filepath='GDS5373.soft',
-		rows=['1255_g_at', '1316_at'],
-		columns=['GSM1110879', 'GSM1110881'],
-		return_filtered_data=True
-   )
-   >>> expression_data
+   >>> selected = gene_expression_reader.read_soft_file(
+   ...	  filepath='GDS5373.soft',
+   ...	  rows=['1255_g_at', '1316_at'],
+   ...    columns=['GSM1110879', 'GSM1110881'],
+   ...    return_filtered_data=True
+   ... )
+   >>> selected
    array([[22.7604, 23.0321],
 	  [21.416 , 21.0107]])
 
@@ -635,10 +650,10 @@ The Protein Data Bank (PDB) [PDB]_ is a database of files that
 describe macromolecular structural data. All of the files on PDB are
 in the PDB format.
 
-In the :code:`dash_bio_utils` package, the :code:`pdb_parser` file
-accepts a path to a PDB file and parses it to generate a JSON string
-containing information about the atoms and the bonds in the molecular
-structure.
+In the :code:`dash_bio_utils` package, the :code:`create_data`
+function in :code:`pdb_parser` generates a JSON string from the
+contents of a specified PDB file. This string contains information
+about the atoms and the bonds in the molecular structure.
 
 The PDB format is standardized; properties of each atom such as its
 position in space and the chain and residue to which it belongs are
@@ -652,8 +667,9 @@ information from the PDB file. Using the bond information from
 :code:`parmed`, a list of dictionaries is created; each dictionary
 contains the indices of the pair of atoms that form a bond.
 
-For instance, parsing a PDB file that contains structural information
-for a small section of DNA: [1bna]_
+In the code snippet below, this parser is used to extract data from a
+PDB file that contains structural information for a small section of
+DNA: [1bna]_
 
 .. code-block:: python
 
