@@ -3,11 +3,13 @@
 :author: Shujie Fan
 :email: sfan19@asu.edu
 :institution: Arizona State University
+:equal-contributor:	      
 
 :author: Max Linke
 :email: max.linke88@gmail.com
 :institution: Max Planck Institute of Biophysics
-
+:equal-contributor:
+	      
 :author: Ioannis Paraskevakos
 :email: i.paraskev@rutgers.edu
 :institution: Rutgers University
@@ -23,8 +25,10 @@
 :author: Oliver Beckstein
 :email: obeckste@asu.edu 
 :institution: Arizona State University 
+:corresponding:
 
-:bibliography: 
+:bibliography: pmda
+
 
 .. STYLE GUIDE
 .. ===========
@@ -40,7 +44,12 @@
 .. .
 .. Workflow
 ..  - use PRs (keep them small and manageable)
-
+..  - build the paper locally from the top level
+..       rm -r output/shujie_fan      # sometimes needed to recover from errors
+..       make_paper.sh papers/shujie_fan/
+..       open  output/shujie_fan/paper.pdf
+..   
+   
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
@@ -52,40 +61,48 @@
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 .. |Ncores| replace:: :math:`N`
 
-------------------------------------------------
-PMDA - Parallel Molecular Dynamics Analysis
-------------------------------------------------
+---------------------------------------------
+ PMDA - Parallel Molecular Dynamics Analysis
+---------------------------------------------
 
 .. class:: abstract
 
-MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to terabyte size.
-Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
-To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
-PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
-We implement a simple split-apply-combine scheme for parallel trajectory analysis.
-The trajectory is split into blocks and analysis is performed separately and in parallel on each block (“apply”).
-The results from each block are gathered and combined.
-PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
-In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
-PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
-We tested the performance of PMDA on single node and multiple nodes on local supercomputing resources and workstations.
-The results show that parallelization improves the performance of trajectory analysis.
-Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
-PMDA is available under the GNU General Public License, version 2.
+   MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
+   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to terabyte size.
+   Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
+   To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
+   PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
+   We implement a simple split-apply-combine scheme for parallel trajectory analysis.
+   The trajectory is split into blocks and analysis is performed separately and in parallel on each block ("apply").
+   The results from each block are gathered and combined.
+   PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
+   In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
+   PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
+   We tested the performance of PMDA on single node and multiple nodes on local supercomputing resources and workstations.
+   The results show that parallelization improves the performance of trajectory analysis.
+   Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
+   PMDA is available under the GNU General Public License, version 2.
 
 .. class:: keywords
 
-   PMDA, MDAnalysis, High Performance Computing, Dask, Map-Reduce
+   MDAnalysis, High Performance Computing, Dask
 
+
+
+=======
 Introduction
-------------
+============
+
+MDAnalysis  :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa`
+
+Dask :cite:`Rocklin:2015aa`
 
 
 
+split-apply-combine for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
 
-Method
---------------------
+Methods
+=======
 
 ``pmda.parallel.ParallelAnalysisBase`` is the base class for defining a split-apply-combine parallel multi frame analysis in PMDA. This class will automatically take care of setting up the trajectory reader for iterating in parallel. The class is based on the following libraries: MDAnalysis 0.20.0, Dask 1.1.1, NumPy 1.15.4.
 
@@ -174,6 +191,10 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
 
 
 
+
+Results and Discussion
+======================
+
 Basic Usage 
 --------------
 
@@ -222,8 +243,16 @@ User-defined Analysis
 ++++++++++++++++++++++
 
 
+
+
+Conclusions
+===========
+
+
+
+
 Acknowledgments
----------------
+===============
 
 SF and IP were supported by grant ACI-1443054 from the National Science Foundation.
 OB was supported in part by grant ACI-1443054 from the National Science Foundation.
@@ -231,7 +260,8 @@ Computational resources were in provided the Extreme Science and Engineering Dis
 
 
 References
-----------
+==========
+
 .. We use a bibtex file ``pmda.bib`` and use
 .. :cite:`Michaud-Agrawal:2011fu` for citations; do not use manual
 .. citations
@@ -240,4 +270,3 @@ References
 .. _PMDA: https://www.mdanalysis.org/pmda/
 .. _MDAnalysis: https://www.mdanalysis.org
 .. _Dask: https://dask.org
-
