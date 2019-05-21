@@ -24,7 +24,7 @@
 :email: obeckste@asu.edu 
 :institution: Arizona State University 
 
-:bibliography: ``pmda``
+:bibliography: 
 
 .. STYLE GUIDE
 .. ===========
@@ -81,12 +81,7 @@ PMDA is available under the GNU General Public License, version 2.
 Introduction
 ------------
 
-MDAnalysis  :cite:`Gowers2016`
 
-Dask :cite:`Rocklin2015`
-
-
-split-apply-combine for trajectory analysis :cite:`Khoshlessan2017` :cite:`Paraskevakos2018`
 
 
 Method
@@ -132,39 +127,22 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
             slices = make_balanced_slices(n_frames, 
                                   n_blocks, start=start,
                                   stop=stop, step=step)
-            with timeit() as total:
-                with timeit() as prepare:
-                    self._prepare()
-                time_prepare = prepare.elapsed
+            self._prepare()
                 blocks = []
-                with self.readonly_attributes():
-                    for bslice in slices:
-                        task = delayed(
-                             self._dask_helper, 
+                for bslice in slices:
+                    task = delayed(
+                         self._dask_helper, 
                              pure=False)(
                                  bslice,
                                  self._indices,
                                  self._top,
                                  self._traj, )
-                        blocks.append(task)
+                    blocks.append(task)
                     blocks = delayed(blocks)
-                    # record the time when scheduler
-                    # starts working
-                    wait_start = time.time()
                     res = blocks.compute(**scheduler_kwargs)
-                with timeit() as conclude:
                     self._results = np.asarray(
                                       [el[0] for el in res])
                     self._conclude()
-            self.timing = Timing(
-                np.hstack([el[1] for el in res]),
-                np.hstack([el[2] for el in res]), 
-                total.elapsed,
-                np.array([el[3] for el in res]), 
-                time_prepare,
-                conclude.elapsed,
-                # waiting time = wait_end - wait_start
-                np.array([el[4]-wait_start for el in res]))
             return self
 
 :code:`_dask_helper()` is the single block analysis function. It first reconstructs the Universe and the tuple of AtomGroups. Then the single-frame analysis :code:`_single_frame()` is performed on each trajectory frame by iterating  over ``u.trajectory[bslice.start:bslice.stop]``. 
@@ -172,10 +150,6 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
 .. code-block:: python
 
         def _dask_helper(self, bslice, indices, top, traj):
-            # wait_end needs to be first line 
-            # for accurate timing
-            wait_end = time.time()
-            with timeit() as b_universe:
                 u = mda.Universe(top, traj)
                 agroups = [u.atoms[idx] for idx in indices]
             res = []
@@ -183,16 +157,10 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
             times_compute = []
             for i in range(bslice.start, 
                            bslice.stop, bslice.step):
-                with timeit() as b_io:
                 ts = u.trajectory[i]
-                with timeit() as b_compute:
-                    res = self._reduce(res, 
-                       self._single_frame(ts, agroups))
-                times_io.append(b_io.elapsed)
-                times_compute.append(b_compute.elapsed)
-            return np.asarray(res), np.asarray(times_io),
-                np.asarray(times_compute), 
-                b_universe.elapsed, wait_end
+                res = self._reduce(res, 
+                      self._single_frame(ts, agroups))
+            return np.asarray(res)
 
 Accumulation of frames within a block happens in the :code:`_reduce` function. It is called for every frame. ``res`` contains all the results before current time step, and ``result_single_frame`` is the result of ``_single_frame`` for the current time step. The return value is the updated ``res``. The default is to append results to a python list. This approach is sufficient for time-series data, such as the root mean square distance(RMSD) of the |Calpha| atoms of a protein. 
 
@@ -223,7 +191,8 @@ PMDA contains a number of pre-defined analysis classes that are modelled after f
 
 ``pmda.leaflet``: LeafletFinder analysis tool
 
-The usage of these tools is similar to ``MDAnalysis.analysis``. The simplest example is calculating root mean square distance(RMSD) of :math:`C_{\alpha}` atoms of the protein with ``pmda.rms``.
+While the first 3 classes are developed based on ``pmda.parallel.ParallelAnalysisBase`` which separates the trajectory into work blocks containing multiple frames, ``pmda.leaflet`` partitions the system based on a 2-dimensional partitioning. 
+The usage of these tools is similar to ``MDAnalysis.analysis``. The simplest example is calculating root mean square distance(RMSD) of |Calpha| atoms of the protein with ``pmda.rms``.
 
 .. code-block:: python
 
