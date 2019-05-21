@@ -93,13 +93,20 @@
 Introduction
 ============
 
+Molecular dynamics (MD) simulations have become an invaluable tool to understand the function of biomolecules :cite:`Karplus:2002ly, Dror:2010fk, Seyler:2014il, Orozco:2014dq, Bottaro:2018aa, Huggins:2019aa` (often with a view towards drug discovery :cite:`Borhani:2012mi`) and diverse problems in materials science :cite:`Rottler:2009aa, Li:2015aa, Varela:2015aa, Lau:2018aa, Kupgan:2018aa, Frederix:2018aa`.
+
+
+
+
 MDAnalysis  :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa`
 
 Dask :cite:`Rocklin:2015aa`
 
+Other packages :cite:`Giorgino:2019aa`
+
+split-apply-combine :cite:`Wickham:2011aa` for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
 
 
-split-apply-combine for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
 
 
 =======
