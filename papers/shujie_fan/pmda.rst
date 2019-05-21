@@ -90,7 +90,7 @@ PMDA - Parallel Molecular Dynamics Analysis
 
 
 
-============
+
 Introduction
 ============
 
@@ -115,9 +115,13 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 
 
 
-=======
 Methods
 =======
+
+
+
+Implementation
+--------------
 
 PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`. 
 Dask's ``delayed()`` function is used extensively to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
@@ -197,15 +201,20 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
             res.append(result_single_frame)
             return res
 
+Benchmarking
+------------
 
-===========
-Basic Usage 
-===========
+
+``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
+	    
+
+Using PMDA
+==========
 
 PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks. In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules. Here, we will introduce some basic usages of PMDA.
 
 Pre-defined Analysis
-====================
+--------------------
 PMDA contains a number of pre-defined analysis classes that are modelled after functionality in ``MDAnalysis.analysis`` and that can be used right away. PMDA currently has four predefined analysis tasks to use:
 
 ``pmda.rms``: RMSD analysis tools
@@ -244,10 +253,10 @@ The usage of these tools is similar to ``MDAnalysis.analysis``. One example is c
 
 
 User-defined Analysis
-=====================
+---------------------
 
 With pmda.custom.AnalysisFromFunction
-+++++++++++++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 PMDA provides helper functions in ``pmda.custom`` to rapidly build a parallel class for users who already have a function:
 1. takes one or more AtomGroup instances as input,
 2. analyzes one frame in a trajectory and returns the result for this frame.
@@ -278,7 +287,7 @@ Run the analysis on 4 cores and show the timeseries of the results stored in ``p
     print(parallel_rgyr.results)
 
 With pmda.parallel.ParallelAnalysisBase
-+++++++++++++++++++++++++++++++++++++++
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In more common cases, one can write the parallel class with the help of ``pmda.parallel.ParallelAnalysisBase``. To build a new analysis class, one should 
 
@@ -333,18 +342,6 @@ The usage of this class is the same as the function we defined with ``pmda.custo
     print(parallel_rgyr.results)
 
 
-=========
-Benchmark
-=========
-
-
-
-
-
-Method
-======
-
-``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
 
 
 Results and Discussion
@@ -357,7 +354,7 @@ Conclusions
 
 
 Code availability and development process
-=========================================
+-----------------------------------------
 
 PMDA is available in source form under the GNU General Public License v2 from the GitHub repository `MDAnalysis/pmda`_, and as a `PyPi package`_ and `conda package`_  (via the conda-forge channel).
 Python 2.7 and Python :math:`\ge` 3.5 are fully supported and tested.
