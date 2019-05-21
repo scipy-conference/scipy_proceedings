@@ -517,4 +517,7 @@ Abbreviations
 - RNN - recurrent neuron networks
 
 
+.. raw:: latex
 
+ \bibliographystyle{alpha}
+ \bibliography{nTahiriSciPy.bib}
