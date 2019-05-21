@@ -717,58 +717,56 @@ References
 
 .. [Mol3D] Autodesk. *Molecule 3D for React*. URL:
 	     `<https://github.com/plotly/molecule-3d-for-react>`_
-.. [PDB] H.M. Berman, J. Westbrook, Z. Feng, G. Gilliland,
-	 T.N. Bhat, H. Weissig, I.N. Shindyalov, P.E. Bourne. (2000) *The
-	 Protein Data Bank*. Nucleic Acids Research, 28:
-	 235-242. URL:`<https://www.rcsb.org>`_
+.. [PDB] Berman, H.M., Westbrook, J., Feng, Z., Gilliland, G., Bhat,
+	 T.N., Weissig, H., Shindyalov, I.N., Bourne, P.E.. (2000) *The
+	 Protein Data Bank*. Nucleic Acids Research, 28: 235-242.
+	 URL:`<https://www.rcsb.org>`_
 .. [Man] Bhatnagar, Samir. *manhattanly*. URL:
 	 `<https://github.com/sahirbhatnagar/manhattanly>`_
-.. [cBio] Ethan Cerami, Jianjiong Gao, Ugur Dogrusoz,
-	  Benjamin E. Gross, Selcuk Onur Sumer, Bülent Arman Aksoy,
-	  Anders Jacobsen, Caitlin J. Byrne, Michael L. Heuer, Erik
-	  Larsson, Yevgeniy Antipin, Boris Reva, Arthur P. Goldberg,
-	  Chris Sander and Nikolaus Schultz. *The cBio Cancer Genomics
-	  Portal: An Open Platform for Exploring Multidimensional
-	  Cancer Genomics Data*. Cancer Discov May 1 2012 (2) (5)
-	  401-404; DOI: 10.1158/2159-8290.CD-12-0095
-.. [BioP] Peter J. A. Cock, Tiago Antao, Jeffrey T. Chang,
-	  Brad A. Chapman, Cymon J. Cox, Andrew Dalke, Iddo Friedberg,
-	  Thomas Hamelryck, Frank Kauff, Bartek Wilczynski,
-	  Michiel J. L. de Hoon: *Biopython: freely available Python
-	  tools for computational molecular biology and
-	  bioinformatics*. Bioinformatics 25 (11), 1422–1423
+.. [cBio] Cerami, E., Gao, J., Dogrusoz, U., Gross, B. E.,
+	  Sumer, S. O., Aksoy, B. A., Jacobsen, A., Byrne, C. J.,
+	  Heuer, M. L., Larsson, E., Antipin, Y., Reva, B.,
+	  Goldberg, A. P., Sander, C., Schultz, N..*The cBio Cancer
+	  Genomics Portal: An Open Platform for Exploring
+	  Multidimensional Cancer Genomics Data*. Cancer Discov May 1
+	  2012 (2) (5) 401-404; DOI: 10.1158/2159-8290.CD-12-0095
+.. [BioP] Cock, P. J. A., Antao, T., Chang, J. T., Chapman, B. A.,
+	  Cox, C. J., Dalke, A., Friedberg, I., Hamelryck, T., Kauff,
+	  F., Wilczynski, B., de Hoon, M. J. L.. *Biopython: freely
+	  available Python tools for computational molecular biology
+	  and bioinformatics*. Bioinformatics 25 (11), 1422–1423
 	  (2009). `<https://doi.org/10.1093/bioinformatics/btp163>`_
 .. [1bna] PDB ID: 1BNA. Drew, H.R., Wing, R.M., Takano, T., Broka, C.,
 	  Tanaka, S., Itakura, K., Dickerson, R.E.. *Structure of a
 	  B-DNA dodecamer: conformation and dynamics.*. (1981)
 	  Proc.Natl.Acad.Sci.USA 78: 2179-2183
-.. [GEO] Edgar R, Domrachev M, Lash AE. *Gene Expression Omnibus: NCBI
-	 gene expression and hybridization array data
+.. [GEO] Edgar, R., Domrachev, M., Lash, A.E.. *Gene Expression
+	 Omnibus: NCBI gene expression and hybridization array data
 	 repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10
 .. [SeqV] FlyBase. *react-sequence-viewer*. URL:
    `<https://github.com/FlyBase/react-sequence-viewer>`_
 .. [Ghr] Genome Reference Consortium. *Genome Reference Consortium
 	 Human Build 37 (GRCh37)* (2009). URL:
 	 `<https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/>`_
-.. [cBio2] Jianjiong Gao, Bülent Arman Aksoy, Ugur Dogrusoz, Gideon
-	   Dresdner, Benjamin Gross, S. Onur Sumer, Yichao Sun, Anders
-	   Jacobsen, Rileen Sinha, Erik Larsson, Ethan Cerami, Chris
-	   Sander, Nikolaus Schultz. *Integrative Analysis of Complex
-	   Cancer Genomics and Clinical Profiles Using the
-	   cBioPortal*. Science Signaling Apr 2 2013
-.. [Circos] Girault, Nic. *circosJS: d3 library to build circular
+.. [cBio2] Gao, J., Aksoy, B. A., Dogrusoz, U., Dresdner, G., Gross,
+	   B., Sumer, S. O., Sun, Y., Jacobsen, A.,
+	   Sinha, R. *Integrative Analysis of Complex Cancer Genomics
+	   and Clinical Profiles Using the cBioPortal*. Science
+	   Signaling Apr 2 2013
+.. [Circos] Girault, N.. *circosJS: d3 library to build circular
 	    graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
-.. [GEOP] Gumienny, Rafal. *GEOparse*. URL:
+.. [GEOP] Gumienny, R.. *GEOparse*. URL:
 	  `<https://github.com/guma44/GEOparse>`_
-.. [miR] Kneitz B, Krebs M, Kalogirou C, Schubert M et al. *Survival
-	 in patients with high-risk prostate cancer is predicted by
-	 miR-221, which regulates proliferation, apoptosis, and
-	 invasion of prostate cancer cells by inhibiting IRF2 and
-	 SOCS3*. Cancer Res 2014 May 1;74(9):2591-603. PMID: 24607843
-.. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global
-	  gene expression analysis reveals specific patterns of cell
-	  junctions in non-small cell lung cancer subtypes.* Lung
-	  Cancer 2009 Jan;63(1):32-8. PMID: 18486272
+.. [miR] Kneitz, B., Krebs, M., Kalogirou, C., Schubert, M., et
+	 al. *Survival in patients with high-risk prostate cancer is
+	 predicted by miR-221, which regulates proliferation,
+	 apoptosis, and invasion of prostate cancer cells by
+	 inhibiting IRF2 and SOCS3*. Cancer Res 2014 May
+	 1;74(9):2591-603. PMID: 24607843
+.. [KR09] Kuner, R., Muley, T., Meister, M., Ruschhaupt, M. et
+	  al. *Global gene expression analysis reveals specific
+	  patterns of cell junctions in non-small cell lung cancer
+	  subtypes.* Lung Cancer 2009 Jan;63(1):32-8. PMID: 18486272
 .. [NCBI] The NCBI C++ Toolkit (https://ncbi.github.io/cxx-toolkit/)
 	  by the National Center for Biotechnology Information,
 	  U.S. *Fasta Sequence ID Format*. National Library of
@@ -785,13 +783,16 @@ References
 	  Foulkes, A. S. (2015) *A guide to genome‐wide association
 	  analysis and post‐analytic interrogation.* Statist. Med.,
 	  34: 3769– 3792. doi: 10.1002/sim.6605.
-.. [Muts] Schroeder, Michael. *Mutations Needle Plot (muts-needle-plot)*. URL: `<https://github.com/bbglab/muts-needle-plot>`_
-.. [Par] Swails, Jason. *ParmEd*. URL:
+.. [Muts] Schroeder, M.. *Mutations Needle Plot
+	  (muts-needle-plot)*. URL:
+	  `<https://github.com/bbglab/muts-needle-plot>`_
+.. [Par] Swails, J.. *ParmEd*. URL:
 	 `<https://github.com/ParmEd/ParmEd>`_
-.. [Speck] Terrell, Rye. *Speck*. URL:
+.. [Speck] Terrell, R.. *Speck*. URL:
 	   `<https://github.com/wwwtyro/speck>`_
-.. [UniP] The UniProt Consortium. *UniProt: a worldwide hub of protein knowledge*. Nucleic Acids Res. 47: D506-515 (2019)
-.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with
+.. [UniP] The UniProt Consortium. *UniProt: a worldwide hub of protein
+	  knowledge*. Nucleic Acids Res. 47: D506-515 (2019)
+.. [Ideo] Weitz, E.. *ideogram: Chromosome visualization with
 	  JavaScript*. URL: `<https://github.com/eweitz/ideogram>`_
 .. [PdbF] wwwPDB. *Protein Data Bank Contents Guide: Atomic Coordinate
 	  Entry Format Description Version 3.30* (2008). 185-197.
