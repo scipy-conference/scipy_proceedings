@@ -119,6 +119,11 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 Methods
 =======
 
+PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`. 
+Dask's ``delayed()`` function is used extensively to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
+For example, the multiprocessing scheduler can be used  to parallelize task graph execution on a single multiprocessor machine while the distributed scheduler is used to run on multiple nodes of a HPC cluster.
+
+
 ``pmda.parallel.ParallelAnalysisBase`` is the base class for defining a split-apply-combine parallel multi frame analysis in PMDA. This class will automatically take care of setting up the trajectory reader for iterating in parallel. The class is based on the following libraries: MDAnalysis 0.20.0, Dask 1.1.1, NumPy 1.15.4.
 
 .. code-block:: python
