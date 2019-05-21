@@ -61,14 +61,14 @@
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 .. |Ncores| replace:: :math:`N`
 
----------------------------------------------
- PMDA - Parallel Molecular Dynamics Analysis
----------------------------------------------
+-------------------------------------------		      
+PMDA - Parallel Molecular Dynamics Analysis
+-------------------------------------------
 
 .. class:: abstract
 
    MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to terabyte size.
+   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
    Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
    To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
    PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
@@ -85,7 +85,8 @@
 
 .. class:: keywords
 
-   MDAnalysis, High Performance Computing, Dask
+   Molecular Dynamics Simulations, High Performance Computing, Python, Dask, MDAnalysis
+
 
 
 
@@ -93,13 +94,32 @@
 Introduction
 ============
 
-MDAnalysis  :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa`
+Classical molecular dynamics (MD) simulations have become an invaluable tool to understand the function of biomolecules :cite:`Karplus:2002ly, Dror:2012cr, Seyler:2014il, Orozco:2014dq, Bottaro:2018aa, Huggins:2019aa` (often with a view towards drug discovery :cite:`Borhani:2012mi`) and diverse problems in materials science :cite:`Rottler:2009aa, Li:2015aa, Varela:2015aa, Lau:2018aa, Kupgan:2018aa, Frederix:2018aa`.
+Systems are modelled as particles (for example, atoms) whose interactions are approximated with a classical potential energy function :cite:`FrenkelSmit02, Braun:2018ab`.
+Forces on the particles are derived from the potential and Newton's equations of motion for the particles are solved with an integrator algorithm, typically using highly optimized MD codes that run on high performance computing (HPC) resources or workstations (often equipped with GPU accelerators).
+The resulting trajectories, the time series of particle positions :math:`\mathbf{r}(t)` (and possibly velocities), are analyzed with statistical mechanics approaches :cite:`Tuckerman:2010cr, Braun:2018ab` to obtain predictions or to compare to experimentally measured quantities.
+Currently simulated systems may contain millions of atoms and the trajectories can consist of hundreds of thousands to millions of individual time frames, thus resulting in file sizes ranging from tens of gigabytes to tens of terabytes.
+Processing and analyzing these trajectories is increasingly becoming a rate limiting step in computational workflows :cite:`Cheatham:2015qf, Beckstein:2018aa`.
+Modern MD packages are highly optimized to perform well on current HPC clusters with hundreds of cores such as the XSEDE supercomputers :cite:`XSEDE` but current general purpose trajectory analysis packages :cite:`Giorgino:2019aa` were not designed with HPC in mind.
 
-Dask :cite:`Rocklin:2015aa`
+In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with Dask's distributed scheduler, and created the *Parallel MDAnalysis* (PMDA_) library.
+By default, PMDA follows a simple split-apply-combine :cite:`Wickham:2011aa` approach for trajectory analysis, whereby each task analyzes a single trajectory segment and reports back the individual results that are then combined into the final result :cite:`Khoshlessan:2017ab`.
+Our previous work established that Dask worked well with MDAnalysis :cite:`Khoshlessan:2017ab` and that this approach was competitive with other task-parallel approaches :cite:`Paraskevakos:2018aa`.
+However, we did not provide a general purpose framework to write parallel analysis tools with MDAnalysis.
+Here we show how the split-apply-combine approach lends itself to a generalizable Python implementation that makes it straightforward for users to implement their own parallel analysis tools.
+At the heart of PMDA is the idea that the user only needs to provide a function that analyzes a single trajectory frame.
+PMDA provides the remaining framework via the ``ParallelAnalysisBase`` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and and combines the data.
 
 
+Code availability and development process
+=========================================
 
-split-apply-combine for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
+PMDA is available in source form under the GNU General Public License v2 from the GitHub repository `MDAnalysis/pmda`_, and as a `PyPi package`_ and `conda package`_  (via the conda-forge channel).
+Python 2.7 and Python :math:`\ge` 3.5 are fully supported and tested.
+The package uses `semantic versioning`_ to make it easy for users to judge the impact of upgrading.
+The development process uses continuous integration (`Travis CI`_): extensive tests are run on all commits and pull requests via pytest_, resulting in a current code coverage of 97\% and documentation_ is automatically generated by `Sphinx`_ and published as GitHub pages.
+Users are supported through the `community mailinglist`_ (Google group) and the GitHub `issue tracker`_.
+
 
 
 =======
@@ -342,9 +362,9 @@ Conclusions
 Acknowledgments
 ===============
 
-SF and IP were supported by grant ACI-1443054 from the National Science Foundation.
-OB was supported in part by grant ACI-1443054 from the National Science Foundation.
-Computational resources were in provided the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575 (allocation MCB130177 to OB.
+This work was supported by the National Science Foundation under grant numbers ACI-1443054 and used the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1548562.
+The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation TG-MCB130177.
+
 
 
 References
@@ -358,3 +378,13 @@ References
 .. _PMDA: https://www.mdanalysis.org/pmda/
 .. _MDAnalysis: https://www.mdanalysis.org
 .. _Dask: https://dask.org
+.. _`MDAnalysis/pmda`: https://github.com/MDAnalysis/pmda
+.. _`PyPi package`: https://pypi.org/project/pmda/
+.. _`conda package`: https://anaconda.org/conda-forge/pmda
+.. _`semantic versioning`: https://semver.org/
+.. _documentation: https://www.mdanalysis.org/pmda/
+.. _pytest: https://pytest.org
+.. _Sphinx: https://www.sphinx-doc.org/
+.. _`Travis CI`: https://travis-ci.com/
+.. _`community mailinglist`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
+.. _`issue tracker`: https://github.com/MDAnalysis/pmda/issues
