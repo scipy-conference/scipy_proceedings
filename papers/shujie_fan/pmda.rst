@@ -263,10 +263,15 @@ With pmda.parallel.ParallelAnalysisBase
 +++++++++++++++++++++++++++++++++++++++
 
 In more common cases, one can write the parallel class with the help of ``pmda.parallel.ParallelAnalysisBase``. To build a new analysis class, one should 
+
 1. (Required) Define the single frame analysis function ``_single_frame``,
+
 2. (Required) Define the final results conclusion function ``_conclue``,
+
 3. (Not Required) Define the additional preparation function ``_prepare``,
+
 4. (Not Required) Define the accumulation function for frames within the same block ``_reduce``, if the result is not time-series data,
+
 5. Derive a class from ``pmda.parallel.ParallelAnalysisBase`` that uses these functions. 
 
 As an example, we show how one can build a class to calculate the radius of gyration of a protein givin in ``AtomGroup`` ``protein``. The class needs to be initialized with ``pmda.parallel.ParallelAnalysisBase`` subclassed. The conclusion function reshapes the ``self._results`` which stores the results from all blocks.  
@@ -287,7 +292,7 @@ As an example, we show how one can build a class to calculate the radius of gyra
         def _conclude(self):
             self.rgyr = np.vstack(self._results)
 
-The inputs for ``_single_frame`` are fixed. ``ts`` contains the current time step and ``agroups`` is a tuple of atomgroups that are updated to the current frame. The current frame number, time and radius of gyration are returned as the single frame results. Here we can use the default ``_reduce``.
+The inputs for ``_single_frame`` are fixed. ``ts`` contains the current time step and ``agroups`` is a tuple of atomgroups that are updated to the current frame. The current frame number, time and radius of gyration are returned as the single frame results. Here we don't need to define a new ``_reduce``.
 
 .. code-block:: python
 
@@ -313,6 +318,10 @@ The usage of this class is the same as the function we defined with ``pmda.custo
 =========
 Benchmark
 =========
+
+
+
+
 
 Method
 ======
