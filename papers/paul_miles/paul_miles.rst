@@ -27,8 +27,8 @@ Introduction
 ------------
 
 The Python package pymcmcstat :cite:`pymcmcstat2019v1.7.0` provides a robust platform for a variety of engineering inverse problems.  Bayesian statistical analysis is a powerful tool for parameter estimation, and many algorithms exist for numerical approaches that utilize Markov Chain Monte Carlo (MCMC) methods :cite:`smith2014uncertainty`.
-   
-In pymcmcstat, the user is provided with a suite of Metropolis based algorithms, with the primary approach being Delayed Rejection Adaptive Metropolis (DRAM) :cite:`haario2006dram`, :cite:`haario2001adaptive`.  A simple procedure of adding data, defining model parameters and settings, and setting up simulation options provides the user with a wide variety of computational tools for considering inverse problems.  This approach to inverse problems utilizes data to provide insight into model limitations and provide accurate estimation of the underlying model and observation uncertainty. 
+
+In pymcmcstat, the user is provided with a suite of Metropolis based algorithms, with the primary approach being Delayed Rejection Adaptive Metropolis (DRAM) :cite:`haario2006dram`, :cite:`haario2001adaptive`.  A simple procedure of adding data, defining model parameters and settings, and setting up simulation options provides the user with a wide variety of computational tools for considering inverse problems.  This approach to inverse problems utilizes data to provide insight into model limitations and provide accurate estimation of the underlying model and observation uncertainty.
 
 As many Python packages currently exist for performing MCMC simulations, we had several goals in developing this code.  To our knowledge, no current package contains the :math:`n`-stage delayed rejection algorithm, so pymcmcstat was intended to fill this gap.  Furthermore, many researchers in our community have extensive experience using the MATLAB toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_.  Our implementation provides a similar user environment, while exploiting Python structures.  We hope to decrease dependence on MATLAB in academic communities by advertising comparable tools in Python.
 
@@ -43,9 +43,9 @@ The goal of Bayesian inference is to estimate the posterior densities :math:`\pi
 
     \pi(q|F^{obs}(i)) = \frac{\mathcal{L}(F^{obs}(i)|q)\pi_0(q)}{\int_{\mathbb{R}^p}\mathcal{L}(F^{obs}(i)|q)\pi_0(q)dq},
 
-we observe that the posterior is proportional to the likelihood and prior functions.  The function :math:`\mathcal{L}(F^{obs}(i)|q)` describes the likelihood of the observations given a parameter set, and any information known *a priori* about the parameters is defined in the prior distribution :math:`\pi_0(q)`.  The denominator ensures the posterior integrates to unity.
+we observe that the posterior is proportional to the likelihood and prior functions.  The function :math:`\mathcal{L}(F^{obs}(i)|q)` describes the likelihood of the observations given a parameter set, and any information known *a priori* about the parameters is defined in the prior distribution :math:`\pi_0(q)`.  The denominator ensures that the posterior integrates to unity.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.
 
 The pymcmcstat package is designed to work with statistical models of the form
 
@@ -63,20 +63,6 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 where :math:`SS_q=\sum_{i=1}^N[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error.  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
 There are a wide variety of Metropolis algorithms that may be used within MCMC.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
-
-.. table:: Metropolis algorithms available in pymcmcstat. :label:`tabmetalg`
-
-   +----+--------------------------+
-   |    | Algorithm                |
-   +====+==========================+
-   | MH | Metropolis-Hastings      |
-   +----+--------------------------+
-   | AM | Adaptive Metropolis      |
-   +----+--------------------------+
-   | DR | Delayed Rejection        |
-   +----+--------------------------+
-   |DRAM| DR + AM                  |
-   +----+--------------------------+
 
 Procedurally, to run an MCMC simulation using pymcmcstat, the user will need to complete the following steps:
 
@@ -122,18 +108,37 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
     # Run simulation
     mcstat.run_simulation()
 
-For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
+Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
+
+.. raw:: latex
+
+   \begin{table}[!b]
+     \centering
+     \begin{tabular}{ll}
+     \hline \hline
+     \multicolumn{2}{c}{{\bf Algorithm}}\tabularnewline
+     \hline
+     MH & Metropolis-Hastings\tabularnewline
+     AM & Adaptive Metropolis\tabularnewline
+     DR & Delayed Rejection\tabularnewline
+     DRAM & DR + AM\tabularnewline
+     \hline \hline
+     \end{tabular}
+
+     \caption{Metropolis algorithms available in pymcmcstat. \DUrole{label}{tabmetalg}}
+
+   \end{table}
 
 Smart Material Systems
 ----------------------
 Many smart material systems depend on robust constitutive relations for applications in robotics, flow control, and energy harvesting :cite:`lines2001principles`, :cite:`cattafesta2011actuators`.  To fully characterize the material or system behavior, uncertainty in the model must be accurately represented.  By using experimental data in conjunction with pymcmcstat, we can estimate the model parameter distributions and visualize how that uncertainty propagates through the system.  We will consider specific examples in viscoelastic modeling of dielectric elastomers and also continuum approximations of ferroelectric monodomain crystal structures.
-           
+
 Viscoelastic Modeling of Dielectric Elastomers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Dielectric elastomers as part of adaptive structures provide unique capabilities for control of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  Many of these materials exhibit viscoelastic behavior which varies significantly with the rate of deformation :cite:`rubinstein2003polymer`.  Figure :ref:`figfinalcycles` shows uni-axial experimental data for the elastomer Very High Bond (VHB) 4910, which highlights how the hysteretic behavior increases with the rate of deformation.  For more details regarding the experimental procedure used to generate this data, the reader is referred to :cite:`miles2015bayesian`.
+Dielectric elastomers as part of adaptive structures provide unique capabilities for control of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  Many of these materials exhibit viscoelastic behavior, which varies significantly with the rate of deformation :cite:`rubinstein2003polymer`.  Figure :ref:`figfinalcycles` shows uni-axial experimental data for the elastomer Very High Bond (VHB) 4910, which highlights how the hysteretic behavior increases with the rate of deformation.  For more details regarding the experimental procedure used to generate this data, the reader is referred to :cite:`miles2015bayesian`.
 
 .. figure:: figures/final_cycle_for_each_rate.png
-   
+
     Experimental data for VHB 4910.  The frequencies refer to different rates of deformation, or in this case different stretch rates, :math:`\dot{\lambda}`. :label:`figfinalcycles`
 
 A variety of models can be used when modeling the behavior of these materials, but for the purpose of this demonstration we will focus on a nonaffine hyperelastic :cite:`davidson2013nonaffine` and integer-order linear viscoelastic representation :cite:`miles2015bayesian`.  The model calibration is performed with respect to the experimental data collected at :math:`\dot{\lambda}=0.67` Hz as shown in Figure :ref:`figfinalcycles`.
@@ -150,7 +155,7 @@ We can perform the MCMC simulation using the basic procedure previously outlined
                 num=400)
 
 The information defined in the data structure can be accessed in the sum-of-squares function
-    
+
 .. code-block:: python
 
     def ssfun(thetavec, data):
@@ -174,7 +179,7 @@ The information defined in the data structure can be accessed in the sum-of-squa
 
 The function is evaluated at a subset of times and then interpolated to the points where experimental data exists.  This speeds up the model evaluation with a limited decrease in accuracy as it is reasonable to assume linear behavior within the time intervals specified.  We note that computational performance can be significantly improved by writing the model functions in C++ or Fortran.  You can easily call these functions by utilizing the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_ and an example of how to do this with pymcmcstat can be found in the `Viscoelasticity Example <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/viscoelasticity/viscoelastic_analysis_using_ctypes.ipynb>`_ tutorial.
 
-Most models are comprised of multiple parameters, not all of which should be included as part of the calibration.  However, it is not usually convenient to define models with fixed parameter values.  To facilitate general model definitions, one can include parameters in the MCMC object that will not be sampled.  For our example, there are a total of six parameters - 3 hyperelastic (:math:`G_c, G_e, \lambda_{max}`) and 3 viscoelastic (:math:`\eta, \gamma, \beta`).  We do not want to sample the hyperelastic model parameters, so we simply set :code:`sample=False` when adding these terms to the parameter structure.
+Most models are comprised of multiple parameters, not all of which should be included as part of the calibration.  To simplify the interface, the user  can pass fixed values into the function.  For our example, there are a total of six parameters - 3 hyperelastic (:math:`G_c, G_e, \lambda_{max}`) and 3 viscoelastic (:math:`\eta, \gamma, \beta`).  We do not want to sample the hyperelastic model parameters, so we simply set :code:`sample=False` when adding these terms to the parameter structure.
 
 .. code-block:: python
 
@@ -209,7 +214,7 @@ Most models are comprised of multiple parameters, not all of which should be inc
 
 We note that the :code:`lstheta0` and :code:`bounds` are simply dictionaries containing the results of a least-squares optimization and user-defined parameter bounds, respectively.  The values can be put directly in the parameter structure or referenced in any manner that the user prefers.
 
-Figure :ref:`figcpvisc` shows the burned-in parameter values sampled during the MCMC process.  We remove the first part of the sampling chain to allow for burn-in to the posterior distribution.  Given the consistent behavior of the sampling chain, we can be reasonably confident that the chains have converged to the posterior densities.  In Figure :ref:`figdpvisc`, we have plotted the posterior distributions using a kernel density estimator (KDE).  The distributions appear to be nominally Gaussian in nature; however, that is not a requirement when running MCMC.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_ tutorial.
+Figure :ref:`figcpvisc` shows the burned-in parameter values sampled during the MCMC process.  By "burn-in" we mean that we have sampled the values sufficiently such that the chains have converged to the posterior densities.  We remove the first part of the sampling chain to allow for burn-in and take the remaining portion to be the posterior distribution.  Given the consistent behavior of the sampling chain, we can be reasonably confident that the chains have converged to the posterior densities.  In Figure :ref:`figdpvisc`, we have plotted the posterior distributions using a kernel density estimator (KDE).  The distributions appear to be nominally Gaussian in nature; however, that is not a requirement when running MCMC.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_ tutorial.
 
 .. figure:: figures/ionv_cp.png
     :figclass: tb
@@ -221,21 +226,21 @@ Figure :ref:`figcpvisc` shows the burned-in parameter values sampled during the 
 
     Marginal posterior densities obtained using the parameter chains shown in Figure :ref:`figcpvisc`. :label:`figdpvisc`
 
-In many problems it is of interest to observe how uncertainty propagates through the model to affect the output.  By sampling from the parameter posterior distributions, we can evaluate the model and construct credible intervals.  Similarly, we generate prediction intervals by also propagating the uncertainty associated with the observation error variance through the model.  In Figure :ref:`figpivisc` we show the mean model response, experimental data, and 95% prediction and credible intervals.  We note that the credible intervals are too small to be observed at this scale.  As a sanity check, we verify the reasonableness of assuming a Gaussian likelihood function in (:ref:`eqnlikelihood`) by observing that the correct percentage of measured data appears to be contained within the 95% prediction interval.
+In many problems it is of interest to observe how uncertainty propagates through the model to affect the output.  By sampling from the parameter posterior distributions, we can evaluate the model and construct credible intervals.  Similarly, we generate prediction intervals by also propagating the uncertainty associated with the observation error variance through the model.  Figure :ref:`figpivisc` shows the mean model response, experimental data, and 95% prediction and credible intervals.  We note that the credible intervals are too small to be observed at this scale.  As a sanity check, we verify the reasonableness of assuming a Gaussian likelihood function in (:ref:`eqnlikelihood`) by observing that the correct percentage of measured data appears to be contained within the 95% prediction interval.
 
 .. figure:: figures/ionv_pi.png
     :figclass: tb
 
     Propagation of uncertainty through elastomer model yields 95% prediction and credible intervals. :label:`figpivisc`
 
-With regard to the amount of uncertainty observed in Figure :ref:`figpivisc`, it is important to note several items.  First, the amount of uncertainty in the output is large enough such that there are large regions of overlap in the loading and unloading parts of the cycle near the point of maximum extension.  Secondly, this volume of uncertainty  spans beyond the limits of experimental data collected at slower rates, meaning the model's ability to predict material behavior at other rates is limited.  This result motivated the investigation of a fractional-order viscoelastic model :cite:`mashayekhi2018fractional`.
+Regarding the amount of uncertainty observed in Figure :ref:`figpivisc`, it is important to note several items.  First, the amount of uncertainty in the output is large enough such that there are large regions of overlap in the loading and unloading parts of the cycle near the point of maximum extension.  Secondly, this volume of uncertainty  spans beyond the limits of experimental data collected at slower rates, meaning the model's ability to predict material behavior at other rates is limited.  This result motivated the investigation of a fractional-order viscoelastic model :cite:`mashayekhi2018fractional`.
 
 Monodomain Crystal Structure Modeling in Ferroelectric Ceramics
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Ferroelectric materials are used in a wide variety of engineering applications, necessitating methodologies that can account for uncertainty across multi-scale physics models.  Bayesian statistics allow us to quantify model parameter uncertainty associated with approximating lattice strain and full-field electron density from density functional theory (DFT) calculations as a homogenized, electromechanical continuum.
 
-Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = [\alpha_{1},\alpha_{11}, \alpha_{111},\alpha_{12},\alpha_{112},\alpha_{123}]`. The Landau energy is a function of 3-dimensional polarization space, :math:`{\bf P}=[P_1, P_2, P_3]`. For the purpose of this example, we consider the case where :math:`P_1 = 0`.  Often times we are interested in using information calculated from DFT calculations in order to inform our continuum approximations, such as our Landau function. For this example, we will assume we have a set of energy DFT calculations corresponding to different values of :math:`P_2` and :math:`P_3` as seen in Figure :ref:`figdftdata`. For more details regarding this research, the reader is referred to :cite:`miles2018analysis` and :cite:`leon2018analysis`.
+Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = [\alpha_{1},\alpha_{11}, \alpha_{111},\alpha_{12},\alpha_{112},\alpha_{123}]`. The Landau energy is a function of 3-dimensional polarization space, :math:`{\bf P}=[P_1, P_2, P_3]`. For the purpose of this example, we consider the case where :math:`P_1 = 0`.  We are often interested in using information calculated from DFT calculations in order to inform our continuum approximations, such as our Landau function. For this example, we will assume we have a set of energy DFT calculations corresponding to different values of :math:`P_2` and :math:`P_3` as seen in Figure :ref:`figdftdata`. For more details regarding this research, the reader is referred to :cite:`miles2018analysis` and :cite:`leon2018analysis`.
 
 .. figure:: figures/dft_data.png
 
@@ -260,7 +265,7 @@ The user can evaluate the MCMC chains using a variety of statistical and diagnos
     burnin = int(chain.shape[0]/2)  # half of chain
     mcstat.chainstats(chain[burnin:,:], results)
 
-which will display 
+which will display
 
 ::
 
@@ -286,14 +291,14 @@ Efficient and accurate localization of special nuclear material (SNM) in urban e
 
 We implement a highly simplified radiation transport model which ignores scattering.  The model accounts for signal attenuation that is caused by distance as well as interference from buildings that are in the path between the source and detector location.  This ray tracing model is implemented in the Python package `gefry3 <https://github.com/jasonmhite/gefry3>`_.  Additional details regarding this research can be found in :cite:`hite2019bayesian`.
 
-A Bayesian approach to source localization provides us with several very practical results.  Firstly, there are multiple regions of the domain that will yield comparable detector measurements, so assigning probabilities to various locations is more realistic than a single point estimate.  If you can infer regions of higher probability, it can then motivate the placement of new detectors in the domain or possibly allow for a team with handheld detectors to complete the localization process.  Given the challenges of modeling the radiation transport physics, it is extremely useful to visualize the potential source locations in light of the underlying uncertainty.  Figure :ref:`figxymarg` shows the marginal posterior densities, where it is clearly seen that the posteriors are very close to the true source location.
+A Bayesian approach to source localization provides us with several very practical results.  Firstly, there are multiple regions of the domain that will yield comparable detector measurements, so assigning probabilities to various locations is more realistic than a single point estimate.  If one can infer regions of higher probability, it can then motivate the placement of new detectors in the domain or possibly allow for a team with handheld detectors to complete the localization process.  Given the challenges of modeling the radiation transport physics, it is extremely useful to visualize the potential source locations in light of the underlying uncertainty.  Figure :ref:`figxymarg` shows the marginal posterior densities, where it is clearly seen that the posteriors are very close to the true source location.
 
 .. figure:: figures/x_vs_y_2d.png
    :figclass: tb
 
    Marginal posteriors from MCMC simulation presented in urban environment.  Actual source location is denoted by the red circle. :label:`figxymarg`
 
- 
+
 Concluding Remarks
 ------------------
 In this paper we have demonstrated several distinct areas of scientific study where MCMC methods provide enhanced understanding of the underlying physics.  The pymcmcstat package presents a robust platform from which to perform a wide array of Bayesian inverse problems using the Delayed Rejection Adaptive Metropolis (DRAM) algorithm.
@@ -307,7 +312,7 @@ To improve the overall usefulness of the pymcmcstat package, we will expand its 
 Acknowledgments
 ---------------
 
-This research was supported by the Department of Energy National Nuclear Security Administration (NNSA) under the Award Number DE-NA0002576 through the Consortium for Nonproliferation Enabling Capabilities (CNEC).
+This research was supported by the Department of Energy National Nuclear Security Administration (NNSA) under the Award Number DE-NA0002576 through the Consortium for Nonproliferation Enabling Capabilities (CNEC).  Additional support was provided by the Air Force Office of Scientific Research (AFOSR) through Award Number FA9550-15-1-0299.
 
 References
 ----------
