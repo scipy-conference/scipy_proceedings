@@ -134,7 +134,6 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
 
         def run(self, start=None, stop=None, step=None,
             n_jobs=1, n_blocks=None):
-	
             # Get the indices of the start, stop 
             # and step frames.
             start, stop, step = 
@@ -147,10 +146,8 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
             self._prepare()
                 blocks = []
                 for bslice in slices:
-                    task = delayed(
-                         self._dask_helper, 
-                             pure=False)(
-                                 bslice,
+                    task = delayed(self._dask_helper, 
+                             pure=False)(bslice,
                                  self._indices,
                                  self._top,
                                  self._traj, )
