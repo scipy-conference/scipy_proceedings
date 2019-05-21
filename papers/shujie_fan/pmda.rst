@@ -128,19 +128,12 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
 	    self._indices = [ag.indices 
                              for ag in atomgroups]
 
-``run()`` performs the split-apply-combine parallel analysis. The trajectory is split into n_blocks blocks by :code:`make_balanced_slices` with first frame start, final frame stop and step length step (corresponding to the split step).  :code:`make_balanced_slices` is a function defined in pmda.util. It generates blocks in such a way that they contain equal numbers of frames when possible, but there are also no empty blocks. The final start and stop frames for each block are restored in a list slices. ``n_jobs`` is the number of jobs to start, this argument will be ignored when the distributed scheduler used. After the additional preparation defined in :code:`_prepare`, the analysis jobs (the apply step, defined in :code:`_dask_helper()`)  on each block are delayed with the :code:`delayed()` function in dask. Finally, the results from all blocks are gathered and combined in the :code:`_conclude()` function.
-
-``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
+``run()`` performs the split-apply-combine parallel analysis. The trajectory is split into n_blocks blocks by :code:`make_balanced_slices` with first frame start, final frame stop and step length step (corresponding to the split step).  :code:`make_balanced_slices` is a function defined in pmda.util. It generates blocks in such a way that they contain equal numbers of frames when possible, but there are also no empty blocks. The final start and stop frames for each block are restored in a list slices. ``n_jobs`` is the number of jobs to start, this argument will be ignored when the distributed scheduler used. After the additional preparation defined in :code:`_prepare`, the analysis jobs (the apply step, defined in :code:`_dask_helper()`)  on each block are delayed with the :code:`delayed()` function in dask. The results from all blocks are moved and reshaped into a sensible new variable ``self.results`` (may have other name) with the :code:`_conclude()` function.
 
 .. code-block:: python
 
         def run(self, start=None, stop=None, step=None,
             n_jobs=1, n_blocks=None):
-            # Get the indices of the start, stop 
-            # and step frames.
-            start, stop, step = 
-                   self._trajectory.check_slice_indices(
-                       start, stop, step)
             n_frames = len(range(start, stop, step))
             slices = make_balanced_slices(n_frames, 
                                   n_blocks, start=start,
@@ -166,11 +159,9 @@ The parallel analysis algorithms are performed on ``Universe`` and tuple of ``At
 .. code-block:: python
 
         def _dask_helper(self, bslice, indices, top, traj):
-                u = mda.Universe(top, traj)
-                agroups = [u.atoms[idx] for idx in indices]
+            u = mda.Universe(top, traj)
+            agroups = [u.atoms[idx] for idx in indices]
             res = []
-            times_io = []
-            times_compute = []
             for i in range(bslice.start, 
                            bslice.stop, bslice.step):
                 ts = u.trajectory[i]
@@ -188,11 +179,6 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
             res.append(result_single_frame)
             return res
 
-
-
-
-Results and Discussion
-======================
 
 ===========
 Basic Usage 
@@ -266,7 +252,7 @@ We can wrap rgyr() in ``pmda.custom.AnalysisFromFunction`` to build a paralleled
     parallel_rgyr = pmda.custom.AnalysisFromFucntion(
                     rgyr, u, protein)
 
-Run the analysis on 8 cores and show the timeseries of the results stored in ``parallel_rgyr.results``:
+Run the analysis on 4 cores and show the timeseries of the results stored in ``parallel_rgyr.results``:
 
 .. code-block:: python
 
@@ -276,6 +262,66 @@ Run the analysis on 8 cores and show the timeseries of the results stored in ``p
 With pmda.parallel.ParallelAnalysisBase
 +++++++++++++++++++++++++++++++++++++++
 
+In more common cases, one can write the parallel class with the help of ``pmda.parallel.ParallelAnalysisBase``. To build a new analysis class, one should 
+1. (Required) Define the single frame analysis function ``_single_frame``,
+2. (Required) Define the final results conclusion function ``_conclue``,
+3. (Not Required) Define the additional preparation function ``_prepare``,
+4. (Not Required) Define the accumulation function for frames within the same block ``_reduce``, if the result is not time-series data,
+5. Derive a class from ``pmda.parallel.ParallelAnalysisBase`` that uses these functions. 
+
+As an example, we show how one can build a class to calculate the radius of gyration of a protein givin in ``AtomGroup`` ``protein``. The class needs to be initialized with ``pmda.parallel.ParallelAnalysisBase`` subclassed. The conclusion function reshapes the ``self._results`` which stores the results from all blocks.  
+
+
+.. code-block:: python
+
+    import numpy as np
+    from pmda.parallel import ParallelAnalysisBase
+
+    class RGYR(ParallelAnalysisBase):
+        def __init__(self, protein):
+            universe = protein.universe
+            super(RMSD, self).__init__(universe, (protein, ))
+
+        def _prepare(self):
+            self.rgyr = None
+        def _conclude(self):
+            self.rgyr = np.vstack(self._results)
+
+The inputs for ``_single_frame`` are fixed. ``ts`` contains the current time step and ``agroups`` is a tuple of atomgroups that are updated to the current frame. The current frame number, time and radius of gyration are returned as the single frame results. Here we can use the default ``_reduce``.
+
+.. code-block:: python
+
+        def _single_frame(self, ts, atomgroups):
+            protein = atomgroups[0]
+            
+            return (ts.frame, ts.time,
+                    protein.radius_of_gyration))
+
+The usage of this class is the same as the function we defined with ``pmda.custom.AnalysisFromFunction``.  
+
+.. code-block:: python
+
+    import MDAnalsys as mda
+    u = mda.Universe(top, traj)
+    protein = u.select_atoms('protein')
+    
+    parallel_rgyr = RGYR(protein)
+    parallel_rgyr.run(n_jobs=4, n_blocks=4)
+    print(parallel_rgyr.results)
+
+
+=========
+Benchmark
+=========
+
+Method
+======
+
+``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
+
+
+Results and Discussion
+======================
 
 
 Conclusions
