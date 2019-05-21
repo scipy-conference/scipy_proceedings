@@ -109,6 +109,7 @@ However, we did not provide a general purpose framework to write parallel analys
 Here we show how the split-apply-combine approach lends itself to a generalizable Python implementation that makes it straightforward for users to implement their own parallel analysis tools.
 At the heart of PMDA is the idea that the user only needs to provide a function that analyzes a single trajectory frame.
 PMDA provides the remaining framework via the ``ParallelAnalysisBase`` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and and combines the data.
+It also contains a growing library of ready-to-use analysis classes, thus enabling users to immediately accelerate analysis that they previously performed in serial with the standard MDAnalysis analysis classes :cite:`Gowers:2016aa`.
 
 
 Code availability and development process
