@@ -1,7 +1,7 @@
 :author: Shammamah Hossain
 :email: shammamah@plot.ly
 :institution: Plotly, Inc., 118 - 5555 Avenue de Gaspe, Montreal QC
-              H2T 2A3
+	      H2T 2A3
 :corresponding:
 
 
@@ -717,26 +717,20 @@ References
 
 .. [Mol3D] Autodesk. *Molecule 3D for React*. URL:
 	     `<https://github.com/plotly/molecule-3d-for-react>`_
-.. [Circos] Girault, Nic. *circosJS: d3 library to build circular
-	    graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
-.. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global
-	  gene expression analysis reveals specific patterns of cell
-	  junctions in non-small cell lung cancer subtypes.* Lung
-	  Cancer 2009 Jan;63(1):32-8. PMID: 18486272
-.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with
-	  JavaScript*. URL: `<https://github.com/eweitz/ideogram>`_
-.. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and
-	  Foulkes, A. S. (2015) *A guide to genome‐wide association
-	  analysis and post‐analytic interrogation.* Statist. Med.,
-	  34: 3769– 3792. doi: 10.1002/sim.6605.
-.. [Speck] Terrell, Rye. *Speck*. URL:
-	   `<https://github.com/wwwtyro/speck>`_
-.. [Align] Plotly. *React Alignment Viewer*. URL:
-	   `<https://github.com/plotly/react-alignment-viewer>`_
-.. [Onco] Plotly. *React OncoPrint*. URL:
-	  `<https://github.com/plotly/react-oncoprint>`_
-.. [SeqV] FlyBase. *react-sequence-viewer*. URL:
-	  `<https://github.com/FlyBase/react-sequence-viewer>`_
+.. [PDB] H.M. Berman, J. Westbrook, Z. Feng, G. Gilliland,
+	 T.N. Bhat, H. Weissig, I.N. Shindyalov, P.E. Bourne. (2000) *The
+	 Protein Data Bank*. Nucleic Acids Research, 28:
+	 235-242. URL:`<https://www.rcsb.org>`_
+.. [Man] Bhatnagar, Samir. *manhattanly*. URL:
+	 `<https://github.com/sahirbhatnagar/manhattanly>`_
+.. [cBio] Ethan Cerami, Jianjiong Gao, Ugur Dogrusoz,
+	  Benjamin E. Gross, Selcuk Onur Sumer, Bülent Arman Aksoy,
+	  Anders Jacobsen, Caitlin J. Byrne, Michael L. Heuer, Erik
+	  Larsson, Yevgeniy Antipin, Boris Reva, Arthur P. Goldberg,
+	  Chris Sander and Nikolaus Schultz. *The cBio Cancer Genomics
+	  Portal: An Open Platform for Exploring Multidimensional
+	  Cancer Genomics Data*. Cancer Discov May 1 2012 (2) (5)
+	  401-404; DOI: 10.1158/2159-8290.CD-12-0095
 .. [BioP] Peter J. A. Cock, Tiago Antao, Jeffrey T. Chang,
 	  Brad A. Chapman, Cymon J. Cox, Andrew Dalke, Iddo Friedberg,
 	  Thomas Hamelryck, Frank Kauff, Bartek Wilczynski,
@@ -744,15 +738,26 @@ References
 	  tools for computational molecular biology and
 	  bioinformatics*. Bioinformatics 25 (11), 1422–1423
 	  (2009). `<https://doi.org/10.1093/bioinformatics/btp163>`_
-.. [NCBI] The NCBI C++ Toolkit (https://ncbi.github.io/cxx-toolkit/)
-	  by the National Center for Biotechnology Information,
-	  U.S. *Fasta Sequence ID Format*. National Library of
-	  Medicine; Bethesda MD, 20894 USA.
-.. [nXP] NeXtprot. *ALB - Serum albumin - proteomics*. URL:
-	 `<https://www.nextprot.org/entry/NX_P02768/proteomics>`_
+.. [1bna] PDB ID: 1BNA. Drew, H.R., Wing, R.M., Takano, T., Broka, C.,
+	  Tanaka, S., Itakura, K., Dickerson, R.E.. *Structure of a
+	  B-DNA dodecamer: conformation and dynamics.*. (1981)
+	  Proc.Natl.Acad.Sci.USA 78: 2179-2183
 .. [GEO] Edgar R, Domrachev M, Lash AE. *Gene Expression Omnibus: NCBI
 	 gene expression and hybridization array data
 	 repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10
+.. [SeqV] FlyBase. *react-sequence-viewer*. URL:
+   `<https://github.com/FlyBase/react-sequence-viewer>`_
+.. [Ghr] Genome Reference Consortium. *Genome Reference Consortium
+	 Human Build 37 (GRCh37)* (2009). URL:
+	 `<https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/>`_
+.. [cBio2] Jianjiong Gao, Bülent Arman Aksoy, Ugur Dogrusoz, Gideon
+	   Dresdner, Benjamin Gross, S. Onur Sumer, Yichao Sun, Anders
+	   Jacobsen, Rileen Sinha, Erik Larsson, Ethan Cerami, Chris
+	   Sander, Nikolaus Schultz. *Integrative Analysis of Complex
+	   Cancer Genomics and Clinical Profiles Using the
+	   cBioPortal*. Science Signaling Apr 2 2013
+.. [Circos] Girault, Nic. *circosJS: d3 library to build circular
+	    graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
 .. [GEOP] Gumienny, Rafal. *GEOparse*. URL:
 	  `<https://github.com/guma44/GEOparse>`_
 .. [miR] Kneitz B, Krebs M, Kalogirou C, Schubert M et al. *Survival
@@ -760,25 +765,33 @@ References
 	 miR-221, which regulates proliferation, apoptosis, and
 	 invasion of prostate cancer cells by inhibiting IRF2 and
 	 SOCS3*. Cancer Res 2014 May 1;74(9):2591-603. PMID: 24607843
-.. [PDB] H.M. Berman, J. Westbrook, Z. Feng, G. Gilliland,
-	 T.N. Bhat, H. Weissig, I.N. Shindyalov, P.E. Bourne. (2000)
-	 *The Protein Data Bank*. Nucleic Acids Research, 28:
-	 235-242. URL: `<https://www.rcsb.org>`_
-.. [Par] Swails, Jason. *ParmEd*. URL:
-	 `<https://github.com/ParmEd/ParmEd>`_
-.. [PdbF] wwwPDB. *Protein Data Bank Contents Guide: Atomic Coordinate
-	  Entry Format Description Version 3.30* (2008). 185-197.
-.. [1bna] PDB ID: 1BNA. Drew, H.R., Wing, R.M., Takano, T., Broka, C.,
-	  Tanaka, S., Itakura, K., Dickerson, R.E.. *Structure of a
-	  B-DNA dodecamer: conformation and dynamics.*. (1981)
-	  Proc.Natl.Acad.Sci.USA 78: 2179-2183
+.. [KR09] Kuner R, Muley T, Meister M, Ruschhaupt M et al. *Global
+	  gene expression analysis reveals specific patterns of cell
+	  junctions in non-small cell lung cancer subtypes.* Lung
+	  Cancer 2009 Jan;63(1):32-8. PMID: 18486272
+.. [NCBI] The NCBI C++ Toolkit (https://ncbi.github.io/cxx-toolkit/)
+	  by the National Center for Biotechnology Information,
+	  U.S. *Fasta Sequence ID Format*. National Library of
+	  Medicine; Bethesda MD, 20894 USA.
+.. [nXP] NeXtprot. *ALB - Serum albumin - proteomics*. URL:
+	 `<https://www.nextprot.org/entry/NX_P02768/proteomics>`_
 .. [Dash] Plotly. *Introducing Dash*. (2017) URL:
 	  `<https://medium.com/@plotlygraphs/introducing-dash-5ecf7191b503>`_
-.. [Ghr] Genome Reference Consortium. *Genome Reference Consortium
-	 Human Build 37 (GRCh37)* (2009). URL:
-	 `<https://www.ncbi.nlm.nih.gov/assembly/GCF_000001405.13/>`_
-.. [Man] Bhatnagar, Samir. *manhattanly*. URL: `<https://github.com/sahirbhatnagar/manhattanly>`_
+.. [Align] Plotly. *React Alignment Viewer*. URL:
+	   `<https://github.com/plotly/react-alignment-viewer>`_
+.. [Onco] Plotly. *React OncoPrint*. URL:
+	  `<https://github.com/plotly/react-oncoprint>`_
+.. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and
+	  Foulkes, A. S. (2015) *A guide to genome‐wide association
+	  analysis and post‐analytic interrogation.* Statist. Med.,
+	  34: 3769– 3792. doi: 10.1002/sim.6605.
 .. [Muts] Schroeder, Michael. *Mutations Needle Plot (muts-needle-plot)*. URL: `<https://github.com/bbglab/muts-needle-plot>`_
+.. [Par] Swails, Jason. *ParmEd*. URL:
+	 `<https://github.com/ParmEd/ParmEd>`_
+.. [Speck] Terrell, Rye. *Speck*. URL:
+	   `<https://github.com/wwwtyro/speck>`_
 .. [UniP] The UniProt Consortium. *UniProt: a worldwide hub of protein knowledge*. Nucleic Acids Res. 47: D506-515 (2019)
-.. [cBio] Ethan Cerami, Jianjiong Gao, Ugur Dogrusoz, Benjamin E. Gross, Selcuk Onur Sumer, Bülent Arman Aksoy, Anders Jacobsen, Caitlin J. Byrne, Michael L. Heuer, Erik Larsson, Yevgeniy Antipin, Boris Reva, Arthur P. Goldberg, Chris Sander and Nikolaus Schultz. *The cBio Cancer Genomics Portal: An Open Platform for Exploring Multidimensional Cancer Genomics Data*. Cancer Discov May 1 2012 (2) (5) 401-404; DOI: 10.1158/2159-8290.CD-12-0095
-.. [cBio2] Jianjiong Gao, Bülent Arman Aksoy, Ugur Dogrusoz, Gideon Dresdner, Benjamin Gross, S. Onur Sumer, Yichao Sun, Anders Jacobsen, Rileen Sinha, Erik Larsson, Ethan Cerami, Chris Sander, Nikolaus Schultz. *Integrative Analysis of Complex Cancer Genomics and Clinical Profiles Using the cBioPortal*. Science Signaling Apr 2 2013
+.. [Ideo] Weitz, Eric. *ideogram: Chromosome visualization with
+	  JavaScript*. URL: `<https://github.com/eweitz/ideogram>`_
+.. [PdbF] wwwPDB. *Protein Data Bank Contents Guide: Atomic Coordinate
+	  Entry Format Description Version 3.30* (2008). 185-197.
