@@ -101,6 +101,8 @@ Dask :cite:`Rocklin:2015aa`
 
 split-apply-combine for trajectory analysis :cite:`Khoshlessan:2017ab,Paraskevakos:2018aa`
 
+
+=======
 Methods
 =======
 
@@ -192,13 +194,14 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
 Results and Discussion
 ======================
 
+===========
 Basic Usage 
---------------
+===========
 
 PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks. In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules. Here, we will introduce some basic usages of PMDA.
 
 Pre-defined Analysis
-++++++++++++++++++++++
+====================
 PMDA contains a number of pre-defined analysis classes that are modelled after functionality in ``MDAnalysis.analysis`` and that can be used right away. PMDA currently has four predefined analysis tasks to use:
 
 ``pmda.rms``: RMSD analysis tools
@@ -210,7 +213,7 @@ PMDA contains a number of pre-defined analysis classes that are modelled after f
 ``pmda.leaflet``: LeafletFinder analysis tool
 
 While the first 3 classes are developed based on ``pmda.parallel.ParallelAnalysisBase`` which separates the trajectory into work blocks containing multiple frames, ``pmda.leaflet`` partitions the system based on a 2-dimensional partitioning. 
-The usage of these tools is similar to ``MDAnalysis.analysis``. The simplest example is calculating root mean square distance(RMSD) of |Calpha| atoms of the protein with ``pmda.rms``.
+The usage of these tools is similar to ``MDAnalysis.analysis``. One example is calculating root mean square distance(RMSD) of |Calpha| atoms of the protein with ``pmda.rms``.
 
 .. code-block:: python
 
@@ -237,8 +240,41 @@ The usage of these tools is similar to ``MDAnalysis.analysis``. The simplest exa
 
 
 User-defined Analysis
-++++++++++++++++++++++
+=====================
 
+With pmda.custom.AnalysisFromFunction
++++++++++++++++++++++++++++++++++++++
+PMDA provides helper functions in ``pmda.custom`` to rapidly build a parallel class for users who already have a function:
+1. takes one or more AtomGroup instances as input,
+2. analyzes one frame in a trajectory and returns the result for this frame.
+For example, we already have a function to calculate the radius of gyration of a protein given in ``AtomGroup`` ``ag``:
+
+.. code-block:: python
+
+    import MDAnalsys as mda
+    u = mda.Universe(top, traj)
+    protein = u.select_atoms('protein')
+
+    def rgyr(ag):
+        return(ag.radius_of_gyration)
+
+We can wrap rgyr() in ``pmda.custom.AnalysisFromFunction`` to build a paralleled version of ``rgyr()``:
+
+.. code-block:: python
+     
+    import pmda.custom
+    parallel_rgyr = pmda.custom.AnalysisFromFucntion(
+                    rgyr, u, protein)
+
+Run the analysis on 8 cores and show the timeseries of the results stored in ``parallel_rgyr.results``:
+
+.. code-block:: python
+
+    parallel_rgyr.run(n_jobs=4, n_blocks=4)
+    print(parallel_rgyr.results)
+
+With pmda.parallel.ParallelAnalysisBase
++++++++++++++++++++++++++++++++++++++++
 
 
 
