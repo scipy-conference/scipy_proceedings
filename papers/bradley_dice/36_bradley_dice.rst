@@ -56,14 +56,16 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-With the popularity of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now simpler than ever to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
-Colloidal materials, with relatively adaptable nano-scale building blocks and diverse strategies for adjusting interparticle interactions, are powerful both as model systems for exploring soft matter physics and as a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
-Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
-The ``freud`` library differentiates itself from other molecular dynamics analysis packages through its focus on nano-scale systems.
-In such systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
-The result is a highly general analysis toolkit that efficiently leverages computational geometry, spherical harmonics, and a wide range of other useful mathematical tools to provide order parameters and characterize structures in a relatively system-agnostic way.
 
-The utility of ``freud`` in studies of soft matter is driven by its unique feature set.
+
+With the popularity of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now simpler than ever to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
+Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
+The ``freud`` library differentiates itself from other molecular dynamics analysis packages through its focus on colloidal and nano-scale systems.
+Due to their immense diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics as well as a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
+
+In colloidal systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
+Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
+The ``freud`` library is targeted towards studying such systems, providing a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
 For example, the multi-dimensional Potential of Mean Force and Torque allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`.
 Additionally, ``freud`` has tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
 The ``freud`` library's extraordinary scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
