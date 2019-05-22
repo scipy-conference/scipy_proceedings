@@ -461,6 +461,47 @@ Results and Discussion
 ======================
 
 
+.. figure:: figs/Total_Eff_SU_rms.pdf
+
+   Strong scaling performance of the RMSD analysis task with short (900 frames) and long (9000) frames trajectories on *SDSC Comet*, where a single node contains 24 cores.
+   The total time to completion |ttotal| was measured for different testing configurations (Table :ref:`tab:configurations`)
+   **A** and **D**: |ttotal| as a function of processes or Dask workers, i.e., the number of CPU cores that were actually used.
+   The number of trajectory blocks was the same as the number of CPU cores.
+   **B** and **E**: efficiency :math:`E`. The ideal case is :math:`E = 1`.
+   **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
+   :label:`fig:rmsd`
+
+
+.. figure:: figs/wait_compute_io_rms.pdf
+
+   Detailed timing analysis for the RMSD analysis task.
+   Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`)
+   **A** and **D**: Average waiting time for the task to be executed by the Dask scheduler.
+   **B** and **E**: Total average compute time per task.
+   **C** and **F**: Total average read I/O time per task.
+   :label:`fig:rms-wait-comp-io`
+	  
+   
+.. figure:: figs/Total_Eff_SU_rdf.pdf
+
+   Strong scaling performance of the RDF analysis task.
+   The total time to completion |ttotal| was measured for different testing configurations (Table :ref:`tab:configurations`)
+   **A** and **D**: |ttotal| as a function of processes or Dask workers, i.e., the number of CPU cores that were actually used.
+   The number of trajectory blocks was the same as the number of CPU cores.
+   **B** and **E**: efficiency :math:`E`. The ideal case is :math:`E = 1`.
+   **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
+   :label:`fig:rdf`
+
+
+.. figure:: figs/wait_compute_io_rdf.pdf
+
+   Detailed timing analysis for the RDF analysis task.
+   Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`)
+   **A** and **D**: Waiting time for the task to be executed by the Dask scheduler.
+   **B** and **E**: Total average compute time per task.
+   **C** and **F**: Total average read I/O time per task.
+   :label:`fig:rdf-wait-comp-io`
+	  
 	  
 
 
