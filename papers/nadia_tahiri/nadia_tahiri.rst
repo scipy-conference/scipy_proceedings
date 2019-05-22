@@ -70,10 +70,10 @@ in the next order of the consumer. By using explanatory variables, such as avail
 information on current promotions in stores in the given region, and commodity price statistics, 
 we developed a machine learning model that is able to:
 
-1. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
-2. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
+i. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
+ii. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
-This list also includes recommendations regarding the optimal quantity of each product suggested and the store(s)  
+This list also includes recommendations regarding the optimal quantity of every product suggested and the store(s)  
 where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
 using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 
@@ -100,7 +100,7 @@ and forward propagation neural networks (Feed-forward NN)
 was applied at the second learning level.
 
 Depending on the user :math:`u` and the user purchase history
-(shop :math:`_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included 
+(:math:`shop_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included 
 in the next shop :math:`_{t+1}` of :math:`u`
 
 Dataset
@@ -111,9 +111,11 @@ the latter obtained from `MyGroceryTour`.
 Features
 ========
 
-The features are described as follow:
+For the project, we consider only the significant features, 
+such as `distance`, `special` rate, `products`, and `store`. 
+All features, we used, are described as follow:
 
-- **user\_id**: user number. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
+- **user\_id**: user number. We take care of anonymized all data set. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
 - **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
