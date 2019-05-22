@@ -197,7 +197,7 @@ Implementation
 
 PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`.
 Dask's :code:`delayed()` function is used to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
-We tested MDAnalysis 0.20.0 (development version), Dask 1.1.1, NumPy 1.15.4.
+We tested PMDA 0.2.1 (development version), MDAnalysis 0.20.0 (development version), Dask 1.1.1, NumPy 1.15.4.
 
 MDAnalysis combines a trajectory file (frames of coordinates that change with time) and a topology file (list of particles, their names, charges, bonds — all information that does not change with time) into a :code:`Universe(topology, trajectory)` object.
 Arbitrary selections of particles (often atoms) are made available as an :code:`AtomGroup` and the common approach in MDAnalysis is to work with these objects :cite:`Gowers:2016aa`; for instance, all coordinates of an :code:`AtomGroup` with :math:`N` atoms named :code:`protein` are accessed as the :math:`N \times 3` NumPy array :code:`protein.positions`.
@@ -228,7 +228,7 @@ The task graph is constructed by wrapping the above code into :code:`delayed()` 
                      for blockslice in slices])
    results = blocks.compute(**scheduler_kwargs)
 
-Calling the :code:`compute()` method of the delayed list object hands the task graph over to the scheduler, which then executes the graph on the available dask workers.
+Calling the :code:`compute()` method of the delayed list object hands the task graph over to the scheduler, which then executes the graph on the available Dask workers.
 For example, the *multiprocessing* scheduler can be used  to parallelize task graph execution on a single multiprocessor machine while the *distributed* scheduler is used to run on multiple nodes of a HPC cluster.
 After all workers have finished, the variable :code:`results` contains a list of results from the individual blocks.
 PMDA actually stores these raw results as :code:`ParallelAnalysisBase._results` and leaves it to the :code:`_conclude()` method to process the results; this can be as simple as :code:`numpy.hstack(self._results)` to generate a time series by concatenating the individual time series from each block.
@@ -284,18 +284,14 @@ PMDA allows one to perform parallel trajectory analysis with pre-defined analysi
 
 Pre-defined Analysis
 --------------------
-PMDA contains a number of pre-defined analysis classes that are modelled after functionality in ``MDAnalysis.analysis`` and that can be used right away. PMDA currently has four predefined analysis tasks to use:
+PMDA contains a growing number of pre-defined analysis classes that are modelled after functionality in :code:`MDAnalysis.analysis` and that can be used right away.
+Current examples are :code:`pmda.rms` for  RMSD analysis, :code:`pmda.contacts` for native contacts analysis, :code:`pmda.rdf` for radial distribution functions, and :code:`pmda.leaflet` for the LeafletFinder analysis tool :cite:`Michaud-Agrawal:2011fu, Paraskevakos:2018aa` for the topological analysis of lipid membranes.
+While the first three modules are based on :code:`pmda.parallel.ParallelAnalysisBase` as described above and follow the strict split-apply-combine approach, :code:`pmda.leaflet` is an example of a more complicated task-based algorithm that can also easily be implemented with MDAnalysis and Dask :cite:`Paraskevakos:2018aa`.
+All PMDA classes can be used in a similar manner to classes in :code:`MDAnalysis.analysis`, which makes it easy for users of MDAnalysis to switch to parallelized versions of the algorithms.
+One example is the calculation of the root mean square distance (RMSD) of |Calpha| atoms of the protein with :code:`pmda.rms.RMSD`.
+An analysis class object is instantiated with the necessary input data such as the :code:`AtomGroup` containing the |Calpha| atoms and a reference structure.
+To perform the analysis, the :code:`run()` method is called. 
 
-``pmda.rms``: RMSD analysis tools
-
-``pmda.comtacts``: Native contacts analysis tools
-
-``pmda.rdf``: Radial distribution function tools
-
-``pmda.leaflet``: LeafletFinder analysis tool
-
-While the first 3 classes are developed based on ``pmda.parallel.ParallelAnalysisBase`` which separates the trajectory into work blocks containing multiple frames, ``pmda.leaflet`` partitions the system based on a 2-dimensional partitioning. 
-The usage of these tools is similar to ``MDAnalysis.analysis``. One example is calculating root mean square distance(RMSD) of |Calpha| atoms of the protein with ``pmda.rms``.
 
 .. code-block:: python
 
@@ -320,58 +316,68 @@ The usage of these tools is similar to ``MDAnalysis.analysis``. One example is c
     # The results can be accessed in rmsd.rmsd.
     print(rmsd.rmsd)
 
+Here the only difference between using the serial version and the parallel version is that the :code:`run()` method takes additional arguments :code:`n_jobs` and :code:`n_blocks`, which determine the level of parallelization.
+When using the *multiprocessing* scheduler (the default),  :code:`n_jobs` is the number of processes to start and typically the number of blocks  :code:`n_blocks` is set to the number of available CPU cores.
+When the *distributed* scheduler is used, Dask will automatically learn the number of available Dask worker processes and :code:`n_jobs` is meaningless; instead it makes more sense to set the number of trajectory blocks that are then spread across all available workers. 
+
+
 
 User-defined Analysis
 ---------------------
 
-With pmda.custom.AnalysisFromFunction
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-PMDA provides helper functions in ``pmda.custom`` to rapidly build a parallel class for users who already have a function:
+PMDA makes it easy to create analysis classes such as the ones discussed above.
+If the per-frame analysis can be expressed as a simple function, then an analysis class can be created with a factory function.
+Otherwise, a class has to be derived from :code:`pmda.parallel.ParallelAnalysisBase`.
+Both approaches are described below.
+
+
+:code:`pmda.custom.AnalysisFromFunction`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PMDA provides helper functions in :code:`pmda.custom` to rapidly build a parallel class for users who already have a *single frame* function that 
 1. takes one or more AtomGroup instances as input,
 2. analyzes one frame in a trajectory and returns the result for this frame.
-For example, we already have a function to calculate the radius of gyration of a protein given in ``AtomGroup`` ``ag``:
+For example, if we already have a function to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``ag``:
 
 .. code-block:: python
 
-    import MDAnalsys as mda
+    import MDAnalysis as mda
     u = mda.Universe(top, traj)
     protein = u.select_atoms('protein')
 
     def rgyr(ag):
-        return(ag.radius_of_gyration)
+        return(ag.radius_of_gyration())
 
-We can wrap rgyr() in ``pmda.custom.AnalysisFromFunction`` to build a paralleled version of ``rgyr()``:
+We can wrap :code:`rgyr()` in :code:`pmda.custom.AnalysisFromFunction` to build a parallel version of :code:`rgyr()`:
 
 .. code-block:: python
      
     import pmda.custom
-    parallel_rgyr = pmda.custom.AnalysisFromFucntion(
+    parallel_rgyr = pmda.custom.AnalysisFromFunction(
                     rgyr, u, protein)
 
-Run the analysis on 4 cores and show the timeseries of the results stored in ``parallel_rgyr.results``:
+This new parallel analysis class can be run just as the existing ones:
 
 .. code-block:: python
 
     parallel_rgyr.run(n_jobs=4, n_blocks=4)
     print(parallel_rgyr.results)
 
-With pmda.parallel.ParallelAnalysisBase
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The time series of the results is stored in the attribute :code:`parallel_rgyr.results`.
 
-In more common cases, one can write the parallel class with the help of ``pmda.parallel.ParallelAnalysisBase``. To build a new analysis class, one should 
 
-1. (Required) Define the single frame analysis function ``_single_frame``,
+:code:`pmda.parallel.ParallelAnalysisBase`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-2. (Required) Define the final results conclusion function ``_conclue``,
+For more general cases, one can write the parallel class with the help of :code:`pmda.parallel.ParallelAnalysisBase`, following the schema in Fig. :ref:`fig:schema`.
+To build a new analysis class, one should derive a class from :code:`pmda.parallel.ParallelAnalysisBase` that implements
 
-3. (Not Required) Define the additional preparation function ``_prepare``,
+1. (Required) the single frame analysis method :code:`_single_frame()`,
+2. (Required) the final results conclusion function :code:`_conclude()`,
+3. (Optional) the additional preparation function :code:`_prepare()`,
+4. (Optional) the reduce function for frames within the same block :code:`_reduce()` (if the result is not time-series data).
 
-4. (Not Required) Define the accumulation function for frames within the same block ``_reduce``, if the result is not time-series data,
-
-5. Derive a class from ``pmda.parallel.ParallelAnalysisBase`` that uses these functions. 
-
-As an example, we show how one can build a class to calculate the radius of gyration of a protein givin in ``AtomGroup`` ``protein``. The class needs to be initialized with ``pmda.parallel.ParallelAnalysisBase`` subclassed. The conclusion function reshapes the ``self._results`` which stores the results from all blocks.  
-
+As an example, we show how one can build a class to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``protein``; of course, in this case the simple approach with :code:`pmda.custom.AnalysisFromFunction` would be easier.
 
 .. code-block:: python
 
@@ -382,30 +388,27 @@ As an example, we show how one can build a class to calculate the radius of gyra
         def __init__(self, protein):
             universe = protein.universe
             super(RMSD, self).__init__(universe, (protein, ))
-
         def _prepare(self):
             self.rgyr = None
         def _conclude(self):
             self.rgyr = np.vstack(self._results)
 
-The inputs for ``_single_frame`` are fixed. ``ts`` contains the current time step and ``agroups`` is a tuple of atomgroups that are updated to the current frame. The current frame number, time and radius of gyration are returned as the single frame results. Here we don't need to define a new ``_reduce``.
+The conclusion method reshapes the attribute :code:`self._results`, which always holds the results from all blocks, into a time series.  	    
+The call signature for method :code:`_single_frame()` is fixed and ``ts`` must contain the current MDAnalysis :code:`Timestep` and ``agroups`` must be a tuple of :code:`AtomGroup` instances.
+The current frame number, time and radius of gyration are returned as the single frame results:
 
 .. code-block:: python
 
         def _single_frame(self, ts, atomgroups):
-            protein = atomgroups[0]
-            
+            protein = atomgroups[0]            
             return (ts.frame, ts.time,
-                    protein.radius_of_gyration))
+                    protein.radius_of_gyration)
 
-The usage of this class is the same as the function we defined with ``pmda.custom.AnalysisFromFunction``.  
+Because we want to return a time series, it is not necessary to define a :code:`_reduce()` method.		    
+This class can be used in the same way as the class that we defined with :code:`pmda.custom.AnalysisFromFunction`:  
 
 .. code-block:: python
 
-    import MDAnalsys as mda
-    u = mda.Universe(top, traj)
-    protein = u.select_atoms('protein')
-    
     parallel_rgyr = RGYR(protein)
     parallel_rgyr.run(n_jobs=4, n_blocks=4)
     print(parallel_rgyr.results)
