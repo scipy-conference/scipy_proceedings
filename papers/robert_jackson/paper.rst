@@ -441,12 +441,13 @@ Hurricane Florence winds using NEXRAD and HRRR
 Another example of the power of PyDDA is its ability to retrieve winds from
 networks of radars over areas spanning thousands of kilometers with ease. An
 example retrieval in Hurricane Florence using 2 NEXRAD radars and HRRR was shown
-in Figure :ref:`streamline`. While there is already hundreds of kilometers in coverage,
+in Figure :ref:`streamline`. For this grid, the horizontal domain is 300 by 400 km
+with 1 km grid spacing. While there is already hundreds of kilometers in coverage,
 not all of the hurricane is covered within the retrieval domain. This therefore
 motivated a feature in PyDDA to use dask :cite:`Dask2016` to manage retrievals that are too large to
 execute on one single machine. Figure :ref:`bighurricane` shows an example of a retrieval
 from PyDDA using 6 NEXRAD radars combined with the HRRR and ERA-Interim. The total horizontal coverage
-of the domain in Figure :ref:`bighurricane` is 1200 km by 1200 km.
+of the domain in Figure :ref:`bighurricane` is 1200 km by 1200 km with 1 km spacing.
 Using a multigrid method that first retrieves the wind field on a coarse grid
 and then splits the fine grid retrieval into chunks, this technique can use dask to retrieve
 the wind field in Figure :ref:`bighurricane` about 30 minutes on 4 nodes with
@@ -521,7 +522,8 @@ In addition to retrieving winds in hurricanes PyDDA can also integrate
 data from radar networks in order to retrieve the winds inside tornadoes.
 For example, a network of four scanning radars in the vicinity of Sydney,
 Australia captured a supercell within the vicinity of Sydney as shown in
-Figure :ref:`bomlayout`.
+Figure :ref:`bomlayout`. In this retrieval, a horizontal domain of 350 km by
+550 km with 1 km grid spacing was used.
 
 .. figure:: Sydney_tornado.png
     :align: center
@@ -555,27 +557,32 @@ can be combined together. In this case, we integrate data from three scanning
 radars whose locations are shown in Figure :ref:`armsite` in the vicinity of the
 Atmospheric Radiation Measurement (ARM) Southern Great Plains (SGP) site. In this example,
 the XSAPR radars are at X-band and therefore have lower coverage but greater resolution
-than the S-band KVNX radar.
+than the S-band KVNX radar. In addition, the High Resolution Rapid Refresh was
+used as an additional constraint, with the constraint stronger in regions without
+radar coverage. The horizontal domain for the retrieval was 100 km by 100 km with
+1 km spacing.
 
 .. figure:: Figure_3radar_hrrr.png
     :align: center
 
-    A wind barb plot of a wind retrieval from 2 XSAPR radars and the KVNX
+    A quiver plot of a wind retrieval from 2 XSAPR radars and the KVNX
     NEXRAD radar in Oklahoma. In addition, the HRRR was used as a constraint.
     The wind barbs are plotted over the reflectivity derived from the maximum
     of the reflectivity from the 3 radars. :label:`somanyradars`
 
 Figure :ref:`somanyradars` shows the resulting wind field
-of such a retrieval during a case of stratiform rain that occurred over the SGP site
-on 04 October 2017. Generally, weaker winds and a less organized structure is seen compared to the
-previous two examples. This would be expected in such conditions. However, this also demonstrates
-the success in integrating radar data from 3 radars and a high resolution
+of such a retrieval during a case of stratiform rain with embedded convection
+that occurred over the SGP site on 04 October 2017. Generally,
+weaker winds and a less organized structure is seen compared to the
+previous two examples. This would be expected in such conditions.
+However, this also demonstrates the success in integrating radar data
+from 3 radars and a high resolution
 reanalysis to provide the most complete wind retrieval possible.
 
 Contributor Information
 -----------------------
 
-We are currently welcoming contributions from the community into PyDDA. A PyDDA roadmap
+We are currently welcoming contributions from the community into PyDDA. A PyDDA road map
 demonstrates what kinds of contributions to PyDDA would be useful. As of the writing
 of this paper, the road map states that the current goals of PyDDA are to implement:
 
