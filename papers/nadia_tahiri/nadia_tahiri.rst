@@ -42,10 +42,10 @@ In addition, several mobile retail studies indicate that potential customers pla
 the highest priority on features that help them to create and to manage personalized 
 shopping lists interactively [NPS03]_ and [Faz17]_.
 
-Problem statement and our proposal
-----------------------------------
+Problem statement and proposal
+------------------------------
 
-In this section, we present our problem statement and describe our considered machine learning architecture.
+In this section, we present the problem statement and describe the considered machine learning architecture.
 Firstly, by using the grocery shopping database in Canada `MyGroceryTour` [#]_ (see Figure :ref:`MyGroceryTour`), 
 we looked for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
@@ -120,8 +120,8 @@ All features, we used, are described as follow:
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
 - **product\_id**: unique number of the product. :math:`product\_id = 46 000`
-- **category\_id**: unique category number for a product. :math:`aisle\_id \in \{1 \cdots 24\}`  
-- **reorder**: 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
+- **category\_id**: unique category number for a product. :math:`category\_id \in \{1 \cdots 24\}`  
+- **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
      
 Consumer profile
@@ -131,19 +131,19 @@ We found that there are 3 consumer profiles see [WJ03]_, [WJ02]_, and [TNTK16]_.
 The first group is consumers who only buy products on promotion.
 The second group is consumers who always buy the same products (without considering promotions).
 Finally, the third group is consumers who buy products whether there is a promotion or not.
-On the model, we plan to consider that information and make your prediction more personalized on the consumer profile.
+On the model, we plan to consider that information and make the prediction more personalized on the consumer profile.
 
 Data Synthesis
 ==============
 
-Since the real dataset was not enough to complete correctly our project, we increased it.
+Since the real dataset was not enough to complete correctly the project, we increased it.
 We described the sets of data simulated in the study, 
-and we presented in detail the results of our simulations.
+and we presented in detail the results of the simulation step.
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
-Finally, we increased the `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution.
-We observed that our baskets generated follow the same distribution that original basket in term of the basket size 
+Finally, we increased the `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution [AAR+18]_.
+We observed that the baskets generated to follow the same distribution that original basket in term of the basket size 
 (see Figure :ref:`orderfrequency`).
 
 .. figure:: figures/order_frequency.png
@@ -154,9 +154,9 @@ We observed that our baskets generated follow the same distribution that origina
 Preprocessing dataset
 =====================
 
-We launched the preprocessing dataset tasks on Compute Canada's servers. This step were carried out using 172 nodes 
-and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16G memory). We preprocessed user data, 
-product data and department data. The bash script has given as follow:
+We launched the preprocessing dataset tasks on the servers of Compute Canada. This step was carried out using 172 nodes 
+and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16G memory). We preprocessed the user data, 
+the product data, and the department data. The bash script has given as follow:
 
 .. code-block:: bash
 
@@ -184,9 +184,9 @@ The LSTM [HS97]_ is a recurrent neural network (RNN) that has an input, hidden (
 The memory block contains 3 gate units namely the input, forget, 
 and output with a self-recurrent connection neuron [HS97]_.
 
-- **Input gate**: learns what information is to be stored in the memory block.
-- **Forget gate**: learns how much information to be retained or forgotten from the memory block.
-- **Output gate**: learns when the stored information can be used.
+- **Input gate** learns what information is to be stored in the memory block.
+- **Forget gate** learns how much information to be retained or forgotten from the memory block.
+- **Output gate** learns when the stored information can be used.
 
 Figure :ref:`lstm` illustrates the proposed architecture and summarizes the detail involved in the structure. 
 
@@ -202,7 +202,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
    In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
    which make it easier to update the weights during the backpropagation process. :label:`lstm`
 
-Overall characteristics used in this project is described as follow:
+Overall characteristics of the NN which used in this project is described as follow:
 
 .. code-block:: python
 
@@ -251,7 +251,7 @@ First level model (feature extraction)
 ======================================
 
 Our goal is to find a diverse set of representations using neural networks (see Table 1). 
-Table 1 summarizes top-level models used by our algorithm and we described each type of model used for every representation (e.g. Products, Category, Size of basket, and Users).
+Table 1 summarizes top-level models used by the algorithm and we described each type of model used for every representation (e.g. `Products`, `Category`, `Size of the basket`, and `Users`).
 We estimated the probability of the :math:`product_i` to be include to 
 the next basket :math:`order_{t+1}` with :math:`orders_{t-h}`, 
 with :math:`t` represents the actual time, 
@@ -351,7 +351,7 @@ Statistic score
 ===============
 
 The *accuracy* of a test is its capability to recognize the classes properly. 
-To evaluate the accuracy of our model, we should define the percentage 
+To evaluate the accuracy of the model, we should define the percentage 
 of true positive and true negative in all estimated cases, 
 i.e. the sum of true positive, true negative, false positive, and false negative.
 Statistically, this can be identified as follow:
@@ -392,7 +392,7 @@ The *F-measure* or :math:`F_1` precise the classifier, as well as how robust it 
    
    F-measure = F1 = \frac{2TP}{(2TP + FP + FN)} 
 
-Finally, we evaluated our model by *FP Rate* which corresponds to the ratio between FP and sum of TN and FP.
+Finally, we evaluated the model by *FP Rate* which corresponds to the ratio between FP and sum of TN and FP.
 
 .. math::
    :label: e:matrix
@@ -470,8 +470,8 @@ We can see cluster of Pasta sauce with Pasta group.
 :math:`F_1` in Figure :ref:`violon` (a) shows that the profiles of all promotions are similar. 
 In the perspective of this work, it will be interesting to include weight base on statistic value. 
 In Statistic Canada - 2017, only 5% of all promotions are more than 50% promoted, 95% of all promotions are less than 50%. 
-Weightings are needed to give our model more robust. 
-Figure :ref:`violon` (b) indicates that all shops follow the same profiles in our model. 
+Weightings are needed to give the model more robust. 
+Figure :ref:`violon` (b) indicates that all shops follow the same profiles in the model. 
 
 .. figure:: figures/violon.png
    :align: center
@@ -544,8 +544,8 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
-We evaluated our model with the statistics score given in Section 'Statistic score'.
-	
+We evaluated the model with the statistics score given in Section 'Statistic score'.
+
 Conclusions and Future Work
 ---------------------------
 
@@ -554,7 +554,7 @@ We developed a new machine learning model to predict which grocery products the 
 buy and in which store(s) of the region he/she will do grocery shopping.
 We created an intelligent shopping list based on the shopping history of consumer and his/her
 known preferences.
-The originality of our approach, compared to the existing algorithms, is that in addition to the
+The originality of the approach, compared to the existing algorithms, is that in addition to the
 purchase history we also consider promotions, possible purchases in different stores and the
 distance between these stores and the home of the consumer.
 
@@ -563,10 +563,10 @@ MyGroceryTour with the help of deep neural networks.
 We used two types of neural networks during
 Learning: Recurrent Neural Networks (RNN) and Networks
 forward-propagating neurons (Feedforward NN).
-The value of the :math:`F_1` statistic that represents the quality of our model
-need to be increase on the next step. The constant influx of new data on *MyGroceryTour*
+The value of the :math:`F_1` statistic that represents the quality of the model
+need to be increasing on the next step. The constant influx of new data on *MyGroceryTour*
 improved the model over time.
-The originality of our approach, compared to existing algorithms,
+The originality of the approach, compared to existing algorithms,
 is that in addition to the purchase history we also consider the
 promotions, possible purchases in different stores and distance
 between these stores and the consumer's home.
@@ -599,6 +599,9 @@ Abbreviations
 References
 ----------
 
+.. [AAR+18] Amin, Mohammad H., Evgeny Andriyash, Jason Rolfe, Bohdan Kulchytskyy, and Roger Melko. 
+            Quantum boltzmann machine.
+            Physical Review X, 8(2):021050, 2018.
 .. [Car03] Rasmussen, Carl Edward. Gaussian processes in machine learning.
            In Summer School on Machine Learning, pages 63:71. Springer, Berlin, Heidelberg, 2003.
 .. [CMW16] Maddison, Chris J., Andriy Mnih, and Yee Whye Teh. 
