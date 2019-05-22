@@ -125,6 +125,35 @@ It is based on the fundamental assumption that the data can be partitioned into 
 A trajectory with :math:`T` saved time steps consists of a sequence of coordinates :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{1\le t \le T}` where :math:`\mathbf{r}_i(t)` are the Cartesian coordinates of particle :math:`i` at time step :math:`t` with :math:`N` particles in the simulated system, i.e., :math:`T \times N \times 3` floating point numbers in total.
 The data are partioned along the time axis (:math:`1 \le t \le T`, here :math:`t` is an integer frame index and each frame index corresponds to a physical time in the trajectory) into :math:`M` blocks of approximately equal size, :math:`\tau = T/M`.
 One trajectory block can be viewed as a slice of a trajectory, e.g., for block :math:`k`, :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{t_k \le t < t_k + \tau_k}` with :math:`\tau_k` frames in the block.
+In general, the coordinates are passed to a function :math:`\mathcal{A}(\{\mathbf{r}_i(t)\})` to compute a time-dependent quantity
+
+.. math::
+   :label: timeseries
+
+   A(t) = \mathcal{A}(\{\mathbf{r}_i(t)\}).
+   
+This quantity does not have to be a simple scalar; it may be a vector or a function of another parameter.
+In many cases, the *time series* :math:`A(t)` is the desired result.
+It is, however, also common to perform some form of *reduction* on the data, which can be as simple as a time average to compute a thermodynamic average :math:`\langle A\rangle \equiv \bar{A} = T^{-1} \sum_{t=1}^{T} A(t)`.
+Such an average can be easily calculated in a post-analysis step after the time series has been obtained.
+An example of a more complicated reduction is the calculation of a histogram such as a radial distribution function (RDF) :cite:`FrenkelSmit02, Tuckerman:2010cr` between two types of particles with numbers :math:`N_a` and :math:`N_b`,
+
+.. math::
+   :label: rdf
+
+   g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_i - \mathbf{r}_j| - r) \right\rangle
+
+where the Dirac delta functional counts the occurences of particles :math:`i` and :math:`j` at distance :math:`r`.
+To compute a RDF, we could generate a time series of histograms along the spatial coordinate :math:`r`, i.e., :math:`A(t; r)` for each frame, and then perform the average in post-analysis.
+However, storage of such histograms becomes problematic, especially if instead of 1-dimensional RDFs, densities on 3-dimensional grids are being calculated.
+It is therefore better to reformulate the algorithm to perform a partial average (or reduction) during the analysis on a per-frame basis.
+PMDA supports the simple time series data collection and the per-frame reduction.
+
+
+
+
+
+
 
 
 
@@ -208,6 +237,11 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
             # 'append' action for a time series
             res.append(result_single_frame)
             return res
+
+	    
+Benchmarking
+------------
+
 
 ``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
 	    
