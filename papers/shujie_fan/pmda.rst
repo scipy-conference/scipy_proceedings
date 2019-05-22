@@ -239,12 +239,6 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
             return res
 
 	    
-Benchmarking
-------------
-
-
-``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
-	    
 
 Using PMDA
 ==========
