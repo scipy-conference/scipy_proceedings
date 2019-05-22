@@ -264,7 +264,7 @@ Performance evaluation
 To evaluate the performance of the parallelization, two common computational tasks were tested that differ in their computational cost and represent two different requirements for data reduction.
 We computed the time series of root mean square distance after optimum superposition (RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
 The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
-As a second test case we computed the water-water radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
+As a second test case we computed the oxygen-oxygen radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
 The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
 
 Test system, benchmarking environment, and data files
@@ -463,7 +463,7 @@ This class can be used in the same way as the class that we defined with :code:`
 Results and Discussion
 ======================
 
-In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimal superposition (*RMSD*) and the water-water radial distribution function (*RDF*), in different scenarios, as summarized in Table :ref:`tab:configurations`.
+In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimal superposition (*RMSD*) and the water oxygen radial distribution function (*RDF*), in different scenarios, as summarized in Table :ref:`tab:configurations`.
 We investigated a long (9000 frames) and a short trajectory (900 frames) to get a sense of to which degree parallelization remains practical.
 We analyzed the total time to completion as a function of the number of CPU cores, which was equal to the number of trajectory blocks, so that each block could be processed in parallel.
 To gain better insight into the performance-limiting steps in our algorithm (Fig. :ref:`fig:schema`) we plotted the *maximum* times over all ranks because the overall time to completion cannot be faster than the slowest parallel process.
