@@ -653,3 +653,4 @@ References
           between shopping trip type, purchases of products on promotion,
           and shopping basket profit. Journal of Business Research,
           56(1):17–29, 2003.
+
