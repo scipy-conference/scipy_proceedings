@@ -267,7 +267,21 @@ The RMSD calculation with optimum superposition was performed with the fast QCPR
 As a second test case we computed the water-water radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
 The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
 
+Test system and data files
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 2,020 compute nodes in total.
+Each node in the machine contains two Intel Xeon (E5-2680v3, 12 cores, 2.5 GHz) CPUs with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
+All nodes share a Lustre parallel file system and have access to node-local 320 GB SSD scratch space.
+Jobs are run through the SLURM batch queuing system.
+Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data.
+
 The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
+The test trajectories are made available on figshare at DOI XXX.
+
+
+Measured parameters
+~~~~~~~~~~~~~~~~~~~
 
 The :code:`ParallelAnalysisBase` class collects detailed timing information for all blocks and all frames and makes these data available in the attribute :code:`ParallelAnalysisBase.timing`:
 We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that each task :math:`k` waits until it is executed by the scheduler, the time |tuniverse| to create a new :code:`Universe` for each Dask task (which includes opening the shared trajectory and topology files and loading the topology into memory), the time |tIO| to read each frame :math:`t` in each block :math:`k` from disk into memory, the time |tcomp| to perform the computation in :code:`_single_frame()` and reduction in :code:`_reduce()`, the time |tconclude| to perform the final processing of all data in :code:`_conclude()`, and the total wall time to solution |ttotal|.
