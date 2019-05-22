@@ -173,7 +173,7 @@ Given a function :math:`\mathcal{A}` that performs the *single frame calculation
 
 .. figure:: figs/pmda-schema.pdf
 	    
-   Schema of the split-apply-combine approach in PMDA.
+   High-level view of the split-apply-combine algorithm in PMDA.
    Steps are labeled with the methods in :code:`pmda.parallel.ParallelAnalysisBase` that perform the corresponding function.
    Methods in red (:code:`_single_frame()` and :code:`_conclude()`) must be implemented for every analysis function because they are not general.
    The blue method :code:`_reduce()` must be implemented unless a simple time series is being calculated.
@@ -307,6 +307,7 @@ With distributed we tested fully utilizing all cores on a node and also only occ
 In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
 We performed single benchmark runs for distributed on local SSD (*SSD-distributed*) and multiprocessing on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
 We plotted results for one typical benchmark run each.
+
 .. TODO: replace figures with ones where 5 repeats are averaged and error bars indicate 1 stdev --- issue #27
 
 
@@ -462,6 +463,20 @@ This class can be used in the same way as the class that we defined with :code:`
 Results and Discussion
 ======================
 
+In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimal superposition (*RMSD*) and the water-water radial distribution function (*RDF*), in different scenarios, as summarized in Table :ref:`tab:configurations`.
+We investigated a long (9000 frames) and a short trajectory (900 frames) to get a sense of to which degree parallelization remains practical.
+We analyzed the total time to completion as a function of the number of CPU cores, which was equal to the number of trajectory blocks, so that each block could be processed in parallel.
+To gain better insight into the performance-limiting steps in our algorithm (Fig. :ref:`fig:schema`) we plotted the *maximum* times over all ranks because the overall time to completion cannot be faster than the slowest parallel process.
+For example, for the read I/O time we calculate the total read I/O time for each rank :math:`k` as :math:`t^\text{I/O}_k = \sum_{t=t_k}^{t_k + \tau_k} t^\text{I/O}_{k, t}` and then report :math:`\max_k t^\text{I/O}_k`.
+
+
+RMSD analysis task
+------------------
+
+The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
+The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
+Overall, using the multiprocessing and either Lustre or SSD gave the best performance and shortest time to solution.
+These results were consistent with findings in our earlier pilot study where we looked at the RMSD task with Dask and found that multiprocessing with both SSD and Lustre gave good single node performance but, using distributed, did not scale beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
 
 .. figure:: figs/Total_Eff_SU_rms.pdf
 
@@ -473,17 +488,45 @@ Results and Discussion
    **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
    :label:`fig:rmsd`
 
-
+A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) shows that the computation scales very well, as does reading time to a lesser degree.
+However, the waiting time either increases for multiprocessing or is roughly a constant 1 s for distributed.
+Beyond 12 cores, the waiting time starts approaching the time for read I/O (compute is a order of magnitude less than I/O) and hence parallel speed up is limited by the wait time.
+	  
 .. figure:: figs/wait_compute_io_rms.pdf
 
-   Detailed timing analysis for the RMSD analysis task.
+   Detailed per-task timing analysis for parallel components of RMSD analysis task.
    Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
    **A** and **D**: Maximum waiting time for the task to be executed by the Dask scheduler.
    **B** and **E**: Maximum total compute time per task.
    **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rms-wait-comp-io`
+
+The second major component that limited scaling performance was the time to create the :code:`Universe` data structure (Fig. :ref:`fig:rms-pre-con-uni` A, D).
+The time to read the topology and open the trajectory file on the shared file system typically increased from 1 s to about 2 s and thus, for the given total trajectory lengths, also became comparable to the time for read I/O.
+The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`) remained negligible with times below :math:`10^{-3}` s.
+
+
+.. figure:: figs/pre_con_uni_rms.pdf
+	    
+   Detailed timing analysis for other components of the RMSD analysis task.
+   Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
+   **A** and **D**: Maximum time for a task to load the :code:`Universe`.
+   **B** and **E**: Time |tprepare| to execute :code:`_prepare()`. 
+   **C** and **F**: Time |tconclude| to excecute :code:`_conclude()`. 
+   :label:`fig:rms-pre-con-uni`
+
+Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10-20) could already be achieved on the equivalent of a modern workstation.
+Performance would likely improve with ever longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
+However, but all things considered, a single node seems sufficent to accelerate RMSD analysis.
+
 	  
-   
+
+RDF analysis task
+-----------------
+
+The RDF analysis task requires much more computational effort than the RMSD task.
+
+
 .. figure:: figs/Total_Eff_SU_rdf.pdf
 
    Strong scaling performance of the RDF analysis task.
@@ -497,7 +540,7 @@ Results and Discussion
 
 .. figure:: figs/wait_compute_io_rdf.pdf
 
-   Detailed timing analysis for the RDF analysis task.
+   Detailed per-task timing analysis for parallel components of the RDF analysis task.
    Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
    **A** and **D**: Maximum waiting time for the task to be executed by the Dask scheduler.
    **B** and **E**: Maximum total compute time per task.
@@ -506,6 +549,7 @@ Results and Discussion
 	  
 	  
 
+	  
 
 Conclusions
 ===========
