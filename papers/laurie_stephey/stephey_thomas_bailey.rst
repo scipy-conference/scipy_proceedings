@@ -158,7 +158,7 @@ code to minimize the impact of calling expensive kernels. We will compare
 parallelization strategies using MPI and Dask, and finally, we will discuss a
 preliminary investigation for moving the DESI code to GPUs.
 
-Profiling the code
+Profiling the Code
 ------------------
 
 Our first step in this study was to use profiling tools to determine places in
@@ -450,10 +450,11 @@ line. Once we implemented our legval cache fix, we achieved this goal.
    The single-node speedup achieved on Intel Ivy Bridge, Haswell, and KNL architectures
    throughout the course of this study. :label:`singlenode`
 
-A more meaningful benchmark for DESI is the number of frames that can be
-processed during a given amount of time using a given number of nodes. We call
-this specific throughput metric "frames per node hour". We performed these
-frames per node hour benchmarks with a full exposure (30 frames), instead of a
+A more informative benchmark for DESI is specific processing throughput, 
+stated in frames processed per node-hour.  Measuring this quantity makes it 
+clear how much of DESI's computing allocation is needed to complete a given 
+amount of processing.  Higher specific throughput translates indicates more effective
+use of computing resources.  We measure this benchmark using a full exposure (30 frames), instead of a
 single frame, on either 19 or 9 nodes for Haswell and KNL, respectively. Though
 a single exposure is still a relatively small test because DESI expects to
 collect 30 or more exposures per night (approximately 1000 frames), it much
@@ -461,7 +462,7 @@ more closely approaches the real DESI workload than the single frame benchmark.
 One feature encoded in this benchmark which is not captured in the speed
 benchmark is the increasingly important role that MPI overhead begins to play
 in multi-node jobs, which is a real factor with which DESI will have to contend
-during its large processing runs. The frames per node hour results are plotted
+during its large processing runs. The frames per node-hour results are plotted
 in Figure :ref:`framespernodehour`. While the increases in specific throughput
 we have obtained are more modest than the raw speedup, these values are a more
 accurate representation of the actual improvements in DESI's processing
@@ -479,7 +480,7 @@ specifically on KNL, which was of course the main goal of this study. For
 legval in particular, shown in Figure :ref:`legval`, we found that JIT
 compiling this function provided 15x speedup on KNL vs only 5x speedup on
 Haswell. This additional speedup on KNL was because Numba was able to target
-the KNL AVX-512 vector units. We therefore strongly recommend Numba to any
+the KNL AVX-512 vector units. We therefore strongly recommend investigating Numba to any
 developer trying to optimize Python code to run on a system with vectorization
 capabilities.
 
@@ -525,11 +526,11 @@ can still provide reasonable gains without a major time investment.
    \end{table*}
 
 
-What about using Dask instead of MPI?
--------------------------------------
+Alternatives to MPI?
+--------------------
 
 A few problems with the current MPI implementation of the DESI spectral
-extraction code prompted us to take a step back and consider if perhaps Dask
+extraction code prompted us to take a step back and consider if newer frameworks like Dask
 :cite:`noauthor_dask:_nodate` would be a better solution for parallelization
 within DESI. The first was the relative inflexibility of the division of work
 between bundles (although this has been addressed now in the subbundle
@@ -545,10 +546,10 @@ scheduler and some number of workers which communicate with each other via a
 client. Dask is more flexible than traditional MPI because it can start workers
 and collect their results via a concurrent futures API. (It should be noted
 that this is also possible in MPI with dynamic process management, but since
-Cray does not officially support this due to problems with SLURM functionality,
-we haven't been able to try this API.)
+Cray does not yet support dynamic process management under the Slurm workload manager,
+we haven't been able to try it at NERSC.)
 
-During this process, we discovered that is that it is non-trivial to convert a
+During this process, we discovered that it is non-trivial to convert a
 code already written in MPI to Dask, and it would likely be difficult to
 convert from Dask to MPI as well. (It would likely be easier to convert from
 dynamic process management MPI to Dask, but the DESI spectral extraction code
@@ -567,8 +568,8 @@ the start with Dask-type parallelism in mind using Dask would have been a good
 choice, but converting existing MPI code into Dask was unfortunately not a
 reasonable solution for us.
 
-Does it make sense to run DESI on GPUs?
----------------------------------------
+Does it Make Sense to Run DESI Code on GPUs?
+--------------------------------------------
 
 Because HPC systems are becoming increasingly heterogeneous, it is important to
 consider how the DESI code will run on future architectures. The next NERSC
@@ -577,7 +578,7 @@ partition that will provide a large fraction of the system's overall FLOPS, so
 it is pertinent to examine if and how the DESI code could take advantage of
 these accelerated nodes.
 
-Since GPUs are fundamentally different than CPUs, it may be necessary to
+Since GPUs are quite different from CPUs, it may be necessary to
 rethink much of the way in which the DESI spectral extraction is performed. At
 the moment, each CCD frame is divided into 20 bundles, and each bundle is
 divided into 60 patches, and each of those 60 patches is further divided into 6
