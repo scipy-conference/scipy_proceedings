@@ -393,7 +393,7 @@ As an example, we show how one can build a class to calculate the radius of gyra
         def _conclude(self):
             self.rgyr = np.vstack(self._results)
 
-The conclusion method reshapes the attribute :code:`self._results`, which always holds the results from all blocks, into a time series.  	    
+The :code:`_conclude()` method reshapes the attribute :code:`self._results`, which always holds the results from all blocks, into a time series.  	    
 The call signature for method :code:`_single_frame()` is fixed and ``ts`` must contain the current MDAnalysis :code:`Timestep` and ``agroups`` must be a tuple of :code:`AtomGroup` instances.
 The current frame number, time and radius of gyration are returned as the single frame results:
 
@@ -402,7 +402,7 @@ The current frame number, time and radius of gyration are returned as the single
         def _single_frame(self, ts, atomgroups):
             protein = atomgroups[0]            
             return (ts.frame, ts.time,
-                    protein.radius_of_gyration)
+                    protein.radius_of_gyration())
 
 Because we want to return a time series, it is not necessary to define a :code:`_reduce()` method.		    
 This class can be used in the same way as the class that we defined with :code:`pmda.custom.AnalysisFromFunction`:  
