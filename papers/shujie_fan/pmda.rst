@@ -271,13 +271,6 @@ Accumulation of frames within a block happens in the :code:`_reduce` function. I
             res.append(result_single_frame)
             return res
 
-
-	    
-Benchmarking
-------------
-
-
-``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
 	    
 
 Using PMDA
@@ -415,10 +408,12 @@ The usage of this class is the same as the function we defined with ``pmda.custo
 
 
 
-
 Results and Discussion
 ======================
 
+To evaluate the performance of the parallelization, two common computational tasks were tested: we computed the time-series of root mean square distance(RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference (``pmda.rms``); we computed the water-water radial distribution function(RDF) for all water molecules in our test system (``pmda.rdf``). The test data files consist of a topology file ``YiiP_system.pdb`` (N = 111815 atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, N = 900 frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, N = 9000 frames) of a membrane-protein system.
+``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
+	    
 
 Conclusions
 ===========
