@@ -75,7 +75,7 @@ shown in Figure :ref:`kittpeak`.
 .. figure:: figures/desi_kitt_peak.png
 
    A photograph of the Mayall telescope (large dome in the center of the
-   image), where the DESI instrument has been installed, in Kitt Peak, Arizona.
+   image), where the DESI instrument has been installed, on Kitt Peak, Arizona.
    :label:`kittpeak`
 
 In fall 2019 DESI will begin sending batches of CCD images nightly to the
@@ -152,11 +152,11 @@ In what follows we will present a case study that describes how a Python image
 processing pipeline was optimized *without rewriting the code in another
 language like C* for increased throughput of 5-7x on a high-performance system.
 We will describe our workflow of using profiling tools to find candidate
-kernels for optimization, we will describe how we used just in time compiling
+kernels for optimization and we will describe how we used just in time compiling
 to speed up these kernels. We will also describe our efforts to restructure the
 code to minimize the impact of calling expensive kernels. We will compare
 parallelization strategies using MPI and Dask, and finally, we will discuss a
-preliminary investigation for moving the DESI code to GPUs.
+preliminary study for moving the DESI code to GPUs.
 
 Profiling the Code
 ------------------
@@ -247,7 +247,7 @@ performance optimization work in this case study. However,
 because the DESI extraction code is an MPI code, these profiling tools do have
 some limitations. Both of these tools can be used to collect data for each MPI
 rank, but visualizing and using the information in a meaningful way is
-challenging, especially when there are 68 outputs from a KNL node, for example.
+challenging, especially when there are 68 outputs from a KNL chip, for example.
 
 .. figure:: figures/line_profiler_xypix.png
 
@@ -372,7 +372,7 @@ as to minimize crosstalk between individual fibers, which results in a sparse
 covariance matrix. We will also note that there was nothing magical about the
 number 6; anywhere from 2 to 10 subbundles provided a similar performance
 increase on both KNL and Haswell. While this strategy was successful on CPUs,
-we will revisit this strategy in the section "Does it make sense to run DESI on
+we will revisit this strategy in the section "Does it Make Sense to Run DESI Code on
 GPUs".
 
 Add Cached legval Values
@@ -445,7 +445,7 @@ major goal of the NESAP program was to reduce the DESI runtime on KNL to below
 the original Edison Ivy Bridge benchmark, which is indicated by the red dotted
 line. Once we implemented our legval cache fix, we achieved this goal.
 
-.. figure:: figures/single_node_benchmark.png
+.. figure:: figures/single_node.png
 
    The single-node speedup achieved on Intel Ivy Bridge, Haswell, and KNL architectures
    throughout the course of this study. :label:`singlenode`
@@ -473,7 +473,7 @@ specific throughput increase instead of the (more exciting but less meaningful)
 .. figure:: figures/frames_per_node_hour.png
 
    This figure shows the improvement over the course of this study in the DESI
-   spectral extraction throughput. :label:`framespernodehour`
+   spectral extraction specific throughput. :label:`framespernodehour`
 
 It is worth mentioning that using Numba allowed us to make notable improvements
 specifically on KNL, which was of course the main goal of this study. For
@@ -508,13 +508,13 @@ can still provide reasonable gains without a major time investment.
      \hline
      Add subbundles & Restructure & 1.55106 & 1.62882 & 1.73696 & 1.28741 \tabularnewline
      \hline
-     Fix legval & JIT compile & 1.11607 & 1.16106 & 1.06005 & 1.12709 \tabularnewline
+     JIT legval & JIT compile & 1.11607 & 1.16106 & 1.06005 & 1.12709 \tabularnewline
      \hline
-     Add caching & Restructure & 1.70416 & 1.72505 & 1.70197 & 1.68546 \tabularnewline
+     Add legval cache & Restructure & 1.70416 & 1.72505 & 1.70197 & 1.68546 \tabularnewline
      \hline
-     Fix pgh & JIT compile & 1.28906 & 1.33125 & 1.15036 & 1.38556 \tabularnewline
+     JIT erf/hermitenorm & JIT compile & 1.28906 & 1.33125 & 1.15036 & 1.38556 \tabularnewline
      \hline
-     Fix xypix & JIT compile & 1.49806 & 1.51875 & 1.31501 & 1.66042 \tabularnewline
+     JIT bookkeeping & JIT compile & 1.49806 & 1.51875 & 1.31501 & 1.66042 \tabularnewline
      \hline
      \end{longtable}
 
@@ -612,10 +612,11 @@ How best to support GPU offloading without having to fill the DESI code with
 distinct CPU and GPU blocks, and additionally avoid being tied to a particular
 vendor, is still an open question for us.
 
-.. figure:: figures/eigh.png
+.. figure:: figures/eigh_scan.png
 
    Data from performing an eigh matrix decomposition of various sizes on Edison
-   Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. :label:`eigh`
+   Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. We used CuPy to perform
+   eigh on the Volta GPU. :label:`eigh`
 
 Conclusions and Future Work
 ---------------------------
