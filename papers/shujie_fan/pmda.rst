@@ -187,7 +187,7 @@ The indices for the :math:`M` trajectory slices are created in such a way that t
 For each slice or block :math:`k`, the *single frame* analysis function :math:`\mathcal{A}` (:code:`_single_frame()`) is sequentially applied to all frames in the slice.
 The result, :math:`A(t)`, is *reduced*, i.e., added to the results for this block.
 For time series, :math:`A(t)` is simply appended to a list to form a partial time series for the block.
-More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the date may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the paralle RDF Eq. :ref:`eq:rdf`).
+More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the date may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the parallel RDF Eq. :ref:`eq:rdf`).
 
 
 
@@ -304,8 +304,10 @@ The test trajectories are made available on figshare at DOI XXX.
 We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared *Lustre* parallel file system or from local *SSD*) as shown in Table :ref:`tab:configurations`.
 The multiprocessing schedulers and the SSD restrict runs to a single node (maximum 24 CPU cores).
 With distributed we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
-In all cases did we split the trajectory in as many blocks as there were available processes or Dask workers.
-
+In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
+We performed single benchmark runs for distributed on local SSD (*SSD-distributed*) and multiprocessing on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
+We plotted results for one typical benchmark run each.
+.. TODO: replace figures with ones where 5 repeats are averaged and error bars indicate 1 stdev --- issue #27
 
 
 Measured parameters
@@ -476,9 +478,9 @@ Results and Discussion
 
    Detailed timing analysis for the RMSD analysis task.
    Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
-   **A** and **D**: Average waiting time for the task to be executed by the Dask scheduler.
-   **B** and **E**: Total average compute time per task.
-   **C** and **F**: Total average read I/O time per task.
+   **A** and **D**: Maximum waiting time for the task to be executed by the Dask scheduler.
+   **B** and **E**: Maximum total compute time per task.
+   **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rms-wait-comp-io`
 	  
    
@@ -497,9 +499,9 @@ Results and Discussion
 
    Detailed timing analysis for the RDF analysis task.
    Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
-   **A** and **D**: Waiting time for the task to be executed by the Dask scheduler.
-   **B** and **E**: Total average compute time per task.
-   **C** and **F**: Total average read I/O time per task.
+   **A** and **D**: Maximum waiting time for the task to be executed by the Dask scheduler.
+   **B** and **E**: Maximum total compute time per task.
+   **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rdf-wait-comp-io`
 	  
 	  
