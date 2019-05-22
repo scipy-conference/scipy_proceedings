@@ -108,7 +108,7 @@ In 2019, the Proceedings Co-Chairs are
 - Chris Calloway (@cbcunc)
 - David Lippa (@dalippa)
 - Dillon Niederhut (@deniederhut)
-- David Schupe (@stargaser)
+- David Shupe (@stargaser)
 
 ## Timeline for 2019
 
@@ -116,7 +116,7 @@ In addition to the following list, we break up the deadlines in the respective d
 
 - April 2: Authors invited to submit full papers
 - May 22: 1st Draft for Submission
-- May 21–June 25: Open Review Period
+- May 22–June 25: Open Review Period
 - May 22: Reviewers Assigned
 - June 11: Initial Complete Review
 - June 25: Final Recommendation and Comprehensive Review Deadlines
@@ -155,7 +155,7 @@ have final say in whether to accept or reject a paper.
 
 - April 2: Authors invited to submit full papers
 - May 22: 1st Draft for Submission
-- May 21–June 25: Open Review Period
+- May 22–June 25: Open Review Period
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
@@ -430,7 +430,7 @@ To information about how to manage the whole proceedings, please see
 #### Publisher Deadlines
 
 - April 2: Authors invited to submit full papers
-- May 21–June 25: Open Review Period
+- May 22–June 25: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
 - July 10: Time Window for Publishing Conference Ready Proceedings
 
@@ -448,7 +448,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 #### Editor Deadlines
 
 - April 2: Authors invited to submit full papers
-- May 21–June 25: Open Review Period
+- May 22–June 25: Open Review Period
 - May 22: Reviewers Assigned
 - June 11: Initial Complete Review
     - Editors should verify that reviews have been completed
