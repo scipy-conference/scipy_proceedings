@@ -17,6 +17,7 @@
 :author: Richard J. Gowers
 :email: richardjgowers@gmail.com
 :institution: University of New Hampshire
+:institution: present address: NextMove Software Ltd. 
 
 :author: Michael Gecht
 :email: michael.gecht@biophys.mpg.de
@@ -70,13 +71,13 @@ PMDA - Parallel Molecular Dynamics Analysis
 .. class:: abstract
 
    MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
-   Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
-   To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
+   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to up to many terabytes in size.
+   However efficient usage of multicore architecture is a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
+   To address the challenge, we developed PMDA_, a Python library that builds upon MDAnalysis to provide parallel analysis algorithms.
    PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
    We implement a simple split-apply-combine scheme for parallel trajectory analysis.
-   The trajectory is split into blocks and analysis is performed separately and in parallel on each block ("apply").
-   The results from each block are gathered and combined.
+   The trajectory is split into blocks, analysis is performed separately and in parallel on each block ("apply"),
+   then results from each block are gathered and combined.
    PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
    In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
    PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
