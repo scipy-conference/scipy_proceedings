@@ -189,87 +189,71 @@ More complicated reductions (method :code:`_reduce()`) can be implemented, for  
 
 
 
-
 Implementation
 --------------
 
-PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`. 
-Dask's ``delayed()`` function is used extensively to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
-For example, the multiprocessing scheduler can be used  to parallelize task graph execution on a single multiprocessor machine while the distributed scheduler is used to run on multiple nodes of a HPC cluster.
+PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`.
+Dask's :code:`delayed()` function is used to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
+We tested MDAnalysis 0.20.0 (development version), Dask 1.1.1, NumPy 1.15.4.
 
+MDAnalysis combines a trajectory file (frames of coordinates that change with time) and a topology file (list of particles, their names, charges, bonds — all information that does not change with time) into a :code:`Universe(topology, trajectory)` object.
+Arbitrary selections of particles (often atoms) are made available as an :code:`AtomGroup` and the common approach in MDAnalysis is to work with these objects :cite:`Gowers:2016aa`; for instance, all coordinates of an :code:`AtomGroup` with :math:`N` atoms named :code:`protein` are accessed as the :math:`N \times 3` NumPy array :code:`protein.positions`.
 
-``pmda.parallel.ParallelAnalysisBase`` is the base class for defining a split-apply-combine parallel multi frame analysis in PMDA. This class will automatically take care of setting up the trajectory reader for iterating in parallel. The class is based on the following libraries: MDAnalysis 0.20.0, Dask 1.1.1, NumPy 1.15.4.
-
-.. code-block:: python
-
-    import MDAnalysis as mda
-    from dask.delayed import delayed
-    import dask
-    import dask.distributed
-    import numpy as np
-
-The parallel analysis algorithms are performed on ``Universe`` and tuple of ``AtomGroups``. The topology, trajectory filenames and the list of AtomGroup indices are passed as attributes to make them accessiable to each block. 
+:code:`pmda.parallel.ParallelAnalysisBase` is the base class for defining a split-apply-combine parallel multi frame analysis in PMDA.
+It requires a :code:`Universe` to operate on and any :code:`AtomGroup` instances that will be used.
+A parallel analysis class must be derived from :code:`ParallelAnalysisBase` and at a minimum, must implement the :code:`_single_frame(ts, agroups)` and :code:`_conclude()` methods.
+The arguments of :code:`_single_frame(ts, agroups)` are a MDAnalysis :code:`Timestep` instance and a tuple of :code:`AtomGroup` instances so that the following code could be run (the code is a simplified version of the current implementation):
 
 .. code-block:: python
+   :linenos:		
 
-    class ParallelAnalysisBase(object):
-	def __init__(self, universe, atomgroups):
-	    self._trajectory = universe.trajectory 
-	    self._top = universe.filename
-	    self._traj = universe.trajectory.filename
-	    self._indices = [ag.indices 
-                             for ag in atomgroups]
+   @delayed
+   def analyze_block(blockslice):
+       result = []		
+       for ts in u.trajectory[blockslice]:		
+	   A = self._single_frame(ts, agroups)
+	   result.append(A)
+       return result
 
-``run()`` performs the split-apply-combine parallel analysis. The trajectory is split into n_blocks blocks by :code:`make_balanced_slices` with first frame start, final frame stop and step length step (corresponding to the split step).  :code:`make_balanced_slices` is a function defined in pmda.util. It generates blocks in such a way that they contain equal numbers of frames when possible, but there are also no empty blocks. The final start and stop frames for each block are restored in a list slices. ``n_jobs`` is the number of jobs to start, this argument will be ignored when the distributed scheduler used. After the additional preparation defined in :code:`_prepare`, the analysis jobs (the apply step, defined in :code:`_dask_helper()`)  on each block are delayed with the :code:`delayed()` function in dask. The results from all blocks are moved and reshaped into a sensible new variable ``self.results`` (may have other name) with the :code:`_conclude()` function.
-
-.. code-block:: python
-
-        def run(self, start=None, stop=None, step=None,
-            n_jobs=1, n_blocks=None):
-            n_frames = len(range(start, stop, step))
-            slices = make_balanced_slices(n_frames, 
-                                  n_blocks, start=start,
-                                  stop=stop, step=step)
-            self._prepare()
-                blocks = []
-                for bslice in slices:
-                    task = delayed(self._dask_helper, 
-                             pure=False)(bslice,
-                                 self._indices,
-                                 self._top,
-                                 self._traj, )
-                    blocks.append(task)
-                    blocks = delayed(blocks)
-                    res = blocks.compute(**scheduler_kwargs)
-                    self._results = np.asarray(
-                                      [el[0] for el in res])
-                    self._conclude()
-            return self
-
-:code:`_dask_helper()` is the single block analysis function. It first reconstructs the Universe and the tuple of AtomGroups. Then the single-frame analysis :code:`_single_frame()` is performed on each trajectory frame by iterating  over ``u.trajectory[bslice.start:bslice.stop]``. 
+The task graph is constructed by wrapping the above code into :code:`delayed()` and appending a delayed instance for each trajectory slice to a (delayed) list:
 
 .. code-block:: python
+   :linenos:
+   :linenostart: 7      
 
-        def _dask_helper(self, bslice, indices, top, traj):
-            u = mda.Universe(top, traj)
-            agroups = [u.atoms[idx] for idx in indices]
-            res = []
-            for i in range(bslice.start, 
-                           bslice.stop, bslice.step):
-                ts = u.trajectory[i]
-                res = self._reduce(res, 
-                      self._single_frame(ts, agroups))
-            return np.asarray(res)
+   blocks = delayed([analyze_block(blockslice) for blockslice in slices])
+   results = blocks.compute(**scheduler_kwargs)
 
-Accumulation of frames within a block happens in the :code:`_reduce` function. It is called for every frame. ``res`` contains all the results before current time step, and ``result_single_frame`` is the result of ``_single_frame`` for the current time step. The return value is the updated ``res``. The default is to append results to a python list. This approach is sufficient for time-series data, such as the root mean square distance(RMSD) of the |Calpha| atoms of a protein. 
+Calling the :code:`compute()` method of the delayed list object hands the task graph over to the scheduler, which then executes the graph on the available dask workers.
+For example, the *multiprocessing* scheduler can be used  to parallelize task graph execution on a single multiprocessor machine while the *distributed* scheduler is used to run on multiple nodes of a HPC cluster.
+After all workers have finished, the variable :code:`results` contains a list of results from the individual blocks.
+PMDA actually stores these raw results as :code:`ParallelAnalysisBase._results` and leaves it to the :code:`_conclude()` method to process the results; this can be as simple as :code:`numpy.hstack(self._results)` to generate a time series by concatenating the individual time series from each block.
+		        
+The default :code:`_reduce()` method appends the results and is equivalent to line 6.
+In general, line 6 reads
+
+.. code-block:: python
+   :linenos:
+   :linenostart: 6  
+
+           result = self._reduce(result, A)
+
+where variable :code:`result` should have been properly initialized in :code:`_prepare()`.
+In order to be parallelizable, the :code:`_reduce()` method must be a static method that does not access any class variables but returns its modified first argument.
+For example, the default "append" reduction is
 
 .. code-block:: python
 
         @staticmethod
         def _reduce(res, result_single_frame):
-            # 'append' action for a time series
             res.append(result_single_frame)
             return res
+
+
+In general, the :code:`ParallelAnalysisBase` controls access to instance attributes via a context manager :code:`ParallelAnalysisBase.readonly_attributes()`.
+It sets them to "read-only" for all parallel parts to prevent the common mistake to set an instance attribute in a parallel task, which breaks under parallelization as the value of an attribute in an instance in a parallel process is never communicated back to the calling process.
+
+
 
 	    
 
