@@ -56,8 +56,6 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-
-
 With the popularity of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now simpler than ever to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
 The ``freud`` library differentiates itself from other molecular dynamics analysis packages through its focus on colloidal and nano-scale systems.
