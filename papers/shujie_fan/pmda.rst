@@ -110,7 +110,7 @@ Our previous work established that Dask worked well with MDAnalysis :cite:`Khosh
 However, we did not provide a general purpose framework to write parallel analysis tools with MDAnalysis.
 Here we show how the split-apply-combine approach lends itself to a generalizable Python implementation that makes it straightforward for users to implement their own parallel analysis tools.
 At the heart of PMDA is the idea that the user only needs to provide a function that analyzes a single trajectory frame.
-PMDA provides the remaining framework via the ``ParallelAnalysisBase`` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and and combines the data.
+PMDA provides the remaining framework via the :code:`ParallelAnalysisBase` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and and combines the data.
 It also contains a growing library of ready-to-use analysis classes, thus enabling users to immediately accelerate analysis that they previously performed in serial with the standard MDAnalysis analysis classes :cite:`Gowers:2016aa`.
 
 
@@ -120,15 +120,19 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 Methods
 =======
 
-The split-apply-combine strategy can be thought of as a simplified map-reduce :cite:`Wickham:2011aa` that provides a conceptually simple approach to operate on data in parallel.
-It is based on the fundamental assumption that the data can be partitioned into blocks that can be analyzed independently.
+At the core of PMDA is the idea that a common interface makes it easy to create code that can be easily parallelized, especially if the analysis can be split into independent work over multiple trajectory slices and a final step in which all data from the trajectory slices is combined.
+We first describe typical steps in analyzing MD trajectories and then outline the approach taken in PMDA.
+
+
+Trajectory analysis
+-------------------
+
 A trajectory with :math:`T` saved time steps consists of a sequence of coordinates :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{1\le t \le T}` where :math:`\mathbf{r}_i(t)` are the Cartesian coordinates of particle :math:`i` at time step :math:`t` with :math:`N` particles in the simulated system, i.e., :math:`T \times N \times 3` floating point numbers in total.
-The data are partioned along the time axis (:math:`1 \le t \le T`, here :math:`t` is an integer frame index and each frame index corresponds to a physical time in the trajectory) into :math:`M` blocks of approximately equal size, :math:`\tau = T/M`.
-One trajectory block can be viewed as a slice of a trajectory, e.g., for block :math:`k`, :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{t_k \le t < t_k + \tau_k}` with :math:`\tau_k` frames in the block.
+To simplify notation, we consider :math:`t` as an integer that indexes the trajectory frames; each frame index corresponds to a physical time in the trajectory that we could obtain if needed.
 In general, the coordinates are passed to a function :math:`\mathcal{A}(\{\mathbf{r}_i(t)\})` to compute a time-dependent quantity
 
 .. math::
-   :label: timeseries
+   :label: eq:timeseries
 
    A(t) = \mathcal{A}(\{\mathbf{r}_i(t)\}).
    
@@ -139,19 +143,48 @@ Such an average can be easily calculated in a post-analysis step after the time 
 An example of a more complicated reduction is the calculation of a histogram such as a radial distribution function (RDF) :cite:`FrenkelSmit02, Tuckerman:2010cr` between two types of particles with numbers :math:`N_a` and :math:`N_b`,
 
 .. math::
-   :label: rdf
+   :label: eq:rdf
 
    g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_i - \mathbf{r}_j| - r) \right\rangle
 
-where the Dirac delta functional counts the occurences of particles :math:`i` and :math:`j` at distance :math:`r`.
+where the Dirac delta function counts the occurences of particles :math:`i` and :math:`j` at distance :math:`r`.
 To compute a RDF, we could generate a time series of histograms along the spatial coordinate :math:`r`, i.e., :math:`A(t; r)` for each frame, and then perform the average in post-analysis.
 However, storage of such histograms becomes problematic, especially if instead of 1-dimensional RDFs, densities on 3-dimensional grids are being calculated.
 It is therefore better to reformulate the algorithm to perform a partial average (or reduction) during the analysis on a per-frame basis.
+For histograms, this could mean building a partial histogram and updating counts in the bins after every frame.
 PMDA supports the simple time series data collection and the per-frame reduction.
 
+Split-apply-combine
+-------------------
 
+The *split-apply-combine* strategy can be thought of as a simplified map-reduce :cite:`Wickham:2011aa` that provides a conceptually simple approach to operate on data in parallel.
+It is based on the fundamental assumption that the data can be partitioned into blocks that can be analyzed independently.
+The trajectory is split along the time axis into :math:`M` blocks of approximately equal size, :math:`\tau = T/M`.
+One trajectory block can be viewed as a slice of a trajectory, e.g., for block :math:`k`, :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{t_k \le t < t_k + \tau_k}` with :math:`\tau_k` frames in the block.
+Each block :math:`k` is analyzed in parallel by applying the function :math:`\mathcal{A}` to the frames in each block.
+Finally, the results from all blocks are gathered and combined.
 
+The advantage of this approach is its simplicity.
+Many typical analysis tasks are based on calculations of time series from single trajectory frames as in Eq. :ref:`eq:timeseries` and it is this calculation that varies from task to task while the book-keeping and trajectory slicing is the same.
+Given a function :math:`\mathcal{A}` that performs the *single frame calculation*, PMDA provides code to perform the other necessary steps (Fig. :ref:`fig:schema`).
 
+.. figure:: figs/pmda-schema.pdf
+	    
+   Schema of the split-apply-combine approach in PMDA.
+   Steps are labeled with the methods in :code:`pmda.parallel.ParallelAnalysisBase` that perform the corresponding function.
+   Methods in red (:code:`_single_frame()` and :code:`_conclude()`) must be implemented for every analysis function because they are not general.
+   The blue method :code:`_reduce()` must be implemented unless a simple time series is being calculated.
+   The :code:`_prepare()` method is optional an provides a hook to initialize custom data structures.
+   :label:`fig:schema`
+
+As explained in more detail later, a class derived from :code:`pmda.parallel.ParallelAnalysisBase` encapsulates one trajectory analysis calculation.
+Individual methods correspond to different steps and in the following (and in Fig. :ref:`fig:schema`) we will mention the names of the relevant methods to make clear how PMDA abstracts parallel analysis.
+The calculation with :math:`M` parallel workers is *prepared* by setting up data structures to hold the final result (method :code:`_prepare()`).
+The indices for the :math:`M` trajectory slices are created in such a way that the number of frames :math:`\tau_k` are balanced and do not differ by more than 1.
+For each slice or block :math:`k`, the *single frame* analysis function :math:`\mathcal{A}` (:code:`_single_frame()`) is sequentially applied to all frames in the slice.
+The result, :math:`A(t)`, is *reduced*, i.e., added to the results for this block.
+For time series, :math:`A(t)` is simply appended to a list to form a partial time series for the block.
+More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the date may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the paralle RDF Eq. :ref:`eq:rdf`).
 
 
 
