@@ -53,13 +53,16 @@
 .. definitions (like \newcommand)
 
 .. |Calpha| replace:: :math:`\mathrm{C}_\alpha`
-.. |tN| replace:: :math:`t_N`
-.. |tcomp| replace:: :math:`t_\text{comp}`
-.. |tIO| replace:: :math:`t_\text{I/O}`
-.. |tcomptIO| replace:: :math:`t_\text{comp}+t_\text{I/O}`
+.. |tprepare| replace:: :math:`t^\text{prepare}`		      
+.. |tcomp| replace:: :math:`t^{\text{compute}}_{k,t}`
+.. |tIO| replace:: :math:`t^\text{I/O}_{k,t}`
+.. |tconclude| replace:: :math:`t^\text{conclude}_{k}`
+.. |tuniverse| replace:: :math:`t^\text{Universe}_{k}`
+.. |twait| replace:: :math:`t^\text{wait}_{k}`
+.. |ttotal| replace:: :math:`t^\text{total}`		 			 		     
 .. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
-.. |Ncores| replace:: :math:`N`
+.. |Ncores| replace:: :math:`M`
 .. |r(t)| replace:: :math:`\mathbf{r}(t)`
 
 		    
@@ -255,6 +258,22 @@ In general, the :code:`ParallelAnalysisBase` controls access to instance attribu
 It sets them to "read-only" for all parallel parts to prevent the common mistake to set an instance attribute in a parallel task, which breaks under parallelization as the value of an attribute in an instance in a parallel process is never communicated back to the calling process.
 
 
+Performance evaluation
+----------------------
+
+To evaluate the performance of the parallelization, two common computational tasks were tested that differ in their computational cost and represent two different requirements for data reduction.
+We computed the time series of root mean square distance after optimum superposition (RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
+The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
+As a second test case we computed the water-water radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
+The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
+
+The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
+
+The :code:`ParallelAnalysisBase` class collects detailed timing information for all blocks and all frames and makes these data available in the attribute :code:`ParallelAnalysisBase.timing`:
+We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that each task :math:`k` waits until it is executed by the scheduler, the time |tuniverse| to create a new :code:`Universe` for each Dask task (which includes opening the shared trajectory and topology files and loading the topology into memory), the time |tIO| to read each frame :math:`t` in each block :math:`k` from disk into memory, the time |tcomp| to perform the computation in :code:`_single_frame()` and reduction in :code:`_reduce()`, the time |tconclude| to perform the final processing of all data in :code:`_conclude()`, and the total wall time to solution |ttotal|.
+
+We quantified the strong scaling behavior by calculating the speed-up for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(M)/t^\text{total}(1)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
+The efficiency was calculated as :math:`E(M) = S(M)/M`.
 
 	    
 
@@ -395,9 +414,6 @@ The usage of this class is the same as the function we defined with ``pmda.custo
 
 Results and Discussion
 ======================
-
-To evaluate the performance of the parallelization, two common computational tasks were tested: we computed the time-series of root mean square distance(RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference (``pmda.rms``); we computed the water-water radial distribution function(RDF) for all water molecules in our test system (``pmda.rdf``). The test data files consist of a topology file ``YiiP_system.pdb`` (N = 111815 atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, N = 900 frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, N = 9000 frames) of a membrane-protein system.
-``timeit`` is a context manager defined in pmda.util (to be used with the ``with`` statement) that records the execution time for the enclosed context block ``elapsed``. Here, we record the time for `prepare`, `compute`, `I/O`, `conclude`, `universe`, `wait` and `total`. These timing results are finally stored in the attributes of the class ``pmda.parallel.Timing``. 
 	    
 
 Conclusions
