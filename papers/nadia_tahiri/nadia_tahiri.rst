@@ -47,7 +47,7 @@ Problem statement and our proposal
 
 In this section, we present our problem statement and describe our considered machine learning architecture.
 Firstly, by using the grocery shopping database in Canada `MyGroceryTour` [#]_ (see Figure :ref:`MyGroceryTour`), 
-first we looked for the partitioning of consumers into classes that will group 
+we looked for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
 Then, this classification was used in the prediction stage. 
 Since the real consumer data contains thousands of individual articles; we focus primarily on product categories. 
