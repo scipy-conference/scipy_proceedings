@@ -452,7 +452,7 @@ Acknowledgments
 ===============
 
 This work was supported by the National Science Foundation under grant numbers ACI-1443054 and used the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1548562.
-The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation TG-MCB130177.
+The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation TG-MCB130177. Max Linke was supported by NumFOCUS under a small development grant.
 
 
 
