@@ -59,7 +59,9 @@ made it possible to determine the number of classes of consumers, as well as the
 .. figure:: figures/trois_magasins.png
    :align: center
    
-   MyGroceryTour website for the postal code H2Y 1C6 in Montreal. The website was created to test the new machine learning model. It was written in Javascript, Bootstrap and Python. :label:`MyGroceryTour` 
+   MyGroceryTour website for the postal code H2Y 1C6 in Montreal. 
+   The website was created to test the new machine learning model. 
+   It was written in Javascript, Bootstrap and Python. :label:`MyGroceryTour` 
 
 .. [#] MyGroceryTour.ca
 
@@ -84,7 +86,7 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 based on dynamic programming, was used to achieve objectives (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method [Gir16]_, based on Recurrent Neuron Networks (RNN) 
-and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library :cite:`girija2016tensorflow`, 
+and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library [Gir16]_, 
 was used to achieve objectives (ii). Those implementations are going to create a significant interest to consumers.
 
 The problem can be reformulated as a binary prediction task. Given a consumer, 
@@ -127,14 +129,14 @@ We found that there are 3 consumer profiles see [WJ03]_, [WJ02]_, and [TNTK16]_.
 The first group is consumers who only buy products on promotion.
 The second group is consumers who always buy the same products (without considering promotions).
 Finally, the third group is consumers who buy products whether there is a promotion or not.
-
-Since the real dataset was not enough to complete correctly our project, we increased it.
-We described the sets of data simulated in the study, 
-and we presented in detail the results of our simulations.
+On the model, we plan to consider that information and make your prediction more personalized on the consumer profile.
 
 Data Synthesis
 ==============
 
+Since the real dataset was not enough to complete correctly our project, we increased it.
+We described the sets of data simulated in the study, 
+and we presented in detail the results of our simulations.
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
@@ -145,7 +147,28 @@ We observed that our baskets generated follow the same distribution that origina
 .. figure:: figures/order_frequency.png
    :align: center
      
-   Difference of basket size distribution between `Baskets generated` in blue and `Original baskets` in red.  :label:`orderfrequency`
+   Difference of basket size distribution between **Baskets generated** in blue and **Original baskets** in red.  :label:`orderfrequency`
+
+Preprocessing dataset
+=====================
+
+We launched the preprocessing dataset tasks on Compute Canada's servers. This step were carried out using 172 nodes 
+and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16G memory). We preprocessed user data, 
+product data and department data. The bash script has given as follow:
+
+.. code-block:: bash
+
+   #!/bin/bash
+   #!SBATCH --time=48:00:00
+   #SBATCH --account=def-jgnes
+   #!SBATCH --job-name=market_cpu
+   #SBATCH --output=market_out_cpu
+   #SBATCH --error=market_err_cpu
+   #!SBATCH --mem=32000M
+   #SBATCH --mail-user=tahiri.nadia@courrier.uqam.ca
+   #SBATCH --mail-type=BEGIN
+   #SBATCH --mail-type=END
+   #SBATCH --mail-type=FAIL
 
 Models
 ------
@@ -159,9 +182,9 @@ The LSTM [HS97]_ is a recurrent neural network (RNN) that has an input, hidden (
 The memory block contains 3 gate units namely the input, forget, 
 and output with a self-recurrent connection neuron [HS97]_.
 
-- Input gate: learns what information is to be stored in the memory block.
-- Forget gate: learns how much information to be retained or forgotten from the memory block.
-- Output gate: learns when the stored information can be used.
+- **Input gate**: learns what information is to be stored in the memory block.
+- **Forget gate**: learns how much information to be retained or forgotten from the memory block.
+- **Output gate**: learns when the stored information can be used.
 
 Figure :ref:`lstm` illustrates the proposed architecture and summarizes the detail involved in the structure. 
 
@@ -214,7 +237,7 @@ learners to boost performance; this makes it a good candidate model for predicti
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple fashion and be applied in both classification and 
-regression with a variety of response distributions including Gaussian, Bernoulli, Poisson, and Laplace. 
+regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]. 
 Finally, missing values in the collected data can be easily managed.
 
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
@@ -309,9 +332,12 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
 .. figure:: figures/workflow.png
    :align: center
-   :scale: 27%
+   :scale: 29%
    
-   The graphical illustration of the proposed model trying to predict the next basket in term of list of product. :label:`workflow`
+   The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
+   The first level of the model used LSTM and NNMF. 
+   The second level of the model applied GBT.
+   Finally, the last test considered to predict the next basket by using :math:`F_1`. :label:`workflow`
 
 Statistics
 ==========
@@ -513,8 +539,6 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 	
 .. figure:: figures/pearsonr.png
    :align: center
-   :figclass: wt 
-   :scale: 3%
 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
@@ -573,6 +597,11 @@ Abbreviations
 References
 ----------
 
+.. [Car03] Rasmussen, Carl Edward. Gaussian processes in machine learning.
+           In Summer School on Machine Learning, pages 63:71. Springer, Berlin, Heidelberg, 2003.
+.. [CMW16] Maddison, Chris J., Andriy Mnih, and Yee Whye Teh. 
+           The concrete distribution: A continuous relaxation of discrete random variables. 
+           arXiv preprint arXiv:1611.00712, 2016.
 .. [Faz17] Fatlume Fazliu. En utforskande studie: inköpslistor som app, 2017.
 .. [Fri02] Jerome H Friedman. Stochastic gradient boosting. Computational
            Statistics & Data Analysis, 38(4):367–378, 2002.
@@ -601,9 +630,15 @@ References
            in the retail arena. In Proceedings of the SIGCHI Conference
            on Human Factors in Computing Systems, pages 337–344. ACM,
            2003.
+.. [PJ73] Consul, Prem C., and Gaurav C. Jain. 
+          A generalization of the Poisson distribution. 
+          Technometrics 15(4):791-799, (1973).
 .. [PM+00] Dan Pelleg, Andrew W Moore, et al. X-means: extending kmeans
            with efficient estimation of the number of clusters. In Icml,
            volume 1, pages 727–734, 2000.
+.. [Tay19] Taylor, James W. Forecasting value at risk and expected shortfall using a 
+           semiparametric approach based on the asymmetric Laplace distribution.
+           Journal of Business & Economic Statistics 37(1):121-133, 2019.
 .. [TNTK16] Arry Tanusondjaja, Magda Nenycz-Thiel, and Rachel Kennedy.
             Understanding shopper transaction data: how to identify crosscategory
             purchasing patterns using the duplication coefficient.
