@@ -221,7 +221,8 @@ The task graph is constructed by wrapping the above code into :code:`delayed()` 
    :linenos:
    :linenostart: 7      
 
-   blocks = delayed([analyze_block(blockslice) for blockslice in slices])
+   blocks = delayed([analyze_block(blockslice)
+                     for blockslice in slices])
    results = blocks.compute(**scheduler_kwargs)
 
 Calling the :code:`compute()` method of the delayed list object hands the task graph over to the scheduler, which then executes the graph on the available dask workers.
