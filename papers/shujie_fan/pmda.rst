@@ -267,8 +267,8 @@ The RMSD calculation with optimum superposition was performed with the fast QCPR
 As a second test case we computed the water-water radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
 The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
 
-Test system and data files
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+Test system, benchmarking environment, and data files
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 2,020 compute nodes in total.
 Each node in the machine contains two Intel Xeon (E5-2680v3, 12 cores, 2.5 GHz) CPUs with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
@@ -278,6 +278,34 @@ Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet
 
 The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
 The test trajectories are made available on figshare at DOI XXX.
+
+.. raw:: latex
+
+   \begin{table}
+   \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}lp{0.07\tablewidth}p{0.07\tablewidth}}
+    \hline
+    \textbf{configuration label} & \textbf{file storage} & \textbf{scheduler} & \textbf{max nodes} & \textbf{max processes} \tabularnewline
+    \hline
+    \endfirsthead
+    Lustre-distributed-3nodes & Lustre       & distributed       &  3        & 72         \tabularnewline
+    Lustre-distributed-6nodes & Lustre       & distributed       &  6        & 72         \tabularnewline
+    Lustre-multiprocessing    & Lustre       & multiprocessing   &  1        & 24         \tabularnewline
+    SSD-distributed           & SSD          & distributed       &  3        & 72         \tabularnewline
+    SSD-multiprocessing       & SSD          & multiprocessing   &  1        & 24         \tabularnewline
+    \hline
+    \end{longtable*}
+    \caption{Testing configurations on \textit{SDSC Comet}.
+	   \textbf{max nodes} is the maximum number of nodes that were tested; the multprocessing scheduler is limited to a single node.
+	   \textbf{max processes} is the maximum number of processes or Dask workers that were employed.
+	   \DUrole{label}{tab:configurations}
+	   }
+   \end{table}
+
+We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared *Lustre* parallel file system or from local *SSD*) as shown in Table :ref:`tab:configurations`.
+The multiprocessing schedulers and the SSD restrict runs to a single node (maximum 24 CPU cores).
+With distributed we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
+In all cases did we split the trajectory in as many blocks as there were available processes or Dask workers.
+
 
 
 Measured parameters
@@ -431,7 +459,10 @@ This class can be used in the same way as the class that we defined with :code:`
 
 Results and Discussion
 ======================
-	    
+
+
+	  
+
 
 Conclusions
 ===========
