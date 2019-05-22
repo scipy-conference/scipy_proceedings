@@ -118,19 +118,27 @@ special function evaluation, and all the necessary bookkeeping required to
 manage the spectral data in each exposure.
 
 The overarching goal of this work is to speed up the DESI experiment's Python
-spectroscopic data processing pipeline on the Cori supercomputer's KNL partition at NERSC.
-NERSC :cite:`noauthor_national_nodate` is the largest Department of Energy
-computing facility in terms of number of users (7000) and scientific output
-:cite:`noauthor_publications_nodate`. Cori is NERSC's current flagship
-supercomputer, a Cray XC40 with a theoretical peak performance of 28 PF, comprised of
-approximately 20 percent Intel Haswell nodes and 80 percent manycore Intel
-Knights Landing (KNL) nodes. Achieving good performance with the manycore KNL
-nodes has proved difficult for many science teams; for this reason NERSC
-established a program called NESAP (NERSC Exascale Science Applications
-Program, :cite:`noauthor_nesap_nodate`). NESAP provides technical expertise
-from NERSC staff and vendors like Intel and Cray to science teams to
-improve the performance of their application on the Cori KNL partition
+spectroscopic data processing pipeline on the Cori supercomputer's KNL
+partition at NERSC.  NERSC :cite:`noauthor_national_nodate` is the largest
+Department of Energy computing facility in terms of number of users (7000) and
+scientific output :cite:`noauthor_publications_nodate`. Cori is NERSC's current
+flagship supercomputer, a Cray XC40 with a theoretical peak performance of 28
+PF, comprised of approximately 20 percent Intel Haswell nodes and 80 percent
+manycore Intel Knights Landing (KNL) nodes.
+
+Achieving good performance with the manycore KNL nodes has proven difficult for
+many science teams. Because the Haswell nodes are "easier" to use (i.e.
+applications often run faster on them out of the box), they are increasingly crowded.
+For this reason NERSC established a program called NESAP (NERSC Exascale
+Science Applications Program, :cite:`noauthor_nesap_nodate`) to help science
+teams transision successfully to the KNL nodes. NESAP provides
+technical expertise from NERSC staff and vendors like Intel and Cray to science
+teams to improve the performance of their application on the Cori KNL partition
 and prepare for the manycore future of high-performance computing (HPC).
+NESAP's goal is to help move a large fraction of the NERSC workload from the
+Haswell to the KNL partition; this will ease queue wait times and help increase
+job throughput for all users.
+
 Achieving optimal Python performance on KNL is especially challenging due its
 slower clock speed and difficulty taking advantage of the KNL AVX-512 vector
 units (which is not possible in native Python). A more detailed discussion of
