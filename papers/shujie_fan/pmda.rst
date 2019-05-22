@@ -60,7 +60,9 @@
 .. |avg_tcomp| replace:: :math:`\langle t_\text{compute} \rangle`
 .. |avg_tIO| replace:: :math:`\langle t_\text{I/O} \rangle`
 .. |Ncores| replace:: :math:`N`
+.. |r(t)| replace:: :math:`\mathbf{r}(t)`
 
+		    
 -------------------------------------------		      
 PMDA - Parallel Molecular Dynamics Analysis
 -------------------------------------------
@@ -117,6 +119,12 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 
 Methods
 =======
+
+The split-apply-combine strategy can be thought of as a simplified map-reduce :cite:`Wickham:2011aa` that provides a conceptually simple approach to operate on data in parallel.
+It is based on the fundamental assumption that the data can be partitioned into blocks that can be analyzed independently.
+A trajectory with :math:`T` saved time steps consists of a sequence of coordinates :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{1\le t \le T}` where :math:`\mathbf{r}_i(t)` are the Cartesian coordinates of particle :math:`i` at time step :math:`t` with :math:`N` particles in the simulated system, i.e., :math:`T \times N \times 3` floating point numbers in total.
+The data are partioned along the time axis (:math:`1 \le t \le T`, here :math:`t` is an integer frame index and each frame index corresponds to a physical time in the trajectory) into :math:`M` blocks of approximately equal size, :math:`\tau = T/M`.
+One trajectory block can be viewed as a slice of a trajectory, e.g., for block :math:`k`, :math:`\big\{\big(\mathbf{r}_1(t), \mathbf{r}_2(t), \dots \mathbf{r}_N(t)\big)\big\}_{t_k \le t < t_k + \tau_k}` with :math:`\tau_k` frames in the block.
 
 
 
