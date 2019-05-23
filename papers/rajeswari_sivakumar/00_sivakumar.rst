@@ -238,3 +238,13 @@ produced.
 
 Experiment II
 +++++++++++++
+
+This experiment focused on breaking down the feature extraction further and
+evaluate another approach: linear dynamical systems. We scale down each coronal
+slice in the images and then evaluate the change over time. The reason for
+scaling down the coronal slices is to allow us to more efficiently build a
+transition model to represent the flow of water over the time steps of the
+image. This will allow us to build a three-dimensional representation of the
+brain from the images that will show the flow of water and the distribution of
+white matter in the brain. We evaluate the produced transition matrix as
+features to be applied to the classification pipeline.
