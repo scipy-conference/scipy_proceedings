@@ -202,7 +202,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
    In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
    which make it easier to update the weights during the backpropagation process. :label:`lstm`
 
-Overall characteristics of the NN which used in this project is described as follow:
+Overall characteristics of the neuron networks which used in this project are described as follow:
 
 .. code-block:: python
 
@@ -234,17 +234,18 @@ Gradient Boosted Tree (GBT) network
 ===================================
 
 GBT [Fri02]_ is an iterative algorithm that combines simple parameterized functions with low performance 
-(high prediction error) to produce a highly accurate prediction rule. GBT utilizes an ensemble of weak
+(i.e. high prediction error) to produce a highly accurate prediction rule. GBT utilizes an ensemble of weak
 learners to boost performance; this makes it a good candidate model for predicting the grocery shopping list. 
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple fashion and be applied in both classification and 
 regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]. 
 Finally, missing values in the collected data can be easily managed.
+Moreover, in this study, we denote frequently missing data in the history grocery list by the user, that is why this technique is more adapted.
 
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
 The final model has two neuron networks and a GBT classifier.
-Once trained, it was used to predict in real time what would be the consumer's basket, based on the history of purchases and current promotions in neighboring stores.
+Once trained, it was used to predict in real time what would be the basket consumer, based on the history of purchases and current promotions in neighboring stores.
 Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size (see Figure :ref:`lstm`).
 
 First level model (feature extraction)
@@ -354,7 +355,7 @@ The *accuracy* of a test is its capability to recognize the classes properly.
 To evaluate the accuracy of the model, we should define the percentage 
 of true positive and true negative in all estimated cases, 
 i.e. the sum of true positive, true negative, false positive, and false negative.
-Statistically, this can be identified as follow:
+Statistically, this metric can be identified as follow:
 
 .. math::
    :label: e:matrix
@@ -363,10 +364,10 @@ Statistically, this can be identified as follow:
 
 where:
 
-- *TP* is True Positive, i.e. the number of positively labeled data, which have been classified as `True`, correct class,
-- *FP* is False Positive, i.e. the number of negatively labeled data, which falsely have been classified as `Positive`,
-- *TN* is True Negative, i.e. the number of negatively labeled data, which have been classified as `Negative`, correct class, and 
-- *FN* is False Negative, i.e.  the number of positively labeled data, which falsely have been classified as `Negative`.
+- **TP** is True Positive, i.e. the number of positively labeled data, which have been classified as `Positive`, correct class,
+- **FP** is False Positive, i.e. the number of negatively labeled data, which falsely have been classified as `Positive`,
+- **TN** is True Negative, i.e. the number of negatively labeled data, which have been classified as `Negative`, correct class, and 
+- **FN** is False Negative, i.e.  the number of positively labeled data, which falsely have been classified as `Negative`.
 
 The *precision* is a description of random errors, a measure of statistical variability.
 The formula of precision is the ratio between TP with all truth data (positive or negative). 
@@ -399,7 +400,7 @@ Finally, we evaluated the model by *FP Rate* which corresponds to the ratio betw
    
    FP Rate = FPR = \frac{FP}{(TN+FP)} 
    
-We examined these six evaluation scores.
+We examined these six evaluation metrics on this study.
 
 Python Script
 -------------
@@ -459,7 +460,8 @@ Results
 -------
 
 Figure :ref:`productpca` illustrates PCA of 20 random products projected in 2 dimensions. 
-We can see cluster of Pasta sauce with Pasta group.
+The results show clearly the cluster of Pasta sauce with Pasta group. 
+In fact, this result can identify consumer buying behavior.
 
 .. figure:: figures/product_pca.png
    :align: center
@@ -480,7 +482,7 @@ Figure :ref:`violon` (b) indicates that all shops follow the same profiles in th
    
    Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
 
-Figure :ref:`productsF1` and Table 3 indicates :math:`F_1` to all products. 
+Figure :ref:`productsF1` and Table 3 indicates that the values of :math:`F_1` metric to all products. 
 Some products are easy to predict with the value of :math:`F_1` > 0 and 
 some products are so hard to predict with the value of :math:`F_1` < 0. 
 For the first group, they are products includes on restriction regime 
