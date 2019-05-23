@@ -5,7 +5,7 @@
 National Advancement of Data Science Education
 ==============================================
 
-Anthony Suen, Alan Liang and Amal Bhatnagar
+By Anthony Suen, Alan Liang and Amal Bhatnagar
 
 Data science is a burgeoning field that is quickly being adopted across
 all domains and sectors. Data Science education initiatives have been
@@ -154,8 +154,8 @@ considerable success due to graduate students or postdocs, who may be
 leading the way for faculty, in adapting new data science methods to
 different disciplines.
 
-2) Common Educational Cyber-Infrastructure
-------------------------------------------
+**2) Common Educational Cyber-Infrastructure**
+----------------------------------------------
 
 Implementation of a data science course in a scalable way requires
 universities and institutions to develop capacity in on-demand
@@ -245,8 +245,8 @@ and consistent between institutions. If such a process could be
 undertaken, the ability to host data science courses for undergraduate
 university-level student will be readily accessible to schools.
 
-**3) Guidelines for Creating and Incorporating Modular DS Content
-(condense into across domain portions)**
+**3) Guidelines for Creating and Incorporating Modular DS Content **
+--------------------------------------------------------------------
 
 There are two main concerns when modularizing data science content:
 *Having just one introductory data science class is not enough to
@@ -354,7 +354,8 @@ add ethical standards to their mission statements or to hire chief
 ethics officers to oversee not only day-to-day operations but also the
 larger social consequences of their work.
 
-I. **Summary & Vision**
+**Summary & Vision**
+--------------------
 
 In summary the conference participants set up a course of work to
 develop data science education and a pathway forwards. The specific
@@ -392,7 +393,8 @@ We believe our methodology will guide our commitment to work together,
 structure our cross-campus collaboration, and target grant writing to
 support these initiatives.
 
-\ **Works Cited**
+**Works Cited**
+---------------
 
 Baumer, Benjamin S., Daniel T. Kaplan, and Nicholas J. Horton. 2017.
 *Modern Data Science with R*. Chapman & Hall.
