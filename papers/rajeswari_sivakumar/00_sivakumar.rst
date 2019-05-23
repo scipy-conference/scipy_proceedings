@@ -8,6 +8,7 @@
 
 
 
+
 ------------------------------------------------------------------------------
 Parkinson's Classification and Feature Extraction from Diffusion Tensor Images
 ------------------------------------------------------------------------------
@@ -186,6 +187,12 @@ without losing information. It will come into play with our final experiment
 using linear dynamical systems to extract features from the DTIs.
 Extending the premise of singular value decomposition (SVD) to higher order
 matrices, or tensors, we come to Tucker decomposition.
+
+.. figure:: fig1.png
+
+   Tucker decomposition, visualized. :label:`figure1`
+
+
 Similarly to SVD, it is used to compress tensors. We are thus able to use it
 as means to describe brain images without breaking down specific regions of
 interest or or focusing on specific brain images.
@@ -248,3 +255,128 @@ image. This will allow us to build a three-dimensional representation of the
 brain from the images that will show the flow of water and the distribution of
 white matter in the brain. We evaluate the produced transition matrix as
 features to be applied to the classification pipeline.
+
+Results
+-------
+
+Experiment I
+++++++++++++
+
+While we were able to achieve an accuracy of 94\% immediately,
+we were not able to improve on this by further reducing the produced features
+with various dimensionality reduction methods. In fact it appears that in some
+cases, such as linear discriminant analysis (LDA), additional dimensionality
+reduction adversely affects classifier performance. In exploring a slice of
+the output core tensor at one ‘time’ point, what we see suggests that the
+output of the tensor decomposition might be likened to a stack of sliced that
+focus on the regions of interest in the original image. This is validated by
+examining several corresponding decomposed core and original slices.
+
+.. figure:: fig2.png
+
+   (left): Slice from original brain image at a
+   specific time point; (right): Corresponding slice
+   from tensor decomposition output :label:`figure2`
+
+
+.. raw:: latex
+
+   \begin{table}
+
+     \begin{longtable}{|l|l|l|}
+     \hline
+     Dimensionality Reduction Approach  & F-measure & Accuracy \tabularnewline
+     \hline
+     - & 0.94 & 0.94 \tabularnewline
+     \hline
+     PCA & 0.94 & 0.94 \tabularnewline
+     \hline
+     LDA & 0.82 & 0.81 \tabularnewline
+     \hline
+     Kernel PcA & 0.94 & 0.94 \tabularnewline
+     \hline
+     \end{longtable}
+
+     \caption{Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied
+ {label}{table1}}
+
+   \end{table}
+
+Experiment II
++++++++++++++
+
+.. raw:: latex
+
+   \begin{table}
+
+     \begin{longtable}{|l|l|l|}
+     \hline
+     Dimensionality Reduction Approach  & F-measure & Accuracy \tabularnewline
+     \hline
+     - & 0.90 & 0.82 \tabularnewline
+     \hline
+     PCA & 0.89 & 0.81 \tabularnewline
+     \hline
+     LDA & 0.84 & 0.74 \tabularnewline
+     \hline
+     Kernel PcA & 0.93 & 0.89 \tabularnewline
+     \hline
+     \end{longtable}
+
+     \caption{Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied
+ {label}{table2}}
+
+   \end{table}
+
+
+We were able to achieve accuracy of 82\% with random forest classifier alone.
+This outperforms previous benchmarks in training classifiers on synthetic
+features derived from MR images. Compare to present results Cole et al. achieved
+only 70\% accuracy at best on synthetic features generated from T1 weighted MRI
+scans. Furthermore, based on the F-measure scores across the experiment
+conditions, we can reasonably say that our model is not skewed as a consequence
+of the uneven distribution of the data. The PPMI data is heavily
+skewed toward Parkinson’s individuals, with a majority of our data set coming
+from Parkinson’s patients (421 subjects) versus controls (213 subjects),
+which was also addressed by rebalancing the classes by oversampling the control.
+We intuited that we could speed up model training and improve accuracy by
+reducing the number of synthetic features we retained. We initially tried
+linear PCA and LDA to perform the dimensionality reduction. However, these
+actually hurt performance, resulting in test accuracy of 81\% and 74\%
+respectively. Based on this, we considered non-linear dimensionality reduction
+would be more effective. To this end we used Kernel PCA with RBF kernel,
+which effectively improved accuracy to 89\%.
+
+
+References
+----------
+
+Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
+
+Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
+
+Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
+
+Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
+
+Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
+
+Cochrane, C. J., & Ebmeier, K. P. (2013). Diffusion tensor imaging in parkinsonian syndromes A systematic review and meta-analysis. Neurology, 80(9), 857-864.
+
+Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
+
+Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
+
+Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
+
+Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
+
+Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
+
+Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
+
+Swiebocka-Wiek, J. (2016, September). Skull Stripping for MRI Images Using Morphological Operators. InIFIP International Conference on Computer Information Systems and Industrial Management (pp. 172-182). Springer International Publishing.
+
+Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
+
+Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
