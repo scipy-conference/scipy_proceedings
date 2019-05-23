@@ -124,6 +124,7 @@ In order convert the task from classifying each node to classifying the whole gr
 .. math::
 
     h_{i} = ||_{k=1}^{K} \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij}^{k} \textbf{W}^{k} h_{j}),
+    
 or
 
 .. math::
