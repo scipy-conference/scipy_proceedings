@@ -278,9 +278,6 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
 
     H(l+1) = \sigma(\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}H(l)\textbf{W}(l)).
 
-
-.. rubric:: Footnotes
-
 .. [1] Each subject has anatomical, diffusion, and functional MRI data for varying numbers of visits to the clinic. We use “acquisition” to describe the multi-modal data for a single visit to the clinic.
 .. [2] https://nifti.nimh.nih.gov
 .. [3] https://www.dicomlibrary.com
