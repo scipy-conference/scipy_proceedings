@@ -417,10 +417,10 @@ The time series of the results is stored in the attribute :code:`parallel_rgyr.r
 For more general cases, one can write the parallel class with the help of :code:`pmda.parallel.ParallelAnalysisBase`, following the schema in Fig. :ref:`fig:schema`.
 To build a new analysis class, one should derive a class from :code:`pmda.parallel.ParallelAnalysisBase` that implements
 
-1. (Required) the single frame analysis method :code:`_single_frame()`,
-2. (Required) the final results conclusion function :code:`_conclude()`,
-3. (Optional) the additional preparation function :code:`_prepare()`,
-4. (Optional) the reduce function for frames within the same block :code:`_reduce()` (if the result is not time-series data).
+1. the single frame analysis method :code:`_single_frame()` (*required*),
+2. the final results conclusion method :code:`_conclude()` (*required*),
+3. the additional preparation method :code:`_prepare()` (*optional*),
+4. the reduce method for frames within the same block :code:`_reduce()` (*optional* for time series, *required* for anything else).
 
 As an example, we show how one can build a class to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``protein``; of course, in this case the simple approach with :code:`pmda.custom.AnalysisFromFunction` would be easier.
 
