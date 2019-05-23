@@ -73,7 +73,7 @@ PMDA - Parallel Molecular Dynamics Analysis
 .. class:: abstract
 
    MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-   With the development of highly optimized MD software packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
+   With the development of highly optimized MD software packages on high performance computing (HPC) resources, the size of simulation trajectories is growing to many terabytes in size.
    Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
    To address this challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
    PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
