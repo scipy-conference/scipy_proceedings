@@ -64,41 +64,137 @@ testing will be used to blind test subjects for their perception of where a soun
 3D Geometry
 ===========
 
+To produce a synthesized 3D audio sound field starts with a geometry. For a given source location 
+:math:`(x,y,z)`, we transform to the cylindrical coordinates shown in :ref:`CYLIND`. This 
+configuration fits well with the CIPIC database.
+
+.. figure:: 3D_Coordinates.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   The cylindrical coordinate system used in the 3D audio simulator. :label:`CYLIND`
+
+More writing TBD.
 
 Real-Time Signal Processing
 ===========================
 
+The cylindrical coordinates of the source point to an LUT entry of filter coefficients for the 
+left and right channels. The :code:`pyaudio_helper` framework [Wickert]_ of Figure :ref:`PAH` provides supports real-time 
+filtering using core signal processing functions of :code:`scipy.signal` [ScipySignal]_. With geometry 
+processing taken care of the actual signal processing block diagram is very simple, as shown in 
+Figure :ref:`FILTERING`
 
+.. figure:: pyaudio_helper_BlockDiagram.pdf
+   :scale: 55%
+   :align: center
+   :figclass: htb
+
+   The `pyaudio_helper` framework for real-time DSP in the Jupyter notebook. :label:`PAH`
+
+
+.. figure:: Filtering_BlockDiagram.pdf
+   :scale: 65%
+   :align: center
+   :figclass: htb
+
+   Real-time DSP filtering with coefficients determined by the audio source :math:`(x,y,z)` location. :label:`FILTERING`
+
+More writing TBD.
 
 Mapping to the CIPIC Interaural Polar Coordinates
 -------------------------------------------------
 
-The class 
+CIPIC uses a special *interaural polar coordinate system* (IPCS) that needs to be addressed in order to make a 3D audio demo. Two other aspects to be consider are:
+
+- CIPIC assumes the sound source lies on a sphere of radius 1m, so due to sound wave divergence, the amplitude needs to be scaled inversely with radial distance (inverse-squared in the sound intensity sense).
+
+- To properly represent a sound source closer than 1m there is a parallax error that must be dealt with as explained in [Fitzpatrick]_.
+
+The ultimate goal is to represent an audio source arriving from any set of coordinates, in this case $(x_1,y_1,z_1$). The class :code:`ss_mapping2CIPIChrif()` manages this:
+
+.. code-block:: python
+
+   class ss_mapping2CIPIChrir(object):
+      """
+      A class for sound source mapping to the CIPIC 
+      HRIR database
+      
+      CIPIC uses the interaural polar coordinate 
+      system (IPCS). The reference sphere for the 
+      head-related transfer function (HRTF) 
+      measurements/head-related impulse response 
+      (HRIR) measurements has a 1m radius.
+      
+      
+      Mark Wickert June 2018
+      """
 
 
 3D Audio Simulator Notebook Apps
 --------------------------------
 
+Two applications (apps) that run in the Jupyter notebook at present are a *static* 
+location audio and time-varying motion audio source. For human subject test the static 
+source is of primary interest.
+
 Static Sound Source
 ===================
+
+The Jupyter Widgets slider interface is shown in Figure :ref:`STATICAPP` 
+
+.. figure:: Static_3D_AudioApp.pdf
+   :scale: 60%
+   :align: center
+   :figclass: htb
+
+   Jupyter notebook for static positioning of the audio test source. :label:`STATICAPP`
 
 
 Dynamic Sound Source Along a Trajectory
 =======================================
 
+The Jupyter Widgets slider interface is shown in Figure :ref:`DYNAMICAPP`
+
+.. figure:: Dynamic_3D_AudioApp.pdf
+   :scale: 60%
+   :align: center
+   :figclass: htb
+
+   Jupyter notebook for setting the parameters of a sound source moving along a trajectory with 
+   prescribed motion characteristics. :label:`DYNAMICAPP`
+
+
+The trajectory used in this app is described in the figure below (having build issues, so 
+not shown in this version)
+
 
 Spherical Head Model as a Simple Reference
 ------------------------------------------
 
-Bring in references [Bolein]_, [Duda]_, and [Beranic]_ to discuss a 3D sound source simulator app which use a 
+Bring in references [Boelein]_, [Duda]_, and [Beranek]_ to discuss a 3D sound source simulator app which use a 
 simple spherical head model in place of the subject's HRTF. The HRTF data filter coefficients can be obtained using known expressions for sound pressure wave scattering from a rigid sphere. The sphere radius can for example be set to match the mean radius of the subjects head. Ultimately we wish to evaluate human subjects with multiple HRTF's, and use the ...
 
+Using a spherical harmonics-based solution the incident plus scattered sound pressure, :math:`\tilde{P}`, as a magnitude 
+and phase is calculated. For an example shown below a very large sphere is for preliminary calculations at 
+an audio frequency of 2 kHz is shown in Figure :ref:`SCATTER`
+
+.. figure:: SphericalHeadScattering.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   Using spherical harmonics, [Beranek]_, to calculate the pressure wave magnitude (shown) here and 
+   phase with a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
 
 
 Conclusions and Future Work
 ---------------------------
 
-TBD
+Applications development is relatively easy on the real-time signal processing side. Getting all of the coordinate transformations together is more complex. 
+
+More writing TBD.
 
 
 References
@@ -108,6 +204,7 @@ References
 .. [CIPIC] *The CIPIC Interface Laboratory Home Page*, (2019, May 22). Retrieved May 22, 2019, from `https://www.ece.ucdavis.edu/cipic`_.
 .. [CIPICHRTF] *The CIPIC HRTF Database*, (2019, May 22). Retrieved May 22, 2019, from `https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`_.
 .. [Wickert] *Real-Time Digital Signal Processing Using pyaudio_helper and the ipywidgets*, (2018, July 15). Retrieved May 22, 2019, from DOI `10.25080/Majora-4af1f417-00e`_.
+.. [ScipySignal] *Signal processing (scipy.signal)*, (2019, May 22). Retrieved May 22, 2019, from `https://docs.scipy.org/doc/scipy/reference/signal.html`_.
 .. [Beranek] Beranek, L. and Mellow, T (2012). *Acoustics: Sound Fields and Transducers*. London: Elsevier.
 .. [Duda] Duda, R. and Martens, W. (1998). Range dependence of the response of a spherical head model, *J. Acoust. Soc. Am. 104 (5)*.
 .. [Boelein]  Bogelein, S., Brinkmann, F.,  Ackermann, D., and Weinzierl, S. (2018). Localization Cues of a Spherical Head Model. *DAGA Conference 2018 Munich*. 
@@ -116,3 +213,4 @@ References
 .. _`https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`: https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 .. _`10.25080/Majora-4af1f417-00e`: http://conference.scipy.org/proceedings/scipy2018/mark_wickert_250.html
+.. _`https://docs.scipy.org/doc/scipy/reference/signal.html`: https://docs.scipy.org/doc/scipy/reference/signal.html
