@@ -464,10 +464,10 @@ Results and Discussion
 ======================
 
 In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimal superposition (*RMSD*) and the water oxygen radial distribution function (*RDF*), in different scenarios, as summarized in Table :ref:`tab:configurations`.
-We investigated a long (9000 frames) and a short trajectory (900 frames) to get a sense of to which degree parallelization remains practical.
+We investigated a long (9000 frames) and a short trajectory (900 frames) to get a sense of to which degree parallelization remained practical.
 We analyzed the total time to completion as a function of the number of CPU cores, which was equal to the number of trajectory blocks, so that each block could be processed in parallel.
 To gain better insight into the performance-limiting steps in our algorithm (Fig. :ref:`fig:schema`) we plotted the *maximum* times over all ranks because the overall time to completion cannot be faster than the slowest parallel process.
-For example, for the read I/O time we calculate the total read I/O time for each rank :math:`k` as :math:`t^\text{I/O}_k = \sum_{t=t_k}^{t_k + \tau_k} t^\text{I/O}_{k, t}` and then report :math:`\max_k t^\text{I/O}_k`.
+For example, for the read I/O time we calculated the total read I/O time for each rank :math:`k` as :math:`t^\text{I/O}_k = \sum_{t=t_k}^{t_k + \tau_k} t^\text{I/O}_{k, t}` and then reported :math:`\max_k t^\text{I/O}_k`.
 
 
 RMSD analysis task
@@ -476,7 +476,7 @@ RMSD analysis task
 The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
 The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
 Overall, using the multiprocessing and either Lustre or SSD gave the best performance and shortest time to solution.
-These results were consistent with findings in our earlier pilot study where we looked at the RMSD task with Dask and found that multiprocessing with both SSD and Lustre gave good single node performance but, using distributed, did not scale beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
+These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that multiprocessing with both SSD and Lustre had given good single node performance but, using distributed, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
 
 .. figure:: figs/Total_Eff_SU_rms.pdf
 
@@ -488,9 +488,9 @@ These results were consistent with findings in our earlier pilot study where we 
    **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
    :label:`fig:rmsd`
 
-A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) shows that the computation scales very well, as does reading time to a lesser degree.
-However, the waiting time either increases for multiprocessing or is roughly a constant 1 s for distributed.
-Beyond 12 cores, the waiting time starts approaching the time for read I/O (compute is a order of magnitude less than I/O) and hence parallel speed up is limited by the wait time.
+A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) showed that the computation scaled very well, as did reading time to a lesser degree.
+However, the waiting time either increased for multiprocessing or was roughly a constant 1 s for distributed.
+Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
 	  
 .. figure:: figs/wait_compute_io_rms.pdf
 
