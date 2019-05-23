@@ -76,7 +76,7 @@ PMDA - Parallel Molecular Dynamics Analysis
    With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
    Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
    To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
-   PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
+   PMDA parallelized common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
    We implement a simple split-apply-combine scheme for parallel trajectory analysis.
    The trajectory is split into blocks and analysis is performed separately and in parallel on each block ("apply").
    The results from each block are gathered and combined.
@@ -100,7 +100,7 @@ Introduction
 ============
 
 Classical molecular dynamics (MD) simulations have become an invaluable tool to understand the function of biomolecules :cite:`Karplus:2002ly, Dror:2012cr, Seyler:2014il, Orozco:2014dq, Bottaro:2018aa, Huggins:2019aa` (often with a view towards drug discovery :cite:`Borhani:2012mi`) and diverse problems in materials science :cite:`Rottler:2009aa, Li:2015aa, Varela:2015aa, Lau:2018aa, Kupgan:2018aa, Frederix:2018aa`.
-Systems are modelled as particles (for example, atoms) whose interactions are approximated with a classical potential energy function :cite:`FrenkelSmit02, Braun:2018ab`.
+Systems are modeled as particles (for example, atoms) whose interactions are approximated with a classical potential energy function :cite:`FrenkelSmit02, Braun:2018ab`.
 Forces on the particles are derived from the potential and Newton's equations of motion for the particles are solved with an integrator algorithm, typically using highly optimized MD codes that run on high performance computing (HPC) resources or workstations (often equipped with GPU accelerators).
 The resulting trajectories, the time series of particle positions :math:`\mathbf{r}(t)` (and possibly velocities), are analyzed with statistical mechanics approaches :cite:`Tuckerman:2010cr, Braun:2018ab` to obtain predictions or to compare to experimentally measured quantities.
 Currently simulated systems may contain millions of atoms and the trajectories can consist of hundreds of thousands to millions of individual time frames, thus resulting in file sizes ranging from tens of gigabytes to tens of terabytes.
@@ -150,7 +150,7 @@ An example of a more complicated reduction is the calculation of a histogram suc
 
    g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_i - \mathbf{r}_j| - r) \right\rangle
 
-where the Dirac delta function counts the occurences of particles :math:`i` and :math:`j` at distance :math:`r`.
+where the Dirac delta function counts the occurrences of particles :math:`i` and :math:`j` at distance :math:`r`.
 To compute a RDF, we could generate a time series of histograms along the spatial coordinate :math:`r`, i.e., :math:`A(t; r)` for each frame, and then perform the average in post-analysis.
 However, storage of such histograms becomes problematic, especially if instead of 1-dimensional RDFs, densities on 3-dimensional grids are being calculated.
 It is therefore better to reformulate the algorithm to perform a partial average (or reduction) during the analysis on a per-frame basis.
@@ -295,7 +295,7 @@ The test trajectories are made available on figshare at DOI XXX.
     \hline
     \end{longtable*}
     \caption{Testing configurations on \textit{SDSC Comet}.
-	   \textbf{max nodes} is the maximum number of nodes that were tested; the multprocessing scheduler is limited to a single node.
+	   \textbf{max nodes} is the maximum number of nodes that were tested; the multiprocessing scheduler is limited to a single node.
 	   \textbf{max processes} is the maximum number of processes or Dask workers that were employed.
 	   \DUrole{label}{tab:configurations}
 	   }
@@ -329,7 +329,7 @@ PMDA allows one to perform parallel trajectory analysis with pre-defined analysi
 
 Pre-defined Analysis
 --------------------
-PMDA contains a growing number of pre-defined analysis classes that are modelled after functionality in :code:`MDAnalysis.analysis` and that can be used right away.
+PMDA contains a growing number of pre-defined analysis classes that are modeled after functionality in :code:`MDAnalysis.analysis` and that can be used right away.
 Current examples are :code:`pmda.rms` for  RMSD analysis, :code:`pmda.contacts` for native contacts analysis, :code:`pmda.rdf` for radial distribution functions, and :code:`pmda.leaflet` for the LeafletFinder analysis tool :cite:`Michaud-Agrawal:2011fu, Paraskevakos:2018aa` for the topological analysis of lipid membranes.
 While the first three modules are based on :code:`pmda.parallel.ParallelAnalysisBase` as described above and follow the strict split-apply-combine approach, :code:`pmda.leaflet` is an example of a more complicated task-based algorithm that can also easily be implemented with MDAnalysis and Dask :cite:`Paraskevakos:2018aa`.
 All PMDA classes can be used in a similar manner to classes in :code:`MDAnalysis.analysis`, which makes it easy for users of MDAnalysis to switch to parallelized versions of the algorithms.
@@ -512,12 +512,12 @@ The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`)
    Individual times per task were measured for different testing configurations (Table :ref:`tab:configurations`).
    **A** and **D**: Maximum time for a task to load the :code:`Universe`.
    **B** and **E**: Time |tprepare| to execute :code:`_prepare()`. 
-   **C** and **F**: Time |tconclude| to excecute :code:`_conclude()`. 
+   **C** and **F**: Time |tconclude| to execute :code:`_conclude()`. 
    :label:`fig:rms-pre-con-uni`
 
 Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10-20) could already be achieved on the equivalent of a modern workstation.
 Performance would likely improve with ever longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
-However, all things considered, a single node seemed sufficent to accelerate RMSD analysis.
+However, all things considered, a single node seemed sufficient to accelerate RMSD analysis.
 
 	  
 
@@ -570,7 +570,7 @@ Although still in early development, it provides useful functionality for users 
 In simple cases, just wrapping a user supplied function is enough to immediately use PMDA but the package also provides a documented API to derive from the :code:`pmda.parallel.ParallelAnalysisBase` class.
 We showed that performance depends on the type of analysis that is being performed.
 Compute-intensive tasks such as the RDF calculation can show good strong scaling up to about a hundred cores on a typical supercomputer and speeding up the time to solution for hours in serial to minutes in parallel should make this an attractive solution for many users.
-For other analysis tasks such as the RMSD calculation and other similar ones (e.g., simple distance calculations), a single multicore workstation seems sufficient to achieve speed-ups on the order of 10 and HPC resources would not be useful.
+For other analysis tasks such as the RMSD calculation and other similar ones (e.g., simple distance calculations), a single multi-core workstation seems sufficient to achieve speed-ups on the order of 10 and HPC resources would not be useful.
 But thanks to the design of Dask, running a PMDA analysis on a laptop, workstation, or supercomputer requires absolutely no changes in the code and the user is free to immediately choose the computational resource that best fits their purpose.
 
 
@@ -581,7 +581,7 @@ PMDA_ is available in source form under the GNU General Public License v2 from t
 Python 2.7 and Python :math:`\ge` 3.5 are fully supported and tested.
 The package uses `semantic versioning`_ to make it easy for users to judge the impact of upgrading.
 The development process uses continuous integration (`Travis CI`_): extensive tests are run on all commits and pull requests via pytest_, resulting in a current code coverage of 97\% and documentation_ is automatically generated by `Sphinx`_ and published as GitHub pages.
-Users are supported through the `community mailinglist`_ (Google group) and the GitHub `issue tracker`_.
+Users are supported through the `community mailing list`_ (Google group) and the GitHub `issue tracker`_.
 
 
 Acknowledgments
@@ -611,5 +611,5 @@ References
 .. _pytest: https://pytest.org
 .. _Sphinx: https://www.sphinx-doc.org/
 .. _`Travis CI`: https://travis-ci.com/
-.. _`community mailinglist`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
+.. _`community mailing list`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _`issue tracker`: https://github.com/MDAnalysis/pmda/issues
