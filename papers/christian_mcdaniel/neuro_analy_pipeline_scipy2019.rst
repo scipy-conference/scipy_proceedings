@@ -29,7 +29,7 @@ While genetic and molecular biomarkers have exhibited some efficacy in developin
 As neuroimage data has accumulated, researchers have worked to develop analytical techniques for the complex images. Powerful machine learning techniques have been employed for analyzing neuroimage data :cite:`ZYHJZLWWZZLLH2018,MLLAMWGSECES2018,K2018,GLHSA2014,TBEDTEEE2015`, but algorithmic differences can result in vastly different results. :cite:`CJMRCMBD2017` found that when performing white matter (WM) tractography on diffusion-weighted MRI (dMRI) data, the choice of algorithm played as much a role as anatomical differences themselves, and :cite:`GRSKMFZJHM2016` found differences in the analysis pipeline to be a main contributor to variability found in resting-state functional MRI (rs-fMRI) data.
 Going further, insights from a single image modality (e.g., dMRI vs. rs-fMRI) do not provide a full picture of the disease :cite:`LCLZFFPK2015,BDH2016,LWXGXKZ2012`, while analyzing the disparate data types together is both poorly defined and extremely challenging.
 
-Previous work has shown that graph-based signal processing techniques can address these issues :cite:`KPFRLGR2017,KPFRLGR2018,ZHCLZW2018`. By representing the anatomical regions of the brain (from T1-weighted images) as nodes on a graph, the functional and structural relationships between the nodes can be defined in the graph space. The weighted connections between nodes are averaged across all subjects' anatomical T1-weighted MRI (T1w) data, mitigating the effect of inter-subject anatomical variability. For a given acquisition [#f1]_, diffusion [and functional data] are transformed from 4-dimensional sequences of volumes to simple one-dimensional vectors on each node (i.e., node *features* or *signals* on the nodes), drastically reducing the size and complexity of the data.
+Previous work has shown that graph-based signal processing techniques can address these issues :cite:`KPFRLGR2017,KPFRLGR2018,ZHCLZW2018`. By representing the anatomical regions of the brain (from T1-weighted images) as nodes on a graph, the functional and structural relationships between the nodes can be defined in the graph space. The weighted connections between nodes are averaged across all subjects' anatomical T1-weighted MRI (T1w) data, mitigating the effect of inter-subject anatomical variability. For a given acquisition [1]_, diffusion [and functional data] are transformed from 4-dimensional sequences of volumes to simple one-dimensional vectors on each node (i.e., node *features* or *signals* on the nodes), drastically reducing the size and complexity of the data.
 
 Intuitively, the graph-based representation has additional benefits over a standard image grid. The graphs group individual voxels into localized anatomical regions and characterize the structural and functional connections between them. This reduces noise from individual voxels and addresses the nonlinear relationship between image features and disease. E.g., overall brain volume naturally shrinks as a function of age :cite:`Peters2006`. Additionally, the probability of connection between two regions is not a function of the distance between them, and connections often do not follow the shortest path between two regions :cite:`Brodal2016`. The edges of the graph offer an explicit metric for establishing meaningful neighborhoods of nodes and the features offer meaningful descriptors with which to group them.
 
@@ -47,9 +47,9 @@ MRI Acquisition and Data Preprocessing
 
 MRI data requires extensive artifact correction and removal before it can be used. MRI signals are acquired through the application of precisely coordinated magnetic fields and radiofrequency (RF) pulses. Each image is reconstructed from a series of recordings averaged over many individual signals. This inherently results in noisy measurements, magnetic-based artifacts, and artifacts from human error such as motion artifacts :cite:`Wang2015,HBL2010`.
 
-Before preprocessing, images should be converted to the Neuroimaging Informatics Technology Initiative (NIfTI) [#f2]_ file format. Whereas many MRI data are initially in the Digital Information and Communications in Medicine (DICOM) [#f3]_ format for standardized transfer of medical data and metadata, the NIfTI format is structured for ease of use when conducting computational analysis and processing on these files. The size, orientation, and location in space of the voxel data is dependent on settings used during image acquisition and requires an affine matrix to relate two images in a standard coordinate space. The NIfTI file format automatically associates each image with an affine matrix as well as a header file, which contains other helpful metadata.
+Before preprocessing, images should be converted to the Neuroimaging Informatics Technology Initiative (NIfTI) [2]_ file format. Whereas many MRI data are initially in the Digital Information and Communications in Medicine (DICOM) [3]_ format for standardized transfer of medical data and metadata, the NIfTI format is structured for ease of use when conducting computational analysis and processing on these files. The size, orientation, and location in space of the voxel data is dependent on settings used during image acquisition and requires an affine matrix to relate two images in a standard coordinate space. The NIfTI file format automatically associates each image with an affine matrix as well as a header file, which contains other helpful metadata.
 
-Next, it is common practice to convert your data file structure to the Brain Imaging Data Structure (BIDS) [#f4]_ format. Converting data to the BIDS format is required by certain softwares, and ensures a standardized and intuitive file structure.
+Next, it is common practice to convert your data file structure to the Brain Imaging Data Structure (BIDS) [4]_ format. Converting data to the BIDS format is required by certain softwares, and ensures a standardized and intuitive file structure.
 
 The modality which serves as the basis for the nodes of the graphs is anatomical T1-weighted MRI (T1w) data. This modality provides high resolution images which are quite useful for distinguishing different tissue types and region boundaries. The speed and relative simplicity of T1w imaging results in fewer and less severe artifacts. For a given subject, images from the other modalities are often aligned to T1w images, and this modality is often used to obtain brain masks (via skull stripping) and perform volumetric segmentation. Typical preprocessing includes motion-correction, intensity normalization, magnetic susceptibility correction, skull stripping, registration to a common brain atlas, and segmentation :cite:`Wang2015,HBL2010`.
 
@@ -124,7 +124,7 @@ In order convert the task from classifying each node to classifying the whole gr
 .. math::
 
     h_{i} = ||_{k=1}^{K} \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij}^{k} \textbf{W}^{k} h_{j}),
-    
+
 or
 
 .. math::
@@ -152,26 +152,26 @@ Recently, researchers have utilized advances in graph convolutional networks to 
 Methods
 ============
 
-Our data is downloaded from the Parkinson's Progression Markers Initiative (PPMI) [#f5]_ database. We download [1,684] images, consisting of [525] T1w images, [918] diffusion images [and [244] functional images]. The images are from 127 individuals (subjects had multiple visits to the clinic and data from multiple image modalities). Among the subjects, [___] are from the Parkinson's Disease (PD) group and [___] are healthy controls (HC). We preprocess the data and construct our novel GCN architecture as follows.
+Our data is downloaded from the Parkinson's Progression Markers Initiative (PPMI) [5]_ database. We download [1,684] images, consisting of [525] T1w images, [918] diffusion images [and [244] functional images]. The images are from 127 individuals (subjects had multiple visits to the clinic and data from multiple image modalities). Among the subjects, [___] are from the Parkinson's Disease (PD) group and [___] are healthy controls (HC). We preprocess the data and construct our novel GCN architecture as follows.
 
 Preprocessing
 -------------------------
 
-The software :code:`dcm2niix` [#f6]_ is helpful for converting the data from its original DICOM format to the usable NIfTI format. We implement this conversion in :code:`neuro-format.py`. We then reformat our data file structure to the BIDS format. There exist some readily available programs for doing this, but the file structure used by PPMI is quite nuanced, so we wrote our own function to do so in :code:`make_bids.py`.
+The software :code:`dcm2niix` [6]_ is helpful for converting the data from its original DICOM format to the usable NIfTI format. We implement this conversion in :code:`neuro-format.py`. We then reformat our data file structure to the BIDS format. There exist some readily available programs for doing this, but the file structure used by PPMI is quite nuanced, so we wrote our own function to do so in :code:`make_bids.py`.
 
-The standard software for T1w MRI data preprocessing is Freesurfer [#f7]_. Freesurfer is an actively developed software with responsive technical support and rich forums. The software is dense and the documentation is lacking in some aspects, so training may still be helpful, although not available in our case. The :code:`recon-all` command performs all the steps needed for standard T1w preprocessing, including motion correction, registration to a common coordinate space using the Talairach atlas by default, intensity correction and thresholding, skull-stripping, region segmentation, surface tessellation and reconstruction, statistical compilation, etc.
+The standard software for T1w MRI data preprocessing is Freesurfer [7]_. Freesurfer is an actively developed software with responsive technical support and rich forums. The software is dense and the documentation is lacking in some aspects, so training may still be helpful, although not available in our case. The :code:`recon-all` command performs all the steps needed for standard T1w preprocessing, including motion correction, registration to a common coordinate space using the Talairach atlas by default, intensity correction and thresholding, skull-stripping, region segmentation, surface tessellation and reconstruction, statistical compilation, etc.
 
-The entire process takes around 15 or more hours per image. Support for GPU-enabled processing was stopped years ago, and the :code:`-openmp <num_cores>` command, which allows parallel processing across the designated number of cores, may only reduce the processing time to around 8-10 hours per image [#f8]_. We employed many cores using Google Cloud Platform virtual machines and utilized :code:`joblib.Parallel` to run many single-core processes in parallel. The bash script :code:`setup` should help with getting the necessary dependencies installed [#f9]_. For segmentation, the Deskian/Killiany atlas is used, resulting in around 115 volume segmentations per image, to be used as the nodes for the graph.
+The entire process takes around 15 or more hours per image. Support for GPU-enabled processing was stopped years ago, and the :code:`-openmp <num_cores>` command, which allows parallel processing across the designated number of cores, may only reduce the processing time to around 8-10 hours per image [8]_. We employed many cores using Google Cloud Platform virtual machines and utilized :code:`joblib.Parallel` to run many single-core processes in parallel. The bash script :code:`setup` should help with getting the necessary dependencies installed [9]_. For segmentation, the Deskian/Killiany atlas is used, resulting in around 115 volume segmentations per image, to be used as the nodes for the graph.
 
-The Functional Magnetic Resonance Imaging of the Brain (FMRIB) Software Library (FSL) [#f10]_ is often used to preprocess diffusion data. The b0 volume is isolated (:code:`fslroi`) and merged with other runs from the same subjects (:code:`fslmerge`). :code:`fslmerge` requires that all dMRI acquisitions for a given subject have the same number of coordinates along the z- (i.e., third) axis. We manually examined acquisitions with extra coordinates and, if possible, removed empty space above or below the brain. Otherwise, these acquisitions were discarded. Next, the brain is isolated from the skull (skull stripped, :code:`bet` with the help of :code:`fslmaths -Tmean`), susceptibility correction is performed *for specific cases* using :code:`topup`, and eddy correction is performed using :code:`eddy_openmp`.
+The Functional Magnetic Resonance Imaging of the Brain (FMRIB) Software Library (FSL) [10]_ is often used to preprocess diffusion data. The b0 volume is isolated (:code:`fslroi`) and merged with other runs from the same subjects (:code:`fslmerge`). :code:`fslmerge` requires that all dMRI acquisitions for a given subject have the same number of coordinates along the z- (i.e., third) axis. We manually examined acquisitions with extra coordinates and, if possible, removed empty space above or below the brain. Otherwise, these acquisitions were discarded. Next, the brain is isolated from the skull (skull stripped, :code:`bet` with the help of :code:`fslmaths -Tmean`), susceptibility correction is performed *for specific cases* using :code:`topup`, and eddy correction is performed using :code:`eddy_openmp`.
 
 The :code:`topup` tool requires two or more acquisitions for a given subject, where the header parameters :code:`TotalReadoutTime` and/or :code:`PhaseEncodingDirection` differ from one another. Since the multiple acquisitions for a given subject typically span different visits to the clinic, the same parameters are often used and :code:`topup` cannot be utilized.
 
-We found another software, BrainSuite [#f11]_, which can perform susceptibility correction using a single acquisition. Although we still include FSL in our pipeline since it is the standard software used in many other papers, we employ the BrainSuite software's Brain Diffusion Pipeline to perform susceptibility correction and to register the corrected dMRI data to the anatomical T1w data for a given subject.
+We found another software, BrainSuite [11]_, which can perform susceptibility correction using a single acquisition. Although we still include FSL in our pipeline since it is the standard software used in many other papers, we employ the BrainSuite software's Brain Diffusion Pipeline to perform susceptibility correction and to register the corrected dMRI data to the anatomical T1w data for a given subject.
 
 First, a BrainSuite compatible brain mask is obtained using :code:`bse`. Next, :code:`bfc` is used for bias field (magnetic susceptibility) correction, and finally :code:`bdp` performs co-registration of the diffusion data to the T1w image for the same subject. The calls to the Freesurfer, FSL, and BrainSuite software libraries are included in :code:`automate_preproc.py`.
 
-There are many algorithms and softwares that perform tractography, but we found that many researchers use the Diffusion Toolkit (DTK) [#f12]_ in their experiments. In :code:`dtk.py` we employ four different diffusion tensor imaging (DTI)-based deterministic tractography algorithms: Fiber Assignment by Continuous Tracking (FACT; :cite:`MCCZ1999`), the second-order Runge–Kutta method (RK2; :cite:`BPPDA2000`), the tensorline method (TL; :cite:`LWTJAM2003`), and the interpolated streamline method (SL, :cite:`CLCASSMBR1999`). :cite:`ZZWJJPNLYT2015` provide a more information on each method. :code:`dti_recon` first transforms the output file from Brainsuite into a usable format for DTK, and then :code:`dti_tracker` is called for each of the tractography algorithms. Finally, :code:`spline_filter` is used to smooth the generated tracts, denoising the outputs.
+There are many algorithms and softwares that perform tractography, but we found that many researchers use the Diffusion Toolkit (DTK) [12]_ in their experiments. In :code:`dtk.py` we employ four different diffusion tensor imaging (DTI)-based deterministic tractography algorithms: Fiber Assignment by Continuous Tracking (FACT; :cite:`MCCZ1999`), the second-order Runge–Kutta method (RK2; :cite:`BPPDA2000`), the tensorline method (TL; :cite:`LWTJAM2003`), and the interpolated streamline method (SL, :cite:`CLCASSMBR1999`). :cite:`ZZWJJPNLYT2015` provide a more information on each method. :code:`dti_recon` first transforms the output file from Brainsuite into a usable format for DTK, and then :code:`dti_tracker` is called for each of the tractography algorithms. Finally, :code:`spline_filter` is used to smooth the generated tracts, denoising the outputs.
 
 Graph Formation
 -------------------------
@@ -185,13 +185,13 @@ Now that the images are processed, they can be efficiently loaded using python l
 Graph Convolutional Network
 ----------------------------------------------------------
 
-The :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [#f13]_ defines a two layer graph convolutional network as
+The :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [13]_ defines a two layer graph convolutional network as
 
 .. math::
 
     Z = f(X,A) = softmax(\hat{A} ReLU(\hat{A}X\textbf{W}(0))\textbf{W}(1)),
 
-where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`. [We tweak this to use the tanh activation function instead of ReLU.  [compare to ReLU, may want to keep ReLU]. Next, we employ a PyTorch implementation [#f14]_ of :cite:`VCCRLB2018`'s :code:`GAT` class to implement a graph attention network, learning attention coefficients as
+where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`. [We tweak this to use the tanh activation function instead of ReLU.  [compare to ReLU, may want to keep ReLU]. Next, we employ a PyTorch implementation [14]_ of :cite:`VCCRLB2018`'s :code:`GAT` class to implement a graph attention network, learning attention coefficients as
 
 .. math::
 
@@ -281,17 +281,17 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
 
 .. rubric:: Footnotes
 
-.. [#f1] Each subject has anatomical, diffusion, and functional MRI data for varying numbers of visits to the clinic. We use “acquisition” to describe the multi-modal data for a single visit to the clinic.
-.. [#f2] https://nifti.nimh.nih.gov
-.. [#f3] https://www.dicomlibrary.com
-.. [#f4] https://bids.neuroimaging.io
-.. [#f5] https://www.ppmi-info.org
-.. [#f6] https://github.com/rordenlab/dcm2niix
-.. [#f7] https://surfer.nmr.mgh.harvard.edu
-.. [#f8] However, in the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. We tested mutliple approaches and found that running images in parellel with a single core per process was the fastest method.
-.. [#f9] We install the softwares to the home directory so that access to root directories during running of scripts is not denied when connected via the ssh command. Freesurfer's setup does not automatically adapt to this, so several of its environment variables need to be hard coded. See the setup bash script we provide for details.
-.. [#f10] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-.. [#f11] http://brainsuite.org
-.. [#f12] http://trackvis.org/dtk/
-.. [#f13] https://github.com/tkipf/pygcn
-.. [#f14] https://github.com/Diego999/pyGAT
+.. [1] Each subject has anatomical, diffusion, and functional MRI data for varying numbers of visits to the clinic. We use “acquisition” to describe the multi-modal data for a single visit to the clinic.
+.. [2] https://nifti.nimh.nih.gov
+.. [3] https://www.dicomlibrary.com
+.. [4] https://bids.neuroimaging.io
+.. [5] https://www.ppmi-info.org
+.. [6] https://github.com/rordenlab/dcm2niix
+.. [7] https://surfer.nmr.mgh.harvard.edu
+.. [8] However, in the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. We tested mutliple approaches and found that running images in parellel with a single core per process was the fastest method.
+.. [9] We install the softwares to the home directory so that access to root directories during running of scripts is not denied when connected via the ssh command. Freesurfer's setup does not automatically adapt to this, so several of its environment variables need to be hard coded. See the setup bash script we provide for details.
+.. [10] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+.. [11] http://brainsuite.org
+.. [12] http://trackvis.org/dtk/
+.. [13] https://github.com/tkipf/pygcn
+.. [14] https://github.com/Diego999/pyGAT
