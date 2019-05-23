@@ -15,17 +15,6 @@ Developing a Graph Convolution-Based Analysis Pipeline for Multi-Modal Neuroimag
 
 Parkinson's disease (PD) is a highly prevalent neurodegenerative disease originating in subcortical areas of the brain and resulting in progressively worsening motor, cognitive, and psychological symptoms. Whereas clinical data tends to be somewhat arbitrary and genetic data inconclusive for many patients, neuroimaging data is an attractive research tool given the neurophysiological origins of the disease. Despite the insights potentially available in magnetic resonance imaging (MRI) data, and the noninvasive and low-risk nature thereof, developing sound analytical techniques for this data has proven difficult. Principally, multiple imaging modalities are needed to provide clinicians with the most accurate view possible; the process of incorporating multiple image modalities into a single holistic model is both poorly defined and extremely challenging. Previous work has demonstrated that graph-based signal processing techniques can address this issue, while also drastically reducing the size and complexity of the data. Unfortunately, details for preprocessing and reformatting this data remain informal and incomplete, impeding the pace of advancement in the field and the reproduction of results. In this paper, we propose a novel graph-based convolutional neural network architecture and present an end-to-end pipeline for preprocessing, formatting, and analyzing this data. On data downloaded from the Parkinson's Progression Markers Initiative (PPMI) database, we *... fill in RESULTS here.*
 
-
-.. class:: keywords
-
-    neuroimaging, Parkinson's disease, data science, deep learning, graph processing, graph convolution
-
-.. role:: cite
-
-.. raw:: latex
-
-       \providecommand*\DUrolecite[1]{\cite{#1}}
-
 Introduction
 ============
 Affecting more than 1% of the United States population over the age of 60, Parkinson's disease (PD) is the second-most prevalent age-related neurodegenerative disease following Alzheimer's disease :cite:`RST2014`. PD diagnosis has traditionally relied on clinical assessments with some degree of subjectivity :cite:`GGLVVZ2018`, often missing early-stage PD altogether :cite:`BDH2016`. Benchmarks for delineating PD progression or differentiating between similar conditions are lacking :cite:`LMSACRMW2018,LWXGXKZ2012`. As such, many efforts have emerged to identify quantitatively rigorous methods through which to distinguish PD.
@@ -223,6 +212,9 @@ Acknowledgements
 Data used in the preparation of this article were obtained from the Parkinson's Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For up-to-date information on the study, visit www.ppmi-info.org.
 PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation for Parkinson's Research and funding partners, including Abbvie, Allergan, Avid, Biogen, BioLegend, Bristol-Mayers Squibb, Colgene, Denali, GE Healthcare, Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer, Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily, Voyager, and Golub Capital.
 
+.. raw:: latex
+
+   \bibliographystyle{plain}
 
 .. raw:: latex
 
@@ -298,9 +290,3 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
 .. [12] http://trackvis.org/dtk/
 .. [13] https://github.com/tkipf/pygcn
 .. [14] https://github.com/Diego999/pyGAT
-
-
-.. raw:: latex
-
-   \bibliographystyle{plain}
-   \bibliography{bibli}
