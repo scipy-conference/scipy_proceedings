@@ -523,7 +523,7 @@ The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`)
    **C** and **F**: Time |tconclude| to execute :code:`_conclude()`. 
    :label:`fig:rms-pre-con-uni`
 
-Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10-20) could already be achieved on the equivalent of a modern workstation.
+Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10 fold) could already be achieved on the equivalent of a modern workstation.
 Performance would likely improve with longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
 However, all things considered, a single node seemed sufficient to accelerate RMSD analysis.
 
