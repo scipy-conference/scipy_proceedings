@@ -73,20 +73,20 @@ PMDA - Parallel Molecular Dynamics Analysis
 .. class:: abstract
 
    MDAnalysis_ is an object-oriented Python library to analyze trajectories from molecular dynamics (MD) simulations in many popular formats.
-   With the development of highly optimized molecular dynamics software (MD) packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
+   With the development of highly optimized molecular dynamics (MD) software packages on HPC resources, the size of simulation trajectories is growing to many  terabytes in size.
    Thus efficient analysis of MD simulations becomes a challenge for MDAnalysis, which does not yet provide a standard interface for parallel analysis.
-   To address the challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
-   PMDA parallelized common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
+   To address this challenge, we developed PMDA_, a Python library that provides parallel analysis algorithms based on MDAnalysis.
+   PMDA parallelizes common analysis algorithms in MDAnalysis through a task-based approach with the Dask_ library.
    We implement a simple split-apply-combine scheme for parallel trajectory analysis.
    The trajectory is split into blocks and analysis is performed separately and in parallel on each block ("apply").
    The results from each block are gathered and combined.
    PMDA allows one to perform parallel trajectory analysis with pre-defined analysis tasks.
    In addition, it provides a common interface that makes it easy to create user-defined parallel analysis modules.
-   PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC or ad-hoc clusters or on a single machine.
-   We tested the performance of PMDA on single node and multiple nodes on local supercomputing resources and workstations.
-   The results show that parallelization improves the performance of trajectory analysis.
+   PMDA supports all schedulers in Dask, and one can run analysis in a distributed fashion on HPC machines, ad-hoc clusters, a single multi-core workstation or a laptop.
+   We tested the performance of PMDA on single node and multiple nodes on a national supercomputer.
+   The results show that parallelization improves the performance of trajectory analysis and, depending on the analysis task, can cut down time to solution from hours to minutes.
    Although still in alpha stage, it is already used on resources ranging from multi-core laptops to XSEDE supercomputers to speed up analysis of molecular dynamics trajectories.
-   PMDA is available under the GNU General Public License, version 2.
+   PMDA is available as open source under the GNU General Public License, version 2 and can be easily installed via the ``pip`` and ``conda`` package managers.
 
 .. class:: keywords
 
@@ -107,13 +107,13 @@ Currently simulated systems may contain millions of atoms and the trajectories c
 Processing and analyzing these trajectories is increasingly becoming a rate limiting step in computational workflows :cite:`Cheatham:2015qf, Beckstein:2018aa`.
 Modern MD packages are highly optimized to perform well on current HPC clusters with hundreds of cores such as the XSEDE supercomputers :cite:`XSEDE` but current general purpose trajectory analysis packages :cite:`Giorgino:2019aa` were not designed with HPC in mind.
 
-In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with Dask's distributed scheduler, and created the *Parallel MDAnalysis* (PMDA_) library.
+In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with Dask's various schedulers (in particular distributed), and created the *Parallel MDAnalysis* (PMDA_) library.
 By default, PMDA follows a simple split-apply-combine :cite:`Wickham:2011aa` approach for trajectory analysis, whereby each task analyzes a single trajectory segment and reports back the individual results that are then combined into the final result :cite:`Khoshlessan:2017ab`.
 Our previous work established that Dask worked well with MDAnalysis :cite:`Khoshlessan:2017ab` and that this approach was competitive with other task-parallel approaches :cite:`Paraskevakos:2018aa`.
 However, we did not provide a general purpose framework to write parallel analysis tools with MDAnalysis.
 Here we show how the split-apply-combine approach lends itself to a generalizable Python implementation that makes it straightforward for users to implement their own parallel analysis tools.
 At the heart of PMDA is the idea that the user only needs to provide a function that analyzes a single trajectory frame.
-PMDA provides the remaining framework via the :code:`ParallelAnalysisBase` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and and combines the data.
+PMDA provides the remaining framework via the :code:`ParallelAnalysisBase` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and combines the data.
 It also contains a growing library of ready-to-use analysis classes, thus enabling users to immediately accelerate analysis that they previously performed in serial with the standard MDAnalysis analysis classes :cite:`Gowers:2016aa`.
 
 
