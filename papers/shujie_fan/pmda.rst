@@ -376,13 +376,13 @@ Otherwise, a class has to be derived from :code:`pmda.parallel.ParallelAnalysisB
 Both approaches are described below.
 
 
-:code:`pmda.custom.AnalysisFromFunction`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+:code:`pmda.custom.AnalysisFromFunction()`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PMDA provides helper functions in :code:`pmda.custom` to rapidly build a parallel class for users who already have a *single frame* function that 
 1. takes one or more AtomGroup instances as input,
 2. analyzes one frame in a trajectory and returns the result for this frame.
-For example, if we already have a function to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``ag``:
+For example, if we already have a function to calculate the radius of gyration :cite:`Mura:2014kx` of a protein given in :code:`AtomGroup` ``ag``:
 
 .. code-block:: python
 
@@ -393,7 +393,7 @@ For example, if we already have a function to calculate the radius of gyration o
     def rgyr(ag):
         return(ag.radius_of_gyration())
 
-We can wrap :code:`rgyr()` in :code:`pmda.custom.AnalysisFromFunction` to build a parallel version of :code:`rgyr()`:
+We can wrap :code:`rgyr()` in the :code:`pmda.custom.AnalysisFromFunction()` class instance factory function to build a parallel version of :code:`rgyr()`:
 
 .. code-block:: python
      
@@ -422,7 +422,7 @@ To build a new analysis class, one should derive a class from :code:`pmda.parall
 3. the additional preparation method :code:`_prepare()` (*optional*),
 4. the reduce method for frames within the same block :code:`_reduce()` (*optional* for time series, *required* for anything else).
 
-As an example, we show how one can build a class to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``protein``; of course, in this case the simple approach with :code:`pmda.custom.AnalysisFromFunction` would be easier.
+As an example, we show how one can build a class to calculate the radius of gyration of a protein given in :code:`AtomGroup` ``protein``; of course, in this case the simple approach with :code:`pmda.custom.AnalysisFromFunction()` would be easier.
 
 .. code-block:: python
 
