@@ -79,11 +79,11 @@ Graph Convolutional Networks
 
 Neuroimage data is readily applied to graph processing techniques and is often used as a benchmark application for new developments in graph processing :cite:`SNFOV2013`. Intuitively, the objective is to establish localized anatomical regions and characterize the structural and functional connections between them. As such, given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix :math:`\textbf{W}`, we define a signal on the vertices as a function :math:`f : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex's weighted connectivity to all other vertices :cite:`SNFOV2013`.
 
-Refer to Appendix A for an in-depth discussion of the modern graph convolution operation used in this paper, which we briefly outline in the following paragraphs. We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\L{}` provides a means for doing this. :math:`\L{}` is a real symmetric matrix represented as
+Refer to Appendix A for an in-depth discussion of the modern graph convolution operation used in this paper, which we briefly outline in the following paragraphs. We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\textup{\L{}}` provides a means for doing this. :math:`\textup{\L{}}` is a real symmetric matrix represented as
 
 .. math::
 
-    \L{} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}}.
+    \textup{\L{}} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}}.
 
 I.e., we can define a graph convolution of input signals :math:`x` with filters :math:`g_{\theta}` on :math:`\mathcal{G}` by
 
@@ -91,9 +91,9 @@ I.e., we can define a graph convolution of input signals :math:`x` with filters 
 
     x*g_{\theta} = Ug U^{T}x,
 
-where :math:`U` is the matrix of eigenvectors of :math:`\L{}` given by the graph FT.
+where :math:`U` is the matrix of eigenvectors of :math:`\textup{\L{}}` given by the graph FT.
 
-We wish to learn the parameters :math:`theta` in :math:`g_{\theta}`. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\L{}` :cite:`KW2017`.
+We wish to learn the parameters :math:`theta` in :math:`g_{\theta}`. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\textup{\L{}}` :cite:`KW2017`.
 
 Extending the task to learning a signal :math:`X \in \mathbb{R}^{NxC}` with :math:`C`-dimensional feature vectors at every node (each *element* will learn a single parameter) and :math:`F` filters, we arrive at
 
@@ -180,7 +180,7 @@ Now that the images are processed, they can be efficiently loaded using python l
 
 :code:`gen_nodes.py` uses the segmented T1w images to calculate the center voxel for each segmentation volume. Next, :code:`adj_mtx.py` calculates the mean voxel coordinate for every volume across all acquisitions and forms the weighted adjacency matrix. See Figure :ref:`adjmtx` for a depiction of the process.
 
-:code:`gen_features.py` uses Freesurfer's :code:`mri_convert`, FSL's :code:`flirt`, and DTK's :code:`track_transform` to co-register the final tractography outputs to the cleaned T1w images for each acquisition. Next, :code:`nibabel` is used to generate a mask file for each segmentation volume, :code:`nibabel.streamlines` is used to read in the tractography data and :code:`dipy.tracking.utils.target` is used to identify which tracts travel through each volume mask. The tracts are encoding using a unique hashing function for later identification. To generate the features for each node, :code:`utils.py` uses the encoded tract ID's assigned to each volume to count the number of tracts connecting each volume pair, and the connections are normalized by the maximum number of connections for a given node. Figure :ref:`featfig` offers a visualization.
+:code:`gen_features.py` uses Freesurfer's :code:`mri_convert`, FSL's :code:`flirt`, and DTK's :code:`track_transform` to co-register the final tractography outputs to the cleaned T1w images for each acquisition. Next, :code:`nibabel` is used to generate a mask file for each segmentation volume, :code:`nibabel.streamlines` is used to read in the tractography data and :code:`dipy.tracking.utils.target` is used to identify which tracts travel through each volume mask. The tracts are encoding using a unique hashing function for later identification. To generate the features for each node, :code:`utils.py` uses the encoded tract ID's assigned to each volume to count the number of tracts connecting each volume pair, and the connections are normalized by the maximum number of connections for a given node. Figure :ref:`featsfig` offers a visualization.
 
 Graph Convolutional Network
 ----------------------------------------------------------
@@ -230,15 +230,15 @@ Graph Convolutional Networks
 
 Given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix **W**, we define a signal on the vertices as a function :math:`\mathcal{f} : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex's weighted connectivity to all other vertices :cite:`SNFOV2013`.
 
-We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\L{}` provides a means for doing this. :math:`\L{}` is a real symmetric matrix represented as
+We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\textup{\L{}}` provides a means for doing this. :math:`\textup{\L{}}` is a real symmetric matrix represented as
 
 .. math::
 
-    \L{} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}}
+    \textup{\L{}} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}}
 
-and with eigendecomposition :math:`\L{} = U \Lambda U^{T}`, where :math:`D` is a diagonal matrix with entries :math:`D_{ii} = \sum_{j} \textbf{W}_{ij} = \textbf{W} \cdot \textbf{1} U`, :math:`U = (u_{1},...,u_{N})` is a complete set of orthonormal eigenvectors, and :math:`\Lambda` are the associated real, non-negative eigenvalues.
+and with eigendecomposition :math:`\textup{\L{}} = U \Lambda U^{T}`, where :math:`D` is a diagonal matrix with entries :math:`D_{ii} = \sum_{j} \textbf{W}_{ij} = \textbf{W} \cdot \textbf{1} U`, :math:`U = (u_{1},...,u_{N})` is a complete set of orthonormal eigenvectors, and :math:`\Lambda` are the associated real, non-negative eigenvalues.
 
-The graph Fourier transform :math:`\hat{\textbf{f}}` of any function :math:`f \in \mathbb{R}^{N}` on the vertices of :math:`\mathcal{G}` gives the expansion of :math:`f` in terms of the eigenvectors of :math:`\L{}` :cite:`SNFOV2013`. Given the Convolution Theorem :cite:`M2009` definition of a convolution as a linear operator that diagonalizes in the Fourier domain, commuting :math:`\L{}` with the translation operator produces such an equation :cite:`HBL2015` and can be used as a convolution operation on graph data.
+The graph Fourier transform :math:`\hat{\textbf{f}}` of any function :math:`f \in \mathbb{R}^{N}` on the vertices of :math:`\mathcal{G}` gives the expansion of :math:`f` in terms of the eigenvectors of :math:`\textup{\L{}}` :cite:`SNFOV2013`. Given the Convolution Theorem :cite:`M2009` definition of a convolution as a linear operator that diagonalizes in the Fourier domain, commuting :math:`\textup{\L{}}` with the translation operator produces such an equation :cite:`HBL2015` and can be used as a convolution operation on graph data.
 
 We can now define a graph convolution of input signals :math:`x` with filters :math:`g_{\theta}` on :math:`\mathcal{G}` by
 
@@ -246,19 +246,19 @@ We can now define a graph convolution of input signals :math:`x` with filters :m
 
     x*g_{\theta} = Ug U^{T}x,
 
-where :math:`U` is the matrix of eigenvectors of :math:`\L{}` given by the graph FT. We wish to learn the parameters :math:`theta` in :math:`g_{\theta}`. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\L{}` :cite:`KW2017`.
+where :math:`U` is the matrix of eigenvectors of :math:`\textup{\L{}}` given by the graph FT. We wish to learn the parameters :math:`theta` in :math:`g_{\theta}`. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\textup{\L{}}` :cite:`KW2017`.
 
-Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\L{}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}'(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\L{}} = \frac{2}{l_{max}} \L{}-I_{N}`, we have
+Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\textup{\L{}}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}'(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\textup{\L{}}} = \frac{2}{l_{max}} \textup{\L{}}-I_{N}`, we have
 
 .. math::
 
-    g_{\theta}' * x \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\L{}})x
+    g_{\theta}' * x \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\textup{\L{}}})x
 
 :cite:`KW2017`.
 
-The expression is :math:`K`-localized, relying only on nodes that are :math:`K`-steps away from a given node (its :math:`K^{th}`-order neighborhood). Evaluating such a function is :math:`O(\mathcal{E})`. By limiting :math:`K=1` we have a linear function with respect to :math:`\L{}` as the preactivation :math:`\hat{H}` of our convolutional layer. Wrapping :math:`\hat{H}` in a nonlinear activation function and stacking multiple layers gives us our graph convolutional network architecture. This so-called deep learning architecture removes the rigid parameterization enforced by Chebyshev polynomials :cite:`KW2017`.
+The expression is :math:`K`-localized, relying only on nodes that are :math:`K`-steps away from a given node (its :math:`K^{th}`-order neighborhood). Evaluating such a function is :math:`O(\mathcal{E})`. By limiting :math:`K=1` we have a linear function with respect to :math:`\textup{\L{}}` as the preactivation :math:`\hat{H}` of our convolutional layer. Wrapping :math:`\hat{H}` in a nonlinear activation function and stacking multiple layers gives us our graph convolutional network architecture. This so-called deep learning architecture removes the rigid parameterization enforced by Chebyshev polynomials :cite:`KW2017`.
 
-:cite:`KW2017` further approximate :math:`l_{max} \approx 2` and simplify the equation for :math:`\hat{H}` to :math:`g_{\theta}' * x \approx \theta_{0}'(x) + \theta_{1}'(\L{} - I_{N})x = \theta_{0}'(x) - \theta_{1}' D^{\frac{-1}{2}}AD^{\frac{-1}{2}}x`, reducing the task to learning two free parameters which can be shared over the whole graph. If :math:`\theta_{0}'` is set equal to :math:`-\theta_{1}'`, then the equation can be expressed with a single parameter :math:`\theta = \theta_{0}'`:
+:cite:`KW2017` further approximate :math:`l_{max} \approx 2` and simplify the equation for :math:`\hat{H}` to :math:`g_{\theta}' * x \approx \theta_{0}'(x) + \theta_{1}'(\textup{\L{}} - I_{N})x = \theta_{0}'(x) - \theta_{1}' D^{\frac{-1}{2}}AD^{\frac{-1}{2}}x`, reducing the task to learning two free parameters which can be shared over the whole graph. If :math:`\theta_{0}'` is set equal to :math:`-\theta_{1}'`, then the equation can be expressed with a single parameter :math:`\theta = \theta_{0}'`:
 
 .. math::
 
