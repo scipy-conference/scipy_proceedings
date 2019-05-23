@@ -13,7 +13,11 @@ Developing a Graph Convolution-Based Analysis Pipeline for Multi-Modal Neuroimag
 
 .. class:: abstract
 
+<<<<<<< HEAD
+  Parkinson's disease (PD) is a highly prevalent neurodegenerative disease originating in subcortical areas of the brain and resulting in progressively worsening motor, cognitive, and psychological symptoms. Whereas clinical data tends to be somewhat arbitrary and genetic data inconclusive for many patients, neuroimaging data is an attractive research tool given the neurophysiological origins of the disease. Despite the insights potentially available in magnetic resonance imaging (MRI) data, and the noninvasive and low-risk nature thereof, developing sound analytical techniques for this data has proven difficult. Principally, multiple imaging modalities are needed to provide clinicians with the most accurate view possible; the process of incorporating multiple image modalities into a single holistic model is both poorly defined and extremely challenging. Previous work has demonstrated that graph-based signal processing techniques can address this issue, while also drastically reducing the size and complexity of the data. Unfortunately, details for preprocessing and reformatting this data remain informal and incomplete, impeding the pace of advancement in the field and the reproduction of results. In this paper, we propose a novel graph-based convolutional neural network architecture and present an end-to-end pipeline for preprocessing, formatting, and analyzing this data. On data downloaded from the Parkinson's Progression Markers Initiative (PPMI) database, we *... fill in RESULTS here.*
+=======
 Parkinson’s disease (PD) is a highly prevalent neurodegenerative disease originating in subcortical areas of the brain and resulting in progressively worsening motor, cognitive, and psychological symptoms. Whereas clinical data tends to be somewhat arbitrary and genetic data inconclusive for many patients, neuroimaging data is an attractive research tool given the neurophysiological origins of the disease. Despite the insights potentially available in magnetic resonance imaging (MRI) data, and the noninvasive and low-risk nature thereof, developing sound analytical techniques for this data has proven difficult. Principally, multiple imaging modalities are needed to provide clinicians with the most accurate view possible; the process of incorporating multiple image modalities into a single holistic model is both poorly defined and extremely challenging. Previous work has demonstrated that graph-based signal processing techniques can address this issue, while also drastically reducing the size and complexity of the data. Unfortunately, details for preprocessing and reformatting this data remain informal and incomplete, impeding the pace of advancement in the field and the reproduction of results. In this paper, we propose a novel graph-based convolutional neural network architecture and present an end-to-end pipeline for preprocessing, formatting, and analyzing this data. On data downloaded from the Parkinson's Progression Markers Initiative (PPMI) database, we *... fill in RESULTS here.*
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 
 .. class:: keywords
@@ -22,7 +26,11 @@ Parkinson’s disease (PD) is a highly prevalent neurodegenerative disease origi
 
 Introduction
 ============
+<<<<<<< HEAD
+Affecting more than 1% of the United States population over the age of 60, Parkinson's disease (PD) is the second-most prevalent age-related neurodegenerative disease following Alzheimer's disease :cite:`RST2014`. PD diagnosis has traditionally relied on clinical assessments with some degree of subjectivity :cite:`GGLVVZ2018`, often missing early-stage PD altogether :cite:`BDH2016`. Benchmarks for delineating PD progression or differentiating between similar conditions are lacking :cite:`LMSACRMW2018,LWXGXKZ2012`. As such, many efforts have emerged to identify quantitatively rigorous methods through which to distinguish PD.
+=======
 Affecting more than 1% of the United States population over the age of 60, Parkinson's disease (PD) is the second-most prevalent age-related neurodegenerative disease following Alzheimer’s disease :cite:`RST2014`. PD diagnosis has traditionally relied on clinical assessments with some degree of subjectivity :cite:`GGLVVZ2018`, often missing early-stage PD altogether :cite:`BDH2016`. Benchmarks for delineating PD progression or differentiating between similar conditions are lacking :cite:`LMSACRMW2018,LWXGXKZ2012`. As such, many efforts have emerged to identify quantitatively rigorous methods through which to distinguish PD.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 While genetic and molecular biomarkers have exhibited some efficacy in developing a PD blueprint :cite:`GGLVVZ2018,MLLAMWGSECES2018,BP2014`, many research efforts have turned to neuroimaging due to its noninvasive nature and alignment with existing knowledge of the disease. Namely, PD is a disease of the nigrostriatal dopaminergic pathway of the brain :cite:`Brodal2016`, and results in various structural and functional abnormalities that can be captured by existing imaging modalities :cite:`ZYHJZLWWZZLLH2018,MLLAMWGSECES2018,GLHSA2014,TBEDTEEE2015,LSCZCCYLHGS2014,GRSKMFZJHM2016`. Subsequent whole-brain neuroimage analysis has identified PD-related regions of interest (ROIs) throughout the brain - from cortical and limbic regions to the brainstem and cerebellum :cite:`BWSWBKSDRH2011,TBEDTEEE2015,GRSKMFZJHM2016`.
 
@@ -31,7 +39,11 @@ Going further, insights from a single image modality (e.g., dMRI vs. rs-fMRI) do
 
 Previous work has shown that graph-based signal processing techniques can address these issues :cite:`KPFRLGR2017,KPFRLGR2018,ZHCLZW2018`. By representing the anatomical regions of the brain (from T1-weighted images) as nodes on a graph, the functional and structural relationships between the nodes can be defined in the graph space. The weighted connections between nodes are averaged across all subjects' anatomical T1-weighted MRI (T1w) data, mitigating the effect of inter-subject anatomical variability. For a given acquisition [#f1]_, diffusion [and functional data] are transformed from 4-dimensional sequences of volumes to simple one-dimensional vectors on each node (i.e., node *features* or *signals* on the nodes), drastically reducing the size and complexity of the data.
 
+<<<<<<< HEAD
+Intuitively, the graph-based representation has additional benefits over a standard image grid. The graphs group individual voxels into localized anatomical regions and characterize the structural and functional connections between them. This reduces noise from individual voxels and addresses the nonlinear relationship between image features and disease. E.g., overall brain volume naturally shrinks as a function of age :cite:`Peters2006`. Additionally, the probability of connection between two regions is not a function of the distance between them, and connections often do not follow the shortest path between two regions :cite:`Brodal2016`. The edges of the graph offer an explicit metric for establishing meaningful neighborhoods of nodes and the features offer meaningful descriptors with which to group them.
+=======
 Intuitively, the graph-based representation has additional benefits over a standard image grid. The graphs group individual voxels into localized anatomical regions and characterize the structural and functional connections between them. This reduces noise from individual voxels and addresses the nonlinear relationship between image features and disease. E.g., overall brain volume naturally shrinks as a function of age :cite:`ZWAHYMKGC2013`. Additionally, the probability of connection between two regions is not a function of the distance between them, and connections often do not follow the shortest path between two regions :cite:`Brodal2016`. The edges of the graph offer an explicit metric for establishing meaningful neighborhoods of nodes and the features offer meaningful descriptors with which to group them.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Common to many areas of data analysis, spectral graph processing techniques have capitalized on the highly flexible and nonlinear calculations characteristic of so-called deep learning neural network architectures. The layered construction of nonlinear calculations loosens rigid parameterizations of other methods, such as the number of components used in independent component analysis (ICA) or explicit parameterizations required for a specific expansion function (e.g., Chebyshev polynomials, discussed in the Background section).
 
@@ -66,7 +78,11 @@ Defining Graph Nodes and Features
 
     A depiction of the steps involved in forming the adjacency matrix. First, anatomical images from each acquisition are segmented into regions of interest (ROIs), which represent the vertices of the graph. The center voxel for each ROI is then calculated. An edge is placed between each node *i* and its *k*-nearest neighbors, calculated using the center coordinates.  Lastly, each edge is weighted by the normalized distance between each node *i* and its connected neighbor *j*. :label:`adjmtx`
 
+<<<<<<< HEAD
+The underlying graph for the GCN is a weighted adjacency matrix sharing information from each acquisition's T1w data. The matrix is generated by first computing the mean center voxel coordinate for each segmentation volume, averaged over all T1w acquisitions. A k-nearest neighbor (k-NN) adjacency matrix is then formed using these coordinates, and the edges between each node to its k nearest neighbors are weighted by the normalized distance to that neighbor. The values are normalized by dividing each distance by the maximum distance for a given node to all of its neighbors, :math:`d_{ij} \in [0,1]`. Finally, self-loops are added for each node, given edge weights equal to the mean weight for a given node's edges. (Refer to the Graph Convolutional Network subsection below for details.) See Figure :ref:`adjmtx` for a depiction of the process.
+=======
 The underlying graph for the GCN is a weighted adjacency matrix sharing information from each acquisition’s T1w data. The matrix is generated by first computing the mean center voxel coordinate for each segmentation volume, averaged over all T1w acquisitions. A k-nearest neighbor (k-NN) adjacency matrix is then formed using these coordinates, and the edges between each node to its k nearest neighbors are weighted by the normalized distance to that neighbor. The values are normalized by dividing each distance by the maximum distance for a given node to all of its neighbors, :math:`d_{ij} \in [0,1]`. Finally, self-loops are added for each node, given edge weights equal to the mean weight for a given node’s edges. (Refer to the Graph Convolutional Network subsection below for details.) See Figure :ref:`adjmtx` for a depiction of the process.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 .. figure:: feats_fig.png
 
@@ -77,7 +93,11 @@ Each acquisition shares the same adjacency matrix and is distinguished by the fe
 Graph Convolutional Networks
 ----------------------------------------------------------
 
+<<<<<<< HEAD
+Neuroimage data is readily applied to graph processing techniques and is often used as a benchmark application for new developments in graph processing :cite:`SNFOV2013`. Intuitively, the objective is to establish localized anatomical regions and characterize the structural and functional connections between them. As such, given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix :math:`\textbf{W}`, we define a signal on the vertices as a function :math:`f : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex's weighted connectivity to all other vertices :cite:`SNFOV2013`.
+=======
 Neuroimage data is readily applied to graph processing techniques and is often used as a benchmark application for new developments in graph processing :cite:`SNFOV2013`. Intuitively, the objective is to establish localized anatomical regions and characterize the structural and functional connections between them. As such, given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix :math:`\textbf{W}`, we define a signal on the vertices as a function :math:`f : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex’s weighted connectivity to all other vertices :cite:`SNFOV2013`.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Refer to Appendix A for an in-depth discussion of the modern graph convolution operation used in this paper, which we briefly outline in the following paragraphs. We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\L{}` provides a means for doing this. :math:`\L{}` is a real symmetric matrix represented as
 
@@ -117,20 +137,34 @@ For each dMRI acquisition, *d* different tractography algorithms are used to com
 Graph Attention Networks
 -------------------------
 
+<<<<<<< HEAD
+In order convert the task from classifying each node to classifying the whole graph, the features on each node must be pooled to generate a single feature vector for a given graph. The *self-attention* mechanism, widely used to compute a single representation of a signal sequence, has been used to effectively compute the importance of graph nodes in a neighborhood :cite:`VCCRLB2018`. This allows for a weighted sum of the nodes' features during pooling.
+
+:cite:`VCCRLB2018` use a single-layer feedforward neural network as an attention mechanism :math:`a` to compute *attention coefficients e* across pairs of nodes in a graph. For a given node *i*, the attention mechanism attends over the first-order neighbors *j* of node *i* using the nodes' features :math:`h_{i}` and :math:`h_{j}`: :math:`e_{ij} = a(\textbf{W}h_{i}, \textbf{W}h_{j})`, where :math:`\textbf{W}` is a shared weight matrix applied to each node's features. :math:`e_{ij}` is normalized via the softmax function to compute :math:`a_{ij}`: :math:`a_{ij} = softmax(e_{ij}) = exp(e_{ij}) / \sum_{k \in \mathcal{N}_{i}} exp(e_{ik})`, where :math:`\mathcal{N}_{i}` is the neighborhood of node *i*. The new features at node *i* are obtained via linear combination of the original features and the normalized attention coefficients, wrapped in a nonlinearity :math:`\sigma`: :math:`h_{i}' = \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij} \textbf{W}h_{j})`. Multi-head attention can be used, yielding :math:`K` independent attention mechanisms that are concatenated (or averaged for the final layer). This helps to stabilize the self-attention learning process.
+=======
 In order convert the task from classifying each node to classifying the whole graph, the features on each node must be pooled to generate a single feature vector for a given graph. The *self-attention* mechanism, widely used to compute a single representation of a signal sequence, has been used to effectively compute the importance of graph nodes in a neighborhood :cite:`VCCRLB2018`. This allows for a weighted sum of the nodes’ features during pooling.
 
 :cite:`VCCRLB2018` use a single-layer feedforward neural network as an attention mechanism :math:`a` to compute *attention coefficients e* across pairs of nodes in a graph. For a given node *i*, the attention mechanism attends over the first-order neighbors *j* of node *i* using the nodes’ features :math:`h_{i}` and :math:`h_{j}`: :math:`e_{ij} = a(\textbf{W}h_{i}, \textbf{W}h_{j})`, where :math:`\textbf{W}` is a shared weight matrix applied to each node’s features. :math:`e_{ij}` is normalized via the softmax function to compute :math:`a_{ij}`: :math:`a_{ij} = softmax(e_{ij}) = exp(e_{ij}) / \sum_{k \in \mathcal{N}_{i}} exp(e_{ik})`, where :math:`\mathcal{N}_{i}` is the neighborhood of node *i*. The new features at node *i* are obtained via linear combination of the original features and the normalized attention coefficients, wrapped in a nonlinearity :math:`\sigma`: :math:`h_{i}’ = \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij} \textbf{W}h_{j})`. Multi-head attention can be used, yielding :math:`K` independent attention mechanisms that are concatenated (or averaged for the final layer). This helps to stabilize the self-attention learning process.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 .. math::
 
     h_{i} = ||_{k=1}^{K} \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij}^{k} \textbf{W}^{k} h_{j}),
+<<<<<<< HEAD
+
+=======
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 or
 
 .. math::
 
     h_{final} = \sigma(\frac{1}{K} \sum_{k=1}^{K} \sum_{j \in \mathcal{N}_{i}} a_{jk}^{k}\textbf{W}^{k} h_{j}).
 
+<<<<<<< HEAD
+The time complexity of computing a single attention mechanism is :math:`O(|\mathcal{V}|FF' + |\mathcal{E}|F')`, where :math:`F` is the number of input features and :math:`F'` is the number of output features.
+=======
 The time complexity of computing a single attention mechanism is :math:`O(|\mathcal{V}|FF’ + |\mathcal{E}|F’)`, where :math:`F` is the number of input features and :math:`F’` is the number of output features.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Multi-Subject Training
 -------------------------
@@ -139,19 +173,31 @@ Multi-Subject Training
 
     A depiction of the novel GCN architecture is shown. First, a GCN is trained for each “view” of the data, corresponding to a specific tractography algorithm. The GCN shares weights, and the resulting features are pooled for each node. This composite graph is then used to train a multi-head graph attention network, which outputs features that have the same size as the number of classes. The attention weight assigned to each node is used to compute a weighted sum of each feature, yielding the predicted class of the input acquisition. :label:`GCNfig`
 
+<<<<<<< HEAD
+GCNs were originally used to classify the nodes of a single graph using a single set of features defined on its nodes. Instead, our task is to learn features that generalize over many subjects' data. To incorporate information from each acquisition, a single complete forward pass - consisting of multi-view GCN, max pooling, GAT - is conducted for every acquisition. A class prediction (e.g., Parkinson's disease or Healthy control) is made for each forward pass output and the loss is calculated after all acquisitions have been used as input. Thus, a single epoch sees all acquisitions in the training set before weight updates are made. Figure :ref:`GCNfig` shows an outline of the network architecture.
+=======
 GCNs were originally used to classify the nodes of a single graph using a single set of features defined on its nodes. Instead, our task is to learn features that generalize over many subjects’ data. To incorporate information from each acquisition, a single complete forward pass - consisting of multi-view GCN, max pooling, GAT - is conducted for every acquisition. A class prediction (e.g., Parkinson’s disease or Healthy control) is made for each forward pass output and the loss is calculated after all acquisitions have been used as input. Thus, a single epoch sees all acquisitions in the training set before weight updates are made. Figure :ref:`GCNfig` shows an outline of the network architecture.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Related Works
 =====================
 
 Powerful machine learning techniques have been employed for neuroimage data analysis and have been shown to perform quite well :cite:`MLLAMWGSECES2018,TBEDTEEE2015,BWSWBKSDRH2011,LSCZCCYLHGS2014`. As concerns have arisen over limitations of these algorithms :cite:`CJMRCMBD2017,GLHSA2014,K2018,ZYHJZLWWZZLLH2018,GRSKMFZJHM2016`, there have been many applications of deep machine learning to neuroimage data analysis. For example, :cite:`KUHSMHBB2016` proposes a 3D convolutional neural network (CNN) for skull stripping 3D brain images, :cite:`HDCLPC2018` proposes a novel recurrent neural network plus independent component analysis (RNN-ICA) model for fMRI analysis, and :cite:`HCSAAP2014` demonstrates the efficacy of the restricted Boltzmann machine (RBM) for network identification. :cite:`LZCY2017` offer a comprehensive review of deep learning-based methods for medical image computing in general. Multi-modal neuroimage analysis is increasing in prevalence :cite:`BSSNSOV2018,LCLZFFPK2015,BDH2016,LMSACRMW2018,LWXGXKZ2012` due to limitations of single modalities, resulting in larger and increasingly complex data sets.
 
+<<<<<<< HEAD
+Recently, researchers have utilized advances in graph convolutional networks to address these concerns. Many results have already been shared regarding the mathematical background of graph convolutional networks (GCNs) and graph attention networks (GATs). Principally, this paper is based on the advancements made by :cite:`KW2017` and :cite:`VCCRLB2018` on GCNs and GATs respectively. :cite:`SNFOV2013`, in addition to providing in-depth intuition behind spectral graph processing, demonstrate graph spectral filtering on diffusion signals defined on a cerebral cortex graph. :cite:`KZS2015,KCR2016,ZHCLZW2018` develop siamese and multi-view neural networks which share weights across parallel neural networks for classifying objects based on multiple “views” or angles. These architectures group examples into pairs and train networks to classify the pairs as being from the same group or different groups. :cite:`KPFRLGR2017,KPFRLGR2018` apply these techniques to learn similarity metrics between subjects with Autism Spectrum Disorder (ASD) and healthy controls (HC), using fMRI data from the Autism Brain Imaging Data Exchange (ABIDE) database.  :cite:`ZHCLZW2018` apply a similar architecture to learn similarity metrics between subjects with Parkinson's disease (PD) and HC, using dMRI data from the PPMI data set.
+=======
 Recently, researchers have utilized advances in graph convolutional networks to address these concerns. Many results have already been shared regarding the mathematical background of graph convolutional networks (GCNs) and graph attention networks (GATs). Principally, this paper is based on the advancements made by :cite:`KW2017` and :cite:`VCCRLB2018` on GCNs and GATs respectively. :cite:`SNFOV2013`, in addition to providing in-depth intuition behind spectral graph processing, demonstrate graph spectral filtering on diffusion signals defined on a cerebral cortex graph. :cite:`KZS2015,KCR2016,ZHCLZW2018` develop siamese and multi-view neural networks which share weights across parallel neural networks for classifying objects based on multiple “views” or angles. These architectures group examples into pairs and train networks to classify the pairs as being from the same group or different groups. :cite:`KPFRLGR2017,KPFRLGR2018` apply these techniques to learn similarity metrics between subjects with Autism Spectrum Disorder (ASD) and healthy controls (HC), using fMRI data from the Autism Brain Imaging Data Exchange (ABIDE) database.  :cite:`ZHCLZW2018` apply a similar architecture to learn similarity metrics between subjects with Parkinson’s disease (PD) and HC, using dMRI data from the PPMI data set.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Methods
 ============
 
+<<<<<<< HEAD
+Our data is downloaded from the Parkinson's Progression Markers Initiative (PPMI) [#f5]_ database. We download [1,684] images, consisting of [525] T1w images, [918] diffusion images [and [244] functional images]. The images are from 127 individuals (subjects had multiple visits to the clinic and data from multiple image modalities). Among the subjects, [___] are from the Parkinson's Disease (PD) group and [___] are healthy controls (HC). We preprocess the data and construct our novel GCN architecture as follows.
+=======
 Our data is downloaded from the Parkinson’s Progression Markers Initiative (PPMI) [#f5]_ database. We download [1,684] images, consisting of [525] T1w images, [918] diffusion images [and [244] functional images]. The images are from 127 individuals (subjects had multiple visits to the clinic and data from multiple image modalities). Among the subjects, [___] are from the Parkinson’s Disease (PD) group and [___] are healthy controls (HC). We preprocess the data and construct our novel GCN architecture as follows.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Preprocessing
 -------------------------
@@ -179,18 +225,30 @@ Now that the images are processed, they can be efficiently loaded using python l
 
 :code:`gen_nodes.py` uses the segmented T1w images to calculate the center voxel for each segmentation volume. Next, :code:`adj_mtx.py` calculates the mean voxel coordinate for every volume across all acquisitions and forms the weighted adjacency matrix. See Figure :ref:`adjmtx` for a depiction of the process.
 
+<<<<<<< HEAD
+:code:`gen_features.py` uses Freesurfer's :code:`mri_convert`, FSL's :code:`flirt`, and DTK's :code:`track_transform` to co-register the final tractography outputs to the cleaned T1w images for each acquisition. Next, :code:`nibabel` is used to generate a mask file for each segmentation volume, :code:`nibabel.streamlines` is used to read in the tractography data and :code:`dipy.tracking.utils.target` is used to identify which tracts travel through each volume mask. The tracts are encoding using a unique hashing function for later identification. To generate the features for each node, :code:`utils.py` uses the encoded tract ID's assigned to each volume to count the number of tracts connecting each volume pair, and the connections are normalized by the maximum number of connections for a given node. Figure :ref:`featfig` offers a visualization.
+=======
 :code:`gen_features.py` uses Freesurfer’s 'mri_convert', FSL's :code:`flirt`, and DTK's :code:`track_transform` to co-register the final tractography outputs to the cleaned T1w images for each acquisition. Next, :code:`nibabel` is used to generate a mask file for each segmentation volume, :code:`nibabel.streamlines` is used to read in the tractography data and :code:`dipy.tracking.utils.target` is used to identify which tracts travel through each volume mask. The tracts are encoding using a unique hashing function for later identification. To generate the features for each node, :code:`utils.py` uses the encoded tract ID's assigned to each volume to count the number of tracts connecting each volume pair, and the connections are normalized by the maximum number of connections for a given node. Figure :ref:`featfig` offers a visualization.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Graph Convolutional Network
 ----------------------------------------------------------
 
+<<<<<<< HEAD
+The :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [#f13]_ defines a two layer graph convolutional network as
+=======
 The :code:`GCN` class from :cite:`KW2017`’s PyTorch implementation [#f13]_ defines a two layer graph convolutional network as
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 .. math::
 
     Z = f(X,A) = softmax(\hat{A} ReLU(\hat{A}X\textbf{W}(0))\textbf{W}(1)),
 
+<<<<<<< HEAD
+where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`. [We tweak this to use the tanh activation function instead of ReLU.  [compare to ReLU, may want to keep ReLU]. Next, we employ a PyTorch implementation [#f14]_ of :cite:`VCCRLB2018`'s :code:`GAT` class to implement a graph attention network, learning attention coefficients as
+=======
 where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`. [We tweak this to use the tanh activation function instead of ReLU.  [compare to ReLU, may want to keep ReLU]. Next, we employ a PyTorch implementation [#f14]_ of :cite:`VCCRLB2018`’s :code:`GAT` class to implement a graph attention network, learning attention coefficients as
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 .. math::
 
@@ -198,7 +256,11 @@ where :math:`\hat{A} = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}
 
 where :math:`||` is concatenation.
 
+<<<<<<< HEAD
+:code:`GCN.py` contains these and helper classes as well as our GCNetwork class, which implements the multi-view GCN on the features derived from multiple tractography algorithms [and function data?], pools the multi-view features and calls the GAT class on the pooled data. The weighted attention assigned to each node's feature is used to compute a weighted average across all the nodes' output feature (of the same size as the number of classes). Figure :ref:`GCNfig` shows an outline of the network architecture.  Finally :code:`train.py`, with help from :code:`utils.py`, trains the network. For a given epoch, the network computes a forward pass on all acquisitions, calculates and backpropagates the loss using all the predictions, and updates the weights accordingly.
+=======
 :code:`GCN.py` contains these and helper classes as well as our GCNetwork class, which implements the multi-view GCN on the features derived from multiple tractography algorithms [and function data?], pools the multi-view features and calls the GAT class on the pooled data. The weighted attention assigned to each node’s feature is used to compute a weighted average across all the nodes’ output feature (of the same size as the number of classes). Figure :ref:`GCNfig` shows an outline of the network architecture.  Finally :code:`train.py`, with help from :code:`utils.py`, trains the network. For a given epoch, the network computes a forward pass on all acquisitions, calculates and backpropagates the loss using all the predictions, and updates the weights accordingly.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Results
 ============
@@ -208,7 +270,11 @@ We initially tested our pipeline on a small sample dataset of 23 subjects contai
 Discussions and Conclusions
 ===================================
 
+<<<<<<< HEAD
+We have presented here a complete pipeline for preprocessing multi-modal neuroimage data and training a novel graph-based deep learning model to perform inference on the data.
+=======
 We have presented here a complete pipeline for preprocessing multi-modal neuroimage data and training a novel graph-based deep learning model to perform inference on the data. 
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 Acknowledgements
 =========================
@@ -227,7 +293,11 @@ Appendix A
 Graph Convolutional Networks
 ------------------------------------------------
 
+<<<<<<< HEAD
+Given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix **W**, we define a signal on the vertices as a function :math:`\mathcal{f} : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex's weighted connectivity to all other vertices :cite:`SNFOV2013`.
+=======
 Given an undirected weighted graph :math:`\mathcal{G} = {\mathcal{V},\mathcal{E}, \textbf{W}}` with a set of vertices :math:`\mathcal{V}` with :math:`|\mathcal{V}| = N`, a set of edges :math:`\mathcal{E}`, and a weighted adjacency matrix **W**, we define a signal on the vertices as a function :math:`\mathcal{f} : \mathcal{V} \rightarrow \mathbb{R}`, returning a vector :math:`\textbf{f} \in \mathbb{R}^{N}`. The vector *signal* defined on each vertex represents that vertex’s weighted connectivity to all other vertices :cite:`SNFOV2013`.
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 We seek to learn filters over the graph, similar to the local filters used in convolutional neural networks. The discrete Fourier transform (FT) matrix of the normalized graph Laplacian :math:`\L{}` provides a means for doing this. :math:`\L{}` is a real symmetric matrix represented as
 
@@ -247,17 +317,29 @@ We can now define a graph convolution of input signals :math:`x` with filters :m
 
 where :math:`U` is the matrix of eigenvectors of :math:`\L{}` given by the graph FT. We wish to learn the parameters :math:`theta` in :math:`g_{\theta}`. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\L{}` :cite:`KW2017`.
 
+<<<<<<< HEAD
+Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\L{}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}'(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\L{}} = \frac{2}{l_{max}} \L{}-I_{N}`, we have
+
+.. math::
+
+    g_{\theta}' * x \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\L{}})x
+=======
 Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\L{}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}’(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}’T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\L{}} = \frac{2}{l_{max}} \L{}-I_{N}`, we have
 
 .. math::
 
     g_{\theta}’ * x \approx \sum_{k=0}^{K} \theta_{k}’T_{k}(\tilde{\L{}})x
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 :cite:`KW2017`.
 
 The expression is :math:`K`-localized, relying only on nodes that are :math:`K`-steps away from a given node (its :math:`K^{th}`-order neighborhood). Evaluating such a function is :math:`O(\mathcal{E})`. By limiting :math:`K=1` we have a linear function with respect to :math:`\L{}` as the preactivation :math:`\hat{H}` of our convolutional layer. Wrapping :math:`\hat{H}` in a nonlinear activation function and stacking multiple layers gives us our graph convolutional network architecture. This so-called deep learning architecture removes the rigid parameterization enforced by Chebyshev polynomials :cite:`KW2017`.
 
+<<<<<<< HEAD
+:cite:`KW2017` further approximate :math:`l_{max} \approx 2` and simplify the equation for :math:`\hat{H}` to :math:`g_{\theta}' * x \approx \theta_{0}'(x) + \theta_{1}'(\L{} - I_{N})x = \theta_{0}'(x) - \theta_{1}' D^{\frac{-1}{2}}AD^{\frac{-1}{2}}x`, reducing the task to learning two free parameters which can be shared over the whole graph. If :math:`\theta_{0}'` is set equal to :math:`-\theta_{1}'`, then the equation can be expressed with a single parameter :math:`\theta = \theta_{0}'`:
+=======
 :cite:`KW2017` further approximate :math:`l_{max} \approx 2` and simplify the equation for :math:`\hat{H}` to :math:`g_{\theta}’ * x \approx \theta_{0}’(x) + \theta_{1}’(\L{} - I_{N})x = \theta_{0}’(x) - \theta_{1}’ D^{\frac{-1}{2}}AD^{\frac{-1}{2}}x`, reducing the task to learning two free parameters which can be shared over the whole graph. If :math:`\theta_{0}’` is set equal to :math:`-\theta_{1}’`, then the equation can be expressed with a single parameter :math:`\theta = \theta_{0}’`:
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 
 .. math::
 
@@ -277,9 +359,12 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
 
     H(l+1) = \sigma(\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}H(l)\textbf{W}(l)).
 
+<<<<<<< HEAD
+=======
 
 .. rubric:: Footnotes
 
+>>>>>>> 99c79070dd706b5e6b84e30d766f56914548a288
 .. [#f1] Each subject has anatomical, diffusion, and functional MRI data for varying numbers of visits to the clinic. We use “acquisition” to describe the multi-modal data for a single visit to the clinic.
 .. [#f2] https://nifti.nimh.nih.gov
 .. [#f3] https://www.dicomlibrary.com
