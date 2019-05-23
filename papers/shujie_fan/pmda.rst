@@ -115,13 +115,13 @@ Currently simulated systems may contain millions of atoms and the trajectories c
 Processing and analyzing these trajectories is increasingly becoming a rate limiting step in computational workflows :cite:`Cheatham:2015qf, Beckstein:2018aa`.
 Modern MD packages are highly optimized to perform well on current HPC clusters with hundreds of cores such as the XSEDE supercomputers :cite:`XSEDE` but current general purpose trajectory analysis packages :cite:`Giorgino:2019aa` were not designed with HPC in mind.
 
-In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with Dask's various schedulers (in particular distributed), and created the *Parallel MDAnalysis* (PMDA_) library.
+In order to scale up trajectory analysis from workstations to HPC clusters with the MDAnalysis_ Python library :cite:`Michaud-Agrawal:2011fu,Gowers:2016aa` we leveraged Dask_ :cite:`Rocklin:2015aa, Dask:2016aa`, a task-graph parallel framework, together with Dask's various schedulers (in particular *distributed*), and created the *Parallel MDAnalysis* (PMDA_) library.
 By default, PMDA follows a simple split-apply-combine :cite:`Wickham:2011aa` approach for trajectory analysis, whereby each task analyzes a single trajectory segment and reports back the individual results that are then combined into the final result :cite:`Khoshlessan:2017ab`.
 Our previous work established that Dask worked well with MDAnalysis :cite:`Khoshlessan:2017ab` and that this approach was competitive with other task-parallel approaches :cite:`Paraskevakos:2018aa`.
 However, we did not provide a general purpose framework to write parallel analysis tools with MDAnalysis.
 Here we show how the split-apply-combine approach lends itself to a generalizable Python implementation that makes it straightforward for users to implement their own parallel analysis tools.
 At the heart of PMDA is the idea that the user only needs to provide a function that analyzes a single trajectory frame.
-PMDA provides the remaining framework via the :code:`ParallelAnalysisBase` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/distributed, and combines the data.
+PMDA provides the remaining framework via the :code:`ParallelAnalysisBase` class to split the trajectory, apply the user's function to trajectory frames, run the analysis in parallel via Dask/*distributed*, and combines the data.
 It also contains a growing library of ready-to-use analysis classes, thus enabling users to immediately accelerate analysis that they previously performed in serial with the standard MDAnalysis analysis classes :cite:`Gowers:2016aa`.
 
 
@@ -295,25 +295,25 @@ The test trajectories are made available on figshare at DOI XXX.
     \textbf{configuration label} & \textbf{file storage} & \textbf{scheduler} & \textbf{max nodes} & \textbf{max processes} \tabularnewline
     \midrule
     \endfirsthead
-    Lustre-distributed-3nodes & Lustre       & distributed       &  3        & 72         \tabularnewline
-    Lustre-distributed-6nodes & Lustre       & distributed       &  6        & 72         \tabularnewline
-    Lustre-multiprocessing    & Lustre       & multiprocessing   &  1        & 24         \tabularnewline
-    SSD-distributed           & SSD          & distributed       &  3        & 72         \tabularnewline
-    SSD-multiprocessing       & SSD          & multiprocessing   &  1        & 24         \tabularnewline
+    Lustre-distributed-3nodes & Lustre       & \textit{distributed}       &  3        & 72         \tabularnewline
+    Lustre-distributed-6nodes & Lustre       & \textit{distributed}       &  6        & 72         \tabularnewline
+    Lustre-multiprocessing    & Lustre       & \textit{multiprocessing}   &  1        & 24         \tabularnewline
+    SSD-distributed           & SSD          & \textit{distributed}       &  3        & 72         \tabularnewline
+    SSD-multiprocessing       & SSD          & \textit{multiprocessing}   &  1        & 24         \tabularnewline
     \bottomrule
     \end{longtable*}
     \caption{Testing configurations on \textit{SDSC Comet}.
-	   \textbf{max nodes} is the maximum number of nodes that were tested; the multiprocessing scheduler is limited to a single node.
+	   \textbf{max nodes} is the maximum number of nodes that were tested; the \textit{multiprocessing} scheduler is limited to a single node.
 	   \textbf{max processes} is the maximum number of processes or Dask workers that were employed.
 	   \DUrole{label}{tab:configurations}
 	   }
    \end{table}
 
 We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared *Lustre* parallel file system or from local *SSD*) as shown in Table :ref:`tab:configurations`.
-The multiprocessing schedulers and the SSD restrict runs to a single node (maximum 24 CPU cores).
-With distributed we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
+The *multiprocessing* scheduler and the SSD restrict runs to a single node (maximum 24 CPU cores).
+With *distributed* we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
 In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
-We performed single benchmark runs for distributed on local SSD (*SSD-distributed*) and multiprocessing on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
+We performed single benchmark runs for *distributed* on local SSD (*SSD-distributed*) and *multiprocessing* on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
 We plotted results for one typical benchmark run each.
 
 .. TODO: replace figures with ones where 5 repeats are averaged and error bars indicate 1 stdev --- issue #27
@@ -483,8 +483,8 @@ RMSD analysis task
 
 The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
 The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
-Overall, using the multiprocessing and either Lustre or SSD gave the best performance and shortest time to solution.
-These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that multiprocessing with both SSD and Lustre had given good single node performance but, using distributed, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
+Overall, using the *multiprocessing* and either Lustre or SSD gave the best performance and shortest time to solution.
+These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
 
 .. figure:: figs/Total_Eff_SU_rms.pdf
 
@@ -497,7 +497,7 @@ These results were consistent with findings in our earlier pilot study where we 
    :label:`fig:rmsd`
 
 A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) showed that the computation scaled very well, as did reading time to a lesser degree.
-However, the waiting time either increased for multiprocessing or was roughly a constant 1 s for distributed.
+However, the waiting time either increased for *multiprocessing* or was roughly a constant 1 s for *distributed*.
 Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
 	  
 .. figure:: figs/wait_compute_io_rms.pdf
@@ -533,10 +533,10 @@ RDF analysis task
 -----------------
 
 Unlike the RMSD analysis task, the parallelized RDF analysis in :code:`pmda.rdf.InterRDF` showed decreasing total time to solution up to the highest number of CPU cores tested (see Fig. :ref:`fig:rdf` A, D).
-The efficiency on a single node remained above 0.6 for almost all cases (Fig. :ref:`fig:rdf` B, E) and remained above 0.6 for the best case (distributed on Lustre and half-filling of nodes for the long trajectory), up to 3 nodes (72 cores, Fig. :ref:`fig:rdf` E).
+The efficiency on a single node remained above 0.6 for almost all cases (Fig. :ref:`fig:rdf` B, E) and remained above 0.6 for the best case (*distributed* on Lustre and half-filling of nodes for the long trajectory), up to 3 nodes (72 cores, Fig. :ref:`fig:rdf` E).
 Even when filling complete nodes, the efficiency for the long trajectory remained above 0.5 (Fig. :ref:`fig:rdf` E).
 Consequently, a sizable speed-up could be maintained that approached 40 fold in the best case (Fig. :ref:`fig:rdf` F), which cut down the time to solution from about 40 min to under 1 min.
-On a single node, all approaches performed similarly well, with the distributed scheduler now having a slight edge over multiprocessing (Fig. :ref:`fig:rdf`).
+On a single node, all approaches performed similarly well, with the *distributed* scheduler now having a slight edge over *multiprocessing* (Fig. :ref:`fig:rdf`).
 
 
 .. figure:: figs/Total_Eff_SU_rdf.pdf
