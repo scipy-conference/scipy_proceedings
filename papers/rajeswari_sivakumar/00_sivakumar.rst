@@ -5,7 +5,7 @@
 :author: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
-:bibliography: mybib
+
 
 
 ------------------------------------------------------------------------------
@@ -218,7 +218,7 @@ reduce the dimensionality of our feature set to 20 components: linear
 principle component analysis (PCA), linear discriminant analysis (LDA) and
 kernel PCA using a radial basis function (RBF).
 
-Experiment 1
+Experiment I
 ++++++++++++
 
 Using the tensorly package, a Tucker decomposition is applied to each brain
@@ -233,5 +233,8 @@ decomposition methods to preserve features unique to each brain image it is
 applied to. This will allow us to scale down each image and focus features and
 regions of interest in each that are specific to that image.
 In this experiment we decompose each brain image from a dimension of
-(65,100,116,116) to (10,10,10,10) to have a continuity in number of features
+:math:`(65,100,116,116)` to :math:`(10,10,10,10)` to have a continuity in number of features
 produced.
+
+Experiment II
++++++++++++++
