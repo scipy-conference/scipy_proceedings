@@ -516,7 +516,7 @@ The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`)
    :label:`fig:rms-pre-con-uni`
 
 Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10-20) could already be achieved on the equivalent of a modern workstation.
-Performance would likely improve with ever longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
+Performance would likely improve with longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
 However, all things considered, a single node seemed sufficient to accelerate RMSD analysis.
 
 	  
@@ -542,8 +542,8 @@ On a single node, all approaches performed similarly well, with the distributed 
    :label:`fig:rdf`
 
 
-The detailed analysis of the individual components in Fig. :ref:`fig:rdf-wait-comp-io` clearly shows that the RDF analysis task requires much more computational effort than the RMSD task and that it is dominated by the compute component, which scales very well to the highest core numbers (Fig. :ref:`fig:rdf-wait-comp-io` B, E).
-For comparison, in serial computation requires about 250~s while read I/O requires less than 10 s, and this ratio is approximately maintained as the read I/O also scales reasonably well (Fig. :ref:`fig:rdf-wait-comp-io` C, F).
+The detailed analysis of the individual components in Fig. :ref:`fig:rdf-wait-comp-io` clearly showed that the RDF analysis task required much more computational effort than the RMSD task and that it was dominated by the compute component, which scaled very well to the highest core numbers (Fig. :ref:`fig:rdf-wait-comp-io` B, E).
+For comparison, serial computation required about 250 s while read I/O required less than 10 s, and this ratio was approximately maintained as the read I/O also scaled reasonably well (Fig. :ref:`fig:rdf-wait-comp-io` C, F).
 The differences between using all cores on a node compared to only using half the cores on each node were small but only using half a node was consistently better, especially in the compute time, and hence the overall performance of the latter approach was better. 
 For the shorter trajectory, the wait time seemed to be a sizable factor in reducing performance at higher core numbers (Fig. :ref:`fig:rdf-wait-comp-io` A) although better statistics would be warranted before drawing more solid conclusions.
 The other components (|tuniverse| :math:`< 2` s, |tprepare| :math:`< 4 \times 10^{-5}` s , |tconclude| :math:`< 4 \times 10^{-4}` s) were similar or better (i.e., shorter) than the ones shown for the RMSD task in Fig. :ref:`fig:rms-pre-con-uni` and are not shown; only the time to set up the :code:`Universe` played a role in reducing the scaling performance in the *Lustre-distributed-3nodes* scenario at 60 or more CPU cores.
@@ -569,7 +569,7 @@ The PMDA_ Python package provides a framework to parallelize analysis of MD traj
 Although still in early development, it provides useful functionality for users to speed up analysis, ranging from a growing library of included tools to different approaches for users to write their own parallel analysis.
 In simple cases, just wrapping a user supplied function is enough to immediately use PMDA but the package also provides a documented API to derive from the :code:`pmda.parallel.ParallelAnalysisBase` class.
 We showed that performance depends on the type of analysis that is being performed.
-Compute-intensive tasks such as the RDF calculation can show good strong scaling up to about a hundred cores on a typical supercomputer and speeding up the time to solution for hours in serial to minutes in parallel should make this an attractive solution for many users.
+Compute-intensive tasks such as the RDF calculation can show good strong scaling up to about a hundred cores on a typical supercomputer and speeding up the time to solution from hours in serial to minutes in parallel should make this an attractive solution for many users.
 For other analysis tasks such as the RMSD calculation and other similar ones (e.g., simple distance calculations), a single multi-core workstation seems sufficient to achieve speed-ups on the order of 10 and HPC resources would not be useful.
 But thanks to the design of Dask, running a PMDA analysis on a laptop, workstation, or supercomputer requires absolutely no changes in the code and the user is free to immediately choose the computational resource that best fits their purpose.
 
