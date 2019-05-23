@@ -39,7 +39,7 @@ Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers
 
    The goal of this work is to improve the performance of DESI's
    spectroscopic data processing pipeline at NERSC while satisfying their productivity requirement that
-   the software remain in Python. Within this space we have obtained "specific" (per node-hour) throughput
+   the software remain in Python. Within this space we have obtained specific (per node-hour) throughput
    improvements of over 5x and 6x on the Cori Haswell and Knights Landing partitions,
    respectively. Several profiling techniques were used to determine potential
    areas for improvement including Python's cProfile and line_profiler packages, 
@@ -185,7 +185,7 @@ cProfile
 
 .. figure:: figures/cpu_2.png
    :align: center
-   :scale: 20%
+   :scale: 15%
    :figclass: wt
 
    This is an example image created from data collected using cProfile and
@@ -586,41 +586,55 @@ partition that will provide a large fraction of the system's overall FLOPS, so
 it is pertinent to examine if and how the DESI code could take advantage of
 these accelerated nodes.
 
-Since GPUs are quite different from CPUs, it may be necessary to
+Since GPUs are fundamentally different from CPUs, it may be necessary to
 rethink much of the way in which the DESI spectral extraction is performed. At
-the moment, each CCD frame is divided into 20 bundles, and each bundle is
-divided into 60 patches, and each of those 60 patches is further divided into 6
-smaller subbundles. Though this division of a larger frame into smaller pieces
-makes sense for CPU architectures, it doesn't make sense for GPU architectures.
-In fact for GPUs often the opposite is true: the programmer should give the GPU
-as much work as possible to keep it occupied and make the relatively expensive
-transfer of data between the host and device worthwhile. This means that to
-help the DESI extraction code run efficiently on GPUs it will likely require a
-major restructuring to better adapt the problem for the capabilities of the
-hardware.
+the moment, each CCD frame is divided into 7200 overlapping subregions such
+that each matrix to solve is typically 400x400 elements. Though this division
+of a larger frame into smaller pieces makes sense for CPU architectures, it may
+not be optimal for GPU architectures. In fact for GPUs often the opposite is
+true: the programmer should give the GPU as much work as possible to keep it
+occupied; thus it may be beneficial to operate on a smaller number of larger
+matrices.  Additionally, it may be necessary to change the code so that the
+matrices are both constructed and solved on the GPU to bypass inefficient
+subregion bookkeeping, which is currently interleaved between constructing and
+solving the matrices, and avoid expensive data transfer. This means that
+helping the DESI extraction code run efficiently on GPUs could require a major
+restructuring to better adapt the problem for the capabilities of the hardware.
 
 Preliminary testing is underway to give some indication of what we might expect
 from a major overhaul. From profiling information we expect that the
-scipy.linalg.eigh function will constitute a major part of the workload as
+scipy.linalg.eigh function will constitute a larger part of the workload as
 matrix sizes increase. We have measured the runtime of scipy.lialg.eigh and
-cupy.linalg.eigh :cite:`noauthor_cupy.linalg.eigh_nodate` on Edison Ivy Bridge
-and Cori Haswell, KNL, and the new Cori Volta GPUs. Figure :ref:`eigh` shows
-the eigh runtime for various sizes of positive definite input matrices. These
-results show that at low matrix sizes, perhaps unsurprisingly, the Volta
-performs poorly, but at larger matrix sizes (above 1000) the Volta performance
-dominates by an order of magnitude. This demonstrates, at least for scipy eigh,
-that breaking the DESI frame into fewer, larger pieces for a GPU could result
-in substantial performance gains. Of course the question is 1) is this large
-restructuring worthwhile and 2) if so, what is the best approach? As we have
-detailed above, we have had reasonably good success with Numba, which also
-supports GPU offloading. Other options are CuPy :cite:`noauthor_cupy_nodate`,
-which aims to be a drop-in replacement for NumPy, pyCUDA
-:cite:`noauthor_pycuda_nodate`, and pyOpenCL :cite:`noauthor_pyopencl_nodate`.
-How best to support GPU offloading without having to fill the DESI code with
-distinct CPU and GPU blocks, and additionally avoid being tied to a particular
-vendor, is still an open question for us.
+cupy.linalg.eigh :cite:`noauthor_cupy.linalg.eigh_nodate` as an initial test
+case on Cori Haswell, KNL, and the new Cori Volta GPUs. (We could not make
+these measurements on Edison Ivy Bridge because it has now been
+decommissioned.) Figure :ref:`eigh` shows the eigh runtime for various sizes of
+positive definite input matrices. These data show that for larger matrix sizes
+(above approximately 1000) the Volta begins to outperform the CPUs. However,
+these data do not include any possible gains from a divide-and-conquer approach
+(which has proven very successful for DESI). Investigating this strategy is
+near-term future work.
 
-.. figure:: figures/eigh_scan.png
+This eigh study is just the first of many planned GPU experiments. DESI has
+additional matrix preparation steps, bookkeeping, and special function
+evaluations (like legval) which also constitute a large part of their total
+workload. At this time it is unclear which of these might perform well on the
+GPU and make the relatively expensive host to device data transfer worthwhile.
+We will perform many experiments to evaluate how well each of these are suited
+to the GPU (or perhaps not suited to the GPU) as future work.
+
+We should note that one of the major conclusions of this case study has been
+that large restructuring efforts have been worthwhile for DESI. If indeed we
+choose to embark upon another major restructure for GPUs, what is the best
+approach? As we have detailed above, we have had reasonably good success with
+Numba, which also supports GPU offloading. Other options are CuPy
+:cite:`noauthor_cupy_nodate`, which aims to be a drop-in replacement for NumPy,
+pyCUDA :cite:`noauthor_pycuda_nodate`, and pyOpenCL
+:cite:`noauthor_pyopencl_nodate`. How best to support GPU offloading without
+having to fill the DESI code with distinct CPU and GPU blocks, and additionally
+to avoid being tied to a particular vendor, is still an open question for us.
+
+.. figure:: figures/eigh.png
 
    Data from performing an eigh matrix decomposition of various sizes on Edison
    Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. We used CuPy to perform
