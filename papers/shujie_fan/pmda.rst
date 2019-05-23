@@ -1,5 +1,6 @@
 .. -*- mode: rst; mode: visual-line; fill-column: 9999; coding: utf-8 -*-
 
+   
 :author: Shujie Fan
 :email: sfan19@asu.edu
 :institution: Arizona State University
@@ -30,6 +31,12 @@
 
 :bibliography: pmda
 
+.. Standard reST tables do not properly build and the first header column is lost.
+.. We therefore use raw LaTeX tables. However, booktabs is not automatically included
+.. unless rest2latex sees a table so we have to add it here manually.
+.. latex::
+   :usepackage: booktabs
+	       
 
 .. STYLE GUIDE
 .. ===========
@@ -66,7 +73,7 @@
 .. |Ncores| replace:: :math:`M`
 .. |r(t)| replace:: :math:`\mathbf{r}(t)`
 
-		    
+	  
 -------------------------------------------		      
 PMDA - Parallel Molecular Dynamics Analysis
 -------------------------------------------
@@ -284,16 +291,16 @@ The test trajectories are made available on figshare at DOI XXX.
 
    \begin{table}
    \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}lp{0.07\tablewidth}p{0.07\tablewidth}}
-    \hline
+    \toprule
     \textbf{configuration label} & \textbf{file storage} & \textbf{scheduler} & \textbf{max nodes} & \textbf{max processes} \tabularnewline
-    \hline
+    \midrule
     \endfirsthead
     Lustre-distributed-3nodes & Lustre       & distributed       &  3        & 72         \tabularnewline
     Lustre-distributed-6nodes & Lustre       & distributed       &  6        & 72         \tabularnewline
     Lustre-multiprocessing    & Lustre       & multiprocessing   &  1        & 24         \tabularnewline
     SSD-distributed           & SSD          & distributed       &  3        & 72         \tabularnewline
     SSD-multiprocessing       & SSD          & multiprocessing   &  1        & 24         \tabularnewline
-    \hline
+    \bottomrule
     \end{longtable*}
     \caption{Testing configurations on \textit{SDSC Comet}.
 	   \textbf{max nodes} is the maximum number of nodes that were tested; the multiprocessing scheduler is limited to a single node.
