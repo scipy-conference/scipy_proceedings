@@ -5,7 +5,7 @@
 :author: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
-:bibliography: mybib
+:bibliography: bibliography
 
 
 
@@ -116,3 +116,60 @@ Parkinson’s Disease
   in examining biological structures.
 Tensor and Matrix Decomposition
 +++++++++++++++++++++++++++++++
+  Matrix decomposition has been used in a variety of computer vision applications
+  in recent years including analysis of facial features. It offers a another
+  means of quantifying the features that describe the relationships between
+  values in a 2D space and can be generalized to a variety of applications.
+  The key being that decomposition offers a powerful means of simultaneously
+  evaluating the relationships of values in a 2 or higher dimensional space.
+  In higher dimensional spaces, tensor decomposition is used, where tensors are
+  a generalization of matrices.
+  Matrix decomposition can be described as a means of separating a matrix into
+  several component matrices whose product would result in the original matrix.
+  For example when solving a system of equations you might approach formulate
+  the problem as:
+
+  .. math::
+
+      Ax = b
+
+  where A is a matrix and x and b are vectors. When
+  trying to solve this equation, we could apply a matrix decompositions
+  operations to the matrix A, to more efficiently solve the system. By
+  finding the products of the of x and b with the the one matrix resulting from
+  the decomposition and the inverse of the other, we can solve the system of
+  equations with significantly fewer operations. We can generalize this premise
+  to machine learning, when model complexity of models, often result in
+  exponential increases in number of computations. This also affects the
+  applications of new algorithms and pipelines can be used in because of their
+  complexity.
+  We can choose specific types of decompositions that also allow us to preserve
+  unique information about original matrix while also reducing the the size of
+  the matrix. For example, in the case of singular value decomposition we are
+  trying to solve:
+
+  .. math::
+
+      A = USV^T
+
+  Where A is the original matrix, of size m ✕ n, U is an orthogonal matrix of
+  size m ✕ n, S is a diagonal matrix of size n ✕ n, and VT is an orthogonal
+  matrix of size n ✕ n. This generalization of the eigendecomposition is useful
+  in compressing matrices without losing information. It will come into play
+  with our final experiment using linear dynamical systems to extract features
+  from the DTIs.
+  Extending the premise of singular value decomposition (SVD) to higher order
+  matrices, or tensors, we come to Tucker decomposition.
+  Similarly to SVD, it is used to compress tensors. We are thus able to use it
+  as means to describe brain images without breaking down specific regions of
+  interest or or focusing on specific brain images.
+
+Methods
+-------
+There are two main experiments conducted. We examine both Tucker tensor
+decomposition and a linear dynamical systems approach to reduce number of
+dimensions and scale down diffusion tensor images. The goal is to evaluate
+the two approaches for the quality of features extracted. To this end, the
+final feature vectors produced by each method is then passed on to a random
+forest classifier, where the accuracy of the final trained model is measured
+on a classification task to predict control or Parkinson’s (PD) group.
