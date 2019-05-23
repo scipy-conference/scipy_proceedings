@@ -20,6 +20,12 @@ Parkinson's disease (PD) is a highly prevalent neurodegenerative disease origina
 
     neuroimaging, Parkinson's disease, data science, deep learning, graph processing, graph convolution
 
+.. role:: cite
+
+.. raw:: latex
+
+       \providecommand*\DUrolecite[1]{\cite{#1}}
+
 Introduction
 ============
 Affecting more than 1% of the United States population over the age of 60, Parkinson's disease (PD) is the second-most prevalent age-related neurodegenerative disease following Alzheimer's disease :cite:`RST2014`. PD diagnosis has traditionally relied on clinical assessments with some degree of subjectivity :cite:`GGLVVZ2018`, often missing early-stage PD altogether :cite:`BDH2016`. Benchmarks for delineating PD progression or differentiating between similar conditions are lacking :cite:`LMSACRMW2018,LWXGXKZ2012`. As such, many efforts have emerged to identify quantitatively rigorous methods through which to distinguish PD.
@@ -292,3 +298,9 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
 .. [12] http://trackvis.org/dtk/
 .. [13] https://github.com/tkipf/pygcn
 .. [14] https://github.com/Diego999/pyGAT
+
+
+.. raw:: latex
+
+   \bibliographystyle{plain}
+   \bibliography{bibli}
