@@ -517,14 +517,18 @@ The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`)
 
 Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10-20) could already be achieved on the equivalent of a modern workstation.
 Performance would likely improve with ever longer trajectories because the "fixed" costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion.
-However, but all things considered, a single node seems sufficent to accelerate RMSD analysis.
+However, all things considered, a single node seemed sufficent to accelerate RMSD analysis.
 
 	  
 
 RDF analysis task
 -----------------
 
-The RDF analysis task requires much more computational effort than the RMSD task.
+Unlike the RMSD analysis task, the parallelized RDF analysis in :code:`pmda.rdf.InterRDF` showed decreasing total time to solution up to the highest number of CPU cores tested (see Fig. :ref:`fig:rdf` A, D).
+The efficiency on a single node remained above 0.6 for almost all cases (Fig. :ref:`fig:rdf` B, E) and remained above 0.6 for the best case (distributed on Lustre and half-filling of nodes for the long trajectory), up to 3 nodes (72 cores, Fig. :ref:`fig:rdf` E).
+Even when filling complete nodes, the efficiency for the long trajectory remained above 0.5 (Fig. :ref:`fig:rdf` E).
+Consequently, a sizable speed-up could be maintained that approached 40 fold in the best case (Fig. :ref:`fig:rdf` F), which cut down the time to solution from about 40 min to under 1 min.
+On a single node, all approaches performed similarly well, with the distributed scheduler now having a slight edge over multiprocessing (Fig. :ref:`fig:rdf`).
 
 
 .. figure:: figs/Total_Eff_SU_rdf.pdf
@@ -538,6 +542,12 @@ The RDF analysis task requires much more computational effort than the RMSD task
    :label:`fig:rdf`
 
 
+The detailed analysis of the individual components in Fig. :ref:`fig:rdf-wait-comp-io` clearly shows that the RDF analysis task requires much more computational effort than the RMSD task and that it is dominated by the compute component, which scales very well to the highest core numbers (Fig. :ref:`fig:rdf-wait-comp-io` B, E).
+For comparison, in serial computation requires about 250~s while read I/O requires less than 10 s, and this ratio is approximately maintained as the read I/O also scales reasonably well (Fig. :ref:`fig:rdf-wait-comp-io` C, F).
+The differences between using all cores on a node compared to only using half the cores on each node were small but only using half a node was consistently better, especially in the compute time, and hence the overall performance of the latter approach was better. 
+For the shorter trajectory, the wait time seemed to be a sizable factor in reducing performance at higher core numbers (Fig. :ref:`fig:rdf-wait-comp-io` A) although better statistics would be warranted before drawing more solid conclusions.
+The other components (|tuniverse| :math:`< 2` s, |tprepare| :math:`< 4 \times 10^{-5}` s , |tconclude| :math:`< 4 \times 10^{-4}` s) were similar or better (i.e., shorter) than the ones shown for the RMSD task in Fig. :ref:`fig:rms-pre-con-uni` and are not shown; only the time to set up the :code:`Universe` played a role in reducing the scaling performance in the *Lustre-distributed-3nodes* scenario at 60 or more CPU cores.
+
 .. figure:: figs/wait_compute_io_rdf.pdf
 
    Detailed per-task timing analysis for parallel components of the RDF analysis task.
@@ -547,13 +557,17 @@ The RDF analysis task requires much more computational effort than the RMSD task
    **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rdf-wait-comp-io`
 	  
-	  
+In summary, the performance increase for a compute-intensive task such as RDF was sizable and, although not extremely efficient, was large enough (about 30-40) to justify the use of about 100 cores on a HPC supercomputer.
+Because scaling seemed mostly limited by constant costs such as the scheduling wait time, processing longer trajectories should improve the performance.
 
-	  
+
 
 Conclusions
 ===========
 
+Here PMDA can make the power of a HPC system available to reduce the time to solution from hours to minutes.
+
+Seamless laptop to HPC, thanks to Dask.
 
 
 Code availability and development process
