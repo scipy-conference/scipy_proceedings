@@ -1,0 +1,16 @@
+The purpose of this project is to provide a geolocation solution by generating code for the complex ambiguity function (CAF) in a hardware description language (HDL) and the implementation on FPGA hardware.
+The CAF has many practical applications, the more traditional being radar or sonar type systems.
+The use case that motivated this project is a similar implementation where the determination of the location of an object is calculated off of signals received through a RF frequency range satellite receiver.
+In this investigation, the pre-processing steps of downsampling and filtering are simulated and considered outside of the scope of this project. 
+In the case of geolocation systems, the use of collectors and reference emitters are used to create geometries that will allow for the detection of Doppler and movement in the signal. The Doppler is used to calculate a frequency difference of arrival (FDOA).
+Then, cross correlations can be used to determine the time delay by denoting the peak location of the resulting output as a time delay of arrival (TDOA).
+The goal of this project is to be able to provide a real time solution for FDOA and TDOA.
+By using scientific Python tools, this project provides a solution for testing signals and the ability to customize modules to target multiple devices.
+The processing for this implementation will be done on a PYNQ board designed by Xilinx.
+The PYNQ board provides a Zynq chip which has both an ARM CPU and FPGA fabric. This allows for a real-time operating system (RTOS) variant of Linux to be able to run on the CPU and for an interface to be made to the accompanying fabric via an overlay. This overlay is loaded and programmed to the fabric through a Jupyter notebook and allows for native visualization and data interaction through any Python tools that work inside the IPython kernel.
+All required mathematical operations for the CAF are returned to the user through Python classes which produce synthesizable code in the Verilog HDL. The Python classes use Jinja templates integrated into the Verilog code to allow for configuration changes that a user will need to change for investigation and simulation, development, and test.
+The simulations and synthesis that are required to be run by a toolset outside of the realm of this project.
+The simulation and synthesis of this project is being supported by Xilinx's Vivado Design Suite.
+Helper methods are included in the package to help simulation of the HDL such as quantization, complex data reading and writing, and methods to verify the data using quantized values.
+Quantizing data correctly is important to make sure that no DC offset is introduced into the system, and to make sure that no undue information loss occurs.
+Other helper methods center around the same goal of making sure that the values produced can be used in the overall system and understanding the implications of the system running in hardware rather than in software.
