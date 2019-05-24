@@ -37,6 +37,38 @@ frequency range.
 Because of the property of orthogonal signals not cross correlating they do not collide with one another, and they are
 an optimal signal type for testing this application :cite:`ZiemerComm`.
 
+Motivation
+----------
+The CAF has many practical applications, the more traditional being the before-mentioned radar and sonar type systems.
+Another common use case is in image processing.
+In image processing, cross-correlations are used to determine similarity between images, and dot products are used as a
+means of filtering.
+This helped in my understanding of the use of the dot product in cross-correlations which is the basis of this project.
+The main motivator for this project comes from the use of the CAF at my workplace where we work on satellite
+communications systems.
+The heavy reliance of Python in both generation and simulation comes from my exposure to the SciPy community, and this
+project relies on many open source projects as a result.
+In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
+geometries that will allow for the detection of Doppler and movement in the signal.
+This method of calculation proves to be very computationally challenging due to the high mathematical intensity and
+cannot be reduced.
+Currently GPU's have been employed as the main workhorse but the use of the FPGA has always been an attractive and
+feasible option due to the hardware options that are available.
+To geolocate a signal's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
+represents a satellite's drift.
+Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
+delay of arrival (TDOA).
+The characteristics of the captured signals will change based on the type of signal, which motivates the need to ensure
+that the resulting HDL can also be produced to match necessary configurations.
+This became a project goal motivated off work done by other projects to be able to produce code in other languages
+:cite:`codegen`.
+Thus, the solution provided must be able to be reconfigured based off of different needs.
+The processing for this system will be targeted to a PYNQ board by Xilinx, but has been designed such that it can be
+synthesized to any target device.
+All Verilog HDL modules that are produced by the Python classes conform to the AXI bus standards of interfacing
+:cite:`axi4`. This allows for a streamlined plug and play connection between all the modules and is the basis of the
+templating that is implemented with the help of Jinja.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
