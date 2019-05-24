@@ -67,6 +67,29 @@ All Verilog HDL modules that are produced by the Python classes conform to the A
 :cite:`axi4`. This allows for a streamlined plug and play connection between all the modules and is the basis of the
 templating that is implemented with the help of Jinja.
 
+Starting Point
+--------------
+The main concepts necessary for the understanding of the CAF are topics that are covered in Modern Digital Signal
+Processing, Communication Systems, and a digital design course. These concepts would be the Fast Fourier Transform
+(FFT), integration in both infinite and discrete forms, frequency shifting, and digital design.
+The main basis of this project then is to show a working implementation of digital design HDL modules implementing the
+logic accurately with this given knowledge. Given the mathematical basis of this project, it is crucial to have a way to
+test implementations against theory. This is the motivation for the discussion of using Python to help generate code
+and test benches.
+
+Project Overview
+----------------
+The goal of this project was to implement the CAF in an HDL such that the end product can be targeted to any device.
+The execution of this goal was taken as a bottom up design approach, and as such the discussion starts from small
+elements to larger ones. The steps taken were in the following order:
+
+#. Obtain and generate a working CAF simulation
+#. Break simulation into workable modules
+#. Design modules
+#. Verify and generate with test benches
+#. Assemble larger modules
+#. Synthesize and Implement using Vivado for the PYNQ-Z1 board
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
