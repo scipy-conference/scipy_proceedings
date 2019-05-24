@@ -1,9 +1,23 @@
+:author: Anthony Suen
+:email: anthonysuen@berkeley.edu 
+:institution: University of California, Berkeley
+
+:author: Alan Liang
+:email: alanliang@berkeley.edu
+:institution: University of California, Berkeley
+
+:author: Amal Bhatnagar
+:email: amalbhatnagar@berkeley.edu
+:institution: University of California, Berkeley
+
+
 .. contents::
    :depth: 3
 ..
 
+------------------------------------------------
 National Advancement of Data Science Education
-==============================================
+------------------------------------------------
 
 By Anthony Suen, Alan Liang and Amal Bhatnagar
 
