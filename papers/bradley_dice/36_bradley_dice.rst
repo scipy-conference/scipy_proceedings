@@ -191,7 +191,7 @@ Then, using ``pandas`` and ``scikit-learn``, we can train a support vector machi
    print('Score:', svm.score(X_test, y_test))
    # The model is ~98% accurate.
 
-To interpret crystal identification models like this, it can be helpful to use a dimensionality reduction tool such as UMAP (Uniform Manifold Approximation and Projection), as shown in figure :ref:`fig:steinhardtumap`.
+To interpret crystal identification models like this, it can be helpful to use a dimensionality reduction tool such as UMAP (Uniform Manifold Approximation and Projection), as shown in figure :ref:`fig:steinhardtumap` :cite:`McInnes2018`.
 The low-dimensional UMAP projection shown is generated directly from our ``pandas`` ``DataFrame``:
 
 .. code-block:: python
