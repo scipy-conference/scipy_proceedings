@@ -66,7 +66,7 @@ testing will be used to blind test subjects for their perception of where a soun
 
 To produce a synthesized 3D audio sound field starts with a geometry. For a given source location 
 :math:`(x,y,z)`, we transform to the cylindrical coordinates shown in :ref:`CYLIND`. This 
-configuration fits well with the CIPIC database.
+configuration fits well with the coordinate system used in the CIPIC database.
 
 .. figure:: 3D_Coordinates.pdf
    :scale: 50%
@@ -75,16 +75,26 @@ configuration fits well with the CIPIC database.
 
    The cylindrical coordinate system used in the 3D audio simulator. :label:`CYLIND`
 
+
 More writing TBD.
+
+
+.. figure:: HRIR_example.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   Example HRIR for a particular arrival angle pulled from CIPIC for subject 165. :label:`HRIR`
+
 
 Real-Time Signal Processing
 ===========================
 
 The cylindrical coordinates of the source point to an LUT entry of filter coefficients for the 
-left and right channels. The :code:`pyaudio_helper` framework [Wickert]_ of Figure :ref:`PAH` provides supports real-time 
-filtering using core signal processing functions of :code:`scipy.signal` [ScipySignal]_. With geometry 
-processing taken care of the actual signal processing block diagram is very simple, as shown in 
-Figure :ref:`FILTERING`
+left and right channels. To implement the filtering action we use the :code:`pyaudio_helper` framework 
+[Wickert]_ of Figure :ref:`PAH`, which interfaces to the audio subsystem of a personal computer. The 
+framework supports real-time signal processing, in particular filtering using core signal 
+processing functions of :code:`scipy.signal` [ScipySignal]_. 
 
 .. figure:: pyaudio_helper_BlockDiagram.pdf
    :scale: 55%
@@ -93,6 +103,8 @@ Figure :ref:`FILTERING`
 
    The `pyaudio_helper` framework for real-time DSP in the Jupyter notebook. :label:`PAH`
 
+A top level block diagram of the 3D audio simulator 
+is shown in Figure :ref:`FILTERING`.
 
 .. figure:: Filtering_BlockDiagram.pdf
    :scale: 65%
@@ -166,8 +178,15 @@ The Jupyter Widgets slider interface is shown in Figure :ref:`DYNAMICAPP`
    prescribed motion characteristics. :label:`DYNAMICAPP`
 
 
-The trajectory used in this app is described in the figure below (having build issues, so 
-not shown in this version)
+The trajectory used in this app, shown in Figure :ref:`TRAJECTORY`, is a circular orbit  with parameters of roll, pitch, and hight, relative to the ear canal centerline.
+
+
+.. figure:: SoundSource_Trajectory.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   The sound source trajectory utilized by the dynamic app. :label:`TRAJECTORY`
 
 
 Spherical Head Model as a Simple Reference
