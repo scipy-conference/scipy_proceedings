@@ -11,15 +11,9 @@
 :institution: University of California, Berkeley
 
 
-.. contents::
-   :depth: 3
-..
-
 ------------------------------------------------
 National Advancement of Data Science Education
 ------------------------------------------------
-
-By Anthony Suen, Alan Liang and Amal Bhatnagar
 
 Data science is a burgeoning field that is quickly being adopted across
 all domains and sectors. Data Science education initiatives have been
@@ -259,7 +253,7 @@ and consistent between institutions. If such a process could be
 undertaken, the ability to host data science courses for undergraduate
 university-level student will be readily accessible to schools.
 
-**3) Guidelines for Creating and Incorporating Modular DS Content **
+**3) Guidelines for Creating and Incorporating Modular DS Content**
 --------------------------------------------------------------------
 
 There are two main concerns when modularizing data science content:
