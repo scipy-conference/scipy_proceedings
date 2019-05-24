@@ -1,11 +1,11 @@
 :author: Chiranth Siddappa
 :email: csiddapp@uccs.edu
 :institution: University of Colorado Colorado Springs
-:bibliography: caf_summary
 
 :author: Mark Wickert
 :email: mwickert@uccs.edu
 :institution: University of Colorado Colorado Springs
+:bibliography: caf
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
@@ -46,8 +46,6 @@ means of filtering.
 This helped in my understanding of the use of the dot product in cross-correlations which is the basis of this project.
 The main motivator for this project comes from the use of the CAF at my workplace where we work on satellite
 communications systems.
-The heavy reliance of Python in both generation and simulation comes from my exposure to the SciPy community, and this
-project relies on many open source projects as a result.
 In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
 geometries that will allow for the detection of Doppler and movement in the signal.
 This method of calculation proves to be very computationally challenging due to the high mathematical intensity and
