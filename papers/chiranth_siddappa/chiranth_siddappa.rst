@@ -1,28 +1,16 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Chiranth Siddappa
+:email: csiddapp@uccs.edu
+:institution: University of Colorado Colorado Springs
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
-
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
-:bibliography: mybib
-
+:author: Mark Wickert
+:email: mwickert@uccs.edu
+:institution: University of Colorado Colorado Springs
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
-------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
-------------------------------------------------
+---------------------------------------------
+CAF Implementation on FPGA Using Python Tools
+---------------------------------------------
 
 .. class:: abstract
 
