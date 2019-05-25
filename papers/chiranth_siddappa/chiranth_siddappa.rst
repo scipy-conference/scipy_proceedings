@@ -270,6 +270,66 @@ taken to produce each module and the design decisions that were made and changed
 simulation. This project implemented the CAF as a bottom up approach, so the document will start with analyzing signals
 and end with the implemented design and usage report.
 
+Quantization
+------------
+
+The need for an analysis of quantization stems from the way that digital radio frequency systems are built. In order to
+use a signal in the digital domain, a signal must first be quantized by an analog to digital converter (ADC). Most ADC's
+that are available are able to provide a 12-bit value. Some newer devices are now able to provide 16-bits :cite:`adc16`.
+However, for this project 12-bit signals were used during testing as this is a very nice number to compute mentally and
+still provides minimal energy loss when plotting on the spectrum.
+
+Inspecting signals after quantization is important because when signals are reduced in size there is an inherent loss.
+This is demonstrated by Fig. :ref:`quant-cos` where a 12 bit and 8 bit quantization of a cosine signal is shown.
+Quantization helper functions are provided in caf_verilog with the help of scikit-dsp-comm's simpleQuant function
+:cite:`scikit`.
+When converting the signals, we must note that the values are signed.
+This means that the full bit value of the signal cannot be used otherwise there is signal loss to DC gain. The signals
+must be equal over 0. For a 12-bit quantization of a vector for example the numbers must be in the range (-4095, 4095)
+in comparison to the two's complement full value of (-4096, 4095). This is all necessary because the computation that is
+done on the FPGA will be done using fixed point or an integer value. This also reduces power and cost on the FPGA
+:cite:`float2fixed`. The test files that are used in verification are written using the values converted from this
+module.
+Most of the modules that were developed in this project write out quantized values as well, and this module will read
+them in as integer values.
+
+.. figure:: quantization_cos.png
+
+   12-bit and 8-bit Quantization Comparison. :label:`quant-cos`
+
+AXI Compliance
+--------------
+
+Xilinx and ARM both promote the use of the AXI4 interface protocols for higher bandwidth and lower latency. This
+protocol describes a handshaking method that occurs when a "tready" signal and "tvalid" signal are asserted on the same
+clock :cite:`axi-stream`. This protocol is a master and slave type protocol.
+Two examples of valid signal assertion are shown.
+The first handshake in Fig. :ref:`axi-before` is where the "tready" signal is asserted waiting for the other device to
+send valid data. The second handshake shown in Fig. :ref:`axi-with` is where the two signals are asserted at the same
+time. This project primarily uses the first sequence as there is pipelining that has been implemented between modules.
+Furthermore, because AXI is domain agnostic, a custom data format can be used in between transfers. For example, in
+Fig. :ref:`axi-cpx` a real sample and complex sample are captured on alternating clocks. In the design implemented in
+this project, both real and imaginary values are clocked on the same cycle. However, because of the ability to throttle
+the input one could perform the same operation and get a valid result.
+
+.. figure:: AXI_before.png
+
+   AXI tready signal is held before the tvalid signal is asserted :cite:`axi-stream`. :label:`axi-before`
+
+.. figure:: AXI_with.png
+
+   AXI tready signal is asserted along with tvalid :cite:`axi-stream`. :label:`axi-with`
+
+.. figure:: AXI_cpx.png
+
+   AXI tready signal is asserted along with tvalid :cite:`axi-ref`. :label:`axi-cpx`
+
+The modules that have been written in this package are all adhere to AXI compliant handshakes. It is generally expected
+that HDL modules will be written with both a clock and reset line to ensure the correct state of a module before use.
+However, due to the convention of using initial blocks in FPGA design, there are no asynchronous resets in this design.
+It is important to note that this type of design is inherently self throttling. This made the implementation of
+pipelined modules very straight forward.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
