@@ -608,6 +608,81 @@ pipelined implementation was able to make use of the primitive DSP48 type. Furth
 ensure that the multiply and accumulate functionality of the primitive type was taken advantage of correctly
 :cite:`8bitdot`.
 
+ArgMax
+------
+
+Because there is a need to compare the magnitudes of complex numbers, the argmax function is required. The mathematical
+absolute value of a complex number is described in Eq. :ref:`mag`.
+However, finding the true absolute value of the number requires the implementation of the square root.
+The first option that was looked at was a binary square root algorithm :cite:`abacus` that only uses base 2 division.
+However, this can take a variable amount of clock cycles. An implementation is provided in the sqrt package as
+reference. The other option is the CORDIC logic core provided by Xilinx which also would apply backpressure to the
+result :cite:`cordic`.
+
+.. math::
+   :label: mag
+
+   r = \sqrt[]{x^2 + y^2}
+
+After comparing results and performing the argmax using these different methods a decision was made to just use the
+squares of each of the real and imaginary components.
+This is possible because we can use the proportion of the squared values and their square roots to compute the argmax
+with the same result.
+Since the largest magnitude squared value is made up of both a real and imaginary component, it is enough to say that
+the largest magnitude (:math:`x^{2}+y^{2}`) will be sufficient.
+The result is provided back by the next clock, with only a delay in the pipeline for the first multiply. Then,
+comparisons are done within the module itself to find the max. This also allows for taking advantage of the larger
+integration time by allowing larger max values to propagate through. The trade-off is that there is much larger
+utilization with multiple instantiations all growing in size as the multiply operands increase in size. Inspecting the
+utilization of the synthesized and implemented designs did not seem to indicate that this was the limiting factor in the
+design layout growth.
+
+CAF Module
+----------
+
+The CAF module uses a generate variable to implement the frequency shifts and corresponding cross correlations. A
+reference buffer and a capture buffer are instantiated in this module that provide the input to the pipeline as shown in
+Fig. :ref:`caf-block-diag`. This module is a slave to a master as it is being driven by the data lines.
+
+.. figure:: caf_block_diagram.png
+
+   Block diagram of a CAF implementation with three frequencies. :label:`caf-block-diag`
+
+An error was found in the way the cross correlation was being calculated during this part of the project that cause
+major rework and investigation to be done. This was because the last integration was missing from the calculation.
+The proper results of a frequency shifted correlation is shown in Fig. :ref:`caf-test-shift`, and an autocorrelation is
+shown in Fig. :ref:`caf-test-signal`.
+We see that in Fig. :ref:`caf-test-shift` there is no peak. This is because two orthogonal signals should not have any
+correlation energy.
+
+.. figure:: caf_test_shift.png
+
+   Cross correlation of a frequency shifted signal. :label:`caf-test-shift`
+
+.. figure:: caf_test_signal.png
+
+   Autocorrelation output with length of implemented design. :label:`caf-test-signal`
+
+In Listing :ref:`caf-listing`, the Python class definition is provided for reference.
+The class takes in both a reference and received or captured signal, and the number of bits requested to represent the
+signals.
+These two signals are required parameters.
+The reference signal is used to produce a stored reference as a capture buffer module, and the received signal is used
+in the generated test bench.
+The same parameters for the SigGen and FreqShift modules are required here as well, as they are passed down to their
+instantiations for the CAF to instantiate.
+
+.. code-block:: Python
+
+   class CAF(CafVerilogBase):
+
+       def __init__(self, reference, received, foas,
+                    ref_i_bits=12, ref_q_bits=0,
+                    rec_i_bits=12, rec_q_bits=0,
+                    fs=625e3, n_bits=8,
+                    pipeline=True, output_dir='.'):
+
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
