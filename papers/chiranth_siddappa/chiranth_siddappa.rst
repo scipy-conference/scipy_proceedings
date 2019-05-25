@@ -495,6 +495,40 @@ of 8-bits was found to be sufficient to provide a frequency shifted signal.
        def __init__(self, freq_res, fs, n_bits, output_dir='.'):
 
 
+Frequency Shift
+---------------
+
+The frequency shift module takes in the same parameters as the signal generator module and adds an input for a complex
+value to shift. This module needs to make sure that different bit width signals are multiplied together correctly and
+that the pipeline is managed correctly to ensure that there are no phase shifts. An example of this module in simulation
+is provided in Fig. :ref:`freq-shift-sim`. Fig. :ref:`freq-shift-in` shows an input signal, and Fig.
+:ref:`freq-shift-out` shows the resulting shifted signal. When using the Python generated Verilog module, a negative
+value for the frequency will be taken care of by passing a bit to the module to perform the complex conjugate on the
+signal generator waveform.
+
+.. figure:: Freq_shift_sim.png
+
+   Performing a frequency shift. :label:`freq-shift-sim`
+
+.. figure:: freq_shift_in.png
+
+   Input signal at 50kHz. :label:`freq-shift-in`
+
+.. figure:: freq_shift_out.png
+
+   Output signal at 50kHz. :label:`freq-shift-out`
+
+A code listing showing the inputs to the FreqShift Python class is shown in Listing :ref:`freq-shift-listing`. The
+additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
+represents.
+
+.. code-block:: Python
+
+   class FreqShift(CafVerilogBase):
+
+        def __init__(self, x, freq_res, fs, n_bits, i_bits=12, q_bits=0,
+                     neg_shift=False, output_dir='.'):
+
 
 
 References
