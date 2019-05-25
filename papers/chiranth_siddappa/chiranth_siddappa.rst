@@ -324,7 +324,7 @@ the input one could perform the same operation and get a valid result.
 
    AXI tready signal is asserted along with tvalid :cite:`axi-ref`. :label:`axi-cpx`
 
-The modules that have been written in this package are all adhere to AXI compliant handshakes. It is generally expected
+The modules that have been written in this package all adhere to AXI compliant handshakes. It is generally expected
 that HDL modules will be written with both a clock and reset line to ensure the correct state of a module before use.
 However, due to the convention of using initial blocks in FPGA design, there are no asynchronous resets in this design.
 It is important to note that this type of design is inherently self throttling. This made the implementation of
@@ -682,6 +682,91 @@ instantiations for the CAF to instantiate.
                     fs=625e3, n_bits=8,
                     pipeline=True, output_dir='.'):
 
+Synthesis and Implementation
+----------------------------
+
+Both the synthesis and implementation were completed successfully, and all timing constraints were met by the tool.
+Several different design sizes were elaborated and implemented, all ending up with different utilization amounts.
+Since it is now known that the longer the integration time the more useful the output will be, the following iterations
+were taken, described by Table  :ref:`f1212`, :ref:`f812`, and :ref:`ffull`.
+
+.. raw:: latex
+
+   \begin{table}[]
+   \renewcommand{\arraystretch}{1.3}
+   \caption{12 phase bits, 12-bit multiplication, 41 frequencies, and 100 samples.}
+   \label{f1212}
+   \centering
+   \begin{tabular}{llll}
+   \textbf{Resource} & \textbf{Utilization} & \textbf{Available} & \textbf{Utilization \%} \\
+   LUT & 16893 & 53200 & 31.75 \\
+   LUTRAM & 42 & 17400 & 0.24 \\
+   FF & 15309 & 106400 & 14.39 \\
+   BRAM & 11 & 140 & 7.86 \\
+   DSP & 210 & 220 & 95.45 \\
+   IO & 61 & 125 & 48.80 \\
+   \end{tabular}%
+   \end{table}
+
+.. raw:: latex
+
+   \begin{table}[]
+   \renewcommand{\arraystretch}{1.3}
+   \caption{12 phase bits, 8-bit multiplication, 41 frequencies, and 100 samples.}
+   \label{f812}
+   \centering
+   \begin{tabular}{llll}
+   \textbf{Resource} & \textbf{Utilization} & \textbf{Available} & \textbf{Utilization \%} \\
+   LUT & 21435 & 53200 & 40.29 \\
+   LUTRAM & 250 & 17400 & 1.44 \\
+   FF & 15861 & 106400 & 14.91 \\
+   BRAM & 13 & 140 & 9.29 \\
+   DSP & 50 & 220 & 22.73 \\
+   IO & 53 & 125 & 42.40 \\
+   \end{tabular}%
+   \end{table}
+
+.. raw:: latex
+
+   \begin{table}[]
+   \renewcommand{\arraystretch}{1.3}
+   \caption{12 phase bits, 8-bit multiplication, 49 frequencies, and 1000 samples.}
+   \label{ffull}
+   \centering
+   \begin{tabular}{llll}
+   \textbf{Resource} & \textbf{Utilization} & \textbf{Available} & \textbf{Utilization \%} \\
+   LUT & 32682 & 53200 & 61.43 \\
+   LUTRAM & 490 & 17400 & 2.82 \\
+   FF & 28695 & 106400 & 26.97 \\
+   BRAM & 25.50 & 140 & 18.21 \\
+   DSP & 196 & 220 & 89.09 \\
+   IO & 53 & 125 & 42.40 \\
+   \end{tabular}%
+   \end{table}
+
+
+The final implementation run shown by Table :ref:`ffull` was able to use the most of the resources of the board
+evenly because of the 8-bit multiplication :cite:`8bitdot`. The first couple implementations were using 12-bit numbers
+because that was what was nominally chosen for the simulations. However, since regenerating the module is very simple, a
+new CAF module was written out using the module and tested with different shifts. The final run showing full timing
+constraints is displayed in Fig. :ref:`ffull-summary`. The final implementation has 49 different frequency offsets and an
+integration sample length of 1000.
+
+.. figure:: implementation_49freq_1000samp.png
+
+   Implementation including place and route. :label:`ffull-summary`
+
+Future Work and Enhancements
+============================
+When the original implementation of the sin and cosine generator was created, a half-sine method was used.
+While functionally sound, it is possible to decrease size by using a quarter-sine implementation where only a fourth of
+the sine is stored :cite:`zipcpu`.
+
+While the body of work for caf-verilog supports the modeling of the caf itself, this project can be used as a basis for
+incorporating Verilog as an extension to the wider scientific computing field.
+The SymPy Development Team has already made significant contributions in this realm, and is being used in many projects.
+The SymPy package currently supports code generation for various languages such as c, c++, and Julia :cite:`codegen`.
+Using a common API, it should be possible to also provide an extension to incorporate the Verilog HDL.
 
 References
 ----------
