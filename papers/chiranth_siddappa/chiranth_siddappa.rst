@@ -217,6 +217,59 @@ DRAM from the programmable logic (FPGA) through an AXI IP Core.
 
    The PYNQ processing overlay diagram. :cite:`pynq` :label:`pspl`
 
+
+Software
+========
+
+Xilinx Vivado WebPack 2018.2
+----------------------------
+
+The Vivado design tool provides a simulator along with the ability to synthesize and implement the design.
+For this project, this built-in simulator was used exclusively.
+Other simulators were not chosen because the other target devices that this project seeks to be implemented on are
+likely to also be Xilinx products.
+The tool is free to download for anyone to use, and allows the hardware engineer to develop and synthesize HDL designs
+for Xilinx FPGA's.
+There is also a Software Development Kit that allows an engineer to write in C code.
+For this project, all modules are written in Verilog.
+This was done because of the need to instantiate multiple submodules that provide functionality together.
+When running the synthesis tool, the output was very useful in helping make incremental design changes to fully optimize
+the board.
+Although none were used in this project, Xilinx does offer many free IP Cores that can be used in designs. They are
+black boxes that can be used in both simulation and the final implementation in HDL and block designs.
+
+Python and Jupyter
+------------------
+
+
+This project made extensive use of the Python ecosystem through the use of pip, Jupyter, and many other packages. The
+reader is encouraged to view the :code:`caf-verilog` source code and view the releases that have been made
+:cite:`caf-verilog`.
+All of the simulation source code and modules that are used in this project are generated through the Python package
+that has been released.
+While working on this project, many design changes occurred and test verification was done by loading the output files
+and investigating them in the Jupyter notebook.
+When designing modules, a first test of what a signal should look like when operated on was done using the interactive
+plotting ability that is provided :cite:`jupyter`.
+The generation of the modules was done using Jinja which provides both template parsing and rendering :cite:`jinja`.
+Whenever a simulated signal was changed, instead of having to write out a file or test bench by hand, a template was
+used to create the output and render it to the simulation directory.
+The signals that are used to create the signal generator were first quantized by using the NumPy library and then
+written to a file that gets used a memory buffer in the signal generator :cite:`numpydev`.
+Most of the mathematical operations that are implemented were first verified using this library.
+This project requires the use of orthogonal signals to ensure that the spectral density that is being tested is isolated
+from the others. This was possible using the gps-helper module that implements the GPS gold codes that are orthogonal
+PRN sequences :cite:`gps-helper`.
+
+
+Experiments
+===========
+
+As the description of the CAF itself was discussed previously, the rest of this document will walk through the steps
+taken to produce each module and the design decisions that were made and changed in order to produce a working
+simulation. This project implemented the CAF as a bottom up approach, so the document will start with analyzing signals
+and end with the implemented design and usage report.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
