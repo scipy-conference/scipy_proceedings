@@ -600,6 +600,14 @@ disk. When running the simulations it was found that the very last dot product i
 A full cross correlation using the dot product actually has two times the length plus one to account for both positive
 and negative offsets.
 
+Dot Product
+-----------
+
+The final CAF solution uses a pipelined multiply and accumulate. When the implementation was run, it was found that a
+pipelined implementation was able to make use of the primitive DSP48 type. Further fine-tuning suggestions were taken to
+ensure that the multiply and accumulate functionality of the primitive type was taken advantage of correctly
+:cite:`8bitdot`.
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
