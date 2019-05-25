@@ -529,7 +529,76 @@ represents.
         def __init__(self, x, freq_res, fs, n_bits, i_bits=12, q_bits=0,
                      neg_shift=False, output_dir='.'):
 
+Cross Correlation
+-----------------
 
+The cross correlation is useful in comparing the time offset between two signals.
+As an example, a pseudorandom sequence signal provided by gps-helper :cite:`gps-helper` is time shifted in Fig.
+:ref:`prn-seq` by ten samples.
+Both of these signals are a non-return to zero representation of the binary bit sequence.
+The reference is shown with zero padding on either end so the visual representation stays centered between the two
+signals.
+
+.. figure:: prn_seq.png
+
+   A reference and received signal (top and bottom) simulated from a PRN sequence from gps-helper. :label:`prn-seq`
+
+.. figure:: xcorr.png
+
+   The cross correlation of two simulated signals, showing a positive offset of 25 samples using xcorr. :label:`xcorr`
+
+.. figure:: xcorr_250.png
+
+   Cross correlated output of a signal of length 250. :label:`x-corr-250`
+
+The general form of the cross correlation is :cite:`ZiemerComm`:
+
+.. math::
+   :label: xcorr-inf
+
+   {\displaystyle (f\star g)(\tau )\ = \int _{-\infty }^{\infty }{\overline {f(t)}}g(t+\tau )\,dt}
+
+In Eq. :ref:`xcorr-inf` the signal :math:`f(t)` is shown with the complex conjugate, and the signal :math:`g(t)` is
+shown with a time or sample shift of :math:`\tau`. When translated into the discrete form, the form looks like the
+following:
+
+.. math::
+   :label: xcorr-disc
+
+   {\displaystyle (f\star g)[n]\ = \sum _{m=-\infty }^{\infty }{{f^{*}[m]}}g[m+n]}
+
+When looking at the cross product in discrete form (:ref:`xcorr-disc`), it is possible to see that the form of the
+multiplication and addition closely follows that of the dot product (\ref{dot_prod_eq}).
+
+.. math::
+   :label: dot-prod-eq
+
+   a \cdot b = \sum_{i = 1}^{n} a_i * b_i
+
+These series of equations provide a means of determining where the signals are correlated in time, or if they are
+orthogonal meaning they are not correlated at all :cite:`ZiemerComm`.
+In order to capture the full signal power with the dot product, it is necessary to store twice the length of the
+reference signal for correlation as shown in Fig. :ref:`prn-seq`.
+Furthermore, as compared to Fig. :ref:`xcorr` which uses xcorr, the dot product method that produced Fig.
+:ref:`x-corr-250` has a much higher magnitude.
+This is because the xcorr method uses an FFT, and the result is normalized to one.
+We also note that the axis for samples is denoted as an inverse offset.
+When the peak is generated with dot products, the center is going to be the center of the sample length.
+This is because the multiply and accumulate has the highest magnitude in the center as compared to the xcorr method with
+FFT's which produces a normalized axis around zero.
+Since we are always looking at what offset is necessary to cause the shift back to the reference, it is left as a sample
+offset.
+This also makes verifying the Verilog test benches much more straight forward.
+However, with the dot product, the magnitude that is achieved when a full correlation is hit is the length of the
+correlation sequence itself.
+This means that a longer integration time allows for a higher fidelity difference between signal magnitudes of
+surrounding shifted correlations.
+This method reduces the amount of multiplies that are necessary and is much simpler to implement on an FPGA. These
+results were verified using the xcorr function from scikit-dsp-comm and the dot product function provided by NumPy. The
+simulation for this function required the output of the entire sequence to be written to and sequentially read from
+disk. When running the simulations it was found that the very last dot product in the sequence was missing.
+A full cross correlation using the dot product actually has two times the length plus one to account for both positive
+and negative offsets.
 
 References
 ----------
