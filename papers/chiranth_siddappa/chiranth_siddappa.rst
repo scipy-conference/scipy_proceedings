@@ -90,9 +90,87 @@ elements to larger ones. The steps taken were in the following order:
 #. Assemble larger modules
 #. Synthesize and Implement using Vivado for the PYNQ-Z1 board
 
+Complex Ambiguity Function
+--------------------------
+
+An example of the signal path in the satellite receiver scenario is described by Fig. :ref:`satellite-diagram-example`.
+In this case, an emitted signal is sent to a satellite, and then captured by an RF receiver.
+Some amount of offset is expected to have happened during the physical relay of the signal back to a receiver within the
+broadcast area of the satellite.
+The signal is then downconverted and filtered, and then sent to the CAF via a capture buffer.
+While a signal is sent through an upconverter and relayed to the satellite, a copy of the same signal must be stored
+away as a reference to compute the TDOA and FDOA.
+Both the reference and capture blocks are abstractions, and have individual modules written in Verilog to handle the
+storage of these signals.
+
+Another very specific example of the satellite receiver scenario is described by Fig. :ref:`satellite-diagram-example-gps`.
+In this scenario, we see that no emitter exists, yet a reference signal is able to be sent to the CAF for TDOA and FDOA
+calculations. This is because GPS signals use a PRN sequence as ranging codes, and the taps for the signals are provided
+to the user :cite:`gpsgov`.
+This provides a significant processing gain as the expected sequence can be computed in real time or stored locally.
+This project takes advantage of these signals through the use of gps-helper :cite:`gps-helper`.
+
+.. figure:: satellite_diagram_example.png
+
+   Satellite Block Diagram for Emitter and Receiver. :label:`satellite-diagram-example`
+
+.. figure:: satellite_diagram_example_gps.png
+
+   Satellite Block Diagram for CAF with GPS Signal. :label:`satellite-diagram-example-gps`
+
+As a basis for what the rest of this paper is describing, an overview of the CAF and the various forms of computing are provided.
+
+The general form of the CAF is:
+
+.. math::
+
+   \chi (\tau ,f)=\int _{{-\infty }}^{\infty }s(t)s^{*}(t-\tau )e^{{i2\pi (f/f_s)t}}\,dt,\ \frac{-f_s}{2} < f < \frac{f_s}{2}
+
+The equation describes both a time offset :math:`\tau` and a frequency offset :math:`f` that are used to create a
+surface. The frequency shift :math:`f` is bounded by half the sampling rate.
+The discrete form is a little simpler, and lends itself to the direct implementation :cite:`hartwellcaf`:
+
+.. math::
+
+   \chi(k, f) = \sum _{n=0}^{N-1}s[n]s^{*}[n - k]e^{i2\pi (f/f_s)(n/N)},\ \frac{-f_s}{2} < f < \frac{f_s}{2}
+
+where :math:`N` is the signal capture window length, :math:`f_s` is the sampling rate in Hz making :math:`f` have units
+of Hz and :math:`kD` is a discrete time offset in samples with sample period :math:`1/f_s`. In both the continuous and
+discrete-time domains, :math:`\chi` is a function of both time offset and frequency offset.
+The symbol :math:`s` represents the signal in question, generally considered to be the reference signal.
+The accompanying :math:`s^{*}` is the complex conjugate and time shifted signal. As an example, a signal that was not time
+shifted would simply be the autocorrelation :cite:`ZiemerComm`. It is referred to as the captured signal in this context,
+and it is the signal that is used to determine both the time and frequency offset. To determine this offset, we are
+attempting to shift the signal as close as possible to the original reference signal.
+The time offset is what allows for the computation of a TDOA, and the frequency offset is what allows for the
+computation of the FDOA.
+In this implementation, the frequency offset is created by a signal generator and a complex multiply module that are
+both configurable.
+Once this offset has been applied, a cross-correlation is applied directly in the form of the dot product.
+This eliminates the costly implementation case where an FFT and an inverse FFT are used to produce a result.
+The signal generator can supply a specified frequency step and accuracy with configuration of the signal generator class
+:cite:`caf-verilog`. An example of the signal generator is shown in Fig. :ref:`dds-one`.
+The resulting spectrum is shown in Fig. :ref:`sig-gen`. This satisfies the frequency (:math:`f`) portion of the equation.
+The complex multiply module is similarly configurable for different bit widths through the complex multiply generator
+class :cite:`caf-verilog`.
+An example CAF surface is provided in Fig. :ref:`caf-surface-example` showing how the energy of the signal is spread over
+both frequency and time. This type of visualization is very useful for real-world signals with associated noise. In
+this project, care was taken in truncation choices to ensure that the correlation summation ensures signal energy
+retention.
+In this project, the CAF module that has been implemented will return a time offset index and frequency offset index
+back to the user based off provided build parameters shown in Listing :ref:`caf-listing`, described in a later
+section for the CAF Module.
+When writing the module, all simulation and testing was done at the sample by sample level to ensure validity so the CAF
+surface was not used in testing. A method for computing the CAF using the dot product and frequency shifts has been
+published to the package. This implementation is specific to this project in that it uses a sample size that is twice
+that of the reference signal for the computation. A sample output slice will be shown in the Experiments section for the
+CAF module in Fig. :ref:`caf-test-signal`.
+
+.. figure:: caf_surface_example.png
+
+   CAF Surface Example. :label:`caf-surface-example`
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
