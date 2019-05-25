@@ -330,6 +330,173 @@ However, due to the convention of using initial blocks in FPGA design, there are
 It is important to note that this type of design is inherently self throttling. This made the implementation of
 pipelined modules very straight forward.
 
+
+Complex Multiply
+----------------
+
+The operation of performing a complex multiply requires the use of complex numbers with real and imaginary parts. As an
+example for why this module is necessary, an example of frequency shifting a signal is presented.
+In Fig. :ref:`cpx-multiply-neg` we have a negative frequency signal, and a positive frequency signal shown in Fig.
+:ref:`cpx-multiply-pos`.
+Both of these signals are shown in a spectral density plot, with both sampling frequencies normalized to a value of 1
+for presentation.
+The output of the complex multiply is shown in Fig. :ref:`cpx-multiply-out`.
+What we see is that the resulting spectrum has a signal at a frequency of the sum of the two negative and positive
+frequency signals. This is what is expected. This method is what is used to shift the captured signal for the CAF.
+
+.. figure:: cpx_multiply_neg.png
+
+   Negative frequency signal as an input to the CPX Multiply Verilog module. :label:`cpx-multiply-neg`
+
+.. figure:: cpx_multiply_pos.png
+
+   Positive frequency signal as an input to the CPX Multiply Verilog module. :label:`cpx-multiply-pos`
+
+.. figure:: cpx_multiply_module_out.png
+
+   Output of the CPX Multiply Verilog module. :label:`cpx-multiply-out`
+
+
+Signed multiplication in Verilog can be done by specifying the signed data type. Any multiply of two numbers of the same
+size requires twice the number of bits in the result :cite:`tumbush-signed`. However, in this project the need for different
+size operands arises. In order to make sure the result is correct a lot of time was spent on this module. This module
+takes in two complex numbers and performs a pipelined multiplication on the data. The general form of this operation is
+provided by:
+
+.. math::
+
+   (x + yi)(u + vi) = (xu - yv) + (xv + yu)i
+
+Where :math:`x + yi` is the first complex signal and :math:`u + vi` is the next complex signal.
+Before the result is provided to the master, the result is truncated.
+It should be noted that no timing constraint violations were encountered during the implementation.
+
+The specific pipeline steps are presented in Table :ref:`cpx-multiply-stages` which shows which operations are completed
+in which pipeline stage.
+Stages 1 and 2 are always conditionally assigned based on the current state of the AXI interface so that resources are
+not constantly being used. This helps for timing and for power usage. The result is then truncated and returned to the
+master when the master's ready signal is asserted.
+Because this is a pipelined implementation, an input and output can be processed every clock.
+
+.. raw:: latex
+
+   \begin{table}
+   \renewcommand{\arraystretch}{1.3}
+   \caption{CPX Multiply Stages}
+   \label{cpx-multiply-stages}
+   \centering
+   \begin{tabular}{ll}
+   \hline
+   Stage & Operation \\ \hline
+   1 & xi * yi \\
+   1 & xq * yq \\
+   1 & xi * yq \\
+   1 & xq * yi \\
+   2 & xu - yv \\
+   2 & xv + yu \\
+   3 & Truncate
+   \end{tabular}
+   \end{table}
+
+A code listing of the Verilog HDL output is provided as reference in Listing :ref:`cpx-multiply-listing`. The two blocks
+that are shown are for the first step through the third step. The first two steps can be seen to only be calculated when
+the master signal conditions are correct.
+
+.. code-block:: verilog
+
+   always @(posedge clk) begin
+      if (m_axis_tvalid & s_axis_tready) begin
+         xu <= xi * yi;
+         yv <= xq * yq;
+         xv <= xi * yq;
+         yu <= xq * yi;
+      end else begin
+         xu <= xu;
+         yv <= yv;
+         xv <= xv;
+         yu <= yu;
+      end // else: !if(m_axis_tvalid & s_axis_tready)
+   end
+
+   always @(posedge clk) begin
+      if(m_axis_tready) begin
+         xu_out <= xu;
+         yv_out <= yv;
+         xv_out <= xv;
+         yu_out <= yu;
+         i_sub <= xu_out - yv_out;
+         i_sub_out <= i_sub;
+         q_add <= xv_out + yu_out;
+         q_add_out <= q_add;
+      end // if (m_axis_tvalid)
+      else begin
+         xu_out <= xu_out;
+         yv_out <= yv_out;
+         xv <= xv;
+         xv_out <= xv_out;
+         yu <= yu;
+         yu_out <= yu_out;
+         i_sub <= i_sub;
+         i_sub_out <= i_sub_out;
+         q_add <= q_add;
+         q_add_out <= q_add_out;
+      end // else: !if(m_axis_tvalid)
+      i <= i_sub_out[xi_bits+yi_bits-1: xi_bits+yi_bits-i_bits];
+      q <= q_add_out[xq_bits+yq_bits-1: xq_bits+yq_bits-q_bits];
+   end // always @ (posedge clk)
+
+Signal Generator
+----------------
+
+The signal generator module is implemented using a half sine lookup table and accumulator.
+This is commonly known as a numerically controlled oscillator in direct digital synthesis :cite:`dds`.
+This module produces a sine wave at the specified frequency by using a modulo counter that increments a phase value at
+every clock cycle.
+It is important to note that when talking about the frequency provided as the sampling rate that it is not necessarily
+the clock rate. The sampling frequency is the frequency that the signal was captured at, and the provided specified
+frequency is relative to that.
+For example, the sampling frequency that is simulated in this project is 625kHz, but the expected clock frequency of the
+fabric is 250MHz.
+The number of phase bits that are necessary are determined by the sampling frequency and the frequency resolution
+specified by Eq. :ref:`phase-bits`.
+
+.. math::
+   :label: phase-bits
+
+   \text{Left side latex is unbounded} = \text{phase\_bits}
+
+The output of one cycle is shown in Fig. :ref:`dds-one`. The values that are supplied to the module for the lookup table
+are generated using the NumPy sine function and are quantized using helper methods included in the caf_verilog module.
+To set the frequency of the signal generator, a phase step or increment value must be provided by Eq.
+:ref:`phase-increment`.
+
+.. math::
+   :label: phase-increment
+
+   \frac{f_\text{out} \cdot 2^{\text{phase\_bits}}}{f_\text{clk}} = \text{phase\_increment}
+
+An example spectrum of the output of the signal generator that is created from the Python class is shown in
+Fig. :ref:`sig-gen`.
+While no calculation of power has been provided, a parameter n_bits sets the signal strength. For this project, a value
+of 8-bits was found to be sufficient to provide a frequency shifted signal.
+
+.. figure:: sig_gen_8_200.png
+
+   Cosine centered at 20kHz with 8-bits and 200Hz resolution. :label:`sig-gen`
+
+.. figure:: dds_one_cycle.png
+
+   Cosine centered at 20kHz with 8-bits and 100Hz resolution. :label:`dds-one`
+
+.. code-block:: Python
+
+   class SigGen(CafVerilogBase):
+
+       def __init__(self, freq_res, fs, n_bits, output_dir='.'):
+
+
+
+
 References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
