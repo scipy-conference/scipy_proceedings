@@ -22,7 +22,7 @@ CAF Implementation on FPGA Using Python Tools
 .. include:: ./papers/chiranth_siddappa/keywords.txt
 
 Introduction
-------------
+============
 
 The basic algorithm for calculating the complex ambiguity function for time difference of arrival and frequency offset
 has been well known since the early 1980's :cite:`stein-orig`. In many radio frequency applications, there is a need to
@@ -38,7 +38,7 @@ Because of the property of orthogonal signals not cross correlating they do not 
 an optimal signal type for testing this application :cite:`ZiemerComm`.
 
 Motivation
-----------
+==========
 The CAF has many practical applications, the more traditional being the before-mentioned radar and sonar type systems.
 Another common use case is in image processing.
 In image processing, cross-correlations are used to determine similarity between images, and dot products are used as a
@@ -68,7 +68,7 @@ All Verilog HDL modules that are produced by the Python classes conform to the A
 templating that is implemented with the help of Jinja.
 
 Starting Point
---------------
+==============
 The main concepts necessary for the understanding of the CAF are topics that are covered in Modern Digital Signal
 Processing, Communication Systems, and a digital design course. These concepts would be the Fast Fourier Transform
 (FFT), integration in both infinite and discrete forms, frequency shifting, and digital design.
@@ -78,7 +78,7 @@ test implementations against theory. This is the motivation for the discussion o
 and test benches.
 
 Project Overview
-----------------
+================
 The goal of this project was to implement the CAF in an HDL such that the end product can be targeted to any device.
 The execution of this goal was taken as a bottom up design approach, and as such the discussion starts from small
 elements to larger ones. The steps taken were in the following order:
@@ -91,7 +91,7 @@ elements to larger ones. The steps taken were in the following order:
 #. Synthesize and Implement using Vivado for the PYNQ-Z1 board
 
 Complex Ambiguity Function
---------------------------
+==========================
 
 An example of the signal path in the satellite receiver scenario is described by Fig. :ref:`satellite-diagram-example`.
 In this case, an emitted signal is sent to a satellite, and then captured by an RF receiver.
@@ -169,6 +169,53 @@ CAF module in Fig. :ref:`caf-test-signal`.
 .. figure:: caf_surface_example.png
 
    CAF Surface Example. :label:`caf-surface-example`
+
+Hardware
+========
+
+The targeted hardware for this project is the Zynq processor on the PYNQ-Z1 board. However, this project is fully
+synthesizable and should be able to be targeted for any other Xilinx board.
+
+
+Python and PYNQ
+---------------
+
+
+The PYNQ development board designed by Xilinx provides a Zynq chip which has an ARM CPU running at 650 MHz and an FPGA
+fabric that is programmable via an overlay :cite:`pynq`.
+This performance allows for a RTOS to be run on the CPU.
+The type of scheduler that is run on the OS is the main driver for whether it is an RTOS or not.
+The RTOS in this case is Ubuntu, and hosts a Jupyter notebook to program and interface with the FPGA fabric using an
+overlay.
+This overlay contains mappings for ports and interfaces between the fabric and the CPU.
+This functionality is very unique in that both an ARM core and a fabric are on the same board.
+As shown by Fig. :ref:`pynq-overlay` the overlay sits between the processing system (CPU) and the programmable logic
+(FPGA).
+The overlay is represented by the yellow background with labels "Custom" and "Accelerator" and shows how the overlay is
+a communication layer between the processing system and the programmable logic.
+
+.. figure:: zynq_block_diagram.jpg
+
+   The PYNQ processing overlay diagram. :cite:`pynq` :label:`pynq-overlay`
+
+It also contains a bitfile that will properly configure the FPGA :cite:`bitfile`.
+This bitfile is generated through the Vivado Design Suite that is provided by Xilinx.
+If a different device is to be targeted, the new target device would also be configured using this design methodology of
+creating a bitfile.
+
+The Jupyter notebook itself is considered an interactive computing pool providing an interactive interface to do
+computation and prototyping. In this implementation it is meant to be an easier way for a non-hardware oriented person
+to be able to access a computational accelerator designed by a hardware engineer :cite:`pynq`.
+
+A diagram of the processing and the programmable logic is shown in Fig. :ref:`pspl`. The processor system is the
+Cortex-A9 processor that is running at 650MHz with 512MB of DDR3 RAM. The FPGA is a Zynq XC7020 part which has 13,300
+logic slices, 53,200 6-input LUTs, 160,400 flip-flops, 630KB of block RAM, and 220 DSP slices. Later, a usage report is
+provided with a description of how the logic was optimized to make use of these primitives. It is possible to access the
+DRAM from the programmable logic (FPGA) through an AXI IP Core.
+
+.. figure:: PSPL.png
+
+   The PYNQ processing overlay diagram. :cite:`pynq` :label:`pspl`
 
 References
 ----------
