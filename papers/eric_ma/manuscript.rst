@@ -297,7 +297,7 @@ has over ``pyjanitor`` is that symbolic expressions can be used inside
 functions, which  automatically get parsed into an appropriate lambda function
 in Python. However, the number of verbs available is restricted to the
 ``dplyr`` set. As of 24 November 2018, development was last seen 3 years ago,
-with 3 contributos to the project.
+with 3 contributors to the project.
 
 **dplython** :cite:`dplython`: Analogous to ``pandas-ply``, ``dplython`` also
 aims to provide the ``dplyr`` syntax to `pandas` users. Development was last
