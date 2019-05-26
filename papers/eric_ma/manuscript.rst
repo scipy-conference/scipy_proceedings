@@ -8,8 +8,7 @@
 :institution: Novartis Institutes for Biomedical Research
 
 :author: Sam Zuckerman
-:email:
-:institution: Audible, Inc.
+:email: sam.p.zuckerman@gmail.com
 
 :author: Zachary Sailer
 :email: zachsailer@gmail.com
