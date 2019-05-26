@@ -49,8 +49,7 @@ It is a common experience amongst data scientists that data wrangling can
 occupy up to 80% of their time :cite:`nytimes` :cite:`JSSv059i10`. Part of this
 time is spent defining modelling approaches, and part of this time is writing
 code that executes the sequence of transformations on raw data that wrangle it
-into the necessary
-shape for downstream modelling work.
+into the necessary shape for downstream modelling work.
 
 In the Python ecosystem, ``pandas`` is the *de facto* tool for data
 manipulation. As reflected by the article with a pun-laden title, "Pandas
