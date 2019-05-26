@@ -176,7 +176,7 @@ and functional APIs. What is exposed, though, is a functional and fluent API
 :cite:`fluent` for the end-user.
 
 Thanks to the ``pandas.DataFrame.query()`` API, symbolic evaluations are
-natively available in ``pyjanitor`` for filtering data. This enables us to
+generally available in ``pyjanitor`` for filtering data. This enables us to
 write functions that do filtering of the DataFrame using a verb that may
 match end-users' intuitions better. One such example is the
 ``.filter_on('criteria')`` method, illustrated in the opening example.
