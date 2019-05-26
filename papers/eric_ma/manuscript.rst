@@ -309,9 +309,11 @@ world. From our study of its source code, in principle, every function there
 can be wrapped with `pandas-flavor`'s `pf.register_dataframe_method` decorator,
 thus bringing the most feature-complete implementation of `dplyr` verbs to the
 `pandas` world. It does, however,  re-implement a number of ``pandas``
-functions using ``dplyr`` names. Whether the developers are interested in
-collaboration remains to be discussed. Development was last seen earlier in the
-year (as of 22 May 2019), with 10 contributors to the project.
+functions using ``dplyr`` names. This makes it distinct from the pyjanitor
+project, where extension, rather than replacement, of existing ``pandas``
+functionality is generally encouraged. Whether the developers are interested
+in collaboration remains to be discussed. Development was last seen earlier in
+the year (as of 22 May 2019), with 10 contributors to the project.
 
 **plydata** :cite:`plydata`: Like the others mentioned before, ``plydata`` also
 aims to provide the ``dplyr``-style data manipulation grammar to ``pandas``. It
