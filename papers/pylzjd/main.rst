@@ -42,7 +42,9 @@ To help new users avoid this difficult task, we have developed the PyLZJD librar
 The Lempel Ziv Jaccard Distance
 -------------------------------
 
-LZJD stands for "Lempel Ziv Jaccard Distance" :cite:`raff_lzjd_2017`, and is the algorithm implemented in PyLZJD. The inspiration and high-level understanding of LZJD comes from compression algorithms. Let :math:`C(\cdot)`  represent your favorite compression algorithm (e.g., zip, bz2, etc.), which will take an input :math:`x` and produce a compressed version :math:`C(x)`. Using a decompressor, you can recover the original object or file :math:`x` from :math:`C(x)`. The purpose of this compression is to reduce the size of the file stored on disk. So if :math:`|x|` represents how many bytes it takes to represent the file :math:`x`, the goal is that :math:`|C(x)| < |x|`. 
+LZJD stands for "Lempel Ziv Jaccard Distance" :cite:`raff_lzjd_2017`, and is the algorithm implemented in PyLZJD. LZJD takes a byte or character sequence :math:`x` (i.e., a "string"), converts it to a set of sub-strings, and then converts the set into a *digest*. This digest is a fixed-length summary of the input sequence, which requires a total of :math:`k` integers to represent. We can then measure the similarity of digests using a distance function, and we can trade accuracy for speed and compactness by decreasing $k$. We can optionally convert this digest into a vector in euclidean space, allowing greater flexibility to use LZJD with other machine learning algorithms. 
+
+The inspiration and high-level understanding of LZJD comes from compression algorithms. Let :math:`C(\cdot)`  represent your favorite compression algorithm (e.g., zip, bz2, etc.), which will take an input :math:`x` and produce a compressed version :math:`C(x)`. Using a decompressor, you can recover the original object or file :math:`x` from :math:`C(x)`. The purpose of this compression is to reduce the size of the file stored on disk. So if :math:`|x|` represents how many bytes it takes to represent the file :math:`x`, the goal is that :math:`|C(x)| < |x|`. 
 
 What if we wanted to compare the similarity of two files, :math:`x` and :math:`y`? We can use compression to help us do that. Consider two files :math:`x` and :math:`y`, with absolutely no shared content. Then we would expect that if we concatenated :math:`x` and :math:`y` together to make one larger file, :math:`x \Vert y`, then compressing the concatenated version of the files should be about the same size as the files compressed separately, :math:`|C(x \Vert y)| = |C(x)| + |C(y)|`. But what if :math:`|C(x \Vert y)| < |C(x)| + |C(y)|`? For that to be true, there must be some overlapping content between :math:`x` and :math:`y` that our compressor :math:`C(\cdot)` was able to reuse in order to achieve a smaller output. The more similarity between :math:`x` and :math:`y`, the greater difference in file size we should see. In which case, we could use the ratio of compressed file lengths to tell us how similar the files are. We could call this a "Compression Distance Metric" :cite:`Keogh:2004:TPD:1014052.1014077` as shown in Equation :ref:`cdm`, where CDM(:math:`x,y`) returns a smaller value the more similar :math:`x` and :math:`y` are, and a larger value if they are different. 
 
@@ -58,9 +60,10 @@ The CDM distance we just described gives the intuition behind LZJD, that is, we 
 
 	\subsection{Mechanics of LZJD} 
 
-While the above strategy has seen much success, it also suffers from drawbacks. Using a compression algorithm for every similarity comparison %makes prior methods
-is slow, and the mechanics of standard compression algorithms are not optimized for machine learning tasks. LZJD rectifies these issues by converting a specific compression algorithm, LZMA, into a dedicated distance metric :cite:`raff_lzjd_2017`. By doing so, LZJD is fast enough to use for larger datasets, and maintains the properties of a true distance metric\footnote{symmetry, indiscernibility, and the triangle inequality
-}. LZJD works by first creating the compression dictionary of the Lempel Ziv algorithm :cite:`Lempel1976`.
+While the above strategy has seen much success, it also suffers from drawbacks. Using a compression algorithm for every similarity comparison makes prior methods
+slow, and the mechanics of standard compression algorithms are not optimized for machine learning tasks. Equation :ref:`cdm` also does not have the properties of a true distance metric [#]_, which can lead to confusing behavior and prevents using tools that rely on these properties. LZJD rectifies these issues by converting a specific compression algorithm, LZMA, into a dedicated distance metric :cite:`raff_lzjd_2017`. By doing so, LZJD is fast enough to use for larger datasets, and maintains the properties of a true distance metric. LZJD works by first creating the compression dictionary of the Lempel Ziv algorithm :cite:`Lempel1976`.
+
+.. [#] The properties of a true distance metric are symmetry, indiscernibility, and the triangle inequality.
 
 
 .. code-block:: python
@@ -96,7 +99,9 @@ Defining a distance as :math:`d(A,B) = 1-J(A,B)` is a valid metric, and thus pro
     dist = 1.0-sim(lzset(a),lzset(b))
 
 
-While the procedure above will implement the LZJD algorithm, it does not include the speedups that have been incorporated into PyLZJD. Following :cite:`raff_lzjd_2017` we use Min-Hashing :cite:`Broder:1998:MIP:276698.276781` to convert a set :math:`A` into a more compact representation :math:`A'`, which is of a fixed size :math:`k` (i.e., :math:`|A'|=k`) but guarantees that :math:`J(A, B) \approx J(A', B')`. :cite:`raff_lzjd_digest` reduced computational time and memory use further by mapping every sub-sequence to a hash, and performing :code:`lzset` construction using a rolling hash function to ensure every byte of input was only processed once. To handle class imbalance scenarios, a stochastic variant of LZJD allows over-sampling to improve accuracy :cite:`raff_shwel`. All of these optimizations were implemented with Cython :cite:`behnel2010cython` in order to make PyLZJD as fast as possible. 
+While the procedure above will implement the LZJD algorithm, it does not include the speedups that have been incorporated into PyLZJD. Following :cite:`raff_lzjd_2017` we use Min-Hashing :cite:`Broder:1998:MIP:276698.276781` to convert a set :math:`A` into a more compact representation :math:`A'`, which is of a fixed size :math:`k` (i.e., :math:`|A'|=k`) but guarantees that :math:`J(A, B) \approx J(A', B')` [#]_. :cite:`raff_lzjd_digest` reduced computational time and memory use further by mapping every sub-sequence to a hash, and performing :code:`lzset` construction using a rolling hash function to ensure every byte of input was only processed once. To handle class imbalance scenarios, a stochastic variant of LZJD allows over-sampling to improve accuracy :cite:`raff_shwel`. All of these optimizations were implemented with Cython :cite:`behnel2010cython` in order to make PyLZJD as fast as possible. 
+
+.. [#] The bottom-:math:`k` approach is used by default, where one hash :math:`h(\cdot)` is applied to every item in the set, and the bottom-:math:`k` values according to :math:`h(\cdot)` are selected. 
 
 .. raw:: latex
 
@@ -104,7 +109,7 @@ While the procedure above will implement the LZJD algorithm, it does not include
 
 The LZJD algorithm as discussed so far provides only a distance metric. This is valuable for search and information retrieval problems, many clustering algorithms, and :math:`k`-nearest-neighbor style classification, but does not avail ourselves to all the algorithms that would be available in Scikit-Learn. Prior work proposed one method of vectorizing LZSets :cite:`raff_shwel` based on feature hashing :cite:`Weinberger2009a`, where every item in the set is mapped to a random position in a large and high dimensional input (they used :math:`d=2^{20}`). For new users, we want to avoid such high dimensional spaces to avoid the "curse of dimensionality" :cite:`Bellman1957`, a phenomena that makes obtaining meaningful results in higher dimensions difficult. 
 
-Working in such high dimensional spaces often requires greater consideration and expertise. To make PyLZJD easier for novices to use, we have developed a different vectorization strategy. To make this possible, we use a new version of Min-Hashing called "SuperMinHash", :cite:`Ertl2017`. The new SuperMinHash adds a fixed overhead compared to the prior method, but enables us to use what is known as :math:`b`-bit minwise hashing to convert sets to a more compact vectorized representation :cite:`Li:2011:TAB:1978542.1978566`. Since :math:`k \leq 1024` in most cases, and :math:`b \leq 8`, we arrive at a more modest :math:`d=k\cdot b \leq 8,192`. By keeping the dimension smaller, we make PyLZJD easier to use and a wider selection of algorithms from Scikit-Learn should produce reasonable results. 
+Working in such high dimensional spaces often requires greater consideration and expertise. To make PyLZJD easier for novices to use, we have developed a different vectorization strategy. To make this possible, we use a new version of Min-Hashing called "SuperMinHash", :cite:`Ertl2017`. The new SuperMinHash is up to 40% slower compared to the prior method, but enables us to use what is known as :math:`b`-bit minwise hashing to convert sets to a more compact vectorized representation :cite:`Li:2011:TAB:1978542.1978566`. Since :math:`k \leq 1024` in most cases, and :math:`b \leq 8`, we arrive at a more modest :math:`d=k\cdot b \leq 8,192`. By keeping the dimension smaller, we make PyLZJD easier to use and a wider selection of algorithms from Scikit-Learn should produce reasonable results. 
 
 .. raw:: latex
 
@@ -136,9 +141,11 @@ To use PyLZJD, at most three functions need to be imported, as shown below.
 These three functions work as follows:
 
 
-- :code:`digest`: takes in a string as data to convert to a digest, or a path to a file, and converts the file's content to an LZJD digest. If a list is given as input, each element of the list will be processed to return a list of digests. 
-- :code:`vectorize`: works the same as digest, but instead of returning a list, returns a numpy array representing a feature vector. 
-- :code:`sim`: takes two LZJD digests, and returns the similarity score between two files. 1.0 indicating they are exactly similar, and 0.0 indicating no similarity. 
+- :code:`digest(b, hash_size=1024, mode=None, processes=-1, false_seen_prob=0.0)`: takes in a string as data to convert to a digest, or a path to a file, and converts the file's content to an LZJD digest. If a list is given as input, each element of the list will be processed to return a list of digests. [#]_
+- :code:`vectorize(b, hash_size=1024, k=8, processes=-1, false_seen_prob=0.0)`: works the same as digest, but instead of returning a list, returns a numpy array representing a feature vector. 
+- :code:`sim(A, B)`: takes two LZJD digests, and returns the similarity score between two files. 1.0 indicating they are exactly similar, and 0.0 indicating no similarity. 
+
+.. [#] :code:`mode` controls which version of min-hashing is used. :code:`None` for the standard hash, or :code:`"SuperHash"` to use the approach that is compatible with vectorization. 
 
 
 The above is all that is needed for practitioners to use pyLZJD in their code. Below we will go through three examples of how to use these functions in conjunction with Scikit-Learn to get decent results on these problems. For new users, we recommend considering LZJD as a first-pass easy-to-use algorithm so long as the length of the input data is 200 bytes/characters or more. This recommendation comes from the fact that LZJD is compression based, and it is difficult to compress very short sequences. Another way to consider if LZJD may work for your data is to try manually compressing data points with your favorite compression algorithm. If the files compress well, LZJD may work. If the files do not compress well, LZJD is less likely to work. 
@@ -156,17 +163,28 @@ The first example we will use is a dataset called "T5", which has historically b
 
 The processes argument is optional. By setting it to -1, as many processor cores as are available will be used. If set to any positive value :math:`n`, then :math:`n` cores will be used. A list of digests will be returned with the same corresponding order as the input. The :code:`digest` function will automatically load every file path from disk, and perform the LZJD process outlined above. 
 
-To use LZJD with Scikit-Learn, we need to massage the files into a form that it expects. Scikit-Learn needs a distance function between data stored as a list of vectors (i.e., a matrix :math:`X`). However, our digests are not vectors in the way that Scikit-Learn understands them, and needs to know how to properly measure distances. An easy way to do this, which is compatible with other specialized distance a user may want to leverage, is to create a 1-D list of vectors. Each vector will store the index of its digest in the created :code:`X_hashes` list.  Then we can can create a distance function which uses the index, and returns the correct value. While wordy to explain, it takes only a few lines of code:
+For this first example, we will stick to using LZJD as a similarity tool and distance metric. When you want to use distance based algorithms, you want to use the :code:`digest` and :code:`sim` functions instead of :code:`vectorize`. :code:`vectorize` will be less accurate and slower when computing distances. 
+
+To use LZJD's digest with Scikit-Learn, we need to massage the files into a form that it expects. Scikit-Learn needs a distance function between data stored as a list of vectors (i.e., a matrix :math:`X`). However, our digests are not vectors in the way that Scikit-Learn understands them, and needs to know how to properly measure distances. An easy way to do this [#], which is compatible with other specialized distance a user may want to leverage, is to create a 1-D list of vectors. Each vector will store the index of its digest in the created :code:`X_hashes` list.  Then we can can create a distance function which uses the index, and returns the correct value. While wordy to explain, it takes only a few lines of code:
 
 .. code-block:: python
 
+    #This will be the vetor given to Scikit-Learn 
     X = [ [i] for i in range(len(X_hashes))]
     
+    #sklearn will give us two vectors a and b from 'X'
     def lzjd_dist(a, b):
-    	a_i = X_hashes[int(a[0])]
-    	b_i = X_hashes[int(b[0])]
-    	return 1.0-sim(a_i, b_i)
-
+    	#Each has len(a) = 1, so only one value to grab
+    	#The stored value tells us which index 
+    	#has 'our' digest
+    	digest_a = X_hashes[int(a[0])]
+    	digest_b = X_hashes[int(b[0])]
+    	#Now that we have the digests, compute a 
+    	#distance measure. 
+    	return 1.0-sim(digest_a, digest_b)
+    	
+    	
+.. [#] This approach is how the Scikit-learn developers recomend using other non-standard distance metrics. For example, the Scikit-learn `FAQ <https://scikit-learn.org/stable/faq.html#how-do-i-deal-with-string-data-or-trees-graphs>`_ shows how to use this approach for doing edit-distance over strings. 
 
 This is all we need to use the tools already built into Scikit-learn. For example, we can perform :math:`k`-nearest-neighbor classification with cross validation to get an idea about how accurately we are able to predict a file's type. 
 
@@ -180,7 +198,7 @@ This is all we need to use the tools already built into Scikit-learn. For exampl
         % (scores.mean(), scores.std() * 2))
 
 
-The above code returns a value of 91\% accuracy. This was all done without us having to specify anything about the associated file formats, how to parse them, or any feature engineering work. We can also leverage other distance metric based tools that Scikit-Learn provides. For example, we can use the t-SNE :cite:`Maaten2008` algorithm to create a 2D embedding of our data that we can then visualize with matplotlib. Using Scikit-Learn, this is only one line of code:
+The above code returns a value of 91\% accuracy, where a majority-vote baseline would return 25\%. This was all done without us having to specify anything about the associated file formats, how to parse them, or any feature engineering work. We can also leverage other distance metric based tools that Scikit-Learn provides. For example, we can use the t-SNE :cite:`Maaten2008` algorithm to create a 2D embedding of our data that we can then visualize with matplotlib. Using Scikit-Learn, this is only one line of code:
 
 .. code-block:: python
 
@@ -201,6 +219,12 @@ A plot of the result is shown in Figure 1, where we see that the groups are most
 	\subsection{Spam Image Classification}
 
 The prior example used files of varying types, which is similar to the problem domain that LZJD was developed for. In this example, we will change the type of data and how we approach the problem. Here, our goal will be to predict if an email image attachment is a "spam" image (i.e., undesirable) or a "ham" image (i.e., desirable - or at least, more desirable than spam). This dataset was collected in 2007 :cite:`imageSpam2007`, with 3298 spam and 2021 ham images. 
+
+.. figure:: spam_ham_example.png
+    :align: center
+    :figclass: h
+    
+    Example of ham (left) and spam (right) images from the dataset's `website <https://www.cs.jhu.edu/~mdredze/datasets/image_spam/>`_.
 
 In this example, we will use the :code:`vectorize` function to create feature vectors for each data point. This may be desirable in order to build models that avoid the nearest neighbor search, which can be slow and cumbersome to deploy. The trade off is we spend more time during the training phase of the algorithm. Doing this with pyLZJD is simple, and the below code snippet handles the work of creating the labels, loading the files, and creating feature vectors, again, without us having to specify anything about the input. 
 
@@ -251,12 +275,13 @@ This should produce an accuracy of about 94.6\%, and an AUC of 98.7\%. In the ab
       train_test_split(all_paths, y, 
         test_size=0.2, random_state=42)
     
-    X_train = vectorize(paths_train*10, 
+    X_train_clean = vectorize(paths_train) 
+    X_train_aug = vectorize(paths_train*10, 
       false_seen_prob=0.05)
     X_test = vectorize(paths_test)
 
 
-In this code, we have over-sampled both the spam and ham training data 10 times. Normally, this would create 10 copies of the same vectors, and have no impact on the solution learned. But, we added the :code:`false_seen_prob` flag, which alters how the :code:`lzset` is constructed: this flag turns on the stochastic component described above that makes you get a different result every time you call the function, so that we can get a variety of different (but realistic) examples for each datapoint. If we train a new logistic regression model on this data, we get improved results, which are shown in Table :ref:`spamImgResults`. 
+In this code, :code:`X_train_clean` constructs the training data in the normal manner. Alternatively, :code:`X_train_aug` has over-sampled both the spam and ham training data 10 times. Normally, this would create 10 copies of the same vectors, and have no impact on the solution learned. But, we added the :code:`false_seen_prob` flag, which alters how the :code:`lzset` is constructed: this flag turns on the stochastic component described above that makes you get a different result every time you call the function, so that we can get a variety of different (but realistic) examples for each datapoint. If we train a new logistic regression model on this data, we get improved results, which are shown in Table :ref:`spamImgResults`. 
 
 .. raw:: latex
 
@@ -267,11 +292,11 @@ In this code, we have over-sampled both the spam and ham training data 10 times.
 	\begin{tabular}{lcc}
 	\hline
 	\multicolumn{1}{c}{Metric} & Score    & Over-sampled Score \\ \hline
-	Accuracy                   & 0.946429 & 0.956767           \\
-	Precision                  & 0.950437 & 0.953824           \\
-	Recall                     & 0.965926 & 0.979259           \\
-	F1-Score                   & 0.958119 & 0.966374           \\
-	AUC                        & 0.987108 & 0.991602           \\ \hline
+	Accuracy                   & 0.946 & 0.957           \\
+	Precision                  & 0.950 & 0.954           \\
+	Recall                     & 0.966 & 0.979           \\
+	F1-Score                   & 0.958 & 0.966           \\
+	AUC                        & 0.987 & 0.992           \\ \hline
 	\end{tabular}
     \end{table}
 
@@ -281,7 +306,7 @@ LZJD won't always be effective for images, and convolutional neural networks (CN
 
 	\subsection{Text Classification}
 
-As our last example, we will use a text-classification problem. While other methods will work better, the purpose it to show that LZJD can be used in a wide array of potential applications. For this, we will use the well-known 20 Newsgroups dataset, which is available in Scikit-Learn. We use this dataset because LZJD works best with longer input sequences. For simplicity we will stick with distinguishing between the newsgroup categories of 'alt.atheism' and 'comp.graphics'. An example of a email from the later group is shown below. 
+As our last example, we will use a text-classification problem. While other methods will work better, the purpose it to show that LZJD can be used in a wide array of potential applications. For this, we will use the well-known 20 Newsgroups dataset, which is available in Scikit-Learn. We use this dataset because LZJD works best with longer input sequences. For simplicity we will stick with distinguishing between the newsgroup categories of 'alt.atheism' and 'comp.graphics'. An example of an email from the later group is shown below. 
 
 
 	By '8 grey level images' you mean 8 items of 1bit images?
