@@ -48,9 +48,9 @@ learning techniques that was used to win the Army Rapid Capability Office (RCO)
 2018 Signal Classification Challenge. An expert feature extraction and shallow
 learning approach is discussed in a simultaneous publication. We evaluated multiple
 state-of-the-art deep learning network architectures and adapted them to work in the
-RF signal domain instead of the image/computer vision domain. The best deep learning methods
+RF signal domain instead of the image/computer-vision domain. The best deep learning methods
 were merged with the best expert feature extraction and shallow learning
-methods using ensemble learning . Finally, the ensemble classifier was calibrated to obtain marginal gains.
+methods using ensemble learning. Finally, the ensemble classifier was calibrated to obtain marginal gains.
 The methods discussed are capable of correctly classifying waveforms at -10 dB SNR
 with over 63% accuracy and signals at +10 dB SNR with over 95% accuracy from an Army RCO provided training set.
 
@@ -68,7 +68,7 @@ waveform being exchanged. However, there are scenarios where the receiver does
 not know what waveform (i.e. modulation, coding, etc.) has been transmitted.
 Classical examples include cognitive radio network (i.e. a new terminal enters a
 network and needs to figure out what waveform is being used), and signals
-intelligence (i.e. interception of adversary’s communications). The problem of
+intelligence (i.e. interception of an adversary’s communications). The problem of
 waveform classifications, or more narrowly, modulation recognition has been
 studied for decades [Aisbett]_. Given the implication of SIGINT [#]_ applications
 before cognitive radio, much of the work had not been published. Key early work
@@ -76,7 +76,7 @@ is done by Azzouz & Nandi [Nandi1]_ [Nandi2]_ [Azz1]_ [Azz2]_.
 
 The fundamental approach taken by most authors has been to find data reduction
 functions that accentuate the differences between different waveforms. These
-functions are applied to input samples and decision is made by comparing the
+functions are applied to input samples and a decision is made by comparing the
 values against a set of multi-dimensional thresholds. Determining the threshold
 values by hand becomes impractical as the number of clusters and/or functions
 grows. The idea to apply neural networks to help make these decisions has been
@@ -94,7 +94,7 @@ Challenge Description
     :figclass: w
     :scale: 60%
 
-    Data flow through the classification pipeline. Light-blue denote the many variable parameters available.
+    Data flow through the classification pipeline. The many variable parameters available are denoted in light blue.
     :label:`data-flow`
 
 The Army Rapid Capability Office is seeking innovative approaches to leverage
@@ -111,7 +111,7 @@ built on expert features which are described in a simultaneous companion publica
 .. [#] In-Phase & Quadrature
 
 The training dataset [Mitre]_ consists of 4.32 million signals each of which
-containing 1024 complex (IQ) points and a label indicating the modulation type
+contain 1024 complex (IQ) points and a label indicating the modulation type
 and SNR. Modulation type is selected from one of 24 digital and analog
 modulations (including a noise class), with AWGN at six different
 signal-to-noise ratios (-10, -6, -2, +2, +6, or +10 dB). The complete dataset
@@ -136,7 +136,7 @@ Where N is the number of instances in the test set, M is the number of
 modulation class labels (24), :math:`y_{ij}` is 1 if test instance :math:`i`
 belongs to class :math:`j` and 0 otherwise, :math:`p_{ij}` is the predicted
 probability that observation :math:`i` belongs in class :math:`j`. The competition score,
-which we will refer to it as simply the score in the remainder of this paper,
+which we will refer to as simply the score in the remainder of this paper,
 was defined per [Mitre]_ as follows:
 
 .. math::
@@ -174,7 +174,7 @@ Approach
 --------
 
 Team Platypus' approach to solve this modulation classification problem is to
-combine deep neural networks and a shallow learning classifiers leveraging
+combine deep neural networks and shallow learning classifiers leveraging
 custom engineering features. Both of these are supervised machine learning
 systems.
 
@@ -194,7 +194,7 @@ There were two unlabeled sets released to competitors. Estimates generated for
 the first set using our deep neural network estimator resulted in very low and
 inconsistent scores. It was apparent that the data was very unlike the training
 data initially provided. Team Platypus estimates that only half of the first
-unlabeled set was like the training set. Our solutions for this datasets relied
+unlabeled set was like the training set. Our solutions for these datasets relied
 exclusively on expert engineering feature extraction and shallow classification
 techniques. Only one of the competitors achieved a higher score (0.8 points) for this set.
 
@@ -365,7 +365,7 @@ cross-validation data. Temperature scaling consistently increased the score of n
 Calibration of the scikit-learn merging classifiers consisted on using the CalibrateClassifierCV class in
 scikit-learn [SKCal]_. This class implements two different approaches for performing calibration: a parametric approach based
 on Platt's sigmoid model and a non-parametric approach based on isotonic regression. Our best results were
-achieved with the isotonic approach which were always between 0.1 to 0.9 points better than the pre-calibrated
+achieved with the isotonic approach which were always between 0.1 to 0.9 points better than the uncalibrated
 score.
 
 Merging and Calibration Results
