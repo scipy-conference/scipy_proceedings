@@ -212,6 +212,7 @@ Extending Crystal Descriptors
 =============================
 
 Computing a different set of descriptors tuned for a particular system of interest (e.g. by using more values of :math:`Q_l`, the higher-order Steinhardt :math:`W_l` parameters, or other order parameters provided by ``freud``) is possible with just a few more lines of code.
+For example, this paper :cite:`Harper2019` used ``freud`` to compute the cubatic order parameter and generate high-dimensional descriptors of structural motifs, which were visualized with t-SNE dimensionality reduction :cite:`vanDerMaaten2008`.
 The open-source ``pythia`` [#]_ library offers a number of descriptor sets, all of which leverage ``freud`` for their fast computations.
 These descriptors have been used with TensorFlow for supervised and unsupervised learning of crystal structures in complex phase diagrams :cite:`Spellings2018,TensorFlow2015`.
 
