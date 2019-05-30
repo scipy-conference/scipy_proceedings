@@ -103,9 +103,9 @@ Integrating ``freud`` with the Scientific Python Ecosystem
 
 NumPy arrays are used for all inputs and outputs in ``freud`` :cite:`Oliphant2006a`.
 Because of the wide range of trajectory formats used by different simulation engines, ``freud`` does not provide a tool for parsing data directly from trajectory output files.
-A number of libraries (such as MDAnalysis and mdtraj, as well as format-specific tools like ``gsd`` for the HOOMD-blue simulation engine) can parse trajectory files and provide their data as NumPy arrays for analysis with ``freud`` :cite:`Michaud-Agrawal2011,McGibbon2015`.
+A number of libraries (such as MDAnalysis and mdtraj, as well as format-specific tools like ``gsd`` [#]_ for the HOOMD-blue simulation engine) can parse trajectory files and provide their data as NumPy arrays for analysis with ``freud`` :cite:`Michaud-Agrawal2011,McGibbon2015`.
 
-.. TODO Cite GSD
+.. [#] https://github.com/glotzerlab/gsd
 
 In addition to ``freud``'s simple NumPy inputs and outputs, the library integrates other important tools from the Scientific Python ecosystem.
 The ``scipy`` package is one such example, where ``freud`` wraps ``scipy``'s behavior to compute Voronoi diagrams in periodic systems.
@@ -113,8 +113,6 @@ Enforcing periodicity with triclinic boxes where the sides are tilted (and thus 
 
 Similarly, the mean-squared displacement module (``freud.msd``) utilizes fast Fourier transforms from ``numpy`` or ``scipy`` to accelerate its computations.
 The resulting MSD data help to identify how particles' dynamics change over time, e.g. from ballistic to diffusive as systems solidify.
-
-.. TODO Include section about Jupyter integration notebook representations if the feature is added in time.
 
 Machine Learning
 ----------------
@@ -131,7 +129,7 @@ This example demonstrates a simple case of how ``freud`` can be used to help sol
    :align: center
    :scale: 100 %
 
-   Histogram of the Steinhardt :math:`Q_6` order parameter for 4000 particles in simple cubic, body-centered cubic, and face-centered cubic lattices with added Gaussian noise.
+   Histogram of the Steinhardt :math:`Q_6` order parameter for 4000 particles in simple cubic, body-centered cubic, and face-centered cubic structures with added Gaussian noise.
    :label:`fig:noisystructuresq6`
 
 In figure :ref:`fig:noisystructuresq6`, we show the distribution of :math:`Q_6` values for sample structures with 4000 particles.
