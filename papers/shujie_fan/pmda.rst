@@ -284,8 +284,8 @@ All nodes share a Lustre parallel file system and have access to node-local 320 
 Jobs are run through the SLURM batch queuing system.
 Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data.
 
-The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
-The test trajectories are made available on figshare at DOI XXX.
+The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111,815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
+The test trajectories are made available on figshare at DOI `10.6084/m9.figshare.8202149`_.
 
 .. raw:: latex
 
@@ -621,3 +621,4 @@ References
 .. _`Travis CI`: https://travis-ci.com/
 .. _`community mailing list`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _`issue tracker`: https://github.com/MDAnalysis/pmda/issues
+.. _`10.6084/m9.figshare.8202149`: https://doi.org/10.6084/m9.figshare.8202149
