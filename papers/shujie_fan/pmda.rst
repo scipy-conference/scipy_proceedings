@@ -440,7 +440,8 @@ As an example, we show how one can build a class to calculate the radius of gyra
     class RGYR(ParallelAnalysisBase):
         def __init__(self, protein):
             universe = protein.universe
-            super(RMSD, self).__init__(universe, (protein, ))
+            super(RMSD, self).__init__(universe,
+	                               (protein,))
         def _prepare(self):
             self.rgyr = None
         def _conclude(self):
