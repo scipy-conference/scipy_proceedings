@@ -388,9 +388,9 @@ Both approaches are described below.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 PMDA provides helper functions in :code:`pmda.custom` to rapidly build a parallel class for users who already have a *single frame* function that 
-1. takes one or more AtomGroup instances as input,
+1. takes one or more ``AtomGroup`` instances as input,
 2. analyzes one frame in a trajectory and returns the result for this frame.
-For example, if we already have a function to calculate the radius of gyration :cite:`Mura:2014kx` of a protein given in :code:`AtomGroup` ``ag``:
+For example, if we already have a function to calculate the radius of gyration :cite:`Mura:2014kx` of a protein given in :code:`AtomGroup` ``ag``, namely ``ag.radius_of_gyration()`` (as available in MDAnalysis), then we can write a simple function ``rgyr()`` that returns for each trajectory frame a tuple containing the time at the current time step and the value of the radius of gyration:
 
 .. code-block:: python
 
@@ -399,8 +399,10 @@ For example, if we already have a function to calculate the radius of gyration :
     protein = u.select_atoms('protein')
 
     def rgyr(ag):
-        return(ag.radius_of_gyration())
+        return (ag.universe.trajectory.time,
+	        ag.radius_of_gyration())
 
+	
 We can wrap :code:`rgyr()` in the :code:`pmda.custom.AnalysisFromFunction()` class instance factory function to build a parallel version of :code:`rgyr()`:
 
 .. code-block:: python
@@ -416,7 +418,15 @@ This new parallel analysis class can be run just as the existing ones:
     parallel_rgyr.run(n_jobs=4, n_blocks=4)
     print(parallel_rgyr.results)
 
-The time series of the results is stored in the attribute :code:`parallel_rgyr.results`.
+The time series of the results is stored in the attribute :code:`parallel_rgyr.results`; for our example where each per-frame result is a tuple ``(time, Rgyr)``, the time series is stored as a :math:`T \times 2` array that can be plotted with
+
+.. code-block:: python
+		
+    import matplotlib.pyplot as plt
+    data = parallel_rgyr.results
+    plt.plot(data[:, 0] , data[:, 1])
+
+
 
 
 :code:`pmda.parallel.ParallelAnalysisBase`
