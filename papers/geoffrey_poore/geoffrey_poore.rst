@@ -252,12 +252,12 @@ Creating examples
 The example in the last section was actually itself an example of using
 Codebraid. This paper was written in Markdown, then converted to
 reStructuredText via Codebraid with Pandoc. Finally, the
-reStructuredText was converted through LaTeX to PDF via docutils. The
-two code blocks in the example were only entered in the original
-Markdown source of this paper a single time, and Codebraid only executed
-them a single time. However, with Codebraid’s copy-paste capabilities,
-it was possible to display the code and output in other locations in the
-document programmatically.
+reStructuredText was converted through LaTeX to PDF via
+Docutils :cite:`docutils`. The two code blocks in the example were only
+entered in the original Markdown source of this paper a single time, and
+Codebraid only executed them a single time. However, with Codebraid’s
+copy-paste capabilities, it was possible to display the code and output
+in other locations in the document programmatically.
 
 The rendered output of the two code blocks is shown at the very end of
 the last section. This is where the code blocks were actually entered in
