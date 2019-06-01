@@ -524,6 +524,60 @@ example below demonstrates this option.
 
    ..
 
+Working with external files
+===========================
+
+Though Codebraid is focused on embedding executable code within a
+document, there will be times when it is useful to interact with
+external source files. Since Codebraid processes code with a programming
+language’s standard interpreter or compiler, normal module systems are
+fully compatible; for example, in Python, ``import`` works normally.
+Codebraid provides additional ways to work with external files via the
+``include_file`` option.
+
+When ``include_file`` is used with the ``cb.code`` command, an external
+source file is simply included and displayed. It is possible to include
+only certain line ranges using the additional option ``include_lines``,
+or only part of a file that matches a regular expression via
+``include_regex``. For example,
+
+.. code:: text
+
+   ```{.markdown .cb.code include_file=poore.txt
+   include_regex="# Working.*?,"}
+   ```
+
+includes the original Markdown source for this paper, and then uses a
+regular expression to display only the first few lines of the current
+section:
+
+.. code:: text
+
+   # Working with external files
+
+   Though Codebraid is focused on embedding executable
+   code within a document,
+
+Since the ``cb.code`` command is including content from elsewhere, it is
+used with an empty code block. Alternatively, a single empty line or a
+single line containing an underscore is allowed as a placeholder. This
+example included part of a file using a single regular expression. There
+are also options for including everything starting with or starting
+after a literal string or regular expression, and for including
+everything before or through a literal string or regular expression.
+
+The ``include_file`` option works with commands that execute code as
+well. For instance,
+
+::
+
+   ```{.python .cb.run include_file=code.py}
+   ```
+
+would read in the contents of an external file “code.py” and then run it
+in the default Python session, just as if it had been entered directly
+within the Markdown file.
+
 Implementation and language support
 ===================================
 
@@ -597,8 +651,7 @@ below.
    Traceback (most recent call last):
      File "source.py", line 3, in <module>
        var += "a"
-   TypeError: unsupported operand type(s) for +=:
-   'int' and 'str'
+   TypeError: unsupported operand type(s) for +=: 'int' and 'str'
 
 ..
 
