@@ -651,7 +651,8 @@ below.
    Traceback (most recent call last):
      File "source.py", line 3, in <module>
        var += "a"
-   TypeError: unsupported operand type(s) for +=: 'int' and 'str'
+   TypeError: unsupported operand type(s) for +=:
+   'int' and 'str'
 
 ..
 

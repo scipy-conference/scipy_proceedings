@@ -576,7 +576,7 @@ executed line numbers can be converted into original line numbers.  Then it
 parses stderr and corrects line numbers.  An example of an error produced with
 `cb.nb` with Python is shown below.
 
-```{.python .cb.nb session=error name=error}
+```{.python .cb.nb session=error name=error stderr_rewrap_lines=50}
 var = 123
 print(var, flush=True)
 var += "a"
