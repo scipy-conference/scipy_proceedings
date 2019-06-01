@@ -350,8 +350,9 @@ These can be used to override the default display settings for each command.
 Markdown source), `code`, `stdout`, `stderr`, and `none`.  Multiple options
 can be combined, such as `show=code+stdout+stderr`.  Code chunks using `copy`
 can also employ `copied_markup` to display the Markdown source of the copied
-code.  When the `cb.expr` command is used, the expression output is available
-via `expr`.  `show` completely overwrites the existing display settings.
+code chunk.  When the `cb.expr` command is used, the expression output is
+available via `expr`.  `show` completely overwrites the existing display
+settings.
 
 The display format can also be specified with `show`.  `stdout`, `stderr`, and
 `expr` can take the formats `raw` (interpreted as Markdown), `verbatim`, or
@@ -359,9 +360,10 @@ The display format can also be specified with `show`.  `stdout`, `stderr`, and
 line).  For example, `show=stdout:raw+stderr:verbatim`.  While a format can be
 specified for `markup` and `code`, only the default `verbatim` is permitted.
 
-`hide` takes the same options as show, except that `none` is replaced by `all`
-and formats are not specified.  Instead of overriding existing settings like
-`show`, `hide` removes the specified options from those that already exist.
+`hide` takes the same options as `show`, except that `none` is replaced by
+`all` and formats are not specified.  Instead of overriding existing settings
+like `show`, `hide` removes the specified display options from those that
+currently exist.
 
 
 # Advanced code execution
@@ -633,13 +635,13 @@ original motivations for creating Codebraid was to build on my previous work
 with PythonTeX :cite:`Poore2015` to create a code execution system that could
 be used with multiple markup languages.  While Codebraid has focused thus far
 on Pandoc Markdown, little of it is actually Markdown-specific.  It should be
-possible to work with other markup languages supported by Pandoc, so long as
-Pandoc parses key-value attributes for some variant of a code block in those
-languages.  Pandoc has recently added Jupyter notebooks to its extensive list
-of supported formats.  Perhaps at some point it may even be conceivable to
-convert a Codebraid document into a Jupyter notebook, perform some exploratory
-programming for a single session of a single language, and then convert back
-to Markdown.
+possible to work with other markup languages supported by Pandoc, such as
+LaTeX; all that is required is that Pandoc parses key-value attributes for
+some variant of a code block.  Pandoc has recently added Jupyter notebooks to
+its extensive list of supported formats.  Perhaps at some point it may even be
+conceivable to convert a Codebraid document into a Jupyter notebook, perform
+some exploratory programming for a single session of a single language, and
+then convert back to Markdown.
 
 Another, simpler integration with Jupyter would be to add support for running
 code using Jupyter kernels rather than Codebraid's built-in system.
