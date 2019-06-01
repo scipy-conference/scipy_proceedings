@@ -19,9 +19,10 @@ Codebraid: Live Code in Pandoc Markdown
    document programmatically and enhances reproducibility.  If there are
    errors, Codebraid parses the stderr and includes it next to the appropriate
    code for easy debugging.  Supported languages include Python, Julia, R,
-   Rust, and Bash.  Adding additional languages is as simple as creating a
-   short configuration file.  A single document can involve multiple
-   programming languages or multiple independent sessions per language.
+   Rust, Bash, and JavaScript.  Adding additional languages is as simple as
+   creating a short configuration file.  A single document can involve
+   multiple programming languages or multiple independent sessions per
+   language.
 
 .. class:: keywords
 
@@ -581,9 +582,9 @@ within the Markdown file.
 Implementation and language support
 ===================================
 
-Codebraid currently supports Python 3.5+, Julia, Rust, R, and Bash. This
-section provides an overview of how code is executed and the procedure
-for adding support for additional languages.
+Codebraid currently supports Python 3.5+, Julia, Rust, R, Bash, and
+JavaScript. This section provides an overview of how code is executed
+and the procedure for adding support for additional languages.
 
 Unless ``outside_main=true`` or ``complete=false``, code is inserted
 into a template before execution. The template writes delimiters to
