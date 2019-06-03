@@ -147,23 +147,29 @@ Graph Attention Networks
 Recent development of attention-based mechanisms allows for a weighting of each vertex based on its individual contribution during learning, thus facilitating whole-graph classifications.
 In order to convert the task from classifying each node to classifying the whole graph, the features on each vertex must be pooled to generate a single feature vector for each input. The *self-attention* mechanism, widely used to compute a concise representation of a signal sequence, has been used to effectively compute the importance of graph vertices in a neighborhood :cite:`VCCRLB2018`. This allows for a weighted sum of the vertices' features during pooling.
 
-:cite:`VCCRLB2018` use a single-layer feedforward neural network as an attention mechanism :math:`a` to compute *attention coefficients e* across pairs of vertices in a graph. For a given vertex :math:`v_{i}`, the attention mechanism attends over its first-order neighbors :math:`v_{j}`; :math:`e_{ij} = a(\textbf{W_{a}}h_{i}, \textbf{W_{a}}h_{j})`, where :math:`h_{i}` and :math:`h_{j}` are the features on vertices :math:`v_{i}` and :math:`v_{j}`, and :math:`\textbf{W_{a}}` is a shared weight matrix applied to each vertex's features. :math:`e_{ij}` is normalized via the softmax function to compute :math:`a_{ij}`: :math:`a_{ij} = softmax(e_{ij}) = exp(e_{ij}) / \sum_{k \in \mathcal{N}_{i}} exp(e_{ik})`, where :math:`\mathcal{N}_{i}` is the neighborhood of vertex :math:`v_{i}`. The new features at :math:`v_{i}` are obtained via linear combination of the original features and the normalized attention coefficients, wrapped in a nonlinearity :math:`\sigma`: :math:`h_{i}' = \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij} \textbf{W_{a}}h_{j})`. “Multi-head” attention can be used, yielding :math:`K` independent attention mechanisms that are concatenated (or averaged for the final layer). This helps to stabilize the self-attention learning process.
+:cite:`VCCRLB2018` use a single-layer feedforward neural network as an attention mechanism :math:`a` to compute *attention coefficients e* across pairs of vertices in a graph. For a given vertex :math:`v_{i}`, the attention mechanism attends over its first-order neighbors :math:`v_{j}`:
 
 .. math::
 
-    h_{i} = ||_{k=1}^{K} \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij}^{k} \textbf{W_{a}}^{k} h_{j}),
+    e_{ij} = a( \textbf{W}_{a}h_{i}, \textbf{W}_{a}h_{j}),
+
+where :math:`h_{i}` and :math:`h_{j}` are the features on vertices :math:`v_{i}` and :math:`v_{j}`, and :math:`\textbf{W}_{a}` is a shared weight matrix applied to each vertex's features. :math:`e_{ij}` is normalized via the softmax function to compute :math:`a_{ij}`: :math:`a_{ij} = softmax(e_{ij}) = exp(e_{ij}) / \sum_{k \in \mathcal{N}_{i}} exp(e_{ik})`, where :math:`\mathcal{N}_{i}` is the neighborhood of vertex :math:`v_{i}`. The new features at :math:`v_{i}` are obtained via linear combination of the original features and the normalized attention coefficients, wrapped in a nonlinearity :math:`\sigma`: :math:`h_{i}' = \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij} \textbf{W}_{a}h_{j})`. “Multi-head” attention can be used, yielding :math:`K` independent attention mechanisms that are concatenated (or averaged for the final layer). This helps to stabilize the self-attention learning process.
+
+.. math::
+
+    h_{i} = ||_{k=1}^{K} \sigma(\sum_{j \in \mathcal{N}_{i}} a_{ij}^{k} \textbf{W}_{a}^{k} h_{j}),
 
 or
 
 .. math::
 
-    h_{final} = \sigma(\frac{1}{K} \sum_{k=1}^{K} \sum_{j \in \mathcal{N}_{i}} a_{jk}^{k}\textbf{W_{a}}^{k} h_{j}).
+    h_{final} = \sigma(\frac{1}{K} \sum_{k=1}^{K} \sum_{j \in \mathcal{N}_{i}} a_{jk}^{k}\textbf{W}_{a}^{k} h_{j}).
 
 We employ a PyTorch implementation [15]_ of :cite:`VCCRLB2018`'s :code:`GAT` class to implement a graph attention network, learning attention coefficients as
 
 .. math::
 
-    a_{ij} = \frac{exp(LeakyReLU(a^{T}[\textbf{W_{a}}h_{i}||\textbf{W_{a}}h_{j}]))}{\sum_{k \in \mathcal{N}_{i}} exp(LeakyReLU(a^{T}[\textbf{W_{a}}h_{i}||\textbf{W_{a}}h_{k}]))},
+    a_{ij} = \frac{exp(LeakyReLU(a^{T}[\textbf{W}_{a}h_{i}||\textbf{W}_{a}h_{j}]))}{\sum_{k \in \mathcal{N}_{i}} exp(LeakyReLU(a^{T}[\textbf{W}_{a}h_{i}||\textbf{W}_{a}h_{k}]))},
 
 where :math:`||` is concatenation.
 
