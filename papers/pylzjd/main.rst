@@ -120,7 +120,7 @@ Another feature introduced in :cite:`raff_shwel` is the ability to stochasticall
 .. code-block:: python
 
     if b_s not in s 
-      or random.uniform() < false_seen_prob:
+      and random.uniform() > false_seen_prob:
 
 
 By doing so, the set of sub-strings returned will be altered. However, the altered set is still true to the data in that every string in the set is a real and valid sub-string from the corpus. This works because the Lempel Ziv dictionary creation is sensitive to small changes in the input, so a few small alterations can propagate forward and cause a number of differences in the entire process. By making the condition random, we can repeat the process several times and get  different results each time, providing additional diversity that can help train a model. When :code:`false_seen_prob` = 0, we get the standard LZJD output. To perform oversampling, we recommend using small values like :code:`false_seen_prob` :math:`\leq 0.05`. 
