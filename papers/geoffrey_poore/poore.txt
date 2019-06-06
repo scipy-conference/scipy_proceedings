@@ -494,15 +494,17 @@ file is simply included and displayed.  It is possible to include only certain
 line ranges using the additional option `include_lines`, or only part of a
 file that matches a regular expression via `include_regex`.  For example,
 
-```{.cb.paste copy=include show=copied_markup copied_markup_rewrap_lines=55}
+```{.cb.paste copy=include show=copied_markup
+copied_markup_rewrap_lines=true copied_markup_rewrap_width=55}
 ```
 
 includes the original Markdown source for this paper, and then uses a regular
 expression to display only the first few lines of the current section:
 
-```{.markdown .cb.code include_file=poore.txt code_rewrap_lines=55
+```{.markdown .cb.code include_file=poore.txt
+code_rewrap_lines=true code_rewrap_width=55
 include_regex="# Working.*?," name=include
-hide_markup_keys=name+code_rewrap_lines}
+hide_markup_keys=name+code_rewrap_lines+code_rewrap_width}
 ```
 
 Since the `cb.code` command is including content from elsewhere, it is used
@@ -580,7 +582,8 @@ executed line numbers can be converted into original line numbers.  Then it
 parses stderr and corrects line numbers.  An example of an error produced with
 `cb.nb` with Python is shown below.
 
-```{.python .cb.nb session=error name=error stderr_rewrap_lines=50}
+```{.python .cb.nb session=error name=error
+stderr_rewrap_lines=true stderr_rewrap_width=50}
 var = 123
 print(var, flush=True)
 var += "a"
