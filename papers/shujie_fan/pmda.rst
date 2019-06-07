@@ -298,7 +298,7 @@ The test trajectories are made available on figshare at DOI `10.6084/m9.figshare
     Lustre-distributed-3nodes & Lustre       & \textit{distributed}       &  3        & 72         \tabularnewline
     Lustre-distributed-6nodes & Lustre       & \textit{distributed}       &  6        & 72         \tabularnewline
     Lustre-multiprocessing    & Lustre       & \textit{multiprocessing}   &  1        & 24         \tabularnewline
-    SSD-distributed           & SSD          & \textit{distributed}       &  3        & 72         \tabularnewline
+    SSD-distributed           & SSD          & \textit{distributed}       &  1        & 24         \tabularnewline
     SSD-multiprocessing       & SSD          & \textit{multiprocessing}   &  1        & 24         \tabularnewline
     \bottomrule
     \end{longtable*}
