@@ -298,7 +298,7 @@ The test trajectories are made available on figshare at DOI `10.6084/m9.figshare
     Lustre-distributed-3nodes & Lustre       & \textit{distributed}       &  3        & 72         \tabularnewline
     Lustre-distributed-6nodes & Lustre       & \textit{distributed}       &  6        & 72         \tabularnewline
     Lustre-multiprocessing    & Lustre       & \textit{multiprocessing}   &  1        & 24         \tabularnewline
-    SSD-distributed           & SSD          & \textit{distributed}       &  3        & 72         \tabularnewline
+    SSD-distributed           & SSD          & \textit{distributed}       &  1        & 24         \tabularnewline
     SSD-multiprocessing       & SSD          & \textit{multiprocessing}   &  1        & 24         \tabularnewline
     \bottomrule
     \end{longtable*}
@@ -310,8 +310,8 @@ The test trajectories are made available on figshare at DOI `10.6084/m9.figshare
    \end{table}
 
 We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared *Lustre* parallel file system or from local *SSD*) as shown in Table :ref:`tab:configurations`.
-The *multiprocessing* scheduler and the SSD restrict runs to a single node (maximum 24 CPU cores).
-With *distributed* we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
+Using either *multiprocessing* scheduler or the SSD restrict runs to a single node (maximum 24 CPU cores).
+With *distributed* (and *Lustre*) we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
 In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
 We performed single benchmark runs for *distributed* on local SSD (*SSD-distributed*) and *multiprocessing* on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
 We plotted results for one typical benchmark run each.
