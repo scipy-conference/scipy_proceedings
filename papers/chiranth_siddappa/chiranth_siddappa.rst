@@ -7,8 +7,6 @@
 :institution: University of Colorado Colorado Springs
 :bibliography: caf
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
-
 ---------------------------------------------
 CAF Implementation on FPGA Using Python Tools
 ---------------------------------------------
