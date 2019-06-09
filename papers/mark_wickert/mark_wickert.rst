@@ -65,7 +65,7 @@ testing will be used to blind test subjects for their perception of where a soun
 ===========
 
 To produce a synthesized 3D audio sound field starts with a geometry. For a given source location 
-:math:`(x,y,z) = (x_1,-x_2,x_3)`, we transform to the cylindrical coordinates shown in :ref:`CYLIND`. Later we discuss 
+:math:`(x,y,z) = (x_1,-x_2,x_3)`, we transform to the cylindrical coordinates shown in Figure :ref:`CYLIND`. Later we discuss 
 how we transform between the cylindrical coordinates and the CIPIC interaural-polar coordinate system (IPCS) 
 in order to use the HRIR filter sets in the simulator.
 
@@ -76,8 +76,20 @@ in order to use the HRIR filter sets in the simulator.
 
    The cylindrical coordinate system used in the 3D audio simulator compared with the CIPIC IPCS. :label:`CYLIND`
 
+The 3D audio rendering provided by the simulator developed in this paper, relies on the 1250 
+HRIR measurements were taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
+A total of 45 subjects are contained in the CIPIC HRIR database.
 
- Add missing text.
+.. figure:: CIPIC_Source_Locations.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   The CIPIC audio source locations, effectively on a 1 m radius sphere, used to obtain 1250 HRIR measurements 
+   for each of 45 subjects (only the right hemisphere locations shown). :label:`CIPICLOC`
+
+For subject 165 in particular, the left-right channel HRIR is shown in Figure :ref:`HRIR`, for a particular cylindrical coordinate 
+system triple :math:`(r_{xz},h_y,\phi_{az})`. 
 
 .. figure:: HRIR_example.pdf
    :scale: 50%
