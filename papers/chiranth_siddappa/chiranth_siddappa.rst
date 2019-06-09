@@ -439,8 +439,10 @@ the master signal conditions are correct.
          q_add <= q_add;
          q_add_out <= q_add_out;
       end // else: !if(m_axis_tvalid)
-      i <= i_sub_out[xi_bits+yi_bits-1: xi_bits+yi_bits-i_bits];
-      q <= q_add_out[xq_bits+yq_bits-1: xq_bits+yq_bits-q_bits];
+      i <= i_sub_out[xi_bits+yi_bits-1:
+                     xi_bits+yi_bits-i_bits];
+      q <= q_add_out[xq_bits+yq_bits-1:
+                     xq_bits+yq_bits-q_bits];
    end // always @ (posedge clk)
 
 Signal Generator
@@ -490,7 +492,8 @@ of 8-bits was found to be sufficient to provide a frequency shifted signal.
 
    class SigGen(CafVerilogBase):
 
-       def __init__(self, freq_res, fs, n_bits, output_dir='.'):
+       def __init__(self, freq_res, fs, n_bits,
+                    output_dir='.'):
 
 
 Frequency Shift
@@ -524,7 +527,8 @@ represents.
 
    class FreqShift(CafVerilogBase):
 
-        def __init__(self, x, freq_res, fs, n_bits, i_bits=12, q_bits=0,
+        def __init__(self, x, freq_res, fs, n_bits,
+                     i_bits=12, q_bits=0,
                      neg_shift=False, output_dir='.'):
 
 Cross Correlation
