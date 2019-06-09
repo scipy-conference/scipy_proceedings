@@ -54,30 +54,30 @@ filters that the sound source audio is passed through. Here the data base for ea
 holds 25 azimuth and 50 elevation angles to approximate continuous sound source 3D locations. 
 
 Obtaining individual HRTFs is a challenge in itself and the subject of much research. In a related 
-research project *deep learning* is being investigated as a means to fit a human subject to a large HRTF 
-data base of subjects based on anthropometrics of the subject. As a simple solution, 
+research project *deep learning* is being investigated as a means to fit a human subject to the CIPIC HRTF 
+data base of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
 we can also consider using a simple spherical head model, and its corresponding HRTF, which 
-make use of spherical harmonics to solve for the sound pressure at any location on the sphere 
-surface. To that end this simulator is integral to planned human subject testing where headphone 
+make use of spherical harmonics to solve for the sound pressure magnitude and phase at any location on the sphere 
+surface, and then the inverse Fourier transform to ultimately obtain the HRIR. To that end this simulator is integral to planned human subject testing where headphone 
 testing will be used to blind test subjects for their perception of where a sound source is located. 
 
 3D Geometry
 ===========
 
 To produce a synthesized 3D audio sound field starts with a geometry. For a given source location 
-:math:`(x,y,z)`, we transform to the cylindrical coordinates shown in :ref:`CYLIND`. This 
-configuration fits well with the coordinate system used in the CIPIC database.
+:math:`(x,y,z) = (x_1,-x_2,x_3)`, we transform to the cylindrical coordinates shown in :ref:`CYLIND`. Later we discuss 
+how we transform between the cylindrical coordinates and the CIPIC interaural-polar coordinate system (IPCS) 
+in order to use the HRIR filter sets in the simulator.
 
 .. figure:: 3D_Coordinates.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   The cylindrical coordinate system used in the 3D audio simulator. :label:`CYLIND`
+   The cylindrical coordinate system used in the 3D audio simulator compared with the CIPIC IPCS. :label:`CYLIND`
 
 
-More writing TBD.
-
+ Add missing text.
 
 .. figure:: HRIR_example.pdf
    :scale: 50%
