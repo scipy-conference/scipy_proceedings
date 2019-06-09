@@ -58,51 +58,62 @@ research project *deep learning* is being investigated as a means to fit a human
 data base of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
 we can also consider using a simple spherical head model, and its corresponding HRTF, which 
 make use of spherical harmonics to solve for the sound pressure magnitude and phase at any location on the sphere 
-surface, and then the inverse Fourier transform to ultimately obtain the HRIR. To that end this simulator is integral to planned human subject testing where headphone 
-testing will be used to blind test subjects for their perception of where a sound source is located. 
+surface, and then the inverse Fourier transform to ultimately obtain the HRIR. To that end this simulator is 
+integral to planned human subject testing where headphone testing will be used to blind test subjects for 
+their perception of where a sound source is located. 
 
 3D Geometry
 ===========
 
-To produce a synthesized 3D audio sound field starts with a geometry. For a given source location 
-:math:`(x,y,z) = (x_1,-x_2,x_3)`, we transform to the cylindrical coordinates shown in Figure :ref:`CYLIND`. Later we discuss 
-how we transform between the cylindrical coordinates and the CIPIC interaural-polar coordinate system (IPCS) 
+To produce a synthesized 3D audio sound field starts with a geometry. The center of the frame is the subjects head 
+where the *mid-sagittal* or vertical *median plane* intersects the line connecting the left and right ear canals. 
+For a given source location :math:`(x,y,z) = (x_1,-x_2,x_3)` pointing at the the origin, we transform from rectangular 
+coordinates to cylindrical coordinates as shown in Figure :ref:`CYLIND`. This transformation is motivated by 
+[Fitzpatrick]_, and will be explained more fully in a later section.
+Note also the second rectangular coordinate frame mention above is the notation used by CIPIC. Later we discuss 
+how we transform between the cylindrical coordinates and the CIPIC interaural-polar coordinate system (IPCS), 
 in order to use the HRIR filter sets in the simulator.
+
 
 .. figure:: 3D_Coordinates.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   The cylindrical coordinate system used in the 3D audio simulator compared with the CIPIC IPCS. :label:`CYLIND`
+   The head-centered cylindrical coordinate system used in the 3D audio simulator compared with the 
+   CIPIC IPCS. :label:`CYLIND`
 
 The 3D audio rendering provided by the simulator developed in this paper, relies on the 1250 
 HRIR measurements were taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
-A total of 45 subjects are contained in the CIPIC HRIR database.
+A total of 45 subjects are contained in the CIPIC HRIR database, both human and the mannequin *Kemar* [CIPICHRTF]_. 
+For subject 165 in particular, the left-right channel HRIR is shown in Figure :ref:`HRIR`, for a particular 
+cylindrical coordinate system triple :math:`(r_{xz},h_y,\phi_{az})`. Figure :ref:`HRIR` in particular illustrates 
+two binaural cues, *interaural level difference* ILD and *interaural time difference* ITD, that are used for 
+accurate localization of a sound source. With :math:`\phi_{az} = 130^\circ` we see as expected, the impulse 
+response for the right ear arriving ahead of the left ear response, and with greater amplitude.
 
 .. figure:: CIPIC_Source_Locations.pdf
-   :scale: 50%
+   :scale: 60%
    :align: center
    :figclass: htb
 
    The CIPIC audio source locations, effectively on a 1 m radius sphere, used to obtain 1250 HRIR measurements 
    for each of 45 subjects (only the right hemisphere locations shown). :label:`CIPICLOC`
-
-For subject 165 in particular, the left-right channel HRIR is shown in Figure :ref:`HRIR`, for a particular cylindrical coordinate 
-system triple :math:`(r_{xz},h_y,\phi_{az})`. 
+ 
 
 .. figure:: HRIR_example.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Example HRIR for a particular arrival angle pulled from CIPIC for subject 165. :label:`HRIR`
+   Example right/left HRIR plots for a particular arrival angle pulled from CIPIC for subject 165. :label:`HRIR`
+
 
 
 Real-Time Signal Processing
 ===========================
 
-The cylindrical coordinates of the source point to an LUT entry of filter coefficients for the 
+In code the cylindrical coordinates of the audio source point to an LUT entry of filter coefficients for the 
 left and right channels. To implement the filtering action we use the :code:`pyaudio_helper` framework 
 [Wickert]_ of Figure :ref:`PAH`, which interfaces to the audio subsystem of a personal computer. The 
 framework supports real-time signal processing, in particular filtering using core signal 
@@ -115,15 +126,15 @@ processing functions of :code:`scipy.signal` [ScipySignal]_.
 
    The `pyaudio_helper` framework for real-time DSP in the Jupyter notebook. :label:`PAH`
 
-A top level block diagram of the 3D audio simulator 
-is shown in Figure :ref:`FILTERING`.
+A top level block diagram of the 3D audio simulator is shown in Figure :ref:`FILTERING`. Here we see that 
 
 .. figure:: Filtering_BlockDiagram.pdf
    :scale: 65%
    :align: center
    :figclass: htb
 
-   Real-time DSP filtering with coefficients determined by the audio source :math:`(x,y,z)` location. :label:`FILTERING`
+   Real-time DSP filtering with coefficients determined by the audio source :math:`(x,y,z)` location. 
+   :label:`FILTERING`
 
 More writing TBD.
 
