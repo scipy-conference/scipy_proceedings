@@ -1042,8 +1042,10 @@ Conclusion
 Codebraid provides a unique and powerful combination of features for executing
 code embedded in Pandoc Markdown documents.  A single document can contain
 multiple languages and multiple independent sessions per language.  Any
-combination of Markdown source, code, stdout, and stderr can be displayed, and
-it is easy to reuse code and output elsewhere in a document.
+combination of Markdown source, code, stdout, and stderr can be displayed.  It
+is easy to reuse code and output elsewhere in a document, or include all or
+part of an external file.  Because only standard Pandoc Markdown syntax is
+used, all Markdown parsing and document conversion can be delegated to Pandoc.
 
 There are several logical avenues for further development.  One of the
 original motivations for creating Codebraid was to build on my previous work
