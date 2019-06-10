@@ -252,6 +252,26 @@ Acknowledgements
 Data used in the preparation of this article were obtained from the Parkinson's Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For up-to-date information on the study, visit www.ppmi-info.org.
 PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation for Parkinson's Research and funding partners, including Abbvie, Allergan, Avid, Biogen, BioLegend, Bristol-Mayers Squibb, Colgene, Denali, GE Healthcare, Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer, Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily, Voyager, and Golub Capital.
 
+
+.. [1] In this paper we use “anatomical MRI” to refer to standard *T1-weighted* (T1w) MR imaging. “T1 weighted” refers to the specific sequence and timing of magnetic pulses and radio frequencies used during imaging. T1w MRI is a common MR imaging procedure; the important thing to note is that T1 weighting yields high-resolution images which show contrast between different tissue types, allowing for segmentation of different anatomical regions.
+.. [2] https://github.com/xtianmcd/ppmi_dl
+.. [3] When using the "Advanced Download" option on the PPMI database, the data is split into multiple zip files, often splitting up the data of a single subject.
+.. [4] https://nifti.nimh.nih.gov
+.. [5] https://www.dicomlibrary.com
+.. [6] https://github.com/rordenlab/dcm2niix
+.. [7] https://bids.neuroimaging.io
+.. [8] We install the softwares to the home (`~`) directory due to permission issues when connect to Google cloud virtual machines via the `ssh` command. Freesurfer's setup does not automatically adapt to installation in the home directory, so several of its environment variables need to be hard coded. See the `setup` bash script provided for details.
+.. [9] https://surfer.nmr.mgh.harvard.edu
+.. [10] In the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. It is also mentioned that the time required to transfer data on and off GPU cores may diminish the speedup provided by GPU processing. GPU support has not been provided by Freesurfer for quite some time, and we were unable to compile Freesurfer to use newer versions of CUDA. We tested multiple CPU multiprocessing approaches and found that running images in parallel with a single core per process was the fastest method.
+.. [11] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+.. [12] Each subject has anatomical and diffusion MRI data for varying numbers of visits to the clinic. We use “clinic visit” or CV to refer to the MRI acquisitions (anatomical and diffusion) obtained during a single visit to the clinic.
+.. [13] http://brainsuite.org
+.. [14] http://trackvis.org/dtk/
+.. [15] https://github.com/tkipf/pygcn
+.. [16] https://github.com/Diego999/pyGAT
+.. [17] https://www.ppmi-info.org
+
+
 .. raw:: latex
 
    \bibliographystyle{plain}
@@ -325,21 +345,3 @@ where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \m
     H(l+1) = \sigma(\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}H(l)\textbf{W}(l)).
 
 The time complexity of computing a single attention mechanism is :math:`O(|\mathcal{V}|FF' + |\mathcal{E}|F')`, where :math:`F` is the number of input features and :math:`F'` is the number of output features.
-
-.. [1] In this paper we use “anatomical MRI” to refer to standard *T1-weighted* (T1w) MR imaging. “T1 weighted” refers to the specific sequence and timing of magnetic pulses and radio frequencies used during imaging. T1w MRI is a common MR imaging procedure; the important thing to note is that T1 weighting yields high-resolution images which show contrast between different tissue types, allowing for segmentation of different anatomical regions.
-.. [2] https://github.com/xtianmcd/ppmi_dl
-.. [3] When using the "Advanced Download" option on the PPMI database, the data is split into multiple zip files, often splitting up the data of a single subject.
-.. [4] https://nifti.nimh.nih.gov
-.. [5] https://www.dicomlibrary.com
-.. [6] https://github.com/rordenlab/dcm2niix
-.. [7] https://bids.neuroimaging.io
-.. [8] We install the softwares to the home (`~`) directory due to permission issues when connect to Google cloud virtual machines via the `ssh` command. Freesurfer's setup does not automatically adapt to installation in the home directory, so several of its environment variables need to be hard coded. See the `setup` bash script provided for details.
-.. [9] https://surfer.nmr.mgh.harvard.edu
-.. [10] In the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. It is also mentioned that the time required to transfer data on and off GPU cores may diminish the speedup provided by GPU processing. GPU support has not been provided by Freesurfer for quite some time, and we were unable to compile Freesurfer to use newer versions of CUDA. We tested multiple CPU multiprocessing approaches and found that running images in parallel with a single core per process was the fastest method.
-.. [11] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-.. [12] Each subject has anatomical and diffusion MRI data for varying numbers of visits to the clinic. We use “clinic visit” or CV to refer to the MRI acquisitions (anatomical and diffusion) obtained during a single visit to the clinic.
-.. [13] http://brainsuite.org
-.. [14] http://trackvis.org/dtk/
-.. [15] https://github.com/tkipf/pygcn
-.. [16] https://github.com/Diego999/pyGAT
-.. [17] https://www.ppmi-info.org
