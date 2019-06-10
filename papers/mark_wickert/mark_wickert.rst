@@ -435,13 +435,26 @@ the ear canal centerline. The Jupyter Widgets slider interface is shown in Figur
 Spherical Head Model as a Simple Reference
 ------------------------------------------
 
-Bring in references [Boelein]_, [Duda]_, and [Beranek]_ to discuss a 3D sound source simulator app which use a 
-simple spherical head model in place of the subject's HRTF. The HRTF data filter coefficients can be obtained 
-using known expressions for sound pressure wave scattering from a rigid sphere. The sphere radius can for example be set to match the mean radius of the subjects head. Ultimately we wish to evaluate human subjects with multiple HRTF's, and use the ...
+In blind testing of human subjects it is also of interest to offer other HRIR solutions, say 
+the Kemar mannequin head or a simple spherical head [Duda]_ and [Bogelein]_. In this section we consider 
+a sphereical head model with intent of using the results of [Duda]_ to allow the construction of a 
+CIPIC-like database entry that can be used in the 3D audio simulator.
 
-Using a spherical harmonics-based solution the incident plus scattered sound pressure, :math:`\tilde{P}`, as a magnitude 
-and phase is calculated. For an example shown below a very large sphere is for preliminary calculations at 
-an audio frequency of 2 kHz is shown in Figure :ref:`SCATTER`
+As a starting point texts such as [Beranek]_ give series solutions for a sinusoidal 
+pressure wave source (point source or plane wave) using spherical harmonics to represent the 
+incident plus scattered sound pressure, :math:`\tilde{P}`, in the presence of a rigid sphere. 
+[Duda]_ notes that a *standard head* radius is 8.75 cm.  For a 8.75 cm radius rigid sphere 
+and an audio frequency of 2 kHz the composite pressure wave magnitude near the sphere is shown 
+Figure :ref:`SCATTER`. For HRIR calculation we are interested in the ratio of the pressure on the 
+surface of the sphere to the incident pressure wave, for a given angle of incidence. In [Duda]_ an 
+efficient series solution is given for a finite distance point source. In Figure :ref:`SPHEREHRIR` 
+a collection of HRIR plots are given for the source 1 m away from the center of a 8.75 cm radius sphere. 
+These HRIRs have been used to create a CIPC-like database entry (:code:`subject_200`) in code. To 
+make this possible, we first have to relate the angle of incidence in the sphere wave equation solution 
+to the angle of arrival of an audio source on the CIPIC 1 m sphere, relative to right and left ear 
+canal entries at :math:`\phi_{az} = \pm 100^\circ`. A description of this problem is given in 
+Figure :ref:`ANGLESOLVE`. This problem turns out to be a familiar analytic geometry problem, that 
+of finding the angle between two 3D vectors passing through the origin.
 
 .. figure:: SphericalHeadScattering.pdf
    :scale: 50%
@@ -452,12 +465,47 @@ an audio frequency of 2 kHz is shown in Figure :ref:`SCATTER`
    phase with a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
 
 
+.. figure:: SphericalHeadHRIR.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   Using the spherical harmonics formulation of [Duda]_ to obtain HRTF and then HRIR as a function of sound 
+   source incidence angle from :math:`0^\circ` to :math:`180^\circ`. :label:`SPHEREHRIR`
+
+
+.. figure:: Angle_Between_Source_Ear_Canal.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   Solving for the angle between the source and a ray extending from the right and left ears. :label:`ANGLESOLVE`
+
+
+Finally, putting is all together code was written in a Jupyter notebook to generate a CIPIC-like database entry. 
+An example HRIR plot, similar to Figure :ref:`HRIR` is shown in Figure :ref:`HRIR875`. 
+
+.. figure:: HRIR_example_sphere_R875.pdf
+   :scale: 50%
+   :align: center
+   :figclass: htb
+
+   Example right/left HRIR plots for a particular arrival angle pulled from the CIPIC-like database entry created 
+   for a radius 8.75 cm sphere. :label:`HRIR875`
+
+
+
 Conclusions and Future Work
 ---------------------------
 
-Applications development is relatively easy on the real-time signal processing side. Getting all of the coordinate transformations together is more complex. 
+Development of the 3D audio simulator was relatively easy on the real-time signal processing side. 
+Getting all of the coordinate transformations, gain and parallax corrections were more complex. Adding 
+the spherical head model calculations, first in the frequency domain (HRIR), and then the time domain 
+(HRIR) was the most complex as special functions are required for the general pressure wave solution. 
 
-More writing TBD.
+Informal testing of human subjects has one well. Precise localization experiments using the static app have 
+not been attempted just yet. The virtual reality aspects of the dynamic app have received many positive 
+comments from informal testing. 
 
 
 References
@@ -470,7 +518,7 @@ References
 .. [ScipySignal] *Signal processing (scipy.signal)*, (2019, May 22). Retrieved May 22, 2019, from `https://docs.scipy.org/doc/scipy/reference/signal.html`_.
 .. [Beranek] Beranek, L. and Mellow, T (2012). *Acoustics: Sound Fields and Transducers*. London: Elsevier.
 .. [Duda] Duda, R. and Martens, W. (1998). Range dependence of the response of a spherical head model, *J. Acoust. Soc. Am. 104 (5)*.
-.. [Boelein]  Bogelein, S., Brinkmann, F.,  Ackermann, D., and Weinzierl, S. (2018). Localization Cues of a Spherical Head Model. *DAGA Conference 2018 Munich*. 
+.. [Bogelein]  Bogelein, S., Brinkmann, F.,  Ackermann, D., and Weinzierl, S. (2018). Localization Cues of a Spherical Head Model. *DAGA Conference 2018 Munich*. 
 
 .. _`https://www.ece.ucdavis.edu/cipic`: https://www.ece.ucdavis.edu/cipic
 .. _`https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`: https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data
