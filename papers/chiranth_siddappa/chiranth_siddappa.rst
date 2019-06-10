@@ -295,40 +295,6 @@ them in as integer values.
 
    12-bit and 8-bit Quantization Comparison. :label:`quant-cos`
 
-AXI Compliance
---------------
-
-Xilinx and ARM both promote the use of the AXI4 interface protocols for higher bandwidth and lower latency. This
-protocol describes a handshaking method that occurs when a "tready" signal and "tvalid" signal are asserted on the same
-clock :cite:`axi-stream`. This protocol is a master and slave type protocol.
-Two examples of valid signal assertion are shown.
-The first handshake in Fig. :ref:`axi-before` is where the "tready" signal is asserted waiting for the other device to
-send valid data. The second handshake shown in Fig. :ref:`axi-with` is where the two signals are asserted at the same
-time. This project primarily uses the first sequence as there is pipelining that has been implemented between modules.
-Furthermore, because AXI is domain agnostic, a custom data format can be used in between transfers. For example, in
-Fig. :ref:`axi-cpx` a real sample and complex sample are captured on alternating clocks. In the design implemented in
-this project, both real and imaginary values are clocked on the same cycle. However, because of the ability to throttle
-the input one could perform the same operation and get a valid result.
-
-.. figure:: AXI_before.png
-
-   AXI tready signal is held before the tvalid signal is asserted :cite:`axi-stream`. :label:`axi-before`
-
-.. figure:: AXI_with.png
-
-   AXI tready signal is asserted along with tvalid :cite:`axi-stream`. :label:`axi-with`
-
-.. figure:: AXI_cpx.png
-
-   AXI tready signal is asserted along with tvalid :cite:`axi-ref`. :label:`axi-cpx`
-
-The modules that have been written in this package all adhere to AXI compliant handshakes. It is generally expected
-that HDL modules will be written with both a clock and reset line to ensure the correct state of a module before use.
-However, due to the convention of using initial blocks in FPGA design, there are no asynchronous resets in this design.
-It is important to note that this type of design is inherently self throttling. This made the implementation of
-pipelined modules very straight forward.
-
-
 Complex Multiply
 ----------------
 
