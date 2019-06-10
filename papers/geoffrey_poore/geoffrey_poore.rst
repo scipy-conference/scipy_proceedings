@@ -159,7 +159,7 @@ the output of expressions.
 .. https://yihui.name/knitr/faq/
 
 When knitr is used with Markdown, custom Markdown syntax is used for
-defining code block options and designating inline code that will be
+defining code-block options and designating inline code that will be
 executed. Fenced code blocks begin with options of the form
 
 ::
@@ -191,8 +191,8 @@ displayed when not being edited), raw text, or code.  Code is executed by
 language-specific backends, or kernels.  Well over one hundred kernels are
 available beyond Python, including Julia, R, bash, and even compiled languages
 like C++ and Rust :cite:`jupyter-kernels`.  While Jupyter kernels are often
-used with the notebook, they can be used separately as a standalone code
-execution system, such as the Org-mode integration mentioned above.
+used with the Jupyter Notebook, they can be used separately as a standalone
+code execution system, such as the Org-mode integration mentioned above.
 
 A Jupyter Notebook can only have a single kernel, and thus only a single
 primary programming language in a single session or process.  This means that
@@ -201,15 +201,15 @@ sessions or processes is typically not as straightforward as it might be in
 Org-mode Babel.  However, the interactive nature of the notebook often reduces
 the impact of this limitation, and can actually be a significant advantage.
 Code cells can be run one at a time; a single code cell can be modified and
-run again within rerunning any previous code cells.
+run again without rerunning any previous code cells.
 
 There are multiple ways to work around the single-kernel-per-notebook
 limitation.  The IPython kernel provides ``%%script`` and similar "magics"
 :cite:`ipython-magics` that can execute a cell with another language.
 Each cell is executed individually in its own subprocess, so there is no
 persistence of data and variables between such cells.  Magics provided by
-PyJulia :cite:`PyJulia` and rpy2 :cite:`RPy2` avoid this limitation so that an
-IPython kernel can interact with a single Julia or R session over a series of
+PyJulia :cite:`PyJulia` and rpy2 :cite:`RPy2` allow an
+IPython kernel to interact with a single Julia or R session over a series of
 cells (see :cite:`Bussonnier2018` for examples).  Some broader approaches to
 working around this limitation are provided by the BeakerX polyglot magics
 :cite:`BeakerX`, which support bidirectional autotranslation of data between
@@ -219,14 +219,16 @@ managing kernel over multiple normal kernels.
 Jupyter code cells correspond to code blocks in Org-mode Babel or knitr.
 There is no built-in support for executing inline code within Markdown cells.
 This is possible with the Python Markdown extension
-:cite:`jupyter:pymarkdown`, so long as inline code is outside LaTeX equations.
-The extension also supports notebook export to other document formats with
-nbconvert :cite:`nbconvert` via a bundled preprocessor.
+:cite:`jupyter:pymarkdown`, which treats Markdown cells as
+``{{expression}}``-style templates, so long as inline code is outside LaTeX
+equations.  The extension also supports notebook export to other document
+formats with nbconvert :cite:`nbconvert` via a bundled preprocessor.
 
 In the browser interface, Jupyter notebooks display code, stdout, stderr, and
 rich output such as plots (when supported by the kernel).  All output can be
 hidden by double-clicking next to it in the left margin.  Hiding code is
-currently only possible with extensions :cite:`jupyter:codefolding,jupyter:hideallinput,jupyter:hideinput`.
+currently only possible with extensions :cite:`jupyter:codefolding,jupyter:hideallinput,jupyter:hideinput`, or by using the newer
+Jupyter Lab interface.
 
 .. https://nbconvert.readthedocs.io/en/latest/config_options.html
 .. https://jupyter.org/jupyter-book/features/hiding.html
@@ -235,10 +237,10 @@ currently only possible with extensions :cite:`jupyter:codefolding,jupyter:hidea
 Notebooks can be exported to document formats such as HTML and PDF with
 nbconvert :cite:`nbconvert`, the Jupyter notebook conversion program.  Hiding
 code or output in exported documents is possible on a notebook-wide basis by
-configuring nbconvert with the TemplateExporter exclude options.  It is also
+configuring nbconvert with the ``TemplateExporter`` exclude options.  It is also
 possible at the individual cell level by adding a tag to a cell (View, Cell
 Toolbar, Tags, then "Add tag") and then configuring nbconvert to use the
-desired TagRemovePreprocessor with a given tag.  An alternative is to use
+desired ``TagRemovePreprocessor`` with a given tag.  An alternative is to use
 extensions with their provided preprocessors or templates
 :cite:`jupyter:codefolding,jupyter:hideinput`, or employ a more inclusive tool
 like Jupyter Book :cite:`JupyterBook` that defines a set of tags for display
@@ -328,7 +330,7 @@ to be loaded as a notebook, or a notebook to be saved as Markdown.
 
 .. https://github.com/aaren/notedown
 
-Similar notebook-Markdown conversion capabilities are provided by notedown
+Similar notebook–Markdown conversion capabilities are provided by notedown
 :cite:`notedown`.  Unlike podoc, notedown allows configuration of which types
 of Markdown code blocks are converted into notebook code cells.  This allows
 code blocks representing literal code that is not executed.  notedown can also
@@ -381,8 +383,8 @@ The tools discussed in the last subsection represent alternate ways of
 interacting with a Jupyter notebook.  This subsection provides an overview of
 programs that combine Jupyter kernels with Markdown or other formats to
 provide a different or broader set of features than what is possible with a
-default notebook (or at least what was possible with a default notebook at the
-time the program was initially developed).
+default notebook.  In some cases, advances in nbconvert capabilities have made
+the features provided by these programs less distinctive.
 
 .. http://mpastell.com/pweave/
 
@@ -395,7 +397,7 @@ and rich output like plots can be included automatically.  Although Pweave is
 focused on Python, it can be used with any Jupyter kernel (one kernel is
 allowed per file).  Pweave documents support inline code execution, provide
 options for hiding code or its output, can execute code to emulate a terminal
-session, and incorporate code block options for customizing figure display.
+session, and incorporate code-block options for customizing figure display.
 
 .. http://weavejl.mpastell.com/stable/
 
@@ -407,7 +409,7 @@ code execution rather than a Jupyter kernel.
 .. https://github.com/pystitch/stitch
 
 knitpy :cite:`knitpy` describes itself as a port of knitr to Python.  It uses
-knitr-style Markdown syntax, and provides code block options to control code
+knitr-style Markdown syntax, and provides code-block options to control code
 and output display.  Other knitr-style options are not supported.  Code is
 executed in a single Jupyter Python kernel.  stitch :cite:`stitch` is similar,
 drawing inspiration from knitr and knitpy.  Compared to knitpy, it lacks
@@ -559,7 +561,7 @@ Docutils :cite:`docutils`. The two code blocks in the example were only
 entered in the original Markdown source of this paper a single time, and
 Codebraid only executed them a single time. However, with Codebraid’s
 copy-paste capabilities, it was possible to display the code and output
-in other locations in the document programmatically.
+at other locations in the document programmatically.
 
 The rendered output of the two code blocks is shown at the very end of
 the last section. This is where the code blocks were actually entered in
@@ -715,8 +717,8 @@ default; and Jupyter kernels. Jupyter kernels are demonstrated in the
 next section. This section describes the built-in system, which
 currently supports Python 3.5+, Julia, Rust, R, Bash, and JavaScript.
 Any combination of these languages can be used within a single document.
-While the built-in system lacks Jupyter kernel features like rich
-outputs, it is nearly identical to extracting the code from the
+While the built-in system currently lacks Jupyter kernel features like
+rich outputs, it is nearly identical to extracting the code from the
 document, concatenating it, and executing it via the standard
 interpreter or compiler. As a result, it has low overhead and produces
 exactly the same output as would have been generated by a separate
@@ -736,10 +738,10 @@ advanced variant of the one I created previously in PythonTeX
 
 By default, code must be divided into complete units. For example, a
 code block must contain an entire loop, or an entire function
-definition. (This restriction can be relaxed with the code chunk
-``complete`` keyword, described later.) If a code chunk is not complete
-(and this is not indicated), then the incomplete code will interfere
-with writing the delimiters.
+definition. (This restriction can be relaxed with the code-chunk keyword
+``complete``, described later.) If a code chunk is not complete (and
+this is not indicated), then the incomplete code will interfere with
+writing the delimiters.
 
 To address this, each individual delimiter is unique, and is tracked
 individually by Codebraid. If incomplete code interferes with the
@@ -814,7 +816,8 @@ Jupyter kernels
 
 Using a Jupyter kernel instead of the built-in code execution system is
 as simple as adding ``jupyter_kernel=<name>`` to the first code chunk
-for a language:
+for a language (or, as discussed later, to the first code chunk of a
+named ``session``):
 
 .. code:: text
 
@@ -902,8 +905,8 @@ obtained by using a Jupyter kernel.
 Sessions
 --------
 
-By default, all code for a language is executed within a single session,
-so variables and data are shared between code chunks. It can be
+By default, all code for a language is executed within a single default
+session, so variables and data are shared between code chunks. It can be
 convenient to separate code into multiple sessions when several
 independent tasks are being performed, or when a long calculation is
 required but the output can easily be saved and loaded by separate code
