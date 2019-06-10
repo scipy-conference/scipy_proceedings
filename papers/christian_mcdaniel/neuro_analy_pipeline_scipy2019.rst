@@ -193,7 +193,7 @@ Our data is downloaded from the Parkinson's Progression Markers Initiative (PPMI
 
 Following preprocessing, we constructed the shared adjacency matrix and trained the model on the dMRI signals, which totaled to 588 (147 dMRI acquisitions x 4 tractography algorithms) :math:`N` x :math:`N` connectivity matrices. We calculated the adjacency matrix using each node's 20 nearest neighbors. To account for the class imbalance between PD and HC images, we use a bagging method. On each of five iterations, all the images from the HC group were combined with an equally-sized subset from the PD group. All of the images were used at least once during training, and the overall performance measures were averaged across training folds.
 
-Using caution to prevent any forms of data leakage, we used a roughly 80/20 train-test split, wherein we ensured all data from the same subject was used as only training or testing data. To assess the performance of our GCN model, we first trained a number of baseline models on the features constructed from the diffusion data. These models include k-nearest neighbor, logistic regression, ridge regression, random forest, and support vector machine (SVM, with both linear and radial basis function kernels) from :code:`scikit-learn`; we also trained a fully-connected neural network (fcNN) and a 4-channel convolutional neural network (CNN) using :code:`PyTorch`. Finally, we compare our model to the “siamese multi-view” GCN (sMVGCN) used in :cite:`ZHCLZW2018`. This network utilizes diffusion and anatomical MRI data and trains on pairs of image data to predict whether the pairs are from the same or different classes. The data is also from the PPMI data set and uses the PD and HC classes during classification. This was the closest model to ours that we found in the literature.
+Using caution to prevent any forms of data leakage, we used a roughly 80/20 train-test split, wherein we ensured all data from the same subject was used as only training or testing data. To assess the performance of our GCN model, we first trained a number of baseline models on the features constructed from the diffusion data. These models include k-nearest neighbor, logistic regression, ridge regression, random forest, and support vector machine (SVM, with both linear and polynomial kernels) from :code:`scikit-learn`; we also trained a fully-connected neural network (fcNN) and a 4-channel convolutional neural network (CNN) using :code:`PyTorch`. Finally, we compare our model to the “siamese multi-view” GCN (sMVGCN) used in :cite:`ZHCLZW2018`. This network utilizes diffusion and anatomical MRI data and trains on pairs of image data to predict whether the pairs are from the same or different classes. The data is also from the PPMI data set and uses the PD and HC classes during classification. This was the closest model to ours that we found in the literature.
 
 Except for the multi-channel CNN, we trained each model on the features from each tractography algorithm individually, and averaged the results. We calculated the overall accuracy, F1 score, and area under the ROC curve (AUC) as our performance measures and have included results from these experiments in Table :ref:`baselines`. The default parameters were used for the :code:`scikit-learn` models. The fcNN was a three-layer network with two hidden layers. The first layer had 128 ReLU units; the second had 64. For the CNN, a single convolutional layer was used, containing 18 filters of size 3; stride of 1 was used. Max pooling with a kernel size of 2 and stride of 2 was used to feed the features through two fully-connected layers before the final output. The first fully-connected layer reduced the 18x57x57-dimension input - where 57 is the original input width and height of 115 halved via max pooling - to 64 ReLU hidden units. For both neural networks, softmax activation was applied to the outputs and negative log likelihood was used as the loss function (i.e., cross entropy). Again for both models, learning rate was set to 0.01 and dropout of 0.5 was used between fully-connected hidden layers. These parameters coincide with the default parameters of the graph convolutional network class we used [14]_, and are commonly used in the literature. We used a validation set to find the optimal number of epochs to train each network for. We tested 40, 80, 100, 140, 200, and 400 epochs for each model and found that 140 worked best for the fcNN, and 100 for the CNN.
 
@@ -210,27 +210,27 @@ The results from training the diffusion data on baseline models, and the combine
 
 .. table:: The results from our testing of the baseline algorithms on the features constructed from the diffusion data alone, and our graph convolutional network (GCN) which additionally incorporates anatomical information. The results are averaged across five training iterations, which use subsamples of the data to ensure class balance. :label:`baselines`
 
-  +------------------------+--------------+-----------+------------+
-  | Model                  | Accuracy (%) | F1-Score  | AUC (%)    |
-  +========================+==============+===========+============+
-  | k-Nearest Neighbor     | 63.66%       | 0.636     | 64.56%     |
-  +------------------------+--------------+-----------+------------+
-  | Logistic Regression    | 75.72%       | 0.749     |  83.89%    |
-  +------------------------+--------------+-----------+------------+
-  | Ridge Regression       | 85.54%       | 0.883     |  50.00%    |
-  +------------------------+--------------+-----------+------------+
-  | Random Forest          | 77.77%       | 0.765     | 78.23%     |
-  +------------------------+--------------+-----------+------------+
-  | SVM (linear kernel)    | 87.66%       | 0.873     | 89.42%     |
-  +------------------------+--------------+-----------+------------+
-  | SVM (RBF kernel)       | 87.02%       | 0.899     | 88.74%     |
-  +------------------------+--------------+-----------+------------+
-  | Fully-Connected NN     | 83.98%       | 0.854     | 88.05%     |
-  +------------------------+--------------+-----------+------------+
-  | Convolutional NN       | 85.33%       | 0.900     | 90.79%     |
-  +------------------------+--------------+-----------+------------+
-  | Graph Convolutional NN | **92.14%**   | **0.953** | **94.29%** |
-  +------------------------+--------------+-----------+------------+
+  +-------------------------+--------------+-----------+------------+
+  | Model                   | Accuracy (%) | F1-Score  | AUC (%)    |
+  +=========================+==============+===========+============+
+  | k-Nearest Neighbor      | 63.66%       | 0.636     | 0.646     |
+  +-------------------------+--------------+-----------+------------+
+  | Logistic Regression     | 75.72%       | 0.749     |  0.839    |
+  +-------------------------+--------------+-----------+------------+
+  | Ridge Regression        | 85.54%       | 0.883     |  0.500    |
+  +-------------------------+--------------+-----------+------------+
+  | Random Forest           | 77.77%       | 0.765     | 0.782     |
+  +-------------------------+--------------+-----------+------------+
+  | SVM (linear kernel)     | 87.66%       | 0.873     | 0.894     |
+  +-------------------------+--------------+-----------+------------+
+  | SVM (polynomial kernel) | 87.02%       | 0.899     | 0.887     |
+  +-------------------------+--------------+-----------+------------+
+  | Fully-Connected NN      | 83.98%       | 0.854     | 0.881     |
+  +-------------------------+--------------+-----------+------------+
+  | Convolutional NN        | 85.33%       | 0.900     | 0.908     |
+  +-------------------------+--------------+-----------+------------+
+  | Graph Convolutional NN  | **92.14%**   | **0.953** | **0.943** |
+  +-------------------------+--------------+-----------+------------+
 
 Discussions and Conclusions
 ===================================
@@ -241,7 +241,6 @@ Due to the time required to construct the pipeline, and the substantial time and
 
 We would also like to see future studies incorporate both diffusion and functional MRI data. We investigated the use of the C-PAC preprocessing software to generate features from functional MRI (fMRI) data, and we believe these features could be incorporated into our model. Additional anatomical information such as the volume of each region could also be incorporated, and even metadata such as age or genetic information could be added to each node of an image to encourage class separation. These points reflect our use of graph convolutional networks for multimodal neuroimage analysis, as the format allows for the combination of multiple forms of data in an efficient and intuitive manner. All of these points were beyond the scope of the current experiment, and are possibilities for future research.
 
-
 We have made the code for our pipeline available on GitHub [2]_. Included in the repository are the parameters we used to download our data from PPMI, so that researchers with access to the database might download similar data for reproduction. Processing this data is very technical; there are multiple ways of doing so and our pipeline is surely capable of being improved upon. For example, we utilized all 115 brain regions returned by Freesurfer’s segmentaion. Instead, :cite:`ZHCLZW2018` selectively utilize only 84 of the regions. By confining the number of regions, e.g., to only those with clinical significance to PD, we may see improvements in performance and interpretability.
 
 We have presented here a complete pipeline for preprocessing multi-modal neuroimage data, applied to real-world data aimed at developing image biomarkers for Parkinson's disease research. We propose a novel graph-based deep learning model for analysing the data in an interpretable format. Our focus in this paper was to explicitly delineate the steps we took and implement sound data analysis techniques, so as to enable reproducibility in the field. To this end, we hope to help bridge the gap between neuroscience research and advanced data analysis.
@@ -251,7 +250,6 @@ Acknowledgements
 
 Data used in the preparation of this article were obtained from the Parkinson's Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For up-to-date information on the study, visit www.ppmi-info.org.
 PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation for Parkinson's Research and funding partners, including Abbvie, Allergan, Avid, Biogen, BioLegend, Bristol-Mayers Squibb, Colgene, Denali, GE Healthcare, Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer, Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily, Voyager, and Golub Capital.
-
 
 .. [1] In this paper we use “anatomical MRI” to refer to standard *T1-weighted* (T1w) MR imaging. “T1 weighted” refers to the specific sequence and timing of magnetic pulses and radio frequencies used during imaging. T1w MRI is a common MR imaging procedure; the important thing to note is that T1 weighting yields high-resolution images which show contrast between different tissue types, allowing for segmentation of different anatomical regions.
 .. [2] https://github.com/xtianmcd/ppmi_dl
@@ -270,7 +268,6 @@ PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation
 .. [15] https://github.com/tkipf/pygcn
 .. [16] https://github.com/Diego999/pyGAT
 .. [17] https://www.ppmi-info.org
-
 
 .. raw:: latex
 
