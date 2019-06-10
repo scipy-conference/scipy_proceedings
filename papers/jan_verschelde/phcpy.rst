@@ -25,6 +25,31 @@
 .. |oumlaut| unicode:: U+00F6 .. oumlaut
    :trim:
 
+***
+
+**High-level notes from @loldja:**
+
+This is an exciting project, but the paper needs some work -- especially in its organization/structure and in making sure the flow of the paper helps make the content accessible to non-experts. First, it would be valuable to define clear goals (and sub-goals) to communicate in this paper, which will help structure the discussion and how you want to edit it. Right now, the **Abstract** is sparse, and it doesn't match up well with the Conclusions or body of the paper (i.e. purpose of the paper is not to explore the development of phcpy, but to explain improvements that phcpy brings and to demonstrate its wide applications in STEM). 
+
+From what I understand, phcpy improves upon existing methods for solving polynomial systems because it brings solving polynomial systems into native Python, is compatible with both shell and notebook-based Python, is parallelizable, and can be used immediately via "one-click" access (post sign-up) to the JupyterHub hosted on UIC's website. To that end, the **Intro** should follow a structure such as: 1) what is polynomial solving, 2) how has it been done in the past, i.e. placing phcpy in a historical context, 3) what is the "mission" (not sure this is the right word, maybe use? purpose?) of phcpy, 4) what are some related modern methods and their limitations. 
+
+I would move the examples of how it is used in science to the **"Solving Polynomial Systems"** section. Additionally, the paper may flow better if "Solving Polynomial Systems" (until "Speedup and Quality") comes *before* the "User Interaction" section. In docs, installation and access preceed tutorials and how to use, but in this case, I think the "Solving" section is an extension of the Intro, since this is necessary background information for the reader to feel properly oriented in 'why should I care / how can I use this' and has been covered in papers before now. The "User Interaction" section, on the other hand, describes part of what is truly novel about this package, and it resembles the Methods of a typical paper.
+
+At first I was intimidated by the JupyterHub link. The certificate was bad, requiring Advanced override to access in the browser. Then it looked like I needed a log-in, but then I noticed I could register for an account. Stating clearly in the paper that 'the JupyterHub is available for public use, after creating a free account' may help potential users feel confident to seek out the tool and play with it.
+
+Also, how difficult would it be to preload the JupyterHub with the apollonius demo? The paper says to "copy [this] over" but I'm not sure if that's an instruction for me or you.
+
+Under **User Interaction** -- "Code snippets" and "direct manipulation" are qualitatively different categories from "JupyterHub access" and "CGI scripting". It's not clear to me that you need the section on CGI scripting -- has the technical details of that development stage been explained elsewhere? If so you can include a reference to them when you add this first iteration of web access as a single sentence in the history section in the Intro.
+
+From here, I lose the organizational thread. Breaking the benchmark section out into its own **"Improvements"** section (and fleshing this out with the remaining technical spec for phcpy, would improve readability, and set the reader up for your more robust "Applications" section. I'm not sure where the "Positive Dimensional Solution Sets" fits or what your goal is by including that section.
+
+The **"Applications"** section looks good, and I like the way you gently tie phcpy to even broader possibilities by showing how the generalized form of homotopy continuation is used across fields.
+
+**"Conclusions"** will naturally become more clear once the abstract, goals, and outline are clarfied.
+Thanks for the interesting read! Looking forward to working with you on this.
+
+***
+
 -------------------------------------
 Solving Polynomial Systems with phcpy
 -------------------------------------
@@ -119,7 +144,7 @@ CGI Scripting
 
 In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
 
-MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+MySQLdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
 As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance.
 
