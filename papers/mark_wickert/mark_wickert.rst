@@ -432,15 +432,15 @@ the ear canal centerline. The Jupyter Widgets slider interface is shown in Figur
 
 
 
-Spherical Head Model as a Simple Reference
-------------------------------------------
+Spherical Head Model as a Simple Reference HRIR
+-----------------------------------------------
 
 In blind testing of human subjects it is also of interest to offer other HRIR solutions, say 
 the Kemar mannequin head or a simple spherical head [Duda]_ and [Bogelein]_. In this section we consider 
 a sphereical head model with intent of using the results of [Duda]_ to allow the construction of a 
-CIPIC-like database entry that can be used in the 3D audio simulator.
+CIPIC-like database entry that can be used in the 3D audio simulator described earlier in this paper.
 
-As a starting point texts such as [Beranek]_ give series solutions for a sinusoidal 
+As a starting point texts such as [Beranek]_ gives series solutions for a sinusoidal 
 pressure wave source (point source or plane wave) using spherical harmonics to represent the 
 incident plus scattered sound pressure, :math:`\tilde{P}`, in the presence of a rigid sphere. 
 [Duda]_ notes that a *standard head* radius is 8.75 cm.  For a 8.75 cm radius rigid sphere 
@@ -462,7 +462,7 @@ of finding the angle between two 3D vectors passing through the origin.
    :figclass: htb
 
    Using spherical harmonics, [Beranek]_, to calculate the pressure wave magnitude (shown) here and 
-   phase with a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
+   phase, using a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
 
 
 .. figure:: SphericalHeadHRIR.pdf
@@ -482,7 +482,7 @@ of finding the angle between two 3D vectors passing through the origin.
    Solving for the angle between the source and a ray extending from the right and left ears. :label:`ANGLESOLVE`
 
 
-Finally, putting is all together code was written in a Jupyter notebook to generate a CIPIC-like database entry. 
+Finally, putting this all together code was written in a Jupyter notebook to generate a CIPIC-like database entry. 
 An example HRIR plot, similar to Figure :ref:`HRIR` is shown in Figure :ref:`HRIR875`. 
 
 .. figure:: HRIR_example_sphere_R875.pdf
