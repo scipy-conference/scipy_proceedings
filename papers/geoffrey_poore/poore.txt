@@ -12,159 +12,471 @@ Codebraid: Live Code in Pandoc Markdown
 
 .. class:: abstract
 
-   Codebraid is a Python program that executes inline code and code blocks in
-   a Pandoc Markdown document, then inserts the output into the final
-   document.  The final document can include the original code as well as the
-   resulting stdout and stderr.  The stdout can be included verbatim or
-   interpreted as Markdown, which makes it possible to generate parts of a
-   document programmatically and enhances reproducibility.  If there are
-   errors, Codebraid parses the stderr and includes it next to the appropriate
-   code for easy debugging.  Supported languages include Python, Julia, R,
-   Rust, Bash, and JavaScript.  Adding additional languages is as simple as
-   creating a short configuration file.  A single document can involve
-   multiple programming languages or multiple independent sessions per
-   language.
+   Codebraid executes designated inline code and code blocks in Pandoc
+   Markdown documents as part of the document build process.  It includes a
+   lightweight, low-overhead code execution system.  Alternatively, code can
+   be executed with Jupyter kernels.  Regardless of how code is executed, a
+   single document can involve multiple programming languages, as well as
+   multiple independent sessions or processes per language.  All code
+   extraction and output insertion is performed on Pandoc's abstract syntax
+   tree (AST) representation of a document, rather than on the original
+   Markdown source.  Because Codebraid only relies on standard Pandoc Markdown
+   syntax, Pandoc handles all Markdown parsing and format conversions.  In the
+   final output document, a code chunk can be replaced by a display of any
+   combination of its original Markdown source, its code, the stdout or stderr
+   resulting from execution, or rich output in the case of Jupyter kernels.
+   There is also support for programmatically copying code or output to other
+   parts of a document.
+
 
 .. class:: keywords
 
-   literate programming, reproducibility, dynamic report generation
+   reproducibility, dynamic report generation, literate programming, Python,
+   Project Jupyter
 
 
 Introduction
 ============
 
 Scientific and technical documents are increasingly written with software that
-allows a mixture of text and executable code.  This approach to writing can
-enhance reproducibility, simplify code documentation, and aid in automating
-reports.  For those using Python, the Jupyter Notebook :cite:`Kluyver2016` is
-a popular option.  Well over one hundred additional Jupyter kernels are
-available, including Julia and R kernels.  For those using R, knitr
-:cite:`Xie2015` is probably more familiar.  Recently, the reticulate
-:cite:`reticulate` and JuliaCall :cite:`juliacall` packages for R have
-significantly expanded knitr's Python and Julia capabilities.  Emacs users
-have Org Babel :cite:`Schulte2011,Schulte2012`.  LaTeX users have my own
-PythonTeX package :cite:`Poore2013,Poore2015`, among other options.
+allows a mixture of text and executable code, such as the Jupyter Notebook
+:cite:`Kluyver2016`, knitr :cite:`Xie2015`, and Org-mode Babel
+:cite:`Schulte2011,Schulte2012`.  Writing with such tools can enhance
+reproducibility, simplify code documentation, and aid in automating reports.
 
-This paper introduces Codebraid, which can execute code in Pandoc Markdown
-documents :cite:`pandoc` as part of the document build process.  Codebraid is
-focused on maximizing the power of having live code in a document while
-providing superior usability.  Although Codebraid can function as a standalone
-system, it is not necessarily in competition with earlier software.  In the
-future, it may be possible to integrate Codebraid with Jupyter kernels or with
-knitr to share code execution capabilities, or use a graphical user interface
-(GUI) such as a notebook so that Pandoc Markdown becomes only an underlying
-file format.  In many ways, Codebraid ultimately represents an attempt to
-reimagine what is possible in documents that combine text with live code, with
-a focus on three primary areas.
+This paper introduces Codebraid, which allows executable code within Pandoc
+Markdown documents :cite:`pandoc`.  To put Codebraid in context, the next
+section is devoted to a review of existing tools that allow a mixture of text
+and executable code, with a focus on those that support Markdown.  This
+emphasizes three categories that are particularly relevant for comparing with
+Codebraid's capabilities:
+
+* Code execution and language support
+
+* Display of code and its output
+
+* Document format and parsing
 
 
-More code
----------
 
-Codebraid allows any number of programming languages to be used within a
-single document.  For each language that is used, multiple independent
-sessions are allowed, so that code can be separated into independent pieces
-that are only re-executed when necessary.  This is similar to Org Babel's
-capabilities.  Jupyter notebooks are limited to a single kernel per notebook,
-and thus a single language.  (Cell magics do allow additional languages, but
-only at the level of a single isolated cell run in a subprocess.)  Multiple
-languages are only possible in a Jupyter notebook by using special kernels and
-extensions (for example, :cite:`SoS,BeakerX`).  knitr is more flexible since
-it allows simultaneous R, Python, and Julia, though it is still limited to a
-single session for each of those languages.  (All other knitr language engines
-are executed as single isolated code chunks, and thus are essentially
-equivalent to Jupyter cell magics.)
+Review
+======
+
+
+Org-mode Babel
+--------------
+
+.. https://orgmode.org/worg/org-contrib/babel/
+.. https://orgmode.org/worg/org-contrib/babel/languages.html
+.. https://orgmode.org/worg/org-contrib/babel/languages/
+.. https://orgmode.org/manual/Specific-header-arguments.htm
+.. https://orgmode.org/manual/session.html
+
+Babel :cite:`Schulte2011,Schulte2012` allows code blocks and inline code in
+Emacs Org-mode documents to be executed.  Any number of languages can be used
+within a single document.  By default, each code chunk is executed
+individually in its own process.  For many interpreted languages, it is also
+possible to run code in a session so that data and variables persist between
+code chunks.  In those cases, multiple named sessions per language are
+possible.  This allows computations to be spread over several code chunks,
+while simultaneously making it possible to separate independent computations
+into separate sessions so that code is only re-executed when necessary.
+
+.. https://orgmode.org/manual/file.html#file
+.. https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-gnuplot.html
+
+Any combination of code and its stdout can be displayed.  Stdout can be
+shown verbatim or interpreted as Org-mode, HTML, or LaTeX markup.  For
+some languages, such as gnuplot, graphical output can also be captured and
+included automatically.
+
+Packages like ob-ipython :cite:`ob-ipython` and emacs-jupyter
+:cite:`emacs-jupyter` make it possible to use Jupyter kernels
+:cite:`Kluyver2016` instead of Babel's built-in code execution system.  These
+add the capability to include error messages or rich output like graphics
+within a document.  The Emacs IPython Notebook :cite:`ein` takes a different
+approach by providing a complete Jupyter Notebook client in Emacs.
+
+.. https://orgmode.org/worg/org-contrib/babel/intro.html#literate-programming
+
+Babel can function as a meta-programming language for Org mode.  A code chunk
+can be named, and then a later code chunk—potentially in a different
+language—can access its output by name and perform further processing.
+Similarly, there are literate programming capabilities that allow a code chunk
+to copy the source of one or more named chunks into itself, essentially
+serving as a template, before execution.
+
+
+.. https://pandoc.org/org.html
+
+Org-mode documents can be converted into a number of other formats such as
+HTML and LaTeX.  Although the format is typically used with Emacs, Pandoc
+supports a subset of Org mode which does not include Babel.  An Org-mode
+document using Babel features can first be processed with Emacs to evaluate
+code, and then the plain Org-mode output can be used with Pandoc.
+
+
+
+knitr
+-----
+
+.. https://leisch.userweb.mwn.de/Sweave/
+.. https://rstudio.github.io/reticulate/index.html
+.. https://cran.r-project.org/web/packages/JuliaCall/index.html
+.. https://rmarkdown.rstudio.com/lesson-2.html
+
+Sweave :cite:`Leisch2002` was one of the first programs for combining text
+with executable code, allowing R within LaTeX.  It was a primary inspiration
+for knitr :cite:`Xie2015`, which provides powerful R evaluation in LaTeX and
+additional formats like Markdown and HTML.  More recently, the reticulate
+:cite:`reticulate` and JuliaCall :cite:`juliacall` packages for R have given
+knitr significant Python and Julia capabilities.  These include the ability to
+convert objects between Python and R or Julia and R.  knitr is commonly used
+with the RStudio IDE, which provides a two-panel source-and-output preview interface as well as a notebook-style mode with inline display of results.
 
 .. https://bookdown.org/yihui/rmarkdown/language-engines.html
 
-Codebraid can also execute both code blocks and inline code, with equivalent
-capabilities in both cases.  Org Babel is similar, while knitr allows inline
-execution but only for printing the output of expressions.  Jupyter notebooks
-require an extension :cite:`JupyterPythonMarkdown` for inline code
-capabilities similar to knitr's.
+All R, Python, and Julia code chunks are executed in language-specific
+sessions, so data and variables persist between code chunks for each
+individual language.  Unlike Org-mode Babel, knitr is limited to a single
+session for each of these languages.  Many additional languages are also
+supported, with the restriction that each code chunk is executed in its own
+separate process.  Though knitr does not include any support for Jupyter
+kernels, the knitron :cite:`knitron` and ipython_from_R :cite:`ipython-from-R`
+packages have demonstrated that this is technically feasible.
 
-.. https://orgmode.org/worg/org-contrib/babel/intro.html
+.. https://yihui.name/knitr/demo/reference/
 
-.. https://yihui.name/knitr/demo/output/
-
-
-More display options
---------------------
-
-For inline code or a code block, Codebraid can display any combination of the
-original Markdown source, the code, stdout, and stderr—in any order.  Its
-display options are consciously designed with documentation and tutorials in
-mind.  Org Babel can display code and/or stdout, but stderr is not captured
-for document inclusion.  Including stderr requires workarounds like
-redirecting it to stdout.  Jupyter notebooks display code, stdout, stderr, and
-rich output (when supported).  Hiding some or all of these when exporting is
-not supported, though it is possible with extensions (for example,
-:cite:`JupyterHideInput` plus a custom template) or additional software (for
-example, :cite:`JupyterBook`).  knitr can display code and/or output, although
-the order is fixed.
-
-Another Codebraid feature is the ability to name inline code or a code block,
-and then use that name elsewhere in the document to display any combination of
-its original Markdown source, code, stdout, and stderr.  Org Babel can do this
-with code and stdout, and knitr can do it with code and output.  Jupyter
-notebooks lack such capabilities.
-
-.. https://jupyter.org/jupyter-book/features/hiding.html
-
-.. https://yihui.name/knitr/options/ -> ref.label
-
-
-More (standard) plain text
---------------------------
-
-Plain text document formats are convenient when writing documents with a
-version control system, because they give simple diffs.  Codebraid uses Pandoc
-Markdown, knitr works with Markdown as well as other formats like LaTeX, and
-Org Babel relies on Org mode markup, so this is an advantage they share.
-Jupyter notebooks are saved in JSON format, which has led to special diffing
-tools such as :cite:`nbdime`.
-
-Although plain text formats have advantages when it comes to diffing, they are
-more complex to parse than a data format like JSON.  Because Org Babel is
-integrated with Org mode markup, it requires no special parsing.  In contrast,
-knitr extends the Markdown syntax for code and thus requires special parsing.
-Similar programs like Pweave :cite:`pweave` and Weave.jl :cite:`weavejl` that
-execute code in Markdown take the same approach.  This extended syntax is
-handled by a preprocessor that extracts the code for execution and then
-inserts the output into a copy of the original document, which can then be
-processed with Pandoc or another parser.  While this approach minimizes the
-overhead associated with code extraction and output insertion, the
-preprocessor can introduce significant cognitive load for users.  For example,
-knitr's preprocessor employs simple regex matching and does not understand
-Markdown comments, so code in a commented-out part of a document still runs.
-Writing tutorials that show literal knitr code chunks can involve inserting
-empty strings, zero-width spaces, linebreaks, or Unicode escapes to avoid the
-preprocessor's tendency to execute everything :cite:`knitrfaq,Hovorka`.
+R, Python, and Julia code blocks can display any combination of code, output,
+and plots.  There are a number of code-block options for customizing plot
+display, including plot layout, dimensions, and captions.  It is possible to
+use code chunk references (``ref.label``) to insert the code or output of a
+named code chunk at another location.  Inline code can be executed to print
+the output of expressions.
 
 .. https://github.com/rstudio/rmarkdown/issues/974
-
 .. https://github.com/yihui/knitr/issues/1363
-
 .. https://rviews.rstudio.com/2017/12/04/how-to-show-r-inline-code-blocks-in-r-markdown/
-
 .. https://yihui.name/knitr/faq/
-
-Codebraid takes a different approach that guarantees correct results at the
-expense of some additional parsing overhead.  Pandoc does not just convert
-directly between documents in different formats.  It also provides an abstract
-syntax tree (AST) as one output option.  Codebraid uses only standard Pandoc
-Markdown syntax, so it is able to perform all code extraction and output
-insertion as operations on the AST.  Since this approach requires running
-Pandoc multiple times, it does involve more overhead than the preprocessor
-approach.  However, since Pandoc is responsible for all Markdown parsing, even
-edge cases for Markdown parsing can be handled correctly.
 
 
 
 `````````````
 
 
-# A simple example
+When knitr is used with Markdown, custom Markdown syntax is used for defining
+code block options and designating inline code that will be executed.  Fenced code blocks begin with options of the form
+
+``````
+```{r key1 = value1, key2 = value2}
+``````
+
+Meanwhile, inline code takes the form `` `r <expression>` ``.  A preprocessor
+is used to extract the code from the original Markdown source, and then output
+is inserted into a copy of the document that can be processed with Pandoc.
+While this approach minimizes the overhead associated with code extraction and
+output insertion, the preprocessor can introduce significant cognitive load
+for users.  For example, knitr's preprocessor employs simple regex matching
+and does not understand Markdown comments, so code in a commented-out part of
+a document still runs.  Writing tutorials that show literal knitr code chunks
+can involve inserting empty strings, zero-width spaces, linebreaks, or Unicode
+escapes to avoid the preprocessor's tendency to execute code
+``:cite:`knitrfaq,Hovorka` ``{=rst}.
+
+
+
+`````````````{=rst}
+
+
+Jupyter Notebook
+----------------
+
+The Jupyter (formerly IPython) Notebook :cite:`Kluyver2016` provides a
+browser-based user interface in which a document is represented as a series of
+cells.  A cell may contain Markdown (which is converted into HTML and
+displayed when not being edited), raw text, or code.  Code is executed by
+language-specific backends, or kernels.  Well over one hundred kernels are
+available beyond Python, including Julia, R, bash, and even compiled languages
+like C++ and Rust :cite:`jupyter-kernels`.  While Jupyter kernels are often
+used with the notebook, they can be used separately as a standalone code
+execution system, such as the Org-mode integration mentioned above.
+
+A Jupyter Notebook can only have a single kernel, and thus only a single
+primary programming language in a single session or process.  This means that
+within a single notebook, separating independent computations into separate
+sessions or processes is typically not as straightforward as it might be in
+Org-mode Babel.  However, the interactive nature of the notebook often reduces
+the impact of this limitation, and can actually be a significant advantage.
+Code cells can be run one at a time; a single code cell can be modified and
+run again within rerunning any previous code cells.
+
+There are multiple ways to work around the single-kernel-per-notebook
+limitation.  The IPython kernel provides ``%%script`` and similar "magics"
+:cite:`ipython-magics` that can execute a cell with another language.
+Each cell is executed individually in its own subprocess, so there is no
+persistence of data and variables between such cells.  Magics provided by
+PyJulia :cite:`PyJulia` and rpy2 :cite:`RPy2` avoid this limitation so that an
+IPython kernel can interact with a single Julia or R session over a series of
+cells (see :cite:`Bussonnier2018` for examples).  Some broader approaches to
+working around this limitation are provided by the BeakerX polyglot magics
+:cite:`BeakerX`, which support bidirectional autotranslation of data between
+languages, and the Script of Scripts (SoS) kernel :cite:`SoS`, which acts as a
+managing kernel over multiple normal kernels.
+
+Jupyter code cells correspond to code blocks in Org-mode Babel or knitr.
+There is no built-in support for executing inline code within Markdown cells.
+This is possible with the Python Markdown extension
+:cite:`jupyter:pymarkdown`, so long as inline code is outside LaTeX equations.
+The extension also supports notebook export to other document formats with
+nbconvert :cite:`nbconvert` via a bundled preprocessor.
+
+In the browser interface, Jupyter notebooks display code, stdout, stderr, and
+rich output such as plots (when supported by the kernel).  All output can be
+hidden by double-clicking next to it in the left margin.  Hiding code is
+currently only possible with extensions :cite:`jupyter:codefolding,jupyter:hideallinput,jupyter:hideinput`.
+
+.. https://nbconvert.readthedocs.io/en/latest/config_options.html
+.. https://jupyter.org/jupyter-book/features/hiding.html
+.. https://nbconvert.readthedocs.io/en/latest/customizing.html
+
+Notebooks can be exported to document formats such as HTML and PDF with
+nbconvert :cite:`nbconvert`, the Jupyter notebook conversion program.  Hiding
+code or output in exported documents is possible on a notebook-wide basis by
+configuring nbconvert with the TemplateExporter exclude options.  It is also
+possible at the individual cell level by adding a tag to a cell (View, Cell
+Toolbar, Tags, then "Add tag") and then configuring nbconvert to use the
+desired TagRemovePreprocessor with a given tag.  An alternative is to use
+extensions with their provided preprocessors or templates
+:cite:`jupyter:codefolding,jupyter:hideinput`, or employ a more inclusive tool
+like Jupyter Book :cite:`JupyterBook` that defines a set of tags for display
+customization.
+
+While Org-mode and knitr documents are saved as markup, Jupyter notebooks are
+saved in JSON format in ipynb files.  By default, notebook files contain all
+code and Markdown from notebook cells, as well as all output including rich
+output like plot images.  It is possible to simplify notebook files by
+excluding output.  Since JSON can be less convenient than markup for working
+with version control systems, special diffing tools such as nbdime
+:cite:`nbdime` have been developed.
+
+
+
+Jupyter Notebooks as Markdown or code plus comments
+---------------------------------------------------
+
+There are a number of programs that represent Jupyter Notebooks using Markdown
+or source code plus comments rather than the standard JSON in an ipynb file.
+This avoids potential version control hassles with JSON, can facilitate
+conversion of notebooks into other document formats, and allows notebooks to
+be edited in any text editor, not just the browser-based notebook interface.
+
+.. https://pandoc.org/MANUAL.html#creating-jupyter-notebooks-with-pandoc
+.. https://github.com/jgm/pandoc/releases/tag/2.6
+
+Pandoc :cite:`pandoc` added the ability to convert to or from ipynb files with
+version 2.6 in January 2019.  The following examples are quoted from the
+Pandoc manual.  In Markdown, code cells can be represented most simply as a
+fenced code block with language "code":
+
+`````````````
+
+
+``````
+``` code
+print("hello")
+```
+``````
+
+It is also possible to create code cells with attributes and output.  The
+sequences of colons in this case are Pandoc's fenced divs, with attributes
+delimited by curly braces:
+
+``````
+:::::: {.cell .code execution_count=1}
+``` {.python}
+print("hello")
+```
+
+::: {.output .stream .stdout}
+```
+hello
+```
+:::
+::::::
+``````
+
+`````````````{=rst}
+
+Pandoc's ipynb support offers new ways to control how a notebook is converted
+into other document formats.  For example, filters can be created that
+manipulate a notebook once it has been converted into Pandoc's AST
+representation.
+
+.. https://github.com/podoc/podoc
+.. https://github.com/rossant/ipymd
+
+
+
+`````````````
+
+Before Pandoc added ipynb support, it was possible to convert between Markdown
+and ipynb with Pandoc via podoc ``:cite:`podoc` ``{=rst}, which provides
+conversion between ipynb and Pandoc's AST.  podoc was created by Cyrille
+Rossant as the primary tool for writing the second edition of *IPython
+Interactive Computing and Visualization Cookbook* (2018)
+``:cite:`ipython-cookbook,writing-ipython-cookbook` ``{=rst}.  It represents a
+significantly more advanced implemention of what Rossant had previously
+created in ipymd ``:cite:`ipymd` ``{=rst}.
+
+With podoc, a code cell is represented by a simple fenced code block with the
+language name, so the first Pandoc example would start with ` ```python`
+instead.  This does bring the limitation that all code blocks are code cells;
+there are no code blocks that simply represent literal code that is not
+executed.  Similarly, output is represented as code blocks beginning with `
+```{output:stdout}`, and images generated by an executed code block become
+Markdown images included immediately after the code block.
+
+podoc also includes a ``ContentsManager`` subclass for the Jupyter Notebook.
+This allows the podoc representation of a notebook in Markdown to be loaded as
+a notebook, or a notebook to be saved as Markdown.
+
+`````````````{=rst}
+
+.. https://github.com/aaren/notedown
+
+Similar notebook-Markdown conversion capabilities are provided by notedown
+:cite:`notedown`.  Unlike podoc, notedown allows configuration of which types
+of Markdown code blocks are converted into notebook code cells.  This allows
+code blocks representing literal code that is not executed.  notedown can also
+convert R Markdown (knitr) documents into Jupyter notebooks.  Like podoc, it
+includes a ``ContentsManager`` subclass for the notebook so that Markdown can
+be used as the saved format.
+
+.. https://github.com/mwouts/jupytext
+.. https://jupytext.readthedocs.io/en/latest/
+
+Jupytext :cite:`jupytext` can convert Jupyter notebooks into Markdown or R
+Markdown, or into scripts in which code cells are converted into code while
+Markdown cells are converted into intervening comments.  These formats can
+also be converted into Jupyter notebooks.  Multiple Markdown representations
+of a code cell are possible.  The standard form is similar to that of Pandoc:
+
+`````````````
+
+``````
+```python <metadata>
+<code>
+```
+``````
+
+`````````````{=rst}
+
+With Jupytext, it is possible to work with a Jupyter notebook in the browser,
+then save it in script form via the Jupytext menu in the Jupyter Notebook,
+edit the script in a text editor until it performs as desired, and finally
+refresh the notebook in the browser to update the notebook code from the
+script.  Like podoc and notedown, this involves a ``ContentsManager``.
+
+.. https://nteract.gitbooks.io/hydrogen/docs/Usage/NotebookFiles.html
+.. https://nteract.gitbooks.io/hydrogen/docs/Usage/GettingStarted.html
+.. https://code.visualstudio.com/docs/python/jupyter-support
+
+The Hydrogen package :cite:`hydrogen` for the Atom text editor also provides
+conversion between ipynb notebook files and source code plus comments.  For
+example, in Python a comment of the form ``# %%`` precedes code that
+corresponds to a code cell, while a comment like ``# %% markdown`` precedes an
+extended comment containing the Markdown text of a Markdown cell.  When such a
+code file is edited within Atom, Hydrogen can connect to a Jupyter kernel so
+that a "code cell" can be executed and rich output like plots or tables
+displayed next to it within the editor.  Similar notebook conversion, code
+execution, and display capabilities are provided by the Python extension for
+VS Code :cite:`python-vscode`.
+
+
+
+Jupyter kernels in Markdown or other formats
+--------------------------------------------
+
+The tools discussed in the last subsection represent alternate ways of
+interacting with a Jupyter notebook.  This subsection provides an overview of
+programs that combine Jupyter kernels with Markdown or other formats to
+provide a different or broader set of features than what is possible with a
+default notebook (or at least what was possible with a default notebook at the
+time the program was initially developed).
+
+.. http://mpastell.com/pweave/
+
+Pweave :cite:`pweave` is inspired by Sweave :cite:`Leisch2002` and knitr
+:cite:`Xie2015`, with a focus on Python in Markdown and other formats like
+LaTeX and reStructuredText.  A source code format with Markdown in comments is
+also supported.  It uses Markdown syntax very similar to knitr's, with many
+similar features and options.  Python code is executed with a Jupyter kernel,
+and rich output like plots can be included automatically.  Although Pweave is
+focused on Python, it can be used with any Jupyter kernel (one kernel is
+allowed per file).  Pweave documents support inline code execution, provide
+options for hiding code or its output, can execute code to emulate a terminal
+session, and incorporate code block options for customizing figure display.
+
+.. http://weavejl.mpastell.com/stable/
+
+Weave.jl :cite:`weavejl-joss`, by the creator of Pweave, is very similar,
+except that it is focused on executing Julia code.  It uses Julia to manage
+code execution rather than a Jupyter kernel.
+
+.. https://github.com/jankatins/knitpy
+.. https://github.com/pystitch/stitch
+
+knitpy :cite:`knitpy` describes itself as a port of knitr to Python.  It uses
+knitr-style Markdown syntax, and provides code block options to control code
+and output display.  Other knitr-style options are not supported.  Code is
+executed in a single Jupyter Python kernel.  stitch :cite:`stitch` is similar,
+drawing inspiration from knitr and knitpy.  Compared to knitpy, it lacks
+options for customizing output display but has options for customizing figure
+display.
+
+.. https://github.com/jhrmnn/knitj
+
+
+
+`````````````
+
+Knitj ``:cite:`knitj` ``{=rst} is another Jupyter kernel–Markdown integration.
+It uses fenced codeblocks with the language name at the beginning, such as `
+```python`.  Options for controling display are contained in special comments
+in the first line of code within a code block.  For example, `#::hide`.  Knitj
+can serve an HTML document derived from Markdown.  When the Markdown is
+modified, it detects which code chunks were modified and only re-evaluates
+them with the Jupyter kernel before pushing  updates to the HTML via
+WebSocket.
+
+
+`````````````{=rst}
+
+.. https://github.com/matthew-brett/nb2plots
+
+Although this review is primarily focused on Markdown, there are some similar
+tools for reStructuredText.  nb2plots can convert an ipynb notebook into
+reStructuredText for Sphinx :cite:`nb2plots`.  When Sphinx builds the files,
+the code is still executed and plots are automatically included, so the live
+code and rich output of the notebook are not lost.  It is possible to
+customize display by hiding code.  The reStructuredText can also be converted
+to a Python source file or ipynb when that is desired.
+
+.. https://jupyter-sphinx.readthedocs.io/en/latest/
+
+The Jupyter Sphinx Extension :cite:`jupyter-sphinx` provides a
+``jupyter-execute`` directive for running code in a Jupyter kernel.  By
+default, code is executed within a single kernel, providing continuity.  It is
+also possible to switch to a different kernel or switch to a different session
+using the same kernel type.  Code and output (including rich output like
+plots) are displayed by default, but there are options for hiding code or output, or reversing their order.  All code for a given Jupyter session can be converted into a script or a Jupyter notebook.
+
+
+
+`````````````
+
+
+# A simple Codebraid example
 
 A simple Pandoc Markdown document that runs code with Codebraid is shown below.
 
@@ -172,6 +484,8 @@ A simple Pandoc Markdown document that runs code with Codebraid is shown below.
 ```
 
 `..`{=rst}
+
+
 
 Pandoc Markdown defines attributes for inline code and code blocks.  These have the general form
 
@@ -186,18 +500,18 @@ key-value pairs can be quoted with double quotation marks, Pandoc allows most
 characters except the space and equals sign unquoted.  Other output formats
 such as LaTeX use attributes in a largely equivalent manner.
 
-Pandoc uses the first class to determine the language name, hence the
-`.python` in the example above.  Codebraid uses the second class to specify a
-command for processing the code.  All Codebraid commands are under a `cb`
-namespace to prevent unintentional collisions with normal Pandoc inline code
-and code blocks.  In this case, `cb.run` indicates that code should be run,
-stdout should be included and interpreted as Markdown, and stderr should be
-displayed in the event of errors.  Finally, in this example, the `name`
-keyword is used to assign a unique name to each piece of code.  This allows
-the code to be referenced elsewhere in a document to insert any combination of
-its Markdown source, code, stdout, and stderr.
+Pandoc uses the first class to determine the language name for syntax
+highlighting, hence the `.python` in the example above.  Codebraid uses the
+second class to specify a command for processing the code.  All Codebraid
+commands are under a `cb` namespace to prevent unintentional collisions with
+normal Pandoc inline code and code blocks.  In this case, `cb.run` indicates
+that code should be run, stdout should be included and interpreted as
+Markdown, and stderr should be displayed in the event of errors.  Finally, in
+this example, the `name` keyword is used to assign a unique name to each piece
+of code.  This allows the code to be referenced elsewhere in a document to
+insert any combination of its Markdown source, code, stdout, and stderr.
 
-If this were a normal Pandoc document, converting it to a format such as
+If this were a normal Pandoc document, converting it into a format such as
 reStructuredText could be accomplished by running
 
 ```
@@ -320,7 +634,7 @@ produces
 
 As this demonstrates, Pandoc code attributes for inline code immediately
 follow the closing backtick(s).  While this sort of a "postfix" notation may
-not be ideal from some from perspectives, it is the cost of maintaining full
+not be ideal from some perspectives, it is the cost of maintaining full
 compatibility with Pandoc Markdown syntax.
 
 Finally, the `cb.nb` command runs code in "notebook mode."  For code blocks,
@@ -433,12 +747,12 @@ parallel execution may be added.
 
 ## Outside `main()`
 
-Codebraid executes code by inserting it into a template.  The template allows
-stdout and stderr to be broken into pieces and correctly associated with the
-code chunks that created them.  For a language like Python under typical
-usage, `complete` eliminates the few limitations of this approach.  However,
-the situation for a compiled language with a `main()` function is more
-complex.
+Codebraid's built-in code execution system runs code by inserting it into a
+template.  The template allows stdout and stderr to be broken into pieces and
+correctly associated with the code chunks that created them.  For a language
+like Python under typical usage, `complete` eliminates the few limitations of
+this approach.  However, the situation for a compiled language with a `main()`
+function is more complex.
 
 Codebraid includes support for Rust.  By default, code is inserted into a
 template that defines a `main()` function.  Thus, a code block like
