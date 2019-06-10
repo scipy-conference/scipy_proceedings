@@ -463,12 +463,12 @@ published results.
     Classifier Accuracy vs SNR for final merging network. :label:`snr-acc-final`
 
 .. figure:: f1-deep.pdf
-    :scale: 25%
+    :scale: 45%
 
     :math:`F_1` scores for all test data for deep learning network. :label:`f1-deep`
 
 .. figure:: f1-final.pdf
-    :scale: 25%
+    :scale: 45%
 
     :math:`F_1` scores for all test data for final merged network. :label:`f1-final`
 
