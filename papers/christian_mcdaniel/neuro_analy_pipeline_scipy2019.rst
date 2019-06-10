@@ -208,7 +208,7 @@ The results from training the diffusion data on baseline models, and the combine
 
     The 16 regions with highest attention weighting across all training iterations are shown. :label:`attentions`
 
-.. table:: The results from our testing of the baseline algorithms on the features constructed from the diffusion data alone, and our graph convolutional network (GCN) which additionally incorporates anatomical information. The results from :cite:`ZHCLZW2018` are also shown. The results are averaged across five training iterations, which use subsamples of the data to ensure class balance. :label:`baselines`
+.. table:: The results from our testing of the baseline algorithms on the features constructed from the diffusion data alone, and our graph convolutional network (GCN) which additionally incorporates anatomical information. The results are averaged across five training iterations, which use subsamples of the data to ensure class balance. :label:`baselines`
 
   +------------------------+--------------+-----------+------------+
   | Model                  | Accuracy (%) | F1-Score  | AUC (%)    |
