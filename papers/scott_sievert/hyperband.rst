@@ -168,26 +168,27 @@ computational control :cite:`klein2016`.
 Hyperband
 ---------
 
-Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`. It
-is a principled early stopping scheme [#resources]_ that partially trains
-models, scores the models then decides which models should continue training.
-Hyperband trains many models in parallel and decides to stop models at
-particular times to preserve computation.
+Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`, and
+a principled early stopping scheme [#resources]_ for randomized
+hyper-parameter selections. At the most basic level, it partially trains
+models before stopping models with low scores, then
+repeats. By default, it stops training the bottom 33% of the available models
+on each iteration. This means that the number of models decay over time, and
+the surviving models have high scores.
+
+The amount of training to do before stopping models depends on the
+relative importance of training time and hyper-parameters. If training time
+only matters a little, it makes sense to aggressively stop training models. On
+the flip side, if only training time influence the score, it only makes sense
+to let all models train for as long as possible and not perform any stopping.
 
 .. [#resources] In general, Hyperband is a resource-allocation scheme for model
    selection.
 
-Hyperband stops training the lowest performing third of models at particular
-times by default. The frequency at which models are stopped depends on the
-relative importance of training time and hyper-parameters.  If training time
-only matters a little, it makes sense to aggressively stop training models. On
-the flip side, if only training time influence the score, it only makes sense
-to let all models train for as long as possible.
-
-This allows a formal mathematical statement that Hyperband will return a much
-higher performing model than the randomized search without early stopping
-returns. This is best characterized by an informal presentation of the main
-theorem:
+This sweep over training time importance enables a formal mathematical
+statement that Hyperband will return a much higher performing model than the
+randomized search without early stopping returns. This is best characterized by
+an informal presentation of the main theorem:
 
 .. latex::
    :usepackage: amsthm
@@ -347,10 +348,10 @@ algorithm's pseudo-code:
                  for _ in range(n_models)]
        while True:
            models = [train(m, calls) for m in models]
-           models = top_k(len(models) // 3, models)
+           models = top_k(models, k=len(models) // 3)
            calls *= 3
            if len(models) <  3:
-               return best_model(models)
+               return top_k(models, k=1)
 
    def hyperband(max_iter: int) -> BaseEstimator:
        # Different brackets have different values of
@@ -364,7 +365,12 @@ algorithm's pseudo-code:
                                (15, 27), (8, 81),
                                (5, 243)]
        final_models = [sha(n, r) for n, r in brackets]
-       return best_model(final_models)
+       return top_k(final_models, k=1)
+
+In this pseudo-code, the train set and validation data are hidden, which ``train``
+and ``top_k`` rely on. ``top_k`` returns the ``k`` best performing
+models on the validation data and ``train`` trains a model for a certain number
+of calls to ``partial_fit``.
 
 Each bracket indicates a value in the tradeoff between hyper-parameter and
 training time importance. With ``max_iter=243``, the least adaptive bracket runs
