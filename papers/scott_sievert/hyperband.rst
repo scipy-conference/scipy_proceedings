@@ -118,40 +118,30 @@ will be presented before mentioning ideas for future work.
 Related work
 ============
 
-Dask
-----
-
-Dask provides advanced parallelism for analytics, especially for NumPy, Pandas
-and Scikit-Learn :cite:`dask`. It is familiar to Python users and does not
-require rewriting code or retraining models to scale to larger datasets or to
-more machines. It can scale up to clusters or to massive dataset but also works
-on laptops and presents the same interface. Dask provides two components:
-
-* Dynamic task scheduling optimized for computation. This low level scheduler
-  provides parallel computation and is optimized for interactive computational
-  workloads.
-* "Big Data" collections like parallel arrays, or dataframes, and lists that
-  extend common interfaces like NumPy, Pandas, or Python iterators to
-  larger-than-memory or distributed environments. These parallel collections
-  run on top of dynamic task schedulers.
-
-Dask aims to be familiar and flexible: it aims to parallelize and distribute
-computation or datasets easily while retaining a task scheduling interface for
-custom workloads and integration into other projects. It is fast and the
-scheduler has lower overhead. It's implemented in pure Python and can scale
-from massive datasets to a cluster with thousands of cores to a laptop running
-single process. In addition, it's designed with interactive computing in mind
-and provides rapid feedback and diagnostics to aid humans.
-
-
 Software for model selection
 ----------------------------
 
-Model selection can be thought of as finding the optimal hyper-parameter for a
-given model. A commonly used method for hyper-parameter selection is a random
+Model selection finds the optimal set of hyper-parameters for a given model.
+These hyper-parameters are chosen to maximize performance on unseen data.
+The typical model selection process
+
+1. splits the dataset into the train dataset and test dataset. The test dataset
+   is reserved for the final model evaluation.
+2. chooses hyper-parameters
+3. trains models with those hyper-parameters
+4. scores those models with unseen data (a subset of the train dataset typically
+   referred to as the "validation set")
+5. trains the best model with the complete train dataset
+6. scores the model on the test dataset. This score is reported as the models
+   score.
+
+The rest of this paper will focus on steps 2 and 3, which is where most of the
+work happens in model selection.
+
+A commonly used method for hyper-parameter selection is a random
 selection of hyper-parameters followed by training each model to completion.
-This offers several advantages, including a simple implementation that is  very
-amendable to parallelism. Other benefits include sampling "important
+This offers several advantages, including a simple implementation that is very
+amenable to parallelism. Other benefits include sampling "important
 parameters" more densely over unimportant parameters :cite:`bergstra2012random`
 This randomized search is implemented in many places, including in Scikit-Learn
 :cite:`pedregosa2011`.
@@ -271,6 +261,33 @@ There is little to no gain from adaptive searches if the passive search
 requires little computational effort. Adaptive searches spends choosing which
 models to evaluate to minimize the computational effort required; if that's not
 a concern there's not much value the value in any adaptive search is limited.
+
+Dask
+----
+
+Dask provides advanced parallelism for analytics, especially for NumPy, Pandas
+and Scikit-Learn :cite:`dask`. It is familiar to Python users and does not
+require rewriting code or retraining models to scale to larger datasets or to
+more machines. It can scale up to clusters or to massive dataset but also works
+on laptops and presents the same interface. Dask provides two components:
+
+* Dynamic task scheduling optimized for computation. This low level scheduler
+  provides parallel computation and is optimized for interactive computational
+  workloads.
+* "Big Data" collections like parallel arrays, or dataframes, and lists that
+  extend common interfaces like NumPy, Pandas, or Python iterators to
+  larger-than-memory or distributed environments. These parallel collections
+  run on top of dynamic task schedulers.
+
+Dask aims to be familiar and flexible: it aims to parallelize and distribute
+computation or datasets easily while retaining a task scheduling interface for
+custom workloads and integration into other projects. It is fast and the
+scheduler has lower overhead. It's implemented in pure Python and can scale
+from massive datasets to a cluster with thousands of cores to a laptop running
+single process. In addition, it's designed with interactive computing in mind
+and provides rapid feedback and diagnostics to aid humans.
+
+
 
 Adaptive model selection in Dask
 ================================
