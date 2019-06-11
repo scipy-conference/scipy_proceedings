@@ -131,7 +131,7 @@ many science teams. Because the Haswell nodes are "easier" to use (i.e.
 applications often run faster on them out of the box), they are increasingly crowded.
 For this reason NERSC established a program called NESAP (NERSC Exascale
 Science Applications Program, :cite:`noauthor_nesap_nodate`) to help science
-teams transision successfully to the KNL nodes. NESAP provides
+teams transition successfully to the KNL nodes. NESAP provides
 technical expertise from NERSC staff and vendors like Intel and Cray to science
 teams to improve the performance of their application on the Cori KNL partition
 and prepare for the manycore future of high-performance computing (HPC).
@@ -152,7 +152,7 @@ resources. They did consider both Cython :cite:`noauthor_cython:_nodate` and
 Numba :cite:`noauthor_numba:_nodate` as options for improving performance, but
 after some initial testing they found that both delivered approximately
 equivalent speedups for their specific test cases. Citing Numba's ease of use,
-automatic compiliation, and ability to gracefully fall back to non-compiled
+automatic compilation, and ability to gracefully fall back to non-compiled
 code, they requested that NESAP proceed with Numba-based optimizations where
 necessary.
 
@@ -214,7 +214,7 @@ less appealing than gprof2dot.
 Examining the visualized cProfile data allowed us to identify expensive kernels
 in the DESI calculation. In Figure :ref:`gprof2dot`, the functions are
 color-coded according to how much total time is spent in each of them. In this
-example, the function "traceset" accounts for approximately 37 percent of the
+example, the function :code:`traceset` accounts for approximately 37 percent of the
 total runtime and was a good candidate for optimization efforts.
 
 Information like that shown in Figure :ref:`gprof2dot` is nevertheless
@@ -241,9 +241,9 @@ identified a few key functions of interest.
 Once decorated, line_profiler provides a great deal of information for each
 line of the function, including how many times each line was invoked and the
 total amount of time spent on each line. An example of line_profiler output for
-the function "xypix" is shown in Figure :ref:`lineprofiler`. This information
+the function :code:`xypix` is shown in Figure :ref:`lineprofiler`. This information
 was vital to our optimization efforts because it could point to functions that
-were particularly expensive, such as numpy's legval or scipy's erf. Once we had
+were particularly expensive, such as numpy's :code:`legval` or scipy's :code:`erf`. Once we had
 this information, we could make decisions about how to reduce the time spent in
 these functions, either by speeding up the functions themselves through JIT
 compiling, or by restructuring the code to make the functions either less
@@ -306,48 +306,48 @@ making expensive functions run more quickly. To achieve this, we have used
 Numba :cite:`lam_numba:_2015`, a just-in-time compiler for Python.
 
 We used Numba for three functions that, through profiling, we identified as
-expensive. These functions were 1) numpy.polynomial.legendre.legval
-:cite:`noauthor_numpy.polynomial.legendre.legval_nodate`, 2) scipy.special.erf
-:cite:`noauthor_scipy.special.erf_nodate`, and 3) scipy.special.hermitenorm
+expensive. These functions were 1) :code:`numpy.polynomial.legendre.legval`
+:cite:`noauthor_numpy.polynomial.legendre.legval_nodate`, 2) :code:`scipy.special.erf`
+:cite:`noauthor_scipy.special.erf_nodate`, and 3) :code:`scipy.special.hermitenorm`
 :cite:`noauthor_scipy.special.hermitenorm_nodate`, which henceforth we will
-refer to as legval, erf, and hermitenorm.
+refer to as :code:`legval`, :code:`erf`, and :code:`hermitenorm`.
 
-legval was perhaps the most straightforward of these three to JIT compile.
+:code:`legval` was perhaps the most straightforward of these three to JIT compile.
 Unlike Python, Numba requires that all variables and arrays cannot change type,
 nor can they change size (e.g. this information must be known prior at compile
-time). This necessitated several small changes to the legval algorithm to put
+time). This necessitated several small changes to the :code:`legval` algorithm to put
 it in the form required by Numba. Several other lines of the function that
 performed type checking were removed. This placed the onus on the developer to
 make sure the correct types are supplied, which was acceptable for us. The
-original and modified legval functions are shown in Figure :ref:`legval`.
+original and modified :code:`legval` functions are shown in Figure :ref:`legval`.
 
 .. figure:: figures/legval_old_vs_new.png
    :align: center
-   :scale: 50%
+   :scale: 40%
    :figclass: wt
 
-   (A) The official numpy.polynomial.legendre.legval function. Profiling data
+   (A) The official :code:`numpy.polynomial.legendre.legval` function. Profiling data
    indicated that this was an expensive function. To conserve space the docstring
-   has been removed. (B) Our modified legval function that was much faster than
+   has been removed. (B) Our modified :code:`legval` function that was much faster than
    its original numpy counterpart. Note the removal of the type checking and the
-   addition of the np.ones array to instruct Numba about the sizes of each array
+   addition of the :code:`np.ones` array to instruct Numba about the sizes of each array
    (and prevent them from changing during every iteration.) :label:`legval`
 
 The two scipy functions were also somewhat challenging to implement in Numba.
 At the time of this writing, Numba does not yet support directly compiling
 scipy functions. This meant that we needed to extract the core part of these
 scipy functions and mold them into a form that Numba would accept. For scipy
-erf, this meant translating the Fortran source code into Python. For scipy
-hermitenorm, which was fortunately already in Python, algorithmic changes
-similar to those we made in legval were necessary to ensure all variables
+:code:`erf`, this meant translating the Fortran source code into Python. For scipy
+:code:`hermitenorm`, which was fortunately already in Python, algorithmic changes
+similar to those we made in :code:`legval` were necessary to ensure all variables
 were a constant type and size.
 
 We should note that we tried to cache the compiled Numba functions with the
-cache=True option to save time, but with larger numbers of MPI ranks, we found
+:code:`cache=True` option to save time, but with larger numbers of MPI ranks, we found
 that this sometimes caused a data race between the Numba caches written by each
 rank. To avoid this problem we considered using ahead of time (AOT) instead of
-JIT compiling but since this change was somewhat awkward, for now we removed
-the cache=True setting and will consider using AOT in the future.
+JIT compiling but since implementing this change was somewhat awkward, for now we have removed
+the :code:`cache=True` setting and will consider using AOT in the future.
 
 Restructuring the Code
 ----------------------
@@ -356,17 +356,17 @@ Restructuring the code was the second major optimization strategy we used. In
 the three subsections that follow, we will describe three types of restructuring
 efforts that we have completed or will soon complete. In the first restructure,
 we have altered the code to process smaller matrices at a time to reduce the
-performance hit we take in the scipy.linalg.eigh function. In the second
+performance hit we take in the :code:`scipy.linalg.eigh` function. In the second
 restructure, we have changed the code to avoid calling an expensive function,
-numpy.polynomial.legendre.legval. In the third restructure, which is currently
+:code:`numpy.polynomial.legendre.legval`. In the third restructure, which is currently
 in progress, we are changing the structure of parallelism to divide the problem
 by subbundle rather than by bundle. This restructure doesn't itself provide a
-performance boost, but it does provide increased flexibility for the DESI code.
+performance boost, but it does provide substantially increased flexibility for the DESI code.
 
 Implement Subbundles
 ~~~~~~~~~~~~~~~~~~~~
 
-Profiling data indicated that when matrix sizes were large, scipy.linalg.eigh,
+Profiling data indicated that when matrix sizes were large, :code:`scipy.linalg.eigh`,
 a key part of the spectroperfectionism extraction, was extremely slow. This is
 not surprising because Jacobi eigenvalue algorithms scale as :math:`O(n^{3})`
 :cite:`press_numerical_1992`. One recommendation from an Intel Dungeon session
@@ -387,29 +387,29 @@ Add Cached legval Values
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another outcome from the Intel Dungeon session was the recommendation to
-restructure the code to avoid calling legval. The problem with legval wasn't
+restructure the code to avoid calling :code:`legval`. The problem with :code:`legval` wasn't
 just that it was an expensive function; rather, it was also contributing to a
 large fraction of the total runtime because it was called millions of times for
-each CCD image in the DESI spectral extraction calculation. Worse, legval was
+each CCD image in the DESI spectral extraction calculation. Worse, :code:`legval` was
 called with scalar values even though it was able to handle vector inputs.
 
 This restructuring required us to modify several major functions and redefine
 some of the bookkeeping that keeps track of which data corresponds to which
 part of the image on the CCD. Prior to the restructure, profiling data indicated
-that legval was called approximately 7 million times per frame with scalar values.
+that :code:`legval` was called approximately 7 million times per frame with scalar values.
 
-The code was restructured so that legval was now called 800,000 times per
+The code was restructured so that :code:`legval` was now called 800,000 times per
 frame. Of course this is still a large number, but it is almost an order of
 magnitude fewer times than the original implementation. The calculated values
 were stored as key-value pairs in a dictionary. We then modified the part of
-the code that previously calculated legval to instead look up the required
+the code that previously calculated :code:`legval` to instead look up the required
 values stored in the dictionary.
 
 Parallelize over Subbundles Instead of Bundles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The original DESI MPI framework split COMM_WORLD into n bundle communicators,
-where n was the number of processors per chip. This was inefficient on a single
+The original DESI MPI framework split :code:`COMM_WORLD` into :code:`n` bundle communicators,
+where :code:`n` was the number of processors per chip. This was inefficient on a single
 processor because 20 bundles used only some of the available processors on
 either a Haswell or KNL. To process additional frames (and additional multiples
 of 20 bundles), a specific number of nodes had to be carefully chosen to fill
@@ -424,12 +424,16 @@ restrictive condition in general).
 
 Work is now in progress towards this goal. When completed, the 500 spectra will
 be more evenly doled out to 32 processors (about 16 spectra each) or 68
-processors (about 7 spectra each). The COMM_WORLD communicator will orchestrate
+processors (about 7 spectra each). The :code:`COMM_WORLD` communicator will orchestrate
 all 30 frames within a single exposure, and the frame level communicator will
 orchestrate the subbundle processing within the frame. Like the other
 restructuring efforts, we have found that implementing this change is
 nontrivial. However, when finished, the additional flexibility in job
-configuration will be very valuable to DESI.
+configuration will be very valuable to DESI. For example, this will allow DESI
+to run efficiently on an arbitrary number of nodes (which is important both on
+a shared system and in a situation when quick turnaround time is valuable),
+rather than being restricted to certain numbers of nodes (multiples of 19 for
+Haswell, for example).
 
 Optimization Results
 --------------------
@@ -445,38 +449,40 @@ the overall runtime of the frame on each architecture.
 Figure :ref:`singlenode` shows that the first few changes we made had the
 largest overall impact: the later optimizations exhibited some diminishing
 returns. Over the course of this work the
-runtime for a single frame was decreased from 4000 s to 525 s for KNL, from 862
-to 130 seconds for Haswell, and from 1146 s to 116 s for Ivy Bridge
+runtime for a single frame was decreased from 4000 to 525 seconds for KNL, from 862
+to 130 seconds for Haswell, and from 1146 to 116 seconds for Ivy Bridge
 (the processor architecture on NERSC's now retired Edison system). The
 overall increases in raw speed varied between 7-10x for each architecture. One
 major goal of the NESAP program was to reduce the DESI runtime on KNL to below
 the original Edison Ivy Bridge benchmark, which is indicated by the red dotted
-line. Once we implemented our legval cache fix, we achieved this goal.
+line. Once we implemented our :code:`legval` cache fix, we achieved this goal.
 
 .. figure:: figures/single_node.png
 
    The single-node speedup achieved on Intel Ivy Bridge, Haswell, and KNL architectures
    throughout the course of this study. :label:`singlenode`
 
-A more informative benchmark for DESI is specific processing throughput, 
-stated in frames processed per node-hour.  Measuring this quantity makes it 
-clear how much of DESI's computing allocation is needed to complete a given 
-amount of processing.  Higher specific throughput translates indicates more effective
-use of computing resources.  We measure this benchmark using a full exposure (30 frames), instead of a
-single frame, on either 19 or 9 nodes for Haswell and KNL, respectively. Though
-a single exposure is still a relatively small test because DESI expects to
-collect 30 or more exposures per night (approximately 1000 frames), it much
-more closely approaches the real DESI workload than the single frame benchmark.
-One feature encoded in this benchmark which is not captured in the speed
-benchmark is the increasingly important role that MPI overhead begins to play
-in multi-node jobs, which is a real factor with which DESI will have to contend
-during its large processing runs. The frames per node-hour results are plotted
-in Figure :ref:`framespernodehour`. While the increases in specific throughput
-we have obtained are more modest than the raw speedup, these values are a more
-accurate representation of the actual improvements in DESI's processing
-capability. For this reason we emphasize that we were able to achieve a 5-7x
-specific throughput increase instead of the (more exciting but less meaningful)
-7-10x in raw processing speed.
+A more informative benchmark for DESI is specific processing throughput, stated
+in frames processed per node-hour.  Measuring this quantity makes it clear how
+much of DESI's computing allocation is needed to complete a given amount of
+processing. Higher specific throughput indicates more effective use of
+computing resources. We measure this benchmark using a full exposure (30
+frames), instead of a single frame. We also measure on either 19 or 9 nodes for
+Haswell and KNL, respectively, due to the limitations we described earlier (in
+the Parallelize over Subbundles Instead of Bundles subsection). Though a single exposure is still a
+relatively small test because DESI expects to collect 30 or more exposures per
+night (approximately 1000 frames), it much more closely approaches the real
+DESI workload than the single frame benchmark. One feature encoded in this
+benchmark which is not captured in the speed benchmark is the increasingly
+important role that MPI overhead begins to play in multi-node jobs, which is a
+real factor with which DESI will have to contend during its large processing
+runs. The frames per node-hour results are plotted in Figure
+:ref:`framespernodehour`. While the increases in specific throughput we have
+obtained are more modest than the raw speedup, these values are a more accurate
+representation of the actual improvements in DESI's processing capability. For
+this reason we emphasize that we were able to achieve a 5-7x specific
+throughput increase instead of the (more exciting but less meaningful) 7-10x in
+raw processing speed.
 
 .. figure:: figures/frames_per_node_hour.png
 
@@ -485,53 +491,35 @@ specific throughput increase instead of the (more exciting but less meaningful)
 
 It is worth mentioning that using Numba allowed us to make notable improvements
 specifically on KNL, which was of course the main goal of this study. For
-legval in particular, shown in Figure :ref:`legval`, we found that JIT
+:code:`legval` in particular, shown in Figure :ref:`legval`, we found that JIT
 compiling this function provided 15x speedup on KNL vs only 5x speedup on
 Haswell. This additional speedup on KNL was because Numba was able to target
 the KNL AVX-512 vector units. We therefore strongly recommend investigating Numba to any
 developer trying to optimize Python code to run on a system with vectorization
 capabilities.
 
-Finally, in Table 1 we summarize the incremental speedups we obtained
-throughout this study on Edison Ivy Bridge, Cori Haswell, and Cori KNL
-according to their type. Perhaps these results are the most generally
-instructive. First, they demonstrate the restructuring-based optimizations were
-more valuable the JIT-based optimizations. For example, the overall speedup of
-adding the legval cached values was approximately 1.7x, although this was also
-the most difficult of all the optimizations in this study. In contrast, our
-relatively painless JIT compiled optimizations were not as effective in terms
-of speedup, averaging between a factor of 1.1-1.5x improvement. The takeaway
-from these results might be that if a developer has enough time, the larger,
-more complex restructuring optimizations may be extremely worthwhile. The flip
-side is that if the developer has limited time, small fixes like JIT compiling
-can still provide reasonable gains without a major time investment.
+Finally, in Figure :ref:`incremental` we summarize the incremental specific
+throughput improvements we obtained throughout this study on Edison Ivy Bridge,
+Cori Haswell, and Cori KNL. The code optimizations are plotted in chronological order.
+Perhaps these results are
+the most generally instructive. First, they demonstrate that the
+restructuring-based optimizations were more valuable than the JIT-based
+optimizations. For example, the overall speedup of adding the :code:`legval`
+cached values was approximately 1.7x, although this was also the most difficult
+of all the optimizations implemented in this study. In contrast, our relatively painless
+JIT compiled optimizations were not as effective in terms of speedup, averaging
+between a factor of 1.1-1.5x improvement. The takeaway from these results might
+be that if a developer has enough time, the larger, more complex restructuring
+optimizations may be extremely worthwhile. The flip side is that if the
+developer has limited time, small fixes like JIT compiling can still provide
+reasonable gains without a major time investment.
 
-.. raw:: latex
+.. figure:: figures/incremental.png
 
-   \begin{table*}
-
-     \begin{longtable}{|c|c|c|c|c|c|}
-     \hline
-     \textbf{Optimization}  & \textbf{Type} & \textbf{Mean Speedup} & Ivy Bridge Speedup & Haswell Speedup & KNL Speedup \tabularnewline
-     \hline
-     Add subbundles & Restructure & 1.55106 & 1.62882 & 1.73696 & 1.28741 \tabularnewline
-     \hline
-     JIT legval & JIT compile & 1.11607 & 1.16106 & 1.06005 & 1.12709 \tabularnewline
-     \hline
-     Add legval cache & Restructure & 1.70416 & 1.72505 & 1.70197 & 1.68546 \tabularnewline
-     \hline
-     JIT erf/hermitenorm & JIT compile & 1.28906 & 1.33125 & 1.15036 & 1.38556 \tabularnewline
-     \hline
-     JIT bookkeeping & JIT compile & 1.49806 & 1.51875 & 1.31501 & 1.66042 \tabularnewline
-     \hline
-     \end{longtable}
-
-     \caption{Types of optimization efforts performed in this study and their
-        resulting speedups on Intel Ivy Bridge, Haswell, and Knights Landing architectures.
-        The geometric mean speedup achieved on all three architectures is displayed in
-        the third column. These optimizations are listed in chronological order.}
-
-   \end{table*}
+    Types of optimization efforts performed in this study and their
+    resulting incremental specific throughput improvements on Intel 
+    Ivy Bridge, Haswell, and Knights Landing architectures. These 
+    optimizations are listed in chronological order. :label:`incremental`
 
 
 Alternatives to MPI?
@@ -541,21 +529,22 @@ A few problems with the current MPI implementation of the DESI spectral
 extraction code prompted us to take a step back and consider if newer frameworks like Dask
 :cite:`noauthor_dask:_nodate` would be a better solution for parallelization
 within DESI. The first was the relative inflexibility of the division of work
-between bundles (although this has been addressed now in the subbundle
-division). The second was the issue of resiliency: if a node goes down, it will
-take the entire MPI job with it. (This is not an issue in Dask, in which dead
-workers can be seamlessly revived while the calculation continues.) An additional feature
+between bundles [#]_ . The second was the issue of resiliency: if a node goes down, it will
+take the entire MPI job with it [#]_ . An additional feature
 we liked about Dask is the ability to monitor Dask jobs in real time with their
 Bokeh status page. We thought Dask seemed promising enough that it was worth
 taking a careful look at what it would mean to replace the DESI MPI with Dask.
 
+.. [#] Although this is being addressed in the subbundle division restructure.
+.. [#] This is not an issue in Dask, in which dead workers can be seamlessly revived while the calculation continues.
+
 Dask is a task-based parallelization system for Python. It is comprised of a
 scheduler and some number of workers which communicate with each other via a
 client. Dask is more flexible than traditional MPI because it can start workers
-and collect their results via a concurrent futures API. (It should be noted
+and collect their results via a concurrent futures API. It should be noted
 that this is also possible in MPI with dynamic process management, but since
 Cray does not yet support dynamic process management under the Slurm workload manager,
-we haven't been able to try it at NERSC.)
+we haven't been able to try it at NERSC.
 
 During this process, we discovered that it is non-trivial to convert a
 code already written in MPI to Dask, and it would likely be difficult to
@@ -570,7 +559,7 @@ parallel can be done on the fly. In Dask, however, the scheduler needs to know
 in advance which work to assign to workers. This means that the work must
 already be divided in sensible way. Collecting the information required for
 Dask-style parallelism in advance would have required a substantial
-restructuring on the order of what was performed for legval, if not more
+restructuring on the order of what was performed for :code:`legval`, if not more
 ambitious. At this point we decided that if the DESI code had been written from
 the start with Dask-type parallelism in mind using Dask would have been a good
 choice, but converting existing MPI code into Dask was unfortunately not a
@@ -603,21 +592,21 @@ restructuring to better adapt the problem for the capabilities of the hardware.
 
 Preliminary testing is underway to give some indication of what we might expect
 from a major overhaul. From profiling information we expect that the
-scipy.linalg.eigh function will constitute a larger part of the workload as
-matrix sizes increase. We have measured the runtime of scipy.lialg.eigh and
-cupy.linalg.eigh :cite:`noauthor_cupy.linalg.eigh_nodate` as an initial test
+:code:`scipy.linalg.eigh` function will constitute a larger part of the workload as
+matrix sizes increase. We have measured the runtime of :code:`scipy.lialg.eigh` and
+:code:`cupy.linalg.eigh` :cite:`noauthor_cupy.linalg.eigh_nodate` as an initial test
 case on Cori Haswell, KNL, and the new Cori Volta GPUs. (We could not make
 these measurements on Edison Ivy Bridge because it has now been
-decommissioned.) Figure :ref:`eigh` shows the eigh runtime for various sizes of
+decommissioned.) Figure :ref:`eigh` shows the :code:`eigh` runtime for various sizes of
 positive definite input matrices. These data show that for larger matrix sizes
 (above approximately 1000) the Volta begins to outperform the CPUs. However,
 these data do not include any possible gains from a divide-and-conquer approach
 (which has proven very successful for DESI). Investigating this strategy is
 near-term future work.
 
-This eigh study is just the first of many planned GPU experiments. DESI has
+This :code:`eigh` study is just the first of many planned GPU experiments. DESI has
 additional matrix preparation steps, bookkeeping, and special function
-evaluations (like legval) which also constitute a large part of their total
+evaluations (like :code:`legval`) which also constitute a large part of their total
 workload. At this time it is unclear which of these might perform well on the
 GPU and make the relatively expensive host to device data transfer worthwhile.
 We will perform many experiments to evaluate how well each of these are suited
@@ -635,6 +624,7 @@ having to fill the DESI code with distinct CPU and GPU blocks, and additionally
 to avoid being tied to a particular vendor, is still an open question for us.
 
 .. figure:: figures/eigh.png
+   :scale: 50%
 
    Data from performing an eigh matrix decomposition of various sizes on Edison
    Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. We used CuPy to perform
@@ -647,7 +637,7 @@ Over the course of this work, we have achieved our goal of speeding up the
 throughput of the DESI spectral extraction code on NERSC Cori Haswell and KNL
 processors by a factor of 5-7x without rewriting their Python code in another
 language. DESI will process its data at NERSC both in semi-realtime and
-additionally, it will reprocess all of its data each year with the latest
+additionally, it will reprocess all of its data each year (at least) with the latest
 pipeline version. At the start of this work, the final data processing would
 have taken 33 million CPU hours. The work presented in this study has reduced
 that to 6.5 million hours, making much more efficient use of the resources
@@ -676,7 +666,7 @@ fundamentally different strategies of dividing the workload, and decided to
 continue using MPI. Finally, we are now investigating how the DESI code could
 run effectively on GPUs by since the next NERSC system Perlmutter will include
 a large CPU and GPU partition. Exploratory studies for how the DESI code can be
-optimized are being performed using scipy.linalg.eigh and cupy.linlg.eigh as a
+optimized are being performed using :code:`scipy.linalg.eigh` and :code:`cupy.linlg.eigh` as a
 test case now and will continue as future work.
 
 Acknowledgments
