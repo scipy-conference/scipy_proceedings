@@ -56,19 +56,19 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-With the popularity of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now simpler than ever to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
+With the availability of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now possible to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
-The ``freud`` library differentiates itself from other molecular dynamics analysis packages through its focus on colloidal and nano-scale systems.
-Due to their immense diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics as well as a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
+The ``freud`` library differentiates itself from other analysis packages through its focus on colloidal and nano-scale systems.
+Due to their diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics as well as a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
 
 In colloidal systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
 Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
 The ``freud`` library is targeted towards studying such systems, providing a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
 For example, the multi-dimensional Potential of Mean Force and Torque allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`.
 Additionally, ``freud`` has tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
-The ``freud`` library's extraordinary scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
+The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
 
-The outputs of molecular simulations are usually stored as a file of particle positions, with some metadata like particle types.
+The outputs of molecular simulations are usually stored as a file of particle positions, with some metadata like particle types, periodic box dimensions, and bond topologies.
 However, these outputs are typically not immediately useful.
 Physical invariants of a system such as translational or rotational invariance are difficult to learn from raw arrays of particle positions, making machine learning libraries hard to apply for tasks such as classification or regression.
 Data visualizations, on the other hand, rely on position arrays for drawing particles but frequently must be coupled with analysis tools in order to provide interpretable views of the system that allow researchers to identify regions, e.g. defects and well-ordered domains, of self-assembled structures.
@@ -112,13 +112,13 @@ The ``scipy`` package is one such example, where ``freud`` wraps ``scipy``'s beh
 Enforcing periodicity with triclinic boxes where the sides are tilted (and thus not orthogonal to one another) can be tricky, necessitating ``freud``'s implementation for determining Voronoi tesselations in both 2D and 3D periodic systems.
 
 Similarly, the mean-squared displacement module (``freud.msd``) utilizes fast Fourier transforms from ``numpy`` or ``scipy`` to accelerate its computations.
-The resulting MSD data help to identify how particles' dynamics change over time, e.g. from ballistic to diffusive as systems solidify.
+The resulting MSD data help to identify how particles' dynamics change over time, e.g. from ballistic to diffusive.
 
 Machine Learning
 ----------------
 
 A common challenge in molecular sciences is identifying crystal structures.
-Recently, several approaches have been developed that use machine learning for detecting phases :cite:`Schoenholz2015,Spellings2018,Fulford2019,Steinhardt1983,Lechner2008`.
+Recently, several approaches have been developed that use machine learning for detecting ordered phases :cite:`Schoenholz2015,Spellings2018,Fulford2019,Steinhardt1983,Lechner2008`.
 The Steinhardt order parameters are often used as a structural fingerprint, and are derived from rotationally invariant combinations of spherical harmonics.
 In the example below, we create face-centered cubic (fcc), body-centered cubic (bcc), and simple cubic (sc) crystals with added Gaussian noise, and use Steinhardt order parameters with a support vector machine to train a simple crystal structure identifier.
 Steinhardt order parameters characterize the spherical arrangement of neighbors around a central particle, and combining values of
@@ -218,8 +218,8 @@ These descriptors have been used with TensorFlow for supervised and unsupervised
 
 .. [#] https://github.com/glotzerlab/pythia
 
-Another useful module for machine learning with ``freud`` is ``freud.cluster``, for pre- or post-processing data that must consider 2D or 3D periodicity.
-For example, finding clusters using the right cutoff distance can identify crystalline grains, which can help with building a training set for machine learning models.
+Another useful module for machine learning with ``freud`` is ``freud.cluster``, which uses a distance-based cutoff to locate clusters of particles while accounting for 2D or 3D periodicity.
+Locating clusters in this way can identify crystalline grains, helpful for building a training set for machine learning models.
 
 Visualization
 -------------
@@ -249,6 +249,7 @@ plato
 
 ``plato`` is an open-source graphics package that expresses a common interface for defining two- or three-dimensional scenes which can be rendered as an interactive Jupyter widget or saved to a high-resolution image using one of several backends (``pythreejs``, ``matplotlib``, ``fresnel``, POVray [#]_, and Blender [#]_, among others).
 Below is an example of how to render particles from a HOOMD-blue snapshot, colored by the density of their local environment :cite:`Anderson2008,Glaser2015`.
+The result is shown in figure :ref:`fig:platopythreejs`.
 
 .. [#] https://www.povray.org/
 .. [#] https://www.blender.org/
@@ -281,7 +282,7 @@ Below is an example of how to render particles from a HOOMD-blue snapshot, color
 fresnel
 =======
 
-``fresnel`` [#]_ is a GPU-accelerated ray tracer designed for particle simulations, with customizable material types and scene lighting, as well as support for a set of common anisotropic shapes simulations.
+``fresnel`` [#]_ is a GPU-accelerated ray tracer designed for particle simulations, with customizable material types and scene lighting, as well as support for a set of common anisotropic shapes.
 Its feature set is especially well suited for publication-quality graphics.
 Its use of ray tracing also means that an image's rendering time scales with the image size, instead of the number of particles -- a desirable feature for extremely large simulations.
 An example of ``fresnel`` integration is available online.
@@ -301,7 +302,7 @@ OVITO
 
 OVITO is a GUI application with features for particle selection, making movies, and support for many trajectory formats :cite:`Stukowski2010`.
 OVITO has several built-in analysis functions (e.g. Polyhedral Template Matching), which complement the methods in ``freud``.
-The Python scripting functionality built into OVITO enables the use of  ``freud`` modules, demonstrated in the code below.
+The Python scripting functionality built into OVITO enables the use of  ``freud`` modules, demonstrated in the code below and shown in figure :ref:`fig:ovitoselection`.
 
 .. code-block:: python
 
@@ -342,7 +343,7 @@ Conclusions
 -----------
 
 The ``freud`` library offers a unique set of high-performance algorithms designed to accelerate the study of nanoscale and colloidal systems.
-We have demonstrated several ways in which these tools for particle analysis can be used in conjunction with other popular packages for machine learning and data visualization.
+We have demonstrated several ways in which these tools for particle analysis can be used in conjunction with other packages for machine learning and data visualization.
 We hope these examples are of use to the computational molecular science community and spark new ideas for analysis and scientific exploration.
 
 Getting ``freud``
