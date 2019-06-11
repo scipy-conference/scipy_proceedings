@@ -102,11 +102,9 @@ underpinnings. Hyperband can only return high performing models with minimal
 training because it evaluate models in parallel.
 
 In the experiments, Hyperband returns high performing models fairly quickly,
-though the simple modification returns models nearly as good and only require
-about 70% of time. The simple heuristic for determining input parameter to
-Hyperband make it easy to use. The implementation can be found on the machine
-learning for Dask, Dask-ML. The documentation for Dask-ML is available at
-https://ml.dask.org.
+with the simple heuristic for determining the input parameters to Hyperband.
+The implementation can be found on the machine learning for Dask, Dask-ML. The
+documentation for Dask-ML is available at https://ml.dask.org.
 
 This paper will review other existing work for model selection before
 detailing the Hyperband implementation in Dask. A realistic set of experiments
@@ -170,22 +168,26 @@ computational control :cite:`klein2016`.
 Hyperband
 ---------
 
-Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`.
-Hyperband is a principled early-stopping scheme for randomized searches, at
-least in one application of the algorithm. Hyperband trains many models in
-parallel and decides to stop models at particular times to preserve
-computation. By contrast, most Bayesian searches tweak a set of
-hyper-parameters based on serial evaluations of a model that's assumed to be a
-black box.
+Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`. It
+is a principled early stopping scheme [#resources]_ that partially trains
+models, scores the models then decides which models should continue training.
+Hyperband trains many models in parallel and decides to stop models at
+particular times to preserve computation.
 
-The analysis underlying Hyperband relies on sweeping over the tradeoff between
-training time and hyper-parameter importance. If training time only matters a
-little, it makes sense to aggressively stop training models. On the flip side,
-if only training time influence the score, it only makes sense to let all
-models train for as long as possible.
+.. [#resources] In general, Hyperband is a resource-allocation scheme for model
+   selection.
 
-This allows a mathematical proof that Hyperband is will return a much higher
-performing model than the randomized search without early stopping returns:
+Hyperband stops training the lowest performing third of models at particular
+times by default. The frequency at which models are stopped depends on the
+relative importance of training time and hyper-parameters.  If training time
+only matters a little, it makes sense to aggressively stop training models. On
+the flip side, if only training time influence the score, it only makes sense
+to let all models train for as long as possible.
+
+This allows a formal mathematical statement that Hyperband will return a much
+higher performing model than the randomized search without early stopping
+returns. This is best characterized by an informal presentation of the main
+theorem:
 
 .. latex::
    :usepackage: amsthm
@@ -294,16 +296,18 @@ Adaptive model selection in Dask
 
 Dask can scale up to clusters or to massive datasets. Model selection searches
 often require significant amounts of computation and can involve large
-datasets. Combining Dask with advanced model selection is a natural fit.  This
-work focuses on the case when the computation required is not insignificant.
-Then, the existing `passive` model selection algorithms in Dask-ML have limited
-use because they don't `adapt` to previous training to reduce the amount of
-training required. [#dasksearchcv]_
+datasets, and Hyperband is amenable to parallelism. Combining Dask
+with Hyperband is a natural fit.
 
-This work implements an adaptive model selection algorithm, Hyperband, in
-Dask's machine learning library, Dask-ML.  [#docs]_ This algorithm adapts to
-previous training to minimize the amount of computation required. This section
-will detail the Hyperband architecture, the input arguments required and some
+This work focuses on the case when the computation required is not
+insignificant. Then, the existing `passive` model selection algorithms in
+Dask-ML have limited use because they don't `adapt` to previous training to
+reduce the amount of training required.  [#dasksearchcv]_
+
+An adaptive model selection algorithm, Hyperband is implemented in Dask's
+machine learning library, Dask-ML.  [#docs]_ This algorithm adapts to previous
+training to minimize the amount of computation required. This section will
+detail the Hyperband architecture, the input arguments required and some
 modifications to reduce time to solution.
 
 
@@ -454,16 +458,16 @@ models more training time. In particular, it also provides a basic early
 stopping mechanism for the least adaptive bracket of Hyperband.
 
 The current implementation uses ``patience=True`` to choose a high value of
-``patience=max_iter // 3``. This choice is validated by the experiments.
+``patience=max_iter // 3``, which is validated by the experiments.
 
 Experiments
 ===========
 
 This section will highlight a practical use of ``HyperbandSearchCV``. This
 involves a neural network using a popular library (PyTorch [#pytorch]_
-:cite:`paszke2017automatic` through the wrapper Skorch [#skorch]_). This is
-a difficult model selection problem even for this relatively simple model.
-The complete implementation behind these experiments can be found at
+:cite:`paszke2017automatic` through the wrapper Skorch [#skorch]_). This is a
+difficult model selection problem even for this relatively simple model.  Some
+detail is mentioned in the Appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
 .. [#pytorch] https://pytorch.org
