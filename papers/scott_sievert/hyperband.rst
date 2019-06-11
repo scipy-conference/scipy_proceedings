@@ -503,16 +503,26 @@ that model:
 Of course, this is a neural network so there are many hyper-parameters to tune.
 Only one effects the global optimum:
 
-* ``estimator__activation``: which activation function should this neural net use?
+* ``estimator__activation``: which specifies the activation the neural network
+  should use.
 
-There are 4 values for this hyper-parameter. The rest control reaching the
-global optimum:
+This hyper-parameter is varied between 4 different choices, all different types
+of the rectified linear unit (ReLU). The other hyper-parameters control
+reaching the global optimum:
 
-* ``optimizer``: optimization method should be used for training?
+.. TODO: cite Xavier, Kaiming, Adam, SGD, weight decay
+
+* ``optimizer``: which optimization method should be used for training? Choices
+  are stochastic gradient descent (SGD)  and Adam.
 * ``estimator__init``: how should the estimator be initialized before training?
-* ``batch_size``: how many examples should the optimizer use to approximate the gradient?
-* ``optimizer__lr``, the most basic hyper-parameter for the optimizer.
-* ``weight_decay``, which controls the amount of regularization
+  Choices are Xavier and Kaiming initialization.
+* ``batch_size``: how many examples should the optimizer use to approximate the
+  gradient? Choices include values between 32 and 512.
+* ``weight_decay``: how much of a particular type of regularization should the
+  neural net have? Regularization helps control how well the model performs on
+  unseen data.
+* ``optimizer__lr``: what learning rate should the optimizer use? This is the
+  most basic hyper-parameter for the optimizer.
 * ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer.
 
 There are 4 discrete variables with :math:`160` possible combinations. For each
