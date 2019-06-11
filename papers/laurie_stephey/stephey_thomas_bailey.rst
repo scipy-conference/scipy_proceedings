@@ -73,6 +73,7 @@ telescope, on Kitt Peak, Arizona, where the DESI instrument is installed, is
 shown in Figure :ref:`kittpeak`.
 
 .. figure:: figures/desi_kitt_peak.png
+   :scale: 17%
 
    A photograph of the Mayall telescope (large dome in the center of the
    image), where the DESI instrument has been installed, on Kitt Peak, Arizona.
@@ -258,6 +259,7 @@ rank, but visualizing and using the information in a meaningful way is
 challenging, especially when there are 68 outputs from a KNL chip, for example.
 
 .. figure:: figures/line_profiler_xypix.png
+   :scale: 15%
 
    Here is a sample output window from line_profiler
    :cite:`kern_line-by-line_2019` for the function "xypix". The clear,
@@ -290,6 +292,7 @@ bundles which left 12 of the 32 Haswell ranks unoccupied. It is clear from
 this Tau visualization that we were not making good use of processor resources.
 
 .. figure:: figures/tau_main.png
+   :scale: 25 %
 
    A sample Tau :cite:`noauthor_tau_nodate` output for the DESI spectral
    extraction code on a
@@ -408,13 +411,14 @@ values stored in the dictionary.
 Parallelize over Subbundles Instead of Bundles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The original DESI MPI framework split :code:`COMM_WORLD` into :code:`n` bundle communicators,
-where :code:`n` was the number of processors per chip. This was inefficient on a single
-processor because 20 bundles used only some of the available processors on
-either a Haswell or KNL. To process additional frames (and additional multiples
-of 20 bundles), a specific number of nodes had to be carefully chosen to fill
-the processors. For example, 19 Haswell nodes and 9 KNL nodes were required to
-efficiently process a full exposure of 30 frames (600 bundles).
+The original DESI MPI framework split :code:`COMM_WORLD` into :code:`n` bundle
+communicators, where :code:`n` was the number of processors per chip. This was
+inefficient on a single processor because 20 bundles used only some of the
+available processors on either a Haswell or KNL. To process additional frames
+(and additional multiples of 20 bundles), a specific number of nodes had to be
+carefully chosen to fill the processors. For example, 19 Haswell nodes and 9
+KNL nodes were required to efficiently process a full exposure of 30 frames
+(600 bundles).
 
 The goal of parallelizing over subbundles, rather than bundles, was to
 restructure the code to divide the spectral extraction into smaller, more
@@ -424,16 +428,20 @@ restrictive condition in general).
 
 Work is now in progress towards this goal. When completed, the 500 spectra will
 be more evenly doled out to 32 processors (about 16 spectra each) or 68
-processors (about 7 spectra each). The :code:`COMM_WORLD` communicator will orchestrate
-all 30 frames within a single exposure, and the frame level communicator will
-orchestrate the subbundle processing within the frame. Like the other
-restructuring efforts, we have found that implementing this change is
+processors (about 7 spectra each). The :code:`COMM_WORLD` communicator will
+orchestrate all 30 frames within a single exposure, and the frame level
+communicator will orchestrate the subbundle processing within the frame. Like
+the other restructuring efforts, we have found that implementing this change is
 nontrivial. However, when finished, the additional flexibility in job
 configuration will be very valuable to DESI. For example, this will allow DESI
 to run efficiently on an arbitrary number of nodes (which is important both on
-a shared system and in a situation when quick turnaround time is valuable),
-rather than being restricted to certain numbers of nodes (multiples of 19 for
-Haswell, for example).
+a shared system and in a situation when quick turnaround time is valuable).
+Additionally, this refactor will help improve load balancing. Since the
+processing time differs for the three types of DESI frames (blue, red, and
+infrared), prior to the refactor, the processors assigned to the blue frames
+finished before the infrared frames, wasting both valuable processor resources
+and time. In this new design, frame types can be grouped together so processor
+time is not wasted.
 
 Optimization Results
 --------------------
@@ -515,6 +523,7 @@ developer has limited time, small fixes like JIT compiling can still provide
 reasonable gains without a major time investment.
 
 .. figure:: figures/incremental.png
+    :scale: 45%
 
     Types of optimization efforts performed in this study and their
     resulting incremental specific throughput improvements on Intel 
@@ -624,7 +633,7 @@ having to fill the DESI code with distinct CPU and GPU blocks, and additionally
 to avoid being tied to a particular vendor, is still an open question for us.
 
 .. figure:: figures/eigh.png
-   :scale: 50%
+   :scale: 44%
 
    Data from performing an eigh matrix decomposition of various sizes on Edison
    Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. We used CuPy to perform
