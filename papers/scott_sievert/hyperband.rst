@@ -634,3 +634,86 @@ hurt performance and can it be avoided?
 References
 ==========
 
+Appendix
+========
+
+This section expands upon the example given above. Complete details can be
+found at
+https://github.com/stsievert/dask-hyperband-comparison.
+
+Test/train data
+---------------
+
+.. code-block:: python
+
+    import noisy_mnist
+    noisy, clean = noisy_mnist.dataset()
+
+    from dask_ml.model_selection import train_test_split
+    _ = train_test_split(X, y)
+    X_train, X_test, y_train, y_test = _
+
+Model
+-----
+
+.. code-block:: python
+
+   import torch.nn as nn
+
+   class Autoencoder(nn.Module):
+       def __init__(
+           self,
+           activation='ReLU',
+           init='xavier_uniform_'
+       ):
+           super().__init__()
+
+           self.activation = activation
+           self.init = init
+
+           Actvation = getattr(nn, activation)
+           self.encoder = nn.Sequential(
+               nn.Linear(28 * 28, inter_dim),
+               Activation(),
+               nn.Linear(inter_dim, latent_dim),
+               Activation()
+           )
+           self.decoder = nn.Sequential(
+               nn.Linear(latent_dim, 28 * 28),
+               nn.Sigmoid()
+           )
+           # code to handle initialization
+
+       def forward(self, x):
+           self._iters += 1
+           shape = x.size()
+           x = x.view(x.shape[0], -1)
+           x = self.encoder(x)
+           x = self.decoder(x)
+           return x.view(shape)
+
+Input parameters
+----------------
+
+.. code-block:: python
+
+   params = {
+       'optimizer': ['SGD', 'Adam'],
+       'batch_size': [32, 64, 128, 256, 512],
+       'estimator__init': ['xavier_uniform_',
+                           'xavier_normal_',
+                           'kaiming_uniform_',
+                           'kaiming_normal_'],
+       'estimator__activation': ['ReLU',
+                                 'LeakyReLU',
+                                 'ELU',
+                                 'PReLU'],
+       'optimizer__lr': \
+              np.logspace(1, -1.5, num=1000),
+       'optimizer__weight_decay': \
+              np.logspace(-5, -3, num=1000),
+       'optimizer__momentum': \
+              np.linspace(0, 1, num=1000)
+   }
+
+
