@@ -393,7 +393,7 @@ Merging and Calibration Results
 
 The best merging and calibration results are presented in Table
 :ref:`merge-calibration-results-subsample`. These results were obtained by
-training on the same random sub-sample of the training datset of size 144000.
+training on the same random sub-sample of the training dataset of size 144000.
 Table :ref:`merge-calibration-results-large` shows the best merging and
 calibration results for both neural nets classifiers and scikit-learn
 classifiers when trained on the full training dataset.
@@ -486,21 +486,22 @@ published results.
 Conclusion
 ----------
 
-This paper shows the variety of ways machine learning techniques in python can
+This paper showed the variety of ways machine learning techniques in python can
 be used to dramatically increase the performance of modulation classification
 algorithms. We presented a performance overview of different deep learning
-architechures when applied to the one-dimensional RF modulation-classification
-problem as presented in [Army]_ and [Mitre]_. While the best architectures
-turned out to be ResNet and ResNeXt, the authors don't believe there is anything
+architectures when applied to the one-dimensional RF modulation-classification
+problem as presented in [Army]_ and [Mitre]_. While the best performing architectures
+were ResNet and ResNeXt, we would caution against deducing that there is something
 inherent in those architectures that makes them more suited to the
 modulation-classification problem. Those algorithms produced the most promising
 results earlier on and thus, more time was spent running variations of them
-instead of trying to train variations of Xception or DenseNet networks.
+instead of trying to improve the performance of Xception or DenseNet networks.
 
-This paper also showed an innovative method of merging different neural networks
-that were trained with significantly different data. Using the outputs of the
-last few layers of each of the initial neural networks resulted in an improved
-score overall.
+This paper also presented a new merging method to fuse different neural networks.
+The novelty resides in what is being used as the input features of the merging classifiers.
+We used as inputs not only the results of the final layers of the
+original networks but the outputs of the
+last few layers of each of the initial neural networks.
 
 Finally, we showed that calibration techniques can improve the log loss of
 diverse classifiers. However, it is important to note that the test cases
