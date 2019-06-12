@@ -103,7 +103,8 @@ Challenge Description
     :scale: 100%
 
     Data flow through engineering features evaluation to classification and
-    scoring. Light-blue denote the many variable parameters available.
+    scoring. Light-blue denote the many variable parameters available. In the
+    Army dataset, :math:`cv` is short for cross validation.
     :label:`data-flow`
 
 The Army Rapid Capability Office is seeking innovative approaches to leverage
@@ -136,8 +137,8 @@ possible modulation classes for each of the 100,000 rows in a pair of unlabeled
 test sets.
 
 Classifier performance is evaluated via a pre-defined equation based on the
-well-known log loss metric. The traditional cross validation log loss equation
-is:
+well-known log loss metric, sometimes referred to as cross-entropy loss. The
+traditional cross validation log loss equation is:
 
 .. math::
     :label: logloss
@@ -148,7 +149,7 @@ Where N is the number of instances in the test set, M is the number of
 modulation class labels (24), :math:`y_{ij}` is 1 if test instance :math:`i`
 belongs to class :math:`j` and 0 otherwise, :math:`p_{ij}` is the predicted
 probability that observation :math:`i` belongs in class :math:`j`. Per [Mitre]_
-this is then scaled between 0 and 100%.
+this is then scaled between 0 and 100.
 
 .. math::
     :label: score
@@ -157,7 +158,7 @@ this is then scaled between 0 and 100%.
 
 Note:
 
-* A uniform probability estimate would yield a score of 23.935
+* A uniform probability estimate would yield a score of 23.935, not zero.
 
 * To get a perfect 100 score participants would need to be both 100% correct and 100% confident of every estimation.
 
