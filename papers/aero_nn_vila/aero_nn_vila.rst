@@ -149,7 +149,7 @@ of this paper, was defined per [Mitre]_ as follows:
 
 Notes:
 
-* A uniform probability estimate would yield a score of 23.935
+* A uniform probability estimate would yield a score of 23.935, not zero.
 
 * To get a perfect 100 score participants would need to be both 100% correct and 100% confident of every estimation.
 
