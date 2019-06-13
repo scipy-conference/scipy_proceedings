@@ -205,7 +205,6 @@ Implementation
 
 PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`.
 Dask's :code:`delayed()` function is used to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
-We tested PMDA 0.2.1 (development version), MDAnalysis 0.20.0 (development version), Dask 1.1.1, NumPy 1.15.4.
 
 MDAnalysis combines a trajectory file (frames of coordinates that change with time) and a topology file (list of particles, their names, charges, bonds — all information that does not change with time) into a :code:`Universe(topology, trajectory)` object.
 Arbitrary selections of particles (often atoms) are made available as an :code:`AtomGroup` and the common approach in MDAnalysis is to work with these objects :cite:`Gowers:2016aa`; for instance, all coordinates of an :code:`AtomGroup` with :math:`N` atoms named :code:`protein` are accessed as the :math:`N \times 3` NumPy array :code:`protein.positions`.
@@ -278,11 +277,13 @@ The RDF calculation is compute-intensive due to the necessity to calculate and h
 Test system, benchmarking environment, and data files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 2,020 compute nodes in total.
-Each node in the machine contains two Intel Xeon (E5-2680v3, 12 cores, 2.5 GHz) CPUs with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
+We tested PMDA 0.2.1, MDAnalysis 0.20.0 (development version), Dask 1.1.1, and NumPy 1.15.4.
+
+Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 1,944 Intel Haswell Standard Compute Nodes in total.
+Each node contains two Intel Xeon CPUs (E5-2680v3, 12 cores, 2.5 GHz) with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
 All nodes share a Lustre parallel file system and have access to node-local 320 GB SSD scratch space.
 Jobs are run through the SLURM batch queuing system.
-Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data and archived under DOI `10.5281/zenodo.3228422`_. 
+Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data and are archived under DOI `10.5281/zenodo.3228422`_. 
 
 The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111,815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
 The test trajectories are made available on figshare at DOI `10.6084/m9.figshare.8202149`_.
