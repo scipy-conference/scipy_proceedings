@@ -195,7 +195,7 @@ The indices for the :math:`M` trajectory slices are created in such a way that t
 For each slice or block :math:`k`, the *single frame* analysis function :math:`\mathcal{A}` (:code:`_single_frame()`) is sequentially applied to all frames in the slice.
 The result, :math:`A(t)`, is *reduced*, i.e., added to the results for this block.
 For time series, :math:`A(t)` is simply appended to a list to form a partial time series for the block.
-More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the date may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the parallel RDF Eq. :ref:`eq:rdf`).
+More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the data may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the parallel RDF Eq. :ref:`eq:rdf`).
 
 
 
