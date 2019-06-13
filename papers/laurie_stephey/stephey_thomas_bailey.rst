@@ -386,8 +386,8 @@ increase on both KNL and Haswell. While this strategy was successful on CPUs,
 we will revisit this strategy in the section "Does it Make Sense to Run DESI Code on
 GPUs".
 
-Add Cached legval Values
-~~~~~~~~~~~~~~~~~~~~~~~~
+Add Cached :code:`legval` Values
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Another outcome from the Intel Dungeon session was the recommendation to
 restructure the code to avoid calling :code:`legval`. The problem with :code:`legval` wasn't
@@ -411,36 +411,27 @@ values stored in the dictionary.
 Parallelize over Subbundles Instead of Bundles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The original DESI MPI framework split :code:`COMM_WORLD` into :code:`n` bundle
-communicators, where :code:`n` was the number of processors per chip. This was
-inefficient on a single processor because 20 bundles used only some of the
-available processors on either a Haswell or KNL. To process additional frames
-(and additional multiples of 20 bundles), a specific number of nodes had to be
-carefully chosen to fill the processors. For example, 19 Haswell nodes and 9
-KNL nodes were required to efficiently process a full exposure of 30 frames
-(600 bundles).
+Desipte these optimizations, the DESI code still has several known issues: poor
+load-balancing and rigid requirements for job sizes (9 nodes for KNL and 19
+Nodes for Haswell, for example). We are in the process of addressing these
+issues and thought that our efforts were worth mentioning.
 
-The goal of parallelizing over subbundles, rather than bundles, was to
+The goal of parallelizing over subbundles, rather than bundles, is to
 restructure the code to divide the spectral extraction into smaller, more
-flexible pieces. This would relax the previous requirement that each frame be
+flexible pieces. This will relax the previous requirement that each frame be
 divided into 20 bundles, which is an awkward number for NERSC hardware (and a
-restrictive condition in general).
+restrictive condition in general). When completed, the 500 spectra will be more
+evenly doled out to 32 processors (about 16 spectra each) or 68 processors
+(about 7 spectra each). This means that all processors can be used for any
+given job size, not just for a carefully chosen job size. However, like the
+other restructuring efforts, we have found that implementing this change is
+nontrivial.
 
-Work is now in progress towards this goal. When completed, the 500 spectra will
-be more evenly doled out to 32 processors (about 16 spectra each) or 68
-processors (about 7 spectra each). The :code:`COMM_WORLD` communicator will
-orchestrate all 30 frames within a single exposure, and the frame level
-communicator will orchestrate the subbundle processing within the frame. Like
-the other restructuring efforts, we have found that implementing this change is
-nontrivial. However, when finished, the additional flexibility in job
-configuration will be very valuable to DESI. For example, this will allow DESI
-to run efficiently on an arbitrary number of nodes (which is important both on
-a shared system and in a situation when quick turnaround time is valuable).
 Additionally, this refactor will help improve load balancing. Since the
 processing time differs for the three types of DESI frames (blue, red, and
 infrared), prior to the refactor, the processors assigned to the blue frames
 finished before the infrared frames, wasting both valuable processor resources
-and time. In this new design, frame types can be grouped together so processor
+and time. In this new design, frame types will be grouped together so processor
 time is not wasted.
 
 Optimization Results
@@ -537,14 +528,19 @@ Alternatives to MPI?
 A few problems with the current MPI implementation of the DESI spectral
 extraction code prompted us to take a step back and consider if newer frameworks like Dask
 :cite:`noauthor_dask:_nodate` would be a better solution for parallelization
-within DESI. The first was the relative inflexibility of the division of work
+within DESI. The reason we considered Dask, and not Apache Spark or similar frameworks,
+was 1) because converting to Dask would require a less extreme refactor and 2) the Dask
+adpatations would not preclude smaller-scale users from running DESI processing
+routines on their laptops, which would have been the case with Spark.
+
+The first problem we hoped to address was the relative inflexibility of the division of work
 between bundles [#]_ . The second was the issue of resiliency: if a node goes down, it will
 take the entire MPI job with it [#]_ . An additional feature
 we liked about Dask is the ability to monitor Dask jobs in real time with their
 Bokeh status page. We thought Dask seemed promising enough that it was worth
 taking a careful look at what it would mean to replace the DESI MPI with Dask.
 
-.. [#] Although this is being addressed in the subbundle division restructure.
+.. [#] Although this is currently being addressed in the subbundle division restructure.
 .. [#] This is not an issue in Dask, in which dead workers can be seamlessly revived while the calculation continues.
 
 Dask is a task-based parallelization system for Python. It is comprised of a
@@ -672,11 +668,13 @@ biggest payoff in terms of speedup.
 We considered changing the parallelism strategy from MPI to Dask, but
 ultimately found that changing an existing code is non-trivial due to the
 fundamentally different strategies of dividing the workload, and decided to
-continue using MPI. Finally, we are now investigating how the DESI code could
-run effectively on GPUs by since the next NERSC system Perlmutter will include
-a large CPU and GPU partition. Exploratory studies for how the DESI code can be
-optimized are being performed using :code:`scipy.linalg.eigh` and :code:`cupy.linlg.eigh` as a
-test case now and will continue as future work.
+continue using MPI. Work is in progress to address two remaining issues:
+load-balancing and inflexible job size. Finally, we are now investigating how
+the DESI code could run effectively on GPUs by since the next NERSC system
+Perlmutter will include a large CPU and GPU partition. Exploratory studies for
+how the DESI code can be optimized are being performed using
+:code:`scipy.linalg.eigh` and :code:`cupy.linlg.eigh` as a test case now and
+will continue as future work.
 
 Acknowledgments
 ---------------
