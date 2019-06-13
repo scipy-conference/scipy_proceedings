@@ -56,25 +56,30 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-With the availability of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now possible to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
+The availability of "off-the-shelf" molecular dynamics engines has made simulating complex systems possible across many scientific fields.
+Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials and develop coarse-graining approaches to access increasing timescales. 
+.. With the availability of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now possible to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
-The ``freud`` library differentiates itself from other analysis packages through its focus on colloidal and nano-scale systems.
-Due to their diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics as well as a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
+The ``freud`` library is one such analysis package that differentiates itself from others through its focus on colloidal and nano-scale systems.
 
+Due to their diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics.
+Such materials are also a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
 In colloidal systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
 Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
-The ``freud`` library is targeted towards studying such systems, providing a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
-For example, the multi-dimensional Potential of Mean Force and Torque allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`.
-Additionally, ``freud`` has tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
-The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
 
-The outputs of molecular simulations are usually stored as a file of particle positions, with some metadata like particle types, periodic box dimensions, and bond topologies.
-However, these outputs are typically not immediately useful.
-Physical invariants of a system such as translational or rotational invariance are difficult to learn from raw arrays of particle positions, making machine learning libraries hard to apply for tasks such as classification or regression.
-Data visualizations, on the other hand, rely on position arrays for drawing particles but frequently must be coupled with analysis tools in order to provide interpretable views of the system that allow researchers to identify regions, e.g. defects and well-ordered domains, of self-assembled structures.
-Existing analysis libraries like MDAnalysis rely heavily on file-based inputs, making it challenging to couple their analysis methods into an existing workflow using popular tools like TensorFlow, ``scikit-learn``, ``scipy``, or ``matplotlib``.
-By contrast, ``freud``'s use of NumPy arrays for input and output allows for seamless integration with machine learning and data visualization tasks.
-This UNIX-like philosophy enables a wide range of forward-thinking applications for ``freud``, from Jupyter notebook integration to versatile, complex 3D renderings.
+The ``freud`` Python package targets these systems by avoiding trajectory management and the analysis of chemically bonded structures, the province of most other analysis platforms **ADD CITATIONS**, and instead providing a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
+In particular, ``freud`` excels at performing analyses based on characterizing local particle environments, which makes it a powerful tool for tasks such as calculating order parameters to track crystallization or finding prenucleation clusters.
+Among the unique methods present in ``freud`` are the potential of mean force and torque, which allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`, and various tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
+All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
+The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
+More details on the use of ``freud`` can be found in **CITE ARXIV PAPER**.
+
+In this paper, we will focus in particular on the usage of ``freud`` for data visualization and machine learning.
+While direct visualization of simulation trajectories can provide insights into the behavior of a system, integrating higher-order analyses is often necessary to provide interpretable visualizations that allow researchers to identify meaningful features like defects and ordered domains of self-assembled structures.
+Such analyses can also reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
+While most existing existing analysis libraries like MDAnalysis **CITE** are tightly coupled to the files typically output by simulation engines and the system representations embedded in these files, ``freud`` decouples file parsing and trajectory representation from analysis tasks.
+This UNIX-like philosophy allows ``freud`` to integrate naturally into visualization or machine learning pipelines using popular tools like TensorFlow, ``scikit-learn``, ``scipy``, or ``matplotlib``, and it enables a wide range of forward-thinking applications for ``freud``, from Jupyter notebook integration to versatile, complex 3D renderings.
+
 
 Analysis Pipelines
 ------------------
