@@ -467,15 +467,10 @@ Frequency Shift
 
 The frequency shift module takes in the same parameters as the signal generator module and adds an input for a complex
 value to shift. This module needs to make sure that different bit width signals are multiplied together correctly and
-that the pipeline is managed correctly to ensure that there are no phase shifts. An example of this module in simulation
-is provided in Fig. :ref:`freq-shift-sim`. Fig. :ref:`freq-shift-in` shows an input signal, and Fig.
+that the pipeline is managed correctly to ensure that there are no phase shifts. Fig. :ref:`freq-shift-in` shows an input signal, and Fig.
 :ref:`freq-shift-out` shows the resulting shifted signal. When using the Python generated Verilog module, a negative
 value for the frequency will be taken care of by passing a bit to the module to perform the complex conjugate on the
 signal generator waveform.
-
-.. figure:: Freq_shift_sim.png
-
-   Performing a frequency shift. :label:`freq-shift-sim`
 
 .. figure:: freq_shift_in.png
 
