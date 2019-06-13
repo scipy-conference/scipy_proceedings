@@ -711,13 +711,8 @@ were taken, described by Table  :ref:`f1212`, :ref:`f812`, and :ref:`ffull`.
 The final implementation run shown by Table :ref:`ffull` was able to use the most of the resources of the board
 evenly because of the 8-bit multiplication :cite:`8bitdot`. The first couple implementations were using 12-bit numbers
 because that was what was nominally chosen for the simulations. However, since regenerating the module is very simple, a
-new CAF module was written out using the module and tested with different shifts. The final run showing full timing
-constraints is displayed in Fig. :ref:`ffull-summary`. The final implementation has 49 different frequency offsets and an
-integration sample length of 1000.
-
-.. figure:: implementation_49freq_1000samp.png
-
-   Implementation including place and route. :label:`ffull-summary`
+new CAF module was written out using the module and tested with different shifts. The final implementation has 49
+different frequency offsets and an integration sample length of 1000.
 
 Future Work and Enhancements
 ============================
