@@ -39,7 +39,7 @@ This work follows from previous efforts applying GCNs to similar classification 
 
 Efforts to utilize GCNs for multimodal neuroimage data have used similar pairwise grouping as a way to increase the size of their data set. [:cite:`KPFRLGR2017,KPFRLGR2018`] train GCN models to learn similarity metrics between subjects with Autism Spectrum Disorder (ASD) and healthy controls (HC), using fMRI data from the Autism Brain Imaging Data Exchange (ABIDE) database. :cite:`ZHCLZW2018` apply a similar architecture to learn similarity metrics between subjects with PD and HC, using dMRI data from the PPMI data set. Their work inspired our paper; to our knowledge, we are the first publication that uses GCNs to predict the class of neuroimage data directly, instead of making predictions on pairwise examples.
 
-Discussion of the End-to-End Pipeline
+Discussion of the Processing Pipeline
 =======================================
 
 This section walks through our pipeline, which handles the formatting and preprocessing of multimodal neuroimage data and readies it for analysis via our GCN architecture. We reference the specific python files that handle each task, and we provide some background information. More information can be found in the Appendices below.
@@ -195,7 +195,7 @@ Following preprocessing, we constructed the shared adjacency matrix and trained 
 
 Using caution to prevent any forms of data leakage, we used a roughly 80/20 train-test split, wherein we ensured all data from the same subject was used as only training or testing data. To assess the performance of our GCN model, we first trained a number of baseline models on the features constructed from the diffusion data. These models include k-nearest neighbor, logistic regression, ridge regression, random forest, and support vector machine (SVM, with both linear and polynomial kernels) from :code:`scikit-learn`; we also trained a fully-connected neural network (fcNN) and a 4-channel convolutional neural network (CNN) using :code:`PyTorch`. Finally, we compare our model to the “siamese multi-view” GCN (sMVGCN) used in :cite:`ZHCLZW2018`. This network utilizes diffusion and anatomical MRI data and trains on pairs of image data to predict whether the pairs are from the same or different classes. The data is also from the PPMI data set and uses the PD and HC classes during classification. This was the closest model to ours that we found in the literature.
 
-Except for the multi-channel CNN, we trained each model on the features from each tractography algorithm individually, and averaged the results. We calculated the overall accuracy, F1 score, and area under the ROC curve (AUC) as our performance measures and have included results from these experiments in Table :ref:`baselines`. The default parameters were used for the :code:`scikit-learn` models. The fcNN was a three-layer network with two hidden layers. The first layer had 128 ReLU units; the second had 64. For the CNN, a single convolutional layer was used, containing 18 filters of size 3; stride of 1 was used. Max pooling with a kernel size of 2 and stride of 2 was used to feed the features through two fully-connected layers before the final output. The first fully-connected layer reduced the 18x57x57-dimension input - where 57 is the original input width and height of 115 halved via max pooling - to 64 ReLU hidden units. For both neural networks, softmax activation was applied to the outputs and negative log likelihood was used as the loss function (i.e., cross entropy). Again for both models, learning rate was set to 0.01 and dropout of 0.5 was used between fully-connected hidden layers. These parameters coincide with the default parameters of the graph convolutional network class we used [14]_, and are commonly used in the literature. We used a validation set to find the optimal number of epochs to train each network for. We tested 40, 80, 100, 140, 200, and 400 epochs for each model and found that 140 worked best for the fcNN, and 100 for the CNN.
+Except for the multi-channel CNN, we trained each model on the features from each tractography algorithm individually, and averaged the results. We calculated the overall accuracy, F1 score, and area under the ROC curve (AUC) as our performance measures. The default parameters were used for the :code:`scikit-learn` models. The fcNN was a three-layer network with two hidden layers. The first layer had 128 ReLU units; the second had 64. For the CNN, a single convolutional layer was used, containing 18 filters of size 3; stride of 1 was used. Max pooling with a kernel size of 2 and stride of 2 was used to feed the features through two fully-connected layers before the final output. The first fully-connected layer reduced the 18x57x57-dimension input - where 57 is the original input width and height of 115 halved via max pooling - to 64 ReLU hidden units. For both neural networks, softmax activation was applied to the outputs and negative log likelihood was used as the loss function (i.e., cross entropy). Again for both models, learning rate was set to 0.01 and dropout of 0.5 was used between fully-connected hidden layers. These parameters coincide with the default parameters of the graph convolutional network class we used [14]_, and are commonly used in the literature. We used a validation set to find the optimal number of epochs to train each network for. We tested 40, 80, 100, 140, 200, and 400 epochs for each model and found that 140 worked best for the fcNN, and 100 for the CNN.
 
 We trained the graph convolutional network (GCN) on the same bagged subsets of data for comparison purposes. The only difference is that the features are mapped to the vertices of the adjacency matrix before training. We used a validation set to tune the model parameters. We tested with or without dropout (set to 0.5 when used), with or without weight decay (set to 5e-4 when used), the number of hidden units for the first GCN layer (8,16,32), the number of "heads" or individual attention weights (2,4,6,8), and the number of epochs (same options as for the fcNN and GCN). We found that dropout of 0.5, weight decay of 5e-4, 8 hidden units, 8 attention heads, and 80 epochs worked best for our model. The results from training the GCN are also included in Table :ref:`baselines`.
 
@@ -211,31 +211,31 @@ The results from training the diffusion data on baseline models, and the combine
 .. table:: The results from our testing of the baseline algorithms on the features constructed from the diffusion data alone, and our graph convolutional network (GCN) which additionally incorporates anatomical information. The results are averaged across five training iterations, which use subsamples of the data to ensure class balance. :label:`baselines`
 
   +-------------------------+--------------+-----------+------------+
-  | Model                   | Accuracy (%) | F1-Score  | AUC (%)    |
+  | Model                   | Accuracy (%) | F1-Score  | AUC        |
   +=========================+==============+===========+============+
-  | k-Nearest Neighbor      | 63.66%       | 0.636     | 0.646     |
+  | k-Nearest Neighbor      | 63.66%       | 0.636     | 0.646      |
   +-------------------------+--------------+-----------+------------+
-  | Logistic Regression     | 75.72%       | 0.749     |  0.839    |
+  | Logistic Regression     | 75.72%       | 0.749     |  0.839     |
   +-------------------------+--------------+-----------+------------+
-  | Ridge Regression        | 85.54%       | 0.883     |  0.500    |
+  | Ridge Regression        | 85.54%       | 0.883     |  0.500     |
   +-------------------------+--------------+-----------+------------+
-  | Random Forest           | 77.77%       | 0.765     | 0.782     |
+  | Random Forest           | 77.77%       | 0.765     | 0.782      |
   +-------------------------+--------------+-----------+------------+
-  | SVM (linear kernel)     | 87.66%       | 0.873     | 0.894     |
+  | SVM (linear kernel)     | 87.66%       | 0.873     | 0.894      |
   +-------------------------+--------------+-----------+------------+
-  | SVM (polynomial kernel) | 87.02%       | 0.899     | 0.887     |
+  | SVM (polynomial kernel) | 87.02%       | 0.899     | 0.887      |
   +-------------------------+--------------+-----------+------------+
-  | Fully-Connected NN      | 83.98%       | 0.854     | 0.881     |
+  | Fully-Connected NN      | 83.98%       | 0.854     | 0.881      |
   +-------------------------+--------------+-----------+------------+
-  | Convolutional NN        | 85.33%       | 0.900     | 0.908     |
+  | Convolutional NN        | 85.33%       | 0.900     | 0.908      |
   +-------------------------+--------------+-----------+------------+
-  | Graph Convolutional NN  | **92.14%**   | **0.953** | **0.943** |
+  | Graph Convolutional NN  | **92.14%**   | **0.953** | **0.943**  |
   +-------------------------+--------------+-----------+------------+
 
 Discussions and Conclusions
 ===================================
 
-From the results on the baseline models, we can see that the features generated from the diffusion MRI data are suitable for distinguishing the PD vs. HC classes. Furthermore, we see from the improved performance of the GCN model that the incorporation of anatomical data improves the capacity for the data to be modeled. Of the 16 highest-weighted regions according to the GAT attentions layers, 9 coincide with lateral or contralateral regions identified by :cite:`ZHCLZW2018` as significantly contributing to the distinction between PD and HC classes. All but two of the regions listed in Figure :ref:`attentions` were from the left hemisphere, whereas the majority of regions in :cite:`ZHCLZW2018` were from the right hemisphere. We aren’t sure why this may be, but the stronger identification of left hemispheric regions aligns with asymmetries found by :cite:`CMDWKHZLDR2016`, wherein the left hemisphere is more significantly affected in early-stage PD.
+From the results on the baseline models, we can see that the features generated from the diffusion MRI data are suitable for distinguishing the PD vs. HC classes. For example, the relatively high performance of the SVM models demonstrate that the features are roughly linearly separable. Furthermore, we see from the improved performance of the GCN model that the incorporation of anatomical data improves the capacity for the data to be modeled. Of the 16 highest-weighted regions according to the GAT attentions layers, 9 coincide with lateral or contralateral regions identified by :cite:`ZHCLZW2018` as significantly contributing to the distinction between PD and HC classes. All but two of the regions listed in Figure :ref:`attentions` were from the left hemisphere, whereas the majority of regions in :cite:`ZHCLZW2018` were from the right hemisphere. We aren’t sure why this may be, but the stronger identification of left hemispheric regions aligns with asymmetries found by :cite:`CMDWKHZLDR2016`, wherein the left hemisphere is more significantly affected in early-stage PD.
 
 Due to the time required to construct the pipeline, and the substantial time and compute resources required for each additional image, we used a relatively small data set. The models showed signs of overfitting during training, due to increasing performance on the training data after improvement with the testing data had stopped. We feel that reproduction with a larger dataset may mitigate this issue and improve the robustness of our initial results.
 
