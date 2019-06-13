@@ -325,7 +325,7 @@ Measured parameters
 The :code:`ParallelAnalysisBase` class collects detailed timing information for all blocks and all frames and makes these data available in the attribute :code:`ParallelAnalysisBase.timing`:
 We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that each task :math:`k` waits until it is executed by the scheduler, the time |tuniverse| to create a new :code:`Universe` for each Dask task (which includes opening the shared trajectory and topology files and loading the topology into memory), the time |tIO| to read each frame :math:`t` in each block :math:`k` from disk into memory, the time |tcomp| to perform the computation in :code:`_single_frame()` and reduction in :code:`_reduce()`, the time |tconclude| to perform the final processing of all data in :code:`_conclude()`, and the total wall time to solution |ttotal|.
 
-We quantified the strong scaling behavior by calculating the speed-up for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(M)/t^\text{total}(1)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
+We quantified the strong scaling behavior by calculating the speed-up for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(1)/t^\text{total}(M)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
 The efficiency was calculated as :math:`E(M) = S(M)/M`.
 
 	    
