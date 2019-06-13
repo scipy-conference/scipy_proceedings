@@ -282,7 +282,7 @@ Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* super
 Each node in the machine contains two Intel Xeon (E5-2680v3, 12 cores, 2.5 GHz) CPUs with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
 All nodes share a Lustre parallel file system and have access to node-local 320 GB SSD scratch space.
 Jobs are run through the SLURM batch queuing system.
-Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data.
+Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data and archived under DOI `10.5281/zenodo.3228422`_. 
 
 The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111,815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
 The test trajectories are made available on figshare at DOI `10.6084/m9.figshare.8202149`_.
@@ -633,3 +633,4 @@ References
 .. _`community mailing list`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _`issue tracker`: https://github.com/MDAnalysis/pmda/issues
 .. _`10.6084/m9.figshare.8202149`: https://doi.org/10.6084/m9.figshare.8202149
+.. _`10.5281/zenodo.3228422`: https://doi.org/10.5281/zenodo.3228422
