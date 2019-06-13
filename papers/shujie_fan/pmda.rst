@@ -131,7 +131,7 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 Methods
 =======
 
-At the core of PMDA is the idea that a common interface makes it easy to create code that can be easily parallelized, especially if the analysis can be split into independent work over multiple trajectory slices and a final step in which all data from the trajectory slices is combined.
+At the core of PMDA is the idea that a common interface makes it easy to create code that can be easily parallelized, especially if the analysis can be split into independent work over multiple trajectory slices and a final step, in which all data from the trajectory slices are combined.
 We first describe typical steps in analyzing MD trajectories and then outline the approach taken in PMDA.
 
 
