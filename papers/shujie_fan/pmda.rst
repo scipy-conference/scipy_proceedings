@@ -156,7 +156,7 @@ An example of a more complicated reduction is the calculation of a histogram suc
 .. math::
    :label: eq:rdf
 
-   g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_i - \mathbf{r}_j| - r) \right\rangle
+   g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_{a,i} - \mathbf{r}_{b,j}| - r) \right\rangle
 
 where the Dirac delta function counts the occurrences of particles :math:`i` and :math:`j` at distance :math:`r`.
 To compute a RDF, we could generate a time series of histograms along the spatial coordinate :math:`r`, i.e., :math:`A(t; r)` for each frame, and then perform the average in post-analysis.
