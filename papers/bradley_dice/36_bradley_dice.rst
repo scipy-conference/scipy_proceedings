@@ -58,7 +58,6 @@ Introduction
 
 The availability of "off-the-shelf" molecular dynamics engines has made simulating complex systems possible across many scientific fields.
 Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials and develop coarse-graining approaches to access increasing timescales. 
-.. With the availability of "off-the-shelf" molecular dynamics engines capable of running parameterized simulations, it is now possible to simulate complex systems ranging from large biomolecules and coarse-grained models to reconfigurable materials and colloidal self-assembly.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
 The ``freud`` library is one such analysis package that differentiates itself from others through its focus on colloidal and nano-scale systems.
 
@@ -74,30 +73,27 @@ All such tasks are accelerated by ``freud``'s extremely fast neighbor finding ro
 The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
 More details on the use of ``freud`` can be found in **CITE ARXIV PAPER**.
 
-In this paper, we will focus in particular on the usage of ``freud`` for data visualization and machine learning.
-While direct visualization of simulation trajectories can provide insights into the behavior of a system, integrating higher-order analyses is often necessary to provide interpretable visualizations that allow researchers to identify meaningful features like defects and ordered domains of self-assembled structures.
-Such analyses can also reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
-While most existing existing analysis libraries like MDAnalysis **CITE** are tightly coupled to the files typically output by simulation engines and the system representations embedded in these files, ``freud`` decouples file parsing and trajectory representation from analysis tasks.
-This UNIX-like philosophy allows ``freud`` to integrate naturally into visualization or machine learning pipelines using popular tools like TensorFlow, ``scikit-learn``, ``scipy``, or ``matplotlib``, and it enables a wide range of forward-thinking applications for ``freud``, from Jupyter notebook integration to versatile, complex 3D renderings.
+The ``freud`` package is especially useful because it can be organically integrated into a data pipeline.
+Many research tasks in computational molecular sciences can be expressed in terms of data pipelines; in molecular simulations, such a pipeline typically involves:
 
+1. **Generating** an input file that defines a simulation.
+2. **Simulating** the system of interest, saving its trajectory to a file.
+3. **Analyzing** the resulting data by computing and storing various quantities.
+4. **Visualizing** the trajectory, using colors or styles determined from previous analyses.
 
-Analysis Pipelines
-------------------
+However, in modern workflows the lines between these stages is typically blurred, particularly with respect to analysis.
+While direct visualization of simulation trajectories can provide insights into the behavior of a system, integrating higher-order analyses is often necessary to provide real-time interpretable visualizations in that allow researchers to identify meaningful features like defects and ordered domains of self-assembled structures.
+Studies of complex systems are also often aided or accelerated by a real-time coupling of simulations with on-the-fly analysis.
+This simultaneous usage of simulation and analysis is especially relevant because modern machine learning techniques frequently involve wrapping this pipeline entirely into a higher-level optimization problem, since the descriptors it computes can be used to, for instance, construct objective functions targeting a specific materials design problem.
 
-Many research tasks in computational molecular sciences can be expressed as a data pipeline, with multiple independent tools that sequentially operate on and share data.
-For example:
+The ``freud`` package is uniquely well-suited to such applications because its interfaces are designed entirely around direct usage of numerical arrays of data.
+This access pattern contrasts with most existing existing analysis libraries, like MDAnalysis **CITE**, which are tightly coupled to the reading of files output by simulation engines and the system representations embedded in these files.
+By decoupling itself from file parsing and specific trajectory representations, ``freud`` can be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity.
 
-1. **Generate** an input file that defines a simulation.
-2. **Simulate** the system of interest, saving its trajectory to a file.
-3. **Analyze** the resulting data with a tool like ``freud``, computing and storing various quantities.
-4. **Visualize** the trajectory, using colors or styles determined from previous analyses.
-
-The ``freud`` library is designed to act as an intermediate (or sometimes final) stage in most data processing pipelines.
-New tools for high-throughput data generation and machine learning have injected new steps into processes like this, sometimes even wrapping the entire simulation and analysis process into a higher-level optimization problem.
-Furthermore, the need to study complex systems has encouraged real-time coupling of complicated analysis and visualization tasks that can be performed in diverse computational environments, from supercomputers to local Jupyter notebooks.
-In all of these cases, ``freud``'s flexible, powerful interface for analysis (which operates independently of a GUI application) is helpful.
-
-In this paper, we focus on a set of applications where ``freud`` has been integrated with other tools in the scientific Python ecosystem for machine learning and visualization.
+In this paper, we will show how this UNIX-like philosophy allows ``freud`` to be easily integrated with various tools for data visualization and machine learning.
+We will provide demonstrations of how ``freud`` can be integrated with using popular tools in the scientific Python ecosystem like TensorFlow, ``scikit-learn``, ``scipy``, or ``matplotlib``.
+We will discuss how the analyses in ``freud`` can reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
+We will further show that ``freud`` can be used for visualizations even outside of scripting contexts, enabling a wide range of forward-thinking applications including Jupyter notebook integrations, versatile 3D renderings, and integration with various standard tools for visualizing simulation trajectories.
 These topics are aimed at computational molecular scientists and data scientists alike, with discussions of real-world usage as well as theoretical motivation and conceptual exploration.
 The full source code of all examples in this paper can be found online [#]_.
 
