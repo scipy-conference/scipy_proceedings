@@ -71,7 +71,7 @@ In particular, ``freud`` excels at performing analyses based on characterizing l
 Among the unique methods present in ``freud`` are the potential of mean force and torque, which allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`, and various tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
 All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
 The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
-More details on the use of ``freud`` can be found in **CITE ARXIV PAPER**.
+More details on the use of ``freud`` can be found in :cite:`Ramasubramani2019`.
 
 The ``freud`` package is especially useful because it can be organically integrated into a data pipeline.
 Many research tasks in computational molecular sciences can be expressed in terms of data pipelines; in molecular simulations, such a pipeline typically involves:
