@@ -57,7 +57,7 @@ Introduction
    :label:`fig:scales`
 
 The availability of "off-the-shelf" molecular dynamics engines has made simulating complex systems possible across many scientific fields.
-Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials and develop coarse-graining approaches to access increasing timescales. 
+Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials and develop coarse-graining approaches to access increasing timescales.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
 The ``freud`` library is one such analysis package that differentiates itself from others through its focus on colloidal and nano-scale systems.
 
@@ -66,7 +66,7 @@ Such materials are also a viable platform for harnessing photonic :cite:`Cersons
 In colloidal systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
 Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
 
-The ``freud`` Python package targets these systems by avoiding trajectory management and the analysis of chemically bonded structures, the province of most other analysis platforms **ADD CITATIONS**, and instead providing a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
+The ``freud`` Python package targets these systems by avoiding trajectory management and the analysis of chemically bonded structures, the province of most other analysis platforms like MDAnalysis and MDTraj :cite:`Michaud-Agrawal2011,McGibbon2015`, and instead provides a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
 In particular, ``freud`` excels at performing analyses based on characterizing local particle environments, which makes it a powerful tool for tasks such as calculating order parameters to track crystallization or finding prenucleation clusters.
 Among the unique methods present in ``freud`` are the potential of mean force and torque, which allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`, and various tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
 All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
@@ -87,7 +87,7 @@ Studies of complex systems are also often aided or accelerated by a real-time co
 This simultaneous usage of simulation and analysis is especially relevant because modern machine learning techniques frequently involve wrapping this pipeline entirely into a higher-level optimization problem, since the descriptors it computes can be used to, for instance, construct objective functions targeting a specific materials design problem.
 
 The ``freud`` package is uniquely well-suited to such applications because its interfaces are designed entirely around direct usage of numerical arrays of data.
-This access pattern contrasts with most existing existing analysis libraries, like MDAnalysis **CITE**, which are tightly coupled to the reading of files output by simulation engines and the system representations embedded in these files.
+This access pattern contrasts with most existing existing analysis libraries, like MDAnalysis :cite:`Michaud-Agrawal2011`, which are tightly coupled to the reading of files output by simulation engines and the system representations embedded in these files.
 By decoupling itself from file parsing and specific trajectory representations, ``freud`` can be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity.
 
 In this paper, we will show how this UNIX-like philosophy allows ``freud`` to be easily integrated with various tools for data visualization and machine learning.
