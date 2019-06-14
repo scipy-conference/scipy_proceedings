@@ -420,7 +420,7 @@ Performance Evaluation
 
 In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimum superposition (*RMSD*) and the water oxygen radial distribution function (*RDF*).
 
-For the *RMSD* task we computed the time series of root mean square distance after optimum superposition (RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
+For the *RMSD* task we computed the time series of root mean square distance after optimum superposition (RMSD) of all 564 |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
 The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
 
 As a second test case we computed the water oxygen-oxygen radial distribution function (*RDF*, Eq. :ref:`eq:rdf`) for all oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
