@@ -435,7 +435,7 @@ The computational experiments were performed in different scenarios to assess th
 Test system, benchmarking environment, and data files
 -----------------------------------------------------
 
-We tested PMDA 0.2.1, MDAnalysis 0.20.0 (development version), Dask 1.1.1, and NumPy 1.15.4 under Python 3.
+We tested PMDA 0.2.1, MDAnalysis 0.20.0 (development version), Dask 1.2.0, and NumPy 1.15.4 under Python 3.6.
 All packages except PMDA and MDAnalysis were installed with the `conda`_ package manager from the `conda-forge`_ channel.
 PMDA and MDAnalysis development versions were installed from source in a conda environment  with ``pip install``.
 
