@@ -499,11 +499,6 @@ For example, for the read I/O time we calculated the total read I/O time for eac
 RMSD analysis task
 ------------------
 
-The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
-The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
-Overall, using the *multiprocessing* and either Lustre or SSD gave the best performance and shortest time to solution.
-These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
-
 .. figure:: figs/Total_Eff_SU_rms.pdf
 
    Strong scaling performance of the RMSD analysis task with short (900 frames) and long (9000) frames trajectories on *SDSC Comet*, where a single node contains 24 cores.
@@ -514,10 +509,12 @@ These results were consistent with findings in our earlier pilot study where we 
    **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
    :label:`fig:rmsd`
 
-A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) showed that the computation scaled very well, as did reading time to a lesser degree.
-However, the waiting time either increased for *multiprocessing* or was roughly a constant 1 s for *distributed*.
-Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
-	  
+
+The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
+The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
+Overall, using the *multiprocessing* and either Lustre or SSD gave the best performance and shortest time to solution.
+These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
+
 .. figure:: figs/wait_compute_io_rms.pdf
 
    Detailed per-task timing analysis for parallel components of RMSD analysis task.
@@ -527,6 +524,10 @@ Beyond 12 cores, the waiting time started approaching the time for read I/O (com
    **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rms-wait-comp-io`
 
+A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) showed that the computation scaled very well, as did reading time to a lesser degree.
+However, the waiting time either increased for *multiprocessing* or was roughly a constant 1 s for *distributed*.
+Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
+	  
 The second major component that limited scaling performance was the time to create the :code:`Universe` data structure (Fig. :ref:`fig:rms-pre-con-uni` A, D).
 The time to read the topology and open the trajectory file on the shared file system typically increased from 1 s to about 2 s and thus, for the given total trajectory lengths, also became comparable to the time for read I/O.
 The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`) remained negligible with times below :math:`10^{-3}` s.
