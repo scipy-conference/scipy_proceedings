@@ -22,7 +22,7 @@ CAF Implementation on FPGA Using Python Tools
 Introduction
 ============
 
-The basic algorithm for calculating the complex ambiguity function for time difference of arrival and frequency offset
+The basic algorithm for calculating the complex ambiguity function for time difference of arrival and frequency offset (CAF)
 has been well known since the early 1980's :cite:`stein-orig`. In many radio frequency applications, there is a need to
 find a time lag of the signal or the frequency offset of a signal.
 The reader would be familiar with a form of frequency offset known as Doppler as a common example.
