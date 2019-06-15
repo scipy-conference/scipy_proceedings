@@ -156,7 +156,7 @@ functions is that the first argument to it be a ``pandas.DataFrame`` object:
 In order to reduce the amount of boilerplate required, ``pyjanitor`` also makes
 heavy use of ``pandas_flavor`` :cite:`pf`, which provides an easy-to-use function
 decorator that handles class method registration. As such, to extend the
-``pandas`` API with more class-method-like functions, we just have to decorate
+``pandas`` API with more instance-method-like functions, we just have to decorate
 the custom function, as illustrated in the following code sample:
 
 .. code-block:: python
