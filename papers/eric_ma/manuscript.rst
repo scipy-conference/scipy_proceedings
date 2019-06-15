@@ -122,8 +122,8 @@ This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users:
 common data cleaning routines that can be mix-and-matched with existing ``pandas``
 API calls, which also enables data scientists to construct their data
 processing code with an easily-readable sequence of meaningful verbs.
-By providing data processing routines, we also save time for
-data scientists and engineers like ourselves, allowing us to accomplish our
+By providing commonly-usable data processing routines, we also save time for
+data scientists and engineers, allowing us to accomplish our
 work more efficiently.
 
 History of ``pyjanitor``
