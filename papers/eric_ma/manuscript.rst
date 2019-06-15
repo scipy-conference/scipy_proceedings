@@ -134,8 +134,8 @@ provides the same functionality to R users. The initial goal was to explicitly
 copy the ``janitor`` function names while engineering it to be compatible with
 ``pandas.DataFrames``, following Pythonic idioms, such as the method chaining
 provided by ``pandas``. As the project evolved, the scope broadened, to provide
-a defined and expressive DSL for data processing, centered around the DataFrame
-object as a first-class citizen.
+a defined and expressive DSL for data processing as an extension on ``pandas``
+DataFrames.
 
 Architecture
 ------------
