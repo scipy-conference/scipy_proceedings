@@ -242,8 +242,6 @@ An examples gallery, which contains Jupyter notebooks that showcase how to use
 Development
 -----------
 
-Additionally, development takes place on GitHub :cite:`github`.
-
 The reception to ``pyjanitor`` has been encouraging thus far. Newcomer
 contributors to open source have made their maiden contributions to
 ``pyjanitor``, and experienced software engineers have also chipped in.
@@ -257,9 +255,6 @@ requests on the source repository issue tracker, but are more so invited to
 contribute an implementation themselves to share. To date, 31 contributors have
 made pull requests into ``pyjanitor``.
 
-Evolving Contributions
-----------------------
-
 In the spirit of being beginner-friendly, new contributions to the pyjanitor
 library are encouraged to solve one and only one specific problem first, before
 we figure out how to either (1) generalize the function use case, or (2)
@@ -272,8 +267,7 @@ request extended the implementation to multi-level columns, and the current
 improved version uses regex string replacement. Each of these contributions
 were made by first-time open source contributors.
 
-The presence of a robust test suite with high test coverage enables us to
-evolve the package while keeping existing functionality stable.
+
 
 Other Related  Tools
 --------------------
