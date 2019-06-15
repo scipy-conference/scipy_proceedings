@@ -52,10 +52,9 @@ code that executes the sequence of transformations on raw data that wrangle it
 into the necessary shape for downstream modelling work.
 
 In the Python ecosystem, ``pandas`` is the *de facto* tool for data
-manipulation. As reflected by the article with a pun-laden title, "Pandas
-responsible for Python explosion", ``pandas`` was pivotal for the development
-of the Python programming language away from merely a scripting language to
-one in which data science workflows could be constructed and executed.
+manipulation. This is because it provided an API for manipulating
+tabular data when conducting data analysis. This kind of API is noticeably
+missing from the Python standard library and NumPy.
 
 ``pandas`` provided the key primitive object for data science's key modelling
 tools of statistical modelling and machine learning: the ``DataFrame``.
