@@ -86,10 +86,10 @@ To do this with the pandas API, one might write the following code.
     df = pd.DataFrame(...)
     # standardize column names.
     df.columns = [
-        i.lower().replace(' ', '_') for we in df.columns
+        i.lower().replace(' ', '_').replace('?', '_') for i in df.columns
     ]
     # remove unnecessary columns
-    del df['column_name_14']
+    df = df.drop(['column_name_14'], axis=1)
     # transform a column by taking the log
     df['column_name_13'] = np.log10(df['column_name_13'])
     df = df[df['column_name_12'] < 3]
@@ -118,12 +118,13 @@ In terms of API design, we might want a block of code that reads as follows:
         .dropna()
     )
 
-This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users.
-By using a fluent API design, ``pyjanitor`` explicitly targets a
-``pandas``-compatible API that enables data scientists to construct their data
-processing code in an expressive fashion. By providing data processing
-routines, we also save time for data scientists and engineers like ourselves,
-allowing us to accomplish our work more efficiently.
+This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users:
+common data cleaning routines that can be mix-and-matched with existing ``pandas``
+API calls, which also enables data scientists to construct their data
+processing code with an easily-readable sequence of meaningful verbs.
+By providing data processing routines, we also save time for
+data scientists and engineers like ourselves, allowing us to accomplish our
+work more efficiently.
 
 History of ``pyjanitor``
 ------------------------
