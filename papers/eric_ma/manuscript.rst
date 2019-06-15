@@ -30,7 +30,7 @@ pyjanitor: A Cleaner API for Cleaning Data
     historical use, prevent use of expressive, fluent programming idioms that
     enable self-documenting ``pandas`` code. Here, we introduce ``pyjanitor``,
     an open source Python package that extends the ``pandas`` API with
-    expressive and fluent idioms. We describe how ``pyjanitor`` reconciles
+    such idioms. We describe how ``pyjanitor`` reconciles
     inconsistencies and limitations identified in Pandas and provide a
     comparison to other available tools. Finally, we describe its history,
     design, and architecturally significant features, including known
