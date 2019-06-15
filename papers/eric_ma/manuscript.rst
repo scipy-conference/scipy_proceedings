@@ -180,13 +180,6 @@ write functions that do filtering of the DataFrame using a verb that may
 match end-users' intuitions better. One such example is the
 ``.filter_on('criteria')`` method, illustrated in the opening example.
 
-At the time of writing, there has been nascent development of bioinformatics,
-cheminformatics, and finance submodules. This enables convenient construction
-of fluent data preprocessing workflows for each of those particular subfields.
-The dependencies required for their usage are optional at install-time, and we
-provide instructions for end-users to install the relevant packages if they are
-not already installed locally.
-
 Design
 ------
 
@@ -376,6 +369,10 @@ tasks currently include:
   contains the string representation of a biological sequence, by "joining"
   in a FASTA file, mapping the string to a particular column that already has
   the sequence identifiers in it.
+
+The dependencies required for their usage are optional at install-time, and we
+provide instructions for end-users to install the relevant packages if they are
+not already installed locally.
 
 The general idea of calling on verb-based function names that method chain in a
 *fluent* fashion can be applied in multiple domains. ``pyjanitor`` is by no
