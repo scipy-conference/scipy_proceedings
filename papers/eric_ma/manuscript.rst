@@ -53,15 +53,14 @@ into the necessary shape for downstream modelling work.
 
 In the Python ecosystem, ``pandas`` is the *de facto* tool for data
 manipulation. This is because it provided an API for manipulating
-tabular data when conducting data analysis. This kind of API is noticeably
-missing from the Python standard library and NumPy.
-
-``pandas`` provided the key primitive object for data science's key modelling
-tools of statistical modelling and machine learning: the ``DataFrame``.
-However, there are inconsistencies in the `pandas` application programming
-interface (API) that, while now idiomatic due to historical use, prevent use of
-expressive, fluent programming idioms that enable self-documenting data science
-code.
+tabular data when conducting data analysis. This API was noticeably
+missing from the Python standard library and NumPy, which, prior to ``pandas``
+emergence, were the primary tools for data analysis in Python.  Hence, through
+the ``DataFrame`` object and its interfaces, ``pandas`` provided a key application programming interface (API)
+that enabled statisticians, data scientists, and machine learners to wrangle their data into a
+usable shape. That said, there are inconsistencies in the `pandas` API that, while now idiomatic due to historical use,
+prevent use of expressive, fluent programming idioms that enable
+self-documenting data science code.
 
 Idiomatic Inconsistencies of ``pandas``
 ---------------------------------------
