@@ -26,7 +26,7 @@ The basic algorithm for calculating the complex ambiguity function for time diff
 has been well known since the early 1980's :cite:`stein-orig`. In many radio frequency applications, there is a need to
 find a time lag of the signal or the frequency offset of a signal.
 The reader would be familiar with a form of frequency offset known as Doppler as a common example.
-However, the CAF is the joint time offset and frequency offset generalization.
+The CAF is the joint time offset and frequency offset generalization.
 The CAF was mainly used first for radar and sonar type processing for locating objects in a method known as active echo
 location :cite:`knight-sonar`.
 In this scenario, a matched filter design would be used to ensure that the signals match :cite:`weiss-waves`.
