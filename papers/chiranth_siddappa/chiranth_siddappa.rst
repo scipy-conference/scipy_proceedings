@@ -240,12 +240,7 @@ Python and Jupyter
 
 
 This project made extensive use of the Python ecosystem through the use of pip, Jupyter, and many other packages. The
-reader is encouraged to view the :code:`caf-verilog` source code and view the releases that have been made
-:cite:`caf-verilog`.
-All of the simulation source code and modules that are used in this project are generated through the `caf-verilog`
-Python package that has been released on PyPI :cite:`caf-verilog-pypi`.
-While working on this project, many design changes occurred and test verification was done by loading the output files
-and investigating them in the Jupyter notebook.
+reader is encouraged to view the :code:`caf-verilog` source code :cite:`caf-verilog` and view the releases that have been made on PyPI :cite:`caf-verilog-pypi`.
 When designing modules, a first test of what a signal should look like when operated on was done using the interactive
 plotting ability that is provided :cite:`jupyter`.
 The generation of the modules was done using Jinja which provides both template parsing and rendering :cite:`jinja`.
