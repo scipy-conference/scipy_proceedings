@@ -253,15 +253,6 @@ This project requires the use of orthogonal signals to ensure that the spectral 
 from the others. This was possible using the gps-helper module that implements the GPS gold codes that are orthogonal
 PRN sequences :cite:`gps-helper`.
 
-
-Experiments
-===========
-
-As the description of the CAF itself was discussed previously, the rest of this document will walk through the steps
-taken to produce each module and the design decisions that were made and changed in order to produce a working
-simulation. This project implemented the CAF as a bottom up approach, so the document will start with analyzing signals
-and end with the implemented design and usage report.
-
 Quantization
 ------------
 
@@ -271,7 +262,7 @@ that are available are able to provide a 12-bit value. Some newer devices are no
 However, for this project 12-bit signals were used during testing as this is a very nice number to compute mentally and
 still provides minimal energy loss when plotting on the spectrum.
 
-Inspecting signals after quantization is important because when signals are reduced in size there is an inherent loss.
+Inspecting signals after quantization is important because when signals are reduced in size there is information loss.
 This is demonstrated by Fig. :ref:`quant-cos` where a 12 bit and 8 bit quantization of a cosine signal is shown.
 Quantization helper functions are provided in caf_verilog with the help of scikit-dsp-comm's simpleQuant function
 :cite:`scikit`.
