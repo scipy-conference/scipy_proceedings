@@ -47,6 +47,7 @@ geometries that will allow for the detection of Doppler and movement in the sign
 This method of calculation has yet to be simplified.
 Currently GPU's have been employed as the main workhorse but the use of the FPGA has always been an attractive and
 feasible option due to the hardware options that are available.
+
 To geolocate a signal's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
 represents a satellite's drift.
 Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
