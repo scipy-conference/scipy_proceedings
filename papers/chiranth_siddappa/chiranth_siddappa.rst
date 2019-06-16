@@ -254,10 +254,10 @@ PRN sequences :cite:`gps-helper`.
 Quantization
 ------------
 
-The need for an analysis of quantization stems from the way that digital radio frequency systems are built. In order to
+In order to
 use a signal in the digital domain, a signal must first be quantized by an analog to digital converter (ADC). Most ADC's
-that are available are able to provide a 12-bit value. Some newer devices are now able to provide 16-bits :cite:`adc16`.
-However, for this project 12-bit signals were used during testing as this is a very nice number to compute mentally and
+that are available are able to provide a 12-bit value, and some newer devices are now able to provide 16-bits :cite:`adc16`.
+However, for this project 12-bit signed signals were used during testing as this is a very nice number to compute mentally and
 still provides minimal energy loss when plotting on the spectrum.
 
 Inspecting signals after quantization is important because when signals are reduced in size there is information loss.
