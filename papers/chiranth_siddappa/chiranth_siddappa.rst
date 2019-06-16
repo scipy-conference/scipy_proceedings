@@ -27,7 +27,7 @@ has been well known since the early 1980's :cite:`stein-orig`. In many radio fre
 find a time lag of the signal or the frequency offset of a signal.
 The reader would be familiar with a form of frequency offset known as Doppler as a common example.
 The CAF is the joint time offset and frequency offset generalization.
-The CAF was mainly used first for radar and sonar type processing for locating objects in a method known as active echo
+The CAF was mainly used first for radar and sonar type processing for locating objects using a method known as active echo
 location :cite:`knight-sonar`.
 In this scenario, a matched filter design would be used to ensure that the signals match :cite:`weiss-waves`.
 More commonly with newer radio frequency systems such as GPS, similar but orthogonal signals are transmitted in the same
