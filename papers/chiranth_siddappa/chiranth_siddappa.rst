@@ -53,7 +53,8 @@ represents a satellite's drift.
 Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
 delay of arrival (TDOA).
 The characteristics of the captured signals will change based on the type of signal, which motivates the need to ensure
-that the resulting HDL can also be produced to match necessary configurations.
+that the resulting hardware description language (HDL)
+output can also be produced to match necessary configurations.
 This became a project goal motivated off work done by other projects to be able to produce code in other languages
 :cite:`codegen`.
 Thus, the solution provided must be able to be reconfigured based off of different needs.
