@@ -724,8 +724,3 @@ incorporating Verilog as an extension to the wider scientific computing field.
 The SymPy Development Team has already made significant contributions in this realm, and is being used in many projects.
 The SymPy package currently supports code generation for various languages such as c, c++, and Julia :cite:`codegen`.
 Using a common API, it should be possible to also provide an extension to incorporate the Verilog HDL.
-
-References
-----------
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
