@@ -237,7 +237,7 @@ Development
 -----------
 
 The reception to ``pyjanitor`` has been encouraging thus far. Newcomer
-contributors to open source have made their maiden contributions to
+contributors to open source have made their first contributions to
 ``pyjanitor``, and experienced software engineers have also chipped in.
 Contributions from data scientists seeking a cleaner API for cleaning data
 have also been welcome. There is a salient lesson here: with open source tools,
