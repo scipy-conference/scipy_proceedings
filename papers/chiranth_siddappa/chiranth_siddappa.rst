@@ -37,7 +37,7 @@ an optimal signal type for testing this application :cite:`ZiemerComm`.
 
 Motivation
 ==========
-The CAF has many practical applications, the more traditional being the before-mentioned radar and sonar type systems.
+The CAF has many practical applications, the more traditional being the aforementioned radar and sonar type systems.
 Another common use case is in image processing.
 In image processing, cross-correlations are used to determine similarity between images, and dot products are used as a
 means of filtering.
