@@ -180,9 +180,7 @@ Python and PYNQ
 
 The PYNQ development board designed by Xilinx provides a Zynq chip which has an ARM CPU running at 650 MHz and an FPGA
 fabric that is programmable via an overlay :cite:`pynq`.
-This performance allows for a RTOS to be run on the CPU.
-The type of scheduler that is run on the OS is the main driver for whether it is an RTOS or not.
-The RTOS in this case is Ubuntu, and hosts a Jupyter notebook to program and interface with the FPGA fabric using an
+This performance allows for a linux operating system to be run on the CPU which in this case is Ubuntu, and hosts a Jupyter notebook to program and interface with the FPGA fabric using an
 overlay.
 This overlay contains mappings for ports and interfaces between the fabric and the CPU.
 This functionality is very unique in that both an ARM core and a fabric are on the same board.
@@ -266,7 +264,6 @@ Inspecting signals after quantization is important because when signals are redu
 This is demonstrated by Fig. :ref:`quant-cos` where a 12 bit and 8 bit quantization of a cosine signal is shown.
 Quantization helper functions are provided in caf_verilog with the help of scikit-dsp-comm's simpleQuant function
 :cite:`scikit`.
-When converting the signals, we must note that the values are signed.
 This means that the full bit value of the signal cannot be used otherwise there is signal loss to DC gain. The signals
 must be equal over 0. For a 12-bit quantization of a vector for example the numbers must be in the range (-4095, 4095)
 in comparison to the two's complement full value of (-4096, 4095). This is all necessary because the computation that is
