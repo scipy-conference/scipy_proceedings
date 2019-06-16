@@ -48,11 +48,11 @@ This method of calculation has yet to be simplified.
 Currently GPU's have been employed as the main workhorse but the use of the FPGA has always been an attractive and
 feasible option due to the hardware options that are available.
 
-To geolocate a signal's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
+To geolocate a signal emitter's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
 represents a satellite's drift.
 Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
 delay of arrival (TDOA).
-The characteristics of the captured signals will change based on the type of signal, which motivates the need to ensure
+The captured signals will be different for every use case, which motivates the need to ensure
 that the resulting Verilog hardware description language (HDL)
 module output can also be produced to match necessary configurations :cite:`verilogIEEE`.
 This became a project goal motivated off work done by other projects to be able to produce code in other languages
