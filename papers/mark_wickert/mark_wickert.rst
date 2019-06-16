@@ -40,14 +40,16 @@ Digital filters of 200 coefficients each for left and right ears are stored in a
 as a function of azimuth and elevation angles of the impinging sounds source.
 
 In cognitive hearing science binaural hearing models how sound pressure waves arrive at either 
-the ear drum, at the end of the ear canal, or in the case of typical measurements, at the entry 
+ear drum, at the end of the ear canal, or in the case of typical measurements, at the entry 
 to the ear canal, both as a function of the arrival angle in 3D (azimuth and elevation) and 
 radial distance. This leads to the need for the head related impulse response (HRIR) 
 (time-domain) or head-related transfer function (HRTF) (frequency domain) for a particular 
-human subject. Traditionally human subjects are placed in an anechoic chamber with a sounder 
+human subject. 
+Traditionally human subjects are placed in an anechoic chamber with a sound 
 source placed at say one meter from the head and then the subject is moved over a range of 
 azimuth and elevation angles, with the HRIR measured at each angle. The 3D simulator described 
-here uses a database of HRIR's to describe a given subject [CIPICHRTF]_. In the 
+here uses a database of HRIR's to describe a given subject [CIPICHRTF]_. 
+In the 
 :code:`pyaudio_helper` application 
 the HRIR at a given angle is represented by two (left and right ear)  200 coefficient digital 
 filters that the sound source audio is passed through. Here the data base for each subject  
@@ -261,8 +263,6 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
       Mark Wickert June 2018
  
 
-
-
 .. code-block:: python
 
    def __init__(self,sub_foldername,
@@ -305,7 +305,6 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
       self.coeffL = self.hrirL[0,0,:]
         
     
-
    def cart2ipcs(self,x1,y1,z1):
       """
       Map cartesian source coordinates (x1,y1,z1) to 
@@ -373,6 +372,8 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
                                self.ElRL_idx,:]
 
 
+In the :code:`__init__` method notice that 
+
 The main take-away is that the coordinate conversion method fills class attributes with the proper 
 right and left filter coefficients and the sound wave amplitude correction factors :code:`self.tR` and 
 :code:`tL`. The variable name :code:`t` comes from the parallax correction expression in [Fitzpatrick]_ 
@@ -435,55 +436,261 @@ the ear canal centerline. The Jupyter Widgets slider interface is shown in Figur
 Spherical Head Model as a Simple Reference HRIR
 -----------------------------------------------
 
-In blind testing of human subjects it is also of interest to offer other HRIR solutions, say 
-the Kemar mannequin head or a simple spherical head [Duda]_ and [Bogelein]_. In this section we consider 
-a sphereical head model with intent of using the results of [Duda]_ to allow the construction of a 
-CIPIC-like database entry that can be used in the 3D audio simulator described earlier in this paper.
+In blind testing of human subjects it is also of interest to offer other HRIR solutions, e.g., 
+the [KEMAR]_ mannequin head  or a simple spherical head [Duda]_ and [Bogelein]_. In this section we consider 
+a spherical head model with the intent of using the results of [Duda]_ to allow the construction of a 
+CIPIC-like database entry, that can be used in the 3D audio simulator described earlier in this paper.
 
-As a starting point texts such as [Beranek]_ gives series solutions for a sinusoidal 
-pressure wave source (point source or plane wave) using spherical harmonics to represent the 
-incident plus scattered sound pressure, :math:`\tilde{P}`, in the presence of a rigid sphere. 
-[Duda]_ notes that a *standard head* radius is 8.75 cm.  For a 8.75 cm radius rigid sphere 
-and an audio frequency of 2 kHz the composite pressure wave magnitude near the sphere is shown 
-Figure :ref:`SCATTER`. For HRIR calculation we are interested in the ratio of the pressure on the 
-surface of the sphere to the incident pressure wave, for a given angle of incidence. In [Duda]_ an 
-efficient series solution is given for a finite distance point source. In Figure :ref:`SPHEREHRIR` 
-a collection of HRIR plots are given for the source 1 m away from the center of a 8.75 cm radius sphere. 
-These HRIRs have been used to create a CIPC-like database entry (:code:`subject_200`) in code. To 
-make this possible, we first have to relate the angle of incidence in the sphere wave equation solution 
-to the angle of arrival of an audio source on the CIPIC 1 m sphere, relative to right and left ear 
-canal entries at :math:`\phi_{az} = \pm 100^\circ`. A description of this problem is given in 
-Figure :ref:`ANGLESOLVE`. This problem turns out to be a familiar analytic geometry problem, that 
-of finding the angle between two 3D vectors passing through the origin.
+
+General Pressure Wave Solution
+==============================
+
+As a starting point, the acoustics text [Beranek]_, provides a solution for 
+the resultant sound pressure at any point in space when a sinusoidal plane wave sound pressure 
+source impinges upon a rigid sphere of radius :math:`R` centered at the coordinate system origin. 
+Rotationally symmetric spherical coordinates, :math:`r` and :math:`\theta` are appropriate here.
+First consider the incident plane wave :math:`\tilde{p}_I(r,\theta)`, in the expansion
+
+.. math::
+   :label: resultant
+   :type: eqnarray
+
+   \tilde{p}_I(r,\theta) = \tilde{p}_0 \sum_{n=0}^\infty (-j)^n (2n+1) j_n(kr) P_n(\cos\theta),
+
+where :math:`P_m(x)` is the :math:`n\text{th-order}` Legendre polynomial, :math:`j_n(x)` is the 
+:math:`n\text{th-order}` spherical Bessel function of the first kind, :math:`k = 2\pi f/c` is the 
+wavenumber, with :math:`f` frequency in Hz and :math:`c = 344.4` m/s the propagation velocity in air. 
+We set the incident wave complex pressure :math:`\tilde{p}_0 = 1\angle 0^\circ` for convenience. Finally, 
+solve for the scattered wave, :math:`\tilde{p}_s(r,\theta)`, by applying boundary conditions, see [Beranek]_ 
+for details, we superimpose the two solutions to obtain 
+
+.. The solution takes the form of an infinite series involving spherical harmonics to represent the 
+   incident plus scattered sound pressure, :math:`\tilde{p}(r,\theta)`, where :math:`r` is the radial 
+   distance from the sphere center, and :math:`\theta` the angle of incidence, :math:`\theta`, relative the incident pressure wave.
+   This is a boundary value problem, which is solved by starting with the incident wave, 
+   :math:`\tilde{p}_I(r,\theta)`, and then solving for the scattered wave, :math:`\tilde{p}_s(r,\theta)`, by 
+   applying the boundary conditions. For the case of an incident plane wave, with complex pressure 
+   :math:`\tilde{p}_0 = 1\angle 0^\circ`, the solution is 
+
+.. math::
+   :label: resultant
+   :type: eqnarray
+
+   \tilde{p}(r,\theta) &=& \tilde{p}_I(r,\theta) + \tilde{p}_s(r,\theta) \nonumber \\
+   &=& \sum_{n=0}^\infty (-j)^n (2n+1) P_n(\cos\theta)  \nonumber \\
+   && \cdot \left[j_n(kr) - 
+   \frac{j_n^\prime(kR)}{h_n^{\prime(2)}(kR)} h_n^{(2)}(kr)\right]
+
+where :math:`j_n^\prime(x)` the spherical Bessel function of the first kind derivative, 
+:math:`h_n^{(2)}(kr)` is the :math:`n\text{th-order}` spherical Hankel function of the second kind 
+and :math:`h_n^{\prime(2)}(kr)` is the corresponding derivative. Figure :ref:`Scatter` shows the pressure 
+magnitude at 2000 Hz for :math:`R = 8.75\text{ cm}`. Note :math:`\cos\theta = \sqrt{w^2 + z^2}`.
 
 .. figure:: SphericalHeadScattering.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Using spherical harmonics, [Beranek]_, to calculate the pressure wave magnitude (shown) here and 
+   Using spherical harmonics [Beranek]_ to calculate the pressure wave magnitude (shown here) and 
    phase, using a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
 
+The calculations required to obtain Figure :label:`SCATTER` follow easily using the functions found in 
+:code:`scipy.special`, e.g., for the scattered field the calculation is:
+
+.. code-block:: python
+
+   def pS(w, z, f, R = 0.0875, N = 50):
+       """
+       Scattered field from a rigid sphere
+
+       w = radial comp in cylind coord
+       z = axial comp in cylind coord
+       f = frequency in Hz
+       R = sphere radius in m
+       N = summation upper boundary
+
+       p_polar = pressure in Pa for p0 = 1 Pa
+
+       Mark Wickert November 2018
+       """
+       p_0 = 1
+       k = 2*pi/(344.4/f)
+       p_polar = zeros((len(z),len(w)),
+                       dtype=complex128)
+       for n,wn in enumerate(w):
+           for m,zm in enumerate(z):
+               r = sqrt(zm**2 + wn**2)
+               cos_theta = zm/sqrt(zm**2 + wn**2)
+               for kk in range(N+1):
+                   if r <= R:
+                       p_polar[m,n] = 0.0
+                   else:
+                       p_polar[m,n] += p_0*(-1j)**kk *\
+                       (2*kk+1) * \
+                       special.spherical_jn(kk,
+                       k*R,True)/spherical_hn2(kk,
+                       k*R,True) * spherical_hn2(kk,
+                       k*r) * \
+                       special.lpmv(0,kk,cos_theta)
+       return -p_polar
+
+   def spherical_hn2(n,z,derivative=False):
+       """ Spherical Hankel Function 2nd Kind """
+       return special.spherical_jn(n,z,deriv=False) \
+              -1j * special.spherical_yn(n,z,
+              derivative=False)
+
+
+In this work we use the *standard head* radius of 8.75 cm discussed in [Duda]_.  For an 8.75 cm radius 
+rigid sphere 
+and an audio frequency of 2 kHz the composite pressure wave magnitude near the sphere is shown 
+Figure :ref:`SCATTER`. Note :math:`8.75\text{cm}` is the *standard head* radius [Duda]_. It is 
+interesting to note that there is a *bright spot* on the back side (:math:`\theta=180^\circ`) due 
+to constructive interference between the waves traveling around either side of the sphere.
+
+
+HRTF on the Sphere Surface 
+==============================
+
+
+
+In [Duda]_ the HRTF, :math:`H(r, R, \theta)`, is defined as the ratio of the sound pressure on the 
+surface of the sphere divided by the pressure at the sphere center, given that the sphere is not 
+present. 
+
+Formally this transfer function should include the propagation delay time from the source 
+location to the sphere center, but this is a *linear phase* of the form :math:`\exp(-j 2\pi f r/c)` 
+that can be dealt with as a time shift once the inverse Fourier transform is used to obtain the HRIR. 
+The expression for HRTF, less the linear phase term, is
+
+.. math::
+   :label: dudahrtf
+
+   H(r, R, \theta) = \frac{r}{kR^2} e^{jkr} \sum_{n=0}^\infty (2n+1) P_n(\cos\theta) 
+   \frac{h_n^{(2)}(kr)}{h_n^{\prime(2)}(kR)},\ r > R
+
+Later we set :math:`r= 1\text{ m}` to match the CIPIC source location relative to the head center. 
+An efficient algorithm for the calculation of (:ref:`dutahrtf`) is presented in [Duda]_, 
+requiring no special functions as a result of using special function recurrence relationships. The 
+Python implementation, shown below, also incorporates an error threshold for terminating the series 
+approximation.
+
+.. code-block:: python
+
+   def sphere(theta, f, r = 1.0, a = 0.01, c = 344.4, 
+              threshold = 1e-6):
+       """
+       HRTF calculation for a rigid sphere with source 
+       r meters from the sphere center
+       
+       Coded from pseudo-code to Python by Mark Wickert
+       
+       Reference: Appendix A of J. Acoust. Soc. Am., 
+       Vol. 104, No. 5, November 1998 R. O. Duda and 
+       W. L. Martens: Ranp.nge dependence for a head model
+       """   
+       x = np.cos(theta*np.pi/180)
+       mu = (2 * np.pi * f * a)/c
+       rho = r / a
+       zr = 1/(1j * mu * rho)
+       za = 1/(1j * mu)
+       Qr2 = zr
+       Qr1 = zr * (1 - zr)
+       Qa2 = za
+       Qa1 = za * (1 - za)
+       P2 = 1
+       P1 = x
+       summ = 0
+       term = zr/(za * (za - 1))
+       summ += term
+       term = (3 * x * zr * (zr - 1) )/ \
+              (za * (2 * za * (za - 1) + 1))
+       summ += term;
+       oldratio = 1
+       newratio = np.abs(term)/np.abs(summ)
+       m = 2
+       while (oldratio > threshold) or \
+             (newratio > threshold):
+           Qr = -(2 * m - 1) * zr * Qr1 + Qr2
+           Qa = -(2 * m - 1) * za * Qa1 + Qa2
+           P = ((2 * m - 1) * x * \
+                P1 - (m - 1) * P2)/m
+           term = ((2 * m + 1) * P * Qr)/((m + 1) \
+                   * za * Qa - Qa1)
+           summ += term
+           m += 1
+           Qr2 = Qr1
+           Qr1 = Qr
+           Qa2 = Qa1
+           Qa1 = Qa
+           P2 = P1
+           P1 = P
+           oldratio = newratio
+           newratio = np.abs(term)/np.abs(summ)
+       # conjugate to match traveling wave convention
+       H = np.conj((rho * np.exp(-1j * mu) * summ)/\
+                   (1j * mu))
+       return H
+
+To build a CIPIC database entry for the spherical head we need to first calculate the HRTF over a range 
+of frequencies running from 0 to one half the CIPIC sampling rate, i.e., :math:`f_s/2 = 44.1\text{kHz}`. 
+We then need to inverse Fourier transform the HRTF to obtain the HRIR. Based on our earlier discussion 
+of the CIPIC format, we need to perform the calculation for 1250 azimuth and elevation angle combinations, 
+with :math:`r = 1\text{ m}`.
+
+In Figure :ref:`SPHEREHRIR` 
+a collection of HRIR plots are given for the source 1 m away from the center of a 8.75 cm radius sphere. 
+These HRIRs have been used to create a CIPC-like database entry (:code:`subject_200`) in code. To 
+make this possible, we first have to relate the angle of incidence in the sphere wave equation solution 
+to the angle of arrival of an audio source on the CIPIC 1 m sphere, relative to right and left ear 
+canal entries at :math:`\phi_{az} = \pm 80^\circ` (a set back of :math:`\pm 100^\circ` from the front). 
+A description of this problem is given in 
+Figure :ref:`ANGLESOLVE`. This problem turns out to be a familiar analytic geometry problem, that 
+of finding the angle between two 3D vectors passing through the origin.
 
 .. figure:: SphericalHeadHRIR.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Using the spherical harmonics formulation of [Duda]_ to obtain HRTF and then HRIR as a function of sound 
-   source incidence angle from :math:`0^\circ` to :math:`180^\circ`. :label:`SPHEREHRIR`
+   Using the spherical harmonics formulation of [Duda]_ to obtain the HRTF and then the HRIR as a 
+   as a function of sound source incidence angle from :math:`0^\circ` to :math:`180^\circ`. :label:`SPHEREHRIR`
 
+
+The final objective 
 
 .. figure:: Angle_Between_Source_Ear_Canal.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Solving for the angle between the source and a ray extending from the right and left ears. :label:`ANGLESOLVE`
+   Solving for the angle between the source and a ray extending from the right and left ears, also 
+   showing a set back of the ear canal by :math:`\pm 100^\circ` from the from the font of the head. :label:`ANGLESOLVE`
 
 
-Finally, putting this all together code was written in a Jupyter notebook to generate a CIPIC-like database entry. 
-An example HRIR plot, similar to Figure :ref:`HRIR` is shown in Figure :ref:`HRIR875`. 
+Finally putting this all together, code was written in a Jupyter notebook to generate a CIPIC-like database entry, 
+which requires the use of :code:`scipy.io` to write a MATLAB :code:`mat` file, e.g., :code:`subject_200` is a 
+spherical head, with no ears (pinna), containing two HRIR arrays:
+
+.. code-block:: python
+
+   io.whosmat('subject_200/hrir_final.mat')
+
+   [('hrir_l', (25, 50, 200), 'double'), 
+    ('hrir_r', (25, 50, 200), 'double')]
+
+
+.. figure:: HRIR_Calc_BlockDiagram.pdf
+   :scale: 65%
+   :align: center
+   :figclass: htb
+
+   A block diagram depicting the steps involved in calculating the HRIR right and left channel impulse responses, 
+   :math:`h_R[n]` and :math:`h_L[n]`, starting from CIPIC source angles, :math:`(\theta_\text{CIPIC}, \phi_\text{CIPIC})`, 
+   ear canal set-back angles, :math:`(\phi_R, \phi_L)`, and the sphere radius :math:`R`. :label:`HRIRCALCBLOCK`
+ 
+An example HRIR plot, similar to Figure :ref:`HRIR`, is shown in Figure :ref:`HRIR875`. 
+Found in `3D audio simulator notebooks`_.
 
 .. figure:: HRIR_example_sphere_R875.pdf
    :scale: 50%
@@ -516,12 +723,15 @@ References
 .. [CIPICHRTF] *The CIPIC HRTF Database*, (2019, May 22). Retrieved May 22, 2019, from `https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`_.
 .. [Wickert] *Real-Time Digital Signal Processing Using pyaudio_helper and the ipywidgets*, (2018, July 15). Retrieved May 22, 2019, from DOI `10.25080/Majora-4af1f417-00e`_.
 .. [ScipySignal] *Signal processing (scipy.signal)*, (2019, May 22). Retrieved May 22, 2019, from `https://docs.scipy.org/doc/scipy/reference/signal.html`_.
+.. [KEMAR] GRAS Sound & Vibration A/S, Head & Torso Simulators, from `http://www.gras.dk/products/head-torso-simulators-kemar`_.
 .. [Beranek] Beranek, L. and Mellow, T (2012). *Acoustics: Sound Fields and Transducers*. London: Elsevier.
 .. [Duda] Duda, R. and Martens, W. (1998). Range dependence of the response of a spherical head model, *J. Acoust. Soc. Am. 104 (5)*.
-.. [Bogelein]  Bogelein, S., Brinkmann, F.,  Ackermann, D., and Weinzierl, S. (2018). Localization Cues of a Spherical Head Model. *DAGA Conference 2018 Munich*. 
+.. [Bogelein]  Bogelein, S., Brinkmann, F.,  Ackermann, D., and Weinzierl, S. (2018). Localization Cues of a Spherical Head Model. *DAGA Conference 2018 Munich*.
 
 .. _`https://www.ece.ucdavis.edu/cipic`: https://www.ece.ucdavis.edu/cipic
 .. _`https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`: https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 .. _`10.25080/Majora-4af1f417-00e`: http://conference.scipy.org/proceedings/scipy2018/mark_wickert_250.html
 .. _`https://docs.scipy.org/doc/scipy/reference/signal.html`: https://docs.scipy.org/doc/scipy/reference/signal.html
+.. _`http://www.gras.dk/products/head-torso-simulators-kemar`: http://www.gras.dk/products/head-torso-simulators-kemar
+.. _`3D audio simulator notebooks`: https://github.com/mwickert/3D_Audio_Simulator
