@@ -721,6 +721,6 @@ the sine is stored :cite:`zipcpu`.
 
 While the body of work for caf-verilog supports the modeling of the caf itself, this project can be used as a basis for
 incorporating Verilog as an extension to the wider scientific computing field.
-The SymPy Development Team has already made significant contributions in this realm, and is being used in many projects.
-The SymPy package currently supports code generation for various languages such as c, c++, and Julia :cite:`codegen`.
+The SymPy Development Team has already made significant contributions in this realm, and is being used in many projects
+to support code generation for various languages such as c, c++, and Julia :cite:`codegen`.
 Using a common API, it should be possible to also provide an extension to incorporate the Verilog HDL.
