@@ -44,8 +44,7 @@ The main motivator for this project comes from the use of the CAF at my workplac
 communications systems.
 In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
 geometries that will allow for the detection of Doppler and movement in the signal.
-This method of calculation proves to be very computationally challenging due to the high mathematical intensity and
-cannot be reduced.
+This method of calculation has yet to be simplified.
 Currently GPU's have been employed as the main workhorse but the use of the FPGA has always been an attractive and
 feasible option due to the hardware options that are available.
 To geolocate a signal's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
