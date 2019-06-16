@@ -53,8 +53,8 @@ represents a satellite's drift.
 Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
 delay of arrival (TDOA).
 The characteristics of the captured signals will change based on the type of signal, which motivates the need to ensure
-that the resulting hardware description language (HDL)
-output can also be produced to match necessary configurations.
+that the resulting Verilog hardware description language (HDL)
+module output can also be produced to match necessary configurations :cite:`verilogIEEE`.
 This became a project goal motivated off work done by other projects to be able to produce code in other languages
 :cite:`codegen`.
 Thus, the solution provided must be able to be reconfigured based off of different needs.
@@ -200,8 +200,8 @@ This bitfile is generated through the Vivado Design Suite that is provided by Xi
 If a different device is to be targeted, the new target device would also be configured using this design methodology of
 creating a bitfile.
 
-The Jupyter notebook itself is considered an interactive computing pool providing an interactive interface to do
-computation and prototyping. In this implementation it is meant to be an easier way for a non-hardware oriented person
+The Jupyter notebook itself is considered an interactive computing pool providing an interface to do
+computation and prototyping through a web browser. In this implementation it is meant to be an easier way for a non-hardware oriented person
 to be able to access a computational accelerator designed by a hardware engineer :cite:`pynq`.
 
 A diagram of the processing and the programmable logic is shown in Fig. :ref:`pspl`. The processor system is the
