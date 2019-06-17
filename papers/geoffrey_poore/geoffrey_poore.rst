@@ -367,10 +367,12 @@ code. All Codebraid commands are under a ``cb`` namespace to prevent
 unintentional collisions with normal Pandoc attributes. In the example,
 ``cb.run`` indicates that code should be run, stdout should be included
 and interpreted as Markdown, and stderr should be displayed in the event
-of errors. Finally, the ``name`` keyword is used to assign a unique name
-to each piece of code. This allows the code to be referenced elsewhere
-in a document to insert any combination of its Markdown source, code,
-stdout, stderr, and rich output (for Jupyter kernels).
+of errors. If a Jupyter kernel were in use, rich output such as plots
+would also be included. Finally, the ``name`` keyword is used to assign
+a unique name to each piece of code. This allows the code to be
+referenced elsewhere in a document to insert any combination of its
+Markdown source, code, stdout, stderr, and rich output (for Jupyter
+kernels).
 
 Creating examples
 =================
@@ -451,7 +453,7 @@ been entered directly in the code block.
 
 The ``cb.expr`` command only works with inline code, unlike other
 commands. It evaluates an expression and then prints a string
-representation. For example,
+representation, which is interpreted as Markdown. For example,
 
 .. code:: text
 
@@ -470,8 +472,9 @@ Finally, the ``cb.nb`` command runs code in “notebook mode.” For code
 blocks, this displays code followed by verbatim stdout. If there are
 errors, stderr is also included automatically. When Codebraid is used
 with a Jupyter kernel, rich output such as plots is included as well;
-this is demonstrated later. For inline code, ``cb.nb`` is equivalent to
-``cb.expr``. The markdown
+this was demonstrated already in the `Introduction`_. For inline code,
+``cb.nb`` is like ``cb.expr`` except that it displays rich output or
+verbatim text. The Markdown
 
 .. code:: text
 
@@ -510,13 +513,13 @@ each command.
 
 ``show`` takes any combination of the following options: ``markup``
 (display Markdown source), ``code``, ``stdout``, ``stderr``, and
-``none``. There is also an option for rich output like plots when a
-Jupyter kernel is used to execute code. Multiple options can be
-combined, such as ``show=code+stdout+stderr``. Code chunks using
-``copy`` can also employ ``copied_markup`` to display the Markdown
-source of the copied code chunk. When the ``cb.expr`` command is used,
-the expression output is available via ``expr``. ``show`` completely
-overwrites the existing display settings.
+``none``. There is also ``rich_output`` when a Jupyter kernel is used to
+execute code. Multiple options can be combined, such as
+``show=code+stdout+stderr``. Code chunks using ``copy`` can employ
+``copied_markup`` to display the Markdown source of the copied code
+chunk. When the ``cb.expr`` command is used, the expression output is
+available via ``expr``. ``show`` completely overwrites the existing
+display settings.
 
 The display format can also be specified with ``show``. ``stdout``,
 ``stderr``, and ``expr`` can take the formats ``raw`` (interpreted as
