@@ -676,8 +676,8 @@ DNA: [1bna]_
    >>> import json
    >>> from dash_bio_utils import pdb_parser
    >>> pdb_string = pdb_parser.create_data('1bna.pdb')
-   >>> 1bna = json.loads(pdb_string)
-   >>> 1bna['atoms'][:3]
+   >>> pdb_1bna = json.loads(pdb_string)
+   >>> pdb_1bna['atoms'][:3]
    [{'name': "O5'", 'chain': 'A',
    'positions': [18.935, 34.195, 25.617],
    'residue_index': 1, 'element': 'O',
@@ -690,7 +690,7 @@ DNA: [1bna]_
    'positions': [19.961, 32.668, 24.1],
    'residue_index': 1, 'element': 'C',
    'residue_name': 'DC1', 'serial': 2}]
-   >>> 1bna['bonds'][:3]
+   >>> pdb_1bna['bonds'][:3]
    [{'atom2_index': 0, 'atom1_index': 1},
    {'atom2_index': 1, 'atom1_index': 2},
    {'atom2_index': 2, 'atom1_index': 3}]
