@@ -271,10 +271,9 @@ This means that the full bit value of the signal cannot be used otherwise there 
 must be equal over 0. For a 12-bit quantization of a vector for example the numbers must be in the range (-4095, 4095)
 in comparison to the two's complement full value of (-4096, 4095). This is all necessary because the computation that is
 done on the FPGA will be done using fixed point or an integer value. This also reduces power and cost on the FPGA
-:cite:`float2fixed`. The test files that are used in verification are written using the values converted from this
-module.
-Most of the modules that were developed in this project write out quantized values as well, and this module will read
-them in as integer values.
+:cite:`float2fixed`.
+Test files are written out and read back as integer values via this module by all the other classes for tests and
+verification.
 
 .. figure:: quantization_cos.png
 
