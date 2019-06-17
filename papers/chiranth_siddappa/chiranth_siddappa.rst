@@ -442,7 +442,7 @@ signal generator waveform.
 
 .. figure:: freq_shift_out.png
 
-   Output signal at 50kHz. :label:`freq-shift-out`
+   Output signal at 70kHz. :label:`freq-shift-out`
 
 A code listing showing the inputs to the FreqShift Python class is shown in Listing :ref:`freq-shift-listing`. The
 additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
