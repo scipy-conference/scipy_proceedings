@@ -421,8 +421,8 @@ similar manner:
    ```
 
 The default format of ``stdout`` is ``verbatim``, but this was specified
-just to be explicit. The other option is ``raw``, or interpreted as
-Markdown.
+just to be explicit. The other option is ``raw`` (interpreted as
+Markdown).
 
 Of course, all Markdown shown in the current section was itself inserted
 programmatically using ``cb.paste`` to copy from the earlier section.
@@ -468,41 +468,13 @@ follow the closing backtick(s). While this sort of a “postfix” notation
 may not be ideal from some perspectives, it is the cost of maintaining
 full compatibility with Pandoc Markdown syntax.
 
-Finally, the ``cb.nb`` command runs code in “notebook mode.” For code
-blocks, this displays code followed by verbatim stdout. If there are
-errors, stderr is also included automatically. When Codebraid is used
-with a Jupyter kernel, rich output such as plots is included as well;
-this was demonstrated already in the `Introduction`_. For inline code,
-``cb.nb`` is like ``cb.expr`` except that it displays rich output or
-verbatim text. The Markdown
-
-.. code:: text
-
-   ```{.python .cb.nb name=notebook}
-   import random
-   random.seed(2)
-   rnums = [random.randrange(100) for n in range(8)]
-   print(f"Random numbers: {rnums}")
-   print(f"Sorted numbers: {sorted(rnums)}")
-   print(f"Range: {[min(rnums), max(rnums)]}")
-   ```
-
-results in
-
-.. code:: python
-
-   import random
-   random.seed(2)
-   rnums = [random.randrange(100) for n in range(8)]
-   print(f"Random numbers: {rnums}")
-   print(f"Sorted numbers: {sorted(rnums)}")
-   print(f"Range: {[min(rnums), max(rnums)]}")
-
-.. code:: text
-
-   Random numbers: [7, 11, 10, 46, 21, 94, 85, 39]
-   Sorted numbers: [7, 10, 11, 21, 39, 46, 85, 94]
-   Range: [7, 94]
+Finally, the ``cb.nb`` command runs code in “notebook mode.” For inline
+code, ``cb.nb`` is like ``cb.expr`` except that it displays rich output
+or verbatim text. For code blocks, ``cb.nb`` displays code followed by
+verbatim stdout. If there are errors, stderr is also included
+automatically. When Codebraid is used with a Jupyter kernel, rich
+outputs such as plots are included as well. This was demonstrated in the
+`Introduction`_, and another example can be found in `Jupyter kernels`_.
 
 Display options
 ===============
@@ -681,10 +653,11 @@ notebook:
 
 The built-in code execution system allows multiple languages within a
 single document. This is also possible when Jupyter kernels are used
-instead. A single document can use multiple kernels, or multiple
-independent sessions for the same kernel type. Of course, kernel
-features like IPython magics :cite:`ipython-magics` are also fully
-functional.
+instead. A single document can involve multiple kernels. Multiple
+independent sessions for the same kernel type are also possible when
+``jupyter_kernel`` is combined with ``session`` (described in the next
+section). Of course, kernel features like IPython magics
+:cite:`ipython-magics` are fully functional as well.
 
 Advanced code execution
 =======================
@@ -743,7 +716,8 @@ convenient to separate code into multiple sessions when several
 independent tasks are being performed, or when a long calculation is
 required but the output can easily be saved and loaded by separate code
 for visualization or other processing. The ``session`` keyword makes
-this possible. For example,
+this possible. Session names are restricted to valid Python identifiers.
+For example,
 
 .. code:: text
 
@@ -791,9 +765,10 @@ In some situations, it would be convenient to completely control the
 definition of the ``main()`` function and add code outside of
 ``main()``. The ``outside_main`` keyword makes this possible. All code
 chunks with ``outside_main=true`` at the beginning of a session are used
-to overwrite the beginning of the ``main()`` template, while any chunks
-with ``outside_main=true`` at the end of the session are used to
-overwrite the end of the template. If all code chunks have
+to overwrite the beginning of the ``main()`` template (everything before
+``main()``), while any chunks with ``outside_main=true`` at the end of
+the session are used to overwrite the end of the ``main()`` template
+(everything after ``main()``). If all code chunks have
 ``outside_main=true``, then all of Codebraid’s templates are completely
 omitted, and all output is associated with the final code chunk. The
 example below demonstrates this option.
@@ -852,10 +827,11 @@ section on working with external files:
 
 Since the ``cb.code`` command is including content from elsewhere, it is
 used with an empty code block. Alternatively, a single empty line or a
-single line containing an underscore is allowed as a placeholder. This
-example included part of a file using a single regular expression. There
-are also options for including everything starting with or starting
-after a literal string or regular expression, and for including
+single line containing an underscore is allowed as a placeholder.
+
+This example included part of a file using a single regular expression.
+There are also options for including everything starting with or
+starting after a literal string or regular expression, and for including
 everything before or through a literal string or regular expression.
 
 The ``include_file`` option works with commands that execute code as
@@ -875,16 +851,34 @@ Conclusion
 ==========
 
 Codebraid provides a unique and powerful combination of features for executing
-code embedded in Pandoc Markdown documents.  A single document can contain
-multiple languages and multiple independent sessions per language.  Any
-combination of Markdown source, code, stdout, and stderr can be displayed.  It
-is easy to reuse code and output elsewhere in a document, or include all or
-part of an external file.  Because only standard Pandoc Markdown syntax is
-used, all Markdown parsing and document conversion can be delegated to Pandoc.
+code embedded in Pandoc Markdown documents.
+
+* Both code blocks and inline code can be executed.
+
+* Code blocks are not required to contain complete units of code, like a
+  complete loop or function definition.
+
+* A single document can use multiple languages and multiple independent
+  sessions per language.  Any language can share a session between multiple
+  code chunks.  Independent computations can be divided into separate sessions
+  and only re-executed when necessary.
+
+* Code can be executed with the built-in system, or with Jupyter
+  kernels which provide rich output such as plots.
+
+* A code chunk can display any combination of its Markdown source, code,
+  stdout, stderr, and rich output.
+
+* It is easy to reuse code and its output programmatically with the paste
+  functionality. It is also possible to include all or part of an external source file for display or execution.
+
+* Because only standard Pandoc Markdown syntax is used, all Markdown
+  parsing and document conversion can be delegated to Pandoc, and there are
+  no issues with preprocessors that do not fully support Markdown syntax.
 
 There are several logical avenues for further development.  One of the
 original motivations for creating Codebraid was to build on my previous work
-with PythonTeX :cite:`Poore2015` to create a code execution system that could
+with PythonTeX :cite:`Poore2015` to create a program that could
 be used with multiple markup languages.  While Codebraid has focused thus far
 on Pandoc Markdown, little of it is actually Markdown-specific.  It should be
 possible to work with other markup languages supported by Pandoc, such as
