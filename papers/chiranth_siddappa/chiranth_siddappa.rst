@@ -307,7 +307,7 @@ frequency signals. This is what is expected. This method is what is used to shif
 
 Signed multiplication in Verilog can be done by specifying the signed data type. Any multiply of two numbers of the same
 size requires twice the number of bits in the result :cite:`tumbush-signed`. However, in this project the need for different
-size operands arises. In order to make sure the result is correct a lot of time was spent on this module. This module
+size operands arises. This module
 takes in two complex numbers and performs a pipelined multiplication on the data.
 Before the result is provided to the master, the result is truncated.
 It should be noted that no timing constraint violations were encountered during the implementation.
