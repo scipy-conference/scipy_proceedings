@@ -69,8 +69,8 @@ Starting Point
 The main concepts necessary for the understanding of the CAF are topics that are covered in Modern Digital Signal
 Processing, Communication Systems, and a digital design course. These concepts would be the Fast Fourier Transform
 (FFT), integration in both infinite and discrete forms, frequency shifting, and digital design.
-The main basis of this project then is to show a working implementation of digital design HDL modules implementing the
-logic accurately with this given knowledge. Given the mathematical basis of this project, it is crucial to have a way to
+This project will show a working implementation of digital design HDL modules implementing the
+logic accurately with this given knowledge. Given the mathematical background of this project, it is crucial to have a way to
 test implementations against theory. This is the motivation for the discussion of using Python to help generate code
 and test benches.
 
@@ -238,7 +238,8 @@ Python and Jupyter
 
 
 This project made extensive use of the Python ecosystem through the use of pip, Jupyter, and many other packages. The
-reader is encouraged to view the :code:`caf-verilog` source code :cite:`caf-verilog` and view the releases that have been made on PyPI :cite:`caf-verilog-pypi`.
+reader is encouraged to view the :code:`caf-verilog` source code :cite:`caf-verilog` and view the releases that have been
+made on PyPI :cite:`caf-verilog-pypi`.
 When designing modules, a first test of what a signal should look like when operated on was done using the interactive
 plotting ability that is provided :cite:`jupyter`.
 The generation of the modules was done using Jinja which provides both template parsing and rendering :cite:`jinja`.
