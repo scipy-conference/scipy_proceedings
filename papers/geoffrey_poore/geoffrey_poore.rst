@@ -649,15 +649,20 @@ named ``session``):
    %matplotlib inline
    import numpy as np
    from matplotlib import pyplot as plt
+   ```
 
+   ```{.python .cb.nb}
    x = np.linspace(0, 2*np.pi)
-   for n in range(4):
-       plt.plot(x, np.sin(x + n*np.pi/3))
+   for n in range(-1, 2):
+       plt.plot(x, np.sin(x + n*np.pi/4))
    plt.grid()
    ```
 
-This Markdown results in displayed code plus a plot, just as it would
-within a Jupyter notebook:
+Notice that ``jupyter_kernel`` was only needed (and only allowed) for
+the first code chunk. The second code chunk is still using the same
+language (``.python``), so it shares the same kernel. This Markdown
+results in displayed code plus a plot, just as it would within a Jupyter
+notebook:
 
 .. code:: python
 
@@ -665,16 +670,21 @@ within a Jupyter notebook:
    import numpy as np
    from matplotlib import pyplot as plt
 
+.. code:: python
+
    x = np.linspace(0, 2*np.pi)
-   for n in range(4):
-       plt.plot(x, np.sin(x + n*np.pi/3))
+   for n in range(-1, 2):
+       plt.plot(x, np.sin(x + n*np.pi/4))
    plt.grid()
 
 |image0|
 
-The built-in code execution system allows for any number of languages
-within a single document. This is also possible when Jupyter kernels are
-used instead.
+The built-in code execution system allows multiple languages within a
+single document. This is also possible when Jupyter kernels are used
+instead. A single document can use multiple kernels, or multiple
+independent sessions for the same kernel type. Of course, kernel
+features like IPython magics :cite:`ipython-magics` are also fully
+functional.
 
 Advanced code execution
 =======================
@@ -1045,5 +1055,5 @@ Of the programs listed above, Jupytext, notedown, and podoc provide
 ``ContentsManager`` subclasses for the Jupyter Notebook that allow it to
 seamlessly use Markdown as a storage format.
 
-.. |image0| image:: _codebraid/python3-jupyter-001-01.png
+.. |image0| image:: python3-jupyter-002-01.png
 

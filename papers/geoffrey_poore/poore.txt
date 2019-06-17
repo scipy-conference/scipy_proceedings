@@ -594,25 +594,32 @@ simple as adding `jupyter_kernel=<name>` to the first code chunk for a
 language (or, as discussed later, to the first code chunk of a named
 `session`):
 
-```{.cb.paste copy=jupyter show=copied_markup}
+```{.cb.paste copy=jupyter1+jupyter2 show=copied_markup}
 ```
 
-This Markdown results in displayed code plus a plot, just as it would within a
-Jupyter notebook:
+Notice that `jupyter_kernel` was only needed (and only allowed) for the first
+code chunk.  The second code chunk is still using the same language
+(`.python`), so it shares the same kernel.  This Markdown results in
+displayed code plus a plot, just as it would within a Jupyter notebook:
 
-```{.python .cb.nb jupyter_kernel=python3 name=jupyter session=jupyter hide_markup_keys=name+session}
+```{.python .cb.nb jupyter_kernel=python3 name=jupyter1 session=jupyter hide_markup_keys=name+session}
 %matplotlib inline
 import numpy as np
 from matplotlib import pyplot as plt
+```
 
+```{.python .cb.nb name=jupyter2 session=jupyter hide_markup_keys=name+session}
 x = np.linspace(0, 2*np.pi)
-for n in range(4):
-    plt.plot(x, np.sin(x + n*np.pi/3))
+for n in range(-1, 2):
+    plt.plot(x, np.sin(x + n*np.pi/4))
 plt.grid()
 ```
 
-The built-in code execution system allows for any number of languages within a
-single document.  This is also possible when Jupyter kernels are used instead.
+The built-in code execution system allows multiple languages within a single
+document.  This is also possible when Jupyter kernels are used instead.  A
+single document can use multiple kernels, or multiple independent sessions for
+the same kernel type.  Of course, kernel features like IPython magics
+``:cite:`ipython-magics` ``{=rst} are also fully functional.
 
 
 
