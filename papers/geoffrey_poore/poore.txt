@@ -287,31 +287,6 @@ A simple Pandoc Markdown document that runs code with Codebraid is shown below.
 `..`{=rst}
 
 
-
-Pandoc Markdown defines attributes for inline code and code blocks.  These have the general form
-
-```
-{#id .class1 .class2 key1=value1 key2=value2}
-```
-
-If code with these attributes were converted into HTML, `#id` becomes an HTML
-id for the code, anything with the form `.class` specifies classes, and
-space-separated key-value pairs provide additional attributes.  Although
-key-value pairs can be quoted with double quotation marks, Pandoc allows most
-characters except the space and equals sign unquoted.  Other output formats
-such as LaTeX use attributes in a largely equivalent manner.
-
-Pandoc uses the first class to determine the language name for syntax
-highlighting, hence the `.python` in the example above.  Codebraid uses the
-second class to specify a command for processing the code.  All Codebraid
-commands are under a `cb` namespace to prevent unintentional collisions with
-normal Pandoc inline code and code blocks.  In this case, `cb.run` indicates
-that code should be run, stdout should be included and interpreted as
-Markdown, and stderr should be displayed in the event of errors.  Finally, in
-this example, the `name` keyword is used to assign a unique name to each piece
-of code.  This allows the code to be referenced elsewhere in a document to
-insert any combination of its Markdown source, code, stdout, and stderr.
-
 If this were a normal Pandoc document, converting it into a format such as
 reStructuredText could be accomplished by running
 
@@ -329,15 +304,16 @@ codebraid pandoc --from markdown --to rst file.md
 The `codebraid` executable is available from the Python Package Index (PyPI);
 development is at https://github.com/gpoore/codebraid.  By default, code is
 executed with Codebraid's built-in code execution system.  This can easily be
-swapped for a Jupyter kernel, as demonstrated later.
+swapped for a Jupyter kernel, as shown in the `` `Introduction`_``{=rst} and
+discussed in greater detail in `` `Jupyter kernels`_``{=rst}.
 
 When this `codebraid pandoc` command is executed, the original Markdown shown
-above is converted into the Codebraid-processed Markdown
+above is converted into Codebraid-processed Markdown:
 
 ```{.cb.paste copy=part1+part2 show=stdout:verbatim name=paste_verbatim hide_markup_keys=name}
 ```
 
-This processed Markdown would then be converted into the final
+This processed Markdown is then converted into the final
 reStructuredText, rendering as
 
 > ```{.python .cb.run name=part1}
@@ -353,26 +329,48 @@ reStructuredText, rendering as
 
 `..`{=rst}
 
-By default, the output of `cb.run` is interpreted as Markdown.  It is possible
-to show the output verbatim instead, as discussed later.
-
-All Markdown parsing and format conversions in this entire process were
-performed solely by Pandoc.  Pandoc does not just convert directly between
-documents in different formats.  It also provides an abstract syntax tree
-(AST) as one output option.  Codebraid uses only standard Pandoc Markdown
-syntax, so it is able to perform all code extraction and output insertion as
-operations on the AST.  Because this approach requires running Pandoc multiple
-times, it does involve more overhead than the preprocessor approach used by
-knitr and other programs such as Pweave.  However, since Pandoc is responsible
-for all Markdown parsing, even edge cases for Markdown parsing can be handled
-correctly, and things like Markdown comments work as expected.
+By default, the output of code executed with `cb.run` is interpreted as
+Markdown.  It is possible to show the output verbatim instead, as discussed
+later.
 
 In this example, the code is simple enough that it could be executed every time the document is built, but that will often not be the case.  By default,
 Codebraid caches all code output, and code is only re-executed when it is modified.  This can be changed by building with the flag `--no-cache`.
 
+
+# Pandoc code attribute syntax
+
+Pandoc Markdown defines an attribute syntax for inline code and code blocks.
+Codebraid uses this to designate which code blocks should be executed and
+provide options.  Code attributes have the general form
+
+```
+{#id .class1 .class2 key1=value1 key2=value2}
+```
+
+If code with these attributes were converted into HTML, `#id` becomes an HTML
+id for the code, anything with the form `.class` specifies classes, and
+space-separated key-value pairs provide additional attributes.  Although
+key-value pairs can be quoted with double quotation marks, Pandoc allows most
+characters except the space and equals sign unquoted.  Other output formats
+such as LaTeX use attributes in a largely equivalent manner.
+
+Pandoc uses the first class to determine the language name for syntax
+highlighting, hence the `.python` in the example in the last section.
+Codebraid uses the second class to specify a command for processing the code.
+All Codebraid commands are under a `cb` namespace to prevent unintentional
+collisions with normal Pandoc attributes.  In the example, `cb.run` indicates
+that code should be run, stdout should be included and interpreted as
+Markdown, and stderr should be displayed in the event of errors.  Finally, the
+`name` keyword is used to assign a unique name to each piece of code.  This
+allows the code to be referenced elsewhere in a document to insert any
+combination of its Markdown source, code, stdout, stderr, and rich output (for
+Jupyter kernels).
+
+
+
 # Creating examples
 
-The example in the last section was actually itself an example of using
+The example in the previous section was actually itself an example of using
 Codebraid.  This paper was written in Markdown, then converted to
 reStructuredText via Codebraid with Pandoc.  Finally, the reStructuredText was
 converted through LaTeX to PDF via ``Docutils :cite:`docutils` ``{=rst}.  The
