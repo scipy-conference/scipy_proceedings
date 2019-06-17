@@ -840,8 +840,8 @@ or only part of a file that matches a regular expression via
    ```
 
 includes the original Markdown source for this paper, and then uses a
-regular expression to display only the first few lines of the current
-section:
+regular expression to display only the first few lines of this current
+section on working with external files:
 
 .. code:: text
 

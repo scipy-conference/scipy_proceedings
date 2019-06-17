@@ -762,7 +762,8 @@ copied_markup_rewrap_lines=true copied_markup_rewrap_width=55}
 ```
 
 includes the original Markdown source for this paper, and then uses a regular
-expression to display only the first few lines of the current section:
+expression to display only the first few lines of this current section on
+working with external files:
 
 ```{.markdown .cb.code include_file=poore.txt
 code_rewrap_lines=true code_rewrap_width=55
