@@ -394,11 +394,8 @@ The signal generator module is implemented using a half sine lookup table and ac
 This is commonly known as a numerically controlled oscillator in direct digital synthesis :cite:`dds`.
 This module produces a sine wave at the specified frequency by using a modulo counter that increments a phase value at
 every clock cycle.
-It is important to note that when talking about the frequency provided as the sampling rate that it is not necessarily
-the clock rate. The sampling frequency is the frequency that the signal was captured at, and the provided specified
-frequency is relative to that.
-For example, the sampling frequency that is simulated in this project is 625kHz, but the expected clock frequency of the
-fabric is 250MHz.
+Note that the sampling frequency of the signal, 625kHz, is different from the clock frequency of the
+board, at 250MHz.
 The number of phase bits that are necessary are determined by the sampling frequency and the frequency resolution
 specified by Eq. :ref:`phase-bits`.
 
