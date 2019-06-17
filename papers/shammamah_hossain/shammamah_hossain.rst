@@ -696,6 +696,20 @@ DNA: [1bna]_
    {'atom2_index': 2, 'atom1_index': 3}]
 
 
+Limitations and Future Directions
+---------------------------------
+
+File Formats
+============
+
+Currently, the :code:`dash_bio_utils` package only supports specific
+data file formats (namely, PDB, FASTA, and SOFT). Additionally, most
+of the components require JSON data. Future developments to the
+package should therefore include processing for other important file
+formats, such as SAM/BAM/BAI for sequence alignment, or Genbank files
+(.gb).
+
+
 Conclusion
 ----------
 
