@@ -33,7 +33,7 @@ Solving Polynomial Systems with phcpy
 
    The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with    homotopy continuation.
 
-   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years.  One result is the availability of phcpy   through a JupyterHub featuring Python2, Python3, and SageMath kernels.
+   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years.  One result is the availability of phcpy   through a JupyterHub server featuring Python2, Python3, and SageMath kernels.
 
 Introduction
 ============
@@ -44,12 +44,12 @@ systems by homotopy continuation methods. In the phcpy interface,
 Python scripts replace command line options and text menus, 
 and data persists in a session without temporary files. 
 This also makes PHCpack accessible from Jupyter notebooks, 
-including a JupyterHub available online [Pascal]_.
+including a JupyterHub server available online [Pascal]_.
 
-The meaning of *solving* evolved from computing approximations to
-all isolated solutions into the numerical irreducible decomposition
+The meaning of *solving* evolved from computing approximations, to
+all isolated solutions, to the numerical irreducible decomposition
 of the solution set.  The numerical irreducible decomposition includes
-not only the isolated solutions, but also representations for all
+not only the isolated solutions, but also the representations for all
 positive dimensional solution sets. Such representations consist
 of sets of *generic points*, partitioned along the irreducible factors.
 
@@ -73,7 +73,7 @@ phcpy is in ongoing development. At the time of writing,
 this paper is based on version 0.9.5 of phcpy,
 whereas version 0.1.5 was current at the time of [Ver14]_.
 An example of these changes is that the software described in [SVW03]_ 
-was recently parallelized for phcy [Ver18]_.
+was recently parallelized for phcpy [Ver18]_.
 
 Mission
 ---------
@@ -100,10 +100,10 @@ Related Software
 ----------------
 
 PHCpack is one of three FOSS packages for polynomial homotopy computation currently under development. Of these, only Bertini 2 [Bertini2.0]_ also offers Python bindings, although it is not GPU-accelerated and does not export the numerical irreducible decomposition, among other differences.
-Version 1.4 of Bertini (released under a too restrictive license)
-is described in [BHSW13]_.
+Version 1.4 of Bertini is described in [BHSW13]_.
 
-HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia, presented at ICMS 2018 [BT18]_.
+HomotopyContinuation.jl [HCJL]_ is a standalone package for Julia,
+presented at ICMS 2018 [BT18]_.
 
 NAG4M2 [NAG4M2]_ is a package for Macaulay2 
 (a standard computational algebra system [M2]_), 
@@ -128,7 +128,10 @@ JupyterHub
 
 With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
 
-For the user administration, we refreshed our first web interface. A custom JupyterHub Authenticator connects to the existing MySQL database, and triggers a SystemdSpawner that isolates the actions of users to separate processes and logins in generic home folders.
+For the user administration, we refreshed our first web interface.
+A custom JupyterHub Authenticator connects to the existing MySQL database
+and triggers a SystemdSpawner that isolates the actions of users to separate 
+processes and logins in generic home folders.
 
 The account management prompts by e-mail were hooked to new Tornado Handler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each pathway serves HTML seamlessly with the JupyterHub interface, with their forms living in new extensions of its Jinja templates.
 
@@ -206,7 +209,7 @@ coefficients of the polynomials in the system is exploited.
 Continuation methods are numerical algorithms which track
 solution paths defined by a one parameter family of polynomial systems.
 This family is called the homotopy.  Homotopy methods take a polynomial
-system on input and construct a suitable embedding of the input system
+system as input and construct a suitable embedding of the input system
 into a family which contains a start system with known solutions.
 
 We say that a homotopy is *optimal* if for generic instances of
@@ -229,7 +232,7 @@ three classes of polynomial systems:
    A system is sparse if relatively few monomials appear with nonzero
    coefficient.  The convex hulls of the exponent vectors of the monomials
    that appear are called Newton polytopes.  The mixed volume of the
-   tuple of Newton polytopes associated to the system is a sharp upper
+   tuple of Newton polytopes associated with the system is a sharp upper
    bound for the number of isolated solutions.
    Polyhedral homotopies start a solutions of systems that are sparser
    and extend those solutions to the solutions of the given problem.
@@ -368,8 +371,62 @@ Positive Dimensional Solution Sets
 As solving evolved from approximating all isolated solutions
 of a polynomial system into computing a numerical irreducible decomposition,
 the meaning of a solution expanded as well.
-To illustrate this expansion, 
-we consider again the family of cyclic *n*-roots problems, 
+To illustrate this expansion, consider the example of the twisted cubic,
+known in algebraic geometry as the first nontrivial space curve.
+We use this example to illustrate two different representations
+of this space curve:
+
+1. In a *witness set* construction, the given polynomial equations are
+   augmented with as many generic hyperplanes as the dimension of the 
+   solution set.  The solutions which satisfy the system and the augmented
+   equations are generic points.  As the degree of the twisted cubic is
+   three, we find three points on a random plane intersecting the cubic.
+
+   .. code-block:: python
+
+      pols = ['x*y - z;', 'x^2 - y;']
+      from phcpy.sets import embed
+      from phcpy.solver import solve
+      embp = embed(3, 1, pols)
+      sols = solve(embp, verbose=False)
+      print('#generic points :', len(sols))
+
+   The above snippet constructs the embedding for the equations that
+   define the twisted cubic.  
+   The solutions of this embedding represent the curve.
+   Moving the added plane and tracking the solution paths starting at
+   the three generic points will provide many more samples of the curve.
+
+2. A *series expansion* for the solution starts its development at
+   some point(s) in a coordinate hyperplane.
+   In this hyperplane, the curve intersects the solution set at some point(s).
+   For a simple example as the twisted cubic, the series development
+   defines an exact solution after the initial term.
+   Consider the snippet:
+
+   .. code-block:: python
+
+      pols = ['x*y - z;', 'x^2 - y;']
+      from phcpy.maps import solve_binomials
+      maps = solve_binomials(3, pols, \
+                 puretopdim=True)
+      for sol in maps:
+          print(sol)
+
+   The output of the above snippet is
+
+   .. code-block:: python
+
+      ['x - (1+0j)*t1**1', 'y - (1+0j)*t1**2', \
+       'z - (1+0j)*t1**3', 'dimension = 1', \
+       'degree = 3']
+
+   which corresponds to the parametric respresentation
+   :math:`(t, t^2, t^3)` of the twisted cubic.
+
+Many interesting polynomial systems have isolated solutions
+and positive dimensional solution sets.
+We consider again the family of cyclic *n*-roots problems, 
 now for :math:`n = 8`, [BF94]_.
 While for :math:`n = 7` all roots are isolated points,
 there is a one dimensional solution curve of cyclic 8-roots of degree 144.
@@ -419,7 +476,7 @@ Consider a graph :math:`G` whose edges each have a given length. A graph embeddi
 
 Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration s.t. vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
-``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing from the solutions of previous systems to find new one.
+``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new one.
 
 In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
 
@@ -428,8 +485,7 @@ Model Selection & Parameter Inference
 
 It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities. These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, that can be explored numerically via polynomial homotopy continuation.
 
-
-Parameter hopotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
+Parameter homotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
 
 
 Critical Point Computation
