@@ -696,6 +696,73 @@ DNA: [1bna]_
    {'atom2_index': 2, 'atom1_index': 3}]
 
 
+Comparisons with Existing Tools
+---------------------------------
+
+GenomeDiagram
+=============
+
+The GenomeDiagram package [Geno]_ provides a way to visualize
+comparative genomics data in a circular format (see
+Fig. :ref:`genomediagram`); supported chart types include line charts,
+bar graphs, and heatmaps.
+
+GenomeDiagram can additionally export high-quality vector diagrams of
+the charts that are generated, which can in turn be used in research
+papers. It can be used in conjunction with the BioPython module to
+interface with GenBank.
+
+.. figure:: genomediagram.jpeg
+   :scale: 50%
+
+   An example of a circular diagram that can be generated with
+   GenomeDiagram. Source: [Geno]_ :label:`genomediagram`
+
+GenomeDiagram shares many similarities with the `Circos`_ component;
+both are circular representations of genomic data, and both support
+multiple "tracks", or traces, of multiple chart types. The key
+difference between the two, and the advantage of Dash Circos, is
+flexibility and interactivity; Dash Circos supports click and hover
+interactions, and GenomeDiagram does not.
+
+Furthermore, Dash Circos can be interactively modified with respect to
+the data that are displayed, as well as the appearance of the graph
+itself. This allows for the implementation of many useful functions,
+such as cross-filtering. Instead of needing to re-create the image
+every time a change is made, updates to the Circos component are
+reflected immediately within a Dash app.
+
+Plotly.py
+=========
+
+Plotly's Python plotting library has been used to create charts that
+are visually similar to those that are used to display certain types
+of bioinformatics data [JCViz]_. For instance, a sequence alignment
+viewer can be created with a Plotly heatmap (see Fig. :ref:`plotlyalignment`).
+
+.. figure:: plotlyalign.png
+
+   Part of a multiple sequence alignment displayed as a Plotly
+   heatmap. Source: [JCViz]_ :label:`plotlyalignment`
+
+The Dash Bio AlignmentViewer component applies a similar approach; the
+React.js component uses a plotly.js heatmap to display the
+alignment. However, the API of AlignmentViewer differs from that of
+the Plotly.py heatmap. The latter requires the user to define
+properties of the graph that don't have anything to do with the
+alignment itself. Annotations must be specified, as well as a custom
+heatmap colorscale in which the values correspond to bases and not
+percentiles of a dataset. It also requires pre-processing of the FASTA
+data, and translation into a format that can be fit into the
+parameters of a Plotly heatmap.
+
+In contrast, AlignmentViewer includes support for information that is
+specific to multiple sequence alignment. The gap and conservation, for
+instance, can be optionally included as barplots; the method of
+conservation can also be changed, and the consensus sequence can be
+displayed on the chart. Data in the form of FASTA files can be used as
+input to the component without any further processing required.
+
 Limitations and Future Directions
 ---------------------------------
 
@@ -704,7 +771,8 @@ File Formats
 
 Currently, the :code:`dash_bio_utils` package only supports specific
 data file formats (namely, PDB, FASTA, and SOFT). Additionally, most
-of the components require JSON data. Future developments to the
+of the components require JSON data as input; this file format is not
+typically provided in datasets or studies. Future developments to the
 package should therefore include processing for other important file
 formats, such as SAM/BAM/BAI for sequence alignment, or Genbank files
 (.gb).
@@ -773,6 +841,8 @@ References
 	    graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
 .. [GEOP] Gumienny, R.. *GEOparse*. URL:
 	  `<https://github.com/guma44/GEOparse>`_
+.. [JCViz] johnchase. *Visualizing bioinformatics data with
+	   plot.ly*. URL:`<https://plot.ly/~johnchase/22/visualizing-bioinformatics-data-with-plo/>`_
 .. [miR] Kneitz, B., Krebs, M., Kalogirou, C., Schubert, M., et
 	 al. *Survival in patients with high-risk prostate cancer is
 	 predicted by miR-221, which regulates proliferation,
@@ -798,6 +868,11 @@ References
 	   `<https://github.com/plotly/react-alignment-viewer>`_
 .. [Onco] Plotly. *React OncoPrint*. URL:
 	  `<https://github.com/plotly/react-oncoprint>`_
+.. [Geno] Pritchard, L., White, J. A., Birch, P. R. J.,
+	  Toth, I. K. *GenomeDiagram: a python package for the
+	  visualization of large-scale genomic data*. Bioinformatics,
+	  Volume 22, Issue 5, 1 March 2006, Pages 616–617. DOI:
+	  10.1093/bioinformatics/btk021
 .. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and
 	  Foulkes, A. S. (2015) *A guide to genome‐wide association
 	  analysis and post‐analytic interrogation.* Statist. Med.,
