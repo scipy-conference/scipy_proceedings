@@ -91,7 +91,7 @@ This access pattern contrasts with most existing existing analysis libraries, li
 By decoupling itself from file parsing and specific trajectory representations, ``freud`` can be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity.
 
 In this paper, we will show how this UNIX-like philosophy allows ``freud`` to be easily integrated with various tools for data visualization and machine learning.
-We will provide demonstrations of how ``freud`` can be integrated with using popular tools in the scientific Python ecosystem like TensorFlow, ``scikit-learn``, ``scipy``, or ``matplotlib``.
+We will provide demonstrations of how ``freud`` can be integrated with using popular tools in the scientific Python ecosystem like TensorFlow, Scikit-learn, SciPy, or Matplotlib.
 We will discuss how the analyses in ``freud`` can reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
 We will further show that ``freud`` can be used for visualizations even outside of scripting contexts, enabling a wide range of forward-thinking applications including Jupyter notebook integrations, versatile 3D renderings, and integration with various standard tools for visualizing simulation trajectories.
 These topics are aimed at computational molecular scientists and data scientists alike, with discussions of real-world usage as well as theoretical motivation and conceptual exploration.
@@ -99,26 +99,34 @@ The full source code of all examples in this paper can be found online [#]_.
 
 .. [#] https://github.com/glotzerlab/freud-examples
 
-Integrating ``freud`` with the Scientific Python Ecosystem
-----------------------------------------------------------
+Data Pipelines with ``freud``
+-----------------------------
 
-NumPy arrays are used for all inputs and outputs in ``freud`` :cite:`Oliphant2006a`.
-Because of the wide range of trajectory formats used by different simulation engines, ``freud`` does not provide a tool for parsing data directly from trajectory output files.
-A number of libraries (such as MDAnalysis and mdtraj, as well as format-specific tools like ``gsd`` [#]_ for the HOOMD-blue simulation engine) can parse trajectory files and provide their data as NumPy arrays for analysis with ``freud`` :cite:`Michaud-Agrawal2011,McGibbon2015`.
+Using ``freud`` to compute features for machine learning algorithms and visualization is straightforward because of the library's reliance on NumPy arrays :cite:`Oliphant2006a` for all inputs and outputs.
+A number of libraries can parse trajectory files and provide their data as NumPy arrays for analysis with ``freud``, such as MDAnalysis :cite:`Michaud-Agrawal2011` and MDTraj :cite:`McGibbon2015`, as well as format-specific tools like ``gsd`` [#]_ for the HOOMD-blue simulation engine.
+The universal use of NumPy arrays also enables ``freud`` analyses to be performed in compute-intensive loops without the need for file I/O.
 
 .. [#] https://github.com/glotzerlab/gsd
-
-In addition to ``freud``'s simple NumPy inputs and outputs, the library integrates other important tools from the Scientific Python ecosystem.
-The ``scipy`` package is one such example, where ``freud`` wraps ``scipy``'s behavior to compute Voronoi diagrams in periodic systems.
-Enforcing periodicity with triclinic boxes where the sides are tilted (and thus not orthogonal to one another) can be tricky, necessitating ``freud``'s implementation for determining Voronoi tesselations in both 2D and 3D periodic systems.
-
-Similarly, the mean-squared displacement module (``freud.msd``) utilizes fast Fourier transforms from ``numpy`` or ``scipy`` to accelerate its computations.
-The resulting MSD data help to identify how particles' dynamics change over time, e.g. from ballistic to diffusive.
 
 Machine Learning
 ----------------
 
-A common challenge in molecular sciences is identifying crystal structures.
+A wide range of problems in soft matter and nano-scale simulations have been addressed using machine learning techniques, such as crystal structure identification :cite:`Spellings2018`.
+In machine learning workflows, ``freud`` is used to generate features, which are then used in classification or regression models, clusterings, or dimensionality reduction methods.
+For example, this paper :cite:`Harper2019` used ``freud`` to compute the cubatic order parameter and generate high-dimensional descriptors of structural motifs, which were visualized with t-SNE dimensionality reduction :cite:`vanDerMaaten2008`.
+The library has also been used in the optimization and inverse design of pair potentials :cite:`Adorf2018`, to compute fitness functions based on the radial distribution function.
+The open-source ``pythia`` [#]_ library offers a number of descriptor sets useful for crystal structure identification, leveraging ``freud`` for fast computations.
+Included among the descriptors in ``pythia`` are quantities based on bond angles and distances, spherical harmonics, and Voronoi diagrams.
+
+Computing a set of descriptors tuned for a particular system of interest (e.g. using values of :math:`Q_l`, the higher-order Steinhardt :math:`W_l` parameters, or other order parameters provided by ``freud``) is possible with just a few lines of code.
+Descriptors like these (exemplified in the ``pythia`` library) have been used with TensorFlow for supervised and unsupervised learning of crystal structures in complex phase diagrams :cite:`Spellings2018,TensorFlow2015`.
+
+.. [#] https://github.com/glotzerlab/pythia
+
+Another useful module for machine learning with ``freud`` is ``freud.cluster``, which uses a distance-based cutoff to locate clusters of particles while accounting for 2D or 3D periodicity.
+Locating clusters in this way can identify crystalline grains, helpful for building a training set for machine learning models.
+
+To demonstrate a concrete example, we focus on a common challenge in molecular sciences: identifying crystal structures.
 Recently, several approaches have been developed that use machine learning for detecting ordered phases :cite:`Schoenholz2015,Spellings2018,Fulford2019,Steinhardt1983,Lechner2008`.
 The Steinhardt order parameters are often used as a structural fingerprint, and are derived from rotationally invariant combinations of spherical harmonics.
 In the example below, we create face-centered cubic (fcc), body-centered cubic (bcc), and simple cubic (sc) crystals with added Gaussian noise, and use Steinhardt order parameters with a support vector machine to train a simple crystal structure identifier.
@@ -134,7 +142,7 @@ This example demonstrates a simple case of how ``freud`` can be used to help sol
    :label:`fig:noisystructuresq6`
 
 In figure :ref:`fig:noisystructuresq6`, we show the distribution of :math:`Q_6` values for sample structures with 4000 particles.
-Below, we demonstrate how to compute the Steinhardt :math:`Q_6`, using neighbors found via a periodic Voronoi diagram.
+Here, we demonstrate how to compute the Steinhardt :math:`Q_6`, using neighbors found via a periodic Voronoi diagram.
 Neighbors with small facets in the Voronoi polytope are filtered out to reduce noise.
 
 .. code-block:: python
@@ -157,6 +165,7 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
 
        return features
 
+   # Input data generation is shown online
    structures = {}
    structures['fcc'] = get_features(
        fcc_box, fcc_positions, 'fcc')
@@ -208,19 +217,6 @@ The low-dimensional UMAP projection shown is generated directly from our ``panda
    The particle descriptors include :math:`Q_l` for :math:`l \in \{4, 6, 8, 10, 12\}`.
    Some noisy configurations of bcc can be confused as fcc and vice versa, which accounts for the small number of errors in the support vector machine's test classification.
    :label:`fig:steinhardtumap`
-
-Extending Crystal Descriptors
-=============================
-
-Computing a different set of descriptors tuned for a particular system of interest (e.g. by using more values of :math:`Q_l`, the higher-order Steinhardt :math:`W_l` parameters, or other order parameters provided by ``freud``) is possible with just a few more lines of code.
-For example, this paper :cite:`Harper2019` used ``freud`` to compute the cubatic order parameter and generate high-dimensional descriptors of structural motifs, which were visualized with t-SNE dimensionality reduction :cite:`vanDerMaaten2008`.
-The open-source ``pythia`` [#]_ library offers a number of descriptor sets, all of which leverage ``freud`` for their fast computations.
-These descriptors have been used with TensorFlow for supervised and unsupervised learning of crystal structures in complex phase diagrams :cite:`Spellings2018,TensorFlow2015`.
-
-.. [#] https://github.com/glotzerlab/pythia
-
-Another useful module for machine learning with ``freud`` is ``freud.cluster``, which uses a distance-based cutoff to locate clusters of particles while accounting for 2D or 3D periodicity.
-Locating clusters in this way can identify crystalline grains, helpful for building a training set for machine learning models.
 
 Visualization
 -------------
