@@ -194,11 +194,10 @@ a communication layer between the processing system and the programmable logic.
    The PYNQ processing overlay diagram. :cite:`pynq` :label:`pynq-overlay`
 
 It also contains a bitfile that will properly configure the FPGA :cite:`bitfile`.
-This bitfile is generated through the Vivado Design Suite that is provided by Xilinx.
-All the modules that are output from the `caf-verilog` package will opened by Vivado to synthesize, and then elaborate
-the design. These steps will be run for every different output from the `CAF` class.
-If a different device is to be targeted, the new target device would also be configured using this design methodology of
-creating a bitfile.
+This bitfile is generated through the Vivado Design Suite that is provided by Xilinx by loading the output modules
+from the `caf-verilog` module.
+A different bitfile must be created for every unique combination of configuration of the CAF and every device that is
+targeted.
 
 The Jupyter notebook itself is considered an interactive computing pool providing an interface to do
 computation and prototyping through a web browser. In this implementation it is meant to be an easier way for a non-hardware oriented person
@@ -221,7 +220,8 @@ Software
 Xilinx Vivado WebPack 2018.2
 ----------------------------
 
-The Vivado design tool provides a simulator along with the ability to synthesize and implement the design.
+The Vivado design tool provides a simulator along with the ability to synthesize, elaborate, and implement the design
+:cite:`vivadodesignsteps`.
 For this project, this built-in simulator was used exclusively.
 Other simulators were not chosen because the other target devices that this project seeks to be implemented on are
 likely to also be Xilinx products.
