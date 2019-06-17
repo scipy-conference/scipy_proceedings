@@ -733,23 +733,39 @@ reconsider our assumptions.
 References
 ----------
 
-.. [Army] ARMY RCO AI Signal Classification Challenge. (2018). Retrieved from www.challenge.gov/challenge/army-signal-classification-challenge/
+.. [Army] ARMY RCO AI Signal Classification Challenge. (2018). Retrieved from https://www.challenge.gov/challenge/army-signal-classification-challenge/
 .. [Mitre] MITRE Challenge. (2018). Retrieved from https://sites.mitre.org/armychallenge/
-.. [Guyon] Guyon, I., Weston, J., Barnhill, S., & Vapnik, V., “Gene selection for cancer classification using support vector machines”, Mach. Learn., 46(1-3), 389-422, 2002.
-.. [Pauluzzi] Pauluzzi, D. & Beaulieu, N., “A comparison of SNR estimation techniques for the AWGN channel,” IEEE Trans. on Comm., vol. 48, no. 10, pp. 1681–1691, Oct. 2000.
-.. [Davenport] Davenport, W., “Signal-to-noise ratios in band-pass limiters,” J. Appl. Phys., vol. 24, no. 6, pp. 720–727, June 1953.
-.. [Springett] Springett, J., & Simon, M., “An analysis of the phase coherent-incoherent output of the bandpass limiter,” IEEE Trans. on Comm. Technology, vol. 19, no. 1, pp. 42–49, Feb. 1971.
-.. [Lee] Lee, Seung Joon. "A new non-data-aided feedforward symbol timing estimator using two samples per symbol." IEEE Communications Letters 6.5 (2002): 205-207.
-.. [Geurts] Geurts, P., Ernst, D. & Wehenkel, L. Mach Learn (2006) 63: 3. https://doi.org/10.1007/s10994-006-6226-1.
-.. [NIST] NIST SP 1065: Handbook of Frequency Stability Analysis. 2008.
-.. [ModRec] Aisbett, Janet. "Automatic modulation recognition using time domain parameters." Signal Processing 13.3 (1987): 323-328.
-.. [Nandi1] Nandi, Asoke K., and Elsayed Elsayed Azzouz. "Algorithms for automatic modulation recognition of communication signals." IEEE Transactions on communications 46.4 (1998): 431-436.
-.. [Nandi2] Nandi, A. K., and Elsayed Elsayed Azzouz. "Automatic analogue modulation recognition." Signal processing 46.2 (1995): 211-222.
-.. [Azz1] Azzouz, Elsayed, and Asoke Kumar Nandi. Automatic modulation recognition of communication signals. Springer Science & Business Media, 2013.
-.. [Azz2] Azzouz, Elsayed Elsayed, and Asoke Kumar Nandi. "Modulation recognition using artificial neural networks." Automatic Modulation Recognition of Communication Signals. Springer, Boston, MA, 1996. 132-176.
-.. [Macleod] Macleod, Malcolm D. "Fast nearly ML estimation of the parameters of real or complex single tones or resolved multiple tones." IEEE Transactions on Signal processing 46.1 (1998): 141-148.
+.. [Guyon] Guyon, I., Weston, J., Barnhill, S., & Vapnik, V., “Gene selection for cancer classification using support vector machines”, Mach. Learn., 46(1-3), 389-422, 2002. `doi:10.1023/A:1012487302797`__.
+__ https://doi.org/10.1023/A:1012487302797
+.. [Pauluzzi] Pauluzzi, D. & Beaulieu, N., “A comparison of SNR estimation techniques for the AWGN channel,” IEEE Trans. on Comm., vol. 48, no. 10, pp. 1681–1691, Oct. 2000. `doi:10.1109/26.871393`__.
+__ https://doi.org/10.1109/26.871393
+.. [Davenport] Davenport, W., “Signal-to-noise ratios in band-pass limiters,” J. Appl. Phys., vol. 24, no. 6, pp. 720–727, June 1953. `doi:10.1063/1.1721365`__.
+__ https://doi.org/10.1063/1.1721365
+.. [Springett] Springett, J., & Simon, M., “An analysis of the phase coherent-incoherent output of the bandpass limiter,” IEEE Trans. on Comm. Technology, vol. 19, no. 1, pp. 42–49, Feb. 1971. `doi:10.1109/tcom.1971.1090611`__.
+__ https://doi.org/10.1109%2Ftcom.1971.1090611
+.. [Lee] Lee, Seung Joon. "A new non-data-aided feedforward symbol timing estimator using two samples per symbol." IEEE Communications Letters 6.5 (2002): 205-207. `doi:10.1109/4234.1001665`__.
+__ https://doi.org/10.1109%2F4234.1001665
+.. [Geurts] Geurts, P., Ernst, D. & Wehenkel, L. Mach Learn (2006) 63: 3. `doi:10.1007/s10994-006-6226-1`__.
+__ https://doi.org/10.1007/s10994-006-6226-1
+.. [NIST] NIST SP 1065: Handbook of Frequency Stability Analysis. 2008. `doi:10.6028/nist.sp.1065`__.
+__ https://doi.org/10.6028%2Fnist.sp.1065
+.. [ModRec] Aisbett, Janet. "Automatic modulation recognition using time domain parameters." Signal Processing 13.3 (1987): 323-328. `doi:10.1016/0165-1684(87)90130-7`__.
+__ https://doi.org/10.1016%2F0165-1684%2887%2990130-7
+.. [Nandi1] Nandi, Asoke K., and Elsayed Elsayed Azzouz. "Algorithms for automatic modulation recognition of communication signals." IEEE Transactions on communications 46.4 (1998): 431-436. `doi:10.1109/26.664294`__.
+__ https://doi.org/10.1109/26.664294
+.. [Nandi2] Nandi, A. K., and Elsayed Elsayed Azzouz. "Automatic analogue modulation recognition." Signal processing 46.2 (1995): 211-222. `doi:10.1016/0165-1684(95)00083-p`__.
+__ https://doi.org/10.1016%2F0165-1684%2895%2900083-p
+.. [Azz1] Azzouz, Elsayed, and Asoke Kumar Nandi. Automatic modulation recognition of communication signals. Springer Science & Business Media, 2013. `doi:10.1007/978-1-4757-2469-1`__.
+__ https://doi.org/10.1007%2F978-1-4757-2469-1
+.. [Azz2] Azzouz, Elsayed Elsayed, and Asoke Kumar Nandi. "Modulation recognition using artificial neural networks." Automatic Modulation Recognition of Communication Signals. Springer, Boston, MA, 1996. 132-176. `doi:10.1007/978-1-4757-2469-1_5.`__
+__ https://doi.org/10.1007%2F978-1-4757-2469-1_5
+.. [Macleod] Macleod, M.D. “Fast Nearly ML Estimation of the Parameters of Real or Complex Single Tones or Resolved Multiple Tones.” IEEE Transactions on Signal Processing 46, no. 1 (1998): 141–148. `doi:10.1109/78.651200`__.
+__ https://doi.org/10.1109%2F78.651200
 .. [Cutler] Cutler, A., & Breiman, L. (2018). Random Forests. Retrieved from https://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm#varimp
 .. [Parr] Parr, T., Turgutlu, K., Csiszar, C., & Howard, J. (2018, March 26). Beware Default Random Forest Importances. Retrieved from https://explained.ai/rf-importance/
-.. [OShea] \T. J. O’Shea, T. Roy and T. C. Clancy, "Over-the-Air Deep Learning Based Radio Signal Classification," in IEEE Journal of Selected Topics in Signal Processing, vol. 12, no. 1, pp. 168-179, Feb. 2018.
-.. [Dong] \Y. Dong et al., "Boosting Adversarial Attacks with Momentum," 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition, Salt Lake City, UT, 2018, pp. 9185-9193.
-.. [Moosavi] \S. Moosavi-Dezfooli, A. Fawzi and P. Frossard, "DeepFool: A Simple and Accurate Method to Fool Deep Neural Networks," 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Las Vegas, NV, 2016, pp. 2574-2582.
+.. [OShea] \T. J. O’Shea, T. Roy and T. C. Clancy, "Over-the-Air Deep Learning Based Radio Signal Classification," in IEEE Journal of Selected Topics in Signal Processing, vol. 12, no. 1, pp. 168-179, Feb. 2018. `doi:10.1109/JSTSP.2018.2797022`__.
+__ https://doi.org/10.1109/JSTSP.2018.2797022
+.. [Dong] Dong, Yinpeng, Fangzhou Liao, Tianyu Pang, Hang Su, Jun Zhu, Xiaolin Hu, and Jianguo Li. “Boosting Adversarial Attacks with Momentum.” 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition (June 2018). `doi:10.1109/cvpr.2018.00957`__.
+__ https://doi.org/10.1109%2Fcvpr.2018.00957
+.. [Moosavi] Moosavi-Dezfooli, Seyed-Mohsen, Alhussein Fawzi, and Pascal Frossard. “DeepFool: A Simple and Accurate Method to Fool Deep Neural Networks.” 2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR) (June 2016). `doi:10.1109/cvpr.2016.282`__.
+__ https://doi.org/10.1109%2Fcvpr.2016.282
