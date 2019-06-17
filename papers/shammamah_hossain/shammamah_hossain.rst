@@ -720,7 +720,7 @@ References
 .. [PDB] Berman, H.M., Westbrook, J., Feng, Z., Gilliland, G., Bhat,
 	 T.N., Weissig, H., Shindyalov, I.N., Bourne, P.E.. (2000) *The
 	 Protein Data Bank*. Nucleic Acids Research, 28: 235-242.
-	 URL:`<https://www.rcsb.org>`_
+	 URL:`<https://www.rcsb.org>`_ DOI: 10.1093/nar/28.1.235.
 .. [Man] Bhatnagar, Samir. *manhattanly*. URL:
 	 `<https://github.com/sahirbhatnagar/manhattanly>`_
 .. [cBio] Cerami, E., Gao, J., Dogrusoz, U., Gross, B. E.,
@@ -729,20 +729,22 @@ References
 	  Goldberg, A. P., Sander, C., Schultz, N..*The cBio Cancer
 	  Genomics Portal: An Open Platform for Exploring
 	  Multidimensional Cancer Genomics Data*. Cancer Discov May 1
-	  2012 (2) (5) 401-404; DOI: 10.1158/2159-8290.CD-12-0095
+	  2012 (2) (5) 401-404; DOI: 10.1158/2159-8290.CD-12-0095.
 .. [BioP] Cock, P. J. A., Antao, T., Chang, J. T., Chapman, B. A.,
 	  Cox, C. J., Dalke, A., Friedberg, I., Hamelryck, T., Kauff,
 	  F., Wilczynski, B., de Hoon, M. J. L.. *Biopython: freely
 	  available Python tools for computational molecular biology
 	  and bioinformatics*. Bioinformatics 25 (11), 1422–1423
-	  (2009). `<https://doi.org/10.1093/bioinformatics/btp163>`_
+	  (2009). DOI: 10.1093/bioinformatics/btp163.
 .. [1bna] PDB ID: 1BNA. Drew, H.R., Wing, R.M., Takano, T., Broka, C.,
 	  Tanaka, S., Itakura, K., Dickerson, R.E.. *Structure of a
 	  B-DNA dodecamer: conformation and dynamics.*. (1981)
-	  Proc.Natl.Acad.Sci.USA 78: 2179-2183
+	  Proc.Natl.Acad.Sci.USA 78: 2179-2183. DOI:
+	  10.1073/pnas.78.4.2179.
 .. [GEO] Edgar, R., Domrachev, M., Lash, A.E.. *Gene Expression
 	 Omnibus: NCBI gene expression and hybridization array data
-	 repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10
+	 repository*. Nucleic Acids Res. 2002 Jan 1;30(1):207-10. DOI:
+	 10.1093/nar/30.1.207.
 .. [SeqV] FlyBase. *react-sequence-viewer*. URL:
    `<https://github.com/FlyBase/react-sequence-viewer>`_
 .. [Ghr] Genome Reference Consortium. *Genome Reference Consortium
@@ -752,7 +754,7 @@ References
 	   B., Sumer, S. O., Sun, Y., Jacobsen, A.,
 	   Sinha, R. *Integrative Analysis of Complex Cancer Genomics
 	   and Clinical Profiles Using the cBioPortal*. Science
-	   Signaling Apr 2 2013
+	   Signaling Apr 2 2013. DOI: 10.1126/scisignal.2004088.
 .. [Circos] Girault, N.. *circosJS: d3 library to build circular
 	    graphs*. URL: `<https://github.com/nicgirault/circosJS>`_
 .. [GEOP] Gumienny, R.. *GEOparse*. URL:
@@ -762,11 +764,14 @@ References
 	 predicted by miR-221, which regulates proliferation,
 	 apoptosis, and invasion of prostate cancer cells by
 	 inhibiting IRF2 and SOCS3*. Cancer Res 2014 May
-	 1;74(9):2591-603. PMID: 24607843
+	 1;74(9):2591-603. PMID: 24607843. DOI:
+	 10.1158/0008-5472.CAN-13-1606.
 .. [KR09] Kuner, R., Muley, T., Meister, M., Ruschhaupt, M. et
 	  al. *Global gene expression analysis reveals specific
 	  patterns of cell junctions in non-small cell lung cancer
-	  subtypes.* Lung Cancer 2009 Jan;63(1):32-8. PMID: 18486272
+	  subtypes.* Lung Cancer 2009
+	  Jan;63(1):32-8. PMID: 18486272. DOI:
+	  10.1016/j.lungcan.2008.03.033.
 .. [NCBI] The NCBI C++ Toolkit (https://ncbi.github.io/cxx-toolkit/)
 	  by the National Center for Biotechnology Information,
 	  U.S. *Fasta Sequence ID Format*. National Library of
@@ -782,7 +787,7 @@ References
 .. [ER15] Reed, E., Nunez, S., Kulp, D., Qian, J., Reilly, M. P., and
 	  Foulkes, A. S. (2015) *A guide to genome‐wide association
 	  analysis and post‐analytic interrogation.* Statist. Med.,
-	  34: 3769– 3792. doi: 10.1002/sim.6605.
+	  34: 3769– 3792. DOI: 10.1002/sim.6605.
 .. [Muts] Schroeder, M.. *Mutations Needle Plot
 	  (muts-needle-plot)*. URL:
 	  `<https://github.com/bbglab/muts-needle-plot>`_
@@ -791,7 +796,8 @@ References
 .. [Speck] Terrell, R.. *Speck*. URL:
 	   `<https://github.com/wwwtyro/speck>`_
 .. [UniP] The UniProt Consortium. *UniProt: a worldwide hub of protein
-	  knowledge*. Nucleic Acids Res. 47: D506-515 (2019)
+	  knowledge*. Nucleic Acids Res. 47: D506-515 (2019). DOI:
+	  10.1093/nar/gky1049.
 .. [Ideo] Weitz, E.. *ideogram: Chromosome visualization with
 	  JavaScript*. URL: `<https://github.com/eweitz/ideogram>`_
 .. [PdbF] wwwPDB. *Protein Data Bank Contents Guide: Atomic Coordinate
