@@ -519,22 +519,37 @@ reconsider our assumptions.
 References
 ----------
 
-.. [Army] ARMY RCO AI Signal Classification Challenge. (2018). Retrieved from www.challenge.gov/challenge/army-signal-classification-challenge/
+.. [Army] ARMY RCO AI Signal Classification Challenge. (2018). Retrieved from https://www.challenge.gov/challenge/army-signal-classification-challenge/
 .. [Mitre] MITRE Challenge. (2018). Retrieved from https://sites.mitre.org/armychallenge/
-.. [Nandi1] Nandi, Asoke K., and Elsayed Elsayed Azzouz. "Algorithms for automatic modulation recognition of communication signals." IEEE Transactions on communications 46.4 (1998): 431-436.
-.. [Nandi2] Nandi, A. K., and Elsayed Elsayed Azzouz. "Automatic analogue modulation recognition." Signal processing 46.2 (1995): 211-222.
-.. [Azz1] Azzouz, Elsayed, and Asoke Kumar Nandi. Automatic modulation recognition of communication signals. Springer Science & Business Media, 2013.
-.. [Azz2] Azzouz, Elsayed Elsayed, and Asoke Kumar Nandi. "Modulation recognition using artificial neural networks." Automatic Modulation Recognition of Communication Signals. Springer, Boston, MA, 1996. 132-176.
-.. [OShea1] \T. J. O’Shea, J. Corgan, "Convolutional radio modulation recognition networks", CoRR abs/1602.04105, 2016.
-.. [OShea2] \T. J. O’Shea, T. Roy and T. C. Clancy. "Over-the-Air Deep Learning Based Radio Signal Classification," in IEEE Journal of Selected Topics in Signal Processing, vol. 12, no. 1, pp. 168-179, Feb. 2018.
-.. [ResNet1] He, K., Zhang, X., Ren, S., Sun, J. "Deep residual learning for image recognition", CVPR arXiv:1512.03385. 2016.
-.. [ResNet2] He, K., Zhang, X., Ren, S., Sun, J. "Identity Mappings in Deep Residual Networks", CVPR arXiv:1603.05027. 2016.
-.. [ResNeXt] Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He. "Aggregated Residual Transformations for Deep Neural Networks", CVPR arXiv:1611.05431. 2017.
-.. [Xception] François Chollet. "Xception: Deep Learning with Depthwise Separable Convolutions", CVPR arXiv:1610.02357. 2016.
-.. [DenseNet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. "Deep Residual Learning for Image Recognition", CVPR arXiv:1512.03385. 2015.
-.. [Guo] Chuan Guo, Geoff Pleiss, Yu Sun, Kilian Q. Weinberger. "On Calibration of Modern Neural Networks", ML arXiv:1706.04599. ICML 2017.
+.. [Nandi1] Nandi, Asoke K., and Elsayed Elsayed Azzouz. "Algorithms for automatic modulation recognition of communication signals." IEEE Transactions on communications 46.4 (1998): 431-436. `doi:10.1109/26.664294`__.
+__ https://doi.org/10.1109/26.664294
+.. [Nandi2] Nandi, A. K., and Elsayed Elsayed Azzouz. "Automatic analogue modulation recognition." Signal processing 46.2 (1995): 211-222. `doi:10.1016/0165-1684(95)00083-p`__.
+__ https://doi.org/10.1016%2F0165-1684%2895%2900083-p
+.. [Azz1] Azzouz, Elsayed, and Asoke Kumar Nandi. Automatic modulation recognition of communication signals. Springer Science & Business Media, 2013. `doi:10.1007/978-1-4757-2469-1`__.
+__ https://doi.org/10.1007%2F978-1-4757-2469-1
+.. [Azz2] Azzouz, Elsayed Elsayed, and Asoke Kumar Nandi. "Modulation recognition using artificial neural networks." Automatic Modulation Recognition of Communication Signals. Springer, Boston, MA, 1996. 132-176. `doi:10.1007/978-1-4757-2469-1_5.`__
+__ https://doi.org/10.1007%2F978-1-4757-2469-1_5
+.. [OShea1] \T. J. O’Shea, J. Corgan, "Convolutional radio modulation recognition networks", CoRR abs/1602.04105, 2016. `doi:10.1007/978-3-319-44188-7_16`__.
+__ https://doi.org/10.1007/978-3-319-44188-7_16
+.. [OShea2] \T. J. O’Shea, T. Roy and T. C. Clancy. "Over-the-Air Deep Learning Based Radio Signal Classification," in IEEE Journal of Selected Topics in Signal Processing, vol. 12, no. 1, pp. 168-179, Feb. 2018. `doi:10.1109/JSTSP.2018.2797022.`__
+__ https://doi.org/10.1109/JSTSP.2018.2797022
+.. [ResNet1] He, K., Zhang, X., Ren, S., Sun, J. "Deep residual learning for image recognition", CVPR `arXiv:1512.03385`__. 2016.
+__ https://arxiv.org/abs/1512.03385v1
+.. [ResNet2] He, K., Zhang, X., Ren, S., Sun, J. "Identity Mappings in Deep Residual Networks", CVPR `arXiv:1603.05027`__. 2016.
+__ https://arxiv.org/abs/1603.05027v3
+.. [ResNeXt] Saining Xie, Ross Girshick, Piotr Dollár, Zhuowen Tu, Kaiming He. "Aggregated Residual Transformations for Deep Neural Networks", CVPR `arXiv:1611.05431`__. 2017.
+__ https://arxiv.org/abs/1611.05431
+.. [Xception] François Chollet. "Xception: Deep Learning with Depthwise Separable Convolutions", CVPR `arXiv:1610.02357`__. 2016.
+__ https://arxiv.org/abs/1610.02357
+.. [DenseNet] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun. "Deep Residual Learning for Image Recognition", CVPR `arXiv:1512.03385`__. 2015.
+__ https://arxiv.org/abs/1512.03385
+.. [Guo] Chuan Guo, Geoff Pleiss, Yu Sun, Kilian Q. Weinberger. "On Calibration of Modern Neural Networks", ML `arXiv:1706.04599`__. ICML 2017.
+__ https://arxiv.org/abs/1706.04599
 .. [SKCal] Probability calibration. Retreived from https://scikit-learn.org/stable/modules/calibration.html
-.. [TPOT1] Randal S. Olson, Ryan J. Urbanowicz, Peter C. Andrews, Nicole A. Lavender, La Creis Kidd, and Jason H. Moore (2016). Automating biomedical data science through tree-based pipeline optimization. Applications of Evolutionary Computation, pages 123-137.
+.. [TPOT1] Randal S. Olson, Ryan J. Urbanowicz, Peter C. Andrews, Nicole A. Lavender, La Creis Kidd, and Jason H. Moore (2016). Automating biomedical data science through tree-based pipeline optimization. Applications of Evolutionary Computation, pages 123-137. 2016. `doi:10.1007/978-3-319-31204-0_9`__.
+__ https://doi.org/10.1007%2F978-3-319-31204-0_9
 .. [TPOT2] TPOT, a Python Automated Machine Learning tool. Retrieved from https://epistasislab.github.io/tpot/
-.. [Aisbett] Aisbett, Janet. "Automatic modulation recognition using time domain parameters." Signal Processing 13.3 (1987): 323-328.
-.. [Ioffe] Sergey Ioffe, Christian Szegedy. "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift". ML arXiv:1502.03167. 2015
+.. [Aisbett] Aisbett, Janet. "Automatic modulation recognition using time domain parameters." Signal Processing 13.3 (1987): 323-328. `doi:10.1016/0165-1684(87)90130-7`__.
+__ https://doi.org/10.1016%2F0165-1684%2887%2990130-7
+.. [Ioffe] Sergey Ioffe, Christian Szegedy. "Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift". ML `arXiv:1502.03167`__. 2015.
+__ https://arxiv.org/abs/1502.03167
