@@ -283,8 +283,7 @@ them in as integer values.
 Complex Multiply
 ----------------
 
-The operation of performing a complex multiply requires the use of complex numbers with real and imaginary parts. As an
-example for why this module is necessary, an example of frequency shifting a signal is presented.
+As an example for why this module is necessary, an example of frequency shifting a signal is presented.
 In Fig. :ref:`cpx-multiply-neg` we have a negative frequency signal, and a positive frequency signal shown in Fig.
 :ref:`cpx-multiply-pos`.
 Both of these signals are shown in a spectral density plot, with both sampling frequencies normalized to a value of 1
@@ -309,14 +308,7 @@ frequency signals. This is what is expected. This method is what is used to shif
 Signed multiplication in Verilog can be done by specifying the signed data type. Any multiply of two numbers of the same
 size requires twice the number of bits in the result :cite:`tumbush-signed`. However, in this project the need for different
 size operands arises. In order to make sure the result is correct a lot of time was spent on this module. This module
-takes in two complex numbers and performs a pipelined multiplication on the data. The general form of this operation is
-provided by:
-
-.. math::
-
-   (x + yi)(u + vi) = (xu - yv) + (xv + yu)i
-
-Where :math:`x + yi` is the first complex signal and :math:`u + vi` is the next complex signal.
+takes in two complex numbers and performs a pipelined multiplication on the data.
 Before the result is provided to the master, the result is truncated.
 It should be noted that no timing constraint violations were encountered during the implementation.
 
