@@ -225,18 +225,20 @@ Locating clusters in this way can identify crystalline grains, helpful for build
 Visualization
 -------------
 
-Many analyses performed by the ``freud`` library can be readily plotted.
-Some analyses like the radial distribution function or correlation functions return data that is binned as a one-dimensional histogram -- these are usually best visualized with a line graph via ``matplotlib.pyplot.plot``, with the bin locations and bin counts given by properties of the compute object.
-Other classes provide multi-dimensional histograms, like the Gaussian density or Potential of Mean Force and Torque, which can be plotted with ``matplotlib.pyplot.imshow``.
+Many analyses performed by the ``freud`` library provide a ``plot(ax=None)`` method (new in v1.2.0) that allows their computed quantities to be visualized with ``matplotlib``.
+Additionally, these plottable analyses offer IPython representations, allowing Jupyter notebooks to render a graph such as a radial distribution function $g(r)$ just by calling the compute object at the end of a cell.
+Analyses like the radial distribution function or correlation functions return data that is binned as a one-dimensional histogram -- these are visualized with a line graph via ``matplotlib.pyplot.plot``, with the bin locations and bin counts given by properties of the compute object.
+Other classes provide multi-dimensional histograms, like the Gaussian density or Potential of Mean Force and Torque, which are plotted with ``matplotlib.pyplot.imshow``.
 
 The most complex case for visualization is that of per-particle properties, which also comprises some of the most useful features in ``freud``.
 Quantities that are computed on a per-particle level can be continuous (e.g. Steinhardt order parameters) or discrete (e.g. clustering, where the integer value corresponds to a unique cluster ID).
-Continuous quantities can be plotted as a histogram, but typically the most helpful visualizations use these quantities with a color map assigned to particles in a two- or three-dimensional view of the system itself.
+Continuous quantities can be plotted as a histogram over particles, but typically the most helpful visualizations use these quantities with a color map assigned to particles in a two- or three-dimensional view of the system itself.
 For such particle visualizations, several open-source tools exist that interoperate well with ``freud``.
-Below are examples of how one can integrate ``freud`` with ``plato`` [#]_, ``fresnel`` [#]_, and OVITO :cite:`Stukowski2010`.
+Below are examples of how one can integrate ``freud`` with ``plato`` [#]_, ``fresnel`` [#]_, and OVITO [#]_ :cite:`Stukowski2010`.
 
 .. [#] https://github.com/glotzerlab/plato
 .. [#] https://github.com/glotzerlab/fresnel
+.. [#] https://ovito.org/
 
 plato
 =====
@@ -283,12 +285,100 @@ The result is shown in figure :ref:`fig:platopythreejs`.
 fresnel
 =======
 
+.. figure:: fresnel_tetrahedra.png
+   :align: center
+   :scale: 20 %
+
+   Hard tetrahedra colored by local density, path traced with ``fresnel``.
+   :label:`fig:fresneltetrahedra`
+
+
 ``fresnel`` [#]_ is a GPU-accelerated ray tracer designed for particle simulations, with customizable material types and scene lighting, as well as support for a set of common anisotropic shapes.
 Its feature set is especially well suited for publication-quality graphics.
 Its use of ray tracing also means that an image's rendering time scales with the image size, instead of the number of particles -- a desirable feature for extremely large simulations.
-An example of ``fresnel`` integration is available online.
+An example of how to integrate ``fresnel`` is shown below and rendered in figure :ref:`fig:fresneltetrahedra`.
 
 .. [#] https://github.com/glotzerlab/fresnel
+
+.. code-block:: python
+
+    # Generate a snapshot of tetrahedra using HOOMD-blue
+    import hoomd
+    import hoomd.hpmc
+    hoomd.context.initialize('')
+
+    # Create an 8x8x8 simple cubic lattice
+    system = hoomd.init.create_lattice(
+        unitcell=hoomd.lattice.sc(a=1.5), n=8)
+
+    # Create tetrahedra, configure HPMC integrator
+    mc = hoomd.hpmc.integrate.convex_polyhedron(seed=123)
+    mc.set_params(d=0.2, a=0.1)
+    vertices = [( 0.5, 0.5, 0.5),
+                (-0.5,-0.5, 0.5),
+                (-0.5, 0.5,-0.5),
+                ( 0.5,-0.5,-0.5)]
+    mc.shape_param.set('A', vertices=vertices)
+
+    # Run for 5,000 steps
+    hoomd.run(5e3)
+    snap = system.take_snapshot()
+
+    # Import analysis & visualization libraries
+    import fresnel
+    import freud
+    import matplotlib.cm
+    from matplotlib.colors import Normalize
+    import numpy as np
+    device = fresnel.Device()
+
+    # Compute local density and prepare geometry
+    poly_info = \
+        fresnel.util.convex_polyhedron_from_vertices(
+            vertices)
+    positions = snap.particles.position
+    orientations = snap.particles.orientation
+    box = freud.box.Box.from_box(snap.box)
+    ld = freud.density.LocalDensity(3.0, 1.0, 1.0)
+    ld.compute(box, positions)
+    colors = matplotlib.cm.viridis(
+        Normalize()(ld.density))
+    box_points = np.asarray([
+        box.makeCoordinates(
+            [[0, 0, 0], [0, 0, 0], [0, 0, 0],
+             [1, 1, 0], [1, 1, 0], [1, 1, 0],
+             [0, 1, 1], [0, 1, 1], [0, 1, 1],
+             [1, 0, 1], [1, 0, 1], [1, 0, 1]]),
+        box.makeCoordinates(
+            [[1, 0, 0], [0, 1, 0], [0, 0, 1],
+             [1, 0, 0], [0, 1, 0], [1, 1, 1],
+             [1, 1, 1], [0, 1, 0], [0, 0, 1],
+             [0, 0, 1], [1, 1, 1], [1, 0, 0]])])
+
+    # Create scene
+    scene = fresnel.Scene(device)
+    geometry = fresnel.geometry.ConvexPolyhedron(
+        scene, poly_info,
+        position=positions,
+        orientation=orientations,
+        color=fresnel.color.linear(colors))
+    geometry.material = fresnel.material.Material(
+        color=fresnel.color.linear([0.25, 0.5, 0.9]),
+        roughness=0.8, primitive_color_mix=1.0)
+    geometry.outline_width = 0.05
+    box_geometry = fresnel.geometry.Cylinder(
+        scene, points=box_points.swapaxes(0, 1))
+    box_geometry.radius[:] = 0.1
+    box_geometry.color[:] = np.tile(
+        [0, 0, 0], (12, 2, 1))
+    box_geometry.material.primitive_color_mix = 1.0
+    scene.camera = fresnel.camera.fit(
+        scene, view='isometric', margin=0.1)
+    scene.lights = fresnel.light.lightbox()
+
+    # Path trace the scene
+    fresnel.pathtrace(scene, light_samples=64,
+                      w=800, h=800)
 
 OVITO
 =====
