@@ -699,7 +699,7 @@ Incomplete units of code
 
 By default, Codebraid requires that code be divided into complete units.
 For example, a code block must contain an entire loop, or an entire
-function definition. Codebraid’s build-in code execution system can
+function definition. Codebraid’s built-in code execution system can
 detect the presence of an incomplete unit of code because it interferes
 with stdout and stderr processing, in which case Codebraid will raise an
 error. Attempting to run an incomplete unit of code with a Jupyter
@@ -755,8 +755,8 @@ this possible. For example,
    ```
 
 Sessions work with both Codebraid’s code execution system and Jupyter
-kernels; for example, it is possible to use multiple python3 kernels
-within a single document.
+kernels. For example, it is possible to have multiple independent
+sessions with a ``python3`` kernel within a single document.
 
 All sessions are currently executed in serial. In the future, support
 for parallel execution may be added.
