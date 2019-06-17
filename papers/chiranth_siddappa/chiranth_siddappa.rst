@@ -195,6 +195,8 @@ a communication layer between the processing system and the programmable logic.
 
 It also contains a bitfile that will properly configure the FPGA :cite:`bitfile`.
 This bitfile is generated through the Vivado Design Suite that is provided by Xilinx.
+All the modules that are output from the `caf-verilog` package will opened by Vivado to synthesize, and then elaborate
+the design. These steps will be run for every different output from the `CAF` class.
 If a different device is to be targeted, the new target device would also be configured using this design methodology of
 creating a bitfile.
 
