@@ -584,9 +584,7 @@ Fig. :ref:`caf-block-diag`. This module is a slave to a master as it is being dr
 
    Block diagram of a CAF implementation with three frequencies. :label:`caf-block-diag`
 
-An error was found in the way the cross correlation was being calculated during this part of the project that cause
-major rework and investigation to be done. This was because the last integration was missing from the calculation.
-The proper results of a frequency shifted correlation is shown in Fig. :ref:`caf-test-shift`, and an autocorrelation is
+The results of a frequency shifted correlation is shown in Fig. :ref:`caf-test-shift`, and an autocorrelation is
 shown in Fig. :ref:`caf-test-signal`.
 We see that in Fig. :ref:`caf-test-shift` there is no peak. This is because two orthogonal signals should not have any
 correlation energy.
