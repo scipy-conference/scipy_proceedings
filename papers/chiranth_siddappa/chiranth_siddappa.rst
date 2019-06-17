@@ -283,25 +283,16 @@ Complex Multiply
 ----------------
 
 As an example for why this module is necessary, an example of frequency shifting a signal is presented.
-In Fig. :ref:`cpx-multiply-neg` we have a negative frequency signal, and a positive frequency signal shown in Fig.
-:ref:`cpx-multiply-pos`.
-Both of these signals are shown in a spectral density plot, with both sampling frequencies normalized to a value of 1
+In Fig. :ref:`cpx-multiply-all` we have two inputs: a positive frequency signal on top, and a negative frequency signal
+in the middle. The output is shown in the bottom plot.
+All of these signals are shown in a spectral density plot, with both sampling frequencies normalized to a value of 1
 for presentation.
-The output of the complex multiply is shown in Fig. :ref:`cpx-multiply-out`.
 What we see is that the resulting spectrum has a signal at a frequency of the sum of the two negative and positive
 frequency signals. This is what is expected. This method is what is used to shift the captured signal for the CAF.
 
-.. figure:: cpx_multiply_neg.png
+.. figure:: cpx_multiply_all.png
 
-   Negative frequency signal as an input to the CPX Multiply Verilog module. :label:`cpx-multiply-neg`
-
-.. figure:: cpx_multiply_pos.png
-
-   Positive frequency signal as an input to the CPX Multiply Verilog module. :label:`cpx-multiply-pos`
-
-.. figure:: cpx_multiply_module_out.png
-
-   Output of the CPX Multiply Verilog module. :label:`cpx-multiply-out`
+   Inputs (top and middle) and output (bottom) of the CPX Multiply Verilog module. :label:`cpx-multiply-all`
 
 
 Signed multiplication in Verilog can be done by specifying the signed data type. Any multiply of two numbers of the same
