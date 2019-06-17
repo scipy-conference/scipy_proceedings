@@ -375,7 +375,7 @@ stdout, stderr, and rich output (for Jupyter kernels).
 Creating examples
 =================
 
-The example in the previous section was actually itself an example of
+The example in the earlier section was actually itself an example of
 using Codebraid. This paper was written in Markdown, then converted to
 reStructuredText via Codebraid with Pandoc. Finally, the
 reStructuredText was converted through LaTeX to PDF via
@@ -386,14 +386,14 @@ copy-paste capabilities, it was possible to display the code and output
 at other locations in the document programmatically.
 
 The rendered output of the two code blocks is shown at the very end of
-the last section. This is where the code blocks were actually entered in
-the original Markdown source of this paper, and where they were
+the earlier section. This is where the code blocks were actually entered
+in the original Markdown source of this paper, and where they were
 executed.
 
 Recall that both blocks were given names, ``part1`` and ``part2``. This
 enables any combination of their Markdown source, code, stdout, and
 stderr to be inserted elsewhere in the document. At the beginning of the
-previous section, the Markdown source for the blocks was shown. This was
+earlier section, the Markdown source for the blocks was shown. This was
 accomplished via
 
 .. code:: text
@@ -409,7 +409,7 @@ command is copying content from elsewhere, it is used with an empty code
 block. Alternatively, a single empty line or a single line containing an
 underscore is allowed as a placeholder.
 
-Toward the end of the last section, the verbatim output of the
+Toward the end of the earlier section, the verbatim output of the
 Codebraid-processed Markdown was displayed. This was inserted in a
 similar manner:
 
@@ -423,7 +423,7 @@ just to be explicit. The other option is ``raw``, or interpreted as
 Markdown.
 
 Of course, all Markdown shown in the current section was itself inserted
-programmatically using ``cb.paste`` to copy from the previous section.
+programmatically using ``cb.paste`` to copy from the earlier section.
 However, to prevent infinite recursion, the next section is not devoted
 to explaining how this was accomplished.
 
