@@ -91,7 +91,7 @@ was used to achieve objectives (ii). Those implementations are going to create a
 
 The problem can be reformulated as a binary prediction task. Given a consumer, 
 the history of their previous purchases and a product with their price history, 
-to predict whether or not the given product will be included in the grocery list of the consumer. 
+predict whether or not the given product will be included in the grocery list of the consumer. 
 Our approach adapted a variety of generative models to existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
