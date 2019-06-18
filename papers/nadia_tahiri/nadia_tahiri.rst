@@ -485,7 +485,7 @@ Figure :ref:`violon` (b) indicates that all shops follow the same profiles in th
 Figure :ref:`productsF1` and Table 3 indicates that the values of :math:`F_1` metric to all products. 
 Some products are easy to predict with the value of :math:`F_1` > 0 and 
 some products are so hard to predict with the value of :math:`F_1` < 0. 
-For the first group, they are products includes on restriction regime 
+For the first group, they are products included on restriction regimes 
 such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry acai greek yogurt`.
 
 .. raw:: latex
