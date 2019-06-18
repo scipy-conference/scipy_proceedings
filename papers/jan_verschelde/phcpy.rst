@@ -119,7 +119,8 @@ CGI Scripting
 
 In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
 
-MySQLdb [MSDB]__ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+
 
 As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance [JUPH]_.
 
@@ -170,7 +171,8 @@ One consequence of the Jupyter notebook's rich output is the possibility of rich
 
 The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
 
-This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
+
 
 .. figure:: ./apollonius.png
   :figclass: h
@@ -472,7 +474,7 @@ Rigid Graph Theory
 
 The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_.
 
-Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given length :math:`d_{e}`. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`\mathbf{d}`. An upper bound over all :math:`d` and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices, unless the upper bound is infinite) can be computed. In particular, the Cayley-Menger matrix of :math:`\mathbf{d}` [LLMM14]_ (i.e. the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, proportional to the mixed volume. Certain of its square subsystems characterize the mechanism in terms of these bounds on unique mechanisms.
+Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given length :math:`d_{e}`. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`\mathbf{d}`.  An upper bound over all :math:`d` and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices, unless the upper bound is infinite) can be computed. In particular, the Cayley-Menger matrix of :math:`\mathbf{d}` [LLMM14]_ (i.e., the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, proportional to the mixed volume.   Certain of its square subsystems characterize the mechanism in terms of these bounds on unique mechanisms.
 
 Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
@@ -497,7 +499,8 @@ A remarkable variety of systems of constraint also take on polynomial form, or c
 Algebraic Kinematics
 --------------------
 
-We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms, e.g.,:
+
+We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.,:
 
 * Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility);
 * Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock);
@@ -670,6 +673,9 @@ References
            The Journal of Software for Algebra and Geometry: Macaulay2,
            5:20-25, 2013.  DOI 10.2140/jsag.2013.5.20.
 
+.. [IPYW] *ipywidgets: Interactive HTML Widgets*
+    https://github.com/jupyter-widgets/ipywidgets
+
 .. [SymPy] D. Joyner, O. :math:`~\!` |Ccaron| ert |iacute| k, 
            A. Meurer, and B. E. Granger.
            *Open source computer algebra systems: SymPy.*
@@ -715,6 +721,10 @@ References
            Theoretical Computer Science, 359(1-3):111-122, 2006.
            DOI 10.1016/j.tcs.2006.02.018.
 
+.. [LLMM14] L. Liberti, C. Lavor, N. Maculan, and A. Mucherino.
+    *Euclidean Distance Geometry and Applications.*
+    SIAM Review 56, no. 1 (January 2014): 3–69. DOI 10.1137/120875909
+
 .. [LML14] L. Liberti, B. Masson, J. Lee, C. Lavor, and A. Mucherino.
            *On the number of realizations of certain henneberg graphs
            arising in protein conformation.*  
@@ -741,6 +751,9 @@ References
 
 .. [NAG4M2] *Branch NAG of M2 repository.*
             https://github.com/antonleykin/M2/tree/NAG
+
+.. [MSDB] *MySQLdb 1.2.4b4 documentation*
+   https://mysqlclient.readthedocs.io/
 
 .. [PHCPY] *phcpy 0.9.5 documentation*
            http://homepages.math.uic.edu/~jan/phcpy_doc_html/
@@ -775,6 +788,9 @@ References
            edited by A. Dickenstein and I. Z. Emiris, pages 301-337, 
            Springer-Verlag 2005.
            DOI 10.1007/3-540-27357-3_8.
+
+.. [SymPyDocs] *SymPy 1.3 documentation.*
+           https://docs.sympy.org/latest/index.html
 
 .. [Ver99] J. Verschelde.
            *Algorithm 795: PHCpack: A general-purpose solver for polynomial
@@ -819,4 +835,3 @@ References
 
 .. [MSDB] *MySQLdb 1.2.4b4 documentation*
    https://mysqlclient.readthedocs.io/
-
