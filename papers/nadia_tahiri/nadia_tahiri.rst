@@ -190,7 +190,7 @@ and output with a self-recurrent connection neuron [HS97]_.
 
 Figure :ref:`lstm` illustrates the proposed architecture and summarizes the detail involved in the structure. 
 
-A combined RNN and CNN trained to predict the probability that a user will order a product at each timestep. 
+A combined RNN and CNN was trained to predict the probability that a user will order a product at each timestep. 
 The RNN is a single-layer LSTM and the CNN is a 6-layer causal CNN with dilated convolutions.
 The last layer is a fully-connected layer which makes the classification.
 The CNN was used as a feature extractor and the LSTM network as a sequential learning.
