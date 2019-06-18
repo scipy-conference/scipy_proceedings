@@ -51,7 +51,7 @@ we looked for the partitioning of consumers into classes that will group
 them efficiently based on purchases made. 
 Then, this classification was used in the prediction stage. 
 Since the real consumer data contains thousands of individual articles; we focus primarily on product categories. 
-The principal component analysis (linear and polynomial PCA [Jol11]_) was first computed to visualize the initial data  
+A principal component analysis (linear and polynomial PCA [Jol11]_) was first computed to visualize the initial data  
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means [Jai10]_ and X-means [PM+00]_, 
 made it possible to determine the number of classes of consumers, as well as their distribution by class.
