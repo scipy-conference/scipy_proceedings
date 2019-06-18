@@ -74,7 +74,7 @@ i. Predict which groceries the consumer will want to buy again or will try to bu
 ii. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
 
 This list also includes recommendations regarding the optimal quantity of every product suggested and the store(s)  
-where these products are to be purchased. We also calculated the consumer's optimal weekly commute 
+where these products are to be purchased. We also calculate the consumer's optimal weekly commute 
 using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
