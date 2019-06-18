@@ -245,7 +245,7 @@ Moreover, in this study, we denote frequently missing data in the history grocer
 
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
 The final model has two neural networks and a GBT classifier.
-Once trained, it was used to predict in real time what would be the basket consumer, based on the history of purchases and current promotions in neighboring stores.
+Once trained, it was used to predict in real time what would be the consumer's basket, based on their history of purchases and current promotions in neighboring stores.
 Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size (see Figure :ref:`lstm`).
 
 First level model (feature extraction)
