@@ -691,9 +691,6 @@ References
 .. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
            https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
 
-.. [SymPyDocs] *SymPy 1.3 documentation.*
-           https://docs.sympy.org/latest/index.html
-
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
            S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing,
