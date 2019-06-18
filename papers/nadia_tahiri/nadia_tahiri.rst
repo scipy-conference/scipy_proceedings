@@ -87,7 +87,7 @@ based on dynamic programming, was used to achieve objective (i),
 which will be of major interest to retailers and distributors. 
 A deep learning method [Gir16]_, based on Recurrent Neuron Networks (RNN) 
 and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library [Gir16]_, 
-was used to achieve objectives (ii). Those implementations are going to create a significant interest to consumers.
+were used to achieve objective (ii). Those implementations can provide significant benefits to consumers.
 
 The problem can be reformulated as a binary prediction task. Given a consumer, 
 the history of their previous purchases and a product with their price history, 
