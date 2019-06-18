@@ -761,7 +761,10 @@ specific to multiple sequence alignment. The gap and conservation, for
 instance, can be optionally included as barplots; the method of
 conservation can also be changed, and the consensus sequence can be
 displayed on the chart. Data in the form of FASTA files can be used as
-input to the component without any further processing required.
+input to the component without any further processing required. This
+allows for the programmer to more easily interact with the component,
+as it removes the need to restructure data to fit a specific format
+for visualization.
 
 Limitations and Future Directions
 ---------------------------------
