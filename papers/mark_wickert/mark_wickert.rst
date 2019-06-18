@@ -67,14 +67,17 @@ their perception of where a sound source is located.
 3D Geometry
 ===========
 
-To produce a synthesized 3D audio sound field starts with a geometry. The center of the frame is the subjects head 
-where the *mid-sagittal* or vertical *median plane* intersects the line connecting the left and right ear canals. 
-For a given source location :math:`(x,y,z) = (x_1,-x_2,x_3)` pointing at the the origin, we transform from rectangular 
-coordinates to cylindrical coordinates as shown in Figure :ref:`CYLIND`. This transformation is motivated by 
-[Fitzpatrick]_, and will be explained more fully in a later section.
-Note also the second rectangular coordinate frame mention above is the notation used by CIPIC. Later we discuss 
-how we transform between the cylindrical coordinates and the CIPIC interaural-polar coordinate system (IPCS), 
-in order to use the HRIR filter sets in the simulator.
+To produce a synthesized 3D audio sound field, we start with a geometry where the center of the frame is 
+the intersection between the subjects  *mid-sagittal* or vertical *median plane* and the line 
+connecting the left and right ear canals. This is referred to as being *head-centered*. The coordinate 
+systems used in this paper are shown in Figure :ref:`CYLIND`. 
+The primary head-centered system has cartesian coordinates labeled :math:`(x,y,z)` and associated cylindrical 
+coordinates :math:`(r_{xy},\phi_\text{az},h_y)` (black labels in Figure :ref:`CYLIND`). A secondary head-centered 
+system, used by CIPIC, has cartesian coordinates labeled :math:`(x_1,x_2,x_3)` and associated spherical 
+coordinates :math:`(r,\phi,\theta)` (purple labels in Figure :ref:`CYLIND`). Note both systems are right-handed. 
+The first system is motivated by [Fitzpatrick]_, and will be explained more fully in a later section.
+The second system is referred to by CIPIC as the interaural-polar coordinate system (IPCS), which is used 
+to index into the HRIR filter pairs which produce the right and left audio outputs.
 
 
 .. figure:: 3D_Coordinates.pdf
@@ -82,11 +85,11 @@ in order to use the HRIR filter sets in the simulator.
    :align: center
    :figclass: htb
 
-   The head-centered cylindrical coordinate system used in the 3D audio simulator compared with the 
-   CIPIC IPCS. :label:`CYLIND`
+   The primary head-centered coordinate system, :math:`(x,y,z)`, used in the 3D audio simulator, along with the 
+   secondary system :math:`(x_1,x_2,x_3)` IPCS used by CIPIC. :label:`CYLIND`
 
-The 3D audio rendering provided by the simulator developed in this paper, relies on the 1250 
-HRIR measurements were taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
+The 3D audio rendering provided by the simulator developed in this paper relies on the 1250 
+HRIR measurements taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
 A total of 45 subjects are contained in the CIPIC HRIR database, both human and the mannequin *Kemar* [CIPICHRTF]_. 
 For subject 165 in particular, the left-right channel HRIR is shown in Figure :ref:`HRIR`, for a particular 
 cylindrical coordinate system triple :math:`(r_{xz},h_y,\phi_{az})`. Figure :ref:`HRIR` in particular illustrates 
@@ -662,7 +665,7 @@ implementation shown below:
 
 .. code-block:: python
 
-   def freqr2imp(H,win_att = 100,fs=1):
+   def freqr2imp(H,win_att = 100):
        """
        Transform the frequency response of a real 
        impulse response system back to the impulse 
@@ -679,6 +682,35 @@ implementation shown below:
                       win_att,sym=True)[Nmax:]
            h = np.fft.irfft(H*W)
        return h
+
+
+   def compute_HRIR(theta_deg, r = 1.0, R = 0.0875, 
+             fs = 44100, roll_factor = 20):
+       """
+       HRIR for rigid sphere at incidence angle
+       theta_deg, distance r and radius R using 
+       sampingrate fs Hz
+       
+       Mark Wickert, June 2019
+       """
+       fs = 44100
+       Nfft = 2**10
+       df = fs/Nfft
+       f = np.arange(df,fs/2,df)
+       df = fs/Nfft
+       f = np.arange(df,fs/2,df)
+       HRTF = np.zeros(len(f),dtype=np.complex128)
+       for k, fk in enumerate(f):
+           HRTF[k] = HRTF_sph(theta_deg,fk,r=r,R = R)
+       # Set DC value to 1
+       HRTF = np.hstack(([1],HRTF))
+       f = np.hstack(([0],f))
+       
+       HRIR = freqr2imp(HRTF,win_att=100)
+       # Scale HRIR so the area is unity
+       G0 = 1/(np.sum(HRIR)*1/fs)
+       t = np.arange(len(HRIR))/fs*1000
+       return t, np.roll(G0*HRIR,roll_factor)
 
 We choose :math:`\Delta f` to obtain at least 100 samples on :math:`[0,f_s/2]`, so that when 
 :code:`np.fft.irfft()` is employed, the full real impulse response length will be 200. The 
@@ -701,14 +733,24 @@ Building a CIPIC Database Entry
 
 To finally create a CIPIC-like database entry for a spherical head, we have to relate the angle of 
 incidence in the HRTF expression (:ref:`dudahrtf`) 
-to the angle of arrival of an audio source on the CIPIC 1 m sphere, relative to right and left ear 
+to the angle of arrival of an audio source on the CIPIC 1 m sphere of Figure :ref:`CIPICLOC`, 
+relative to right and left ear 
 canal entries at :math:`\phi_{az} = \pm 80^\circ` (a set back of :math:`\pm 100^\circ` from the front). 
 The problem is depicted in Figure :ref:`ANGLESOLVE`. This problem turns out to be a familiar 
-analytic geometry problem, that of finding the angle between two 3D vectors passing through the origin.
+analytic geometry problem, that of finding the angle between two 3D vectors passing through the origin, 
+e.g.
 
-Based on our earlier discussion 
-of the CIPIC format, we need to perform the calculation for 1250 azimuth and elevation angle combinations, 
-with :math:`r = 1\text{ m}`.
+.. math::
+   :label: incidentAngle1
+   :type: eqnarray
+
+   \theta_{\vec{S}\vec{R}} &=& \cos^{-1}\left(\frac{\vec{S}\cdot \vec{R}}{|\vec{S}|\, |\vec{R}|}\right) 
+   = x_S\sin\phi_R + z_S\cos\phi_R
+
+where :math:`\vec{R}` is the vector to the right ear canal with angle :math:`\phi_R`, assumed to lie 
+in the horizontal plane, and :math:`\vec{S}` is the vector to the source of length 1 m with primary 
+coordinate system components :math:`(x_S, y_S, z_S)` as defined in Figure :ref:`CYLIND`. A similar relation 
+holds for the left ear canal entry.
 
 .. figure:: Angle_Between_Source_Ear_Canal.pdf
    :scale: 50%
@@ -716,22 +758,23 @@ with :math:`r = 1\text{ m}`.
    :figclass: htb
 
    Solving for the angle between the source and a ray extending from the right and left ears, also 
-   showing a set back of the ear canal by :math:`\pm 100^\circ` from the from the font of the head. :label:`ANGLESOLVE`
+   showing a set back of the ear canal by :math:`\pm 100^\circ` from the from the font of the head. 
+   :label:`ANGLESOLVE`
 
 
-These HRIRs have been used to create a CIPC-like database entry (:code:`subject_200`) in code.
+We need to fill the database using the CIPIC angle of arrival source grid using the secondary (ICPS) 
+coordinate system. The coordinate conversion between :math:`x_S` and :math:`z_s` and the IPCS is 
+:math:`x_s = r\sin\theta_\text{CIPIC}` and :math:`z_s = -r\cos\phi_\text{CIPIC}\cos\theta_\text{CIPIC}`, 
+so with :math:`r=1` the angle of incidence formula (:ref:`incidentAngle1`) in final form is
 
-Finally putting this all together, code was written in a Jupyter notebook to generate a CIPIC-like database entry, 
-which requires the use of :code:`scipy.io` to write a MATLAB :code:`mat` file, e.g., :code:`subject_200` is a 
-spherical head, with no ears (pinna), containing two HRIR arrays:
+.. math::
+   :label: incidentAngle2
 
-.. code-block:: python
+   \theta_{\vec{S}\vec{R}} = \sin\theta_\text{CIPIC}\sin\phi_R - \cos\phi_\text{CIPIC}\cos\theta_\text{CIPIC}\cos\phi_R
 
-   io.whosmat('subject_200/hrir_final.mat')
+and similarly for the left ear canal.
 
-   [('hrir_l', (25, 50, 200), 'double'), 
-    ('hrir_r', (25, 50, 200), 'double')]
-
+The steps for producing the HRIR filter pair over 1250 IPCS angle pairs is summarized in Figure :ref:`HRIRCALCBLOCK`.
 
 .. figure:: HRIR_Calc_BlockDiagram.pdf
    :scale: 65%
@@ -741,9 +784,19 @@ spherical head, with no ears (pinna), containing two HRIR arrays:
    A block diagram depicting the steps involved in calculating the HRIR right and left channel impulse responses, 
    :math:`h_R[n]` and :math:`h_L[n]`, starting from CIPIC source angles, :math:`(\theta_\text{CIPIC}, \phi_\text{CIPIC})`, 
    ear canal set-back angles, :math:`(\phi_R, \phi_L)`, and the sphere radius :math:`R`. :label:`HRIRCALCBLOCK`
+
+Finally putting this all together, code was written in a Jupyter notebook to generate a CIPIC-like database entry, 
+using :code:`scipy.io` to write a MATLAB :code:`mat` file, e.g., :code:`subject_200` is a 
+spherical head, with no ears (pinna), containing two HRIR arrays:
+
+.. code-block:: python
+
+   io.whosmat('subject_200/hrir_final.mat')
+
+   [('hrir_l', (25, 50, 200), 'double'), 
+    ('hrir_r', (25, 50, 200), 'double')]
  
 An example HRIR plot, similar to Figure :ref:`HRIR`, is shown in Figure :ref:`HRIR875`. 
-
 
 .. figure:: HRIR_example_sphere_R875.pdf
    :scale: 50%
