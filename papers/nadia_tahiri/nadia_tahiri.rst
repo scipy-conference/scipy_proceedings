@@ -239,7 +239,7 @@ learners to boost performance; this makes it a good candidate model for predicti
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple fashion and be applied in both classification and 
-regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]. 
+regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]_. 
 Finally, missing values in the collected data can be easily managed.
 Moreover, in this study, we denote frequently missing data in the history grocery list by the user, that is why this technique is more adapted.
 
