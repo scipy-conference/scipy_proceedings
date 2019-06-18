@@ -121,6 +121,7 @@ In our first design of a web interface to ``phc``, we developed a collection of 
 
 MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
+
 As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance [JUPH]_.
 
 JupyterHub
@@ -171,6 +172,7 @@ One consequence of the Jupyter notebook's rich output is the possibility of rich
 The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
 
 This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
+
 
 .. figure:: ./apollonius.png
   :figclass: h
@@ -485,8 +487,7 @@ Model Selection & Parameter Inference
 
 It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities. These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, that can be explored numerically via polynomial homotopy continuation.
 
-Parameter homotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
-
+Parameter hopotopies were used by Gross et al. [GHR16]_ to perform model selection on a mammalian phosphorylation pathway, determining whether the kinase acts processively (i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo. In doing so, they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
 
 Critical Point Computation
 --------------------------
@@ -497,6 +498,7 @@ A remarkable variety of systems of constraint also take on polynomial form, or c
 
 Algebraic Kinematics
 --------------------
+
 
 We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.,:
 
@@ -689,6 +691,9 @@ References
 .. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
            https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
 
+.. [SymPyDocs] *SymPy 1.3 documentation.*
+           https://docs.sympy.org/latest/index.html
+
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
            S. Corlay, P. Ivanov, D. Avila, S. Abdalla, C. Willing,
@@ -744,12 +749,11 @@ References
           Journal of Mechanical Design, 112(4): 544-550, 1990.
           DOI 10.1115/1.2912644.
 
+.. [NAG4M2] *Branch NAG of M2 repository.*
+            https://github.com/antonleykin/M2/tree/NAG
+
 .. [MSDB] *MySQLdb 1.2.4b4 documentation*
    https://mysqlclient.readthedocs.io/
-
-
-.. [NAG4M2] Branch NAG of M2 repository.
-            https://github.com/antonleykin/M2/tree/NAG
 
 .. [PHCPY] *phcpy 0.9.5 documentation*
            http://homepages.math.uic.edu/~jan/phcpy_doc_html/
@@ -817,7 +821,17 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-.. [WS11] C. W. Wampler and A. J. Sommese.
-          *Numerical algebraic geometry and algebraic kinematics.*
-          Acta Numerica, 20, pages 469–567. 2011.
-          DOI: 10.1017/S0962492911000067.
+.. [WS11] C. W. Wampler & A. J. Sommese
+    *Numerical algebraic geometry and algebraic kinematics.*
+    Acta Numerica, 20, pages 469–567. 2011.
+    DOI: 10.1017/S0962492911000067.
+
+.. [LLMM14] L. Liberti, C. Lavor, N. Maculan, and A. Mucherino.
+    *Euclidean Distance Geometry and Applications.*
+    SIAM Review 56, no. 1 (January 2014): 3–69. DOI 10.1137/120875909
+
+.. [IPYW] *ipywidgets: Interactive HTML Widgets*
+    https://github.com/jupyter-widgets/ipywidgets
+
+.. [MSDB] *MySQLdb 1.2.4b4 documentation*
+   https://mysqlclient.readthedocs.io/
