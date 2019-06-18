@@ -83,7 +83,7 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized commercial traveler algorithm. :label:`circuit`
 
 :math:`F_1` statistics maximization algorithm [NCLC12]_, 
-based on dynamic programming, was used to achieve objectives (i), 
+based on dynamic programming, was used to achieve objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method [Gir16]_, based on Recurrent Neuron Networks (RNN) 
 and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library [Gir16]_, 
