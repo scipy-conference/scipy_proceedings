@@ -573,7 +573,7 @@ is that in addition to the purchase history we also consider the
 promotions, possible purchases in different stores and distance
 between these stores and the consumer's home.
 
-In future work, we plan to predict the next grocery shop and to include the product quantities on the basket proposed to the user. 
+In future work, we plan to predict the grocery store that will visited next, and to include the product quantities in the basket proposed to the user. 
 We suggest also to ponderate the algorithm with the distance between shop and user home coordinates to the promotion rate.
 
 Acknowledgments
