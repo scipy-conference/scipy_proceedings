@@ -65,7 +65,7 @@ made it possible to determine the number of classes of consumers, as well as the
 
 .. [#] MyGroceryTour.ca
 
-Secondly, we developed a statistical model to predict which products previously purchased will be 
+Second, we developed a statistical model to predict which products previously purchased will be 
 in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
 information on current promotions in stores in the given region, and commodity price statistics, 
 we developed a machine learning model that is able to:
