@@ -143,7 +143,7 @@ For :math:`store\_id`, we started with an initial store and changed stores based
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
 Finally, we increased the `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution [AAR+18]_.
-We observed that the baskets generated to follow the same distribution that original basket in term of the basket size 
+We observed that the sizes of the generated baskets follow the same distribution as the original basket sizes
 (see Figure :ref:`orderfrequency`).
 
 .. figure:: figures/order_frequency.png
