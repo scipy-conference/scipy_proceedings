@@ -46,6 +46,17 @@ and data persists in a session without temporary files.
 This also makes PHCpack accessible from Jupyter notebooks, 
 including a JupyterHub server available online [Pascal]_.
 
+Polynomial homotopy continuation combines the application of 
+homotopy and continuation methods to solve polynomial systems.
+Continuation methods extend the convergence of Newton's method 
+from local to global.  A homotopy is a family of polynomial systems
+where one of the variables is considered as a parameter.
+Homotopy methods connect a given system to a start system 
+with known solutions.  
+Numerical continuation methods track the solution paths,
+depending on the parameter, originating at the known solutions 
+to the solutions of the given system.
+
 The meaning of *solving* evolved from computing approximations, to
 all isolated solutions, to the numerical irreducible decomposition
 of the solution set.  The numerical irreducible decomposition includes
