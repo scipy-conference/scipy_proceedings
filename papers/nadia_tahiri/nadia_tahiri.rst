@@ -472,7 +472,7 @@ In fact, this result can identify consumer buying behavior.
 :math:`F_1` in Figure :ref:`violon` (a) shows that the profiles of all promotions are similar. 
 In the perspective of this work, it will be interesting to include weight base on statistic value. 
 In Statistic Canada - 2017, only 5% of all promotions are more than 50% promoted, 95% of all promotions are less than 50%. 
-Weightings are needed to give the model more robust. 
+Weightings are needed to make the model more robust. 
 Figure :ref:`violon` (b) indicates that all shops follow the same profiles in the model. 
 
 .. figure:: figures/violon.png
