@@ -33,7 +33,7 @@ With the recent expansion of machine learning methods, including deep learning,
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
 and cost-effective shopping baskets, as well as to propose consumers tools 
 to create smart personalized weekly shopping lists based on historical purchases, 
-known preferences and specials available in local stores.
+known preferences, and specials available in local stores.
 
 A grocery list is an integral part of the shopping experience for many consumers. 
 The lists serve, for example, as a reminder, a budgeting tool, 
