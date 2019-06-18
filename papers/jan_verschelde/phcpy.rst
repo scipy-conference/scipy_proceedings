@@ -80,7 +80,7 @@ mention its application to their computations.
 * Roots of Alexander polynomials [CD18]_.
 * Critical points of equilibrium problems [SWM16]_.
 
-phcpy is in ongoing development. At the time of writing, 
+The package phcpy is in ongoing development. At the time of writing, 
 this paper is based on version 0.9.5 of phcpy,
 whereas version 0.1.5 was current at the time of [Ver14]_.
 An example of these changes is that the software described in [SVW03]_ 
@@ -139,6 +139,7 @@ JupyterHub
 ----------
 
 With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
+Our server is available for public use, after creating a free account.
 
 For the user administration, we refreshed our first web interface.
 A custom JupyterHub Authenticator connects to the existing MySQL database
@@ -235,7 +236,8 @@ three classes of polynomial systems:
 1. *dense polynomial systems*
 
    A polynomial of degree *d* can be deformed into a product of *d*
-   linear polynomials.  If we do this for all polynomials in the system,
+   linear polynomials.  
+   If we do this for all polynomials in the system (as in [VC93]_),
    then the solutions of the deformed system are solutions of linear systems.
    Continuation methods track the paths originating at the solutions of
    the deformed system to the given problem.
@@ -247,7 +249,8 @@ three classes of polynomial systems:
    that appear are called Newton polytopes.  The mixed volume of the
    tuple of Newton polytopes associated with the system is a sharp upper
    bound for the number of isolated solutions.
-   Polyhedral homotopies start a solutions of systems that are sparser
+   Polyhedral homotopies ([HS95]_, [VVC94]_)
+   start at solutions of systems that are sparser than the given system
    and extend those solutions to the solutions of the given problem.
 
 3. *Schubert problems in enumerative geometry*
@@ -257,7 +260,7 @@ three classes of polynomial systems:
    Homotopies to solve geometric problems move the input data
    to special position, solve the special configuration, and then
    deform the solutions of the special problem into those of the
-   original problem.
+   original problem.  Such homotopies were introduced in [HSS98]_.
 
 All classes of homotopies share the introduction of random constants.
 
@@ -684,6 +687,16 @@ References
            The Journal of Software for Algebra and Geometry: Macaulay2,
            5:20-25, 2013.  DOI 10.2140/jsag.2013.5.20.
 
+.. [HS95] B. Huber and B. Sturmfels.
+          *A polyhedral method for solving sparse polynomial systems.*
+          Mathematics of Computation, 64(212):1541-1555, 1995.
+          DOI 10.1090/S0025-5718-1995-1297471-4.
+
+.. [HSS98] B. Huber, F. Sottile, and B. Sturmfels.
+           *Numerical Schubert calculus.*
+           Journal of Symbolic Computation, 26(6):767-788, 1998.
+           DOI 10.1006/jsco.1998.0239.
+
 .. [IPYW] *ipywidgets: Interactive HTML Widgets*
     https://github.com/jupyter-widgets/ipywidgets
 
@@ -822,6 +835,17 @@ References
            volume 11077 of Lecture Notes in Computer Science, pages 361-375.
            Springer-Verlag, 2018.
            DOI 10.1007/978-3-319-99639-4_25.
+
+.. [VC93] J. Verschelde and R. Cools.
+          *Symbolic homotopy construction.*
+          Applicable Algebra in Engineering, Communication and Computing,
+          4(3):169-183, 1993.  DOI 10.1007/BF01202036.
+
+.. [VVC94] J. Verschelde, P. Verlinden, and R. Cools.
+           *Homotopies exploiting Newton polytopes for solving sparse
+           polynomial systems.*
+           SIAM Journal on Numerical Analysis 31(3):915-930, 1994.
+           DOI 10.1137/0731049.
 
 .. [VY15] J. Verschelde and X. Yu.
           *Polynomial Homotopy Continuation on GPUs.*
