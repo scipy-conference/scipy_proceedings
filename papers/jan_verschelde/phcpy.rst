@@ -825,13 +825,3 @@ References
     *Numerical algebraic geometry and algebraic kinematics.*
     Acta Numerica, 20, pages 469–567. 2011.
     DOI: 10.1017/S0962492911000067.
-
-.. [LLMM14] L. Liberti, C. Lavor, N. Maculan, and A. Mucherino.
-    *Euclidean Distance Geometry and Applications.*
-    SIAM Review 56, no. 1 (January 2014): 3–69. DOI 10.1137/120875909
-
-.. [IPYW] *ipywidgets: Interactive HTML Widgets*
-    https://github.com/jupyter-widgets/ipywidgets
-
-.. [MSDB] *MySQLdb 1.2.4b4 documentation*
-   https://mysqlclient.readthedocs.io/
