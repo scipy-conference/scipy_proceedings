@@ -119,9 +119,9 @@ CGI Scripting
 
 In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
 
-MySLQdb does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+MySQLdb [MSDB]__ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
-As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance.
+As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance [JUPH]_.
 
 JupyterHub
 ----------
@@ -133,7 +133,7 @@ A custom JupyterHub Authenticator connects to the existing MySQL database
 and triggers a SystemdSpawner that isolates the actions of users to separate 
 processes and logins in generic home folders.
 
-The account management prompts by e-mail were hooked to new Tornado Handler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each pathway serves HTML seamlessly with the JupyterHub interface, with their forms living in new extensions of its Jinja templates.
+The account management prompts by e-mail were hooked to new Tornado RequestHandler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each such route serves HTML forms seamlessly with the JupyterHub interface, by extending its Jinja templates.
 
 
 Code Snippets
@@ -160,17 +160,17 @@ The code snippets from these tutorials are available in our JupyterHub deploymen
    sols = solve(f)
    for sol in sols: print(sol)
 
-The first solution of the given trinomial can be read off as (0.48613… + 0.0i, 0.34258… - 0.0i), where the imaginary part of x_0 is exactly zero, and that of y_0 negligibly small. Programmatically, these can be accessed using either ``solve(f, dictionary_output=True)``, or equivalently by parsing strings through ``[phcpy.solutions.strsol2dict(sol) for sol in solve(f)]``.
+The first solution of the given trinomial can be read as (0.48613… + 0.0i, 0.34258… - 0.0i), where the imaginary part of x_0 is exactly zero, and that of y_0 negligibly small. Programmatically, these can be accessed using either ``solve(f, dictionary_output=True)``, or equivalently by parsing strings through ``[phcpy.solutions.strsol2dict(sol) for sol in solve(f)]``.
 
 
 Direct Manipulation
 -------------------
 
-One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
+One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets [IPYW]_ and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
 The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
 
-This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations), which we solved interactively (Fig. :ref:`apollonius`). In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
 
 .. figure:: ./apollonius.png
   :figclass: h
@@ -266,7 +266,7 @@ the same time, by how much can we improve the solution using *p* processors?
 
 We illustrate the quality up question on the cyclic 7-roots
 benchmark problem [BF91]_.
-The online SymPy documentation uses the cyclic 4-roots problem
+The online SymPy documentation [SymPyDocs]_ uses the cyclic 4-roots problem
 to illustrate its ``nonlinsolve`` method.
 
 The function defined below returns the elapsed performance 
@@ -344,10 +344,10 @@ double double to quad double precision in about the same time.
 
 The data in Table :ref:`perfcyc7parallel` is 
 visualized in Fig.  :ref:`figqualityup`.
-The interpolation allows to estimate running times for a number
+The interpolation allows us to estimate running times for a number
 of tasks different from the measured run times.
 To answer the original quality up question, 
-One could interpolate between the sizes of working precision 
+one could interpolate between the sizes of working precision 
 to answer the following quality up question.
 If we can afford to spend the same time as on one path tracking task,
 then how many extra decimal places can we gain with *p* path tracking tasks?
@@ -470,35 +470,34 @@ We consider some examples from various literatures which apply polynomial constr
 Rigid Graph Theory
 ------------------
 
-The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_ (which we gloss in this section).
+The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_.
 
-Consider a graph :math:`G` whose edges each have a given length. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`d`, and an upper bound over :math:`d` (for which it isn't infinite) and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices) can be computed. In particular, the Cayley-Menger matrix of :math:`d` (the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, including square subsystems (where the # variables equals the # equations).
+Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given length :math:`d_{e}`. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`\mathbf{d}`. An upper bound over all :math:`d` and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices, unless the upper bound is infinite) can be computed. In particular, the Cayley-Menger matrix of :math:`\mathbf{d}` [LLMM14]_ (i.e. the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, proportional to the mixed volume. Certain of its square subsystems characterize the mechanism in terms of these bounds on unique mechanisms.
 
-Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration s.t. vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
+Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
 ``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new one.
 
-In fact, many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by ``DBSCAN`` in ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in e.g. SageMath.
+Many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by the ``DBSCAN`` class of ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in, for instance, SageMath.
 
 Model Selection & Parameter Inference
 --------------------------------------
 
 It is often useful to know all the steady states of a biological network, as represented by a nonlinear system of ordinary differential equations, with some conserved quantities. These two lists of polynomials (from rates of change of form :math:`\dot{x} = p(x)`, by letting :math:`\dot{x}=0`; and from conservation laws of form :math:`c = \sum{x_i}` by subtracting :math:`c` from both sides) have a zero set which is a steady-state variety, that can be explored numerically via polynomial homotopy continuation.
 
-Parameter homotopies were used by Gross et. al [GHR16]_ to perform model selection on a mammalian phosphorylation pathway (to distinguish whether the kinase acts processively, i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo, and they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
-
+Parameter hopotopies were used by Gross et al. [GHR16]_ to perform model selection on a mammalian phosphorylation pathway, determining whether the kinase acts processively (i.e. adding more than one phosphate at once, which it does not in vitro). Their analysis validated experimental work showing processivity in vivo. In doing so, they obtained >50x speedup over non-parameter homotopies (for running times in minutes, not hours) on systems tracking 20 paths.
 
 Critical Point Computation
 --------------------------
 
-Polynomial homotopy continuation has also been adapted to the field of chemical engineering to locate critical points of multicomponent mixtures [SWM16]_, i.e. temperature and pressure satisfying a multi-phase equilibrium.
+Polynomial homotopy continuation has also been adapted to the field of chemical engineering to locate critical points of multicomponent mixtures [SWM16]_, i.e., temperature and pressure satisfying a multi-phase equilibrium.
 
 A remarkable variety of systems of constraint also take on polynomial form, or can be approximated thereby, in various sciences. Diverse problems in the analysis of belief propagation (in graphical models) [KMC18]_, hyperbolic conservation laws (in PDEs) [HHS13]_, and vacuum moduli spaces (in supersymmetric field theory) [HHM13]_ have been addressed using polynomial homotopy continuation.
 
 Algebraic Kinematics
 --------------------
 
-We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.:
+We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms, e.g.,:
 
 * Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility);
 * Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock);
@@ -530,7 +529,7 @@ Continuation homotopies were developed as a substitute for algebraic elimination
 Systems Biology
 ---------------
 
-Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might investigate:
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might seek to:
 
 * determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states;
 * evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state;
@@ -680,8 +679,14 @@ References
 .. [Pascal] *JupyterHub deployment of phcpy.*
             Website, accessed May 2019. 2017.  https://phcpack.org
 
+.. [JUPH] *JupyterHub 0.7.2 documentation*
+   https://jupyterhub.readthedocs.io/en/0.7.2/index.html
+
 .. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
            https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
+
+.. [SymPyDocs] *SymPy 1.3 documentation.*
+           https://docs.sympy.org/latest/index.html
 
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
@@ -734,7 +739,7 @@ References
           Journal of Mechanical Design, 112(4): 544-550, 1990.
           DOI 10.1115/1.2912644.
 
-.. [NAG4M2] Branch NAG of M2 repository.
+.. [NAG4M2] *Branch NAG of M2 repository.*
             https://github.com/antonleykin/M2/tree/NAG
 
 .. [PHCPY] *phcpy 0.9.5 documentation*
@@ -800,7 +805,18 @@ References
           pages 130-133, 2015. 
           DOI 10.1145/2893803.2893810.
 
-.. [WS11] C. W. Wampler and A. J. Sommese.
-          *Numerical algebraic geometry and algebraic kinematics.*
-          Acta Numerica, 20, pages 469–567. 2011.
-          DOI: 10.1017/S0962492911000067.
+.. [WS11] C. W. Wampler & A. J. Sommese
+    *Numerical algebraic geometry and algebraic kinematics.*
+    Acta Numerica, 20, pages 469–567. 2011.
+    DOI: 10.1017/S0962492911000067.
+
+.. [LLMM14] L. Liberti, C. Lavor, N. Maculan, and A. Mucherino.
+    *Euclidean Distance Geometry and Applications.*
+    SIAM Review 56, no. 1 (January 2014): 3–69. DOI 10.1137/120875909
+
+.. [IPYW] *ipywidgets: Interactive HTML Widgets*
+    https://github.com/jupyter-widgets/ipywidgets
+
+.. [MSDB] *MySQLdb 1.2.4b4 documentation*
+   https://mysqlclient.readthedocs.io/
+
