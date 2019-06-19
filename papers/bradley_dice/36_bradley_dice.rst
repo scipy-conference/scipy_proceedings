@@ -75,6 +75,7 @@ Among the unique methods present in ``freud`` are the potential of mean force an
 All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
 The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
 More details on the use of ``freud`` can be found in :cite:`Ramasubramani2019`.
+In this paper, we will demonstrate that ``freud`` is uniquely well-suited to usage in the context of data pipelines for visualization and machine learning applications.
 
 
 Data Pipelines
@@ -93,8 +94,7 @@ While direct visualization of simulation trajectories can provide insights into 
 Studies of complex systems are also often aided or accelerated by a real-time coupling of simulations with on-the-fly analysis.
 This simultaneous usage of simulation and analysis is especially relevant because modern machine learning techniques frequently involve wrapping this pipeline entirely into a higher-level optimization problem, since the descriptors it computes can be used to, for instance, construct objective functions targeting a specific materials design problem.
 
-In this paper, we will demonstrate that ``freud`` is uniquely well-suited to usage in the context of data pipelines for visualization and machine learning applications.
-We provide demonstrations of how ``freud`` can be integrated with popular tools in the scientific Python ecosystem like TensorFlow, Scikit-learn, SciPy, or Matplotlib.
+Following, we provide demonstrations of how ``freud`` can be integrated with popular tools in the scientific Python ecosystem like TensorFlow, Scikit-learn, SciPy, or Matplotlib.
 In the context of machine learning algorithms, we will discuss how the analyses in ``freud`` can reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
 We will further show that ``freud`` can be used for visualizations even outside of scripting contexts, enabling a wide range of forward-thinking applications including Jupyter notebook integrations, versatile 3D renderings, and integration with various standard tools for visualizing simulation trajectories.
 These topics are aimed at computational molecular scientists and data scientists alike, with discussions of real-world usage as well as theoretical motivation and conceptual exploration.
@@ -182,11 +182,16 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
    from util import make_fcc
 
    def get_features(box, positions, structure):
+       # Create a Voronoi compute object
        voro = freud.voronoi.Voronoi(
            box, buff=max(box.L)/2)
        voro.computeNeighbors(positions)
+
+       # Filter the Voronoi NeighborList
        nlist = voro.nlist
        nlist.filter(nlist.weights > 0.1)
+
+       # Compute Steinhardt order parameters
        features = {}
        for l in [4, 6, 8, 10, 12]:
            ql = freud.order.LocalQl(
@@ -196,8 +201,11 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
 
        return features
 
+   # Create a freud box object and an array of 3D positions
+   # of a face-centered cubic structure with 4000 particles
    fcc_box, fcc_positions = make_fcc(
        nx=10, ny=10, nz=10, noise=0.1)
+
    structures = {}
    structures['fcc'] = get_features(
        fcc_box, fcc_positions, 'fcc')
@@ -207,12 +215,14 @@ Then, using ``pandas`` and ``scikit-learn``, we can train a support vector machi
 
 .. code-block:: python
 
+   # Build dictionary of DataFrames, labeled by structure
    structure_dfs = {}
    for i, struct in enumerate(structures):
        df = pd.DataFrame.from_dict(structures[struct])
        df['class'] = i
        structure_dfs[struct] = df
 
+   # Combine DataFrames for input to SVM
    df = pd.concat(structure_dfs.values())
    df = df.reset_index(drop=True)
 
@@ -220,6 +230,8 @@ Then, using ``pandas`` and ``scikit-learn``, we can train a support vector machi
    from sklearn.model_selection import train_test_split
    from sklearn.svm import SVC
 
+   # We use the normalized Steinhardt order parameters
+   # to predict the crystal structure
    X = df.drop('class', axis=1).values
    X = normalize(X)
    y = df['class'].values
@@ -238,6 +250,9 @@ The low-dimensional UMAP projection shown is generated directly from our ``panda
 
     from umap import UMAP
     umap = UMAP()
+
+    # Project the high-dimensional descriptors
+    # to a two dimensional manifold
     data = umap.fit_transform(df)
     plt.plot(data[:, 0], data[:, 1])
 
@@ -297,11 +312,16 @@ The result is shown in figure :ref:`fig:platopythreejs`.
    from sklearn.preprocessing import minmax_scale
 
    # snap comes from a previous HOOMD-blue simulation
+   box = freud.box.Box.from_box(snap.box)
    positions = snap.particles.position
+
+   # Compute the local density of each particle
    ld = freud.density.LocalDensity(
        r_cut=3.0, volume=1.0, diameter=1.0)
-   box = freud.box.Box.from_box(snap.box)
    ld.compute(box, positions)
+
+   # Create a scene for visualization,
+   # colored by local density
    radii = 0.5 * np.ones(len(positions))
    colors = matplotlib.cm.viridis(
        minmax_scale(ld.density))
