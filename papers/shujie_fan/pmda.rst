@@ -131,7 +131,7 @@ It also contains a growing library of ready-to-use analysis classes, thus enabli
 Methods
 =======
 
-At the core of PMDA is the idea that a common interface makes it easy to create code that can be easily parallelized, especially if the analysis can be split into independent work over multiple trajectory slices and a final step in which all data from the trajectory slices is combined.
+At the core of PMDA is the idea that a common interface makes it easy to create code that can be easily parallelized, especially if the analysis can be split into independent work over multiple trajectory slices and a final step, in which all data from the trajectory slices are combined.
 We first describe typical steps in analyzing MD trajectories and then outline the approach taken in PMDA.
 
 
@@ -156,7 +156,7 @@ An example of a more complicated reduction is the calculation of a histogram suc
 .. math::
    :label: eq:rdf
 
-   g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_i - \mathbf{r}_j| - r) \right\rangle
+   g(r) = \left\langle \frac{1}{N_a N_b} \sum_{i=1}^{N_a} \sum_{j=1}^{N_b} \delta(|\mathbf{r}_{a,i} - \mathbf{r}_{b,j}| - r) \right\rangle
 
 where the Dirac delta function counts the occurrences of particles :math:`i` and :math:`j` at distance :math:`r`.
 To compute a RDF, we could generate a time series of histograms along the spatial coordinate :math:`r`, i.e., :math:`A(t; r)` for each frame, and then perform the average in post-analysis.
@@ -195,7 +195,7 @@ The indices for the :math:`M` trajectory slices are created in such a way that t
 For each slice or block :math:`k`, the *single frame* analysis function :math:`\mathcal{A}` (:code:`_single_frame()`) is sequentially applied to all frames in the slice.
 The result, :math:`A(t)`, is *reduced*, i.e., added to the results for this block.
 For time series, :math:`A(t)` is simply appended to a list to form a partial time series for the block.
-More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the date may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the parallel RDF Eq. :ref:`eq:rdf`).
+More complicated reductions (method :code:`_reduce()`) can be implemented, for  example, the data may be histogrammed and added to a partial histogram for the block (as necessary for the implementation of the parallel RDF Eq. :ref:`eq:rdf`).
 
 
 
@@ -205,7 +205,6 @@ Implementation
 
 PMDA is written in Python and, through MDAnalysis :cite:`Gowers:2016aa`, reads trajectory data from the file system into NumPy arrays :cite:`Oliphant:2007aa, Van-Der-Walt:2011aa`.
 Dask's :code:`delayed()` function is used to build a task graph that is then executed using any of the schedulers available to Dask :cite:`Dask:2016aa`.
-We tested PMDA 0.2.1 (development version), MDAnalysis 0.20.0 (development version), Dask 1.1.1, NumPy 1.15.4.
 
 MDAnalysis combines a trajectory file (frames of coordinates that change with time) and a topology file (list of particles, their names, charges, bonds — all information that does not change with time) into a :code:`Universe(topology, trajectory)` object.
 Arbitrary selections of particles (often atoms) are made available as an :code:`AtomGroup` and the common approach in MDAnalysis is to work with these objects :cite:`Gowers:2016aa`; for instance, all coordinates of an :code:`AtomGroup` with :math:`N` atoms named :code:`protein` are accessed as the :math:`N \times 3` NumPy array :code:`protein.positions`.
@@ -264,69 +263,6 @@ For example, the default "append" reduction is
 
 In general, the :code:`ParallelAnalysisBase` controls access to instance attributes via a context manager :code:`ParallelAnalysisBase.readonly_attributes()`.
 It sets them to "read-only" for all parallel parts to prevent the common mistake to set an instance attribute in a parallel task, which breaks under parallelization as the value of an attribute in an instance in a parallel process is never communicated back to the calling process.
-
-
-Performance evaluation
-----------------------
-
-To evaluate the performance of the parallelization, two common computational tasks were tested that differ in their computational cost and represent two different requirements for data reduction.
-We computed the time series of root mean square distance after optimum superposition (RMSD) of all |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
-The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
-As a second test case we computed the oxygen-oxygen radial distribution function (RDF, Eq. :ref:`eq:rdf`) for all oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
-The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
-
-Test system, benchmarking environment, and data files
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 2,020 compute nodes in total.
-Each node in the machine contains two Intel Xeon (E5-2680v3, 12 cores, 2.5 GHz) CPUs with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
-All nodes share a Lustre parallel file system and have access to node-local 320 GB SSD scratch space.
-Jobs are run through the SLURM batch queuing system.
-Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data.
-
-The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111,815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
-The test trajectories are made available on figshare at DOI `10.6084/m9.figshare.8202149`_.
-
-.. raw:: latex
-
-   \begin{table}
-   \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}lp{0.07\tablewidth}p{0.07\tablewidth}}
-    \toprule
-    \textbf{configuration label} & \textbf{file storage} & \textbf{scheduler} & \textbf{max nodes} & \textbf{max processes} \tabularnewline
-    \midrule
-    \endfirsthead
-    Lustre-distributed-3nodes & Lustre       & \textit{distributed}       &  3        & 72         \tabularnewline
-    Lustre-distributed-6nodes & Lustre       & \textit{distributed}       &  6        & 72         \tabularnewline
-    Lustre-multiprocessing    & Lustre       & \textit{multiprocessing}   &  1        & 24         \tabularnewline
-    SSD-distributed           & SSD          & \textit{distributed}       &  1        & 24         \tabularnewline
-    SSD-multiprocessing       & SSD          & \textit{multiprocessing}   &  1        & 24         \tabularnewline
-    \bottomrule
-    \end{longtable*}
-    \caption{Testing configurations on \textit{SDSC Comet}.
-	   \textbf{max nodes} is the maximum number of nodes that were tested; the \textit{multiprocessing} scheduler is limited to a single node.
-	   \textbf{max processes} is the maximum number of processes or Dask workers that were employed.
-	   \DUrole{label}{tab:configurations}
-	   }
-   \end{table}
-
-We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared *Lustre* parallel file system or from local *SSD*) as shown in Table :ref:`tab:configurations`.
-The *multiprocessing* scheduler and the SSD restrict runs to a single node (maximum 24 CPU cores).
-With *distributed* we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
-In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
-We performed single benchmark runs for *distributed* on local SSD (*SSD-distributed*) and *multiprocessing* on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
-We plotted results for one typical benchmark run each.
-
-.. TODO: replace figures with ones where 5 repeats are averaged and error bars indicate 1 stdev --- issue #27
-
-
-Measured parameters
-~~~~~~~~~~~~~~~~~~~
-
-The :code:`ParallelAnalysisBase` class collects detailed timing information for all blocks and all frames and makes these data available in the attribute :code:`ParallelAnalysisBase.timing`:
-We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that each task :math:`k` waits until it is executed by the scheduler, the time |tuniverse| to create a new :code:`Universe` for each Dask task (which includes opening the shared trajectory and topology files and loading the topology into memory), the time |tIO| to read each frame :math:`t` in each block :math:`k` from disk into memory, the time |tcomp| to perform the computation in :code:`_single_frame()` and reduction in :code:`_reduce()`, the time |tconclude| to perform the final processing of all data in :code:`_conclude()`, and the total wall time to solution |ttotal|.
-
-We quantified the strong scaling behavior by calculating the speed-up for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(M)/t^\text{total}(1)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
-The efficiency was calculated as :math:`E(M) = S(M)/M`.
 
 	    
 
@@ -479,23 +415,89 @@ This class can be used in the same way as the class that we defined with :code:`
 
 
 
-Results and Discussion
+Performance Evaluation
 ======================
 
-In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimal superposition (*RMSD*) and the water oxygen radial distribution function (*RDF*), in different scenarios, as summarized in Table :ref:`tab:configurations`.
-We investigated a long (9000 frames) and a short trajectory (900 frames) to get a sense of to which degree parallelization remained practical.
+In order to characterize the performance of PMDA on a typical HPC machine we performed computational experiments for two different analysis tasks, the RMSD calculation after optimum superposition (*RMSD*) and the water oxygen radial distribution function (*RDF*).
+
+For the *RMSD* task we computed the time series of root mean square distance after optimum superposition (RMSD) of all 564 |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
+The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
+
+As a second test case we computed the water oxygen-oxygen radial distribution function (*RDF*, Eq. :ref:`eq:rdf`) for all oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
+The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
+
+These two common computational tasks differ in their computational cost and represent two different requirements for data reduction and thus allow us to investigate two distinct use cases.
+We investigated a long (9000 frames) and a short trajectory (900 frames) to assess to which degree parallelization remained practical. 
+The computational experiments were performed in different scenarios to assess the influence of different Dask schedulers (*multiprocessing* and *distributed*) and the role of the file storage system (shared Lustre parallel file system and local SSD), as described below and summarized in Table :ref:`tab:configurations`.
+
+
+
+Test system, benchmarking environment, and data files
+-----------------------------------------------------
+
+We tested PMDA 0.2.1, MDAnalysis 0.20.0 (development version), Dask 1.2.0, and NumPy 1.15.4 under Python 3.6.
+All packages except PMDA and MDAnalysis were installed with the `conda`_ package manager from the `conda-forge`_ channel.
+PMDA and MDAnalysis development versions were installed from source in a conda environment  with ``pip install``.
+
+Benchmarks were run on the CPU nodes of XSEDE's :cite:`XSEDE` *SDSC Comet* supercomputer, a 2 PFlop/s cluster with 1,944 Intel Haswell Standard Compute Nodes in total.
+Each node contains two Intel Xeon CPUs (E5-2680v3, 12 cores, 2.5 GHz) with 24 CPU cores per node, 128 GB DDR4 DRAM main memory, and a non-blocking fat-tree InfiniBand FDR 56 Gbps node interconnect.
+All nodes share a Lustre parallel file system and have access to node-local 320 GB SSD scratch space.
+Jobs are run through the SLURM batch queuing system.
+Our SLURM submission shell scripts  and Python benchmark scripts for *SDSC Comet* are available in the repository https://github.com/Becksteinlab/scipy2019-pmda-data and are archived under DOI `10.5281/zenodo.3228422`_. 
+
+The test data files consist of a topology file ``YiiP_system.pdb`` (with :math:`N = 111,815` atoms) and two trajectory files ``YiiP_system_9ns_center.xtc`` (Gromacs XTC format, :math:`T = 900` frames) and ``YiiP_system_90ns_center.xtc`` (Gromacs XTC format, :math:`T = 9000` frames) of the membrane protein YiiP in a lipid bilayer together with water and ions.
+The test trajectories are made available on figshare at DOI `10.6084/m9.figshare.8202149`_.
+
+.. raw:: latex
+
+   \begin{table}
+   \begin{longtable*}[c]{p{0.3\tablewidth}p{0.1\tablewidth}lp{0.07\tablewidth}p{0.07\tablewidth}}
+    \toprule
+    \textbf{configuration label} & \textbf{file storage} & \textbf{scheduler} & \textbf{max nodes} & \textbf{max processes} \tabularnewline
+    \midrule
+    \endfirsthead
+    Lustre-distributed-3nodes & Lustre       & \textit{distributed}       &  3        & 72         \tabularnewline
+    Lustre-distributed-6nodes & Lustre       & \textit{distributed}       &  6        & 72         \tabularnewline
+    Lustre-multiprocessing    & Lustre       & \textit{multiprocessing}   &  1        & 24         \tabularnewline
+    SSD-distributed           & SSD          & \textit{distributed}       &  1        & 24         \tabularnewline
+    SSD-multiprocessing       & SSD          & \textit{multiprocessing}   &  1        & 24         \tabularnewline
+    \bottomrule
+    \end{longtable*}
+    \caption{Testing configurations on \textit{SDSC Comet}.
+	   \textbf{max nodes} is the maximum number of nodes that were tested; the \textit{multiprocessing} scheduler is limited to a single node.
+	   \textbf{max processes} is the maximum number of processes or Dask workers that were employed.
+	   \DUrole{label}{tab:configurations}
+	   }
+   \end{table}
+
+We tested different combinations of Dask schedulers (*distributed*, *multiprocessing*) with different means to read the trajectory data (either from the shared Lustre parallel file system or from local SSD) as shown in Table :ref:`tab:configurations`.
+Using either the *multiprocessing* scheduler or the SSD restrict runs to a single node (maximum 24 CPU cores).
+With *distributed* (and Lustre) we tested fully utilizing all cores on a node and also only occupying half the available cores, while doubling the total number of nodes.
+In all cases the trajectory were split in as many blocks as there were available processes or Dask workers.
+We performed single benchmark runs for *distributed* on local SSD (*SSD-distributed*) and *multiprocessing* on Lustre (*Lustre-multiprocessing*) and five repeats for all other scenarios in Table :ref:`tab:configurations`.
+We plotted results for one typical benchmark run each.
+
+.. TODO: replace figures with ones where 5 repeats are averaged and error bars indicate 1 stdev --- issue #27
+
+
+Measured parameters
+-------------------
+
+The :code:`ParallelAnalysisBase` class collects detailed timing information for all blocks and all frames and makes these data available in the attribute :code:`ParallelAnalysisBase.timing`:
+We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that each task :math:`k` waits until it is executed by the scheduler, the time |tuniverse| to create a new :code:`Universe` for each Dask task (which includes opening the shared trajectory and topology files and loading the topology into memory), the time |tIO| to read each frame :math:`t` in each block :math:`k` from disk into memory, the time |tcomp| to perform the computation in :code:`_single_frame()` and reduction in :code:`_reduce()`, the time |tconclude| to perform the final processing of all data in :code:`_conclude()`, and the total wall time to solution |ttotal|.
+
 We analyzed the total time to completion as a function of the number of CPU cores, which was equal to the number of trajectory blocks, so that each block could be processed in parallel.
+We quantified the strong scaling behavior by calculating the *speed-up* for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(1)/t^\text{total}(M)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
+The *efficiency* was calculated as :math:`E(M) = S(M)/M`.
+
 To gain better insight into the performance-limiting steps in our algorithm (Fig. :ref:`fig:schema`) we plotted the *maximum* times over all ranks because the overall time to completion cannot be faster than the slowest parallel process.
 For example, for the read I/O time we calculated the total read I/O time for each rank :math:`k` as :math:`t^\text{I/O}_k = \sum_{t=t_k}^{t_k + \tau_k} t^\text{I/O}_{k, t}` and then reported :math:`\max_k t^\text{I/O}_k`.
 
 
+
+
 RMSD analysis task
 ------------------
-
-The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
-The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
-Overall, using the *multiprocessing* and either Lustre or SSD gave the best performance and shortest time to solution.
-These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
 
 .. figure:: figs/Total_Eff_SU_rms.pdf
 
@@ -507,10 +509,12 @@ These results were consistent with findings in our earlier pilot study where we 
    **C** and **F**: speed-up :math:`S`. The dashed line represents ideal strong scaling :math:`S(M) = M`.
    :label:`fig:rmsd`
 
-A detailed look at the maximum times that the Dask worker processes spent on waiting to be executed (Fig. :ref:`fig:rms-wait-comp-io` A, D), performing the RMSD calculation with data in memory (Fig. :ref:`fig:rms-wait-comp-io` B, E), and reading the trajectory frame data from the file into memory (Fig. :ref:`fig:rms-wait-comp-io` C, F) showed that the computation scaled very well, as did reading time to a lesser degree.
-However, the waiting time either increased for *multiprocessing* or was roughly a constant 1 s for *distributed*.
-Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
-	  
+
+The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to about half a node (12 cores), as shown in Fig. :ref:`fig:rmsd` A, D, regardless of the length of the trajectory.
+The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
+Overall, using the *multiprocessing* scheduler and either Lustre or SSD gave the best performance and shortest time to solution.
+These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
+
 .. figure:: figs/wait_compute_io_rms.pdf
 
    Detailed per-task timing analysis for parallel components of RMSD analysis task.
@@ -520,6 +524,10 @@ Beyond 12 cores, the waiting time started approaching the time for read I/O (com
    **C** and **F**: Maximum total read I/O time per task.
    :label:`fig:rms-wait-comp-io`
 
+A detailed look at the maximum times (Fig. :ref:`fig:rms-wait-comp-io`) that the Dask worker processes spent on waiting to be executed, performing the RMSD calculation with data in memory, and reading the trajectory frame data from the file into memory showed that the computation scaled very well (Fig. :ref:`fig:rms-wait-comp-io` B, E); the reading time scaled fairly well but exhibited some variation beyond a single node (24 cores) as seen in Fig. :ref:`fig:rms-wait-comp-io` C, F.
+However, the waiting time (Fig. :ref:`fig:rms-wait-comp-io` A, D) either increased for *multiprocessing* or was roughly a constant 1 s for *distributed*.
+Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
+	  
 The second major component that limited scaling performance was the time to create the :code:`Universe` data structure (Fig. :ref:`fig:rms-pre-con-uni` A, D).
 The time to read the topology and open the trajectory file on the shared file system typically increased from 1 s to about 2 s and thus, for the given total trajectory lengths, also became comparable to the time for read I/O.
 The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`) remained negligible with times below :math:`10^{-3}` s.
@@ -596,7 +604,7 @@ But thanks to the design of Dask, running a PMDA analysis on a laptop, workstati
 Code availability and development process
 -----------------------------------------
 
-PMDA_ is available in source form under the GNU General Public License v2 from the GitHub repository `MDAnalysis/pmda`_, and as a `PyPi package`_ and `conda package`_  (via the conda-forge channel).
+PMDA_ is available in source form under the GNU General Public License v2 from the GitHub repository `MDAnalysis/pmda`_, and as a `PyPi package`_ and `conda package`_  (via the `conda-forge`_ channel).
 Python 2.7 and Python :math:`\ge` 3.5 are fully supported and tested.
 The package uses `semantic versioning`_ to make it easy for users to judge the impact of upgrading.
 The development process uses continuous integration (`Travis CI`_): extensive tests are run on all commits and pull requests via pytest_, resulting in a current code coverage of 97\% and documentation_ is automatically generated by `Sphinx`_ and published as GitHub pages.
@@ -633,3 +641,6 @@ References
 .. _`community mailing list`: https://groups.google.com/forum/#!forum/mdnalysis-discussion
 .. _`issue tracker`: https://github.com/MDAnalysis/pmda/issues
 .. _`10.6084/m9.figshare.8202149`: https://doi.org/10.6084/m9.figshare.8202149
+.. _`10.5281/zenodo.3228422`: https://doi.org/10.5281/zenodo.3228422
+.. _`conda`: https://docs.conda.io
+.. _`conda-forge`: https://anaconda.org/conda-forge/
