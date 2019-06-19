@@ -179,6 +179,7 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
 
    import freud
    import numpy as np
+   from util import make_fcc
 
    def get_features(box, positions, structure):
        voro = freud.voronoi.Voronoi(
@@ -195,7 +196,8 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
 
        return features
 
-   # Input data generation is shown online
+   fcc_box, fcc_positions = make_fcc(
+       nx=10, ny=10, nz=10, noise=0.1)
    structures = {}
    structures['fcc'] = get_features(
        fcc_box, fcc_positions, 'fcc')
