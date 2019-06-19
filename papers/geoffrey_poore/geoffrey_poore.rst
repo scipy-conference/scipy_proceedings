@@ -42,9 +42,10 @@ automating reports.
 This paper introduces Codebraid, which allows executable code within
 Pandoc Markdown documents :cite:`markdown,pandoc`. Codebraid is
 developed at https://github.com/gpoore/codebraid and is available from
-PyPI. It allows Markdown code blocks like the one below to be executed
-during the document build process. In this case, the “``.cb.run``” tells
-Codebraid to run the code and include the output.
+the Python Package Index (PyPI). It allows Markdown code blocks like the
+one below to be executed during the document build process. In this
+case, the “``.cb.run``” tells Codebraid to run the code and include the
+output.
 
 .. code:: text
 
@@ -98,183 +99,14 @@ as it would in a Jupyter notebook:
 
 .. math:: \sqrt{\pi}
 
+..
 
-.. _Comparison:
+..
 
-Comparison
-==========
-
-To put Codebraid in context, this section provides a comparison with knitr,
-Pweave, Org-mode Babel, and the Jupyter Notebook.  The comparison focuses on
-the default features of each program.  Extensions for these programs and
-additional programs with similar features are summarized in the Appendix_.
-
-
-knitr
------
-
-.. https://leisch.userweb.mwn.de/Sweave/
-.. https://rstudio.github.io/reticulate/index.html
-.. https://cran.r-project.org/web/packages/JuliaCall/index.html
-.. https://rmarkdown.rstudio.com/lesson-2.html
-
-knitr :cite:`Xie2015` provides powerful R evaluation in Markdown, LaTeX, HTML,
-and other formats.  It was inspired by Sweave :cite:`Leisch2002`, which allows
-R in LaTeX.  The reticulate :cite:`reticulate` and JuliaCall :cite:`juliacall`
-packages for R have given knitr significant Python and Julia capabilities as
-well, including the ability to convert objects between languages.  knitr is
-commonly used with the RStudio IDE, which provides a two-panel
-source-and-output preview interface as well as a notebook-style mode with
-inline display of results.
-
-.. https://bookdown.org/yihui/rmarkdown/language-engines.html
-
-While knitr provides superior support for R, Codebraid focuses on providing
-more capabilities for other languages.  knitr runs all R, Python, and Julia
-code in language-specific sessions, so data and variables are shared between
-code chunks.  For all other languages, each code chunk is run in a separate
-process and there is no such continuity.  Codebraid's built-in code execution
-system is designed to allow any language to share a session between multiple
-code chunks, and Jupyter kernels provide equivalent capabilities.  R, Python,
-and Julia are limited to a single shared session each with knitr.  Codebraid
-allows multiple sessions for all supported languages.  This allows independent
-computations to be divided into separate sessions and only re-executed when
-necessary.
-
-Once code is executed, Codebraid and knitr provide similar basic features for
-displaying the code and its output.  knitr has more advanced options for
-formatting output, such as customizing plot appearance, converting plots into
-figures with captions, or combining plots into an animation.
-
-.. https://github.com/rstudio/rmarkdown/issues/974
-.. https://github.com/yihui/knitr/issues/1363
-.. https://rviews.rstudio.com/2017/12/04/how-to-show-r-inline-code-blocks-in-r-markdown/
-.. https://yihui.name/knitr/faq/
-
-The two programs take different approaches to extracting code from Markdown
-documents.  knitr uses the custom R Markdown :cite:`rmarkdown` syntax to
-designate code that should be executed.  It extracts inline code and code
-blocks from the original Markdown source using a preprocessor, then inserts
-the code's output into a copy of the document that can subsequently be
-processed with Pandoc.  Because the preprocessor is based on simple regex
-matching, it does not understand Markdown comments and will run code in a
-commented-out part of a document.  Writing tutorials that show literal knitr
-code chunks can involve inserting empty strings, zero-width spaces,
-linebreaks, or Unicode escapes to avoid the preprocessor's tendency to execute
-code :cite:`knitrfaq,Hovorka`.  With Codebraid, Pandoc is used to convert a
-Markdown document into Pandoc's abstract syntax tree (AST) representation.
-Code extraction and output insertion are performed as operations on the AST,
-and then Pandoc converts the modified AST into the final output document.
-This has the advantage that Pandoc handles all parsing and conversion, at
-the cost of running Pandoc multiple times.
-
-
-Pweave
-------
-
-Pweave :cite:`pweave` is inspired by Sweave :cite:`Leisch2002` and knitr
-:cite:`Xie2015`, with a focus on Python in Markdown and other formats like
-LaTeX and reStructuredText.  Pweave uses a custom Markdown syntax similar to
-knitr's for designating code blocks that should be executed, with many similar
-features and options.  It also extracts code from Markdown documents with a
-simple preprocessor.  Code is executed with a single Jupyter kernel.  Any
-kernel can be used; the default is ``python3``.  Rich output like plots can be
-included automatically.
-
-Like knitr, Pweave provides some more advanced options for display formatting
-that Codebraid lacks, primarily related to figures.  Codebraid has advantages
-in three areas.  Code execution is more flexible since it allows multiple
-Jupyter kernels per document and multiple independent sessions per kernel, in
-addition to the built-in code execution system.  Since Codebraid uses Pandoc
-for all Markdown parsing, it avoids the limitations of a preprocessor.
-Codebraid also provides a broader set of display capabilites, including the
-ability to programmatically copy and display code or its output into other
-parts of a document.
-
-
-Org-mode Babel
---------------
-
-.. https://orgmode.org/worg/org-contrib/babel/
-.. https://orgmode.org/worg/org-contrib/babel/languages.html
-.. https://orgmode.org/worg/org-contrib/babel/languages/
-.. https://orgmode.org/manual/Specific-header-arguments.htm
-.. https://orgmode.org/manual/session.html
-.. https://orgmode.org/manual/file.html#file
-.. https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-gnuplot.html
-
-Babel :cite:`Schulte2011,Schulte2012` allows code blocks and inline code in
-Emacs Org-mode documents to be executed.  Any number of languages can be used
-within a single document.  By default, each code chunk is executed
-individually in its own process.  For many interpreted languages, it is also
-possible to run code in a session so that data and variables persist between
-code chunks.  In those cases, multiple sessions per language are possible.
-Any combination of code and its stdout can be displayed.  Stdout can be shown
-verbatim or interpreted as Org-mode, HTML, or LaTeX markup.  For some
-languages, such as gnuplot, graphical output can also be captured and included
-automatically.
-
-.. https://orgmode.org/worg/org-contrib/babel/intro.html#literate-programming
-
-Babel can function as a meta-programming language for Org mode.  A code chunk
-can be named, and then a later code chunk—potentially in a different
-language—can access its output by name and perform further processing.
-Similarly, there are literate programming capabilities that allow a code chunk
-to copy the source of one or more named chunks into itself, essentially
-serving as a template, before execution.
-
-Codebraid is like a Markdown-based Babel with additional code execution
-capabilities but without some of the meta-programming and literate programming
-options.  Codebraid allows sessions for all languages, not just for some
-interpreted languages.  It provides broad support for rich output like plots
-through Jupyter kernels.  Stderr can also be displayed.  While Codebraid
-currently lacks a system for passing output between code chunks, it does
-provide some literate-programming style capabilities for code reuse.
-
-
-Jupyter Notebook
-----------------
-
-The Jupyter (formerly IPython) Notebook :cite:`Kluyver2016` provides a
-browser-based user interface in which a document is represented as a series of
-cells.  A cell may contain Markdown (which is converted into HTML and
-displayed when not being edited), raw text, or code.  Code is executed by
-language-specific backends, or kernels.  Well over one hundred kernels are
-available beyond Python, including Julia, R, bash, and even compiled languages
-like C++ and Rust :cite:`jupyter-kernels`.  Jupyter kernels are often used
-with the Jupyter Notebook, but they can also function as a standalone code
-execution system.
-
-A Jupyter Notebook can only have a single kernel, and thus only a single
-primary programming language with a single session or process.  This means
-that dividing independent computations into separate sessions or processes is
-typically not as straightforward as it might be in Org-mode Babel or
-Codebraid.  However, the interactive nature of the notebook often reduces the
-impact of this limitation, and can actually be a significant advantage.  Code
-cells can be run one at a time; a single code cell can be modified and run
-again without re-executing any previous code cells.
-
-Some kernels include support for interacting with additional languages.  The
-IPython kernel :cite:`ipython` has ``%%script`` and similar “magics”
-:cite:`ipython-magics` that allow single cells to be executed in a subprocess
-by another language.  PyJulia :cite:`PyJulia` and rpy2 :cite:`RPy2` provide
-more advanced magics that allow an IPython kernel to interact with a single
-Julia or R session over a series of cells (see :cite:`Bussonnier2018` for
-examples).
-
-While Codebraid lacks the Jupyter Notebook's interactivity, it does have
-several capabilities not present in the default Notebook.  A Codebraid
-document can involve multiple Jupyter kernels, as well as multiple independent
-sessions per kernel.  It can execute both code blocks and inline code; the
-Jupyter Notebook is limited to executing code in code cells.  Code layout is
-more flexible with Codebraid because a code chunk can contain an incomplete
-unit of code, such as part of a loop or part of a function definition.  This
-is possible even when working with Jupyter kernels.  Codebraid also provides
-more flexible display options.  It is possible to show any combination of
-code, stdout, stderr, or rich output in any order, and to select which form of
-rich output (mime type) is shown.  Code or its output can be copied
-programmatically, so code can be executed at one location in a document and
-its output displayed elsewhere.
+The next section provides an example of the document build process with
+Codebraid. This is followed by an overview of Codebraid features and
+capabilities. Finally, the `Comparison`_ considers Codebraid in the
+context of knitr, Pweave, Org-mode Babel, and the Jupyter Notebook.
 
 Building a simple Codebraid document
 ====================================
@@ -845,6 +677,184 @@ well. For instance,
 would read in the contents of an external file “code.py” and then run it
 in the default Python session, just as if it had been entered directly
 within the Markdown file.
+
+
+.. _Comparison:
+
+Comparison
+==========
+
+To put Codebraid in context, this section provides a comparison with knitr,
+Pweave, Org-mode Babel, and the Jupyter Notebook.  The comparison focuses on
+the default features of each program.  Extensions for these programs and
+additional programs with similar features are summarized in the Appendix_.
+
+
+knitr
+-----
+
+.. https://leisch.userweb.mwn.de/Sweave/
+.. https://rstudio.github.io/reticulate/index.html
+.. https://cran.r-project.org/web/packages/JuliaCall/index.html
+.. https://rmarkdown.rstudio.com/lesson-2.html
+
+knitr :cite:`Xie2015` provides powerful R evaluation in Markdown, LaTeX, HTML,
+and other formats.  It was inspired by Sweave :cite:`Leisch2002`, which allows
+R in LaTeX.  The reticulate :cite:`reticulate` and JuliaCall :cite:`juliacall`
+packages for R have given knitr significant Python and Julia capabilities as
+well, including the ability to convert objects between languages.  knitr is
+commonly used with the RStudio IDE, which provides a two-panel
+source-and-output preview interface as well as a notebook-style mode with
+inline display of results.
+
+.. https://bookdown.org/yihui/rmarkdown/language-engines.html
+
+While knitr provides superior support for R, Codebraid focuses on providing
+more capabilities for other languages.  knitr runs all R, Python, and Julia
+code in language-specific sessions, so data and variables are shared between
+code chunks.  For all other languages, each code chunk is run in a separate
+process and there is no such continuity.  Codebraid's built-in code execution
+system is designed to allow any language to share a session between multiple
+code chunks, and Jupyter kernels provide equivalent capabilities.  R, Python,
+and Julia are limited to a single shared session each with knitr.  Codebraid
+allows multiple sessions for all supported languages.  This allows independent
+computations to be divided into separate sessions and only re-executed when
+necessary.
+
+Once code is executed, Codebraid and knitr provide similar basic features for
+displaying the code and its output.  knitr has more advanced options for
+formatting output, such as customizing plot appearance, converting plots into
+figures with captions, or combining plots into an animation.
+
+.. https://github.com/rstudio/rmarkdown/issues/974
+.. https://github.com/yihui/knitr/issues/1363
+.. https://rviews.rstudio.com/2017/12/04/how-to-show-r-inline-code-blocks-in-r-markdown/
+.. https://yihui.name/knitr/faq/
+
+The two programs take different approaches to extracting code from Markdown
+documents.  knitr uses the custom R Markdown :cite:`rmarkdown` syntax to
+designate code that should be executed.  It extracts inline code and code
+blocks from the original Markdown source using a preprocessor, then inserts
+the code's output into a copy of the document that can subsequently be
+processed with Pandoc.  Because the preprocessor is based on simple regex
+matching, it does not understand Markdown comments and will run code in a
+commented-out part of a document.  Writing tutorials that show literal knitr
+code chunks can involve inserting empty strings, zero-width spaces,
+linebreaks, or Unicode escapes to avoid the preprocessor's tendency to execute
+code :cite:`knitrfaq,Hovorka`.  With Codebraid, Pandoc is used to convert a
+Markdown document into Pandoc's abstract syntax tree (AST) representation.
+Code extraction and output insertion are performed as operations on the AST,
+and then Pandoc converts the modified AST into the final output document.
+This has the advantage that Pandoc handles all parsing and conversion, at
+the cost of running Pandoc multiple times.
+
+
+Pweave
+------
+
+Pweave :cite:`pweave` is inspired by Sweave :cite:`Leisch2002` and knitr
+:cite:`Xie2015`, with a focus on Python in Markdown and other formats like
+LaTeX and reStructuredText.  Pweave uses a custom Markdown syntax similar to
+knitr's for designating code blocks that should be executed, with many similar
+features and options.  It also extracts code from Markdown documents with a
+simple preprocessor.  Code is executed with a single Jupyter kernel.  Any
+kernel can be used; the default is ``python3``.  Rich output like plots can be
+included automatically.
+
+Like knitr, Pweave provides some more advanced options for display formatting
+that Codebraid lacks, primarily related to figures.  Codebraid has advantages
+in three areas.  Code execution is more flexible since it allows multiple
+Jupyter kernels per document and multiple independent sessions per kernel, in
+addition to the built-in code execution system.  Since Codebraid uses Pandoc
+for all Markdown parsing, it avoids the limitations of a preprocessor.
+Codebraid also provides a broader set of display capabilites, including the
+ability to programmatically copy and display code or its output into other
+parts of a document.
+
+
+Org-mode Babel
+--------------
+
+.. https://orgmode.org/worg/org-contrib/babel/
+.. https://orgmode.org/worg/org-contrib/babel/languages.html
+.. https://orgmode.org/worg/org-contrib/babel/languages/
+.. https://orgmode.org/manual/Specific-header-arguments.htm
+.. https://orgmode.org/manual/session.html
+.. https://orgmode.org/manual/file.html#file
+.. https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-gnuplot.html
+
+Babel :cite:`Schulte2011,Schulte2012` allows code blocks and inline code in
+Emacs Org-mode documents to be executed.  Any number of languages can be used
+within a single document.  By default, each code chunk is executed
+individually in its own process.  For many interpreted languages, it is also
+possible to run code in a session so that data and variables persist between
+code chunks.  In those cases, multiple sessions per language are possible.
+Any combination of code and its stdout can be displayed.  Stdout can be shown
+verbatim or interpreted as Org-mode, HTML, or LaTeX markup.  For some
+languages, such as gnuplot, graphical output can also be captured and included
+automatically.
+
+.. https://orgmode.org/worg/org-contrib/babel/intro.html#literate-programming
+
+Babel can function as a meta-programming language for Org mode.  A code chunk
+can be named, and then a later code chunk—potentially in a different
+language—can access its output by name and perform further processing.
+Similarly, there are literate programming capabilities that allow a code chunk
+to copy the source of one or more named chunks into itself, essentially
+serving as a template, before execution.
+
+Codebraid is like a Markdown-based Babel with additional code execution
+capabilities but without some of the meta-programming and literate programming
+options.  Codebraid allows sessions for all languages, not just for some
+interpreted languages.  It provides broad support for rich output like plots
+through Jupyter kernels.  Stderr can also be displayed.  While Codebraid
+currently lacks a system for passing output between code chunks, it does
+provide some literate-programming style capabilities for code reuse.
+
+
+Jupyter Notebook
+----------------
+
+The Jupyter (formerly IPython) Notebook :cite:`Kluyver2016` provides a
+browser-based user interface in which a document is represented as a series of
+cells.  A cell may contain Markdown (which is converted into HTML and
+displayed when not being edited), raw text, or code.  Code is executed by
+language-specific backends, or kernels.  Well over one hundred kernels are
+available beyond Python, including Julia, R, bash, and even compiled languages
+like C++ and Rust :cite:`jupyter-kernels`.  Jupyter kernels are often used
+with the Jupyter Notebook, but they can also function as a standalone code
+execution system.
+
+A Jupyter Notebook can only have a single kernel, and thus only a single
+primary programming language with a single session or process.  This means
+that dividing independent computations into separate sessions or processes is
+typically not as straightforward as it might be in Org-mode Babel or
+Codebraid.  However, the interactive nature of the notebook often reduces the
+impact of this limitation, and can actually be a significant advantage.  Code
+cells can be run one at a time; a single code cell can be modified and run
+again without re-executing any previous code cells.
+
+Some kernels include support for interacting with additional languages.  The
+IPython kernel :cite:`ipython` has ``%%script`` and similar “magics”
+:cite:`ipython-magics` that allow single cells to be executed in a subprocess
+by another language.  PyJulia :cite:`PyJulia` and rpy2 :cite:`RPy2` provide
+more advanced magics that allow an IPython kernel to interact with a single
+Julia or R session over a series of cells (see :cite:`Bussonnier2018` for
+examples).
+
+While Codebraid lacks the Jupyter Notebook's interactivity, it does have
+several capabilities not present in the default Notebook.  A Codebraid
+document can involve multiple Jupyter kernels, as well as multiple independent
+sessions per kernel.  It can execute both code blocks and inline code; the
+Jupyter Notebook is limited to executing code in code cells.  Code layout is
+more flexible with Codebraid because a code chunk can contain an incomplete
+unit of code, such as part of a loop or part of a function definition.  This
+is possible even when working with Jupyter kernels.  Codebraid also provides
+more flexible display options.  It is possible to show any combination of
+code, stdout, stderr, or rich output in any order, and to select which form of
+rich output (mime type) is shown.  Code or its output can be copied
+programmatically, so code can be executed at one location in a document and
+its output displayed elsewhere.
 
 
 Conclusion
