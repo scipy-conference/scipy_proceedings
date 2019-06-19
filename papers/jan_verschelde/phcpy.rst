@@ -125,15 +125,26 @@ for PHCpack's Macaulay2 bindings [GPV13]_.
 User Interaction
 ================
 
+The first area of improvement that phcpy brings is
+in the interaction with the user.
+
 CGI Scripting
 -------------
 
-In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
+In our first design of a web interface to ``phc``, 
+we developed a collection of Python scripts (mediated through HTML forms), 
+following common programming patterns [Chu06]_.
+This design is described in Chapter 6 of [Yu15]_.
 
-MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+MySQLdb [MSDB]_ does the management of user data, including 
+a) names and encrypted passwords, 
+b) generic, random folder names to store data files, and 
+c) file names with polynomial systems they have solved.
+With the module smtplib, we defined email exchanges for an automatic 
+2-step registration process and password recovery protocol.
 
-
-As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance [JUPH]_.
+As of the middle of May 2019, our web server has 146 user accounts, 
+each having access to our new JupyterHub instance [JUPH]_.
 
 JupyterHub
 ----------
@@ -325,6 +336,10 @@ The script above was executed on a 2.2 GHz Intel Xeon E5-2699 processor
 in a CentOS Linux workstation with 256 GB RAM
 and the elapsed performance is in Table :ref:`perfcyc7overhead`.
 
+.. raw:: latex
+
+   \floatplacement{table}{hb}
+
 .. table:: Elapsed performance of the blackbox solver in double,
            double double, and quad double precision. :label:`perfcyc7overhead`
 
@@ -346,7 +361,7 @@ overhead caused by the multiprecision arithmetic by multitasking.
    +-------+-------+-------+-------+
    | tasks |   8   |   16  |   32  |
    +=======+=======+=======+=======+
-   |  dd   | 42.41 |  5.07 |  3.88 |
+   |  dd   |  7.56 |  5.07 |  3.88 |
    +-------+-------+-------+-------+
    |  qd   | 96.08 | 65.82 | 44.35 |
    +-------+-------+-------+-------+
@@ -356,7 +371,7 @@ is less than the 5.45 of Table :ref:`perfcyc7overhead`:
 with 16 tasks we doubled the precision and finished the computations
 in about the same time.
 The 42.41 and 44.35 in Table :ref:`perfcyc7parallel` are similar enough
-to state that with 32 instead of 8 tasks we doubled the precision from 
+to state that with 32 instead of 1 task we doubled the precision from 
 double double to quad double precision in about the same time.
 
 The data in Table :ref:`perfcyc7parallel` is 
@@ -514,16 +529,24 @@ A remarkable variety of systems of constraint also take on polynomial form, or c
 Algebraic Kinematics
 --------------------
 
-
 We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.,:
 
-* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility);
-* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock);
-* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation);
-* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity);
-* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses;
+* Motion decomposition - into assembly modes (of individual mechanisms)
+  or subfamilies of mechanisms (with varying mobility);
+* Mobility analysis - degrees of freedom of a mechanism 
+  (sometimes exceptional),
+  sometimes specific to certain configurations (e.g., gimbal lock);
+* Kinematics - effector position given parameters (forward kinematics),
+  and vice versa (inverse kinematics, e.g. used in computer animation);
+* Singularity analysis - detection of situations where the mechanism
+  can move without change to its parameters (input singularity),
+  or the parameters can change without movement of the mechanism 
+  (output singularity);
+* Workspace analysis - determining all possible outputs of the mechanism, 
+  i.e.: reachable poses;
 
-...as well as the **synthesis** of mechanisms that can reach certain sets of outputs, or that can be controlled by a certain input/output relationship.
+...as well as the **synthesis** of mechanisms that can reach certain sets
+of outputs, or that can be controlled by a certain input/output relationship.
 
 Fig. :ref:`fig4barcoupler` illustrates a reproduction
 of one synthesis result in the mechanism design literature [MW90]_.
@@ -858,3 +881,8 @@ References
     *Numerical algebraic geometry and algebraic kinematics.*
     Acta Numerica, 20, pages 469–567. 2011.
     DOI: 10.1017/S0962492911000067.
+
+.. [Yu15] X. Yu.
+          *Accelerating Polynomial Homotopy Continuation 
+          on Graphics Processing Units.*
+          PhD thesis, University of Illinois at Chicago, 2015.
