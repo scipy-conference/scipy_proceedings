@@ -343,7 +343,7 @@ We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
    Finally, the last test considered to predict the next basket by using :math:`F_1`. :label:`workflow`
 
 Statistics
-==========
+-------------
 
 We present the obtained results using proposed method in this section. 
 As well as the metrics (see Equations 1-5) that are utilized to evaluate the performance of methods.
