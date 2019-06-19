@@ -40,7 +40,7 @@ The lists serve, for example, as a reminder, a budgeting tool,
 or an effective way to organize weekly grocery shopping. 
 In addition, several mobile retail studies indicate that potential customers place 
 the highest priority on features that help them to create and to manage personalized 
-shopping lists interactively [NPS03]_ and [Faz17]_.
+shopping lists interactively [NPS03]_ and [SZA16]_.
 
 Problem statement and proposal
 ------------------------------
@@ -604,70 +604,74 @@ References
 .. [AAR+18] Amin, Mohammad H., Evgeny Andriyash, Jason Rolfe, Bohdan Kulchytskyy, and Roger Melko. 
             *Quantum boltzmann machine*.
             Physical Review X, 8(2):021050, 2018.
-	    DOI: 10.1103/PhysRevX.8.021050
+	    DOI: https://doi.org/10.1103/PhysRevX.8.021050
 .. [Car03] Rasmussen, Carl Edward. *Gaussian processes in machine learning*.
-           In Summer School on Machine Learning, pages 63:71. Springer, Berlin, Heidelberg, 2003.
-	   DOI: 10.1007/978-3-540-28650-9_4 
+           In Summer School on Machine Learning, pp. 63:71. Springer, Berlin, Heidelberg, 2003.
+	   DOI: https://doi.org/10.1007/978-3-540-28650-9_4 
 .. [CMW16] Maddison, Chris J., Andriy Mnih, and Yee Whye Teh. 
            *The concrete distribution: A continuous relaxation of discrete random variables*. 
            arXiv preprint arXiv:1611.00712, 2016.
-	   https://arxiv.org/pdf/1611.00712.pdf
-.. [Faz17] Fatlume Fazliu. *En utforskande studie: inköpslistor som app*, 2017.
-.. [Fri02] Jerome H Friedman. *Stochastic gradient boosting*. Computational
+	   https://arxiv.org/pdf/1611.00712.pdf 
+.. [Fri02] Jerome H. Friedman. *Stochastic gradient boosting*. Computational
            Statistics & Data Analysis, 38(4):367–378, 2002.
-	   DOI: 10.1016/S0167-9473(01)00065-2
+	   DOI: https://doi.org/10.1016/S0167-9473(01)00065-2
 .. [GBC16] Ian Goodfellow, Yoshua Bengio, and Aaron Courville. *Deep
            learning*. MIT press, 2016.
 .. [HLYX18] Hao, L., Liang, S., Ye, J. and Xu, Z., 2018. 
            *TensorD: A tensor decomposition library in TensorFlow*. 
-	   Neurocomputing, 318, pp.196-200.
-	   DOI: 10.1016/j.neucom.2018.08.055
+	   Neurocomputing, 318, pp. 196-200.
+	   DOI: https://doi.org/10.1016/j.neucom.2018.08.055
 .. [HS97] Sepp Hochreiter and Jurgen Schmidhuber. *Long short-term memory*.
           Neural computation, 9(8):1735–1780, 1997.
-	  DOI: 10.1162/neco.1997.9.8.1735 
+	  DOI: https://doi.org/10.1162/neco.1997.9.8.1735 
 .. [Jai10] Anil K Jain. *Data clustering: 50 years beyond k-means*. Pattern
            recognition letters, 31(8):651–666, 2010.
-	   DOI: 10.1016/j.patrec.2009.09.011 
+	   DOI: https://doi.org/10.1016/j.patrec.2009.09.011 
 .. [Jol11] Ian Jolliffe. *Principal component analysis*. Springer, 2011.
-           DOI: 10.1007/978-3-642-04898-2_455 
+           DOI: https://doi.org/10.1007/978-3-642-04898-2_455 
 .. [KR05] Debasis Kundu and Mohammad Z Raqab. *Generalized rayleigh
           distribution: different methods of estimations*. Computational
           statistics & data analysis, 49(1):187–200, 2005.
-	  DOI: 10.1016/j.csda.2004.05.008 
+	  DOI: https://doi.org/10.1016/j.csda.2004.05.008 
 .. [LEN14] Zachary C Lipton, Charles Elkan, and Balakrishnan
            Naryanaswamy. *Optimal thresholding of classifiers to maximize
            f1 measure*. In Joint European Conference on Machine Learning
-           and Knowledge Discovery in Databases, pages 225–239. Springer,
+           and Knowledge Discovery in Databases, pp. 225–239. Springer,
            2014.
-	   DOI: 10.1007/978-3-662-44851-9_15
+	   DOI: https://doi.org/10.1007/978-3-662-44851-9_15
 .. [NCLC12] Ye Nan, Kian Ming Chai, Wee Sun Lee, and Hai Leong Chieu.
             *Optimizing f-measure: A tale of two approaches*. arXiv preprint
             arXiv:1206.4625, 2012.
 	    https://arxiv.org/ftp/arxiv/papers/1206/1206.4625.pdf
 .. [NPS03] Erica Newcomb, Toni Pashley, and John Stasko. *Mobile computing
            in the retail arena*. In Proceedings of the SIGCHI Conference
-           on Human Factors in Computing Systems, pages 337–344. ACM,
+           on Human Factors in Computing Systems, pp. 337–344. ACM,
            2003.
-	   DOI: 10.1145/642667.642670 
+	   DOI: https://doi.org/10.1145/642667.642670 
 .. [PJ73] Consul, Prem C., and Gaurav C. Jain. 
           *A generalization of the Poisson distribution*. 
           Technometrics 15(4):791-799, (1973).
 .. [PM+00] Dan Pelleg, Andrew W Moore, et al. *X-means: extending kmeans
            with efficient estimation of the number of clusters*. In Icml,
-           volume 1, pages 727–734, 2000.
+           volume 1, pp. 727–734, 2000.
+.. [SZA16] Szpiro, S., Zhao, Y. and Azenkot, S. 
+           *Finding a store, searching for a product: a study of daily challenges of low vision people*. 
+	   In Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing,
+	   pp. 61-72. ACM, 2016.
+           DOI: https://doi.org/10.1145/2971648.2971723	   
 .. [Tay19] Taylor, James W. *Forecasting value at risk and expected shortfall using a 
            semiparametric approach based on the asymmetric Laplace distribution*.
            Journal of Business & Economic Statistics 37(1):121-133, 2019.
-	   DOI: 10.1080/07350015.2017.1281815
+	   DOI: https://doi.org/10.1080/07350015.2017.1281815
 .. [TNTK16] Arry Tanusondjaja, Magda Nenycz-Thiel, and Rachel Kennedy.
             *Understanding shopper transaction data: how to identify crosscategory
             purchasing patterns using the duplication coefficient*.
             International Journal of Market Research, 58(3):401–419, 2016.
-	    DOI: 10.2501/ijmr-2016-026 
+	    DOI: https://doi.org/10.2501/ijmr-2016-026 
 .. [TTR16] Arry Tanusondjaja, Giang Trinh, and Jenni Romaniuk. *Exploring
            the past behaviour of new brand buyers*. International Journal of
            Market Research, 58(5):733–747, 2016.
-	   DOI: 10.2501/ijmr-2016-042 
+	   DOI: https://doi.org/10.2501/ijmr-2016-042 
 .. [WJ02] Rockney Walters and Maqbul Jamil. *Measuring cross-category
           specials purchasing: theory, empirical results, and implications*.
           Journal of Market-Focused Management, 5(1):25–42, 2002.
@@ -675,5 +679,5 @@ References
           between shopping trip type, purchases of products on promotion,
           and shopping basket profit*. 
 	  Journal of Business Research, 56(1):17–29, 2003.
-	  DOI: 10.1016/s0148-2963(01)00201-6
+	  DOI: https://doi.org/10.1016/s0148-2963(01)00201-6
 
