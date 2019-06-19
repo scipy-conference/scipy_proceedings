@@ -346,7 +346,7 @@ Statistics
 ==========
 
 We present the obtained results using proposed method in this section. 
-As well as the metrics (see Equations 1-6) that are utilized to evaluate the performance of methods.
+As well as the metrics (see Equations 1-5) that are utilized to evaluate the performance of methods.
 
 Statistic score
 ===============
@@ -400,7 +400,7 @@ Finally, we evaluated the model by *FP Rate* which corresponds to the ratio betw
    
    FP Rate = FPR = \frac{FP}{(TN+FP)} 
    
-We examined these six evaluation metrics on this study.
+We examined these five evaluation metrics on this study.
 
 Python Script
 -------------
