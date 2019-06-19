@@ -86,13 +86,13 @@ whereas version 0.1.5 was current at the time of [Ver14]_.
 An example of these changes is that the software described in [SVW03]_ 
 was recently parallelized for phcpy [Ver18]_.
 
-Mission
----------
+A Scripting Interface for PHCpack
+---------------------------------
 
 The mission of phcpy is to bring polynomial homotopy continuation
 into Python's computational ecosystem.
 
-phcpy wraps the shared object files of a compiled PHCpack, 
+The package phcpy wraps the shared object files of a compiled PHCpack, 
 which makes the methods more accessible without sacrificing their efficiency.
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. 
@@ -104,7 +104,7 @@ numerical linear algebra.
 PHCpack prototyped the first algorithms to compute 
 a numerical irreducible decomposition of the solution set
 of a polynomial system.
-phcpy aims to bring the algorithms of numerical algebraic geometry
+The package phcpy aims to bring the algorithms of numerical algebraic geometry
 into the computational ecosystem of Python.
 
 Related Software
@@ -218,8 +218,9 @@ Polynomial Homotopy Continuation
 --------------------------------
 
 As we compute over the field of complex numbers,
-the continuity of the solution set in function of changing
-coefficients of the polynomials in the system is exploited.
+what we exploit is the continuity of the solution set,
+which changes continuously in function of changing coefficients 
+of the polynomials in the system.
 Continuation methods are numerical algorithms which track
 solution paths defined by a one parameter family of polynomial systems.
 This family is called the homotopy.  Homotopy methods take a polynomial
