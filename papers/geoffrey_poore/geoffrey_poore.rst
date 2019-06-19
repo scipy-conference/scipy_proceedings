@@ -209,10 +209,10 @@ kernels).
 Creating examples
 =================
 
-The example in the earlier section was actually itself an example of
-using Codebraid. This paper was written in Markdown, then converted to
-reStructuredText via Codebraid with Pandoc. Finally, the
-reStructuredText was converted through LaTeX to PDF via
+The example in `Building a simple Codebraid document`_ was actually
+itself an example of using Codebraid. This paper was written in
+Markdown, then converted to reStructuredText via Codebraid with Pandoc.
+Finally, the reStructuredText was converted through LaTeX to PDF via
 Docutils :cite:`docutils`. The two code blocks in the example were only
 entered in the original Markdown source of this paper a single time, and
 Codebraid only executed them a single time. However, with Codebraid’s
@@ -494,10 +494,10 @@ section). Of course, kernel features like IPython magics
 Advanced code execution
 =======================
 
-Ideally, executable code should arranged within a document based on what
-is best for the reader, rather than in a manner dictated by limitations
-of the tooling. Several options are provided to maximize the flexibility
-of code presentation.
+Ideally, executable code should be arranged within a document based on
+what is best for the reader, rather than in a manner dictated by
+limitations of the tooling. Several options are provided to maximize the
+flexibility of code presentation.
 
 Incomplete units of code
 ------------------------
@@ -560,9 +560,9 @@ For example,
        json.dump({"result": result}, f)
    ```
 
-Sessions work with both Codebraid’s code execution system and Jupyter
-kernels. For example, it is possible to have multiple independent
-sessions with a ``python3`` kernel within a single document.
+Sessions work with both Codebraid’s built-in code execution system and
+Jupyter kernels. For example, it is possible to have multiple
+independent sessions with a ``python3`` kernel within a single document.
 
 All sessions are currently executed in serial. In the future, support
 for parallel execution may be added.
