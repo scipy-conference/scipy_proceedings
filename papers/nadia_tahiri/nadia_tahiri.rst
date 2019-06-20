@@ -166,7 +166,7 @@ The graphical representation of the workflow in Figure :ref:`workflow` predicts 
 
 .. figure:: figures/workflow.png
    :align: center
-   :scale: 29%
+   :scale: 39%
    :figclass: wt
    
    The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
