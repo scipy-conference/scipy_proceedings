@@ -533,11 +533,6 @@ The computation itself scaled very well (Fig. :ref:`fig:rms-wait-comp-io` B, E) 
 The reading time scaled fairly well but exhibited some variation beyond a single node (24 cores) and an unexplained decline in performance for the longer trajectory, as seen in Fig. :ref:`fig:rms-wait-comp-io` C, F.
 The read I/O results indicated that both Lustre and SSD can perform equally well.
 Beyond 12 cores, the waiting time started approaching the time for read I/O (compute was an order of magnitude less than I/O) and hence parallel speed-up was limited by the wait time.
-	  
-The second major component that limited scaling performance was the time to create the :code:`Universe` data structure (Fig. :ref:`fig:rms-pre-con-uni` A, D).
-The time to read the topology and open the trajectory file on the shared file system typically increased from 1 s to about 2 s and thus, for the given total trajectory lengths, also became comparable to the time for read I/O.
-The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`) remained negligible with times below :math:`10^{-3}` s.
-
 
 .. figure:: figs/pre_con_uni_rms.pdf
 	    
@@ -549,9 +544,23 @@ The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`)
    Points represent the mean over five repeats with the standard deviation shown as error bars.
    :label:`fig:rms-pre-con-uni`
 
-Overall, we found that for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10 fold) could already be achieved on the equivalent of a modern workstation.
+The second major component that limited scaling performance was the time to create the :code:`Universe` data structure (Fig. :ref:`fig:rms-pre-con-uni` A, D).
+The time to read the topology and open the trajectory file on the shared file system typically increased from 1 s to about 2 s and thus, for the given total trajectory lengths, also became comparable to the time for read I/O.
+The other components (prepare and conclude, see Fig. :ref:`fig:rms-pre-con-uni`) remained negligible with times below :math:`10^{-3}` s.
+
+.. figure:: figs/percentage_stack_rms.pdf
+
+   Fraction of the total run time taken by individual steps in the parallel *RMSD* calculation for *distributed* on up to three nodes (Lustre-distributed-3nodes).
+   Compute (green) and read I/O (red) represent the parallelizable fraction of the program; all other components are effectively serial.
+   **A** Trajectory with 900 frames.
+   **B** Trajectory with 9000 frames.   
+   :label:`fig:timefraction-rms`
+
+The parallelizable fraction of the workload consisted of the compute and read I/O steps.
+Because this fraction was relatively small and was dominated by the wait time from the Dask scheduler and the time to initialize the ``Universe`` data structure (Fig. :ref:`fig:timefraction-rms`), the overall performance gain by parallelization remained modest, as explained by Amdahl's law :cite:`Amdahl:1967aa`.
+Thus, for a highly optimized and fast computation such as the RMSD calculation, the best performance (speed-up on the order of 10 fold) could already be achieved on the equivalent of a modern workstation.
 The *multiprocessing* scheduler seemed to be the more consistent and better performing choice in this scenario; therefore PMDA defaults to *multiprocessing*.
-Performance would likely improve with longer trajectories because the "fixed" serial costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion, which benefit from parallelization :cite:`Gustafson:1988aa`.
+Performance would likely improve with longer trajectories because the "fixed" serial costs (waiting, :code:`Universe` creation) would decrease in relevance to the time spent on computation and data ingestion (see Fig. :ref:`fig:timefraction-rms` B), which benefit from parallelization :cite:`Gustafson:1988aa`.
 However, all things considered, a single node seemed sufficient to accelerate RMSD analysis.
 
 	  
@@ -577,15 +586,6 @@ On a single node, all approaches performed similarly well, with the *distributed
    Points represent the mean over five repeats with the standard deviation shown as error bars.   
    :label:`fig:rdf`
 
-
-The detailed analysis of the individual components in Fig. :ref:`fig:rdf-wait-comp-io` clearly showed that the RDF analysis task required much more computational effort than the RMSD task and that it was dominated by the compute component, which scaled very well to the highest core numbers (Fig. :ref:`fig:rdf-wait-comp-io` B, E).
-However, *multiprocessing* and especially *distributed* with *SSD* took longer for the computational part at :math:`\ge` 8 cores (one third of a single node), indicating that in these cases some sort of competition  reduced performance.
-For comparison, serial computation required about 250 s while read I/O required less than 10 s, and this ratio was approximately maintained as the read I/O also scaled reasonably well (Fig. :ref:`fig:rdf-wait-comp-io` C, F)
-Although the variance increased markedly when multiple nodes were included such as when using six half-filled nodes, this effect did not strongly impact overall performance because |tcomp| :math:`\gg` |tIO|.
-The differences between using all cores on a node compared to only using half the cores on each node were small but only using half a node was consistently better, especially in the compute time, and hence the overall performance of the latter approach was better. 
-For the shorter trajectory, the wait time was a factor in reducing performance at higher core numbers (Fig. :ref:`fig:rdf-wait-comp-io` A).
-The other components (|tuniverse| :math:`< 2` s, |tprepare| :math:`< 3 \times 10^{-5}` s , |tconclude| :math:`< 4 \times 10^{-4}` s) were similar or better (i.e., shorter) than the ones shown for the RMSD task in Fig. :ref:`fig:rms-pre-con-uni` and are not shown; only the time to set up the :code:`Universe` played a role in reducing the scaling performance in the *Lustre-distributed-3nodes* scenario at 60 or more CPU cores.
-
 .. figure:: figs/wait_compute_io_rdf.pdf
 
    Detailed per-task timing analysis for parallel components of the RDF analysis task.
@@ -595,9 +595,25 @@ The other components (|tuniverse| :math:`< 2` s, |tprepare| :math:`< 3 \times 10
    **C** and **F**: Maximum total read I/O time per task.
    Points represent the mean over five repeats with the standard deviation shown as error bars.   
    :label:`fig:rdf-wait-comp-io`
-	  
+
+The detailed analysis of the individual components in Fig. :ref:`fig:rdf-wait-comp-io` clearly showed that the RDF analysis task required much more computational effort than the RMSD task and that it was dominated by the compute component (Fig. :ref:`fig:timefraction-rdf`), which scaled very well to the highest core numbers (Fig. :ref:`fig:rdf-wait-comp-io` B, E).
+However, *multiprocessing* and especially *distributed* with *SSD* took longer for the computational part at :math:`\ge` 8 cores (one third of a single node), indicating that in these cases some sort of competition  reduced performance.
+For comparison, serial computation required about 250 s while read I/O required less than 10 s, and this ratio was approximately maintained as the read I/O also scaled reasonably well (Fig. :ref:`fig:rdf-wait-comp-io` C, F)
+Although the variance increased markedly when multiple nodes were included such as when using six half-filled nodes, this effect did not strongly impact overall performance because |tcomp| :math:`\gg` |tIO|.
+The differences between using all cores on a node compared to only using half the cores on each node were small but only using half a node was consistently better, especially in the compute time, and hence the overall performance of the latter approach was better. 
+For the shorter trajectory, the wait time was a factor in reducing performance at higher core numbers (Fig. :ref:`fig:rdf-wait-comp-io` A).
+The other components (|tuniverse| :math:`< 2` s, |tprepare| :math:`< 3 \times 10^{-5}` s , |tconclude| :math:`< 4 \times 10^{-4}` s) were similar or better (i.e., shorter) than the ones shown for the RMSD task in Fig. :ref:`fig:rms-pre-con-uni` and are not shown; only the time to set up the :code:`Universe` played a role in reducing the scaling performance in the *Lustre-distributed-3nodes* scenario at 60 or more CPU cores.
+
+.. figure:: figs/percentage_stack_rdf.pdf
+	    
+   Fraction of the total run time taken by individual steps in the parallel *RDF* calculation for *distributed* on up to three nodes (Lustre-distributed-3nodes).
+   Compute (green) and read I/O (red) represent the parallelizable fraction of the program; all other components are effectively serial.
+   **A** Trajectory with 900 frames.
+   **B** Trajectory with 9000 frames.   
+   :label:`fig:timefraction-rdf`
+   
 In summary, the performance increase for a compute-intensive task such as RDF was sizable and, although not extremely efficient, was large enough (about 30-40) to justify the use of about 100 cores on a HPC supercomputer.
-Because scaling seemed mostly limited by constant costs such as the scheduling wait time, processing longer trajectories, for which more work has to be done in the parallelizable compute and read I/O steps, should improve the scaling behavior :cite:`Gustafson:1988aa`.
+Because scaling seemed mostly limited by constant costs such as the scheduling wait time (see Fig. :ref:`fig:timefraction-rdf`), processing longer trajectories, for which more work has to be done in the parallelizable compute and read I/O steps, should improve the scaling behavior :cite:`Gustafson:1988aa`.
 
 
 
