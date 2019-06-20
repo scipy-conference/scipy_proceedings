@@ -159,7 +159,7 @@ Direct Manipulation
 
 One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets [IPYW]_ and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
-The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js`` to your own user directory).
+The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying ``apollonius_d3.ipynb`` and ``apollonius_d3.js`` to one's own user directory).
 
 This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
 
