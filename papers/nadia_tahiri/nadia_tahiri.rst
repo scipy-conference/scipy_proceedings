@@ -107,6 +107,7 @@ Dataset
 -------
 In this section we discuss the details of synthetic and real datasets,
 the latter obtained from `MyGroceryTour`.
+The importance of the feature is very crucial to perform the prediction of the model developed. 
 
 Features
 ========
@@ -123,6 +124,8 @@ All features, we used, are described as follow:
 - **category\_id**: unique category number for a product. :math:`category\_id \in \{1 \cdots 24\}`  
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
+
+We denoted two type of features: categorical and quantitative variables. 
      
 Consumer profile
 ================
