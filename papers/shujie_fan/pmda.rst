@@ -642,6 +642,7 @@ Users are supported through the `community mailing list`_ (Google group) and the
 Acknowledgments
 ===============
 
+We would like to thank reviewer Cyrus Harrison for the idea to plot the fractional time spent on different stages of the program (Figs. :ref:`fig:timefraction-rms` and :ref:`fig:timefraction-rdf`).
 This work was supported by the National Science Foundation under grant numbers ACI-1443054 and used the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1548562.
 The SDSC Comet computer at the San Diego Supercomputer Center was used under allocation TG-MCB130177. Max Linke was supported by NumFOCUS under a small development grant.
 
