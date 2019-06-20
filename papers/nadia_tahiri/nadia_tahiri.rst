@@ -200,7 +200,7 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
   
    This figure shows a chain-structured LSTM network. An LSTM architecture contains forget, learn, remember and use gates that determine whether an input is so important  that  it  can  be  saved.  
    In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
-   which make it easier to update the weights during the backpropagation process. Here :math:`X_{t}` designates the input vector, :math: `H_{t-1}` is the previous cell output, :math: `C_{t-1}` is the previous cell memory, :math: `H_{t}` is the current cell output, :math: `C_{t}` is the current cell memory.
+   which make it easier to update the weights during the backpropagation process. Here :math:`X_{t}` designates the input vector, :math:`H_{t-1}` is the previous cell output, :math:`C_{t-1}` is the previous cell memory, :math:`H_{t}` is the current cell output, :math:`C_{t}` is the current cell memory.
    :label:`lstm`
 
 Overall characteristics of the neuron networks which used in this project are described as follow:
