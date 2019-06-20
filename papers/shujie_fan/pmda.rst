@@ -487,7 +487,7 @@ We measured the time |tprepare| for :code:`_prepare()`, the time |twait| that ea
 
 We analyzed the total time to completion as a function of the number of CPU cores, which was equal to the number of trajectory blocks, so that each block could be processed in parallel.
 We quantified the strong scaling behavior by calculating the *speed-up* for running on :math:`M` CPU cores with :math:`M` parallel Dask tasks as :math:`S(M) = t^\text{total}(1)/t^\text{total}(M)`, where :math:`t^\text{total}(1)` is the performance of the PMDA code using the serial scheduler.
-The *efficiency* was calculated as :math:`E(M) = S(M)/M`.
+The *efficiency* was calculated as :math:`E(M) = S(M)/M`. The errors of these quantities were derived by the standard error propagation.
 
 To gain better insight into the performance-limiting steps in our algorithm (Fig. :ref:`fig:schema`) we plotted the *maximum* times over all ranks because the overall time to completion cannot be faster than the slowest parallel process.
 For example, for the read I/O time we calculated the total read I/O time for each rank :math:`k` as :math:`t^\text{I/O}_k = \sum_{t=t_k}^{t_k + \tau_k} t^\text{I/O}_{k, t}` and then reported :math:`\max_k t^\text{I/O}_k`.
