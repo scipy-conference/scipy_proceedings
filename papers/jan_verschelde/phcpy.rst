@@ -46,8 +46,8 @@ and data persists in a session without temporary files.
 This also makes PHCpack accessible from Jupyter notebooks, 
 including a JupyterHub server available online [Pascal]_.
 
-The meaning of *solving* evolved from computing approximations, to
-all isolated solutions, to the numerical irreducible decomposition
+*Solving* a system has evolved in meaning, from computing approximations of
+all its isolated solutions, to finding the numerical irreducible decomposition
 of the solution set.  The numerical irreducible decomposition includes
 not only the isolated solutions, but also the representations for all
 positive dimensional solution sets. Such representations consist
@@ -206,8 +206,8 @@ Polynomial Homotopy Continuation
 --------------------------------
 
 As we compute over the field of complex numbers,
-the continuity of the solution set in function of changing
-coefficients of the polynomials in the system is exploited.
+the continuity of the solution set as a function of the coefficients
+of each polynomial in the system is exploited.
 Continuation methods are numerical algorithms which track
 solution paths defined by a one parameter family of polynomial systems.
 This family is called the homotopy.  Homotopy methods take a polynomial
@@ -478,7 +478,7 @@ Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given lengt
 
 Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
-``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new one.
+``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new ones.
 
 Many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by the ``DBSCAN`` class of ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in, for instance, SageMath.
 
