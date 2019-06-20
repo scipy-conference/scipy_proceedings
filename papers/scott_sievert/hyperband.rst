@@ -14,36 +14,38 @@
 
 :bibliography: refs
 
--------------------------------------------
-Better and faster model selection with Dask
--------------------------------------------
+--------------------------------------------------------
+Better and faster hyper-parameter optimization with Dask
+--------------------------------------------------------
 
 .. class:: abstract
 
-   Nearly every machine learning estimator has parameters assumed to be given.
-   Finding the optimal set of these values is a difficult and time-consuming
-   process for most modern estimators and is called "model selection". A recent
-   breakthrough model selection algorithm Hyperband addresses this problem by
+   Nearly every machine learning estimator requires that the user specify
+   certain parameters, aka "hyper-parameters".
+   Finding the optimal set of these values is a time- and resource-consuming
+   process for most modern estimators. A recent
+   breakthrough hyper-parameter optimization algorithm, Hyperband, addresses this problem by
    finding high performing estimators with minimal training and has theoretical
    backing. This paper will explain why Hyperband is well-suited for Dask, the
    required input parameters and the rationale behind some minor modifications.
    Experiments with a neural network will be used for illustration and
-   comparison.
+   comparison. These experiments demonstrate that Dask
+   is well-suited for a parallelized implementation of Hyperband.
 
 .. class:: keywords
 
-   machine learning, model selection, distributed, dask
+   machine learning, model selection, hyper-parameter optimization, distributed, dask
 
 Introduction
 ============
 
 Training any machine learning pipeline requires data, an untrained model or
 estimator and parameters that change the model and data, a.k.a.
-"hyper-parameters". These hyper-parameters greatly influence the performance of
-the model but are typically assumed to be given. A good example is with
+"hyper-parameters". The user needs to specify values for these hyper-parameters in order to use the model. A good example is with
 adapting the ridge regression or LASSO models to the amount of noise in the
 data with the regularization parameter :cite:`marquardt1975`
-:cite:`tibshirani1996`.
+:cite:`tibshirani1996`. Hyper-parameter choice verification can not be
+completed until model training is completed.
 
 Model performance strongly depends on the hyper-parameters provided, even for
 the simple examples above. This gets much more complex when more
@@ -53,18 +55,20 @@ hyper-parameters are required. For example, a particular visualization tool
 tool effectively is titled "Those hyper-parameters really matter"
 :cite:`wattenberg2016`.
 
-These hyper-parameters are typically assumed to be given. This requires
-searching over the possible values to find the best value by some measure
-Typically models are scored on unseen data through a "cross-validation" search.
+These hyper-parameters need to be specified by the user, and there are no good
+heuristics for determining what these values should be.
+These values are typically found through a search over possible values through
+a "cross-validation" search that scores models on unseen data or a holdout set.
 These searches are part of a "model selection" process because hyper-parameters
 are considered part of the model. Even in the simple ridge regression case
-above, a brute force search is required :cite:`marquardt1975`.
+above, a brute force search is required :cite:`marquardt1975`. This brute force
+search quickly grows unfeasible when two or more hyper-parameters are required.
 
-This gets more complex with many different hyper-parameter values to input, and
+Hyper-parameter optimization gets more complex with many different hyper-parameter values to input, and
 especially because there's often an interplay between hyper-parameters. A good
 example is with deep learning, which has specialized techniques for handling
 many data :cite:`bottou2010large`. However, these optimization methods can't
-provide basic hyper-parameters because there are too many data. For example,
+provide basic hyper-parameters because there are too many data to perform optimization efficiently :cite:`bottou2010large`. For example,
 the most basic hyper-parameter "learning rate" or "step size" is
 straightforward with few data but infeasible with many data
 :cite:`maren2015prob`.
@@ -73,15 +77,18 @@ Contributions
 =============
 
 A hyper-parameter search a.k.a "model selection" is required if high
-performance is desired. In practice, it's a burden for machine learning
+performance is desired. In practice, it's expensive and time-consuming for machine learning
 researchers and practitioners. Ideally, model selection algorithms return high
 performing models quickly and are simple to use.
 
+Returning quality hyper-parameters quickly relies on making decisions about
+which hyper-parameters to devote training time to. This might mean
+progressively choosing higher-performing hyper-parameter values or stopping
+low-performing models early during training.
+
 Returning high performing models quickly will allow the user (e.g., a data
-scientist) to more easily use model selection. Having a better search method
-will allow them to easily find high performing models and remove the need for
-repeating model selection searches to obtain a better model. Returning this
-high performing model quickly would lower the barrier to performing model
+scientist) to more easily use model selection. Returning this
+high performing model quickly would lower the expense and/or time barrier to performing model
 selection.
 
 This work
@@ -110,14 +117,14 @@ This paper will review other existing work for model selection before
 detailing the Hyperband implementation in Dask. A realistic set of experiments
 will be presented before mentioning ideas for future work.
 
-.. [#scarce] If computation is not a scarce resource, there is no benefit from
+.. [#scarce] If computation is not a scarce resource, there is little benefit from
    this algorithm.
 
 Related work
 ============
 
-Software for model selection
-----------------------------
+Model selection
+---------------
 
 Model selection finds the optimal set of hyper-parameters for a given model.
 These hyper-parameters are chosen to maximize performance on unseen data.
@@ -140,20 +147,21 @@ A commonly used method for hyper-parameter selection is a random
 selection of hyper-parameters followed by training each model to completion.
 This offers several advantages, including a simple implementation that is very
 amenable to parallelism. Other benefits include sampling "important
-parameters" more densely over unimportant parameters :cite:`bergstra2012random`
+parameters" more densely than unimportant parameters :cite:`bergstra2012random`
 This randomized search is implemented in many places, including in Scikit-Learn
 :cite:`pedregosa2011`.
 
-These implementations do not adapt to previous training, and are by definition
-`passive`. `Adaptive` algorithms can return a higher quality solution in less
+These implementations are by definition `passive` because they do not adapt to previous training. `Adaptive` algorithms can return a higher quality solution in less
 time by adapting to previous training and choosing which hyper-parameters to
 sample. This is especially useful for difficult model selection problems with
 many hyper-parameters and many values for each hyper-parameter.
 
 Bayesian algorithms are popular as adaptive model selection algorithms. These
 algorithms treat the model as a black box and the model scores as a noisy
-evaluation of that black box. These algorithms try to tune a set of
-hyper-parameters over time given serial evaluations of the black box.
+evaluation of that black box. These algorithms have an estimate of
+the optimal set of hyper-parameters and use some probabilistic methods to improve
+the estimate. The choice of which hyper-parameter value to evaluate depends on
+previous evaluations.
 
 Popular Bayesian searches include sequential model-based algorithm
 configuration (SMAC) :cite:`hutter2011`, tree-structure Parzen estimator (TPE)
@@ -168,27 +176,29 @@ computational control :cite:`klein2016`.
 Hyperband
 ---------
 
-Hyperband is an adaptive model selection algorithm :cite:`li2016hyperband`, and
-a principled early stopping scheme [#resources]_ for randomized
-hyper-parameter selections. At the most basic level, it partially trains
+Hyperband is a principled early stopping scheme for randomized hyper-parameter
+selection [#resources]_ and an adaptive model selection algorithm :cite:`li2016hyperband`.
+At the most basic level, it partially trains
 models before stopping models with low scores, then
 repeats. By default, it stops training the bottom 33% of the available models
-on each iteration. This means that the number of models decay over time, and
+at certain times. This means that the number of models decay over time, and
 the surviving models have high scores.
 
-The amount of training to do before stopping models depends on the
-relative importance of training time and hyper-parameters. If training time
+Naturally, model quality depends on two factors: the amount of training and the
+values of various hyper-parameters. If training time
 only matters a little, it makes sense to aggressively stop training models. On
 the flip side, if only training time influence the score, it only makes sense
 to let all models train for as long as possible and not perform any stopping.
 
-.. [#resources] In general, Hyperband is a resource-allocation scheme for model
-   selection.
-
+Hyperband sweeps over the relative importance of hyper-parameter choice and
+amount of training.
 This sweep over training time importance enables a formal mathematical
 statement that Hyperband will return a much higher performing model than the
 randomized search without early stopping returns. This is best characterized by
 an informal presentation of the main theorem:
+
+.. [#resources] In general, Hyperband is a resource-allocation scheme for model
+   selection.
 
 .. latex::
    :usepackage: amsthm
@@ -196,16 +206,16 @@ an informal presentation of the main theorem:
 
 .. raw:: latex
 
-   \newtheorem{thm}{Theorem}
+   \newtheorem{cor}{Corollary}
    \newcommand{\Log}{\overline{\log}}
    \newcommand{\parens}[1]{\left( #1 \right)}
-   \begin{thm}
+   \begin{cor}
    \label{thm:hyperband}
-   (informal presentation of Theorem 5 from \cite{li2016hyperband})
+   (informal presentation of \cite[Theorem 5]{li2016hyperband})
    Assume the loss at iteration $k$ decays like $(1/k)^{1/\alpha}$, and
    the validation losses approximately follow the cumulative distribution
-   function $F(\nu) = (\nu - \nu_*)^\beta$ for $\nu\in[0, 1]$ with optimal
-   validation loss $\nu_*$.
+   function $F(\nu) = (\nu - \nu_*)^\beta$ with optimal
+   validation loss $\nu_*$ for $\nu-\nu_*\in[0, 1]$ .
 
    Higher values of $\alpha$ mean slower convergence, and higher values of
    $\beta$ represent more difficult model selection problems because it's
@@ -228,7 +238,7 @@ an informal presentation of the main theorem:
    performs (i.e., randomized searches and training until completion) after $T$
    resources have been used to train models has loss $$\nu_{\widehat{i}_T} \le
    \nu_* + c \parens{\frac{\log(T) \cdot a}{T}}^{1 / (\alpha + \beta)}$$
-   \end{thm}
+   \end{cor}
 
 For simplicity, only the infinite horizon case is presented though much of the
 analysis carries over to the practical finite horizon Hyperband. [#finite]_
@@ -301,8 +311,8 @@ datasets, and Hyperband is amenable to parallelism. Combining Dask
 with Hyperband is a natural fit.
 
 This work focuses on the case when the computation required is not
-insignificant. Then, the existing `passive` model selection algorithms in
-Dask-ML have limited use because they don't `adapt` to previous training to
+insignificant. Then, the existing passive model selection algorithms in
+Dask-ML have limited use because they don't adapt to previous training to
 reduce the amount of training required.  [#dasksearchcv]_
 
 An adaptive model selection algorithm, Hyperband is implemented in Dask's
@@ -318,20 +328,22 @@ modifications to reduce time to solution.
    More detail at https://ml.dask.org/hyper-parameter-search.html.
 
 .. [#docs] The documentation the Hyperband implementation can be found at
-   https://ml.dask.org.
-
-.. TODO: add link to Hyperband docs
+   https://ml.dask.org/modules/generated/dask_ml.model_selection.HyperbandSearchCV
 
 Hyperband architecture
 ----------------------
 
-There are two levels of parallelism in Hyperband, which result in two
-embarrassingly parallel for-loops:
+There are two levels of parallelism in Hyperband, which result in for-loops:
 
 * an "embarrassingly parallel" sweep over the different brackets of the
   hyper-parameter vs. training time importance
-* in each bracket, the models are trained independently (though the training of
-  low performing models ceases at particular times)
+* in each bracket, the models are trained independently. This would be
+  embarrassingly parallel if not for ceasing training of low performing models
+  at particular times.
+
+The amount of parallelism makes a Dask implementation very attractive. Dask
+Distributed is required because of the nested parallelism: the computational
+graph is dynamic and depends on other nodes in the graph.
 
 Of course, the number of models in each bracket decrease over time because
 Hyperband is an early stopping strategy. This is best illustrated by the
@@ -360,10 +372,11 @@ algorithm's pseudo-code:
        brackets = [(get_num_models(b, max_iter),
                     get_initial_calls(b, max_iter))
                    for b in range(formula(max_iter))]
-       if max_iter == 243:
+       if max_iter == 243:  # for example...
            assert brackets == [(81, 3), (34, 9),
                                (15, 27), (8, 81),
                                (5, 243)]
+           # Each tuple is (num_models, n_init_calls)
        final_models = [sha(n, r) for n, r in brackets]
        return top_k(final_models, k=1)
 
@@ -373,23 +386,25 @@ models on the validation data and ``train`` trains a model for a certain number
 of calls to ``partial_fit``.
 
 Each bracket indicates a value in the tradeoff between hyper-parameter and
-training time importance. With ``max_iter=243``, the least adaptive bracket runs
-5 models until completion and the most adaptive bracket aggressively prunes off
-81 models.
+training time importance, and is specified by the list of tuples in the example
+above. Each bracket is specified so that the total number of ``partial_fit``
+calls is approximately the same among different brackets. Then, having many
+models requires pruning models very aggressively and vice versa with few
+models. As an example, with ``max_iter=243`` the least adaptive bracket has 5
+models and no pruning. The most adaptive bracket has 81 models and fairly
+aggressive early stopping schedule.
 
-This architecture with many embarrassingly parallel for-loops and nested
-parallelism lends itself well to Dask, an advanced distributed scheduler that
-can handle many concurrent jobs. Dask can exploit the parallelism present in
-this algorithm and train models from different brackets concurrently.
+The exact aggressiveness of the early stopping schedule depends one optional
+input to ``HyperbandSearchCV``, ``aggressiveness``. The default value is 3,
+which has some theoretical motivation :cite:`li2016hyperband`.
+``aggressiveness=4`` is likely more suitable for initial exploration when not
+much is known about the model, data or hyper-parameters.
 
-Dask Distributed is required because of the nested parallelism and the decision
-to stop training low-performing models. This means the computational graph is
-dynamic and depends on other nodes in the graph.
 
 Input parameters
 ----------------
 
-Hyperband is fairly easy to use as well. It only requires two input parameters:
+Hyperband is also fairly easy to use. It only requires two input parameters:
 
 1. the number of ``partial_fit`` calls for the best model (via
    ``max_iter``)
@@ -402,7 +417,7 @@ These two parameters rely on knowing how long to train the model
 Trying twice as many parameters with the same amount of computation requires
 halving ``chunks`` and doubling ``max_iter``. There is a third parameter that
 controls the aggressiveness of the search and stopping model training, but it's
-optional and has some theoretical backing.
+optional and has theoretical backing.
 
 In comparison, random searches require three inputs:
 
@@ -414,9 +429,20 @@ In comparison, random searches require three inputs:
 
 Trying twice as many parameters with the same amount of computation requires
 doubling ``num_params`` and halving either ``max_iter`` or ``chunks``, which
-means every model will see half as many data. An balance between training time
+means every model will see half as many data. A balance between training time
 and hyper-parameter importance is implicitly being decided upon. Hyperband has
-one fewer input because it sweeps over this balance's importance.
+one fewer input because it sweeps over this balance's importance in different
+brackets.
+
+The primary advantage to Hyperband's inputs is that they do not require
+balancing training time importance and hyper-parameter importance. The
+values for ``max_iter`` and ``chunks`` can be specified by a rule-of-thumb once
+the number of parameter to be sampled (``n_params``) and the number of examples
+required to be seen by at least one model, ``n_examples``.  Specifically, the
+rule-of-thumb used in experiments is to set ``max_iter = n_params`` and
+``chunks = n_examples / n_params``. With this, no example sees more than
+``n_examples`` examples as desired and Hyperband evalutes (approximately)
+``n_params`` hyper-parameter combinations.
 
 .. [#examples] e.g., something in the form "the most trained model should see
    100 times the number of examples (aka 100 epochs)"
@@ -427,29 +453,19 @@ Dwindling number of models
 --------------------------
 
 At first, Hyperband evaluates many models. As time progresses, the number of
-models decay because Hyperband is a (principled) early stopping scheme.
-Hyperband varies how aggressively to stop model training per bracket. Each
-bracket performs something like a binary search but varies the amount of
-training between each decision. The least aggressive bracket lets a few models
-run without any stopping.
+models decay because Hyperband is an early stopping scheme.  This
+means towards the end of the computation, a few (possibly high-performing)
+models can be training while most of the computational hardware is free. This
+is especially a problem when computational resources are not free (e.g., with
+cloud platforms like Amazon AWS or Google Cloud Engine).
 
-This means towards the end of the computation, a few models can be training
-while most of the computational hardware is free. This is especially a problem
-when computational resources are not free (e.g., with cloud platforms like
-Amazon AWS or Google Cloud Engine).
-
-Hyperband is a principled early stopping scheme, but doesn't protect against at
-least two common cases:
+Hyperband is a principled early stopping scheme, but it doesn't protect against
+at least two common cases:
 
 1. when models have converged before training completes (i.e., the score stays
    constant)
 2. when models have not converged and poor hyper-parameters are chosen (so the
    scores are decreasing).
-
-These common use cases happen when the user specifies a poor set of
-hyper-parameters or that training continue for too long. Regardless,
-the scores of the models above will not increase too much with high
-probability.
 
 Providing a "stop on plateau" scheme will protect against these cases because
 training will be stopped if a model's score stops increasing
@@ -484,15 +500,16 @@ Problem
 
 This section will walk through an image denoising task. The inputs and desired
 outputs are given in Figure :ref:`fig:io+est`. This is an especially difficult
-problem because the noise variance varies slightly between images, which
-requires a model that's at least a little complex.
+problem because the noise variance varies slightly between images. To protect
+against this, let's use a shallow neural network that's more complex than a
+linear model.
 
 Model architecture & Parameters
 -------------------------------
 
 To address that complexity, let's use an autoencoder. These are a type of neural
 network that reduce the dimensionality of the input before expanding to the
-original dimension. This can be thought of a lossy compression. Let's create
+original dimension. This can be thought of as a lossy compression. Let's create
 that model:
 
 .. code-block:: python
@@ -507,21 +524,21 @@ that model:
 .. This autoencoder has two layers that compress
 
 Of course, this is a neural network so there are many hyper-parameters to tune.
-Only one effects the global optimum:
+Only one hyper-parameter affects the model architecture:
 
-* ``estimator__activation``: which specifies the activation the neural network
-  should use.
+* ``estimator__activation``, which specifies the activation the neural network
+  should use. This hyper-parameter is varied between 4 different choices, all
+  different types of the rectified linear unit (ReLU) :cite:`relu`, including
+  the leaky ReLU :cite:`leaky-relu`, parametric ReLU :cite:`prelu` and
+  exponential linear units (ELU) :cite:`elu`.
 
-This hyper-parameter is varied between 4 different choices, all different types
-of the rectified linear unit (ReLU). The other hyper-parameters control
-reaching the global optimum:
-
-.. TODO: cite Xavier, Kaiming, Adam, SGD, weight decay
+All other hyper-parameters do not influence the model architecture. They
+control finding the optimal model after the architecture is fixed:
 
 * ``optimizer``: which optimization method should be used for training? Choices
-  are stochastic gradient descent (SGD)  and Adam.
+  are stochastic gradient descent (SGD) :cite:`bottou2010large` and Adam :cite:`adam`.
 * ``estimator__init``: how should the estimator be initialized before training?
-  Choices are Xavier and Kaiming initialization.
+  Choices are Xavier :cite:`xavier` and Kaiming :cite:`kaiming` initialization.
 * ``batch_size``: how many examples should the optimizer use to approximate the
   gradient? Choices include values between 32 and 512.
 * ``weight_decay``: how much of a particular type of regularization should the
@@ -529,7 +546,8 @@ reaching the global optimum:
   unseen data.
 * ``optimizer__lr``: what learning rate should the optimizer use? This is the
   most basic hyper-parameter for the optimizer.
-* ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer.
+* ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer to
+  incorporate Nesterov momentum :cite:`nesterov2013a`.
 
 There are 4 discrete variables with :math:`160` possible combinations. For each
 one of this combinations, there are 3 continuous variables to tune. Let's
@@ -566,10 +584,11 @@ This model has denoised series of image it's never seen before in Figure
    denoising problem. The output is shown for the best model that Hyperband
    finds. :label:`fig:io+est`
 
-``HyperbandSearchCV`` beat hand-tuning by a considerable margin. While manually
+``HyperbandSearchCV`` beat manual hand-tuning by a considerable margin. While manually
 tuning, I considered any scores about :math:`-0.10` to be pretty good, and I
-obtained scores no higher than :math:`-0.098`. By that measure, a score of
-:math:`-0.093` is fantastic.
+obtained scores no higher than :math:`-0.098`. That's the context necessary
+to interpret ``HyperbandSearchCV``'s score of
+:math:`-0.093` and ``IncrementalSearchCV``'s score of :math:`-0.0975`.
 
 ``HyperbandSearchCV`` only requires `one` parameter besides the model and data
 as discussed above. This number controls the amount of computation that will be
@@ -618,7 +637,7 @@ of examples in the dataset because ``max_iter=243`` for all searches.
 .. figure:: imgs/2019-03-24-calls.png
    :align: center
 
-   The number of ``partial_fit`` calls against the empirically best score (or
+   The number of ``partial_fit`` calls against the validation best score (or
    negative loss). The legend labels are in Table :ref:`table:legend`.
    :label:`fig:calls`
 
@@ -631,7 +650,7 @@ been used this plot in Figure :ref:`fig:time` would be the same as Figure
 .. figure:: imgs/2019-03-24-time.png
    :align: center
 
-   The time required to obtain a particular accuracy. The legend labels are in
+   The time required to obtain a particular validation score (or negative loss). The legend labels are in
    Table :ref:`table:legend`.
    :label:`fig:time`
 
