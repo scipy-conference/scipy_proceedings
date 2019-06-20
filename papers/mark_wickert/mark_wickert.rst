@@ -812,15 +812,25 @@ Conclusions and Future Work
 ---------------------------
 
 Development of the 3D audio simulator was relatively easy on the real-time signal processing side. 
-Getting all of the coordinate transformations, gain and parallax corrections were more complex. Adding 
-the spherical head model calculations, first in the frequency domain (HRIR), and then the time domain 
-(HRIR) was the most complex as special functions are required for the general pressure wave solution.   
+The :code:`pyaudio_helper` interface is very easy to work with.
+Getting all of the coordinate transformations, gain and parallax corrections on the geometry side, was a 
+more complex undertaking. Working with the spherical head model calculations, first in the frequency domain 
+(HRIR), and then the time domain (HRIR), was the most complex. The fact that recursions can be used to evaluate 
+the needed special functions for sound pressure on the surface of a sphere, makes the generation of a 
+CIPIC-like database entry take only a few minutes of compute time.    
 
-Informal testing of human subjects has one well. Precise localization experiments using the static app have 
-not been attempted just yet. The virtual reality aspects of the dynamic app have received many positive 
-comments from informal testing. 
+Informal testing of human subjects has gone well. Precise localization experiments using the static app have 
+not been attempted just yet, as a formal pool human subjects has yet to be gathered. The virtual reality aspects
+of the dynamic app have received many positive comments from informal testing with those interested in 3D audio.
 
-The Jupyter notebooks used in the analysis and development of this paper can be found on GitHub [3D_Audio]_.
+For future research, this simulator will be used to evaluate personalized HRIR fitting to human subjects, based on 
+their upper torso anthropometrics. For the case of the spherical head, it is of interest to consider alternative 
+HRIR grids. The 1 m radius 1250 point grid of angle pairs is no longer a limitation. For close range 
+sound localization a different grid of angle pairs and with :math:`r < 1\text{ m}`, can be used. This would 
+make filter switching on the real-time DSP side of things finer grained, and hence more natural.
+
+The Jupyter notebooks used in the analysis and development of this paper can be found on GitHub [3D_Audio]_. 
+This will give open access to anyone interested in trying out the simulator.
 
 
 References
