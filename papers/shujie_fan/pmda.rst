@@ -423,8 +423,8 @@ In order to characterize the performance of PMDA on a typical HPC machine we per
 For the *RMSD* task we computed the time series of root mean square distance after optimum superposition (RMSD) of all 564 |Calpha| atoms of a protein with the initial coordinates at the first frame as reference, as implemented in class :code:`pmda.rms.RMSD`.
 The RMSD calculation with optimum superposition was performed with the fast QCPROT algorithm :cite:`Theobald:2005vn` as implemented in MDAnalysis :cite:`Michaud-Agrawal:2011fu`.
 
-As a second test case we computed the water oxygen-oxygen radial distribution function (*RDF*, Eq. :ref:`eq:rdf`) for all oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
-The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N^2)`) of distances for each time step; it additionally exemplifies a non-trivial reduction.
+As a second test case we computed the water oxygen-oxygen radial distribution function (*RDF*, Eq. :ref:`eq:rdf`) in 75 bins up to a cut-off of 5 Å for all 24,239 oxygen atoms in the water molecules in our test system, using the class :code:`pmda.rdf.InterRDF`.
+The RDF calculation is compute-intensive due to the necessity to calculate and histogram a large number (:math:`\mathcal{O}(N)` because of the use of a cut-off) of distances for each time step; it additionally exemplifies a non-trivial reduction.
 
 These two common computational tasks differ in their computational cost and represent two different requirements for data reduction and thus allow us to investigate two distinct use cases.
 We investigated a long (9000 frames) and a short trajectory (900 frames) to assess to which degree parallelization remained practical. 
