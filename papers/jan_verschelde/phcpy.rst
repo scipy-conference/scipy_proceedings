@@ -31,9 +31,9 @@ Solving Polynomial Systems with phcpy
 
 .. class:: abstract
 
-   The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with    homotopy continuation.
+   The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with   homotopy continuation.
 
-   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years.  One result is the availability of phcpy   through a JupyterHub server featuring Python2, Python3, and SageMath kernels.
+   This paper explores new developments in phcpy, a scripting interface for PHCpack, over the past five years. For instance, phcpy is now available online through a JupyterHub server featuring Python2, Python3, and SageMath kernels. As small systems are solved in real-time by phcpy, they are suitable for interactive exploration through the notebook interface. Meanwhile, phcpy supports GPU parallelization, improving the speed and quality of solutions to much larger polynomial systems. From various model design and analysis problems in STEM, certain classes of polynomial system frequently arise, to which phcpy is well-suited.
 
 Introduction
 ============
@@ -46,12 +46,10 @@ and data persists in a session without temporary files.
 This also makes PHCpack accessible from Jupyter notebooks, 
 including a JupyterHub server available online [Pascal]_.
 
-*Solving* a system has evolved in meaning, from computing approximations of
-all its isolated solutions, to finding the numerical irreducible decomposition
-of the solution set.  The numerical irreducible decomposition includes
-not only the isolated solutions, but also the representations for all
-positive dimensional solution sets. Such representations consist
-of sets of *generic points*, partitioned along the irreducible factors.
+phcpy takes as input a list of polynomials in several variables, with complex-valued floating-point coefficients.
+This system is then numerically solved over the field of complex numbers, by using a homotopy continuation method to construct its embedding into a start system with known solutions, and tracking the solution paths to the given coefficient choices.
+phcpy is also able to represent the numerical irreducible decomposition of the system's solution set,
+which yields the *positive dimensional solution sets* containing infinitely many points, in addition to the isolated solutions.
 
 The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
@@ -114,28 +112,20 @@ for PHCpack's Macaulay2 bindings [GPV13]_.
 User Interaction
 ================
 
-CGI Scripting
+Online access
 -------------
 
-In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_.
+With JupyterHub [JUPH]_, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session. As of the middle of May 2019, our web server has 146 user accounts, each having access to our JupyterHub instance, which is currently accepting public sign-ups.
 
-MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_. MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
 
-
-As of the middle of May 2019, our web server has 146 user accounts, each having access to our new JupyterHub instance [JUPH]_.
-
-JupyterHub
-----------
-
-With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
-
-For the user administration, we refreshed our first web interface.
+For the user administration of our JupyterHub, we refreshed this first web interface.
 A custom JupyterHub Authenticator connects to the existing MySQL database
 and triggers a SystemdSpawner that isolates the actions of users to separate 
-processes and logins in generic home folders.
-
-The account management prompts by e-mail were hooked to new Tornado RequestHandler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each such route serves HTML forms seamlessly with the JupyterHub interface, by extending its Jinja templates.
-
+processes and logins in generic home folders. The email account management prompts
+were hooked to new Tornado RequestHandler instances, which perform account registration
+and activation in the database, as well as password recovery and reset. Each such route
+serves HTML forms seamlessly with the JupyterHub interface, by extending its Jinja templates.
 
 Code Snippets
 -------------
@@ -169,7 +159,7 @@ Direct Manipulation
 
 One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets [IPYW]_ and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
-The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
+The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js`` to your own user directory).
 
 This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
 
@@ -370,10 +360,14 @@ for algebraic curves.
 Positive Dimensional Solution Sets
 ----------------------------------
 
-As solving evolved from approximating all isolated solutions
-of a polynomial system into computing a numerical irreducible decomposition,
-the meaning of a solution expanded as well.
-To illustrate this expansion, consider the example of the twisted cubic,
+*Solving* a system has evolved in meaning, from computing approximations of
+all its isolated solutions, to finding the numerical irreducible decomposition
+of the solution set.  The numerical irreducible decomposition includes
+not only the isolated solutions, but also the representations for all
+positive dimensional solution sets. Such representations consist
+of sets of *generic points*, partitioned along the irreducible factors.
+
+To illustrate this expanded sense of a 'solution', we consider the twisted cubic,
 known in algebraic geometry as the first nontrivial space curve.
 We use this example to illustrate two different representations
 of this space curve:
