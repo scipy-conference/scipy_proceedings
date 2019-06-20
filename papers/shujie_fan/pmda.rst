@@ -514,7 +514,7 @@ The parallelized RMSD analysis in :code:`pmda.rms.RMSD` scaled well only to abou
 The efficiency dropped below 0.8 (Fig. :ref:`fig:rmsd` B, E) and the maximum achievable speed-up remained below 10 for the short trajectory (Fig. :ref:`fig:rmsd` C) and below 20 for the long one (Fig. :ref:`fig:rmsd` F).
 Overall, using the *multiprocessing* scheduler and either Lustre or SSD gave the best performance and shortest time to solution.
 The *distributed* scheduler with SSD gave widely variable results as seen by large standard deviations over multiple repeats.
-It still performed performed better than when the Lustre file system was used but overall, for a single node, the *multiprocessing* scheduler always gave better performance with less variation in run time.
+It still performed better than when the Lustre file system was used but overall, for a single node, the *multiprocessing* scheduler always gave better performance with less variation in run time.
 These results were consistent with findings in our earlier pilot study where we had looked at the RMSD task with Dask and had found that *multiprocessing* with both SSD and Lustre had given good single node performance but, using *distributed*, had not scaled well beyond a single *SDSC Comet* node :cite:`Khoshlessan:2017ab`.
 
 .. figure:: figs/wait_compute_io_rms.pdf
