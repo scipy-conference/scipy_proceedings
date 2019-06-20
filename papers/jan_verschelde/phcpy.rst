@@ -112,7 +112,7 @@ for PHCpack's Macaulay2 bindings [GPV13]_.
 User Interaction
 ================
 
-Online access
+Online Access
 -------------
 
 With JupyterHub [JUPH]_, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session. As of the middle of May 2019, our web server has 146 user accounts, each having access to our JupyterHub instance, which is currently accepting public sign-ups.
