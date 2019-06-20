@@ -629,7 +629,7 @@ having to fill the DESI code with distinct CPU and GPU blocks, and additionally
 to avoid being tied to a particular vendor, is still an open question for us.
 
 .. figure:: figures/eigh.png
-   :scale: 44%
+   :scale: 42%
 
    Data from performing an eigh matrix decomposition of various sizes on Edison
    Ivy Bridge, Cori Haswell, Cori KNL, and Cori Volta. We used CuPy to perform
