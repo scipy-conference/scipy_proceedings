@@ -156,26 +156,22 @@ Preprocessing dataset
 
 We launched the preprocessing dataset tasks on the servers of Compute Canada. This step was carried out using 172 nodes 
 and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16G memory). We preprocessed the user data, 
-the product data, and the department data. The bash script has given as follow:
-
-.. code-block:: bash
-
-   #!/bin/bash
-   #!SBATCH --time=48:00:00
-   #SBATCH --account=def-jgnes
-   #!SBATCH --job-name=market_cpu
-   #SBATCH --output=market_out_cpu
-   #SBATCH --error=market_err_cpu
-   #!SBATCH --mem=32000M
-   #SBATCH --mail-user=tahiri.nadia@courrier.uqam.ca
-   #SBATCH --mail-type=BEGIN
-   #SBATCH --mail-type=END
-   #SBATCH --mail-type=FAIL
+the product data, and the department data. The preprocessing had a 48 hour limit and used 32 GB of memory.
 
 Models
 ------
 
 In this section, we described the workflow (see Figure :ref:`workflow`) and the models we used.
+The graphical representation of the workflow in Figure :ref:`workflow` predicts the next basket by using three models: LSTM, NNMF, and GBT (see next section).
+
+.. figure:: figures/workflow.png
+   :align: center
+   :scale: 29%
+   
+   The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
+   The first level of the model used LSTM and NNMF. 
+   The second level of the model applied GBT.
+   Finally, the last test considered to predict the next basket by using :math:`F_1`. :label:`workflow`
 
 Long short-term memory (LSTM) network
 =====================================
@@ -333,15 +329,6 @@ This score is frequently used especially when the relevant elements are scarce.
 
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1` if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
-
-.. figure:: figures/workflow.png
-   :align: center
-   :scale: 29%
-   
-   The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
-   The first level of the model used LSTM and NNMF. 
-   The second level of the model applied GBT.
-   Finally, the last test considered to predict the next basket by using :math:`F_1`. :label:`workflow`
 
 Statistics
 -------------
