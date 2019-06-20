@@ -27,7 +27,7 @@ Hardware verification is the process of checking that a given design correctly i
    :scale: 35%
    :align: center
 
-   Overview of the prototype pipeline. Top: the existing workflow (randomized testing). Bottom: the complementary machine learning (ML) flow. In the final deployed version, approximately 1000 test candidates are provided to the ML flow, which passed about 400 tests. This corresponds to the 10% of the number of the tests in the top flow. The cubes correspond to the pre-trained machine learning models (blue: a supervised model, green: an unsupervised model). :label:`Fig.1`
+   Overview of the prototype pipeline. Top: the existing workflow (the randomized testing). Bottom: the complementary machine learning (ML) flow. By default, engineers run all tests that are randomly generated. In the ML flow, before running tests, the test candidates (input settings) are shown to the models first. The models then flag which tests are likely to fail. In the end, engineers can run the flagged test candidates only. In the final deployed version, approximately 1000 test candidates are provided to the ML flow, which passed about 400 tests. This corresponds to the 10% of the number of the tests in the top flow. The cubes correspond to the pre-trained machine learning models (blue: a supervised model, green: an unsupervised model). :label:`Fig.1`
 
 Failures (bugs) in hardware verification
 ########################################
