@@ -16,7 +16,7 @@ Parameter Estimation Using the Python Package pymcmcstat
 
 .. class:: abstract
 
-   Metropolis algorithms have greatly expanded our ability to estimate parameter distributions.  In this paper we introduce pymcmcstat, which utilizes the Delayed Rejection Adaptive Metropolis (DRAM) algorithm to perform Markov Chain Monte Carlo (MCMC) simulations.  The user interface provides a straight forward environment for experienced and new Python users to quickly compare their models with data.  Furthermore, the package provides a wide variety of diagnostic tools for visualizing uncertainty propagation.  This package has been utilized in a wide array of scientific and engineering problems, including radiation source localization and constitutive model development of smart material systems.
+   A Bayesian approach to solving inverse problems provides insight regarding model limitations as well as the underlying model and observation uncertainty.  In this paper we introduce pymcmcstat, which provides a wide variety of tools for estimating unknown parameter distributions.  For scientists and engineers familiar with least-squares optimization, this package provides a similar interface from which to expand their analysis to a Bayesian framework.  This package has been utilized in a wide array of scientific and engineering problems, including radiation source localization and constitutive model development of smart material systems.
 
 .. class:: keywords
 
