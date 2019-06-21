@@ -20,21 +20,21 @@ Better and faster hyper-parameter optimization with Dask
 
 .. class:: abstract
 
-   Nearly every machine learning estimator requires that the user specify
-   certain parameters, aka "hyper-parameters".
-   Finding the optimal set of these values is a time- and resource-consuming
-   process for most modern estimators. A recent
-   breakthrough hyper-parameter optimization algorithm, Hyperband, addresses this problem by
-   finding high performing estimators with minimal training and has theoretical
-   backing. This paper will explain why Hyperband is well-suited for Dask, the
-   required input parameters and the rationale behind some minor modifications.
-   Experiments with a neural network will be used for illustration and
-   comparison. These experiments demonstrate that Dask
-   is well-suited for a parallelized implementation of Hyperband.
+    Nearly every machine learning model requires that the user specify certain
+    parameters before training begins, aka "hyper-parameters". Finding the
+    optimal set of hyper-parameters is often a time- and resource-consuming
+    process. A recent breakthrough hyper-parameter optimization algorithm,
+    Hyperband, can find high performing hyper-parameters with minimal training
+    and has theoretical backing. This paper will provide intuition for
+    Hyperband, explain it's use and why it's well-suited for Dask, a Python
+    library that scales Python to larger datasets and more computational
+    resources. Experiments find high performing hyper-parameters more quickly
+    in the presence of parallel computational resources and with a deep
+    learning model.
 
 .. class:: keywords
 
-   machine learning, model selection, hyper-parameter optimization, distributed, dask
+   machine learning, hyper-parameter optimization, distributed computing, dask
 
 Introduction
 ============
