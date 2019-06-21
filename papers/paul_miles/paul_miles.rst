@@ -66,7 +66,7 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
 where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  There are a wide variety of Metropolis algorithms that may be used within MCMC.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  There are a wide variety of Metropolis algorithms that may be used within MCMC, and options available with pymcmcstat are outlined in the following section.
 
 Procedurally, to run an MCMC simulation using pymcmcstat, the user will need to complete the following steps:
 
@@ -113,6 +113,10 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
     mcstat.run_simulation()
 
 Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
+
+Simulation Options
+------------------
+In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
 
 .. raw:: latex
 
