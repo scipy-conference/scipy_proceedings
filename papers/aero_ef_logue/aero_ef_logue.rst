@@ -154,7 +154,7 @@ this is then scaled between 0 and 100.
 .. math::
     :label: score
 
-    score = \dfrac {1}{1+logloss}
+    score = \dfrac {100}{1+logloss}
 
 Note:
 
