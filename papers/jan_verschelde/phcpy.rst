@@ -484,11 +484,11 @@ We consider some examples from various literatures which apply polynomial constr
 Rigid Graph Theory
 ------------------
 
-The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_.
+The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et al. [BELT18]_.
 
 Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given length :math:`d_{e}`. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`\mathbf{d}`.  An upper bound over all :math:`d` and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices, unless the upper bound is infinite) can be computed. In particular, the Cayley-Menger matrix of :math:`\mathbf{d}` [LLMM14]_ (i.e., the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, proportional to the mixed volume.   Certain of its square subsystems characterize the mechanism in terms of these bounds on unique mechanisms.
 
-Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
+Bartzos et al. implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
 ``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new ones.
 
@@ -552,7 +552,7 @@ Continuation homotopies were developed as a substitute for algebraic elimination
 Systems Biology
 ---------------
 
-Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might seek to:
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et al. [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might seek to:
 
 * determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states;
 * evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state;
