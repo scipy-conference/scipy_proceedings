@@ -145,7 +145,7 @@ of this paper, was defined per [Mitre]_ as follows:
 .. math::
     :label: score
 
-    score = \dfrac {1}{1+logloss}
+    score = \dfrac {100}{1+logloss}
 
 Notes:
 
@@ -377,7 +377,7 @@ probabilities to increase the score.
 
 In order to calibrate our merging neural network we used a modification of the
 temperature scaling approach proposed in [Guo]_. The temperature scaling
-approach finds the optimal temperature scalar to divide the the output logits
+approach finds the optimal temperature scalar to divide the output logits
 by, that minimizes the log loss on the cross-validation dataset. We extended
 this method by finding the separate optimal temperature scalars for each
 predicted modulation type using the cross-validation data. Temperature scaling
