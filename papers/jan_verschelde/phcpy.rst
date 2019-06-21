@@ -176,8 +176,7 @@ One consequence of the Jupyter notebook's rich output is the possibility of rich
 
 The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying ``apollonius_d3.ipynb`` and ``apollonius_d3.js`` to one's own user directory).
 
-This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
-
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles can be solved interactively by our system in real-time (Fig. :ref:`apollonius`). Although any of the 8 tangent circles could have nonzero imaginary part in their x/y position or radius, depending on input coefficients (input circles), such circles are not rendered. Thanks to its rich output capabilities, Jupyter is a suitable environment for mapping algebraic inputs to the planar geometric objects they represent (a data binding) through D3.js [D3]_.
 
 .. figure:: ./apollonius.png
   :figclass: h
