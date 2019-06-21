@@ -47,9 +47,16 @@ This also makes PHCpack accessible from Jupyter notebooks,
 including a JupyterHub server available online [Pascal]_.
 
 phcpy takes as input a list of polynomials in several variables, with complex-valued floating-point coefficients.
-This system is then numerically solved over the field of complex numbers, by using a homotopy continuation method to construct its embedding into a start system with known solutions, and tracking the solution paths to the given coefficient choices.
+Homotopy methods connect this given system to a 'start system' with known solutions. 
+A homotopy is a family of polynomial systems where one of the variables is considered as a parameter.
+Polynomial homotopy continuation combines the application of homotopy and continuation methods,
+which extend the convergence of Newton's method from local to global, to solve polynomial systems.
+
+Numerical continuation methods track the solution paths, depending on the parameter,
+originating at the known solutions to the solutions of the given system.
 phcpy is also able to represent the numerical irreducible decomposition of the system's solution set,
-which yields the *positive dimensional solution sets* containing infinitely many points, in addition to the isolated solutions.
+which yields the *positive dimensional solution sets* containing infinitely many points,
+in addition to the isolated solutions.
 
 The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
@@ -67,19 +74,19 @@ mention its application to their computations.
 * Roots of Alexander polynomials [CD18]_.
 * Critical points of equilibrium problems [SWM16]_.
 
-phcpy is in ongoing development. At the time of writing, 
+The package phcpy is in ongoing development. At the time of writing, 
 this paper is based on version 0.9.5 of phcpy,
 whereas version 0.1.5 was current at the time of [Ver14]_.
 An example of these changes is that the software described in [SVW03]_ 
 was recently parallelized for phcpy [Ver18]_.
 
-Mission
----------
+A Scripting Interface for PHCpack
+---------------------------------
 
 The mission of phcpy is to bring polynomial homotopy continuation
 into Python's computational ecosystem.
 
-phcpy wraps the shared object files of a compiled PHCpack, 
+The package phcpy wraps the shared object files of a compiled PHCpack, 
 which makes the methods more accessible without sacrificing their efficiency.
 First, the wrapping transfers the implementation of the many available homotopy algorithms in a direct way into Python modules.
 Second, we do not sacrifice the efficiency of the compiled code. 
@@ -91,7 +98,7 @@ numerical linear algebra.
 PHCpack prototyped the first algorithms to compute 
 a numerical irreducible decomposition of the solution set
 of a polynomial system.
-phcpy aims to bring the algorithms of numerical algebraic geometry
+The package phcpy aims to bring the algorithms of numerical algebraic geometry
 into the computational ecosystem of Python.
 
 Related Software
@@ -115,11 +122,19 @@ User Interaction
 Online access
 -------------
 
-With JupyterHub [JUPH]_, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session. As of the middle of May 2019, our web server has 146 user accounts, each having access to our JupyterHub instance, which is currently accepting public sign-ups.
+The first area of improvement that phcpy brings is in the interaction with the user.
 
-In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_. MySQLdb [MSDB]_ does the management of user data, including a) names and encrypted passwords, b) generic, random folder names to store data files, and c) file names with polynomial systems they have solved. With the module smtplib, we defined email exchanges for an automatic 2-step registration process and password recovery protocol.
+With JupyterHub [JUPH]_, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session. As of the middle of May 2019, our web server has 146 user accounts, each having access to our JupyterHub instance. Our server is available for public use, after creating a free account.
 
-For the user administration of our JupyterHub, we refreshed this first web interface.
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_. This design is described in Chapter 6 of [Yu15]_. For the user administration of our JupyterHub, we refreshed this first web interface, retaining the following architecture.
+
+MySQLdb [MSDB]_ does the management of user data, including 
+a) names and encrypted passwords, 
+b) generic, random folder names to store data files, and 
+c) file names with polynomial systems they have solved.
+With the module smtplib, we defined email exchanges for an automatic 
+2-step registration process and password recovery protocol.
+
 A custom JupyterHub Authenticator connects to the existing MySQL database
 and triggers a SystemdSpawner that isolates the actions of users to separate 
 processes and logins in generic home folders. The email account management prompts
@@ -195,13 +210,11 @@ fast computers for a long time is not hard.
 Polynomial Homotopy Continuation
 --------------------------------
 
-As we compute over the field of complex numbers,
-the continuity of the solution set as a function of the coefficients
-of each polynomial in the system is exploited.
-Continuation methods are numerical algorithms which track
-solution paths defined by a one parameter family of polynomial systems.
-This family is called the homotopy.  Homotopy methods take a polynomial
-system as input and construct a suitable embedding of the input system
+By computing over the field of complex numbers, we exploit the continuity
+of the solution set as a function of the coefficients of the polynomials in the system.
+These numerical algorithms, called continuation methods, track solution paths defined by
+a one parameter family of polynomial systems (the homotopy). Homotopy methods take a
+polynomial system as input, and construct a suitable embedding of the input system
 into a family which contains a start system with known solutions.
 
 We say that a homotopy is *optimal* if for generic instances of
@@ -214,7 +227,8 @@ three classes of polynomial systems:
 1. *dense polynomial systems*
 
    A polynomial of degree *d* can be deformed into a product of *d*
-   linear polynomials.  If we do this for all polynomials in the system,
+   linear polynomials.  
+   If we do this for all polynomials in the system (as in [VC93]_),
    then the solutions of the deformed system are solutions of linear systems.
    Continuation methods track the paths originating at the solutions of
    the deformed system to the given problem.
@@ -226,7 +240,8 @@ three classes of polynomial systems:
    that appear are called Newton polytopes.  The mixed volume of the
    tuple of Newton polytopes associated with the system is a sharp upper
    bound for the number of isolated solutions.
-   Polyhedral homotopies start a solutions of systems that are sparser
+   Polyhedral homotopies ([HS95]_, [VVC94]_)
+   start at solutions of systems that are sparser than the given system
    and extend those solutions to the solutions of the given problem.
 
 3. *Schubert problems in enumerative geometry*
@@ -236,7 +251,7 @@ three classes of polynomial systems:
    Homotopies to solve geometric problems move the input data
    to special position, solve the special configuration, and then
    deform the solutions of the special problem into those of the
-   original problem.
+   original problem.  Such homotopies were introduced in [HSS98]_.
 
 All classes of homotopies share the introduction of random constants.
 
@@ -300,6 +315,10 @@ The script above was executed on a 2.2 GHz Intel Xeon E5-2699 processor
 in a CentOS Linux workstation with 256 GB RAM
 and the elapsed performance is in Table :ref:`perfcyc7overhead`.
 
+.. raw:: latex
+
+   \floatplacement{table}{hb}
+
 .. table:: Elapsed performance of the blackbox solver in double,
            double double, and quad double precision. :label:`perfcyc7overhead`
 
@@ -321,7 +340,7 @@ overhead caused by the multiprecision arithmetic by multitasking.
    +-------+-------+-------+-------+
    | tasks |   8   |   16  |   32  |
    +=======+=======+=======+=======+
-   |  dd   | 42.41 |  5.07 |  3.88 |
+   |  dd   |  7.56 |  5.07 |  3.88 |
    +-------+-------+-------+-------+
    |  qd   | 96.08 | 65.82 | 44.35 |
    +-------+-------+-------+-------+
@@ -331,7 +350,7 @@ is less than the 5.45 of Table :ref:`perfcyc7overhead`:
 with 16 tasks we doubled the precision and finished the computations
 in about the same time.
 The 42.41 and 44.35 in Table :ref:`perfcyc7parallel` are similar enough
-to state that with 32 instead of 8 tasks we doubled the precision from 
+to state that with 32 instead of 1 task we doubled the precision from 
 double double to quad double precision in about the same time.
 
 The data in Table :ref:`perfcyc7parallel` is 
@@ -493,16 +512,24 @@ A remarkable variety of systems of constraint also take on polynomial form, or c
 Algebraic Kinematics
 --------------------
 
-
 We have discussed an application of numerical methods to counting unique instances of rigid-body mechanisms. In fact, kinematics and numerical algebraic geometry have a close historical relationship. Following Wampler and Sommese [WS11]_, other geometric problems arising from robotics include **analysis** of specific mechanisms e.g.,:
 
-* Motion decomposition - into assembly modes (of individual mechanisms) or subfamilies of mechanisms (with varying mobility);
-* Mobility analysis - degrees of freedom of a mechanism (sometimes exceptional), sometimes specific to certain configurations (e.g. gimbal lock);
-* Kinematics - effector position given parameters (forward kinematics), and vice versa (inverse kinematics, e.g. used in computer animation);
-* Singularity analysis - detection of situations where the mechanism can move without change to its parameters (input singularity), or the parameters can change without movement of the mechanism (output singularity);
-* Workspace analysis - determining all possible outputs of the mechanism, i.e. reachable poses;
+* Motion decomposition - into assembly modes (of individual mechanisms)
+  or subfamilies of mechanisms (with varying mobility);
+* Mobility analysis - degrees of freedom of a mechanism 
+  (sometimes exceptional),
+  sometimes specific to certain configurations (e.g., gimbal lock);
+* Kinematics - effector position given parameters (forward kinematics),
+  and vice versa (inverse kinematics, e.g. used in computer animation);
+* Singularity analysis - detection of situations where the mechanism
+  can move without change to its parameters (input singularity),
+  or the parameters can change without movement of the mechanism 
+  (output singularity);
+* Workspace analysis - determining all possible outputs of the mechanism, 
+  i.e.: reachable poses;
 
-...as well as the **synthesis** of mechanisms that can reach certain sets of outputs, or that can be controlled by a certain input/output relationship.
+...as well as the **synthesis** of mechanisms that can reach certain sets
+of outputs, or that can be controlled by a certain input/output relationship.
 
 Fig. :ref:`fig4barcoupler` illustrates a reproduction
 of one synthesis result in the mechanism design literature [MW90]_.
@@ -667,6 +694,16 @@ References
            The Journal of Software for Algebra and Geometry: Macaulay2,
            5:20-25, 2013.  DOI 10.2140/jsag.2013.5.20.
 
+.. [HS95] B. Huber and B. Sturmfels.
+          *A polyhedral method for solving sparse polynomial systems.*
+          Mathematics of Computation, 64(212):1541-1555, 1995.
+          DOI 10.1090/S0025-5718-1995-1297471-4.
+
+.. [HSS98] B. Huber, F. Sottile, and B. Sturmfels.
+           *Numerical Schubert calculus.*
+           Journal of Symbolic Computation, 26(6):767-788, 1998.
+           DOI 10.1006/jsco.1998.0239.
+
 .. [IPYW] *ipywidgets: Interactive HTML Widgets*
     https://github.com/jupyter-widgets/ipywidgets
 
@@ -684,9 +721,6 @@ References
 
 .. [JUP15] *Jupyter notebook snippets menu - jupyter-contrib-nbextensions 0.5.0*
            https://jupyter-contrib-nbextensions.readthedocs.io/en/latest/nbextensions/snippets_menu/readme.html.
-
-.. [SymPyDocs] *SymPy 1.3 documentation.*
-           https://docs.sympy.org/latest/index.html
 
 .. [Klu16] T. Kluyver, B. Ragan-Kelley, F. P |eacute| rez, B. Granger,
            M. Bussonnier, J. Frederic, K. Kelley, J. Hamrick, J. Grout,
@@ -809,6 +843,17 @@ References
            Springer-Verlag, 2018.
            DOI 10.1007/978-3-319-99639-4_25.
 
+.. [VC93] J. Verschelde and R. Cools.
+          *Symbolic homotopy construction.*
+          Applicable Algebra in Engineering, Communication and Computing,
+          4(3):169-183, 1993.  DOI 10.1007/BF01202036.
+
+.. [VVC94] J. Verschelde, P. Verlinden, and R. Cools.
+           *Homotopies exploiting Newton polytopes for solving sparse
+           polynomial systems.*
+           SIAM Journal on Numerical Analysis 31(3):915-930, 1994.
+           DOI 10.1137/0731049.
+
 .. [VY15] J. Verschelde and X. Yu.
           *Polynomial Homotopy Continuation on GPUs.*
           ACM Communications in Computer Algebra, volume 49, issue 4, 
@@ -820,12 +865,7 @@ References
     Acta Numerica, 20, pages 469–567. 2011.
     DOI: 10.1017/S0962492911000067.
 
-.. [LLMM14] L. Liberti, C. Lavor, N. Maculan, and A. Mucherino.
-    *Euclidean Distance Geometry and Applications.*
-    SIAM Review 56, no. 1 (January 2014): 3–69. DOI 10.1137/120875909
-
-.. [IPYW] *ipywidgets: Interactive HTML Widgets*
-    https://github.com/jupyter-widgets/ipywidgets
-
-.. [MSDB] *MySQLdb 1.2.4b4 documentation*
-   https://mysqlclient.readthedocs.io/
+.. [Yu15] X. Yu.
+          *Accelerating Polynomial Homotopy Continuation 
+          on Graphics Processing Units.*
+          PhD thesis, University of Illinois at Chicago, 2015.
