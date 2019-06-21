@@ -66,14 +66,14 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
 where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  There are a wide variety of Metropolis algorithms that may be used within MCMC, and options available with pymcmcstat are outlined in the following section.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  There are a wide variety of Metropolis algorithms that may be used for MCMC, and options available within pymcmcstat are outlined in the following section.
 
-Procedurally, to run an MCMC simulation using pymcmcstat, the user will need to complete the following steps:
+At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
-1. Import and initialize MCMC object
-2. Add data to the simulation
-3. Define sum-of-squares function
-4. Define model settings and simulation options
+1. Data: In order to fit a model, one requires observations (:math:`F^{obs}(i)`).  These may be either experimental measurements or high-fidelity model results.
+2. Model: The user needs to define a model of the form :math:`F(i, q)`; i.e., a model that depends on a set of parameters :math:`q`.  Strictly speaking the model can be created in any language the user desires so long as it can be called within your Python script.  For example, if your model code is written in C++ or Fortran, this is easily done using the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_.
+3. Sum-of-squares function: The sum-of-squares error between the model and data, :math:`SS_q`, will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.  Defining a function to calculate the sum-of-squares error should be familiar for scientists who have performed least-squares optimization, and several examples have been provided later on in the paper.
+4. Parameters: The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
 5. Add model parameters
 6. Execute simulation
 
