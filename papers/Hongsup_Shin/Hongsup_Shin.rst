@@ -79,7 +79,7 @@ The input data was preprocessed based on the domain knowledge of the verificatio
    :scale: 50%
    :align: center
 
-   Unique failure signature (UFS) recovery rate (left) and efficiency (right) metrics across 15-day (1 month, the tests were not generated daily during this duration) performance for the three models (union, supervised and unsupervised). The dashed orange line in the efficiency plot shows average fail-discovery rate (the lower bound of the efficiency metric). Note that the union approach catches more UFS but lowers efficiency because more tests should be run. :label:`Fig.3`
+   The unique failure signature (UFS) recovery rate (left) and efficiency (right) metrics across 15-day (1 month, the tests were not generated daily during this duration) performance for the three models (union, supervised and unsupervised). The dashed orange line in the efficiency plot shows average fail-discovery rate (the lower bound of the efficiency metric). Note that the union approach catches more UFS but lowers efficiency because more tests should be run. :label:`Fig.3`
 
 Models
 ######
