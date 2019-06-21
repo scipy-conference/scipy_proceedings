@@ -59,8 +59,8 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-The availability of "off-the-shelf" molecular dynamics engines has made simulating complex systems possible across many scientific fields.
-Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials :cite:`Cersonsky2018a` and develop coarse-graining approaches to access increasing timescales.
+The availability of "off-the-shelf" molecular dynamics engines (e.g. HOOMD-blue :cite:`Anderson2008,Glaser2015`, LAMMPS :cite:`Plimpton1995`, GROMACS :cite:`Berendsen1995`) has made simulating complex systems possible across many scientific fields.
+Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials :cite:`Cersonsky2018a` and develop coarse-graining approaches to access increasing timescales :cite:`Simon2019`.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
 The ``freud`` library is one such analysis package that differentiates itself from others through its focus on colloidal and nano-scale systems.
 
