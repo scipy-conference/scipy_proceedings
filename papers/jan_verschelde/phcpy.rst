@@ -31,9 +31,9 @@ Solving Polynomial Systems with phcpy
 
 .. class:: abstract
 
-   The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with    homotopy continuation.
+   The solutions of a system of polynomials in several variables are often    needed, e.g.: in the design of mechanical systems, and    in phase-space analyses of nonlinear biological dynamics.    Reliable, accurate, and comprehensive numerical solutions are available    through PHCpack, a FOSS package for solving polynomial systems with   homotopy continuation.
 
-   This paper explores the development of phcpy, a scripting interface for    PHCpack, over the past five years.  One result is the availability of phcpy   through a JupyterHub server featuring Python2, Python3, and SageMath kernels.
+   This paper explores new developments in phcpy, a scripting interface for PHCpack, over the past five years. For instance, phcpy is now available online through a JupyterHub server featuring Python2, Python3, and SageMath kernels. As small systems are solved in real-time by phcpy, they are suitable for interactive exploration through the notebook interface. Meanwhile, phcpy supports GPU parallelization, improving the speed and quality of solutions to much larger polynomial systems. From various model design and analysis problems in STEM, certain classes of polynomial system frequently arise, to which phcpy is well-suited.
 
 Introduction
 ============
@@ -46,23 +46,17 @@ and data persists in a session without temporary files.
 This also makes PHCpack accessible from Jupyter notebooks, 
 including a JupyterHub server available online [Pascal]_.
 
-Polynomial homotopy continuation combines the application of 
-homotopy and continuation methods to solve polynomial systems.
-Continuation methods extend the convergence of Newton's method 
-from local to global.  A homotopy is a family of polynomial systems
-where one of the variables is considered as a parameter.
-Homotopy methods connect a given system to a start system 
-with known solutions.  
-Numerical continuation methods track the solution paths,
-depending on the parameter, originating at the known solutions 
-to the solutions of the given system.
+phcpy takes as input a list of polynomials in several variables, with complex-valued floating-point coefficients.
+Homotopy methods connect this given system to a 'start system' with known solutions. 
+A homotopy is a family of polynomial systems where one of the variables is considered as a parameter.
+Polynomial homotopy continuation combines the application of homotopy and continuation methods,
+which extend the convergence of Newton's method from local to global, to solve polynomial systems.
 
-The meaning of *solving* evolved from computing approximations, to
-all isolated solutions, to the numerical irreducible decomposition
-of the solution set.  The numerical irreducible decomposition includes
-not only the isolated solutions, but also the representations for all
-positive dimensional solution sets. Such representations consist
-of sets of *generic points*, partitioned along the irreducible factors.
+Numerical continuation methods track the solution paths, depending on the parameter,
+originating at the known solutions to the solutions of the given system.
+phcpy is also able to represent the numerical irreducible decomposition of the system's solution set,
+which yields the *positive dimensional solution sets* containing infinitely many points,
+in addition to the isolated solutions.
 
 The focus of this paper is on the application of new technology
 to solve polynomial systems, in particular, cloud computing [BSVY15]_
@@ -125,16 +119,14 @@ for PHCpack's Macaulay2 bindings [GPV13]_.
 User Interaction
 ================
 
-The first area of improvement that phcpy brings is
-in the interaction with the user.
-
-CGI Scripting
+Online Access
 -------------
 
-In our first design of a web interface to ``phc``, 
-we developed a collection of Python scripts (mediated through HTML forms), 
-following common programming patterns [Chu06]_.
-This design is described in Chapter 6 of [Yu15]_.
+The first area of improvement that phcpy brings is in the interaction with the user.
+
+With JupyterHub [JUPH]_, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session. As of the middle of May 2019, our web server has 146 user accounts, each having access to our JupyterHub instance. Our server is available for public use, after creating a free account.
+
+In our first design of a web interface to ``phc``, we developed a collection of Python scripts (mediated through HTML forms), following common programming patterns [Chu06]_. This design is described in Chapter 6 of [Yu15]_. For the user administration of our JupyterHub, we refreshed this first web interface, retaining the following architecture.
 
 MySQLdb [MSDB]_ does the management of user data, including 
 a) names and encrypted passwords, 
@@ -143,22 +135,12 @@ c) file names with polynomial systems they have solved.
 With the module smtplib, we defined email exchanges for an automatic 
 2-step registration process and password recovery protocol.
 
-As of the middle of May 2019, our web server has 146 user accounts, 
-each having access to our new JupyterHub instance [JUPH]_.
-
-JupyterHub
-----------
-
-With JupyterHub, we provide online access [Pascal]_ to environments with Python and SageMath kernels pre-installed, both featuring phcpy and tutorials on its use (per next section). Since Jupyter is language-agnostic, execution environments in several dozen languages are possible. Our users can also run code in a Python Terminal session.
-Our server is available for public use, after creating a free account.
-
-For the user administration, we refreshed our first web interface.
 A custom JupyterHub Authenticator connects to the existing MySQL database
 and triggers a SystemdSpawner that isolates the actions of users to separate 
-processes and logins in generic home folders.
-
-The account management prompts by e-mail were hooked to new Tornado RequestHandler instances, which perform account registration and activation on the database, as well as password recovery and reset. Each such route serves HTML forms seamlessly with the JupyterHub interface, by extending its Jinja templates.
-
+processes and logins in generic home folders. The email account management prompts
+were hooked to new Tornado RequestHandler instances, which perform account registration
+and activation in the database, as well as password recovery and reset. Each such route
+serves HTML forms seamlessly with the JupyterHub interface, by extending its Jinja templates.
 
 Code Snippets
 -------------
@@ -192,10 +174,9 @@ Direct Manipulation
 
 One consequence of the Jupyter notebook's rich output is the possibility of rich input, as explored through ipywidgets [IPYW]_ and interactive plotting libraries. The combination of rich input with fast numerical methods makes surprising interactions possible, such as interactive solution of Apollonius' Problem, which is to construct all circles tangent to three given circles in a plane.
 
-The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying over ``apollonius_d3.ipynb`` and ``apollonius_d3.js``).
+The tutorial given in the phcpy documentation was adapted for a demo accompanying a SciPy poster in 2017, whose code [APP]_ will run on our JupyterHub (by copying ``apollonius_d3.ipynb`` and ``apollonius_d3.js`` to one's own user directory).
 
-This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles (some of which have imaginary position or radius in certain configurations) can be solved interactively by our system in real-time (Fig. :ref:`apollonius`), in response to interaction. In fact, Jupyter is a suitable environment for mapping algebraic inputs to their geometric representations (in a 2D plane), through its interaction with D3.js [D3]_ for nonstandard (non-chart) data visualizations.
-
+This system of 3 nonlinear constraints in 5 parameters for each of 8 possible tangent circles can be solved interactively by our system in real-time (Fig. :ref:`apollonius`). Although any of the 8 tangent circles could have nonzero imaginary part in their x/y position or radius, depending on input coefficients (input circles), such circles are not rendered. Thanks to its rich output capabilities, Jupyter is a suitable environment for mapping algebraic inputs to the planar geometric objects they represent (a data binding) through D3.js [D3]_.
 
 .. figure:: ./apollonius.png
   :figclass: h
@@ -228,14 +209,11 @@ fast computers for a long time is not hard.
 Polynomial Homotopy Continuation
 --------------------------------
 
-As we compute over the field of complex numbers,
-what we exploit is the continuity of the solution set,
-which changes continuously in function of changing coefficients 
-of the polynomials in the system.
-Continuation methods are numerical algorithms which track
-solution paths defined by a one parameter family of polynomial systems.
-This family is called the homotopy.  Homotopy methods take a polynomial
-system as input and construct a suitable embedding of the input system
+By computing over the field of complex numbers, we exploit the continuity
+of the solution set as a function of the coefficients of the polynomials in the system.
+These numerical algorithms, called continuation methods, track solution paths defined by
+a one parameter family of polynomial systems (the homotopy). Homotopy methods take a
+polynomial system as input, and construct a suitable embedding of the input system
 into a family which contains a start system with known solutions.
 
 We say that a homotopy is *optimal* if for generic instances of
@@ -400,10 +378,14 @@ for algebraic curves.
 Positive Dimensional Solution Sets
 ----------------------------------
 
-As solving evolved from approximating all isolated solutions
-of a polynomial system into computing a numerical irreducible decomposition,
-the meaning of a solution expanded as well.
-To illustrate this expansion, consider the example of the twisted cubic,
+*Solving* a system has evolved in meaning, from computing approximations of
+all its isolated solutions, to finding the numerical irreducible decomposition
+of the solution set.  The numerical irreducible decomposition includes
+not only the isolated solutions, but also the representations for all
+positive dimensional solution sets. Such representations consist
+of sets of *generic points*, partitioned along the irreducible factors.
+
+To illustrate this expanded sense of a 'solution', we consider the twisted cubic,
 known in algebraic geometry as the first nontrivial space curve.
 We use this example to illustrate two different representations
 of this space curve:
@@ -502,13 +484,13 @@ We consider some examples from various literatures which apply polynomial constr
 Rigid Graph Theory
 ------------------
 
-The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et. al [BELT18]_.
+The conformations of proteins [LML14]_, molecules [EM99]_, and robotic mechanisms (discussed further below) can be studied by counting and classifying unique mechanisms, i.e. real embeddings of graphs with fixed edge lengths, modulo rigid motions, per Bartzos et al. [BELT18]_.
 
 Consider a graph :math:`G` whose edges :math:`e \in E_G` each have a given length :math:`d_{e}`. A graph embedding is a function that maps the vertices of :math:`G` into :math:`D`-dimensional Euclidean space (especially :math:`D` = 2 or 3). Embeddings which are 'compatible' are those which preserve :math:`G`'s edge lengths. The number of unique mechanisms is thus a function of :math:`G` and :math:`\mathbf{d}`.  An upper bound over all :math:`d` and :math:`G` with k vertices (yielding lower bounds for graphs with :math:`n \geq k` vertices, unless the upper bound is infinite) can be computed. In particular, the Cayley-Menger matrix of :math:`\mathbf{d}` [LLMM14]_ (i.e., the squared distance matrix with a row and column of 1s prepended, except that its main diagonal is 0s) is an algebraic system, proportional to the mixed volume.   Certain of its square subsystems characterize the mechanism in terms of these bounds on unique mechanisms.
 
-Bartzos et. al implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
+Bartzos et al. implemented, using ``phcpy``, a constructive method yielding all 7-vertex minimally rigid graphs in 3D space (the smallest open case) and certain 8-vertex cases previously uncounted. A graph :math:`G` is generically rigid if, for any given edge lengths :math:`d`, none of its compatible embeddings (into a generic configuration such that vertices are algebraically independent) are continuously deformable. :math:`G` is minimally rigid if removing any one of its edges yields a non-rigid mechanism.
 
-``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new one.
+``phcpy`` was used to find edge lengths with maximally many real embeddings, exploiting the flexibility of being able to specify their starting system. This sped up their algorithm by perturbing the solutions of previous systems to find new ones.
 
 Many iterations of sampling have to be performed if the wrong number of real embeddings is found; in each case, a different subgraph is selected based on a heuristic implemented by the ``DBSCAN`` class of ``scikit-learn`` (illustrating the value of a scientific Python ecosystem). The actual number of real embeddings is known from an enumeration of unique graphs constructed by Henneberg steps in, for instance, SageMath.
 
@@ -570,7 +552,7 @@ Continuation homotopies were developed as a substitute for algebraic elimination
 Systems Biology
 ---------------
 
-Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et. al [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might seek to:
+Whether a model biological system is multistationary or oscillatory, and whether this depends on its rate constants, are all properties of its steady-state locus. Following the survey of Gross et al. [GBH16]_ regarding uses of numerical algebraic geometry in this domain, one might seek to:
 
 * determine which values of the rate and conserved-quantity parameters allow the model to have multiple steady states;
 * evaluate models with partial data (subsets of the :math:`x_i`) and reject those which don't agree with the data at steady state;
