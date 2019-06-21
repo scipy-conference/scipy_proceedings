@@ -119,7 +119,7 @@ for PHCpack's Macaulay2 bindings [GPV13]_.
 User Interaction
 ================
 
-Online access
+Online Access
 -------------
 
 The first area of improvement that phcpy brings is in the interaction with the user.
