@@ -203,6 +203,11 @@ In real-world scenarios, it is often the case where a machine learning approach 
 
 To address these issues, this study shows a prototype that provides test candidates and filters out failure-prone tests instead of trying to guide the testbench itself. To work with the class imbalance issues, I used both supervised and unsupervised models to address the problem as classification and outlier detection at the same time. I chose a customized approach for model selection by evaluating multiple metrics to be more practical and be able to make a compromise between the metrics. Finally, I have conducted experiments in the post-deployment process to address the details of retraining and identifying the cause of performance variability, which are often overlooked but crucial in deployment. In summary, this study proves that machine learning approach can be used for failure detection in hardware verification and provides practical guidance to work under constraints, to identify and investigate performance-related issues for building a machine learning engineering product. 
 
+Acknowledgments
+---------------
+
+I thank Wade Walker in Research, Nagesh Loke, Aneesh Balaji Ganesh Ram, Swati Ramachandran, and Mark Koob in Central Engineering at Arm for their invaluable support and help for data collection, software engineering, prototyping, discussions on metrics and objectives, and domain knowledge on hardware verification. Building a machine learning engineering product requires collaborative effort and I have been very fortunate to work with these great collaborators. I also thank Meghann Agarwal and Dillon Niederhut for reviewing the manuscript and providing useful comments, and the SciPy conference for the opportunity to present this work.
+
 References
 ----------
 
