@@ -59,8 +59,8 @@ Introduction
    These features contrast the assumptions of most analysis tools designed for biomolecular simulations and materials science.
    :label:`fig:scales`
 
-The availability of "off-the-shelf" molecular dynamics engines has made simulating complex systems possible across many scientific fields.
-Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials and develop coarse-graining approaches to access increasing timescales.
+The availability of "off-the-shelf" molecular dynamics engines (e.g. HOOMD-blue :cite:`Anderson2008,Glaser2015`, LAMMPS :cite:`Plimpton1995`, GROMACS :cite:`Berendsen1995`) has made simulating complex systems possible across many scientific fields.
+Simulations of systems ranging from large biomolecules to colloids are now common, allowing researchers to ask new questions about reconfigurable materials :cite:`Cersonsky2018a` and develop coarse-graining approaches to access increasing timescales :cite:`Simon2019`.
 Various tools have arisen to facilitate the analysis of these simulations, many of which are immediately interoperable with the most popular simulation tools.
 The ``freud`` library is one such analysis package that differentiates itself from others through its focus on colloidal and nano-scale systems.
 
@@ -108,7 +108,8 @@ Performance and Integrability
 
 Using ``freud`` to compute features for machine learning algorithms and visualization is straightforward because it adheres to a UNIX-like philosophy of providing modular, composable features.
 This design is evidenced by the library's reliance on NumPy arrays :cite:`Oliphant2006a` for all inputs and outputs, a format that is naturally integrated with most other tools in the scientific Python ecosystem.
-In general, the analyses in ``freud`` are designed around analyses of raw simulation trajectories, meaning that the inputs are typically :math:`(N, 3)` arrays of particle positions and :math:`(N, 4)` arrays of particle orientations, and analyses that involve many simulation frames over time use `accumulate` methods that are called once for each simulation frame.
+In general, the analyses in ``freud`` are designed around analyses of raw particle trajectories, meaning that the inputs are typically :math:`(N, 3)` arrays of particle positions and :math:`(N, 4)` arrays of particle orientations, and analyses that involve many frames over time use `accumulate` methods that are called once for each frame.
+This general approach enables ``freud`` to be used for a range of input data, including molecular dynamics and Monte Carlo simulations as well as experimental data (e.g. positions extracted via particle tracking) in both 3D and 2D.
 The direct usage of numerical arrays indicates a different usage pattern than that of tools, such as MDAnalysis :cite:`Michaud-Agrawal2011` and MDTraj :cite:`McGibbon2015`, for which trajectory parsing is a core feature.
 Due to the existence of many such tools, as well as certain formats like ``gsd`` [#]_ that provide their own parsers, ``freud`` eschews any form of trajectory management and instead relies on such tools to provide inputs.
 Decoupling ``freud`` from file parsing and specific trajectory representations allows it to be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity, while the universal usage of NumPy arrays makes such integrations very natural.
@@ -116,7 +117,7 @@ Decoupling ``freud`` from file parsing and specific trajectory representations a
 .. [#] https://github.com/glotzerlab/gsd
 
 
-.. figure:: comparison_rcut_1.pdf
+.. figure:: comparison_12_neighbors.pdf
    :align: center
    :scale: 60 %
 
@@ -126,10 +127,10 @@ Decoupling ``freud`` from file parsing and specific trajectory representations a
 In keeping with this focus on composable features, ``freud`` also abstracts and directly exposes the task of finding particle neighbors, the task most central to all other analyses in  ``freud``.
 Since neighbor finding is a common need, the neighbor finding routines in ``freud`` are highly optimized and natively support periodic systems, a crucial feature for any analysis of particle simulations (which often employ periodic boundary conditions).
 In figure :ref:`fig:scipycomparison`, a comparison is shown between the neighbor finding algorithms in ``freud`` and ``scipy`` :cite:`Jones2001`.
-For each system size, :math:`N` particles are uniformly distributed in a 3D periodic cube of side length :math:`L = 10`.
-Neighbors are found for each particle by searching within a cutoff distance :math:`r_{cut} = 1`.
+For each system size, :math:`N` particles are uniformly distributed in a 3D periodic cube such that each particle has an average of 12 neighbors within a distance of :math:`r_{cut} = 1.0`.
+Neighbors are found for each particle by searching within the cutoff distance :math:`r_{cut}`.
 The methods compared are ``scipy.spatial.cKDTree``'s ``query_ball_tree``, ``freud.locality.AABBQuery``'s ``queryBall``, and ``freud.locality.LinkCell``'s ``compute``.
-The benchmarks were performed on a 3.6 GHz Intel Core i3 processor with 16 GB 2667 MHz DDR4 RAM.
+The benchmarks were performed with 5 replicates on a 3.6 GHz Intel Core i3-8100B processor with 16 GB 2667 MHz DDR4 RAM.
 
 Evidently, ``freud`` performs very well on this core task and scales well to larger systems.
 The parallel C++ backend implemented with Cython and Intel Threading Building Blocks makes ``freud`` perform quickly even for large systems :cite:`Behnel2011,Intel2018`.
