@@ -70,16 +70,26 @@ Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to
 
 At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
-2. Model: The user needs to define a model of the form :math:`F(i, q)`; i.e., a model that depends on a set of parameters :math:`q`.  Strictly speaking the model can be created in any language the user desires so long as it can be called within your Python script.  For example, if your model code is written in C++ or Fortran, this is easily done using the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_.
-
 1. Import and initialize MCMC object.
 2. Add data to the simulation - :math:`F^{obs}(i)`. These may be either experimental measurements or high-fidelity model results.
-3. Define sum-of-squares function - :math:`SS_q`.  The sum-of-squares error between the model and data will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.
-4. Define model settings and simulation options.
-5. Add model parameters - :math:`q`. The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
-6. Execute simulation.
+3. Define model function: The user needs to define a model of the form :math:`F(i, q)`; i.e., a model that depends on a set of parameters :math:`q`.  Strictly speaking the model can be created in any language the user desires so long as it can be called within your Python script.  For example, if your model code is written in C++ or Fortran, this is easily done using the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_.  Note, the model does not need to be a separate :code:`def` statement, but can be included directly in the sum-of-squares function.
+4. Define sum-of-squares function - :math:`SS_q`.  The sum-of-squares error between the model and data will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.
+5. Define model settings and simulation options.
+6. Add model parameters - :math:`q`. The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
+7. Execute simulation.
 
-Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to some data, the basic implementation is as follows:
+Let's walk through a basic example to see how all these pieces work together.  To start, we will generate some fictitious data,
+
+.. code-block:: python
+
+    import numpy as np
+    x = np.linspace(0, 5, num=100)
+    y = 2.0*x + 3.0 + 0.1*np.random.standard_normal(
+                            x.shape)
+
+Note, we assume data where observations :code:`y` have been made at independent points :code:`x`, which are uniformly distributed between 0 and 5.  The observations follow a linear trend with slope 2 and offset 3.  To make the data realistic we add random noise to the observations of the form :math:`\epsilon_i\sim\mathit{N}(0, \sigma^2)`.  In this case we define the observation standard deviation to be :math:`\sigma=0.1`.
+
+In this case we know what the model should be because we used it to generate the data.  We want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to the observations.  To run a MCMC simulation for this problem, the basic implementation is as follows:
 
 .. code-block:: python
 
@@ -102,7 +112,7 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
         sos_function=ssfun)
     # Define simulation options
     mcstat.simulation_options.define_simulation_options(
-        nsimu=5.0e3,  # No. of MCMC simulations
+        nsimu=5.0e4)  # No. of MCMC simulations
     # Add model parameters
     mcstat.parameters.add_model_parameter(
         name='m',
@@ -114,6 +124,35 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
         maximum=5)  # upper limit
     # Run simulation
     mcstat.run_simulation()
+
+We can check the results of the MCMC simulation by displaying the chain statistics.  Note, we typically remove the first part of the sampling chain as it may not have converged to the correct posterior depending on the initial value.  Details regarding chain diagnostics will be discussed in a later section.
+
+.. code-block:: python
+
+    # Extract results
+    results = mcstat.simulation_results.results
+    chain = results['chain']
+    burnin = int(chain.shape[0]/2)
+    # display chain statistics
+    mcstat.chainstats(chain[burnin:, :], results)
+
+This will output to your display
+
+.. code-block:: python
+
+    name  : mean    std     MC_err  tau      geweke
+    m     : 2.0245  0.0324  0.0006  10.4081  0.9968
+    b     : 2.9343  0.0816  0.0016  10.5925  0.9942
+
+Recall that the data was generated with a slope of 2 and offset of 3, so the algorithm appears to be converging to the correct values.  We can visualize the sampling history of the MCMC process by using some of pymcmcstat's plotting routines.
+
+.. code-block:: python
+
+    mcpl = mcstat.mcmcplot  # initialize plotting methods
+    mcpl.plot_density_panel(chain[burnin:,:], names)
+    mcpl.plot_chain_panel(chain[burnin:,:], names)
+    mcpl.plot_pairwise_correlation_panel(
+          chain[burnin:, :], names)
 
 Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
 
