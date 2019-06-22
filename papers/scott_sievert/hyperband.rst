@@ -517,7 +517,7 @@ The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
            \texttt{passive}). The shaded regions
-           correspond to the 10\% and 90\% percentiles over 20 runs.
+           correspond to the 25\% and 75\% percentiles over 28 runs.
        }
        \label{fig:synthetic-performance}
    \end{subfigure}
