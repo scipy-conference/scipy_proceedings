@@ -82,7 +82,7 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    :figclass: wt
-   :scale: 33%
+   :scale: 34%
    
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
@@ -172,10 +172,9 @@ We observed that the baskets generated follow the same distribution that the ori
 
 .. figure:: figures/order_frequency.png
    :align: center
-     
+   :scale: 5%
+ 
    Difference of basket size distribution between **Baskets generated** in blue and **Original baskets** in red.  :label:`orderfrequency`
-
-These histograms confirm that the simulated data follow the same distribution that the real data.
 
 Preprocessing dataset
 =====================
@@ -431,8 +430,7 @@ Statistically, this metric can be identified as follow:
    
    Accuracy = \frac{(TP+TN)}{(TP+TN+FP+FN)}
 
-where:
-**TP** is True Positive, **FP** is False Positive, **TN** is True Negative, and **FN** is False Negative.
+where **TP** is True Positive, **FP** is False Positive, **TN** is True Negative, and **FN** is False Negative.
 
 The *precision* is a description of random errors, a measure of statistical variability.
 The formula of precision is the ratio between TP with all truth data (positive or negative). 
