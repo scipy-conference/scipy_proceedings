@@ -34,10 +34,10 @@ Analyzing Particle Systems for Machine Learning and Data Visualization with ``fr
 .. class:: abstract
 
 The ``freud`` Python library analyzes particle data output from molecular dynamics simulations.
-The library's design and its various high-performance methods make it a powerful tool for various modern applications.
+The library's design and its variety of high-performance methods make it a powerful tool for many modern applications.
 In particular, ``freud`` can be used as part of the data generation pipeline for machine learning algorithms for analyzing particle simulations, and it can be easily integrated with various simulation visualization tools for simultaneous visualization and real-time analysis.
 Here, we present numerous examples both of using ``freud`` to analyze nano-scale particle systems by coupling traditional simulational analyses to machine learning libraries and of visualizing per-particle quantities calculated by ``freud`` analysis methods.
-We include code and various examples of this visualization, showing that in general the introduction of ``freud`` into existing ML and visualization pipelines is smooth and unintrusive.
+We include code and examples of this visualization, showing that in general the introduction of ``freud`` into existing ML and visualization workflows is smooth and unintrusive.
 We demonstrate that among Python packages used in the computational molecular sciences, ``freud`` offers a unique set of analysis methods with efficient computations and seamless coupling into powerful data analysis pipelines.
 
 .. class:: keywords
@@ -67,13 +67,13 @@ The ``freud`` library is one such analysis package that differentiates itself fr
 Due to their diversity and adaptability, colloidal materials are a powerful model system for exploring soft matter physics :cite:`Glotzer2007`.
 Such materials are also a viable platform for harnessing photonic :cite:`Cersonsky2018a`, plasmonic :cite:`Tan2011BuildingDNA`, and other useful structurally-derived properties.
 In colloidal systems, features like particle anisotropy play an important role in creating complex crystal structures, some of which have no atomic analogues :cite:`Damasceno2012`.
-Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been studied, yielding phase diagrams filled with complex behavior.
+Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been shown to yield phase diagrams filled with complex behavior.
 
 The ``freud`` Python package targets these systems by avoiding trajectory management and the analysis of chemically bonded structures, the province of most other analysis platforms like MDAnalysis and MDTraj :cite:`Michaud-Agrawal2011,McGibbon2015`, and instead provides a unique feature set that is tailored to capturing the important properties that characterize colloidal systems.
 In particular, ``freud`` excels at performing analyses based on characterizing local particle environments, which makes it a powerful tool for tasks such as calculating order parameters to track crystallization or finding prenucleation clusters.
 Among the unique methods present in ``freud`` are the potential of mean force and torque, which allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`, and various tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
 All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
-The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to elucidate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
+The ``freud`` library's scalability is exemplified by its use in computing correlation functions on systems of over a million particles, calculations that were used to illuminate the elusive hexatic phase transition in two-dimensional systems of hard polygons :cite:`Anderson2017`.
 More details on the use of ``freud`` can be found in :cite:`Ramasubramani2019`.
 In this paper, we will demonstrate that ``freud`` is uniquely well-suited to usage in the context of data pipelines for visualization and machine learning applications.
 
@@ -92,7 +92,7 @@ Many research tasks in computational molecular sciences can be expressed in term
 However, in modern workflows the lines between these stages is typically blurred, particularly with respect to analysis.
 While direct visualization of simulation trajectories can provide insights into the behavior of a system, integrating higher-order analyses is often necessary to provide real-time interpretable visualizations in that allow researchers to identify meaningful features like defects and ordered domains of self-assembled structures.
 Studies of complex systems are also often aided or accelerated by a real-time coupling of simulations with on-the-fly analysis.
-This simultaneous usage of simulation and analysis is especially relevant because modern machine learning techniques frequently involve wrapping this pipeline entirely into a higher-level optimization problem, since the descriptors it computes can be used to, for instance, construct objective functions targeting a specific materials design problem.
+This simultaneous usage of simulation and analysis is especially relevant because modern machine learning techniques frequently involve wrapping this pipeline entirely within a higher-level optimization problem, since analysis methods can be used to construct objective functions targeting a specific materials design problem, for instance.
 
 Following, we provide demonstrations of how ``freud`` can be integrated with popular tools in the scientific Python ecosystem like TensorFlow, Scikit-learn, SciPy, or Matplotlib.
 In the context of machine learning algorithms, we will discuss how the analyses in ``freud`` can reduce the 6N-dimensional space of particle positions and orientations into a tractable set of features that can be fed into machine learning algorithms.
@@ -111,7 +111,7 @@ This design is evidenced by the library's reliance on NumPy arrays :cite:`Olipha
 In general, the analyses in ``freud`` are designed around analyses of raw simulation trajectories, meaning that the inputs are typically :math:`(N, 3)` arrays of particle positions and :math:`(N, 4)` arrays of particle orientations, and analyses that involve many simulation frames over time use `accumulate` methods that are called once for each simulation frame.
 The direct usage of numerical arrays indicates a different usage pattern than that of tools, such as MDAnalysis :cite:`Michaud-Agrawal2011` and MDTraj :cite:`McGibbon2015`, for which trajectory parsing is a core feature.
 Due to the existence of many such tools, as well as certain formats like ``gsd`` [#]_ that provide their own parsers, ``freud`` eschews any form of trajectory management and instead relies on such tools to provide inputs.
-Decoupling ``freud`` from file parsing and specific trajectory representations allows it to be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity, and the universal usage of NumPy arrays makes such integrations very natural.
+Decoupling ``freud`` from file parsing and specific trajectory representations allows it to be efficiently integrated into simulations, machine learning applications, and visualization toolkits with no I/O overhead and limited additional code complexity, while the universal usage of NumPy arrays makes such integrations very natural.
 
 .. [#] https://github.com/glotzerlab/gsd
 
@@ -346,7 +346,7 @@ fresnel
 
 ``fresnel`` [#]_ is a GPU-accelerated ray tracer designed for particle simulations, with customizable material types and scene lighting, as well as support for a set of common anisotropic shapes.
 Its feature set is especially well suited for publication-quality graphics.
-Its use of ray tracing also means that an image's rendering time scales with the image size, instead of the number of particles -- a desirable feature for extremely large simulations.
+Its use of ray tracing also means that an image's rendering time scales most strongly with the image size, instead of the number of particles -- a desirable feature for extremely large simulations.
 An example of how to integrate ``fresnel`` is shown below and rendered in figure :ref:`fig:fresneltetrahedra`.
 
 .. [#] https://github.com/glotzerlab/fresnel
