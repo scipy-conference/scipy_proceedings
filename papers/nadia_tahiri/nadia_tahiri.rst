@@ -432,11 +432,7 @@ Statistically, this metric can be identified as follow:
    Accuracy = \frac{(TP+TN)}{(TP+TN+FP+FN)}
 
 where:
-
-- **TP** is True Positive, i.e. the number of positively labeled data, which have been classified as `Positive`, correct class,
-- **FP** is False Positive, i.e. the number of negatively labeled data, which falsely have been classified as `Positive`,
-- **TN** is True Negative, i.e. the number of negatively labeled data, which have been classified as `Negative`, correct class, and 
-- **FN** is False Negative, i.e.  the number of positively labeled data, which falsely have been classified as `Negative`.
+**TP** is True Positive, **FP** is False Positive, **TN** is True Negative, and **FN** is False Negative.
 
 The *precision* is a description of random errors, a measure of statistical variability.
 The formula of precision is the ratio between TP with all truth data (positive or negative). 
