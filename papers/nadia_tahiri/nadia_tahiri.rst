@@ -3,7 +3,9 @@
 :institution: Département d’Informatique, Université du Québec à Montréal, Case postale 8888, Succursale Centre-ville, H3C 3P8 Montréal, Canada
 :corresponding:
 
-
+:author: Vladimir Makarenkov
+:email: vladimir.makarenkov@uqam.ca
+:institution: Département d’Informatique, Université du Québec à Montréal, Case postale 8888, Succursale Centre-ville, H3C 3P8 Montréal, Canada
 
 -----------------------------------------------------------------------------------------------------
 An intelligent shopping list based on the application of partitioning and machine learning algorithms
@@ -24,10 +26,10 @@ An intelligent shopping list based on the application of partitioning and machin
 Introduction
 ------------
 
-A typical grocery retailer offers consumers thousands of promotions every week 
-to attract more consumers and thus improve their economic performance [TTR16]_. 
-The studies by Walters and Jamil (2002, 2003) of [WJ02]_ and [WJ03]_ found that about 39% of all items purchased 
-during an inter-category grocery were weekly specials and promotions, and about 30% of consumers 
+A typical grocery retailer offers consumers thousands of promotions every week        
+to attract more consumers and thus improve their economic performance [TTR16]_.
+The studies by Walters and Jamil (2002, 2003) of [WJ02]_ and [WJ03]_ found that about 39% of all items purchased
+during a grocery shopping were weekly specials and promotions, and about 30% of consumers
 surveyed were very sensitive to product prices, buying more promotional items than regular ones. 
 With the recent expansion of machine learning methods, including deep learning, 
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
@@ -79,10 +81,12 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
+   :figclass: wt
+   :scale: 33%
    
-   Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized commercial traveler algorithm. :label:`circuit`
+   Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
-An :math:`F_1` statistics maximization algorithm [NCLC12]_, 
+An :math:`F_1` statistics maximization algorithm [NCLC12]_ (see the Statistics section),, 
 based on dynamic programming, was used to achieve objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method [GBC16]_, based on Recurrent Neuron Networks (RNN) 
@@ -100,11 +104,12 @@ and forward propagation neural networks (Feed-forward NN)
 was applied at the second learning level.
 
 Depending on the user :math:`u` and the user purchase history
-(:math:`shop_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included 
-in the next shop :math:`_{t+1}` of :math:`u`
+(:math:`shop_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included
+in the current shopping basket :math:`_{t+1}` of :math:`u`.
 
 Dataset
 -------
+
 In this section we discuss the details of synthetic and real datasets,
 the latter obtained from `MyGroceryTour`.
 The importance of the feature is very crucial to perform the prediction of the model developed. 
@@ -114,9 +119,9 @@ Features
 
 For the project, we consider only the significant features, 
 such as `distance`, `special` rate, `products`, and `store`. 
-All features, we used, are described as follow:
+All features, we used, are described as follows:
 
-- **user\_id**: user number. We take care of anonymized all data set. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
+- **user\_id**: the user ID. We anonymized all data used in our study. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
 - **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
@@ -125,12 +130,24 @@ All features, we used, are described as follow:
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
 
-We denoted two type of features: categorical and quantitative variables. 
-     
+The IDs (`user\_id`) are not sequentially. In total, we have 1374 users. Among them we have 374 real users and 1000 users whose behaviour was generated following the distribution of real users (see Figure 3) and 
+the consumer statistics available in the report by Statistics Canada (2017).
+
+The product categories were determined with the purchase histories is the current version of our model 
+does not allow a new product to be bought by a user (i.e., every user can only buy products that were in at least one of its previous shopping baskets).
+
+We denoted two types of features: categorical and quantitative variables. 
+The difficulty to manage the categorical variable is very important in our study. 
+Only `distance` and `special` variables are quantitative, the rest of the variables are categorical.
+To manage the categorical variables, we applied a hashing scheme to deal 
+with large scale categorical features. The hash function takes into account the input and output vectors length.
+We use `LabelEncoder` function existing in `scikit-learn` package, in Python version 3.
+
 Consumer profile
 ================
 
 We found that there are 3 consumer profiles see [WJ03]_, [WJ02]_, and [TNTK16]_. 
+These values were obtained from Statistics Canada. Moreover, the distributions used our study follow these statistics.
 The first group is consumers who only buy products on promotion.
 The second group is consumers who always buy the same products (without considering promotions).
 Finally, the third group is consumers who buy products whether there is a promotion or not.
@@ -139,14 +156,18 @@ On the model, we plan to consider that information and make the prediction more 
 Data Synthesis
 ==============
 
-Since the real dataset was not enough to complete correctly the project, we increased it.
+Since the real dataset was not large enough to apply the appropriate machine learning methods, its size was increased by adding simulated data following the distribution of real data.
+The original dataset was composed of 375 users. It may be not enough to apply an appropriate machine learning method. 
+In fact, 72.73% of the data were simulated (1000 out of 1374 baskets were simulated).
 We described the sets of data simulated in the study, 
 and we presented in detail the results of the simulation step.
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
-Finally, we increased the `special` feature. This variable is based on the composition of the baskets, choosing a special random proportional to the Boltzmann distribution [AAR+18]_.
-We observed that the sizes of the generated baskets follow the same distribution as the original basket sizes
+Assuming that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)`,
+the distance between a given store and the consumer’s home :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
+Finally, we increased the value of the `special` random variable. Its value has been drawn from a Boltzmann distribution [AAR+18]_.
+We observed that the baskets generated follow the same distribution that the original basket in terms of the basket size
 (see Figure :ref:`orderfrequency`).
 
 .. figure:: figures/order_frequency.png
@@ -154,12 +175,15 @@ We observed that the sizes of the generated baskets follow the same distribution
      
    Difference of basket size distribution between **Baskets generated** in blue and **Original baskets** in red.  :label:`orderfrequency`
 
+These histograms confirm that the simulated data follow the same distribution that the real data.
+
 Preprocessing dataset
 =====================
 
+Initially, the data were stocked in csv files at a MySQL database taking 1.4 GB. Then, the data were stocked in a dataframe in our Python script.
 We launched the preprocessing dataset tasks on the servers of Compute Canada. This step was carried out using 172 nodes 
-and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16G memory). We preprocessed the user data, 
-the product data, and the department data. The preprocessing had a 48 hour limit and used 32 GB of memory.
+and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16 GB of memory). We preprocessed the user data, 
+the product data, and the department data. The preprocessing had a 48 hour limit and used 32 GB of the RAM memory.
 
 Models
 ------
@@ -169,8 +193,7 @@ The graphical representation of the workflow in Figure :ref:`workflow` predicts 
 
 .. figure:: figures/workflow.png
    :align: center
-   :scale: 39%
-   :figclass: wt
+   :scale: 29%
    
    The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
    The first level of the model used LSTM and NNMF. 
@@ -198,9 +221,10 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 .. figure:: figures/lstm.png
    :align: center 
   
-   This figure shows a chain-structured LSTM network. An LSTM architecture contains forget, learn, remember and use gates that determine whether an input is so important  that  it  can  be  saved.  
-   In  the  LSTM  unit representing in this figure, four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
+   This figure shows a chain-structured LSTM network. An LSTM architecture contains forget, learn, remember, and uses gates that determine whether an input is so important that it can be saved.  
+   In the LSTM unit representing in this figure, there are four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
    which make it easier to update the weights during the backpropagation process. Here :math:`X_{t}` designates the input vector, :math:`H_{t-1}` is the previous cell output, :math:`C_{t-1}` is the previous cell memory, :math:`H_{t}` is the current cell output, :math:`C_{t}` is the current cell memory.
+   :math:`f_t` is forget gate with sigmoid function :math:`sigma`, :math:`\overline{C_t}` and :math:`I_t` corresponds to input gate with `tanh` function, and finally :math:`O_t` is output gate with :math:`sigma` function.
    :label:`lstm`
 
 Overall characteristics of the neuron networks which used in this project are described as follow:
@@ -231,6 +255,53 @@ Overall characteristics of the neuron networks which used in this project are de
      num_validation_batches=4,
     )
 
+We considered the `Adam` optimizer which is a good default implementation of gradient descent. 
+The learning rate was equal to 0.001 to control how long the weights should be udated in response to the estimated gradient at the end of each batch. 
+The size of the hidden state of an LSTM unit was fixed to 512.
+Batch size corresponds to the number of samples between updates to the model weights and was set to 64 during the training process. We set to 4 the number of validation batches.
+The Tensorflow package was used to implement our `rnn` class which takes into account the features described in the previous section.
+The `rnn` class structure is organized using the four functions.
+
+.. code-block:: python
+
+     import TFBaseModel
+
+     class rnn(TFBaseModel):
+       def __init__(self, 
+                    lstm_size,
+                    dilations, 
+                    filter_widths, 
+                    skip_channels, 
+                    residual_channels, 
+                    **kwargs):
+          ...
+       def calculate_loss(self):
+          ...
+       def get_input_sequences(self):
+          ...
+       def calculate_outputs(self, x):
+         ...
+
+
+Non-negative matrix factorization (NNMF) network
+================================================
+
+NNMF [LS01]_ is a matrix factorization method which matrix constraints are to be non-negative.
+The technique consists to combine linear algebra and multivariate analysis to produce two matrices `W` and `H`.
+We factorize a matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W` 
+(i.e. `user\_id`) and `H` (i.e.`product\_id`) so the representation can be formulated as: 
+:math:`X \approx WH` (see Figure :ref:`nnmf`).
+
+.. figure:: figures/nnmf.png
+   :align: center
+   :scale: 65%
+   
+   Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). :label:`nnmf`
+
+NNMF is a surprisingly powerful machine learning method and the authors of [LS01]_ show the convergence 
+of the results by finding at least locally optimal solutions.
+NNMF is trained on a matrix of `user*product` counts.
+
 Gradient Boosted Tree (GBT) network
 ===================================
 
@@ -239,15 +310,21 @@ GBT [Fri02]_ is an iterative algorithm that combines simple parameterized functi
 learners to boost performance; this makes it a good candidate model for predicting the grocery shopping list. 
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
-Further, GBT can model complex interactions in a simple fashion and be applied in both classification and 
+Further, GBT can model complex interactions in a simple recommendation system and be applied in both classification and 
 regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]_. 
 Finally, missing values in the collected data can be easily managed.
 Moreover, in this study, we denote frequently missing data in the history grocery list by the user, that is why this technique is more adapted.
 
 The data is divided into 2 groups (training and validation) which comprise 90% and 10% of the data respectively.
+After simulating the dataset, the strategy used was to merge real and simulated data and then split them into two groups (training and validation datasets). 
+The test set was composed of the real and simulated dataset.
 The final model has two neural networks and a GBT classifier.
-Once trained, it was used to predict in real time what would be the consumer's basket, based on their history of purchases and current promotions in neighboring stores.
-Based on the validation loss function, we eliminated the LSTM Rays and LSTM model size (see Figure :ref:`lstm`).
+Once trained, it was used to predict in real time what would be the consumer's basket, 
+based on their history of purchases and current promotions in neighboring stores.
+Based on the validation loss function, we eliminated the LSTM Category and LSTM size of the next barket.
+
+The last layer includes a GTB classifier used to predict the products that will be bought during the current week. 
+The classifier contains two classes: 0 (i.e. will be bought) and 1 (i.e. won’t be bought).
 
 First level model (feature extraction)
 ======================================
@@ -273,9 +350,9 @@ Finally, we estimated the size of the next order minimizing the root mean square
      \hline
      \textbf{Representation} & \textbf{Description} & \textbf{Type}\tabularnewline
      \hline
-     \textcolor{blue}{Products} & \textcolor{blue}{\begin{tabular}{@{}c@{}} Predicts P$(\text{product}_{i}\in \text{order}_{t+1})$\\ with orders$_{t-h,t}$, $h>0$.\end{tabular}}& \textcolor{blue}{\begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}} \\
+     \textcolor{blue}{Products} & \textcolor{blue}{\begin{tabular}{@{}c@{}} Predict P$(\text{product}_{i}\in \text{order}_{t+1})$\\ with orders$_{t-h,t}$, $h>0$.\end{tabular}}& \textcolor{blue}{\begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}} \\
      \hline
-     Categories & Predicts P$(\exists i:\text{product}_{i,t+1} \in \text{category}_r)$. & \begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}\\
+     Categories & Predict P$(\exists i:\text{product}_{i,t+1} \in \text{category}_r)$. & \begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}\\
      \hline
      Size & Predict the size of the order$_{t+1}$. & \begin{tabular}{@{}c@{}}LSTM\\ (300 neurons)\end{tabular}\\
      \hline
@@ -304,9 +381,9 @@ If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathca
         \hline
         LSTM Products & Products & $49,684 \times 300$\\
         \hline
-        LSTM Products & Catégories & $24 \times 50$\\
+        LSTM Products & Categories & $24 \times 50$\\
         \hline
-        LSTM Products & Departments & $50 \rightarrow 10$\\
+        LSTM Products & Categories & $50 \rightarrow 10$\\
         \hline
         LSTM Products & Users & $1,374 \times 300$\\
         \hline
@@ -378,7 +455,8 @@ the total number of TP and FN labeled data.
   
    Recall = Sensitivity = TP Rate = \frac{TP}{(TP+FN)}
 
-The *F-measure* or :math:`F_1` precise the classifier, as well as how robust it is (does not miss a significant number of instances).
+“The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.”
+The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
 
 .. math::
    :label: e:matrix
@@ -392,7 +470,7 @@ Finally, we evaluated the model by *FP Rate* which corresponds to the ratio betw
    
    FP Rate = FPR = \frac{FP}{(TN+FP)} 
    
-We examined these five evaluation metrics on this study.
+We examined these five evaluation metrics in our study (see the next section for the results of the F1 measure)
 
 Python Script
 -------------
@@ -451,13 +529,15 @@ The select_products function in Python script is the following:
 Results
 -------
 
-Figure :ref:`productpca` illustrates PCA of 20 random products projected in 2 dimensions. 
-The results show clearly the cluster of Pasta sauce with Pasta group. 
+Figure :ref:`productpca` illustrates PCA of 20 random products projected into 2 dimensions.
+The results show clearly the presence of the cluster of products including the Pasta sauce and Pasta group articles.
+This embedding plot was generated with 20 random products. Some trends can be observed here, but there also some exceptions as it often happens with real data. 
+In Table 2, Pasta Group was included into product Categories.
 In fact, this result can identify consumer buying behavior.
 
 .. figure:: figures/product_pca.png
    :align: center
-   :scale: 25%
+   :scale: 27%
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
@@ -472,7 +552,7 @@ Figure :ref:`violon` (b) indicates that all shops follow the same profiles in th
    :scale: 20%
    :figclass: wt
    
-   Distribution of :math:`F_1` measures against stores (a) and rebates (b). :label:`violon`
+   Distribution of :math:`F_1` measures against rebates (a) and stores (b). :label:`violon`
 
 Figure :ref:`productsF1` and Table 3 indicates that the values of :math:`F_1` metric to all products. 
 Some products are easy to predict with the value of :math:`F_1` > 0 and 
@@ -486,7 +566,7 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 
         \begin{longtable}{lc}
         \hline
-                                      \textbf{Product} &        \textbf{$F_1$} \\
+        \textbf{Product} &        \textbf{$F_1$} \\
         \hline
     Gogo Squeez Organic Apple Strawberry Applesauce &  0.042057 \\
             Organic AppleBerry Applesauce on the Go &  0.042057 \\
@@ -501,15 +581,15 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
               Total 0\% Blueberry Acai Greek Yogurt &  0.590824 \\
         \hline
         \end{longtable}
-		\caption{The average value of $F_1$ for all products considered.}
+        \caption{The average value of $F_1$ for all products considered.}
     \end{table}   
 
 .. figure:: figures/products_F1.png
    :align: center
-   :scale: 20%
+   :scale: 25%
    
    Distribution of :math:`F_1` measures relative to products around average. :label:`productsF1`
-	
+
 .. raw:: latex
     
     \begin{table}
@@ -532,9 +612,11 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
         \end{longtable}
         \caption{The 10 most popular products included in the predicted baskets.}
   \end{table}
-	
+
 .. figure:: figures/pearsonr.png
    :align: center
+   :figclass: wt
+   :scale: 3%
 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
@@ -566,7 +648,7 @@ promotions, possible purchases in different stores and distance
 between these stores and the consumer's home.
 
 In future work, we plan to predict the grocery store that will visited next, and to include the product quantities in the basket proposed to the user. 
-We suggest also to ponderate the algorithm with the distance between shop and user home coordinates to the promotion rate.
+We will investigate weighting the algorithm by the distance between the user's home and the store, and the promotion rate.
 
 Acknowledgments
 ---------------
@@ -582,9 +664,10 @@ Abbreviations
 
 - CNN - Convolutional Neural Network
 - GBT  - Gradient Tree Boosting
-- LSTM - Long short-term memory
+- LSTM - Long Short-Term Memory
 - ML - Machine Learning
 - NN - Neuron Networks
+- NNMF - Non-Negative Matrix Factorization
 - PCA - Principal Component Analysis
 - RMSE - Root Mean Square Error
 - RNN - Recurrent Neuron Networks
@@ -596,50 +679,52 @@ References
 .. [AAR+18] Amin, Mohammad H., Evgeny Andriyash, Jason Rolfe, Bohdan Kulchytskyy, and Roger Melko. 
             *Quantum boltzmann machine*.
             Physical Review X, 8(2):021050, 2018.
-	    DOI: https://doi.org/10.1103/PhysRevX.8.021050
+            DOI: https://doi.org/10.1103/PhysRevX.8.021050
 .. [Car03] Rasmussen, Carl Edward. *Gaussian processes in machine learning*.
            In Summer School on Machine Learning, pp. 63:71. Springer, Berlin, Heidelberg, 2003.
-	   DOI: https://doi.org/10.1007/978-3-540-28650-9_4 
+           DOI: https://doi.org/10.1007/978-3-540-28650-9_4 
 .. [CMW16] Maddison, Chris J., Andriy Mnih, and Yee Whye Teh. 
            *The concrete distribution: A continuous relaxation of discrete random variables*. 
            arXiv preprint arXiv:1611.00712, 2016.
-	   https://arxiv.org/pdf/1611.00712.pdf 
+           https://arxiv.org/pdf/1611.00712.pdf 
 .. [Fri02] Jerome H. Friedman. *Stochastic gradient boosting*. Computational
            Statistics & Data Analysis, 38(4):367–378, 2002.
-	   DOI: https://doi.org/10.1016/S0167-9473(01)00065-2
+           DOI: https://doi.org/10.1016/S0167-9473(01)00065-2
 .. [GBC16] Ian Goodfellow, Yoshua Bengio, and Aaron Courville. *Deep
            learning*. MIT press, 2016.
 .. [HLYX18] Hao, L., Liang, S., Ye, J. and Xu, Z., 2018. 
            *TensorD: A tensor decomposition library in TensorFlow*. 
-	   Neurocomputing, 318, pp. 196-200.
-	   DOI: https://doi.org/10.1016/j.neucom.2018.08.055
+           Neurocomputing, 318, pp. 196-200.
+           DOI: https://doi.org/10.1016/j.neucom.2018.08.055
 .. [HS97] Sepp Hochreiter and Jurgen Schmidhuber. *Long short-term memory*.
           Neural computation, 9(8):1735–1780, 1997.
-	  DOI: https://doi.org/10.1162/neco.1997.9.8.1735 
+          DOI: https://doi.org/10.1162/neco.1997.9.8.1735 
 .. [Jai10] Anil K Jain. *Data clustering: 50 years beyond k-means*. Pattern
            recognition letters, 31(8):651–666, 2010.
-	   DOI: https://doi.org/10.1016/j.patrec.2009.09.011 
+           DOI: https://doi.org/10.1016/j.patrec.2009.09.011 
 .. [Jol11] Ian Jolliffe. *Principal component analysis*. Springer, 2011.
            DOI: https://doi.org/10.1007/978-3-642-04898-2_455 
 .. [KR05] Debasis Kundu and Mohammad Z Raqab. *Generalized rayleigh
           distribution: different methods of estimations*. Computational
           statistics & data analysis, 49(1):187–200, 2005.
-	  DOI: https://doi.org/10.1016/j.csda.2004.05.008 
+          DOI: https://doi.org/10.1016/j.csda.2004.05.008 
 .. [LEN14] Zachary C Lipton, Charles Elkan, and Balakrishnan
            Naryanaswamy. *Optimal thresholding of classifiers to maximize
            f1 measure*. In Joint European Conference on Machine Learning
            and Knowledge Discovery in Databases, pp. 225–239. Springer,
            2014.
-	   DOI: https://doi.org/10.1007/978-3-662-44851-9_15
+           DOI: https://doi.org/10.1007/978-3-662-44851-9_15
+.. [LS01] Lee, D.D. and Seung, H.S. *Algorithms for non-negative matrix factorization*. 
+          In Advances in neural information processing systems, pp. 556-562, 2001.
 .. [NCLC12] Ye Nan, Kian Ming Chai, Wee Sun Lee, and Hai Leong Chieu.
             *Optimizing f-measure: A tale of two approaches*. arXiv preprint
             arXiv:1206.4625, 2012.
-	    https://arxiv.org/ftp/arxiv/papers/1206/1206.4625.pdf
+            https://arxiv.org/ftp/arxiv/papers/1206/1206.4625.pdf
 .. [NPS03] Erica Newcomb, Toni Pashley, and John Stasko. *Mobile computing
            in the retail arena*. In Proceedings of the SIGCHI Conference
            on Human Factors in Computing Systems, pp. 337–344. ACM,
            2003.
-	   DOI: https://doi.org/10.1145/642667.642670 
+           DOI: https://doi.org/10.1145/642667.642670 
 .. [PJ73] Consul, Prem C., and Gaurav C. Jain. 
           *A generalization of the Poisson distribution*. 
           Technometrics 15(4):791-799, (1973).
@@ -648,28 +733,28 @@ References
            volume 1, pp. 727–734, 2000.
 .. [SZA16] Szpiro, S., Zhao, Y. and Azenkot, S. 
            *Finding a store, searching for a product: a study of daily challenges of low vision people*. 
-	   In Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing,
-	   pp. 61-72. ACM, 2016.
+           In Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing,
+           pp. 61-72. ACM, 2016.
            DOI: https://doi.org/10.1145/2971648.2971723	   
 .. [Tay19] Taylor, James W. *Forecasting value at risk and expected shortfall using a 
            semiparametric approach based on the asymmetric Laplace distribution*.
            Journal of Business & Economic Statistics 37(1):121-133, 2019.
-	   DOI: https://doi.org/10.1080/07350015.2017.1281815
+           DOI: https://doi.org/10.1080/07350015.2017.1281815
 .. [TNTK16] Arry Tanusondjaja, Magda Nenycz-Thiel, and Rachel Kennedy.
             *Understanding shopper transaction data: how to identify crosscategory
             purchasing patterns using the duplication coefficient*.
             International Journal of Market Research, 58(3):401–419, 2016.
-	    DOI: https://doi.org/10.2501/ijmr-2016-026 
+            DOI: https://doi.org/10.2501/ijmr-2016-026 
 .. [TTR16] Arry Tanusondjaja, Giang Trinh, and Jenni Romaniuk. *Exploring
            the past behaviour of new brand buyers*. International Journal of
            Market Research, 58(5):733–747, 2016.
-	   DOI: https://doi.org/10.2501/ijmr-2016-042 
+           DOI: https://doi.org/10.2501/ijmr-2016-042 
 .. [WJ02] Rockney Walters and Maqbul Jamil. *Measuring cross-category
           specials purchasing: theory, empirical results, and implications*.
           Journal of Market-Focused Management, 5(1):25–42, 2002.
 .. [WJ03] Rockney G Walters and Maqbul Jamil. *Exploring the relationships
           between shopping trip type, purchases of products on promotion,
           and shopping basket profit*. 
-	  Journal of Business Research, 56(1):17–29, 2003.
-	  DOI: https://doi.org/10.1016/s0148-2963(01)00201-6
-
+          Journal of Business Research, 56(1):17–29, 2003.
+          DOI: https://doi.org/10.1016/s0148-2963(01)00201-6
+    
