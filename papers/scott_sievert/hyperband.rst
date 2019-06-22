@@ -481,8 +481,107 @@ stopping mechanism for the least adaptive bracket of Hyperband.
 The current implementation uses ``patience=True`` to choose a high value of
 ``patience=max_iter // 3``, which is validated by the experiments.
 
-Experiments
-===========
+Serial Simulations
+==================
+
+This section focuses on a synthetic classification example for the dataset
+shown in Figure :ref:`fig:synthetic-data`.
+Some
+detail is mentioned in the Appendix, though complete details can be found at
+https://github.com/stsievert/dask-hyperband-comparison.
+
+.. latex::
+   :usepackage: subcaption
+
+.. latex::
+   :usepackage: graphicx
+
+.. NOTE: figure* below changes to horizontal, not vertical
+
+.. raw:: latex
+
+   \begin{figure}
+   \centering
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.75\linewidth]{imgs/synthetic-dataset.png}
+       \caption{
+           The synthetic dataset used as input. In addition to these two
+           informative dimensions, there are 4 uninformative dimensiosn
+           with uniformly distributed random noise. The colors
+           correspond to different class labels and the points are all
+           bounded between $-1.5$ and $1.5$.
+       }
+       \label{fig:synthetic-data}
+   \end{subfigure}
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.95\linewidth]{imgs/synthetic-val-acc.pdf}
+       \caption{
+           A comparison of hyper-parameter optimization between
+           Hyperband's early stopping scheme (via \texttt{hyperband})
+           and randomized search without any early stopping (via
+           \texttt{passive}). The passive search trains 17 models to
+           completion (81 passes through the data). The shaded regions
+           correspond to the 10% and 90% percentiles over 20 runs.
+       }
+       \label{fig:synthetic-performance}
+   \end{subfigure}
+   \caption{
+       In this simulation, each call to \texttt{partial\_fit} sees about 1/3rd
+       of examples in the complete train dataset. Each model completes no more
+       than 81 passes through the data.
+   }
+   \end{figure}
+
+
+
+Model architecture & Hyper-parameters
+-------------------------------------
+
+The model used is Scikit-learn's fully-connected neural network, their
+``MLPClassifier``. In this, there are several hyper-parameters.  Only one is
+varied that effects the architecture of the best model:
+
+* ``hidden_layer_sizes``, which controls the number of total neurons. This
+  parameter is varied so the neural network has 20 neurons but varies the
+  width of each layer. e.g., two choices are 10 neurons in 2 layers or 20
+  neurons in one layer.
+
+Several other hyper-parameters control finding the best model:
+
+* ``alpha``, a regularization term that can affect generalization
+* ``batch_size``, the number of examples used to approximate the gradient at
+  each optimization iteration. This is varied between 32 and 512.
+* ``learning_rate`` controls the learning rate decay scheme, either constant or
+  via the "``invscaling``" scheme, which has the learning rate decay like
+  :math:`\gamma_0/t^p` where :math:`p` and :math:`\gamma_0` are also tuned.
+* ``momentum``, the amount of momentum to include in Nesterov's momentum
+  :cite:`nesterov2013a`
+
+Performance
+-----------
+
+Two hyper-parameter optimizations are performed, Hyperband and random search.
+Recall from above that Hyperband is a principled early stopping scheme for
+random search. The comparison mirrors that by sampling same hyperparameters
+[#random-sampling-hyperband]_ and using the same validation set for each run.
+
+Dask's implementation of Hyperband adaptively selects the highest performing
+bracket of Hyperband. Hyperband makes no distinction on which bracket is
+highest performing. However, prioritizing high-performing models will mean that
+the highest performing bracket finishes training first.
+
+These simulations are performed on a laptop with 4 Dask workers. This makes the
+hyper-parameter selection very serial and the number of ``partial_fit`` calls
+or passes through the dataset a good proxy for time.
+
+.. [#random-sampling-hyperband] As much as possible -- Hyperband evaluates more
+   hyper-parameters combinates. The random search without early stopping
+   evaluates every hyper-parameter value Hyperband evaluates.
+
+Parallel Experiments
+====================
 
 This section will highlight a practical use of ``HyperbandSearchCV``. This
 involves a neural network using a popular library (PyTorch [#pytorch]_
@@ -491,11 +590,10 @@ difficult hyper-parameter optimization problem even for this relatively simple m
 detail is mentioned in the Appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
+This experiment will be run with 25 Dask workers.
+
 .. [#pytorch] https://pytorch.org
 .. [#skorch] https://github.com/skorch-dev/skorch
-
-Problem
--------
 
 This section will walk through an image denoising task. The inputs and desired
 outputs are given in Figure :ref:`fig:io+est`. This is an especially difficult
@@ -503,8 +601,8 @@ problem because the noise variance varies slightly between images. To protect
 against this, let's use a shallow neural network that's more complex than a
 linear model.
 
-Model architecture & Parameters
--------------------------------
+Model architecture & Hyper-parameters
+-------------------------------------
 
 To address that complexity, let's use an autoencoder. These are a type of neural
 network that reduce the dimensionality of the input before expanding to the
@@ -557,8 +655,6 @@ create the parameters to search over:
    # definition in Appendix
    params = {'optimizer': ['SGD', 'Adam'], ...}
 
-The goal for hyper-parameter optimization is to find a high performing estimator quickly is
-easy usage.
 
 Usage
 -----
@@ -576,13 +672,6 @@ First, let's create a ``HyperbandSearachCV`` object:
 This model has denoised series of image it's never seen before in Figure
 :ref:`fig:io+est`.
 
-.. figure:: imgs/io+est.png
-   :align: center
-
-   The rows show in the ground truth, input and output respectively for the
-   denoising problem. The output is shown for the best model that Hyperband
-   finds. :label:`fig:io+est`
-
 ``HyperbandSearchCV`` beat manual hand-tuning by a considerable margin. While manually
 tuning, I considered any scores about :math:`-0.10` to be pretty good, and I
 obtained scores no higher than :math:`-0.098`. That's the context necessary
@@ -598,7 +687,7 @@ Performance
 -----------
 
 Let's compare three algorithms with the same model, parameters and validation
-data. The comparisons are shown in Figures :ref:`fig:calls`, :ref:`fig:time`
+data. The comparisons are shown in Figures :ref:`fig:time`
 and :ref:`fig:activity` and the legends for these plots is shown in Table
 :ref:`table:legend`. In these experiments, 25 workers are used with Dask,
 meaning that 25 tasks can complete in parallel.
@@ -611,7 +700,59 @@ training time importance: training models for longer with the same
 computational effort would require a higher value for ``num_params`` and a
 lower and more aggressive value for ``patience``.
 
-.. table:: A summary of the legends in Figures :ref:`fig:calls`,
+Figure :ref:`fig:calls` supports the claim that Hyperband will high performing
+models with minimal ``partial_fit`` calls.
+
+
+The data scientist cares about time to reach a particular score, not
+the number of ``partial_fit`` calls required. This plot is shown in Figure
+:ref:`fig:time`. This plot is shown with 25 workers; if only one worker had
+been used this plot in Figure :ref:`fig:time` would be similar to
+:ref:`fig:synthetic-performance`.
+
+.. raw:: latex
+
+   \begin{figure}
+   \centering
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.95\linewidth]{imgs/io+est}
+       \caption{
+   The rows show in the ground truth, input and output respectively for the
+   denoising problem. The output is shown for the best model that Hyperband
+   finds.
+       }
+       \label{fig:io+est}
+   \end{subfigure}
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.95\linewidth]{imgs/2019-03-24-time.png}
+       \caption{
+   The time required to obtain a particular validation score (or negative loss). The legend labels are in
+   Table \ref{table:legend}.
+       }
+       \label{fig:time}
+   \end{subfigure}
+   \caption{
+       In this experiment, each call to \texttt{partial\_fit} uses 1/3 of the
+       examples in the complete train dataset, so algorithm passes over the training data about 1,667 times in
+       total, a.k.a.  1,667 epochs. Each model sees no more than 81 times the
+       number of examples in the dataset because \texttt{max\_iter=243} for all
+       searches.
+   }
+   \end{figure}
+
+``HyperbandSearchCV`` with ``patience=True`` and ``patience=False`` require a
+similar number of calls to ``partial_fit``, within a 5% difference. However,
+Figure :ref:`fig:time` shows a remarkable difference of specifying
+``patience=True`` for Hyperband: specifying ``patience=True`` means that
+Hyperband finishes in about 2/3rds of the time as the default Hyperband! This
+is because one worker hold onto a single model for about 4 minutes as shown in
+Figure :ref:`fig:activity`. Specifying ``patience=True`` removes that behavior,
+and likely removes that model.
+
+
+.. table:: A summary of the legends in Figures
            :ref:`fig:time` and :ref:`fig:activity`. ``IncrementalSearchCV``
            ``patience=24`` is an algorithm that stops training after the scores
            stop increasing or plateau, hence the label.
@@ -626,41 +767,6 @@ lower and more aggressive value for ``patience``.
    +---------------------+---------------------------------------------------+
    | ``hyperband+sop``   | ``HyperbandSearchCV``, ``patience=True``          |
    +---------------------+---------------------------------------------------+
-
-Figure :ref:`fig:calls` supports the claim that Hyperband will high performing
-models with minimal ``partial_fit`` calls. Each ``partial_fit`` call uses 1/3
-of the dataset, so algorithm passes over the training data about 1,667 times in
-total, a.k.a.  1,667 epochs. Each model sees no more than 81 times the number
-of examples in the dataset because ``max_iter=243`` for all searches.
-
-.. figure:: imgs/2019-03-24-calls.png
-   :align: center
-
-   The number of ``partial_fit`` calls against the validation best score (or
-   negative loss). The legend labels are in Table :ref:`table:legend`.
-   :label:`fig:calls`
-
-However, the data scientist cares about time to reach a particular score, not
-the number of ``partial_fit`` calls required. This plot is shown in Figure
-:ref:`fig:time`. This plot is shown with 25 workers; if only one worker had
-been used this plot in Figure :ref:`fig:time` would be the same as Figure
-:ref:`fig:calls` up to the x-axis labeling.
-
-.. figure:: imgs/2019-03-24-time.png
-   :align: center
-
-   The time required to obtain a particular validation score (or negative loss). The legend labels are in
-   Table :ref:`table:legend`.
-   :label:`fig:time`
-
-.. TODO do Hyperband and Hyperband+sop find the same model?
-
-The difference between Figures :ref:`fig:calls` and :ref:`fig:time` show a
-remarkable difference of specifying ``patience`` for Hyperband: specifying
-``patience=True`` means that Hyperband finishes in about 2/3rds of the time as
-the default Hyperband! This is because one worker hold onto a single model for
-about 4 minutes as shown in Figure :ref:`fig:activity`. Specifying
-``patience=True`` removes that behavior, and likely removes that model.
 
 .. TODO: figure out which model that is. Say a sentence about it (which bracket, etc)
 
