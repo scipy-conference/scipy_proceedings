@@ -22,7 +22,7 @@ PyLZJD: An Easy to Use Tool for Machine Learning
 
 .. class:: abstract
 
-    As Machine Learning (ML) becomes more widely known and popular, so too does the desire for new users from other backgrounds to apply ML techniques to their own domains. A difficult prerequisite that often confounds new users is the feature creation and engineering process. This is especially true when users attempt to apply ML to domains that have not historically received attention from the ML community (e.g., outside of text, images, and audio). The Lempel Ziv Jaccard Distance (LZJD) is a compression based technique that can be used for many machine learning tasks. Because of its compression background, users do not need to specify any feature extraction, making it easy to apply to new domains. We introduce pyLZJD, a library that implements LZJD in a manner meant to be easy to use and and apply for novice practitioners. We will discuss the intuition and high-level mechanics behind LZJD, followed by examples of how to use it on problems of disparate data types. 
+    As Machine Learning (ML) becomes more widely known and popular, so too does the desire for new users from other backgrounds to apply ML techniques to their own domains. A difficult prerequisite that often confounds new users is the feature creation and engineering process. This is especially true when users attempt to apply ML to domains that have not historically received attention from the ML community (e.g., outside of text, images, and audio). The Lempel Ziv Jaccard Distance (LZJD) is a compression based technique that can be used for many machine learning tasks. Because of its compression background, users do not need to specify any feature extraction, making it easy to apply to new domains. We introduce pyLZJD, a library that implements LZJD in a manner meant to be easy to use and apply for novice practitioners. We will discuss the intuition and high-level mechanics behind LZJD, followed by examples of how to use it on problems of disparate data types. 
 
 .. class:: keywords
 
@@ -31,7 +31,7 @@ PyLZJD: An Easy to Use Tool for Machine Learning
 Introduction
 ------------
 
-Machine Learning (ML) has become an increasingly popular tool, with libraries like Scikit-Learn :cite:`scikit-learn` and others :cite:`xgboost,JMLR:v18:16-131,JMLR:v17:15-237,Hall2009` making ML algorithms available to a wide audience of potential users. However, ML can be daunting for news and amateur users to pick up and use. Before even considering what algorithm should be used for a given problem, feature creation and engineering is a prerequisite step that is not easy to perform, nor is it easy to automate. 
+Machine Learning (ML) has become an increasingly popular tool, with libraries like Scikit-Learn :cite:`scikit-learn` and others :cite:`xgboost,JMLR:v18:16-131,JMLR:v17:15-237,Hall2009` making ML algorithms available to a wide audience of potential users. However, ML can be daunting for new and amateur users to pick up and use. Before even considering what algorithm should be used for a given problem, feature creation and engineering is a prerequisite step that is not easy to perform, nor is it easy to automate. 
 
 In normal use, we as ML practitioners would describe our data as a matrix :math:`\boldsymbol{X}` that has :math:`n` rows and :math:`d` columns. Each of the :math:`n` rows corresponds to one of our data points (i.e., an example), and each of the :math:`d` columns corresponds to one of our features. Using cars as an analogy problem, we may want to know what color a car is, how old it is, or its odometer mileage, as features. We want to have these features in every row :math:`n` of our matrix so that we have the information for every car.  Once done, we might train a model :math:`m(\cdot)` to perform a classification problem (e.g., is the car an SUV or sedan?), or use some distance measure :math:`d(\cdot, \cdot)` to help us find similar or related examples (e.g., which used car that has been sold is most like my own?). 
 
@@ -68,7 +68,7 @@ slow, and the mechanics of standard compression algorithms are not optimized for
 
 .. code-block:: python
 
-    def lzset(b): #b should be a list
+    def lzset(b): #code for string case only
         s = set()
         start = 0
         end = 1
@@ -165,7 +165,7 @@ The processes argument is optional. By setting it to -1, as many processor cores
 
 For this first example, we will stick to using LZJD as a similarity tool and distance metric. When you want to use distance based algorithms, you want to use the :code:`digest` and :code:`sim` functions instead of :code:`vectorize`. :code:`vectorize` will be less accurate and slower when computing distances. 
 
-To use LZJD's digest with Scikit-Learn, we need to massage the files into a form that it expects. Scikit-Learn needs a distance function between data stored as a list of vectors (i.e., a matrix :math:`X`). However, our digests are not vectors in the way that Scikit-Learn understands them, and needs to know how to properly measure distances. An easy way to do this [#], which is compatible with other specialized distance a user may want to leverage, is to create a 1-D list of vectors. Each vector will store the index of its digest in the created :code:`X_hashes` list.  Then we can can create a distance function which uses the index, and returns the correct value. While wordy to explain, it takes only a few lines of code:
+To use LZJD's digest with Scikit-Learn, we need to massage the files into a form that it expects. Scikit-Learn needs a distance function between data stored as a list of vectors (i.e., a matrix :math:`X`). However, our digests are not vectors in the way that Scikit-Learn understands them, and needs to know how to properly measure distances. An easy way to do this [#], which is compatible with other specialized distance a user may want to leverage, is to create a 1-D list of vectors. Each vector will store the index of its digest in the created :code:`X_hashes` list.  Then we can create a distance function which uses the index, and returns the correct value. While wordy to explain, it takes only a few lines of code:
 
 .. code-block:: python
 
@@ -212,7 +212,7 @@ The above code returns a value of 91\% accuracy, where a majority-vote baseline 
     Example of t-SNE visualization created using LZJD. Best viewed digitally and in color.
 
 
-A plot of the result is shown in Figure 1, where we see that the groups are mostly clustered into separate regions, but that there is a significant collection of points that were difficult to organize with their respective groups. While a tutorial on effective use t-SNE is beyond the scope of this paper, LZJD allows us to leverage this popular tool for immediate visual feedback and exploration. 
+A plot of the result is shown in Figure 1, where we see that the groups are mostly clustered into separate regions, but that there is a significant collection of points that were difficult to organize with their respective groups. While a tutorial on effective use of t-SNE is beyond the scope of this paper, LZJD allows us to leverage this popular tool for immediate visual feedback and exploration. 
 
 .. raw:: latex
 
