@@ -70,7 +70,8 @@ Codebraid includes a built-in code execution system. It can also use
 Jupyter kernels :cite:`Kluyver2016` to execute code. The first code
 block that is executed with a given language can specify a kernel. In
 the example below, the “``.cb.nb``” tells Codebraid to run the code and
-provide a “notebook” display that shows both code and output.
+provide a “notebook” display that shows both code and output, while
+“``jupyter_kernel``” specifies a kernel.
 
 .. code:: text
 
@@ -83,8 +84,9 @@ provide a “notebook” display that shows both code and output.
    integral.doit()
    ```
 
-The result includes rich output in the form of rendered LaTeX math, just
-as it would in a Jupyter notebook:
+Because a Jupyter kernel was used to run the code, the result includes
+rich output in the form of rendered LaTeX math, just as it would in a
+Jupyter notebook:
 
 .. code:: python
 
@@ -136,7 +138,8 @@ as reStructuredText could be accomplished by running
    pandoc --from markdown --to rst file.md
 
 Using Codebraid to execute code as part of the document conversion
-process is as simple as replacing ``pandoc`` with ``codebraid pandoc``:
+process is simply a matter of replacing ``pandoc`` with
+``codebraid pandoc``:
 
 ::
 
@@ -300,13 +303,13 @@ follow the closing backtick(s). While this sort of a “postfix” notation
 may not be ideal from some perspectives, it is the cost of maintaining
 full compatibility with Pandoc Markdown syntax.
 
-Finally, the ``cb.nb`` command runs code in “notebook mode.” For inline
-code, ``cb.nb`` is like ``cb.expr`` except that it displays rich output
-or verbatim text. For code blocks, ``cb.nb`` displays code followed by
-verbatim stdout. If there are errors, stderr is also included
-automatically. When Codebraid is used with a Jupyter kernel, rich
-outputs such as plots are included as well. This was demonstrated in the
-`Introduction`_, and another example can be found in `Jupyter kernels`_.
+Finally, the ``cb.nb`` command runs code and provides a “notebook”
+display. For inline code, ``cb.nb`` is like ``cb.expr`` except that it
+displays rich output or verbatim text. For code blocks, ``cb.nb``
+displays code followed by verbatim stdout. If there are errors, stderr
+is also included automatically. When Codebraid is used with a Jupyter
+kernel, rich outputs such as plots are included as well. This was
+demonstrated in the `Introduction`_.
 
 Display options
 ===============
@@ -316,21 +319,23 @@ There are two code chunk keywords that govern display, ``show`` and
 each command.
 
 ``show`` takes any combination of the following options: ``markup``
-(display Markdown source), ``code``, ``stdout``, ``stderr``, and
-``none``. There is also ``rich_output`` when a Jupyter kernel is used to
-execute code. Multiple options can be combined, such as
-``show=code+stdout+stderr``. Code chunks using ``copy`` can employ
-``copied_markup`` to display the Markdown source of the copied code
-chunk. When the ``cb.expr`` command is used, the expression output is
-available via ``expr``. ``show`` completely overwrites the existing
-display settings.
+(display Markdown source), ``code`` (display code being executed),
+``stdout``, ``stderr``, and ``none``. There is also ``rich_output`` when
+a Jupyter kernel is used to execute code. Multiple options can be
+combined, such as ``show=code+stdout+stderr``. Code chunks using
+``copy`` can employ ``copied_markup`` to display the Markdown source of
+the copied code chunk. When the ``cb.expr`` command is used, the
+expression output is available via ``expr``. Using ``show`` completely
+overwrites the existing display settings.
 
-The display format can also be specified with ``show``. ``stdout``,
-``stderr``, and ``expr`` can take the formats ``raw`` (interpreted as
-Markdown), ``verbatim``, or ``verbatim_or_empty`` (verbatim if there is
-output, otherwise a space or empty line). For example,
+The display format can also be specified with ``show``. For ``stdout``,
+``stderr``, and ``expr``, there are three formats: ``raw`` (interpreted
+as Markdown), ``verbatim``, or ``verbatim_or_empty`` (verbatim if there
+is output, otherwise a space or empty line). For example,
 ``show=stdout:raw+stderr:verbatim``. While a format can be specified for
-``markup`` and ``code``, only the default ``verbatim`` is permitted.
+``markup`` and ``code``, only the default ``verbatim`` is permitted. For
+``rich_output``, the output representation (mime type) can be selected.
+Thus, ``show=rich_output:png`` selects a PNG image representation.
 
 ``hide`` takes the same options as ``show``, except that ``none`` is
 replaced by ``all`` and formats are not specified. Instead of overriding
@@ -449,13 +454,13 @@ named ``session``):
 
 .. code:: text
 
-   ```{.python .cb.nb jupyter_kernel=python3}
+   ```{.python .cb.run jupyter_kernel=python3}
    %matplotlib inline
    import numpy as np
    from matplotlib import pyplot as plt
    ```
 
-   ```{.python .cb.nb}
+   ```{.python .cb.run}
    x = np.linspace(0, 2*np.pi)
    for n in range(-1, 2):
        plt.plot(x, np.sin(x + n*np.pi/4))
@@ -465,21 +470,9 @@ named ``session``):
 Notice that ``jupyter_kernel`` was only needed (and only allowed) for
 the first code chunk. The second code chunk is still using the same
 language (``.python``), so it shares the same kernel. This Markdown
-results in displayed code plus a plot, just as it would within a Jupyter
-notebook:
-
-.. code:: python
-
-   %matplotlib inline
-   import numpy as np
-   from matplotlib import pyplot as plt
-
-.. code:: python
-
-   x = np.linspace(0, 2*np.pi)
-   for n in range(-1, 2):
-       plt.plot(x, np.sin(x + n*np.pi/4))
-   plt.grid()
+results in a plot, just as it would within a Jupyter notebook. Because
+``cb.run`` was used rather than ``cb.nb``, code is not displayed and
+only the plot is shown:
 
 |image0|
 
