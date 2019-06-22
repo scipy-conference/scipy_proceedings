@@ -70,12 +70,14 @@ Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to
 
 At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
-1. Data: In order to fit a model, one requires observations (:math:`F^{obs}(i)`).  These may be either experimental measurements or high-fidelity model results.
 2. Model: The user needs to define a model of the form :math:`F(i, q)`; i.e., a model that depends on a set of parameters :math:`q`.  Strictly speaking the model can be created in any language the user desires so long as it can be called within your Python script.  For example, if your model code is written in C++ or Fortran, this is easily done using the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_.
-3. Sum-of-squares function: The sum-of-squares error between the model and data, :math:`SS_q`, will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.  Defining a function to calculate the sum-of-squares error should be familiar for scientists who have performed least-squares optimization, and several examples have been provided later on in the paper.
-4. Parameters: The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
-5. Add model parameters
-6. Execute simulation
+
+1. Import and initialize MCMC object.
+2. Add data to the simulation - :math:`F^{obs}(i)`. These may be either experimental measurements or high-fidelity model results.
+3. Define sum-of-squares function - :math:`SS_q`.  The sum-of-squares error between the model and data will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.
+4. Define model settings and simulation options.
+5. Add model parameters - :math:`q`. The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
+6. Execute simulation.
 
 Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to some data, the basic implementation is as follows:
 
@@ -91,6 +93,7 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
         m, b = q  # slope and offset
         x = data.xdata[0]
         y = data.ydata[0]
+        # Evaluate model
         ymodel = m*x + b
         res = ymodel - y
         return (res ** 2).sum(axis=0)
@@ -100,15 +103,15 @@ Assuming we want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to so
     # Define simulation options
     mcstat.simulation_options.define_simulation_options(
         nsimu=5.0e3,  # No. of MCMC simulations
-        updatesigma=True,  # Infer obs. error variance
-        method='dram')  # Metropolis algorithm
     # Add model parameters
     mcstat.parameters.add_model_parameter(
         name='m',
-        theta0=2.)
+        theta0=2.)  # initial value
     mcstat.parameters.add_model_parameter(
         name='b',
-        theta0=2.75)
+        theta0=2.75,  # initial value
+        minimum=-5,  # lower limit
+        maximum=5)  # upper limit
     # Run simulation
     mcstat.run_simulation()
 
