@@ -66,7 +66,7 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
 where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  There are a wide variety of Metropolis algorithms that may be used for MCMC, and options available within pymcmcstat are outlined in the following section.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  A basic description of the Metropolis approach is outlined in the following section and also a list of available algorithms within pymcmcstat.
 
 At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
@@ -119,6 +119,9 @@ Note, this algorithm is also applicable to nonlinear models, examples of which a
 
 Simulation Options
 ------------------
+
+For those unfamiliar with Metropolis algorithms, the key takeaway is that a set of parameters :math:`q^*` is accepted if the value of :math:`\mathcal{L}(F^{obs}(i)|q^*)\pi_0(q*)` is greater than the value using the previous parameter set :math:`q^{k-1}`.
+
 In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
 
 .. raw:: latex
