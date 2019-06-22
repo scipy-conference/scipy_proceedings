@@ -74,9 +74,10 @@ At the end of the day, many users do not need to know the statistical background
 2. Add data to the simulation - :math:`F^{obs}(i)`. These may be either experimental measurements or high-fidelity model results.
 3. Define model function: The user needs to define a model of the form :math:`F(i, q)`; i.e., a model that depends on a set of parameters :math:`q`.  Strictly speaking the model can be created in any language the user desires so long as it can be called within your Python script.  For example, if your model code is written in C++ or Fortran, this is easily done using the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_.  Note, the model does not need to be a separate :code:`def` statement, but can be included directly in the sum-of-squares function.
 4. Define sum-of-squares function - :math:`SS_q`.  The sum-of-squares error between the model and data will be used in evaluating the likelihood function :math:`\mathcal{L}(F^{obs}(i)|q)`.
-5. Define model settings and simulation options.
+5. Define model settings and simulation options.  More details regarding these features will be provided in subsequent sections.
 6. Add model parameters - :math:`q`. The user must specify the parameters in the model that need to be calibrated as well as define any limits regarding potential values those parameters can have.  By defining parameter minimum and/or maximum limits, the user has specified the prior function :math:`\pi_0(q)`.  By default, pymcmcstat assumes a uniform distribution for all parameters; i.e., there is equal probability of the parameter being a particular value between the minimum and maximum limit.
 7. Execute simulation.
+8. Analyze parameter chains.  The chains reflect the sampling history of the MCMC simulation.
 
 Let's walk through a basic example to see how all these pieces work together.  To start, we will generate some fictitious data,
 
@@ -87,9 +88,9 @@ Let's walk through a basic example to see how all these pieces work together.  T
     y = 2.0*x + 3.0 + 0.1*np.random.standard_normal(
                             x.shape)
 
-Note, we assume data where observations :code:`y` have been made at independent points :code:`x`, which are uniformly distributed between 0 and 5.  The observations follow a linear trend with slope 2 and offset 3.  To make the data realistic we add random noise to the observations of the form :math:`\epsilon_i\sim\mathit{N}(0, \sigma^2)`.  In this case we define the observation standard deviation to be :math:`\sigma=0.1`.
+Note, we assume data where observations :code:`y` have been made at independent points :code:`x`, which are uniformly distributed between 0 and 5.  The observations follow a linear trend with slope 2 and offset 3.  To make the data realistic we add random noise to the observations of the form :math:`\epsilon_i\sim\mathit{N}(0, \sigma^2)`.  In this case we define the observation error standard deviation to be :math:`\sigma=0.1`.
 
-In this case we know what the model should be because we used it to generate the data.  We want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to the observations.  To run a MCMC simulation for this problem, the basic implementation is as follows:
+In this case we know what the model should be because we used it to generate the data.  We want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to the observations.  To calibrate this model with pymcmcstat, the basic implementation is as follows:
 
 .. code-block:: python
 
@@ -112,7 +113,7 @@ In this case we know what the model should be because we used it to generate the
         sos_function=ssfun)
     # Define simulation options
     mcstat.simulation_options.define_simulation_options(
-        nsimu=5.0e4)  # No. of MCMC simulations
+        nsimu=10.0e3)  # No. of MCMC simulations
     # Add model parameters
     mcstat.parameters.add_model_parameter(
         name='m',
@@ -140,19 +141,50 @@ This will output to your display
 
 .. code-block:: python
 
-    name  : mean    std     MC_err  tau      geweke
-    m     : 2.0245  0.0324  0.0006  10.4081  0.9968
-    b     : 2.9343  0.0816  0.0016  10.5925  0.9942
+    name  : mean    std     MC_err  tau     geweke
+    m     : 2.0059  0.0348  0.0015  7.1351  0.9912
+    b     : 2.9983  0.0206  0.0009  7.9169  0.9962
 
-Recall that the data was generated with a slope of 2 and offset of 3, so the algorithm appears to be converging to the correct values.  We can visualize the sampling history of the MCMC process by using some of pymcmcstat's plotting routines.
+Recall that the data was generated with a slope of 2 and offset of 3, so the algorithm appears to be converging to the correct values.
+
+A typical part of analyzing the results is to visualize the sampling history of the MCMC process.  This is accomplished by using pymcmcstat's :code:`plot_chain_panel` method.
 
 .. code-block:: python
 
     mcpl = mcstat.mcmcplot  # initialize plotting methods
-    mcpl.plot_density_panel(chain[burnin:,:], names)
+    mcpl.plot_chain_panel(chain, names)
+
+.. figure:: figures/basic_cp_full.png
+
+    Parameter chains obtained with 5000 realizations of the linear model. :label:`figbasiccpfull`
+
+.. figure:: figures/basic_cp.png
+
+    Parameter chains obtained with 5000 realizations of the linear model. :label:`figbasiccp`
+
+Figure :ref:`figbasiccpfull` shows the full parameter chains for all 10,000 MCMC simulations.  The algorithm takes a few simulations to reach the correct distribution, which is clearly seen by the jump at the beginning.  This is why we typically remove the first part of the chain to allow for burn-in.  We make another plot, except this time we have removed the first part of the chain.
+
+.. code-block:: python
+
     mcpl.plot_chain_panel(chain[burnin:,:], names)
+
+Figure :ref:`figbasiccp` shows the burned-in parameter chains based on the final 5,000 MCMC simulations.  We observe that the distribution of parameter values appears to be consistent for the entire range of sampling shown, which supports the conclusion that we have converged to the posterior distribution.  To visualize the distribution, we use the `plot_density_panel` method
+
+.. code-block:: python
+
+    mcpl.plot_density_panel(chain[burnin:,:], names)
+
+Figure :ref:`figbasicdp` shows the marginal posterior parameter densities.  The densities are generated using a Kernel Density Estimation (KDE) algorithm based on the parameter chains shown in Figure :ref:`figbasiccp`.
+
+.. figure:: figures/basic_dp.png
+
+    Marginal posterior parameter densities for linear model. :label:`figbasicdp`
+
+.. code-block:: python
+
     mcpl.plot_pairwise_correlation_panel(
           chain[burnin:, :], names)
+
 
 Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
 
