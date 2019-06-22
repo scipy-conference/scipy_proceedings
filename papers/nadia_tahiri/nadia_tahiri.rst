@@ -285,21 +285,21 @@ The `rnn` class structure is organized using the four functions.
 Non-negative matrix factorization (NNMF) network
 ================================================
 
-NNMF [LS01]_ is a matrix factorization method which matrix constraints are to be non-negative.
+NNMF [LS01]_ is a matrix factorization method where the constrain of the matrices is to be nonnegative.
 The technique consists to combine linear algebra and multivariate analysis to produce two matrices `W` and `H`.
 We factorize a matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W` 
-(i.e. `user\_id`) and `H` (i.e.`product\_id`) so the representation can be formulated as: 
+(i.e. `user\_id`) and `H` (i.e. `product\_id`) so the representation can be formulated as: 
 :math:`X \approx WH` (see Figure :ref:`nnmf`).
 
+Figure :ref:`nnmf` shows the decomposition of the `user_id` by `product_id` matrix to two matrices.
+ 
 .. figure:: figures/nnmf.png
    :align: center
    :scale: 65%
    
    Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). :label:`nnmf`
 
-NNMF is a surprisingly powerful machine learning method and the authors of [LS01]_ show the convergence 
-of the results by finding at least locally optimal solutions.
-NNMF is trained on a matrix of `user*product` counts.
+NNMF is a powerful machine learning method. [LS01] proved the convergence of NNMF to at least a locally optimal solution. NNMF is trained on the matrix of `user*product` counts.
 
 Gradient Boosted Tree (GBT) network
 ===================================
