@@ -15,74 +15,74 @@
 :bibliography: refs
 
 --------------------------------------------------------
-Better and faster hyper-parameter optimization with Dask
+Better and faster hyperparameter optimization with Dask
 --------------------------------------------------------
 
 .. class:: abstract
 
     Nearly every machine learning model requires that the user specify certain
-    parameters before training begins, aka "hyper-parameters". Finding the
-    optimal set of hyper-parameters is often a time- and resource-consuming
-    process. A recent breakthrough hyper-parameter optimization algorithm,
-    Hyperband, can find high performing hyper-parameters with minimal training
+    parameters before training begins, aka "hyperparameters". Finding the
+    optimal set of hyperparameters is often a time- and resource-consuming
+    process. A recent breakthrough hyperparameter optimization algorithm,
+    Hyperband, can find high performing hyperparameters with minimal training
     and has theoretical backing. This paper will provide intuition for
     Hyperband, explain the slightly modified implementation and why it's
     well-suited for Dask, a Python library that scales Python to larger
     datasets and more computational resources. Experiments find high performing
-    hyper-parameters more quickly in the presence of parallel computational
+    hyperparameters more quickly in the presence of parallel computational
     resources and with a deep learning model.
 
 .. class:: keywords
 
-   machine learning, hyper-parameter optimization, distributed computing
+   machine learning, hyperparameter optimization, distributed computing
 
 Introduction
 ============
 
 Training any machine learning pipeline requires data, an untrained model or
-estimator and "hyper-parameters", parameters chosen before training that adapt the model to the data. The user needs to specify values for these hyper-parameters in order to use the model. A good example is with
+estimator and "hyperparameters", parameters chosen before training that adapt the model to the data. The user needs to specify values for these hyperparameters in order to use the model. A good example is with
 adapting the ridge regression or LASSO models to the amount of noise in the
 data with the regularization parameter :cite:`marquardt1975`
-:cite:`tibshirani1996`. Hyper-parameter choice verification can not be
+:cite:`tibshirani1996`. Hyperparameter choice verification can not be
 completed until model training is completed.
 
-Model performance strongly depends on the hyper-parameters provided, even for
+Model performance strongly depends on the hyperparameters provided, even for
 the simple examples above. This gets much more complex when more
-hyper-parameters are required. For example, a particular visualization tool
-(t-SNE) requires (at least) three different hyper-parameters
+hyperparameters are required. For example, a particular visualization tool
+(t-SNE) requires (at least) three different hyperparameters
 :cite:`maaten2008visualizing`. The first section of a study on how to use this
-tool effectively is titled "Those hyper-parameters really matter"
+tool effectively is titled "Those hyperparameters really matter"
 :cite:`wattenberg2016`.
 
-These hyper-parameters need to be specified by the user, and there are no good
+These hyperparameters need to be specified by the user, and there are no good
 heuristics for determining what these values should be.
 These values are typically found through a search over possible values through
-a "cross-validation" search that scores models on unseen data or a holdout set.
-These searches are part of a hyper-parameter optimization or "model selection" process because hyper-parameters
+a "crossvalidation" search that scores models on unseen data or a holdout set.
+These searches are part of a hyperparameter optimization or "model selection" process because hyperparameters
 are considered part of the model. Even in the simple ridge regression case
 above, a brute force search is required :cite:`marquardt1975`. This brute force
-search quickly grows unfeasible when two or more hyper-parameters are required.
+search quickly grows unfeasible when two or more hyperparameters are required.
 
-Hyper-parameter optimization gets more complex with many different hyper-parameter values to input, and
-especially because there's often an interplay between hyper-parameters. A good
+Hyperparameter optimization gets more complex with many different hyperparameter values to input, and
+especially because there's often an interplay between hyperparameters. A good
 example is with deep learning, which has specialized techniques for handling
 many data :cite:`bottou2010large`. However, these optimization methods can't
-provide basic hyper-parameters because there are too many data to perform optimization efficiently :cite:`bottou2010large`. For example,
-the most basic hyper-parameter "learning rate" or "step size" is
+provide basic hyperparameters because there are too many data to perform optimization efficiently :cite:`bottou2010large`. For example,
+the most basic hyperparameter "learning rate" or "step size" is
 straightforward with few data but infeasible with many data
 :cite:`maren2015prob`.
 
 Contributions
 =============
 
-A hyper-parameter optimization or model selection is required if high
+A hyperparameter optimization or model selection is required if high
 performance is desired. In practice, it's expensive and time-consuming for machine learning
-researchers and practitioners. Ideally, hyper-parameter optimization algorithms return high
+researchers and practitioners. Ideally, hyperparameter optimization algorithms return high
 performing models quickly and are simple to use.
 
-Returning quality hyper-parameters quickly relies on making decisions about
-which hyper-parameters to devote training time to. This might mean
-progressively choosing higher-performing hyper-parameter values or stopping
+Returning quality hyperparameters quickly relies on making decisions about
+which hyperparameters to devote training time to. This might mean
+progressively choosing higher-performing hyperparameter values or stopping
 low-performing models early during training.
 
 Returning this
@@ -92,7 +92,7 @@ these algorithms.
 
 This work
 
-* provides implementation of a particular hyper-parameter optimization algorithm, Hyperband
+* provides implementation of a particular hyperparameter optimization algorithm, Hyperband
   in Dask, a Python library that provides advanced parallelism. Hyperband
   returns models with a high validation score with minimal training.  A Dask
   implementation is attractive because Hyperband is amenable to parallelism.
@@ -112,7 +112,7 @@ with the simple heuristic for determining the input parameters to Hyperband.
 The implementation can be found on the machine learning for Dask, Dask-ML. The
 documentation for Dask-ML is available at https://ml.dask.org.
 
-This paper will review other existing work for hyper-parameter optimization before
+This paper will review other existing work for hyperparameter optimization before
 detailing the Hyperband implementation in Dask. A realistic set of experiments
 will be presented before mentioning ideas for future work.
 
@@ -122,17 +122,17 @@ will be presented before mentioning ideas for future work.
 Related work
 ============
 
-Hyper-parameter optimization
+Hyperparameter optimization
 ----------------------------
 
-Hyper-parameter optimization finds the optimal set of hyper-parameters for a given model.
-These hyper-parameters are chosen to maximize performance on unseen data.
-The typical hyper-parameter optimization process
+Hyperparameter optimization finds the optimal set of hyperparameters for a given model.
+These hyperparameters are chosen to maximize performance on unseen data.
+The typical hyperparameter optimization process
 
 1. splits the dataset into the train dataset and test dataset. The test dataset
    is reserved for the final model evaluation.
-2. chooses hyper-parameters
-3. trains models with those hyper-parameters
+2. chooses hyperparameters
+3. trains models with those hyperparameters
 4. scores those models with unseen data (a subset of the train dataset typically
    referred to as the "validation set")
 5. trains the best model with the complete train dataset
@@ -140,10 +140,10 @@ The typical hyper-parameter optimization process
    score.
 
 The rest of this paper will focus on steps 2 and 3, which is where most of the
-work happens in hyper-parameter optimization.
+work happens in hyperparameter optimization.
 
-A commonly used method for hyper-parameter selection is a random
-selection of hyper-parameters followed by training each model to completion.
+A commonly used method for hyperparameter selection is a random
+selection of hyperparameters followed by training each model to completion.
 This offers several advantages, including a simple implementation that is very
 amenable to parallelism. Other benefits include sampling "important
 parameters" more densely than unimportant parameters :cite:`bergstra2012random`
@@ -151,15 +151,15 @@ This randomized search is implemented in many places, including in Scikit-Learn
 :cite:`pedregosa2011`.
 
 These implementations are by definition `passive` because they do not adapt to previous training. `Adaptive` algorithms can return a higher quality solution in less
-time by adapting to previous training and choosing which hyper-parameters to
-sample. This is especially useful for difficult hyper-parameter optimization problems with
-many hyper-parameters and many values for each hyper-parameter.
+time by adapting to previous training and choosing which hyperparameters to
+sample. This is especially useful for difficult hyperparameter optimization problems with
+many hyperparameters and many values for each hyperparameter.
 
-Bayesian algorithms are popular as adaptive hyper-parameter optimization algorithms. These
+Bayesian algorithms are popular as adaptive hyperparameter optimization algorithms. These
 algorithms treat the model as a black box and the model scores as a noisy
 evaluation of that black box. These algorithms have an estimate of
-the optimal set of hyper-parameters and use some probabilistic methods to improve
-the estimate. The choice of which hyper-parameter value to evaluate depends on
+the optimal set of hyperparameters and use some probabilistic methods to improve
+the estimate. The choice of which hyperparameter value to evaluate depends on
 previous evaluations.
 
 Popular Bayesian searches include sequential model-based algorithm
@@ -175,8 +175,8 @@ computational control :cite:`klein2016`.
 Hyperband
 ---------
 
-Hyperband is a principled early stopping scheme for randomized hyper-parameter
-selection [#resources]_ and an adaptive hyper-parameter optimization algorithm :cite:`li2016hyperband`.
+Hyperband is a principled early stopping scheme for randomized hyperparameter
+selection [#resources]_ and an adaptive hyperparameter optimization algorithm :cite:`li2016hyperband`.
 At the most basic level, it partially trains
 models before stopping models with low scores, then
 repeats. By default, it stops training the bottom 33% of the available models
@@ -184,12 +184,12 @@ at certain times. This means that the number of models decay over time, and
 the surviving models have high scores.
 
 Naturally, model quality depends on two factors: the amount of training and the
-values of various hyper-parameters. If training time
+values of various hyperparameters. If training time
 only matters a little, it makes sense to aggressively stop training models. On
 the flip side, if only training time influence the score, it only makes sense
 to let all models train for as long as possible and not perform any stopping.
 
-Hyperband sweeps over the relative importance of hyper-parameter choice and
+Hyperband sweeps over the relative importance of hyperparameter choice and
 amount of training.
 This sweep over training time importance enables a formal mathematical
 statement that Hyperband will return a much higher performing model than the
@@ -217,7 +217,7 @@ an informal presentation of the main theorem:
    validation loss $\nu_*$ for $\nu-\nu_*\in[0, 1]$ .
 
    Higher values of $\alpha$ mean slower convergence, and higher values of
-   $\beta$ represent more difficult hyper-parameter optimization problems because it's
+   $\beta$ represent more difficult hyperparameter optimization problems because it's
    harder to obtain a validation loss close to the optimal validation loss
    $\nu_*$.  Taking $\beta > 1$ means the validation losses are not uniformly
    distributed and higher losses are more common. The commonly used stochastic
@@ -301,20 +301,20 @@ and provides rapid feedback and diagnostics to aid humans.
 
 
 
-Adaptive hyper-parameter optimization in Dask
+Adaptive hyperparameter optimization in Dask
 =============================================
 
-Dask can scale up to clusters or to massive datasets. Hyper-parameter optimization searches
+Dask can scale up to clusters or to massive datasets. Hyperparameter optimization searches
 often require significant amounts of computation and can involve large
 datasets, and Hyperband is amenable to parallelism. Combining Dask
 with Hyperband is a natural fit.
 
 This work focuses on the case when the computation required is not
-insignificant. Then, the existing passive hyper-parameter optimization algorithms in
+insignificant. Then, the existing passive hyperparameter optimization algorithms in
 Dask-ML have limited use because they don't adapt to previous training to
 reduce the amount of training required.  [#dasksearchcv]_
 
-An adaptive hyper-parameter optimization algorithm, Hyperband is implemented in Dask's
+An adaptive hyperparameter optimization algorithm, Hyperband is implemented in Dask's
 machine learning library, Dask-ML.  [#docs]_ This algorithm adapts to previous
 training to minimize the amount of computation required. This section will
 detail the Hyperband architecture, the input arguments required and some
@@ -335,7 +335,7 @@ Hyperband architecture
 There are two levels of parallelism in Hyperband, which result in for-loops:
 
 * an "embarrassingly parallel" sweep over the different brackets of the
-  hyper-parameter vs. training time importance
+  hyperparameter vs. training time importance
 * in each bracket, the models are trained independently. This would be
   embarrassingly parallel if not for ceasing training of low performing models
   at particular times.
@@ -366,7 +366,7 @@ algorithm's pseudo-code:
 
    def hyperband(max_iter: int) -> BaseEstimator:
        # Different brackets have different values of
-       # "training" and "hyper-parameter" importance.
+       # "training" and "hyperparameter" importance.
        # => more models means more aggressive pruning
        brackets = [(get_num_models(b, max_iter),
                     get_initial_calls(b, max_iter))
@@ -384,7 +384,7 @@ and ``top_k`` rely on. ``top_k`` returns the ``k`` best performing
 models on the validation data and ``train`` trains a model for a certain number
 of calls to ``partial_fit``.
 
-Each bracket indicates a value in the tradeoff between hyper-parameter and
+Each bracket indicates a value in the tradeoff between hyperparameter and
 training time importance, and is specified by the list of tuples in the example
 above. Each bracket is specified so that the total number of ``partial_fit``
 calls is approximately the same among different brackets. Then, having many
@@ -397,7 +397,7 @@ The exact aggressiveness of the early stopping schedule depends one optional
 input to ``HyperbandSearchCV``, ``aggressiveness``. The default value is 3,
 which has some theoretical motivation :cite:`li2016hyperband`.
 ``aggressiveness=4`` is likely more suitable for initial exploration when not
-much is known about the model, data or hyper-parameters.
+much is known about the model, data or hyperparameters.
 
 
 Input parameters
@@ -419,7 +419,7 @@ controls the aggressiveness of the search and stopping model training, but it's
 optional and has theoretical backing.
 
 The primary advantage to Hyperband's inputs is that they do not require
-balancing training time importance and hyper-parameter importance.
+balancing training time importance and hyperparameter importance.
 
 In comparison, random searches require three inputs:
 
@@ -432,7 +432,7 @@ In comparison, random searches require three inputs:
 Trying twice as many parameters with the same amount of computation requires
 doubling ``num_params`` and halving either ``max_iter`` or ``chunks``, which
 means every model will see half as many data. A balance between training time
-and hyper-parameter importance is implicitly being decided upon. Hyperband has
+and hyperparameter importance is implicitly being decided upon. Hyperband has
 one fewer input because it sweeps over this balance's importance in different
 brackets.
 
@@ -456,7 +456,7 @@ at least two common cases:
 
 1. when models have converged before training completes (i.e., the score stays
    constant)
-2. when models have not converged and poor hyper-parameters are chosen (so the
+2. when models have not converged and poor hyperparameters are chosen (so the
    scores are decreasing).
 
 Providing a "stop on plateau" scheme will protect against these cases because
@@ -515,7 +515,7 @@ https://github.com/stsievert/dask-hyperband-comparison.
        \centering
        \includegraphics[width=0.95\linewidth]{imgs/synthetic-val-acc.pdf}
        \caption{
-           A comparison of hyper-parameter optimization between
+           A comparison of hyperparameter optimization between
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
            \texttt{passive}). The passive search trains 26 models to
@@ -533,11 +533,11 @@ https://github.com/stsievert/dask-hyperband-comparison.
 
 
 
-Model architecture & Hyper-parameters
+Model architecture & Hyperparameters
 -------------------------------------
 
 The model used is Scikit-learn's fully-connected neural network, their
-``MLPClassifier``. In this, there are several hyper-parameters.  Only one is
+``MLPClassifier``. In this, there are several hyperparameters.  Only one is
 varied that effects the architecture of the best model:
 
 * ``hidden_layer_sizes``, which controls the number of total neurons. This
@@ -545,9 +545,9 @@ varied that effects the architecture of the best model:
   width of each layer. e.g., two choices are 10 neurons in 2 layers or 20
   neurons in one layer.
 
-Five other hyper-parameters have to be tuned and control finding the best
+Five other hyperparameters have to be tuned and control finding the best
 model, 4 of which are continous. There are 25 possible choices from the two
-discrete hyper-parameters. Details are in the appendix. These hyper-parameters
+discrete hyperparameters. Details are in the appendix. These hyperparameters
 include the batch size, learning rate (and decay schedule) and a regularization
 parameter.
 
@@ -596,12 +596,12 @@ this:
 
 
 With this, no model sees more than ``n_examples`` examples as desired and
-Hyperband evalutes (approximately) ``n_params`` hyper-parameter combinations.
+Hyperband evalutes (approximately) ``n_params`` hyperparameter combinations.
 
 Performance
 -----------
 
-Two hyper-parameter optimizations are performed, Hyperband and random search.
+Two hyperparameter optimizations are performed, Hyperband and random search.
 Recall from above that Hyperband is a principled early stopping scheme for
 random search. The comparison mirrors that by sampling same hyperparameters
 [#random-sampling-hyperband]_ and using the same validation set for each run.
@@ -612,12 +612,12 @@ highest performing. However, prioritizing high-performing models will mean that
 the highest performing bracket finishes training first.
 
 These simulations are performed on a laptop with 4 Dask workers. This makes the
-hyper-parameter selection very serial and the number of ``partial_fit`` calls
+hyperparameter selection very serial and the number of ``partial_fit`` calls
 or passes through the dataset a good proxy for time.
 
 .. [#random-sampling-hyperband] As much as possible -- Hyperband evaluates more
-   hyper-parameter values. The random search without early stopping
-   evaluates every hyper-parameter value Hyperband evaluates.
+   hyperparameter values. The random search without early stopping
+   evaluates every hyperparameter value Hyperband evaluates.
 
 Parallel Experiments
 ====================
@@ -625,7 +625,7 @@ Parallel Experiments
 This section will highlight a practical use of ``HyperbandSearchCV``. This
 involves a neural network using a popular library (PyTorch [#pytorch]_
 :cite:`paszke2017automatic` through the wrapper Skorch [#skorch]_). This is a
-difficult hyper-parameter optimization problem even for this relatively simple model.  Some
+difficult hyperparameter optimization problem even for this relatively simple model.  Some
 detail is mentioned in the appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
@@ -640,7 +640,7 @@ problem because the noise variance varies slightly between images. To protect
 against this, let's use a shallow neural network that's more complex than a
 linear model.
 
-Model architecture & Hyper-parameters
+Model architecture & Hyperparameters
 -------------------------------------
 
 To address that complexity, let's use an autoencoder. These are a type of neural
@@ -658,22 +658,22 @@ that model:
 
 .. This autoencoder has two layers that compress
 
-Of course, this is a neural network so there are many hyper-parameters to tune.
-Only one hyper-parameter affects the model architecture:
+Of course, this is a neural network so there are many hyperparameters to tune.
+Only one hyperparameter affects the model architecture:
 
 * ``estimator__activation``, which specifies the activation the neural network
-  should use. This hyper-parameter is varied between 4 different choices, all
+  should use. This hyperparameter is varied between 4 different choices, all
   different types of the rectified linear unit (ReLU) :cite:`relu`, including
   the leaky ReLU :cite:`leaky-relu`, parametric ReLU :cite:`prelu` and
   exponential linear units (ELU) :cite:`elu`.
 
-There are 6 other hyper-parameters do not influence the model architecture.
-There are 3 discrete hyper-parameters (and 160 combinations of all discrete
-variables) and 3 contiuous hyper-parameters. These hyper-parameters all control
+There are 6 other hyperparameters do not influence the model architecture.
+There are 3 discrete hyperparameters (and 160 combinations of all discrete
+variables) and 3 contiuous hyperparameters. These hyperparameters all control
 finding the optimal model after the architecture is fixed. These includes
-hyper-parameter like the optimizer to use (stochastic gradient descent
+hyperparameter like the optimizer to use (stochastic gradient descent
 :cite:`bottou2010large` a.k.a SGD or Adam :cite:`adam`), initialization,
-regularization and optimizer hyper-parameters like learning rate or momentum.
+regularization and optimizer hyperparameters like learning rate or momentum.
 Details are in the appendix.
 
 There are 4 discrete variables with :math:`160` possible combinations. For each
@@ -705,7 +705,7 @@ used with Dask, meaning that 25 tasks can complete in parallel.
 I will compare against a basic stop on plateau algorithm with particular
 choices for ``patience`` and ``num_params``. Specifically, I choose a low value
 for ``patience`` and hence choose to evaluate twice as many
-hyper-parameters. This illustrates the choice between hyper-parameter vs.
+hyperparameters. This illustrates the choice between hyperparameter vs.
 training time importance: training models for longer with the same
 computational effort would require a higher value for ``num_params`` and a
 lower and more aggressive value for ``patience``.
@@ -815,7 +815,7 @@ https://github.com/stsievert/dask-hyperband-comparison.
 Serial Simulation
 -----------------
 
-Here are some of the other hyper-parameters tuned:
+Here are some of the other hyperparameters tuned:
 
 * ``alpha``, a regularization term that can affect generalization
 * ``batch_size``, the number of examples used to approximate the gradient at
@@ -828,7 +828,7 @@ Here are some of the other hyper-parameters tuned:
 
 Parallel Experiments
 --------------------
-Here are some of the other hyper-parameters tuned:
+Here are some of the other hyperparameters tuned:
 
 * ``optimizer``: which optimization method should be used for training? Choices
   are stochastic gradient descent (SGD) :cite:`bottou2010large` and Adam :cite:`adam`.
@@ -840,7 +840,7 @@ Here are some of the other hyper-parameters tuned:
   neural net have? Regularization helps control how well the model performs on
   unseen data.
 * ``optimizer__lr``: what learning rate should the optimizer use? This is the
-  most basic hyper-parameter for the optimizer.
+  most basic hyperparameter for the optimizer.
 * ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer to
   incorporate Nesterov momentum :cite:`nesterov2013a`.
 
