@@ -34,7 +34,7 @@ Better and faster hyper-parameter optimization with Dask
 
 .. class:: keywords
 
-   machine learning, hyper-parameter optimization, distributed computing, dask
+   machine learning, hyper-parameter optimization, distributed computing
 
 Introduction
 ============
@@ -101,7 +101,7 @@ This work
 * provides an simple heuristic to determine the parameters to Hyperband, which
   only requires knowing how many examples the model should observe and a rough
   estimate on how many parameters to sample
-* provides validating experiments
+* provides validating experiments that illustrate use
 
 Hyperband treats computation as a scarce resource [#scarce]_ and has parallel
 underpinnings. Hyperband can only return high performing models with minimal
@@ -418,6 +418,9 @@ halving ``chunks`` and doubling ``max_iter``. There is a third parameter that
 controls the aggressiveness of the search and stopping model training, but it's
 optional and has theoretical backing.
 
+The primary advantage to Hyperband's inputs is that they do not require
+balancing training time importance and hyper-parameter importance.
+
 In comparison, random searches require three inputs:
 
 1. the number of ``partial_fit`` calls for `every` model (via ``max_iter``)
@@ -432,16 +435,6 @@ means every model will see half as many data. A balance between training time
 and hyper-parameter importance is implicitly being decided upon. Hyperband has
 one fewer input because it sweeps over this balance's importance in different
 brackets.
-
-The primary advantage to Hyperband's inputs is that they do not require
-balancing training time importance and hyper-parameter importance. The
-values for ``max_iter`` and ``chunks`` can be specified by a rule-of-thumb once
-the number of parameter to be sampled (``n_params``) and the number of examples
-required to be seen by at least one model, ``n_examples``.  Specifically, the
-rule-of-thumb used in experiments is to set ``max_iter = n_params`` and
-``chunks = n_examples / n_params``. With this, no example sees more than
-``n_examples`` examples as desired and Hyperband evalutes (approximately)
-``n_params`` hyper-parameter combinations.
 
 .. [#examples] e.g., something in the form "the most trained model should see
    100 times the number of examples (aka 100 epochs)"
@@ -487,8 +480,13 @@ Serial Simulations
 This section focuses on a synthetic classification example for the dataset
 shown in Figure :ref:`fig:synthetic-data`.
 Some
-detail is mentioned in the Appendix, though complete details can be found at
+detail is mentioned in the appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
+
+.. code-block:: python
+
+   X_train, y_train = make_4_circles("train", num=50e3)
+   X_test, y_test = make_4_circles("test", num=10e3)
 
 .. latex::
    :usepackage: subcaption
@@ -496,21 +494,20 @@ https://github.com/stsievert/dask-hyperband-comparison.
 .. latex::
    :usepackage: graphicx
 
-.. NOTE: figure* below changes to horizontal, not vertical
-
 .. raw:: latex
 
-   \begin{figure}
+   \begin{figure}  % figure* for horizontal figures
    \centering
    \begin{subfigure}{0.45\textwidth}
        \centering
        \includegraphics[width=0.75\linewidth]{imgs/synthetic-dataset.png}
        \caption{
            The synthetic dataset used as input. In addition to these two
-           informative dimensions, there are 4 uninformative dimensiosn
-           with uniformly distributed random noise. The colors
-           correspond to different class labels and the points are all
-           bounded between $-1.5$ and $1.5$.
+           informative dimensions, there are 4 uninformative dimensiosn with
+           uniformly distributed random noise. There are 60,000 examples in
+           this dataset and 50,000 are used for training. The colors correspond
+           to different class labels and all points are bounded between $-2$
+           and $2$ for all dimensions.
        }
        \label{fig:synthetic-data}
    \end{subfigure}
@@ -521,9 +518,9 @@ https://github.com/stsievert/dask-hyperband-comparison.
            A comparison of hyper-parameter optimization between
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
-           \texttt{passive}). The passive search trains 17 models to
-           completion (81 passes through the data). The shaded regions
-           correspond to the 10% and 90% percentiles over 20 runs.
+           \texttt{passive}). The passive search trains 26 models to
+           completion (80 passes through the data). The shaded regions
+           correspond to the 10\% and 90\% percentiles over 25 runs.
        }
        \label{fig:synthetic-performance}
    \end{subfigure}
@@ -548,16 +545,58 @@ varied that effects the architecture of the best model:
   width of each layer. e.g., two choices are 10 neurons in 2 layers or 20
   neurons in one layer.
 
-Several other hyper-parameters control finding the best model:
+Five other hyper-parameters have to be tuned and control finding the best
+model, 4 of which are continous. There are 25 possible choices from the two
+discrete hyper-parameters. Details are in the appendix. These hyper-parameters
+include the batch size, learning rate (and decay schedule) and a regularization
+parameter.
 
-* ``alpha``, a regularization term that can affect generalization
-* ``batch_size``, the number of examples used to approximate the gradient at
-  each optimization iteration. This is varied between 32 and 512.
-* ``learning_rate`` controls the learning rate decay scheme, either constant or
-  via the "``invscaling``" scheme, which has the learning rate decay like
-  :math:`\gamma_0/t^p` where :math:`p` and :math:`\gamma_0` are also tuned.
-* ``momentum``, the amount of momentum to include in Nesterov's momentum
-  :cite:`nesterov2013a`
+
+.. code-block:: python
+
+   from sklearn.neural_network import MLPClassifier
+   model = MLPClassifier(...)
+   params = {'batch_size': [32, 64, ..., 512], ...}
+
+Usage
+-----
+
+``HyperbandSearchCV`` only requires `one` parameter besides the model and data
+as discussed above. This number controls the amount of computation that will be
+performed, and does not require balancing between the number of models and how
+long to train each model.
+
+The values for ``max_iter`` and ``chunks`` can be specified by a rule-of-thumb
+once the number of parameter to be sampled and the number of examples required
+to be seen by at least one model, ``n_examples``. This rule of thumb is:
+
+.. code-block:: python
+
+   # Specify these two parameters
+   n_params = 300
+   n_examples = 80 * len(X_train)
+
+   # Rule-of-thumb
+   max_iter = n_params
+   chunks = n_examples // n_params
+
+Creation of a ``HyperbandSearachCV`` object and the Dask array is simple with
+this:
+
+.. code-block:: python
+
+    from dask_ml.model_selection import HyperbandSearchCV
+    search = HyperbandSearchCV(
+        model, params, max_iter=max_iter
+    )
+
+    X_train = da.from_array(X_train, chunks=chunks)
+    y_train = da.from_array(y_train, chunks=chunks)
+    search.fit(X_train, y_train)
+
+
+With this, no model sees more than ``n_examples`` examples as desired and
+Hyperband evalutes (approximately) ``n_params`` hyper-parameter combinations.
 
 Performance
 -----------
@@ -577,7 +616,7 @@ hyper-parameter selection very serial and the number of ``partial_fit`` calls
 or passes through the dataset a good proxy for time.
 
 .. [#random-sampling-hyperband] As much as possible -- Hyperband evaluates more
-   hyper-parameters combinates. The random search without early stopping
+   hyper-parameter values. The random search without early stopping
    evaluates every hyper-parameter value Hyperband evaluates.
 
 Parallel Experiments
@@ -587,15 +626,15 @@ This section will highlight a practical use of ``HyperbandSearchCV``. This
 involves a neural network using a popular library (PyTorch [#pytorch]_
 :cite:`paszke2017automatic` through the wrapper Skorch [#skorch]_). This is a
 difficult hyper-parameter optimization problem even for this relatively simple model.  Some
-detail is mentioned in the Appendix, though complete details can be found at
+detail is mentioned in the appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
-This experiment will be run with 25 Dask workers.
 
 .. [#pytorch] https://pytorch.org
 .. [#skorch] https://github.com/skorch-dev/skorch
 
-This section will walk through an image denoising task. The inputs and desired
+This experiment will be run with 25 Dask workers.
+and show an image denoising task. The inputs and desired
 outputs are given in Figure :ref:`fig:io+est`. This is an especially difficult
 problem because the noise variance varies slightly between images. To protect
 against this, let's use a shallow neural network that's more complex than a
@@ -615,8 +654,7 @@ that model:
    from autoencoder import Autoencoder
    import skorch  # scikit-learn API wrapper for PyTorch
 
-   # definition in Appendix
-   est = skorch.NeuralNetRegressor(Autoencoder, ...)
+   model = skorch.NeuralNetRegressor(Autoencoder, ...)
 
 .. This autoencoder has two layers that compress
 
@@ -629,22 +667,14 @@ Only one hyper-parameter affects the model architecture:
   the leaky ReLU :cite:`leaky-relu`, parametric ReLU :cite:`prelu` and
   exponential linear units (ELU) :cite:`elu`.
 
-All other hyper-parameters do not influence the model architecture. They
-control finding the optimal model after the architecture is fixed:
-
-* ``optimizer``: which optimization method should be used for training? Choices
-  are stochastic gradient descent (SGD) :cite:`bottou2010large` and Adam :cite:`adam`.
-* ``estimator__init``: how should the estimator be initialized before training?
-  Choices are Xavier :cite:`xavier` and Kaiming :cite:`kaiming` initialization.
-* ``batch_size``: how many examples should the optimizer use to approximate the
-  gradient? Choices include values between 32 and 512.
-* ``weight_decay``: how much of a particular type of regularization should the
-  neural net have? Regularization helps control how well the model performs on
-  unseen data.
-* ``optimizer__lr``: what learning rate should the optimizer use? This is the
-  most basic hyper-parameter for the optimizer.
-* ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer to
-  incorporate Nesterov momentum :cite:`nesterov2013a`.
+There are 6 other hyper-parameters do not influence the model architecture.
+There are 3 discrete hyper-parameters (and 160 combinations of all discrete
+variables) and 3 contiuous hyper-parameters. These hyper-parameters all control
+finding the optimal model after the architecture is fixed. These includes
+hyper-parameter like the optimizer to use (stochastic gradient descent
+:cite:`bottou2010large` a.k.a SGD or Adam :cite:`adam`), initialization,
+regularization and optimizer hyper-parameters like learning rate or momentum.
+Details are in the appendix.
 
 There are 4 discrete variables with :math:`160` possible combinations. For each
 one of this combinations, there are 3 continuous variables to tune. Let's
@@ -652,45 +682,25 @@ create the parameters to search over:
 
 .. code-block:: python
 
-   # definition in Appendix
    params = {'optimizer': ['SGD', 'Adam'], ...}
 
 
-Usage
------
-
-First, let's create a ``HyperbandSearachCV`` object:
-
-.. code-block:: python
-
-    from dask_ml.model_selection import HyperbandSearchCV
-    search = HyperbandSearchCV(est, params, max_iter=243)
-    search.fit(X_train, y_train)
-    search.best_score_
-    # -0.0929. Best of hand tuning: -0.098
-
-This model has denoised series of image it's never seen before in Figure
-:ref:`fig:io+est`.
-
-``HyperbandSearchCV`` beat manual hand-tuning by a considerable margin. While manually
-tuning, I considered any scores about :math:`-0.10` to be pretty good, and I
-obtained scores no higher than :math:`-0.098`. That's the context necessary
-to interpret ``HyperbandSearchCV``'s score of
-:math:`-0.093` and ``IncrementalSearchCV``'s score of :math:`-0.0975`.
-
-``HyperbandSearchCV`` only requires `one` parameter besides the model and data
-as discussed above. This number controls the amount of computation that will be
-performed, and does not require balancing between the number of models and how
-long to train each model.
 
 Performance
 -----------
 
-Let's compare three algorithms with the same model, parameters and validation
-data. The comparisons are shown in Figures :ref:`fig:time`
-and :ref:`fig:activity` and the legends for these plots is shown in Table
-:ref:`table:legend`. In these experiments, 25 workers are used with Dask,
-meaning that 25 tasks can complete in parallel.
+Anecdotally, ``HyperbandSearchCV`` performs well and beats manual hand-tuning
+by a considerable margin. While manually tuning, I considered any scores about
+:math:`-0.10` to be pretty good, and I obtained scores no higher than
+:math:`-0.098`. That's the context necessary to interpret
+``HyperbandSearchCV``'s score of :math:`-0.093` and ``IncrementalSearchCV``'s
+score of :math:`-0.0975`.
+
+A quantative measure comes by comparing three algorithms with
+the same model, parameters and validation data. The comparisons are shown in
+Figures :ref:`fig:time` and :ref:`fig:activity` and the legends for these plots
+is shown in Table :ref:`table:legend`. In these experiments, 25 workers are
+used with Dask, meaning that 25 tasks can complete in parallel.
 
 I will compare against a basic stop on plateau algorithm with particular
 choices for ``patience`` and ``num_params``. Specifically, I choose a low value
@@ -700,15 +710,13 @@ training time importance: training models for longer with the same
 computational effort would require a higher value for ``num_params`` and a
 lower and more aggressive value for ``patience``.
 
-Figure :ref:`fig:calls` supports the claim that Hyperband will high performing
-models with minimal ``partial_fit`` calls.
-
-
-The data scientist cares about time to reach a particular score, not
-the number of ``partial_fit`` calls required. This plot is shown in Figure
-:ref:`fig:time`. This plot is shown with 25 workers; if only one worker had
-been used this plot in Figure :ref:`fig:time` would be similar to
-:ref:`fig:synthetic-performance`.
+The data scientist cares about time to reach a particular score, not the number
+of ``partial_fit`` calls required. Those are similar for a small personal
+machine but may be very different in the presence of a large cluster or
+supercomputer. The time required to reach a particular validation accuracy
+thatis shown in Figure :ref:`fig:time`.  This plot is shown with 25 workers, a
+reasonable number of workers to expect, especially if each worker requires a
+GPU.
 
 .. raw:: latex
 
@@ -795,6 +803,7 @@ hurt performance and can it be avoided?
 References
 ==========
 
+
 Appendix
 ========
 
@@ -802,79 +811,37 @@ This section expands upon the example given above. Complete details can be
 found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
-Test/train data
----------------
 
-.. code-block:: python
+Serial Simulation
+-----------------
 
-    import noisy_mnist
-    noisy, clean = noisy_mnist.dataset()
+Here are some of the other hyper-parameters tuned:
 
-    from dask_ml.model_selection import train_test_split
-    _ = train_test_split(X, y)
-    X_train, X_test, y_train, y_test = _
+* ``alpha``, a regularization term that can affect generalization
+* ``batch_size``, the number of examples used to approximate the gradient at
+  each optimization iteration. This is varied between 32 and 512.
+* ``learning_rate`` controls the learning rate decay scheme, either constant or
+  via the "``invscaling``" scheme, which has the learning rate decay like
+  :math:`\gamma_0/t^p` where :math:`p` and :math:`\gamma_0` are also tuned.
+* ``momentum``, the amount of momentum to include in Nesterov's momentum
+  :cite:`nesterov2013a`
 
-Model
------
+Parallel Experiments
+--------------------
+Here are some of the other hyper-parameters tuned:
 
-.. code-block:: python
-
-   import torch.nn as nn
-
-   class Autoencoder(nn.Module):
-       def __init__(
-           self,
-           activation='ReLU',
-           init='xavier_uniform_'
-       ):
-           super().__init__()
-
-           self.activation = activation
-           self.init = init
-
-           Actvation = getattr(nn, activation)
-           self.encoder = nn.Sequential(
-               nn.Linear(28 * 28, inter_dim),
-               Activation(),
-               nn.Linear(inter_dim, latent_dim),
-               Activation()
-           )
-           self.decoder = nn.Sequential(
-               nn.Linear(latent_dim, 28 * 28),
-               nn.Sigmoid()
-           )
-           # code to handle initialization
-
-       def forward(self, x):
-           self._iters += 1
-           shape = x.size()
-           x = x.view(x.shape[0], -1)
-           x = self.encoder(x)
-           x = self.decoder(x)
-           return x.view(shape)
-
-Input parameters
-----------------
-
-.. code-block:: python
-
-   params = {
-       'optimizer': ['SGD', 'Adam'],
-       'batch_size': [32, 64, 128, 256, 512],
-       'estimator__init': ['xavier_uniform_',
-                           'xavier_normal_',
-                           'kaiming_uniform_',
-                           'kaiming_normal_'],
-       'estimator__activation': ['ReLU',
-                                 'LeakyReLU',
-                                 'ELU',
-                                 'PReLU'],
-       'optimizer__lr': \
-              np.logspace(1, -1.5, num=1000),
-       'optimizer__weight_decay': \
-              np.logspace(-5, -3, num=1000),
-       'optimizer__momentum': \
-              np.linspace(0, 1, num=1000)
-   }
+* ``optimizer``: which optimization method should be used for training? Choices
+  are stochastic gradient descent (SGD) :cite:`bottou2010large` and Adam :cite:`adam`.
+* ``estimator__init``: how should the estimator be initialized before training?
+  Choices are Xavier :cite:`xavier` and Kaiming :cite:`kaiming` initialization.
+* ``batch_size``: how many examples should the optimizer use to approximate the
+  gradient? Choices include values between 32 and 512.
+* ``weight_decay``: how much of a particular type of regularization should the
+  neural net have? Regularization helps control how well the model performs on
+  unseen data.
+* ``optimizer__lr``: what learning rate should the optimizer use? This is the
+  most basic hyper-parameter for the optimizer.
+* ``optimizer__momentum``, which is a hyper-parameter for the SGD optimizer to
+  incorporate Nesterov momentum :cite:`nesterov2013a`.
 
 
