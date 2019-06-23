@@ -29,16 +29,6 @@ A Real-Time 3D Audio Simulator for Cognitive Hearing Science
 Introduction
 ------------
 
-This paper describes the development of a 3D audio simulator for use in cognitive hearing science 
-studies and also for general 3D audio experimentation. The framework that the simulator is build 
-upon is :code:`pyaudio_helper`, which is a module of the package :code:`scikit-dsp-comm`. The simulator runs in 
-a Jupyter notebook and makes use of Jupyter widgets for interactive control of audio source 
-positioning in 3D space. 3D audio has application in virtual reality and in hearing assistive 
-devices (HAD) research and development.  At its core the simulator uses digital filters to represent the 
-sound pressure wave propagation path from the sound source to each ear canal of a human subject. 
-Digital filters of 200 coefficients each for left and right ears are stored in a look-up table (LUT) 
-as a function of azimuth and elevation angles of the impinging sounds source.
-
 In cognitive hearing science binaural hearing models how sound pressure waves arrive at either 
 ear drum, at the end of the ear canal, or in the case of typical measurements, at the entry 
 to the ear canal, both as a function of the arrival angle in 3D (azimuth and elevation) and 
@@ -57,27 +47,34 @@ holds 25 azimuth and 50 elevation angles to approximate continuous sound source 
 
 Obtaining individual HRTFs is a challenge in itself and the subject of much research. In a related 
 research project *deep learning* is being investigated as a means to fit a human subject to the CIPIC HRTF 
-data base of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
+database of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
 we can also consider using a simple spherical head model, and its corresponding HRTF, which 
-make use of spherical harmonics to solve for the sound pressure magnitude and phase at any location on the sphere 
-surface, and then the inverse Fourier transform to ultimately obtain the HRIR. To that end this simulator is 
-integral to planned human subject testing where headphone testing will be used to blind test subjects for 
-their perception of where a sound source is located. 
+makes use of spherical harmonics to solve for the sound pressure magnitude and phase at any location on the sphere 
+surface. A frequency sweep of magnitude and phase is then the inverse Fourier transformed to obtain the HRIR. 
+The ultimate intent of the simulator is to serve as a clinical tool for blind sound source localization experiments. 
+Human subjects will be exposed to several different HRIR models, where at least one model is a *personalized 
+fit* based on deep learning using anthropometrics and/or a finite element wave equation solution using a 3D 
+rendering of the subjects shoulders and head. Note 3D rendering of a subject can be obtained using *photogrammetry*, 
+which estimates three-dimensional coordinates of points on an object from a collection of photographic images taken from 
+different positions.
 
 3D Geometry
 ===========
 
-To produce a synthesized 3D audio sound field, we start with a geometry where the center of the frame is 
+To produce a synthesized 3D audio sound field, we start with a geometry where the center of the coordinate frame is 
 the intersection between the subjects  *mid-sagittal* or vertical *median plane* and the line 
 connecting the left and right ear canals. This is referred to as being *head-centered*. The coordinate 
 systems used in this paper are shown in Figure :ref:`CYLIND`. 
 The primary head-centered system has cartesian coordinates labeled :math:`(x,y,z)` and associated cylindrical 
-coordinates :math:`(r_{xy},\phi_\text{az},h_y)` (black labels in Figure :ref:`CYLIND`). A secondary head-centered 
+coordinates :math:`(r_{xy},\phi_\text{az},h_y)` (black labels in Figure :ref:`CYLIND`). The cylindrical coordinates 
+will be used in Jupyter notebook apps presented later as the interface for GUI controls to conveniently position 
+the audio source about a subjects head. A secondary head-centered 
 system, used by CIPIC, has cartesian coordinates labeled :math:`(x_1,x_2,x_3)` and associated spherical 
-coordinates :math:`(r,\phi,\theta)` (purple labels in Figure :ref:`CYLIND`). Note both systems are right-handed. 
-The first system is motivated by [Fitzpatrick]_, and will be explained more fully in a later section.
-The second system is referred to by CIPIC as the interaural-polar coordinate system (IPCS), which is used 
-to index into the HRIR filter pairs which produce the right and left audio outputs.
+coordinates :math:`(r,\phi,\theta)` (purple labels in Figure :ref:`CYLIND`).  The first coordinate system 
+is motivated by [Fitzpatrick], and its usage is explained in detail in the section 
+FIR Filter Coefficient Set Selection. The second system is referred to by CIPIC as the 
+*interaural-polar coordinate system* (IPCS), which is used to index into the HRIR filter pairs which 
+produce the right and left audio outputs.
 
 
 .. figure:: 3D_Coordinates.pdf
@@ -179,15 +176,15 @@ describes the playback of a *noise* via headphones:
        ...    
        #***********************************************
        # DSP operations here:
-       # Apply Kemar HRIR left and right channel filters 
-       # at the sound source location in cylindrical 
-       # coordinates mapped to cartesian coordinates
-       # from GUI sliders
+       # Apply Kemar HRIR left and right channel  
+       # filters at the sound source location in  
+       # cylindrical coordinates mapped to cartesian 
+       # coordinates from GUI sliders
        # The input to both filters comes by first 
        # combining x_left & x_right channels or here
        # input white noise
        x_mono = Gain.value*5000*randn(frame_length) 
-       subject.cart2ipcs(r_xz_plane.value*sin(pi/180* \
+       subj.cart2ipcs(r_xz_plane.value*sin(pi/180* \
                          azimuth.value), #x
                          y_axis.value,   #y
                          r_xz_plane.value* \
@@ -195,11 +192,11 @@ describes the playback of a *noise* via headphones:
                          azimuth.value)) #z 
        # Filter a frame of samples and save initial 
        # conditions for the next frame
-       y_left, zi_left = signal.lfilter(subject.coeffL,
-                                   1,subject.tL*x_mono,
+       y_left, zi_left = signal.lfilter(subj.coeffL,
+                                   1,subj.tL*x_mono,
                                    zi=zi_left) 
-       y_right, zi_right = signal.lfilter(subject.coeffR,
-                                   1,subject.tR*x_mono,
+       y_right, zi_right = signal.lfilter(subj.coeffR,
+                                   1,subj.tR*x_mono,
                                    zi=zi_right)
        #***********************************************
        ...
@@ -210,10 +207,10 @@ describes the playback of a *noise* via headphones:
    # SUBJECT 20, 21 (KEMAR SM ears), 
    # & 165 (KEMAR LG ears)
    # subject_200, 201 is 8.75 cm, 10 cm sphere
-   subject = ss_mapping2CIPIChrir('subject_165')
+   subj = ss_mapping2CIPIChrir('subject_165')
    # Initialize L/R filter initial conditions
-   zi_left = signal.lfiltic(subject.coeffL,1,[0])
-   zi_right = signal.lfiltic(subject.coeffR,1,[0])
+   zi_left = signal.lfiltic(subj.coeffL,1,[0])
+   zi_right = signal.lfiltic(subj.coeffR,1,[0])
    # Create a IO stream object and start streaming
    DSP_IO = pah.DSP_io_stream(callback,0,1,
                               frame_length=1024, 
@@ -224,31 +221,44 @@ describes the playback of a *noise* via headphones:
 
 
 
-Mapping to the CIPIC and Source Range Correction
-------------------------------------------------
+FIR Filter Coefficient Set Selection
+------------------------------------
 
-The real-time signal processing just described requires coordinate transformations to obtain the properly 
-CIPIC database filter coefficients as well as range corrections, as the source may be less than or 
-greater than 1 m away. The Jupyter notebook apps described in the next section are driven by source position 
-using the cyclindrical coordinates described in Figure :ref:`CYLIND`. To allow extensibility to future 
-applications it was decided that access to CIPIC is made from :math:`(x,y,z)` and as needed apps  
-convert from cylindrical coordinates to cartesian :math:`(x,y,z)`. This decision was strongly motivated by 
-the fact that [Fitzpatrick]_ uses :math:`(x,yz)`, as defined in :ref:`CYLIND`, to additionally perform 
-the import task of *parallax* correction and source range amplitude/gain correction. 
-The main points of amplitude and parallax correction are:
+To finally render 3D audio requires selection of the appropriate right/left filter coefficient set, 
+and if needed range correction. If we simply want to position an audio source on the 1 m reference 
+sphere used by CIPIC, then the coefficient selection process is simply picking the index into the 
+database that is closest to the corresponding IPCS angle pair, :math:`(\phi,\theta)`, of the source.
 
-- CIPIC assumes the sound source lies on a sphere of radius 1m, so due to sound wave divergence, the amplitude needs to be scaled inversely with radial distance (inverse-squared in the sound intensity sense).
+For the more typical case of the source range, :math:`r = \sqrt{x^2 + y^2 + z^2} \neq 1`, more 
+processing is required. The approach taken here follows [Fitzpatrick]_ using the primary cartesian 
+coordinates to additionally perform *parallax* correction and source range amplitude correction. Source 
+range correction accounts for the fact that with a point source we have sound wave divergence, thus 
+the amplitude needs to be scaled inversely with radial distance (inverse-squared in the sound 
+intensity sense). The inverse distance correction is for each ear and takes into account the fact 
+that the entry to the ear canal is offset from the head center by the mean head radius :math:`R`. The 
+second correction factor is *parallax*, which is graphically depicted in Figure :ref:`PARALLAX` for the 
+special case of a source in the horizontal plane and directly in front of the head. Both 
+corrections are addressed in detail in [Fitzpatrick]_. For a source not on the unit sphere, 
+sound parallax requires an adjustment in the HRIR coefficients, unique to the right and left ears. 
+If we extend rays from the right and left ears that pass through the sound source location and then 
+touch the unit sphere, the required azimuth values will be shifted to locations either side of the 
+true source azimuth. The corresponding HRIR values where these rays contact the unit sphere, 
+respectively, perform the needed parallax correction. The actual database entries utilized are those 
+that are closest to the intersection point   
 
-- To properly represent a sound source closer than 1m there is a parallax error that must be dealt with as explained in [Fitzpatrick]_.
+.. figure:: Parallax_Correction.pdf
+   :scale: 80%
+   :align: center
+   :figclass: htb
 
-- For a source on the 1 m reference sphere, or further away, the there is no parallax error and the CIPIC HRIR coefficients are those of the corresponding azimuth and elevation for both right and left ears
+   Parallax correction geometry for three possible source locations in the horizontal plane: 
+   :math:`A<1\text{ m}`, :math:`B=1\text{ m}`, and :math:`C>1\text{ m}`, directly in front of the 
+   head. :label:`PARALLAX`
 
-- When the source is inside is the unit sphere sound parallax [Fitzpatrick]_ requires an adjustment in the HRIR coefficients, unique to the right and left ears. If we extend rays from the left and right ears that pass through the sound source location and then touch the unit sphere, the required azimuth values will be shifted to locations either side of the true source azimuth. The corresponding HRIR values where these rays contact the unit sphere, respectively, perform parallax correction.  
-
-
-The ultimate goal is to represent an audio source arriving from any set of coordinates, in this 
-case :math:`(x,y,z)`. The simple class :code:`ss_mapping2CIPIChrif()`, in a Jupyter notebook, manages this with the single 
-method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The code is listed below:
+ 
+The class :code:`ss_mapping2CIPIChrif()` takes the source location, :math:`(x,y,z)`, and using the 
+single method :code:`cart2ipcs(self,x,y,z)`, produces the parallax corrected right and left HRIR filter 
+coefficients and range amplitude scaling factors. The code is listed below:
 
 .. code-block:: python
 
@@ -278,9 +288,10 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
       # Store the head radius in meters
       self.head_radius = head_radius_cm/100
       
-      # Store the HRIR 200 tap FIR filter coefficient sets
+      # Store the HRIR 200 tap FIR filter coef sets
       self.subject = sub_foldername
-      hrir_LR = io.loadmat( self.subject + '/hrir_final.mat')
+      hrir_LR = io.loadmat( self.subject + \
+                           '/hrir_final.mat')
       self.hrirL = hrir_LR['hrir_l']
       self.hrirR = hrir_LR['hrir_r']
       
@@ -288,9 +299,10 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
       # values. This will make it easy to quantize
       # a given source location to one of the 
       # available HRIRs in the database.
-      self.Az_LUT = hstack(([-80,-65,-55],
-                     arange(-45,45+5,5.0),[55,65,80]))
-      self.El_LUT = -45 + 5.625*arange(0,50)
+      self.Az_LUT = np.hstack(([-80,-65,-55],
+                     np.arange(-45,45+5,5.0),
+                               [55,65,80]))
+      self.El_LUT = -45 + 5.625*np.arange(0,50)
       
       # Initialize parameters
       self.tR = 1 # place source on unit sphere
@@ -308,9 +320,9 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
       self.coeffL = self.hrirL[0,0,:]
         
     
-   def cart2ipcs(self,x1,y1,z1):
+   def cart2ipcs(self,x,y,z):
       """
-      Map cartesian source coordinates (x1,y1,z1) to 
+      Map cartesian source coordinates (x,y,z) to 
       the CIPIC interaural polar coordinate system 
       (IPCS) for easy access to CIPIC HRIR. Parallax 
       error is also dealt with so two azimuth values 
@@ -329,45 +341,49 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
                    a right-handed coordinate system is 
                    formed.
 
-      Mark Wickert June 2018
+      Mark Wickert June 2018, updated June 2019
       """
       # First solve for the parameter t, which is used
       # to describe parametrically the location of the 
-      # source at (x1,y1,z1) on a line connecting the
+      # source at (x,y,z) on a line connecting the
       # right or left ear canal entry point to the 
       # unit sphere.
 
       # The right ear (pinna) solution
-      aR = (x1-self.head_radius)**2 + y1**2 + z1**2
-      bR = 2*self.head_radius*(x1-self.head_radius)
+      aR = (x-self.head_radius)** + y**2 + z**2
+      bR = 2*self.head_radius*(x-self.head_radius)
       cRL = self.head_radius**2 - 1
       # The left ear (pinna) solution
-      aL = (x1+self.head_radius)**2 + y1**2 + z1**2
-      bL = -2*self.head_radius*(x1+self.head_radius)
+      aL = (x+self.head_radius)**2 + y**2 + z**2
+      bL = -2*self.head_radius*(x+self.head_radius)
 
       # Find the t values which are also the gain 
       # values to be applied to the filter.
-      self.tR = max((-bR+sqrt(bR**2-4*aR*cRL))/(2*aR),
-               (-bR-sqrt(bR**2-4*aR*cRL))/(2*aR))
-      self.tL = max((-bL+sqrt(bL**2-4*aL*cRL))/(2*aL),
-               (-bL-sqrt(bL**2-4*aL*cRL))/(2*aL))
+      self.tR = max((-bR+np.sqrt(bR**2-4*aR*cRL)) \
+                /(2*aR),
+               (-bR-np.sqrt(bR**2-4*aR*cRL))/(2*aR))
+      self.tL = max((-bL+np.sqrt(bL**2-4*aL*cRL)) \
+                /(2*aL),
+               (-bL-np.sqrt(bL**2-4*aL*cRL))/(2*aL))
       # Find the IPCS elevation angle and mod it
-      elRL = 180/pi*arctan2(y1,-z1)
+      elRL = 180/np.pi*np.arctan2(y1,-z1)
       if elRL < -90:
             elRL += 360
       self.elRL = elRL
-      self.azR = 180/pi*arcsin(clip(self.head_radius\
+      self.azR = 180/np.pi* \
+                 np.arcsin(np.clip(self.head_radius\
                   + self.tR*(x1-self.head_radius),
                   -1,1))
-      self.azL = 180/pi*arcsin(clip(-self.head_radius\
+      self.azL = 180/np.pi* \
+                 np.arcsin(clip(-self.head_radius\
                   + self.tL*(x1+self.head_radius),
                   -1,1))
-      
-      self.AzR_idx = argmin((self.Az_LUT \
+      # Find closest database entry in Az & El
+      self.AzR_idx = np.argmin((self.Az_LUT \
                              - self.azR)**2)
-      self.AzL_idx = argmin((self.Az_LUT \
+      self.AzL_idx = np.argmin((self.Az_LUT \
                              - self.azL)**2)
-      self.ElRL_idx = argmin((self.El_LUT \
+      self.ElRL_idx = np.argmin((self.El_LUT \
                              - self.elRL)**2)
       self.coeffR = self.hrirR[self.AzR_idx,
                                self.ElRL_idx,:]
@@ -375,31 +391,29 @@ method :code:`cart2ipcs(self,x1,y1,z1)`, following object instantiation. The cod
                                self.ElRL_idx,:]
 
 
-In the :code:`__init__` method notice that 
-
-The main take-away is that the coordinate conversion method fills class attributes with the proper 
-right and left filter coefficients and the sound wave amplitude correction factors :code:`self.tR` and 
-:code:`tL`. The variable name :code:`t` comes from the parallax correction expression in [Fitzpatrick]_ 
-as a distance scale factor. This distance scale factor is conveniently also the same as the 
+In the :code:`__init__` method all the right left filter coefficients for the chosen subject database entry 
+are copied into class attributes and look-up tables (LUTs) are populated in terms of IPCS angles to ease 
+selecting the needed right/left filters. The sound wave amplitude correction factors :code:`self.tR` and 
+:code:`tL` are obtained from the parallax correction expression in [Fitzpatrick]_, and double as the 
 required range scale factors, :math:`G_R` and :math:`G_L` in (1) and (2). 
-
 
 3D Audio Simulator Notebook Apps
 --------------------------------
 
-For human subject testing and general audio virtual reality experiments two applications (apps), that 
-run in the Jupyter notebook, have been created. The first is a *static* 
-location audio and the the second is a *time-varying motion* audio source. For human subject tests the static 
-source is of primary interest.
+For human subject testing and general audio virtual reality experiments, two applications (apps) that 
+run in the Jupyter notebook were created. The first allows the user to *statically* 
+locate an audio source in space, while the second creates a *time-varying motion* audio source. 
+For human subject tests the static source is of primary interest. Both apps have a GUI slider interface 
+that use the cylindrical coordinates described in Figure :ref:`CYLIND` to control the position the source.
 
 Static Sound Source
 ===================
 
-The first and foremost purpose the 3D audio simulator is to to be able statically position the audio source 
-and then ask a human subject where the source is located. This is a cognitive experiment, and can serve many 
-purposes. One purpose in the present research is to to see how well the HRIR utilized in the simulator 
-matches the subjects true HRIR. As mentioned in the introduction an ongoing study is form an *individualized 
-HRIR* using say deep machine learning/deep learning. The Jupyter Widgets slider interface is for this 
+The first and foremost purpose the 3D audio simulator is to to be able statically position an audio source 
+and then ask a human subject where the source is located (localization). This is a cognitive experiment, and 
+can serve many purposes. One purpose in the present research is to to see how well the HRIR utilized in the simulator 
+matches the subject's true HRIR. As mentioned in the introduction, an ongoing study is to estimate an *individualized 
+HRIR* using deep machine learning/deep learning. The Jupyter Widgets slider interface for this 
 app is shown in Figure :ref:`STATICAPP` 
 
 .. figure:: Static_3D_AudioApp.pdf
@@ -413,10 +427,11 @@ app is shown in Figure :ref:`STATICAPP`
 Dynamic Sound Source Along a Trajectory
 =======================================
 
-From a virtual reality perspective we were also interested in giving a subject a moving sound source experience. 
-In this case we consider an *orbit like* sound source trajectory. The trajectory as shown in Figure 
-:ref:`TRAJECTORY`, is a circular orbit  with parameters of roll, pitch, and hight, relative to 
-the ear canal centerline. The Jupyter Widgets slider interface is shown in Figure :ref:`DYNAMICAPP`.
+From a virtual reality perspective, we were also interested in giving a subject a moving sound source 
+experience via headphones. In this case we consider an *orbit like* sound source trajectory. The 
+trajectory as shown in Figure :ref:`TRAJECTORY`, is a circular orbit  with parameters of roll, 
+pitch, and hight, relative to the ear canal centerline. The Jupyter Widgets slider interface for this 
+app is shown in Figure :ref:`DYNAMICAPP`.
 
 .. figure:: SoundSource_Trajectory.pdf
    :scale: 50%
@@ -806,18 +821,21 @@ An example HRIR plot, similar to Figure :ref:`HRIR`, is shown in Figure :ref:`HR
    Example right/left HRIR plots for a particular arrival angle pulled from the CIPIC-like database entry created 
    for a radius 8.75 cm sphere. :label:`HRIR875`
 
+Casual listening tests with a coarse fit human subject from CIPIC and the simple spherical model, indicate both similarities 
+and differences. Coarse localization is similar between the two, bit the spherical model seems *sterile*. The fact that 
+coarse localization is present is an indication that the database is correct. Additional testing is planned.
 
 
 Conclusions and Future Work
 ---------------------------
 
-Development of the 3D audio simulator was relatively easy on the real-time signal processing side. 
-The :code:`pyaudio_helper` interface is very easy to work with.
-Getting all of the coordinate transformations, gain and parallax corrections on the geometry side, was a 
-more complex undertaking. Working with the spherical head model calculations, first in the frequency domain 
-(HRIR), and then the time domain (HRIR), was the most complex. The fact that recursions can be used to evaluate 
-the needed special functions for sound pressure on the surface of a sphere, makes the generation of a 
-CIPIC-like database entry take only a few minutes of compute time.    
+Development of the real-time signal processing aspect of the 3D audio simulator was a relatively simple task. 
+This is a perfect application for the :code:`pyaudio_helper` code module of :code:`scikit-dsp-comm`.
+Working through the details of the coordinate transformations, and gain and parallax corrections on the 
+geometry side, was a more complex undertaking. Likewise, working with the spherical head model calculations, 
+first in the frequency domain (HRIR), and then the time domain (HRIR), was the most complex. The fact that 
+recursions can be used to evaluate the needed special functions for sound pressure on the surface of a 
+sphere, makes the generation of a CIPIC-like database entry take only a few minutes of compute time.    
 
 Informal testing of human subjects has gone well. Precise localization experiments using the static app have 
 not been attempted just yet, as a formal pool human subjects has yet to be gathered. The virtual reality aspects
