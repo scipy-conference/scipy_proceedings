@@ -40,8 +40,10 @@ This package has been applied to a wide variety of engineering problems, includi
 
 Methodology
 -----------
-Knowledge of Bayesian statistics is important to understanding the theory, but it is not necessarily required information for using pymcmcstat.  We provide a brief overview of the Bayesian approach and then explain then key terms that impact the user.
+Knowledge of Bayesian statistics is important to understanding the theory, but it is not necessarily required information for using pymcmcstat.  We provide a brief overview of the Bayesian approach and then explain the key terms that impact the user by going through a basic example.
 
+Bayesian Framework
+~~~~~~~~~~~~~~~~~~
 The goal of Bayesian inference is to estimate the posterior densities :math:`\pi(q|F^{obs}(i))`, which quantify the probability of parameter values given a set of observations.  From Bayes' relation
 
 .. math::
@@ -64,12 +66,12 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
     \mathcal{L}(F^{obs}(i)|q) = \exp\Big(-\frac{SS_q}{2\sigma^2}\Big),
 
-where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
+where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and identically distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
 Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  More details regarding Metropolis algorithms are provided in a later section.
 
 Basic Example
--------------
+~~~~~~~~~~~~~
 At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
 1. Import and initialize MCMC object.
@@ -236,9 +238,9 @@ For those unfamiliar with Metropolis algorithms, we have provided a brief overvi
 
     \alpha = \frac{\mathcal{L}(F^{obs}(i)|q^*)\pi_0(q^*)}{\mathcal{L}(F^{obs}(i)|q^{k-1})\pi_0(q^{k-1})}.
 
-We observe that (:ref:`eqnacceptratio`) compares the unscaled posterior probabilities.  Essentially, we are computing whether :math:`q^*` or :math:`q^{k-1}` is more likely.  For uniform prior distributions, this simplifies to comparing the likelihood function.  For the Gaussian likelihood function (:ref:`eqnlikelihood`), a smaller sum-of-squares error implies a larger likelihood.  So, if the error is reduced by evaluating the model with :math:`q^*`, the acceptance ratio will have a value :math:`\alpha > 1`.  In that case we accept the parameters and set :math:`q^k=q^*`.  In contrast, if the error increases (i.e., the likelihood decreases), the acceptance ratio becomes :math:`\alpha < 1`.  Rather than outright reject parameter sets that increase error, we conditionally accept :math:`q^*` if :math:`\alpha > \mathit{U}(0, 1)` (random value from a uniform distribution between 0 and 1).  Otherwise, we set :math:`q^k=q^{k-1}`.
+We observe that (:ref:`eqnacceptratio`) compares the unscaled posterior probabilities.  Essentially, we are computing whether :math:`q^*` or :math:`q^{k-1}` is more likely.  For uniform prior distributions, this simplifies to comparing the likelihood function.  For the Gaussian likelihood function (:ref:`eqnlikelihood`), a smaller sum-of-squares error implies a larger likelihood.  So, if the error is reduced by evaluating the model with :math:`q^*`, the acceptance ratio will have a value :math:`\alpha > 1`.  In that case we accept the parameters and set :math:`q^k=q^*`.  In contrast, if the error increases (i.e., the likelihood decreases), the acceptance ratio becomes :math:`\alpha < 1`.  Rather than outright reject parameter sets that increase error, we conditionally accept :math:`q^*` if :math:`\alpha > \mathit{U}(0, 1)` (random value from a uniform distribution between 0 and 1).  In this way we will often accept values that yield similar errors because the acceptance ratio will be closer to 1.  Otherwise, we define the next simulation parameter set to be equal to the previous; i.e., :math:`q^k=q^{k-1}`.
 
-Candidates :math:`q^*` are generated by sampling from a proposal distribution, which accounts for parameter correlation.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  Good mixing simply means that the simulation is switching between points frequently and not stagnating on a single value; i.e., :math:`q^k=q^{k-1}` for many simulations in a row.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
+Candidates, :math:`q^*`, are generated by sampling from a proposal distribution, which accounts for parameter correlation.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  Good mixing simply means that the simulation is switching between points frequently and not stagnating on a single value; i.e., :math:`q^k=q^{k-1}` for many simulations in a row.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
 
 .. raw:: latex
 
