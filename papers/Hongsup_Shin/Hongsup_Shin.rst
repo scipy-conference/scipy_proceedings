@@ -105,7 +105,9 @@ For both supervised and unsupervised models, I used recall and precision as basi
 
 .. math::
 
-   \text{UFS recovery rate} = \frac{\mathrm{card}(S_{\hat{y}=1})}{\mathrm{card}(S_{y=1})},
+   \text{UFS recovery rate}
+   \footnote{This metric is the same as the Jaccard similarity of $S_{\hat{y}=1}$ and $S_{y=1}$. When Jaccard similarity is used as a metric between two arbitrary sets $A$ and $B$, it is often assumed that $|A - B|$ and $|B - A|$ are non-zero (i.e., $A \not\subset B$ and $B \not\subset A$). In this case, $S_{\hat{y}=1} \subset S_{y=1}$, and thus I defined the UFS recovery rate with set cardinality.} 
+   = \frac{\mathrm{card}(S_{\hat{y}=1})}{\mathrm{card}(S_{y=1})}, 
 
 where :math:`S` is a set of UFS, :math:`y` and :math:`\hat{y}` are true and predicted labels of failure (0 as pass and 1 as failure), and :math:`\mathrm{card}(S)` is the cardinality of the set :math:`S`, also known as the unique count of the set. Hence, :math:`\mathrm{card}(S_{\hat{y}=1})` means the number of the UFS in the tests that are predicted as failure and :math:`\mathrm{card}(S_{y=1})` as the total number of UFS in all failed tests in training data. This metric is similar to recall but here the focus is on the retrieval of UFS instead of the binary labels.
 
