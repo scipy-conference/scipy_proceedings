@@ -627,7 +627,7 @@ Performance
    :scale: 75%
 
    A comparison of how Dask influences Hyperband. The priority ``high-scores``
-   prioritizes fitting models with high score; ``none`` does not prioritize and
+   prioritizes training models with high score; ``none`` does not prioritize and
    fits models in the order they are received by Dask Distributed's scheduler.
    Of course, the implementation behind ``high-scores`` is in Dask-ML.
    Both models have the same hyperparameters, train
