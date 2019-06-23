@@ -369,51 +369,6 @@ In many problems it is of interest to observe how uncertainty propagates through
 
 Regarding the amount of uncertainty observed in Figure :ref:`figpivisc`, it is important to note several items.  First, the amount of uncertainty in the output is large enough such that there are large regions of overlap in the loading and unloading parts of the cycle near the point of maximum extension.  Secondly, this volume of uncertainty  spans beyond the limits of experimental data collected at slower rates, meaning the model's ability to predict material behavior at other rates is limited.  This result motivated the investigation of a fractional-order viscoelastic model :cite:`mashayekhi2018fractional`.
 
-Monodomain Crystal Structure Modeling in Ferroelectric Ceramics
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Ferroelectric materials are used in a wide variety of engineering applications, necessitating methodologies that can account for uncertainty across multi-scale physics models.  Bayesian statistics allow us to quantify model parameter uncertainty associated with approximating lattice strain and full-field electron density from density functional theory (DFT) calculations as a homogenized, electromechanical continuum.
-
-Consider the 6th order Landau function, :math:`u(q, {\bf P})`, where :math:`q = [\alpha_{1},\alpha_{11}, \alpha_{111},\alpha_{12},\alpha_{112},\alpha_{123}]`. The Landau energy is a function of 3-dimensional polarization space, :math:`{\bf P}=[P_1, P_2, P_3]`. For the purpose of this example, we consider the case where :math:`P_1 = 0`.  We are often interested in using information calculated from DFT calculations in order to inform our continuum approximations, such as our Landau function. For this example, we will assume we have a set of energy DFT calculations corresponding to different values of :math:`P_2` and :math:`P_3` as seen in Figure :ref:`figdftdata`. For more details regarding this research, the reader is referred to :cite:`miles2018analysis` and :cite:`leon2018analysis`.
-
-.. figure:: figures/dft_data.png
-
-    Stored energy density for various points in :math:`P_2-P_3` space as found using DFT. :label:`figdftdata`
-
-We run a total of :math:`5\times10^5` MCMC simulations and remove the first half for burn-in.  Figure :ref:`figmonodp` shows the resulting posterior distributions, which appear to be nominally Gaussian.  A simple chain diagnostic that is often useful to consider is a pairwise correlation plot.  Figure :ref:`figmonopairs` shows the pairwise correlation with respect to each sampled parameter.  We observe fairly strong correlation between several of the Landau energy parameters, such as between :math:`\alpha_1` and :math:`\alpha_{11}`.  Correlated parameters occur frequently in many models, but there is nothing in the MCMC algorithm that prohibits such behavior.  In contrast, if we observe a very tight correlation that is nearly single-valued, this may imply that the parameters are not uniquely identifiable.  This highlights the importance of performing sensitivity analysis in conjunction with the parameter estimation.
-
-.. figure:: figures/monodomain_dp.png
-
-    Marginal posterior densities of Landau energy parameters calibrating using DFT data shown in Figure :ref:`figdftdata`. :label:`figmonodp`
-
-.. figure:: figures/monodomain_pairwise.png
-
-   Pairwise correlation from MCMC simulation.  Strong correlation is observed
-   between several of the Landau parameters, which supports the results
-   from the sensitivity analysis discussed in :cite:`leon2018analysis`. :label:`figmonopairs`
-
-The user can evaluate the MCMC chains using a variety of statistical and diagnostic tools.  The simplest method to display a summary of chain metrics is to execute
-
-.. code-block:: python
-
-    burnin = int(chain.shape[0]/2)  # half of chain
-    mcstat.chainstats(chain[burnin:,:], results)
-
-which will display
-
-::
-
-    ---------------------
-    name           :       mean        std ...
-    $\alpha_{1}$   :  -389.7189    10.3126 ...
-    $\alpha_{11}$  :   762.3086    29.3550 ...
-    $\alpha_{111}$ :    60.7729    19.5034 ...
-    $\alpha_{12}$  :   421.1136   233.7327 ...
-    $\alpha_{112}$ :  -758.5364   481.1972 ...
-    ---------------------
-
-Not shown here are the outputs for normalized batch mean standard deviation (:code:`MC_err`), autocorrelation time (:code:`tau`), and Geweke's convergence diagnostic (:code:`geweke`) :cite:`brooks1998assessing`.  The chain metrics will be returned in a dictionary if the optional argument :code:`returnstats=True` is included when executing :code:`chainstats`.
-
 Radiation Source Localization
 -----------------------------
 Efficient and accurate localization of special nuclear material (SNM) in urban environments is a vitally important task to national security and presents many unique computational challenges. A realistic problem requires accounting for radiation transport in 3D, using representative nuclear cross-sections for solid materials, and simulating the expected interaction with a network of detectors.  This is a non-trivial task that highlights the importance of surrogate modeling when high-fidelity models become computationally intractable for sampling based methods.  For the purpose of this example, we will highlight some previous research that utilizes a ray-tracing approach in 2D.  We simulate a 250m :math:`\times` 178m block of downtown Washington D. C. as shown in Figure :ref:`figurbanenv`.
