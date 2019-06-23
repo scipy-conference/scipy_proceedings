@@ -287,11 +287,11 @@ The `rnn` class structure is organized using the four functions: 1) constructor 
 Non-negative matrix factorization (NNMF) network
 ================================================
 
-Non-negative matrix factorization NNMF [LS01] is a technique consists in combining linear algebra and multivariate analysis to produce 
-two matrices `W` and `H` with the property that all three matrices have no negative elements. This non-negativity makes the resulting matrices easier to inspect.
+Non-negative matrix factorization NNMF [LS01] is a technique consists in combining linear algebra and multivariate analysis to produce two matrices `W` and `H` with 
+the property that all three matrices have no negative elements. This non-negativity makes the resulting matrices easier to inspect.
 We factorize the matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W`
 (i.e. `user\_id`) and `H` (i.e.`product\_id`) so that the representation can be formulated as: 
-:math:`X \approx WH` (see Figure :ref:`nnmf`). 
+:math:`X \approx WH` (see Figure :ref:`nnmf`).
 
 
 .. figure:: figures/nnmf.png
@@ -465,7 +465,7 @@ Finally, we evaluated the model by *FP Rate* which corresponds to the ratio betw
    
    FP Rate = FPR = \frac{FP}{(TN+FP)} 
    
-We examined these five evaluation metrics in our study (see the next section for the results of the F1 measure)
+We examined these five evaluation metrics in our study (see the next section for the results of the F1 measure).
 
 Python Script
 -------------
