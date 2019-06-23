@@ -66,8 +66,10 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
 where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  A basic description of the Metropolis approach is outlined in the following section and also a list of available algorithms within pymcmcstat.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  A basic description of the Metropolis approach is outlined in a later section as well as a list of available algorithms within pymcmcstat.
 
+Basic Example
+-------------
 At the end of the day, many users do not need to know the statistical background, but they can still appreciate the information gained from using the Bayesian approach.  Below we outline the key components of pymcmcstat and explain their relationship to the Bayesian approach described above.  Procedurally, to calibrate a model using pymcmcstat, the user will need to provide the following pieces:
 
 1. Import and initialize MCMC object.
@@ -168,23 +170,28 @@ Figure :ref:`figbasiccpfull` shows the full parameter chains for all 10,000 MCMC
 
     mcpl.plot_chain_panel(chain[burnin:,:], names)
 
-Figure :ref:`figbasiccp` shows the burned-in parameter chains based on the final 5,000 MCMC simulations.  We observe that the distribution of parameter values appears to be consistent for the entire range of sampling shown, which supports the conclusion that we have converged to the posterior distribution.  To visualize the distribution, we use the `plot_density_panel` method
+Figure :ref:`figbasiccp` shows the burned-in parameter chains based on the final 5,000 MCMC simulations.  We observe that the distribution of parameter values appears to be consistent for the entire range of sampling shown, which supports the conclusion that we have converged to the posterior distribution.  To visualize the distribution, we use the :code:`plot_density_panel` method.
 
 .. code-block:: python
 
     mcpl.plot_density_panel(chain[burnin:,:], names)
 
-Figure :ref:`figbasicdp` shows the marginal posterior parameter densities.  The densities are generated using a Kernel Density Estimation (KDE) algorithm based on the parameter chains shown in Figure :ref:`figbasiccp`.
-
-.. figure:: figures/basic_dp.png
-
-    Marginal posterior parameter densities for linear model. :label:`figbasicdp`
+Figure :ref:`figbasicdp` shows the marginal posterior parameter densities.  The densities are generated using a Kernel Density Estimation (KDE) algorithm based on the parameter chains shown in Figure :ref:`figbasiccp`.  One more chain diagnostic that we commonly consider is with regard to parameter correlation.  We visualize the parameter correlation using the :code:`plot_pairwise_correlation_panel` method.
 
 .. code-block:: python
 
     mcpl.plot_pairwise_correlation_panel(
           chain[burnin:, :], names)
 
+Figure :ref:`figbasicpc` shows the pairwise parameter correlation based on the sample history of the MCMC simulation.  Essentially, we take the points from the chain seen in Figure :ref:`figbasiccp` and plot the matching points for :math:`m` and :math:`b` against one another.  As seen in Figure :ref:`figbasicpc`, there appears to be a negative correlation between the two parameters; however, it is not particularly strong.  The MCMC approach has no issues with correlated parameters, so these results are fine.  Where you have to be careful is when the pairwise correlation shows a nearly single-valued relationship of some kind.  By single-valued, we mean that the value of one parameter can be used to directly determine the other, e.g., if the pairwise correlation revealed a completely straight line.
+
+.. figure:: figures/basic_dp.png
+
+    Marginal posterior parameter densities for linear model. :label:`figbasicdp`
+
+.. figure:: figures/basic_pc.png
+
+    Pairwise correlation between sampling points for linear model. :label:`figbasicpc`
 
 Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
 
