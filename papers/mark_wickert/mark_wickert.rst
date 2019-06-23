@@ -38,9 +38,9 @@ human subject.
 Traditionally human subjects are placed in an anechoic chamber with a sound 
 source placed at say one meter from the head and then the subject is moved over a range of 
 azimuth and elevation angles, with the HRIR measured at each angle. The 3D simulator described 
-here uses a database of HRIR's to describe a given subject [CIPICHRTF]_. 
-In the 
-:code:`pyaudio_helper` application 
+here uses a database of HRIR's from the University of California, Davis, originally in the Center 
+for Image Processing and Integrated Computing (CIPIC), [CIPICHRTF]_, to describe a given subject. 
+In the :code:`pyaudio_helper` application 
 the HRIR at a given angle is represented by two (left and right ear)  200 coefficient digital 
 filters that the sound source audio is passed through. Here the data base for each subject  
 holds 25 azimuth and 50 elevation angles to approximate continuous sound source 3D locations. 
@@ -83,7 +83,7 @@ produce the right and left audio outputs.
    :figclass: htb
 
    The primary head-centered coordinate system, :math:`(x,y,z)`, used in the 3D audio simulator, along with the 
-   secondary system :math:`(x_1,x_2,x_3)` IPCS used by CIPIC. :label:`CYLIND`
+   secondary system, :math:`(x_1,x_2,x_3)` used by CIPIC via IPCS and spherical coordinates :math:`(r,\phi,\theta)`. :label:`CYLIND`
 
 The 3D audio rendering provided by the simulator developed in this paper relies on the 1250 
 HRIR measurements taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
@@ -166,7 +166,7 @@ input signal sample frames into right/left output sample frames according to (:r
 method :code:`interactive_stream()` to start streaming. All of the code for the 3D simulator is developed in a 
 Jupyter notebook for prototyping ease. Since [Wickert]_ details steps (i)-(iii), in the code snippet below 
 we focus on the key filtering expressions in the callback and  
-describes the playback of a *noise* via headphones:
+describe the playback of a geometrically positioned *noise* source via headphones:
 
 .. code-block:: python
 
@@ -473,20 +473,21 @@ First consider the incident plane wave :math:`\tilde{p}_I(r,\theta)`, in the exp
    :label: resultant
    :type: eqnarray
 
-   \tilde{p}_I(r,\theta) = \tilde{p}_0 \sum_{n=0}^\infty (-j)^n (2n+1) j_n(kr) P_n(\cos\theta),
+   \tilde{p}_I(r,\theta_i) = \tilde{p}_0 \sum_{n=0}^\infty (-j)^n (2n+1) j_n(kr) P_n(\cos\theta_i),
 
-where :math:`P_m(x)` is the :math:`n\text{th-order}` Legendre polynomial, :math:`j_n(x)` is the 
+where :math:`\theta_i` is the incidence angle between the plane wave and measurement point, 
+:math:`P_m(x)` is the :math:`n\text{th-order}` Legendre polynomial, :math:`j_n(x)` is the 
 :math:`n\text{th-order}` spherical Bessel function of the first kind, :math:`k = 2\pi f/c` is the 
 wavenumber, with :math:`f` frequency in Hz and :math:`c = 344.4` m/s the propagation velocity in air. 
 We set the incident wave complex pressure :math:`\tilde{p}_0 = 1\angle 0^\circ` for convenience. Finally, 
-solve for the scattered wave, :math:`\tilde{p}_s(r,\theta)`, by applying boundary conditions, see [Beranek]_ 
+solve for the scattered wave, :math:`\tilde{p}_s(r,\theta_i)`, by applying boundary conditions, see [Beranek]_ 
 for details, we superimpose the two solutions to obtain 
 
 .. The solution takes the form of an infinite series involving spherical harmonics to represent the 
-   incident plus scattered sound pressure, :math:`\tilde{p}(r,\theta)`, where :math:`r` is the radial 
-   distance from the sphere center, and :math:`\theta` the angle of incidence, :math:`\theta`, relative the incident pressure wave.
+   incident plus scattered sound pressure, :math:`\tilde{p}(r,\theta_i)`, where :math:`r` is the radial 
+   distance from the sphere center, and :math:`\theta_i` the angle of incidence, :math:`\theta_i`, relative the incident pressure wave.
    This is a boundary value problem, which is solved by starting with the incident wave, 
-   :math:`\tilde{p}_I(r,\theta)`, and then solving for the scattered wave, :math:`\tilde{p}_s(r,\theta)`, by 
+   :math:`\tilde{p}_I(r,\theta_i)`, and then solving for the scattered wave, :math:`\tilde{p}_s(r,\theta_i)`, by 
    applying the boundary conditions. For the case of an incident plane wave, with complex pressure 
    :math:`\tilde{p}_0 = 1\angle 0^\circ`, the solution is 
 
@@ -494,18 +495,18 @@ for details, we superimpose the two solutions to obtain
    :label: resultant
    :type: eqnarray
 
-   \tilde{p}(r,\theta) &=& \tilde{p}_I(r,\theta) + \tilde{p}_s(r,\theta) \nonumber \\
-   &=& \sum_{n=0}^\infty (-j)^n (2n+1) P_n(\cos\theta)  \nonumber \\
+   \tilde{p}(r,\theta_i) &=& \tilde{p}_I(r,\theta_i) + \tilde{p}_s(r,\theta_i) \nonumber \\
+   &=& \sum_{n=0}^\infty (-j)^n (2n+1) P_n(\cos\theta_i)  \nonumber \\
    && \cdot \left[j_n(kr) - 
    \frac{j_n^\prime(kR)}{h_n^{\prime(2)}(kR)} h_n^{(2)}(kr)\right]
 
 where :math:`j_n^\prime(x)` the spherical Bessel function of the first kind derivative, 
 :math:`h_n^{(2)}(kr)` is the :math:`n\text{th-order}` spherical Hankel function of the second kind 
-and :math:`h_n^{\prime(2)}(kr)` is the corresponding derivative. Figure :ref:`Scatter` shows the 
+and :math:`h_n^{\prime(2)}(kr)` is the corresponding derivative. Figure :ref:`SCATTER` shows the 
 pressure magnitude at 2000 Hz for :math:`R = 8.75\text{ cm}`, for the plane wave traveling along the 
 :math:`+z-\text{axis}`. The second plot coordinate, due to axial symmetry, is :math:`w= \sqrt{x^2+y^2}`. 
 Note in the spherical coordinates of the math model, it remains that :math:`r = \sqrt{w^2+z^2}` and 
-:math:`\cos\theta = z/\sqrt{w^2 + z^2}`.
+:math:`\cos\theta_i = z/\sqrt{w^2 + z^2}`.
 
 .. figure:: SphericalHeadScattering.pdf
    :scale: 50%
@@ -564,7 +565,7 @@ The calculations required to obtain Figure :label:`SCATTER` follow easily using 
 
 The use of :math:`R = 8.75\text{ cm}` is motivated by the *standard head* radius 
 discussed in [Duda]_.  It is interesting to note that there is a *bright spot* on the back 
-side (:math:`\theta=180^\circ`) due to constructive interference between the waves traveling 
+side (:math:`\theta_i=180^\circ`) due to constructive interference between the waves traveling 
 around either side of the sphere.
 
 
@@ -589,10 +590,10 @@ present:
 .. math::
    :label: dudahrtf
 
-   H(\theta, f, r, R) = \frac{r}{kR^2} e^{jkr} \sum_{n=0}^\infty (2n+1) P_n(\cos\theta) 
+   H(\theta_i, f, r, R) = \frac{r}{kR^2} e^{jkr} \sum_{n=0}^\infty (2n+1) P_n(\cos\theta_i) 
    \frac{h_n^{(2)}(kr)}{h_n^{\prime(2)}(kR)},\ r > R
 
-where :math:`\theta` is the angle of incidence between the source and measurement point, 
+where :math:`\theta_i` is the angle of incidence between the source and measurement point, 
 :math:`f` is the operating frequency in Hz, :math:`r` is the distance fro the source to the 
 center if the sphere, and one again :math:`R` is the sphere radius. Recall also that the 
 wave number :math:`k` contains :math:`f`.
@@ -606,7 +607,7 @@ the CIPIC source location relative to the head center.
 An efficient algorithm for the calculation of (:ref:`dudahrtf`) is presented in [Duda]_, 
 requiring no special functions as a result of using special function recurrence relationships. The 
 Python implementation, shown below, also incorporates an error threshold for terminating the series 
-approximation.
+approximation:
 
 .. code-block:: python
 
@@ -741,7 +742,7 @@ for the source 1 m away from the center of a 8.75 cm radius sphere.
    :figclass: htb
 
    Using the spherical harmonics formulation of [Duda]_ to obtain the HRTF and then the HRIR as a 
-   as a function of sound source incidence angle from :math:`0^\circ` to :math:`180^\circ`. :label:`SPHEREHRIR`
+   function of sound source incidence angle from :math:`0^\circ` to :math:`180^\circ`. :label:`SPHEREHRIR`
 
 Building a CIPIC Database Entry
 ===============================
