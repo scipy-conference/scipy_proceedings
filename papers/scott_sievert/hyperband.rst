@@ -601,15 +601,23 @@ this:
 
     from dask_ml.model_selection import HyperbandSearchCV
     search = HyperbandSearchCV(
-        model, params, max_iter=max_iter)
+        model, params,
+        max_iter=max_iter, aggressiveness=4)
 
     X_train = da.from_array(X_train, chunks=chunks)
     y_train = da.from_array(y_train, chunks=chunks)
     search.fit(X_train, y_train)
 
 
-With this, no model sees more than ``n_examples`` examples as desired and
-Hyperband evalutes (approximately) ``n_params`` hyperparameter combinations.
+``aggressiveness=4`` is chosen because this is my first time optimizing these
+hyperparametrs – I only edited the search space `once` for a tangential reason
+involving personal curiosity [#change]_.  With ``max_iter``, no model sees more than ``n_examples`` examples
+as desired and Hyperband evalutes (approximately) ``n_params`` hyperparameter
+combinations.
+
+.. [#change] I changed total number of neurons to 24 from 20 to allow the ``[12, 6,
+   3, 3]`` configuration
+
 
 Performance
 -----------
@@ -621,6 +629,7 @@ Performance
    A comparison of how Dask influences Hyperband. The priority ``high-scores``
    prioritizes fitting models with high score; ``none`` does not prioritize and
    fits models in the order they are received by Dask Distributed's scheduler.
+   Of course, the implementation behind ``high-scores`` is in Dask-ML.
    Both models have the same hyperparameters, train
    data and validation data, and also have the same internal random state. The
    hyperparameters are chosen from a run in Figure :ref:`fig:synthetic-performance`.
@@ -632,11 +641,13 @@ Recall from above that Hyperband is a principled early stopping scheme for
 random search. The comparison mirrors that by sampling same hyperparameters
 [#random-sampling-hyperband]_ and using the same validation set for each run.
 
+Dask provides features that the Hyperband implementation can easily exploit.
 Dask's implementation of Hyperband prioritizes training on the highest
 performing bracket of Hyperband. Hyperband makes no distinction on which
 bracket is highest performing. However, prioritizing high-performing models
 will likely mean that the highest performing bracket finishes training more
-quickly. This is shown in Figure :ref:`fig:synthetic-priority`.
+quickly. This highlights how Dask is useful to Hyperband and shown in Figure
+:ref:`fig:synthetic-priority`.
 
 These simulations are performed on a laptop with 4 Dask workers. This makes the
 hyperparameter selection very serial and the number of ``partial_fit`` calls
