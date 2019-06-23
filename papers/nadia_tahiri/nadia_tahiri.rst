@@ -526,8 +526,8 @@ Results
 
 Figure :ref:`productpca` illustrates PCA of 20 random products projected into 2 dimensions.
 The results show clearly the presence of the cluster of products including the Pasta sauce and Pasta group articles.
-This embedding plot was generated with 20 random products. Some trends can be observed here, but there also some exceptions as it often happens with real data. 
-In Table 2, Pasta Group was included into product Categories.
+This embedding plot was generated with 20 random products. Some trends can be observed here, but there are also some exceptions as it often happens with real data. 
+In Table 2, Pasta Group was included into the product Categories.
 In fact, this result can identify consumer buying behavior.
 
 .. figure:: figures/product_pca.png
