@@ -498,7 +498,7 @@ The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
    \centering
    \begin{subfigure}{0.45\textwidth}
        \centering
-       \includegraphics[width=0.75\linewidth]{imgs/synthetic-dataset.png}
+       \includegraphics[width=0.70\linewidth]{imgs/synthetic-dataset.png}
        \caption{
            The synthetic dataset used as input. In addition to these two
            informative dimensions, there are 4 uninformative dimensiosn with
@@ -517,7 +517,9 @@ The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
            \texttt{passive}). The shaded regions
-           correspond to the 25\% and 75\% percentiles over 28 runs.
+           correspond to the 25\% and 75\% percentiles over 40 runs.
+           The mean is low for \texttt{passive} because two models had final best
+           scores below 60\%. All other \texttt{passive} runs had final best scores about 70\%.
        }
        \label{fig:synthetic-performance}
    \end{subfigure}
@@ -528,6 +530,7 @@ The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
        stopping and trains 17 models to completion. Hyperband initially
        evaluates 143 models.
    }
+   \label{fig:synthetic}
    \end{figure}
 
 
@@ -568,7 +571,7 @@ parameter:
    #     "learning_rate_init"  # cnts
    # ])
 
-Usage: rule of thumb of ``HyperbandSearchCV``'s inputs
+Usage: rule of thumb on ``HyperbandSearchCV``'s inputs
 ------------------------------------------------------
 
 ``HyperbandSearchCV`` only requires `two` parameters besides the model and data
@@ -598,8 +601,7 @@ this:
 
     from dask_ml.model_selection import HyperbandSearchCV
     search = HyperbandSearchCV(
-        model, params, max_iter=max_iter
-    )
+        model, params, max_iter=max_iter)
 
     X_train = da.from_array(X_train, chunks=chunks)
     y_train = da.from_array(y_train, chunks=chunks)
@@ -612,7 +614,20 @@ Hyperband evalutes (approximately) ``n_params`` hyperparameter combinations.
 Performance
 -----------
 
-Two hyperparameter optimizations are performed, Hyperband and random search.
+.. figure:: imgs/synthetic-priority
+   :align: center
+   :scale: 75%
+
+   A comparison of how Dask influences Hyperband. The priority ``high-scores``
+   prioritizes fitting models with high score; ``none`` does not prioritize and
+   fits models in the order they are received by Dask Distributed's scheduler.
+   Both models have the same hyperparameters, train
+   data and validation data, and also have the same internal random state. The
+   hyperparameters are chosen from a run in Figure :ref:`fig:synthetic-performance`.
+   :label:`fig:synthetic-priority`
+
+Two hyperparameter optimizations are compared, Hyperband and random search and
+is shown in Figure :ref:`fig:synthetic-performance`.
 Recall from above that Hyperband is a principled early stopping scheme for
 random search. The comparison mirrors that by sampling same hyperparameters
 [#random-sampling-hyperband]_ and using the same validation set for each run.
@@ -621,9 +636,7 @@ Dask's implementation of Hyperband prioritizes training on the highest
 performing bracket of Hyperband. Hyperband makes no distinction on which
 bracket is highest performing. However, prioritizing high-performing models
 will likely mean that the highest performing bracket finishes training more
-quickly.
-
-.. TODO: verify and give numbers
+quickly. This is shown in Figure :ref:`fig:synthetic-priority`.
 
 These simulations are performed on a laptop with 4 Dask workers. This makes the
 hyperparameter selection very serial and the number of ``partial_fit`` calls
