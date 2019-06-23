@@ -220,11 +220,13 @@ The CNN was used as a feature extractor and the LSTM network as a sequential lea
 .. figure:: figures/lstm.png
    :align: center 
   
-   This figure shows a chain-structured LSTM network. An LSTM architecture contains forget, learn, remember, and uses gates that determine whether an input is so important that it can be saved.  
-   In the LSTM unit representing in this figure, there are four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`) are used, 
-   which make it easier to update the weights during the backpropagation process. Here :math:`X_{t}` designates the input vector, :math:`H_{t-1}` is the previous cell output, :math:`C_{t-1}` is the previous cell memory, :math:`H_{t}` is the current cell output, :math:`C_{t}` is the current cell memory.
-   :math:`f_t` is forget gate with sigmoid function :math:`sigma`, :math:`\overline{C_t}` and :math:`I_t` corresponds to input gate with `tanh` function, and finally :math:`O_t` is output gate with :math:`sigma` function.
+   This figure shows a chain-structured LSTM network. An LSTM architecture contains the forget, learn, remember, and uses gates that determine the importance of the input data.
+   In the LSTM unit represented in this figure, there are four different functions: sigmoid (:math:`\sigma`), hyperbolic tangent (:math:`tanh`), multiplication (:math:`*`), and sum (:math:`+`),
+   making it easier to update the weights during the backpropagation process. Here :math:`X_{t}` denotes the input vector, :math:`H_{t-1}` is the previous cell output, :math:`C_{t-1}` is the previous cell memory, 
+   :math:`H_{t}` is the current cell output, :math:`C_{t}` is the current cell memory.
+   :math:`f_t` is the forget gate with sigmoid function :math:`sigma`, :math:`\overline{C_t}` and :math:`I_t` corresponds to the input gate with `tanh` function, and finally :math:`O_t` is the output gate with :math:`sigma` function.
    :label:`lstm`
+
 
 Overall characteristics of the neuron networks which used in this project are described as follow:
 
