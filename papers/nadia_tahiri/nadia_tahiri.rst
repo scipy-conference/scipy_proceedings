@@ -61,7 +61,7 @@ made it possible to determine the number of classes of consumers, as well as the
 .. figure:: figures/trois_magasins.png
    :align: center
    
-   MyGroceryTour website for the postal code H2Y 1C6 in Montreal. 
+   MyGroceryTour website for the postal code H3T 1C8 in Montreal. 
    The website was created to test the new machine learning model. 
    It was written in Javascript, Bootstrap and Python. :label:`MyGroceryTour` 
 
