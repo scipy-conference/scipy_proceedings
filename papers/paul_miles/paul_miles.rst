@@ -158,11 +158,11 @@ A typical part of analyzing the results is to visualize the sampling history of 
 
 .. figure:: figures/basic_cp_full.png
 
-    Parameter chains obtained with 5000 realizations of the linear model. :label:`figbasiccpfull`
+    Parameter chains obtained with all 10,000 realizations of the linear model. :label:`figbasiccpfull`
 
 .. figure:: figures/basic_cp.png
 
-    Parameter chains obtained with 5000 realizations of the linear model. :label:`figbasiccp`
+    Parameter chains obtained with the final 5,000 realizations of the linear model. :label:`figbasiccp`
 
 Figure :ref:`figbasiccpfull` shows the full parameter chains for all 10,000 MCMC simulations.  The algorithm takes a few simulations to reach the correct distribution, which is clearly seen by the jump at the beginning.  This is why we typically remove the first part of the chain to allow for burn-in.  We make another plot, except this time we have removed the first part of the chain.
 
