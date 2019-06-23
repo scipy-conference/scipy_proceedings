@@ -471,7 +471,7 @@ Python Script
 -------------
 
 The final reorder probabilities are a weighted average of the outputs from the second-level models. The final basket is chosen by using these probabilities and choosing the product subset with maximum expected F1-score.
-The select_products function in Python script is the following:
+We used `f1_optimizer` implemented in **F1Optimizer** package. The select_products function in Python script is the following:
 
 .. code-block:: python
     :linenos:
@@ -544,7 +544,7 @@ Figure :ref:`violon` (b) indicates that all shops follow the same profiles in th
 
 .. figure:: figures/violon.png
    :align: center
-   :scale: 20%
+   :scale: 21%
    :figclass: wt
    
    Distribution of :math:`F_1` measures against rebates (a) and stores (b). :label:`violon`
