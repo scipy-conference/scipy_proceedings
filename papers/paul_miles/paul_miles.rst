@@ -66,7 +66,7 @@ We expect the observations :math:`F^{obs}(i)` (experimental data or high-fidelit
 
 where :math:`SS_q=\sum_{i=1}^{N_{obs}}[F^{obs}(i) - F(i, q)]^2` is the sum-of-squares error (:math:`N_{obs}` is the number of data points).  This is consistent with the observations being independent and normally distributed with :math:`F^{obs}(i)\sim\mathit{N}(F(i;q), \sigma^2)`.  As the observation error variance :math:`\sigma^2` is unknown in many cases, we will often include it as part of the inference process.
 
-Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  A basic description of the Metropolis approach is outlined in a later section as well as a list of available algorithms within pymcmcstat.
+Direct evaluation of (:ref:`eqnbayes`) is often computationally untenable due to the integral in the denominator.  To avoid the issues that arise due to quadrature, we alternatively employ Markov Chain Monte Carlo (MCMC) methods.  In MCMC, we use sampling based Metropolis algorithms :cite:`metropolis1953equation` whose stationary distribution is the posterior density :math:`\pi(q|F^{obs}(i))`.  What this means is that we sample parameter values, evaluate the numerator of Bayes' equation (:ref:`eqnbayes`), and accept or reject parameter values using a Metropolis algorithm.  More details regarding Metropolis algorithms are provided in a later section.
 
 Basic Example
 -------------
@@ -225,18 +225,24 @@ Figure :ref:`figbasicpi` shows the 95% credible and prediction intervals.  We ob
 
     95% credible and prediction intervals for linear model. :label:`figbasicpi`
 
-This concludes the basic example and highlights the workflow of how pymcmcstat could be used for a scientific problem.  Note, this example highlighted a linear model; however, the algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
+This concludes the basic example and highlights the workflow of how pymcmcstat could be used for a scientific problem.  Note, this example highlighted a linear model; however, the algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.
 
-Simulation Options
-------------------
+Metropolis Algorithms
+---------------------
+For those unfamiliar with Metropolis algorithms, we have provided a brief overview of the procedure.  For each step of the MCMC simulation, a new set of parameter values are proposed :math:`q^*`.  We accept or reject :math:`q^*` based on comparison with results obtained with the previous parameter set :math:`q^{k-1}`.  To do this we calculate the acceptance ratio
 
-For those unfamiliar with Metropolis algorithms, the key takeaway is that a set of parameters :math:`q^*` is accepted if the value of :math:`\mathcal{L}(F^{obs}(i)|q^*)\pi_0(q*)` is greater than the value using the previous parameter set :math:`q^{k-1}`.
+.. math::
+    :label: eqnacceptratio
 
-In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
+    \alpha = \frac{\mathcal{L}(F^{obs}(i)|q^*)\pi_0(q^*)}{\mathcal{L}(F^{obs}(i)|q^{k-1})\pi_0(q^{k-1})}.
+
+We observe that (:ref:`eqnacceptratio`) compares the unscaled posterior probabilities.  Essentially, we are computing whether :math:`q^*` or :math:`q^{k-1}` is more likely.  For uniform prior distributions, this simplifies to comparing the likelihood function.  For the Gaussian likelihood function (:ref:`eqnlikelihood`), a smaller sum-of-squares error implies a larger likelihood.  So, if the error is reduced by evaluating the model with :math:`q^*`, the acceptance ratio will have a value :math:`\alpha > 1`.  In that case we accept the parameters and set :math:`q^k=q^*`.  In contrast, if the error increases (i.e., the likelihood decreases), the acceptance ratio becomes :math:`\alpha < 1`.  Rather than outright reject parameter sets that increase error, we conditionally accept :math:`q^*` if :math:`\alpha > \mathit{U}(0, 1)` (random value from a uniform distribution between 0 and 1).  Otherwise, we set :math:`q^k=q^{k-1}`.
+
+Candidates :math:`q^*` are generated by sampling from a proposal distribution, which accounts for parameter correlation.  In an ideal case one can adapt the proposal distribution as information is learned about the posterior distribution from accepted candidates.  This is referred to as adaptive Metropolis (AM) and it is implemented in pymcmcstat using the algorithm presented in :cite:`haario2001adaptive`.  Another desirable feature in Metropolis algorithms is to include delayed rejection (DR), which helps to stimulate mixing within the sampling chain.  Good mixing simply means that the simulation is switching between points frequently and not stagnating on a single value; i.e., :math:`q^k=q^{k-1}` for many simulations in a row.  This has been implemented using the algorithm presented in :cite:`haario2006dram`.  A summary of the Metropolis algorithms available inside pymcmcstat is presented in Table :ref:`tabmetalg`.
 
 .. raw:: latex
 
-   \begin{table}[!b]
+   \begin{table}[!t]
      \centering
      \begin{tabular}{ll}
      \hline \hline
@@ -252,6 +258,10 @@ In an ideal case one can adapt the proposal distribution as information is learn
      \caption{Metropolis algorithms available in pymcmcstat. \DUrole{label}{tabmetalg}}
 
    \end{table}
+
+Options and Settings
+--------------------
+For more details regarding the options available in pymcmcstat, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.  Below we provide a brief summary of common features and explanations of how a user might implement them for a particular problem.
 
 Smart Material Systems
 ----------------------
