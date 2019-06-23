@@ -312,7 +312,8 @@ learners to boost performance; this makes it a good candidate model for predicti
 It requires little data preprocessing and tuning of parameters while yielding interpretable results, 
 with the help of partial dependency plots and other investigative tools. 
 Further, GBT can model complex interactions in a simple recommendation system and be applied in both classification and 
-regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]_. 
+regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]_.
+The composition of the shopping history list is not complete in the sense we do not have the composition of the baskets for each user for all weeks.
 Finally, missing values in the collected data can be easily managed.
 
 The data are divided into two groups (training and validation) which comprising 90% and 10% of the data respectively.
@@ -430,7 +431,7 @@ Statistically, this metric can be identified as follow:
    
    Accuracy = \frac{(TP+TN)}{(TP+TN+FP+FN)}
 
-where **TP** is True Positive, **FP** is False Positive, **TN** is True Negative, and **FN** is False Negative.
+where `TP` is True Positive, `FP` is False Positive, `TN` is True Negative, and `FN` is False Negative.
 
 The *precision* is a description of random errors, a measure of statistical variability.
 The formula of precision is the ratio between TP with all truth data (positive or negative). 
