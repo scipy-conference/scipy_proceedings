@@ -599,24 +599,24 @@ this:
 
 .. code-block:: python
 
-    from dask_ml.model_selection import HyperbandSearchCV
-    search = HyperbandSearchCV(
-        model, params,
-        max_iter=max_iter, aggressiveness=4)
+   from dask_ml.model_selection import HyperbandSearchCV
+   search = HyperbandSearchCV(
+       model, params,
+       max_iter=max_iter, aggressiveness=4)
 
-    X_train = da.from_array(X_train, chunks=chunks)
-    y_train = da.from_array(y_train, chunks=chunks)
-    search.fit(X_train, y_train)
+   X_train = da.from_array(X_train, chunks=chunks)
+   y_train = da.from_array(y_train, chunks=chunks)
+   search.fit(X_train, y_train)
 
 
 ``aggressiveness=4`` is chosen because this is my first time optimizing these
-hyperparametrs – I only edited the search space `once` for a tangential reason
-involving personal curiosity [#change]_.  With ``max_iter``, no model sees more than ``n_examples`` examples
-as desired and Hyperband evalutes (approximately) ``n_params`` hyperparameter
+hyperparametrs – I only made one small edit to the hyperparameter search space
+[#change]_.  With ``max_iter``, no model sees more than ``n_examples`` examples
+as desired and Hyperband evaluates (approximately) ``n_params`` hyperparameter
 combinations.
 
-.. [#change] I changed total number of neurons to 24 from 20 to allow the ``[12, 6,
-   3, 3]`` configuration
+.. [#change] For personal curiosity, I changed total number of neurons to 24
+   from 20 to allow the ``[12, 6, 3, 3]`` configuration.
 
 
 Performance
@@ -649,9 +649,11 @@ will likely mean that the highest performing bracket finishes training more
 quickly. This highlights how Dask is useful to Hyperband and shown in Figure
 :ref:`fig:synthetic-priority`.
 
-These simulations are performed on a laptop with 4 Dask workers. This makes the
-hyperparameter selection very serial and the number of ``partial_fit`` calls
-or passes through the dataset a good proxy for time.
+Dask's priority of training high scoring models works best in very serial
+environments: priority makes no difference in very parallel environment when
+every job can be run. These simulations are performed on a laptop with 4 Dask
+workers. This makes the hyperparameter selection very serial and the number of
+``partial_fit`` calls or passes through the dataset a good proxy for time.
 
 .. [#random-sampling-hyperband] As much as possible – Hyperband evaluates more
    hyperparameter values. The random search without early stopping
