@@ -261,7 +261,7 @@ The learning rate was equal to 0.001 to control how long the weights should be u
 The size of the hidden state of an LSTM unit was fixed to 512.
 Batch size corresponds to the number of samples between updates to the model weights and was set to 64 during the training process. We set to 4 the number of validation batches.
 The Tensorflow package was used to implement our `rnn` class which takes into account the features described in the previous section.
-The `rnn` class structure is organized using the four functions.
+The `rnn` class structure is organized using the four functions: 1) constructor function, 2) loss score function calculation, 3) getter function, and 4) output score function.
 
 .. code-block:: python
 
@@ -287,21 +287,21 @@ The `rnn` class structure is organized using the four functions.
 Non-negative matrix factorization (NNMF) network
 ================================================
 
-NNMF [LS01]_ is a matrix factorization method where the constrain of the matrices is to be nonnegative.
-The technique consists to combine linear algebra and multivariate analysis to produce two matrices `W` and `H`.
-We factorize a matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W` 
-(i.e. `user\_id`) and `H` (i.e. `product\_id`) so the representation can be formulated as: 
-:math:`X \approx WH` (see Figure :ref:`nnmf`).
+Non-negative matrix factorization NNMF [LS01] is a technique consists in combining linear algebra and multivariate analysis to produce 
+two matrices `W` and `H` with the property that all three matrices have no negative elements. This non-negativity makes the resulting matrices easier to inspect.
+We factorize the matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W`
+(i.e. `user\_id`) and `H` (i.e.`product\_id`) so that the representation can be formulated as: 
+:math:`X \approx WH` (see Figure :ref:`nnmf`). 
 
-Figure :ref:`nnmf` shows the decomposition of the `user_id` by `product_id` matrix to two matrices.
- 
+
 .. figure:: figures/nnmf.png
-   :align: center
-   :scale: 65%
-   
-   Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). :label:`nnmf`
+    :align: center
+    :scale: 65%
+
+    Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). :label:`nnmf`
 
 NNMF is a powerful machine learning method. [LS01] proved the convergence of NNMF to at least a locally optimal solution. NNMF is trained on the matrix of `user*product` counts.
+
 
 Gradient Boosted Tree (GBT) network
 ===================================
@@ -314,7 +314,6 @@ with the help of partial dependency plots and other investigative tools.
 Further, GBT can model complex interactions in a simple recommendation system and be applied in both classification and 
 regression with a variety of response distributions including Gaussian [Car03]_, Bernoulli [CMW16]_, Poisson [PJ73]_, and Laplace [Tay19]_. 
 Finally, missing values in the collected data can be easily managed.
-Moreover, in this study, we denote frequently missing data in the history grocery list by the user, that is why this technique is more adapted.
 
 The data are divided into two groups (training and validation) which comprising 90% and 10% of the data respectively.
 After simulating the dataset, the strategy used was to merge real and simulated data and then split them into two groups (training and validation datasets). 
