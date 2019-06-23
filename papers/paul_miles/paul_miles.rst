@@ -193,7 +193,39 @@ Figure :ref:`figbasicpc` shows the pairwise parameter correlation based on the s
 
     Pairwise correlation between sampling points for linear model. :label:`figbasicpc`
 
-Note, this algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
+Now that we have distributions for the parameters, we want to know how that uncertainty propagates through the model.  Within pymcmcstat, the user has the ability to generate credible and prediction intervals.  Credible intervals represent the distribution of the model output based simply on propagating the uncertainty from the parameter distributions.  In contrast, prediction intervals also include uncertainty that arises due to observation errors :math:`\epsilon_i`.  The following example code can be used to generate and plot credible and prediction intervals using pymcmcstat
+
+.. code-block:: python
+
+    def modelfun(pdata, theta):
+        m, b = theta
+        x = pdata.xdata[0]
+        y = m*x + b
+        return y
+
+    mcstat.PI.setup_prediction_interval_calculation(
+        results=results,
+        data=mcstat.data,
+        modelfunction=modelfun,
+        burnin=burnin)
+    mcstat.PI.generate_prediction_intervals(
+      calc_pred_int=True)
+    # plot prediction intervals
+    fg, ax = mcstat.PI.plot_prediction_intervals(
+                adddata=True,
+                plot_pred_int=True)
+    ax[0].set_ylabel('y')
+    ax[0].set_xlabel('x')
+
+The procedure takes a subsample of the MCMC chain, evaluates the model for each sampled parameter set, and sorts the output to generate a distribution.
+
+Figure :ref:`figbasicpi` shows the 95% credible and prediction intervals.  We observe that the credible intervals are fairly narrow, which is not surprising given the small amount of uncertainty in the parameter values (standard deviations of 0.03 and 0.02 for :math:`m` and :math:`b`, respectively).  This is not always the case, especially in instances where there is unknown or missing physics in the model.  However, we generated fictitious data using the model, so these results are reasonable.  Prediction intervals quantify the probability of observing future numerical predictions or experimental observations because they include both parameter and observation uncertainty.  For a 95% prediction interval, we expect a future observation to fall within that region 95% of the time.  As a general check, we note that approximately 95% of the data appears to be inside the prediction interval shown in Figure :ref:`figbasicpi`, which is consistent with what we expect.
+
+.. figure:: figures/basic_pi.png
+
+    95% credible and prediction intervals for linear model. :label:`figbasicpi`
+
+This concludes the basic example and highlights the workflow of how pymcmcstat could be used for a scientific problem.  Note, this example highlighted a linear model; however, the algorithm is also applicable to nonlinear models, examples of which are discussed in subsequent sections.  For more details regarding the options available in each step, the reader is referred to the pymcmcstat `documentation <https://pymcmcstat.readthedocs.io/en/latest/>`_ and `tutorials <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/index.ipynb>`_.
 
 Simulation Options
 ------------------
