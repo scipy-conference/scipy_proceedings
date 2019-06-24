@@ -298,7 +298,9 @@ We factorize the matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into tw
     :align: center
     :scale: 65%
 
-    Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). :label:`nnmf`
+    Decomposition of the `user_id` (`u` in Figure) by `product_id` (`p` in Figure). The first matrix represents the product by the user (i.e. order count), 
+    and then the second and third matrices show the representation of the user and product respectively by 25.
+    :label:`nnmf`
 
 NNMF is a powerful machine learning method. [LS01]_ proved the convergence of NNMF to at least a locally optimal solution. NNMF is trained on the matrix of `user*product` counts.
 
@@ -360,7 +362,7 @@ Finally, we estimated the size of the next order minimizing the root mean square
      \hline
      \end{longtable}
 
-     \caption{Top-level models used.}
+     \caption{Top-level models used. The Figure shows the representation, the description, and the type of products, categories, size of baskets, and matrix users/products.}
          \label{tab:model1}
 
    \end{table}
@@ -393,7 +395,7 @@ If :math:`\mathcal{A} \subset \mathbb{Z}`, :math:`T` is a matrix :math:`|\mathca
         \hline        
         \end{longtable}
 
-        \caption{Dimensions of the representations learned by different models.}
+        \caption{Dimensions of the representations learned by different models in the first level of the model used.}
         \label{tab:model2}
 
     \end{table}
