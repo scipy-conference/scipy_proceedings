@@ -149,62 +149,8 @@ where each addend is as in Table :ref:`costfunctions`.
 The evaluation of :math:`J(\textbf{V})` can be done entirely using calls
 from NumPy and SciPy. For example, evaluating :math:`J_{c}(\vec{\textbf{V}}) =
 \nabla\cdot\vec{\textbf{V}}` with an optional anelastic term be reduced to a
-few NumPy calls:
-
-.. code-block:: python
-
-    import numpy as np
-
-    def calculate_mass_continuity(
-        u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
-        """
-        Calculates the mass continuity cost function by
-        taking the divergence
-        of the wind field.
-
-        All arrays in the given lists must have the same
-        dimensions and represent the same spatial
-        coordinates.
-
-        Parameters
-        ----------
-        u: Float array
-            Float array with u component of wind field
-        v: Float array
-            Float array with v component of wind field
-        w: Float array
-            Float array with w component of wind field
-        dx: float
-            Grid spacing in x direction.
-        dy: float
-            Grid spacing in y direction.
-        dz: float
-            Grid spacing in z direction.
-        z: Float array (1D)
-            1D Float array with heights of grid
-        coeff: float
-            Constant controlling contribution of mass
-            continuity to cost function
-        anel: int
-            = 1 use anelastic approximation, 0=don't
-
-        Returns
-        -------
-        J: float
-            value of mass continuity cost function
-        """
-        dudx = np.gradient(u, dx, axis=2)
-        dvdy = np.gradient(v, dy, axis=1)
-        dwdz = np.gradient(w, dz, axis=0)
-
-        if(anel == 1):
-            rho = np.exp(-z/10000.0)
-            drho_dz = np.gradient(rho, dz, axis=0)
-            anel = w/rho*drho_dz
-        else:
-            anel = np.zeros(w.shape)
-        return coeff*np.sum(
-            np.square(dudx + dvdy + dwdz + anel))/2.0
+few NumPy calls. The code that executes these NumPy calls can be found in the
+Appendix.
 
 Since NumPy can be configured to take advantage of open source mathematics libraries that
 parallelize the calculation, this also extends the capability of the retrieval
@@ -636,3 +582,63 @@ wind data. PyDDA was partially supported by the Climate Model Development and Va
 Activity of the Department of Energy Office of Science. Dr. Tsengdar Lee of the NASA Weather
 program provided funds that supported the development of MultiDop, a critical intermediate
 step toward the development of PyDDA.
+
+Appendix: Mass continuity cost function in Python
+-------------------------------------------------
+This appendix shows an example cost function from PyDDA. The code snippet below shows how
+the mass continuity cost function can be implemented using NumPy.
+
+.. code-block:: python
+
+    import numpy as np
+
+    def calculate_mass_continuity(
+        u, v, w, z, dx, dy, dz, coeff=1500.0, anel=1):
+        """
+        Calculates the mass continuity cost function by
+        taking the divergence
+        of the wind field.
+
+        All arrays in the given lists must have the same
+        dimensions and represent the same spatial
+        coordinates.
+
+        Parameters
+        ----------
+        u: Float array
+            Float array with u component of wind field
+        v: Float array
+            Float array with v component of wind field
+        w: Float array
+            Float array with w component of wind field
+        dx: float
+            Grid spacing in x direction.
+        dy: float
+            Grid spacing in y direction.
+        dz: float
+            Grid spacing in z direction.
+        z: Float array (1D)
+            1D Float array with heights of grid
+        coeff: float
+            Constant controlling contribution of mass
+            continuity to cost function
+        anel: int
+            = 1 use anelastic approximation, 0=don't
+
+        Returns
+        -------
+        J: float
+            value of mass continuity cost function
+        """
+        dudx = np.gradient(u, dx, axis=2)
+        dvdy = np.gradient(v, dy, axis=1)
+        dwdz = np.gradient(w, dz, axis=0)
+
+        if(anel == 1):
+            rho = np.exp(-z/10000.0)
+            drho_dz = np.gradient(rho, dz, axis=0)
+            anel = w/rho*drho_dz
+        else:
+            anel = np.zeros(w.shape)
+        return coeff*np.sum(
+            np.square(dudx + dvdy + dwdz + anel))/2.0
