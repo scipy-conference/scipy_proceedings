@@ -136,7 +136,8 @@ The hyperparameter optimization process typically looks like
 3. Train models with those hyperparameters
 4. Score those models with unseen data (a subset of the train dataset typically
    referred to as the "validation set")
-5. Use the best performing hyperparameters to train the a model with the
+5. Use the best performing hyperparameters to train a model with those
+   hyperparameters on the
    complete train dataset
 6. Score the model on the test dataset. This is the score that is reported.
 
@@ -383,7 +384,7 @@ and ``top_k`` rely on. ``top_k`` returns the ``k`` best performing
 models on the validation data and ``train`` trains a model for a certain number
 of calls to ``partial_fit``.
 
-Each bracket indicates a value in the tradeoff between hyperparameter and
+Each bracket indicates a value in the trade-off between hyperparameter and
 training time importance, and is specified by the list of tuples in the example
 above. Each bracket is specified so that the total number of ``partial_fit``
 calls is approximately the same among different brackets. Then, having many
@@ -501,7 +502,7 @@ The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
        \includegraphics[width=0.70\linewidth]{imgs/synthetic-dataset.png}
        \caption{
            The synthetic dataset used as input. In addition to these two
-           informative dimensions, there are 4 uninformative dimensiosn with
+           informative dimensions, there are 4 uninformative dimensions with
            uniformly distributed random noise. There are 60,000 examples in
            this dataset and 50,000 are used for training. The colors correspond
            to different class labels and all points are bounded between $-2$
@@ -594,7 +595,7 @@ to be seen by at least one model, ``n_examples``. This rule of thumb is:
    max_iter = n_params
    chunks = n_examples // n_params
 
-Creation of a ``HyperbandSearachCV`` object and the Dask array is simple with
+Creation of a ``HyperbandSearchCV`` object and the Dask array is simple with
 this:
 
 .. code-block:: python
@@ -610,7 +611,7 @@ this:
 
 
 ``aggressiveness=4`` is chosen because this is my first time optimizing these
-hyperparametrs – I only made one small edit to the hyperparameter search space
+hyperparameters – I only made one small edit to the hyperparameter search space
 [#change]_.  With ``max_iter``, no model sees more than ``n_examples`` examples
 as desired and Hyperband evaluates (approximately) ``n_params`` hyperparameter
 combinations.
@@ -680,6 +681,49 @@ optimization is not simple.
 Again, some detail is mentioned in the appendix though complete details can be
 found at https://github.com/stsievert/dask-hyperband-comparison.
 
+.. raw:: latex
+
+   \begin{figure}
+   \centering
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.95\linewidth]{imgs/io+est}
+       \caption{
+   The rows show in the ground truth, input and output respectively for the
+   denoising problem. The output is shown for the best model that Hyperband
+   finds.
+       }
+       \label{fig:io+est}
+   \end{subfigure}
+   \begin{subfigure}{0.45\textwidth}
+       \centering
+       \includegraphics[width=0.95\linewidth]{imgs/2019-03-24-time.png}
+       \caption{
+   The time required to obtain a particular validation score (or negative loss). The legend labels are in
+   Table \ref{table:legend}.
+       }
+       \label{fig:time}
+   \end{subfigure}
+   \caption{
+       In this experiment, each call to \texttt{partial\_fit} uses 1/3 of the
+       examples in the complete train dataset, so algorithm passes over the training data about 1,667 times in
+       total, a.k.a.  1,667 epochs. Each model sees no more than 81 times the
+       number of examples in the dataset because \texttt{max\_iter=243} for all
+       searches.
+   }
+   \label{fig:img-exp}
+   \end{figure}
+
+.. TODO: figure out which model that is. Say a sentence about it (which bracket, etc)
+
+.. figure:: imgs/2019-03-24-activity.png
+   :align: center
+
+   The activity over time for the 25 Dask workers for the run shown in
+   Figure :ref:`fig:img-exp`.
+   :label:`fig:activity`
+
+
 Model architecture & Hyperparameters
 -------------------------------------
 
@@ -716,7 +760,7 @@ of the rectified linear unit (ReLU) :cite:`relu`, including the leaky ReLU
 
 There are 6 other hyperparameters do not influence the model architecture.
 There are 3 discrete hyperparameters (and 160 combinations of all discrete
-variables) and 3 contiuous hyperparameters. These hyperparameters all control
+variables) and 3 continuous hyperparameters. These hyperparameters all control
 finding the optimal model after the architecture is fixed. These includes
 hyperparameter like the optimizer to use (stochastic gradient descent
 :cite:`bottou2010large` a.k.a SGD or Adam :cite:`adam`), initialization,
@@ -770,7 +814,7 @@ by a considerable margin. While manually tuning, I considered any scores about
 ``HyperbandSearchCV``'s score of :math:`-0.093` and ``IncrementalSearchCV``'s
 score of :math:`-0.0975`.
 
-A quantative measure comes by comparing three algorithms with
+A quantitative measure comes by comparing three algorithms with
 the same model, parameters and validation data. The comparisons are shown in
 Figures :ref:`fig:time` and :ref:`fig:activity` and the legends for these plots
 is shown in Table :ref:`table:legend`. In these experiments, 25 workers are
@@ -783,7 +827,7 @@ stopping scheme that will likely stop these models). These two schemes will be
 trains all models to completion via ``IncrementalSearchCV``.
 
 The inputs to ``IncrementalSearchCV`` illustrate the implicit balance between
-hyperparameter vs.  training time importance: training models for longer with
+hyperparameter vs. training time importance: training models for longer with
 the same computational effort would require a higher value for ``num_params``
 and a lower and more aggressive value for ``patience``.  For
 ``IncrementalSearchCV``, I choose an aggressive and low patience of
@@ -795,41 +839,9 @@ The data scientist cares about time to reach a particular score, not the number
 of ``partial_fit`` calls required. Those are similar for a small personal
 machine but may be very different in the presence of a large cluster or
 supercomputer. The time required to reach a particular validation accuracy
-thatis shown in Figure :ref:`fig:time`.  This plot is shown with 25 workers, a
+that is shown in Figure :ref:`fig:time`.  This plot is shown with 25 workers, a
 reasonable number of workers to expect, especially if each worker requires a
 GPU.
-
-.. raw:: latex
-
-   \begin{figure}
-   \centering
-   \begin{subfigure}{0.45\textwidth}
-       \centering
-       \includegraphics[width=0.95\linewidth]{imgs/io+est}
-       \caption{
-   The rows show in the ground truth, input and output respectively for the
-   denoising problem. The output is shown for the best model that Hyperband
-   finds.
-       }
-       \label{fig:io+est}
-   \end{subfigure}
-   \begin{subfigure}{0.45\textwidth}
-       \centering
-       \includegraphics[width=0.95\linewidth]{imgs/2019-03-24-time.png}
-       \caption{
-   The time required to obtain a particular validation score (or negative loss). The legend labels are in
-   Table \ref{table:legend}.
-       }
-       \label{fig:time}
-   \end{subfigure}
-   \caption{
-       In this experiment, each call to \texttt{partial\_fit} uses 1/3 of the
-       examples in the complete train dataset, so algorithm passes over the training data about 1,667 times in
-       total, a.k.a.  1,667 epochs. Each model sees no more than 81 times the
-       number of examples in the dataset because \texttt{max\_iter=243} for all
-       searches.
-   }
-   \end{figure}
 
 ``HyperbandSearchCV`` with ``patience=True`` and ``patience=False`` require a
 similar number of calls to ``partial_fit``, within a 5% difference. However,
@@ -855,14 +867,6 @@ Figure :ref:`fig:activity`.
    +---------------------+---------------------------------------------------+
    | ``hyperband+sop``   | ``HyperbandSearchCV``, ``patience=True``          |
    +---------------------+---------------------------------------------------+
-
-.. TODO: figure out which model that is. Say a sentence about it (which bracket, etc)
-
-.. figure:: imgs/2019-03-24-activity.png
-   :align: center
-
-   The activity over time for the 25 Dask workers.
-   :label:`fig:activity`
 
 
 Future work
