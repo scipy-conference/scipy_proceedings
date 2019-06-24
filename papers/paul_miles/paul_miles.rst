@@ -130,7 +130,7 @@ In this case we know what the model should be because we used it to generate the
     # Run simulation
     mcstat.run_simulation()
 
-We can check the results of the MCMC simulation by displaying the chain statistics.  Note, we typically remove the first part of the sampling chain as it may not have converged to the correct posterior depending on the initial value.  Details regarding chain diagnostics will be discussed in a later section.
+We can check the results of the MCMC simulation by displaying the chain statistics.  Note, we typically remove the first part of the sampling chain as it may not have converged to the correct posterior depending on the initial value.
 
 .. code-block:: python
 
@@ -149,7 +149,7 @@ This will output to your display
     m     : 2.0059  0.0348  0.0015  7.1351  0.9912
     b     : 2.9983  0.0206  0.0009  7.9169  0.9962
 
-Recall that the data was generated with a slope of 2 and offset of 3, so the algorithm appears to be converging to the correct values.
+Recall that the data was generated with a slope of 2 and offset of 3, so the algorithm appears to be converging to the correct values.  Additional items displayed include normalized batch mean standard deviation (:code:`MC_err`), autocorrelation time (:code:`tau`), and Geweke's convergence diagnostic (:code:`geweke`) :cite:`brooks1998assessing`.
 
 A typical part of analyzing the results is to visualize the sampling history of the MCMC process.  This is accomplished by using pymcmcstat's :code:`plot_chain_panel` method.
 
@@ -178,7 +178,7 @@ Figure :ref:`figbasiccp` shows the burned-in parameter chains based on the final
 
     mcpl.plot_density_panel(chain[burnin:,:], names)
 
-Figure :ref:`figbasicdp` shows the marginal posterior parameter densities.  The densities are generated using a Kernel Density Estimation (KDE) algorithm based on the parameter chains shown in Figure :ref:`figbasiccp`.  One more chain diagnostic that we commonly consider is with regard to parameter correlation.  We visualize the parameter correlation using the :code:`plot_pairwise_correlation_panel` method.
+Figure :ref:`figbasicdp` shows the marginal posterior parameter densities.  The densities are generated using a Kernel Density Estimation (KDE) algorithm based on the parameter chains shown in Figure :ref:`figbasiccp`.  The distributions appear to be nominally Gaussian in nature; however, that is not a requirement when running MCMC.  One more chain diagnostic that we commonly consider is with regard to parameter correlation.  We visualize the parameter correlation using the :code:`plot_pairwise_correlation_panel` method.
 
 .. code-block:: python
 
@@ -291,105 +291,71 @@ Case Studies
 ------------
 Viscoelastic Modeling of Dielectric Elastomers
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Dielectric elastomers as part of adaptive structures provide unique capabilities for control of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  These capabilities make them suitable for a wide variety of applications, including robotics, flow control, and energy harvesting :cite:`lines2001principles`, :cite:`cattafesta2011actuators`.  Many of these materials exhibit viscoelastic behavior, which varies significantly with the rate of deformation :cite:`rubinstein2003polymer`.  Figure :ref:`figfinalcycles` shows uni-axial experimental data for the elastomer Very High Bond (VHB) 4910, which highlights how the hysteretic behavior increases with the rate of deformation.  For more details regarding the experimental procedure used to generate this data, the reader is referred to :cite:`miles2015bayesian`.
+Dielectric elastomers are a type of smart material commonly implemented within an adaptive structure, which provide unique capabilities for control of a structure's shape, stiffness, and damping :cite:`smith2005smart`.  These capabilities make them suitable for a wide variety of applications, including robotics, flow control, and energy harvesting :cite:`lines2001principles`, :cite:`cattafesta2011actuators`.  Accurately modeling this material presents many challenges in light of its viscoelastic behavior.  Viscoelastic materials exhibit a time-dependent strain response, which can vary significantly with the rate at which the material is being deformed :cite:`rubinstein2003polymer`.  To help visualize this behavior, Figure :ref:`figfinalcycles` shows uni-axial experimental data for the elastomer Very High Bond (VHB) 4910.  This highlights how as the material is deformed (i.e., stretch) you see a different stress response depending on the rate of deformation (i.e., stretch rate).  Furthermore, at each rate you see two lines.  The upper line reflects the material stress response as it is being loaded and the lower line is the stress as it is being relaxed.  The gap between loading and relaxing is called hysteresis and is commonly seen in viscoelastic materials like this.  For more details regarding the experimental procedure used to generate this data, the reader is referred to :cite:`miles2015bayesian`.
 
 .. figure:: figures/final_cycle_for_each_rate.png
 
     Experimental data for VHB 4910.  The frequencies refer to different rates of deformation, or in this case different stretch rates, :math:`\dot{\lambda}`. :label:`figfinalcycles`
 
-A variety of models can be used when modeling the behavior of these materials, but for the purpose of this demonstration we will focus on a nonaffine hyperelastic :cite:`davidson2013nonaffine` and an integer-order linear viscoelastic representation :cite:`miles2015bayesian`.  The model calibration is performed with respect to the experimental data collected at :math:`\dot{\lambda}=0.67` Hz as shown in Figure :ref:`figfinalcycles`.
+A variety of models can be used when modeling the behavior of these materials, but the details are beyond the scope of this paper.  We implement a model of the form :math:`F(i; q)` to predict the nominal stress response during the loading and unloading of the material.  The model depends on the parameter set
 
-We can perform the MCMC simulation using the basic procedure previously outlined.  However, in many instances it is useful to be able to pass additional information into the sum-of-squares function.  This can be accomplished by utilizing the :code:`user_defined_object` feature of the data structure.  For our elastomer problem, we want to pass in two additional elements, 1) a function that describes the deformation, and 2) the number of terms to use in evaluating the model.
+.. math::
+    :label: eqnviscpar
+
+    q = [G_c, G_e, \lambda_{max}, \eta, \gamma],
+
+where each parameter helps describe a certain aspect of the physics that we are interested in modeling.  Details regarding these models can be found in :cite:`davidson2013nonaffine` and :cite:`miles2015bayesian`.  We calibrate the with respect to the experimental data collected at :math:`\dot{\lambda}=0.67` Hz as shown in Figure :ref:`figfinalcycles`.
+
+We can perform the MCMC simulation using the basic procedure previously outlined.  For this particular case study, we wish to point out several specific devices that were used, and a full implementation of the code for this problem can be found in the `Viscoelasticity Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/viscoelasticity/viscoelastic_analysis_using_ctypes.ipynb>`_.  To begin, we point out the potential advantages of using pymcmcstat in conjunction with models written in faster computing languages.
+
+In any sampling based method, computational efficiency is extremely important, and most of your computational time will be spent in evaluating the model.  We note that computational performance can be significantly improved by writing the model functions in C++ or Fortran.  You can easily call these functions by utilizing the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_ and an example of how to do this with pymcmcstat can be found in the `Viscoelasticity Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/viscoelasticity/viscoelastic_analysis_using_ctypes.ipynb>`_.  For example, the elastomer model implemented here was written in both Python and C++.  The average run time for a single model evaluation using C++ was approximately 0.09 ms whereas the Python implementation took over 8 ms.  This particular model is reasonably fast in both languages, but we wished to point out the advantage of using more efficient code for the model evaluation.
+
+Another item that commonly arises in model calibration is that not all your parameters are identifiable.  Determination of identifiable parameters is typically done using some type of sensitivity analysis, which is beyond the scope of this paper.  For this example, let us suppose that the first three parameters in :math:`q` have known, fixed values and therefore should not be included in the sampling chain of the MCMC simulation.  As they are fixed values, one could simply hard code the parameters into the sum-of-squares function like this
 
 .. code-block:: python
 
-    mcstat.data.add_data_set(
-	x=x,
-	y=y,
-	user_defined_object=dict(
-		stretch_function=stretch_function,
-                num=400)
+    def ssfun(q, data):
+        # Assign model parameters
+        Gc, Ge, lam_max = 7.55, 17.7, 4.83
+        eta, gamma = q
+        # evaluate elastomer model
+        ...
 
-The information defined in the data structure can be accessed in the sum-of-squares function
-
-.. code-block:: python
-
-    def ssfun(thetavec, data):
-    	# extract elements from data structure
-    	time = data.xdata[0]
-    	ydata = data.ydata[0]
-	udo = data.user_defined_object[0]
-    	stretch_function = udo['stretch_function']
-    	num = udo['num']
-    	# compute total stress
-    	teval = np.linspace(time[0], time[-1],
-		 num=num).reshape(num,)
-    	modelraw = elastomer_model(
-        	    thetavec, teval, stretch_function)
-    	model = interp1d(teval,
-                     modelraw.reshape(teval.shape),
-                     kind='linear')
-    	# compute sum-of-squares error
-    	res = ydata - model(time).reshape(ydata.shape)
-    	return (res ** 2).sum(axis=0)
-
-The function is evaluated at a subset of times and then interpolated to the points where experimental data exists.  This speeds up the model evaluation with a limited decrease in accuracy as it is reasonable to assume linear behavior within the time intervals specified.  We note that computational performance can be significantly improved by writing the model functions in C++ or Fortran.  You can easily call these functions by utilizing the `ctypes package <https://docs.python.org/3/library/ctypes.html>`_ and an example of how to do this with pymcmcstat can be found in the `Viscoelasticity Example <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/viscoelasticity/viscoelastic_analysis_using_ctypes.ipynb>`_ tutorial.
-
-Most models are comprised of multiple parameters, not all of which should be included as part of the calibration.  To simplify the interface, the user  can pass fixed values into the function.  For our example, there are a total of six parameters - 3 hyperelastic (:math:`G_c, G_e, \lambda_{max}`) and 3 viscoelastic (:math:`\eta, \gamma, \beta`).  We do not want to sample the hyperelastic model parameters, so we simply set :code:`sample=False` when adding these terms to the parameter structure.
+This solution is not ideal as you may later decide to include those parameters as part of the calibration.  To accommodate models with fixed parameters, pymcmcstat allows the user to specify whether or not to include parameters in the sampling process.  This is accomplished by specifying :code:`sample=False` as follows
 
 .. code-block:: python
 
     # define model parameters
     mcstat.parameters.add_model_parameter(
         name='$G_c$',
-        theta0=lstheta0['Gc'],
+        theta0=7.55,
         sample=False)
     mcstat.parameters.add_model_parameter(
         name='$G_e$',
-        theta0=lstheta0['Ge'],
+        theta0=17.7,
         sample=False)
     mcstat.parameters.add_model_parameter(
         name='$\\lambda_{max}$',
-        theta0=lstheta0['lam_max'],
+        theta0=4.83,
         sample=False)
     mcstat.parameters.add_model_parameter(
         name='$\\eta$',
-        theta0=lstheta0['eta'],
-        minimum=bounds['eta'][0],
-        maximum=bounds['eta'][1])
+        theta0=708)
     mcstat.parameters.add_model_parameter(
         name='$\\gamma$',
-        theta0=lstheta0['gamma'],
-        minimum=bounds['gamma'][0],
-        maximum=bounds['gamma'][1])
-    mcstat.parameters.add_model_parameter(
-        name='$\\beta$',
-        theta0=lstheta0['beta'],
-        minimum=bounds['beta'][0],
-        maximum=bounds['beta'][1])
+        theta0=31)
 
-We note that the :code:`lstheta0` and :code:`bounds` are simply dictionaries containing the results of a least-squares optimization and user-defined parameter bounds, respectively.  The values can be put directly in the parameter structure or referenced in any manner that the user prefers.
+This now allows the user to define their sum-of-squares function without hard coded values for the first three parameters.
 
-Figure :ref:`figcpvisc` shows the burned-in parameter values sampled during the MCMC process.  By "burn-in" we mean that we have sampled the values sufficiently such that the chains have converged to the posterior densities.  We remove the first part of the sampling chain to allow for burn-in and take the remaining portion to be the posterior distribution.  Given the consistent behavior of the sampling chain, we can be reasonably confident that the chains have converged to the posterior densities.  In Figure :ref:`figdpvisc`, we have plotted the posterior distributions using a kernel density estimator (KDE).  The distributions appear to be nominally Gaussian in nature; however, that is not a requirement when running MCMC.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_ tutorial.
+.. code-block:: python
 
-.. figure:: figures/ionv_cp.png
-    :figclass: tb
+    def ssfun(q, data):
+        # Assign model parameters
+        Gc, Ge, lam_max, eta, gamma = q
+        # evaluate elastomer model
+        ...
 
-    Parameter chains obtained with :math:`5\times10^3` realizations of the elastomer model. :label:`figcpvisc`
-
-.. figure:: figures/ionv_dp.png
-    :figclass: tb
-
-    Marginal posterior densities obtained using the parameter chains shown in Figure :ref:`figcpvisc`. :label:`figdpvisc`
-
-In many problems it is of interest to observe how uncertainty propagates through the model to affect the output.  By sampling from the parameter posterior distributions, we can evaluate the model and construct credible intervals.  Similarly, we generate prediction intervals by also propagating the uncertainty associated with the observation error variance through the model.  Figure :ref:`figpivisc` shows the mean model response, experimental data, and 95% prediction and credible intervals.  We note that the credible intervals are too small to be observed at this scale.  As a sanity check, we verify the reasonableness of assuming a Gaussian likelihood function in (:ref:`eqnlikelihood`) by observing that the correct percentage of measured data appears to be contained within the 95% prediction interval.
-
-.. figure:: figures/ionv_pi.png
-    :figclass: tb
-
-    Propagation of uncertainty through elastomer model yields 95% prediction and credible intervals. :label:`figpivisc`
-
-Regarding the amount of uncertainty observed in Figure :ref:`figpivisc`, it is important to note several items.  First, the amount of uncertainty in the output is large enough such that there are large regions of overlap in the loading and unloading parts of the cycle near the point of maximum extension.  Secondly, this volume of uncertainty  spans beyond the limits of experimental data collected at slower rates, meaning the model's ability to predict material behavior at other rates is limited.  This result motivated the investigation of a fractional-order viscoelastic model :cite:`mashayekhi2018fractional`.
+The final item for this case study relates to assessing chain convergence.  As part of the basic example, we outlined a variety of plotting methods available for looking at the sampling history and parameter correlation.  We also mentioned various statistical measures, such Geweke's convergence diagnostic and autocorrelation time.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_, which also includes information on how to calculate Gelman-Rubin diagnostics.
 
 Radiation Source Localization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
