@@ -368,13 +368,41 @@ Efficient and accurate localization of special nuclear material (SNM) in urban e
 
 We implement a highly simplified radiation transport model which ignores scattering.  The model accounts for signal attenuation that is caused by distance as well as interference from buildings that are in the path between the source and detector location.  This ray tracing model is implemented in the Python package `gefry3 <https://github.com/jasonmhite/gefry3>`_.  Additional details regarding this research can be found in :cite:`hite2019bayesian`.
 
-A Bayesian approach to source localization provides us with several very practical results.  Firstly, there are multiple regions of the domain that will yield comparable detector measurements, so assigning probabilities to various locations is more realistic than a single point estimate.  If one can infer regions of higher probability, it can then motivate the placement of new detectors in the domain or possibly allow for a team with handheld detectors to complete the localization process.  Given the challenges of modeling the radiation transport physics, it is extremely useful to visualize the potential source locations in light of the underlying uncertainty.  Figure :ref:`figxymarg` shows the marginal posterior densities, where it is clearly seen that the posteriors are very close to the true source location.
+As with the viscoelasticity case study, we only highlight several key features for solving this problem with pymcmcstat.  The complete code can be found on the `Radiation Source Localization Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/radiation_source_localization/radiation_source_localization.ipynb>`_.  The first item we wish to highlight is the ability to pass additional information into the sum-of-squares function by utilizing the :code:`user_defined_object` feature of the data structure.
+
+.. code-block:: python
+
+    # setup data structure for dram
+    mcstat.data.add_data_set(
+        x=np.zeros(observations.shape),
+        y=observations,
+        user_defined_object=[
+            model,
+            background,
+        ],
+    )
+
+In this case, we have created an object which is a list with two elements: 1) the radiation transport model and 2) the background radiation.  These items are easily accessed within the sum-of-squares function.
+
+.. code-block:: python
+
+    # Radiation Sum of Squares Function
+    def radiation_ssfun(theta, data):
+        x, y, I = theta
+        model, background = data.user_defined_object[0]
+        output = model((x, y), I) + background
+        res = data.ydata[0] - output
+        ss = (res ** 2).sum(axis = 0)
+        return ss
+
+A Bayesian approach to source localization provides us with several very practical results.  Firstly, there are multiple regions of the domain that will yield comparable detector measurements, so assigning probabilities to various locations is more realistic than a single point estimate.  If one can infer regions of higher probability, it can then motivate the placement of new detectors in the domain or possibly allow for a team with handheld detectors to complete the localization process.  Given the challenges of modeling the radiation transport physics, it is extremely useful to visualize the potential source locations in light of the underlying uncertainty.  Figure :ref:`figxymarg` shows the marginal posterior densities, where it is clearly seen that the posteriors are very close to the true source location.  We note that this plot was generated using the mcmcplot package, and the required code can be found in the `Radiation Source Localization Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/radiation_source_localization/radiation_source_localization.ipynb>`_.
 
 .. figure:: figures/x_vs_y_2d.png
    :figclass: tb
 
    Marginal posteriors from MCMC simulation presented in urban environment.  Actual source location is denoted by the red circle. :label:`figxymarg`
 
+This is a very simplified case, but it highlights another unique problem in which pymcmcstat can be used to gain insight regarding uncertainty.
 
 Concluding Remarks
 ------------------
