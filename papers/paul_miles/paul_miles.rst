@@ -355,7 +355,12 @@ This now allows the user to define their sum-of-squares function without hard co
         # evaluate elastomer model
         ...
 
-The final item for this case study relates to assessing chain convergence.  As part of the basic example, we outlined a variety of plotting methods available for looking at the sampling history and parameter correlation.  We also mentioned various statistical measures, such Geweke's convergence diagnostic and autocorrelation time.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_, which also includes information on how to calculate Gelman-Rubin diagnostics.
+.. figure:: figures/iolv_cp.png
+    :figclass: tb
+
+    Parameter chains obtained with :math:`2.5\times10^3` realizations of the elastomer model. :label:`figcpvisc`
+
+The final item for this case study relates to assessing chain convergence.  Previously, we outlined a variety of plotting methods available for looking at the sampling history and parameter correlation.  We also mentioned various statistical measures, such Geweke's convergence diagnostic and autocorrelation time.  The chain panel shown in Figure :ref:`figcpvisc` appears to be converged, but there is a possibility that the algorithm is stuck in a local minimum.  If you run the simulation longer, then you may see a jump in the chain as it finds another local minimum.  For a more rigorous assessment of chain convergence, the user can generate multiple sets of chains and use Gelman-Rubin diagnostics :cite:`gelman1992inference`.  An example of how to generate multiple chains with pymcmcstat can be found in the `Running Parallel Chains Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/running_parallel_chains/running_parallel_chains.ipynb>`_, which also includes information on how to calculate Gelman-Rubin diagnostics.
 
 Radiation Source Localization
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -406,11 +411,7 @@ This is a very simplified case, but it highlights another unique problem in whic
 
 Concluding Remarks
 ------------------
-In this paper we have demonstrated several distinct areas of scientific study where MCMC methods provide enhanced understanding of the underlying physics.  The pymcmcstat package presents a robust platform from which to perform a wide array of Bayesian inverse problems using the Delayed Rejection Adaptive Metropolis (DRAM) algorithm.
-
-Several examples were highlighted that demonstrated using pymcmcstat to calibrate different smart material systems.  For the dielectric elastomer VHB 4910, we calibrated the viscoelastic parameters and propagated the uncertainty through the model to generate credible and prediction intervals.  This provided insight regarding model limitations and led to the implementation of the fractional-order approach.  In consideration of ferroelectric materials, we used results obtained from high-fidelity DFT calculations to calibrate our Landau energy continuum approximation.  Given the multi-scale nature of this problem, accurate quantification of model parameter uncertainty is crucial.  Furthermore, observation of the pairwise correlation plot revealed that several parameters were strongly correlated.
-
-With regarding to radiation transport, a Bayesian approach to parameter estimation provides extensive information about possible source locations with the resulting posterior distributions.  The posteriors illuminate the probability of potential source locations, which can be used to motivate future detector placement.  In practice, isolating the source location to within the span of a few buildings is an extremely useful result as at that point a team with handheld detectors can likely complete the localization process.
+The pymcmcstat package presents a robust platform from which to perform a wide array of Bayesian inverse problems using the Delayed Rejection Adaptive Metropolis (DRAM) algorithm.  In this paper we have provided a basic description of Markov Chain Monte Carlo (MCMC) methods and outlined a general example of how to implement pymcmcstat.  Furthermore, we highlighted aspects of two distinct areas of scientific study where MCMC methods provided enhanced understanding of the underlying physics.
 
 To improve the overall usefulness of the pymcmcstat package, we will expand its functionality to allow for user-defined likelihood and prior functions (currently limited to Gaussian).  We designed the package to serve as a Python alternative for the MATLAB toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_, so it is important to maintain the features of the original user interface for ease of transition from one platform to another.  Overall, the package is applicable to a wide variety of scientific problems, and provides a nice interface for users who are potentially new to Bayesian methods.
 
