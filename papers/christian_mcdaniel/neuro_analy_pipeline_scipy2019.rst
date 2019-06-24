@@ -13,7 +13,7 @@ Developing a Graph Convolution-Based Analysis Pipeline for Multi-Modal Neuroimag
 
 .. class:: abstract
 
-Parkinson's disease (PD) is a highly prevalent neurodegenerative disease originating in subcortical areas of the brain and resulting in progressively worsening motor, cognitive, and psychiatric (e.g., depression) symptoms. Neuroimage data is an attractive research tool given the neurophysiological origins of the disease. Despite insights potentially available in magnetic resonance imaging (MRI) data, developing sound analytical techniques for this data has proven difficult. Principally, multiple image modalities are needed to compile the most accurate view possible; the process of incorporating multiple image modalities into a single holistic model is both poorly defined and extremely challenging. In this paper, we address these issues through the proposition of a novel graph-based convolutional neural network (GCN) architecture and present an end-to-end pipeline for preprocessing, formatting, and analyzing multimodal neuroimage data. We employ our pipeline on data downloaded from the Parkinson's Progression Markers Initiative (PPMI) database. Our GCN model outperforms baseline models, and uniquely allows for direct interpretation of its results.
+Parkinson's disease (PD) is a highly prevalent neurodegenerative condition originating in subcortical areas of the brain and resulting in progressively worsening motor, cognitive, and psychiatric (e.g., depression) symptoms. Neuroimage data is an attractive research tool given the neurophysiological origins of the disease. Despite insights potentially available in magnetic resonance imaging (MRI) data, developing sound analytical techniques for this data has proven difficult. Principally, multiple image modalities are needed to compile the most accurate view possible; the process of incorporating multiple image modalities into a single holistic model is both poorly defined and extremely challenging. In this paper, we address these issues through the proposition of a novel graph-based convolutional neural network (GCN) architecture and present an end-to-end pipeline for preprocessing, formatting, and analyzing multimodal neuroimage data. We employ our pipeline on data downloaded from the Parkinson's Progression Markers Initiative (PPMI) database. Our GCN model outperforms baseline models, and uniquely allows for direct interpretation of its results.
 
 Introduction
 ============
@@ -47,7 +47,7 @@ This section walks through our pipeline, which handles the formatting and prepro
 Data Formatting
 ------------------
 
-MRI data requires extensive artifact correction and removal before it can be used. MRI signals are acquired through the application of precisely coordinated magnetic fields and radiofrequency (RF) pulses. Each image is reconstructed from a series of recordings averaged over many individual signals. This inherently results in noisy measurements, magnetic-based artifacts, and artifacts from human error such as motion artifacts [:cite:`Wang2015,HBL2010`]. As such, extensive preprocessing must be performed to clean the data before analysis. Appendix A provides more details on the main MRI modalities.
+MRI signals are acquired through the application of precisely coordinated magnetic fields and radiofrequency (RF) pulses. Each image is reconstructed from a series of recordings averaged over many individual signals, and requires extensive artifact correction and removal before it can be used. This inherently results in noisy measurements, magnetic-based artifacts, and artifacts from human error such as motion artifacts [:cite:`Wang2015,HBL2010`]. As such, extensive preprocessing must be performed to clean the data before analysis. Appendix A provides more details on the main MRI modalities.
 
 Our pipeline assumes that a "multi-zip" download is used to get data from the PPMI database [3]_. The file :code:`neuro_format.py` combines the data from multiple download folders into a single folder, consolidating the multiple zip files and recombining data from the same subject.
 
@@ -60,7 +60,7 @@ Data Preprocessing
 
 This subsection discusses the various softwares and commands used to preprocess the multimodal MRI data. The bash script :code:`setup` should help with getting the necessary dependencies installed [8]_. The script was written for setting up a Google cloud virtual machine, and assumes the data and pipeline files are already stored in a Google cloud bucket.
 
-The standard software for preprocessing anatomical MRI (aMRI [1]_) data is Freesurfer [9]_. Freesurfer is an actively developed software with responsive technical support and rich forums. The software is dense and the documentation is lacking in some areas, so training may still be helpful, although not available in our case. The :code:`recon-all` command performs all the steps needed for standard aMRI preprocessing, including motion correction, registration to a common coordinate space using the Talairach atlas by default, intensity correction and thresholding, skull-stripping, region segmentation, surface tessellation and reconstruction, statistical compilation, etc.
+The standard software for preprocessing anatomical MRI (aMRI [1]_) data is Freesurfer [9]_. Although an actively developed software with responsive technical support and rich forums, receiving training for Freesurfer may still be helpful. The :code:`recon-all` command performs all the steps needed for standard aMRI preprocessing, including motion correction, registration to a common coordinate space using the Talairach atlas by default, intensity correction and thresholding, skull-stripping, region segmentation, surface tessellation and reconstruction, statistical compilation, etc.
 
 The entire process takes around 15 or more hours per image. Support for GPU-enabled processing was stopped years ago, and the :code:`-openmp <num_cores>` command, which allows parallel processing across the designated number of cores, may only reduce the processing time to around 8-10 hours per image [10]_. We found that running parallel single-core CPU processes worked the best, especially when many processing cores are available. For this we employed a Google Cloud Platform virtual machine and utilized the python module :code:`joblib.Parallel` to run many single-core processes in parallel. For segmentation, the Deskian/Killiany atlas is used, resulting in around 115 volume segmentations per image, to be used as the nodes for the graph.
 
@@ -206,7 +206,7 @@ The results from training the diffusion data on baseline models, and the combine
 
 .. figure:: attentions.png
 
-    The 16 regions with highest attention weighting across all training iterations are shown. :label:`attentions`
+    The 16 regions with highest attention weighting across all training iterations are shown. "L" and "R" indicate regions on the left or right hemisphere, respectively. "post.", "ant.", "sup.", "mid.", "rost.", "caud.", and "trans." indicate posterior, anterior, superior, middle, rostral, caudal, and transverse, respectively. :label:`attentions`
 
 .. table:: The results from our testing of the baseline algorithms on the features constructed from the diffusion data alone, and our graph convolutional network (GCN) which additionally incorporates anatomical information. The results are averaged across five training iterations, which use subsamples of the data to ensure class balance. :label:`baselines`
 
@@ -232,7 +232,7 @@ The results from training the diffusion data on baseline models, and the combine
   | Graph Convolutional NN  | **92.14%**   | **0.953** | **0.943**  |
   +-------------------------+--------------+-----------+------------+
 
-Discussions and Conclusions
+Discussion and Conclusion
 ===================================
 
 From the results on the baseline models, we can see that the features generated from the diffusion MRI data are suitable for distinguishing the PD vs. HC classes. For example, the relatively high performance of the SVM models demonstrate that the features are roughly linearly separable. Furthermore, we see from the improved performance of the GCN model that the incorporation of anatomical data improves the capacity for the data to be modeled. Of the 16 highest-weighted regions according to the GAT attentions layers, 9 coincide with lateral or contralateral regions identified by :cite:`ZHCLZW2018` as significantly contributing to the distinction between PD and HC classes. All but two of the regions listed in Figure :ref:`attentions` were from the left hemisphere, whereas the majority of regions in :cite:`ZHCLZW2018` were from the right hemisphere. We aren’t sure why this may be, but the stronger identification of left hemispheric regions aligns with asymmetries found by :cite:`CMDWKHZLDR2016`, wherein the left hemisphere is more significantly affected in early-stage PD.
@@ -251,40 +251,19 @@ Acknowledgements
 Data used in the preparation of this article were obtained from the Parkinson's Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For up-to-date information on the study, visit www.ppmi-info.org.
 PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation for Parkinson's Research and funding partners, including Abbvie, Allergan, Avid, Biogen, BioLegend, Bristol-Mayers Squibb, Colgene, Denali, GE Healthcare, Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer, Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily, Voyager, and Golub Capital.
 
-.. [1] In this paper we use “anatomical MRI” to refer to standard *T1-weighted* (T1w) MR imaging. “T1 weighted” refers to the specific sequence and timing of magnetic pulses and radio frequencies used during imaging. T1w MRI is a common MR imaging procedure; the important thing to note is that T1 weighting yields high-resolution images which show contrast between different tissue types, allowing for segmentation of different anatomical regions.
-.. [2] https://github.com/xtianmcd/ppmi_dl
-.. [3] When using the "Advanced Download" option on the PPMI database, the data is split into multiple zip files, often splitting up the data of a single subject.
-.. [4] https://nifti.nimh.nih.gov
-.. [5] https://www.dicomlibrary.com
-.. [6] https://github.com/rordenlab/dcm2niix
-.. [7] https://bids.neuroimaging.io
-.. [8] We install the softwares to the home (`~`) directory due to permission issues when connect to Google cloud virtual machines via the `ssh` command. Freesurfer's setup does not automatically adapt to installation in the home directory, so several of its environment variables need to be hard coded. See the `setup` bash script provided for details.
-.. [9] https://surfer.nmr.mgh.harvard.edu
-.. [10] In the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. It is also mentioned that the time required to transfer data on and off GPU cores may diminish the speedup provided by GPU processing. GPU support has not been provided by Freesurfer for quite some time, and we were unable to compile Freesurfer to use newer versions of CUDA. We tested multiple CPU multiprocessing approaches and found that running images in parallel with a single core per process was the fastest method.
-.. [11] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
-.. [12] Each subject has anatomical and diffusion MRI data for varying numbers of visits to the clinic. We use “clinic visit” or CV to refer to the MRI acquisitions (anatomical and diffusion) obtained during a single visit to the clinic.
-.. [13] http://brainsuite.org
-.. [14] http://trackvis.org/dtk/
-.. [15] https://github.com/tkipf/pygcn
-.. [16] https://github.com/Diego999/pyGAT
-.. [17] https://www.ppmi-info.org
-
 .. raw:: latex
 
    \bibliographystyle{plain}
 
-.. raw:: latex
-
-    \newpage
 
 Appendix A: MRI Modalities
 =============================
 
-The modality which serves as the basis for the nodes of the graphs is anatomical T1-weighted MRI (aMRI [1]_) data. This modality provides high resolution images which are quite useful for distinguishing different tissue types and region boundaries. The speed and relative simplicity of aMRI imaging results in fewer and less severe artifacts. For a given subject, images from the other modalities are often aligned to aMRI images, and this modality is often used to obtain brain masks (via skull stripping) and perform volumetric segmentation. Typical preprocessing includes motion-correction, intensity normalization, magnetic susceptibility correction, skull stripping, registration to a common brain atlas, and segmentation [9]_ [:cite:`Wang2015,HBL2010`].
+The modality which serves as the basis for the nodes of the graphs is anatomical T1-weighted MRI (aMRI [1]_) data. This modality provides high resolution images which are quite useful for distinguishing different tissue types and region boundaries. For a given subject, images from the other modalities are often aligned to aMRI images (i.e., *coregistration*), and this modality is often used to obtain brain masks (via skull stripping) and perform volumetric segmentation. Typical preprocessing includes motion-correction, intensity normalization, magnetic susceptibility correction, skull stripping, registration to a common brain atlas, and segmentation [9]_ [:cite:`Wang2015,HBL2010`].
 
-Diffusion-weighted MR imaging (dMRI) introduces additional noise sources. dMRI measures the diffusion of water molecules in the brain by applying pulsed magnetic field gradients in numerous directions, resulting in multiple 3D volumes for a single image. Typically, a higher resolution image (resembling anatomical images) is taken as the first volume, and is termed the *b0* volume. During processing, all other volumes are aligned to this volume. dMRI data is usually obtained using an MRI variant known as spin-echo echo planar imaging (EPI), which results in artifacts such as eddy currents and magnetic susceptibility artifacts. Typical preprocessing includes correcting these artifacts and co-registering the diffusion data to aMRI images of the same acquisition, for comparison to the aMRI data during analysis [:cite:`Wang2015,HBL2010`].
+Diffusion-weighted MR imaging (dMRI) introduces additional noise sources. dMRI measures the diffusion of water molecules in the brain by applying pulsed magnetic field gradients in numerous directions, resulting in multiple 3D volumes for a single image. Typically, a higher resolution image (resembling anatomical images) is taken as the first volume, and is termed the *b0* volume and used for coregistration. dMRI acquisition results in artifacts such as eddy currents and magnetic susceptibility artifacts. Typical preprocessing includes correcting these artifacts and co-registering the diffusion data to aMRI images of the same subject [:cite:`Wang2015,HBL2010`].
 
-Once dMRI data is cleaned, the information can be processed to trace the directionality of water diffusion across voxels, forming connected paths between them. This process, called *tractography* estimates white matter (WM) tracts, which are bundles of nerve fibers, or axons, that connect regions of the brain. The specific tractography algorithm can significantly affect the analysis results, so we incorporate the output from four different tractography algorithms in our model.
+Once dMRI data is cleaned, the information can be processed to trace the directionality of water diffusion across voxels, forming connected paths between them. This process, called *tractography* estimates white matter (WM) tracts, which are bundles of nerve fibers, or axons, that connect regions of the brain. The specific tractography algorithm can significantly affect the analysis results.
 
 Appendix B: Graph Convolutional Networks
 ===========================================
@@ -311,13 +290,7 @@ We can now define a graph convolution of input signals :math:`x` with filters :m
 
 Where :math:`x` is a specific instance of :math:`f` (a single connectivity matrix of graph signals), :math:`U` is the matrix of eigenvectors of :math:`\textup{\L{}}` given by the graph FT, and :math:`\theta` are the parameters we wish to learn. We consider :math:`g_{\theta}` as a function of the eigenvalues :math:`\Lambda`, :math:`g_{\theta}(\Lambda) = diag(\theta)`; thus the parameters :math:`\theta` are the Fourier coefficients from the graph FT on :math:`\textup{\L{}}` :cite:`KW2017`.
 
-Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\textup{\L{}}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}'(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\textup{\L{}}} = \frac{2}{l_{max}} \textup{\L{}}-I_{N}`, we have
-
-.. math::
-
-    g_{\theta}' * x \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\textup{\L{}}})x
-
-:cite:`KW2017`.
+Finding these parameters are computationally expensive as multiplication with :math:`U` is :math:`O(N^{2})`, and :math:`\textup{\L{}}` itself may be quite expensive to calculate. So, an approximation is made in terms of Chebyshev polynomials :math:`T_{k}(x)` up to the :math:`K^{th}` order :cite:`HVG2011`. Chebyshev polynomials are recursively defined :math:`T_{k}(x) = 2xT_{k-1}(x) - T_{k-2}(x)`, with :math:`T_{0}(x) = 1` and :math:`T_{1}(x) = x`. Now, :math:`g_{\theta}'(\Lambda) \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\Lambda})`, where rescaled :math:`\tilde{\Lambda} = \frac{2}{l_{max}} \Lambda - I_{N}` and :math:`l_{max}` is the largest eigenvalue of :math:`\Lambda`. Defining :math:`\tilde{\textup{\L{}}} = \frac{2}{l_{max}} \textup{\L{}}-I_{N}`, we have :math:`g_{\theta}' * x \approx \sum_{k=0}^{K} \theta_{k}'T_{k}(\tilde{\textup{\L{}}})x` :cite:`KW2017`.
 
 The expression is :math:`K`-localized, relying only on nodes that are :math:`K`-steps away from a given node (its :math:`K^{th}`-order neighborhood). Evaluating such a function is :math:`O(\mathcal{E})`. By limiting :math:`K=1` we have a linear function with respect to :math:`\textup{\L{}}` as the preactivation :math:`\hat{H}` of our convolutional layer. Wrapping :math:`\hat{H}` in a nonlinear activation function and stacking multiple layers gives us our graph convolutional network architecture. This so-called deep learning architecture removes the rigid parameterization enforced by Chebyshev polynomials :cite:`KW2017`.
 
@@ -327,18 +300,30 @@ The expression is :math:`K`-localized, relying only on nodes that are :math:`K`-
 
     g_{theta} * x \approx \theta(I_{N} + D^{\frac{-1}{2}}AD^{\frac{-1}{2}})x.
 
-:math:`k` successive applications of this operator effectively convolve the :math:`k^{th}`-order neighborhood of a given node, but may also lead to numerical instabilities and the exploding/vanishing gradient problem, since :math:`I_{N}+ D^{\frac{-1}{2}}AD^{\frac{-1}{2}}` now has eigenvalues in [0,2]. :cite:`KW2017` solve this issue via a *renormalization trick* such that :math:`I_{N}+ D^{\frac{-1}{2}}AD^{\frac{-1}{2}}` becomes :math:`\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`, where :math:`\tilde{A} = A+I_{N}` and :math:`\tilde{D}_{ii} = \sum_{j} \tilde{A}_{ij}`. I.e., self-loops have been added to the adjacency matrix. The weights given to these connections should bear similar importance to the other connections, e.g., using the mean edge weight.
+:math:`k` successive applications of this operator effectively convolve the :math:`k^{th}`-order neighborhood of a given node, but may also lead to numerical instabilities and the exploding/vanishing gradient problem, since :math:`I_{N}+ D^{\frac{-1}{2}}AD^{\frac{-1}{2}}` now has eigenvalues in [0,2]. To solve this, :cite:`KW2017` convert :math:`I_{N}+ D^{\frac{-1}{2}}AD^{\frac{-1}{2}}` to :math:`\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}`, where :math:`\tilde{A} = A+I_{N}` and :math:`\tilde{D}_{ii} = \sum_{j} \tilde{A}_{ij}`. I.e., self-loops have been added to the adjacency matrix. The weights given to these connections should bear similar importance to the other connections, e.g., using the mean edge weight.
 
-Finally, the equation is generalized to a signal :math:`X \in \mathbb{R}^{NxC}` with :math:`C`-dimensional feature vectors at every node (each *element* will learn a single parameter) and :math:`F` filters:
-
-.. math::
-
-    Z = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}} X \Theta,
-
-where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \mathbb{R}^{NxF}` is the convolved signal matrix. This equation is of complexity :math:`O(|\mathcal{E}|FC)`. Generalizing :math:`X=H(l)` as the inputs to a layer, where :math:`H(0)` is the original data and :math:`\Theta` to the weight matrix :math:`\textbf{W}(l)` at a layer :math:`l`, we can calculate a hidden layer as
+Finally, the equation is generalized to a signal :math:`X \in \mathbb{R}^{NxC}` with :math:`C`-dimensional feature vectors at every node (each *element* will learn a single parameter) and :math:`F` filters: :math:`Z = \tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}} X \Theta`, where :math:`\Theta \in \mathbb{R}^{CxF}` are the parameters and :math:`Z \in \mathbb{R}^{NxF}` is the convolved signal matrix. This equation is of complexity :math:`O(|\mathcal{E}|FC)`. Generalizing :math:`X=H(l)` as the inputs to a layer, where :math:`H(0)` is the original data and :math:`\Theta` to the weight matrix :math:`\textbf{W}(l)` at a layer :math:`l`, we can calculate a hidden layer as
 
 .. math::
 
     H(l+1) = \sigma(\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}H(l)\textbf{W}(l)).
 
 The time complexity of computing a single attention mechanism is :math:`O(|\mathcal{V}|FF' + |\mathcal{E}|F')`, where :math:`F` is the number of input features and :math:`F'` is the number of output features.
+
+.. [1] In this paper we use “anatomical MRI” to refer to standard *T1-weighted* (T1w) MR imaging. “T1 weighted” refers to the specific sequence and timing of magnetic pulses and radio frequencies used during imaging. T1w MRI is a common MR imaging procedure; the important thing to note is that T1 weighting yields high-resolution images which show contrast between different tissue types, allowing for segmentation of different anatomical regions.
+.. [2] https://github.com/xtianmcd/ppmi_dl
+.. [3] When using the "Advanced Download" option on the PPMI database, the data is split into multiple zip files, often splitting up the data of a single subject.
+.. [4] https://nifti.nimh.nih.gov
+.. [5] https://www.dicomlibrary.com
+.. [6] https://github.com/rordenlab/dcm2niix
+.. [7] https://bids.neuroimaging.io
+.. [8] We install the softwares to the home (`~`) directory due to permission issues when connect to Google cloud virtual machines via the `ssh` command. Freesurfer's setup does not automatically adapt to installation in the home directory, so several of its environment variables need to be hard coded. See the `setup` bash script provided for details.
+.. [9] https://surfer.nmr.mgh.harvard.edu
+.. [10] In the release notes, it is recommended for multi-subject pipelines to use a single core per image and process subjects in parallel, and in the forums it is discussed that multiprocessing may only reduce the processing time to around 10 hours. It is also mentioned that the time required to transfer data on and off GPU cores may diminish the speedup provided by GPU processing. GPU support has not been provided by Freesurfer for quite some time, and we were unable to compile Freesurfer to use newer versions of CUDA. We tested multiple CPU multiprocessing approaches and found that running images in parallel with a single core per process was the fastest method.
+.. [11] https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
+.. [12] Each subject has anatomical and diffusion MRI data for varying numbers of visits to the clinic. We use “clinic visit” or CV to refer to the MRI acquisitions (anatomical and diffusion) obtained during a single visit to the clinic.
+.. [13] http://brainsuite.org
+.. [14] http://trackvis.org/dtk/
+.. [15] https://github.com/tkipf/pygcn
+.. [16] https://github.com/Diego999/pyGAT
+.. [17] https://www.ppmi-info.org
