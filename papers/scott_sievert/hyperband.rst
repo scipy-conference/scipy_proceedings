@@ -627,13 +627,15 @@ Performance
    :align: center
    :scale: 75%
 
-   A comparison of how Dask influences Hyperband. The priority ``high-scores``
-   prioritizes training models with high score; ``none`` does not prioritize and
-   fits models in the order they are received by Dask Distributed's scheduler.
-   Of course, the implementation behind ``high-scores`` is in Dask-ML.
-   Both models have the same hyperparameters, train
-   data and validation data, and also have the same internal random state. The
-   hyperparameters are chosen from a run in Figure :ref:`fig:synthetic-performance`.
+   A visualization of how the Dask prioritization scheme influences the
+   Hyperband's time to solution. Dask assigns prioritizes training models with
+   higher scores (via ``high-scores``). When Dask uses the default priority
+   scheme it fits models in the order they are received by Dask Distributed's
+   scheduler (via  ``fifo``). Only the prioritization in the figure changes
+   because both ``high-scores`` and ``fifo`` have the same hyperparameters,
+   train/validation data, and assign the same internal random state to models.
+   The hyperparameters are chosen from a run in Figure
+   :ref:`fig:synthetic-performance`.
    :label:`fig:synthetic-priority`
 
 Two hyperparameter optimizations are compared, Hyperband and random search and
@@ -907,7 +909,7 @@ their default values and the values chosen for tuning.
   :math:`10^{-6}` and :math:`10^{-3}`
 * ``batch_size``, the number of examples used to approximate the gradient at
   each optimization iteration. This value defaults to 200 and is chosen to be one of :math:`[32, 64,
-  \ldots, 512`.
+  \ldots, 512]`.
 * ``learning_rate`` controls the learning rate decay scheme, either constant or
   via the "``invscaling``" scheme, which has the learning rate decay like
   :math:`\gamma_0/t^p` where :math:`p` and :math:`\gamma_0` are also tuned.
@@ -932,7 +934,7 @@ Here are some of the other hyperparameters tuned:
 * ``estimator__init``: how should the estimator be initialized before training?
   Choices are Xavier :cite:`xavier` and Kaiming :cite:`kaiming` initialization.
 * ``batch_size``: how many examples should the optimizer use to approximate the
-  gradient? Choices :math:`32, 64, \ldots,  512]`.
+  gradient? Choices :math:`[32, 64, \ldots,  512]`.
 * ``weight_decay``: how much of a particular type of regularization should the
   neural net have? Regularization helps control how well the model performs on
   unseen data. This value is chosen to be zero 1/6th of the time, and if not
