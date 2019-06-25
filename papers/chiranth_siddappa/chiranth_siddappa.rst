@@ -301,7 +301,7 @@ size operands arises. This module
 takes in two complex numbers and performs a pipelined multiplication on the data.
 Before the result is provided to the master, the result is truncated.
 It should be noted that no timing constraint violations were encountered during the implementation. The only timing
-constraint that was provided was for the fabric clock, and all other constraints were Vivado defaults.
+constraint that was provided was the slew rate for the fabric clock, and all other constraints were Vivado defaults.
 
 The specific pipeline steps are presented in Table :ref:`cpx-multiply-stages` which shows which operations are completed
 in which pipeline stage.
