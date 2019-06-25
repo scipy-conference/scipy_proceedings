@@ -15,7 +15,7 @@
 :author: Brutus
 :email: brutus@rome.it
 :institution: Unaffiliated
-:bibliography: mybib
+
 
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690

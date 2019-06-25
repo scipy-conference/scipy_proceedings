@@ -1,11 +1,11 @@
 :author: Rajeswari Sivakumar
 :email: rajeswari.a.sivakumar@gmail.com
 :institution: University of Georgia
+-
 
 :author: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
-
 
 
 
@@ -45,12 +45,12 @@ Parkinson’s Disease
 Parkinson’s disease (PD) is one of the most common neurodegenerative disorders.
 The disease mainly affects the motor systems and its symptoms can include shaking,
 slowness of movement, and reduced fine motor skills. As of 2015 an estimated
-6.2 million globally were afflicted with the disease. Its cause is largely unknown
+6.2 million globally were afflicted with the disease [chaudhuri2016]. Its cause is largely unknown
 and there are some treatments available, but no cure has yet been found.
 Early diagnosis of PD is a topic of keen interest to diagnosticians and
 researchers alike. Currently Parkinson’s is diagnosed based on the presence of
 observable motor symptoms and change in symptoms in response to medications that
-target dopaminergic receptors such as Levdopa.
+target dopaminergic receptors such as Levodopa.
 The problem with this approach is that it relies on treating symptoms instead of
 preventing them. Once motor symptoms present, at least 60\% of neurons have been
 affected and there is little likelihood of healing them fully. Additionally
@@ -66,16 +66,19 @@ and better treatments for the disease. The cohort consists of approximately 400
 de novo, untreated PD subjects and 200 healthy subjects followed longitudinally
 for clinical, imaging and biospecimen biomarker assessment. The PPMI data set is
 a collection of biomarker data collected from a longitudinal study of Parkinson’s
-and control subjects. They have thus far collected DaT scan, MRI, fMRI, and CT
-scan data from several hundred subjects in 6 month intervals. They first began
-collecting data in 2010, funded by the Michael J.Fox Foundation.
+and control subjects. They have thus far collected DaT (dopamine transporter) scan,
+MRI (magnetic resonance imaging), fMRI (functional magnetic resonance imaging), and CT
+(computerized tomography) scan data from several hundred subjects in 6 month intervals.
+They first began collecting data in 2010, funded by the Michael J.Fox Foundation.
 The dataset chosen for this paper was PPMI’s Diffusion Tensor Imaging (DTI) records.
-DTI has been shown to be a promising biomarker in Parkinsonian symptoms and can
+DTI has been shown to be a promising avenue to explore biomarkers in Parkinsonian symptoms and can
 provide unique insights into brain network connectivity. Moreover, the DTI data was
 one of PPMI’s cleanest and largest datasets and thus expected to be one of the most
 useful for further analysis. A DTI record is a four-dimensional dataset comprised of
 a time-series of a three-dimensional imaging sequence of the brain. PPMI’s DTIs
 generally consisted of 65 time slices, each taken approximately five seconds apart.
+This method tracks movement of water in brain over the discrete time steps, creating a
+representation of the brain that emphasizes the white matter structures.
 
 Existing Work
 -------------
@@ -128,8 +131,9 @@ able to achieve 98.53\% using ensemble learning methods trained on
 T1 weighted MRI data. However Banerjee used several domain knowledge based feature
 extraction methods to preprocess their data including image registration,
 segmentation, and volumetric analysis.
-Our present research strikes a balance between the two. While our
-autoregressive model does utilize a basic understanding of relevance of time
+
+The present research strikes a balance between feature selection and domain knowledge.
+While our autoregressive model does utilize a basic understanding of relevance of time
 in diffusion tensor imaging, we do not utilize any other domain specific
 knowledge to inform our feature extraction. Our hope is to build a
 generalizable approach that can be applied to other data structured similarly
@@ -161,18 +165,19 @@ the problem as:
    A x = b
 
 where :math:`A` is a matrix and :math:`x` and :math:`b` are vectors. When
-trying to solve this equation, we could apply a matrix decompositions
+trying to solve this system of linear equation, we could apply a matrix decompositions
 operations to the matrix :math:`A`, to more efficiently solve the system. By
 finding the products of the of :math:`x` and :math:`b` with the the one matrix
 resulting from the decomposition and the inverse of the other,
 we can solve the system of equations with significantly fewer operations.
-We can generalize this premise to machine learning, when model complexity of
+This can be generalized to machine learning applications where increased complexity of
 models, often result in exponential increases in number of computations.
-This also affects the applications of new algorithms and pipelines can be used
-in because of their complexity.
+This also affects the applications of new algorithms and pipelines, Those that
+are too complex and consequently have too many operations become too computationally
+intensiveto be practical to use in some cases.
 We can choose specific types of decompositions that also allow us to preserve
 unique information about original matrix while also reducing the the size of
-the matrix. For example, in the case of singular value decomposition we are
+the matrix. Singular Value Decomposition  For example, in the case of singular value decomposition we are
 trying to solve:
 
 .. math::
@@ -181,7 +186,7 @@ trying to solve:
 
 Where :math:`A` is the original matrix, of size :math:`m * n`, :math:`U` is an
 orthogonal matrix of size :math:`m * n`, :math:`S` is a diagonal matrix of
-size :math:`n * n`, and :math:`V T` is an orthogonal matrix of size :math:`n * n`.
+size :math:`n * n`, and :math:`V^T` is an orthogonal matrix of size :math:`n * n`.
 This generalization of the eigendecomposition is useful in compressing matrices
 without losing information. It will come into play with our final experiment
 using linear dynamical systems to extract features from the DTIs.
@@ -193,9 +198,15 @@ matrices, or tensors, we come to Tucker decomposition.
    Tucker decomposition, visualized. :label:`figure1`
 
 
-Similarly to SVD, it is used to compress tensors. We are thus able to use it
-as means to describe brain images without breaking down specific regions of
-interest or or focusing on specific brain images.
+Similarly to SVD, Tucker decomposition is used to compress tensors, and can be
+applied to any tensor of 3 or more dimensions. This is illustrated using a tensor of
+three dimensions in Figure 1. The resulting core tensor from the decomposition still
+maintains the same shape and number of dimensions, but each are scaled down
+to the size specified. We are thus able to use it as means to scale brain images to a
+set of representative features without breaking down specific regions of
+interest.
+
+
 
 Methods
 -------
@@ -207,6 +218,9 @@ the two approaches for the quality of features extracted. To this end, the
 final feature vectors produced by each method is then passed on to a random
 forest classifier, where the accuracy of the final trained model is measured
 on a classification task to predict control or Parkinson’s (PD) group.
+
+The objective is to represent the original DTI as an abstracted tensor that is the
+product of one of the dimensionality reduction techniques used in each experiment.
 
 Algorithm Selection
 +++++++++++++++++++
@@ -254,7 +268,9 @@ transition model to represent the flow of water over the time steps of the
 image. This will allow us to build a three-dimensional representation of the
 brain from the images that will show the flow of water and the distribution of
 white matter in the brain. We evaluate the produced transition matrix as
-features to be applied to the classification pipeline.
+features to be applied to the classification pipeline. The nature of the linear
+dynamical systems allow us to directly model the flow of water via the net change
+over time in the DTI.
 
 Results
 -------
@@ -279,8 +295,22 @@ examining several corresponding decomposed core and original slices.
    from tensor decomposition output :label:`figure2`
 
 
-.. raw:: latex
+.. table:: Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied :label:table1
+   :class: w
 
+   +----------------------------+-------------+------------+
+   |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
+   +----------------------------+-------------+------------+
+   | -                          |      0.94   |     0.94   |
+   +----------------------------+-------------+------------+
+   | PCA                        |      0.94   |     0.94   |
+   +----------------------------+-------------+------------+
+   | LDA                        |      0.82   |     0.81   |
+   +----------------------------+-------------+------------+
+   | Kernel PCA                 |      0.94   |     0.94   |
+   +----------------------------+-------------+------------+
+
+.. raw:: latex
    \begin{table}
 
      \begin{longtable}{|l|l|l|}
@@ -293,17 +323,28 @@ examining several corresponding decomposed core and original slices.
      \hline
      LDA & 0.82 & 0.81 \tabularnewline
      \hline
-     Kernel PcA & 0.94 & 0.94 \tabularnewline
+     Kernel PCA & 0.94 & 0.94 \tabularnewline
      \hline
      \end{longtable}
-
-     \caption{Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied
- {label}{table1}}
 
    \end{table}
 
 Experiment II
 +++++++++++++
+.. table:: Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied :label:table1
+   :class: w
+
++----------------------------+-------------+------------+
+|  Dimensionality Reduction  |  F-measure  |  Accuracy  |
++----------------------------+-------------+------------+
+| -                          |      0.90   |     0.82   |
++----------------------------+-------------+------------+
+| PCA                        |      0.89   |     0.81   |
++----------------------------+-------------+------------+
+| LDA                        |      0.84   |     0.74   |
++----------------------------+-------------+------------+
+| Kernel PCA                 |      0.93   |     0.89   |
++----------------------------+-------------+------------+
 
 .. raw:: latex
 
@@ -319,19 +360,18 @@ Experiment II
      \hline
      LDA & 0.84 & 0.74 \tabularnewline
      \hline
-     Kernel PcA & 0.93 & 0.89 \tabularnewline
+     Kernel PCA & 0.93 & 0.89 \tabularnewline
      \hline
      \end{longtable}
 
-     \caption{Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied
- {label}{table2}}
+     \caption{Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied {label}{table2}}
 
    \end{table}
 
 
 We were able to achieve accuracy of 82\% with random forest classifier alone.
 This outperforms previous benchmarks in training classifiers on synthetic
-features derived from MR images. Compare to present results Cole et al. achieved
+features derived from MR images. Compared to present results, Cole et al. achieved
 only 70\% accuracy at best on synthetic features generated from T1 weighted MRI
 scans. Furthermore, based on the F-measure scores across the experiment
 conditions, we can reasonably say that our model is not skewed as a consequence
@@ -347,36 +387,28 @@ respectively. Based on this, we considered non-linear dimensionality reduction
 would be more effective. To this end we used Kernel PCA with RBF kernel,
 which effectively improved accuracy to 89\%.
 
+Discussion
+----------
+In summary we can conclude that dimensionality reduction is a useful method for
+extracting meaningful features from brain imaging. Furthermore the impressive
+performance of these features in machine learning applications indicates that at
+least some subset of the the 
+
+Acknowledgements
+----------------
+Data used in the preparation of this article were obtained from the Parkinson's
+Progression Markers Initiative (PPMI) database (www.ppmi-info.org/data). For
+up-to-date information on the study, visit www.ppmi-info.org.
+PPMI - a public-private partnership - is funded by the Michael J. Fox Foundation
+for Parkinson's Research and funding partners, including Abbvie, Allergan, Avid,
+Biogen, BioLegend, Bristol-Mayers Squibb, Colgene, Denali, GE Healthcare,
+Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer,
+Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily,
+Voyager, and Golub Capital.
+
+
+
 
 References
 ----------
-
-Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
-
-Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
-
-Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
-
-Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
-
-Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
-
-Cochrane, C. J., & Ebmeier, K. P. (2013). Diffusion tensor imaging in parkinsonian syndromes A systematic review and meta-analysis. Neurology, 80(9), 857-864.
-
-Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
-
-Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
-
-Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
-
-Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
-
-Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
-
-Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
-
-Swiebocka-Wiek, J. (2016, September). Skull Stripping for MRI Images Using Morphological Operators. InIFIP International Conference on Computer Information Systems and Industrial Management (pp. 172-182). Springer International Publishing.
-
-Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
-
-Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
+.. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
