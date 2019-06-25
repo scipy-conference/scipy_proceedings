@@ -155,8 +155,8 @@ both frequency and time. This type of visualization is very useful for real-worl
 this project, care was taken in truncation choices to ensure that the correlation summation ensures signal energy
 retention.
 In this project, the CAF module that has been implemented will return a time offset index and frequency offset index
-back to the user based off provided build parameters shown in Listing :ref:`caf-listing`, described in a later
-section for the CAF Module.
+back to the user based off provided build parameters shown in the code listing for the Python class `CAF`,
+described in a later section for the CAF Module.
 When writing the module, all simulation and testing was done at the sample by sample level to ensure validity so the CAF
 surface was not used in testing. A method for computing the CAF using the dot product and frequency shifts has been
 published to the package. This implementation is specific to this project in that it uses a sample size that is twice
