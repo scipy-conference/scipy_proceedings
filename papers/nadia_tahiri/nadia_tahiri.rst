@@ -86,7 +86,7 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
    
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
-An :math:`F_1` statistics maximization algorithm [NCLC12]_ (see the Statistics section),, 
+An :math:`F_1` statistics maximization algorithm [NCLC12]_ (see the Statistics section), 
 based on dynamic programming, was used to achieve objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method [GBC16]_, based on Recurrent Neuron Networks (RNN) 
