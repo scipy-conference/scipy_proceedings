@@ -503,9 +503,7 @@ Acknowledgments
 ---------------
 
 Thanks to Jin Soo Ihm for benchmarking the neighbor finding features of ``freud`` against ``scipy``.
-Support for the design and development of ``freud`` has evolved over time and programmatic research directions.
-Conceptualization and early implementations were supported in part by the DOD/ASD(R&E) under Award No. N00244-09-1-0062 and also by the National Science Foundation, Integrative Graduate Education and Research Traineeship, Award # DGE 0903629 (to E.S.H. and M.P.S.).
-A majority of the code development including all public code releases was supported by the National Science Foundation, Division of Materials Research under a Computational and Data-Enabled Science & Engineering Award # DMR 1409620.
-M.P.S. also acknowledges support from the University of Michigan Rackham Predoctoral Fellowship program.
+The ``freud`` library's code development and public code releases are supported by the National Science Foundation, Division of Materials Research under a Computational and Data-Enabled Science & Engineering Award # DMR 1409620 (2014-2018) and the Office of Advanced Cyberinfrastructure Award # OAC 835612 (2018-2021).
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
-Computational resources and services supported in part by Advanced Research Computing at the University of Michigan, Ann Arbor.
+M.P.S acknowledges funding from the Toyota Research Institute; this article solely reflects the opinions and conclusions of its authors and not TRI or any other Toyota entity.
+Data for Figure 7 generated on the Extreme Science and Engineering Discovery Environment (XSEDE), which is supported by National Science Foundation grant number ACI-1053575; XSEDE award DMR 140129.
