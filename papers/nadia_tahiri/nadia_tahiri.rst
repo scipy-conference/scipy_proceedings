@@ -137,7 +137,7 @@ The product categories were determined with the purchase histories is the curren
 does not allow a new product to be bought by a user (i.e., every user can only buy products that were in at least one of its previous shopping baskets).
 
 We denoted two types of features: categorical and quantitative variables. 
-The difficulty to manage the categorical variable is very important in our study. 
+The difficulty of managing the categorical variables is very important in our study. 
 Only `distance` and `special` variables are quantitative, the rest of the variables are categorical.
 To manage the categorical variables, we applied a hashing scheme to deal 
 with large scale categorical features. The hash function takes into account the input and output vectors length.
