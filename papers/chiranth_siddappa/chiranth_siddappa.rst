@@ -420,14 +420,6 @@ module used as an example in this section are used in Fig. :ref:`freq-shift-inou
 
    Cosine centered at 20kHz with 8-bits and 100Hz resolution. :label:`dds-one`
 
-.. code-block:: Python
-
-   class SigGen(CafVerilogBase):
-
-       def __init__(self, freq_res, fs, n_bits,
-                    output_dir='.'):
-
-
 Frequency Shift
 ---------------
 
@@ -442,18 +434,9 @@ on the signal generator output.
 
    Input signal at 50kHz (top), and output signal at 70kHz (bottom). :label:`freq-shift-inout`
 
-A code listing showing the inputs to the `FreqShift` Python class is shown. The
-additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
-represents. We see that the same parameters are passed to the `FreqShift` class so that the `SigGen` module can be
-instantiated internally.
-
-.. code-block:: Python
-
-   class FreqShift(CafVerilogBase):
-
-        def __init__(self, x, freq_res, fs, n_bits,
-                     i_bits=12, q_bits=0,
-                     neg_shift=False, output_dir='.'):
+Required inputs for the `FreqShift` Python class are the input vector 'x', and the number of bits for the I and Q data that it
+represents. The same parameters are passed to the `FreqShift` class so that the `SigGen` module can be
+instantiated internally and accessed for naming by the Jinja template for the module.
 
 Cross Correlation
 -----------------
