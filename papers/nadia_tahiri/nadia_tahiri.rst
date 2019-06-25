@@ -316,7 +316,7 @@ regression with a variety of response distributions including Gaussian [Car03]_,
 The composition of the shopping history list is not complete in the sense we do not have the composition of the baskets for each user for all weeks.
 Finally, missing values in the collected data can be easily managed.
 
-The data are divided into two groups (training and validation) which comprising 90% and 10% of the data respectively.
+The data are divided into two groups (training and validation) which comprise 90% and 10% of the data respectively.
 After simulating the dataset, the strategy used was to merge real and simulated data and then split them into two groups (training and validation datasets). 
 The test set was composed of the real and simulated dataset.
 The final model has two neural networks and a GBT classifier.
