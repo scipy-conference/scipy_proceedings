@@ -164,8 +164,6 @@ and we presented in detail the results of the simulation step.
 For :math:`store\_id`, we started with an initial store and changed stores based on the proportion of common products between baskets.
 If we assumed that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)` independently, 
 the distance between this store and the consumer home located originally :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
-Assuming that the store coordinates are normally distributed :math:`\mathcal{N}(0,\sigma^2)`,
-the distance between a given store and the consumer’s home :math:`(0,0)` follows a Rayleigh distribution [KR05]_ with the :math:`\sigma` parameter.
 Finally, we increased the value of the `special` random variable. Its value has been drawn from a Boltzmann distribution [AAR+18]_.
 We observed that the baskets generated follow the same distribution that the original basket in terms of the basket size
 (see Figure :ref:`orderfrequency`).
