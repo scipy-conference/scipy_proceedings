@@ -50,7 +50,7 @@ and there are some treatments available, but no cure has yet been found.
 Early diagnosis of PD is a topic of keen interest to diagnosticians and
 researchers alike. Currently Parkinson’s is diagnosed based on the presence of
 observable motor symptoms and change in symptoms in response to medications that
-target dopaminergic receptors such as Levodopa.
+target dopaminergic receptors such as Levodopa. [sveinbjornsdottir2016]
 The problem with this approach is that it relies on treating symptoms instead of
 preventing them. Once motor symptoms present, at least 60\% of neurons have been
 affected and there is little likelihood of healing them fully. Additionally
@@ -60,7 +60,7 @@ with other motor neuron diseases.
 Parkinsons Progression Markers Initiative Datasets
 ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-The Parkinson’s Progression Markers Initiative (PPMI) is an observational
+The Parkinson’s Progression Markers Initiative (PPMI) [marek2011] is a
 clinical study designed to identify PD biomarkers and contribute towards new
 and better treatments for the disease. The cohort consists of approximately 400
 de novo, untreated PD subjects and 200 healthy subjects followed longitudinally
@@ -78,7 +78,7 @@ useful for further analysis. A DTI record is a four-dimensional dataset comprise
 a time-series of a three-dimensional imaging sequence of the brain. PPMI’s DTIs
 generally consisted of 65 time slices, each taken approximately five seconds apart.
 This method tracks movement of water in brain over the discrete time steps, creating a
-representation of the brain that emphasizes the white matter structures.
+representation of the brain that emphasizes the white matter structures.[soares2013]
 
 Existing Work
 -------------
@@ -109,10 +109,10 @@ interesting finding was a notable increase in accuracy when using group size
 rebalancing techniques to counteract the effect of cohort sample-size disparities
 (there are many more patients than control subjects), increasing accuracy in one
 SVM classifier from 75.9\% to 96.3\%.
-Baytas et al. recognized the inherent difficulty of using time-series analysis
+Researchers in [baytas2017] recognized the inherent difficulty of using time-series analysis
 techniques on longitudinal data collected at irregularly-spaced intervals and
 proposed a new Long-Short Term Memory (LSTM) technique: Time-Aware LSTM (T-LSTM).
-Simuni et al. (2016) found that the subgroup PD classification of
+In [simuni2016] it was found that the subgroup PD classification of
 tremor dominant (TD) versus postural instability gait disorder dominant (PIGD)
 has substantial variability, especially in the early stages of diagnosis.
 For this reason no attempt was made in this paper to include subtype assignment,
@@ -413,32 +413,31 @@ Voyager, and Golub Capital.
 References
 ----------
 .. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
-Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
 
-Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
+.. [sveinbjornsdottir2016] Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
 
-Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
+.. [rabanser2017] Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
 
-Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
+.. [vos2016]Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
 
-Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
+.. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
 
-Cochrane, C. J., & Ebmeier, K. P. (2013). Diffusion tensor imaging in parkinsonian syndromes A systematic review and meta-analysis. Neurology, 80(9), 857-864.
+.. [cochrane2013] Cochrane, C. J., & Ebmeier, K. P. (2013). Diffusion tensor imaging in parkinsonian syndromes A systematic review and meta-analysis. Neurology, 80(9), 857-864.
 
-Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
+.. [soares2013] Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
 
-Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
+.. [chahine2016] Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
 
-Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
+.. [dinov2016] Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
 
-Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
+.. [baytas2017] Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
 
-Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
+.. [simuni2016] Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
 
-Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
+.. [adeli2017] Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
 
-Swiebocka-Wiek, J. (2016, September). Skull Stripping for MRI Images Using Morphological Operators. InIFIP International Conference on Computer Information Systems and Industrial Management (pp. 172-182). Springer International Publishing.
+.. [swiebocka2016] Swiebocka-Wiek, J. (2016, September). Skull Stripping for MRI Images Using Morphological Operators. InIFIP International Conference on Computer Information Systems and Industrial Management (pp. 172-182). Springer International Publishing.
 
-Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
+.. [cole2016] Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
 
-Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
+.. [banerjee2016] Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
