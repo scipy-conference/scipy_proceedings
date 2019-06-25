@@ -549,9 +549,10 @@ design layout growth.
 CAF Module
 ----------
 
-The CAF module uses a generate variable to implement the frequency shifts and corresponding cross correlations. A
-reference buffer and a capture buffer are instantiated in this module that provide the input to the pipeline as shown in
-Fig. :ref:`caf-block-diag`. This module is a slave to a master as it is being driven by the data lines.
+The CAF module uses a generate variable, which is part of the Verilog standard :cite:`verilogIEEE` to implement the
+frequency shifts and corresponding cross correlations. A reference buffer and a capture buffer are instantiated in this
+module that provide the input to the pipeline as shown in Fig. :ref:`caf-block-diag`. This module is a slave to a master
+as it is being driven by the data lines.
 
 .. figure:: caf_block_diagram.png
 
