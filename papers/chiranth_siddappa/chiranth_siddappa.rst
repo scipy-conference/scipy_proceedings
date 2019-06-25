@@ -444,7 +444,8 @@ on the signal generator output.
 
 A code listing showing the inputs to the `FreqShift` Python class is shown. The
 additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
-represents.
+represents. We see that the same parameters are passed to the `FreqShift` class so that the `SigGen` module can be
+instantiated internally.
 
 .. code-block:: Python
 
