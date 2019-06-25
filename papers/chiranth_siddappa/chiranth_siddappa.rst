@@ -409,7 +409,8 @@ To set the frequency of the signal generator, a phase step or increment value mu
 An example spectrum of the output of the signal generator that is created from the Python class is shown in
 Fig. :ref:`sig-gen`.
 While no calculation of power has been provided, a parameter n_bits sets the signal strength. For this project, a value
-of 8-bits was found to be sufficient to provide a frequency shifted signal.
+of 8-bits was found to be sufficient to provide a frequency shifted signal. The same settings used to generate the
+module used as an example in this section are used in Fig. :ref:`freq-shift-inout` by using the `SigGen` class.
 
 .. figure:: sig_gen_8_200.png
 
@@ -432,20 +433,16 @@ Frequency Shift
 
 The frequency shift module takes in the same parameters as the signal generator module and adds an input for a complex
 value to shift. This module needs to make sure that different bit width signals are multiplied together correctly and
-that the pipeline is managed correctly to ensure that there are no phase shifts. Fig. :ref:`freq-shift-in` shows an input signal, and Fig.
-:ref:`freq-shift-out` shows the resulting shifted signal. When using the Python generated Verilog module, a negative
-value for the frequency will be taken care of by passing a bit to the module to perform the complex conjugate on the
-signal generator waveform.
+that the pipeline is managed correctly to ensure that there are no phase shifts. Fig. :ref:`freq-shift-inout` shows an
+input signal, and the resulting shifted signal. When using the Python generated Verilog module, a negative
+value for the frequency will be taken care of by setting a bit in the module parameters to perform the complex conjugate
+on the signal generator output.
 
-.. figure:: freq_shift_in.png
+.. figure:: freq_shift_inout.png
 
-   Input signal at 50kHz. :label:`freq-shift-in`
+   Input signal at 50kHz (top), and output signal at 70kHz (bottom). :label:`freq-shift-inout`
 
-.. figure:: freq_shift_out.png
-
-   Output signal at 70kHz. :label:`freq-shift-out`
-
-A code listing showing the inputs to the FreqShift Python class is shown. The
+A code listing showing the inputs to the `FreqShift` Python class is shown. The
 additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
 represents.
 
