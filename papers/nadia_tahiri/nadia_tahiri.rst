@@ -285,7 +285,7 @@ The `rnn` class structure is organized using the four functions: 1) constructor 
 Non-negative matrix factorization (NNMF) network
 ================================================
 
-Non-negative matrix factorization NNMF [LS01]_ is a technique consists in combining linear algebra and multivariate analysis to produce two matrices `W` and `H` with 
+Non-negative matrix factorization NNMF [LS01]_ is a technique that consists of combining linear algebra and multivariate analysis to produce two matrices `W` and `H` with 
 the property that all three matrices have no negative elements. This non-negativity makes the resulting matrices easier to inspect.
 We factorize the matrix `X` (i.e. matrix of `user\_id` by `product\_id`) into two matrices `W`
 (i.e. `user\_id`) and `H` (i.e. `product\_id`) so that the representation can be formulated as: 
