@@ -440,7 +440,7 @@ OVITO
    :align: center
    :scale: 20 %
 
-   A crystalline grain identified using ``freud``'s ``LocalDensity`` module and cut out for display using OVITO.
+   A crystalline grain identified using ``freud``'s ``LocalDensity`` module and cut out for display using OVITO. The image shows a tP30-CrFe structure formed from an isotropic pair potential optimized to generate this structure :cite:`Adorf2018`.
    :label:`fig:ovitoselection`
 
 
