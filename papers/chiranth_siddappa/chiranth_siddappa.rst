@@ -330,7 +330,7 @@ Because this is a pipelined implementation, an input and output can be processed
    \end{tabular}
    \end{table}
 
-A code listing of the Verilog HDL output is provided as reference in Listing :ref:`cpx-multiply-listing`. The two blocks
+A code listing of the Verilog HDL output is provided as reference. The two blocks
 that are shown are for the first step through the third step. The first two steps can be seen to only be calculated when
 the master signal conditions are correct.
 
@@ -445,7 +445,7 @@ signal generator waveform.
 
    Output signal at 70kHz. :label:`freq-shift-out`
 
-A code listing showing the inputs to the FreqShift Python class is shown in Listing :ref:`freq-shift-listing`. The
+A code listing showing the inputs to the FreqShift Python class is shown. The
 additional parameters for the class are the input vector 'x', and the number of bits for the I and Q data that it
 represents.
 
@@ -589,7 +589,7 @@ correlation energy.
 
    Autocorrelation output with length of implemented design. :label:`caf-test-signal`
 
-In Listing :ref:`caf-listing`, the Python class definition is provided for reference.
+In the next code listing, the Python class definition for `CAF` is provided for reference.
 The class takes in both a reference and received or captured signal, and the number of bits requested to represent the
 signals.
 These two signals are required parameters.
