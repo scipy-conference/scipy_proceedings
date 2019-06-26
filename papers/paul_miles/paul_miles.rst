@@ -311,7 +311,7 @@ A variety of models can be used when modeling the behavior of these materials, b
 
     q = [G_c, G_e, \lambda_{max}, \eta, \gamma],
 
-where each parameter helps describe a certain aspect of the physics that we are interested in modeling.  Details regarding these models can be found in :cite:`davidson2013nonaffine` and :cite:`miles2015bayesian`.  We calibrate the with respect to the experimental data collected at :math:`\dot{\lambda}=0.67` Hz as shown in Figure :ref:`figfinalcycles`.
+where each parameter helps describe a certain aspect of the physics that we are interested in modeling.  Details regarding these models can be found in :cite:`davidson2013nonaffine` and :cite:`miles2015bayesian`.  We calibrate the model with respect to the experimental data collected at :math:`\dot{\lambda}=0.67` Hz as shown in Figure :ref:`figfinalcycles`.
 
 We can perform the MCMC simulation using the basic procedure previously outlined.  For this particular case study, we wish to point out several specific devices that were used, and a full implementation of the code for this problem can be found in the `Viscoelasticity Tutorial <https://nbviewer.jupyter.org/github/prmiles/pymcmcstat/blob/master/tutorials/viscoelasticity/viscoelastic_analysis_using_ctypes.ipynb>`_ [#]_.  To begin, we point out the potential advantages of using pymcmcstat in conjunction with models written in faster computing languages.
 
