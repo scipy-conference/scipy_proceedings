@@ -631,7 +631,9 @@ using `sklearn` metrics see below.
                                f1_score, 
                                recall_score
 
-The results are given by Table 5. 
+  
+The results in Table 5 illustrates that a better model accuracy was obtained when the original dataset of 374 real users was enriched by 1000 artificial users. 
+The accuracy of 49% was obtained for the augmented dataset, compared to the accuracy of 27% for the original dataset. 
 
 .. raw:: latex
     
@@ -649,13 +651,9 @@ The results are given by Table 5.
             F-measure & 0.22 & 0.37\\
         \hline
         \end{longtable}
-        \caption{Statistic score results for real data, augmented data, and real with augmented data.}
+        \caption{Statistic score results for real data, and real with augmented data. Table clarify the impact of augmented data instead of only used real data.}
   \end{table}
-  
-Table 5 shows the impact of augmented data.
-With the precision of 0.49, the model could correctly predict 49% of all reordered items, 
-and the recall of 0.7 determined how many true and false positives altogether the model could predict. 
-At least, the customers can be assured that they will not need to backorder. 
+
 
 Conclusions and Future Work
 ---------------------------
