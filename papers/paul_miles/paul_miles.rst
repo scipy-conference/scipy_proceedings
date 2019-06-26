@@ -34,7 +34,7 @@ To quantify the uncertainty in our modeling problem, we utilize Bayesian inferen
 
 The Python package pymcmcstat :cite:`miles2019pymcmcstat` provides a robust platform for performing Bayesian model calibration.  Procedurally, the user provides data, defines model parameters and settings, and sets up simulation options.  As many intended users may be unfamiliar with Bayesian methods, the default package behavior requires minimal knowledge of statistics.  In fact, like many optimization problems, the user's main responsibility is to provide a sum-of-squares error function, which will become clear throughout the examples in this paper.
 
-Within pymcmcstat, we use Markov Chain Monte Carlo (MCMC) methods to solve the Bayesian inverse problem :cite:`smith2014uncertainty`.  As many Python packages currently exist for performing MCMC simulations, we had several goals in developing this code.  To our knowledge, no current package contains the :math:`n`-stage delayed rejection algorithm, so pymcmcstat was intended to fill this gap.  Delayed rejection may be an unfamiliar concept, so more details are provided in the discussion of Metropolis algorithms in the next section.  Furthermore, many researchers in our community have extensive experience using the MATLAB toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_ [#]_.  Our implementation provides a similar user environment, while exploiting Python structures.  We hope to decrease dependence on MATLAB in academic communities by advertising comparable tools in Python.
+Within pymcmcstat, we use Markov Chain Monte Carlo (MCMC) methods to solve the Bayesian inverse problem :cite:`smith2014uncertainty`.  As many Python packages currently exist for performing MCMC simulations, we had several goals in developing this code.  To our knowledge, no current package contains the :math:`n`-stage delayed rejection algorithm, so pymcmcstat was intended to fill this gap.  Delayed rejection may be an unfamiliar concept, so more details are provided in the discussion of Metropolis algorithms in a later section.  Furthermore, many researchers in our community have extensive experience using the MATLAB toolbox `mcmcstat <https://mjlaine.github.io/mcmcstat/>`_ [#]_.  Our implementation provides a similar user environment, while exploiting Python structures.  We hope to decrease dependence on MATLAB in academic communities by advertising comparable tools in Python.
 
 .. [#] https://mjlaine.github.io/mcmcstat/
 
@@ -92,11 +92,11 @@ Let's walk through a basic example to see how all these pieces work together.  T
 .. code-block:: python
 
     import numpy as np
-    x = np.linspace(0, 5, num=100)
+    x = np.linspace(0, 1, num=100)
     y = 2.0*x + 3.0 + 0.1*np.random.standard_normal(
                             x.shape)
 
-Note, we assume data where observations :code:`y` have been made at independent points :code:`x`, which are uniformly distributed between 0 and 5.  The observations follow a linear trend with slope 2 and offset 3.  To make the data realistic we add random noise to the observations of the form :math:`\epsilon_i\sim\mathit{N}(0, \sigma^2)`.  In this case we define the observation error standard deviation to be :math:`\sigma=0.1`.
+Note, we assume data where observations :code:`y` have been made at independent points :code:`x`, which are uniformly distributed between 0 and 1.  The observations follow a linear trend with slope 2 and offset 3.  To make the data realistic we add random noise to the observations of the form :math:`\epsilon_i\sim\mathit{N}(0, \sigma^2)`.  In this case we define the observation error standard deviation to be :math:`\sigma=0.1`.
 
 In this case we know what the model should be because we used it to generate the data.  We want to fit a linear model (i.e., :math:`F(i,q=[m,b])=mx_i+b`) to the observations.  To calibrate this model with pymcmcstat, the basic implementation is as follows:
 
