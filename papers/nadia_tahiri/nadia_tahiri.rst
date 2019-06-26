@@ -338,6 +338,7 @@ Actually, the "real time" does not mean "second-by-second", but rather "day-by-d
 Based on the validation loss function, we removed the following parameters from our input data: 1) LSTM Category and 2) LSTM size of the next basket.
 
 The last layer includes a GTB classifier used to predict the products that will be bought during the current week. 
+GBT model was modelled using "by user" and "by order" frameworks.
 The classifier contains two classes: 0 (i.e. will be bought) and 1 (i.e. won’t be bought).
 
 First level model (feature extraction)
