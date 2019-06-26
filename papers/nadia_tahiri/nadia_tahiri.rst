@@ -334,6 +334,7 @@ After simulating the dataset, the strategy used was to merge real and simulated 
 The test set was composed of the real and simulated dataset.
 The final model has two neural networks and a GBT classifier.
 Once trained, it was used to predict in real time the content of the current grocery basket, based on the history of purchases and current promotions in neighbouring stores.
+Actually, the "real time" does not mean "second-by-second", but rather "day-by-day". We scheduled it using the crontab. 
 Based on the validation loss function, we removed the following parameters from our input data: 1) LSTM Category and 2) LSTM size of the next basket.
 
 The last layer includes a GTB classifier used to predict the products that will be bought during the current week. 
@@ -632,7 +633,7 @@ using `sklearn` metrics see below.
                                recall_score
 
   
-The results in Table 5 illustrates that a better model accuracy was obtained when the original dataset of 374 real users was enriched by 1000 artificial users. 
+The results in Table 5 illustrates that a better model accuracy was obtained when the original dataset of 374 real users was enriched by 1,000 artificial users. 
 The accuracy of 49% was obtained for the augmented dataset, compared to the accuracy of 27% for the original dataset. 
 
 .. raw:: latex
