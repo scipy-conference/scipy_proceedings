@@ -557,6 +557,10 @@ Figure :ref:`violon` (b) indicates that all stores follow the same profiles in t
    
    Distribution of :math:`F_1` measures against rebates (a) and stores (b). :label:`violon`
 
+
+PCA was used to visualize the clustering of 20 selected products. 
+It was used to show that some products are frequently bought together with the other products. 
+Such a clustering was not used explicitly in our model, by an artificial network model is supposed to capture and use it implicitly in order to provide a better prediction. 
 Figure :ref:`productsF1` and Table 3 indicates that the values of :math:`F_1` metric to all products. 
 Some products are easy to predict with the value of :math:`F_1` > 0 and 
 some products are so hard to predict with the value of :math:`F_1` < 0. 
