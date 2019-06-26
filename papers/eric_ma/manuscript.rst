@@ -30,11 +30,10 @@ pyjanitor: A Cleaner API for Cleaning Data
     historical use, prevent use of expressive, fluent programming idioms that
     enable self-documenting ``pandas`` code. Here, we introduce ``pyjanitor``,
     an open source Python package that extends the ``pandas`` API with
-    such idioms. We describe how ``pyjanitor`` reconciles
-    inconsistencies and limitations identified in Pandas and provide a
-    comparison to other available tools. Finally, we describe its history,
-    design, and architecturally significant features, including known
-    limitations and developmental targets.
+    such idioms. We describe its design and implementation of the package,
+    provide usage examples from a variety of domains, and discuss the ways
+    that the ``pyjanitor`` project has enabled the inclusion of first-time
+    contributors to open source projects.
 
 .. class:: keywords
 
@@ -281,10 +280,25 @@ request extended the implementation to multi-level columns, and the current
 improved version uses regex string replacement. Each of these contributions
 were made by first-time open source contributors.
 
+For the long-term health of the package, we are on the lookout for minority
+contributors who would like to help maintain the package as well. A code of
+conduct document, and a community guidelines document, are also on our
+development roadmap, to encourage professional and healthy interactions
+between package contributors.
 
+Other Related Tools
+-------------------
 
-Other Related  Tools
---------------------
+When developing ``pyjanitor``, we originally set out to port ``janitor`` (the
+R package) to Python, providing compatibility with ``pandas`` DataFrames in a
+style compatible with Pythonic idioms (e.g. method chaining). While
+development was under way, we also found the Python alternatives described
+below, and found them to either (a) be lacking active development, (b)
+inventing a new pipe-like operator, (c) be restricted to dplyr, and/or (d)
+lacking a robust community of developers. Hence, the development of
+``pyjanitor`` was, and still is, oriented towards solving these problems.
+
+For completeness, we list our assessment of related tools below.
 
 **janitor** :cite:`janitor`: This is the original source of inspiration for
 ``pyjanitor``, and the original creator of ``janitor`` is aware of
@@ -302,12 +316,11 @@ aims to provide the ``dplyr`` syntax to ``pandas`` users. One advantage that it
 has over ``pyjanitor`` is that symbolic expressions can be used inside
 functions, which  automatically get parsed into an appropriate lambda function
 in Python. However, the number of verbs available is restricted to the
-``dplyr`` set. As of 24 November 2018, development was last seen 3 years ago,
-with 3 contributors to the project.
+``dplyr`` set.
 
 **dplython** :cite:`dplython`: Analogous to ``pandas-ply``, ``dplython`` also
-aims to provide the ``dplyr`` syntax to `pandas` users. Development was last
-seen 2 years ago as of 22 May 2019, with 8 contributors to the project.
+aims to provide the ``dplyr`` syntax to `pandas` users, but just like
+``pandas-ply``, it is restricted to providing ``dplyr``.
 
 **dfply** :cite:`dfply`: This is the most actively-developed, pandas-compatible
 `dplyr` port. Its emphasis is on porting over the piping syntax to the pandas
@@ -318,27 +331,23 @@ thus bringing the most feature-complete implementation of `dplyr` verbs to the
 functions using ``dplyr`` names. This makes it distinct from the pyjanitor
 project, where extension, rather than replacement, of existing ``pandas``
 functionality is generally encouraged. Whether the developers are interested
-in collaboration remains to be discussed. Development was last seen earlier in
-the year (as of 22 May 2019), with 10 contributors to the project.
+in collaboration remains to be discussed.
 
 **plydata** :cite:`plydata`: Like the others mentioned before, ``plydata`` also
 aims to provide the ``dplyr``-style data manipulation grammar to ``pandas``. It
 also provides a *pipe*-like operator (``>>``), and features integration with
 ``plotnine``, a grammar of graphics plotting library for the Python programming
-language. This project appears to be actively developed, with a total of 2
-contributors to the project.
+language.
 
 **kadro** :cite:`kadro`: Kadro uses a wrapper around ``pandas.DataFrame``
-objects to provide ``dplyr``-style syntax. Development was last seen 2 years
-ago, with 1 contributor to the project.
+objects to provide ``dplyr``-style syntax.
 
 **pdpipe**  :cite:`pdpipe`: ``pdpipe`` provides a language for creating data
 preprocessing pipelines that are turned into Python callables, through which a
 DataFrame can be passed. Its design choice is to create fluent pipelines as
 pre-declared functions that are chained, rather than as methods that are
 tacked onto a DataFrame. Its programming paradigm is purely functional in this
-respect. ``pdpipe`` is actively developed  (as of 22 May 2019), and with 3
-contributors to the project.
+respect.
 
 Limitations of ``pyjanitor``
 ----------------------------
