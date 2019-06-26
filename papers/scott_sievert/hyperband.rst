@@ -2,6 +2,7 @@
 :email: scott@stsievert.com
 :institution: University of Wisconsin–Madison
 :institution: Relevant work performed while interning for Anaconda, Inc.
+:corresponding:
 
 :author: Tom Augspurger
 :email: taugspurger@anaconda.com
@@ -65,7 +66,7 @@ above, a brute force search is required :cite:`marquardt1975`. This brute force
 search quickly grows infeasible as the number of hyperparameters grow.
 
 Hyperparameter optimization gets more complex with many hyperparameters, and
-especially because there's often interplay between hyperparameters. A good
+especially because there's often interaction between hyperparameters. A good
 example of hyperparameter optimization is with deep learning, which has
 specialized techniques for handling many data :cite:`bottou2010large`. However,
 these optimization methods can't provide basic hyperparameters because there
