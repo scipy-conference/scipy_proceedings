@@ -126,11 +126,11 @@ For the project, we considered only the features we found to be significant,
 such as `distance`, `special` rate, `products`, and `store`. 
 All features, we used, are described below:
 
-- **user\_id**: the user ID. We anonymized all data used in our study. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
+- **user\_id**: the user ID. We anonymized all data used in our study. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1,374\}}_{\text{generated}}`
 - **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
-- **product\_id**: unique number of the product. :math:`product\_id = 49,684`. We tested our model with 1000 products only (out of 49,684 products), which belonged to 5 of the 24 available categories, i.e. `Fruits-Vegetables`, `Pasta-Flour`, `Organic Food`, `Beverages`, and `Breakfast`, the rest of the categories were not considered in our test.
+- **product\_id**: unique number of the product. :math:`product\_id = 49,684`. We tested our model with 1,000 products only (out of 49,684 products), which belonged to 5 of the 24 available categories, i.e. `Fruits-Vegetables`, `Pasta-Flour`, `Organic Food`, `Beverages`, and `Breakfast`, the rest of the categories were not considered in our test.
 - **category\_id**: unique category number for a product. :math:`category\_id \in \{1 \cdots 24\}`  
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
@@ -592,6 +592,9 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
         \end{longtable}
         \caption{The average value of $F_1$ for all products considered.}
     \end{table}   
+
+Table 3 presents only the products with the five highest and the five lowest values of `F_1`. 
+The average, in this case, was taken over all users who purchased these products. 
 
 .. figure:: figures/products_F1.png
    :align: center
