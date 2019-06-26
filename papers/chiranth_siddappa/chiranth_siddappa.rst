@@ -40,8 +40,8 @@ Motivation
 The CAF has many practical applications, the more traditional being the aforementioned radar and sonar type systems, with a similar use case in image processing.
 The use of cross-correlations in the form of the dot product to find similarities
 is the same theoretical basis for our use in geolocation.
-The main motivator for this project comes from the use of the CAF at my workplace where we work on satellite
-communications systems.
+The main motivator for this project comes from the use of the CAF at the author's workplace where the field of work is
+satellite communications systems.
 In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
 geometries that will allow for the detection of Doppler and movement in the signal.
 This method of calculation has yet to be simplified.
