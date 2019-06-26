@@ -623,8 +623,7 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
-We evaluated the model with the statistics score given in Section 'Statistic score' 
-using `sklearn` metrics see below.
+We evaluated the model (see Section 'Statistic scores') using the `sklearn` metrics (see below):
 
 .. code-block:: python
 
