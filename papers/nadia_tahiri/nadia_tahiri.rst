@@ -61,6 +61,8 @@ A principal component analysis (linear and polynomial PCA [Jol11]_) was first co
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means [Jai10]_ and X-means [PM+00]_, 
 made it possible to determine the number of classes of consumers, as well as their distribution by class.
+We used the Calinski-Harabazs cluster validity index [CH74]_ to determine the number of cluster in K-means. 
+The Silhouette index [RPJ87]_ could be also used for this purpose. 
 
 .. figure:: figures/trois_magasins.png
    :align: center
@@ -713,6 +715,9 @@ References
 .. [Car03] Rasmussen, Carl Edward. *Gaussian processes in machine learning*.
            In Summer School on Machine Learning, pp. 63:71. Springer, Berlin, Heidelberg, 2003.
            DOI: https://doi.org/10.1007/978-3-540-28650-9_4 
+.. [CH74] Caliński, T. and Harabasz, J., 1974. *A dendrite method for cluster analysis*. 
+          Communications in Statistics-theory and Methods, 3(1), pp.1-27.
+          DOI: https://doi.org/10.1080/03610917408548446
 .. [CMW16] Maddison, Chris J., Andriy Mnih, and Yee Whye Teh. 
            *The concrete distribution: A continuous relaxation of discrete random variables*. 
            arXiv preprint arXiv:1611.00712, 2016.
@@ -761,6 +766,9 @@ References
 .. [PM+00] Dan Pelleg, Andrew W Moore, et al. *X-means: extending kmeans
            with efficient estimation of the number of clusters*. In Icml,
            volume 1, pp. 727–734, 2000.
+.. [RPJ87] Rousseeuw, P.J., 1987. *Silhouettes: a graphical aid to the interpretation and validation of cluster analysis*. 
+           Journal of computational and applied mathematics, 20, pp.53-65. 
+           DOI: https://doi.org/10.1016/0377-0427(87)90125-7
 .. [SZA16] Szpiro, S., Zhao, Y. and Azenkot, S. 
            *Finding a store, searching for a product: a study of daily challenges of low vision people*. 
            In Proceedings of the 2016 ACM International Joint Conference on Pervasive and Ubiquitous Computing,
