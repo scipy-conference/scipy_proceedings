@@ -645,18 +645,20 @@ random search. The comparison mirrors that by sampling same hyperparameters
 [#random-sampling-hyperband]_ and using the same validation set for each run.
 
 Dask provides features that the Hyperband implementation can easily exploit.
-Dask's implementation of Hyperband prioritizes training on the highest
-performing bracket of Hyperband. Hyperband makes no distinction on which
-bracket is highest performing. However, prioritizing high-performing models
-will likely mean that the highest performing bracket finishes training more
-quickly. This highlights how Dask is useful to Hyperband and shown in Figure
-:ref:`fig:synthetic-priority`.
+Dask Distributed supports prioritizing different jobs, so it's simple to
+prioritize the training of different models based on their most recent score.
+Prioritizing high-performing models will almost certainly prioritize the
+highest performing bracket finishes training more quickly. This highlights how
+Dask is useful to Hyperband and shown in Figure :ref:`fig:synthetic-priority`.
+These simulations are performed on a laptop with 4 Dask workers. This makes the
+hyperparameter selection very serial and the number of ``partial_fit`` calls or
+passes through the dataset a good proxy for time.
 
 Dask's priority of training high scoring models works best in very serial
 environments: priority makes no difference in very parallel environment when
-every job can be run. These simulations are performed on a laptop with 4 Dask
-workers. This makes the hyperparameter selection very serial and the number of
-``partial_fit`` calls or passes through the dataset a good proxy for time.
+every job can be run. To get around this in very parallel environments, the
+worst performing models all have the same priority for each bracket.
+
 
 .. [#random-sampling-hyperband] As much as possible – Hyperband evaluates more
    hyperparameter values. The random search without early stopping
