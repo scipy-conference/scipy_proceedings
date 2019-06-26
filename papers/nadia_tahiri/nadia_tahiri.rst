@@ -133,8 +133,13 @@ All features, we used, are described below:
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
 
-The IDs (`user\_id`) are not sequentially. In total, we have 1374 users. Among them we have 374 real users and 1000 users whose behaviour was generated following the distribution of real users (see Figure 3) and 
-the consumer statistics available in the report by Statistics Canada (2017).
+In total, we have 1374 users. Among them, we have 374 real users and 1000 users whose behaviour was generated following the distribution of real users (see Figure 3) and 
+the consumer statistics available in the report by Statistics Canada (2017). The product categories were available for each product. 
+So, the product category was one of the explanatory variables used in the model. 
+In total, we considered 24 product categories. 
+The current version of our model does not allow a new product to be bought by a user (i.e., every user can only buy products that were present in at least one of its previous shopping baskets). 
+The user IDs were not sequential because we only considered users having a sufficient number of previous shopping baskets available. 
+The average basket size was also used to predict the content of the current basket size of each user.
 
 The product categories were determined with the purchase histories is the current version of our model 
 does not allow a new product to be bought by a user (i.e., every user can only buy products that were in at least one of its previous shopping baskets).
