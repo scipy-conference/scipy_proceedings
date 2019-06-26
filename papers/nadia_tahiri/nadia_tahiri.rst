@@ -3,6 +3,10 @@
 :institution: Département d’Informatique, Université du Québec à Montréal, Case postale 8888, Succursale Centre-ville, H3C 3P8 Montréal, Canada
 :corresponding:
 
+:author: Bogdan Mazoure
+:email: bogdan.mazoure@mail.mcgill.ca
+:institution: Montreal Institute for Learning Algorithms (MILA) and McGill University,Montréal, Canada
+
 :author: Vladimir Makarenkov
 :email: vladimir.makarenkov@uqam.ca
 :institution: Département d’Informatique, Université du Québec à Montréal, Case postale 8888, Succursale Centre-ville, H3C 3P8 Montréal, Canada
@@ -14,9 +18,9 @@ An intelligent shopping list based on the application of partitioning and machin
 .. class:: abstract
    
   A grocery list is an integral part of the shopping experience for many consumers. Several mobile retail studies of grocery apps indicate that potential customers place the highest priority on features that help them to create and to manage personalized shopping lists. 
-  First, we propose the development of a new machine learning model written in Python 3 that predicts which grocery products the consumer will buy again or will try to buy for the first time, and in which store(s) they will shop. 
-  Second, we developed a smart shopping list template to provide consumers with a personalized weekly shopping list based on their shopping history and known preferences. 
-  As the explanatory variables, we used available grocery shopping history, store promotion information for the given region, 
+  First, we propose a new machine learning model written in Python 3 that predicts which grocery products the consumer will buy again or will try to buy for the first time, and in which store(s) the purchase will be made. 
+  Second, we introduce a smart shopping template to provide consumers with a personalized weekly shopping list based on their shopping history and known preferences. 
+  As the explanatory variables, we used available grocery shopping history, weekly product promotion information for the given region, 
   as well as product price statistics.
 
 .. class:: keywords
@@ -28,20 +32,20 @@ Introduction
 
 A typical grocery retailer offers consumers thousands of promotions every week        
 to attract more consumers and thus improve their economic performance [TTR16]_.
-The studies by Walters and Jamil (2002, 2003) of [WJ02]_ and [WJ03]_ found that about 39% of all items purchased
-during a grocery shopping were weekly specials and promotions, and about 30% of consumers
-surveyed were very sensitive to product prices, buying more promotional items than regular ones. 
+The studies by Walters and Jamil (2002, 2003) ([WJ02]_ and [WJ03]_) report that about 39% of all items purchased
+during a grocery shopping are weekly specials, and about 30% of consumers
+surveyed are very sensitive to the product prices, buying more promotional items than regular ones. 
 With the recent expansion of machine learning methods, including deep learning, 
 it seems appropriate to develop a series of methods that allow retailers to offer consumers attractive 
 and cost-effective shopping baskets, as well as to propose consumers tools 
 to create smart personalized weekly shopping lists based on historical purchases, 
-known preferences, and specials available in local stores.
+known preferences, and weekly specials available in local stores.
 
 A grocery list is an integral part of the shopping experience for many consumers. 
-The lists serve, for example, as a reminder, a budgeting tool, 
+These lists serve, for example, as a reminder, a budgeting tool, 
 or an effective way to organize weekly grocery shopping. 
 In addition, several mobile retail studies indicate that potential customers place 
-the highest priority on features that help them to create and to manage personalized 
+the highest priority on features that help them to create and manage personalized 
 shopping lists interactively [NPS03]_ and [SZA16]_.
 
 Problem statement and proposal
@@ -51,8 +55,8 @@ In this section, we present the problem statement and describe the considered ma
 First, by using the grocery shopping database in Canada `MyGroceryTour` [#]_ (see Figure :ref:`MyGroceryTour`), 
 we looked for the partitioning of consumers into classes that will group 
 them efficiently based on purchases made. 
-Then, this classification was used in the prediction stage. 
-Since the real consumer data contains thousands of individual articles; we focus primarily on product categories. 
+Then, this classification was used at the prediction stage. 
+Since the real consumer data contain thousands of individual articles, we regrouped the products by their categories. 
 A principal component analysis (linear and polynomial PCA [Jol11]_) was first computed to visualize the initial data  
 and to choose the number of main components to use when partitioning consumers into classes. 
 The application of efficient partitioning methods, such as K-means [Jai10]_ and X-means [PM+00]_, 
@@ -61,23 +65,23 @@ made it possible to determine the number of classes of consumers, as well as the
 .. figure:: figures/trois_magasins.png
    :align: center
    
-   MyGroceryTour website for the postal code H3T 1C8 in Montreal. 
-   The website was created to test the new machine learning model. 
-   It was written in Javascript, Bootstrap and Python. :label:`MyGroceryTour` 
+   Screenshot of the the MyGroceryTour.com website for the postal code H3T 1C8 in Montreal. 
+   The website has been created to test the new machine learning model. 
+   It has been written in Javascript, Bootstrap, and Python. :label:`MyGroceryTour` 
 
 .. [#] MyGroceryTour.ca
 
-Second, we developed a statistical model to predict which products previously purchased will be 
-in the next order of the consumer. By using explanatory variables, such as available grocery shopping histories, 
-information on current promotions in stores in the given region, and commodity price statistics, 
-we developed a machine learning model that is able to:
+Second, we developed a statistical model to predict which products previously purchased by a given consumer will be present 
+in its next order. By using explanatory variables, such as available grocery shopping histories, 
+information on current promotions in stores in a given region, and commodity price statistics, 
+we developed a machine learning model which is able to:
 
-i. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as which store(s) (within the area they usually shop in);
-ii. Create a smart shopping list by providing the consumer with a weekly shopping list customized based on their purchase history and known preferences. 
+i. Predict which groceries the consumer will want to buy again or will try to buy for the first time, as well as in which store(s) (within the area they usually shop in) the purchase(s) will be made;
+ii. Create a smart shopping list by providing the consumer with a weekly shopping list, customized based on his/her purchase history and known preferences. 
 
-This list also includes recommendations regarding the optimal quantity of every product suggested and the store(s)  
-where these products are to be purchased. We also calculate the consumer's optimal weekly commute 
-using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
+This list also includes recommendations regarding the optimal quantity of every product suggested.   
+We also calculate the consumer's optimal weekly commute 
+using the generalized travelling salesman algorithm (see Figure :ref:`circuit`).
 
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
@@ -87,45 +91,44 @@ using the generalized commercial traveler algorithm (see Figure :ref:`circuit`).
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
 An :math:`F_1` statistics maximization algorithm [NCLC12]_ (see the Statistics section), 
-based on dynamic programming, was used to achieve objective (i), 
+based on dynamic programming, was used to achieve the objective (i), 
 which will be of major interest to retailers and distributors. 
 A deep learning method [GBC16]_, based on Recurrent Neuron Networks (RNN) 
-and Convolutional Neuron Network (CNN), and both implemented using the TensorFlow library [HLYX18]_, 
-were used to achieve objective (ii). Those implementations can provide significant benefits to consumers.
+and Convolutional Neuron Network (CNN), both implemented using the TensorFlow library [HLYX18]_, 
+was used to achieve the objective (ii). Those implementations can provide significant benefits to consumers.
 
 The problem can be reformulated as a binary prediction task. Given a consumer, 
-the history of their previous purchases and a product with their price history, 
+the history of his/her previous purchases and a product with its price history, 
 predict whether or not the given product will be included in the grocery list of the consumer. 
-Our approach adapted a variety of generative models to existing data, i.e., 
+Our approach adapted a generative model to process the existing data, i.e., 
 first-level models, and to use the internal representations of 
 these models as features of the second-level models. 
 RNNs and CNNs were used at the first learning level 
 and forward propagation neural networks (Feed-forward NN) 
-was applied at the second learning level.
+was used at the second learning level.
 
-Depending on the user :math:`u` and the user purchase history
+Thus depending on the user :math:`u` and the user's purchase history
 (:math:`shop_{t-h:t}`, :math:`h > 0`), we predict the probability that a product :math:`i` is included
 in the current shopping basket :math:`_{t+1}` of :math:`u`.
 
 Dataset
 -------
 
-In this section we discuss the details of synthetic and real datasets,
-the latter obtained from `MyGroceryTour`.
-The importance of the feature is very crucial to perform the prediction of the model developed. 
+In this section, we discuss the details of synthetic and real datasets,
+the latter obtained from our website `MyGroceryTour.com`. 
 
 Features
 ========
 
-For the project, we consider only the significant features, 
+For the project, we considered only the features we found to be significant, 
 such as `distance`, `special` rate, `products`, and `store`. 
-All features, we used, are described as follows:
+All features, we used, are described below:
 
 - **user\_id**: the user ID. We anonymized all data used in our study. :math:`user\_id \in \underbrace{\{1 \cdots 374\}}_{\text{reals}} \cup \underbrace{\{375 \cdots 1374\}}_{\text{generated}}`
 - **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
-- **product\_id**: unique number of the product. :math:`product\_id = 46 000`
+- **product\_id**: unique number of the product. :math:`product\_id = 49,684`
 - **category\_id**: unique category number for a product. :math:`category\_id \in \{1 \cdots 24\}`  
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
@@ -415,7 +418,7 @@ Statistics
 -------------
 
 We present the obtained results using proposed method in this section. 
-As well as the metrics (see Equations 1-5) that are utilized to evaluate the performance of methods.
+As well as the metrics (see Equations 1-4) that are utilized to evaluate the performance of methods.
 
 Statistic score
 ===============
@@ -450,22 +453,15 @@ the total number of TP and FN labeled data.
   
    Recall = Sensitivity = TP Rate = \frac{TP}{(TP+FN)}
 
-“The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.”
+The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.”
 The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
 
 .. math::
    :label: e:matrix
    
    F-measure = F1 = \frac{2TP}{(2TP + FP + FN)} 
-
-Finally, we evaluated the model by *FP Rate* which corresponds to the ratio between FP and sum of TN and FP.
-
-.. math::
-   :label: e:matrix
    
-   FP Rate = FPR = \frac{FP}{(TN+FP)} 
-   
-We examined these five evaluation metrics in our study (see the next section for the results of the F1 measure).
+We examined these four evaluation metrics in our study (see the next section for the results of the F1 measure).
 
 Python Script
 -------------
@@ -540,7 +536,7 @@ In fact, this result can identify consumer buying behavior.
 In the perspective of this work, it will be interesting to include weight base on statistic value. 
 In Statistic Canada - 2017, only 5% of all promotions are more than 50% promoted, 95% of all promotions are less than 50%. 
 Weightings are needed to make the model more robust. 
-Figure :ref:`violon` (b) indicates that all shops follow the same profiles in the model. 
+Figure :ref:`violon` (b) indicates that all stores follow the same profiles in the model. 
 
 .. figure:: figures/violon.png
    :align: center
@@ -561,7 +557,7 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 
         \begin{longtable}{lc}
         \hline
-        \textbf{Product} &        \textbf{$F_1$} \\
+        \textbf{Product} & \textbf{$F_1$} \\
         \hline
     Gogo Squeez Organic Apple Strawberry Applesauce &  0.042057 \\
             Organic AppleBerry Applesauce on the Go &  0.042057 \\
@@ -615,7 +611,41 @@ such as `diet cranberry fruit juice`, `purified water`, and `total 0% blueberry 
 
    Distribution of :math:`F_1` measures against consumers and products. :label:`pearsonr`
 
-We evaluated the model with the statistics score given in Section 'Statistic score'.
+We evaluated the model with the statistics score given in Section 'Statistic score' 
+using `sklearn` metrics see below.
+
+.. code-block:: python
+
+   from sklearn.metrics import make_scorer, 
+                               accuracy_score, 
+                               f1_score, 
+                               recall_score
+
+The results are given by Table 5. 
+
+.. raw:: latex
+    
+    \begin{table}
+
+        \begin{longtable}{lccc}
+        \hline
+        \textbf{Statistics} & \textbf{Real} & \textbf{Real and augmented} \\
+        \textbf{score} & \textbf{data} & \textbf{data} \\
+
+        \hline
+            Accuracy & 0.27 & 0.49\\
+            Precision & 0.27 & 0.49\\
+            Recall & 0.51 & 0.7\\
+            F-measure & 0.22 & 0.37\\
+        \hline
+        \end{longtable}
+        \caption{Statistic score results for real data, augmented data, and real with augmented data.}
+  \end{table}
+  
+Table 5 shows the impact of augmented data.
+With the precision of 0.49, the model could correctly predict 49% of all reordered items, 
+and the recall of 0.7 determined how many true and false positives altogether the model could predict. 
+At least, the customers can be assured that they will not need to backorder. 
 
 Conclusions and Future Work
 ---------------------------
