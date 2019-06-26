@@ -56,11 +56,12 @@ manipulation. This is because it provided an API for manipulating
 tabular data when conducting data analysis. This API was noticeably
 missing from the Python standard library and NumPy, which, prior to ``pandas``
 emergence, were the primary tools for data analysis in Python.  Hence, through
-the ``DataFrame`` object and its interfaces, ``pandas`` provided a key application programming interface (API)
-that enabled statisticians, data scientists, and machine learners to wrangle their data into a
-usable shape. That said, there are inconsistencies in the `pandas` API that, while now idiomatic due to historical use,
-prevent use of expressive, fluent programming idioms that enable
-self-documenting data science code.
+the ``DataFrame`` object and its interfaces, ``pandas`` provided a key 
+application programming interface that enabled statisticians, data scientists, 
+and machine learners to wrangle their data into a usable shape. That said, 
+there are inconsistencies in the `pandas` API that, while now idiomatic due to 
+historical use, prevent use of expressive, fluent programming idioms that 
+enable self-documenting data science code.
 
 Idiomatic Inconsistencies of ``pandas``
 ---------------------------------------
@@ -75,6 +76,7 @@ operations:
 4.  Transforming a column through a function.
 5.  Filtering the DataFrame based on a column's values.
 6.  Dropping rows that have null values.
+7.  Adding a column that is the mean of each sample's group.
 
 To do this with the pandas API, one might write the following code.
 
@@ -84,24 +86,29 @@ To do this with the pandas API, one might write the following code.
     import numpy as np
 
     df = pd.DataFrame(...)
+    
     # standardize column names.
     df.columns = [
         i.lower().replace(' ', '_').replace('?', '_') for i in df.columns
     ]
+    
     # remove unnecessary columns
     df = df.drop(['column_name_14'], axis=1)
+    
     # transform a column by taking the log
     df['column_name_13'] = np.log10(df['column_name_13'])
-    df = df[df['column_name_12'] < 3]
-    df = df.dropna()
+    
+    # filter for values less than 3 on column_name_12.
+    # then drop null values.
+    df = df.query("column_name_12 < 3").dropna()
 
-This coding style has become idiomatic over the years. However, the mixing of
-imperative and functional programming styles, and the lack of
-*informative operation names*, yields a non-fluent expression of what is
-intended to be accomplished. This, in turn, hampers readability, and hence
-code maintainability.
+    # add a column that is the mean of each sample's group.
+    group_means = df.groupby("group")['value_column'].mean()
+    group_means.columns = ['group_mean']
+    df = df.join(group_means)
 
-In terms of API design, we might want a block of code that reads as follows:
+By using ``pyjanitor``, end-users can instead write code that reads much 
+closer to the plain English description.
 
 .. code-block:: python
 
@@ -116,15 +123,22 @@ In terms of API design, we might want a block of code that reads as follows:
         .transform_column('column_name_13', np.log10)
         .query('column_name_12 < 3')
         .dropna()
+        .groupby_agg(
+            by="group", 
+            agg_column_name="value_column",
+            new_column_name="group_mean",
+            agg="mean",
+        )
     )
 
 This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users:
-common data cleaning routines that can be mix-and-matched with existing ``pandas``
-API calls, which also enables data scientists to construct their data
-processing code with an easily-readable sequence of meaningful verbs.
-By providing commonly-usable data processing routines, we also save time for
-data scientists and engineers, allowing us to accomplish our
-work more efficiently.
+common data cleaning routines that can be mix-and-matched with existing 
+``pandas`` API calls. In keeping with Line 7 of the Zen of Python,
+"Readability counts"; ``pyjanitor`` thus enables data scientists to construct 
+their data processing code with an easily-readable sequence of meaningful 
+verbs. By providing commonly-usable data processing routines, we also save 
+time for data scientists and engineers, allowing them to accomplish their work 
+more efficiently.
 
 History of ``pyjanitor``
 ------------------------
@@ -153,11 +167,11 @@ functions is that the first argument to it be a ``pandas.DataFrame`` object:
         ...
         return df
 
-In order to reduce the amount of boilerplate required, ``pyjanitor`` also makes
-heavy use of ``pandas_flavor`` :cite:`pf`, which provides an easy-to-use function
-decorator that handles class method registration. As such, to extend the
-``pandas`` API with more instance-method-like functions, we just have to decorate
-the custom function, as illustrated in the following code sample:
+In order to reduce the amount of boilerplate required, ``pyjanitor`` also 
+makes heavy use of ``pandas_flavor`` :cite:`pf`, which provides an easy-to-use 
+function decorator that handles class method registration. As such, to extend 
+the ``pandas`` API with more instance-method-like functions, we just have to 
+decorate the custom function, as illustrated in the following code sample:
 
 .. code-block:: python
 
