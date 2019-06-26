@@ -88,7 +88,7 @@ using the generalized travelling salesman algorithm (see Figure :ref:`circuit`).
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    :figclass: wt
-   :scale: 34%
+   :scale: 29%
    
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
