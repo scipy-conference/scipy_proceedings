@@ -813,7 +813,7 @@ Performance
 -----------
 
 Anecdotally, ``HyperbandSearchCV`` performs well and beats manual hand-tuning
-by a considerable margin. While manually tuning, I considered any scores about
+by a considerable margin. While manually tuning, I considered any scores/negative losses of about
 :math:`-0.10` to be pretty good, and I obtained scores no higher than
 :math:`-0.098`. That's the context necessary to interpret
 ``HyperbandSearchCV``'s score of :math:`-0.093` and ``IncrementalSearchCV``'s
