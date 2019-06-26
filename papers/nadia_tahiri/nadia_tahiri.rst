@@ -699,8 +699,8 @@ Acknowledgments
 The authors thank PyCon Canada for their valuable comments on this project. This work used
 resources of the Calcul Canada. This work was supported by Natural Sciences 
 and Engineering Research Council of Canada and Fonds de Recherche sur la Nature et Technologies of Quebec. 
-The funds provided by these funding institutions have been used. We would like to thanks SciPy conference 
-and anonymous reviewers for their valuable comments on this manuscript.
+The funds provided by these funding institutions have been used. We would like to thanks SciPy conference, 
+Dillon Niederhut, David Shupe, Chris Calloway, and anonymous reviewers for their valuable comments on this manuscript.
 
 Abbreviations
 -------------
