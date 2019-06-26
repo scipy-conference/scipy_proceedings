@@ -56,11 +56,11 @@ manipulation. This is because it provided an API for manipulating
 tabular data when conducting data analysis. This API was noticeably
 missing from the Python standard library and NumPy, which, prior to ``pandas``
 emergence, were the primary tools for data analysis in Python.  Hence, through
-the ``DataFrame`` object and its interfaces, ``pandas`` provided a key 
-application programming interface that enabled statisticians, data scientists, 
-and machine learners to wrangle their data into a usable shape. That said, 
-there are inconsistencies in the `pandas` API that, while now idiomatic due to 
-historical use, prevent use of expressive, fluent programming idioms that 
+the ``DataFrame`` object and its interfaces, ``pandas`` provided a key
+application programming interface that enabled statisticians, data scientists,
+and machine learners to wrangle their data into a usable shape. That said,
+there are inconsistencies in the `pandas` API that, while now idiomatic due to
+historical use, prevent use of expressive, fluent programming idioms that
 enable self-documenting data science code.
 
 Idiomatic Inconsistencies of ``pandas``
@@ -86,18 +86,18 @@ To do this with the pandas API, one might write the following code.
     import numpy as np
 
     df = pd.DataFrame(...)
-    
+
     # standardize column names.
     df.columns = [
         i.lower().replace(' ', '_').replace('?', '_') for i in df.columns
     ]
-    
+
     # remove unnecessary columns
     df = df.drop(['column_name_14'], axis=1)
-    
+
     # transform a column by taking the log
     df['column_name_13'] = np.log10(df['column_name_13'])
-    
+
     # filter for values less than 3 on column_name_13.
     # then drop null values.
     df = df.query("column_name_13 < 3").dropna()
@@ -107,7 +107,7 @@ To do this with the pandas API, one might write the following code.
     group_means.columns = ['group_mean']
     df = df.join(group_means)
 
-By using ``pyjanitor``, end-users can instead write code that reads much 
+By using ``pyjanitor``, end-users can instead write code that reads much
 closer to the plain English description.
 
 .. code-block:: python
@@ -124,7 +124,7 @@ closer to the plain English description.
         .query('column_name_13 < 3')
         .dropna()
         .groupby_agg(
-            by="group", 
+            by="group",
             agg_column_name="value_column",
             new_column_name="group_mean",
             agg="mean",
@@ -132,12 +132,12 @@ closer to the plain English description.
     )
 
 This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users:
-common data cleaning routines that can be mix-and-matched with existing 
-``pandas`` API calls. In keeping with Line 7 of the Zen of Python, which 
-states that "Readability counts"; ``pyjanitor`` thus enables data scientists 
-to construct their data processing code with an easily-readable sequence of 
-meaningful verbs. By providing commonly-usable data processing routines, we 
-also save time for data scientists and engineers, allowing them to accomplish 
+common data cleaning routines that can be mix-and-matched with existing
+``pandas`` API calls. In keeping with Line 7 of the Zen of Python, which
+states that "Readability counts"; ``pyjanitor`` thus enables data scientists
+to construct their data processing code with an easily-readable sequence of
+meaningful verbs. By providing commonly-usable data processing routines, we
+also save time for data scientists and engineers, allowing them to accomplish
 their work more efficiently.
 
 History of ``pyjanitor``
@@ -147,9 +147,9 @@ History of ``pyjanitor``
 provides the same functionality to R users. The initial goal was to explicitly
 copy the ``janitor`` function names while engineering it to be compatible with
 ``pandas.DataFrames``, following Pythonic idioms, such as the method chaining
-provided by ``pandas``. As the project evolved, the scope broadened, to 
-provide a defined language for data processing as an extension on ``pandas`` 
-DataFrames, including submodules with functions specific for bioinformatics, 
+provided by ``pandas``. As the project evolved, the scope broadened, to
+provide a defined language for data processing as an extension on ``pandas``
+DataFrames, including submodules with functions specific for bioinformatics,
 cheminformatics, and finance.
 
 Architecture
@@ -169,10 +169,10 @@ functions is that the first argument to it be a ``pandas.DataFrame`` object:
         ...
         return df
 
-In order to reduce the amount of boilerplate required, ``pyjanitor`` also 
-makes heavy use of ``pandas_flavor`` :cite:`pf`, which provides an easy-to-use 
-function decorator that handles class method registration. As such, to extend 
-the ``pandas`` API with more instance-method-like functions, we just have to 
+In order to reduce the amount of boilerplate required, ``pyjanitor`` also
+makes heavy use of ``pandas_flavor`` :cite:`pf`, which provides an easy-to-use
+function decorator that handles class method registration. As such, to extend
+the ``pandas`` API with more instance-method-like functions, we just have to
 decorate the custom function, as illustrated in the following code sample:
 
 .. code-block:: python
@@ -204,9 +204,9 @@ expressions. This helps achieve the DSL-like nature of the API. Hence, if we
 want to "clean names", the end user can call on the ``.clean_names()``
 function. If the end user wants to "remove all empty rows and columns", they
 can call on ``.remove_empty()``. As far as possible, function names are
-expressed using simple English verbs that are understandable cross-culturally,
-to ensure that this API is inclusive and accessible to the widest subset of
-users possible.
+expressed using simple English verbs that are understandable cross-culturally
+and well-documented, to ensure that this API is inclusive and accessible to
+the widest subset of users possible.
 
 Where domain-specific verbs are used, we strive to match the
 mental models and vocabulary of domain experts. One example comes from the
@@ -234,7 +234,11 @@ before cleaning, one can add the ``preserve_original`` keyword argument to the
 In order to keep the code functional, no operations that change the original
 DataFrame are allowed. Hence, if the internal implementation of a function
 results in a mutation of the original DataFrame, we explicitly make a copy of
-the DataFrame first.
+the DataFrame first, though we also generally try to avoid double-copying in
+the internal implementation of each function. This decision, which was made
+after a fairly extensive discussion on our issue tracker, ensures that we
+followed ``pandas`` development trajectory, where user-facing ``inplace``
+keyword arguments are being deprecated.
 
 Finally, we explicitly do not allow overriding or duplicating existing
 DataFrame class methods. The goal here is to extend ``pandas``, rather than
