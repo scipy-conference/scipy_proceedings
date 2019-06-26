@@ -223,6 +223,7 @@ Figure :ref:`lstm` illustrates the proposed architecture and summarizes the deta
 A combined RNN and CNN was trained to predict the probability that a user will order a product at each timestep.
 A time step was defined by the composition of the basket and the store location on the map (see Figure 2). 
 The RNN is a single-layer LSTM and the CNN is a 6-layer causal CNN with dilated convolutions.
+The width of the CNN was equal to 1374 (i.e., the number of users), the height was equal to 8 (i.e., the number of features), and the depth was equal to 100 (i.e., the number of orders).
 The last layer is a fully-connected layer which makes the classification.
 The CNN was used as a feature extractor and the LSTM network as a sequential learning.
 
