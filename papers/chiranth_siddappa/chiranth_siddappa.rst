@@ -395,7 +395,7 @@ specified by Eq. :ref:`phase-bits`.
 .. math::
    :label: phase-bits
 
-   \text{Left side latex is unbounded} = \text{phase\_bits}
+   \Big\lceil \log_2\Big(\frac{ f_{\text{clk}} }{ \text{freq\_res} }\Big) \Big\rceil = \text{phase\_bits}
 
 The output of one cycle is shown in Fig. :ref:`dds-one`. The values that are supplied to the module for the lookup table
 are generated using the NumPy sine function and are quantized using helper methods included in the caf_verilog module.
