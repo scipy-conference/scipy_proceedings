@@ -202,10 +202,11 @@ The graphical representation of the workflow in Figure :ref:`workflow` predicts 
    :align: center
    :scale: 29%
    
-   The graphical illustration of the proposed model trying to predict the next basket in term of the list of product. 
-   The first level of the model used LSTM and NNMF. 
-   The second level of the model applied GBT.
-   Finally, the last test considered to predict the next basket by using :math:`F_1`. :label:`workflow`
+   The graphical illustration of the proposed model intended to predict the content of the current grocery basket. 
+   At the first level of the model the LSTM and NNMF networks were used. 
+   At the second level of the model, the GBT model was applied. 
+   Finally, at the last step we predicted the current grocery basket using:math:`F_1`. 
+   :label:`workflow`
 
 Long short-term memory (LSTM) network
 =====================================
