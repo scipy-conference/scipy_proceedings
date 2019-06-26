@@ -45,8 +45,9 @@ communications systems.
 In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
 geometries that will allow for the detection of Doppler and movement in the signal.
 This method of calculation has yet to be simplified.
-Currently GPU's have been employed as the main workhorse but the use of the FPGA has always been an attractive and
-feasible option due to the hardware options that are available.
+Currently GPU's have been employed as the main workhorse due to the availability as a co-prorcessor.
+But the use of the FPGA has always been an attractive alternative due to the high configurability of the hardware options,
+but comes with much higher up front design cost :cite:`Hennessy`.
 
 To geolocate a signal emitter's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
 represents a satellite's drift.
