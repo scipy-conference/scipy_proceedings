@@ -544,6 +544,9 @@ In fact, this result can identify consumer buying behavior.
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
+PCA was used to visualize the clustering of 20 selected products. 
+It was used to show that some products are frequently bought together with the other products. 
+Such a clustering was not used explicitly in our model, by an artificial network model is supposed to capture and use it implicitly in order to provide a better prediction.
 :math:`F_1` in Figure :ref:`violon` (a) shows that the profiles of all promotions are similar. 
 In the perspective of this work, it will be interesting to include weight base on statistic value. 
 In Statistic Canada - 2017, only 5% of all promotions are more than 50% promoted, 95% of all promotions are less than 50%. 
@@ -557,10 +560,9 @@ Figure :ref:`violon` (b) indicates that all stores follow the same profiles in t
    
    Distribution of :math:`F_1` measures against rebates (a) and stores (b). :label:`violon`
 
-
-PCA was used to visualize the clustering of 20 selected products. 
-It was used to show that some products are frequently bought together with the other products. 
-Such a clustering was not used explicitly in our model, by an artificial network model is supposed to capture and use it implicitly in order to provide a better prediction. 
+This plot represents the distribution of F1-score results with respect to the promotions and stores. 
+We can see the distribution of the promotions and stores are very similar. 
+Finally, this plot suggests the absence of the bias for these two model parameters.
 Figure :ref:`productsF1` and Table 3 indicates that the values of :math:`F_1` metric to all products. 
 Some products are easy to predict with the value of :math:`F_1` > 0 and 
 some products are so hard to predict with the value of :math:`F_1` < 0. 
