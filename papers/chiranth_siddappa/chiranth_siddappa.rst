@@ -198,7 +198,7 @@ It also contains a bitfile that will properly configure the FPGA :cite:`bitfile`
 This bitfile is generated through the Vivado Design Suite that is provided by Xilinx by loading the output modules
 from the `caf-verilog` module.
 A different bitfile must be created for every unique combination of configuration of the CAF and every device that is
-targeted.
+targeted. Every instantiation of the `CAF` Python class that has different parameters will require a new bitfile.
 
 The Jupyter notebook itself is considered an interactive computing pool providing an interface to do
 computation and prototyping through a web browser. In this implementation it is meant to be an easier way for a non-hardware oriented person
@@ -597,7 +597,9 @@ Synthesis and Implementation
 Both the synthesis and implementation were completed successfully, and all timing constraints were met by the tool.
 Several different design sizes were elaborated and implemented, all ending up with different utilization amounts.
 Since it is now known that the longer the integration time the more useful the output will be, the following iterations
-were taken, described by Table  :ref:`f1212`, :ref:`f812`, and :ref:`ffull`.
+were taken, described by Table  :ref:`f1212`, :ref:`f812`, and :ref:`ffull`. Each of these tables describes a different
+usage that is still below the specific size of the Pynq board. For different devices, new `CAF` Python class instantiations
+should be used to explore board usages by using the Verilog module outputs to follow the Vivado design process.
 
 .. raw:: latex
 
