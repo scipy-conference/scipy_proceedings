@@ -130,7 +130,7 @@ All features, we used, are described below:
 - **order\_id**: unique number of the basket. :math:`order\_id \in \mathbb{Z}`
 - **store\_id**: unique number of the store. :math:`store\_id \in \{1 \cdots 10\}` 
 - **distance**: distance to the store. :math:`distance \in \mathbb{R}^+`
-- **product\_id**: unique number of the product. :math:`product\_id = 49,684`
+- **product\_id**: unique number of the product. :math:`product\_id = 49,684`. We tested our model with 1000 products only (out of 49,684 products), which belonged to 5 of the 24 available categories, i.e. `Fruits-Vegetables`, `Pasta-Flour`, `Organic Food`, `Beverages`, and `Breakfast`, the rest of the categories were not considered in our test.
 - **category\_id**: unique category number for a product. :math:`category\_id \in \{1 \cdots 24\}`  
 - **reorder**: the reorder is equal to 1 if this product has been ordered by this user in the past, 0 else. :math:`reorders \in \{0,1\}`
 - **special**: discount percentage applied to the product price at the time of purchase. :math:`special \in \{[0\%,15\%[, [15\%,30\%[, [30\%,50\%[, [50\%,100\%[\}`
