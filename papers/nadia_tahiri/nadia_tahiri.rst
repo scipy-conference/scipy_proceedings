@@ -465,7 +465,7 @@ the total number of TP and FN labeled data.
   
    Recall = Sensitivity = TP Rate = \frac{TP}{(TP+FN)}
 
-The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.”
+The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.
 The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
 
 .. math::
@@ -540,7 +540,7 @@ In fact, this result can identify consumer buying behavior.
 
 .. figure:: figures/product_pca.png
    :align: center
-   :scale: 27%
+   :scale: 23%
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
