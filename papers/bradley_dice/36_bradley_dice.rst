@@ -144,7 +144,7 @@ Machine Learning
 
 A wide range of problems in soft matter and nano-scale simulations have been addressed using machine learning techniques, such as crystal structure identification :cite:`Spellings2018`.
 In machine learning workflows, ``freud`` is used to generate features, which are then used in classification or regression models, clusterings, or dimensionality reduction methods.
-For example, this paper :cite:`Harper2019` used ``freud`` to compute the cubatic order parameter and generate high-dimensional descriptors of structural motifs, which were visualized with t-SNE dimensionality reduction :cite:`vanDerMaaten2008`.
+For example, Harper et al. used ``freud`` to compute the cubatic order parameter and generate high-dimensional descriptors of structural motifs, which were visualized with t-SNE dimensionality reduction :cite:`Harper2019,vanDerMaaten2008`.
 The library has also been used in the optimization and inverse design of pair potentials :cite:`Adorf2018`, to compute fitness functions based on the radial distribution function.
 The open-source ``pythia`` [#]_ library offers a number of descriptor sets useful for crystal structure identification, leveraging ``freud`` for fast computations.
 Included among the descriptors in ``pythia`` are quantities based on bond angles and distances, spherical harmonics, and Voronoi diagrams.
@@ -271,7 +271,7 @@ Visualization
 -------------
 
 Many analyses performed by the ``freud`` library provide a ``plot(ax=None)`` method (new in v1.2.0) that allows their computed quantities to be visualized with ``matplotlib``.
-Additionally, these plottable analyses offer IPython representations, allowing Jupyter notebooks to render a graph such as a radial distribution function $g(r)$ just by calling the compute object at the end of a cell.
+Additionally, these plottable analyses offer IPython representations, allowing Jupyter notebooks to render a graph such as a radial distribution function :math:`g(r)` just by calling the compute object at the end of a cell.
 Analyses like the radial distribution function or correlation functions return data that is binned as a one-dimensional histogram -- these are visualized with a line graph via ``matplotlib.pyplot.plot``, with the bin locations and bin counts given by properties of the compute object.
 Other classes provide multi-dimensional histograms, like the Gaussian density or Potential of Mean Force and Torque, which are plotted with ``matplotlib.pyplot.imshow``.
 
