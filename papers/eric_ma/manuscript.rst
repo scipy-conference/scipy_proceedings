@@ -73,8 +73,8 @@ operations:
     than ``Spelled Like This``).
 2.  Removing unnecessary columns.
 3.  Adding a column of data.
-4.  Transforming a column through a function.
-5.  Filtering the DataFrame based on a column's values.
+4.  Log-transforming a column.
+5.  And then filtering the log-transformed column.
 6.  Dropping rows that have null values.
 7.  Adding a column that is the mean of each sample's group.
 
@@ -98,9 +98,9 @@ To do this with the pandas API, one might write the following code.
     # transform a column by taking the log
     df['column_name_13'] = np.log10(df['column_name_13'])
     
-    # filter for values less than 3 on column_name_12.
+    # filter for values less than 3 on column_name_13.
     # then drop null values.
-    df = df.query("column_name_12 < 3").dropna()
+    df = df.query("column_name_13 < 3").dropna()
 
     # add a column that is the mean of each sample's group.
     group_means = df.groupby("group")['value_column'].mean()
@@ -121,7 +121,7 @@ closer to the plain English description.
         .clean_names()
         .remove_column('column_name_14')
         .transform_column('column_name_13', np.log10)
-        .query('column_name_12 < 3')
+        .query('column_name_13 < 3')
         .dropna()
         .groupby_agg(
             by="group", 
@@ -133,12 +133,12 @@ closer to the plain English description.
 
 This is the API design that ``pyjanitor`` aims to provide to ``pandas`` users:
 common data cleaning routines that can be mix-and-matched with existing 
-``pandas`` API calls. In keeping with Line 7 of the Zen of Python,
-"Readability counts"; ``pyjanitor`` thus enables data scientists to construct 
-their data processing code with an easily-readable sequence of meaningful 
-verbs. By providing commonly-usable data processing routines, we also save 
-time for data scientists and engineers, allowing them to accomplish their work 
-more efficiently.
+``pandas`` API calls. In keeping with Line 7 of the Zen of Python, which 
+states that "Readability counts"; ``pyjanitor`` thus enables data scientists 
+to construct their data processing code with an easily-readable sequence of 
+meaningful verbs. By providing commonly-usable data processing routines, we 
+also save time for data scientists and engineers, allowing them to accomplish 
+their work more efficiently.
 
 History of ``pyjanitor``
 ------------------------
@@ -147,14 +147,16 @@ History of ``pyjanitor``
 provides the same functionality to R users. The initial goal was to explicitly
 copy the ``janitor`` function names while engineering it to be compatible with
 ``pandas.DataFrames``, following Pythonic idioms, such as the method chaining
-provided by ``pandas``. As the project evolved, the scope broadened, to provide
-a defined and expressive DSL for data processing as an extension on ``pandas``
-DataFrames.
+provided by ``pandas``. As the project evolved, the scope broadened, to 
+provide a defined language for data processing as an extension on ``pandas`` 
+DataFrames, including submodules with functions specific for bioinformatics, 
+cheminformatics, and finance.
 
 Architecture
 ------------
 
-``pyjanitor`` relies completely on the ``pandas`` extension API :cite:`pandas`,
+``pyjanitor`` relies completely on the ``pandas`` extension API
+(https://pandas.pydata.org/pandas-docs/stable/development/extending.html),
 which allows developers to create functions that behave as if they were native
 ``pandas.DataFrame`` class methods. The only requirement here for such
 functions is that the first argument to it be a ``pandas.DataFrame`` object:
