@@ -594,46 +594,10 @@ Synthesis and Implementation
 
 Both the synthesis and implementation were completed successfully, and all timing constraints were met by the tool.
 Several different design sizes were elaborated and implemented, all ending up with different utilization amounts.
-Since it is now known that the longer the integration time the more useful the output will be, the following iterations
-were taken, described by Table  :ref:`f1212`, :ref:`f812`, and :ref:`ffull`. Each of these tables describes a different
+The final design iteration that was able to maximize the iteration time is
+described by Table :ref:`ffull`. Each of these tables describes a different
 usage that is still below the specific size of the Pynq board. For different devices, new `CAF` Python class instantiations
 should be used to explore board usages by using the Verilog module outputs to follow the Vivado design process.
-
-.. raw:: latex
-
-   \begin{table}[]
-   \renewcommand{\arraystretch}{1.3}
-   \caption{12 phase bits, 12-bit multiplication, 41 frequencies, and 100 samples.}
-   \label{f1212}
-   \centering
-   \begin{tabular}{llll}
-   \textbf{Resource} & \textbf{Utilization} & \textbf{Available} & \textbf{Utilization \%} \\
-   LUT & 16893 & 53200 & 31.75 \\
-   LUTRAM & 42 & 17400 & 0.24 \\
-   FF & 15309 & 106400 & 14.39 \\
-   BRAM & 11 & 140 & 7.86 \\
-   DSP & 210 & 220 & 95.45 \\
-   IO & 61 & 125 & 48.80 \\
-   \end{tabular}%
-   \end{table}
-
-.. raw:: latex
-
-   \begin{table}[]
-   \renewcommand{\arraystretch}{1.3}
-   \caption{12 phase bits, 8-bit multiplication, 41 frequencies, and 100 samples.}
-   \label{f812}
-   \centering
-   \begin{tabular}{llll}
-   \textbf{Resource} & \textbf{Utilization} & \textbf{Available} & \textbf{Utilization \%} \\
-   LUT & 21435 & 53200 & 40.29 \\
-   LUTRAM & 250 & 17400 & 1.44 \\
-   FF & 15861 & 106400 & 14.91 \\
-   BRAM & 13 & 140 & 9.29 \\
-   DSP & 50 & 220 & 22.73 \\
-   IO & 53 & 125 & 42.40 \\
-   \end{tabular}%
-   \end{table}
 
 .. raw:: latex
 
