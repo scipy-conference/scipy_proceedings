@@ -53,7 +53,7 @@ To geolocate a signal emitter's location the Doppler is used to calculate a freq
 represents a satellite's drift.
 Then, cross correlations can be used to determine the time delay by denoting the peak of the resulting output as a time
 delay of arrival (TDOA).
-The captured signals will be different for every use case, which motivates the need to ensure
+The refernce signal will be different for every use case, which motivates the need to ensure
 that the resulting Verilog hardware description language (HDL)
 module output can also be produced to match necessary configurations :cite:`verilogIEEE`.
 This became a project goal motivated off work done by other projects to be able to produce code in other languages
