@@ -35,7 +35,7 @@ Analyzing Particle Systems for Machine Learning and Data Visualization with ``fr
 
 The ``freud`` Python library analyzes particle data output from molecular dynamics simulations.
 The library's design and its variety of high-performance methods make it a powerful tool for many modern applications.
-In particular, ``freud`` can be used as part of the data generation pipeline for machine learning algorithms for analyzing particle simulations, and it can be easily integrated with various simulation visualization tools for simultaneous visualization and real-time analysis.
+In particular, ``freud`` can be used as part of the data generation pipeline for machine learning (ML) algorithms for analyzing particle simulations, and it can be easily integrated with various simulation visualization tools for simultaneous visualization and real-time analysis.
 Here, we present numerous examples both of using ``freud`` to analyze nano-scale particle systems by coupling traditional simulational analyses to machine learning libraries and of visualizing per-particle quantities calculated by ``freud`` analysis methods.
 We include code and examples of this visualization, showing that in general the introduction of ``freud`` into existing ML and visualization workflows is smooth and unintrusive.
 We demonstrate that among Python packages used in the computational molecular sciences, ``freud`` offers a unique set of analysis methods with efficient computations and seamless coupling into powerful data analysis pipelines.
@@ -70,7 +70,7 @@ In colloidal systems, features like particle anisotropy play an important role i
 Design spaces encompassing wide ranges of particle morphology :cite:`Damasceno2012` and interparticle interactions :cite:`Adorf2018` have been shown to yield phase diagrams filled with complex behavior.
 
 The ``freud`` Python package offers a unique feature set that targets the analysis of colloidal systems.
-The library avoids trajectory management and the analysis of chemically bonded structures, which are the province of most other analysis platforms like MDAnalysis and MDTraj :cite:`Michaud-Agrawal2011,McGibbon2015`.
+The library avoids trajectory management and the analysis of chemically bonded structures, which are the province of most other analysis platforms like MDAnalysis and MDTraj (see also :ref:`fig:scales`) :cite:`Michaud-Agrawal2011,McGibbon2015`.
 In particular, ``freud`` excels at performing analyses based on characterizing local particle environments, which makes it a powerful tool for tasks such as calculating order parameters to track crystallization or finding prenucleation clusters.
 Among the unique methods present in ``freud`` are the potential of mean force and torque, which allows users to understand the effects of particle anisotropy on entropic self-assembly :cite:`VanAnders2014c,VanAnders2014d,Karas2016,Harper2015,Anderson2017`, and various tools for identifying and clustering particles by their local crystal environments :cite:`Teich2019`.
 All such tasks are accelerated by ``freud``'s extremely fast neighbor finding routines and are automatically parallelized, making it an ideal tool for researchers performing peta- or exascale simulations of particle systems.
@@ -124,12 +124,12 @@ Decoupling ``freud`` from file parsing and specific trajectory representations a
    :align: center
    :scale: 60 %
 
-   Comparison of runtime for neighbor finding algorithms in ``freud`` and ``scipy`` for varied system sizes. See text for details.
+   Comparison of runtime for neighbor finding algorithms in ``freud`` and SciPy for varied system sizes. See text for details.
    :label:`fig:scipycomparison`
 
 In keeping with this focus on composable features, ``freud`` also abstracts and directly exposes the task of finding particle neighbors, the task most central to all other analyses in  ``freud``.
 Since neighbor finding is a common need, the neighbor finding routines in ``freud`` are highly optimized and natively support periodic systems, a crucial feature for any analysis of particle simulations (which often employ periodic boundary conditions).
-In figure :ref:`fig:scipycomparison`, a comparison is shown between the neighbor finding algorithms in ``freud`` and ``scipy`` :cite:`Jones2001`.
+In figure :ref:`fig:scipycomparison`, a comparison is shown between the neighbor finding algorithms in ``freud`` and SciPy :cite:`Jones2001`.
 For each system size, :math:`N` particles are uniformly distributed in a 3D periodic cube such that each particle has an average of 12 neighbors within a distance of :math:`r_{cut} = 1.0`.
 Neighbors are found for each particle by searching within the cutoff distance :math:`r_{cut}`.
 The methods compared are ``scipy.spatial.cKDTree``'s ``query_ball_tree``, ``freud.locality.AABBQuery``'s ``queryBall``, and ``freud.locality.LinkCell``'s ``compute``.
@@ -205,8 +205,9 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
 
        return features
 
-   # Create a freud box object and an array of 3D positions
-   # of a face-centered cubic structure with 4000 particles
+   # Create a freud box object and an array of
+   # 3D positions for a face-centered cubic
+   # structure with 4000 particles
    fcc_box, fcc_positions = make_fcc(
        nx=10, ny=10, nz=10, noise=0.1)
 
@@ -215,11 +216,12 @@ Neighbors with small facets in the Voronoi polytope are filtered out to reduce n
        fcc_box, fcc_positions, 'fcc')
    # ... repeat for all structures
 
-Then, using ``pandas`` and ``scikit-learn``, we can train a support vector machine to identify these structures:
+Then, using Pandas and Scikit-learn, we can train a support vector machine to identify these structures:
 
 .. code-block:: python
 
-   # Build dictionary of DataFrames, labeled by structure
+   # Build dictionary of DataFrames,
+   # labeled by structure
    structure_dfs = {}
    for i, struct in enumerate(structures):
        df = pd.DataFrame.from_dict(structures[struct])
@@ -248,7 +250,7 @@ Then, using ``pandas`` and ``scikit-learn``, we can train a support vector machi
    # The model is ~98% accurate.
 
 To interpret crystal identification models like this, it can be helpful to use a dimensionality reduction tool such as Uniform Manifold Approximation and Projection (UMAP) :cite:`McInnes2018`, as shown in figure :ref:`fig:steinhardtumap`.
-The low-dimensional UMAP projection shown is generated directly from our ``pandas`` ``DataFrame``:
+The low-dimensional UMAP projection shown is generated directly from the Pandas ``DataFrame``:
 
 .. code-block:: python
 
@@ -273,8 +275,8 @@ The low-dimensional UMAP projection shown is generated directly from our ``panda
 Visualization
 -------------
 
-Many analyses performed by the ``freud`` library provide a ``plot(ax=None)`` method (new in v1.2.0) that allows their computed quantities to be visualized with ``matplotlib``.
-Additionally, these plottable analyses offer IPython representations, allowing Jupyter notebooks to render a graph such as a radial distribution function :math:`g(r)` just by calling the compute object at the end of a cell.
+Many analyses performed by the ``freud`` library provide a ``plot(ax=None)`` method (new in v1.2.0) that allows their computed quantities to be visualized with Matplotlib.
+Additionally, these plottable analyses offer IPython representations, allowing Jupyter notebooks to render a graph such as a radial distribution function :math:`g(r)` just by returning the compute object at the end of a cell.
 Analyses like the radial distribution function or correlation functions return data that is binned as a one-dimensional histogram -- these are visualized with a line graph via ``matplotlib.pyplot.plot``, with the bin locations and bin counts given by properties of the compute object.
 Other classes provide multi-dimensional histograms, like the Gaussian density or Potential of Mean Force and Torque, which are plotted with ``matplotlib.pyplot.imshow``.
 
@@ -299,7 +301,7 @@ plato
    Interactive visualization of a Lennard-Jones particle system, rendered in a Jupyter notebook using ``plato`` with the ``pythreejs`` backend.
    :label:`fig:platopythreejs`
 
-``plato`` is an open-source graphics package that expresses a common interface for defining two- or three-dimensional scenes which can be rendered as an interactive Jupyter widget or saved to a high-resolution image using one of several backends (``pythreejs``, ``matplotlib``, ``fresnel``, POVray [#]_, and Blender [#]_, among others).
+``plato`` is an open-source graphics package that expresses a common interface for defining two- or three-dimensional scenes which can be rendered as an interactive Jupyter widget or saved to a high-resolution image using one of several backends (PyThreejs, Matplotlib, ``fresnel``, POVray [#]_, and Blender [#]_, among others).
 Below is an example of how to render particles from a HOOMD-blue snapshot, colored by the density of their local environment :cite:`Anderson2008,Glaser2015`.
 The result is shown in figure :ref:`fig:platopythreejs`.
 
@@ -476,7 +478,7 @@ The ``freud`` library offers a unique set of high-performance algorithms designe
 These algorithms are enabled by a fast, easy-to-use set of tools for identifying particle neighbors, a common first step in nearly all such analyses.
 The efficiency of both the core neighbor finding algorithms and the higher-level analyses makes them suitable for incorporation into real-time visualization environments, and, in conjunction with the transparent NumPy-based interface, allows integration into machine learning workflows using iterative optimization routines that require frequent recomputation of these analyses.
 The use of ``freud`` for real-time visualization has the potential to simplify and accelerate existing simulation visualization pipelines, which typically involve slower and less easily integrable solutions to performing real-time analysis during visualization.
-The application of ``freud`` to machine learning, on the other hand, opens up entirely new avenues of research based on treating well-known analysis of particle simulations as descriptors or optimization targets for machine learning applications
+The application of ``freud`` to machine learning, on the other hand, opens up entirely new avenues of research based on treating well-known analyses of particle simulations as descriptors or optimization targets.
 In these ways, ``freud`` can facilitate research in the field of computational molecular science, and we hope these examples will spark new ideas for scientific exploration in this field.
 
 
@@ -505,7 +507,7 @@ Its source code is available on GitHub [#]_ and its documentation is available v
 Acknowledgments
 ---------------
 
-Thanks to Jin Soo Ihm for benchmarking the neighbor finding features of ``freud`` against ``scipy``.
+Thanks to Jin Soo Ihm for benchmarking the neighbor finding features of ``freud`` against SciPy.
 The ``freud`` library's code development and public code releases are supported by the National Science Foundation, Division of Materials Research under a Computational and Data-Enabled Science & Engineering Award # DMR 1409620 (2014-2018) and the Office of Advanced Cyberinfrastructure Award # OAC 835612 (2018-2021).
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
 M.P.S acknowledges funding from the Toyota Research Institute; this article solely reflects the opinions and conclusions of its authors and not TRI or any other Toyota entity.
