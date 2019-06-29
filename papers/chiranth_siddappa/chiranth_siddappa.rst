@@ -37,15 +37,17 @@ an optimal signal type for testing this application :cite:`ZiemerComm`.
 
 Motivation
 ==========
-The CAF has many practical applications, the more traditional being the aforementioned radar and sonar type systems, with a similar use case in image processing.
-The use of cross-correlations in the form of the dot product to find similarities
-is the same theoretical basis for our use in geolocation.
+The CAF has many practical applications, the more traditional being the aforementioned radar and sonar type systems,
+with a similar use case in image processing. The use of cross-correlations in the form of the dot product to find
+similarities is the same theoretical basis for our use in geolocation.
 In the particular case of geolocation systems, the use of collectors and reference emitters are used to create
 geometries that will allow for the detection of Doppler and movement in the signal.
 This method of calculation has yet to be simplified.
 Currently GPU's have been employed as the main workhorse due to the availability as a co-prorcessor.
 But the use of the FPGA has always been an attractive alternative due to the high configurability of the hardware options,
-but comes with much higher up front design cost :cite:`Hennessy`.
+but comes with much higher up front design cost :cite:`Hennessy`. For design cost, we are primarily concerned with the
+development time for code that can be written in C syntax in the form of OpenCL or CUDA for a GPU, as compared to using an
+HDL which will require background in digital logic and testing that must occur on hardware directly.
 
 To geolocate a signal emitter's location the Doppler is used to calculate a frequency difference of arrival (FDOA) which
 represents a satellite's drift.
