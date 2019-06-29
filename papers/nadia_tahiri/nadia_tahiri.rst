@@ -187,7 +187,7 @@ We observed that the baskets generated follow the same distribution that the ori
 Preprocessing dataset
 =====================
 
-Initially, the data were stocked in csv files at a MySQL database taking 1.4 GB. Then, the data were stocked in a dataframe in our Python script.
+Initially, the data were saved in CSV files from a MySQL database and taking up 1.4 GB. Then, the data were organized in a dataframe in our Python script.
 We launched the preprocessing dataset tasks on the servers of Compute Canada. This step was carried out using 172 nodes 
 and 40 cores with an Intel Gold 6148 Skylake CPU(2.4 GHz) and  NVidia V100SXM2(16 GB of memory). We preprocessed the user data, 
 the product data, and the department data. The preprocessing had a 48 hour limit and used 32 GB of the RAM memory.
