@@ -566,7 +566,7 @@ The average, in this case, was taken over all users who purchased these products
 
 .. figure:: figures/products_F1.png
    :align: center
-   :scale: 24%
+   :scale: 21%
    
    Distribution of :math:`F_1` measures relative to products around average. :label:`productsF1`
 
