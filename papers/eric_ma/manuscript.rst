@@ -238,7 +238,7 @@ Design
 
 Inspired by the ``dplyr`` world, 
 ``pyjanitor`` functions are named with verb expressions. 
-This as mentioned earlier, this helps with readability.
+This, as mentioned earlier, this helps with readability.
 Hence, if we want to "clean names", 
 the end user can call on the ``.clean_names()`` function/class method. 
 If the end user wants to "remove all empty rows and columns", 
