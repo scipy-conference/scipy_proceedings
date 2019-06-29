@@ -426,6 +426,23 @@ This score is frequently used especially when the relevant elements are scarce.
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1` if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
+Statistics
+----------
+
+We present the obtained results using the proposed method in this section.
+As well as the *F-measure* (see Equation 1) that is utilized to evaluate the performance of methods.
+
+Statistic score
+===============
+
+The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.
+The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
+
+.. math::
+   :label: e:matrix
+
+    F-measure = F1 = \frac{2TP}{(2TP + FP + FN)}
+
 Python Script
 -------------
 
@@ -479,23 +496,6 @@ We used `f1_optimizer` implemented in **F1Optimizer** package. The select_produc
      series['true_products'] = true_products
 
      return true_products, predicted_products, opt[-1]
-
-Statistics
-----------
-
-We present the obtained results using the proposed method in this section.
-As well as the *F-measure* (see Equation 1) that is utilized to evaluate the performance of methods.
-
-Statistic score
-===============
-
-The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.
-The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
-
-.. math::
-   :label: e:matrix
-   
-   F-measure = F1 = \frac{2TP}{(2TP + FP + FN)}
 
 Results
 -------
