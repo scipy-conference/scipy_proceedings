@@ -328,7 +328,8 @@ to concisely express the cleaning operation.
 Most notably, each of these contributions were made by first-time open source contributors.
 
 For the long-term health of the package, 
-we are on the lookout for minority contributors who would like to help maintain the package as well. 
+we are on the lookout for underrepresented contributors 
+who would like to help maintain the package long-term as well. 
 A code of conduct document, 
 and a community guidelines document, 
 are also on our development roadmap.
