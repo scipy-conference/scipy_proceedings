@@ -144,7 +144,9 @@ where :math:`N` is the signal capture window length, :math:`f_s` is the sampling
 of Hz and :math:`kD` is a discrete time offset in samples with sample period :math:`1/f_s`. In both the continuous and
 discrete-time domains, :math:`\chi` is a function of both time offset and frequency offset.
 The symbol :math:`s` represents the signal in question, generally considered to be the reference signal.
-The accompanying :math:`s^{*}` is the complex conjugate and time shifted signal. As an example, a signal that was not time
+The accompanying :math:`s^{*}` is the complex conjugate and time shifted signal.
+
+As an example, a signal that was not time
 shifted would simply be the autocorrelation :cite:`ZiemerComm`. It is referred to as the captured signal in this context,
 and it is the signal that is used to determine both the time and frequency offset. To determine this offset, we are
 attempting to shift the signal as close as possible to the original reference signal.
