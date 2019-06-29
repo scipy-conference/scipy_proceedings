@@ -590,7 +590,7 @@ The average, in this case, was taken over all users who purchased these products
  Sparkling Water Grapefruit &    792 \\
         \hline
         \end{longtable}
-        \caption{The 10 most popular products included in the predicted baskets.}
+        \caption{The 10 most popular products included in the predicted baskets. The top products are from a subset comprising 2% of all available products.}
   \end{table}
 
 .. figure:: figures/pearsonr.png
