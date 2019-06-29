@@ -155,6 +155,7 @@ By providing commonly-usable data processing routines,
 we also save time for data scientists and engineers, 
 allowing them to accomplish their work more efficiently.
 
+
 History of ``pyjanitor``
 ------------------------
 
@@ -207,10 +208,15 @@ as illustrated in the following code sample:
         # data cleaning operations go here
         ...
         return df
+        
+``pandas-flavor`` has functionality that warns, at runtime, 
+whether a ``DataFrame`` attribute has been overwritten by a custom function.
+Our test suite allows us to catch this issue
+before committing contributed code to the library.
 
 Underneath each data cleaning function, 
 we are free to use both the imperative and functional APIs. 
-What is exposed, though, is a functional and fluent API for the end-user.
+What is exposed, then, is a functional and fluent API for the end-user.
 
 Thanks to the ``pandas.DataFrame.query()`` API, 
 symbolic evaluations are generally available in ``pyjanitor`` for filtering data. 
