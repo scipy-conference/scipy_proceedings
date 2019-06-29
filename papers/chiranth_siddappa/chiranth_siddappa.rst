@@ -100,7 +100,7 @@ Complex Ambiguity Function
 ==========================
 
 An example of the signal path in the satellite receiver scenario is described by Fig. :ref:`satellite-diagram-example`.
-In this case, an emitted signal is sent to a satellite, and then captured by an RF receiver.
+In this case, an emitted signal is sent to a satellite, and then received and captured by an RF receiver.
 Some amount of offset is expected to have happened during the physical relay of the signal back to a receiver within the
 broadcast area of the satellite.
 The signal is then downconverted and filtered, and then sent to the CAF via a capture buffer.
@@ -147,7 +147,7 @@ The symbol :math:`s` represents the signal in question, generally considered to 
 The accompanying :math:`s^{*}` is the complex conjugate and time shifted signal.
 
 As an example, a signal that was not time
-shifted would simply be the autocorrelation :cite:`ZiemerComm`. It is referred to as the captured signal in this context,
+shifted would simply be the autocorrelation :cite:`ZiemerComm`. It is referred to as the received signal in this context,
 and it is the signal that is used to determine both the time and frequency offset. To determine this offset, we are
 attempting to shift the signal as close as possible to the original reference signal.
 The time offset is what allows for the computation of a TDOA, and the frequency offset is what allows for the
