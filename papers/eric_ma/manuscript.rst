@@ -96,28 +96,35 @@ To do this with the pandas API, one might write the following code.
 
     import pandas as pd
     import numpy as np
+    import re
 
     df = pd.DataFrame(...)
 
-    # standardize column names.
-    df.columns = [
-        i.lower().replace(' ', '_').replace('?', '_') for i in df.columns
-    ]
-
-    # remove unnecessary columns
-    df = df.drop(['column_name_14'], axis=1)
-
-    # transform a column by taking the log
-    df['column_name_13'] = np.log10(df['column_name_13'])
-
-    # filter for values less than 3 on column_name_13.
-    # then drop null values.
-    df = df.query("column_name_13 < 3").dropna()
+    def clean_name(x):
+        """Custom function to sanitize column name."""
+        FIXES = [(r"[\* /:,?!()\.-]", "_"), (r"['’]", "")]
+        for search, replace in FIXES:
+            x = re.sub(search, replace, x)
+        return x.lower().replace('__', '_')
+        
+    df = (
+        df
+        # clean column names
+        .rename(columns=clean_name)
+        # remove column
+        .drop('column_name_14', axis='columns')
+        # log transform
+        .assign(column_name_13=lambda x: np.log10(x['column_name_13']))
+        # drop null values
+        .dropna()
+        # filter based on column value
+        .query("column_name_13 < 3")
+    )
 
     # add a column that is the mean of each sample's group.
-    group_means = df.groupby("group")['value_column'].mean()
-    group_means.columns = ['group_mean']
-    df = df.join(group_means)
+    col13_means = df.groupby('group').mean()['column_name_13']
+    col13_means
+    df = df.join(col13_means, rsuffix='_mean', on='group')
 
 By using ``pyjanitor``, end-users can instead write code 
 that reads much closer to the plain English description.
@@ -137,8 +144,8 @@ that reads much closer to the plain English description.
         .dropna()
         .groupby_agg(
             by="group",
-            agg_column_name="value_column",
-            new_column_name="group_mean",
+            agg_column_name="column_name_13",
+            new_column_name="column_name_13_mean",
             agg="mean",
         )
     )
