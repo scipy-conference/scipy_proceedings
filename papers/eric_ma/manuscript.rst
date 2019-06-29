@@ -65,7 +65,7 @@ that enabled statisticians, data scientists, and machine learners
 to wrangle their data into a usable shape. 
 That said, there are inconsistencies in the `pandas` API
 which, though now are idiomatic due to historical use, 
-prevent the use of expressive, fluent :cite:`fluent` programming idioms [#fluent]
+prevent the use of expressive, fluent :cite:`fluent` programming idioms [#fluent]_
 that enable self-documenting data science code.
 
 
