@@ -65,8 +65,15 @@ that enabled statisticians, data scientists, and machine learners
 to wrangle their data into a usable shape. 
 That said, there are inconsistencies in the `pandas` API
 which, though now are idiomatic due to historical use, 
-prevent the use of expressive, fluent programming idioms 
+prevent the use of expressive, fluent :cite:`fluent` programming idioms [#fluent]
 that enable self-documenting data science code.
+
+
+.. [#fluent] Fluent interfaces, as a term, were first coined in 2006, 
+and describe a programming pattern
+allowing code to more closely resemble written prose.
+
+
 
 Idiomatic Inconsistencies of ``pandas``
 ---------------------------------------
@@ -74,7 +81,7 @@ Idiomatic Inconsistencies of ``pandas``
 A case in point is the following elementary sequence of data preprocessing operations:
 
 1.  Standardizing column names to snake-case (``spelled_like_this``, rather \
-    than ``Spelled Like This``),
+    than ``Spelled! Like! This?``),
 2.  Removing unnecessary columns,
 3.  Adding a column of data,
 4.  Log-transforming a column,
@@ -202,7 +209,7 @@ as illustrated in the following code sample:
 
 Underneath each data cleaning function, 
 we are free to use both the imperative and functional APIs. 
-What is exposed, though, is a functional and fluent API :cite:`fluent` for the end-user.
+What is exposed, though, is a functional and fluent API for the end-user.
 
 Thanks to the ``pandas.DataFrame.query()`` API, 
 symbolic evaluations are generally available in ``pyjanitor`` for filtering data. 
