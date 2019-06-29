@@ -123,7 +123,6 @@ To do this with the pandas API, one might write the following code.
 
     # add a column that is the mean of each sample's group.
     col13_means = df.groupby('group').mean()['column_name_13']
-    col13_means
     df = df.join(col13_means, rsuffix='_mean', on='group')
 
 By using ``pyjanitor``, end-users can instead write code 
