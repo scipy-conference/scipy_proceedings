@@ -22,6 +22,14 @@ CAF Implementation on FPGA Using Python Tools
 Introduction
 ============
 
+In this investigation, the pre-processing steps of downsampling and filtering are simulated and considered outside of
+the scope of this project.
+In the case of geolocation systems, the use of collectors and reference emitters are used to create geometries that will
+allow for the detection of Doppler and movement in the signal. The Doppler is used to calculate a frequency difference
+of arrival (FDOA).
+Then, cross correlations can be used to determine the time delay by denoting the peak location of the resulting output
+as a time delay of arrival (TDOA).
+The goal of this project is to be able to provide a real time solution for FDOA and TDOA.
 The basic algorithm for calculating the complex ambiguity function for time difference of arrival and frequency offset (CAF)
 has been well known since the early 1980's :cite:`stein-orig`. In many radio frequency applications, there is a need to
 find a time lag of the signal or the frequency offset of a signal.
@@ -142,6 +150,7 @@ and it is the signal that is used to determine both the time and frequency offse
 attempting to shift the signal as close as possible to the original reference signal.
 The time offset is what allows for the computation of a TDOA, and the frequency offset is what allows for the
 computation of the FDOA.
+
 In this implementation, the frequency offset is created by a signal generator and a complex multiply module that are
 both configurable.
 Once this offset has been applied, a cross-correlation is applied directly in the form of the dot product.
@@ -187,6 +196,8 @@ This overlay contains mappings for ports and interfaces between the fabric and t
 This functionality is very unique in that both an ARM core and a fabric are on the same board.
 As shown by Fig. :ref:`pynq-overlay` the overlay sits between the processing system (CPU) and the programmable logic
 (FPGA).
+This overlay is loaded and programmed to the fabric through a Jupyter notebook and allows for native
+visualization and data interaction through any Python tools that work inside the IPython kernel.
 The overlay is represented by the yellow background with labels "Custom" and "Accelerator" and shows how the overlay is
 a communication layer between the processing system and the programmable logic.
 
