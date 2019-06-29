@@ -111,7 +111,9 @@ To do this with the pandas API, one might write the following code.
         # remove column
         .drop('column_name_14', axis='columns')
         # log transform
-        .assign(column_name_13=lambda x: np.log10(x['column_name_13']))
+        .assign(
+            column_name_13=lambda x: np.log10(x['column_name_13'])
+        )
         # drop null values
         .dropna()
         # filter based on column value
