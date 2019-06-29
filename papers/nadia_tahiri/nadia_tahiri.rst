@@ -427,9 +427,9 @@ where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
 Statistics
-----------
+-------------
 
-We present the obtained results using the proposed method in this section.
+We present the obtained results using proposed method in this section. 
 As well as the *F-measure* (see Equation 1) that is utilized to evaluate the performance of methods.
 
 Statistic score
@@ -440,8 +440,8 @@ The value of 1 would the mean perfect accuracy, i.e., the product would definite
 
 .. math::
    :label: e:matrix
-
-    F-measure = F1 = \frac{2TP}{(2TP + FP + FN)}
+   
+   F-measure = F1 = \frac{2TP}{(2TP + FP + FN)} 
 
 Python Script
 -------------
@@ -590,7 +590,7 @@ The average, in this case, was taken over all users who purchased these products
  Sparkling Water Grapefruit &    792 \\
         \hline
         \end{longtable}
-        \caption{The 10 most popular products included in the predicted baskets. The top products are from a subset comprising 2% of all available products.}
+        \caption{The 10 most popular products included in the predicted baskets. The top products are from a subset comprising 2\% of all available products.}
   \end{table}
 
 .. figure:: figures/pearsonr.png
@@ -609,6 +609,7 @@ We evaluated the model (see Section 'Statistic scores') using the `sklearn` metr
                                f1_score, 
                                recall_score
 
+  
 The results in Table 5 illustrates that a better model accuracy was obtained when the original dataset of 374 real users was enriched by 1,000 artificial users. 
 The accuracy of 49% was obtained for the augmented dataset, compared to the accuracy of 27% for the original dataset. 
 
