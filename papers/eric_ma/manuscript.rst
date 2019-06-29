@@ -440,11 +440,13 @@ Acknowledgments
 ---------------
 
 We would like to thank the users who have made contributions to ``pyjanitor``.
-These contributions have included documentation enhancements, bug fixes,
-development of tests, new functions, and new keyword arguments for functions.
-The list of contributors, which we anticipate will grow over time, can be found
-under ``AUTHORS.rst`` in the development repository.
+These contributions have included documentation enhancements, 
+bug fixes,
+development of tests, 
+new functions, 
+and new keyword arguments for functions.
+The list of contributors, which we anticipate will grow over time, 
+can be found under ``AUTHORS.rst`` in the development repository.
 
-We would also like to acknowledge the tremendous convenience provided by
-``pandas-flavor``, which was developed by one of our co-authors, Dr. Zachary
-Sailer.
+We would also like to acknowledge the tremendous convenience provided by ``pandas-flavor``, 
+which was developed by one of our co-authors, Dr. Zachary Sailer.
