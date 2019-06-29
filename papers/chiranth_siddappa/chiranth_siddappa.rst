@@ -67,8 +67,8 @@ module output can also be produced to match necessary configurations :cite:`veri
 This became a project goal motivated off work done by other projects to be able to produce code in other languages
 :cite:`codegen`.
 Thus, the solution provided must be able to be reconfigured based off of different needs.
-The processing for this system will be targeted to a PYNQ board by Xilinx, but has been designed such that it can be
-synthesized to any target device.
+The processing for this system will be targeted to a PYNQ board manufactured by Xilinx, but has been designed such that
+it can be synthesized to any target device.
 All Verilog HDL modules that are produced by the Python classes conform to the AXI bus standards of interfacing
 :cite:`axi4`. This allows for a streamlined plug and play connection between all the modules and is the basis of the
 templating that is implemented with the help of Jinja.
