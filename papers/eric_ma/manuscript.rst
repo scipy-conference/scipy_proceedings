@@ -72,6 +72,7 @@ that enable self-documenting data science code.
 .. [#fluent] Fluent interfaces, as a term, were first coined in 2006, 
 and describe a programming pattern
 allowing code to more closely resemble written prose.
+Method chaining is the most common way to achieve this.
 
 
 
