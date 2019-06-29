@@ -153,6 +153,7 @@ attempting to shift the signal as close as possible to the original reference si
 The time offset is what allows for the computation of a TDOA, and the frequency offset is what allows for the
 computation of the FDOA.
 
+
 In this implementation, the frequency offset is created by a signal generator and a complex multiply module that are
 both configurable.
 Once this offset has been applied, a cross-correlation is applied directly in the form of the dot product.
