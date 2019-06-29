@@ -88,7 +88,7 @@ using the generalized travelling salesman algorithm (see Figure :ref:`circuit`).
 .. figure:: figures/mygrocerytour_circuit.png
    :align: center
    :figclass: wt
-   :scale: 30%
+   :scale: 29%
    
    Screenshot of MyGroceryTour website with an optimal shopping journey using the generalized travelling salesman algorithm. :label:`circuit`
 
@@ -426,6 +426,55 @@ This score is frequently used especially when the relevant elements are scarce.
 where True Positive :math:`(TP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=1]`, False Negative :math:`(FN)=\mathbb{I}[\lfloor p(i)\rceil=0]\mathbb{I}[R_i=1]`, False Positive :math:`(FP)=\mathbb{I}[\lfloor p(i)\rceil=1]\mathbb{I}[R_i=0]` and :math:`R_i=1` if the product :math:`i` was bought in the basket :math:`p'\in \mathcal{P}`, else :math:`0`.\\
 We used :math:`\mathbb{E}_{X}[F_1(Y)]=\sum_{x\in X}F_1(Y=y|x)P(X=x)`
 
+Statistics
+-------------
+
+We present the obtained results using proposed method in this section. 
+As well as the metrics (see Equations 1-4) that are utilized to evaluate the performance of methods.
+
+Statistic score
+===============
+
+The *accuracy* of a test is its capability to recognize the classes properly. 
+To evaluate the accuracy of the model, we should define the percentage 
+of true positive and true negative in all estimated cases, 
+i.e. the sum of true positive, true negative, false positive, and false negative.
+Statistically, this metric can be identified as follow:
+
+.. math::
+   :label: e:matrix
+   
+   Accuracy = \frac{(TP+TN)}{(TP+TN+FP+FN)}
+
+where `TP` is True Positive, `FP` is False Positive, `TN` is True Negative, and `FN` is False Negative.
+
+The *precision* is a description of random errors, a measure of statistical variability.
+The formula of precision is the ratio between TP with all truth data (positive or negative). 
+The Equation is described as follow:
+
+.. math::
+   :label: e:matrix
+   
+   Precision = \frac{TP}{(TP+FP)}
+
+The *recall* or *sensitivity* or *TP Rate* is defined as the number of true positive data labeled divided by 
+the total number of TP and FN labeled data.
+
+.. math::
+  :label: e:matrix
+  
+   Recall = Sensitivity = TP Rate = \frac{TP}{(TP+FN)}
+
+The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.
+The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
+
+.. math::
+   :label: e:matrix
+   
+   F-measure = F1 = \frac{2TP}{(2TP + FP + FN)} 
+   
+We examined these four evaluation metrics in our study (see the next section for the results of the F1 measure).
+
 Python Script
 -------------
 
@@ -480,23 +529,6 @@ We used `f1_optimizer` implemented in **F1Optimizer** package. The select_produc
 
      return true_products, predicted_products, opt[-1]
 
-Statistics
-----------
-
-We present the obtained results using the proposed method in this section.
-As well as the *F-measure* (see Equation 1) that is utilized to evaluate the performance of methods.
-
-Statistic score
-===============
-
-The *F-measure* or :math:`F_1` is a well-known and reliable evaluation metric.
-The value of 1 would the mean perfect accuracy, i.e., the product would definitely be purchased.
-
-.. math::
-   :label: e:matrix
-   
-   F-measure = F1 = \frac{2TP}{(2TP + FP + FN)}
-
 Results
 -------
 
@@ -508,7 +540,7 @@ In fact, this result can identify consumer buying behavior.
 
 .. figure:: figures/product_pca.png
    :align: center
-   :scale: 27%
+   :scale: 23%
    
    Embeddings of 20 random products projected in 2 dimensions. :label:`productpca`
 
@@ -566,7 +598,7 @@ The average, in this case, was taken over all users who purchased these products
 
 .. figure:: figures/products_F1.png
    :align: center
-   :scale: 25%
+   :scale: 23%
    
    Distribution of :math:`F_1` measures relative to products around average. :label:`productsF1`
 
@@ -609,6 +641,7 @@ We evaluated the model (see Section 'Statistic scores') using the `sklearn` metr
                                f1_score, 
                                recall_score
 
+  
 The results in Table 5 illustrates that a better model accuracy was obtained when the original dataset of 374 real users was enriched by 1,000 artificial users. 
 The accuracy of 49% was obtained for the augmented dataset, compared to the accuracy of 27% for the original dataset. 
 
@@ -628,7 +661,7 @@ The accuracy of 49% was obtained for the augmented dataset, compared to the accu
             F-measure & 0.22 & 0.37\\
         \hline
         \end{longtable}
-        \caption{Statistic score results for real data, and real with augmented data. The table clarifies the impact of using augmented data instead of only real data.}
+        \caption{Statistic score results for real data, and real with augmented data. Table clarify the impact of augmented data instead of only used real data.}
   \end{table}
 
 
