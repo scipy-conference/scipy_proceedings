@@ -11,5 +11,3 @@ synthesizable code in the Verilog HDL. The Python classes use Jinja templates in
 for configuration changes that a user will need to change for investigation and simulation, development, and test.
 Helper methods are included in the package to help simulation of the HDL such as quantization, complex data reading and
 writing, and methods to verify the data using quantized values.
-Other helper methods center around the same goal of making sure that the values produced can be used in the overall
-system and understanding the implications of the system running in hardware rather than in software.
