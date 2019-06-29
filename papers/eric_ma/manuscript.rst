@@ -289,16 +289,18 @@ between package contributors.
 Other Related Tools
 -------------------
 
-When developing ``pyjanitor``, we originally set out to port ``janitor`` (the
-R package) to Python, providing compatibility with ``pandas`` DataFrames in a
-style compatible with Pythonic idioms (e.g. method chaining). While
-development was under way, we also found the Python alternatives described
-below, and found them to either (a) be lacking active development, (b)
-inventing a new pipe-like operator, (c) be restricted to dplyr, and/or (d)
-lacking a robust community of developers. Hence, the development of
-``pyjanitor`` was, and still is, oriented towards solving these problems.
+When developing ``pyjanitor``, we originally set out to port ``janitor`` (the R package) to Python, 
+providing compatibility with ``pandas`` DataFrames 
+in a style compatible with Pythonic idioms (e.g. method chaining). 
+While development was under way, we also found the Python alternatives described below, 
+and found them to either 
+(a) be lacking active development, 
+(b) inventing a new pipe-like operator, 
+(c) be restricted to dplyr verbs, and/or 
+(d) lacking a robust community of developers. 
+Hence, the development of ``pyjanitor`` was, and still is, oriented towards solving these problems.
 
-For completeness, we list our assessment of related tools below.
+For the convenience of our readers, we list our assessment of related tools below.
 
 **janitor** :cite:`janitor`: This is the original source of inspiration for
 ``pyjanitor``, and the original creator of ``janitor`` is aware of
