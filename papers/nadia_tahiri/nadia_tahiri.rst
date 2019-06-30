@@ -447,7 +447,7 @@ Python Script
 -------------
 
 The final reorder probabilities are a weighted average of the outputs from the second-level models. The final basket is chosen by using these probabilities and choosing the product subset with maximum expected F1-score.
-We used `f1_optimizer` implemented in **F1Optimizer** package. The select_products function in Python script is the following:
+We used `f1_optimizer` implemented in **F1Optimizer** package. The implementation of [NCLC12]_ is available in [F1Optimizer]_. The select_products function in Python script is the following:
 
 .. code-block:: python
     :linenos:
@@ -701,6 +701,8 @@ References
            *The concrete distribution: A continuous relaxation of discrete random variables*. 
            arXiv preprint arXiv:1611.00712, 2016.
            https://arxiv.org/pdf/1611.00712.pdf 
+.. [F1Optimizer] Kaggle post, *F1-Score Expectation Maximization in O(n²)*, 2017.
+           https://www.kaggle.com/mmueller/f1-score-expectation-maximization-in-o-n
 .. [Fri02] Jerome H. Friedman. *Stochastic gradient boosting*. Computational
            Statistics & Data Analysis, 38(4):367–378, 2002.
            DOI: https://doi.org/10.1016/S0167-9473(01)00065-2
