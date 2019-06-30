@@ -1,12 +1,11 @@
 :author: Rajeswari Sivakumar
 :email: rajeswari.a.sivakumar@gmail.com
 :institution: University of Georgia
--
+:corresponding:
 
 :author: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
-
 
 
 ------------------------------------------------------------------------------
@@ -295,13 +294,13 @@ examining several corresponding decomposed core and original slices.
    from tensor decomposition output :label:`figure2`
 
 
-.. table:: Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied :label:table1
+.. table:: Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied :label:`table1`
    :class: w
 
    +----------------------------+-------------+------------+
    |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
    +----------------------------+-------------+------------+
-   | -                          |      0.94   |     0.94   |
+   |                            |      0.94   |     0.94   |
    +----------------------------+-------------+------------+
    | PCA                        |      0.94   |     0.94   |
    +----------------------------+-------------+------------+
@@ -310,64 +309,24 @@ examining several corresponding decomposed core and original slices.
    | Kernel PCA                 |      0.94   |     0.94   |
    +----------------------------+-------------+------------+
 
-.. raw:: latex
-   \begin{table}
-
-     \begin{longtable}{|l|l|l|}
-     \hline
-     Dimensionality Reduction Approach  & F-measure & Accuracy \tabularnewline
-     \hline
-     - & 0.94 & 0.94 \tabularnewline
-     \hline
-     PCA & 0.94 & 0.94 \tabularnewline
-     \hline
-     LDA & 0.82 & 0.81 \tabularnewline
-     \hline
-     Kernel PCA & 0.94 & 0.94 \tabularnewline
-     \hline
-     \end{longtable}
-
-   \end{table}
 
 Experiment II
 +++++++++++++
-.. table:: Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied :label:table1
-   :class: w
 
-+----------------------------+-------------+------------+
-|  Dimensionality Reduction  |  F-measure  |  Accuracy  |
-+----------------------------+-------------+------------+
-| -                          |      0.90   |     0.82   |
-+----------------------------+-------------+------------+
-| PCA                        |      0.89   |     0.81   |
-+----------------------------+-------------+------------+
-| LDA                        |      0.84   |     0.74   |
-+----------------------------+-------------+------------+
-| Kernel PCA                 |      0.93   |     0.89   |
-+----------------------------+-------------+------------+
+.. table:: Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied :label:`table2`
+  :class: w
 
-.. raw:: latex
-
-   \begin{table}
-
-     \begin{longtable}{|l|l|l|}
-     \hline
-     Dimensionality Reduction Approach  & F-measure & Accuracy \tabularnewline
-     \hline
-     - & 0.90 & 0.82 \tabularnewline
-     \hline
-     PCA & 0.89 & 0.81 \tabularnewline
-     \hline
-     LDA & 0.84 & 0.74 \tabularnewline
-     \hline
-     Kernel PCA & 0.93 & 0.89 \tabularnewline
-     \hline
-     \end{longtable}
-
-     \caption{Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied {label}{table2}}
-
-   \end{table}
-
+  +----------------------------+-------------+------------+
+  |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
+  +----------------------------+-------------+------------+
+  |                            |      0.90   |     0.82   |
+  +----------------------------+-------------+------------+
+  | PCA                        |      0.89   |     0.81   |
+  +----------------------------+-------------+------------+
+  | LDA                        |      0.84   |     0.74   |
+  +----------------------------+-------------+------------+
+  | Kernel PCA                 |      0.93   |     0.89   |
+  +----------------------------+-------------+------------+
 
 We were able to achieve accuracy of 82\% with random forest classifier alone.
 This outperforms previous benchmarks in training classifiers on synthetic
@@ -418,7 +377,7 @@ References
 
 .. [rabanser2017] Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
 
-.. [vos2016]Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
+.. [vos2016] Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
 
 .. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
 
