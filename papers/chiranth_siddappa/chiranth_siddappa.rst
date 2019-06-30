@@ -540,8 +540,8 @@ absolute value of a complex number is described in Eq. :ref:`mag`.
 However, finding the true absolute value of the number requires the implementation of the square root.
 The first option that was looked at was a binary square root algorithm :cite:`abacus` that only uses base 2 division.
 However, this can take a variable amount of clock cycles. An implementation is provided in the sqrt package as
-reference. The other option is the CORDIC logic core provided by Xilinx which also would apply backpressure to the
-result :cite:`cordic`.
+reference. The other option is the CORDIC logic core provided by Xilinx which also would apply backpressure :cite:`cordic`,
+essentially sequentially buffering the result by a fixed number of clocks.
 
 .. math::
    :label: mag
