@@ -62,13 +62,13 @@ different positions.
 ===========
 
 To produce a synthesized 3D audio sound field, we start with a geometry where the center of the coordinate frame is 
-the intersection between the subjects  *mid-sagittal* or vertical *median plane* and the line 
+the intersection between the subject's  *mid-sagittal* or vertical *median plane* and the line 
 connecting the left and right ear canals. This is referred to as being *head-centered*. The coordinate 
 systems used in this paper are shown in Figure :ref:`CYLIND`. 
 The primary head-centered system has cartesian coordinates labeled :math:`(x,y,z)` and associated cylindrical 
 coordinates :math:`(r_{xy},\phi_\text{az},h_y)` (black labels in Figure :ref:`CYLIND`). The cylindrical coordinates 
 will be used in Jupyter notebook apps presented later as the interface for GUI controls to conveniently position 
-the audio source about a subjects head. A secondary head-centered 
+the audio source about a subject's head. A secondary head-centered 
 system, used by CIPIC, has cartesian coordinates labeled :math:`(x_1,x_2,x_3)` and associated spherical 
 coordinates :math:`(r,\phi,\theta)` (purple labels in Figure :ref:`CYLIND`).  The first coordinate system 
 is motivated by [Fitzpatrick], and its usage is explained in detail in the section 
@@ -118,7 +118,7 @@ Real-Time Signal Processing
 
 In this section we briefly describe the role real-time digital signal processing (DSP) plays in implementing 
 the 3D audio simulator. A top level block diagram of the 3D audio simulator is shown in Figure :ref:`FILTERING`. 
-From the block diagram we see that for audio source is positioned at :math:`(x,y,z)` relative to the head 
+For an audio source positioned at :math:`(x,y,z)` relative to the head 
 center, the appropriate HRIR right and left channel digital filter coefficients are utilized along with gain scaling 
 to account for radial distance relative to 1 m and a parallax correction factor. Gain scaling and parallax 
 correction, are taken from [Fitzpatrick]_, and are explained in more detail in the following section of this paper.
@@ -129,7 +129,7 @@ framework supports real-time signal processing, in particular filtering using co
 processing functions of :code:`scipy.signal` [ScipySignal]_. The 200 coefficients of the right and left HRIR 
 are equivalent to the coefficients in a finite impulse response (FIR) digital filter which produce a discrete-time 
 output signal or sequence :math:`y_R[n]/y_L[n]` from a single audio source signal :math:`x[n]`. All of the signals 
-are processed with at a sampling rate of :math:`f_s = 44.1` ksps, as this is rate used in forming the CIPIC 
+are processed with at a sampling rate of :math:`f_s = 44.1` kHz, as this is rate used in forming the CIPIC 
 database. In mathematical terms we have the output signals that drive 
 
 .. math::
@@ -242,7 +242,7 @@ special case of a source in the horizontal plane and directly in front of the he
 corrections are addressed in detail in [Fitzpatrick]_. For a source not on the unit sphere, 
 sound parallax requires an adjustment in the HRIR coefficients, unique to the right and left ears. 
 If we extend rays from the right and left ears that pass through the sound source location and then 
-touch the unit sphere, the required azimuth values will be shifted to locations either side of the 
+touch the unit sphere, the required azimuth values will be shifted to locations on either side of the 
 true source azimuth. The corresponding HRIR values where these rays contact the unit sphere, 
 respectively, perform the needed parallax correction. The actual database entries utilized are those 
 that are closest to the intersection points.   
