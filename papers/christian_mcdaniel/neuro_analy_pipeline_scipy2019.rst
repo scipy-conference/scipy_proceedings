@@ -128,41 +128,23 @@ In this paper, we utilize the Graph Convolutional Network (GCN) to compute signa
 
 The convolution operation measures the amount of change enacted on a function :math:`f_{1}` by combining it with another function :math:`f_{2}`. We can define :math:`f_{2}` such that its convolution with instances of :math:`f_{1}` from one class (e.g., PD) produce large changes while its convolution with instances of :math:`f_{1}` from another class (e.g., HC) produce small changes; this provides a way to discriminate instances of :math:`f_{1}` into classes without explicitly knowing the class values. Recall that we have defined a function :math:`f` over the vertices of our graph using dMRI data (i.e., the *signals*). We seek to learn functions, termed *filters*, that, when convolved with the input graph signals, transform the inputs into distinguishable groups according to class value (e.g., PD vs. healthy control). This is similar to the local filters used in convolutional neural networks, except that the filters of GCNs use the connections of the graph (i.e., the edges) to establish locality.
 
-The convolution operator is made possible over a graph structure by utilizing a few insights from spectral graph theory. Namely, the normalized graph Laplacian is a representation of the graph written as
-
-.. math::
-
-    \textup{\L{}} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}},
-
-where :math:`I` is the identity matrix with 1's along the diagonal and 0's everywhere else, :math:`W` is the weighted adjacency matrix defined earlier w.r.t. :math:`\mathcal{G}`, and :math:`D` is a weighted degree matrix such that :math:`D_{ii} = \sum_{j} \textbf{W}_{ij}`. :math:`\textup{\L{}}` can be factorized via a process called *eigendecomposition*, or the graph Fourier transform, as :math:`\textup{\L{}} = U \Lambda U^{T}`, where :math:`U = (u_{1},...,u_{N})` is a complete set of orthonormal eigenvectors, and :math:`\Lambda` are the associated real, non-negative eigenvalues. The eigenvectors can be thought of as underlying components that, when combined, give the graph its specific numeric values. This representation of :math:`\textup{\L{}}` is in the Fourier domain, in which the convolution operation becomes multiplication.
-
-Recall that we wish to convolve functions :math:`f` (i.e., our input signals) and :math:`g` (i.e., our filters to be learned), which are both functions over the vertices of :math:`\mathcal{G}`. The graph Fourier transform can be applied to :math:`f` and :math:`g` by multiplication with :math:`U` :cite:`HBL2015`,
-
-.. math::
-
-    x*g_{\theta} = Ug_{\theta}U^{T}x
-
-where :math:`x` is an input instance of :math:`f` (i.e., the signal at a single vertex), :math:`\theta` are the coefficients we wish to learn, and :math:`g_{\theta}` is a function of the eigenvalues of :math:`\textup{\L{}}`, :math:`g_{\theta}(\Lambda)` :cite:`KW2017`. This allows us to define a convolution operation between two functions of the vertices of a graph.
-
-Our specific implementation is based off the :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [15]_, which has several computational improvements over the original graph convolution formula. In short, we define the graph convolutional operation as
+Our specific implementation is based off the :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [15]_, which has several computational improvements over the original graph convolution formula. In short, the graph convolutional operation is based off the graph Laplacian
 
 .. [15] https://github.com/tkipf/pygcn
 
 .. math::
 
-    Z = \tilde{D}^{\frac{-1}{2}}\tilde{W}\tilde{D}^{\frac{-1}{2}} X \Theta.
+    \textup{\L{}} = I - D^{\frac{-1}{2}} \textbf{W} D^{\frac{-1}{2}},
 
-A so-called *renormalization trick* has been applied to :math:`\textup{\L{}}` wherein identity matrix :math:`I_{N}` has been added; i.e., self-loops have been added to the adjacency matrix. :math:`I_{N}+D^{\frac{-1}{2}}WD^{\frac{-1}{2}}` becomes :math:`\tilde{D}^{\frac{-1}{2}}\tilde{W}\tilde{D}^{\frac{-1}{2}}`, where :math:`\tilde{W} = W+I_{N}` and :math:`\tilde{D}_{ii} = \sum_{j} \tilde{W}_{ij}`. :math:`\Theta \in \mathbb{R}^{CxF}` is a matrix of trainable coefficients, where :math:`C=N` is the length of the input signals at each node, and :math:`F=N` is the number of C-dimensional filters to be learned. :math:`X` is the :math:`N` x :math:`N` matrix of input signals for all vertices (i.e., the signals from a single tractography output of a single dMRI image). :math:`Z \in \mathbb{R}^{NxF}` is the output matrix of convolved signals. We will call the output signals *features* going forward.
-
-Generalizing :math:`\Theta` to the weight matrix :math:`\textbf{W}(l)` at a layer :math:`l` and :math:`X=H(l)` as the inputs to layer :math:`l`, where :math:`H(0)` is the original data, we can calculate a hidden layer of our GCN as
+where :math:`I` is the identity matrix with 1's along the diagonal and 0's everywhere else, :math:`W` is the weighted adjacency matrix defined earlier w.r.t. :math:`\mathcal{G}`, and :math:`D` is a weighted degree matrix such that :math:`D_{ii} = \sum_{j} \textbf{W}_{ij}`. We define the graph convolutional operation as
 
 .. math::
 
-    H(l+1) = \sigma(\tilde{D}^{\frac{-1}{2}}\tilde{A}\tilde{D}^{\frac{-1}{2}}H(l)\textbf{W}(l)),
+    Z = \tilde{D}^{\frac{-1}{2}}\tilde{W}\tilde{D}^{\frac{-1}{2}} X \Theta,
 
-where :math:`\sigma` represents a nonlinear activation function (e.g., :math:`ReLU`). The :code:`GCN` class from :cite:`KW2017`'s PyTorch implementation [16]_ defines a two layer graph convolutional network as
+A so-called *renormalization trick* has been applied to :math:`\textup{\L{}}` wherein identity matrix :math:`I_{N}` has been added; i.e., self-loops have been added to the adjacency matrix. :math:`I_{N}+D^{\frac{-1}{2}}WD^{\frac{-1}{2}}` becomes :math:`\tilde{D}^{\frac{-1}{2}}\tilde{W}\tilde{D}^{\frac{-1}{2}}`, where :math:`\tilde{W} = W+I_{N}` and :math:`\tilde{D}_{ii} = \sum_{j} \tilde{W}_{ij}`. :math:`\Theta \in \mathbb{R}^{CxF}` is a matrix of trainable coefficients, where :math:`C=N` is the length of the input signals at each node, and :math:`F=N` is the number of C-dimensional filters to be learned. :math:`X` is the :math:`N` x :math:`N` matrix of input signals for all vertices (i.e., the signals from a single tractography output of a single dMRI image). :math:`Z \in \mathbb{R}^{NxF}` is the output matrix of convolved signals. We will call the output signals *features* going forward.
 
-.. [16] https://github.com/Diego999/pyGAT
+Generalizing :math:`\Theta` to the weight matrix :math:`\textbf{W}(l)` at a layer, we can calculate a hidden layer of our GCN as
 
 .. math::
 
@@ -178,7 +160,9 @@ Graph Attention Networks
 -------------------------
 In order to convert the task from classifying each node to classifying the whole graph, the features on each vertex must be pooled to generate a single feature vector for each input. The *self-attention* mechanism, widely used to compute a concise representation of a signal sequence, has been used to effectively compute the importance of graph vertices in a neighborhood :cite:`VCCRLB2018`. This allows for a weighted sum of the vertices' features during pooling.
 
-We employ a PyTorch implementation of :cite:`VCCRLB2018`'s :code:`GAT` class to implement a graph attention network, using a feed-forward neural network to learn attention coefficients as
+We employ a PyTorch implementation of :cite:`VCCRLB2018`'s :code:`GAT` class [16]_ to implement a graph attention network, using a feed-forward neural network to learn attention coefficients as
+
+.. [16] https://github.com/Diego999/pyGAT
 
 .. math::
 
