@@ -32,10 +32,10 @@ Introduction
 In cognitive hearing science binaural hearing models how sound pressure waves arrive at either 
 ear drum, at the end of the ear canal, or in the case of typical measurements, at the entry 
 to the ear canal, both as a function of the arrival angle in 3D (azimuth and elevation) and 
-radial distance. This leads to the need for the head related impulse response (HRIR) 
+radial distance. A tutorial on 3-D audio can be found at [HCI]_. 
+This leads to the need for the head related impulse response (HRIR) 
 (time-domain) or head-related transfer function (HRTF) (frequency domain) for a particular 
-human subject. 
-Traditionally human subjects are placed in an anechoic chamber with a sound 
+human subject. Traditionally human subjects are placed in an anechoic chamber with a sound 
 source placed at e.g. one meter from the head and then the subject is moved over a range of 
 azimuth and elevation angles, with the HRIR measured at each angle. The 3D simulator described 
 here uses a database of HRIR's from the University of California, Davis, originally in the Center 
@@ -45,7 +45,9 @@ the HRIR at a given angle is represented by two (left and right ear)  200 coeffi
 filters that the sound source audio is passed through. Here the data base for each subject  
 holds 25 azimuth and 50 elevation angles to approximate continuous sound source 3D locations. 
 
-Obtaining individual HRTFs is a challenge in itself and the subject of much research. In a related 
+Obtaining individual HRTFs is a challenge in itself and the subject of much research. 
+
+In a related 
 research project *deep learning* is being investigated as a means to fit a human subject to the CIPIC HRTF 
 database of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
 we can also consider using a simple spherical head model, and its corresponding HRTF, which 
@@ -71,7 +73,7 @@ will be used in Jupyter notebook apps presented later as the interface for GUI c
 the audio source about a subject's head. A secondary head-centered 
 system, used by CIPIC, has cartesian coordinates labeled :math:`(x_1,x_2,x_3)` and associated spherical 
 coordinates :math:`(r,\phi,\theta)` (purple labels in Figure :ref:`CYLIND`).  The first coordinate system 
-is motivated by [Fitzpatrick], and its usage is explained in detail in the section 
+is motivated by [Fitzpatrick]_, and its usage is explained in detail in the section 
 FIR Filter Coefficient Set Selection. The second system is referred to by CIPIC as the 
 *interaural-polar coordinate system* (IPCS), which is used to index into the HRIR filter pairs which 
 produce the right and left audio outputs.
@@ -857,9 +859,10 @@ This will give open access to anyone interested in trying out the simulator.
 References
 ----------
 
-.. [Fitzpatrick] Fitzpatrick, W., Wickert, M., and Semwal, S. (2013) 3D Sound Imaging with Head Tracking, *Proceedings IEEE 15th Digital Signal Processing Workshop/7th Signal Processing Education Workshop*.
+.. [HCI] *3-D Audio for Human/Computer Interaction*, (2019, June 30). Retrieved June 30, 2019, from `https://www.ece.ucdavis.edu/cipic/spatial-sound/tutorial`_. 
 .. [CIPIC] *The CIPIC Interface Laboratory Home Page*, (2019, May 22). Retrieved May 22, 2019, from `https://www.ece.ucdavis.edu/cipic`_.
 .. [CIPICHRTF] *The CIPIC HRTF Database*, (2019, May 22). Retrieved May 22, 2019, from `https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`_.
+.. [Fitzpatrick] Fitzpatrick, W., Wickert, M., and Semwal, S. (2013) 3D Sound Imaging with Head Tracking, *Proceedings IEEE 15th Digital Signal Processing Workshop/7th Signal Processing Education Workshop*.
 .. [Wickert] *Real-Time Digital Signal Processing Using pyaudio_helper and the ipywidgets*, (2018, July 15). Retrieved May 22, 2019, from DOI `10.25080/Majora-4af1f417-00e`_.
 .. [ScipySignal] *Signal processing (scipy.signal)*, (2019, May 22). Retrieved May 22, 2019, from `https://docs.scipy.org/doc/scipy/reference/signal.html`_.
 .. [KEMAR] GRAS Sound & Vibration A/S, Head & Torso Simulators, from `http://www.gras.dk/products/head-torso-simulators-kemar`_.
@@ -869,6 +872,7 @@ References
 .. [3D_Audio] 3D audio simulator, (2019, June 16): Retrieved June 16, 2019, from `https://github.com/mwickert/3D_Audio_Simulator`_.
 
 .. _`https://www.ece.ucdavis.edu/cipic`: https://www.ece.ucdavis.edu/cipic
+.. _`https://www.ece.ucdavis.edu/cipic/spatial-sound/tutorial`: https://www.ece.ucdavis.edu/cipic/spatial-sound/tutorial
 .. _`https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data`: https://www.ece.ucdavis.edu/cipic/spatial-sound/hrtf-data
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 .. _`10.25080/Majora-4af1f417-00e`: http://conference.scipy.org/proceedings/scipy2018/mark_wickert_250.html
