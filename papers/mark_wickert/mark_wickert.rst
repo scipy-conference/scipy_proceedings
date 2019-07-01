@@ -18,7 +18,7 @@ A Real-Time 3D Audio Simulator for Cognitive Hearing Science
    devices (HAD) research and development. At its core the simulator uses digital filters to represent the 
    sound pressure wave propagation path from the sound source to each ear canal of a human subject. 
    Digital filters of 200 coefficients each for left and right ears are stored in a look-up table 
-   as a function of azimuth and elevation angles of the impinging sounds source.
+   as a function of azimuth and elevation angles of the impinging sound's source.
 
 
 .. class:: keywords
@@ -36,7 +36,7 @@ radial distance. This leads to the need for the head related impulse response (H
 (time-domain) or head-related transfer function (HRTF) (frequency domain) for a particular 
 human subject. 
 Traditionally human subjects are placed in an anechoic chamber with a sound 
-source placed at say one meter from the head and then the subject is moved over a range of 
+source placed at e.g. one meter from the head and then the subject is moved over a range of 
 azimuth and elevation angles, with the HRIR measured at each angle. The 3D simulator described 
 here uses a database of HRIR's from the University of California, Davis, originally in the Center 
 for Image Processing and Integrated Computing (CIPIC), [CIPICHRTF]_, to describe a given subject. 
@@ -50,11 +50,11 @@ research project *deep learning* is being investigated as a means to fit a human
 database of subjects, based on 27 upper torso anthropometrics (measurements) of the subject. As a simple solution, 
 we can also consider using a simple spherical head model, and its corresponding HRTF, which 
 makes use of spherical harmonics to solve for the sound pressure magnitude and phase at any location on the sphere 
-surface. A frequency sweep of magnitude and phase is then the inverse Fourier transformed to obtain the HRIR. 
+surface. A frequency sweep of magnitude and phase is then inverse Fourier transformed to obtain the HRIR. 
 The ultimate intent of the simulator is to serve as a clinical tool for blind sound source localization experiments. 
 Human subjects will be exposed to several different HRIR models, where at least one model is a *personalized 
 fit* based on deep learning using anthropometrics and/or a finite element wave equation solution using a 3D 
-rendering of the subjects shoulders and head. Note 3D rendering of a subject can be obtained using *photogrammetry*, 
+rendering of the subject's shoulders and head. 3D rendering of a subject can be obtained using *photogrammetry*, 
 which estimates three-dimensional coordinates of points on an object from a collection of photographic images taken from 
 different positions.
 
@@ -87,7 +87,8 @@ produce the right and left audio outputs.
 
 The 3D audio rendering provided by the simulator developed in this paper relies on the 1250 
 HRIR measurements taken using the geometrical configuration shown in Figure :ref:`CIPICLOC`. 
-A total of 45 subjects are contained in the CIPIC HRIR database, both human and the mannequin *Kemar* [CIPICHRTF]_. 
+A total of 45 subjects are contained in the CIPIC HRIR database, both human and the mannequin KEMAR (Knowles 
+Electronics Manikin for Auditory Research) [CIPICHRTF]_. 
 For subject 165 in particular, the left-right channel HRIR is shown in Figure :ref:`HRIR`, for a particular 
 cylindrical coordinate system triple :math:`(r_{xz},h_y,\phi_{az})`. Figure :ref:`HRIR` in particular illustrates 
 two binaural cues, *interaural level difference* ILD and *interaural time difference* ITD, that are used for 
@@ -244,7 +245,7 @@ If we extend rays from the right and left ears that pass through the sound sourc
 touch the unit sphere, the required azimuth values will be shifted to locations either side of the 
 true source azimuth. The corresponding HRIR values where these rays contact the unit sphere, 
 respectively, perform the needed parallax correction. The actual database entries utilized are those 
-that are closest to the intersection point   
+that are closest to the intersection points.   
 
 .. figure:: Parallax_Correction.pdf
    :scale: 80%
@@ -409,7 +410,7 @@ that use the cylindrical coordinates described in Figure :ref:`CYLIND` to contro
 Static Sound Source
 ===================
 
-The first and foremost purpose the 3D audio simulator is to to be able statically position an audio source 
+The first and foremost purpose the 3D audio simulator is to be able to statically position an audio source 
 and then ask a human subject where the source is located (localization). This is a cognitive experiment, and 
 can serve many purposes. One purpose in the present research is to to see how well the HRIR utilized in the simulator 
 matches the subject's true HRIR. As mentioned in the introduction, an ongoing study is to estimate an *individualized 
@@ -516,7 +517,7 @@ Note in the spherical coordinates of the math model, it remains that :math:`r = 
    Using spherical harmonics [Beranek]_ to calculate the pressure wave magnitude (shown here) and 
    phase, using a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
 
-The calculations required to obtain Figure :label:`SCATTER` follow easily using the functions found in 
+The calculations required to obtain Figure :ref:`SCATTER` follow easily using the functions found in 
 :code:`scipy.special`, e.g., for the scattered field the calculation is:
 
 .. code-block:: python
@@ -823,8 +824,9 @@ An example HRIR plot, similar to Figure :ref:`HRIR`, is shown in Figure :ref:`HR
    for a radius 8.75 cm sphere. :label:`HRIR875`
 
 Casual listening tests with a coarse fit human subject from CIPIC and the simple spherical model, indicate both similarities 
-and differences. Coarse localization is similar between the two, bit the spherical model seems *sterile*. The fact that 
-coarse localization is present is an indication that the database is correct. Additional testing is planned.
+and differences. Coarse localization is similar between the two, but the spherical model seems *sterile*, that is the sound 
+seems unnatural. The fact that coarse localization is present is an indication that the database is correct. Additional 
+testing is planned.
 
 
 Conclusions and Future Work
