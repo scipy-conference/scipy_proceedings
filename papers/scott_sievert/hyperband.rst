@@ -21,17 +21,19 @@ Better and faster hyperparameter optimization with Dask
 
 .. class:: abstract
 
-    Nearly every machine learning model requires that the user specify certain
-    parameters before training begins, aka "hyperparameters". Finding the
-    optimal set of hyperparameters is often a time- and resource-consuming
-    process. A recent breakthrough hyperparameter optimization algorithm,
-    Hyperband :cite:`li2016hyperband`, can find high performing hyperparameters with minimal training
-    and has theoretical foundations. This paper will provide intuition for
-    Hyperband, explain the slightly modified implementation and why it's
-    well-suited for Dask, a Python library that scales Python to larger
-    datasets and more computational resources. Experiments find high performing
-    hyperparameters more quickly in the presence of serial or parallel
-    computational resources with deep learning models.
+    Nearly every machine learning model requires hyperparameters, parameters
+    that the user must specify before training begins and influence model
+    performance. Finding the optimal set of hyperparameters is often a time-
+    and resource-consuming process.  A recent breakthrough hyperparameter
+    optimization algorithm, Hyperband finds high performing hyperparameters
+    with minimal training via a principled early stopping scheme for random
+    hyperparameter selection :cite:`li2016hyperband`. This paper will provide
+    an intuitive introduction to Hyperband and explain the implementation in
+    Dask, a Python library that scales Python to larger datasets and more
+    computational resources. The implementation makes adjustments to the
+    Hyperband algorithm to exploit Dask's capabilities and parallel processing.
+    In experiments, the Dask implementation of Hyperband rapidly finds high
+    performing hyperparameters for deep learning models.
 
 .. class:: keywords
 
@@ -43,7 +45,7 @@ Introduction
 Training any machine learning pipeline requires data, an untrained model or
 estimator and "hyperparameters", parameters chosen before training begins that
 help with cohesion between the model and data. The user needs to specify values
-for these hyperparameters in order to use the model. A good example is with
+for these hyperparameters in order to use the model. A good example is
 adapting the ridge regression or LASSO to the amount of noise in the
 data with the regularization parameter :cite:`marquardt1975`
 :cite:`tibshirani1996`.  Hyperparameter choice verification can not be
@@ -61,19 +63,18 @@ These hyperparameters need to be specified by the user. There are no good
 heuristics for determining what the values should be.
 These values are typically found through a search over possible values through
 a "cross validation" search where models are scored on unseen holdout data.
-These searches are part of a hyperparameter optimization, and for certain more import. Even in the simple ridge regression case
+Even in the simple ridge regression case
 above, a brute force search is required :cite:`marquardt1975`. This brute force
 search quickly grows infeasible as the number of hyperparameters grow.
 
-Hyperparameter optimization gets more complex with many hyperparameters, and
-especially because there's often interaction between hyperparameters. A good
+Hyperparameter optimization grows more complex as the number of hyperparameters
+grow, especially because of the frequent interactions between them. A good
 example of hyperparameter optimization is with deep learning, which has
-specialized techniques for handling many data :cite:`bottou2010large`. However,
-these optimization methods can't provide basic hyperparameters because there
-are too many data to perform optimization efficiently :cite:`bottou2010large`.
-For example, the most basic hyperparameter "learning rate" or "optimization
-step size" is a quick computation with few data but infeasible for many data
-:cite:`maren2015prob`.
+specialized algorithms for handling many data but have difficulty providing
+basic hyperparameters. For example, the commonly used stochastic gradient
+descent (SGD) has difficulty with the most basic hyperparameter "learning rate"
+:cite:`bottou2010large`, which is a quick computation with few data but
+infeasible for many data :cite:`maren2015prob`.
 
 Contributions
 =============
@@ -104,17 +105,19 @@ This work
 * provides an simple heuristic to determine the parameters Hyperband requires,
   which only requires knowing how many examples the model should observe and a
   rough estimate on how many parameters to sample
-* provides validating experiments that also illustrate common use cases
+* provides validating experiments that illustrate common use cases and explore
+  performance
 
 Hyperband treats computation as a scarce resource [#scarce]_ and has parallel
-underpinnings.  In experiments, Hyperband returns high performing models fairly
-quickly with a simple heuristic for determining Hyperband's input parameters.
-The implementation can be found in Dask's machine learning package,
-Dask-ML [#dask-ml]_.
+underpinnings. In the experiments performed with the Dask implementation,
+Hyperband returns high performing models fairly quickly with a simple heuristic
+for determining Hyperband's input parameters.  The implementation can be found
+in Dask's machine learning package, Dask-ML [#dask-ml]_.
 
-This paper will review other existing work for hyperparameter optimization before
-detailing the Hyperband implementation in Dask. A realistic set of experiments
-will be presented before mentioning ideas for future work.
+This paper will review other existing work for hyperparameter optimization
+before detailing the Hyperband implementation in Dask. A realistic set of
+experiments will be presented to highlight the performance of the Dask
+implementation before mentioning ideas for future work.
 
 .. [#scarce] If computation is not a scarce resource, there is little benefit from
    this algorithm.
@@ -304,28 +307,26 @@ and provides rapid feedback and diagnostics to aid humans.
 Dask's implementation of Hyperband
 ==================================
 
-Dask can scale up to clusters or to massive datasets. Hyperparameter optimization searches
-often require significant amounts of computation and can involve large
-datasets, and Hyperband is amenable to parallelism. Combining Dask
-with Hyperband is a natural fit.
+Combining Dask and Hyperband is a natural fit. Hyperparameter optimization
+searches often require significant amounts of computation and can involve large
+datasets. Hyperband is amenable to parallelism, and Dask can scale up to
+clusters or to massive datasets.
 
-This work focuses on the case when the computation required is not
-insignificant. Then, the existing passive hyperparameter optimization algorithms in
+This work focuses on the case when significant computation is required. In
+these cases, the existing passive hyperparameter optimization algorithms in
 Dask-ML have limited use because they don't adapt to previous training to
-reduce the amount of training required.  [#dasksearchcv]_
+reduce the amount of training required. [#dasksearchcv]_
 
-An adaptive hyperparameter optimization algorithm, Hyperband is implemented in Dask's
-machine learning library, Dask-ML.  [#docs]_ This algorithm adapts to previous
-training to minimize the amount of computation required. This section will
-detail the Hyperband architecture, the input arguments required and some
-small modifications to reduce time to solution.
+This section will explain the parallel underpinnings of Hyperband, show the
+heuristic for Hyperband's inputs and mention a modification to increase
+amenability to parallelism. Complete documentation of the Dask implementation
+of Hyperband can be found at
+https://ml.dask.org/modules/generated/dask_ml.model_selection.HyperbandSearchCV.
 
 .. [#dasksearchcv] Though the existing implementation can reduce the
    computation required when pipelines are used. This is particularly useful
    when tuning data preprocessing (e.g., with natural language processing).
    More detail at https://ml.dask.org/hyper-parameter-search.html.
-
-.. [#docs] https://ml.dask.org/modules/generated/dask_ml.model_selection.HyperbandSearchCV
 
 Hyperband architecture
 ----------------------
@@ -394,11 +395,15 @@ models. As an example, with ``max_iter=243`` the least adaptive bracket has 5
 models and no pruning. The most adaptive bracket has 81 models and fairly
 aggressive early stopping schedule.
 
-The exact aggressiveness of the early stopping schedule depends one optional
-input to ``HyperbandSearchCV``, ``aggressiveness``. The default value is 3,
-which has some theoretical motivation :cite:`li2016hyperband`.
-``aggressiveness=4`` is likely more suitable for initial exploration when not
-much is known about the model, data or hyperparameters.
+
+.. raw:: latex
+
+   The exact aggressiveness of the early stopping schedule depends on one
+   optional input to \texttt{HyperbandSearchCV}, \texttt{aggressiveness}. The
+   default value is 3, which has some mathematical motivation \cite[Section
+   2.6]{li2016hyperband}.  \texttt{aggressiveness=4} is likely more suitable
+   for initial exploration when not much is known about the model, data or
+   hyperparameters.
 
 
 Input parameters
@@ -473,9 +478,15 @@ stopping mechanism for the least adaptive bracket of Hyperband.
 Serial Simulations
 ==================
 
-This section focuses on a synthetic classification example between 4 classes.
-Some
-detail is mentioned in the appendix, though complete details can be found at
+This section is focused on the initial exploration of a model and it's
+hyperparameters on a personal laptop. In this section, performance in this
+environment is shown alongside details on ``HyperbandSearchCV``'s inputs. This
+provides a demonstration that the Hyperband implementation in Dask works
+correctly before the parallel computing resources of Dask are leveraged.
+
+This section uses a synthetic
+classification problem with 4 classes. Some detail is mentioned in the
+appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
 .. code-block:: python
@@ -486,7 +497,9 @@ https://github.com/stsievert/dask-hyperband-comparison.
        X, y, test_size=int(10e3)
    )
 
-The complete dataset is shown in Figure :ref:`fig:synthetic-data`.
+A visualization of this dataset is in Figure :ref:`fig:synthetic-data`.
+
+.. TODO: change line style of "fifo" label to dotted blue
 
 .. latex::
    :usepackage: subcaption
@@ -541,8 +554,8 @@ Model architecture & Hyperparameters
 -------------------------------------
 
 The model used is Scikit-learn's fully-connected neural network, their
-``MLPClassifier``. In this, there are several hyperparameters.  Only one is
-effects the architecture of the best model: ``hidden_layer_sizes``, which
+``MLPClassifier`` which has several hyperparameters. Only one
+affects the architecture of the best model: ``hidden_layer_sizes``, which
 controls the number of layers and number of neurons in each layer.
 
 There are 5 values for the hyperparameter. It is varied so the neural network
@@ -551,11 +564,11 @@ choices are 12 neurons in 2 layers or 6 neurons in four layers. One choice
 has 12 neurons in the first layer, 6 in the second, and 3 in third and
 fourth layers.
 
-Six other hyperparameters have to be tuned and control finding the best model,
-3 of which are continuous. There are 50 possible choices from all of the 3
-discrete hyperparameters. Details are in the appendix. These hyperparameters
-include the batch size, learning rate (and decay schedule) and a regularization
-parameter:
+The other six hyperparameters controls finding the best model and do not
+influence model architecture.  3 of these hyperparameters are continuous and 3
+are discrete (of which there are 10 unique combinations). Details are in the
+appendix. These hyperparameters include the batch size, learning rate (and
+decay schedule) and a regularization parameter:
 
 .. code-block:: python
 
@@ -668,11 +681,12 @@ worst performing models all have the same priority for each bracket.
 Parallel Experiments
 ====================
 
-This section will highlight a practical use of ``HyperbandSearchCV`` and use 25
-Dask workers. A popular neural network library will be used PyTorch [#pytorch]_
-:cite:`paszke2017automatic` (through the wrapper Skorch [#skorch]_) for an
-image denoising task.
-
+This section will highlight a practical use of ``HyperbandSearchCV`` by using a
+popular deep learning library for model creation and leverage Dask's
+parallelization and reduce time to solution with up to 25 Dask workers.
+Specifically, this section will find the best hyperparameters for a model
+created in PyTorch [#pytorch]_ :cite:`paszke2017automatic` (through the library
+Skorch [#skorch]_) for an image denoising task.
 
 .. [#pytorch] https://pytorch.org
 .. [#skorch] https://github.com/skorch-dev/skorch
@@ -683,7 +697,7 @@ between images. To protect against this, let's use a shallow neural network
 that's slightly more complex than a linear model.  This means hyperparameter
 optimization is not simple.
 
-Again, some detail is mentioned in the appendix though complete details can be
+Again, some detail is mentioned in the appendix and complete details can be
 found at https://github.com/stsievert/dask-hyperband-comparison.
 
 .. raw:: latex
@@ -735,7 +749,7 @@ Model architecture & Hyperparameters
 To address that complexity, let's use an autoencoder. These are a type of neural
 network that reduce the dimensionality of the input before expanding to the
 original dimension. This can be thought of as a lossy compression. Let's create
-that model and the images it'll denoise:
+that model and the images it will denoise:
 
 .. code-block:: python
 
@@ -763,14 +777,13 @@ of the rectified linear unit (ReLU) :cite:`relu`, including the leaky ReLU
 :cite:`leaky-relu`, parametric ReLU :cite:`prelu` and exponential linear units
 (ELU) :cite:`elu`.
 
-There are 6 other hyperparameters do not influence the model architecture.
-There are 3 discrete hyperparameters (and 160 combinations of all discrete
-variables) and 3 continuous hyperparameters. These hyperparameters all control
-finding the optimal model after the architecture is fixed. These includes
-hyperparameter like the optimizer to use (stochastic gradient descent
-:cite:`bottou2010large` a.k.a SGD or Adam :cite:`adam`), initialization,
-regularization and optimizer hyperparameters like learning rate or momentum.
-Here's a brief description:
+The other hyperparameters all control finding the optimal model after the
+architecture is fixed and do not influence the model architecture. These
+hyperparameters include 3 discrete hyperparameters (with 160 unique
+combinations) and 3 continuous hyperparameters.  These includes hyperparameter
+like the optimizer to use (SGD :cite:`bottou2010large` or Adam :cite:`adam`),
+initialization, regularization and optimizer hyperparameters like learning rate
+or momentum.  Here's a brief description:
 
 .. code-block:: python
 
