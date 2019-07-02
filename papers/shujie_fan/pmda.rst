@@ -185,7 +185,7 @@ Given a function :math:`\mathcal{A}` that performs the *single frame calculation
    Steps are labeled with the methods in :code:`pmda.parallel.ParallelAnalysisBase` that perform the corresponding function.
    Methods in red (:code:`_single_frame()` and :code:`_conclude()`) must be implemented for every analysis function because they are not general.
    The blue method :code:`_reduce()` must be implemented unless a simple time series is being calculated.
-   The :code:`_prepare()` method is optional an provides a hook to initialize custom data structures.
+   The :code:`_prepare()` method is optional and provides a hook to initialize custom data structures.
    :label:`fig:schema`
 
 As explained in more detail later, a class derived from :code:`pmda.parallel.ParallelAnalysisBase` encapsulates one trajectory analysis calculation.
