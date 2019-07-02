@@ -493,7 +493,7 @@ following:
    {\displaystyle (f\star g)[n]\ = \sum _{m=-\infty }^{\infty }{{f^{*}[m]}}g[m+n]}
 
 When looking at the cross product in discrete form (:ref:`xcorr-disc`), it is possible to see that the form of the
-multiplication and addition closely follows that of the dot product (\ref{dot_prod_eq}).
+multiplication and addition closely follows that of the dot product (Eq. :ref:`dot-prod-eq`).
 
 .. math::
    :label: dot-prod-eq
