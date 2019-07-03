@@ -491,11 +491,10 @@ https://github.com/stsievert/dask-hyperband-comparison.
 
 .. code-block:: python
 
-   from sklearn.model_selection import train_test_split
+   from dask_ml.model_selection import train_test_split
    X, y = make_4_circles(num=60e3)
    X_train, X_test, y_train, y_test = train_test_split(
-       X, y, test_size=int(10e3)
-   )
+       X, y, test_size=int(10e3))
 
 A visualization of this dataset is in Figure :ref:`fig:synthetic-data`.
 
@@ -531,7 +530,8 @@ A visualization of this dataset is in Figure :ref:`fig:synthetic-data`.
            The average best score from
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
-           \texttt{passive}). The shaded regions
+           \texttt{passive}). Models require 81 passes through the
+           dataset, so the equivalent of 25 models are trained for both methods. The shaded regions
            correspond to the 25\% and 75\% percentiles over 40 runs.
            The mean is low for \texttt{passive} because two models had final best
            scores below 60\%. All other \texttt{passive} runs had final best scores about 70\%.
@@ -682,65 +682,70 @@ Parallel Experiments
 ====================
 
 This section will highlight a practical use of ``HyperbandSearchCV`` by using a
-popular deep learning library for model creation and leverage Dask's
-parallelization and reduce time to solution with up to 25 Dask workers.
-Specifically, this section will find the best hyperparameters for a model
-created in PyTorch [#pytorch]_ :cite:`paszke2017automatic` (through the library
-Skorch [#skorch]_) for an image denoising task.
+popular deep learning library for model creation. It will leverage Dask's
+parallelism and investigate how well ``HyperbandSearchCV`` scales as the number
+of workers grows from 8 to 32.
 
 .. [#pytorch] https://pytorch.org
 .. [#skorch] https://github.com/skorch-dev/skorch
 
 The inputs and desired outputs are given in Figure :ref:`fig:io+est`. This is
 an especially difficult problem because the noise variance varies slightly
-between images. To protect against this, let's use a shallow neural network
+between images. To protect against this, a shallow neural network is used
 that's slightly more complex than a linear model.  This means hyperparameter
 optimization is not simple.
 
-Again, some detail is mentioned in the appendix and complete details can be
-found at https://github.com/stsievert/dask-hyperband-comparison.
+Specifically, this section will find the best hyperparameters for a model
+created in PyTorch [#pytorch]_ :cite:`paszke2017automatic` (through the library
+Skorch [#skorch]_) for an image denoising task. Again, some detail is mentioned
+in the appendix and complete details can be found at
+https://github.com/stsievert/dask-hyperband-comparison.
+
+
+.. figure:: imgs/input-output
+   :align: center
+
+   The input and ground truth for the image denoising problem. There are 70,000
+   images in the output, the original MNIST dataset. For the input, random
+   noise is added to images, and amount of data grows to 350,000 input/output
+   images. Each ``partial\_fit`` calls sees (about) 20,780 examples and
+   each call to ``score`` uses 66,500 examples for validation.
+   :label:`fig:io+est`
 
 .. raw:: latex
 
    \begin{figure}
-   \centering
-   \begin{subfigure}{0.45\textwidth}
+
+   \begin{subfigure}{0.49\textwidth}
        \centering
-       \includegraphics[width=0.95\linewidth]{imgs/io+est}
+       \hspace{-7.55em}\includegraphics[width=0.75\linewidth]{imgs/scaling}
        \caption{
-   The rows show in the ground truth, input and output respectively for the
-   denoising problem. The output is shown for the best model that Hyperband
-   finds.
-       }
-       \label{fig:io+est}
-   \end{subfigure}
-   \begin{subfigure}{0.45\textwidth}
-       \centering
-       \includegraphics[width=0.95\linewidth]{imgs/2019-03-24-time.png}
-       \caption{
-   The time required to obtain a particular validation score (or negative loss). The legend labels are in
-   Table \ref{table:legend}.
+           The time required to obtain a particular validation score (or negative loss) with a different number of Dask workers for \texttt{HyperbandSearchCV} with \texttt{patience=False}.
        }
        \label{fig:time}
    \end{subfigure}
+   \begin{subfigure}{0.49\textwidth}
+       \centering
+       \includegraphics[width=1.00\linewidth]{imgs/patience}
+       \caption{
+           The effect that specifying \texttt{patience=True} has on
+           \texttt{HyperbandSearchCV} for different number of Dask workers.
+       }
+       \label{fig:activity}
+   \end{subfigure}
    \caption{
-       In this experiment, each call to \texttt{partial\_fit} uses 1/3 of the
-       examples in the complete train dataset, so algorithm passes over the training data about 1,667 times in
-       total, a.k.a.  1,667 epochs. Each model sees no more than 81 times the
-       number of examples in the dataset because \texttt{max\_iter=243} for all
-       searches.
+       In these experiments, the models are trained to completion and
+       their history is saved. Simulations are performed with this history that
+       consume 1 second for a
+       \texttt{partial\_fit} call and 1.5 seconds for a \texttt{score} call.
+       The model trained the longest takes 243 seconds to train because it
+       requires no more than 243 \texttt{partial\_fit} calls.
    }
    \label{fig:img-exp}
    \end{figure}
 
 .. TODO: figure out which model that is. Say a sentence about it (which bracket, etc)
 
-.. figure:: imgs/2019-03-24-activity.png
-   :align: center
-
-   The activity over time for the 25 Dask workers for the run shown in
-   Figure :ref:`fig:img-exp`.
-   :label:`fig:activity`
 
 
 Model architecture & Hyperparameters
@@ -755,35 +760,30 @@ that model and the images it will denoise:
 
    # custom model definition with PyTorch
    from autoencoder import Autoencoder
-   from sklearn.model_selection import train_test_split
+   from dask_ml.model_selection import train_test_split
    import skorch  # scikit-learn API wrapper for PyTorch
 
    model = skorch.NeuralNetRegressor(Autoencoder, ...)
 
-   X, y = noisy_mnist()
+   X, y = noisy_mnist(augment=5)
    X_train, X_test, y_train, y_test = train_test_split(
-       X, y, test_size=0.1
-   )
-
-.. This autoencoder has two layers that compress
+       X, y, test_size=0.05)
 
 Of course, this is a neural network so there are many hyperparameters to tune.
 Only one hyperparameter affects the model architecture:
 ``estimator__activation``, which specifies the activation the neural network
-should use.
-
-This hyperparameter is varied between 4 different choices, all different types
-of the rectified linear unit (ReLU) :cite:`relu`, including the leaky ReLU
-:cite:`leaky-relu`, parametric ReLU :cite:`prelu` and exponential linear units
-(ELU) :cite:`elu`.
+should use. This hyperparameter is varied between 4 different choices, all
+different types of the rectified linear unit (ReLU) :cite:`relu`, including the
+leaky ReLU :cite:`leaky-relu`, parametric ReLU :cite:`prelu` and exponential
+linear units (ELU) :cite:`elu`.
 
 The other hyperparameters all control finding the optimal model after the
-architecture is fixed and do not influence the model architecture. These
-hyperparameters include 3 discrete hyperparameters (with 160 unique
-combinations) and 3 continuous hyperparameters.  These includes hyperparameter
-like the optimizer to use (SGD :cite:`bottou2010large` or Adam :cite:`adam`),
-initialization, regularization and optimizer hyperparameters like learning rate
-or momentum.  Here's a brief description:
+architecture is fixed. These hyperparameters include 3 discrete hyperparameters
+(with 160 unique combinations) and 3 continuous hyperparameters. Some of these
+hyperparameters include choices on the optimizer to use (SGD
+:cite:`bottou2010large` or Adam :cite:`adam`), initialization, regularization
+and optimizer hyperparameters like learning rate or momentum. Here's a brief
+summary:
 
 .. code-block:: python
 
@@ -812,79 +812,35 @@ create a ``HyperbandSearchCV`` object that stops training non-improving models.
 
     from dask_ml.model_selection import HyperbandSearchCV
     search = HyperbandSearchCV(
-        model, params, max_iter=max_iter, patience=True
-    )
+        model, params, max_iter=max_iter, patience=True)
     search.fit(X_train, y_train)
 
 The current implementation uses ``patience=True`` to choose a high value of
 ``patience=max_iter // 3``. This is most useful for the least adaptive bracket
-of Hyperband, which trains a couple models to completion. This has a large
+of Hyperband, which trains a couple models to completion. This has a moderate
 impact on the time to solution with these parallel computational resources but
 doesn't have a large impact on the number of ``partial_fit`` calls.
 
 Performance
 -----------
 
-Anecdotally, ``HyperbandSearchCV`` performs well and beats manual hand-tuning
-by a considerable margin. While manually tuning, I considered any scores/negative losses of about
-:math:`-0.10` to be pretty good, and I obtained scores no higher than
-:math:`-0.098`. That's the context necessary to interpret
-``HyperbandSearchCV``'s score of :math:`-0.093` and ``IncrementalSearchCV``'s
-score of :math:`-0.0975`.
+This section will focus on how ``HyperbandSearchCV`` scales as the number of
+workers grow and stopping non-improving models.
 
-A quantitative measure comes by comparing three algorithms with
-the same model, parameters and validation data. The comparisons are shown in
-Figures :ref:`fig:time` and :ref:`fig:activity` and the legends for these plots
-is shown in Table :ref:`table:legend`. In these experiments, 25 workers are
-used with Dask, meaning that 25 tasks can complete in parallel.
+The speedups ``HyperbandSearchCV`` can achieve begin to saturate around 24
+workers, at least in this experiment as shown in Figure :ref:`fig:time`.
+Figures :ref:`fig:time` and :ref:`fig:activity` show that ``HyperbandSearchCV``
+spends significant amount of time with a low number of workers without
+improving the score.  Luckily, ``HyperbandSearchCV`` will soon support keyboard
+interruptions and can exit early once if the user desires.
 
-This section will focus on stopping non-improving models. Two schemes that stop
-non-improving models will be compared with Hyperband (which is already an early
-stopping scheme that will likely stop these models). These two schemes will be
-``HyperbandSearchCV`` with ``patience=True`` and a randomized search that
-trains all models to completion via ``IncrementalSearchCV``.
-
-The inputs to ``IncrementalSearchCV`` illustrate the implicit balance between
-hyperparameter vs. training time importance: training models for longer with
-the same computational effort would require a higher value for ``num_params``
-and a lower and more aggressive value for ``patience``.  For
-``IncrementalSearchCV``, I choose an aggressive and low patience of
-``patience=24`` 8 passes through the data. Because of this, I choose to
-evaluate twice as many hyperparameters as the number required to have the same
-number of ``partial_fit`` calls as Hyperband.
-
-The data scientist cares about time to reach a particular score, not the number
-of ``partial_fit`` calls required. Those are similar for a small personal
-machine but may be very different in the presence of a large cluster or
-supercomputer. The time required to reach a particular validation accuracy
-that is shown in Figure :ref:`fig:time`.  This plot is shown with 25 workers, a
-reasonable number of workers to expect, especially if each worker requires a
-GPU.
-
-``HyperbandSearchCV`` with ``patience=True`` and ``patience=False`` require a
-similar number of calls to ``partial_fit``, within a 5% difference. However,
-Figure :ref:`fig:time` shows a remarkable difference of specifying
-``patience=True`` for Hyperband: specifying ``patience=True`` means that
-Hyperband finishes in about 2/3rds of the time as the default Hyperband! This
-is because one worker hold onto a single model for about 4 minutes as shown in
-Figure :ref:`fig:activity`.
-
-
-.. table:: A summary of the legends in Figures
-           :ref:`fig:time` and :ref:`fig:activity`. ``IncrementalSearchCV``
-           ``patience=24`` is an algorithm that stops training after the scores
-           stop increasing or plateau, hence the label.
-           :label:`table:legend`
-
-   +---------------------+---------------------------------------------------+
-   | Label               | Class                                             |
-   +=====================+===================================================+
-   | ``hyperband``       | ``HyperbandSearchCV``                             |
-   +---------------------+---------------------------------------------------+
-   | ``stop-on-plateau`` | ``IncrementalSearchCV``, ``patience=24``          |
-   +---------------------+---------------------------------------------------+
-   | ``hyperband+sop``   | ``HyperbandSearchCV``, ``patience=True``          |
-   +---------------------+---------------------------------------------------+
+Specifying ``patience=True`` for ``HyperbandSearchCV`` has a larger effect on
+time-to-solution when fewer workers are used as shown in Figure
+:ref:`fig:activity`, at least when keyboard interruptions are not used. In the
+serial case with an low number of workers (less than 10) amount of workers,
+specifying ``patience=True`` can reduce time to solution by removing models
+that worse as training proceeds. This is especially true because
+``HyperbandSearchCV`` prioritizes high scoring models.
 
 
 Future work
@@ -901,6 +857,14 @@ children (including ``HyperbandSearchCV``) work well with large models.
 Modern models often consume most of GPU memory, and currently
 ``IncrementalSearchCV`` requires making a copy the model. How much does this
 hurt performance and can it be avoided?
+
+Future work specifically does not include implementing the asynchronous version
+of successive halving :cite:`li2018massively` in Dask. This variant of
+successive halving is designed to reduce waiting time experience by a model.
+It does this by stopping a model's training only if it's in the worst
+performing fraction of models `received` and does not wait for all models to be
+collected before decisions. Dask's advanced task scheduling helps resolves this
+issue for ``HyperbandSearchCV``.
 
 References
 ==========
