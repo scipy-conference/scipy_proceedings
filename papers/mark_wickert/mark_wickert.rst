@@ -11,7 +11,7 @@ A Real-Time 3D Audio Simulator for Cognitive Hearing Science
 .. class:: abstract
 
    This paper describes the development of a 3D audio simulator for use in cognitive hearing science 
-   studies and also for general 3D audio experimentation. The framework that the simulator is build 
+   studies and also for general 3D audio experimentation. The framework that the simulator is built 
    upon is :code:`pyaudio_helper`, which is a module of the package :code:`scikit-dsp-comm`. The simulator runs in 
    a Jupyter notebook and makes use of Jupyter widgets for interactive control of audio source 
    positioning in 3D space. 3D audio has application in virtual reality and in hearing assistive 
@@ -36,7 +36,7 @@ radial distance. A tutorial on 3-D audio can be found at [HCI]_.
 This leads to the need for the head related impulse response (HRIR) 
 (time-domain) or head-related transfer function (HRTF) (frequency domain) for a particular 
 human subject. Traditionally human subjects are placed in an anechoic chamber with a sound 
-source placed at e.g. one meter from the head and then the subject is moved over a range of 
+source placed at e.g. one meter from the head and then moved relative the subject's head over a range of 
 azimuth and elevation angles, with the HRIR measured at each angle. The 3D simulator described 
 here uses a database of HRIR's from the University of California, Davis, originally in the Center 
 for Image Processing and Integrated Computing (CIPIC), [CIPICHRTF]_, to describe a given subject. 
@@ -228,9 +228,13 @@ FIR Filter Coefficient Set Selection
 ------------------------------------
 
 To finally render 3D audio requires selection of the appropriate right/left filter coefficient set, 
-and if needed range correction. If we simply want to position an audio source on the 1 m reference 
-sphere used by CIPIC, then the coefficient selection process is simply picking the index into the 
-database that is closest to the corresponding IPCS angle pair, :math:`(\phi,\theta)`, of the source.
+and if needed range correction. For the special case of the source on the 1 m CIPIC reference sphere, 
+we simply pick the coefficient set that lies closest to the desired 
+IPCS angle pair :math:`(\phi,\theta)`.
+
+..  If we simply want to position an audio source on the 1 m reference 
+    sphere used by CIPIC, then the coefficient selection process is simply picking the index into the 
+    database that is closest to the corresponding IPCS angle pair, :math:`(\phi,\theta)`, of the source.
 
 For the more typical case of the source range, :math:`r = \sqrt{x^2 + y^2 + z^2} \neq 1`, more 
 processing is required. The approach taken here follows [Fitzpatrick]_ using the primary cartesian 
@@ -412,7 +416,7 @@ that use the cylindrical coordinates described in Figure :ref:`CYLIND` to contro
 Static Sound Source
 ===================
 
-The first and foremost purpose the 3D audio simulator is to be able to statically position an audio source 
+The first and foremost purpose of the 3D audio simulator is to be able to statically position an audio source 
 and then ask a human subject where the source is located (localization). This is a cognitive experiment, and 
 can serve many purposes. One purpose in the present research is to to see how well the HRIR utilized in the simulator 
 matches the subject's true HRIR. As mentioned in the introduction, an ongoing study is to estimate an *individualized 
@@ -575,7 +579,7 @@ around either side of the sphere.
 HRTF on the Sphere Surface 
 ==========================
 
-In signal processing the *transfer function*, :math:`H(f) = |H(f)| e^{j\angle H(f)}`, is a ratio 
+In signal processing, the *transfer function*, :math:`H(f) = |H(f)| e^{j\angle H(f)}`, is a ratio 
 of two complex numbers as a function frequency in Hz. In the denominator we have the magnitude 
 and phase (angle) of the sinusoidal signal input 
 to a system and in the numerator we have the magnitude and phase of the corresponding output signal 
@@ -597,8 +601,8 @@ present:
    \frac{h_n^{(2)}(kr)}{h_n^{\prime(2)}(kR)},\ r > R
 
 where :math:`\theta_i` is the angle of incidence between the source and measurement point, 
-:math:`f` is the operating frequency in Hz, :math:`r` is the distance fro the source to the 
-center if the sphere, and one again :math:`R` is the sphere radius. Recall also that the 
+:math:`f` is the operating frequency in Hz, :math:`r` is the distance from the source to the 
+center of the sphere, and once again :math:`R` is the sphere radius. Recall also that the 
 wave number :math:`k` contains :math:`f`.
 
 Formally this transfer function definition should include the propagation 
@@ -677,7 +681,7 @@ HRIR on the Sphere Surface
 The next step is to calculate the impulse response :math:`h(t)` corresponding to :math:`H(f)` via 
 the inverse Fourier transform of the HRTF. Since we are 
 working with digital (discrete-time) signal processing, the inverse discrete Fourier transform (IDFT) 
-will is used here, as opposed to the Fourier integral. We take samples of the HRTF at uniformly spaced 
+is used here, as opposed to the Fourier integral. We take samples of the HRTF at uniformly spaced 
 frequency samples, :math:`\Delta f`, running from 0 to one half the CIPIC sampling rate,  
 :math:`f_s = 44.1\text{kHz}`. This makes :math:`h(t)\rightarrow h(n/f_s) = h[n]` in the Python 
 implementation shown below:
