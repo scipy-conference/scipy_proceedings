@@ -237,11 +237,11 @@ IPCS angle pair :math:`(\phi,\theta)`.
     database that is closest to the corresponding IPCS angle pair, :math:`(\phi,\theta)`, of the source.
 
 For the more typical case of the source range, :math:`r = \sqrt{x^2 + y^2 + z^2} \neq 1`, more 
-processing is required. The approach taken here follows [Fitzpatrick]_ using the primary cartesian 
-coordinates to additionally perform *parallax* correction and source range amplitude correction. Source 
-range correction accounts for the fact that with a point source we have sound wave divergence, thus 
-the amplitude needs to be scaled inversely with radial distance (inverse-squared in the sound 
-intensity sense). The inverse distance correction is for each ear and takes into account the fact 
+processing is required. The approach taken here follows the methodology of [Fitzpatrick]_ by using the 
+primary cartesian coordinates of Figure :ref:`CYLIND` to additionally perform *parallax* correction and 
+source range amplitude correction. At distance :math:`r` from a point source the sound wave energy diverges 
+by :math:`1/r^2`, so in terms of wave amplitude we include a scale factor of :math:`1/r`. 
+Here the inverse distance correction also takes into account the fact 
 that the entry to the ear canal is offset from the head center by the mean head radius :math:`R`. The 
 second correction factor is *parallax*, which is graphically depicted in Figure :ref:`PARALLAX` for the 
 special case of a source in the horizontal plane and directly in front of the head. Both 
@@ -400,9 +400,13 @@ coefficients and range amplitude scaling factors. The code is listed below:
 
 In the :code:`__init__` method all the right left filter coefficients for the chosen subject database entry 
 are copied into class attributes and look-up tables (LUTs) are populated in terms of IPCS angles to ease 
-selecting the needed right/left filters. The sound wave amplitude correction factors :code:`self.tR` and 
-:code:`tL` are obtained from the parallax correction expression in [Fitzpatrick]_, and double as the 
-required range scale factors, :math:`G_R` and :math:`G_L` in (1) and (2). 
+selecting the needed right/left filters. Note in particular the scale factors :code:`self.tR` and 
+:code:`self.tL` are the inverse distance wave amplitude correction factors representing :math:`G_R` 
+and :math:`G_L` in (1) and (2), respectively.
+
+.. The sound wave amplitude correction factors :code:`self.tR` and 
+   :code:`tL` are obtained from the parallax correction expression in [Fitzpatrick]_, and double as the 
+   required range scale factors, :math:`G_R` and :math:`G_L` in (1) and (2). 
 
 3D Audio Simulator Notebook Apps
 --------------------------------
@@ -472,7 +476,7 @@ General Pressure Wave Solution
 
 As a starting point, the acoustics text [Beranek]_, provides a solution for 
 the resultant sound pressure at any point in space when a sinusoidal plane wave sound pressure 
-source impinges upon a rigid sphere of radius :math:`R` centered at the coordinate system origin. 
+source impinges upon a rigid sphere of radius :math:`R`, centered at the coordinate system origin. 
 Rotationally symmetric spherical coordinates, :math:`r` and :math:`\theta` are appropriate here.
 First consider the incident plane wave :math:`\tilde{p}_I(r,\theta)`, in the expansion
 
@@ -486,9 +490,12 @@ where :math:`\theta_i` is the incidence angle between the plane wave and measure
 :math:`P_m(x)` is the :math:`n\text{th-order}` Legendre polynomial, :math:`j_n(x)` is the 
 :math:`n\text{th-order}` spherical Bessel function of the first kind, :math:`k = 2\pi f/c` is the 
 wavenumber, with :math:`f` frequency in Hz and :math:`c = 344.4` m/s the propagation velocity in air. 
-We set the incident wave complex pressure :math:`\tilde{p}_0 = 1\angle 0^\circ` for convenience. Finally, 
-solve for the scattered wave, :math:`\tilde{p}_s(r,\theta_i)`, by applying boundary conditions, see [Beranek]_ 
-for details, we superimpose the two solutions to obtain 
+We set the incident wave complex pressure :math:`\tilde{p}_0 = 1\angle 0^\circ` for convenience.
+
+Finally, solve for the scattered wave, :math:`\tilde{p}_s(r,\theta_i)`, by applying boundary conditions, see [Beranek]_ 
+for details. The resultant wave is the sum of the incident and scattered waves as given below:
+
+.. we superimpose the two solutions to obtain 
 
 .. The solution takes the form of an infinite series involving spherical harmonics to represent the 
    incident plus scattered sound pressure, :math:`\tilde{p}(r,\theta_i)`, where :math:`r` is the radial 
@@ -507,24 +514,30 @@ for details, we superimpose the two solutions to obtain
    && \cdot \left[j_n(kr) - 
    \frac{j_n^\prime(kR)}{h_n^{\prime(2)}(kR)} h_n^{(2)}(kr)\right]
 
-where :math:`j_n^\prime(x)` the spherical Bessel function of the first kind derivative, 
-:math:`h_n^{(2)}(kr)` is the :math:`n\text{th-order}` spherical Hankel function of the second kind 
+where :math:`j_n^\prime(x)` is the spherical Bessel function of the first kind derivative, 
+:math:`h_n^{(2)}(kr)` is the :math:`n\text{th-order}` spherical Hankel function of the second kind, 
 and :math:`h_n^{\prime(2)}(kr)` is the corresponding derivative. Figure :ref:`SCATTER` shows the 
 pressure magnitude at 2000 Hz for :math:`R = 8.75\text{ cm}`, for the plane wave traveling along the 
-:math:`+z-\text{axis}`. The second plot coordinate, due to axial symmetry, is :math:`w= \sqrt{x^2+y^2}`. 
-Note in the spherical coordinates of the math model, it remains that :math:`r = \sqrt{w^2+z^2}` and 
+:math:`+z-\text{axis}`. For plotting convenience, the axes :math:`z` and :math:`w= \sqrt{x^2+y^2}` 
+are cylindrical coordinates, as the sphere has axial symmetry. To be clear :math:`z` and :math:`w` 
+are related to the original spherical coordinates of the math model by :math:`r = \sqrt{w^2+z^2}` and 
 :math:`\cos\theta_i = z/\sqrt{w^2 + z^2}`.
+
+.. The second plot coordinate, due to axial symmetry, is :math:`w= \sqrt{x^2+y^2}`. 
+   Note in the spherical coordinates of the math model, it remains that :math:`r = \sqrt{w^2+z^2}` and 
+   :math:`\cos\theta_i = z/\sqrt{w^2 + z^2}`.
 
 .. figure:: SphericalHeadScattering.pdf
    :scale: 50%
    :align: center
    :figclass: htb
 
-   Using spherical harmonics [Beranek]_ to calculate the pressure wave magnitude (shown here) and 
-   phase, using a plane wave audio source arriving from the bottom of the figure. :label:`SCATTER`
+   The resultant sound pressure wave magnitude in cylindrical coordinates :math:`z` and :math:`w`, due to 
+   scattering of a plane wave from a rigid sphere. :label:`SCATTER`
 
-The calculations required to obtain Figure :ref:`SCATTER` follow easily using the functions found in 
-:code:`scipy.special`, e.g., for the scattered field the calculation is:
+
+The calculations required to evaluate (4), and thus create the plot of Figure :ref:`SCATTER`, conveniently 
+make use of functions in :code:`scipy.special`. This is shown in the code listing below:
 
 .. code-block:: python
 
