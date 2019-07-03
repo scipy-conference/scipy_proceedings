@@ -1,80 +1,60 @@
 {
-  "diversity_scholarship": [
-    {
-      "name": "",
-      "org": ""
-    },
-    {
-      "name": "",
-      "org": ""
-    }
-  ],
   "proceedings": {
-    "location": "Austin, Texas",
-    "editor": [
-      "Chris Calloway",
-      "David Lippa",
-      "Dillon Niederhut",
-      "David Shupe"
-    ],
-    "citation_key": "proc-scipy-2019",
+    "doi": "",
+    "xref": {
+      "prefix": "10.25080",
+      "registrant": "Crossref",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "depositor_name": "Dillon Niederhut",
+      "depositor_email": "dillon.niederhut@gmail.com"
+    },
     "copyright": {
       "proceedings": [
         "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
         "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
         "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
       ],
-      "license": "Creative Commons Attribution License (CCAL)",
-      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited."
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
+      "license": "Creative Commons Attribution License (CCAL)"
     },
+    "title": {
+      "conference": "Python in Science Conference",
+      "full": "Proceedings of the 18th Python in Science Conference",
+      "short": "PROC. OF THE 18th PYTHON IN SCIENCE CONF. (SCIPY 2019)",
+      "acronym": "SciPy",
+      "ordinal": "18th"
+    },
+    "citation_key": "proc-scipy-2019",
     "editor_email": [
       "cbc@unc.edu",
       "dalippa@gmail.com",
       "dillon.niederhut@gmail.com",
       "dave.shupe@gmail.com"
     ],
-    "number": 1,
-    "volume": 4,
     "dates": "July 8 - July 14",
-    "xref": {
-      "depositor_name": "Dillon Niederhut",
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_email": "dillon.niederhut@gmail.com",
-      "prefix": "10.25080",
-      "registrant": "Crossref"
-    },
-    "year": "2019",
-    "doi": "",
+    "editor": [
+      "Chris Calloway",
+      "David Lippa",
+      "Dillon Niederhut",
+      "David Shupe"
+    ],
+    "location": "Austin, Texas",
+    "volume": 4,
+    "number": 1,
     "isbn": "noisbn",
-    "title": {
-      "conference": "Python in Science Conference",
-      "ordinal": "18th",
-      "short": "PROC. OF THE 18th PYTHON IN SCIENCE CONF. (SCIPY 2019)",
-      "acronym": "SciPy",
-      "full": "Proceedings of the 18th Python in Science Conference"
-    }
+    "year": "2019"
   },
-  "scipy_scholarship": [
-    {
-      "name": "",
-      "org": ""
-    },
-    {
-      "name": "",
-      "org": ""
-    }
-  ],
   "organization": [
     {
       "name": "Conference Chairs",
       "members": [
         {
-          "name": "Serge Rey",
-          "org": "Arizona State University"
+          "org": "Arizona State University",
+          "name": "Serge Rey"
         },
         {
-          "name": "Corran Webster",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Corran Webster"
         }
       ]
     },
@@ -82,12 +62,12 @@
       "name": "Program Chairs",
       "members": [
         {
-          "name": "Gil Forsyth",
-          "org": "George Washington University"
+          "org": "George Washington University",
+          "name": "Gil Forsyth"
         },
         {
-          "name": "Nelle Varoquaux",
-          "org": "Berkeley Institute for Data Science"
+          "org": "Berkeley Institute for Data Science",
+          "name": "Nelle Varoquaux"
         }
       ]
     },
@@ -95,8 +75,8 @@
       "name": "Communications",
       "members": [
         {
-          "name": "Paul Ivanov",
-          "org": "Bloomberg"
+          "org": "Bloomberg",
+          "name": "Paul Ivanov"
         }
       ]
     },
@@ -104,12 +84,12 @@
       "name": "Birds of a Feather",
       "members": [
         {
-          "name": "Matthias Bussonnier",
-          "org": "University of California, Merced"
+          "org": "University of California, Merced",
+          "name": "Matthias Bussonnier"
         },
         {
-          "name": "Lindsey Heagy",
-          "org": "University of California, Berkeley"
+          "org": "University of California, Berkeley",
+          "name": "Lindsey Heagy"
         }
       ]
     },
@@ -117,20 +97,20 @@
       "name": "Proceedings",
       "members": [
         {
-          "name": "Chris Calloway",
-          "org": "University of North Carolina"
+          "org": "University of North Carolina",
+          "name": "Chris Calloway"
         },
         {
-          "name": "David Lippa",
-          "org": "Amazon"
+          "org": "Amazon",
+          "name": "David Lippa"
         },
         {
-          "name": "Dillon Niederhut",
-          "org": "Novi Labs"
+          "org": "Novi Labs",
+          "name": "Dillon Niederhut"
         },
         {
-          "name": "David Shupe",
-          "org": "Caltech's IPAC Astronomy Data Center"
+          "org": "Caltech's IPAC Astronomy Data Center",
+          "name": "David Shupe"
         }
       ]
     },
@@ -138,16 +118,16 @@
       "name": "Financial Aid",
       "members": [
         {
-          "name": "Celia Cintas",
-          "org": "IBM Research Africa"
+          "org": "IBM Research Africa",
+          "name": "Celia Cintas"
         },
         {
-          "name": "Scott Collis",
-          "org": "Argonne National Laboratory"
+          "org": "Argonne National Laboratory",
+          "name": "Scott Collis"
         },
         {
-          "name": "Eric Ma",
-          "org": "Novartis Institutes for Biomedical Research"
+          "org": "Novartis Institutes for Biomedical Research",
+          "name": "Eric Ma"
         }
       ]
     },
@@ -155,16 +135,16 @@
       "name": "Tutorials",
       "members": [
         {
-          "name": "Alexandre Chabot-Leclerc",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Alexandre Chabot-Leclerc"
         },
         {
-          "name": "Allen Downey",
-          "org": "Franklin W. Olin College of Engineering"
+          "org": "Franklin W. Olin College of Engineering",
+          "name": "Allen Downey"
         },
         {
-          "name": "Mike Hearne",
-          "org": "USGS"
+          "org": "USGS",
+          "name": "Mike Hearne"
         }
       ]
     },
@@ -172,12 +152,12 @@
       "name": "Sprints",
       "members": [
         {
-          "name": "Ryan May",
-          "org": "University Corporation for Atmospheric Research"
+          "org": "University Corporation for Atmospheric Research",
+          "name": "Ryan May"
         },
         {
-          "name": "Kuya Takami",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Kuya Takami"
         }
       ]
     },
@@ -185,12 +165,12 @@
       "name": "Diversity",
       "members": [
         {
-          "name": "Nathan Goldbaum",
-          "org": "University of Illinois"
+          "org": "University of Illinois",
+          "name": "Nathan Goldbaum"
         },
         {
-          "name": "Melissa Mendonca",
-          "org": "Federal University of Santa Catarina"
+          "org": "Federal University of Santa Catarina",
+          "name": "Melissa Mendonca"
         }
       ]
     },
@@ -198,12 +178,12 @@
       "name": "Activities",
       "members": [
         {
-          "name": "Kyle Niemeyer",
-          "org": "Oregon State University"
+          "org": "Oregon State University",
+          "name": "Kyle Niemeyer"
         },
         {
-          "name": "Julia Pasquarella",
-          "org": "Enthought"
+          "org": "Enthought",
+          "name": "Julia Pasquarella"
         }
       ]
     },
@@ -211,8 +191,8 @@
       "name": "Sponsors",
       "members": [
         {
-          "name": "Jill Cowan",
-          "org": "Enthought"
+          "org": "Enthought",
+          "name": "Jill Cowan"
         }
       ]
     },
@@ -220,16 +200,16 @@
       "name": "Financial",
       "members": [
         {
-          "name": "Chris Chan",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Chris Chan"
         },
         {
-          "name": "Bill Cowan",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Bill Cowan"
         },
         {
-          "name": "Jodi Havranek",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Jodi Havranek"
         }
       ]
     },
@@ -237,8 +217,8 @@
       "name": "Logistics",
       "members": [
         {
-          "name": "Jill Cowan",
-          "org": "Enthought, Inc."
+          "org": "Enthought, Inc.",
+          "name": "Jill Cowan"
         }
       ]
     },
@@ -246,22 +226,132 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "Alberto Antonietti"
         },
         {
-          "name": ""
+          "name": "Alejandro Weinstein"
+        },
+        {
+          "name": "Amir Kalighi"
+        },
+        {
+          "name": "Angelos Krypotos"
+        },
+        {
+          "name": "Ankur Ankan"
+        },
+        {
+          "name": "Awalin Sopan"
+        },
+        {
+          "name": "Brian McFee"
+        },
+        {
+          "name": "Catherine Ordun"
+        },
+        {
+          "name": "Christine Choirat"
+        },
+        {
+          "name": "Cyrus Harrison"
+        },
+        {
+          "name": "David Nicholson"
+        },
+        {
+          "name": "Filipe Fernandes"
+        },
+        {
+          "name": "Haruna Abdu"
+        },
+        {
+          "name": "Jaime Arias Almeida"
+        },
+        {
+          "name": "James Bednar"
+        },
+        {
+          "name": "Kirtan Dave"
+        },
+        {
+          "name": "Laura Kahn"
+        },
+        {
+          "name": "Mahdi Sadjadi"
+        },
+        {
+          "name": "Marc Wouts"
+        },
+        {
+          "name": "Mark Fenner"
+        },
+        {
+          "name": "Matt Craig"
+        },
+        {
+          "name": "Matthew Seal"
+        },
+        {
+          "name": "Meghann Agarwal"
+        },
+        {
+          "name": "Nicholas Malaya"
+        },
+        {
+          "name": "Patrick Huck"
+        },
+        {
+          "name": "Scott Sievert"
+        },
+        {
+          "name": "Senol Piskin"
+        },
+        {
+          "name": "Shuai Tang"
+        },
+        {
+          "name": "Stefan van der Walt"
+        },
+        {
+          "name": "Tania Lorido Botran"
+        },
+        {
+          "name": "Yingwei Yu"
+        },
+        {
+          "name": "Zach Golkhou"
         }
       ]
     }
   ],
   "series": {
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    },
+    "doi": "10.25080/issn.2575-9752",
     "xref": {
       "issn": "2575-9752",
       "resource_url": "https://conference.scipy.org/proceedings"
-    },
-    "doi": "10.25080/issn.2575-9752",
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
     }
-  }
+  },
+  "scipy_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ],
+  "diversity_scholarship": [
+    {
+      "org": "",
+      "name": ""
+    },
+    {
+      "org": "",
+      "name": ""
+    }
+  ]
 }
