@@ -334,7 +334,7 @@ as Markdown), ``verbatim``, or ``verbatim_or_empty`` (verbatim if there
 is output, otherwise a space or empty line). For example,
 ``show=stdout:raw+stderr:verbatim``. While a format can be specified for
 ``markup`` and ``code``, only the default ``verbatim`` is permitted. For
-``rich_output``, the output representation (mime type) can be selected.
+``rich_output``, the output representation (MIME type) can be selected.
 Thus, ``show=rich_output:png`` selects a PNG image representation.
 
 ``hide`` takes the same options as ``show``, except that ``none`` is
@@ -733,7 +733,7 @@ processed with Pandoc.  Because the preprocessor is based on simple regex
 matching, it does not understand Markdown comments and will run code in a
 commented-out part of a document.  Writing tutorials that show literal knitr
 code chunks can involve inserting empty strings, zero-width spaces,
-linebreaks, or Unicode escapes to avoid the preprocessor's tendency to execute
+line breaks, or Unicode escapes to avoid the preprocessor's tendency to execute
 code :cite:`knitrfaq,Hovorka`.  With Codebraid, Pandoc is used to convert a
 Markdown document into Pandoc's abstract syntax tree (AST) representation.
 Code extraction and output insertion are performed as operations on the AST,
@@ -760,7 +760,7 @@ in three areas.  Code execution is more flexible since it allows multiple
 Jupyter kernels per document and multiple independent sessions per kernel, in
 addition to the built-in code execution system.  Since Codebraid uses Pandoc
 for all Markdown parsing, it avoids the limitations of a preprocessor.
-Codebraid also provides a broader set of display capabilites, including the
+Codebraid also provides a broader set of display capabilities, including the
 ability to programmatically copy and display code or its output into other
 parts of a document.
 
@@ -813,7 +813,7 @@ browser-based user interface in which a document is represented as a series of
 cells.  A cell may contain Markdown (which is converted into HTML and
 displayed when not being edited), raw text, or code.  Code is executed by
 language-specific backends, or kernels.  Well over one hundred kernels are
-available beyond Python, including Julia, R, bash, and even compiled languages
+available beyond Python, including Julia, R, Bash, and even compiled languages
 like C++ and Rust :cite:`jupyter-kernels`.  Jupyter kernels are often used
 with the Jupyter Notebook, but they can also function as a standalone code
 execution system.
@@ -845,7 +845,7 @@ unit of code, such as part of a loop or part of a function definition.  This
 is possible even when working with Jupyter kernels.  Codebraid also provides
 more flexible display options.  It is possible to show any combination of
 code, stdout, stderr, or rich output in any order, and to select which form of
-rich output (mime type) is shown.  Code or its output can be copied
+rich output (MIME type) is shown.  Code or its output can be copied
 programmatically, so code can be executed at one location in a document and
 its output displayed elsewhere.
 
@@ -953,7 +953,7 @@ figure display.
 .. https://github.com/jhrmnn/knitj
 
 Knitj :cite:`knitj` is another Jupyter kernel–Markdown integration.  Options
-for controling display are contained in special comments in the first line of
+for controlling display are contained in special comments in the first line of
 code within a code block, rather than in the code block's Markdown attributes.
 It focuses on producing HTML and includes efficient live preview capabilities.
 
