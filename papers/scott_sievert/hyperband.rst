@@ -215,7 +215,8 @@ an informal presentation of the main theorem:
    \newcommand{\parens}[1]{\left( #1 \right)}
    \begin{cor}
    \label{thm:hyperband}
-   (informal presentation of \cite[Theorem 5]{li2016hyperband})
+   (informal presentation of \cite[Theorem 5]{li2016hyperband} and surrounding
+   discussion)
    Assume the loss at iteration $k$ decays like $(1/k)^{1/\alpha}$, and
    the validation losses $\nu$ approximately follow the cumulative distribution
    function $F(\nu) = (\nu - \nu_*)^\beta$ with optimal
