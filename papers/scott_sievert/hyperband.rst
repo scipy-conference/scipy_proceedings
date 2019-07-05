@@ -708,7 +708,7 @@ https://github.com/stsievert/dask-hyperband-comparison.
    The input and ground truth for the image denoising problem. There are 70,000
    images in the output, the original MNIST dataset. For the input, random
    noise is added to images, and amount of data grows to 350,000 input/output
-   images. Each ``partial\_fit`` calls sees (about) 20,780 examples and
+   images. Each ``partial_fit`` calls sees (about) 20,780 examples and
    each call to ``score`` uses 66,500 examples for validation.
    :label:`fig:io+est`
 
@@ -718,9 +718,23 @@ https://github.com/stsievert/dask-hyperband-comparison.
 
    \begin{subfigure}{0.49\textwidth}
        \centering
+       \hspace{-6.00em}\includegraphics[width=0.69\linewidth]{imgs/scaling-patience}
+       \caption{
+           The time required to complete the
+           \texttt{HyperbandSearchCV} search with a different number of workers
+           for different values of \texttt{patience}.
+       }
+       \label{fig:patience}
+   \end{subfigure}
+   \begin{subfigure}{0.49\textwidth}
+       \centering
        \hspace{-7.55em}\includegraphics[width=0.75\linewidth]{imgs/scaling}
        \caption{
-           The time required to obtain a particular validation score (or negative loss) with a different number of Dask workers for \texttt{HyperbandSearchCV} with \texttt{patience=False}.
+           The time required to obtain a particular validation score (or
+           negative loss) with a different number of Dask workers for
+           \texttt{HyperbandSearchCV} with \texttt{patience=False} in the solid
+           line and \texttt{patience=True} with the dotted line. There is a
+           vertical line when the search completes.
        }
        \label{fig:time}
    \end{subfigure}
@@ -738,13 +752,14 @@ https://github.com/stsievert/dask-hyperband-comparison.
        their history is saved. Simulations are performed with this history that
        consume 1 second for a
        \texttt{partial\_fit} call and 1.5 seconds for a \texttt{score} call.
-       The model trained the longest takes 243 seconds to train because it
-       requires no more than 243 \texttt{partial\_fit} calls.
+       In this simulations, only the number of workers change: the models are
+       static so Hyperband is deterministic.
+       The model trained the longest
+       requires 243 seconds to be fully trained, and additional time for
+       scoring.
    }
    \label{fig:img-exp}
    \end{figure}
-
-.. TODO: figure out which model that is. Say a sentence about it (which bracket, etc)
 
 
 
@@ -817,9 +832,16 @@ create a ``HyperbandSearchCV`` object that stops training non-improving models.
 
 The current implementation uses ``patience=True`` to choose a high value of
 ``patience=max_iter // 3``. This is most useful for the least adaptive bracket
-of Hyperband, which trains a couple models to completion. This has a moderate
-impact on the time to solution with these parallel computational resources but
-doesn't have a large impact on the number of ``partial_fit`` calls.
+of Hyperband, which trains a couple models to completion, and mirrors the
+patience of the second least adaptive bracket in Hyperband.
+
+Specifying ``patience=True`` has a moderate impact on the time to solution with
+these parallel computational resources but doesn't have a large impact on the
+number of ``partial_fit`` calls. In these experiments, it has no effect on
+performance. If ``patience=max_iter // 6`` for these experiments, there is a
+moderate effect on performance (``patience=max_iter // 6`` obtains a model with
+validation loss 0.0637 instead of 0.0630 like ``patience=max_iter // 3`` and
+``patience=False``).
 
 Performance
 -----------
@@ -852,11 +874,11 @@ treat every model as a black box and vary the amount of data provided. This
 would not require the model to implement ``partial_fit`` and would only require
 a ``fit`` method.
 
-Another area of future work is ensuring ``IncrementalSearchCV`` and all of its
-children (including ``HyperbandSearchCV``) work well with large models.
-Modern models often consume most of GPU memory, and currently
-``IncrementalSearchCV`` requires making a copy the model. How much does this
-hurt performance and can it be avoided?
+Another area of future work is ensuring ``HyperbandSearchCV`` and all of its
+work well with large models. Modern models often consume most of GPU memory
+during training. Currently, ``HyperbandSearchCV`` requires serialization of
+every model between ``partial_fit`` calls. How much does this influence
+performance?
 
 Future work specifically does not include implementing the asynchronous version
 of successive halving :cite:`li2018massively` in Dask. This variant of
