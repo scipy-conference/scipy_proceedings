@@ -295,7 +295,6 @@ examining several corresponding decomposed core and original slices.
 
 
 .. table:: Classification accuracy of features generated from Tucker decomposition after various additional dimensionality reduction techniques are applied :label:`table1`
-   :class: w
 
    +----------------------------+-------------+------------+
    |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
@@ -314,19 +313,18 @@ Experiment II
 +++++++++++++
 
 .. table:: Classification accuracy of features generated from linear dynamical systems after various additional dimensionality reduction techniques are applied :label:`table2`
-  :class: w
 
-  +----------------------------+-------------+------------+
-  |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
-  +----------------------------+-------------+------------+
-  |                            |      0.90   |     0.82   |
-  +----------------------------+-------------+------------+
-  | PCA                        |      0.89   |     0.81   |
-  +----------------------------+-------------+------------+
-  | LDA                        |      0.84   |     0.74   |
-  +----------------------------+-------------+------------+
-  | Kernel PCA                 |      0.93   |     0.89   |
-  +----------------------------+-------------+------------+
+    +----------------------------+-------------+------------+
+    |  Dimensionality Reduction  |  F-measure  |  Accuracy  |
+    +----------------------------+-------------+------------+
+    |                            |      0.90   |     0.82   |
+    +----------------------------+-------------+------------+
+    | PCA                        |      0.89   |     0.81   |
+    +----------------------------+-------------+------------+
+    | LDA                        |      0.84   |     0.74   |
+    +----------------------------+-------------+------------+
+    | Kernel PCA                 |      0.93   |     0.89   |
+    +----------------------------+-------------+------------+
 
 We were able to achieve accuracy of 82\% with random forest classifier alone.
 This outperforms previous benchmarks in training classifiers on synthetic
@@ -352,6 +350,12 @@ In summary we can conclude that dimensionality reduction is a useful method for
 extracting meaningful features from brain imaging. Furthermore the impressive
 performance of these features in machine learning applications indicates that at
 least some subset of these features strongly correlates with the patient group.
+
+While not explored in this paper, it would be interesting to explore why LDA seemed
+cause a drop in classifier performance while traditional PCA did not in the tensor
+decomposition. Furthermore it would be interesting to explore why PCA and LDA both
+have caused classifier performance decreases with with features produced from linear
+dynamical systems.
 
 
 Acknowledgements
