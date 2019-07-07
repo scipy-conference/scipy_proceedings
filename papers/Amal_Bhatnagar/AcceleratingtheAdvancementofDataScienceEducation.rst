@@ -14,14 +14,14 @@
 :email: amalbhatnagar@berkeley.edu
 :institution: University of California, Berkeley
 
-
 .. contents::
    :depth: 3
 ..
 
-------------------------------------------------------
-Accelerating the Advancement of Data Science Education
-------------------------------------------------------
+=======================================================
+Accelerating the Advancement of Data Science Education 
+=======================================================
+
 
 Data science is a burgeoning field that is quickly being adopted across
 all domains and sectors. Undergraduate data science education
@@ -59,10 +59,10 @@ The workshop sought to build a national community of practice around
 undergraduate Data Science education by focusing around four primary
 areas:
 
-1) Examining the *Foundations of Data Science (Data 8)* course - How
+*1)* Examining the *Foundations of Data Science (Data 8)* course - How
 does the content to pedagogical methods of Data 8 integrates various
 disciplines through the use of computational and inferential
-thinking.\ * *
+thinking.*
 
 *2)* Showcase the infrastructural platform that Berkeley has developed
 for its courses, and empower participants to use its many open-source
@@ -70,13 +70,13 @@ components to overcome the *financial and technical barriers.*
 
 *3)* Applying Modular Data Science education content into various
 disciplinary fields past the scope of that from a traditional computer
-science or statistics courses provide.
+science or statistics courses provide.*
 
 *4)* Implementing Ethical Content into *data science courses and
 examines how such integration could work. *
 
-**Establishing Foundational Course that Serves the Entire Campus**
--------------------------------------------------------------------
+Establishing Foundational Course that Serves the Entire Campus
+--------------------------------------------------------------
 
 Data science can touch all different genres and disciplines of
 academia\ *.* The proliferation of affordable computational capacity,
@@ -103,12 +103,12 @@ Science “Tables” library without getting lost in the more complex syntax
 of Pandas and transition into statistics and computer science, as many
 students do not have prior coding experience. In 2015, UC Berkeley
 launched Data 8 *Foundations of Data Science* for its undergraduate
-students. Using the Python *datascience* package, students work with
-real-world datasets to ask questions and find answers. With the course
-centered upon students learning inferential thinking, computational
-thinking, and real-world relevance, students learn how to apply such
-statistical or computer programming techniques onto non-traditional
-fields through economic and geographical data and social issues. 
+students. With the course centered upon students learning inferential
+thinking, computational thinking, and real-world relevance, students
+learn how to apply such statistical or computer programming techniques
+onto non-traditional fields through economic and geographical data and
+social issues. Using the Python datascience package, students work
+with real-world datasets to ask questions and find answers.
 
 Through Data 8, core foundational facilitators now know to find
 connections to other departments and stakeholders. In fielding an
@@ -116,42 +116,41 @@ entry-level data science course and fitting it into the curriculum, it’s
 crucial to engage with faculty across a variety of disciplines in an
 inclusive, supportive way and a spirit of partnership. Berkeley has
 launched and taught many different connector courses that use Data 8 as
-a prerequisite. The Data Science students having classes from a field of
-application allows students to find ways to apply their learning from
-Data 8 onto other domains. 
+a prerequisite. The Data Science students having classes from a
+non-traditional field allows students to find ways to apply their
+learning from Data 8 onto other domains. 
 
-**Setting Campus Wide Educational Cyber-Infrastructure**
----------------------------------------------------------
+Setting Campus Wide Educational Cyber-Infrastructure
+----------------------------------------------------
 
 Implementation of a data science course like Data 8 across the entire
 campus requires universities and institutions to develop capacity in
 on-demand cyber-infrastructure to support their educational goals. Local
-computation is not ideal, as it is harder to manage when the number of
+computation is not ideal, as it is harder to scale when the number of
 courses and students increases. For many institutions, the ability to
 set up the necessary support systems for JupyterHub or other
 infrastructure is beyond the expertise of a single course instructor,
-who already have to distribute their finite time in planning lesson
+who already has to distribute their finite time in planning lesson
 outlines and curriculum. Institutional IT staff members would have to
 obtain additional training, which would vary across institutions to
 better fit the differing needs and implementations of the data science
-courses causing inconsistency. For many small institutions and
+courses and can be too costly. For many small institutions and
 universities, this proves to be a major barrier in course delivery. The
 development of regional or national cloud-based computing solutions that
 can serve individual educational institutions is needed.
 
 Universities must invest resources into developing data science
 educational infrastructure like JupyterHub, a platform not many
-universities have and differs from research cyber-infrastructure. The
+universities have, that differs from research cyber-infrastructure. The
 two have different goals, resource needs, deployment timelines, cost and
-pricing of models, and broad access mandate. Data science educational
+pricing of models, and broad access mandates. Data science educational
 infrastructure is deployed for relatively low resource use by a large
 number of relatively unsophisticated users. Making the data science
 infrastructure accessible requires establishing three components. At UC
 Berkeley, the core components include setting up a campus wide
 JupyterHub, integration with existing campus Learning Management Systems
-(LMS), e.g. Canvas
-(`*https://www.instructure.com/* `https://www.instructure.com/>`__), and
-utilizing autograder technology. 
+(LMS), e.g. Canvas (https://www.instructure.com/), and utilizing
+autograder technology. 
 
 Autograding technology is essential to the scalability of data science
 education and alleviates substantial work for large classes at UC
@@ -168,7 +167,9 @@ sysadmins operating an okpy server installation. On the other hand, Data
 an open source grading solution built for Jupyter Notebooks. On Data 8X,
 the newly developed *gofer grader* is used to solely address the needs
 of a MOOC course and retains similar aspects from Data 8’s grading
-system.
+system. The *gofer grader* is relatively new and has run into issues
+relatively frequently. Yet, it asynchronously supports hundreds of
+students’ grading concurrently 
 
 To mitigate high individual institutional infrastructure startup costs,
 a national educational cyber-infrastructure strategy with industry and
@@ -191,54 +192,54 @@ infrastructure, as instructors can teach students for many, the system
 holds all the necessary material, simplifies data management and
 analysis, and visualizes data for instructors. Before Berkeley launched
 its integrated system, the teaching faculty found it difficult to
-efficiently scale courses at the rate of their increasing interest. Now,
-more than 1,600 students enrolled in Data 8 for its Spring 2019
-iteration, a historic milestone that would not have been possible absent
-Berkeley’s educational cyber-infrastructure. 
+efficiently scale courses at the rate of their increasing interest.
+Berkeley’s adoption of JupyterHub has allowed more than 1,600 students
+to enroll in Data 8 for its Spring 2019 iteration, a historic milestone
+that would not have been possible absent Berkeley’s educational
+cyber-infrastructure. 
 
-**Creating and Incorporating Modular Data Science Content **
-------------------------------------------------------------
-
-*Spreading data science content into all courses*
+Creating and Incorporating Modular Data Science Content 
+--------------------------------------------------------
 
 There are two main concerns when modularizing data science content:
 *Having just one introductory data science class is not enough to
 warrant an entire data science curricula, and creating a sustainable
-model that supports the data science curricula. *
+model that supports the data science curricula is challenging for newly
+adopting institutions.  *
 
 Implementing and integrating the new course to fit in the overall
 academic curriculum is critical for seamless student experience in data
-science. UC Berkeley Data Science student teams have also supported the
+science. UC Berkeley’s Division of Data Sciences has also supported the
 creation of data science content for inserting in other types of
 (usually non-data science) courses in self-contained “Modules” that can
-illustration aspects of data science to a different audience. Some
-examples of modules that students can take include Linguistics 110:
-*Introduction to Phonetics and Phonology,* Sociology 130 AC:
-*Neighborhood Mapping,* and Econ 101B: Macroeconomics. Developing and
-implementing such modules allow students to experience data-driven
-techniques through Python that they would not have previously had
-exposure to. 
+showcase aspects of data science to a different audience. Some examples
+of modules that students can take include Linguistics 110: *Introduction
+to Phonetics and Phonology,* Sociology 130 AC: *Neighborhood Mapping,*
+and Econ 101B: *Macroeconomics*. Developing and implementing such
+modules allow students to experience data-driven techniques and
+scientific computing through Python. 
 
 Because data science serves functions in a vast array of
 interdisciplinary fields of study, the ability to modify the
 introductory course and tailor it to fit in with the current
 institutional curriculum will go a long way in communicating the
-relevance of the study to students taking the course. This process will
+relevance of the field to students taking the course. This process will
 need time for planning and preparation before the actual steps for
 integration can start. In addition, faculty across different departments
 should collaborate to explore the possibility of connector courses or
 incorporation of data science in each others’ subjects. Connector
 courses are supplemental courses which build on the introductory data
 science course by using similar statistical and computational techniques
-across different disciplines, such as business, economics, and
-geography. Berkeley has offered 27 different connector courses since
-their launch in 2015. To alleviate the burden of redistributing finances
-and increase funding, faculty might have to reallocate their time to
-develop and adopt a new curriculum. To mitigate increasing startup
-costs, Berkeley has hired graduate students and even undergraduate
-students who previously excelled at that class to assist in teaching
-efforts. Incorporating local talent, such as previous students, allows
-institutions to balance high startup costs. 
+across different disciplines, such as business, biology, and geography.
+Berkeley has offered 27 different connector courses since their launch
+in 2015. To alleviate the burden of redistributing finances and to
+increase funding, faculty might have to reallocate their time to develop
+and adopt a new curriculum. To mitigate increasing startup costs,
+Berkeley has hired graduate students and even undergraduate students who
+previously excelled at that class to assist in teaching efforts.
+Incorporating on-campus talent, such as previous students, creates a
+robust data science culture on campus that is easy to spread among the
+student population. 
 
 To successfully adopt a data science modules curricula, we propose
 creating a platform to share teaching resources that is available to
@@ -246,24 +247,19 @@ anyone in the community. Such a platform could be modeled on the popular
 Data8 public organization (https://github.com/data-8) and the site
 hosting Data Carpentry lessons (https://datacarpentry.org/lessons/). The
 principal functions of this platform are to share teaching resources
-such as use cases (dataset and accompanying analyses), open source
+such as use cases (datasets and accompanying analyses), open source
 textbooks or modules, and programs used to facilitate data science
-education. A dissemination of exercises, activities, and examples sorted
-by a topic/domain that will include relevant and useful examples in new
-or existing courses. This repository would include canonical examples,
-such as the Iris and Mauna Loa CO2 data sets commonly used to illustrate
-classification and time series analysis, and other examples from local
-industry or research projects. National Workshop on Data Science
-Education proves that the design of the courses and the planning of the
-material and activities is key. Berkeley’s Data 8’s success in reaching
-up to 1,500 students within its first few iterations attests to the
-importance of curriculum innovation and pedagogical methods. Having
-staff with technical skills to support the computer infrastructure and
-collaborative support with nearby/sister institutions who can share best
-practices and resources makes this model even more successful.
-Developing collaborative, modularized open-source teaching materials,
-such as the books used in Data 8 and Data 100, allows other institutions
-to more easily implement curricula for themselves. 
+education. National Workshop on Data Science Education proves that the
+design of the courses and the planning of the material and activities is
+key. Berkeley’s Data 8’s success in reaching up to 1,500 students within
+its first few iterations attests to the importance of curriculum
+innovation and pedagogical methods. Having staff with technical skills
+to support the computer infrastructure and collaborative support with
+nearby/sister institutions who can share best practices and resources
+makes this model even more successful. Developing collaborative,
+modularized open-source teaching materials, such as the books used in
+Data 8 and Data 100, allows other institutions to more easily implement
+curricula for themselves. 
 
 Recently, Berkeley has been sharing such resources with institutions
 interested in adopting a data science curriculum. By sharing access to
@@ -279,8 +275,8 @@ proves that transparency and communication is key to start and scale
 undergraduate data science programs across the world and increase Python
 literacy. 
 
-**Integrating The Teaching of Ethics Into Data Science Courses**
-----------------------------------------------------------------
+Integrating The Teaching of Ethics Into Data Science Courses
+------------------------------------------------------------
 
 As data come to structure more and more aspects of our lives, the
 potential impact of data science on individuals and societies looms ever
@@ -300,10 +296,9 @@ questions arise at every step of the data science life cycle. Where data
 science courses teach professional competencies of statistics, computer
 science, and various content areas, they can also introduce students to
 the ethical standards of research and practice in those domains
-(National Academies of Sciences, Engineering, and Medicine 2018). Some
+[NASEMS 18]_. Some
 data science textbooks already address such issues as misleading data
-visualizations, p-hacking, web scraping, and data privacy (Baumer,
-Kaplan, and Horton 2017). 
+visualizations, p-hacking, web scraping, and data privacy [Baumer 17]_. 
 
 A recent trend in incorporating such ethical practices includes
 incorporating anti-bias algorithms in the workplace. Starting from the
@@ -322,14 +317,14 @@ students can mitigate such algorithmic bias when they work in industry
 or academia post-graduation. 
 
 Databases and algorithms are socio-technical objects; they emerge and
-evolve in tandem with the societies in which they operate (Latour 1990).
+evolve in tandem with the societies in which they operate [Latour 90]_.
 Understanding data science in this way and recognizing its social
 implications requires a different kind of critical thinking that is
 taught in data science courses. Issues such as computational agency
-(Tufekci 2015), the politics of data classification and statistical
-inference (Bowker and Star 2000; Desrosières 1998), and the perpetuation
-of social injustice through algorithmic decision making (Eubanks 2018;
-Noble 2018; O’Neill 2016) are well known to scholars in the
+[Tufekci 15]_, the politics of data classification and statistical
+inference [Bowker 08]_, [Desrosières 11]_, and the perpetuation
+of social injustice through algorithmic decision making [Eubanks 19]_, 
+[Noble 18]_, [ONeil 18]_ are well known to scholars in the
 interdisciplinary field of science and technology studies (STS), who
 should be invited to participate in the development of data science
 curricula. STS or other courses in the social sciences and humanities
@@ -344,8 +339,8 @@ add ethical standards to their mission statements or to hire chief
 ethics officers to oversee not only day-to-day operations but also the
 larger social consequences of their work. 
 
-**Summary & Vision**
---------------------
+Summary & Vision
+----------------
 
 We envision a world where all students can learn ethical data-driven
 techniques regardless of their domain and can manipulate data to find
@@ -360,36 +355,36 @@ previously expected. These strategies will accelerate the creation of a
 space for Data Science to exist as a cross-campus endeavor and engage
 faculty and students in different departments.
 
-**Works Cited**
----------------
+References
+----------
 
-Baumer, Benjamin S., Daniel T. Kaplan, and Nicholas J. Horton. 2017.
-*Modern Data Science with R*. Chapman & Hall.
-`*http://mdsr-book.github.io* <http://mdsr-book.github.io>`__ 
+.. [Baumer 17] Baumer, B. S., Kaplan, D. T., & Horton, N. J. (2017). Modern Data
+Science with R. Retrieved from http://mdsr-book.github.io/	
 
-Bowker, Geoffrey C., and Susan Leigh Star. 2000. *Sorting Things Out:
-Classification and Its Consequences*. Cambridge: MIT Press.
+.. [Bowker 08] Bowker, G. C., & Star, S. L. (2008). Sorting things out: Classification
+and its consequences. Cambridge, MA: MIT Press.	
 
-Desrosières, Alain. 1998. *The Politics of Large Numbers: A History of
-Statistical Reasoning*. Cambridge: Harvard University Press.
+.. [Desrosières 11] Desrosières, A. (2011). The politics of large numbers: A history of
+statistical reasoning. Cambridge, MA: Harvard University Press.	
 
-Eubanks, Virginia. 2018. *Automating Inequality: How High-Tech Tools
-Profile, Police, and Punish the Poor*. New York: St. Martin’s.
+.. [Eubanks 19] Eubanks, V. (2019). AUTOMATING INEQUALITY: How high-tech tools profile,
+police, and punish the poor. PICADOR.	
 
-Latour, Bruno. 1990. Technology is society made durable. *The
-Sociological Review* 38(1, supplement): 103-131.
+.. [Latour 90] Latour, B. (1990). Technology is society made durable. The Sociological
+Review, 38(1), supplement, 103-131. Retrieved from
+http://www.bruno-latour.fr/sites/default/files/46-TECHNOLOGY-DURABLE-GBpdf.pdf	
 
-National Academies of Sciences, Engineering, and Medicine. 2018. *Data
-Science for Undergraduates: Opportunities and Options*. Washington, DC:
-The National Academies Press.
-`*https://doi.org/10.17226/25104* <https://doi.org/10.17226/25104>`__ 
+.. [NASEMS 18] National Academies of Sciences, Engineering, and Medicinemies of
+Sciences. (2018, May 02). Data Science for Undergraduates: Opportunities
+and Options. Retrieved from https://doi.org/10.17226/25104	
 
-Noble, Safiya Umoja. 2018. *Algorithms of Oppression: How Search Engines
-Reinforce Racism*. New York: New York University Press.
+.. [Noble 18] Noble, S. U. (2018). Algorithms of oppression how search engines
+reinforce racism. New York: New York University Press.	
 
-O’Neill, Cathy. 2016. *Weapons of Math Destruction: How Big Data
-Increases Inequality and Threatens Democracy*. New York: Crown.
+.. [ONeil 18] ONeil, C. (2018). Weapons of math destruction: How big data increases
+inequality and threatens democracy. London: Penguin Books.	
 
-Tufekci, Zeynep. 2015. Algorithmic harms beyond Facebook and Google:
-Emergent challenges of computational agency. *Colorado Technology Law
-Journal* 13(2): 203-218.
+.. [Tufekci 15] Tufekci, Z. (2015). Algorithmic harms beyond Facebook and Google:
+Emergent challenges of computational agency. Colorado Technology Law
+Journal, 203-218. Retrieved from
+https://ctlj.colorado.edu/wp-content/uploads/2015/08/Tufekci-final.pdf.	
