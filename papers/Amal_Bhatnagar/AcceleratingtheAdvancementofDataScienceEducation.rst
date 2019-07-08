@@ -1,6 +1,7 @@
 :author: Eric Van Dusen
 :email: ericvd@berkeley.edu 
 :institution: University of California, Berkeley
+:corresponding: 
 
 :author: Anthony Suen
 :email: anthonysuen@berkeley.edu
@@ -22,7 +23,30 @@
 Accelerating the Advancement of Data Science Education 
 =======================================================
 
+.. class:: abstract
 
+We outline a synthesis of strategies created in collaboration with 35+
+colleges and universities on how to advance undergraduate data science
+education on a national scale. The four core pillars of this strategy
+include the integration of data science education across all domains,
+establishing adoptable and scalable cyberinfrastructure, applying data
+science to non-traditional domains, and incorporating ethical content
+into data science curricula. The paper analyzes UC Berkeley’s method of
+accelerating the national advancement of data science education in
+undergraduate institutions and examines the recent innovations in
+autograders for assignments which helps scale such programs. The
+conversation of ethical practices with data science are key to mitigate
+social issues arising from computing, such as incorporating anti-bias
+algorithms. Following these steps will form the basis of a scalable data
+science education system that prepares undergraduate students with
+analytical skills for a data-centric world.
+
+.. class:: keywords
+	data science education, autograder, undergraduate institutions
+
+
+Introduction
+------------
 Data science is a burgeoning field that is quickly being adopted across
 all domains and sectors. Undergraduate data science education
 initiatives have been growing rapidly, but also largely in an
@@ -62,7 +86,7 @@ areas:
 *1)* Examining the *Foundations of Data Science (Data 8)* course - How
 does the content to pedagogical methods of Data 8 integrates various
 disciplines through the use of computational and inferential
-thinking.*
+thinking.
 
 *2)* Showcase the infrastructural platform that Berkeley has developed
 for its courses, and empower participants to use its many open-source
@@ -70,10 +94,10 @@ components to overcome the *financial and technical barriers.*
 
 *3)* Applying Modular Data Science education content into various
 disciplinary fields past the scope of that from a traditional computer
-science or statistics courses provide.*
+science or statistics courses provide.
 
 *4)* Implementing Ethical Content into *data science courses and
-examines how such integration could work. *
+examines how such integration could work.*
 
 Establishing Foundational Course that Serves the Entire Campus
 --------------------------------------------------------------
@@ -205,7 +229,7 @@ There are two main concerns when modularizing data science content:
 *Having just one introductory data science class is not enough to
 warrant an entire data science curricula, and creating a sustainable
 model that supports the data science curricula is challenging for newly
-adopting institutions.  *
+adopting institutions.*
 
 Implementing and integrating the new course to fit in the overall
 academic curriculum is critical for seamless student experience in data
@@ -322,7 +346,7 @@ Understanding data science in this way and recognizing its social
 implications requires a different kind of critical thinking that is
 taught in data science courses. Issues such as computational agency
 [Tufekci 15]_, the politics of data classification and statistical
-inference [Bowker 08]_, [Desrosières 11]_, and the perpetuation
+inference [Bowker 08]_, [Desrosieres 11]_, and the perpetuation
 of social injustice through algorithmic decision making [Eubanks 19]_, 
 [Noble 18]_, [ONeil 18]_ are well known to scholars in the
 interdisciplinary field of science and technology studies (STS), who
@@ -359,32 +383,32 @@ References
 ----------
 
 .. [Baumer 17] Baumer, B. S., Kaplan, D. T., & Horton, N. J. (2017). Modern Data
-Science with R. Retrieved from http://mdsr-book.github.io/	
+	Science with R. Retrieved from http://mdsr-book.github.io/	
 
 .. [Bowker 08] Bowker, G. C., & Star, S. L. (2008). Sorting things out: Classification
-and its consequences. Cambridge, MA: MIT Press.	
+	and its consequences. Cambridge, MA: MIT Press.	
 
-.. [Desrosières 11] Desrosières, A. (2011). The politics of large numbers: A history of
-statistical reasoning. Cambridge, MA: Harvard University Press.	
+.. [Desrosieres 11] Desrosieres, A. (2011). The politics of large numbers: A history of
+	statistical reasoning. Cambridge, MA: Harvard University Press.	
 
 .. [Eubanks 19] Eubanks, V. (2019). AUTOMATING INEQUALITY: How high-tech tools profile,
-police, and punish the poor. PICADOR.	
+	police, and punish the poor. PICADOR.	
 
 .. [Latour 90] Latour, B. (1990). Technology is society made durable. The Sociological
-Review, 38(1), supplement, 103-131. Retrieved from
-http://www.bruno-latour.fr/sites/default/files/46-TECHNOLOGY-DURABLE-GBpdf.pdf	
+	Review, 38(1), supplement, 103-131. Retrieved from
+	http://www.bruno-latour.fr/sites/default/files/46-TECHNOLOGY-DURABLE-GBpdf.pdf	
 
 .. [NASEMS 18] National Academies of Sciences, Engineering, and Medicinemies of
-Sciences. (2018, May 02). Data Science for Undergraduates: Opportunities
-and Options. Retrieved from https://doi.org/10.17226/25104	
+	Sciences. (2018, May 02). Data Science for Undergraduates: Opportunities
+	and Options. Retrieved from https://doi.org/10.17226/25104	
 
 .. [Noble 18] Noble, S. U. (2018). Algorithms of oppression how search engines
-reinforce racism. New York: New York University Press.	
+	reinforce racism. New York: New York University Press.	
 
 .. [ONeil 18] ONeil, C. (2018). Weapons of math destruction: How big data increases
-inequality and threatens democracy. London: Penguin Books.	
+	inequality and threatens democracy. London: Penguin Books.	
 
 .. [Tufekci 15] Tufekci, Z. (2015). Algorithmic harms beyond Facebook and Google:
-Emergent challenges of computational agency. Colorado Technology Law
-Journal, 203-218. Retrieved from
-https://ctlj.colorado.edu/wp-content/uploads/2015/08/Tufekci-final.pdf.	
+	Emergent challenges of computational agency. Colorado Technology Law
+	Journal, 203-218. Retrieved from
+	https://ctlj.colorado.edu/wp-content/uploads/2015/08/Tufekci-final.pdf.	
