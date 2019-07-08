@@ -42,7 +42,8 @@ science education system that prepares undergraduate students with
 analytical skills for a data-centric world.
 
 .. class:: keywords
-	data science education, autograder, undergraduate institutions
+
+	data science education, autograding, undergraduate institutions
 
 
 Introduction
@@ -320,9 +321,9 @@ questions arise at every step of the data science life cycle. Where data
 science courses teach professional competencies of statistics, computer
 science, and various content areas, they can also introduce students to
 the ethical standards of research and practice in those domains
-[NASEMS 18]_. Some
+[NASEMS18]_. Some
 data science textbooks already address such issues as misleading data
-visualizations, p-hacking, web scraping, and data privacy [Baumer 17]_. 
+visualizations, p-hacking, web scraping, and data privacy [Baumer17]_. 
 
 A recent trend in incorporating such ethical practices includes
 incorporating anti-bias algorithms in the workplace. Starting from the
@@ -341,14 +342,14 @@ students can mitigate such algorithmic bias when they work in industry
 or academia post-graduation. 
 
 Databases and algorithms are socio-technical objects; they emerge and
-evolve in tandem with the societies in which they operate [Latour 90]_.
+evolve in tandem with the societies in which they operate [Latour90]_.
 Understanding data science in this way and recognizing its social
 implications requires a different kind of critical thinking that is
 taught in data science courses. Issues such as computational agency
-[Tufekci 15]_, the politics of data classification and statistical
-inference [Bowker 08]_, [Desrosieres 11]_, and the perpetuation
-of social injustice through algorithmic decision making [Eubanks 19]_, 
-[Noble 18]_, [ONeil 18]_ are well known to scholars in the
+[Tufekci15]_, the politics of data classification and statistical
+inference [Bowker08]_, [Desrosieres11]_, and the perpetuation
+of social injustice through algorithmic decision making [Eubanks19]_, 
+[Noble 18]_, [ONeil18]_ are well known to scholars in the
 interdisciplinary field of science and technology studies (STS), who
 should be invited to participate in the development of data science
 curricula. STS or other courses in the social sciences and humanities
@@ -380,35 +381,36 @@ space for Data Science to exist as a cross-campus endeavor and engage
 faculty and students in different departments.
 
 References
-----------
+-----------
 
-.. [Baumer 17] Baumer, B. S., Kaplan, D. T., & Horton, N. J. (2017). Modern Data
+
+.. [Baumer17] Baumer, B. S., Kaplan, D. T., & Horton, N. J. (2017). Modern Data
 	Science with R. Retrieved from http://mdsr-book.github.io/	
 
-.. [Bowker 08] Bowker, G. C., & Star, S. L. (2008). Sorting things out: Classification
+.. [Bowker08] Bowker, G. C., & Star, S. L. (2008). Sorting things out: Classification
 	and its consequences. Cambridge, MA: MIT Press.	
 
-.. [Desrosieres 11] Desrosieres, A. (2011). The politics of large numbers: A history of
+.. [Desrosieres11] Desrosieres, A. (2011). The politics of large numbers: A history of
 	statistical reasoning. Cambridge, MA: Harvard University Press.	
 
-.. [Eubanks 19] Eubanks, V. (2019). AUTOMATING INEQUALITY: How high-tech tools profile,
+.. [Eubanks19] Eubanks, V. (2019). AUTOMATING INEQUALITY: How high-tech tools profile,
 	police, and punish the poor. PICADOR.	
 
-.. [Latour 90] Latour, B. (1990). Technology is society made durable. The Sociological
+.. [Latour90] Latour, B. (1990). Technology is society made durable. The Sociological
 	Review, 38(1), supplement, 103-131. Retrieved from
 	http://www.bruno-latour.fr/sites/default/files/46-TECHNOLOGY-DURABLE-GBpdf.pdf	
 
-.. [NASEMS 18] National Academies of Sciences, Engineering, and Medicinemies of
+.. [NASEMS18] National Academies of Sciences, Engineering, and Medicinemies of
 	Sciences. (2018, May 02). Data Science for Undergraduates: Opportunities
 	and Options. Retrieved from https://doi.org/10.17226/25104	
 
-.. [Noble 18] Noble, S. U. (2018). Algorithms of oppression how search engines
+.. [Noble18] Noble, S. U. (2018). Algorithms of oppression how search engines
 	reinforce racism. New York: New York University Press.	
 
-.. [ONeil 18] ONeil, C. (2018). Weapons of math destruction: How big data increases
+.. [ONeil18] ONeil, C. (2018). Weapons of math destruction: How big data increases
 	inequality and threatens democracy. London: Penguin Books.	
 
-.. [Tufekci 15] Tufekci, Z. (2015). Algorithmic harms beyond Facebook and Google:
+.. [Tufekci15] Tufekci, Z. (2015). Algorithmic harms beyond Facebook and Google:
 	Emergent challenges of computational agency. Colorado Technology Law
 	Journal, 203-218. Retrieved from
 	https://ctlj.colorado.edu/wp-content/uploads/2015/08/Tufekci-final.pdf.	
