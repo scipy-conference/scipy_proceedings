@@ -507,44 +507,57 @@ A visualization of this dataset is in Figure :ref:`fig:synthetic-data`.
 .. latex::
    :usepackage: graphicx
 
+
+.. raw:: latex
+
+   \begin{figure}
+       \centering
+       \includegraphics[width=0.40\linewidth]{imgs/synthetic-dataset.png}
+       \caption{
+           The synthetic dataset used as input for the serial simulations.
+           The colors correspond to different class labels.
+           In addition to these two
+           informative dimensions, there are 4 uninformative dimensions with
+           uniformly distributed random noise. There are 60,000 examples in
+           this dataset and 50,000 are used for training.
+       }
+       \label{fig:synthetic-data}
+   \end{figure}
+
 .. raw:: latex
 
    \begin{figure}  % figure* for horizontal figures
    \centering
    \begin{subfigure}{0.45\textwidth}
        \centering
-       \includegraphics[width=0.70\linewidth]{imgs/synthetic-dataset.png}
+       \includegraphics[width=0.75\linewidth]{imgs/synthetic-final-acc.pdf}
        \caption{
-           The synthetic dataset used as input. In addition to these two
-           informative dimensions, there are 4 uninformative dimensions with
-           uniformly distributed random noise. There are 60,000 examples in
-           this dataset and 50,000 are used for training. The colors correspond
-           to different class labels and all points are bounded between $-2$
-           and $2$ for all dimensions.
+           The final validation accuracy over the different runs. The worst of
+           the \texttt{hyperband} runs performs better than 179 of the
+           \texttt{passive} runs.  21 of the 200 \texttt{passive} runs have
+           final validation accuracy less than 70\%.
        }
-       \label{fig:synthetic-data}
+       \label{fig:synthetic-performance}
    \end{subfigure}
    \begin{subfigure}{0.45\textwidth}
        \centering
-       \includegraphics[width=0.95\linewidth]{imgs/synthetic-val-acc.pdf}
+       \includegraphics[width=0.85\linewidth]{imgs/synthetic-val-acc.pdf}
        \caption{
            The average best score from
            Hyperband's early stopping scheme (via \texttt{hyperband})
            and randomized search without any early stopping (via
-           \texttt{passive}). Models require 81 passes through the
-           dataset, so the equivalent of 25 models are trained for both methods. The shaded regions
-           correspond to the 25\% and 75\% percentiles over 40 runs.
-           The mean is low for \texttt{passive} because two models had final best
-           scores below 60\%. All other \texttt{passive} runs had final best scores about 70\%.
+           \texttt{passive}). The shaded regions
+           correspond to the 25\% and 75\% percentiles over the different runs.
+           The green dotted line indicates the time required to train 4 models
+           with 4 Dask workers.
        }
        \label{fig:synthetic-performance}
    \end{subfigure}
    \caption{
-       In this simulation, each call to \texttt{partial\_fit} sees about 1/3rd
+       In this simulation, each call to \texttt{partial\_fit} sees about 1/6th
        of examples in the complete train dataset. Each model completes no more
-       than 81 passes through the data. The passive search performs no early
-       stopping and trains 17 models to completion. Hyperband initially
-       evaluates 143 models.
+       than 50 passes through the data. This experiment includes 200 runs of \texttt{hyperband}
+       and \texttt{passive} and passive.
    }
    \label{fig:synthetic}
    \end{figure}
@@ -603,12 +616,16 @@ to be seen by at least one model, ``n_examples``. This rule of thumb is:
 .. code-block:: python
 
    # Specify these two parameters
-   n_params = 230
-   n_examples = 81 * len(X_train)
+   n_params = 299
+   n_examples = 50 * len(X_train)
 
-   # Use this rule-of-thumb
+   # The rule-of-thumb to determine inputs
    max_iter = n_params
    chunks = n_examples // n_params
+
+The value of ``n_params`` is only approximate. The value of 299 is chosen to
+make the Dask array evenly chunked and to sample approximately 4 hyperparameter
+combinations for unique combination of discrete hyperparameters.
 
 Creation of a ``HyperbandSearchCV`` object and the Dask array is simple with
 this:
@@ -640,7 +657,7 @@ Performance
 
 .. figure:: imgs/synthetic-priority
    :align: center
-   :scale: 75%
+   :scale: 70%
 
    A visualization of how the Dask prioritization scheme influences the
    Hyperband's time to solution. Dask assigns prioritizes training models with
@@ -672,7 +689,8 @@ passes through the dataset a good proxy for time.
 Dask's priority of training high scoring models works best in very serial
 environments: priority makes no difference in very parallel environment when
 every job can be run. To get around this in very parallel environments, the
-worst performing models all have the same priority for each bracket.
+worst performing :math:`P` models all have the same priority for each bracket
+when there are :math:`P` Dask workers.
 
 
 .. [#random-sampling-hyperband] As much as possible – Hyperband evaluates more
@@ -723,7 +741,9 @@ https://github.com/stsievert/dask-hyperband-comparison.
        \caption{
            The time required to complete the
            \texttt{HyperbandSearchCV} search with a different number of workers
-           for different values of \texttt{patience}.
+           for different values of \texttt{patience}. The vertical white line
+           indicates the time required to train one model to completion without
+           any scoring.
        }
        \label{fig:patience}
    \end{subfigure}
@@ -734,8 +754,7 @@ https://github.com/stsievert/dask-hyperband-comparison.
            The time required to obtain a particular validation score (or
            negative loss) with a different number of Dask workers for
            \texttt{HyperbandSearchCV} with \texttt{patience=False} in the solid
-           line and \texttt{patience=True} with the dotted line. There is a
-           vertical line when the search completes.
+           line and \texttt{patience=True} with the dotted line.
        }
        \label{fig:time}
    \end{subfigure}
