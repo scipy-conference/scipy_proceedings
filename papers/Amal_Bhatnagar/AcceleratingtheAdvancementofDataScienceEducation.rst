@@ -187,7 +187,7 @@ data science courses. *Data 8* utilizes ok.py, a Berkeley developed
 solution that has a plethora of features for large and diverse computer
 science and data science classes. However, this comes with a complexity
 cost for instructors who only need a subset of these features and
-sysadmins operating an okpy server installation. On the other hand, Data
+sysadmins operating an okpy server installation [Suen18]_. On the other hand, Data
 100, the upper division core data science course, utilizes *nbgrader*,
 an open source grading solution built for Jupyter Notebooks. On Data 8X,
 the newly developed *gofer grader* is used to solely address the needs
@@ -378,11 +378,10 @@ all, and the human context and ethics content to reign in misuse of data
 exposes students to learning programming in areas they would not have
 previously expected. These strategies will accelerate the creation of a
 space for Data Science to exist as a cross-campus endeavor and engage
-faculty and students in different departments.
+faculty and students in different departments
 
 References
 -----------
-
 
 .. [Baumer17] Baumer, B. S., Kaplan, D. T., & Horton, N. J. (2017). Modern Data
 	Science with R. Retrieved from http://mdsr-book.github.io/	
@@ -408,9 +407,15 @@ References
 	reinforce racism. New York: New York University Press.	
 
 .. [ONeil18] ONeil, C. (2018). Weapons of math destruction: How big data increases
-	inequality and threatens democracy. London: Penguin Books.	
+	inequality and threatens democracy. London: Penguin Books.
+
+.. [Suen18] Suen, A., Norén, L., Liang, A., & Tu, A. (2018). Equity, Scalability,
+	and Sustainability of Data Science Infrastructure. Proceedings of the
+	17th Python in Science Conference. doi:10.25080/majora-4af1f417-002	
 
 .. [Tufekci15] Tufekci, Z. (2015). Algorithmic harms beyond Facebook and Google:
 	Emergent challenges of computational agency. Colorado Technology Law
 	Journal, 203-218. Retrieved from
 	https://ctlj.colorado.edu/wp-content/uploads/2015/08/Tufekci-final.pdf.	
+
+
