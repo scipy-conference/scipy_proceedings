@@ -7,6 +7,7 @@
 :email: spq@cs.uga.edu
 :institution: University of Georgia
 
+:url: https://github.com/quinngroup/SciPy2019-demo/blob/master/README.md
 
 ------------------------------------------------------------------------------
 Parkinson's Classification and Feature Extraction from Diffusion Tensor Images
@@ -44,7 +45,7 @@ Parkinson’s Disease
 Parkinson’s disease (PD) is one of the most common neurodegenerative disorders.
 The disease mainly affects the motor systems and its symptoms can include shaking,
 slowness of movement, and reduced fine motor skills. As of 2015 an estimated
-6.2 million globally were afflicted with the disease [chaudhuri2016]. Its cause is largely unknown
+6.2 million globally were afflicted with the disease [vos2016]. Its cause is largely unknown
 and there are some treatments available, but no cure has yet been found.
 Early diagnosis of PD is a topic of keen interest to diagnosticians and
 researchers alike. Currently Parkinson’s is diagnosed based on the presence of
@@ -88,15 +89,15 @@ Parkinson’s Disease
 A variety of tools currently exist for diagnosis of Parkinson’s through
 pre-motor symptoms. For example Parkinson’s seems to measurably affect olfactory
 sensitivity prior to presenting motor symptoms more than other motor neuron diseases,
-as illustrated by the University of Pennsylvania Smell Identification Test (UPSIT).
+as illustrated by the University of Pennsylvania Smell Identification Test (UPSIT).[chaudhuri2016]
 While there is still more work needed to refine tests like these, it is one example
 that proves the feasibility of earlier diagnosis of Parkinson’s disease.
 The PPMI holds that discovery of one or more biomarkers for PD is a critical step
-for developing treatments for the disease. Chahine & Stern conducted a search
+for developing treatments for the disease. In [chahine2016] a search was conducted
 of existing PD articles relating to objective biomarkers for PD and found that
 there are several potential candidates, including biofluids, peripheral tissue,
 imaging, genetics, and technology based objective motor testing.
-Dinov et al. explored both model-based and model-free approaches for PD
+Dinov et al. [dinov2016] explored both model-based and model-free approaches for PD
 classification and prediction, jointly processing imaging, genetic, clinical,
 and demographic data. They were able to develop and full data-processing
 pipeline enabling modeling of all the data available from PPMI, and found that
@@ -117,7 +118,7 @@ has substantial variability, especially in the early stages of diagnosis.
 For this reason no attempt was made in this paper to include subtype assignment,
 but only to learn a binary Yes/No PD classification prediction.
 State-of-the art Parkinson’s classification results were reported by
-Adeli et al. in early 2017 through use of a joint kernel-based feature
+[adeli2017] in early 2017 through use of a joint kernel-based feature
 selection and classification framework. Unlike conventional feature selection
 techniques, this allowed them to select features that best benefit the classification
 scheme in the kernel space as opposed to the original input feature space.
@@ -125,8 +126,8 @@ They analyzed MRI and SPECT data of 538 subjects from the PPMI database and
 obtained a diagnosis accuracy of 70.5\% in MRI generated features and 95.6\% in
 SPECT image generated features. The authors speculated that their non-linear
 feature selection was the reason for their outperformance of other methods on
-this non-linear classification problem. Other researchers, Banerjee, et al. were
-able to achieve 98.53\% using ensemble learning methods trained on
+this non-linear classification problem. Other researchers, [banerjee2016]
+were able to achieve 98.53\% using ensemble learning methods trained on
 T1 weighted MRI data. However Banerjee used several domain knowledge based feature
 extraction methods to preprocess their data including image registration,
 segmentation, and volumetric analysis.
@@ -147,13 +148,13 @@ Tensor and Matrix Decomposition
 +++++++++++++++++++++++++++++++
 
 Matrix decomposition has been used in a variety of computer vision applications
-in recent years including analysis of facial features. It offers a another
+in recent years including analysis of facial features. It offers another
 means of quantifying the features that describe the relationships between
 values in a 2D space and can be generalized to a variety of applications.
 The key being that decomposition offers a powerful means of simultaneously
 evaluating the relationships of values in a 2 or higher dimensional space.
 In higher dimensional spaces, tensor decomposition is used, where tensors are
-a generalization of matrices.
+a generalization of matrices. [rabanser2017]
 Matrix decomposition can be described as a means of separating a matrix into
 several component matrices whose product would result in the original matrix.
 For example when solving a system of equations you might approach formulate
@@ -166,17 +167,17 @@ the problem as:
 where :math:`A` is a matrix and :math:`x` and :math:`b` are vectors. When
 trying to solve this system of linear equation, we could apply a matrix decompositions
 operations to the matrix :math:`A`, to more efficiently solve the system. By
-finding the products of the of :math:`x` and :math:`b` with the the one matrix
+finding the products of the of :math:`x` and :math:`b` with the one matrix
 resulting from the decomposition and the inverse of the other,
-we can solve the system of equations with significantly fewer operations.
+we can solve the system of equations with significantly fewer operations. [rabanser2017]
 This can be generalized to machine learning applications where increased complexity of
 models, often result in exponential increases in number of computations.
 This also affects the applications of new algorithms and pipelines, Those that
 are too complex and consequently have too many operations become too computationally
-intensiveto be practical to use in some cases.
+intensive to be practical to use in some cases.
 We can choose specific types of decompositions that also allow us to preserve
-unique information about original matrix while also reducing the the size of
-the matrix. Singular Value Decomposition  For example, in the case of singular value decomposition we are
+unique information about original matrix while also reducing the size of
+the matrix. In the case of singular value decomposition we are
 trying to solve:
 
 .. math::
@@ -224,7 +225,7 @@ product of one of the dimensionality reduction techniques used in each experimen
 Algorithm Selection
 +++++++++++++++++++
 
-To guide our selection of a classifier, we used the python package TPOT.
+To guide our selection of a classifier, we used the python package TPOT. [olson2016]
 TPOT uses genetic algorithms to iteratively generate, select and evaluate
 classification pipelines. We evaluated 10 generations of pipelines with
 population size 100 in each and found that Random Forest classification was
@@ -241,7 +242,7 @@ kernel PCA using a radial basis function (RBF).
 Experiment I
 ++++++++++++
 
-Using the tensorly package, a Tucker decomposition is applied to each brain
+Using the tensorly package [kossaifi2019], a Tucker decomposition is applied to each brain
 image. This approach to tensor decomposition was selected because it will
 produce one core tensor that is representative but scaled down from the original
 diffusion tensor image. Additionally Tucker decomposition, unlike other forms of
@@ -328,7 +329,7 @@ Experiment II
 
 We were able to achieve accuracy of 82\% with random forest classifier alone.
 This outperforms previous benchmarks in training classifiers on synthetic
-features derived from MR images. Compared to present results, Cole et al. achieved
+features derived from MR images. Compared to present results, [cole2016] achieved
 only 70\% accuracy at best on synthetic features generated from T1 weighted MRI
 scans. Furthermore, based on the F-measure scores across the experiment
 conditions, we can reasonably say that our model is not skewed as a consequence
@@ -354,8 +355,17 @@ least some subset of these features strongly correlates with the patient group.
 While not explored in this paper, it would be interesting to explore why LDA seemed
 cause a drop in classifier performance while traditional PCA did not in the tensor
 decomposition. Furthermore it would be interesting to explore why PCA and LDA both
-have caused classifier performance decreases with with features produced from linear
-dynamical systems.
+have caused classifier performance decreases with features produced from linear
+dynamical systems. Specifically it would be interesting to explore the co linearity
+between the class and features that affect the output features following the LDA
+treatment. Specifically LDA seems to be stuck producing one strong feature
+and ignoring the rest.
+
+Additionally it would be interesting to explore the effect of various preprocessing
+methods to improve out comes and to systematically obscure the data to evaluate which
+features of the raw pixel data are being hi-lighted by the tensor decomposition and
+linear dynamical systems steps.
+
 
 
 Acknowledgements
@@ -370,37 +380,40 @@ Genentech, GlaxoSmithKline, Lilly, Lundbeck, Merck, Meso Scale Discovery, Pfizer
 Piramal, Prevail, Roche, Sanofi Genzyme, Servier, Takeda, TEVA, UCB, Verily,
 Voyager, and Golub Capital.
 
+We would also like to thanks the reviewers for their feedback and support in
+preparing this manuscript for publication.
+
 
 
 
 References
 ----------
-.. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
+.. [adeli2017] Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
 
-.. [sveinbjornsdottir2016] Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
-
-.. [rabanser2017] Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
-
-.. [vos2016] Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
-
-.. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
-
-.. [cochrane2013] Cochrane, C. J., & Ebmeier, K. P. (2013). Diffusion tensor imaging in parkinsonian syndromes A systematic review and meta-analysis. Neurology, 80(9), 857-864.
-
-.. [soares2013] Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
-
-.. [chahine2016] Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
-
-.. [dinov2016] Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
+.. [banerjee2016] Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
 
 .. [baytas2017] Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
 
-.. [simuni2016] Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
+.. [chahine2016] Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
 
-.. [adeli2017] Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
-
-.. [swiebocka2016] Swiebocka-Wiek, J. (2016, September). Skull Stripping for MRI Images Using Morphological Operators. InIFIP International Conference on Computer Information Systems and Industrial Management (pp. 172-182). Springer International Publishing.
+.. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
 
 .. [cole2016] Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
 
-.. [banerjee2016] Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
+.. [dinov2016] Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
+
+.. [kossaifi2019] Kossaifi, Jean, et al. "Tensorly: Tensor learning in python." The Journal of Machine Learning Research 20.1 (2019): 925-930.
+
+.. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
+
+.. [olson2016] Olson, R. S., Urbanowicz, R. J., Andrews, P. C., Lavender, N. A., & Moore, J. H. (2016, March). Automating biomedical data science through tree-based pipeline optimization. In European Conference on the Applications of Evolutionary Computation (pp. 123-137). Springer, Cham.
+
+.. [rabanser2017] Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
+
+.. [simuni2016] Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
+
+.. [soares2013] Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
+
+.. [sveinbjornsdottir2016] Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
+
+.. [vos2016] Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
