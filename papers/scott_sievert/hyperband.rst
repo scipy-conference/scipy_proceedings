@@ -532,9 +532,10 @@ A visualization of this dataset is in Figure :ref:`fig:synthetic-data`.
        \centering
        \includegraphics[width=0.75\linewidth]{imgs/synthetic-final-acc.pdf}
        \caption{
-           The final validation accuracy over the different runs. The worst of
-           the \texttt{hyperband} runs performs better than 179 of the
-           \texttt{passive} runs.  21 of the 200 \texttt{passive} runs have
+           The final validation accuracy over the different runs. Out of the
+           200 runs, the worst of
+           the \texttt{hyperband} runs performs better than 99 of the
+           \texttt{passive} runs, and 21 \texttt{passive} runs have
            final validation accuracy less than 70\%.
        }
        \label{fig:synthetic-performance}
