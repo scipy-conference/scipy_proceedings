@@ -50,7 +50,7 @@ and there are some treatments available, but no cure has yet been found.
 Early diagnosis of PD is a topic of keen interest to diagnosticians and
 researchers alike. Currently Parkinson’s is diagnosed based on the presence of
 observable motor symptoms and change in symptoms in response to medications that
-target dopaminergic receptors such as Levodopa. [sveinbjornsdottir2016]
+target dopaminergic receptors such as Levodopa [sveinbjornsdottir2016].
 The problem with this approach is that it relies on treating symptoms instead of
 preventing them. Once motor symptoms present, at least 60\% of neurons have been
 affected and there is little likelihood of healing them fully. Additionally
@@ -78,7 +78,7 @@ useful for further analysis. A DTI record is a four-dimensional dataset comprise
 a time-series of a three-dimensional imaging sequence of the brain. PPMI’s DTIs
 generally consisted of 65 time slices, each taken approximately five seconds apart.
 This method tracks movement of water in brain over the discrete time steps, creating a
-representation of the brain that emphasizes the white matter structures.[soares2013]
+representation of the brain that emphasizes the white matter structures [soares2013].
 
 Existing Work
 -------------
@@ -89,7 +89,7 @@ Parkinson’s Disease
 A variety of tools currently exist for diagnosis of Parkinson’s through
 pre-motor symptoms. For example Parkinson’s seems to measurably affect olfactory
 sensitivity prior to presenting motor symptoms more than other motor neuron diseases,
-as illustrated by the University of Pennsylvania Smell Identification Test (UPSIT).[chaudhuri2016]
+as illustrated by the University of Pennsylvania Smell Identification Test (UPSIT) [chaudhuri2016].
 While there is still more work needed to refine tests like these, it is one example
 that proves the feasibility of earlier diagnosis of Parkinson’s disease.
 The PPMI holds that discovery of one or more biomarkers for PD is a critical step
@@ -97,7 +97,7 @@ for developing treatments for the disease. In [chahine2016] a search was conduct
 of existing PD articles relating to objective biomarkers for PD and found that
 there are several potential candidates, including biofluids, peripheral tissue,
 imaging, genetics, and technology based objective motor testing.
-Dinov et al. [dinov2016] explored both model-based and model-free approaches for PD
+Dinov et al [dinov2016] explored both model-based and model-free approaches for PD
 classification and prediction, jointly processing imaging, genetic, clinical,
 and demographic data. They were able to develop and full data-processing
 pipeline enabling modeling of all the data available from PPMI, and found that
@@ -154,7 +154,7 @@ values in a 2D space and can be generalized to a variety of applications.
 The key being that decomposition offers a powerful means of simultaneously
 evaluating the relationships of values in a 2 or higher dimensional space.
 In higher dimensional spaces, tensor decomposition is used, where tensors are
-a generalization of matrices. [rabanser2017]
+a generalization of matrices [rabanser2017].
 Matrix decomposition can be described as a means of separating a matrix into
 several component matrices whose product would result in the original matrix.
 For example when solving a system of equations you might approach formulate
@@ -169,7 +169,7 @@ trying to solve this system of linear equation, we could apply a matrix decompos
 operations to the matrix :math:`A`, to more efficiently solve the system. By
 finding the products of the of :math:`x` and :math:`b` with the one matrix
 resulting from the decomposition and the inverse of the other,
-we can solve the system of equations with significantly fewer operations. [rabanser2017]
+we can solve the system of equations with significantly fewer operations [rabanser2017].
 This can be generalized to machine learning applications where increased complexity of
 models, often result in exponential increases in number of computations.
 This also affects the applications of new algorithms and pipelines, Those that
@@ -225,7 +225,7 @@ product of one of the dimensionality reduction techniques used in each experimen
 Algorithm Selection
 +++++++++++++++++++
 
-To guide our selection of a classifier, we used the python package TPOT. [olson2016]
+To guide our selection of a classifier, we used the python package TPOT [olson2016].
 TPOT uses genetic algorithms to iteratively generate, select and evaluate
 classification pipelines. We evaluated 10 generations of pipelines with
 population size 100 in each and found that Random Forest classification was
