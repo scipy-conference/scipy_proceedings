@@ -486,9 +486,13 @@ provides a demonstration that the Hyperband implementation in Dask works
 correctly before the parallel computing resources of Dask are leveraged.
 
 This section uses a synthetic
-classification problem with 4 classes. Some detail is mentioned in the
+classification problem with 4 classes. These simulations are performed on a laptop with 4 Dask workers. This makes the
+hyperparameter selection very serial and the number of ``partial_fit`` calls or
+passes through the dataset a good proxy for time. Some detail is mentioned in the
 appendix, though complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
+
+
 
 .. code-block:: python
 
@@ -624,7 +628,7 @@ to be seen by at least one model, ``n_examples``. This rule of thumb is:
    max_iter = n_params
    chunks = n_examples // n_params
 
-The value of ``n_params`` is only approximate. The value of 299 is chosen to
+``n_params`` is not exactly the number of parameters that are sampled. The value of 299 is chosen to
 make the Dask array evenly chunked and to sample approximately 4 hyperparameter
 combinations for unique combination of discrete hyperparameters.
 
@@ -677,19 +681,21 @@ Recall from above that Hyperband is a principled early stopping scheme for
 random search. The comparison mirrors that by sampling same hyperparameters
 [#random-sampling-hyperband]_ and using the same validation set for each run.
 
-Dask provides features that the Hyperband implementation can easily exploit.
-Dask Distributed supports prioritizing different jobs, so it's simple to
-prioritize the training of different models based on their most recent score.
-Prioritizing high-performing models will almost certainly prioritize the
-highest performing bracket finishes training more quickly. This highlights how
-Dask is useful to Hyperband and shown in Figure :ref:`fig:synthetic-priority`.
-These simulations are performed on a laptop with 4 Dask workers. This makes the
-hyperparameter selection very serial and the number of ``partial_fit`` calls or
-passes through the dataset a good proxy for time.
+.. raw:: latex
+
+   Dask provides features that the Hyperband implementation can easily exploit.
+   Dask Distributed supports prioritizing different jobs, so it's simple to
+   prioritize the training of different models based on their most recent score.
+   This will emphasize the more adaptive brackets of Hyperband because they are
+   scored more frequently. Empirically, these are the highest performing brackets of
+   Hyperband \cite[Section 2.3]{li2016hyperband}. This highlights how
+   Dask is useful to Hyperband and is shown in Figure \ref{fig:synthetic-priority}.
 
 Dask's priority of training high scoring models works best in very serial
 environments: priority makes no difference in very parallel environment when
-every job can be run. To get around this in very parallel environments, the
+every job can be run. In moderately parallel environments the different
+priorities may lead to longer time to solution because of suboptimal
+scheduling. To get around this, the
 worst performing :math:`P` models all have the same priority for each bracket
 when there are :math:`P` Dask workers.
 
@@ -716,14 +722,15 @@ that's slightly more complex than a linear model.  This means hyperparameter
 optimization is not simple.
 
 Specifically, this section will find the best hyperparameters for a model
-created in PyTorch [#pytorch]_ :cite:`paszke2017automatic` (through the library
-Skorch [#skorch]_) for an image denoising task. Again, some detail is mentioned
+created in PyTorch [#pytorch]_ :cite:`paszke2017automatic` through the library
+Skorch [#skorch]_ for an image denoising task. Again, some detail is mentioned
 in the appendix and complete details can be found at
 https://github.com/stsievert/dask-hyperband-comparison.
 
 
 .. figure:: imgs/input-output
    :align: center
+   :scale: 45%
 
    The input and ground truth for the image denoising problem. There are 70,000
    images in the output, the original MNIST dataset. For the input, random
@@ -870,7 +877,7 @@ Performance
 This section will focus on how ``HyperbandSearchCV`` scales as the number of
 workers grow and stopping non-improving models.
 
-The speedups ``HyperbandSearchCV`` can achieve begin to saturate around 24
+The speedups ``HyperbandSearchCV`` can achieve begin to saturate between 16 and 24
 workers, at least in this experiment as shown in Figure :ref:`fig:time`.
 Figures :ref:`fig:time` and :ref:`fig:activity` show that ``HyperbandSearchCV``
 spends significant amount of time with a low number of workers without
@@ -895,11 +902,12 @@ treat every model as a black box and vary the amount of data provided. This
 would not require the model to implement ``partial_fit`` and would only require
 a ``fit`` method.
 
-Another area of future work is ensuring ``HyperbandSearchCV`` and all of its
-work well with large models. Modern models often consume most of GPU memory
-during training. Currently, ``HyperbandSearchCV`` requires serialization of
-every model between ``partial_fit`` calls. How much does this influence
-performance?
+.. raw:: latex
+
+   Future work might include providing an option to reduce time to solution at
+   some performance cost. This will likely involve choosing which brackets
+   of \texttt{HyperbandSearchCV} to run. Empirically, the best performing
+   brackets are not passive \cite[Section 2.3]{li2016hyperband}.
 
 Future work specifically does not include implementing the asynchronous version
 of successive halving :cite:`li2018massively` in Dask. This variant of
@@ -957,7 +965,7 @@ Here are some of the other hyperparameters tuned:
 * ``estimator__init``: how should the estimator be initialized before training?
   Choices are Xavier :cite:`xavier` and Kaiming :cite:`kaiming` initialization.
 * ``batch_size``: how many examples should the optimizer use to approximate the
-  gradient? Choices :math:`[32, 64, \ldots,  512]`.
+  gradient? Choices are :math:`[32, 64, \ldots,  512]`.
 * ``weight_decay``: how much of a particular type of regularization should the
   neural net have? Regularization helps control how well the model performs on
   unseen data. This value is chosen to be zero 1/6th of the time, and if not
