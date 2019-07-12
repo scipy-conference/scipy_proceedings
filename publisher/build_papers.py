@@ -20,8 +20,10 @@ pdf_dir    = conf.pdf_dir
 toc_conf   = conf.toc_conf
 proc_conf  = conf.proc_conf
 dirs       = conf.dirs
+other_dirs = conf.other_dirs
 xref_conf = conf.xref_conf
 papers_dir = conf.papers_dir
+other_conf = conf.other_conf
 is_final = conf.status_file_base == 'ready'
 
 
@@ -46,10 +48,29 @@ def paper_stats(paper_id, start, doi_prefix=None):
 
     return stats
 
+def other_stats(track_dir, _id, doi_prefix=None):
+    """Pull in stats of slides, return stats and the next paper
+    """
+
+    stats = options.cfg2dict(os.path.join(track_dir, _id, 'info.json'))
+    doi = make_doi(doi_prefix)
+
+    print('"%s" other entry' % (_id))
+
+    # Build table of contents
+    stats.update({
+                  'slide_id': _id,
+                  'doi': doi if is_final else ''
+                })
+
+    return stats
+
+
 if __name__ == "__main__":
 
     start = 1
     toc_entries = []
+    other_entries = {}
 
     options.mkdir_p(pdf_dir)
     basedir = os.path.join(os.path.dirname(__file__), '..')
@@ -70,6 +91,14 @@ if __name__ == "__main__":
         dest_pdf = os.path.join(pdf_dir, paper_id+'.pdf')
         shutil.copy(src_pdf, dest_pdf)
 
+    for track_dir, folder_ids in other_dirs.items():
+        track = os.path.split(track_dir)[-1]
+        other_entries[track] = []
+        for folder in folder_ids:
+            stats = other_stats(track_dir, folder, doi_prefix)
+            other_entries[track].append(stats)
+
+
     # load completed TOC
     toc = {'toc': toc_entries}
     # make doi for this year's proceedings and for whole conference (static)
@@ -78,9 +107,10 @@ if __name__ == "__main__":
 
     # persist metadata
     options.dict2cfg(toc, toc_conf)
+    options.dict2cfg(other_entries, other_conf)
     options.dict2cfg(scipy_entry, proc_conf)
 
     # make crossref submission file
-    xref = XrefMeta(scipy_entry, toc_entries)
+    xref = XrefMeta(scipy_entry, toc_entries, other_entries)
     xref.make_metadata()
     xref.write_metadata(xref_conf)
