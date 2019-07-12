@@ -111,6 +111,6 @@ if __name__ == "__main__":
     options.dict2cfg(scipy_entry, proc_conf)
 
     # make crossref submission file
-    xref = XrefMeta(scipy_entry, toc_entries)
+    xref = XrefMeta(scipy_entry, toc_entries, other_entries)
     xref.make_metadata()
     xref.write_metadata(xref_conf)
