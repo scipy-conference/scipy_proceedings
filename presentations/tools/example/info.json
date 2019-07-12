@@ -2,5 +2,6 @@
     "title": "SciPy Tools Plenary on Mayavi",
     "authors": [
         "Prabhu Ramachandran"
-    ]
+    ],
+    "description": "2018 updates in Mayavi, a 3D plotting application"
 }

@@ -3,5 +3,6 @@
 		"First Author",
 		"Second Author"
 	],
-	"title": "A test title"
+	"title": "A test title",
+	"description": "A brief description of what this object is"
 }

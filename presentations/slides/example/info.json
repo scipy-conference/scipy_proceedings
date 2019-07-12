@@ -2,5 +2,6 @@
     "title": "Safe handling instructions for missing data",
     "authors": [
         "Dillon Niederhut"
-    ]
+    ],
+    "description": "A presentation about what to do with missing data"
 }
