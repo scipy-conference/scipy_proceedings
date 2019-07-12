@@ -23,16 +23,17 @@ from doitools import make_batch_id
 
 class XrefMeta:
 
-    def __init__(self, scipy_conf, toc):
+    def __init__(self, scipy_conf, toc, slides):
         self.scipy_entry = scipy_conf
         self.toc_entries = toc
+        self.slide_entries = slides
         # lxml's implementation of xml location attributes is a little odd
         location = "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
         # this thing is the root node of allllll the elements to follow
         self.doi_batch = xml.Element('doi_batch',
-            version="4.4.0",
-            xmlns="http://www.crossref.org/schema/4.4.0",
-            attrib={location: "http://www.crossref.org/schema/4.4.0 http://www.crossref.org/schemas/crossref4.4.0.xsd"}
+            version="4.4.2",
+            xmlns="http://www.crossref.org/schema/4.4.2",
+            attrib={location: "http://www.crossref.org/schema/4.4.2 http://www.crossref.org/schemas/crossref4.4.2.xsd"}
         )
 
     def make_metadata(self, echo=False):
@@ -72,6 +73,7 @@ class XrefMeta:
         """
         body = xml.SubElement(self.doi_batch, 'body')
         self.make_conference(body)
+        self.make_database(body)
 
     def make_conference(self, body):
         """Build metadata for Scipy conference and individual papers"""
@@ -160,6 +162,59 @@ class XrefMeta:
         paper_doi.text = entry['doi']
         paper_resource = xml.SubElement(paper_doi_data, 'resource')
         paper_resource.text = self.paper_url(entry['paper_id'])
+
+    def make_database(self, body):
+        """Build metadata for the location, or database, where we are putting
+        presentations
+        """
+        database = xml.SubElement(body, 'database')
+        database_metadata = xml.SubElement(database, 'database_metadata', language='en')
+        contributors = xml.SubElement(database_metadata, 'contributors')
+        person_name = xml.SubElement(contributors, 'person_name', contributor_role='editor', sequence='first')
+        first_name, last_name = split_name(self.scipy_entry['proceedings']['xref']['depositor_name'])
+        given_name = xml.SubElement(person_name, 'given_name')
+        given_name.text = first_name
+        surname = xml.SubElement(person_name, 'surname')
+        surname.text = last_name
+        titles = xml.SubElement(database_metadata, 'titles')
+        title = xml.SubElement(titles, 'title')
+        title.text = self.scipy_entry['series']['title']['full']
+        for group, entries in self.slide_entries.items():
+            for entry in entries:
+                entry['group'] = group
+                self.make_dataset(database, entry)
+
+    def make_dataset(self, database, entry):
+        """Build metadata for a single presentation
+        """
+        dataset = xml.SubElement(database, "dataset", dataset_type='other')
+        dataset_contributors = xml.SubElement(dataset, 'contributors')
+        for index, contributor in enumerate(entry.get('authors', [])):
+            # CrossRef has two kinds of authors: {'first', 'additional'}
+            person_name = xml.SubElement(dataset_contributors, 'person_name', contributor_role='author', sequence="additional" if index else "first") # first index value is 0
+            first_name, last_name = split_name(contributor)
+            given_name = xml.SubElement(person_name, 'given_name')
+            given_name.text = first_name
+            surname = xml.SubElement(person_name, 'surname')
+            surname.text = last_name
+        titles = xml.SubElement(dataset, 'titles')
+        title = xml.SubElement(titles, 'title')
+        title.text = entry.get('title', '')
+        database_date = xml.SubElement(dataset, 'database_date')
+        publication_date = xml.SubElement(database_date, 'publication_date')
+        year = xml.SubElement(publication_date, 'year')
+        year.text = self.scipy_entry['proceedings']['year']
+        description = xml.SubElement(dataset, "description")
+        description.text = entry.get('description', 'Material presented at SciPy')
+        program = xml.SubElement(dataset, 'program', name='relations', xmlns= "http://www.crossref.org/relations.xsd")
+        related_item = xml.SubElement(program, 'related_item')
+        inter_work_relation = xml.SubElement(related_item, 'inter_work_relation', attrib={'relationship-type': 'isPartOf', 'identifier-type': 'doi'})
+        inter_work_relation.text = self.scipy_entry['series']['doi']
+        doi_data = xml.SubElement(dataset, 'doi_data')
+        doi = xml.SubElement(doi_data, 'doi')
+        doi.text = entry['doi']
+        resource = xml.SubElement(doi_data, 'resource')
+        resource.text = entry.get('zenodo_url', 'https://fake-url.place')
 
     def write_metadata(self, filepath):
         """Dump entire doi metadata batch to filepath"""
