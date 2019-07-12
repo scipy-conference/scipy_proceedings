@@ -31,9 +31,9 @@ class XrefMeta:
         location = "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
         # this thing is the root node of allllll the elements to follow
         self.doi_batch = xml.Element('doi_batch',
-            version="4.4.0",
-            xmlns="http://www.crossref.org/schema/4.4.0",
-            attrib={location: "http://www.crossref.org/schema/4.4.0 http://www.crossref.org/schemas/crossref4.4.0.xsd"}
+            version="4.4.2",
+            xmlns="http://www.crossref.org/schema/4.4.2",
+            attrib={location: "http://www.crossref.org/schema/4.4.2 http://www.crossref.org/schemas/crossref4.4.2.xsd"}
         )
 
     def make_metadata(self, echo=False):
