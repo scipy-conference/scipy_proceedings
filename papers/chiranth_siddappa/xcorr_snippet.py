@@ -1,7 +1,0 @@
-fig, axs = plt.subplots(2, sharey=True)
-axs[0].plot(abs(rr))
-axs[0].grid(True)
-axs[1].plot(abs(rr))
-axs[1].set_xlim([80, 120])
-axs[1].set_xlabel('Inverse Center Offset (Samples)')
-axs[1].grid(True)
