@@ -10,10 +10,10 @@ You can find more information about the [proceedings' organising principles](#or
 
 **All** communication between authors and reviewers should be civil and
 respectful. There are no exceptions to this rule. Please see the
-[SciPy2018 Code of Conduct](https://scipy2018.scipy.org/ehome/299527/648147/)
+[SciPy2019 Code of Conduct](https://www.scipy2019.scipy.org/code-of-conduct)
 for more info.
 
-You can find the [schedule for 2018](#timeline-for-2018) below.
+You can find the [schedule for 2019](#timeline-for-2019) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -87,7 +87,7 @@ Attribution (CC By) license.
 - Papers are openly available at http://conference.scipy.org/proceedings/, with
   no pay walls barring consumption or author processing charges.
 
-- From 2017 onward, papers have DOIs (making them easily citable) and are also
+- From 2015 onward, papers have DOIs (making them easily citable) and are also
   openly available from those DOIs.
 
 The community is involved in the entire process for creating the proceedings,
@@ -106,24 +106,24 @@ which ensures relevance to the community that created them.
 
 The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
 
-In 2018, the Proceedings Co-Chairs are
-- M Pacer (@mpacer)
+In 2019, the Proceedings Co-Chairs are
+- Chris Calloway (@cbcunc)
 - David Lippa (@dalippa)
 - Dillon Niederhut (@deniederhut)
-- Fatih Akici (@FatihAkici)
+- David Shupe (@stargaser)
 
-## Timeline for 2018
+## Timeline for 2019
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 10–12: Authors invited to submit full papers
-- May 23: 1st Draft for Submission
-- May 23–July 2: Open Review Period
-- May 25: Reviewers Assigned
-- June 18: Initial Complete Review
-- July 2: Final Recommendation and Comprehensive Review Deadlines
+- April 2: Authors invited to submit full papers
+- May 22: 1st Draft for Submission
+- May 22–June 25: Open Review Period
+- May 22: Reviewers Assigned
+- June 11: Initial Complete Review
+- June 25: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
-- July 6-9: Time Window for Publishing Conference Ready Proceedings
+- July 10: Time Window for Publishing Conference Ready Proceedings
 
 ## Instructions for Authors
 
@@ -155,10 +155,10 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 10–12: Authors invited to submit full papers
-- May 23: 1st Draft for Submission Deadline
-- May 23–July 2: Open Review Period
-- July 5: Final Editorial Decisions for Proceedings Contents Deadline
+- April 2: Authors invited to submit full papers
+- May 22: 1st Draft for Submission
+- May 22–June 25: Open Review Period
+- July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
 
@@ -211,7 +211,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2018) for your paper based off the latest `2018` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2019) for your paper based off the latest `2019` branch.
     - If you submit multiple papers, you will need a new branch for each.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
@@ -241,22 +241,22 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (fetch)
 upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
-#### Getting the latest `2018` branch
+#### Getting the latest `2019` branch
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2018` branch
-    - `git checkout -b 2018 --track upstream/2018`
+- Check out the upstream `2019` branch
+    - `git checkout -b 2019 --track upstream/2019`
 
-#### Creating a new branch based off of `2018`
+#### Creating a new branch based off of `2019`
 
-If you are submitting only one paper, you can use the `2018` branch directly.
+If you are submitting only one paper, you can use the `2019` branch directly.
 
-Otherwise, you will need to create a new branch based on `2018` and set its
+Otherwise, you will need to create a new branch based on `2019` and set its
 upstream to origin.
 
 ```
-git checkout 2018
+git checkout 2019
 git checkout -b <your_branch_name>
 git push --set-upstream origin <your_branch_name>
 ```
@@ -297,7 +297,7 @@ submission procedure ([see below](creating-build-system-prs)).
 
 - Once you are ready to submit your paper, make a pull request on GitHub.
   **Please ensure that you file against the correct branch.**
-- Create a pull request against our `2018` branch.
+- Create a pull request against our `2019` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
@@ -357,9 +357,9 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- May 23: 1st Draft of Proceedings Submission Due
-- June 18: Initial Complete Review Deadline
-- July 2: Final Recommendation Deadline
+- May 22: Reviewers Assigned
+- June 11: Initial Complete Review
+- June 25: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
 
@@ -431,10 +431,10 @@ To information about how to manage the whole proceedings, please see
 
 #### Publisher Deadlines
 
-- April 10–12: Authors invited to submit full papers
-- May 23–July 2: Open Review Period
+- April 2: Authors invited to submit full papers
+- May 22–June 25: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
-- July 6-9: Time Window for Publishing Conference Ready Proceedings
+- July 10: Time Window for Publishing Conference Ready Proceedings
 
 ### Instructions for Editors
 
@@ -449,10 +449,10 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- April 10–12: Authors invited to submit full papers
-- May 23–July 2: Open Review Period
+- April 2: Authors invited to submit full papers
+- May 22–June 25: Open Review Period
 - May 22: Reviewers Assigned
-- June 18: Initial Complete Review
+- June 11: Initial Complete Review
     - Editors should verify that reviews have been completed
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
