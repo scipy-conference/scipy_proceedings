@@ -1,0 +1,12 @@
+complex,
+ambiguity,
+function,
+overlay,
+verilog,
+jinja,
+jupyter,
+xilinx,
+fpga,
+zynq,
+pynq,
+linux
