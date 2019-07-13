@@ -98,7 +98,7 @@ disciplinary fields past the scope of that from a traditional computer
 science or statistics courses provide.
 
 *4)* Implementing Ethical Content into *data science courses and
-examines how such integration could work.*
+examining how such integration could work.*
 
 Establishing Foundational Course that Serves the Entire Campus
 --------------------------------------------------------------
@@ -349,7 +349,7 @@ taught in data science courses. Issues such as computational agency
 [Tufekci15]_, the politics of data classification and statistical
 inference [Bowker08]_, [Desrosieres11]_, and the perpetuation
 of social injustice through algorithmic decision making [Eubanks19]_, 
-[Noble 18]_, [ONeil18]_ are well known to scholars in the
+[Noble18]_, [ONeil18]_ are well known to scholars in the
 interdisciplinary field of science and technology studies (STS), who
 should be invited to participate in the development of data science
 curricula. STS or other courses in the social sciences and humanities
