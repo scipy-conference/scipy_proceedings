@@ -913,6 +913,11 @@ performing fraction of models received so far and does not wait for all models t
 collected. Dask's advanced task scheduling helps resolves this
 issue for ``HyperbandSearchCV``.
 
+Regardless of these potential improvements, the implementation of Hyperband in
+Dask-ML allows efficient computation of hyperparameter optimization.
+The implementation of ``HyperbandSearchCV`` specifically leverages the
+abilities of Dask Distributed and can handle distributed datasets.
+
 References
 ==========
 
