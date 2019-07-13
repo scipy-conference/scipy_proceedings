@@ -25,7 +25,7 @@ html_dir      = os.path.join(build_dir, 'html')
 bib_dir       = os.path.join(html_dir, 'bib')
 toc_conf      = os.path.join(build_dir, 'toc.json')
 proc_conf     = os.path.join(work_dir, '../scipy_proc.json')
-xref_conf     = os.path.join(build_dir, 'doi_batch.xml')
+xref_conf     = os.path.join(build_dir, 'doi_batch')
 other_conf    = os.path.join(build_dir, 'other.json')
 status_file   = os.path.join(static_dir, status_file_name)
 

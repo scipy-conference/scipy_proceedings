@@ -27,14 +27,6 @@ class XrefMeta:
         self.scipy_entry = scipy_conf
         self.toc_entries = toc
         self.slide_entries = slides
-        # lxml's implementation of xml location attributes is a little odd
-        location = "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
-        # this thing is the root node of allllll the elements to follow
-        self.doi_batch = xml.Element('doi_batch',
-            version="4.4.2",
-            xmlns="http://www.crossref.org/schema/4.4.2",
-            attrib={location: "http://www.crossref.org/schema/4.4.2 http://www.crossref.org/schemas/crossref4.4.2.xsd"}
-        )
 
     def make_metadata(self, echo=False):
         """Build CrossRef compliant batch of DOI metadata, and store it
@@ -43,18 +35,26 @@ class XrefMeta:
         Meant to be called before 'write_metadata'. Set echo=True
         to send doi_batch to STDOUT
         """
-        self.make_head()
-        self.make_body()
+        self.papers_batch = self.make_papers_batch()
+        self.slides_batch = self.make_slides_batch()
         if echo:
-            print(xml.dump(self.doi_batch))
+            print(xml.dump(self.papers_batch))
+            print(xml.dump(self.slides_batch))
 
-    def make_head(self):
+    def make_batch(self):
         """Build the metametadata, including timestamp and depositor email
 
         The depositor email is super important, because that's who gets
         contacted if the submission fails
         """
-        head = xml.SubElement(self.doi_batch, 'head')
+        # lxml's implementation of xml location attributes is a little odd
+        location = "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
+        batch = xml.Element('doi_batch',
+            version="4.4.2",
+            xmlns="http://www.crossref.org/schema/4.4.2",
+            attrib={location: "http://www.crossref.org/schema/4.4.2 http://www.crossref.org/schemas/crossref4.4.2.xsd"}
+        )
+        head = xml.SubElement(batch, 'head')
         doi_batch_id = xml.SubElement(head, 'doi_batch_id')
         doi_batch_id.text = make_batch_id()
         timestamp = xml.SubElement(head, 'timestamp')
@@ -66,14 +66,23 @@ class XrefMeta:
         depositor_email_address.text = self.scipy_entry["proceedings"]["xref"]["depositor_email"]
         registrant = xml.SubElement(head, 'registrant')
         registrant.text = self.scipy_entry["proceedings"]["xref"]["registrant"]
+        return batch
 
-    def make_body(self):
-        """Build the metadata, including the conference, proceedings, and
-        individual papers
+    def make_papers_batch(self):
+        """Build the metadata for conference papers
         """
-        body = xml.SubElement(self.doi_batch, 'body')
+        batch = self.make_batch()
+        body = xml.SubElement(batch, 'body')
         self.make_conference(body)
+        return batch
+
+    def make_slides_batch(self):
+        """Build the metadata for conference slides
+        """
+        batch = self.make_batch()
+        body = xml.SubElement(batch, 'body')
         self.make_database(body)
+        return batch
 
     def make_conference(self, body):
         """Build metadata for Scipy conference and individual papers"""
@@ -216,9 +225,10 @@ class XrefMeta:
         resource = xml.SubElement(doi_data, 'resource')
         resource.text = entry.get('zenodo_url', 'https://fake-url.place')
 
-    def write_metadata(self, filepath):
-        """Dump entire doi metadata batch to filepath"""
-        xml.ElementTree(self.doi_batch).write(filepath)
+    def write_metadata(self, filepath_root):
+        """Dump doi metadata batches to filepath_root + suffix"""
+        xml.ElementTree(self.papers_batch).write(filepath_root + '_papers.xml')
+        xml.ElementTree(self.slides_batch).write(filepath_root + '_slides.xml')
 
     def paper_url(self, paper_id):
         """Return the url where a particular paper will end up.
