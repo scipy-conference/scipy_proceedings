@@ -25,7 +25,7 @@ bib_from_tmpl('proceedings', config, citation_key)
 proc_dict = deepcopy(config)
 proc_dict.update({
     'pdf': 'pdfs/proceedings.pdf',
-    'bibtex': 'bib/' + citation_key
+    'bibtex': 'bib/' + citation_key + '.bib'
     })
 
 for dest_fn in ['index', 'organization', 'slides', 'students']:
