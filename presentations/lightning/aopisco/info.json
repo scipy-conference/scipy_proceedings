@@ -11,5 +11,5 @@
         "Tony Wyss-Coray",
         "Stephen R. Quake"
     ],
-    "Tabula Muris Senis is a single cell transcriptomic atlas across a mouse's life span that reveals new molecular info on aging. This presentations illustrates how the Python ecosystem makes such a scientific expedition possible."
+    "description": "Tabula Muris Senis is a single cell transcriptomic atlas across a mouse's life span that reveals new molecular info on aging. This presentations illustrates how the Python ecosystem makes such a scientific expedition possible."
 }
