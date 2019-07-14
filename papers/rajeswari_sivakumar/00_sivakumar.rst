@@ -388,32 +388,32 @@ preparing this manuscript for publication.
 
 References
 ----------
-.. [adeli2017] Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7.
+.. [adeli2017] Adeli, E., Wu, G., Saghafi, B., An, L., Shi, F., & Shen, D. (2017). Kernel-based Joint Feature Selection and Max-Margin Classification for Early Diagnosis of Parkinson’s Disease.Scientific reports, 7. doi: 10.1038/srep41069
 
-.. [banerjee2016] Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764.
+.. [banerjee2016] Banerjee, M., Okun, M. S., Vaillancourt, D. E., & Vemuri, B. C. (2016). A Method for Automated Classification of Parkinson’s Disease Diagnosis Using an Ensemble Average Propagator Template Brain Map Estimated from Diffusion MRI. PloS one, 11(6), e0155764. doi: 10.1371/journal.pone.0155764
 
-.. [baytas2017] Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM
+.. [baytas2017] Baytas, I. M., Xiao, C., Zhang, X., Wang, F., Jain, A. K., & Zhou, J. (2017, August). Patient subtyping via time-aware lstm networks. InProceedings of the 23rd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining (pp. 65-74). ACM. doi: 10.1145/3097983.3097997
 
-.. [chahine2016] Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice.
+.. [chahine2016] Chahine, L. M., & Stern, M. B. (2016). Parkinson’s Disease Biomarkers: Where Are We and Where Do We Go Next?.Movement Disorders Clinical Practice. doi: 10.1002/mdc3.12545
 
-.. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8.
+.. [chaudhuri2016] Chaudhuri, K. R., Bhidayasiri, R., & van Laar, T. (2016). Unmet needs in Parkinson’s disease: New horizons in a changing landscape. Parkinsonism & related disorders, 33, S2-S8. doi: 10.1016/j.parkreldis.2016.11.018
 
-.. [cole2016] Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. arXiv preprint arXiv:1612.02572.
+.. [cole2016] Cole, J. H., Poudel, R. P., Tsagkrasoulis, D., Caan, M. W., Steves, C., Spector, T. D., & Montana, G. (2016, December). Predicting brain age with deep learning from raw imaging data results in a reliable and heritable biomarker. doi: 10.1016/j.neuroimage.2017.07.059
 
-.. [dinov2016] Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077.
+.. [dinov2016] Dinov, I. D., Heavner, B., Tang, M., Glusman, G., Chard, K., Darcy, M., ... & Foster, I. (2016). Predictive big data analytics: a study of Parkinson’s disease using large, complex, heterogeneous, incongruent, multi-source and incomplete observations. PloS one, 11(8), e0157077. doi: 10.1371/journal.pone.0157077
 
-.. [kossaifi2019] Kossaifi, Jean, et al. "Tensorly: Tensor learning in python." The Journal of Machine Learning Research 20.1 (2019): 925-930.
+.. [kossaifi2019] Kossaifi, Jean, et al. "Tensorly: Tensor learning in python." The Journal of Machine Learning Research 20.1 (2019): 925-930. url: http://jmlr.org/papers/v20/18-277.html
 
-.. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635.
+.. [marek2011] Marek, K., Jennings, D., Lasch, S., Siderowf, A., Tanner, C., Simuni, T., ... & Poewe, W. (2011). The parkinson progression marker initiative (PPMI). Progress in neurobiology, 95(4), 629-635. doi: 10.1016/j.pneurobio.2011.09.005
 
-.. [olson2016] Olson, R. S., Urbanowicz, R. J., Andrews, P. C., Lavender, N. A., & Moore, J. H. (2016, March). Automating biomedical data science through tree-based pipeline optimization. In European Conference on the Applications of Evolutionary Computation (pp. 123-137). Springer, Cham.
+.. [olson2016] Olson, R. S., Urbanowicz, R. J., Andrews, P. C., Lavender, N. A., & Moore, J. H. (2016, March). Automating biomedical data science through tree-based pipeline optimization. In European Conference on the Applications of Evolutionary Computation (pp. 123-137). Springer, Cham. doi: https://doi.org/10.1007/978-3-030-05318-5_8
 
 .. [rabanser2017] Rabanser, S., Shchur, O., & Günnemann, S. (2017). Introduction to Tensor Decompositions and their Applications in Machine Learning. arXiv preprint arXiv:1711.10781.
 
-.. [simuni2016] Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67.
+.. [simuni2016] Simuni, T., Caspell-Garcia, C., Coffey, C., Lasch, S., Tanner, C., Marek, K., & PPMI Investigators. (2016). How stable are Parkinson’s disease subtypes in de novo patients: Analysis of the PPMI cohort?.Parkinsonism & related disorders, 28, 62-67. doi: 10.1016/j.parkreldis.2016.04.027
 
-.. [soares2013] Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7.
+.. [soares2013] Soares, J. M., Marques, P., Alves, V., & Sousa, N. (2013). A hitchhiker’s guide to diffusion tensor imaging. Frontiers in neuroscience, 7. doi: 10.3389/fnins.2013.00031
 
-.. [sveinbjornsdottir2016] Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324.
+.. [sveinbjornsdottir2016] Sveinbjornsdottir, S. (2016). The clinical symptoms of Parkinson’s disease. Journal of neurochemistry, 139(S1), 318-324. doi: 10.1111/jnc.13691
 
-.. [vos2016] Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602.
+.. [vos2016] Vos, T., Allen, C., Arora, M., Barber, R. M., Bhutta, Z. A., Brown, A., ... & Coggeshall, M. (2016). Global, regional, and national incidence, prevalence, and years lived with disability for 310 diseases and injuries, 1990–2015: a systematic analysis for the Global Burden of Disease Study 2015. The Lancet, 388(10053), 1545-1602. doi: 10.1016/S0140-6736(16)31678-6
