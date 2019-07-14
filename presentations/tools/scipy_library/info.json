@@ -1,0 +1,7 @@
+{
+    "title": "SciPy: not just a conference!",
+    "authors": [
+        "Matt Haberland"
+    ],
+    "description": "Besides a conference, 'SciPy' is also a library that provides fundamental building blocks for modeling and solving scientific problems. SciPy includes algorithms for optimization, interpolation, statistics, fast Fourier transforms, and many other classes of problems; it also provides specialized data structures, such as k-dimensional trees and sparse matrices. This presentation summarizes the current status and future plans of the SciPy library."
+}
