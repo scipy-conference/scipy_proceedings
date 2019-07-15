@@ -62,17 +62,17 @@ justo vitae odio tincidunt tempus at vitae tortor.
 Bibliographies, citations and block quotes
 ------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
+If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension.
 
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
+**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work.
 
 To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`hume48` (which literally is :code:`:cite:`hume48`` in accordance with the ``hume48`` cite-key in the associated ``mybib.bib`` file).
 
-However, if you use a bibtex file, this will overwrite any manually written references. 
+However, if you use a bibtex file, this will overwrite any manually written references.
 
-So what would previously have registered as a in text reference ``[Atr03]_`` for 
+So what would previously have registered as a in text reference ``[Atr03]_`` for
 
-:: 
+::
 
      [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
@@ -82,7 +82,7 @@ what you actually see will be an empty reference rendered as **[?]**.
 E.g., [Atr03]_.
 
 
-If you wish to have a block quote, you can just indent the text, as in 
+If you wish to have a block quote, you can just indent the text, as in
 
     When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
 
@@ -159,7 +159,7 @@ Or a snippet from the above code, starting at the correct line number:
    for (int i = 0; i < 10; i++) {
        /* do something */
    }
- 
+
 Important Part
 --------------
 
@@ -317,5 +317,3 @@ References
 ----------
 .. [Atr03] P. Atreides. *How to catch a sandworm*,
            Transactions on Terraforming, 21(3):261-300, August 2003.
-
-
