@@ -1,0 +1,8 @@
+{
+	"authors": [
+		"Jackson Anderson",
+		"Dana Weinstein"
+	],
+	"title": "PyMeasRF: Automating RF Device Measurements Using Python",
+	"description": "This poster introduces a Test and Measurement (T&M)-related python package that has been written to enable RF-related T&M automation and speed electrical test development time. Presented are two case studies that highlight the ways in which the package has been used at Purdue to increase productivity and enable collecting and visualizing device data at scale. Also provided is an overview of the package structure and a discussion of the challenges faced in developing packages for the T&M ecosystem."
+}
