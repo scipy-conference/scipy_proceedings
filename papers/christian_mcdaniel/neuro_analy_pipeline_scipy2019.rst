@@ -6,6 +6,7 @@
 :email: spq@uga.edu
 :institution: University of Georgia
 :bibliography: bibli
+:corresponding:
 
 ***********************************************************************************************************************************************
 Developing a Graph Convolution-Based Analysis Pipeline for Multi-Modal Neuroimage Data: An Application to Parkinson's Disease
