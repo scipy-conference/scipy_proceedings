@@ -1,0 +1,7 @@
+{
+    "title": "Building and Replicating Models of Visual Search Behavior with Tensorflow and the Scientific Python Stack",
+    "authors": [
+        "David Nicholson"
+    ],
+    "description": "A presentation about using open-source software to replicate and build models of how the brain performs visual search tasks"
+}
