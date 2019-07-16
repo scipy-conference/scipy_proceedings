@@ -5,8 +5,9 @@
 :author: Shannon Quinn, PhD
 :email: spq@uga.edu
 :institution: University of Georgia
-:bibliography: bibli
 :corresponding:
+:bibliography: bibli
+
 
 ***********************************************************************************************************************************************
 Developing a Graph Convolution-Based Analysis Pipeline for Multi-Modal Neuroimage Data: An Application to Parkinson's Disease
