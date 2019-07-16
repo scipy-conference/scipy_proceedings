@@ -1,0 +1,9 @@
+{
+  "authors": [
+      "Henry Senyondo",
+      "Andrew Zhang",
+      "Ethan P. White"
+  ],
+  "title": "The PyDataWeaver: A data integration platform",
+  "description": "Combine publicly available data into ready-to-analyze datasets. Most research questions require integrating multiple datasets. Researchers typically have to manually create these combined datasets using databases, programming languages and GIS systems. The PyDataWeaver automates the task of integrating multiple data sources to create new comprehensive datasets using JSON based a data integration standard."
+}
