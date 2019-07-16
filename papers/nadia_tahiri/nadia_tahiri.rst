@@ -194,7 +194,7 @@ The graphical representation of the workflow in Figure :ref:`workflow` allowing 
    The graphical illustration of the proposed model intended to predict the content of the current grocery basket. 
    At the first level of the model the LSTM and NNMF networks were used. 
    At the second level of the model, the GBT model was applied. 
-   Finally, at the last step we predicted the current grocery basket using:math:`F_1`. 
+   Finally, at the last step we predicted the current grocery basket using :math:`F_1`. 
    :label:`workflow`
 
 Long short-term memory (LSTM) network
@@ -420,7 +420,7 @@ Statistical score
 =================
 
 *F-measure*, or :math:`F_1`, is a well-known and reliable evaluation statistic (see [JOA05]_).
-The F_1 value of 1 means perfect accuracy.
+The :math:`F_1` value of 1 means perfect accuracy.
 
 .. math::
    :label: e:matrix
