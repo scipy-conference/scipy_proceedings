@@ -1,0 +1,11 @@
+{
+    "title": "Turning HPC Systems into Interactive Data Analysis Platforms using Jupyter and Dask",
+    "authors": [
+        "Anderson Banihirwe", 
+        "Matthew Rocklin",
+        "Joseph Hamman", 
+        "Julia Kent",
+        "Kevin Paul"
+    ],
+    "description": "This talk demonstrates how to use Dask and Jupyter on large high-performance computing (HPC) systems to scale and accelerate large interactive data analysis tasks -- effectively turning HPC systems into interactive big-data platforms. We will introduce dask-jobqueue which allows users to seamlessly deploy and scale dask on HPC clusters that use a variety of job queuing systems such as PBS, Slurm, SGE, and LSF. We will also introduce dask-mpi, a Python package that makes deploying Dask easy from within a distributed MPI environment."
+}
