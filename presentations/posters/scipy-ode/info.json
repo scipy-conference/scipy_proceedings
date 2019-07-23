@@ -1,0 +1,8 @@
+{
+	"authors": [
+		"David R Hagen",
+		"Nikolay Mayorov"
+	],
+	"title": "Class-based ODE solvers and event detection in SciPy",
+	"description": "In SciPy 1.0, a new interface for solving ODE initial value problems was added to scipy.integrate. The solve_ivp function and OdeSolver base class provide additional features and greater extensibility over the previous odeint function and ode base class."
+}
