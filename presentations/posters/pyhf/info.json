@@ -1,0 +1,10 @@
+{
+	"title": "pyhf: a pure Python statistical fitting library for High Energy Physics with tensors and autograd",
+	"authors": [
+		"Matthew Feickert",
+		"Lukas Heinrich",
+		"Giordon Stark",
+		"Kyle Cranmer"
+	],
+	"description": "In experimental high energy physics, the common HistFactory p.d.f. template and fitting tools have only existed within the C++ based ROOT framework developed and maintained by CERN. pyhf is a pure-Python implementation of that statistical model for multi-bin histogram-based analysis with interval estimation based on 'Asymptotic formulae for likelihood-based tests of new physics' [arxiv:1007.1727]. pyhf supports modern computational graph libraries such as TensorFlow and PyTorch as computational backends in order to make use of features such as auto-differentiation and GPU acceleration and defines models with an expressive JSON schema."
+}
