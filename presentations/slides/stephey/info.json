@@ -1,0 +1,9 @@
+{
+    "title": "Optimizing Python-Based Spectroscopic Data Processing on NERSC Supercomputers",
+    "authors": [
+        "Laurie A. Stephey",
+        "Rollin C. Thomas",
+        "Stephen J. Bailey"
+    ],
+    "description": "A case study in profiling and optimizing an image processing application for NERSC supercomputer systems"
+}i
