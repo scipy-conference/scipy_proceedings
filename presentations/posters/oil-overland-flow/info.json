@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Pi-Yueh Chuang",
+		"Tracy Thorleifson",
+		"Lorena A. Barba"
+	],
+	"title": "Python Workflow for High-Fidelity Modeling of Overland Hydrocarbon Flows with GeoClaw and Cloud Computing",
+	"description": "We expanded GeoClaw, a shallow-water solver, for computing overland hydrocarbon flows, and developed a Python workflow for risk analysis of pipeline ruptures on Microsoft Azure cloud resources. The added functionality in GeoClaw includes rupture-point inflows, evaporation, Darcy-Weisbach friction, and in-land hydrologic features. The Python workflow automates running and controlling simulations on Azure clusters. The goal is performing analysis on hundreds or thousands of potential rupture points along a pipeline. We also developed a Python toolbox that integrates GeoClaw and the Azure workflow with ArcGIS Pro, and an equivalent Jupyter-based workflow, while Jupyter notebooks also serve as automatic reports."
+}
