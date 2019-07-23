@@ -1,0 +1,9 @@
+{
+	"authors": [
+		"Gavin Wiggins",
+		"Srikanth Allu",
+        "Hsin Wang"
+	],
+	"title": "A Pythonic Equivalent Circuit Model for Battery Research",
+	"description": "Electric vehicles are poised to reduce fuel consumption and carbon emissions around the world. To ensure efficient operation of the battery pack, an effective battery management system must be implemented. Equivalent circuit models utilize a lumped battery modeling approach that relies on a small parameter space. The simplicity of these models offers near real-time results with good enough accuracy for battery management systems. In this presentation, we will discuss the use of several Python packages such as Pandas, NumPy, SciPy, and Matplotlib for creating equivalent circuit models."
+}
