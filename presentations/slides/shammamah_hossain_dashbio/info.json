@@ -1,0 +1,7 @@
+{
+    "title": "Visualization of Bioinformatics Data with Dash Bio",
+    "authors": [
+        "Shammamah Hossain"
+    ],
+    "description": "Dash Bio is a suite of bioinformatics components designed to work with Plotly's Dash. This talk contains information about Plotly and Dash, a subset of the Dash Bio components, and a small section related to the dash-bio-utils library, which contains a set of parsing scripts for popular bioinformatics databases."
+}
