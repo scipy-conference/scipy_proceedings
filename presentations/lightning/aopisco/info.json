@@ -1,0 +1,15 @@
+{
+    "title": "The Mouse Aging Cell Atlas: cell biology meets Python",
+    "authors": [
+        "The Tabula Muris consortium",
+        "Angela Oliveira Pisco",
+        "Nicholas Schaum",
+        "Aaron McGeever",
+        "Jim Karkanias",
+        "Norma F. Neff",
+        "Spyros Darmanis",
+        "Tony Wyss-Coray",
+        "Stephen R. Quake"
+    ],
+    "description": "Tabula Muris Senis is a single cell transcriptomic atlas across a mouse's life span that reveals new molecular info on aging. This presentations illustrates how the Python ecosystem makes such a scientific expedition possible."
+}
