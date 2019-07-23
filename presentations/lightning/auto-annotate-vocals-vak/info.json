@@ -1,0 +1,7 @@
+{
+    "title": "Automated Annotation of Animal Vocalizations",
+    "authors": [
+        "David Nicholson"
+    ],
+    "description": "lightning talk about automated annotation of vocalizations with neural net TweetyNet and the vak and crowsetta libraries"
+}
