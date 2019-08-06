@@ -1,0 +1,7 @@
+{
+    "title": "Multi-dimensional linked-data exploration with glue",
+    "authors": [
+        "Thomas Robitaille"
+    ],
+    "description": "We have developed an open-source multi-disciplinary Python package named glue (http://glueviz.org) that allows users to explore relationships within and across related datasets, making it easy for them to create multi-dimensional linked visualizations of datasets, select subsets of data interactively or programmatically in 1, 2, or 3 dimensions, and to see those selections propagate live across all open visualizations of the data (e.g., graphs, maps, diagnostics charts, etc.). In this talk, I present both the desktop and the new Jupyter-based versions of glue, along with plugins that can be used to extend glue for different disciplines."
+}
