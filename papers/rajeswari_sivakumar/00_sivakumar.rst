@@ -1,11 +1,12 @@
 :author: Rajeswari Sivakumar
 :email: rajeswari.a.sivakumar@gmail.com
 :institution: University of Georgia
-:corresponding:
+
 
 :author: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
+:corresponding:
 
 :url: https://github.com/quinngroup/SciPy2019-demo/blob/master/README.md
 
