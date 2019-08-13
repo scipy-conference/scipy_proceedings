@@ -3,7 +3,7 @@
 :institution: University of Georgia
 :corresponding:
 
-:corresponding author: Shannon Quinn
+:corresponding: Shannon Quinn
 :email: spq@cs.uga.edu
 :institution: University of Georgia
 
