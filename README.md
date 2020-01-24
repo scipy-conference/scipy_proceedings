@@ -10,10 +10,10 @@ You can find more information about the [proceedings' organising principles](#or
 
 **All** communication between authors and reviewers should be civil and
 respectful. There are no exceptions to this rule. Please see the
-[SciPy2019 Code of Conduct](https://www.scipy2019.scipy.org/code-of-conduct)
+[SciPy2020 Code of Conduct](https://www.scipy2020.scipy.org/code-of-conduct)
 for more info.
 
-You can find the [schedule for 2019](#timeline-for-2019) below.
+You can find the [schedule for 2020](#timeline-for-2020) below.
 
 Please use @-mentions in issues and pull requests(PRs) to [contact the proceedings Co-Chairs](#contacting-the-proceedings-co-chairs).
 
@@ -106,13 +106,13 @@ which ensures relevance to the community that created them.
 
 The most effective way to contact the Proceedings Co-Chairs for issues related to this GitHub repository is to use GitHub's issues and "@"-mentioning the Co-Chairs.
 
-In 2019, the Proceedings Co-Chairs are
+In 2020, the Proceedings Co-Chairs are
+- Meghann Agarwal (@mepa)
 - Chris Calloway (@cbcunc)
-- David Lippa (@dalippa)
 - Dillon Niederhut (@deniederhut)
 - David Shupe (@stargaser)
 
-## Timeline for 2019
+## Timeline for 2020
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
@@ -123,7 +123,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - June 11: Initial Complete Review
 - June 25: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
-- July 10: Time Window for Publishing Conference Ready Proceedings
+- July 8: Time Window for Publishing Conference Ready Proceedings
 
 ## Instructions for Authors
 
@@ -211,7 +211,7 @@ git clone https://github.com/mpacer/scipy_proceedings
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2019) for your paper based off the latest `2019` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2020) for your paper based off the latest `2020` branch.
     - If you submit multiple papers, you will need a new branch for each.
 4. [Set up your environment](#setting-up-your-environment).
 5. [Write your paper](#write-your-paper), [commit changes](#commit-your-changes), and [build your paper](#build-your-paper)
@@ -241,22 +241,22 @@ upstream	https://github.com/scipy-conference/scipy_proceedings.git (fetch)
 upstream	https://github.com/scipy-conference/scipy_proceedings.git (push)
 ```
 
-#### Getting the latest `2019` branch
+#### Getting the latest `2020` branch
 
 - Fetch the latest version of the `scipy_proceedings` repo
     - `git fetch upstream`
-- Check out the upstream `2019` branch
-    - `git checkout -b 2019 --track upstream/2019`
+- Check out the upstream `2020` branch
+    - `git checkout -b 2020 --track upstream/2020`
 
-#### Creating a new branch based off of `2019`
+#### Creating a new branch based off of `2020`
 
-If you are submitting only one paper, you can use the `2019` branch directly.
+If you are submitting only one paper, you can use the `2020` branch directly.
 
-Otherwise, you will need to create a new branch based on `2019` and set its
+Otherwise, you will need to create a new branch based on `2020` and set its
 upstream to origin.
 
 ```
-git checkout 2019
+git checkout 2020
 git checkout -b <your_branch_name>
 git push --set-upstream origin <your_branch_name>
 ```
@@ -297,7 +297,7 @@ submission procedure ([see below](creating-build-system-prs)).
 
 - Once you are ready to submit your paper, make a pull request on GitHub.
   **Please ensure that you file against the correct branch.**
-- Create a pull request against our `2019` branch.
+- Create a pull request against our `2020` branch.
 - Do not modify any files outside of your paper directory. Create a separate PR for any changes to the build system.
 
 #### Creating build system PRs
