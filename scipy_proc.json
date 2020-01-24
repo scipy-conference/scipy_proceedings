@@ -19,38 +19,38 @@
     },
     "title": {
       "conference": "Python in Science Conference",
-      "full": "Proceedings of the 18th Python in Science Conference",
-      "short": "PROC. OF THE 18th PYTHON IN SCIENCE CONF. (SCIPY 2019)",
+      "full": "Proceedings of the 19th Python in Science Conference",
+      "short": "PROC. OF THE 19th PYTHON IN SCIENCE CONF. (SCIPY 2020)",
       "acronym": "SciPy",
-      "ordinal": "18th"
+      "ordinal": "19th"
     },
-    "citation_key": "proc-scipy-2019",
+    "citation_key": "proc-scipy-2020",
     "editor_email": [
+      "agarwal.meghann@gmail.com",
       "cbc@unc.edu",
-      "dalippa@gmail.com",
       "dillon.niederhut@gmail.com",
       "dave.shupe@gmail.com"
     ],
-    "dates": "July 8 - July 14",
+    "dates": "July 6 - July 12",
     "editor": [
+      "Meghann Agarwal",
       "Chris Calloway",
-      "David Lippa",
       "Dillon Niederhut",
       "David Shupe"
     ],
     "location": "Austin, Texas",
-    "volume": 4,
+    "volume": 5,
     "number": 1,
     "isbn": "noisbn",
-    "year": "2019"
+    "year": "2020"
   },
   "organization": [
     {
       "name": "Conference Chairs",
       "members": [
         {
-          "org": "Arizona State University",
-          "name": "Serge Rey"
+          "org": "",
+          "name": "Jonathan Guyer"
         },
         {
           "org": "Enthought, Inc.",
@@ -66,8 +66,20 @@
           "name": "Gil Forsyth"
         },
         {
-          "org": "Berkeley Institute for Data Science",
-          "name": "Nelle Varoquaux"
+          "org": "",
+          "name": "Matt Haberland"
+        },
+        {
+          "org": "",
+          "name": "Nicolas Hug"
+        },
+        {
+          "org": "",
+          "name": "Paul Ivanov"
+        },
+        {
+          "org": "",
+          "name": "Madicken Munk"
         }
       ]
     },
@@ -75,8 +87,12 @@
       "name": "Communications",
       "members": [
         {
-          "org": "Bloomberg",
-          "name": "Paul Ivanov"
+          "org": "",
+          "name": "Tania Allard"
+        },
+        {
+          "org": "",
+          "name": "Matt Davis"
         }
       ]
     },
@@ -86,10 +102,6 @@
         {
           "org": "University of California, Merced",
           "name": "Matthias Bussonnier"
-        },
-        {
-          "org": "University of California, Berkeley",
-          "name": "Lindsey Heagy"
         }
       ]
     },
@@ -97,12 +109,12 @@
       "name": "Proceedings",
       "members": [
         {
-          "org": "University of North Carolina",
-          "name": "Chris Calloway"
+          "org": "Oracle",
+          "name": "Meghann Agarwal"
         },
         {
-          "org": "Amazon",
-          "name": "David Lippa"
+          "org": "University of North Carolina",
+          "name": "Chris Calloway"
         },
         {
           "org": "Novi Labs",
@@ -118,16 +130,16 @@
       "name": "Financial Aid",
       "members": [
         {
-          "org": "IBM Research Africa",
-          "name": "Celia Cintas"
-        },
-        {
           "org": "Argonne National Laboratory",
           "name": "Scott Collis"
         },
         {
           "org": "Novartis Institutes for Biomedical Research",
           "name": "Eric Ma"
+        },
+        {
+          "org": "",
+          "name": ""
         }
       ]
     },
@@ -139,12 +151,12 @@
           "name": "Alexandre Chabot-Leclerc"
         },
         {
-          "org": "Franklin W. Olin College of Engineering",
-          "name": "Allen Downey"
-        },
-        {
           "org": "USGS",
           "name": "Mike Hearne"
+        },
+        {
+          "org": "",
+          "name": "Serah Rono"
         }
       ]
     },
@@ -154,10 +166,6 @@
         {
           "org": "University Corporation for Atmospheric Research",
           "name": "Ryan May"
-        },
-        {
-          "org": "Enthought, Inc.",
-          "name": "Kuya Takami"
         }
       ]
     },
@@ -165,12 +173,12 @@
       "name": "Diversity",
       "members": [
         {
-          "org": "University of Illinois",
-          "name": "Nathan Goldbaum"
+          "org": "IBM Research Africa",
+          "name": "Celia Cintas"
         },
         {
           "org": "Federal University of Santa Catarina",
-          "name": "Melissa Mendonca"
+          "name": "Melissa Weber Mendonca"
         }
       ]
     },
@@ -178,12 +186,16 @@
       "name": "Activities",
       "members": [
         {
-          "org": "Oregon State University",
-          "name": "Kyle Niemeyer"
+          "org": "",
+          "name": "Paul Anze"
         },
         {
           "org": "Enthought",
           "name": "Julia Pasquarella"
+        },
+        {
+          "org": "",
+          "name": "Inessa Pawson"
         }
       ]
     },
@@ -191,8 +203,12 @@
       "name": "Sponsors",
       "members": [
         {
-          "org": "Enthought",
+          "org": "Enthought, Inc.",
           "name": "Jill Cowan"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Kristen Leiser"
         }
       ]
     },
@@ -219,6 +235,10 @@
         {
           "org": "Enthought, Inc.",
           "name": "Jill Cowan"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Kristen Leiser"
         }
       ]
     },
@@ -226,100 +246,7 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": "Alberto Antonietti"
-        },
-        {
-          "name": "Alejandro Weinstein"
-        },
-        {
-          "name": "Amir Kalighi"
-        },
-        {
-          "name": "Angelos Krypotos"
-        },
-        {
-          "name": "Ankur Ankan"
-        },
-        {
-          "name": "Awalin Sopan"
-        },
-        {
-          "name": "Brian McFee"
-        },
-        {
-          "name": "Catherine Ordun"
-        },
-        {
-          "name": "Christine Choirat"
-        },
-        {
-          "name": "Cyrus Harrison"
-        },
-        {
-          "name": "David Nicholson"
-        },
-        {
-          "name": "Filipe Fernandes"
-        },
-        {
-          "name": "Haruna Abdu"
-        },
-        {
-          "name": "Jaime Arias Almeida"
-        },
-        {
-          "name": "James Bednar"
-        },
-        {
-          "name": "Kirtan Dave"
-        },
-        {
-          "name": "Laura Kahn"
-        },
-        {
-          "name": "Mahdi Sadjadi"
-        },
-        {
-          "name": "Marc Wouts"
-        },
-        {
-          "name": "Mark Fenner"
-        },
-        {
-          "name": "Matt Craig"
-        },
-        {
-          "name": "Matthew Seal"
-        },
-        {
-          "name": "Meghann Agarwal"
-        },
-        {
-          "name": "Nicholas Malaya"
-        },
-        {
-          "name": "Patrick Huck"
-        },
-        {
-          "name": "Scott Sievert"
-        },
-        {
-          "name": "Senol Piskin"
-        },
-        {
-          "name": "Shuai Tang"
-        },
-        {
-          "name": "Stefan van der Walt"
-        },
-        {
-          "name": "Tania Lorido Botran"
-        },
-        {
-          "name": "Yingwei Yu"
-        },
-        {
-          "name": "Zach Golkhou"
+          "name": ""
         }
       ]
     }
