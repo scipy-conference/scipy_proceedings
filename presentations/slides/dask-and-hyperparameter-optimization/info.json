@@ -1,0 +1,9 @@
+{
+    "title": "Better and Faster Hyperparameter Optimization with Dask",
+    "authors": [
+        "Scott Sievert",
+        "Tom Augspurger",
+        "Matthew Rocklin"
+    ],
+    "description": "Slides about a new hyperparameter optimization algorithm in Dask"
+}
