@@ -49,7 +49,7 @@
       "name": "Conference Chairs",
       "members": [
         {
-          "org": "",
+          "org": "NIST",
           "name": "Jonathan Guyer"
         },
         {
@@ -62,23 +62,23 @@
       "name": "Program Chairs",
       "members": [
         {
-          "org": "George Washington University",
+          "org": "CapitalOne",
           "name": "Gil Forsyth"
         },
         {
-          "org": "",
+          "org": "Cal Poly",
           "name": "Matt Haberland"
         },
         {
-          "org": "",
+          "org": "Columbia University",
           "name": "Nicolas Hug"
         },
         {
-          "org": "",
+          "org": "Bloomberg",
           "name": "Paul Ivanov"
         },
         {
-          "org": "",
+          "org": "University of Illinois",
           "name": "Madicken Munk"
         }
       ]
@@ -87,11 +87,11 @@
       "name": "Communications",
       "members": [
         {
-          "org": "",
+          "org": "Microsoft",
           "name": "Tania Allard"
         },
         {
-          "org": "",
+          "org": "Populus",
           "name": "Matt Davis"
         }
       ]
@@ -138,8 +138,8 @@
           "name": "Eric Ma"
         },
         {
-          "org": "",
-          "name": ""
+          "org": "Université de Montréal",
+          "name": "Nadia Tahiri"
         }
       ]
     },
@@ -155,7 +155,7 @@
           "name": "Mike Hearne"
         },
         {
-          "org": "",
+          "org": "The Carpentries",
           "name": "Serah Rono"
         }
       ]
@@ -166,6 +166,14 @@
         {
           "org": "University Corporation for Atmospheric Research",
           "name": "Ryan May"
+        },
+        {
+          "org": "Monash University",
+          "name": "Juan Nunez-Iglesias"
+        },
+        {
+          "org": "US Army Engineer Research and Development Center",
+          "name": "Dharhas Pothina"
         }
       ]
     },
@@ -186,15 +194,15 @@
       "name": "Activities",
       "members": [
         {
-          "org": "",
+          "org": "HEB",
           "name": "Paul Anze"
         },
         {
-          "org": "Enthought",
-          "name": "Julia Pasquarella"
+          "org": "Oregon State University",
+          "name": "Kyle Neimeyer"
         },
         {
-          "org": "",
+          "org": "Albus Code",
           "name": "Inessa Pawson"
         }
       ]
