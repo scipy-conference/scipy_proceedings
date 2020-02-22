@@ -16,6 +16,7 @@ The front-matter is composed of:
 - the copyright section
 - the organinization section: shows the committee chairs and reviewers
 - the students section: shows the students who have been given scholarships
+- the listing of posters, plenaries, and slides
 
 ### Papers
 
@@ -36,6 +37,7 @@ The html pages are derived from a few different templates:
 - pages for the individual articles (article.html.tmpl)
 - a page for the information about the conference organisers (organization.html.tmpl)
 - a page for the information about students receiving scholarships (students.html.tmpl)
+- a page for the slides and posters (slides.html.tmpl)
 
 The resulting html files will include:
 
@@ -74,7 +76,7 @@ proceedings.
 
 The following commands are some of the most useful for partial builds:
 
-1. `make papers`: builds a pdf composed of all of the papers, as well as pdfs for the individual papers
+1. `make papers`: builds pdfs for the individual papers
 2. `make front-pdf`: builds the pdfs for the front-matter elements
 3. `make html`: builds the html pages for displaying the proceedings and papers
 4. `make proceedings`: builds the pdf of the proceedings (front-matter + papers)
@@ -101,11 +103,12 @@ can be served on the official SciPy organisation website.
   changes will be applied (e.g., adding video links once they are posted)
 - "ready":
   This is the version of the proceedings with no watermark. This should only
-  be used to publish the final version of the proceedings.
+  be used to publish the final version of the proceedings. Using "ready" is
+  responsible for triggering the creation of DOIs and XML submission files.
 
   ## DOI metadata
 
-As of 2017, each SciPy conference proceedings and the individual papers in
+As of 2015, each SciPy conference proceedings and the individual papers in
 one proceedings are assigned DOIs. As of 2018, the conference itself has a
 DOI, such that the linking structure now looks the following:
 
