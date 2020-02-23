@@ -1,0 +1,336 @@
+
+
+    The skdata library provides both scripts and library routines for tasks related to data sets, including several large datasets of images that must be handled with care in order to fit in typical amounts of RAM.
+    Scripts are provided for downloading, verifying, and visualizing many public benchmark datasets.
+    Routines and data types are provided for interfacing to data sets as both raw and structured things.
+    A low level interface provides relatively *raw* access to the contents of
+    each data set, in terms that closely reflect what was (in most cases) downloaded from the web.
+    Each data set may also be associated with zero or more high level interfaces.
+    A high level interface provides a *sanitized* view of a data set, in which the data have been assembled into e.g. (X, y) pairs,
+    in order to look like a standard machine learning problem such as classification, regression, or density estimation.
+    The high level interface ensures that learning algorithms see exactly the right examples for training and testing,
+    so that results are directly comparable to ones published in academic literature.
+
+
+
+Introduction
+------------
+
+but even such widely disparate data sets can be interpreted as providing features (X) and labels (y) for a machine learning *classification problem*, and be treated
+
+
+The number of conceptually different kinds of statistical inferences that dominate the attention of machine learning researchers is not so large.
+Some of the standard kinds of inferences include:
+
+* *classification* is the prediction of a discrete label from some number of real-valued or discrete-valued *feature* variables
+* *regression* the prediction of real-valued responses from some number of real-valued or discrete-valued *feature* variables
+* *density estimation*
+* *matrix completion* often arises in user rating scenarios
+* *ranking and structured prediction*
+
+These inference categories correspond to industrially relevant applications, and algorithms for solving them have seen a lot of attention for decades.
+Consequently they are supported by many mature inference algorithms (see e.g. [sklearn]_), even while research continues to develop new ones.
+Other kinds of machine learning problems exist (see e.g. [LangfordReductions]_) but skdata has been developed foremost to support
+the popular inference types mentioned above.
+
+In contrast to the relatively short list of common inference types,
+the number of data sets in active use for evaluating relevant inference algorithms is quite a lot larger and grows every year.
+As computers get faster, storage gets cheaper, and research interests shift, we
+see a steady stream of new public data sets for that focus researchers on
+industrially or scientifically relevant challenges.
+
+
+
+
+There is a typical pattern in the workflow of researchers as they approach a machine learning challenge.
+(I am summarizing my observations of many graduate students as well as my own working habits.)
+
+What typically happens when a machine learning researcher, say a graduate
+student, starts to work on a new project is that they:
+
+1. start with an idea for a new algorithm
+
+1. read papers on the subject and learn what the standard benchmarks
+   are
+
+1. implement their idea and want to compare it with the previous work
+
+1. download a relevant data set and spend a day or two ensuring that they
+   have understood it correctly
+
+1. try to determine from the paper exactly which examples were used for
+   training and testing (possibly failing to do so, and guessing)
+
+1. download another data set and spend another day or two on that one
+   
+1. download a third data set (etc.)
+
+In terms of this workflow, the skdata library helps with steps 4-7.
+The skdata library
+Relative
+
+
+
+
+
+Cross-validation
+* training
+* validation
+* testing
+
+Kfold cross-validation
+
+
+Sklearn: input is sanitized
+
+
+Pre-processing
+
+
+
+Even within particular kinds of data, such as the prediction of a real valued response from another real-valued control variable,
+different algorithms generalize from data differently.
+For example, a linear model predicts very different values most points than a higher-order polynomial,
+even if both the linear model and the polynomial have been fit to the same few examples (called "training data").
+
+Machine learning benchmark data sets come in all shapes and sizes.
+
+
+Most data sets have relevant internal structure, especially when they
+represent a number of joint samples of several random variables.
+It is often important to distinguish between the variables
+
+*meta-data* of image data sets (image
+sizes, compact description of semantic content), and the
+*pixel* data itself. The meta-data typically is not overwhelmingly large, whereas
+signal data such as image pixels, audio recordings, and video data can easily be too
+large to load all at once on a single computer.
+
+
+
+
+
+that Spice grows on the planet Dune.  Test
+some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
+equation on a separate line:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. figure:: figure1.png
+
+   This is the caption. :label:`egfig`
+
+.. figure:: figure1.png
+   :scale: 20%
+   :figclass: bht
+
+   This is the caption on a smaller figure that will be placed by default at the
+   bottom of the page, and failing that it will be placed inline or at the top.
+   Note that for now, scale is relative to a completely arbitrary original
+   reference size which might be the original size of your image - you probably
+   have to play with it. :label:`egfig2`
+
+
+
+Cache directory
+~~~~~~~~~~~~~~~
+
+Various skdata utilities help to manage the data sets themselves, which are stored in the user's "~/.skdata" directory.
+
+
+
+
+
+Skdata Project Architecture
+---------------------------
+
+The skdata library aims to provide two levels of interface to data sets.
+The lower level interface provides a "raw" view of the underlying data set.
+
+
+Skdata consists primarily of independent submodules that deal with individual data sets.
+Each submodule has three important sub-sub-module files:
+
+1. a 'dataset' file with the nitty-gritty details of how to download, extract,
+   and parse a particular data set;
+
+2. a 'view' file with any standard evaluation protocols from relevant
+   literature; and
+
+3. a 'main' file with CLI entry points for e.g. downloading and visualizing
+   the data set in question.
+
+
+The evaluation protocols represent the logic that turns parsed (but potentially ideosyncratic) data into one or more standardized learning tasks.
+
+
+The skdata library provides two levels of interfacing to each data set
+that it provides.
+A low level interface provides relatively *raw* access to the contents of
+a data set, in terms that reflect what was (in most cases) downloaded from the web.
+The goal of the low level interface is save users the trouble of unpacking
+and parsing downloaded files, while giving them direct acces to the
+downloaded content.
+
+A high level ("protocol") interface provides a sanitized version of a data
+set, in which examples have been assembled into e.g. (X, y) pairs,
+standard preprocessing has been applied, and the examples have been
+partitioned into standard training, validation, and testing splits, where
+applicable. The goal of this high level interface is to allow algorithm
+designers to simply "plug in" classification and feature transformation algorithms,
+and rest assured that they have trained and tested on the right examples
+which allow them to make direct comparisons in academic literature.
+
+Skdata consists primarily of independent submodules that deal with individual data sets.
+Each submodule has three important sub-sub-module files:
+
+The basic approach has been developed over years of combined experience by the authors, and used extensively in recent work (e.g. [2]).
+The presentation will cover the design of data set submodules, and the basic interactions between a learning algorithm and an evaluation protocol.
+
+
+Answering this question for new algorithms is often a principal contribution of research papers in machine learning.
+Anyone implementing an algorithm from scientific literature must first verify that their implementation matches the results reported in that literature.
+
+
+
+
+
+
+
+Generally, these low-level classes exist to support any corresponding high-level protocol objects (in e.g. ``skdata.lfw.view``)
+We will come to ``view`` modules in the next Section,
+
+
+
+
+Motivation and Complaining about common practice
+------------------------------------------------
+
+Testing an implementation of a machine learning algorithms can be difficult.
+One of the most basic strategies is to verify that it yeilds the expected performance on standard benchmarks.
+More often than not though, the exactly definition of standard benchmarks is not clear.
+Exact definitions can be helpful in tracking down subtle errors because when reproducing previous work, the margins of statistical error do not apply.
+Running exactly the same algorithm on exactly the same examples should produce exactly the same results.
+
+
+At the same time, it is not always obvious what exactly the standard protocol is.
+For example, the widely-used Iris data set is simply an enumeration of 150 specimens' petal and sepal measurements along with the label of which kind of iris each one is [Iris]_.
+If we are interested in matching the generalization error of our implementation to a generalization error in the literature, then we would like to know more than just the accuracy;
+we would like to know exactly which examples were used for training, and which
+examples were used for measuring that generalization error.
+It would be tedious to write such detail into a paper (and to transcribe it back into code afterward!), but it is natural to express
+this kind of precision in programming logic.
+Indeed, the authors of every scientific paper with empirical results of this type used some programmatic logic to
+
+1. Obtain their data,
+#. Unpack it into some working directory,
+#. Load it into the data structures of their programming language of choice,
+#. Convert those examples into the training, validation, and testing sets used for cross-validation, and
+#. Provide those training examples as input to some machine learning algorithm.
+
+These steps are typically not formalized by authors of scientific papers as reusable software.
+We conjecture that instead, the vast majority of researchers use web browsers, hand-typed unix shell commands, and one-off private scripts to accomplish these steps.
+This practice stands as an obstacle to reproducibility in machine learning, computer vision, natural language processing, and other applications of machine learning.
+
+
+
+Machine Learning: Problems and Protocols
+----------------------------------------
+
+
+Unlike the data sets themselves, which appear at a steady pace and which vary
+endlessly in their nature and formatting, the set of *machine learning algorithms*
+that people tend to apply to those data sets is much more stable,
+and the set of *machine learning problems* for which those algorithms have been
+formulated changes more slowly still.
+
+
+Machine learning algorithms for classification (or simply *classification algorithms*) are often judged on their accuracy on a *test set* of examples that were not part of the *training set*.
+This type of evaluation is called *cross-validation*.
+Evaluating a classification algorithm by cross-validation proceeds as follows:
+
+1. Load a data set.
+#. Choose some examples for training.
+#. Choose remaining examples for testing.
+#. Fit the classification model to training data.
+#. Predict labels for the test data.
+#. Count fraction of correct predictions on test data.
+
+The SkData library provides two kinds of service to help researchers step
+through this standard pattern: the low level data-wrangling that loads the data set,
+and a high-level description of the entire 6-step protocol
+(including the partitioning of data into particular training and testing sets).
+The SkData library therefore fills in important gaps around the scope of the
+sklearn library: it addresses how to get data into the ``X`` and ``y`` NumPy
+arrays expected by the ``fit()`` and ``predict()`` methods of ``Estimator``
+subclasses and it provides formal description of how machine learning
+algorithms should be used to obtain standard measures of generalization error
+that can be compared with results in scientific literature.
+
+The simple cross-validation protocol described above is standard for many data
+sets, but it is not unusual for a data set to suggest or require a
+variation.
+For example, when algorithms are evaluated on small data sets, a more
+efficient *K-fold* cross-validation is typically used.
+When model selection is part of the training process, training sets
+must be further subdivided into a test for fitting and a *validation* set
+used for the internal model selection.
+Some data sets (e.g. related to face-pair match verification and music
+style labeling) have non-i.i.d.
+(non-independently identically drawn) examples that cannot be arbitrarily
+partitioned into training and testing sets.
+The high level protocol layer of the SkData library has been designed
+to help researchers respect these more detailed protocols.
+
+Beyond classification, there are many other kinds of machine learning problem.
+More general regression problems include the prediction of real-valued
+variables and structured mathematical objects.
+Density estimation is the problem of predicting the probability of events
+like the ones in the training data.
+Matrix completion problems arise in recommendation settings,
+and many information retrieval tasks can be described more accurately as
+ranking problems than classification or regression.
+The SkData library's low-level data interface provides a natural place to put
+code for loading the data sets used to evaluate algorithms for these other
+kinds of machine learning problem.
+Currently SkData's high level data interfaces do not have special support
+these other kinds of protocols.
+To our knowledge there is nothing about these kinds of learning problems that
+makes them incompatible with the encapsulation techniques used in SkData, but
+the design has not been pushed in this direction.
+
+
+
+
+.. Classification with Sklearn
+
+Continuing with classification as our working example, the sklearn library defines an ``Estimator`` interface for predictive models with ``fit`` and ``predict`` methods.
+The fit method expects two arguments: a matrix ``X`` whose rows are independent examples and whose columns correspond to each input feature, and a vector ``y`` of integer target labels for each row in ``X``.
+When the fit method of a predictive model is called, the model adapts itself to *learn* the pattern of association between the rows of ``X`` and the values of ``y``.
+The predict method requires just one argument: another matrix ``X_test`` whose rows are examples and columns are features.
+When the predict method is called, it returns the models best guesses of the correct label for each row of ``X_test``.
+
+Any classifier that behaves like an sklearn classifier (i.e. has the expected kind of ``fit`` and ``predict`` methods) can be used to configure an ``SklearnClassifier`` object.
+
+
+
+
+
+.. In all settings so far, a Task instance represents *all* of the information about a *subset* of the examples in a data set
+.. (although future protocols looking at e.g. user ratings data may define task semantics differently).
+.. For example, in cross-validation the training set and the testing set would be represented by Task objects.
+.. In a K-fold cross-validation setting, there would be 2K Task objects representing each of the training sets and each of the test sets
+.. involved in the evaluation protocol.
+.. Task objects may, in general, overlap in the examples they represent.
+
