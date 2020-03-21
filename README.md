@@ -116,7 +116,7 @@ In 2020, the Proceedings Co-Chairs are
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 2: Authors invited to submit full papers
+- April 6: Authors invited to submit full papers
 - May 22: 1st Draft for Submission
 - May 22–June 25: Open Review Period
 - May 22: Reviewers Assigned
@@ -155,7 +155,7 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 2: Authors invited to submit full papers
+- April 6: Authors invited to submit full papers
 - May 22: 1st Draft for Submission
 - May 22–June 25: Open Review Period
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
@@ -183,7 +183,7 @@ have final say in whether to accept or reject a paper.
 - Avoid custom LaTeX markup where possible.
 - Do not modify any files outside of your paper directory.
 - The compiled version of the paper (PDF) should be at most 8 pages,
-  including figures and references.
+  including figures but not including references.
 
 ### Author Workflow
 
@@ -431,7 +431,7 @@ To information about how to manage the whole proceedings, please see
 
 #### Publisher Deadlines
 
-- April 2: Authors invited to submit full papers
+- April 6: Authors invited to submit full papers
 - May 22–June 25: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
 - July 10: Time Window for Publishing Conference Ready Proceedings
@@ -449,7 +449,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- April 2: Authors invited to submit full papers
+- April 6: Authors invited to submit full papers
 - May 22–June 25: Open Review Period
 - May 22: Reviewers Assigned
 - June 11: Initial Complete Review
