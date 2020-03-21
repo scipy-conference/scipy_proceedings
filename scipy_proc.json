@@ -4,12 +4,12 @@
       "name": "Conference Chairs",
       "members": [
         {
-          "org": "University of California Berkeley, USA",
-          "name": "Jarrod Millman"
+          "name": "Jarrod Millman",
+          "org": "University of California Berkeley, USA"
         },
         {
-          "org": "Enthought, Inc., USA",
-          "name": "Travis Oliphant"
+          "name": "Travis Oliphant",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
@@ -17,12 +17,12 @@
       "name": "Program Chairs",
       "members": [
         {
-          "org": "Applied Mathematics, Stellenbosch University, South Africa",
-          "name": "Stéfan van der Walt"
+          "name": "Stéfan van der Walt",
+          "org": "Applied Mathematics, Stellenbosch University, South Africa"
         },
         {
-          "org": "Enthought, Inc., USA",
-          "name": "Warren Weckesser"
+          "name": "Warren Weckesser",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
@@ -30,44 +30,44 @@
       "name": "Program Committee",
       "members": [
         {
-          "org": "PyTables.org, Spain",
-          "name": "Francesc Alted"
+          "name": "Francesc Alted",
+          "org": "PyTables.org, Spain"
         },
         {
-          "org": "Oceanographer, NOAA Emergency Response Division, USA",
-          "name": "Christopher Barker"
+          "name": "Christopher Barker",
+          "org": "Oceanographer, NOAA Emergency Response Division, USA"
         },
         {
-          "org": "Computer Science and Biology, Michigan State, USA",
-          "name": "C. Titus Brown"
+          "name": "C. Titus Brown",
+          "org": "Computer Science and Biology, Michigan State, USA"
         },
         {
-          "org": "Mechanics and New Technologies Research, University of West Bohemia, Plzeň, Czech Republic",
-          "name": "Robert Cimrman"
+          "name": "Robert Cimrman",
+          "org": "Mechanics and New Technologies Research, University of West Bohemia, Plzeň, Czech Republic"
         },
         {
-          "org": "Cornell High Energy Synchrotron Source, Cornell University, USA",
-          "name": "Darren Dale"
+          "name": "Darren Dale",
+          "org": "Cornell High Energy Synchrotron Source, Cornell University, USA"
         },
         {
-          "org": "Neuroscience Institute, UC Berkeley, USA",
-          "name": "Fernando Pérez"
+          "name": "Fernando Pérez",
+          "org": "Neuroscience Institute, UC Berkeley, USA"
         },
         {
-          "org": "Aerospace Engineering, IIT Bombay, India",
-          "name": "Prabhu Ramachandran"
+          "name": "Prabhu Ramachandran",
+          "org": "Aerospace Engineering, IIT Bombay, India"
         },
         {
-          "org": "Texas Water Development Board, Austin, USA",
-          "name": "Dharhas Pothin"
+          "name": "Dharhas Pothin",
+          "org": "Texas Water Development Board, Austin, USA"
         },
         {
-          "org": "Department of Mathematics, Colgate University, USA",
-          "name": "Dan Schult"
+          "name": "Dan Schult",
+          "org": "Department of Mathematics, Colgate University, USA"
         },
         {
-          "org": "Gemini Observatory, Chile",
-          "name": "James Turner"
+          "name": "James Turner",
+          "org": "Gemini Observatory, Chile"
         }
       ]
     },
@@ -75,8 +75,8 @@
       "name": "Tutorial Chair",
       "members": [
         {
-          "org": "Physics, CalPoly, USA",
-          "name": "Brian Granger"
+          "name": "Brian Granger",
+          "org": "Physics, CalPoly, USA"
         }
       ]
     },
@@ -84,8 +84,8 @@
       "name": "Student Sponsorship Chair",
       "members": [
         {
-          "org": "Enthought, Inc., USA",
-          "name": "Chris Colbert"
+          "name": "Chris Colbert",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
@@ -93,8 +93,8 @@
       "name": "Python and Core Technologies Track Chair",
       "members": [
         {
-          "org": "Enthought, Inc., USA",
-          "name": "Anthony Scopatz"
+          "name": "Anthony Scopatz",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
@@ -102,8 +102,8 @@
       "name": "Python in Data Science Track Chair",
       "members": [
         {
-          "org": "Streamitive, LLC., USA",
-          "name": "Peter Wang"
+          "name": "Peter Wang",
+          "org": "Streamitive, LLC., USA"
         }
       ]
     },
@@ -111,197 +111,197 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "org": "Department of Astronomy, University of Washington",
           "name": "Jacob VanderPlas",
+          "org": "Department of Astronomy, University of Washington",
           "location": ""
         },
         {
-          "org": "Gemini Observatory",
           "name": "James Turner",
+          "org": "Gemini Observatory",
           "location": "Chile"
         },
         {
-          "org": "",
           "name": "Yannick Schwartz",
+          "org": "",
           "location": "France"
         },
         {
-          "org": "Texas Advanced Computing Center, University of Texas at Austin",
           "name": "Andy R. Terrel",
+          "org": "Texas Advanced Computing Center, University of Texas at Austin",
           "location": "USA"
         },
         {
-          "org": "Telecommunications, Stellenbosch University",
           "name": "Gert-Jan van Rooyen",
+          "org": "Telecommunications, Stellenbosch University",
           "location": "South Africa"
         },
         {
-          "org": "Bernstein Center for Computational Neuroscience, Humboldt University of Berlin",
           "name": "Tiziano Zito",
+          "org": "Bernstein Center for Computational Neuroscience, Humboldt University of Berlin",
           "location": "Berlin, Germany"
         },
         {
-          "org": "",
           "name": "Mateusz Paprocki",
+          "org": "",
           "location": "Wrocław, Poland"
         },
         {
-          "org": "Center for Behavioral Brain Sciences, University of Magdeburg",
           "name": "Michael Hanke",
+          "org": "Center for Behavioral Brain Sciences, University of Magdeburg",
           "location": "Germany"
         },
         {
-          "org": "Université de Montréal",
           "name": "David Warde-Farley",
+          "org": "Université de Montréal",
           "location": "Montréal, Canada"
         },
         {
-          "org": "Department of Mathematics and Computer Science, Drake University",
           "name": "Jason Grout",
+          "org": "Department of Mathematics and Computer Science, Drake University",
           "location": "Des Moines, IA, USA"
         },
         {
-          "org": "Department of Psychology, Stanford University",
           "name": "Ariel Rokem",
+          "org": "Department of Psychology, Stanford University",
           "location": "Palo Alto, CA, USA"
         },
         {
-          "org": "??",
           "name": "Jacob Barhak",
+          "org": "??",
           "location": "USA"
         },
         {
-          "org": "Ben Patterson Management Company, LLC",
           "name": "Travis Vaught",
+          "org": "Ben Patterson Management Company, LLC",
           "location": "USA"
         },
         {
-          "org": "MIT",
           "name": "Nicholas Pinto",
+          "org": "MIT",
           "location": "Cambridge, MA, USA"
         },
         {
-          "org": "Brown University",
           "name": "Tony Yu",
+          "org": "Brown University",
           "location": "USA"
         }
       ]
     }
   ],
+  "series": {
+    "xref": {
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "issn": "2575-9752"
+    },
+    "doi": "10.25080/issn.2575-9752",
+    "title": {
+      "full": "Proceedings of the Python in Science Conference"
+    }
+  },
   "scipy_scholarship": [
     {
-      "org": "University of Texas Austin",
       "name": "Chad Baker",
+      "org": "University of Texas Austin",
       "location": "Austin, TX"
     },
     {
-      "org": "New York University",
       "name": "Drew Conway",
+      "org": "New York University",
       "location": "New York, NY"
     },
     {
-      "org": "University of New Mexico",
       "name": "Ben Edwards",
+      "org": "University of New Mexico",
       "location": "Albuquerque, NM"
     },
     {
-      "org": "University of California Davis",
       "name": "Christopher Ellison",
+      "org": "University of California Davis",
       "location": "Davis, CA"
     },
     {
-      "org": "University of California Berkeley",
       "name": "Paul Ivanov",
+      "org": "University of California Berkeley",
       "location": "Berkeley, CA"
     },
     {
-      "org": "University of Texas Austin",
       "name": "Thinh Lam",
+      "org": "University of Texas Austin",
       "location": "Austin, TX"
     },
     {
-      "org": "New Mexico Tech",
       "name": "Aaron Meurer",
+      "org": "New Mexico Tech",
       "location": "Socorro, NM"
     },
     {
-      "org": "University of California Berkeley",
       "name": "Min Ragan-Kelley",
+      "org": "University of California Berkeley",
       "location": "Berkeley, CA"
     },
     {
-      "org": "University of Texas Austin",
       "name": "Joon Ro",
+      "org": "University of Texas Austin",
       "location": "Austin, TX"
     },
     {
-      "org": "American University",
       "name": "Skipper Seabold",
+      "org": "American University",
       "location": "Washington, D.C."
     },
     {
-      "org": "University of Barcelona, IESE Business School",
       "name": "Jordi Torrents",
+      "org": "University of Barcelona, IESE Business School",
       "location": "Barcelona, Spain"
     },
     {
-      "org": "Université de Montréal",
       "name": "David Warde-Farley",
+      "org": "Université de Montréal",
       "location": "Montréal, Canada"
     }
   ],
+  "diversity_scholarship": [
+    {
+      "name": "",
+      "org": ""
+    }
+  ],
   "proceedings": {
-    "year": "2011",
-    "title": {
-      "acronym": "SciPy",
-      "conference": "Python in Science Conference",
-      "ordinal": "10th",
-      "full": "Proceedings of the 10th Python in Science Conference",
-      "short": "PROC. OF THE 10th PYTHON IN SCIENCE CONF. (SCIPY 2011)"
-    },
-    "number": 1,
-    "doi": "10.25080/Majora-8b375195-014",
-    "dates": "July 11 - 16",
-    "isbn": "noisbn",
     "copyright": {
-      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
       "license": "Creative Commons Attribution License (CCAL)",
+      "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
       "proceedings": [
         "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
         "This is an open-access publication and is distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
         "For more information, please see:  http://creativecommons.org/licenses/by/3.0/"
       ]
     },
+    "xref": {
+      "depositor_email": "dniederhut@enthought.com",
+      "registrant": "Crossref",
+      "depositor_name": "Dillon Niederhut",
+      "prefix": "10.25080",
+      "resource_url": "https://conference.scipy.org/proceedings"
+    },
+    "title": {
+      "full": "Proceedings of the 10th Python in Science Conference",
+      "acronym": "SciPy",
+      "ordinal": "10th",
+      "short": "PROC. OF THE 10th PYTHON IN SCIENCE CONF. (SCIPY 2011)",
+      "conference": "Python in Science Conference"
+    },
+    "volume": 3,
+    "citation_key": "proc-scipy-2011",
     "editor": [
       "Stéfan van der Walt",
       "Jarrod Millman"
     ],
-    "editor_email": [],
-    "citation_key": "proc-scipy-2011",
-    "volume": 3,
-    "xref": {
-      "prefix": "10.25080",
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "registrant": "Crossref",
-      "depositor_name": "Dillon Niederhut",
-      "depositor_email": "dniederhut@enthought.com"
-    },
-    "location": "Austin, Texas"
-  },
-  "diversity_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    }
-  ],
-  "series": {
-    "title": {
-      "full": "Proceedings of the Python in Science Conference"
-    },
-    "xref": {
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "issn": "2575-9752"
-    },
-    "doi": "10.25080/issn.2575-9752"
+    "isbn": "noisbn",
+    "number": 1,
+    "doi": "10.25080/Majora-ebaa42b7-014",
+    "location": "Austin, Texas",
+    "dates": "July 11 - 16",
+    "year": "2011",
+    "editor_email": []
   }
 }
