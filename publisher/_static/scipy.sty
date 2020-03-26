@@ -70,6 +70,15 @@
 \usepackage{upquote}
 \usepackage{fancyvrb}
 
+% Fix issue with James Bednar's paper where links span more than one
+% level of bounding boxes
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\@combinedblfloats{\box\@outputbox}{\unvbox\@outputbox}{}{%
+  \errmessage{\noexpand\@combinedblfloats could not be patched}%
+}%
+\makeatother
+
 % Make single quotes non-curly in inline literal text (\texttt)
 % and in code-block directives (which use Pygments; patch Pygments macro).
 % Also fix backtick in inline literal text.
