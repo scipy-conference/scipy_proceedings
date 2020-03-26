@@ -1,13 +1,5 @@
 {
   "proceedings": {
-    "doi": "",
-    "xref": {
-      "prefix": "10.25080",
-      "registrant": "Crossref",
-      "resource_url": "https://conference.scipy.org/proceedings",
-      "depositor_name": "Dillon Niederhut",
-      "depositor_email": "dillon.niederhut@gmail.com"
-    },
     "copyright": {
       "proceedings": [
         "The articles in the Proceedings of the Python in Science Conference are copyrighted and owned by their original authors",
@@ -17,236 +9,134 @@
       "article": "This is an open-access article distributed under the terms of the Creative Commons Attribution License, which permits unrestricted use, distribution, and reproduction in any medium, provided the original author and source are credited.",
       "license": "Creative Commons Attribution License (CCAL)"
     },
+    "citation_key": "proc-scipy-2010",
+    "location": "Austin, Texas",
+    "doi": "10.25080/Majora-8b375195-012",
+    "xref": {
+      "registrant": "Crossref",
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "depositor_name": "Dillon Niederhut",
+      "prefix": "10.25080",
+      "depositor_email": "dniederhut@enthought.com"
+    },
     "title": {
       "conference": "Python in Science Conference",
-      "full": "Proceedings of the 19th Python in Science Conference",
-      "short": "PROC. OF THE 19th PYTHON IN SCIENCE CONF. (SCIPY 2020)",
       "acronym": "SciPy",
-      "ordinal": "19th"
+      "short": "PROC. OF THE 9th PYTHON IN SCIENCE CONF. (SCIPY 2010)",
+      "ordinal": "9th",
+      "full": "Proceedings of the 9th Python in Science Conference"
     },
-    "citation_key": "proc-scipy-2020",
-    "editor_email": [
-      "agarwal.meghann@gmail.com",
-      "cbc@unc.edu",
-      "dillon.niederhut@gmail.com",
-      "dave.shupe@gmail.com"
-    ],
-    "dates": "July 6 - July 12",
+    "isbn": "978-1-4583-4619-3",
     "editor": [
-      "Meghann Agarwal",
-      "Chris Calloway",
-      "Dillon Niederhut",
-      "David Shupe"
+      "Stéfan van der Walt",
+      "Jarrod Millman"
     ],
-    "location": "Austin, Texas",
-    "volume": 5,
+    "dates": "June 28 - July 3",
+    "volume": 3,
     "number": 1,
-    "isbn": "noisbn",
-    "year": "2020"
+    "year": "2010"
   },
   "organization": [
     {
       "name": "Conference Chairs",
       "members": [
         {
-          "org": "NIST",
-          "name": "Jonathan Guyer"
+          "name": "Eric Jones",
+          "org": "Enthought, Inc., USA"
         },
         {
-          "org": "Enthought, Inc.",
-          "name": "Corran Webster"
+          "name": "Jarrod Millman",
+          "org": "Neuroscience Institute, UC Berkeley, USA"
         }
       ]
     },
     {
-      "name": "Program Chairs",
+      "name": "Program Chair",
       "members": [
         {
-          "org": "CapitalOne",
-          "name": "Gil Forsyth"
-        },
-        {
-          "org": "Cal Poly",
-          "name": "Matt Haberland"
-        },
-        {
-          "org": "Columbia University",
-          "name": "Nicolas Hug"
-        },
-        {
-          "org": "Bloomberg",
-          "name": "Paul Ivanov"
-        },
-        {
-          "org": "University of Illinois",
-          "name": "Madicken Munk"
+          "name": "Stéfan van der Walt",
+          "org": "Applied Mathematics, Stellenbosch University, South Africa"
         }
       ]
     },
     {
-      "name": "Communications",
+      "name": "Program Committee",
       "members": [
         {
-          "org": "Microsoft",
-          "name": "Tania Allard"
+          "name": "Christopher Barker",
+          "org": "Oceanographer, NOAA Emergency Response Division, USA"
         },
         {
-          "org": "Populus",
-          "name": "Matt Davis"
+          "name": "C. Titus Brown",
+          "org": "Computer Science and Biology, Michigan State, USA"
+        },
+        {
+          "name": "Robert Cimrman",
+          "org": "Mechanics and New Technologies Research, University of West Bohemia, Plzeň, Czech Republic"
+        },
+        {
+          "name": "David Cournapeau",
+          "org": "School of Informatics, Kyoto University, Japan"
+        },
+        {
+          "name": "Darren Dale",
+          "org": "Cornell High Energy Synchrotron Source, Cornell University, USA"
+        },
+        {
+          "name": "Fernando Pérez",
+          "org": "Neuroscience Institute, UC Berkeley, USA"
+        },
+        {
+          "name": "Prabhu Ramachandran",
+          "org": "Aerospace Engineering, IIT Bombay, India"
+        },
+        {
+          "name": "James Turner",
+          "org": "Gemini Observatory, Chile"
+        },
+        {
+          "name": "Warren Weckesser",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
     {
-      "name": "Birds of a Feather",
+      "name": "Tutorial Chair",
       "members": [
         {
-          "org": "University of California, Merced",
-          "name": "Matthias Bussonnier"
+          "name": "Brian Granger",
+          "org": "Physics, CalPoly, USA"
         }
       ]
     },
     {
-      "name": "Proceedings",
+      "name": "Student Sponsorship Chair",
       "members": [
         {
-          "org": "Oracle",
-          "name": "Meghann Agarwal"
-        },
-        {
-          "org": "University of North Carolina",
-          "name": "Chris Calloway"
-        },
-        {
-          "org": "Novi Labs",
-          "name": "Dillon Niederhut"
-        },
-        {
-          "org": "Caltech's IPAC Astronomy Data Center",
-          "name": "David Shupe"
+          "name": "Travis Oliphant",
+          "org": "Enthought, Inc., USA"
         }
       ]
     },
     {
-      "name": "Financial Aid",
+      "name": "Biomedical/Bioinformatics Track Chair",
       "members": [
         {
-          "org": "Argonne National Laboratory",
-          "name": "Scott Collis"
-        },
-        {
-          "org": "Novartis Institutes for Biomedical Research",
-          "name": "Eric Ma"
-        },
-        {
-          "org": "Université de Montréal",
-          "name": "Nadia Tahiri"
+          "name": "Glen Otero",
+          "org": "Dell, USA"
         }
       ]
     },
     {
-      "name": "Tutorials",
+      "name": "Parallel Processing/Cloud Computing Track Chairs",
       "members": [
         {
-          "org": "Enthought, Inc.",
-          "name": "Alexandre Chabot-Leclerc"
+          "name": "Ken Elkabany",
+          "org": "PiCloud, USA"
         },
         {
-          "org": "USGS",
-          "name": "Mike Hearne"
-        },
-        {
-          "org": "The Carpentries",
-          "name": "Serah Rono"
-        }
-      ]
-    },
-    {
-      "name": "Sprints",
-      "members": [
-        {
-          "org": "University Corporation for Atmospheric Research",
-          "name": "Ryan May"
-        },
-        {
-          "org": "Monash University",
-          "name": "Juan Nunez-Iglesias"
-        },
-        {
-          "org": "US Army Engineer Research and Development Center",
-          "name": "Dharhas Pothina"
-        }
-      ]
-    },
-    {
-      "name": "Diversity",
-      "members": [
-        {
-          "org": "IBM Research Africa",
-          "name": "Celia Cintas"
-        },
-        {
-          "org": "Federal University of Santa Catarina",
-          "name": "Melissa Weber Mendonca"
-        }
-      ]
-    },
-    {
-      "name": "Activities",
-      "members": [
-        {
-          "org": "HEB",
-          "name": "Paul Anze"
-        },
-        {
-          "org": "Oregon State University",
-          "name": "Kyle Neimeyer"
-        },
-        {
-          "org": "Albus Code",
-          "name": "Inessa Pawson"
-        }
-      ]
-    },
-    {
-      "name": "Sponsors",
-      "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
-        {
-          "org": "Enthought, Inc.",
-          "name": "Kristen Leiser"
-        }
-      ]
-    },
-    {
-      "name": "Financial",
-      "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Chris Chan"
-        },
-        {
-          "org": "Enthought, Inc.",
-          "name": "Bill Cowan"
-        },
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jodi Havranek"
-        }
-      ]
-    },
-    {
-      "name": "Logistics",
-      "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
-        {
-          "org": "Enthought, Inc.",
-          "name": "Kristen Leiser"
+          "name": "Brian Granger",
+          "org": "Physics, CalPoly, USA"
         }
       ]
     },
@@ -254,39 +144,154 @@
       "name": "Proceedings Reviewers",
       "members": [
         {
-          "name": ""
+          "name": "Matthew Brett",
+          "org": "Neuroscience Institute, UC Berkeley, USA"
+        },
+        {
+          "name": "C. Titus Brown",
+          "org": "Computer Science and Biology, Michigan State, USA"
+        },
+        {
+          "name": "Damian Eads",
+          "org": "Computer Science, UC Santa Cruz, USA"
+        },
+        {
+          "name": "Ralf Gommers",
+          "org": "Healthcare Department, Philips Research Asia, Shanghai, China"
+        },
+        {
+          "name": "Emmanuelle Gouillart",
+          "org": "CNRS Saint Gobain, France"
+        },
+        {
+          "name": "Yaroslav O. Halchenko",
+          "org": "PBS Department, Dartmouth College, USA"
+        },
+        {
+          "name": "Josh Hemann",
+          "org": "Marketing Analytics and Business Strategy, Sports Authority, USA"
+        },
+        {
+          "name": "Neil Muller",
+          "org": "Applied Mathematics, University of Stellenbosch, South Africa"
+        },
+        {
+          "name": "Emanuele Olivetti",
+          "org": "NeuroInformatics Laboratory, Bruno Kessler Foundation and University of Trento, Italy"
+        },
+        {
+          "name": "Dag Sverre Seljebotn",
+          "org": "Theoretical Astrophysics, University of Oslo, Norway"
+        },
+        {
+          "name": "Andrew Straw",
+          "org": "Molecular Pathology, Austria"
+        },
+        {
+          "name": "James Turner",
+          "org": "Data Processing Software Group, Gemini Observatory, Chile"
+        }
+      ]
+    },
+    {
+      "name": "Program Staff",
+      "members": [
+        {
+          "name": "Amenity Applewhite",
+          "org": "Enthought, Inc., USA"
+        },
+        {
+          "name": "Jodi Havranek",
+          "org": "Enthought, Inc., USA"
+        },
+        {
+          "name": "Leah Jones",
+          "org": "Enthought, Inc., USA"
         }
       ]
     }
   ],
   "series": {
+    "xref": {
+      "resource_url": "https://conference.scipy.org/proceedings",
+      "issn": "2575-9752"
+    },
     "title": {
       "full": "Proceedings of the Python in Science Conference"
     },
-    "doi": "10.25080/issn.2575-9752",
-    "xref": {
-      "issn": "2575-9752",
-      "resource_url": "https://conference.scipy.org/proceedings"
-    }
+    "doi": "10.25080/issn.2575-9752"
   },
-  "scipy_scholarship": [
-    {
-      "org": "",
-      "name": ""
-    },
-    {
-      "org": "",
-      "name": ""
-    }
-  ],
   "diversity_scholarship": [
     {
-      "org": "",
-      "name": ""
+      "name": "",
+      "org": ""
+    }
+  ],
+  "scipy_scholarship": [
+    {
+      "name": "Elaine Angelo",
+      "location": "Boston, Massachusetts",
+      "org": "Harvard University"
     },
     {
-      "org": "",
-      "name": ""
+      "name": "James Bergstra",
+      "location": "Montreal, Canada",
+      "org": "University of Montreal"
+    },
+    {
+      "name": "Kadambari Devarajan",
+      "location": "Chicago, Illinois",
+      "org": "University of Illinois"
+    },
+    {
+      "name": "Gerardo Gutierrez",
+      "location": "Medellin, Colombia",
+      "org": "Universidad de Antioquia"
+    },
+    {
+      "name": "Ryan May",
+      "location": "Norman, Oklahoma",
+      "org": "University of Oklahoma"
+    },
+    {
+      "name": "Kristopher Overholt",
+      "location": "Austin, Texas",
+      "org": "University of Texas"
+    },
+    {
+      "name": "Fabian Pedregosa",
+      "location": "Granada, Spain",
+      "org": "University of Granada"
+    },
+    {
+      "name": "Nicolas Pinto",
+      "location": "Boston, Massachusetts",
+      "org": "Massachusetts Institute of Technology"
+    },
+    {
+      "name": "Skipper Seabold",
+      "location": "Washington, D.C.",
+      "org": "American University"
+    },
+    {
+      "name": "Kurt Smith",
+      "location": "Madison, Wisconsin",
+      "org": "University of Wisconsin"
+    },
+    {
+      "name": "Stéfan van der Walt",
+      "location": "Stellenbosch, South Africa",
+      "org": "Stellenbosch University"
+    },
+    {
+      "name": "David Warde Farley",
+      "location": "Toronto, Canada",
+      "org": "University of Toronto"
+    },
+    {
+      "name": "Omar Andres Zapata Mesa",
+      "location": "Medellin, Colombia",
+      "org": "Universidad de Antioquia"
     }
   ]
 }

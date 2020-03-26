@@ -1,0 +1,149 @@
+%% This is file `aeguill.sty' 
+% This file gives french guillemets (and not guillemots!)
+% built with the Polish CMR fonts (default), WNCYR fonts, the LASY fonts 
+% or with the EC fonts. 
+% This is useful in conjunction with the ae package
+% (this package loads the ae package in case it has not been loaded)
+%  and with or without the french(le) package.
+%
+% In order to get the guillemets, it is necessary to either type
+% \guillemotleft and \guillemotright, or to use an 8 bit encoding
+% (such as ISO-Latin1) which selects these two commands, 
+% or, if you use the french package (but not the frenchle package), 
+% to type << or >>.
+%
+% By default, you get the Polish CMR guillemets; if this package is loaded
+% with the `cm' option, you get the LASY guillemets; with `ec,' you
+% get the EC guillemets, and with `cyr,' you get the cyrillic guillemets.
+%
+% In verbatim mode, you always get the EC/TT guillemets.
+%
+% The default option is interesting in conjunction with PDF,
+% because there is a Type 1 version of the Polish CMR fonts
+% and these guillemets are very close in shape to the EC guillemets.
+% There are no free Type 1 versions of the EC fonts.
+%
+% Support for Polish CMR guillemets was kindly provided by 
+% Rolf Niepraschk <niepraschk@ptb.de> in version 0.99 (2000/05/22).
+% Bernd Raichle provided extensive simplifications to the code
+% for version 1.00.
+%
+% This package is released under the LPPL.
+%
+% Changes:
+%   Date        version
+%   2001/04/12  1.01    the frenchle and french package are now distinguished.
+%
+\def\fileversion{1.01}
+\def\filedate{2001/04/12}
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{aeguill}[2001/04/12 1.01 %
+AE fonts with french guillemets (D. Roegel)]
+\RequirePackage{ae}
+
+\newcommand{\@ae@switch}[4]{#4}
+\DeclareOption{ec}{\renewcommand\@ae@switch[4]{#1}}
+\DeclareOption{cm}{\renewcommand\@ae@switch[4]{#2}}
+\DeclareOption{cyr}{\renewcommand\@ae@switch[4]{#3}}
+\DeclareOption{pl}{\renewcommand\@ae@switch[4]{#4}}
+\ExecuteOptions{pl}
+\ProcessOptions
+
+%
+% Load necessary packages
+%
+\@ae@switch{% ec
+  % do nothing
+}{% cm
+  \RequirePackage{latexsym}%
+}{% cyr
+  \RequirePackage[OT2,T1]{fontenc}%
+}{% pl
+  \RequirePackage[OT4,T1]{fontenc}%
+}
+
+% The following command will be compared to \frenchname,
+% as defined in french.sty and frenchle.sty.
+\def\aeguillfrenchdefault{french}%
+
+\let\guill@verbatim@font\verbatim@font
+\def\verbatim@font{\guill@verbatim@font\ecguills{cmtt}%
+                   \let\guillemotleft\@oguills\let\guillemotright\@fguills}
+
+\begingroup \catcode`\<=13 \catcode`\>=13
+\def\x{\endgroup
+ \def\ae@lfguill{<<}%
+ \def\ae@rfguill{>>}%
+}\x
+
+\newcommand{\ecguills}[1]{%
+  \def\selectguillfont{\fontencoding{T1}\fontfamily{#1}\selectfont}%
+  \def\@oguills{{\selectguillfont\symbol{19}}}%
+  \def\@fguills{{\selectguillfont\symbol{20}}}%
+  } 
+
+\newcommand{\aeguills}{%
+  \ae@guills
+  % We redefine \guillemotleft and \guillemotright
+  % in order to catch them when they are used 
+  % with \DeclareInputText (in latin1.def for instance)
+  % We use \auxWARNINGi as a safe indicator that french.sty is used.
+  \gdef\guillemotleft{\ifx\auxWARNINGi\undefined
+                         \@oguills % neither french.sty nor frenchle.sty
+                      \else
+                         \ifx\aeguillfrenchdefault\frenchname
+                           \ae@lfguill  % french.sty
+                         \else
+                           \@oguills    % frenchle.sty
+                         \fi
+                      \fi}%
+  \gdef\guillemotright{\ifx\auxWARNINGi\undefined
+                         \@fguills % neither french.sty nor frenchle.sty
+                       \else
+                         \ifx\aeguillfrenchdefault\frenchname
+                           \ae@rfguill  % french.sty
+                         \else
+                           \@fguills    % frenchle.sty
+                         \fi
+                       \fi}%
+  }
+
+%
+% Depending on the class option
+% define the internal command \ae@guills
+\@ae@switch{% ec
+  \newcommand{\ae@guills}{%
+    \ecguills{cmr}}%
+}{% cm
+  \newcommand{\ae@guills}{%
+    \def\selectguillfont{\fontencoding{U}\fontfamily{lasy}%
+            \fontseries{m}\fontshape{n}\selectfont}%
+    \def\@oguills{\leavevmode\nobreak
+                \hbox{\selectguillfont (\kern-.20em(\kern.20em}\nobreak}%
+    \def\@fguills{\leavevmode\nobreak
+                \hbox{\selectguillfont \kern.20em)\kern-.2em)}%
+                \ifdim\fontdimen\@ne\font>\z@\/\fi}}%
+}{% cyr
+  \newcommand{\ae@guills}{%
+    \def\selectguillfont{\fontencoding{OT2}\fontfamily{wncyr}\selectfont}%
+    \def\@oguills{{\selectguillfont\symbol{60}}}%
+    \def\@fguills{{\selectguillfont\symbol{62}}}}
+}{% pl
+  \newcommand{\ae@guills}{%
+    \def\selectguillfont{\fontencoding{OT4}\fontfamily{cmr}\selectfont}%
+    \def\@oguills{{\selectguillfont\symbol{174}}}%
+    \def\@fguills{{\selectguillfont\symbol{175}}}}
+}
+
+
+\AtBeginDocument{%
+  \ifx\GOfrench\undefined
+    \aeguills
+  \else
+    \let\aeguill@GOfrench\GOfrench
+    \gdef\GOfrench{\aeguill@GOfrench \aeguills}%
+  \fi
+  }
+
+\endinput
+
