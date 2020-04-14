@@ -172,6 +172,8 @@ have final say in whether to accept or reject a paper.
 - For your paper to be found by the build system at http://procbuild.scipy.org
   your PR needs to have a title that begins with "Paper:". If you do not do
   this, the co-chairs will change your title on your behalf.
+- Authors may include a project or consortium (e.g. [The Jupyter Project](https://raw.githubusercontent.com/scipy-conference/scipy_proceedings/2018/papers/project_jupyter/paper.rst))
+- There must be at least one corresponding author, and this must be a specific person with a valid email address
 - All citations that have DOIs should include those DOIs in the paper's
   references section, see [`mybib.bib`](./papers/00_bibderwalt/mybib.bib).
 - All figures and tables should have captions.
