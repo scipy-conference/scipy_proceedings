@@ -87,7 +87,7 @@ Attribution (CC By) license.
 - Papers are openly available at http://conference.scipy.org/proceedings/, with
   no pay walls barring consumption or author processing charges.
 
-- From 2015 onward, papers have DOIs (making them easily citable) and are also
+- From 2010 onward, papers have DOIs (making them easily citable) and are also
   openly available from those DOIs.
 
 The community is involved in the entire process for creating the proceedings,
@@ -116,12 +116,12 @@ In 2020, the Proceedings Co-Chairs are
 
 In addition to the following list, we break up the deadlines in the respective documents for authors and reviewers.
 
-- April 6: Authors invited to submit full papers
-- May 22: 1st Draft for Submission
-- May 22–June 25: Open Review Period
-- May 22: Reviewers Assigned
-- June 11: Initial Complete Review
-- June 25: Final Recommendation and Comprehensive Review Deadlines
+- April 21: Authors invited to submit full papers
+- May 29: 1st Draft for Submission
+- May 29–July 2: Open Review Period
+- May 29: Reviewers Assigned
+- June 18: Initial Complete Review
+- July 2: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 - July 8: Time Window for Publishing Conference Ready Proceedings
 
@@ -155,9 +155,9 @@ have final say in whether to accept or reject a paper.
 
 ### Author Deadlines
 
-- April 6: Authors invited to submit full papers
-- May 22: 1st Draft for Submission
-- May 22–June 25: Open Review Period
+- April 21: Authors invited to submit full papers
+- May 29: 1st Draft for Submission
+- May 29–July 2: Open Review Period
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
 ### General Information and Guidelines for Authors:
@@ -359,9 +359,9 @@ change in question, then that change should be requested and made before the
 
 ### Reviewer Deadlines
 
-- May 22: Reviewers Assigned
-- June 11: Initial Complete Review
-- June 25: Final Recommendation and Comprehensive Review Deadlines
+- May 29: Reviewers Assigned
+- June 18: Initial Complete Review
+- July 2: Final Recommendation and Comprehensive Review Deadlines
 
 ### Reviewer Workflow
 
@@ -433,10 +433,10 @@ To information about how to manage the whole proceedings, please see
 
 #### Publisher Deadlines
 
-- April 6: Authors invited to submit full papers
-- May 22–June 25: Open Review Period
+- April 21: Authors invited to submit full papers
+- May 29–July 2: Open Review Period
     - The [build server](#build-server) should be maintained throughout the Open Review Period.
-- July 10: Time Window for Publishing Conference Ready Proceedings
+- July 8: Time Window for Publishing Conference Ready Proceedings
 
 ### Instructions for Editors
 
@@ -451,10 +451,10 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 #### Editor Deadlines
 
-- April 6: Authors invited to submit full papers
-- May 22–June 25: Open Review Period
-- May 22: Reviewers Assigned
-- June 11: Initial Complete Review
+- April 29: Authors invited to submit full papers
+- May 29–July 2: Open Review Period
+- May 29: Reviewers Assigned
+- June 18: Initial Complete Review
     - Editors should verify that reviews have been completed
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 
