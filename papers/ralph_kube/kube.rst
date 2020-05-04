@@ -78,22 +78,35 @@ extracted from sea water, which is available in near-infinite quantities.
 
 The plasma confinement devices with the best performance have a toroidal geometry, such as a 
 tokamak. Medium-sized tokamaks, such as DIII-D [D3D]_, NSTX-U [NSTX]_, ASDEX Upgrade [AUG]_,
-MAST [MAST]_, TCV [TCV]_ or KSTAR [KSTAR], have a major radius R≈1-1.5m and a minor radius a≈0.2-0.7m. 
-During a typical experimental campaign, about 10-30 ``shots`` are performed on a given day. In each shot
-the machine confines a plasma for a duration of a few seconds to up to several minutes. Numerous
-measurements of the plasma are taken in each shot in order to better understand the physics of fusion 
-plasmas and to optimize the design of a future fusion power plant. A common type of measurement is the
-samping of the emission intensity by free electrons in the plasma, which allows to infer 
-the temperature of the electrons as a function of radius [Cos74]_. This so-called Electron Cyclotron
-Emission Imaging (ECEI) diagnostic produces a high-dimensional stream of high-velocity data. The
-ECEI diagnostic installed in KSTAR [Yun14]_ produces data streams of up to 500 MB/sec.
+MAST [MAST]_, TCV [TCV]_ or KSTAR [KSTAR], have a major radius R=1-1.5m and a minor radius a=0.2-0.7m. 
+During a typical experimental campaign, about 10-30 ``shots`` are performed on a given day. 
+By configuring paramaters such as the plasma density, type and magnitude of external heating,
+the strength of the magnetic field, researchers are studying the behaviour of the fusion plasma
+in this configuration. A typical plasma shot lasts a couple of seconds up to minutes, a time in which
+numerous measurements of the plasma and the mechanical components of the tokamak are performed. After
+a cool-down phase - any large tokamak contains cryogenic components - the device is ready for the 
+next shot. In this short break researchers and engineers may look at preliminary data and 
+make decisions on whether to follow the experimental plan or to depart from it based on new data.
+This decision making is sometimes aided by reduced model simulations that are fast enough to run
+in between shots. Given the size of fusion experiments, with hundreds of staff on site, numerous
+collaborators scattered around may also be involved and interested in timely results of any experimental
+activity.
 
-Given the operational size and scale of fusion research, hundreds to thousands of people per 
-experimental size, and hundreds of research groups of all sizes scattered around the globe,
-measurement data is of interest to numerous researchers. 
+Need refs here to reduced models etc.
 
+A common type of measurement is the samping of the emission intensity by free electrons in the plasma,
+which allows to infer their temperature as a function of radius [Cos74]_. These so-called Electron
+Cyclotron Emission Imaging (ECEI) diagnostic image the plasmas emission. Modern ECEI systems, as the 
+one installed in the KSTAR tokamak [Yun14]_ have 192 spatial channels and sample data on a microsecond 
+time-scale. The resulting data stream is approximately 500 MB/sec. Providing timely analysis results of 
+plasma measurements to interested parties would provide multiple benefits. For one, such an 
+analysis may provide information to perform inter-shot optimization. This optimization could also 
+be performed in combination with machine-learning algorithms, similar to the workflow that incorporates
+the optometrist algorithm [Bal17]_.
 
-Inter-shot optimization used in combination with ML f.ex. TAE optometrist [Bal17]_
+Here we present the ``DELTA`` framework which is designed to facilitate near-real time analysis of big
+and fast fusion data. 
+
 
 
 This presentation will guide the audience through the adaptation process and will demonstrate how 
@@ -121,7 +134,7 @@ Analysis of measurements taken in experiments on magnetic fusion energy are
 typically performed batch-wise after the experiment has concluded. 
 
 
-.. table:: This is the caption for the materials table.
+.. table:: Time-scales on which analysis results of fusion data is required for different tasks.
 
     +---------------+------------------+--------------------+
     |    Task       | Time-scale       | code-name          |
@@ -137,9 +150,48 @@ typically performed batch-wise after the experiment has concluded.
     +---------------+------------------+--------------------+
 
 
+Analysis routines for Electron Cyclotron Emission Imaging diagnostic
+--------------------------------------------------------------------
+The Electron Cyclotron Emission Imgaging diagnostic installed in the KSTAR tokamak 
+measures the electron temperature :math:`T_e` on a 0.15m by 0.5m grid, resolved using 8 horizontal
+and 24 vertical channels, with a time resolution of about 1 microsecond [Yun10]_ [Yun14]_.
+The spatial view of this diagnostic covers a significant area of the plasma cross-section which 
+allows it to directly visualize the large-scale structures of the plasma. Spectral quantities calculated
+off local :math:`T_e` fluctuations, such as the cross coherence or the cross phases, can be
+used to identify macro-scale structures in the plasma, so called magnetic islands [Cho17]_. 
+Detection of magnetic islands is an important task, as they can trigger a disruption of the plasma
+confinement.
+
+A common workflow for analyzing diagnostic data is to store the data on disk and to analyze it
+on demand. This is done hours, days, or weeks after a given plasma shot, and often batch-wise.
+The researchers specify the channel pairs for which to calculate a given quantity 
+like the cross phase. The output is stored in another file and visualized. With an abundance of 
+computational resources available, it is now possible to automate these calculations. 
+Modern high-performance computing (HPC) resources provide ample computing power to perform 
+calculations of all relevant spectral quantities, for any given channel pair in near real-time.
+Furthermore, the calculated quantities can be stored indefinitely for future access together with
+sufficient meta-data to know what the people who wrote the data did. With appropriate reduction,
+these data can also be distributed to interested parties, internationally distributed teams of 
+researchers, in near real-time.
+
 
 Designing the streaming framework
 ---------------------------------
+
+Performing fusion plasma experiments is a large undertaking. Besides the complicated multi-scale 
+physics which govern the plasma dynamics and the intricate engineering designs that are operated
+to confined the plasma, the plasma diagnostics operated at the sites are usually custom built. 
+There are no common electronic design or software platforms that are shared by the plasma diagnostics.
+
+
+
+.. figure:: plots/delta_network.png
+  :alt: Alternative text
+
+  The network topology for which the delta framework is designed. Data is streamed in the
+  direction indicated by the orange arrow. The KSTAR and NERSC DTNs are linked through a 
+  wide-area network. The compute nodes, on which the data is analyzed, are behind another 
+  firewall.
 
 
 
@@ -147,7 +199,6 @@ Designing abstractions for the diagnostic data
 ----------------------------------------------
 
 How do program?
-
 
 Refactoring the analysis code
 -----------------------------
@@ -194,11 +245,19 @@ References
            Rev. Sci. Instr. 85 11D820 (2014)
            http://dx.doi.org/10.1063/1.4890401
 
-.. [Bal17] E.A. Baltz, E. Trask, M. Binderbauer et al. *chievement of Sustained Net Plasma Heating in a Fusion Experiment with the Optometrist Algorithm*
-           Sci. Rep 7m 6425 (@017)
+.. [Bal17] E.A. Baltz, E. Trask, M. Binderbauer et al. *Achievement of Sustained Net Plasma Heating in a Fusion Experiment with the Optometrist Algorithm*
+           Sci. Reports 6425 (2017)
            https://doi.org/10.1038/s41598-017-06645-7
 
 .. [Bel18] V. A. Belyakov and A. A. *Kavin Fundamentals of Magnetic Thermonuclear Reactor Design*
            Chapter 8 Woodhead Publishing Series in Energy
+
+.. [Yun10] G. S. Yun, W. Lee, M. J. Choi et al. *Development of KSTAR ECE imaging system for measurement of temperature fluctuations and edge density fluctuations*
+           Rev. Sci. Instr. 81 10D930 (2010)
+           https://dx.doi.org/10.1063/1.3483209
+
+.. [Cho17] M. J. Choi, J. Kim, J.-M. Kwon et al. *Multiscale interaction between a large scale magnetic island and small scale turbulence*
+           Nucl. fusion 57 126058 (2017)
+           https://doi.org/10.1088/1741-4326/aa86fe
 
 .. [nerscdtn] https://docs.nersc.gov/systems/dtn/
