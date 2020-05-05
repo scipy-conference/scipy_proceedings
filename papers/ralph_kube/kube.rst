@@ -134,7 +134,7 @@ Analysis of measurements taken in experiments on magnetic fusion energy are
 typically performed batch-wise after the experiment has concluded. 
 
 
-.. table:: Time-scales on which analysis results of fusion data is required for different tasks.
+.. _table-1 : Time-scales on which analysis results of fusion data is required for different tasks.
 
     +---------------+------------------+--------------------+
     |    Task       | Time-scale       | code-name          |
@@ -142,56 +142,113 @@ typically performed batch-wise after the experiment has concluded.
     | real-time     | ms               | [Bel18]_           |
     | control       |                  |                    |
     +---------------+------------------+--------------------+
-    | inter-shot    | seconds,         | delta              |
+    | inter-shot    | seconds,         | ``Delta``          |
     | analysis      | minutes          |                    |
     +---------------+------------------+--------------------+
     | post-shot     | hours,days,weeks | fluctana           |
     | batch analysis|                  |                    |
     +---------------+------------------+--------------------+
 
+This is listed in table-1_.
 
-Analysis routines for Electron Cyclotron Emission Imaging diagnostic
---------------------------------------------------------------------
+
+
+Data analysis for Electron Cyclotron Emission Imaging diagnostic
+----------------------------------------------------------------
 The Electron Cyclotron Emission Imgaging diagnostic installed in the KSTAR tokamak 
 measures the electron temperature :math:`T_e` on a 0.15m by 0.5m grid, resolved using 8 horizontal
-and 24 vertical channels, with a time resolution of about 1 microsecond [Yun10]_ [Yun14]_.
-The spatial view of this diagnostic covers a significant area of the plasma cross-section which 
-allows it to directly visualize the large-scale structures of the plasma. Spectral quantities calculated
-off local :math:`T_e` fluctuations, such as the cross coherence or the cross phases, can be
-used to identify macro-scale structures in the plasma, so called magnetic islands [Cho17]_. 
-Detection of magnetic islands is an important task, as they can trigger a disruption of the plasma
-confinement.
-
-A common workflow for analyzing diagnostic data is to store the data on disk and to analyze it
-on demand. This is done hours, days, or weeks after a given plasma shot, and often batch-wise.
-The researchers specify the channel pairs for which to calculate a given quantity 
-like the cross phase. The output is stored in another file and visualized. With an abundance of 
-computational resources available, it is now possible to automate these calculations. 
-Modern high-performance computing (HPC) resources provide ample computing power to perform 
-calculations of all relevant spectral quantities, for any given channel pair in near real-time.
-Furthermore, the calculated quantities can be stored indefinitely for future access together with
-sufficient meta-data to know what the people who wrote the data did. With appropriate reduction,
-these data can also be distributed to interested parties, internationally distributed teams of 
-researchers, in near real-time.
+and 24 vertical channels [Yun10]_ [Yun14]_. Each individual channel produces an intensity time series
+:math:`I_{h, v}(t_i)` where h and v index the horizontal and vertical channel number and
+:math:`t_i = i * \Delta_t` denotes the time where the intensity is sampled with 
+:math:`\Delta_t \approx 1 \mu s` being the sampling time. The spatial view of this diagnostic covers 
+a significant area of the plasma cross-section which allows it to directly visualize the large-scale 
+structures of the plasma. Besides analyzing the normalized intensity, several quantities calculated 
+off the Fourier Transformed intensity :math:`X(\omega)`, where :math:`\omega` denotes the angular frequency, are used
+to study the plasma dynamics. The cross-power S, the coherence C, the cross-phase P and 
+the cross-coherence R are respectively defined for two Fourier Transformed intensity signals X and Y as
 
 
-Designing the streaming framework
----------------------------------
+.. math:: 
+   S_{xy}(\omega) = E[F_x(\omega) F_y^{\dagger}(\omega)],
+   :label: eq-S
+   
+.. math::
+   C_{xy}(\omega) = |S_{xy}(\omega)| / \sqrt{S_{xx}(\omega)} / \sqrt{S_{yy}(\omega)},
+   :label: eq-C
 
-Performing fusion plasma experiments is a large undertaking. Besides the complicated multi-scale 
-physics which govern the plasma dynamics and the intricate engineering designs that are operated
-to confined the plasma, the plasma diagnostics operated at the sites are usually custom built. 
-There are no common electronic design or software platforms that are shared by the plasma diagnostics.
+.. math::
+   P_{xy}(\omega) = arctan(Im(S_{xy}(\omega)) / Re(S_{xy}(\omega)),
+   :label: eq-P
+
+and
+
+.. math::
+   R_{xy}(t) = IFFT(S_{xy}(\omega)).
+   :label: eq-R
+
+Here E denotes an ensemble average, :math:`^{\dagger}` denotes complex conjugation, :math:`Re` and
+:math:`Im` denote the real and imaginary part of a complex number and :math:`IFFT` denotes the
+inverse Fourier Transform. Spectral quantities calculated off local :math:`T_e` fluctuations, such
+as the cross coherence or the cross phases, can be used to identify macro-scale structures in the
+plasma, so called magnetic islands [Cho17]_. Detection of magnetic islands is an important task as
+they can disrupt plasma confinement.
+
+Commonly, diagnostic data as produced by the ECEI is analyzed manually batch-wise, often hours,
+days, or weeks after a given plasma shot. The researchers doing this obtain the raw data files and
+maybe a copy of common analysis routines or they write their own analysis codes. Then the channel
+pairs for which quantities like eq-S are to be computed are specified by hand. The output
+and visualization is stored in another file. 
+
+Abundant high performance computing resources make it possible to design a streaming workflow for
+this analysis task. Modern high-performance computing (HPC) resources provide ample computing power
+to perform calculations of all relevant spectral quantities, for any given channel pair in near
+real-time. Furthermore, the calculated quantities can be stored indefinitely for future access
+together with sufficient meta-data to know what the people who wrote the data did. With appropriate
+reduction, these data can also be distributed to interested parties, internationally distributed
+teams of researchers, in near real-time.
+
+
+A streaming workflow for big and fast fusion data
+-------------------------------------------------
+
+Designing a streaming workflow for the analysis of fusion data can not be done in a top-down
+approach, that facilitates multiple experiments or diagnostics. Plasma diagnostics operated at
+experimental sites produce a heterogeneous set of data streams. Furthermore, the diagnostics are
+often custom build and share no common platform. Delta takes a bottom-up approach by being tailored
+to KSTARs ECEI diagnostic and the suite of spectral analysis routines described in the previous
+section. Being designed with a specific application in mind, we implement Delta on Cori, a Cray
+XC-40 supercomputer in California, USA. Cori is operated by the U.S. National Energy Research
+Scientific Computing Center and ranks 13 on the Top500 list. Figure :ref:`fig1` shows the target
+network topology. KSTAR and NERSC are connected through the internet. The endpoint at each 
+site for data-transfer is a Data Transfer Node. These are servers dedicated to performing data
+transfers. As such, they feature large-bandwidth network interfaces, both for internal and external
+connections. Table :ref:`tab1` lists the hardware of the DTNs.
 
 
 
 .. figure:: plots/delta_network.png
-  :alt: Alternative text
 
   The network topology for which the delta framework is designed. Data is streamed in the
-  direction indicated by the orange arrow. The KSTAR and NERSC DTNs are linked through a 
-  wide-area network. The compute nodes, on which the data is analyzed, are behind another 
-  firewall.
+  direction indicated by the orange arrow. The KSTAR and NERSC Data Transfer Nodes are 
+  machines dedicated to transfer data in and out of their respective networks. _table-dtn
+  lists the speed of the network interface connections (NIC) connecting them to the internet.
+  Another firewall is between Cori on which the data is finally analyzed and the NERSC DTN.
+  This is the label :label:`fig1`
+  
+
+.. table:: Hardware and network interconnections of the data transfer nodes (DTNs) :label:`tab1`
+ 
+    +---------------+--------------------+----------+-----------------------------------------+
+    | Where         |   CPU              |    RAM   |  NIC                                    |
+    +===============+====================+==========+=========================================+
+    | | KSTAR       | | Xeon E5-2640 v4  | | 128GB  | | 100 Gbit Ethernet (external)          |
+    +---------------+--------------------+----------+-----------------------------------------+
+    | |  NERSC      | | Xeon E5-2680 v2  | | 128GB  | | 2 * 100 Gbit Ethernet (external)      |
+    |               |                    |          | | 2 * 10 Gbit Ethernet (internal)       |
+    +---------------+--------------------+----------+-----------------------------------------+
+
+
+
 
 
 
