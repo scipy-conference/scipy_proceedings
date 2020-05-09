@@ -1,0 +1,43 @@
+digraph {
+	node [	file=white,
+		fontcolor=black,
+		shape=box,
+		style=filled
+	];
+	
+	/* Base object */
+	Simulation;
+	State;
+	Operations;
+	Device;
+
+	Simulation -> State [headport=n];
+	Simulation -> Operations;
+	Simulation -> Device [headport=n];
+
+	/* Sub Simulation */
+	subsimulation [label="run()\ntimestep"];
+	{ rank=same; "Simulation"; "subsimulation"; }
+
+	Simulation -> subsimulation [arrowhead=none];
+
+	/* Sub State */
+	substate [
+		label=
+	"snapshot\nlocal_snapshot\nparticle_types\nbond_types\nangle_types\n..."
+	];
+	
+	State -> substate [arrowhead=none];
+
+	/* Sub Operations */
+	suboperations [
+		label="integrator\nupdaters\nanalyzers\ntuners\ncomputes"];
+
+	Operations -> suboperations [arrowhead=none];
+
+	/* Sub Device */
+	subdevice [
+		label="comm (communicator)\nnum_ranks\nmode\nnotice_level"];
+
+	Device -> subdevice [arrowhead=none];
+}
