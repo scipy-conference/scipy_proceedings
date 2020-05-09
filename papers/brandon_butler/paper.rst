@@ -10,7 +10,6 @@
 :institution: University of Michigan, Department of Material Science and Engineering
 :institution: University of Michigan, Department of Physics
 :institution: University of Michigan, Biointerfaces Institute
-
 :bibliography: references
 
 ------------------------------------------------------------
@@ -35,16 +34,20 @@ Introduction
 ------------
 
 Two methods of determining equilibrium properties of particulate matter, Monte Carlo (MC) and
-molecular dynamics (MD), have existed in some form since the 1950's :cite:`TODO`. Today many
-packages exist for this purpose: LAMMPS :cite:`TODO`, Gromacs :cite:`TODO`, OpenMM :cite:`TODO`, and
-HOOMD-blue :cite:`TODO` to name a few. Algorithms for improving performance using GPU's :cite:`TODO`
-or other means :cite:`TODO` and greater accessibility to greater computational power has improved
-tremendously the length and time scales of simulations. However, having well designed application
-protocol interfaces (API) is also important for simulation engines. They must provide scientists
-with little computer science exercise a facile way to interface with the code while also providing
-those experienced with software the power to customize and tailor the code to their needs.
-HOOMD-blue always has aimed to provide such an interface, and changes in its API for version 3 have
-continued to improve upon that aim.
+molecular dynamics (MD), have existed in some form since the 1950's :cite:`metropolis.etal1953,
+alder.wainwright1959`.
+
+Today many packages exist for this purpose: LAMMPS :cite:`plimpton1993`, Gromacs
+:cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, and HOOMD-blue
+:cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020` to name a few. Algorithms for
+improving performance using GPU's :cite:`spellings.etal2017` or other means
+:cite:`niethammer.etal2014` and greater accessibility to greater computational power has improved
+tremendously the length and time scales of simulations :cite:`simon.etal2019, shaw.etal2009`.
+However, having well designed application protocol interfaces (API) is also important for simulation
+engines. They must provide scientists with little computer science exercise a facile way to
+interface with the code while also providing those experienced with software the power to customize
+and tailor the code to their needs.  HOOMD-blue always has aimed to provide such an interface, and
+changes in its API for version 3 have continued to improve upon that aim.
 
 HOOMD-blue was first created in 2008 by Joshua Anderson. Soon after, he added a Python interface for
 writing simulations scripts. The first Python API was inspired by other simulation software such as
@@ -52,11 +55,12 @@ LAMMPS. This largely remained the same as HOOMD-blue released its version 2.0. H
 package transitions into a 3.0 release, the API has been rethought from the ground up to present a
 thoroughly object oriented and Pythonic interface for users. In addition, where possible we have
 sought to provide performant ways to add custom Python objects into HOOMD-blue's run loop. Other
-Python packages like SciPy :cite:`TODO`, NumPy :cite:`TODO`, scikit-learn :cite:`TODO`, matplotlib
-:cite:`TODO`, and others have inspired us in this pursuit. In this endeavour we have founds ways to
-make HOOMD-blue more flexible, extensible, and integrable with the SciPy community as well.  Over
-the next few sections, we will use examples of HOOMD-blue's version 3 API to highlight changes in
-the package's extensibility, flexibility, or Pythonic interface.
+Python packages like SciPy :cite:`virtanen.etal2020`, NumPy :cite:`vanderwalt.etal2011`,
+scikit-learn :cite:`pedregosa.etal2011`, matplotlib :cite:`hunter2007`, and others have inspired us
+in this pursuit. In this endeavour we have founds ways to make HOOMD-blue more flexible, extensible,
+and integrable with the SciPy community as well.  Over the next few sections, we will use examples
+of HOOMD-blue's version 3 API to highlight changes in the package's extensibility, flexibility, or
+Pythonic interface.
 
 General API Design
 ------------------
@@ -74,7 +78,8 @@ like custom memory tracebacks and MPI communicator.
 .. figure:: figures/object-diagram.pdf
     :align: center
 
-    Diagram of core objects with some attributes and methods.
+    Diagram of core objects with some attributes and methods. Figure made using Graphviz
+    :cite:`elison.etal2003, gansner.etal1993`.
 
 The :code:`State` class stores the system data (e.g. particle positions, orientations, velocities,
 the system box). The :code:`State` class also exposes this data and allows setting it in two
@@ -105,8 +110,9 @@ approach.
 
 Both approaches allow the complete use of the SciPy ecosystem as they use NumPy arrays. In addition
 to these two methods though, we plan on exposing the data through the
-:code:`__cuda_array_interface__` as well which would allow interoperability with cupy :cite:`TODO`,
-numba's :cite:`TODO` GPU capabilities, and other packages which support the interface.
+:code:`__cuda_array_interface__` as well which would allow interoperability with cupy
+:cite:`zotero-593`, numba's :cite:`lam.etal2015` GPU capabilities, and other packages which support
+the interface.
 
 The final of the three :code:`Operations` holds the different "operations" that will act on the
 simulation state. Broadly these consist of 3 categories: updaters which modify simulation state,
@@ -238,6 +244,13 @@ easily create different back ends that a :code:`Logger` object can plug into for
 
 User Customization
 ------------------
+
+In HOOMD v3, we provide multiple means of "injecting" Python code into HOOMD's C++ core. We achieve
+this through two general means, inheriting from C++ classes through pybind11 :cite:`jakob.etal2017`
+and through wrapping user classes and functions in C++ classes. To guide the choice between
+inheritance and composition, we looked at multiple factors: is the class simple (only requires a few
+methods) and would inheritance expose internals, to name two. Regardless of the method to add
+functionality to HOOMD-blue, we have re
 
 Triggers
 ++++++++
@@ -510,3 +523,8 @@ Logging
 
 Running the System
 ++++++++++++++++++
+
+References
+----------
+.. [hume48] D. Hume. "An enquiry concerning human understanding",
+            Hackett, 1748.
