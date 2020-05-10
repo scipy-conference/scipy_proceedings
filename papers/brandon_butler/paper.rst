@@ -79,7 +79,7 @@ like custom memory tracebacks and MPI communicator.
     :align: center
 
     Diagram of core objects with some attributes and methods. Figure made using Graphviz
-    :cite:`elison.etal2003, gansner.etal1993`.
+    :cite:`ellson.etal2003, gansner.etal1993`.
 
 The :code:`State` class stores the system data (e.g. particle positions, orientations, velocities,
 the system box). The :code:`State` class also exposes this data and allows setting it in two
@@ -179,12 +179,12 @@ allow syncing between the C++ and Python lists.
     # use of SyncedList
     ops.analyzers.append(gsd)
 
-Error Handling
-**************
-
-Another improvement to user experience is our improved error messaging and handling. An example
-error message for accidentally trying to set :code:`sigma` for particle type 'A' in the
-Lennard-Jones pair potential to a string would provide the error message, TODO.
+Another improvement to user experience is the error messaging and handling for these objects. An
+example error message for accidentally trying to set :code:`sigma` for particle type 'A' in the
+Lennard-Jones pair potential to a string (i.e. :code:`lj.params[('A', 'A')] = {'sigma': 'foo',
+'epsilon': 1.}` would provide the error message, "TypeConversionError: For types [('A', 'A')], error
+In key sigma: Value foo of type <class 'str'> cannot be converted using OnlyType(float).  Raised
+error: value foo not convertible into type <class 'float'>.".
 
 Deferred C++ Initialization
 +++++++++++++++++++++++++++
@@ -280,6 +280,7 @@ this functionality already exists in the :code:`Periodic` class.
 
     class CustomTrigger(Trigger):
         def __init__(self, period, phase=0):
+            super().__init__()
             self.period = period
             self.phase = phase
 
@@ -308,15 +309,17 @@ varying objects. An example of a sinusoidal cycled variant is shown below.
     from hoomd.variant import Variant
 
     class SinVariant(Variant):
-        def __init__(self, period, amplitude,
-                     phase=0, center=0):
-            self.period = period
+        def __init__(self, frequency, amplitude,
+                    phase=0, center=0):
+            super().__init__()
+            self.frequency = frequency
             self.amplitude = amplitude
             self.phase = phase
             self.center = center
 
         def __call__(self, timestep):
-            tmp = sin(self.period + self.phase)
+            tmp = self.frequency * timestep
+            tmp = sin(tmp + self.phase)
             return self.amplitude * tmp + self.center
 
         def _min(self):
@@ -340,12 +343,15 @@ particles). The new class :code:`ParticleFilter` implements the selection logic.
 :code:`ParticleFilter` objects. The latter ensures that we do not create multiple of the same
 :code:`ParticleGroup` which can occupy large amounts of memory. The separation also allows the
 creation of large numbers of the same :code:`ParticleFitler` object without needing to worry about
-memory constraints. Finally, this separation makes, :code:`CustomParticleFilter` which is a subclass
-of :code:`ParticleFilter` with some added functionality a suitable class to subclass since its scope
-is limited and does not have to deal with many of the internal details that the
-:code:`ParticleGroup` class does.  For this reason, :code:`ParticleGroup` instances are private in
-HOOMD v3. An example of a :code:`CustomParticleFilter` that selects only particle with positive
-charge is given below.
+memory constraints.
+
+.. TODO Update this section with whatever paradigm we decide to use for user customization.
+
+Finally, this separation makes, :code:`CustomParticleFilter` which is a subclass of
+:code:`ParticleFilter` with some added functionality a suitable class to subclass since its scope is
+limited and does not have to deal with many of the internal details that the :code:`ParticleGroup`
+class does.  For this reason, :code:`ParticleGroup` instances are private in HOOMD v3. An example of
+a :code:`CustomParticleFilter` that selects only particle with positive charge is given below.
 
 .. code-block:: python
 
@@ -376,13 +382,15 @@ allow for users to achieve higher performance using standard Python libraries li
 numba, cupy and others. Furthermore, this performance comes without users having to worry about code
 compilation, ABI, or other concerns in compiled languages.
 
+.. TODO need to add example
+
 Fuller Examples
 ---------------
 
 In this section we will provide more substantial applications of features new to HOOMD-blue v3.
 
-Trigger that determines nucleation (freud)
-++++++++++++++++++++++++++++++++++++++++++
+Trigger that detects nucleation
++++++++++++++++++++++++++++++++
 
 The first example is a :code:`Trigger` that only returns true when a threshold :math:`Q_6`
 Steinhardt order parameter is reached. Such a :code:`Trigger` could be used for nucleation detection
@@ -390,8 +398,7 @@ which depending on the type of simulation could trigger a decrease in cooling ra
 frequent output of simulation trajectories, or any of numerous other possibilities. Also, in this
 example we showcase the use of the local MPI rank data access uses ghost particles as well (ghost
 particles are particles that an MPI ranks knows about, but is not directly responsible for
-updating). Another approach to implement this class could use the snapshot approach and would be
-simpler and shorter, but this approach should be significantly faster on large simulations.
+updating).
 
 .. code-block:: python
 
@@ -437,6 +444,13 @@ simpler and shorter, but this approach should be significantly faster on large s
                 else:
                     return Q6 >= self.threshold
 
+Most of the complexity in the logic comes from ensuring that we use as much data as possible and
+striving for optimal performance. By using the ghost particles, more particles local to a rank will
+have at least 12 neighbors. If we did not care about this, we would not need to construct
+:code:`nlist` at all, and could just pass in :code:`data` to the :code:`compute` method. Another
+simplification to the :code:`Q6Trigger` class while using all the system data, would be to use the
+standard snapshot, though this would be slower (many times slower if freud
+:cite:`ramasubramani.etal2020` if restricted to a single core like many packages such as NumPy are).
 
 Pandas Logger Back-end
 ++++++++++++++++++++++
@@ -506,25 +520,17 @@ dictionary.
                 k: v.append(rdf[k])
                 for k, v in data['array'].items()}
 
-Comparison between LAMMPS, OpenMM, and HOOMD v3
------------------------------------------------
+From here once could chose what to do with the various :code:`DataFrame` objects. If handling
+non-scalar values was not needed, then the code would become much simpler; likewise, if using a file
+format such as HDF5 through h5py :cite:`collette2008` that has support for scalar and
+multi-dimensional array quantities directly, the code is simplified drastically.
 
-Initialing the State
-++++++++++++++++++++
-
-Setting the Forces
-++++++++++++++++++
-
-Writing Output
-++++++++++++++
-
-Logging
-+++++++
-
-Running the System
-++++++++++++++++++
-
-References
+Conclusion
 ----------
-.. [hume48] D. Hume. "An enquiry concerning human understanding",
-            Hackett, 1748.
+
+HOOMD-blue version 3 presents a Pythonic API that encourages experimentation and customization.
+Through subclassing C++ classes, providing wrappers for custom operations, and exposing data in
+zero-copy NumPy arrays, we allow HOOMD-blue to utilize the full potential of Python and the
+scientific Python community. Our examples have shown that often this customization is easy to
+implement, and is only more verbose or difficult when the desired performance or the algorithm
+itself requires.
