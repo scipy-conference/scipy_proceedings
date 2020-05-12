@@ -80,10 +80,9 @@ addition, the device manages thinks like custom memory tracebacks and the MPI co
 
 .. figure:: figures/object-diagram.pdf
     :align: center
-    :label: core-objects
 
     Diagram of core objects with some attributes and methods. Figure made using Graphviz
-    :cite:`ellson.etal2003, gansner.etal1993`.
+    :cite:`ellson.etal2003, gansner.etal1993`. :label: core-objects
 
 The :code:`State` class stores the system data (e.g. particle positions, orientations, velocities,
 the system box). The :code:`State` class also exposes this data and allows setting it in two
