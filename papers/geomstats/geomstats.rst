@@ -62,6 +62,8 @@
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
+:bibliography: main
+
 ------------------------------------------------------------
 Geomstats: An introduction to Geometric Statistics in Python
 ------------------------------------------------------------
@@ -77,6 +79,8 @@ Geomstats: An introduction to Geometric Statistics in Python
    development not only depends on previous relationships found but also on
    connections made during exploitation of this novel new experimental
    protocol.
+
+:cite:`Evans1993`
 
 .. class:: keywords
 
@@ -294,6 +298,9 @@ Perhaps we want to end off with a quote by Lao Tse [#]_:
 ..      :usepackage: somepackage
 
 ..      Some custom LaTeX source here.
+
+
+
 
 References
 ----------
