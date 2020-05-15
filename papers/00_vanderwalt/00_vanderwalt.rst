@@ -2,16 +2,19 @@
 :email: jj@rome.it
 :institution: Senate House, S.P.Q.R.
 :institution: Egyptian Embassy, S.P.Q.R.
+:orcid: 0101-0101-0101-0101
 :corresponding:
 
 :author: Mark Anthony
 :email: mark37@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
+:orcid: 0101-0101-0101-0102
 
 :author: Jarrod Millman
 :email: millman@rome.it
 :institution: Egyptian Embassy, S.P.Q.R.
 :institution: Yet another place, S.P.Q.R.
+:orcid: 0101-0101-0101-0103
 :equal-contributor:
 
 :author: Brutus
