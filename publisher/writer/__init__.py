@@ -37,6 +37,7 @@ class Translator(LaTeXTranslator):
         self.author_institutions = []
         self.author_institution_map = dict()
         self.author_emails = []
+        self.author_orcids = []
         self.corresponding = []
         self.equal_contributors = []
         self.paper_title = ''
@@ -92,6 +93,8 @@ class Translator(LaTeXTranslator):
 
         if self.current_field == 'email':
             self.author_emails.append(text)
+        elif self.current_field == 'orcid':
+            self.author_orcids.append(text)
         elif self.current_field == 'corresponding':
             self.corresponding.append(self.author_names[-1])
         elif self.current_field == 'equal-contributor':
@@ -257,6 +260,7 @@ class Translator(LaTeXTranslator):
                                'author_email': self.author_emails,
                                'author_institution': self.author_institutions,
                                'author_institution_map' : self.author_institution_map,
+                               'author_orcids': self.author_orcids,
                                'abstract': self.abstract_text,
                                'keywords': self.keywords,
                                'copyright_holder': copyright_holder,
