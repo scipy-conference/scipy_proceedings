@@ -11,5 +11,6 @@ def bibtex_caps(words):
   pages     = { {{' - '.join([str(article['page']['start']), str(article['page']['stop'])])}} },
   year      = { {{proceedings['year']}} },
   editor    = { {{bibtex_caps(' and '.join(proceedings['editor']))}} },
+  orcids    = { {{article['author_orcid_map']}} },
   doi       = { {{article['doi']}} }
 }
