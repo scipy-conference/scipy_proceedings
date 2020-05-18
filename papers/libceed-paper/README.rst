@@ -1,7 +1,7 @@
 SciPy2020paper
 ========================================
 
-This is a repo to hold our [SciPy2020](https://github.com/scipy-conference/scipy_proceedings) paper submission
+This is a repo to hold our `SciPy2020 <https://github.com/scipy-conference/scipy_proceedings>`_ paper submission
 
 As per their Instructions for Authors:
 
