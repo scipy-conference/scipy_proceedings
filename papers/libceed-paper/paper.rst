@@ -45,14 +45,14 @@ In this work, we first introduce libCEED’s conceptual framework and C interfac
 libCEED's API
 ----------------------------------------------------------------------------------
 
-LibCEED's API provides the local action of the linear or nonlinear operator without assembling its sparse representation. Let us define the global operator as
+LibCEED's API provides the action of the linear or nonlinear operator without assembling its sparse representation. Let us define the global operator as
 
 .. math::
    :label: eq-operator-decomposition
 
    A = P^T \underbrace{G^T B^T D B G}_{\text{libCEED's scope}} P \, ,
 
-where :math:`P` is the parallel process decomposition operator (external to ``libCEED``, which needs to be managed by the user via external packages, such as ``petsc4py`` :cite:`PETScUserManual`, :cite:`petsc4py`) in which the degrees of freedom (DOFs) are scattered to and gathered from the different compute devices. The operator denoted by :math:`A_L = G^T B^T D B G` gives the local action on a compute node or process, where :math:`G` is a local element restriction operation that localizes DOFs based on the elements, :math:`B` defines the action of the basis functions (or their gradients) on the nodes, and :math:`D` is the user-defined pointwise function describing the physics of the problem at the quadrature points, also called the QFunction (see Fig. :ref:`fig-operator-decomp`).
+where :math:`P` is the parallel process decomposition operator (external to libCEED, which needs to be managed by the user via external packages, such as ``petsc4py`` :cite:`PETScUserManual`, :cite:`petsc4py`) in which the degrees of freedom (DOFs) are scattered to and gathered from the different compute devices. The operator denoted by :math:`A_L = G^T B^T D B G` gives the local action on a compute node or process, where :math:`G` is a local element restriction operation that localizes DOFs based on the elements, :math:`B` defines the action of the basis functions (or their gradients) on the nodes, and :math:`D` is the user-defined pointwise function describing the physics of the problem at the quadrature points, also called the QFunction (see Fig. :ref:`fig-operator-decomp`). Instead of forming a single operator using a sparse matrix representation, libCEED uses the product of operators described in equation (:ref:`eq-operator-decomposition`) to decompose the action of the single operator that will be applied sequentially.
 
 .. figure:: libCEED.png
    :align: center
