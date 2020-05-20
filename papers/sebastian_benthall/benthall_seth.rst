@@ -8,6 +8,8 @@
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
+:bibliography: mybib
+
 -------------------------------------------------------------------
 Aligning Across Use Cases for Domain Specific Scientific Software
 -------------------------------------------------------------------
@@ -23,249 +25,190 @@ Aligning Across Use Cases for Domain Specific Scientific Software
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
+...
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+Literature review
+------------------
+
+Ever since :cite:`papert1980mindstorms` introduced
+'constructionist' learning using computers, educators
+have been enticed by the possibility that students could
+learn valuable knowledge by playing with software.
+While originally used as a tool for teaching mathematics,
+it was not long before Papert's Logo tool was also
+used in scientific education, teaching students not just
+about the abstract mathematical sphere, but about the
+physical world. :cite:`resnick1990lego`.
+The legacy of Logo is alive and well in NetLogo :cite:`tisue2004netlogo`,
+which is used by both students and researchers alike in the study of
+complex and agent-based systems, and the Python ABM toolkit
+Mesa :cite:`masad2015mesa`.
+
+Since, the ubiquity of computing and its increasingly
+central role in industry has prompted the spread of
+ideas that were once specific to "computer science"
+into other disciplines. :cite:`wing2006computational`
+coined the term "computational thinking" for the
+general skills of managine abstraction, modularity,
+scalability, and robustness of systems.
+Now it refers to the cross-disciplinary use of these
+computational concepts :cite:`guzdial2008education`
+:cite:`settle2013beyond`.
+The question raised by "computational thinking" is 
+how much computer science education is necessary for
+these cross-disciplinary uses of computation.
+Logo, after all, not only introduced students to mathematics,
+but also programming.
+But did it teach "computational thinking"?
+
+The industrial demand for students educated in handling
+"Big Data" systems has since prompted a popularization
+of statistics beyond its discipline in a way that's analogous
+to the popularization of computer science. 
+:cite:`jordan2016computational` discusses this new industry
+demand as "inferential thinking".
+Together, computational thinking and inferential thinking
+have been reimagined by some as the foundation for a
+new form of cross-disciplinary "data science" curriculum
+:cite:`adhikari2017computational`
+:cite:`van2019accelerating`.
+
+Open source scientific software development has benefited
+from the influx of capital due to industry interest in
+"data science" applications. Software packages such as Numpy (cite)
+Pandas (cite) and Scikit-learn (cite) have become popular as
+infrastructure for data science--computational and inferential thinking.
+At the same time, these tools have provided a foundation and aspirational
+example for more domain specific scientific libraries, such as (need a list: astropy, what else?).
+Scientific educators continue to see potential in the use of these
+tools to support the education of their students not only
+*about computation*, but *about the world* :cite:`barba2016computational`,
+in a return to Papert's constructionist paradigm.
+
+This vision of scientific research and education supported by
+open source domain specific scientific libraries faces two
+significant obstacles.
+The first is the development and sustainability of the software
+itself.
+Open source software projects in general are not guaranteed to
+succeed; most fail to gain wide adoption or reach sustainability.
+:cite:`schweik2012internet`
+In addition to these general difficulties, scientific software
+suffers from the fac that researchers, who are often required to
+write and modify software, do not have formal training in software
+development. As a result, scientific software is often hampered
+by technical debt. These problems are mitigated by national
+initiatives to train scientists in software engineering skills,
+such as the UK's Software Sustainability Institute, as well as
+Software Carpentry :cite:`wilson2014software`.
+There is further work to be done in institutional design
+around filling this skills gap :cite:`katz2016report`.
+But it is known that "computational thinking" skills alone
+are not sufficient for successful scientific software.
+Software engineering skills are necessary to produce
+software that is usable beyond the lab or research group
+that originates it, which is a necessary path towards
+software sustainability :cite:`benthall_2019`.
+
+A second obstacle integrating software tools into
+scientific practice is that software-based learning
+requires additional education infrastructure.
+:cite:`suen2018equity` document the challenges in providing
+JupyterHub with automatic grading extensions at universities
+and colleges; they find that many institutions do not have the
+resources or deep IT expertise necessary to build and maintain this
+infrastructure. Cloud-based computational notebooks for assignments
+and exploration are coming to be necessary for computation-based
+scientific education, with implications for social equity in scientific
+education.
 
 
-Bibliographies, citations and block quotes
+
+Discipline Specifics
+---------------------
+
+The Econ-ARK project :cite:`carroll2018econ`
+is a toolkit for the structural
+modeling of optimizing economic choices by heterogenous agents.
+A primary goal of its flagship software library, HARK (Heterogenous
+Agent Research toolKit) is to support economic research
+into heterogeneous agent (HA) modeling, which became a research priority
+after the 2008 financial crisis revealed the weaknesses in the
+then-dominant representative agent (RA) based paradigm.
+It has been designed so that researchers and students can take a hands-on approach to economic modeling in software :cite:`carroll2018hands`.
+It lies roughly in the Papertian educational tradition, similar to
+other agent-based modeling software such as NetLogo :cite:`tisue2004netlogo` and Mesa :cite:`masad2015mesa`.
+However, in Econ-ARK models, agents that optimize their behavior strategically with respect to predicted effects over time.
+In this respect, Econ-ARK has some characteristics of a reinforcement learning or "AI" toolkit.
+
+(Example of a problem, here: bellman equations, etc.)
+
+Models in HARK are, at a certain level of mathematical abstraction,
+equivalent to Markov Decision Problems (MDP).
+However, generic MDP software is not adequate for research in this
+field, for several reasons.
+
+- **Substantive, policy-oriented model-building.**
+  Unlike many recent fields of "data science", in which generic
+  model-fitting and machine-learning techniques are applied to
+  a large data set for the purpose of maximizing predictive potential,
+  this branch of economics operates with relatively scarce data and
+  a drive for model veracity. Besides the academic field of researchers,
+  the intended audience for these models are national central banks
+  and other policy-makers. For example, one policy application of these
+  models is predicting the impact of the CARES stimulus bill on
+  consumption. :cite:`carroll2020modeling` These models are scientifically
+  valued for their ability to approximate real social dynamics, and
+  for their ability to build consensus towards policy-making, in addition
+  to their goodness of fit to available data.
+- **Analytical results informing solvers.** Like many other sciences,
+  this branch of economics has a theoretical component consisting in
+  mathematical proofs about the models in question.
+  In addition to providing
+  "interpretable" insight into the invariant properties of a model,
+  these results also inform the design of model solvers and
+  the user experience.
+  For example, a mathematical result might reveal under what parameter
+  conditions a model has a degenerate solution; the software will warn the
+  user if they attempt to solve the model in such a case. Elsewhere,
+  an analytical result might provide a shortcut such that it is possible
+  to write a solution algorithm with lower computational complexity than a
+  generic one would have.
+- **Continuous space decisions.** Most MDP solvers and simulators
+  assume a discrete control and state space. The economic
+  problems studied using HARK are most often defined with continuous
+  control and state spaces, and with continuous random variables as
+  exogenous shocks. HARK therefore includes a variety of discretization
+  and interpolation tools that support the transformation between
+  discrete and continuous representations.
+
+The upshot of these conditions is that Econ-ARK software is not only
+a tool for researchers doing empirical scientific work.
+Rather, its software is an encoding of substantive research results
+in mathematical theory. This entails that the success of Econ-ARK
+will imply a practical change to the research field: students will
+study models that have been published by researchers in Python
+in order to learn insights about the economy. This blending of roles,
+between researchers, students, and software engineers, leads to
+complicates the software architecture of the toolkit.
+
+Case Study: Econ-ARK Use Cases
+------------------------------------
+
+Roles
+  - Researcher
+  - Teacher/Student
+  - Publication
+  - Software engineer
+    
+
+
+Case Study: Econ-ARK infrastructure
 ------------------------------------------
 
-If you want to include a ``.bib`` file, do so above by placing  :code:`:bibliography: yourFilenameWithoutExtension` as above (replacing ``mybib``) for a file named :code:`yourFilenameWithoutExtension.bib` after removing the ``.bib`` extension. 
-
-**Do not include any special characters that need to be escaped or any spaces in the bib-file's name**. Doing so makes bibTeX cranky, & the rst to LaTeX+bibTeX transform won't work. 
-
-To reference citations contained in that bibliography use the :code:`:cite:`citation-key`` role, as in :cite:`barba2016computational` 
-
-
-If you wish to have a block quote, you can just indent the text, as in 
-
-    When it is asked, What is the nature of all our reasonings concerning matter of fact? the proper answer seems to be, that they are founded on the relation of cause and effect. When again it is asked, What is the foundation of all our reasonings and conclusions concerning that relation? it may be replied in one word, experience. But if we still carry on our sifting humor, and ask, What is the foundation of all conclusions from experience? this implies a new question, which may be of more difficult solution and explication. :cite:`hume48`
-
-Dois in bibliographies
-++++++++++++++++++++++
-
-In order to include a doi in your bibliography, add the doi to your bibliography
-entry as a string. For example:
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = "10.1017/CBO9780511808432",
-   }
-
-
-If there are errors when adding it due to non-alphanumeric characters, see if
-wrapping the doi in ``\detokenize`` works to solve the issue.
-
-.. code-block:: bibtex
-
-   @Book{hume48,
-     author =  "David Hume",
-     year =    "1748",
-     title =   "An enquiry concerning human understanding",
-     address =     "Indianapolis, IN",
-     publisher =   "Hackett",
-     doi = \detokenize{10.1017/CBO9780511808432},
-   }
-
-Source code examples
+Discussion
 --------------------
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
-
-.. code-block:: python
-
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-Maybe also in another language, and with line numbers:
-
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
-
-Or a snippet from the above code, starting at the correct line number:
-
-.. code-block:: c
-   :linenos:
-   :linenostart: 2
-
-   for (int i = 0; i < 10; i++) {
-       /* do something */
-   }
- 
-Important Part
---------------
-
-It is well known [Atr03]_ that Spice grows on the planet Dune.  Test
-some maths, for example :math:`e^{\pi i} + 3 \delta`.  Or maybe an
-equation on a separate line:
-
-.. math::
-
-   g(x) = \int_0^\infty f(x) dx
-
-or on multiple, aligned lines:
-
-.. math::
-   :type: eqnarray
-
-   g(x) &=& \int_0^\infty f(x) dx \\
-        &=& \ldots
-
-The area of a circle and volume of a sphere are given as
-
-.. math::
-   :label: circarea
-
-   A(r) = \pi r^2.
-
-.. math::
-   :label: spherevol
-
-   V(r) = \frac{4}{3} \pi r^3
-
-We can then refer back to Equation (:ref:`circarea`) or
-(:ref:`spherevol`) later.
-
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas [#]_ diam turpis, placerat [#]_ at adipiscing ac,
-pulvinar id metus.
-
-.. [#] On the one hand, a footnote.
-.. [#] On the other hand, another footnote.
-
-.. figure:: figure1.png
-
-   This is the caption. :label:`egfig`
-
-.. figure:: figure1.png
-   :align: center
-   :figclass: w
-
-   This is a wide figure, specified by adding "w" to the figclass.  It is also
-   center aligned, by setting the align keyword (can be left, right or center).
-
-.. figure:: figure1.png
-   :scale: 20%
-   :figclass: bht
-
-   This is the caption on a smaller figure that will be placed by default at the
-   bottom of the page, and failing that it will be placed inline or at the top.
-   Note that for now, scale is relative to a completely arbitrary original
-   reference size which might be the original size of your image - you probably
-   have to play with it. :label:`egfig2`
-
-As you can see in Figures :ref:`egfig` and :ref:`egfig2`, this is how you reference auto-numbered
-figures.
-
-.. table:: This is the caption for the materials table. :label:`mtable`
-
-   +------------+----------------+
-   | Material   | Units          |
-   +============+================+
-   | Stone      | 3              |
-   +------------+----------------+
-   | Water      | 12             |
-   +------------+----------------+
-   | Cement     | :math:`\alpha` |
-   +------------+----------------+
-
-
-We show the different quantities of materials required in Table
-:ref:`mtable`.
-
-
-.. The statement below shows how to adjust the width of a table.
-
-.. raw:: latex
-
-   \setlength{\tablewidth}{0.8\linewidth}
-
-
-.. table:: This is the caption for the wide table.
-   :class: w
-
-   +--------+----+------+------+------+------+--------+
-   | This   | is |  a   | very | very | wide | table  |
-   +--------+----+------+------+------+------+--------+
-
-Unfortunately, restructuredtext can be picky about tables, so if it simply
-won't work try raw LaTeX:
-
-
-.. raw:: latex
-
-   \begin{table*}
-
-     \begin{longtable*}{|l|r|r|r|}
-     \hline
-     \multirow{2}{*}{Projection} & \multicolumn{3}{c|}{Area in square miles}\tabularnewline
-     \cline{2-4}
-      & Large Horizontal Area & Large Vertical Area & Smaller Square Area\tabularnewline
-     \hline
-     Albers Equal Area  & 7,498.7 & 10,847.3 & 35.8\tabularnewline
-     \hline
-     Web Mercator & 13,410.0 & 18,271.4 & 63.0\tabularnewline
-     \hline
-     Difference & 5,911.3 & 7,424.1 & 27.2\tabularnewline
-     \hline
-     Percent Difference & 44\% & 41\% & 43\%\tabularnewline
-     \hline
-     \end{longtable*}
-
-     \caption{Area Comparisons \DUrole{label}{quanitities-table}}
-
-   \end{table*}
-
-Perhaps we want to end off with a quote by Lao Tse [#]_:
-
-  *Muddy water, let stand, becomes clear.*
-
-.. [#] :math:`\mathrm{e^{-i\pi}}`
 
 .. Customised LaTeX packages
 .. -------------------------
