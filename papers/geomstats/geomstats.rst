@@ -70,11 +70,8 @@ Introduction to Geometric Statistics in Python with Geomstats
 
 .. class:: abstract
 
+There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric statistical learning algorithms seemlessly, without delving into the mathematical details. To adress this gap, we introduce the open-source Python package :code:`geomstats` and present hands-on tutorials of differential geometry in statistics - Geometric Statistics - that rely on it. Code and documentation: :code:`www.geomstats.ai`.
 
-We introduce `geomstats`, an open-source Python package for computations and statistics for data on non-linear manifolds such as hyperbolic spaces, spaces of symmetric positive definite matrices, Lie groups of transformations, etc. We provide object-oriented and extensively unit-tested implementations. The manifolds come with families of Riemannian metrics, with associated Exponential/Logarithm maps, geodesics, and parallel transport. The learning algorithms follow scikit-learn API and provide methods for estimation, clustering and dimension reduction on manifolds. The operations are vectorized for batch computations and available with NumPy, PyTorch, and TensorFlow backends, which allows GPU acceleration. This talk will present the package, compare it with related libraries, and show relevant examples. Code and documentation: www.geomstats.ai.
-
-
-:cite:`Evans1993`
 
 .. class:: keywords
 
@@ -83,184 +80,148 @@ We introduce `geomstats`, an open-source Python package for computations and sta
 Introduction
 ------------
 
-Data on manifolds naturally arise in different fields. Hyperspheres model directional data in molecular and protein biology, and some aspects of 3D shapes. Density estimation on hyperbolic spaces arises for electrical impedance, networks or reflection coefficients extracted from a radar signal. Symmetric Positive Definite (SPD) matrices are used to characterize data from Diffusion Tensor Imaging (DTI) and functional Magnetic Resonance Imaging (fMRI). Examples of manifold data are numerous: as a result, there has been a growing interest in leveraging differential geometry in the machine learning community.
+Data on manifolds naturally arise in different fields. Hyperspheres model directional data in molecular and protein biology :cite:`Kent2005UsingStructure`, and some aspects of 3D shapes :cite:`Jung2012AnalysisSpheres, Hong2016`. Density estimation on hyperbolic spaces arises to model electrical impedances :cite:`Huckemann2010MobiusEstimation`, networks :cite:`Asta2014GeometricComparison` or reflection coefficients extracted from a radar signal :cite:`Chevallier2015ProbabilityProcessing`. Symmetric Positive Definite (SPD) matrices are used to characterize data from Diffusion Tensor Imaging (DTI) :cite:`Pennec2006b, Yuan2012` and functional Magnetic Resonance Imaging (fMRI) :cite:`Sporns2005TheBrain`. Examples of manifold data are numerous: as a result, there is a growing interest in leveraging differential geometry in the machine learning community.
 
-Yet, the adoption of differential geometry computations has been inhibited by the lack of a reference implementation. Code sequences are often custom-tailored for specific problems and are not easily reused. Some python packages do exist, but focus on optimization (Pymanopt, Geoopt, and McTorch), or are dedicated to a single manifold (PyRiemann, PyQuaternion, PyGeometry), or lack unit-tests and continuous integration (TheanoGeometry). There is a need for an open-source low-level implementation of differential geometry, and associated learning algorithms, for manifold-valued data.
+Yet, the adoption of differential geometry computations has been inhibited by the lack of a reference implementation. Code sequences are often custom-tailored for specific problems and are not easily reused. Some python packages do exist, but focus on optimization (Pymanopt :cite:`Townsend2016Pymanopt:Differentiation`, Geoopt :cite:`Becigneul2018RiemannianMethods, Kochurov2019Geoopt:Optim`, and McTorch :cite:`Meghwanshi2018McTorchLearning`), are dedicated to a single manifold (PyRiemann :cite:`Barachant2015PyRiemann:Interface`, PyQuaternion :cite:`Wynn2014PyQuaternions:Quaternions`, PyGeometry :cite:`Censi2012PyGeometry:Manifolds.`), or lack unit-tests and continuous integration (TheanoGeometry :cite:`Kuhnel2017ComputationalTheano`). There is a need for an open-source low-level implementation of differential geometry, and associated learning algorithms, for manifold-valued data.
 
-We present `geomstats`, an open-source Python package of computations and statistics for data on non-linear manifolds such as hyperbolic spaces, spaces of symmetric positive definite matrices, Lie groups of transformations, etc: a field called “geometric statistics”. We provide object-oriented and extensively unit-tested implementations. Geomstats has three main objectives: (i) support research in differential geometry and geometric statistics, by providing code to get intuition or test a theorem (ii) democratize the use of geometric statistics, by implementing user-friendly geometric learning algorithms using scikit-learn API (iii) provide educational support to learn "hands-on" differential geometry and geometric statistics, through its examples and visualizations.
+We present :code:`geomstats`, an open-source Python package of computations and statistics for data on non-linear manifolds: a field called Geometric Statistics. We provide object-oriented and extensively unit-tested implementations, supported for different execution backends -- namely NumPy, PyTorch, and TensorFlow. This paper illustrates the use of :code:`geomstats` through hands-on introductory tutorials of geometric statistics. The tutorials enable users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric statistical learning algorithms seemlessly, without delving into the mathematical details.
 
 
 Presentation of Geomstats
 -------------------------
 
-In Geomstats, the module `geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: Manifold and RiemannianMetric. Standard manifolds inherit from Manifold, space-specific attributes and methods can then be added. The class RiemannianMetric provides methods such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, etc. Going beyond Riemannian geometry, the class Connection implements affine connections using automatic differentiation with `autograd` to provide computations when closed-form formulae do not exist.
+The package :code:`geomstats` is organized into two main modules: :code:`geometry` and :code:`learning`. The module `geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, etc.
 
-The module `learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from scikit-learn base classes and mixin: BaseEstimator, ClassifierMixin, RegressorMixin, etc. This module provides implementations of Frechet mean estimators, K-means and principal component analysis (PCA) designed for manifold data. These algorithms can be applied seamlessly to the different manifolds implemented in the library.
+The module `learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixin: :code:`BaseEstimator`, :code:`ClassifierMixin`, :code:`RegressorMixin`, etc. This module provides implementations of Frechet mean estimators, K-means and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
 
-The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, relies on TensorFlow/PyTorch backend allowing GPU acceleration, and is partially ported to R. The package comes with a `visualization` module that enables users to develop an intuition on differential geometry.
+The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, relies on TensorFlow/PyTorch backend allowing GPU acceleration. The package comes with a :code:`visualization` module that enables users to develop an intuition on differential geometry.
 
 
 Tutorial: Computing with data on manifolds
 ------------------------------------------
 
-Set-up
+This section shows how to use :code:`geomstats` to learn the essential concepts of differential geometry and Riemannian geometry. This hands-on approach complements traditional textbooks, that often focus on the theoretical explanations.
+
+Set up
 ******
 
-Before starting this tutorial, we import the visualization module and
-its parameters.
+Before starting this tutorial, we import the backend that will be used for geomstats computation, as well as the visualization module. In the command line::
+
+    export GEOMSTATS_BACKEND=numpy
+
+then, in the python script:
 
 .. code:: ipython3
 
-    import matplotlib
-    import matplotlib.image as mpimg
-    import matplotlib.pyplot as plt
-
+    import geomstats.backend as gs
     import geomstats.visualization as visualization
 
     visualization.tutorial_matplotlib()
-
 
 .. parsed-literal::
 
     INFO: Using numpy backend
 
-
-We also import the backend that will be used for geomstats computations.
-
-.. code:: ipython3
-
-    import geomstats.backend as gs
-
+Modules related to :code:`matplotlib` should be imported during setup too.
 
 From data on linear spaces to data on manifolds
 ***********************************************
 
-The **science of Statistics** is defined as the collection of data,
-their analysis and interpretation. Statistical theory is usually defined
+We first illustrate how Geometric Statistics differ from traditional Statistics. Statistical theory is usually defined
 for data belonging to vector spaces, which are *linear spaces*. For
 example, we know how to compute the mean of a data set of numbers, like
 the mean of students’ weights in a classroom, or of multidimensional
 arrays, like the average 3D velocity vector of blood cells in a vessel.
 
 Here is an example of the computation of the mean of two arrays of
-dimension 2.
+dimension 2. We plot the points and their mean on the 2D Euclidean space, which is a
+linear space: a plane.
 
 .. code:: ipython3
 
     from geomstats.geometry.euclidean import Euclidean
 
-    dim = 2
-    n_samples = 2
+    euclidean = Euclidean(dim=2)
+    points_in_linear_space = euclidean.random_uniform(
+        n_samples=2)
 
-    euclidean = Euclidean(dim=dim)
-    points_in_linear_space = euclidean.random_uniform(n_samples=n_samples)
-    print('Points in linear space:\n', points_in_linear_space)
+    linear_mean = gs.sum(
+        points_in_linear_space, axis=0) / n_samples
 
-    linear_mean = gs.sum(points_in_linear_space, axis=0) / n_samples
-    print('Mean of points:\n', linear_mean)
-
-
-.. parsed-literal::
-
-    Points in linear space:
-     [[ 0.97255366  0.74678389]
-     [ 0.01949105 -0.45632857]]
-    Mean of points:
-     [0.49602235 0.14522766]
-
-
-We plot the points and their mean on the 2D Euclidean space, which is a
-linear space: a plane.
-
-.. code:: ipython3
-
-    %matplotlib inline
-
-    fig = plt.figure(figsize=(6, 6))
+..  fig = plt.figure(figsize=(6, 6))
     ax = fig.add_subplot(111)
-
-    ax.scatter(points_in_linear_space[:, 0], points_in_linear_space[:, 1], label='Points')
-    ax.plot(points_in_linear_space[:, 0], points_in_linear_space[:, 1], linestyle='dashed')
-
     ax.scatter(
-        gs.to_numpy(linear_mean[0]),
-        gs.to_numpy(linear_mean[1]), label='Mean', s=80, alpha=0.5)
-
+        points_in_linear_space[:, 0],
+        points_in_linear_space[:, 1],
+        label='Points')
+    ax.plot(
+        points_in_linear_space[:, 0],
+        points_in_linear_space[:, 1],
+        linestyle='dashed')
+    ax.scatter(
+        linear_mean[0],
+        linear_mean[1],
+        label='Mean', s=80, alpha=0.5)
     ax.set_title('Mean of points in a linear space')
     ax.legend();
 
+We use :code:`matplotlib` to plot the result.
 
 
-.. image:: 01_data_on_manifolds_files/01_data_on_manifolds_14_0.png
+.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_14_0.png
+    :scale: 30 %
+    :align: center
+
+    Mean of two points on a linear space.
 
 
-What happens to the usual statistical theory when the data doesn’t
+Now consider a non-linear space: a manifold. A manifold
+:math:`M` of dimension :math:`m` is a space that is allowed to be
+curved but that looks like an :math:`m`-dimensional vector space in the
+neighborhood of every point. A sphere, like the earth, is a good example of a manifold.
+What happens to the usual statistical theory when the data does not
 naturally belong to a linear space. For example, if we want to perform
 statistics on the coordinates of world cities, which lie on the earth: a
 sphere?
 
-The non-linear spaces we consider are called manifolds. A **manifold
-:math:`M` of dimension :math:`m`** is a space that is allowed to be
-curved but that looks like an :math:`m`-dimensional vector space in the
-neighborhood of every point.
-
-A sphere, like the earth, is a good example of a manifold. We know that
-the earth is curved, but at our scale we do not see its curvature. Can
-we still use linear statistics when data are defined on these manifolds,
-or shall we?
-
-Let’s try.
 
 .. code:: ipython3
 
     from geomstats.geometry.hypersphere import Hypersphere
 
-    sphere = Hypersphere(dim=dim)
-    points_in_manifold = sphere.random_uniform(n_samples=n_samples)
-    print('Points in manifold:\n', points_in_manifold)
+    sphere = Hypersphere(dim=2)
+    points_in_manifold = sphere.random_uniform(
+         n_samples=2)
 
-    linear_mean = gs.sum(points_in_manifold, axis=0) / n_samples
-    print('Mean of points:\n', linear_mean)
+    linear_mean = gs.sum(
+        points_in_manifold, axis=0) / n_samples
 
-
-.. parsed-literal::
-
-    Points in manifold:
-     [[-0.71502435 -0.41197257 -0.56481748]
-     [-0.997575   -0.04788171  0.05051201]]
-    Mean of points:
-     [-0.85629967 -0.22992714 -0.25715273]
-
-
-We plot the points and their mean computed with the linear formula.
-
-.. code:: ipython3
-
-    %matplotlib inline
-
-    fig = plt.figure(figsize=(8, 8))
+..  fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
-
     visualization.plot(
-        points_in_manifold, ax=ax, space='S2', label='Point', s=80)
-
+        points_in_manifold,
+        ax=ax, space='S2', label='Point', s=80)
     ax.plot(
         points_in_manifold[:, 0],
         points_in_manifold[:, 1],
         points_in_manifold[:, 2],
         linestyle='dashed', alpha=0.5)
-
     ax.scatter(
-        linear_mean[0], linear_mean[1], linear_mean[2],
+        linear_mean[0],
+        linear_mean[1],
+        linear_mean[2],
         label='Mean', s=80, alpha=0.5)
-
     ax.set_title('Mean of points on a manifold')
     ax.legend();
 
+We use :code:`matplotlib` to plot the result.
 
 
-.. image:: 01_data_on_manifolds_files/01_data_on_manifolds_18_0.png
+.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_18_0.png
+    :scale: 25 %
+    :align: center
 
+    Mean of two points on the sphere.
 
 What happened? The mean of two points on a manifold (the sphere) is not
 on the manifold. In our example, the mean city is not on the earth. This
@@ -280,208 +241,34 @@ For this reason, researchers aim to build a theory of statistics that is
 by construction compatible with any structure we equip the manifold
 with. This theory is called *Geometric Statistics*.
 
+
+From vector spaces to manifolds
+*******************************
+
 **Geometric Statistics** is a theory of statistics on manifolds, that
 takes into account their geometric structures. Geometric Statistics is
 therefore the child of two major pillars of Mathematics: Geometry and
 Statistics.
 
-Examples of data on manifolds
-*****************************
+This subsection shows how to load geometric datasets using the module :code:`datasets`,
+and perform elementary operations of Riemannian geometry.
 
-Why should we bother to build a whole new theory of statistics? Do we
-really have data that belong to spaces like the sphere illustrated in
-introduction?
-
-Let’s see some examples of data spaces that are naturally manifolds. By
-doing so, we will introduce the ``datasets`` and ``visualization``
-modules of ``geomstats``.
-
-We first import the ``datasets.utils`` module that allows loading
-datasets.
+We import the dataset :code:`cities` of the coordinates of cities on the earth.
 
 .. code:: ipython3
 
     import geomstats.datasets.utils as data_utils
-
-World cities: data on the sphere
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We load the dataset ``cities``, that contains the coordinates of world
-cities in spherical coordinates.
-
-.. code:: ipython3
-
     data, names = data_utils.load_cities()
-    print(names[:5])
-    print(data[:5])
-
-
-.. parsed-literal::
-
-    ['Tokyo', 'New York', 'Mexico City', 'Mumbai', 'São Paulo']
-    [[ 0.61993792 -0.52479018  0.58332859]
-     [-0.20994315  0.7285533   0.65202298]
-     [ 0.14964311  0.93102728  0.33285904]
-     [-0.27867026 -0.9034188   0.32584868]
-     [-0.62952884  0.6662902  -0.3996884 ]]
-
-
-We convert the spherical coordinates to X, Y, Z coordinates and verify
-that they belong to the sphere.
-
-.. code:: ipython3
-
-    gs.all(sphere.belongs(data))
-
-
-
-
-.. parsed-literal::
-
-    True
-
-
-
-Now, we plot the cities on the sphere. We choose only a subset of the
-cities that have a nice rendering in the 2D plot of the 3D earth. This
-plot is nicer shown in an interactive 3D figure.
-
-.. code:: ipython3
-
-    from geomstats.geometry.matrices import Matrices
-    from geomstats.geometry.special_orthogonal import SpecialOrthogonal
-
-    data, names = data_utils.load_cities()
-
-.. code:: ipython3
 
     fig = plt.figure(figsize=(10, 10))
     ax = fig.add_subplot(111, projection='3d')
 
-    visualization.plot(data[15:20], ax=ax, space='S2', label=names[15:20], s=80, alpha=0.5)
-
-    ax.set_title('Cities on the earth.');
-
-
+    visualization.plot(
+        data[15:20], ax=ax, space='S2',
+        label=names[15:20], s=80, alpha=0.5)
 
 .. image:: 01_data_on_manifolds_files/01_data_on_manifolds_32_0.png
 
-
-Pose of objects in pictures
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-We consider the dataset ``poses``, that contains the 3D poses of objects
-in images. Specifically, we consider poses of beds in images, i.e. the
-3D orientation of each bed within a given 2D image.
-
-The orientation corresponds to a 3D rotation. A 3D rotation :math:`R` is
-visually represented as the result of :math:`R` applied to the
-coordinate frame :math:`(e_x, e_y, e_z)`.
-
-We first load the dataset.
-
-.. code:: ipython3
-
-    data, img_paths = data_utils.load_poses()
-
-    img_path1, img_path2 = img_paths[0], img_paths[1]
-    img_path1 = os.path.join(data_utils.DATA_FOLDER, 'poses', img_path1)
-    img_path2 = os.path.join(data_utils.DATA_FOLDER, 'poses', img_path2)
-
-    img1 = mpimg.imread(img_path1)
-    img2 = mpimg.imread(img_path2)
-
-    fig = plt.figure(figsize=(16, 8))
-
-    ax = fig.add_subplot(121)
-    imgplot = ax.imshow(img1)
-    ax.axis('off')
-    ax = fig.add_subplot(122)
-    imgplot = ax.imshow(img2)
-    ax.axis('off')
-
-    plt.show()
-
-
-
-.. image:: 01_data_on_manifolds_files/01_data_on_manifolds_35_0.png
-
-
-We import the manifold of 3D rotations: the Special Orthogonal group in
-3D, :math:`SO(3)`. We choose to represent the 3D rotations as rotation
-vectors, hence: ``point_type='vector'``.
-
-.. code:: ipython3
-
-    from geomstats.geometry.special_orthogonal import SpecialOrthogonal
-
-    so3 = SpecialOrthogonal(n=3, point_type='vector')
-
-We verify that the poses belong to the space of 3D rotations.
-
-.. code:: ipython3
-
-    gs.all(so3.belongs(data))
-
-
-
-
-.. parsed-literal::
-
-    True
-
-
-
-We plot the orientations of the first 2 beds.
-
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111, projection='3d')
-
-    visualization.plot(data[:2], ax=ax, space='SO3_GROUP')
-
-    ax.set_title('3D orientations of the beds.');
-
-
-
-.. image:: 01_data_on_manifolds_files/01_data_on_manifolds_41_0.png
-
-
-These orientations are very close, as expected from the corresponding
-images.
-
-
-From vector spaces to manifolds
-*******************************
-
-In the previous tutorial, we visualized data that naturally belong to
-manifolds, i.e. generalizations of vector spaces that are allowed to
-have curvature.
-
-A simple example of such data is the coordinates of cities on the
-surface of the earth: they belong to a sphere, which is a manifold.
-
-.. code:: ipython3
-
-    import geomstats.datasets.utils as data_utils
-
-    data, names = data_utils.load_cities()
-
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-
-    visualization.plot(data[15:20], ax=ax, space='S2', label=names[15:20], s=80, alpha=0.5)
-
-    ax.set_title('Cities on the earth.');
-
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_10_0.png
-
-
-The purpose of this tutorial is to show how we can perform elementary
-computations on such data.
 
 From addition to exponential map
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -490,29 +277,6 @@ The elementary operations on a vector space are: addition, substraction
 and multiplication by a scalar. We can add a vector to a point,
 substract two points to get a vector, or multiply a vector by a scalar
 value.
-
-.. code:: ipython3
-
-    %matplotlib inline
-
-    fig = plt.figure(figsize=(6, 6))
-    ax = fig.add_subplot(111)
-
-    point_a = gs.array([0, 1])
-    point_b = gs.array([1, 2])
-    vector = point_b - point_a
-
-    ax.scatter(point_a, point_b, label='Points')
-    ax.arrow(gs.to_numpy(point_a[0]), gs.to_numpy(point_a[1]),
-             dx=gs.to_numpy(vector[0]), dy=gs.to_numpy(vector[1]),
-             width=0.008, length_includes_head=True, color='black')
-
-    ax.legend();
-
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_14_0.png
-
 
 For points on a manifold, like the sphere, the same operations are not
 permitted. Indeed, adding a vector to a point will not give a point that
@@ -526,12 +290,12 @@ belongs to the manifold.
     paris = data[19]
     vector = gs.array([1, 0, 0.8])
 
-    ax = visualization.plot(paris, ax=ax, space='S2', s=200, alpha=0.8, label='Paris')
+    ax = visualization.plot(
+        paris, ax=ax, space='S2',
+        s=200, alpha=0.8, label='Paris')
 
     arrow = visualization.Arrow3D(paris, vector=vector)
     arrow.draw(ax, color='black')
-    ax.legend();
-
 
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_16_0.png
@@ -553,31 +317,18 @@ This path is called a “geodesic”.
 
     paris = data[19]
     vector = gs.array([1, 0, 0.8])
-    tangent_vector = sphere.to_tangent(vector, base_point=paris)
+    tangent_vector = sphere.to_tangent(
+         vector, base_point=paris)
 
-    result = sphere.metric.exp(tangent_vector, base_point=paris)
+    result = sphere.metric.exp(
+        tangent_vector, base_point=paris)
 
     geodesic = sphere.metric.geodesic(
-            initial_point=paris,
-            initial_tangent_vec=tangent_vector)
+        initial_point=paris,
+        initial_tangent_vec=tangent_vector)
 
-    points_on_geodesic = geodesic(gs.linspace(0., 1., 30))
-
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-
-
-    ax = visualization.plot(paris, ax=ax, space='S2', s=100, alpha=0.8, label='Paris')
-    ax = visualization.plot(result, ax=ax, space='S2', s=100, alpha=0.8, label='End point')
-    ax = visualization.plot(
-        points_on_geodesic, ax=ax, space='S2', color='black', label='Geodesic')
-
-    arrow = visualization.Arrow3D(paris, vector=tangent_vector)
-    arrow.draw(ax, color='black')
-    ax.legend();
-
+    points_on_geodesic = geodesic(
+        gs.linspace(0., 1., 30))
 
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_19_0.png
@@ -606,21 +357,6 @@ the other.
 
     points_on_geodesic = geodesic(gs.linspace(0., 1., 30))
 
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-
-    ax = visualization.plot(paris, ax=ax, space='S2', s=100, alpha=0.8, label='Paris')
-    ax = visualization.plot(beijing, ax=ax, space='S2', s=100, alpha=0.8, label='Beijing')
-    ax = visualization.plot(
-        points_on_geodesic, ax=ax, space='S2', color='black', label='Geodesic')
-
-    arrow = visualization.Arrow3D(paris, vector=log)
-    arrow.draw(ax, color='black')
-    ax.legend();
-
-
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_23_0.png
 
@@ -645,7 +381,8 @@ hyperbolic plane and compute the geodesic between them.
 
     initial_point = gs.array([gs.sqrt(2.), 1., 0.])
     end_point = gs.array([2.5, 2.5])
-    end_point = hyperbolic.from_coordinates(end_point, 'intrinsic')
+    end_point = hyperbolic.from_coordinates(
+        end_point, 'intrinsic')
 
     geodesic = hyperbolic.metric.geodesic(
         initial_point=initial_point, end_point=end_point)
@@ -654,7 +391,7 @@ hyperbolic plane and compute the geodesic between them.
 
 We use the visualization module to plot the two points and the geodesic
 between them. We can choose the visualization we prefer for points on
-the hyperbolic plane. First we visualize with the Poincare disk
+the hyperbolic plane. We visualize with the Poincare disk
 representation.
 
 .. code:: ipython3
@@ -665,44 +402,18 @@ representation.
     representation = 'H2_poincare_disk'
 
     ax = visualization.plot(
-        initial_point, ax=ax, space=representation, s=50, label='Initial point');
+        initial_point, ax=ax, space=representation,
+        s=50, label='Initial point');
     ax = visualization.plot(
-        end_point, ax=ax, space=representation, s=50, label='End point');
+        end_point, ax=ax, space=representation,
+        s=50, label='End point');
 
     ax = visualization.plot(
-        points[1:-1], ax=ax, space=representation, s=5, color='black', label='Geodesic');
-    ax.axis('off')
-    ax.set_title('Geodesic on the hyperbolic plane in Poincare disk representation')
-    ax.legend();
-
+        points[1:-1], ax=ax, space=representation,
+        s=5, color='black', label='Geodesic');
 
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_30_0.png
-
-
-We can visualize the same geodesic in Klein disk representation.
-
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111)
-
-    representation = 'H2_klein_disk'
-
-    ax = visualization.plot(
-        initial_point, ax=ax, space=representation, s=50, label='Initial point');
-    ax = visualization.plot(
-        end_point, ax=ax, space=representation, s=50, label='End point');
-
-    ax = visualization.plot(
-        points[1:-1], ax=ax, space=representation, s=5, color='black', label='Geodesic');
-    ax.axis('off')
-    ax.set_title('Geodesic on the hyperbolic plane in Klein disk representation')
-    ax.legend();
-
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_32_0.png
 
 
 We consider the special euclidean group in 3D, which is the group of 3D
@@ -712,25 +423,25 @@ represented by a frame, oriented by the 3D rotation, and located by the
 
 We create two points in SE(3), and compute the geodesic between them.
 
+We visualize the geodesic in the group SE(3), which is a path of frames
+in 3D.
+
 .. code:: ipython3
 
-    from geomstats.geometry.special_euclidean import SpecialEuclidean
+    from geomstats.geometry.special_euclidean import \
+        SpecialEuclidean
 
     se3 = SpecialEuclidean(n=3, point_type='vector')
     metric = se3.left_canonical_metric
 
     initial_point = se3.identity
-    initial_tangent_vec = gs.array([1.8, 0.2, 0.3, 3., 3., 1.])
+    initial_tangent_vec = gs.array(
+        [1.8, 0.2, 0.3, 3., 3., 1.])
     geodesic = metric.geodesic(
         initial_point=initial_point,
         initial_tangent_vec=initial_tangent_vec)
 
     points = geodesic(gs.linspace(-3., 3., 40))
-
-We visualize the geodesic in the group SE(3), which is a path of frames
-in 3D.
-
-.. code:: ipython3
 
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
@@ -738,11 +449,8 @@ in 3D.
     visualization.plot(points, ax=ax, space='SE3_GROUP');
 
 
-
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_37_0.png
 
-
--> Notebooks 02 here: https://github.com/geomstats/geomstats/tree/master/notebooks
 
 Tutorial: Classification of SPD matrices
 ----------------------------------------
