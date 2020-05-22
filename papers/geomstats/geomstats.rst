@@ -133,48 +133,6 @@ example, we know how to compute the mean of a data set of numbers, like
 the mean of students’ weights in a classroom, or of multidimensional
 arrays, like the average 3D velocity vector of blood cells in a vessel.
 
-Here is an example of the computation of the mean of two arrays of
-dimension 2. We plot the points and their mean on the 2D Euclidean space, which is a
-linear space: a plane.
-
-.. code:: ipython3
-
-    from geomstats.geometry.euclidean import Euclidean
-
-    euclidean = Euclidean(dim=2)
-    points_in_linear_space = euclidean.random_uniform(
-        n_samples=2)
-
-    linear_mean = gs.sum(
-        points_in_linear_space, axis=0) / n_samples
-
-..  fig = plt.figure(figsize=(6, 6))
-    ax = fig.add_subplot(111)
-    ax.scatter(
-        points_in_linear_space[:, 0],
-        points_in_linear_space[:, 1],
-        label='Points')
-    ax.plot(
-        points_in_linear_space[:, 0],
-        points_in_linear_space[:, 1],
-        linestyle='dashed')
-    ax.scatter(
-        linear_mean[0],
-        linear_mean[1],
-        label='Mean', s=80, alpha=0.5)
-    ax.set_title('Mean of points in a linear space')
-    ax.legend();
-
-We use :code:`matplotlib` to plot the result.
-
-
-.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_14_0.png
-    :scale: 30 %
-    :align: center
-
-    Mean of two points on a linear space.
-
-
 Now consider a non-linear space: a manifold. A manifold
 :math:`M` of dimension :math:`m` is a space that is allowed to be
 curved but that looks like an :math:`m`-dimensional vector space in the
@@ -214,30 +172,20 @@ sphere?
     ax.set_title('Mean of points on a manifold')
     ax.legend();
 
-We use :code:`matplotlib` to plot the result.
 
+.. image:: 01_data_on_manifolds_files/01_data_on_manifolds_18_0.png
 
-.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_18_0.png
-    :scale: 25 %
-    :align: center
-
-    Mean of two points on the sphere.
+|
 
 What happened? The mean of two points on a manifold (the sphere) is not
 on the manifold. In our example, the mean city is not on the earth. This
-leads to errors in statistical computations.
+leads to errors in statistical computations. The line:
 
 .. code:: ipython3
 
-    print(sphere.belongs(linear_mean))
+    sphere.belongs(linear_mean)
 
-
-.. parsed-literal::
-
-    False
-
-
-For this reason, researchers aim to build a theory of statistics that is
+returns :code:`False`. For this reason, researchers aim to build a theory of statistics that is
 by construction compatible with any structure we equip the manifold
 with. This theory is called *Geometric Statistics*.
 
@@ -258,6 +206,7 @@ We import the dataset :code:`cities` of the coordinates of cities on the earth.
 .. code:: ipython3
 
     import geomstats.datasets.utils as data_utils
+
     data, names = data_utils.load_cities()
 
     fig = plt.figure(figsize=(10, 10))
@@ -269,9 +218,7 @@ We import the dataset :code:`cities` of the coordinates of cities on the earth.
 
 .. image:: 01_data_on_manifolds_files/01_data_on_manifolds_32_0.png
 
-
-From addition to exponential map
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|
 
 The elementary operations on a vector space are: addition, substraction
 and multiplication by a scalar. We can add a vector to a point,
@@ -280,28 +227,7 @@ value.
 
 For points on a manifold, like the sphere, the same operations are not
 permitted. Indeed, adding a vector to a point will not give a point that
-belongs to the manifold.
-
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(10, 10))
-    ax = fig.add_subplot(111, projection='3d')
-
-    paris = data[19]
-    vector = gs.array([1, 0, 0.8])
-
-    ax = visualization.plot(
-        paris, ax=ax, space='S2',
-        s=200, alpha=0.8, label='Paris')
-
-    arrow = visualization.Arrow3D(paris, vector=vector)
-    arrow.draw(ax, color='black')
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_16_0.png
-
-
-The exponential map is the operation that generalizes the addition of a
+belongs to the manifold. The exponential map is the operation that generalizes the addition of a
 vector to a point, on manifolds.
 
 The exponential map takes a point and a tangent vector as inputs, and
@@ -309,9 +235,11 @@ outputs the point on the manifold that is reached by “shooting” with the
 tangent vector. “Shooting” means taking the path of shortest length.
 This path is called a “geodesic”.
 
+
 .. code:: ipython3
 
-    from geomstats.geometry.hypersphere import Hypersphere
+    from geomstats.geometry.hypersphere import \
+        Hypersphere
 
     sphere = Hypersphere(dim=2)
 
@@ -333,9 +261,7 @@ This path is called a “geodesic”.
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_19_0.png
 
-
-From substraction to logarithm map
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+|
 
 The logarithm map is the operation that generalizes the substraction of
 two points, that gives a vector.
@@ -349,82 +275,22 @@ the other.
     paris = data[19]
     beijing = data[15]
 
-    log = sphere.metric.log(point=beijing, base_point=paris)
+    log = sphere.metric.log(
+        point=beijing,
+        base_point=paris)
 
-    geodesic = sphere.metric.geodesic(
-            initial_point=paris,
-            end_point=beijing)
-
-    points_on_geodesic = geodesic(gs.linspace(0., 1., 30))
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_23_0.png
-
-
-Geodesics
-~~~~~~~~~
 
 So far, we have given examples of geodesics on the sphere. The sphere is
-a simple manifold that is easy to visualize. Yet, ``geomstats`` provides
-many more manifolds, on which the exp and log are defined. Let’s present
-a few more.
-
-
-We consider the hyperbolic geometry here. We define two points on the
-hyperbolic plane and compute the geodesic between them.
-
-.. code:: ipython3
-
-    from geomstats.geometry.hyperboloid import Hyperboloid
-
-    hyperbolic = Hyperboloid(dim=2, coords_type='extrinsic')
-
-    initial_point = gs.array([gs.sqrt(2.), 1., 0.])
-    end_point = gs.array([2.5, 2.5])
-    end_point = hyperbolic.from_coordinates(
-        end_point, 'intrinsic')
-
-    geodesic = hyperbolic.metric.geodesic(
-        initial_point=initial_point, end_point=end_point)
-
-    points = geodesic(gs.linspace(0., 1., 10))
-
-We use the visualization module to plot the two points and the geodesic
-between them. We can choose the visualization we prefer for points on
-the hyperbolic plane. We visualize with the Poincare disk
-representation.
-
-.. code:: ipython3
-
-    fig = plt.figure(figsize=(8, 8))
-    ax = fig.add_subplot(111)
-
-    representation = 'H2_poincare_disk'
-
-    ax = visualization.plot(
-        initial_point, ax=ax, space=representation,
-        s=50, label='Initial point');
-    ax = visualization.plot(
-        end_point, ax=ax, space=representation,
-        s=50, label='End point');
-
-    ax = visualization.plot(
-        points[1:-1], ax=ax, space=representation,
-        s=5, color='black', label='Geodesic');
-
-
-.. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_30_0.png
-
+a simple manifold that is easy to visualize. Yet, :code:`geomstats` provides
+many more manifolds, on which the exp and log are defined.
 
 We consider the special euclidean group in 3D, which is the group of 3D
 rotations and 3D translations. One element of this group can be
 represented by a frame, oriented by the 3D rotation, and located by the
 3D translation from the origin.
 
-We create two points in SE(3), and compute the geodesic between them.
-
-We visualize the geodesic in the group SE(3), which is a path of frames
-in 3D.
+We create two points in SE(3), and compute the geodesic between them. We visualize the
+geodesic in the group SE(3), which is a path of frames in 3D.
 
 .. code:: ipython3
 
@@ -446,11 +312,13 @@ in 3D.
     fig = plt.figure(figsize=(8, 8))
     ax = fig.add_subplot(111, projection='3d')
 
-    visualization.plot(points, ax=ax, space='SE3_GROUP');
+    visualization.plot(
+        points, ax=ax, space='SE3_GROUP');
 
 
 .. image:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_37_0.png
 
+|
 
 Tutorial: Classification of SPD matrices
 ----------------------------------------
