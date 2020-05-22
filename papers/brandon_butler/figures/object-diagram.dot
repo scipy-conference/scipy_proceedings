@@ -18,7 +18,7 @@ digraph {
 	Simulation -> Device [headport=n];
 
 	/* Sub Simulation */
-	subsimulation [label="run()\ntimestep"];
+	subsimulation [label="run()\ltimestep\l"];
 	{ rank=same; "Simulation"; "subsimulation"; }
 
 	Simulation -> subsimulation [arrowhead=none];
