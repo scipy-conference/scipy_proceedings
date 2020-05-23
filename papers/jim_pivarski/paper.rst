@@ -47,7 +47,9 @@ Tentatively labeling each as :math:`\pi^+` and :math:`\pi^-`
 
 .. code-block:: python
 
-   plt.hist(ak.flatten(ak.combinations(pions[good], 2).mass))
+   kaon_masses = ak.combinations(pions[good], 2).mass
+
+   plt.hist(ak.flatten(kaon_masses))
 
 .. figure:: figures/physics-example.pdf
    :align: center
