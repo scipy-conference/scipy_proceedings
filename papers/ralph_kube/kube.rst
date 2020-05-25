@@ -49,8 +49,8 @@ Magnetic Fusion Energy research and its data analysis needs
 -----------------------------------------------------------
 
 Research on magnetic fusion energy (MFE) combines theoretical physics, experimental physics, engineering,
-and even economics to achieve the goal of developing an unlimited, clean energy source. Python has
-established itself in the fusion community with projects like plasmapy [PPY]_ or OMFIT [OMF]_. With
+and even economics to achieve the goal of developing an unlimited, clean energy source. Python is
+in the plasma physics and fusion community with projects like plasmapy [PPY]_ or OMFIT [Men15]_. With
 a plethora of scientific disciplines at its footing, scientific workflows in MFE 
 vary significantly by the amount of data and computational time they require. Here we present a
 ``Delta``, a new workflow tool we hope will aid research on magnetic fusion energy.
@@ -178,7 +178,7 @@ as the cross coherence or the cross phases, are used to identify macro-scale str
 plasma, so called magnetic islands [Cho17]_. Detection of magnetic islands is an important task as
 they can disrupt plasma confinement.
 
-Commonly, ECEI measurements are analyzed manually batch-wise hours, days, or weeks after a given plasma shot.
+Commonly, ECEI measurements are analyzed manually batch-wise after a given plasma shot. 
 In a typical workflow, the raw data files and maybe a copy of common analysis routines are copied to a workstation
 or researchers they write their own analysis codes. Then the channel pairs for which spectral quantities
 Eq.(:ref:`eq-S`) are to be computed are specified by hand. Output and visualization are stored in another file. 
@@ -189,13 +189,15 @@ to perform calculations of all relevant spectral quantities, for any given chann
 real-time. Furthermore, the calculated quantities can be stored indefinitely for future access
 together with descriptibe meta-data for later access and re-analysis. 
 
-The ``Delta`` framework implements analysis routines for Eqs.(:ref:`eq-S`) - (ref:`eq-R`) as separate kernels 
-The performance of the current implementation is compared to a commonly used pure python implemenation
-in the next section.
+For the rest of this paper we consider that the ECEI data analysis workflow consists of calculating
+Eqs.(:ref:`eq-S`) - (ref:`eq-R`) for :math:`n_{ch} = 500` time chunks. Each time chunk represents :math:`10,000`
+time samples from :math:`192` ECEI samples, which can be combined in 18336 unique channel pairs :math:`(x,y)`.
+To serve as input, a short-time Fourier Transformation (STFT) with a sliding window size of 512 samples is applied
+to the data multiplied to a Hann window. 
 
 
 Targeted HPC architecture
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Designed with a specific application in mind, we implement ``Delta`` for streaming data from KSTAR to the 
 National Energy Research Scientific Computing Centre (NERSC). NERSC operates Cori, a Cray XC-40 supercomputer
@@ -247,7 +249,7 @@ running on the KSTAR DTN, a **middle_man** running on the NERSC DTN, and a **pro
 Cori. The generator ingests data from an experiment and sends it through the Internet to NERSC where
 the middle_man is running. The middle_man forwards the received data and forwards it to the processor.
 The processor receives the data, executes the appropriate analysis kernels and stores the analysis resuls.
-To facilitate high bandwidth streaming, ``Delta`` uses ADIOS2 [adios2]_ on the paths marked with orange
+To facilitate high bandwidth streaming, ``Delta`` uses ADIOS2 [adios2]_ [Liu14]_ on the paths marked with orange
 arrows in :ref:`fig-topo`. ADIOS2 is a unified input/output system that transports and transforms groups 
 of self-describing data variables across different media with performance as a main goal. Its transport 
 interface is step-based, which resembles the generation of scientific data. ADIOS2 implements multiple transport
@@ -258,38 +260,11 @@ For intra-datacenter transfer ``Delta`` uses the SST engine.
 
 
 
-
-Gritty details
---------------
+Implementaion details
+---------------------
 
 After providing an overview of the ``Delta`` framework and introducing its component in the previous section
 we continue by describing the implementation details and present performance analysis of the components. 
-
-
-Performance of the WAN connections
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-
-To measured the practically available bandwidth between the KSTAR and NERSC DTNs using iperf3
-[iperf]_.
-Multiple data streams are often necessary to exhaust high-bandwidth networks. Varying the 
-number of senders from 1 to 8, we measure data transfer rates from 500 MByte/sec using 1 
-process up to a peak rate of 1500 MByte/sec using 8 processes, shown in Figure :ref:`kstar-dtn-xfer`.
-Using 1 thread we find that the data transfer rate is approximately 500 MByte/sec with little 
-variation throughout the benchmakr. Running the 2 and 4 process benchmark we see initial transfer
-rates of more than 1000 MByte/sec. After about 5 to 8 seconds, TCP observes network congestion and
-falls back to fast recovery mode where the transfer rates increase to the approximately the 
-initial transfer rates until the end of the benchmark run. The 8 process benchmark shows a
-qualitatively similar behaviour but the congestion avoidance starts at approximately 15 seconds
-where the transfer enters a fast recovery phase.
-
-.. figure:: plots/kstar_dtn_xfer.png
-   :scale: 100%
-   :figclass: h
-
-   Data transfer rates between the KSTAR and NERSC DTNs measured using iperf3
-   using 1, 2, 4, and 8 processes :label:`kstar-dtn-xfer`
-
 
 
 
@@ -303,7 +278,7 @@ diagnostic digitizer, and sends it to the processing facility. At NERSC, the  **
 runs on the DTN, receives the data stream from the WAN and forwards it to Cori. On cori the **processor**
 runs as an MPI program, receives the data stream, performs data analysis and stores the results in a backend,
 such as a database. Once stored, the analyzed can readily be ingested by visualizers, such as a dashboard. Figure 
-:ref:`fig-sw-arch` visualizes the architecture, but leaves out the middle man for simplicity.
+:ref:`fig-sw-arch` visualizes the architecture, but hides the middle man for simplicity.
 
 
 .. figure:: plots/delta-sw-arch.png
@@ -312,8 +287,9 @@ such as a database. Once stored, the analyzed can readily be ingested by visuali
    :scale: 40%
 
    Schematic of the ``Delta`` framework. The **generator** runs at the data staging site and
-   transmits time chunks to the **processor** via the ADIOS2 channels SSSSS_ECEI_NN. Here SSSSS 
-   denotes the shot number and NN enumerates the ADIOS2 channels.  :label:`fig-sw-arch`.
+   transmits time chunks via the ADIOS2 channels SSSSS_ECEI_NN. Here SSSSS 
+   denotes the shot number and NN enumerates the ADIOS2 channels. The **processor** runs at the
+   HPC site, recieves the data and submits it for processing through a ``task_list``. :label:`fig-sw-arch`.
 
 
 The generator is implemented as a single-threaded application. Data is sourced using a loader
@@ -333,7 +309,7 @@ Pseudo-code for the generator looks like this:
    batch_gen = loader.batch_generator()
    for batch in batch_gen:
        writer.BeginStep()
-       writer.put_data(batch)
+       writer.put(batch)
        writer.EndStep()
 
 
@@ -342,7 +318,7 @@ and details on how to calculate data normalization, are stored in the ``ECEI`` s
 for the writer, such as to use the DataMan IO engine and connection details, are stored in the ``transport_tx`` section.
 Moving all diagnostic-dependent transformations into the loader class, the generator code appears 
 diagnostic-agnostic. We note however that in the current version, the number of generated data
-batches, which is specific to the ECEi diagnostic, defines the number of steps. Furthermore, the
+batches, which is specific to the ECEI diagnostic, defines the number of steps. Furthermore, the
 pseudo-code  example above demonstrates the step-centered design of the ADIOS2 library. It encapsulates 
 each time chunk in a single time step.
 
@@ -351,8 +327,11 @@ to the processor. Using the classes available in ``Delta``, the pseudo-code look
 generator. But instead of a loader, a reader object is instantiated that consumes the generators
 writer stream. This stream is passed to a writer object that sends the stream to the processor.
 
-The processor is run on Cori. It receives the incoming data stream and dispatches specified analysis
-tasks. In pseudo-code the processor looks like this
+The processor is run on Cori. It receives the incoming data stream, publishes them in a queue and 
+submits analysis tasks to a pool of worker threads. As illustrated in :ref:`fig-sw-arch` a ``reader`` object
+receives time chunks data. The time chunk
+data then passed to ``task_list`` objects, which group a series of analysis routines. In pseudo-code the
+processor looks like this
 
 .. code:: python
    :linenos:
@@ -415,7 +394,7 @@ subsequently read data from the queue and dispatch it to the data analysis code.
 
 The actual data analysis code is done in cython kernels which are described in a later subsection.
 While the low-level implementation of Eqs. (:ref:`eq-S`) - (:ref:`eq-R`) is in cython, ``Delta`` abstracts
-them through the ``task`` class. Sans initialization the relevant class structure looks like this:
+them through the ``task`` class. Sans initialization the relevant class methods looks like this:
 
 .. code:: python
    :linenos:
@@ -433,12 +412,16 @@ them through the ``task`` class. Sans initialization the relevant class structur
 
 
 The actual call to the analysis kernel happens in ``calc_and_store``. This member function also handles 
-storage to the data backend. Above we only pass ``tidx`` as metadata to ``store``, for real-world application additional
-meta-data is passed. Once ``calc_and_store`` returns the data has been analyzed and stored. The member 
-function ``submit`` launches ``calc_and_store``. It allows for additionaly granularity by specifying 
-``ch_it``, an iterateable over channel pairs :math:`X` and :math:`Y`. 
+storage to the data backend so that when it returns, the data has been analyzed and stored. Implementing  
+analysis and storage as separate functions would introduce dependencies between futures returned 
+``executor.submit``. Grouping analysis and storage together on the other hand guarantees that once 
+``calc_and_store`` returns, the data has been analyzed and stored.  The member 
+function ``submit`` launches ``calc_and_store`` on an executor by iterating over ``get_dispatch_sequence()``.
+This method returns a list of list of channel pairs :math:`X` and :math:`Y` where each sub-list specifies 
+the range for which a kernel is evaluated.
 
-Adding another level of abstraction, the different tasks are grouped together by a ``task_list`` class:
+Recognizing that all ECEI analysis tasks expect Fourier Transformed data, we add 
+another level of abstraction by grouping these tasks in a ``task_list`` class:
 
 .. code:: python
    :linenos:
@@ -453,8 +436,8 @@ Adding another level of abstraction, the different tasks are grouped together by
      for task in self.task_list:
        task.submit(self.executor_anl, fft_future.result(), tidx)
 
-
-This bare-bones example demonstrates the utilization of the two PoolExecutors. All FFTs, implemented 
+Grouping the spectral analysis reduces the number of executed Fourier Transformations by a factor of 4.
+From the pseudo-code example we also see where the two PoolExecutors are utilized. All STFTs, implemented 
 by ``scipy.signal.stft``, are executed on ``executor_fft``. Assuming a single-threaded implementation,
 the number of queue worker processes should correspond to the number of processes used to instantiate
 this executor, ``n_thr == NF``.  Our experiments show that reserving CPU resources for the Fourier 
@@ -462,16 +445,16 @@ Transformation through a separate PoolExecutor significantly decreases the total
 After a data chunk has been Fourier Transformed, it is distributed to the analysis routines.
 
 
+
+Explored alternative architectures
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 ``Delta`` utilizes the ``futures`` interface defined in PEP 3148 Since however both Cori and ADIOS2 are
 designed for MPI applications we use the ``mpi4py`` [mpi4py]_ implementation. Being a standard interface,
 other implemenations like ``concurrent.futures`` can readily be used. Note that the reason why calls to
 ``executor.submit`` are enacpsulated in classes is to pass kernel-dependent keyword arguments. The 
 Python Standard Library defines the inerface as :code:`executor.submit(fn, *args **kwargs)`. We are passing 
 an executor to the ``submit`` wrapper call and class-specific information is passed to ``kwargs``.
-
-
-Explored alternative architectures
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Besides ``mpi4py`` we also explored executing ``task.calc_and_store`` calls on a ``Dask`` [dask]_ cluster.
 Exposing ``concurrent.futures``-compatible interface, both libraries can be interchanged with little
@@ -542,53 +525,62 @@ performed after transfer to the processing site. One may wish for example to dis
 the 18336 channel pairs among multiple instances of ``task_ecei``. This approach lets us seamlessly
 do that.
 
+In summary, the architecture of ``Delta`` implements data streaming using time-stepping interface of ADIOS2
+and data analysis using PEP 3148 compatible executors. In order to increase performance we choose to use 
+two PoolExecutors and to group all analysis tasks. The first executor is available for Fourier Transformations
+of the the input data for the entire analysis task group. The second pool executor is available for running
+the analysis kernels and immediate storage of the results. 
 
 
 Performance analysis
 --------------------
 
-A goal of the ``Delta`` framework is to enable near real-time intra-shot analysis for tasks that are
-commonly performed post-shot in a batch-wise manner. Based on the architecture sketched in Figure :ref:`fig-sw-arch`,
-the different knobs that can be turned in the different components are
-
-generator
-  ``get_batch`` Can be improved to maximize load-speed when loading pre-recorded data. In a streaming setting
-  this should be as fast as the diagnostic producing the data
-
-ADIOS2 communication
-  Data needs to be transferred as fast as possible from the data staging site to the HPC facility
-
-processor
-  Data analysis routines should be optimized for the HPC environment. Overhead can also be expected when
-  storing large amounts of data from multiple sources simultaneously in the backend.
-  
-For development purposes, the generator stages pre-recorded data for transport. Without resorting to
-parallel data-access patterns and multiple writers data loading and staging is limited by the I/O 
-resources of the KSTAR DTN. As such, this is not a candidate for performance optimization. Next we present
-a performance analysis of the data transfer methods and of the data analysis kernels implemented in
-``Delta``.
+The ``Delta`` framework aims to facilitate near real-time intra-shot data analysis by leveraging remote HPC
+resources. While the overall performance of the framework can be measured by the walltime of the analysis
+workflow at hand, the complex composition of the framework makes it relevant to understand the performance 
+of the blocks. Referring to figure :ref:`fig-sw-arch`, both the ADIOS2 communication performance, 
+the asynchronous receive-publish-submit strategy of the processor, and the speed of the individual analysis kernels 
+contribute to the workflow walltime. In the workflow walltime may also be sensitive to how the different 
+components of the framework interact. For example, even though the processor design aims to facilitate high-velocity
+data streams by using queues and multiple worker threads, the data streams may still significantly affect the
+performance. Given these considerations we start be investigating the performance of individual components
+in this section and finally investigate the performance of the framework on the ECEI workflow.
 
 
-Data Transfer Methods
-^^^^^^^^^^^^^^^^^^^^^
-
-We need to test dataman transfers.
+Performance of the WAN connections
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-Entering NERSC, data is moved from the DTN to Cori using ADIOS2 SST. Internally, SST can take advantage 
-of RDMA. Data is transferred with approximately 35 MByte/sec. As soon as data is received on Cori, the
-analysis starts. To transfer all time chunks from the DTN to Cori it takes about 200secs. After that,
-the time to perform the FFT is reduced to about 0.8secs from about 3 secs.
+To measured the practically available bandwidth between the KSTAR and NERSC DTNs using iperf3
+[iperf]_.
+Multiple data streams are often necessary to exhaust high-bandwidth networks. Varying the 
+number of senders from 1 to 8, we measure data transfer rates from 500 MByte/sec using 1 
+process up to a peak rate of 1500 MByte/sec using 8 processes, shown in Figure :ref:`kstar-dtn-xfer`.
+Using 1 thread we find that the data transfer rate is approximately 500 MByte/sec with little 
+variation throughout the benchmakr. Running the 2 and 4 process benchmark we see initial transfer
+rates of more than 1000 MByte/sec. After about 5 to 8 seconds, TCP observes network congestion and
+falls back to fast recovery mode where the transfer rates increase to the approximately the 
+initial transfer rates until the end of the benchmark run. The 8 process benchmark shows a
+qualitatively similar behaviour but the congestion avoidance starts at approximately 15 seconds
+where the transfer enters a fast recovery phase.
 
+.. figure:: plots/kstar_dtn_xfer.png
+   :scale: 100%
+   :figclass: h
 
+   Data transfer rates between the KSTAR and NERSC DTNs measured using iperf3
+   using 1, 2, 4, and 8 processes :label:`kstar-dtn-xfer`
+
+While we measured the highest bandwidth for the 8 process transfer, ``Delta`` currently only implements 
+data transfers with a single writer process.
 
 
 Data Analysis Kernels 
 ^^^^^^^^^^^^^^^^^^^^^
 
 Foreshadowed in the code-example above, ``Delta`` implements data analysis routines as computational
-kernels. To fully utilize the multi-threading capabilities of Cori, all currently used kernels 
-are implemented using cython. The coherence, Eq. (:ref:`eq-C`), is implemented as
+kernels. These are implemented in cython to circumvent the global interpreter lock and utilize 
+multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is implemented as
 
 
 .. code:: python
@@ -639,39 +631,132 @@ are implemented using cython. The coherence, Eq. (:ref:`eq-C`), is implemented a
 The arguments passed to the kernel are the three-dimensional array of Fourier Coefficients,
 ``ch_it`` - an iterator over the channel lists, and ``fft_config`` - a dictionary of parameters used 
 for the Fourier Transformation. While the data stream produced by the ECEi diagnostic is only 
-two-dimensional, ``fft_data`` is three-dimensional as we use a sliding-window Fourier Transformation.
-The second argument ``ch_it`` is an iterator over a list of channel pairs, defining the pairs for which
-to calculate :math:`C`. After defining the output array and temporary data, the kernel defines a 
-section where it discards the global interpreter lock. This is crucial to enable the compiler to 
-generate multi-threaded code for the section. 
+two-dimensional, ``fft_data`` is three-dimensional as we use a Short Time Fourier Transformation.
+The second argument ``ch_it`` is an iterator over a list of channel pairs, defining linear index pairs 
+for the channels :math:`X` and :math:`Y` for which to calculate :math:`C`. After defining the output
+array and temporary data, the kernel opens a section where it discards the global interpreter lock.
+This is crucial for executing the enclosed section with multiple threads.
 
 The ranges of the three for loops within these section decrease by order of magnitude. 
-For a full dataset, each kernel iterators over 18336 distinct channel pairs, 512 to 1024 Fourier 
-Coefficients and 19 to 38 sliding window bins. Data caching occurs after each for-loop header.
-Furthermore are the channel-pairs a tuple-like data structure and sorted by the first item,
-``ch1_idx`` in the case above. This sorting allows to better utilize the CPU cache. The preferred
-compiler on Cori is the cray compilier, which is a wrapper for the Intel compiler. Since this
-compiler stack is incompatible with mpi4py on Cori, we choose to use the Gnu compiler for the 
-diagnostic kernels as well.
-
+For the full ECEI dataset, ``ch_it`` spans 18336 distinct channel pairs, 512 to 1024 Fourier 
+Coefficients are calculated for a total of 19 to 38 sliding window bins. After each for-loop header we
+instruct to cache data. Additionally, the channel pairs in ``ch_it`` are a tuple of integers and sorted
+by the first item. These measures allow to better utilize the CPU cache. 
 
 .. figure:: plots/kernel_performance.png
    :scale: 100%
 
    Runtime of the multi-threaded kernels for coherence :math:`C`, cross-power :math:`S` and cross-phase :math:`P` compared against numpy implementations. :label:`kernel-perf`
 
-Figure :ref:`kernel-perf` shows the performance gained by using multi-threaded kernels 
-over kernels implemented in numpy. Running with a single-thread, the coherence kernel written in cython
+Figure :ref:`kernel-perf` demonstrates a strong scaling of the kernels calculating Eqs.(:ref:`eq-S`) - (ref:`eq-R`)
+for up to 16 threads. Using more 32 threads results in sub-linear speedup. We note here that this benchmark was
+performed on a single Cori compute node with 32 cores and 64 threads. 
+
+
+
+Performance of the ECEI workflow
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After having benchmarked the performance of individual components we now continue by benchmarking the performance 
+of ``Delta`` on the ECEI workflow. The task at hand is to calculate Eqs.(:ref:`eq-S`) - (ref:`eq-R`) on the
+
+
+Now that we have indicated the performance of the individual components we proceed with studying the runtime 
+of the entire framework. To better understand the bottlenecks coming from the architecture we 
+benchmarked the runtime of the ``Delta`` ECEI workflow in three scenarios. In the ``file`` scenario, 
+the processor reads data from a local data file. No data is streamed. In the ``2-node`` scenario, data is
+streamed from the NERSC DTN to Cori using the ADIOS2 DataMan backend. In the ``3-node`` scenario, data is
+streamed from the KSTAR DTN to the NERSC DTN and forwared to Cori. The workflow walltimes of these scenarios
+are listed in :ref:`walltimes`.  All runs are performed on an allocation using 8 Cori nodes partitioned into
+32 MPI ranks with 16 Threads each for a total of 2048 CPU cores.
+
+
+.. table:: Walltime for the ECEI workflow in different configurations .  :label:`walltimes`
+
+    +-------------+--------------------+
+    | Scenario    |   Walltime / s     |
+    +=============+====================+
+    | file        | 352                |
+    +-------------+--------------------+
+    | 2-node      | 221                |
+    +-------------+--------------------+
+    | 3-node      | No data yet        |
+    +-------------+--------------------+
+
+
+The total runtime for the file-based workflow takes 352s, for the 2-node streaming about 221 seconds. A reason for this
+can be found in how the high-velocity data I/O interacts with the receive-publish-submit architecture implemented by the
+processor and is explained in the following.
+
+``Delta`` uses a queue to communicate between the reader and the PoolExecutor. Figure :ref:`delta-perf-queue` shows 
+the time that the time chunks are enqueued. We find that even tough reading from the filesystem should be faster
+than streaming, data spends on average less time in the 2-node streaming scenario than in the file scenario.
+
+.. figure:: plots/performance_time_subcon.png
+   :scale: 100%
+
+   Time that the individual time chunks are queued for the scenarios listed in Table 3. :label:`delta-perf-queue`
+
+As a time chunk is read from the queue, a STFT is executed. The time where this occurs to the individual time-chunks 
+is shown in :ref:`delta-fft-tstart`. The beginning of each horizontal bar indicates where a time chunk is submitted 
+to **executor_fft** and the length of each bar denotes the time it takes to execute the STFT. The beginning of 
+each horizontal bar co-incides with the end of the bar in :ref:`delta-perf-queue`. In :ref:delta-fft-perf` we plot
+the distribution of the walltimes it takes to perform the STFT. In both scenarios, the time it takes to perform 
+an STFT on the executor is approximately one second. Both cases also show outliers where it takes up to 10 seconds 
+to perform a STFT. These outliers usually occur in the first few time steps where the many processes are spawned.
+MPI process spawning is an expensive process we do not observe such long execution times after the startup.
+
+
+.. figure:: plots/performance_fft.png
+   :scale: 100%
+
+   Time where the individual time chunks are Fourier Transformed :label:`delta-fft-tstart`
+
+
+.. figure:: plots/performance_fft_violin.png
+   :scale: 100%
+
+   Distribution of the time it takes to perform a Fourier Transformation on **executor_fft** :label:`delta-fft-perf`
+
+
+In Figures :ref:`delta-perf-file` and :ref:`delta-perf-2node` we show the timing and utilization of MPI ranks
+running data analysis kernels. These show that once all data has been Fourier transformed, all available MPI ranks start 
+executing data analysis kernels. There is little difference between the kernel runtime in the total workflow and in the
+benchmarks shown in the previous section.
+
+
+.. figure:: plots/nodes_walltime_file.png
+   :scale: 100%
+
+   Timing and utilization of the MPI ranks executing data analysis kernels for the ``file`` scenario :label:`delta-perf-file`
+
+
+
+.. figure:: plots/nodes_walltime_2node.png
+   :scale: 100% 
+
+   Timing and utilization of the MPI ranks executing data analysis kernels for the ``2-node`` scenario :label:`delta-perf-2node`
+
+
 
 
 
 Conclusions and future work
 ---------------------------
 
+We have demonstrated that ``Delta`` can facilitate near real-time analysis of high-velicty big streaming data.
+``Delta`` on Cori can execute the ECEI workflow in less than 4 minutes. Using a single-core pure python implementation this
+would take about 4 hours. 
 
-Next generation HPC facilities such as Perlmutter will be equipped with Nvidia Ampere GPUs. 
+Future work will extend ``Delta`` on multiple fronts. For one, the next generation HPC facilities will use 
+nVidias Ampere GPU. These will come available in 2021 and we are looking to explore GPU computing for the
+computationally demanding parts of the framework.
+Second, we look to include machine learning inference workloads on the processor. This could be disruption 
+detection as described for ECEI data in RMCs paper.
 
-RMCs ECEi disruption detection paper
+We also investigate how to make ``Delta`` more adaptive. This could include using machine learning 
+at the sender side to stream only really interesting data and have it analyzed extra carefully. And for standard
+cases you would only run default analysis.
 
 Making delta adaptiv:
  * Allow other diagnostic data to be transferred
@@ -691,7 +776,7 @@ References
 
 .. [PPY] https://www.plasmapy.org
 
-.. [OMF] O. Meneghini, S.P. Smith, L.L. Lao et al. *Integrated modeling applications for tokamak experiments with OMFIT*
+.. [Men15] O. Meneghini, S.P. Smith, L.L. Lao et al. *Integrated modeling applications for tokamak experiments with OMFIT*
          Nucl. Fusion **55** 083008 (2015)
 
 .. [Ent18] S. Entler, J. Horacek, T. Dlouhy and V. Dostal *Approximation of the economy of fusion energy*
@@ -738,6 +823,9 @@ References
 .. [iperf] https://iperf.fr
 
 .. [adios2] https://adios2.readthedocs.io/en/latest/index.html
+
+.. [Liu14] Q. Liu, J. Logan, Y. Tian et al. *Hello ADIOS: the challenges and lessons of developing leadership class I/O frameworks*
+           Concurrency Computat.: Pract. Exper. **26** 1453-1473 (2014).
 
 .. [PEP3148] https://www.python.org/dev/peps/pep-3148/
 
