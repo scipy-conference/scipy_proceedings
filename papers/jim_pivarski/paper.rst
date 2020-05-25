@@ -46,15 +46,15 @@ In this paper, we will describe Awkward Array, a generalization of NumPy's core 
 Motivation from particle physics
 --------------------------------
 
-Awkward Array was created to make it easier to analyze particle physics data in the scientific Python ecosystem. Particle physics datasets are big and intrinsically structured: trillions of particle collisions result in thousands of particles each, grouped by type and clustered as jets. The operations to be performed depend on this structure. The most basic operation reconstructs particles that have decayed before they could be detected through their decay products.
+Awkward Array was created to make it easier to analyze particle physics data using scientific Python tools. Particle physics datasets are big and intrinsically structured: trillions of particle collisions result in thousands of particles each, grouped by type and clustered as jets. The operations to be performed depend on this structure.
 
-If a particle such as a kaon (:math:`K_S`) decays into two charged pions (:math:`\pi^+`, :math:`\pi^-`), the energy (:math:`E`) and momenta (:math:`\vec{p}`) of the observed pions can be combined to reconstruct the original kaon's mass (:math:`m`):
+The most basic operation reconstructs particles that decayed before they could be detected, using kinematic constraints on their visible decay products. For example, if a neutral kaon (:math:`K_S`) decays into two charged pions (:math:`\pi^+`, :math:`\pi^-`), the energy (:math:`E`) and momenta (:math:`\vec{p}`) of the observed pions can be combined to reconstruct the unobserved kaon's mass (:math:`m`):
 
 .. math::
 
    m_{K_S} = \sqrt{(E_{\pi^+} + E_{\pi^-})^2 - \left|\vec{p}_{\pi^+} + \vec{p}_{\pi^-}\right|^2}
 
-Since kaons have a well-defined mass, the :math:`m_{K_S}` values corresponding to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing where to look, every pair of pions in a collision event must be searched.
+Since kaons have a well-defined mass, the :math:`m_{K_S}` values that corresponding to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing where to look, every pair of pions in a collision event must be searched.
 
 .. figure:: figures/physics-example.pdf
    :align: center
@@ -62,17 +62,15 @@ Since kaons have a well-defined mass, the :math:`m_{K_S}` values corresponding t
    
    Example of a particle physics problem requiring combinatorial search: all pairs of pions in a collision event must be tested for compatibility with decay from a kaon. :label:`physics-example`
 
-Physicists employ many other techniques, but most of them involve combinatorial searches like this one. Since the list of 
+Physicists employ many other techniques, but most of them involve combinatorial searches like this one. Since the numbers of particles of each type differ from event to event and they carry dozens of attributes that must be referenced in the combinatorial pairs, this would be a hard analysis to do in NumPy.
 
-
+With Awkward Array, however, it would be
 
 .. code-block:: python
 
    kaon_masses = ak.combinations(pions[good], 2).mass
 
-
-
-
+where :code:`ak.combinations` is a built-in function, :code:`pions[good]` preselects good pion objects in all events using an array of variable-length lists of booleans, and :code:`.mass` is a user-defined property that computes :math:`m_{K_S}` using NumPy universal functions.
 
 Demonstration with GeoJSON bike routes
 --------------------------------------
