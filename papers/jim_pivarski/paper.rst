@@ -75,7 +75,7 @@ where :code:`ak.combinations` is a built-in function, :code:`pions[good]` presel
 Demonstration with GeoJSON bike routes
 --------------------------------------
 
-asdf
+However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following data, which contain two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
 
 .. code-block:: python
 
@@ -87,14 +87,30 @@ asdf
     bikeroutes_json = urllib.request.urlopen(url).read()
     bikeroutes_pyobj = json.loads(bikeroutes_json)
 
+Importing this JSON object into Awkward Array splits its record-oriented structure into a contiguous buffer for each field, making it ready for columnar operations. Heterogeneous data are split by type, such that each buffer in memory has one numerical type.
+
 .. code-block:: python
 
     import awkward1 as ak
     bikeroutes = ak.Record(bikeroutes_pyobj)
+
+Longitude and latitude are in the first two components of fields named :code:`"coordinates"` of fields named :code:`"geometry"` of fields named :code:`"features"`. They can be accessed with NumPy-like slices.
+
+.. code-block:: python
     
-    geometry = bikeroutes["features", "geometry"]
-    km_east = geometry.coordinates[..., 0] * 82.7
-    km_north = geometry.coordinates[..., 1] * 111.1
+    longitude = bikeroutes["features", "geometry",
+                           "coordinates", ..., 0]
+    latitude  = bikeroutes["features", "geometry",
+                           "coordinates", ..., 1]
+
+The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64` (expressed as a Datashape): 1061 routes with a variable number of variable-length polylines.
+
+To compute distances, we can use NumPy universal functions (such as :code:`np.sqrt`) and reducers (such as :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` has a different length.
+
+.. code-block:: python
+
+    km_east = longitude * 82.7
+    km_north = latitude * 111.1
 
     segment_length = np.sqrt(
         (km_east[:, :, 1:] - km_east[:, :, :-1])**2 +
@@ -103,7 +119,7 @@ asdf
     route_length = np.sum(segment_length, axis=-1)
     total_length = np.sum(route_length, axis=-1)
 
-The ``km_east`` and ``km_north`` have type ``1061 * var * var * float64``, for 1061 bike routes, variable number of polylines, variable number of numerical positions in each.
+The same could be performed with the following pure Python, though the vectorized form is more succinct and 8 times faster; see Figure :ref:`bikeroutes-scaling`.
 
 .. code-block:: python
 
