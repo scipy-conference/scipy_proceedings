@@ -34,28 +34,44 @@ Awkward Array: JSON-like data, NumPy-like idioms
 
    NumPy, Numba, C++, Apache Arrow, Columnar data, AOS-to-SOA, Ragged array, Jagged array, JSON
 
+Introduction
+------------
+
+NumPy is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
+
+More general data structures can be expressed as JSON and processed in pure Python, but at an expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed contiguously in memory. Some calculations can be expressed more succinctly in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
+
+In this paper, we will describe Awkward Array, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. In doing so, we'll focus on the internal representation of data structures as columnar arrays, very similar to (and compatible with) Apache Arrow. The key feature of the Awkward Array library, however, is that calculations, including those that restructure data, are performed on the columnar arrays themselves, rather than instantiating objects. Since the logical data structure is implicit in the arrangement of columnar arrays and most operations only rearrange integer indexes, these functions can be precompiled for specialized data types, like NumPy.
+
 Motivation from particle physics
 --------------------------------
 
-asdf
+Awkward Array was created to make it easier to analyze particle physics data in the scientific Python ecosystem. Particle physics datasets are big and intrinsically structured: trillions of particle collisions result in thousands of particles each, grouped by type and clustered as jets. The operations to be performed depend on this structure. The most basic operation reconstructs particles that have decayed before they could be detected through their decay products.
 
-Tentatively labeling each as :math:`\pi^+` and :math:`\pi^-`
+If a particle such as a kaon (:math:`K_S`) decays into two charged pions (:math:`\pi^+`, :math:`\pi^-`), the energy (:math:`E`) and momenta (:math:`\vec{p}`) of the observed pions can be combined to reconstruct the original kaon's mass (:math:`m`):
 
 .. math::
 
-   \sqrt{(E_{\pi^+} + E_{\pi^-})^2 - \left|\vec{p}_{\pi^+} + \vec{p}_{\pi^-}\right|^2}
+   m_{K_S} = \sqrt{(E_{\pi^+} + E_{\pi^-})^2 - \left|\vec{p}_{\pi^+} + \vec{p}_{\pi^-}\right|^2}
+
+Since kaons have a well-defined mass, the :math:`m_{K_S}` values corresponding to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing where to look, every pair of pions in a collision event must be searched.
+
+.. figure:: figures/physics-example.pdf
+   :align: center
+   :scale: 13%
+   
+   Example of a particle physics problem requiring combinatorial search: all pairs of pions in a collision event must be tested for compatibility with decay from a kaon. :label:`physics-example`
+
+Physicists employ many other techniques, but most of them involve combinatorial searches like this one. Since the list of 
+
+
 
 .. code-block:: python
 
    kaon_masses = ak.combinations(pions[good], 2).mass
 
-   plt.hist(ak.flatten(kaon_masses))
 
-.. figure:: figures/physics-example.pdf
-   :align: center
-   :scale: 13%
 
-   This is the caption. :label:`physics-example`
 
 
 Demonstration with GeoJSON bike routes
