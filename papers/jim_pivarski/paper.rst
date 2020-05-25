@@ -75,7 +75,7 @@ where :code:`ak.combinations` is a built-in function, :code:`pions[good]` presel
 Demonstration with GeoJSON bike routes
 --------------------------------------
 
-However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following data, which contain two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
+However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following Chicago bike routes, a dataset with two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
 
 .. code-block:: python
 
@@ -94,7 +94,7 @@ Importing this JSON object into Awkward Array splits its record-oriented structu
     import awkward1 as ak
     bikeroutes = ak.Record(bikeroutes_pyobj)
 
-Longitude and latitude are in the first two components of fields named :code:`"coordinates"` of fields named :code:`"geometry"` of fields named :code:`"features"`. They can be accessed with NumPy-like slices.
+Longitude and latitude are in the first two components of fields named :code:`"coordinates"` of fields named :code:`"geometry"` of fields named :code:`"features"`. They can be accessed with NumPy-like slices, including ellipsis, :code:`np.newaxis`, masks, etc.
 
 .. code-block:: python
     
