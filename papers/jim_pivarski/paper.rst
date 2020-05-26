@@ -223,7 +223,18 @@ Now this represents
 
     [[     2.2, 3.3], [   ], [     6.6], [     8.8, 9.9]]
 
-but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`.
+but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting one from the original :code:`stops`, and subtraction has to align the :code:`content` of both arguments before applying the NumPy ufunc.
+
+
+
+.. figure:: figures/awkward-1-0-layers.pdf
+   :align: center
+   :scale: 45%
+
+   Components of the Awkward Array library: the high-level interface is in Python, linked to C++ array nodes with pybind11, which in turn call cpu-kernels or gpu-kernels, where all array manipulation algorithms are implemented. The gpu-kernels are isolated so they can be loaded as a plugin. Numba models fill the same role as the C++ classes, but for just-in-time compilation. :label:`awkward-1-0-layers`
+
+
+
 
 Numba for just-in-time compilation
 ----------------------------------
