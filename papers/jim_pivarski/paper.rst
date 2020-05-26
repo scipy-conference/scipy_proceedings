@@ -151,7 +151,9 @@ The same could be performed with the following, though the vectorized form is sh
 Scope: data types and common operations
 ---------------------------------------
 
-Awkward Array supports the same suite of abstract data types and features as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro—namely, there are
+Awkward Array supports the same suite of abstract data types and features as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro, etc.
+
+Namely, there are
 
 * primitive types: numbers and booleans,
 * variable-length lists,
@@ -165,7 +167,9 @@ Awkward Array supports the same suite of abstract data types and features as "ty
 
 Like Apache Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
 
-Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids). Awkward functions include
+Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
+
+Awkward functions include
 
 * basic and advanced slices (:code:`__getitem__`) including variable-length and missing data as advanced slices,
 * masking, an alternative to slices that maintains length but introduces missing values instead of dropping elements,
@@ -180,49 +184,189 @@ Conversions to other formats, such as Arrow, access in third-party libraries, su
 Columnar representation, columnar implementation
 ------------------------------------------------
 
-A list of variable-length lists, such as longitude points along a bike route, is logically represented as
+Like Arrow, Awkward data structures are not localized in memory. Instead of concentrating all data for one array element in nearby memory (as an "array of structs"), all data for a given field are contiguous, and all data for another field are elsewhere contiguous (as a "struct of arrays"). This favors a pattern of data access in which only a few fields are needed at a time.
+
+Additionally, Awkward operations are performed on columnar data without returning to the record-oriented format. To illustrate, consider a list of variable-length lists, such as longitude points along a bike route,
 
 .. code-block:: python
 
     [[1.1, 2.2, 3.3], [4.4], [5.5, 6.6], [7.7, 8.8, 9.9]]
 
-but it can be represented in memory buffers as flattened :code:`content` and an :code:`offsets` array to indicate where each sublist starts and stops.
+Instead of creating objects to represent the four lists, we flatten the :code:`content` and introduce :code:`starts` and :code:`stops` buffers to indicate where each sublist starts and stops.
 
 .. code-block:: python
 
-    offsets: 0,             3,   4,        6,           9
+    starts:  0, 3, 4, 6
+    stops:   3, 4, 6, 9
     content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
 
+A list of lists of lists would use these three buffers as the :code:`content` of another node with its own :code:`starts` and :code:`stops`. In general, a hierarchy of columnar array nodes mirrors the hierarchy of the nested data, except that the number of such nodes scales with the complexity of the data type, not the number of elements in the array. Particle physics use-cases require thousands of nodes to describe complex collision events, but billions of events in memory at once. Figure :ref:`example-hierarchy` shows a small example.
 
+.. figure:: figures/example-hierarchy.pdf
+   :align: center
+   :scale: 60%
+   :figclass: w
 
+   Hierarchy for an example data structure: an array of lists of records, in which field :code:`"x"` of the records are numbers and field :code:`"y"` of the records are lists of numbers. Such a sample might represent :code:`[[], [{"x": 1, "y": [1]}, {"x": 2, "y": [2, 2]}]]`, or it might represent an array with billions of elements (of the same type). The number of nodes scales with complexity, not data volume. :label:`example-hierarchy`
 
+To compute distances in each bike route, we needed :code:`a[:, 1:] - a[:, :-1]`. To compute :code:`a[:, 1:]`, we only have to add one to the :code:`starts`:
 
-asdf (talk about Arrow in this section, maybe also Pandas)
+.. code-block:: python
+
+    starts:  1, 4, 5, 7
+    stops:   3, 4, 6, 9
+    content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
+
+Now this represents
+
+.. code-block:: python
+
+    [[     2.2, 3.3], [   ], [     6.6], [     8.8, 9.9]]
+
+but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`.
 
 Numba for just-in-time compilation
 ----------------------------------
 
-asdf
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
 
 ArrayBuilder: creating columnar data in-place
 ---------------------------------------------
 
-asdf
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
 
 High-level behaviors
 --------------------
 
-asdf
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
 
 GPU backend
 -----------
 
-asdf
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
+
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
 
 Conclusions
 -----------
 
-asdf
+Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
+consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
+lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
+turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
+adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
+arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
+faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
+consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
+orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
+sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
+lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
+volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
+pulvinar id metus.
 
 Acknowledgements
 ----------------
