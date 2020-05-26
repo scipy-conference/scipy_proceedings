@@ -85,6 +85,8 @@ tools to support the education of their students not only
 *about computation*, but *about the world* :cite:`barba2016computational`,
 in a return to Papert's constructionist paradigm.
 
+-- cf computational narratives :cite:`perez2015project`
+
 This vision of scientific research and education supported by
 open source domain specific scientific libraries faces two
 significant obstacles.
@@ -256,10 +258,71 @@ challenges of _publication_ require IT skills that are
 in general not available to researchers who may be
 technically capable fo programming models that show
 substantive academic results.
-- **Teacher/Student**
-- **Software engineer**
-- **Infrastructure engineer**
+- **Teacher and Student**. In an academic context,
+the pedagogical use case is as important as the
+researcher's use case. While the researcher is building new
+models to communicate new discoveries, the teacher guides
+students to learn skills that are already known.
+Two of the hurdles faced by teachers attempting to use
+Econ-ARK pedagogically are the creation and grading of
+assignments and assisting students with the availability
+of an adequate computing environment that does not distract
+them from the course materials. Technical solutions
+have been developed for both hurdles. `nbgrader` enables
+the creation of assignments with Jupyter notebooks. :cite:`hamrick2016creatin` :cite:`blank2019nbgrader`
+JupyterHub has been deployed to allow students to get around the
+hardware limitations of their laptops and the difficulties of
+setting up a local coding environment. :cite:`kim_2018`
+Noteably, both technical solutions, which have been developed only
+in the past few years, require skills that are
+not part of normal disciplinary training in economics.
+Economics professors currently require others to fill the social
+role that enables these tools to be useful.
 
+- **Software engineer**. The elephant in the room in
+all discussions of scientific software and computational
+education is that building and deploying robust software
+is its own complex field that often shares few disciplinary
+roots with the domain sciences. These skills are often
+specific to technologies that originated in industry or open
+source technology production, not in academia. For example,
+the version control system Git was not originally an academic
+project, but it neverthless is now ubiquitiously used for
+computational academic research through its popularization
+via GitHub. The workflow patterns of collaboratively
+developing software using GitHub and managing release cycles
+are not part of any conventional Economics curriculum,
+and yet these are researcher increasingly need to learn and
+use in order to participate in computational research.
+Software engineering skills are not only useful for these
+infrastructural requirements of publication and pedagogy.
+Integrating new features, expressing substantive disciplinary
+material, and making these features available for new users
+requires these skills. In other words, software engineering
+skills are required to make a software project robust
+and reusable across many different labs and
+groups of researchers :cite:`benthall_2019`.
+
+This division of roles and skills raises some quandaries
+for computational economics.
+Publication, pedagogy, and the sustainability of the
+domain specific software library Econ-ARK all require
+software engineering skills.
+But there is no point at which new entrants into this
+discipline are trained in these skills.
+They must be learned informally by researchers who are
+not incentivized to do so, or they must be hired from
+an external talent pool trained in other disciplines
+or at another workplace.
+
+This interrupts the cycle, from student to researcher to
+professor, who teaches more students, which is necessary
+for the autonomy of economics as a field of knowledge.
+If at every point in the process--even at the point where
+new discoveries are integrated into the core software library--
+there is a dependence on an externally sourced skillset, 
+then the discipline will fail to reproduce scholars with
+the competence to participate in its own field.
 
 Case Study: Econ-ARK infrastructure
 ------------------------------------------
@@ -323,6 +386,29 @@ Case Study: Econ-ARK infrastructure
 
 Discussion
 --------------------
+
+Is research software engineering becoming a core skill
+for research that involves writing code?
+The skills for navigating many practical elements of
+software engineering are necessary for equipping a digital
+classroom, effectively publishing results, and contributing
+new features to scientific libraries.
+Yet they are currently considered a peripheral part of
+disciplinary education in economics.
+What if there were an introductory course for first year
+Economics PhD students, "Software Engineering for Economists",
+that guided students in using the necessary tools?
+There are basic research methods course for such programs:
+quantitative research, qualitative research, econometrics,
+applied statistics. So far, computational narratives and
+constructionism have not been considered a _method_ in
+a way that would require such basic treatment.
+And yet :cite:`epstein2006generative` among others have
+argued that computational modeling in social science is
+the natural successor to game theoretic and rational choice
+modeling, which has a long social scientific history,
+allowing a wider range of models with greater realism
+and theoretical insight.
 
 
 .. Customised LaTeX packages
