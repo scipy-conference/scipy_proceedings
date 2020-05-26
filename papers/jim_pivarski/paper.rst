@@ -146,12 +146,30 @@ The same could be performed with the following, though the vectorized form is sh
    :align: center
    :scale: 45%
 
-   This is the caption. :label:`bikeroutes-scaling`
+   Scaling of Awkward Arrays and pure Python loops for the bike routes calculation shown in the text. :label:`bikeroutes-scaling`
 
 Data types and common operations
 --------------------------------
 
-types: lists, records, missing data, heterogeneous, virtual, partitioned
+Awkward Array supports the same suite of abstract data types as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro—namely, there are
+
+* primitive types: numbers and booleans,
+* variable-length lists,
+* regular-length lists (i.e. tensors),
+* records/structs/objects (named, typed fields),
+* typed, fixed-length tuples (unnamed, typed fields),
+* missing/nullable data,
+* mixed, yet specified, types (i.e. union types),
+* virtual arrays (function generates array on demand),
+* partitioned arrays (for off-core and parallel analysis).
+
+Like Apache Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
+
+Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
+
+* 
+
+
 
 operations: slice/mask with variable-width/missing data extensions, broadcasting, universal functions, reducers, num, zip/unzip, flatten, pad_none/fill_none, cartesian, combinations
 
