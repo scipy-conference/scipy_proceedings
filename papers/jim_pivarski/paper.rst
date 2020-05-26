@@ -207,7 +207,7 @@ A list of lists of lists would use these three buffers as the :code:`content` of
    :scale: 60%
    :figclass: w
 
-   Hierarchy for an example data structure: an array of lists of records, in which field :code:`"x"` of the records are numbers and field :code:`"y"` of the records are lists of numbers. Such a sample might represent :code:`[[], [{"x": 1, "y": [1]}, {"x": 2, "y": [2, 2]}]]`, or it might represent an array with billions of elements (of the same type). The number of nodes scales with complexity, not data volume. :label:`example-hierarchy`
+   Hierarchy for an example data structure: an array of lists of records, in which field :code:`"x"` of the records are numbers and field :code:`"y"` of the records are lists of numbers. This might, for example, represent :code:`[[], [{"x": 1, "y": [1]}, {"x": 2, "y": [2, 2]}]]`, but it also might represent an array with billions of elements (of the same type). The number of nodes scales with complexity, not data volume. :label:`example-hierarchy`
 
 To compute distances in each bike route, we needed :code:`a[:, 1:] - a[:, :-1]`. To compute :code:`a[:, 1:]`, we only have to add one to the :code:`starts`:
 
@@ -230,17 +230,19 @@ The first widely used version of Awkward Array was released in September 2018 as
 Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
 
 * the high-level interface is in Python,
-* the array nodes (managing ownership and lifetimes of :code:`start` and :code:`stop` buffers)
-
+* the array nodes (managing ownership and lifetimes of :code:`start` and :code:`stop` buffers) in C++ through pybind11,
+* an alternate implementation of array navigation exists for use in Numba,
+* array manipulation algorithms (without memory management) independently in "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
 
 .. figure:: figures/awkward-1-0-layers.pdf
    :align: center
    :scale: 45%
 
-   Components of the Awkward Array library: the high-level interface is in Python, linked to C++ array nodes with pybind11, which in turn call cpu-kernels or gpu-kernels, where all array manipulation algorithms are implemented. The gpu-kernels are isolated so they can be loaded as a plugin. Numba models fill the same role as the C++ classes, but for just-in-time compilation. :label:`awkward-1-0-layers`
+   Components of Awkward Array, as described in the text. :label:`awkward-1-0-layers`
 
+Most array operations are shallow, affecting only one or a few levels of the hierarchy, as in our :code:`a[:, 1:]` example above. Thus, the recursive walk over array nodes to perform operations such as these only steps over a few nodes in C++, at most a thousand for particle physics use-cases. Iterations over billions of array elements are restricted to CPU kernels and GPU kernels, so performance optimization can be exclusively focused on this layer.
 
-
+The C++ layer is primarily motivated by interoperability with C++ codebases, which are common in particle physics.
 
 Numba for just-in-time compilation
 ----------------------------------
