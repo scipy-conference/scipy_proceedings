@@ -112,8 +112,34 @@ Parallel algorithms
 Elementwise
 ~~~~~~~~~~~
 
+The elementwise operator operates on each element of an input array and maps it to
+an output array. 
+
 Reduction
 ~~~~~~~~~
+
+The reduction operator reduces an array to a single value. Given an input array
+:math:`(a_0, a_1, a_2, \cdots, a_{n-1})` and an associative binary operator 
+:math:`\oplus`, the reduction operation returns the 
+value :math:`a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}`.
+
+Compyle also allows users to give a map expression to map the
+input before applying the reduction operator. Following is a simple
+example.
+
+.. code-block:: python
+
+    from math import cos, sin
+    x = np.linspace(0, 1, 1000)/1000
+    y = x.copy()
+    x, y = wrap(x, y, backend=backend)
+
+    @annotate
+    def map(i=0, x=[0.0], y=[0.0]):
+        return cos(x[i])*sin(y[i])
+
+    r = Reduction('a+b', map_func=map, backend=backend)
+    result = r(x, y)
 
 Trivial examples
 ~~~~~~~~~~~~~~~~~
@@ -127,8 +153,58 @@ Simple Laplace equation?
 
 Scans
 ~~~~~
+Scans are generalizations of prefix sums / cumulative sums and can be used as 
+building blocks to construct a number of parallel algorithms. These include but 
+not are limited to sorting, polynomial evaluation, and tree operations.
 
-Basic ideas, theory, and assumptions.
+Given an input array
+:math:`a = (a_0, a_1, a_2, \cdots, a_{n-1})` and an associative binary operator 
+:math:`\oplus`, a prefix sum operation returns the following array
+
+.. math::
+   y = \left(a_0, (a_0 \oplus a_1), \cdots, (a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}) \right)
+
+The scan semantics in compyle are similar to those of the :code:`GenericScanKernel` in PyOpenCL.
+This allows us to construct generic scans by having an input expression, an output expression
+and a scan operator. The input function takes the input array and the array
+index as arguments.
+Assuming an input function :math:`f`, the generic scan will return the following array,
+
+.. math::
+   y_i = \bigoplus_{k=0}^{i} f(a, k) 
+
+Note that using an input expression :math:`f(a, k) = a_k` gives the same result as a
+prefix sum.
+
+The output expression can then be used to map and write the scan result as
+required. The output function also operates on the input array and an
+index but also has the scan result, the previous item and the last item 
+in the scan result available as arguments.
+
+Following is a simple example of a cumulative sum over all elements of an
+array.
+
+.. code-block:: python
+
+    ary = np.arange(10000, dtype=np.int32)
+    ary = wrap(ary, backend=backend)
+
+    @annotate
+    def input_expr(i, ary):
+        return ary[i]
+
+    @annotate
+    def output_expr(i, item, ary):
+        ary[i] = item
+
+    scan = Scan(input_expr, output_expr, 'a+b',
+                dtype=np.int32, backend=backend)
+    scan(ary=ary)
+    ary.pull()
+
+    # Result = ary.data
+
+A more complex example is given in section ??.
 
 A parallel "where"
 ------------------
