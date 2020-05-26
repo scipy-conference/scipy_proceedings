@@ -143,6 +143,8 @@ In this respect, Econ-ARK has some characteristics of a reinforcement learning o
 
 (Example of a problem, here: bellman equations, etc.)
 
+(Emphasis on structural modeling as reasoning about counterfactuals and interventions))
+
 Models in HARK are, at a certain level of mathematical abstraction,
 equivalent to Markov Decision Problems (MDP).
 However, generic MDP software is not adequate for research in this
@@ -195,12 +197,68 @@ complicates the software architecture of the toolkit.
 Case Study: Econ-ARK Use Cases
 ------------------------------------
 
-Roles
-  - Researcher
-  - Teacher/Student
-  - Publication
-  - Software engineer
-    
+Econ-ARK has been broadly conceived as a collection
+of projects that supports this computational approach
+to education and research in economic structural modeling.
+The project has been organized around several different
+version-controlled software repositories.
+The software in these repositories is written mostly
+in Python, though there is also a great deal of expository
+content and sometimes older code in other languages
+such as MATLAB and Mathematica.
+
+In the course of developing Econ-ARK, we have identified
+several different roles that people take on when
+interacting with Econ-ARK.
+The same individual or "natural person" might take on different
+roles at different times, but nevertheless these
+categories have been useful as
+"ideal types" :cite:`hekman1983weber` with which to reason
+about requirements and skills.
+
+- **Researcher**. The role at the heart of the Econ-ARK
+system is that of the Researcher. This user is trying to
+advance the frontier of economic thinking by drawing on
+deep domain knowledge (economics) as well as general training
+in computational and inferential thinking, applied math,
+and perhaps other fields. Research with Econ-ARK may be
+nebulously defined because while the question of how to
+implement class of economic models efficiently and robustly
+in Python is a "research question" in its own right, these
+kinds of contributions are rarely considered first-order research contributions in their own right. Researchers work within a complex field of economic capital incentives (such as
+university salaries and grant funding) and symbolic capital
+incentives (scholar recognition
+for published work) :cite:`bourdieu2004science`.
+At the time of this article's publication, the institutional
+mechanisms for training and rewarding economics researchers
+to work in the medium of robust software are few.
+As a consequence there is a skills gap: researchers often
+have programming ability, but not the software engineering
+and IT training that is necessary to fully realize the
+vision of the software's potential. :cite:`crouch2013software`
+- **Publisher**. One way to untie the Gordian knot of
+incentives around the Econ-ARK is to provide a more
+reliable and efficent path towards recognized scholarly
+publication using Econ-ARK tools.
+One proposal has been that economists begin a Journal
+of Open Source Economics :cite:`josecon2019`, modeled
+loosely on the Journal of Open Source Software (JOSS).
+Preliminery efforts towards such a journal have been
+attempted through the Econ-ARK sub-project REMARK
+(Replications and Explorations Made using the ARK),
+which organizes contributed directories of material
+that meet a minimal 'publishable' standard of reproducibility.
+This approach has surfaced many challenges, mainly regarding
+the technical requirements of reliably hosting Python
+environments for each publishable unit, and managing
+dependencies across those environments. These technical
+challenges of _publication_ require IT skills that are
+in general not available to researchers who may be
+technically capable fo programming models that show
+substantive academic results.
+- **Teacher/Student**
+- **Software engineer**
+- **Infrastructure engineer**
 
 
 Case Study: Econ-ARK infrastructure
