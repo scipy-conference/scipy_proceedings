@@ -148,30 +148,34 @@ The same could be performed with the following, though the vectorized form is sh
 
    Scaling of Awkward Arrays and pure Python loops for the bike routes calculation shown in the text. :label:`bikeroutes-scaling`
 
-Data types and common operations
---------------------------------
+Scope: data types and common operations
+---------------------------------------
 
-Awkward Array supports the same suite of abstract data types as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro—namely, there are
+Awkward Array supports the same suite of abstract data types and features as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro—namely, there are
 
 * primitive types: numbers and booleans,
 * variable-length lists,
-* regular-length lists (i.e. tensors),
+* regular-length lists as a separate type (i.e. tensors),
 * records/structs/objects (named, typed fields),
-* typed, fixed-length tuples (unnamed, typed fields),
+* fixed-width tuples (unnamed, typed fields),
 * missing/nullable data,
-* mixed, yet specified, types (i.e. union types),
-* virtual arrays (function generates array on demand),
+* mixed, yet specified, types (i.e. union/sum types),
+* virtual arrays (functions generate arrays on demand),
 * partitioned arrays (for off-core and parallel analysis).
 
 Like Apache Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
 
-Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
+Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids). Awkward functions include
 
-* 
+* basic and advanced slices (:code:`__getitem__`) including variable-length and missing data as advanced slices,
+* masking, an alternative to slices that maintains length but introduces missing values instead of dropping elements,
+* broadcasting of universal functions into structures,
+* reducers of and across variable-length lists,
+* zip/unzip/project free arrays into and out of records,
+* flattening and padding to make rectilinear data,
+* Cartesian products (cross join) and combinations (self join) at :code:`axis >= 1` (per element of one or more arrays).
 
-
-
-operations: slice/mask with variable-width/missing data extensions, broadcasting, universal functions, reducers, num, zip/unzip, flatten, pad_none/fill_none, cartesian, combinations
+Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba, as well as methods of building data structures and customizing high-level behavior are also in the library's scope.
 
 Columnar representation, columnar implementation
 ------------------------------------------------
