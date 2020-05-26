@@ -206,6 +206,63 @@ Roles
 Case Study: Econ-ARK infrastructure
 ------------------------------------------
 
+- **Decoupling scientific content from code** A lot of scientific code is written as part of academic research projects where the incentives aren't closely aligned with those of creating scientific software. (link to the COVID england debacle?) There are initiatives like Journal of Open source Software (JOSS), Zenodo which helps to align the incentives in the right direction. Before working on this we first need to differentiate between a research artifact and a scientific software library. An example of this sepration could be hard coded variables in the research artifact, which should rather exist as part of API/configurations in the scientific software library. A quick example of this is the difference between a script and a modular function.
+
+	.. code-block:: python
+
+		# a research project to calculate the moving
+		# averages of two tech stocks
+
+		import pandas as pd
+
+		data = pd.read_csv('stocks_data.csv')
+
+		x = data['APPL'].rolling(window=5).mean()
+		y = data['GOOG'].rolling(window=5).mean()
+
+		print(x, y)
+
+	Running this script prints out the moving average time series of our 2 stocks.
+
+	We can also create a new software package which achieves the similar thing in a more modular way.
+
+	.. code-block:: python
+
+		# move_avg.py
+
+		import pandas as pd
+
+		def calculate_MA(data, stock, days):
+			"""
+			"""
+			return data[stock].rolling(window=days).mean()
+
+	We can achieve similar results using our new package `move_avg`, but this isn't restricted to our specific hard coded variables.
+
+	.. code-block:: python
+
+		import pandas as pd
+		from move_avg import calculate_MA
+
+		data = pd.read_csv('stocks_data.csv')
+		print(calculate_MA(data, 'APPL', 5))
+		print(calculate_MA(data, 'GOOG', 5))
+
+
+	This seems trivial for people with a Computer Science background but not necessarily for others. We discuss this further in our next recommendation of software design training to researchers.
+
+	This could also be extended to the data used in the research artifact by including the data with the software package. The decoupling excercise also helps with reproduciblity part of research projects as it gives other researchers necessary tools to examine the resarch papers.
+
+	We know this is a hard problem to solve in domain specifc scintific code where the boundaries between a research paper and code could be blury and to tackle this is Econ-ARK we extracted generalised code from research artifacts to create our software package HARK (cite) and we maintain the research artifacts which heavily rely on HARK as RemARKs (replications and ...). We are still working on creating generalised tools used in various research projects in the area of heterogenous agent modeling.
+
+
+- **Introductory training to scientific researchers about software design** (other places like software carpentry/RSEs do this) (software versioning, CI, testing)
+
+- **Reproducible builds of scientific content**, RemARK (use technologies like Docker/ versioning) One click (command) reproducible research artifact 
+
+- **Pedagogy Teaching resources**  MyBinder / JupyterHub At econ-ark we have used tools like MyBinder and JupyterHub extensively for teaching graduate economics courses. Tools like MyBinder significantly reduces the overhead required for local setup and installation, especially for students from a non-CS background which are the primary users of domain specific scientific software. 
+
+
 Discussion
 --------------------
 
