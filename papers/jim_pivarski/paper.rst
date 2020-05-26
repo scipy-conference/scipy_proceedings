@@ -243,7 +243,7 @@ Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
 
    Components of Awkward Array, as described in the text. :label:`awkward-1-0-layers`
 
-Most array operations are shallow, affecting only one or a few levels of the hierarchy, as in our :code:`a[:, 1:]` example above. Thus, the recursive walk over array nodes to perform operations such as these only steps over a few nodes in C++, at most a thousand for particle physics use-cases. Iterations over billions of array elements are restricted to CPU kernels and GPU kernels, so performance optimization can be exclusively focused on this layer.
+Most array operations are shallow, affecting only one or a few levels of the hierarchy, as in our :code:`a[:, 1:]` example above. Thus, recursive walks over array nodes to perform operations such as these only step over a few nodes in C++, at most a thousand for particle physics use-cases. Iterations over billions of array elements are restricted to CPU kernels and GPU kernels, so performance optimization can be exclusively focused on this layer.
 
 The C++ layer is primarily motivated by interoperability with C++ codebases, which are common in particle physics.
 
