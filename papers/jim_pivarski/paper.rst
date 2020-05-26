@@ -39,7 +39,7 @@ Introduction
 
 NumPy is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
 
-More general data structures can be expressed as JSON and processed in pure Python, but at an expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed contiguously in memory. Some calculations can be expressed more succinctly in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
+More general data structures can be expressed as JSON and processed in pure Python, but at an expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed contiguously in memory. Some expressions can be more concise in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
 
 In this paper, we will describe Awkward Array, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. In doing so, we'll focus on the internal representation of data structures as columnar arrays, very similar to (and compatible with) Apache Arrow. The key feature of the Awkward Array library, however, is that calculations, including those that restructure data, are performed on the columnar arrays themselves, rather than instantiating objects. Since the logical data structure is implicit in the arrangement of columnar arrays and most operations only rearrange integer indexes, these functions can be precompiled for specialized data types, like NumPy.
 
@@ -54,7 +54,7 @@ The most basic operation reconstructs particles that decayed before they could b
 
    m_{K_S} = \sqrt{(E_{\pi^+} + E_{\pi^-})^2 - \left|\vec{p}_{\pi^+} + \vec{p}_{\pi^-}\right|^2}
 
-Since kaons have a well-defined mass, the :math:`m_{K_S}` values that corresponding to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing where to look, every pair of pions in a collision event must be searched.
+Since kaons have a well-defined mass, the :math:`m_{K_S}` values that correspond to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing which pions are due to kaon decays, every pair of pions in a collision event must be searched, in principle.
 
 .. figure:: figures/physics-example.pdf
    :align: center
@@ -87,7 +87,7 @@ However, nested data structures are not unique to particle physics, so we presen
     bikeroutes_json = urllib.request.urlopen(url).read()
     bikeroutes_pyobj = json.loads(bikeroutes_json)
 
-Importing this JSON object into Awkward Array splits its record-oriented structure into a contiguous buffer for each field, making it ready for columnar operations. Heterogeneous data are split by type, such that each buffer in memory has one numerical type.
+Importing this JSON object as an Awkward Array splits its record-oriented structure into a contiguous buffer for each field, making it ready for columnar operations. Heterogeneous data are split by type, such that each buffer in memory has a single numerical type.
 
 .. code-block:: python
 
@@ -105,7 +105,7 @@ Longitude and latitude are in the first two components of fields named :code:`"c
 
 The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64` (expressed as a Datashape): 1061 routes with a variable number of variable-length polylines.
 
-To compute distances, we can use NumPy universal functions (such as :code:`np.sqrt`) and reducers (such as :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` has a different length.
+To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` has a different length.
 
 .. code-block:: python
 
@@ -119,7 +119,7 @@ To compute distances, we can use NumPy universal functions (such as :code:`np.sq
     route_length = np.sum(segment_length, axis=-1)
     total_length = np.sum(route_length, axis=-1)
 
-The same could be performed with the following pure Python, though the vectorized form is more succinct and 8 times faster; see Figure :ref:`bikeroutes-scaling`.
+The same could be performed with the following, though the vectorized form is shorter and 8 times faster; see Figure :ref:`bikeroutes-scaling`.
 
 .. code-block:: python
 
