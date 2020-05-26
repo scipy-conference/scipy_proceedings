@@ -248,18 +248,19 @@ NICs. In Cori, the individual compute nodes are connected with a Cray Aries inte
 Connection science experiments to HPC resources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to connect KSTAR to Cori, ``Delta`` uses three separate software components. A **generator**
-running on the KSTAR DTN, a **middle_man** running on the NERSC DTN, and a **processor** running on 
-Cori. The generator ingests data from an experiment and sends it to the NERSC DTN where
-the middle_man is running. The middle_man forwards the received data to the processor.
-The processor receives the data, executes the appropriate analysis kernels and stores the analysis results.
-``Delta`` uses ADIOS2 [adios2]_ [Liu14]_ to facilitate high bandwidth streaming  on the paths marked
-with orange arrows in :ref:`fig-topo`. ADIOS2 is a unified input/output system that transports and
-transforms groups of self-describing data variables across different media with performance as a
-main goal. Its transport interface is step-based, which resembles the generation of scientific data.
-ADIOS2 implements multiple transport mechanisms as engines, such as DataMan or a Sustainable Staging
-Transport (SST), which take advantage of underlying network communication mechanisms to provide optimal
-performance. For the topology at hand, ``Delta`` configures ADIOS2 to use the DataMan engine for trans-oceanic data and SST for intra-datacenter transfer.
+In order to connect KSTAR to Cori, ``Delta`` uses three separate software components. A
+**generator** running on the KSTAR DTN, a **middle_man** running on the NERSC DTN, and a
+**processor** running on Cori. The generator ingests data from an experiment and sends it to the
+NERSC DTN where the middle_man is running. The middle_man forwards the received data to the
+processor. The processor receives the data, executes the appropriate analysis kernels and stores the
+analysis results. ``Delta`` uses ADIOS2 [adios2]_ [Liu14]_ to facilitate high bandwidth streaming
+on the paths marked with orange arrows in :ref:`fig-topo`. ADIOS2 is a unified input/output system
+that transports and transforms groups of self-describing data variables across different media with
+performance as a main goal. Its transport interface is step-based, which resembles the generation of
+scientific data. ADIOS2 implements multiple transport mechanisms as engines, such as DataMan or a
+Sustainable Staging Transport (SST), which take advantage of underlying network communication
+mechanisms to provide optimal performance. For the topology at hand, ``Delta`` configures ADIOS2 to
+use the DataMan engine for trans-oceanic data and SST for intra-datacenter transfer.
 
 
 Implementaion details
@@ -312,14 +313,14 @@ calls to ADIOS2. Pseudo-code for the generator looks like this:
        writer.EndStep()
 
 
-Here, cfg is a framwork-wide json configuration file. Diagnostic-specific parameters, such as :math:`n_{ch}`
-and details on how to calculate data normalization, are stored in the ``ECEI`` section. ADIOS2 parameters
-for the writer, such as parameters for the IO engine and connection details are stored in the ``transport_tx`` section.
-Moving all diagnostic-dependent transformations into the loader class, the generator code appears 
-diagnostic-agnostic. We note however that in the current version, the number of generated data
-batches, which is specific to the ECEI diagnostic, defines the number of steps. Furthermore, the
-pseudo-code  example above demonstrates the step-centered design of the ADIOS2 library. It encapsulates 
-each time chunk in a single time step.
+Here, cfg is a framwork-wide json configuration file. Diagnostic-specific parameters, such as
+:math:`n_{ch}` and details on how to calculate data normalization, are stored in the ``ECEI``
+section. ADIOS2 parameters for the writer, such as parameters for the IO engine and connection
+details are stored in the ``transport_tx`` section. Moving all diagnostic-dependent transformations
+into the loader class, the generator code appears diagnostic-agnostic. We note however that in the
+current version, the number of generated data batches, which is specific to the ECEI diagnostic,
+defines the number of steps. Furthermore, the pseudo-code  example above demonstrates the
+step-centered design of the ADIOS2 library. It encapsulates each time chunk in a single time step.
 
 The middle-man runs on the NERSC DTN. It's task is to read data from the generator and pass it along 
 to the processor. Using the classes available in ``Delta``, the pseudo-code looks similar to the
@@ -329,7 +330,7 @@ writer stream. This stream is passed to a writer object that sends the stream to
 The processor is run on Cori. It receives an incoming time chunks from an ADIOS2 stream, publishes
 them in a queue and submits analysis tasks to a pool of worker threads. As illustrated in
 :ref:`fig-sw-arch` a ``reader`` object receives time chunks data. The time chunk data then passed to
-``task_list`` objects, which group a series of analysis routines. In pseudo-code the processor looks
+``task_list`` objects, which group a series of analysis routines. Pseudo-code for the processor looks
 like this
 
 .. code:: python
@@ -750,10 +751,10 @@ We also investigate how to make ``Delta`` more adaptive. This could include usin
 at the sender side to stream only really interesting data and have it analyzed extra carefully. And for standard
 cases you would only run default analysis.
 
-Making delta adaptiv:
- * Allow other diagnostic data to be transferred
- * Real-time detection of interesting features, coupled to compression
- * ECEi has large view, maybe we need fewer channels
+Making delta adaptiv by
+Allow other diagnostic data to be transferred
+Real-time detection of interesting features, coupled to compression
+ECEi has large view, maybe we need fewer channels
 
 
 

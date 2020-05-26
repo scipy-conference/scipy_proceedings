@@ -111,7 +111,7 @@ ax2.set_xticklabels(["2-node", "file"])
 ax2.yaxis.set_major_locator(MultipleLocator(2.5))
 ax2.yaxis.set_minor_locator(MultipleLocator(0.5))
 
-fig2.savefig("performance_fft_violin.png")
+fig2.savefig("performance_fft_violin.png", dpi=300)
 
 
 plt.show()
