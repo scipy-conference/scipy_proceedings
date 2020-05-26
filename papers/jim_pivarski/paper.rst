@@ -223,8 +223,14 @@ Now this represents
 
     [[     2.2, 3.3], [   ], [     6.6], [     8.8, 9.9]]
 
-but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting one from the original :code:`stops`, and subtraction has to align the :code:`content` of both arguments before applying the NumPy ufunc.
+but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting one from the original :code:`stops`, and the :code:`-` operation has to align the :code:`content` of both arguments before applying the NumPy ufunc.
 
+The first widely used version of Awkward Array was released in September 2018 as a Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops. In August 2019, we began a half-year project to rewrite the library in C++, isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." This project is complete, though transitioning the userbase from "Awkward 0.x" to "Awkward 1.x" is not.
+
+Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
+
+* the high-level interface is in Python,
+* the array nodes (managing ownership and lifetimes of :code:`start` and :code:`stop` buffers)
 
 
 .. figure:: figures/awkward-1-0-layers.pdf
