@@ -32,7 +32,7 @@ Awkward Array: JSON-like data, NumPy-like idioms
 
 .. class:: keywords
 
-   NumPy, Numba, C++, Apache Arrow, Columnar data, AOS-to-SOA, Ragged array, Jagged array, JSON
+   NumPy, Numba, Pandas, C++, Apache Arrow, Columnar data, AOS-to-SOA, Ragged array, Jagged array, JSON
 
 Introduction
 ------------
@@ -175,10 +175,27 @@ Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak
 * flattening and padding to make rectilinear data,
 * Cartesian products (cross join) and combinations (self join) at :code:`axis >= 1` (per element of one or more arrays).
 
-Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba, as well as methods of building data structures and customizing high-level behavior are also in the library's scope.
+Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba and Pandas, as well as methods of building data structures and customizing high-level behavior are also in the library's scope.
 
 Columnar representation, columnar implementation
 ------------------------------------------------
+
+A list of variable-length lists, such as longitude points along a bike route, is logically represented as
+
+.. code-block:: python
+
+    [[1.1, 2.2, 3.3], [4.4], [5.5, 6.6], [7.7, 8.8, 9.9]]
+
+but it can be represented in memory buffers as flattened :code:`content` and an :code:`offsets` array to indicate where each sublist starts and stops.
+
+.. code-block:: python
+
+    offsets: 0,             3,   4,        6,           9
+    content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
+
+
+
+
 
 asdf (talk about Arrow in this section, maybe also Pandas)
 
