@@ -105,12 +105,12 @@ Longitude and latitude are in the first two components of fields named :code:`"c
 
 The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64` (expressed as a Datashape): 1061 routes with a variable number of variable-length polylines.
 
-To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` has a different length.
+To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` may have a different length.
 
 .. code-block:: python
 
-    km_east = longitude * 82.7
-    km_north = latitude * 111.1
+    km_east = (longitude - np.mean(longitude)) * 82.7
+    km_north = (latitude - np.mean(latitude)) * 111.1
 
     segment_length = np.sqrt(
         (km_east[:, :, 1:] - km_east[:, :, :-1])**2 +
@@ -157,7 +157,7 @@ Namely, there are
 
 * primitive types: numbers and booleans,
 * variable-length lists,
-* regular-length lists as a separate type (i.e. tensors),
+* regular-length lists as a distinct type (i.e. tensors),
 * records/structs/objects (named, typed fields),
 * fixed-width tuples (unnamed, typed fields),
 * missing/nullable data,
@@ -175,11 +175,11 @@ Awkward functions include
 * masking, an alternative to slices that maintains length but introduces missing values instead of dropping elements,
 * broadcasting of universal functions into structures,
 * reducers of and across variable-length lists,
-* zip/unzip/project free arrays into and out of records,
+* zip/unzip/projecting free arrays into and out of records,
 * flattening and padding to make rectilinear data,
 * Cartesian products (cross join) and combinations (self join) at :code:`axis >= 1` (per element of one or more arrays).
 
-Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba and Pandas, as well as methods of building data structures and customizing high-level behavior are also in the library's scope.
+Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba and Pandas, methods of building data structures, and customizing high-level behavior are also in the library's scope.
 
 Columnar representation, columnar implementation
 ------------------------------------------------
@@ -209,7 +209,7 @@ A list of lists of lists would use these three buffers as the :code:`content` of
 
    Hierarchy for an example data structure: an array of lists of records, in which field :code:`"x"` of the records are numbers and field :code:`"y"` of the records are lists of numbers. This might, for example, represent :code:`[[], [{"x": 1, "y": [1]}, {"x": 2, "y": [2, 2]}]]`, but it also might represent an array with billions of elements (of the same type). The number of nodes scales with complexity, not data volume. :label:`example-hierarchy`
 
-To compute distances in each bike route, we needed :code:`a[:, 1:] - a[:, :-1]`. To compute :code:`a[:, 1:]`, we only have to add one to the :code:`starts`:
+To compute distances in each bike route, we needed to compute :code:`a[:, 1:] - a[:, :-1]`. For :code:`a[:, 1:]`, we only have to add :code:`1` to the :code:`starts`:
 
 .. code-block:: python
 
@@ -217,22 +217,25 @@ To compute distances in each bike route, we needed :code:`a[:, 1:] - a[:, :-1]`.
     stops:   3, 4, 6, 9
     content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
 
-Now this represents
+This new array represents
 
 .. code-block:: python
 
     [[     2.2, 3.3], [   ], [     6.6], [     8.8, 9.9]]
 
-but we didn't have to change the :code:`content` to make it. Since the :code:`content` is untouched, this can be a precompiled routine on :code:`starts` that treats the :code:`content` as an opaque pointer. It could contain other lists or records, or the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting one from the original :code:`stops`, and the :code:`-` operation has to align the :code:`content` of both arguments before applying the NumPy ufunc.
+and we could reuse the original :code:`content` to construct it. Since :code:`content` is untouched, the slice can be a precompiled routine that treats the :code:`content` as an opaque pointer. The :code:`content` might contain other lists or records, like the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting :code:`1` from the original :code:`stops`, and it is up to the :code:`-` operation to align the :code:`content` of its arguments before applying :code:`np.subtract`.
 
-The first widely used version of Awkward Array was released in September 2018 as a Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops. In August 2019, we began a half-year project to rewrite the library in C++, isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." This project is complete, though transitioning the userbase from "Awkward 0.x" to "Awkward 1.x" is not.
+Awkward 1.x
+-----------
+
+The first widely used version of Awkward Array was released in September 2018 as a pure Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops. In August 2019, we began a half-year project to rewrite the library in C++, isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." This project is complete, though transitioning users from the original "Awkward 0.x" to the new "Awkward 1.x" is not.
 
 Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
 
 * the high-level interface is in Python,
-* the array nodes (managing ownership and lifetimes of :code:`start` and :code:`stop` buffers) in C++ through pybind11,
-* an alternate implementation of array navigation exists for use in Numba,
-* array manipulation algorithms (without memory management) independently in "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
+* the array nodes (managing node hierarchy and ownership/lifetime) are in C++, accessed through pybind11,
+* an alternate implementation of array navigation was written for functions that are compiled by Numba,
+* array manipulation algorithms (without memory management) are independently implemented as "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
 
 .. figure:: figures/awkward-1-0-layers.pdf
    :align: center
