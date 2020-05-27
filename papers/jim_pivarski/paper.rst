@@ -372,7 +372,60 @@ Although ArrayBuilder is compiled code and calls into it are specialized by Numb
 High-level behaviors
 --------------------
 
-asdf
+One of the most popular features of Awkward 0.x was the ability to create subclasses of array nodes (in Python) that add domain-specific methods to records in an array. This includes "object" methods:
+
+.. code-block:: python
+
+    # distance between pion 5 and pion 6 in event 1000
+    events[1000].pions[5].distance(events[1000].pions[6])
+
+and "vectorized" methods:
+
+.. code-block:: python
+
+    # distances between pion 5 and 6 in all events
+    events.pions[5].distance(events.pions[6])
+
+This capability has been ported to Awkward 1.x (in the C++ layer) and expanded upon. In Awkward 1.x, records can be named (as part of more general "properties" metadata) and record names are linked to Python classes through an :code:`ak.behavior` dict.
+
+.. code-block:: python
+
+    class Point:
+        def magnitude(self):
+            return np.sqrt(self.x**2 + self.y**2)
+
+    class PointRecord(Point, ak.Record):
+        pass
+    class PointArray(Point, ak.Array):
+        pass
+
+    ak.behavior["point"] = PointRecord
+    ak.behavior["*", "point"] = PointArray
+
+    array = ak.Array([{"x": 1.1, "y": 1},
+                      {"x": 2.2, "y": 2},
+                      {"x": 3.3, "y": 3}],
+                     with_name="point")
+
+    array[2].magnitude()
+    # 4.459820624195552
+
+    array.magnitude()
+    # <Array [1.49, 2.97, 4.46] type='3 * float64'>
+
+When an operation on array nodes completes and the result is wrapped in a high-level :code:`ak.Array` or :code:`ak.Record` class for the user, the :code:`ak.behavior` is checked for signatures that link records and arrays of records to user-defined subclasses. Only the name :code:`"point"` is stored with the data; methods are all added at runtime, which allows schemas to evolve.
+
+Other kinds of behaviors can be assigned through different signatures in the :code:`ak.behavior` dict, such as overriding ufuncs,
+
+.. code-block:: python
+
+    # link np.absolute("point") to a custom function
+    ak.behavior[np.absolute, "point"] = Point.magnitude
+
+    np.absolute(array)
+    # <Array [1.49, 2.97, 4.46] type='3 * float64'>
+
+custom broadcasting rules, and Numba extensions (typing and lowering functions).
 
 GPU backend
 -----------
