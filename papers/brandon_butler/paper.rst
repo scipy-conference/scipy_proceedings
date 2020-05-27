@@ -25,7 +25,7 @@ HOOMD-blue version 3.0  A Modern, Extensible, Flexible, Object-Oriented API for 
     that uses pybind11 to provide a Python interface to fast C++ internals.  The package is designed
     to scale from a single CPU core to thousands of NVIDIA or AMD GPUs. In developing HOOMD-blue
     version 3.0, we significantly improve the application protocol interface (API) by making it more
-    flexible, extensible, and Pythonic.  We have also striven to provide simpier and more performant
+    flexible, extensible, and Pythonic.  We have also striven to provide simpler and more performant
     entry points to the internal C++ classes and data structures. With these updates, we show how
     HOOMD-blue users will be able to write completely custom Python classes which integrate directly
     into the simulation run loop directly in Python and analyze previously inaccessible data.
@@ -42,56 +42,67 @@ Molecular simulation has been an important technique for studying the equilibriu
 molecular systems since the 1950s. The two most common methods for this purpose are molecular
 dynamics and Monte Carlo simulations :cite:`metropolis.etal1953, alder.wainwright1959`. Molecular
 dynamics (MD) is the application of Newton's laws of motion to molecular system, while Monte Carlo
-simulations explore a system's degrees of freedom through a Markov chain, to find equilibrium
+simulations explore a system's degrees of freedom through a Markov chain to find equilibrium
 quantities. Since their inception these tools have been used to study numerous systems, examples
 include colloids :cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal2014`, and proteins
 :cite:`dignon.etal2018a`, among others.
 
-Today many software packages exist for this purpose: LAMMPS :cite:`plimpton1993`, GROMACS
+Today many software packages exist for this purpose, including LAMMPS :cite:`plimpton1993`, GROMACS
 :cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, and Amber
-:cite:`salomon-ferrer.etal2013, case.etal2005` to name a few. Implementations on high performance
-GPUs :cite:`spellings.etal2017`, parallel architectures :cite:`niethammer.etal2014`, as well as
-greater accessibility of computational power has improved tremendously the length
+:cite:`salomon-ferrer.etal2013, case.etal2005`, to name a few. Implementations on high performance
+GPUs :cite:`spellings.etal2017`, parallel architectures :cite:`niethammer.etal2014`, and the
+greater accessibility of computational power have improved tremendously the length
 :cite:`byna.etal2012` and time :cite:`shaw.etal2009` scales of simulations from those conducted in
-the mid 1900's. Due to the flexibility and generality of such tools, their usage has dramatically
-increased the usage of molecular simulations, further increasing the demand for highly flexible and
+the mid 1900s. The flexibility and generality of such tools has dramatically increased the usage of
+molecular simulations, which has in turn led to demands for even more
 customizable software packages that can be tailored to very specific simulation requirements.
 Different tools have taken different approaches to enabling this, such as the text-file scripting in
 LAMMPS, the command line interface provided by GROMACS, and the Python, C++, C, and Fortran bindings
-of OpenMM. The desire to allow for the unparalleled flexibility of working within a fully-featured
-programming language environment, HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015,
-anderson.etal2020` offers a full-featured Python interface. HOOMD-blue version 3.0 aims to further
-improve this interface by providing simpler, more Pythonic ways to write simulations and providing
-seamless interfaces for other tools in the Python ecosystem, providing a more usable and flexible
-API than ever before.
+of OpenMM.
 
-HOOMD-blue is a Python package with a C++ for MD and MC simulations. It was first released in 2008
-by with full support for NVIDIA GPUs using CUDA.  In 2014, we added support for MPI parallelization
-using domain decomposition (separating a simulation box into local boxes, one for each rank). Recent
-development on HOOMD-blue enables support for both NVIDIA and AMD GPUs. At the time of writing,
-HOOMD-blue's branch for version 3.0 development has 12,510 commits, 1,154 files and 187,382 lines of
-code excluding blank lines and comments.
+The desire to allow for the unparalleled flexibility of working within a fully-featured programming
+language environment was a primary motivation for the creation of HOOMD-blue
+:cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, the first fully GPU-enabled MD
+simulation engine. HOOMD-blue is a Python package with a C++ backend for MD and MC simulations that
+was first released in 2008 with full support for NVIDIA GPUs using CUDA. Since its initial release,
+HOOMD-blue has remained under active development, adding numerous features over the years that have
+increased its range of applicability, including recent developments that enable support for 
+AMD in addition to NVIDIA GPUs. **I removed the MPI part because it doesn't really fit here, we may
+still want to mention it somewhere, if for no other reason than to give context to the zero-copy
+state API** 
 
-The second release of HOOMD-blue added an imperative Python interface for writing simulations
-scripts. The structure and available commands in the original Python API are largely
-inspired by and reminiscent of the structure of other simulation software such as LAMMPS.  This
-largely remained the same in HOOMD-blue version 2.0. However, as the package transitions into a 3.0
-release, we have redesigned the API from the ground up to present a thoroughly object oriented and
-Pythonic interface for users. Where possible we have sought to provide performant ways
-to use Python to interface with the HOOMD-blue C++ back end.  Other Python packages like SciPy
+Despite its great flexibility, the package's API still has certain key limitations. In particular,
+since its inception HOOMD-blue has been designed around some maintenance of global state. The
+original releases of HOOMD-blue provided Python scripting capabilities based on an imperative
+programming model, but it required that these scripts be run through HOOMD's modified interpreter
+that was responsible for managing this global state. Version 2.0 relaxed this restriction, allowing
+the use of HOOMD within ordinary Python scripts and introducing the :code:`SimulationContext` object
+to encapsulate the global state to some degree, thereby allowing multiple largely independent
+simulations to coexist in a single script. However, this object remained largely opaque to the user,
+in many ways still behaving like a pseudo-global state, and version 2.0 otherwise made minimal
+modifications to the HOOMD Python API, which was largely inspired by and reminiscent of the
+structure of other simulation software, particularly LAMMPS.
+
+In this paper, we describe the upcoming 3.0 release of HOOMD-blue, which is a complete redesign of
+the API from the ground up to present a more transparent and Pythonic interface for users.
+Version 3.0 aspires to match the intuitive APIs provided by other Python packages like SciPy
 :cite:`virtanen.etal2020`, NumPy :cite:`vanderwalt.etal2011`, scikit-learn
-:cite:`pedregosa.etal2011`, matplotlib :cite:`hunter2007`, and others have inspired us through their
-intuitive API's and motivated us increasing the ability to integrate such packages with HOOMD-blue.
-In this endeavour, we have found ways to make HOOMD-blue more flexible, extensible, and integrable
-with the scientific Python community as well.  Over the next few sections, we will use examples of
-HOOMD-blue's version 3.0 API (which is still in development at the time of writing) to highlight
-changes in the package's extensibility, flexibility, and Pythonic interface.
+:cite:`pedregosa.etal2011`, matplotlib :cite:`hunter2007`, while simultaneously adding seamless
+interfaces by which such packages may be integrated into simulation scripts using HOOMD-blue. Global
+state has been completely removed, instead replaced by a highly object-oriented model that gives
+users explicit and complete control over all aspects of simulation configuration. Where possible,
+the new version also provides performant, Pythonic interfaces to data stored by the C++ back end.
+Over the next few sections, we will use examples of HOOMD-blue's version 3.0 API (which is still in
+development at the time of writing) to highlight the improved extensibility, flexibilty, and ease of
+use of the new HOOMD API.
 
-Example Script
---------------
+General API Design
+------------------
 
-Here we show a script that simulations a Lennard-Jones fluid using the current implementation of the
-version 3.0 API. We also show a rendering of the particle configuration in Figure (:ref:`sim`).
+Rather than beginning with abstract descriptions, we will introduce the new API by example. The
+script below illustrates a standard MD simulation of a Lennard-Jones fluid using the version 3.0
+API. Each of the elements of this script is introduced throughout the rest of this section. We also
+show a rendering of the particle configuration in Figure (:ref:`sim`).
 
 .. code-block:: python
 
@@ -102,7 +113,7 @@ version 3.0 API. We also show a rendering of the particle configuration in Figur
     device = hoomd.device.Auto()
     sim = hoomd.Simulation(device)
 
-    # Place particles on simple cubic lattice
+    # Place particles on simple cubic lattice.
     N_per_side = 14
     N = N_per_side ** 3
     L = 20
@@ -111,26 +122,26 @@ version 3.0 API. We also show a rendering of the particle configuration in Figur
     coords = np.array(
         (x.ravel(), y.ravel(), z.ravel())).T
 
+    # One way to define an initial system state is by defining a
+    # snapshot and using it to initialize the system state.
     snap = hoomd.Snapshot()
     snap.particles.N = N
     snap.configuration.box = hoomd.Box.cube(L)
     snap.particles.position[:] = (coords - 0.5) * L
     snap.particles.types = ['A']
 
-    # Create state
     sim.create_state_from_snapshot(snap)
 
     # Create integrator and forces
     integrator = hoomd.md.Integrator(dt=0.005)
     langevin = hoomd.md.methods.Langevin(
         hoomd.filter.All(), kT=1., seed=42)
+    integrator.methods.append(langevin)
 
     nlist = md.nlist.Cell()
     lj = md.pair.LJ(nlist, r_cut=2.5)
     lj.params[('A', 'A')] = dict(
         sigma=1., epsilon=1.)
-
-    integrator.methods.append(langevin)
     integrator.forces.append(lj)
 
     # Setup output
@@ -151,20 +162,18 @@ version 3.0 API. We also show a rendering of the particle configuration in Figur
     :code:`GSD` class objects. Figure is rendered in OVITO :cite:`stukowski2009a` using the Tachyon
     :cite:`stone1998` render. :label:`sim`
 
-General API Design
-------------------
 
 Simulation, Device, State, Operations
 +++++++++++++++++++++++++++++++++++++
 
-Each simulation in HOOMD-blue now is controlled through 3 main objects which are joined together by
+Each simulation in HOOMD-blue is now controlled through 3 main objects which are joined together by
 the :code:`Simulation` class: the :code:`Device`, :code:`State`, and :code:`Operations` classes. A
 simple figure of this relationship with some core attributes/methods for each class is given in
 Figure (:ref:`core-objects`). Each :code:`Simulation` object holds the requisite information to run
-a full molecular dynamics or Monte Carlo simulation.  The :code:`Device` class denotes
-whether a simulation should be run on CPU or GPU and the number of cores/GPUS it should run on. In
-addition, the device manages custom memory tracebacks, profiler configurations, and the MPI
-communicator among other things.
+a full molecular dynamics or Monte Carlo simulation, thereby circumventing any need for global state
+information. The :code:`Device` class denotes whether a simulation should be run on CPUs or GPUs and
+the number of cores/GPUS it should run on. In addition, the device manages custom memory tracebacks,
+profiler configurations, and the MPI, communicator among other things.
 
 .. figure:: figures/object-diagram.pdf
     :align: center
@@ -174,14 +183,15 @@ communicator among other things.
     gansner.etal1993`. :label:`core-objects`
 
 The :code:`State` class stores the system data (e.g. particle positions, orientations, velocities,
-the system box). The :code:`State` class also exposes this data and allows setting it in two ways.
-Through the snapshot API, users interface with a single object exposing NumPy arrays that store a
-copy of the system data. To construct a snapshot all system data distributed across MPI ranks must
-be gathered and combined to the root rank. To set the state using the snapshot API requires setting
-the snapshot property to an new snapshot (i.e. all system data is reset upon setting). The
-advantages to this approach come from its ease of use of working with a single object containing the
-complete description of the state. The following snippet showcases hows this approach can be used
-to set the z position of all particles to zero.
+the system box). As shown in our example, the state can be initialized from a snapshot, after which
+the data can be accessed and modified in two ways. One option is for users to operate on a new
+:code:`Snapshot` object, which exposes NumPy arrays that store a copy of the system data. To
+construct a snapshot, all system data distributed across MPI ranks must be gathered and combined to
+the root rank. To set the state using the snapshot API requires assigning a modified snapshot to the
+system state (i.e. all system data is reset upon setting). The advantages to this approach come
+from the ease of use of working with a single object containing the complete description of the
+state. The following snippet showcases hows this approach can be used to set the z position of all
+particles to zero.
 
 .. code-block:: python
 
@@ -195,17 +205,17 @@ to set the z position of all particles to zero.
 The other API for accessing :code:`State` data is via a zero-copy, rank-local access to the
 state's data on either the GPU or CPU. On the CPU, we expose the buffers as
 :code:`numpy.ndarray`-like objects through provided hooks such as :code:`__array_ufunc__` and
-:code:`__array_interface__`. Similarly, on the GPU, we mock much of the CuPy's
+:code:`__array_interface__`. Similarly, on the GPU we mock much of the CuPy's
 :cite:`zotero-593` :code:`ndarray` class if it is installed; however, at present the CuPy
-package provides fewer hooks, so our integration is more limited.  Whether or not CuPy is installed
-though we use the :code:`__cuda_array_interace__` protocol for GPU access. This provides support for
+package provides fewer hooks, so our integration is more limited.  Whether or not CuPy is installed,
+we use the :code:`__cuda_array_interace__` protocol for GPU access. This provides support for
 libraries such as numba's :cite:`lam.etal2015` GPU JIT and PyTorch :cite:`paszke.etal2019`. We chose
 to mock the interfaces of both NumPy and CuPy rather than just expose :code:`ndarray` objects
 directly out of consideration for memory safety. To ensure data integrity, we restrict the data to
-only be accessible within a specific context manager. Using HOOMD-blue's data buffers directly, this
-approach is much faster than using the snapshot API, but requires the user to deal the domain
-decomposition directly. The example below modifies the previous example to instead use the zero-copy
-API.
+only be accessible within a specific context manager. This approach is much faster than using the
+snapshot API because it uses HOOMD-blue's data buffers directly, but it requires the user to deal
+directly with the domain decomposition. The example below modifies the previous example to instead use
+the zero-copy API.
 
 .. code-block:: python
 
@@ -217,69 +227,45 @@ API.
         data.particles.position[:, 2] = 0
 
 The final of the three classes, :code:`Operations`, holds the different *operations* that will act
-on the simulation state. Broadly these consist of 3 categories: updaters which modify simulation
-state, analyzers which observe system state, and tuners which tune other operation's hyperparameters
-for performance.
+on the simulation state. Broadly these consist of 3 categories: updaters, which modify simulation
+state; analyzers, which observe system state; and tuners, which tune the hyperparameters of other
+operations for performance. Although these classes all existing in version 2.x, these *operations*
+have undergone a significant API overhaul for version 3.0 to support one of the more far-reaching
+changes to HOOMD-blue: the deferred initialization model.
 
-For the rest of this section we will discuss our decision to make HOOMD-blue version 3.0
-*operations* defer the initialization of their C++ objects. This will provide context to the
-following section describing some base classes behind many of HOOMD-blue's classes and behavior.
+*Operations* in HOOMD-blue are generally implemented as two classes, a user-facing Python object and
+an internal C++ object. On creation, these C++ objects typically require a :code:`Device` and a C++
+:code:`State` in order to, for instance, initialize appropriately sized arrays.  Unfortunately this
+requirement restricts the order in which objects may be created since devices and states must always
+exist. This restriction creates potential confusion for users who forget this ordering, and it also
+limits the composability of modular simulation components by preventing, for instance, the creation
+of a simple force field without the prior existence of a :code:`Device` and a :code:`State` .
+To circumvent these difficulties, the new API has moved to a deferred initialization model in which
+C++ objects are not created until the corresponding Python objects are *attached* to a
+:code:`Simulation`, a model we discuss in greater detail below.
+
 
 Deferred C++ Initialization
 +++++++++++++++++++++++++++
 
-Most objects in C++ in HOOMD-blue require a :code:`Device` and the C++ implementation of a
-:code:`State` object on creation. However, this establishes a strict order in which objects can be
-created. Having to create a full simulation state just to create, for instance, a pair potential,
-limits the composability of the Python interface and makes it harder to write modular simulation
-protocols. For instance, if a package that wanted to generate a particular force-field
-in response to some user inputs, it would require a previously instantiated :code:`Device` access to
-the :code:`State` it was to operate on. This means that this functionality could only be invoked
-after the user had already instantiated a specific simulation state. Moreover, this requirement
-makes it more difficult for users to write simulation scripts, because it requires them be aware of
-the order in which objects must be created. To circumvent these difficulties, the new API has moved
-to a deferred initialization model in which C++ objects are not created until the corresponding
-Python objects are *attached* to a :code:`Simulation`.
-
-In addition to ameliorating the difficulties mentioned above, deferred initialization allows us to
-more easily export an object's state (not to be confused with the simulation state) since it is
-store in pure Python as well as enabling duck-typing of parameters. We make an object's state a
-loggable quantity in HOOMD-blue's logging system, and provide a :code:`from_state` factory method
-for all operations in HOOMD-blue which can reconstruct the object from the state.  This greatly
-increases the restartability of simulations since the state of each object can be saved at the end
-of a given run, and read at the start of the next.
-
-.. code-block:: python
-
-    from hoomd.hpmc.integrate import Sphere
-
-    sphere = Sphere.from_state('example.gsd', frame=-1)
-
-This code block would create a :code:`Sphere` object with the parameters stored from the last frame
-of the gsd file :code:`example.gsd`.
-
-
-The Internal Base Classes
-+++++++++++++++++++++++++
-
-The :code:`_Operation` class facilitates adding more features to HOOMD-blue, simplifies the internal
-class logic, and provides a more uniform interface. This base class is inherited by most other user
-facing classes. Through it (and its metaclass :code:`Loggable`) we provide deferred C++
-initialization, expose entry points for logging (explained in more detail in the Logging and
-Accessing Data section), enable manage dependencies between objects in cases where they may be added
-or removed from a :code:`Operations` object, and our default way of exposing and synchronizing
-attributes between Python and C++.
-
-We implemented two solution that provide a Pythonic interface for interacting with object
-parameters, robust validation on setting, and maintaining state between Python and C++ when
-attached: one for parameters that are type dependent and one for those that were not.  Through the
-:code:`ParameterDict` class, we synchronize C++ and Python for standard attributes. For type
-dependent attributes, we created the :code:`TypeParameter` and :code:`TypeParameterDict` classes.
-These type dependent quantities are exposed through dictionary-like attributes with types as keys.
+The core logic for the deferred initialization model is implemented in the :code:`_Operation` class,
+which is the base class for all operations in Python. This class contains the machinery for handling
+the attaching and detaching of operations to their C++ counterparts, and it defines the user
+interface for setting and modifying operation-specific parameters while guaranteeing that such
+parameters are synchronized with attached C++ objects as appropriate. Rather than handling these
+concerns directly, the :code:`_Operation` class manages parameters using specially defined classes
+that handle the synchronization of attributes between Python and C++: the :code:`ParameterDict`
+and :code:`TypeParameterDict` classes **I intentionally omitted TypeParameter, I think it only
+confuses things**. In addition to providing transparent
+dict-like APIs for the automatically synchronized setting of parameters, these classes also provide
+strict validation of input types, ensuring that user inputs are validated regardless of whether or
+not operations are attached to a simulation.
 
 Each class supports validation of their keys, and they can be used to define the structure and
-validation of arbitrarily nested structures of dictionaries, lists, and tuples. In addition,
-the :code:`TypeParameterDict` class supports default specification, :code:`ParameterDict` has
+validation of arbitrarily nested structures of dictionaries, lists, and tuples. **Brandon, after our
+discussion today I think you can maybe explain this part a little better. I think clarifying in
+words the distinction between these classes is important.** In addition,
+the :code:`TypeParameterDict` class supports default specification. The :code:`ParameterDict` has
 defaults but these are equivalent to object attribute defaults. An example object specification and
 initialization can be seen below.
 
@@ -317,10 +303,10 @@ transparently handles synchronization of Python lists and C++ vectors.
     # use of SyncedList
     ops.analyzers.append(gsd)
 
-We also improve the user experience by improving the error messaging and handling through these
-objects. An example error message for trying to set :code:`sigma` for *A-A* interactions in the
-Lennard-Jones pair potential to a string (i.e. :code:`lj.params[('A', 'A')] = {'sigma': 'foo',
-'epsilon': 1.}` would provide the error message,
+These classes also have the ancillary benefit of improving error messaging and handling. An example
+error message for trying to set :code:`sigma` for *A-A* interactions in the Lennard-Jones pair
+potential to a string (i.e. :code:`lj.params[('A', 'A')] = {'sigma': 'foo', 'epsilon': 1.}` would
+provide the error message,
 
 .. code-block:: python
 
@@ -328,7 +314,9 @@ Lennard-Jones pair potential to a string (i.e. :code:`lj.params[('A', 'A')] = {'
     In key sigma: Value foo of type <class 'str'> cannot
     be converted using OnlyType(float).  Raised error:
     value foo not convertible into type <class 'float'>.
-    
+
+**The float in the error in the snippet above has weird formatting in the PDF, not sure you can
+control that but just FYI**
 Previously, the equivalent error would be :code:`TypeError: must be real number, not str`, the error
 would not be raised until running the simulation, and the line setting sigma would not be in the
 stack trace given.
@@ -336,50 +324,81 @@ stack trace given.
 Logging and Accessing Data
 --------------------------
 
-Logging simulation data is critical for molecular simulation software packages.  Such data is
-required post processing and analysis.  We use our Pythonic object oriented design to provide a
-flexible and extensible logging system.  Through extensive use of properties, we directly expose
-object data such as the total potential energy in all our pair potentials, the trial move acceptance
-rate in MC integrators, and thermodynamic variables like temperature that users can use directly or
-store through a logging interface.  The logging is quite general, and supports logging scalars,
-strings, arrays, and even general Python objects.  By separating the data collection from the
-writing to files, and by providing such a flexible intermediate representation, HOOMD can now
-support a range of back ends for logging; moreover, it offers users the flexibility to define their
-own.  For instance, logging data to text files or standard out is supported out of the box, but
-other back ends like MongoDB, Pandas :cite:`mckinney2010`, and Python pickles would also be feasible
-to implement.  Consistent with the new approach to logging, HOOMD-blue version 3.0 makes simulation
-output an opt-in feature even for common simulation output like performance and thermodynamic
-quantities (e.g temperature and pressure).  In addition to this improved flexibility in storage
-possibilities, for HOOMD-blue version 3.0 we have added new properties to objects to directly expose
-more of their data than had previously been available. For example, pair potentials now expose
-*per-particle* potential energies at any given time (this data is used to color Figure
+Logging simulation data for analysis is a critical feature of molecular simulation software packages.
+Up to now, HOOMD has supported logging through an analyzer interface that simply accepted a list of
+quantities to log, where the set of valid quantities was based on what objects had been created at
+any point and stored to the global state. The creation of the base :code:`_Operation` class has
+allowed us to simultaneously simplify and increase the power of our logging infrastructure. The
+:code:`Loggable` metaclass of :code:`_Operation` allows all subclasses to expose their loggable
+quantities by simply providing a list of Python properties to query.
+
+The actual task of logging data is acomplished by the :code:`Logger` class, which provides an
+interface for logging most HOOMD-blue objects and custom user quantities. Adding all loggable
+quantities of an object to a logger for logging is as simple as :code:`logger += obj`. The utility
+of this class lies in its intermediate representation of the data. Using the HOOMD-blue namespace as
+the basis for distinguishing between quantities, the :code:`Logger` maps logged quantities into an
+internal representation as a nested dictionary. For example, logging the Lennard-Jones pair
+potentials total energy would be produce this dictionary by a :code:`Logger` object :code:`{'md':
+{'pair': {'LJ': {'energy': (-1.4, 'scalar')}}}}` where :code:`'scalar'` is a flag to make processing
+the logged output easier. In real use cases, the dictionary would likely be filled with many other
+quantities. 
+
+Version 3.0 of HOOMD uses properties extensively expose object data such as the total potential
+energy in all our pair potentials, the trial move acceptance rate in MC integrators, and
+thermodynamic variables like temperature, all of which users can use directly or store through the
+logging interface. The logging is quite general and supports scalars, strings, arrays, and even
+general Python objects. By separating the data collection from the writing to files, and by
+providing such a flexible intermediate representation, HOOMD can now support a range of back ends
+for logging; moreover, it offers users the flexibility to define their own. For instance, while
+logging data to text files or standard out is supported out of the box, other back ends like
+MongoDB, Pandas :cite:`mckinney2010`, and Python pickles can now be implemented on top of the
+existing logging infrastructure.  Consistent with the new approach to logging, HOOMD-blue version
+3.0 makes simulation output an opt-in feature even for common outputs like performance and
+thermodynamic quantities (e.g temperature and pressure).  In addition to this improved flexibility
+in storage possibilities, for HOOMD-blue version 3.0 we have added new properties to objects to
+directly expose more of their data than had previously been available. For example, pair potentials
+now expose *per-particle* potential energies at any given time (this data is used to color Figure
 (:ref:`sim`)).
 
-Logger
-++++++
+In conjunction with the deferred initialization model, the new logging infrastructure also allows us
+to more easily export an object's state (not to be confused with the simulation state).  Due to the
+switch to deferred initialization, all operation state information is now stored directly in Python,
+so we have made object's state a loggable quantity. All operations also provide a :code:`from_state`
+factory method that can reconstruct the object from the state, dramatically increasing the
+restartability of simulations since the state of each object can be saved at the end of a given run
+and read at the start of the next.
 
-The :code:`Logger` class provides an interface for logging most HOOMD-blue objects and
-custom user quantities. Through the :code:`Loggable` metaclass, all subclasses that inherit from
-:code:`_Operation` expose their loggable quantities. Adding all loggable quantities of an object to
-a logger for logging is as simple as :code:`logger += obj`. The utility of this class lies in its
-intermediate representation of the data. Using the HOOMD-blue namespace as the basis for
-distinguishing between quantities, the :code:`Logger` maps logged quantities into a nested
-dictionary. For example, logging the Lennard-Jones pair potentials total energy would be produce
-this dictionary by a :code:`Logger` object :code:`{'md': {'pair': {'LJ': {'energy': (-1.4,
-'scalar')}}}}` where :code:`'scalar'` is a flag to make processing the logged output easier. In real
-use cases, the dictionary would likely be filled with many other quantities. This intermediate form
-allows developers and users to create different back ends for outputting data.
+.. code-block:: python
+
+    from hoomd.hpmc.integrate import Sphere
+
+    sphere = Sphere.from_state('example.gsd', frame=-1)
+
+This code block would create a :code:`Sphere` object with the parameters stored from the last frame
+of the gsd file :code:`example.gsd`.
+
 
 User Customization
 ------------------
 
-We have added multiple means of injecting Python code into HOOMD-blue's C++ core simulation loop.
-We achieve this through two general means, inheriting from C++ classes through pybind11
-:cite:`jakob.etal2017` and through wrapping user classes and functions in C++ classes. To guide the
-choice between inheritance and composition, we looked at multiple factors such as is the class
-simple (only requires a few methods) and would inheritance expose internal data structures subject
-to change.  We have prioritized adding and improving methods for extending the package
-as the examples below highlight.
+A major improvement in HOOMD version 3 is the ease with which users can customize their simulations
+in previously impossible ways. The changes that enable this improvement generally come in two
+flavors, the generalization of existing concepts in HOOMD and the introduction of a completely new
+:code:`CustomAction` class that enables the user to inject arbitrary operations into the simulation
+loop. In this section, we first discuss how concepts like periods and groups have been generalized
+from previous iterations of HOOMD and then show how users can inject completely novel routines to
+actually modify the behavior of simulations.
+
+**I would move discussion of inheritance vs composition on a per-class basis, and only where the
+discussion adds something interesting. Specifically, how you use composition in custom actions.**
+
+.. We have added multiple means of injecting Python code into HOOMD-blue's C++ core simulation loop.
+   We achieve this through two general means, inheriting from C++ classes through pybind11
+   :cite:`jakob.etal2017` and through wrapping user classes and functions in C++ classes. To guide the
+   choice between inheritance and composition, we looked at multiple factors such as is the class
+   simple (only requires a few methods) and would inheritance expose internal data structures subject
+   to change.  We have prioritized adding and improving methods for extending the package
+   as the examples below highlight.
 
 Triggers
 ++++++++
@@ -499,7 +518,7 @@ with positive charge is given below.
                 return data.particles.tag[mask]
 
 Custom Actions
-+++++++++++++++++
+++++++++++++++
 
 In HOOMD-blue, we distinguish between the object that performs an action on the simulation state
 called *Actions* and their containing objects that deal with setting state and the user interface
