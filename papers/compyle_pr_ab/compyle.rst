@@ -102,9 +102,34 @@ high-level data structures in an easy way.
 Motivation and background
 --------------------------
 
+* Talk about PyPy?
+* Numba translates Python functions to optimized machine code at runtime using the 
+  LLVM compiler library.
+* Numba has a dependency on LLVM
+* Inability to understand compiled code using numba and difficult to find
+  bottlenecks
+* Cython produces readable C code as well as the annotation feature helps identify
+  bottlenecks
+* Cython syntax differs a lot from python and has a learning curve
+* Pythran does a source to source python to C++ translation on a subset of
+  python
+* None of the above libraries provide GPU support
+* Numba has GPU support but only provides map and reduce. No scans. (verify this)
+
 
 High-level overview
 --------------------
+
+The functionality that Compyle provides falls broadly in two categories,
+
+* Common parallel algorithms that will work across backends. This includes, 
+  elementwise operations, reductions, and prefix-sums/scans.
+* Specific support to run code on a particular backend. This is for code that 
+  will only work on one backend by definition. This is necessary in order to 
+  best use different hardware and also use differences in the particular backend 
+  implementations. For example, the notion of local (or shared) memory only has 
+  meaning on a GPGPU. In this category we provide support to compile and execute 
+  Cython code, and also create and execute a GPU kernel
 
 Parallel algorithms
 --------------------
@@ -113,7 +138,70 @@ Elementwise
 ~~~~~~~~~~~
 
 The elementwise operator operates on each element of an input array and maps it to
-an output array. 
+an output array. Below is a simple example of calculating :math:`y = a\sin{x} + b`.
+
+.. code-block:: python
+
+    import numpy as np
+    from compyle.api import annotate, Elementwise, \
+        get_config
+
+    @annotate
+    def axpb(i, x, y, a, b):
+        y[i] = a[i]*sin(x[i]) + b[i]
+
+    # Setup the input data
+    n = 1000000
+    x = np.linspace(0, 1, n)
+    y = np.zeros_like(x)
+    a = np.random.random(n)
+    b = np.random.random(n)
+
+    # Use OpenMP
+    get_config().use_openmp = True
+
+    # Now run this in parallel with Cython.
+    backend = 'cython'
+    e = Elementwise(axpb, backend=backend)
+    e(x, y, a, b)
+
+This will call the axpb function in parallel using OpenMP. To call this
+function on the GPU, the arrays need to be sent to the device. This can
+be acheived by using the :code:`Array` wrapper as follows,
+
+.. code-block:: python
+
+    from compyle.api import wrap
+
+    backend = 'opencl'
+    x, y, a, b = wrap(x, y, a, b, backend=backend)
+
+This wraps the arrays and sends the data to the device. :code:`x.pull()` gets
+the data from device to host and :code:`x.push()` sends the data from
+host to device.
+
+Here is an example of using elementwise for implementing the step
+function for solving laplace equation.
+
+.. code-block:: python
+
+    @annotate
+    def laplace_step(i, u, res, err, nx, ny, dx2, dy2, 
+                     dnr_inv):
+        xid = i % nx
+        yid = i / nx
+
+        if xid == 0 or xid == nx - 1 or yid == 0 or \
+            yid == ny - 1:
+            return
+
+        res[i] = ((u[i - 1] + u[i + 1]) * dx2 +
+                  (u[i - nx] + u[i + nx]) * dy2) * \
+                  dnr_inv
+
+        diff = res[i] - u[i]
+
+        err[i] = diff * diff
 
 Reduction
 ~~~~~~~~~
@@ -204,10 +292,50 @@ array.
 
     # Result = ary.data
 
-A more complex example is given in section ??.
+Below is a more complex example of implementing a parallel "where".
+This returns elements of an array where a given condition is satisfied.
+The following example returns elements of the array that are smaller
+than 50.
 
-A parallel "where"
-------------------
+.. code-block:: python
+
+    ary = np.random.randint(0, 100, 1000, dtype=np.int32)
+    result = np.zeros(len(ary.data), dtype=np.int32)
+    result = wrap(result, backend=backend)
+    result_count = np.zeros(1, dtype=np.int32)
+    result_count = wrap(result_count, backend=backend)
+    ary = wrap(ary, backend=backend)
+
+    @annotate
+    def input_expr(i, ary):
+        return 1 if ary[i] < 50 else 0
+
+    @annotate
+    def output_expr(i, prev_item, item, N, ary, result,
+                    result_count):
+        if item != prev_item:
+            result[item - 1] = ary[i]
+        if i == N - 1:
+            result_count[0] = item
+
+    scan = Scan(input_expr, output_expr, 'a+b',
+                dtype=np.int32, backend=backend)
+    scan(ary=ary, result=result, 
+         result_count=result_count)
+    result.pull()
+    result_count.pull()
+    result_count = result_count.data[0]
+    result = result.data[:result_count]
+
+    # Result = result
+
+The :code:`input_expr` could also be used as the map function
+for reduction and the required size of result could be found
+before running the scan and the result array can be allocated
+accordingly.
+
+Example using local memory
+--------------------------
 
 Simple nearest neighbors
 ------------------------
@@ -216,6 +344,8 @@ Simple nearest neighbors
 Simple n-body treecode
 -----------------------
 
+Performance comparison with numba
+---------------------------------
 
 Limitations
 ------------
