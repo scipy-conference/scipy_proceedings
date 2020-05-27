@@ -252,33 +252,82 @@ The C++ layer is therefore not motivated by performance, since that is the respo
 Numba for just-in-time compilation
 ----------------------------------
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-pulvinar id metus.
+Some expressions are simpler in "vectorized" form, such as :code:`pions[good]` to select :code:`pions` with a broadcastable array of booleans :code:`good`. However, some operations are more difficult to express in this form, particularly iterative algorithms.
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-pulvinar id metus.
+A common case in particle physics is following each particle of a decay tree to a particular type of ancestor, such as a quark. These trees are often expressed as a collection of :code:`particles`, which are records with a field named :code:`parent`—the index of its immediate ancestor.
+
+We can find immediate ancestors in a vectorized expression,
+
+.. code-block:: python
+
+    immediate_ancestors = particles[particles.parent]
+
+but this step must be repeated a different number of times for different elements. The same is true of numerical algorithms that must iterate until they converge.
+
+Iteration is easy to express in imperative Python code:
+
+.. code-block:: python
+
+    def find_quark(particle):
+        while not is_quark(particle):
+            particle = particles[particle.parent]
+        return particle
+
+Doing so, however, gives up on the performance advantage of using arrays. Iteration over Awkward Arrays is even slower than built-in Python objects. Ideally, we want to iterate over the arrays in compiled code, code that involves domain-specific logic and therefore must be written by the user. Users could write their functions in C++, accessing Awkward Array's C++ layer the way a third-party library might, but that would be an unreasonable amount of effort for common analysis tasks.
+
+Instead, we recommend using Numba, a just-in-time compiler for Python. All array nodes except :code:`UnionArray` have been implemented as Numba models, so Awkward Arrays can be used as arguments and return values from compiled Python functions. The function above can be compiled by simply adding a decorator,
+
+.. code-block:: python
+
+    import numba as nb
+
+    @nb.njit
+    def find_quark(particle):
+        while not is_quark(particle):
+            particle = particles[particle.parent]
+        return particle
+
+assuming that :code:`is_quark` is similarly defined,
+
+.. code-block:: python
+
+    @nb.njit
+    def is_quark(particle):
+        return abs(particle.pdg_id) <= 6
+
+Such an implementation would still suffer from poor performance because :code:`find_quark` takes a single particle as input, incurring overhead for each particle in the dataset. Users should write functions that take and return whole datasets, performing the loop inside the compiled block. For this example, we could do that by returning an integer index to use as a slice:
+
+.. code-block:: python
+
+    @nb.njit
+    def find_quarks(particles):
+        index = np.empty(len(particles), np.int64)
+        for i in range(len(particles)):
+            index[i] = i
+            while not is_quark(particles[index[i]]):
+                index[i] = particles[index[i]].parent
+        return index
+
+    particles[find_quarks(particles)]
+
+This is fast, but possibly non-intuitive. For more natural user code, we introduced an ArrayBuilder, which is an append-only structure that becomes an Awkward Array when a "snapshot" is taken.
+
+.. code-block:: python
+
+    @nb.njit
+    def find_quarks(particles, builder):
+        for particle in particles:
+            while not is_quark(particle):
+                particle = particles[particle.parent]
+            builder.append(particle)
+        return builder
+
+    find_quarks(particles, ak.ArrayBuilder()).snapshot()
+
+The ArrayBuilder is presented in more detail in the next section.
+
+
+
 
 
 ArrayBuilder: creating columnar data in-place
