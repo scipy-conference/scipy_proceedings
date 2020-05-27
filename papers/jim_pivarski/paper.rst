@@ -474,7 +474,7 @@ and nested records translate into MultiIndex column names:
     # 3      30  30  30
     # 4      40  40  40
 
-If an array contains records with fields of different nested list lengths, however, a single DataFrame cannot losslessly encode the information, though a collection related by a foreign key can.
+If an array contains records with fields of different nested list lengths, however, a single DataFrame cannot losslessly encode the information, though several DataFrames related by a key can.
 
 Other third-party libraries, such as NumExpr, are similarly wrapped to generalize their treatment of NumPy arrays to Awkward Arrays.
 
@@ -508,14 +508,12 @@ Awkward Array is one of the most widely used Python packages for particle physic
 
 Motivated by the success of Awkward 0.x, but learning from its limitations, Awkward 1.x was developed separately from the original library and it includes much needed interface changes as well as refactoring. To avoid disrupting ongoing physics analysis, is still deployed with :code:`awkward1` as its PyPI and Python module name. Although the new library is ready for data analysis, the ecosystem is not: at the time of writing, Uproot is still being updated to present ROOT data as Awkward 1.x arrays. Therefore, :code:`awkward` and :code:`awkward1` will coexist until a point later this year, when PyPI, Conda, Python, and GitHub names will simultaneously transfer :code:`awkward` to :code:`awkward0` and :code:`awkward1` to :code:`awkward`.
 
-Conclusions
------------
+As an incentive, the Awkward 1.x project has been heavily documented, with complete docstring and doxygen coverage.
 
+Summary
+-------
 
-
-
-
-
+By providing NumPy-like idioms on JSON-like data, Awkward Array fills a need required by the particle physics community. The inclusion of data structures in array types and operations was an enabling factor in this community's adoption of other scientific Python tools. However, the Awkward Array library itself is not domain-specific and is open to use in other domains.
 
 Acknowledgements
 ----------------
