@@ -37,11 +37,11 @@ Awkward Array: JSON-like data, NumPy-like idioms
 Introduction
 ------------
 
-NumPy is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
+NumPy [1]_ is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
 
 More general data structures can be expressed as JSON and processed in pure Python, but at an expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed contiguously in memory. Some expressions can be more concise in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
 
-In this paper, we will describe Awkward Array, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. In doing so, we'll focus on the internal representation of data structures as columnar arrays, very similar to (and compatible with) Apache Arrow. The key feature of the Awkward Array library, however, is that calculations, including those that restructure data, are performed on the columnar arrays themselves, rather than instantiating objects. Since the logical data structure is implicit in the arrangement of columnar arrays and most operations only rearrange integer indexes, these functions can be precompiled for specialized data types, like NumPy.
+In this paper, we will describe Awkward Array [2]_ [3]_, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. In doing so, we'll focus on the internal representation of data structures as columnar arrays, very similar to (and compatible with) Apache Arrow [4]_. The key feature of the Awkward Array library, however, is that calculations, including those that restructure data, are performed on the columnar arrays themselves, rather than instantiating objects. Since the logical data structure is implicit in the arrangement of columnar arrays and most operations only rearrange integer indexes, these functions can be precompiled for specialized data types, like NumPy.
 
 Motivation from particle physics
 --------------------------------
@@ -75,7 +75,7 @@ where :code:`ak.combinations` is a built-in function, :code:`pions[good]` presel
 Demonstration with GeoJSON bike routes
 --------------------------------------
 
-However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following Chicago bike routes, a dataset with two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
+However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following Chicago bike routes [5]_, a dataset with two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
 
 .. code-block:: python
 
@@ -105,7 +105,7 @@ Longitude and latitude are in the first two components of fields named :code:`"c
 
 The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64` (expressed as a Datashape): 1061 routes with a variable number of variable-length polylines.
 
-To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 and NPE-18 protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` may have a different length.
+To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 [6]_ and NEP-18 [7]_ protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` may have a different length.
 
 .. code-block:: python
 
@@ -167,7 +167,7 @@ Namely, there are
 
 Like Apache Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
 
-Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
+Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy [8]_, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
 
 Awkward functions include
 
@@ -179,7 +179,7 @@ Awkward functions include
 * flattening and padding to make rectilinear data,
 * Cartesian products (cross join) and combinations (self join) at :code:`axis >= 1` (per element of one or more arrays).
 
-Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba and Pandas, methods of building data structures, and customizing high-level behavior are also in the library's scope.
+Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba [9]_ and Pandas [10]_, methods of building data structures, and customizing high-level behavior are also in the library's scope.
 
 Columnar representation, columnar implementation
 ------------------------------------------------
@@ -520,8 +520,36 @@ Acknowledgements
 
 Support for this work was provided by NSF cooperative agreement OAC-1836650 (IRIS-HEP), grant OAC-1450377 (DIANA/HEP) and PHY-1520942 (US-CMS LHC Ops).
 
-References
-----------
+Reference
+---------
 
-.. [Atr03] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
+.. [1] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The NumPy Array: A Structure for Efficient Numerical Computation*,
+       Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
+
+.. [2] Jim Pivarski, Jaydeep Nandi, David Lange, Peter Elmer. *Columnar data processing for HEP analysis*,
+       Proceedings of the 23rd International Conference on Computing in High Energy and Nuclear Physics (CHEP 2018). DOI:10.1051/epjconf/201921406026
+
+.. [3] Jim Pivarski, Peter Elmer, David Lange. *Awkward Arrays in Python, C++, and Numba*,
+       CHEP 2019 proceedings, EPJ Web of Conferences (CHEP 2019). arxiv:2001.06307
+
+.. [4] Apache Software Foundation. *Arrow: a cross-language development platform for in-memory data*,
+       https://arrow.apache.org
+
+.. [5] City of Chicago Data Portal,
+       https://data.cityofchicago.org
+
+.. [6] Pauli Virtanen, Nathaniel Smith, Marten van Kerkwijk, Stephan Hoyer. *NEP 13 — A Mechanism for Overriding Ufuncs*,
+       https://numpy.org/neps/nep-0013-ufunc-overrides.html
+
+.. [7] Stephan Hoyer, Matthew Rocklin, Marten van Kerkwijk, Hameer Abbasi, Eric Wieser. *NEP 18 — A dispatch mechanism for NumPy’s high level array functions*,
+       https://numpy.org/neps/nep-0018-array-function-protocol.html
+
+.. [8] Pauli Virtanen et al. *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
+       SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
+
+.. [9] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert. *Numba: a LLVM-based Python JIT compiler*,
+       LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015), DOI:10.1145/2833157.2833162
+
+
+.. [10] Wes McKinney. *Data Structures for Statistical Computing in Python*,
+        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
