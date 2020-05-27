@@ -326,44 +326,46 @@ This is fast, but possibly non-intuitive. For more natural user code, we introdu
 
 The ArrayBuilder is described in more detail in the next section.
 
-Whereas the C++ implementation uses (relatively) slow runtime objects because the number of nodes touched by a vectorized operation scales with the complexity of the type, not the number elements in the array, a user function written in Numba would walk over the same nodes for each element of the array, and therefore must be more thoroughly optimized. Each node type is implemented as a Numba type, but the only runtime objects are lookup tables pointing to elements of the array's buffers. The node types generate specialized code for walking over these lookup tables (no dynamic dispatch) and apart from the ArrayBuilder interface, Awkward Arrays cannot be created in a Numba-compiled function (no memory management).
+Whereas the C++ implementation uses (relatively) slow runtime objects because the number of nodes touched by a vectorized operation scales with the complexity of the type, not the number elements in the array, a user function written in Numba would walk over the same nodes for each element of the array, and therefore must be more thoroughly optimized.
 
-Since the Numba models are so different from the C++ classes, Awkward's full suite of vectorized functions can't be applied in the compiled block. However, the following features are supported:
+Each node type is implemented as a Numba type but not as runtime objects. The only runtime object is a lookup table of buffer pointers, and the node types generate specialized code to walk over the lookup table. Since this Numba model is so different from the C++ classes, Awkward's full suite of vectorized functions are not available in the compiled block. However, the following features are supported for imperative programming:
 
 * iteration and :code:`__len__` for arrays,
 * simple :code:`__getitem__`: integers indexes, slices, and strings for record fields that are compile-time constants,
-* attribute :code:`__getattr__` as an alternative for constant-string :code:`__getitem__`.
+* attribute :code:`__getattr__` as an alternative to string-slices.
 
 ArrayBuilder: creating columnar data in-place
 ---------------------------------------------
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-pulvinar id metus.
+Awkward Arrays are immutable; NumPy's ability to assign elements in place is not supported or generalized by the Awkward Array library. (As an exception, users can assign fields to records using :code:`__setitem__` syntax, but this *replaces* the inner tree with one having the new field.) Restricting Awkward Arrays to read-only access allows whole subtrees of nodes to be shared among different versions of an array.
 
-Mauris purus enim, volutpat non dapibus et, gravida sit amet sapien. In at
-consectetur lacus. Praesent orci nulla, blandit eu egestas nec, facilisis vel
-lacus. Fusce non ante vitae justo faucibus facilisis. Nam venenatis lacinia
-turpis. Donec eu ultrices mauris. Ut pulvinar viverra rhoncus. Vivamus
-adipiscing faucibus ligula, in porta orci vehicula in. Suspendisse quis augue
-arcu, sit amet accumsan diam. Vestibulum lacinia luctus dui. Aliquam odio arcu,
-faucibus non laoreet ac, condimentum eu quam. Quisque et nunc non diam
-consequat iaculis ut quis leo. Integer suscipit accumsan ligula. Sed nec eros a
-orci aliquam dictum sed ac felis. Suspendisse sit amet dui ut ligula iaculis
-sollicitudin vel id velit. Pellentesque hendrerit sapien ac ante facilisis
-lacinia. Nunc sit amet sem sem. In tellus metus, elementum vitae tincidunt ac,
-volutpat sit amet mauris. Maecenas diam turpis, placerat at adipiscing ac,
-pulvinar id metus.
+To create new arrays, we introduced ArrayBuilder, an append-only object that accumulates data and cteates :code:`ak.Arrays` by taking a "snapshot" of the current state. New data are attached at various levels of depth through method calls, which also dynamically refines the type of the provisional array.
+
+.. code-block:: python
+
+                       # type of b.snapshot()
+    b                  # 0 * unknown
+    b.begin_record()   # 0 * {}
+    b.field("x")       # 0 * {"x": unknown}
+    b.integer(1)       # 0 * {"x": int64}
+    b.end_record()     # 1 * {"x": int64}
+    b.begin_record()   # 1 * {"x": int64}
+    b.field("x")       # 1 * {"x": int64}
+    b.real(2.2)        # 1 * {"x": float64}
+    b.field("y")       # 1 * {"x": float64, "y": ?unknown}
+    b.integer(2)       # 1 * {"x": float64, "y": ?int64}
+    b.end_record()     # 2 * {"x": float64, "y": ?int64}
+    b.null()           # 3 * ?{"x": float64, "y": ?int64}
+    b.string("hello")  # 4 * ?union[{"x": float64,
+                       #             "y": ?int64}, string]
+
+In the above example, an initially empty ArrayBuilder :code:`b` has unknown type and zero length. With :code:`begin_record`, its type becomes a record with no fields. Calling :code:`field` adds a field of unknown type, and following that with :code:`integer` sets the field type to an integer. The length of the array is only increased when the record is closed by :code:`end_record`.
+
+In the next record, field :code:`"x"` is filled with a floating point number, which retroactively updates previous integers to floats. Calling :code:`b.field("y")` introduces a field :code:`"y"` to all records, though it has option type because this field is missing for all previous records. The third record is missing (:code:`b.null()`), which refines its type as optional, and in place of a fourth record, we append a string, so the type becomes a union.
+
+Internally, ArrayBuilder maintains a similar hierarchy of nodes as an array, except that all flat buffers can grow (when the preallocated space is used up, the buffer is reallocated and copied into a buffer 1.5× larger), and 
+
+
 
 
 High-level behaviors
