@@ -432,12 +432,28 @@ As a special case, strings are not defined as an array type, but as a parameter 
 GPU backend
 -----------
 
-asdf
+One of the advantages of a vectorized user interface is that it is already optimal for calculations on a GPU. Imperative loops need to be redesigned when porting algorithms to GPUs, but CuPy, Torch, TensorFlow, and JAX demonstrate that array-at-a-time functions can hide the distinction between CPU calculations and GPU calculations.
+
+To allow for a future GPU backend, all instances of reading or writing to an array's buffers were restricted to the "array manipulation" layer of the project (see Figure :ref:`awkward-1-0-layers`). The first implementation of this layer, "CPU kernels," performs all operations that actually access the array buffers, and it is compiled into a physically separate file: :code:`libawkward-cpu-kernels.so`, as opposed to the main :code:`libawkward.so`, Python extension module, and Python code.
+
+In May 2020, we began developing the "GPU kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "GPU kernels" may be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
+
+The kernels library contains many functions (428 with an "extern C" interface, 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one uses dynamic memory, but there may be alternatives). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
+
+.. figure:: figures/kernels-survey.pdf
+   :align: center
+   :scale: 45%
+
+   CPU kernels by algorithmic complexity, as of February 2020. :label:`kernels-survey`
 
 Conclusions
 -----------
 
-asdf
+
+
+
+
+
 
 Acknowledgements
 ----------------
