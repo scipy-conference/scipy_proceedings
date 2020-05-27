@@ -254,5 +254,15 @@ For all of the illustrated classes of objects (``libceed.Ceed``, ``libceed.Vecto
 
 These and other examples can be found in the suite of Project Jupyter :cite:`ProjectJupyter` tutorials provided with libCEED in a dedicated Binder :cite:`libCEEDBinder` interactive environment.
 
+Conclusions
+----------------------------------------------------------------------------------
+
+We have presented libCEED, a new open-source, lightweight matrix-free Finite Element library, its conceptual framework, and new Python interface. libCEED’s purely algebraic framework can unobtrusively be integrated in new and legacy software to provide performance portable applications. In this work, we have demonstrated the usage of libCEED's Python interface by providing examples of the creation and application of the main classes in libCEED's API: ``libceed.Ceed``, ``libceed.Vector``, ``libceed.ElemRestriction``, ``libceed.Basis``, ``libceed.QFunction``, and ``libceed.Operator``. We have showed how libCEED can be used to open up new strategies for parallelism and scaling in high-performance Python, without having to compromise ease of use.
+
+Acknowledgments
+----------------------------------------------------------------------------------
+
+The libCEED library is distributed under a BSD 2-Clause License with Copyright (c) 2017 of the Lawrence Livermore National Security, LLC. The work presented in this paper is supported by the Exascale Computing Project (17-SC-20-SC), a collaborative effort of two U. S. Department of Energy Organizations (the Office of Science and the National Nuclear Security Administration) responsible for the planning and preparation of a capable exascale ecosystem, including software, applications, hardware, advanced system engineering and early testbed platforms, in support of the nation’s exascale computing imperative.
+
 References
 ----------------------------------------------------------------------------------
