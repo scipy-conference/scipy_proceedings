@@ -457,8 +457,8 @@ of the geodesic that links them.
 Learning graph representations with hyperbolic spaces in `Geomstats`
 ********************************************************************
 
-Setup
-~~~~~
+`Setup`
+~~~~~~~
 
 We start by importing standard tools for logging and visualization,
 allowing us to draw the embedding of the GSD on the manifold. Next, we
@@ -480,8 +480,8 @@ from ``geomstats``.
         import PoincareBall
 
 
-Parameters and Initialization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Parameters and Initialization`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Table :ref:`tabparam` defines the parameters needed for embedding.
 Let us discuss a few things about the parameters of the above table. The
 number of dimensions should be high (i.e., 10+) for large datasets
@@ -581,15 +581,11 @@ in ``geomstats`` is straightforward:
     hyperbolic_manifold = PoincareBall(2)
 
 
-**End of part 1**
-
-
-
-Learning embedding by optimizing a loss function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Learning embedding by optimizing a loss function`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
-set of edges. The goal of embedding GSD is to provide a faithful and
+set of edges of the graph. The goal of embedding GSD is to provide a faithful and
 exploitable representation of the graph structure. It is mainly achieved
 by preserving *first-order* proximity that enforces nodes sharing edges
 to be close to each other. It can additionally preserve *second-order*
@@ -597,32 +593,33 @@ proximity that enforces two nodes sharing the same context (i.e., nodes
 that are neighbours but not necessarily directly connected) to be close.
 To preserve first and second-order proximities we adopt a loss function
 similar to :cite:`NIPS2017_7213` and consider the negative sampling
-approach as in :cite:`NIPS2013_5021` :
+approach as in :cite:`NIPS2013_5021`:
 
 .. math::      \mathcal{L} = - \sum_{v_i\in V} \sum_{v_j \in C_i} \bigg[ log(\sigma(-d^2(\phi_i, \phi_j'))) + \sum_{v_k\sim \mathcal{P}_n} log(\sigma(d^2(\phi_i, \phi_k')))  \bigg]
 
-where :math:`\sigma(x)=\frac{1}{1+e^{-x}}` is the sigmoid function and
-:math:`\phi_i \in \mathbb{B}^m` is the embedding of the :math:`i`-th
+where :math:`\sigma(x)=(1+e^{-x})^{-1}` is the sigmoid function and
+:math:`\phi_i \in H_2` is the embedding of the :math:`i`-th
 node of :math:`V`, :math:`C_i` the nodes in the context of the
-:math:`i`-th node, :math:`\phi_j'\in \mathbb{B}^m` the embedding of
-:math:`v_j\in C_i` and :math:`\mathcal{P}_n` the negative sampling
-distribution over :math:`V`:
-:math:`\mathcal{P}_n(v)=\frac{deg(v)^{3/4}}{\sum_{v_i\in V}deg(v_i)^{3/4}}`.
-Intuitively one can see that to minimizing :math:`L`, the distance
-between :math:`v_i` and :math:`v_j` should get smaller, while the one
-between :math:`v_i` and :math:`v_k` would get larger.
+:math:`i`-th node, :math:`\phi_j'\in H_2` the embedding of
+:math:`v_j\in C_i`. Negatively sampled nodes :math:`v_k` are chosen according to
+the distribution :math:`\mathcal{P}_n` such that
+:math:`\mathcal{P}_n(v)=(deg(v)^{3/4}).(\sum_{v_i\in V}deg(v_i)^{3/4})^{-1}`.
+
+Intuitively one can see on Figure :ref:`fignotation` that to minimizing :math:`L`, the distance
+between :math:`\phi_i` and :math:`\phi_j` should get smaller, while the one
+between :math:`\phi_i` and :math:`\phi_k` would get larger.
 
 .. figure:: learning_graph_structured_data_h2_files/Notations.png
     :scale: 40%
     :align: center
 
-    Distances between embedded nodes after applying one optimization iteration.
+    Distances between node embeddings after applying one optimization iteration :label:`fignotation`.
 
-Riemannian optimization
-~~~~~~~~~~~~~~~~~~~~~~~
+`Riemannian optimization`
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Following the idea of we use the following formula to optimize
-:math:`L`:
+Following the idea of :cite:`ganea2018hyperbolic` we use the following formula
+to optimize :math:`L`:
 
 .. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial L}{\partial \phi} \right)
 
@@ -641,37 +638,21 @@ unit. The Riemannian exponential map is implemented as a method of the
 ``geomstats``.
 
 Therefore to minimize :math:`L` we will need to compute its gradient.
-Several steps are required to do so, 1. Compute the gradient of the
-squared distance 2. Compute the gradient of the log sigmoid 3. Compute
-the gradient of the composision of 1. and 2.
+To do so, we will need the gradient of:
 
-For 1., we use the formula proposed by which uses the Riemannian
+1. the squared distance :math:`d^2(x,y)`
+2. the log sigmoid :math:`log(\sigma(x))`
+3. the composision of 1. and 2.
+
+For 1., we use the formula proposed by :cite:`Arnaudon2013` which uses the Riemannian
 logarithmic map to compute the gradient of the distance. This is
 implemented as
 
 .. code:: ipython3
 
     def grad_squared_distance(point_a, point_b):
-        """Gradient of squared hyperbolic distance.
-
-        Gradient of the squared distance based on the
-        Ball representation according to point_a
-
-        Parameters
-        ----------
-        point_a : array-like, shape=[n_samples, dim]
-            First point in hyperbolic space.
-        point_b : array-like, shape=[n_samples, dim]
-            Second point in hyperbolic space.
-
-        Returns
-        -------
-        dist : array-like, shape=[n_samples, 1]
-            Geodesic squared distance between the two points.
-        """
         hyperbolic_metric = PoincareBall(2).metric
         log_map = hyperbolic_metric.log(point_b, point_a)
-
         return -2 * log_map
 
 For 2. define the ``log_sigmoid`` corresponding as follows:
@@ -679,18 +660,6 @@ For 2. define the ``log_sigmoid`` corresponding as follows:
 .. code:: ipython3
 
     def log_sigmoid(vector):
-        """Logsigmoid function.
-
-        Apply log sigmoid function
-
-        Parameters
-        ----------
-        vector : array-like, shape=[n_samples, dim]
-
-        Returns
-        -------
-        result : array-like, shape=[n_samples, dim]
-        """
         return gs.log((1 / (1 + gs.exp(-vector))))
 
 The gradient of the logarithm of sigmoid function is implemented as:
@@ -698,42 +667,31 @@ The gradient of the logarithm of sigmoid function is implemented as:
 .. code:: ipython3
 
     def grad_log_sigmoid(vector):
-        """Gradient of log sigmoid function.
-
-        Parameters
-        ----------
-        vector : array-like, shape=[n_samples, dim]
-
-        Returns
-        -------
-        gradient : array-like, shape=[n_samples, dim]
-        """
         return 1 / (1 + gs.exp(vector))
 
 For 3., apply the composition rule to obtain the gradient of :math:`L`.
 The following function given :math:`\phi_i`, :math:`\phi'_j` and
 :math:`\phi'_k` returns the total value of :math:`L` and its gradient
-vector at :math:`\phi_i`. For the value of :math:`L` the loss function
-formula is simply applied. For the gradient, we apply the composition of
+vector at :math:`\phi_i`. To obtain the value of :math:`L` the loss function
+formula is simply applied. For the gradient of :math:`L`, we apply the composition of
 ``grad_log_sigmoid`` with ``grad_squared_distance`` while paying
-attention to the signs.
+attention to the signs as
 
 .. code:: ipython3
 
-    def loss(example_embedding, context_embedding, negative_embedding,
-             manifold):
-        """Compute loss and grad.
+    def loss(
+        example_embedding, context_embedding,
+        negative_embedding, manifold):
 
-        Compute loss and grad given embedding of the current example,
-        embedding of the context and negative sampling embedding.
-        """
         n_edges, dim =\
-            negative_embedding.shape[0], example_embedding.shape[-1]
+            negative_embedding.shape[0],
+            example_embedding.shape[-1]
         example_embedding = gs.expand_dims(example_embedding, 0)
         context_embedding = gs.expand_dims(context_embedding, 0)
         positive_distance =\
             manifold.metric.squared_dist(
-                example_embedding, context_embedding)
+                example_embedding,
+                context_embedding)
         positive_loss =\
             log_sigmoid(-positive_distance)
 
@@ -741,7 +699,8 @@ attention to the signs.
             gs.repeat(example_embedding, n_edges, axis=0)
         negative_distance =\
             manifold.metric.squared_dist(
-                reshaped_example_embedding, negative_embedding)
+                reshaped_example_embedding,
+                negative_embedding)
         negative_loss = log_sigmoid(negative_distance)
 
         total_loss = -(positive_loss + negative_loss.sum())
@@ -750,7 +709,8 @@ attention to the signs.
             -grad_log_sigmoid(-positive_distance)
 
         positive_distance_grad =\
-            grad_squared_distance(example_embedding, context_embedding)
+            grad_squared_distance(example_embedding,
+            context_embedding)
 
         positive_grad =\
             gs.repeat(positive_log_sigmoid_grad, dim, axis=-1)\
@@ -770,8 +730,8 @@ attention to the signs.
 
         return total_loss, example_grad
 
-Capturing the graph structure
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Capturing the graph structure`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this point we have the necessary bricks to compute the resulting
 gradient of :math:`L`. We are ready to prepare the nodes :math:`v_i`,
