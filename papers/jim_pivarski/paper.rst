@@ -228,13 +228,15 @@ and we could reuse the original :code:`content` to construct it. Since :code:`co
 Awkward 1.x
 -----------
 
-The first widely used version of Awkward Array was released in September 2018 as a pure Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops. In August 2019, we began a half-year project to rewrite the library in C++, isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." This project is complete, though transitioning users from the original "Awkward 0.x" to the new "Awkward 1.x" is not.
+The first widely used version of Awkward Array (0.x) was released in September 2018 as a pure Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops.
 
-Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
+In August 2019, we began a half-year project to rewrite the library in C++ (1.x), isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." Apart from the implementation of the "GPU kernels," this project is complete, though users are still transitioning from the original "Awkward 0.x" to the new "Awkward 1.x," which are both available as separate libraries in PyPI.
+
+Figure :ref:`awkward-1-0-layers` shows how Awkward 1.x is organized:
 
 * the high-level interface is in Python,
 * the array nodes (managing node hierarchy and ownership/lifetime) are in C++, accessed through pybind11,
-* an alternate implementation of array navigation was written for functions that are compiled by Numba,
+* an alternate implementation of array navigation was written for Python functions that are compiled by Numba,
 * array manipulation algorithms (without memory management) are independently implemented as "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
 
 .. figure:: figures/awkward-1-0-layers.pdf
@@ -243,9 +245,9 @@ Figure :ref:`awkward-1-0-layers` shows how the new library is organized:
 
    Components of Awkward Array, as described in the text. :label:`awkward-1-0-layers`
 
-Most array operations are shallow, affecting only one or a few levels of the hierarchy, as in our :code:`a[:, 1:]` example above. Thus, recursive walks over array nodes to perform operations such as these only step over a few nodes in C++, at most a thousand for particle physics use-cases. Iterations over billions of array elements are restricted to CPU kernels and GPU kernels, so performance optimization can be exclusively focused on this layer.
+Most array operations are shallow, affecting only one or a few levels of the hierarchy, but even in the worst case, an operation initiated by a Python call steps over at most all of the nodes of an array, which is no more than thousands in particle physics use-cases. The number of elements in the array can be billions (multi-GB memory). The loops over array elements are strictly contained in the kernels, so performance optimizations can focus on this layer.
 
-The C++ layer is primarily motivated by interoperability with C++ codebases, which are common in particle physics.
+The C++ layer is therefore not motivated by performance, since that is the responsibility of the kernels. It exists because many particle physics libraries are written in C++ and having a full object model for the arrays in C++ allows us to pass data to and from C++ libraries as Awkward Arrays, avoiding unnecessary conversions. The C++ implementation freely uses dynamic dispatch (virtual methods) and atomic reference counting (shared pointers) to match Python's object model.
 
 Numba for just-in-time compilation
 ----------------------------------
