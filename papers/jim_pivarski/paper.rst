@@ -386,7 +386,7 @@ and "vectorized" methods:
     # distances between pion 5 and 6 in all events
     events.pions[5].distance(events.pions[6])
 
-This capability has been ported to Awkward 1.x (in the C++ layer) and expanded upon. In Awkward 1.x, records can be named (as part of more general "properties" metadata) and record names are linked to Python classes through an :code:`ak.behavior` dict.
+This capability has been ported to Awkward 1.x and expanded upon. In Awkward 1.x, records can be named (as part of more general "properties" metadata in C++) and record names are linked to Python classes through an :code:`ak.behavior` dict.
 
 .. code-block:: python
 
@@ -426,6 +426,8 @@ Other kinds of behaviors can be assigned through different signatures in the :co
     # <Array [1.49, 2.97, 4.46] type='3 * float64'>
 
 custom broadcasting rules, and Numba extensions (typing and lowering functions).
+
+As a special case, strings are not defined as an array type, but as a parameter label on variable-length lists. Behaviors that present these lists as strings (overriding :code:`__repr__`) and define per-string equality (overriding :code:`np.equal`) are preloaded in the default :code:`ak.behavior`.
 
 GPU backend
 -----------
