@@ -13,15 +13,21 @@ import seaborn as sns
 from matplotlib.ticker import MultipleLocator, NullLocator
 
 
-dir_run1 = "../data/tests_performance/N128_OMP16_32nodes_2node"
-dir_run2 = "../data/tests_performance/N128_OMP16_32nodes_bp4"
+dir_run1 = "../data/tests_performance/N128_OMP16_32nodes_bp4"
+dir_run2 = "../data/tests_performance/N128_OMP16_32nodes_2node"
+dir_run3 = "../data/tests_performance/N128_OMP16_32nodes_3node_v3"
+
 assert(isdir(dir_run1))
 assert(isdir(dir_run2))
+assert(isdir(dir_run3))
 
 logfile_run1 = join(dir_run1, "delta.log")
 logfile_run2 = join(dir_run2, "delta.log")
+logfile_run3 = join(dir_run3, "delta.log")
+
 assert(isfile(logfile_run1))
 assert(isfile(logfile_run2))
+assert(isfile(logfile_run3))
 
 golden_ratio = 1.618
 columns = ["time_log", "tidx", "time_fft", "mode"]
@@ -67,10 +73,31 @@ with open(logfile_run2, "r") as df:
             tidx = int(splits[10][:-1])
             time_fft = float(splits[13][:-1])
             
-            
             new_row = {"time_log": time_log - toff_run2, "tidx":int(splits[10][:-1]), 
                        "time_fft": datetime.timedelta(seconds=float(splits[13][:-1])),
                        "mode": "bp4"}
+            dframe = dframe.append(new_row, ignore_index=True)
+
+with open(logfile_run3, "r") as df:
+    l0 = df.readline()
+    splits = l0.split()
+    # There is a , that needs to be removed
+    fix_mus = splits[2].replace(",", ".", 1)
+    fix_mus = fix_mus.replace(",", "")
+    toff_run3 = datetime.datetime.strptime(splits[1] + " " + fix_mus, "%Y-%m-%d %H:%M:%S.%f") 
+    
+    for line in df:
+        if "FFT took" in line:
+            splits = line.split()
+            fix_mus = splits[2].replace(",", ".", 1)
+            fix_mus = fix_mus.replace(",", "")
+            time_log = datetime.datetime.strptime(splits[1] + " " + fix_mus, "%Y-%m-%d %H:%M:%S.%f") 
+            tidx = int(splits[10][:-1])
+            time_fft = float(splits[13][:-1])            
+            
+            new_row = {"time_log": time_log - toff_run3, "tidx":int(splits[10][:-1]), 
+                       "time_fft": datetime.timedelta(seconds=float(splits[13][:-1])),
+                       "mode": "3node"}
             dframe = dframe.append(new_row, ignore_index=True)
 
 fig = plt.figure(figsize=(3.46, 3.46 / golden_ratio))
@@ -85,8 +112,16 @@ for index, row in dframe.iterrows():
         fc = "C0"
     elif row["mode"] == "2node":
         fc = "C1"
-    
+    elif row["mode"] == "3node":
+        fc = "C2"
+
     ax.broken_barh([(toff, tdelta)], (row.tidx, 1), facecolors=fc)
+
+ax.plot([0.0], [0.0], 'C0.', label="File")
+ax.plot([0.0], [0.0], 'C1.', label="2-node")
+ax.plot([0.0], [0.0], 'C2.', label="3-node")
+ax.set_xlim((10.0, 155.0))
+ax.legend(loc="lower right")
 
 ax.xaxis.set_major_locator(MultipleLocator(50.0))
 ax.xaxis.set_minor_locator(MultipleLocator(10.0))
@@ -106,7 +141,7 @@ fig2 = plt.figure(figsize=(3.46, 3.46 / golden_ratio))
 ax2 = fig2.add_axes([0.2, 0.2, 0.75, 0.75])
 sns.violinplot(x="mode", y="time_fft_secs", data=dframe, ax=ax2)
 ax2.set(ylabel=r"$t_{\mathrm{FFT}} / \mathrm{s}$", xlabel="")
-ax2.set_xticklabels(["2-node", "file"])
+ax2.set_xticklabels(["file", "2-node", "3-node"])
 
 ax2.yaxis.set_major_locator(MultipleLocator(2.5))
 ax2.yaxis.set_minor_locator(MultipleLocator(0.5))

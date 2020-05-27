@@ -150,7 +150,7 @@ visualize the large-scale structures of the plasma. Besides analyzing the normal
 several quantities calculated off the Fourier Transformed intensity :math:`X(\omega)`, here
 :math:`\omega` denotes the angular frequency, are used to study the plasma dynamics. The cross-power
 S, the coherence C, the cross-phase P and the cross-coherence R are defined respectively for pairs of
-Fourier Transformed intensity signals :math:`X` and :math:`Y as
+Fourier Transformed intensity signals :math:`X` and :math:`Y` as
 
 
 .. math:: 
@@ -182,23 +182,6 @@ as the cross coherence or the cross phases, are used to identify macro-scale str
 plasma, so called magnetic islands [Cho17]_. Detection of magnetic islands is an important task as
 they can disrupt plasma confinement.
 
-Commonly, ECEI measurements are analyzed batch-wise after a given plasma shot with lots of manual
-configurations. In a typical workflow the ECEI data is obtained manually from either a data file or
-a database. The researchers who analyze the data may use common analysis routines or prefer to use
-their own. In most cases, the channel pairs for which spectral quantities Eq.(:ref:`eq-S`) are to be
-computed are specified by hand. Output and visualization are stored in another file. 
-
-Modern HPC resources provide ample computing power to perform calculations of all relevant spectral quantities, for all channel pairs in near real-time. This allows to implement an automated streaming 
-workflow for ECEI data analysis. Furthermore, the calculated quantities can be stored with descriptibe meta-data for later access and re-analysis. By implementing a fast, automated analysis and storage of 
-the results the streaming workflow described here allows to provide fast insights into the physics 
-captured by the ECEI diagnostic and at the same time allows for scientific rigor by storing and 
-archiving the data. 
-
-For the rest of this paper we consider the ECEI data analysis workflow that consists of calculating
-Eqs.(:ref:`eq-S`) - (ref:`eq-R`) for :math:`n_{ch} = 500` time chunks. Each time chunk represents
-:math:`10,000` time samples from :math:`192` ECEI samples, which can be combined in 18336 unique
-channel pairs :math:`(x,y)`. To serve as input, a short-time Fourier Transformation (STFT) with a
-sliding window size of 512 samples is applied to the data multiplied to a Hann window.
 
 
 Targeted HPC architecture
@@ -270,6 +253,8 @@ After providing an overview of the ``Delta`` framework and introducing its compo
 we continue by describing the implementation details and present performance analysis of the components. 
 
 
+
+
 Components of the ``Delta`` framework
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -291,6 +276,8 @@ such as a database. Once stored, the analyzed can readily be ingested by visuali
    transmits time chunks via the ADIOS2 channels SSSSS_ECEI_NN. Here SSSSS 
    denotes the shot number and NN enumerates the ADIOS2 channels. The **processor** runs at the
    HPC site, recieves the data and submits it for processing through a ``task_list``. :label:`fig-sw-arch`.
+
+
 
 
 The generator is implemented as a single-threaded application. Data is sourced using a loader class,
@@ -326,6 +313,7 @@ The middle-man runs on the NERSC DTN. It's task is to read data from the generat
 to the processor. Using the classes available in ``Delta``, the pseudo-code looks similar to the
 generator. But instead of a loader, a reader object is instantiated that consumes the generators
 writer stream. This stream is passed to a writer object that sends the stream to the processor.
+
 
 The processor is run on Cori. It receives an incoming time chunks from an ADIOS2 stream, publishes
 them in a queue and submits analysis tasks to a pool of worker threads. As illustrated in
@@ -383,6 +371,9 @@ Queue for Inter-process communication a series of worker threads is started. In 
 consumes the data stream and the data packets are inserted in the queue. The array of worker tasks 
 subsequently read data from the queue and dispatch it to the data analysis code.
 
+
+
+
 The actual data analysis code is implemented as cython kernels which are described in a later subsection.
 While the low-level implementation of Eqs. (:ref:`eq-S`) - (:ref:`eq-R`) is in cython, ``Delta`` abstracts
 them through the ``task`` class. Sans initialization the relevant class methods looks like this:
@@ -433,6 +424,9 @@ task_list, one may choose to execute the Fourier Transformation in the task_clas
 particular choice would for example increase the number of Fourier Transformations by a factor of 4.
 
 
+
+
+
 Explored alternative architectures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -458,10 +452,12 @@ design approach.
 
 
 
+
+
 Using data analysis codes  ``Delta``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In a very broad sense, data analysis can be described as applying a transformation :math:`F` to
+In a broad sense, data analysis can be described as applying a transformation :math:`F` to
 some data :math:`d`,
 
 .. math::
@@ -661,17 +657,17 @@ performed on an allocation using 8 Cori nodes partitioned into 32 MPI ranks with
 a total of 2048 CPU cores.
 
 
-.. table:: Walltime for the ECEI workflow in different configurations .  :label:`walltimes`
+.. table:: Walltime and number of processesed time chunk for the ECEI workflow in different configurations .  :label:`walltimes`
 
-    +-------------+--------------------+
-    | Scenario    |   Walltime / s     |
-    +=============+====================+
-    | file        | 352                |
-    +-------------+--------------------+
-    | 2-node      | 221                |
-    +-------------+--------------------+
-    | 3-node      | No data yet        |
-    +-------------+--------------------+
+    +-------------+----------+-----------+----------+
+    | Scenario    | Walltime | processed |  Average |
+    +=============+==========+===========+==========+
+    | file        | 352s     | 500       | 0.70s    |
+    +-------------+----------+-----------+----------+
+    | 2-node      | 221s     | 318       | 0.69     |
+    +-------------+----------+-----------+----------+
+    | 3-node      | 148s     | 193       | 0.77     |
+    +-------------+----------+-----------+----------+
 
 
 The walltime for the file-based workflow is 352s, about 221s for the 2-node scenario and ... for the
@@ -685,7 +681,7 @@ than streaming, data spends on average less time in the 2-node streaming scenari
 .. figure:: plots/performance_time_subcon.png
    :scale: 100%
 
-   Time that the individual time chunks are queued for the scenarios listed in Table 3. :label:`delta-perf-queue`
+   Time that the individual time chunks are queued. The color legend is shown in Figure 6 :label:`delta-perf-queue`
 
 As a time chunk is read from the queue, a STFT is executed. The time where this occurs to the individual time-chunks 
 is shown in :ref:`delta-fft-tstart`. The beginning of each horizontal bar indicates where a time chunk is submitted 
@@ -727,8 +723,10 @@ benchmarks shown in the previous section.
 
    Timing and utilization of the MPI ranks executing data analysis kernels for the ``2-node`` scenario :label:`delta-perf-2node`
 
+.. figure:: plots/nodes_walltime_3node.png
+   :scale: 100%
 
-
+   Timing and utilization of the MPI ranks executing data analysis kernels for the ``3-node`` scenario :label:`delta-perf-3node`
 
 
 Conclusions and future work
@@ -765,6 +763,7 @@ The authors would like to acknowledge the excellent technical support from engin
 at the National Energy Research Scientific Computing Center in developing delta. This work used
 resources of the National Energy Research Scientific Computing Center (NERSC), a U.S. DOE Office of
 Science User Facility operated under Contract No. DE-AC02-05CH11231.
+
 
 References
 ----------
