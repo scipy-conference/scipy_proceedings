@@ -675,7 +675,8 @@ The following function given :math:`\phi_i`, :math:`\phi'_j` and
 vector at :math:`\phi_i`. To obtain the value of :math:`L` the loss function
 formula is simply applied. For the gradient of :math:`L`, we apply the composition of
 ``grad_log_sigmoid`` with ``grad_squared_distance`` while paying
-attention to the signs as
+attention to the signs. Please note that we omitted details regarding reshaping
+the arrays. The full code is available in in the `examples` directory.
 
 .. code:: ipython3
 
@@ -686,8 +687,7 @@ attention to the signs as
         n_edges, dim =\
             negative_embedding.shape[0],
             example_embedding.shape[-1]
-        example_embedding = gs.expand_dims(example_embedding, 0)
-        context_embedding = gs.expand_dims(context_embedding, 0)
+
         positive_distance =\
             manifold.metric.squared_dist(
                 example_embedding,
@@ -695,11 +695,9 @@ attention to the signs as
         positive_loss =\
             log_sigmoid(-positive_distance)
 
-        reshaped_example_embedding =\
-            gs.repeat(example_embedding, n_edges, axis=0)
         negative_distance =\
             manifold.metric.squared_dist(
-                reshaped_example_embedding,
+                example_embedding,
                 negative_embedding)
         negative_loss = log_sigmoid(negative_distance)
 
@@ -713,21 +711,21 @@ attention to the signs as
             context_embedding)
 
         positive_grad =\
-            gs.repeat(positive_log_sigmoid_grad, dim, axis=-1)\
+            positive_log_sigmoid_grad,
             * positive_distance_grad
 
         negative_distance_grad =\
-            grad_squared_distance(reshaped_example_embedding, negative_embedding)
+            grad_squared_distance(
+                example_embedding,
+                negative_embedding)
 
-        negative_distance = gs.to_ndarray(negative_distance,
-                                          to_ndim=2, axis=-1)
         negative_log_sigmoid_grad =\
             grad_log_sigmoid(negative_distance)
 
         negative_grad = negative_log_sigmoid_grad\
             * negative_distance_grad
-        example_grad = -(positive_grad + negative_grad.sum(axis=0))
-
+        example_grad =
+                -(positive_grad + negative_grad)
         return total_loss, example_grad
 
 `Capturing the graph structure`
@@ -742,8 +740,8 @@ node :math:`v_i\in V` with random points belonging to the Poincaré disk.
 
 .. code:: ipython3
 
-    embeddings = gs.random.normal(size=(karate_graph.n_nodes, dim))
-    embeddings = embeddings * 0.2
+    embeddings = gs.random.normal(
+        size=(karate_graph.n_nodes, dim)) * 0.2
 
 Next, to prepare the context nodes :math:`v_j` for each node
 :math:`v_i`, we compute random walks initialised from each :math:`v_i`
@@ -766,9 +764,9 @@ previously defined probability distribution function
 
     for i, nb_v in enumerate(nb_vertices_by_edges):
         negative_sampling_table +=\
-            ([i] * int((nb_v**(3. / 4.))) * negative_table_parameter)
+            ([i] * int((nb_v**(3. / 4.)))
+                * negative_table_parameter)
 
-    negative_sampling_table = gs.array(negative_sampling_table)
 
 Numerically optimizing the loss function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -811,20 +809,26 @@ Riemannian exponential map is applied to find the new value of
         for path in random_walks:
 
             for example_index, one_path in enumerate(path):
-                context_index = path[max(0, example_index - context_size):
-                                     min(example_index + context_size,
-                                     len(path))]
+                context_index = path[max(
+                    0, example_index - context_size):
+                    min(example_index + context_size,
+                    len(path))]
                 negative_index =\
-                    gs.random.randint(negative_sampling_table.shape[0],
-                                      size=(len(context_index),
-                                      n_negative))
-                negative_index = negative_sampling_table[negative_index]
+                    gs.random.randint(
+                        negative_sampling_table.shape[0],
+                        size=(len(context_index),
+                        n_negative))
+                negative_index =
+                    negative_sampling_table[negative_index]
 
-                example_embedding = embeddings[one_path]
-                for one_context_i, one_negative_i in zip(context_index,
-                                                         negative_index):
-                    context_embedding = embeddings[one_context_i]
-                    negative_embedding = embeddings[one_negative_i]
+                example_embedding =
+                    embeddings[one_path]
+                for one_context_i, one_negative_i in
+                    zip(context_index, negative_index):
+                    context_embedding =
+                        embeddings[one_context_i]
+                    negative_embedding =
+                        embeddings[one_negative_i]
                     l, g_ex = loss(
                         example_embedding,
                         context_embedding,
@@ -832,8 +836,10 @@ Riemannian exponential map is applied to find the new value of
                         hyperbolic_manifold)
                     total_loss.append(l)
 
-                    example_to_update = embeddings[one_path]
-                    embeddings[one_path] = hyperbolic_manifold.metric.exp(
+                    example_to_update =
+                        embeddings[one_path]
+                    embeddings[one_path] =
+                        hyperbolic_manifold.metric.exp(
                         -lr * g_ex, example_to_update)
         logging.info(
             'iteration %d loss_value %f',
