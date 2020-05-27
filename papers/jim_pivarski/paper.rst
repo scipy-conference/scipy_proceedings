@@ -429,6 +429,55 @@ custom broadcasting rules, and Numba extensions (typing and lowering functions).
 
 As a special case, strings are not defined as an array type, but as a parameter label on variable-length lists. Behaviors that present these lists as strings (overriding :code:`__repr__`) and define per-string equality (overriding :code:`np.equal`) are preloaded in the default :code:`ak.behavior`.
 
+Pandas and other third-party libraries
+--------------------------------------
+
+Awkward Arrays are Pandas extensions, so they can be used as a :code:`Series` and :code:`DataFrame` column type. NumPy ufuncs on the resulting Pandas objects are correctly passed through to the Awkward Arrays (including behavioral overrides), though many special cases are missing for general use.
+
+Rather than directly embedding complex data structures in Pandas, however, it is often more useful to translate Awkward structures into Pandas structures. Variable-length lists translate naturally into MultiIndex rows:
+
+.. code-block:: python
+
+    ak.pandas.df(ak.Array([[[1.1, 2.2], [], [3.3]],
+                           [],
+                           [[4.4], [5.5, 6.6]],
+                           [[7.7]],
+                           [[8.8]]]))
+    #                             values
+    # entry subentry subsubentry
+    # 0     0        0               1.1
+    #                1               2.2
+    #       2        0               3.3
+    # 2     0        0               4.4
+    #       1        0               5.5
+    #                1               6.6
+    # 3     0        0               7.7
+    # 4     0        0               8.8
+
+and nested records translate into MultiIndex column names:
+
+.. code-block:: python
+
+    ak.pandas.df(ak.Array([{"I":
+                              {"a": _, "b": {"c": _}},
+                            "II":
+                              {"x": {"y": {"z": _}}}}
+                           for _ in range(0, 50, 10)]))
+    #         I      II
+    #         a   b   x
+    #             c   y
+    #                 z
+    # entry
+    # 0       0   0   0
+    # 1      10  10  10
+    # 2      20  20  20
+    # 3      30  30  30
+    # 4      40  40  40
+
+If an array contains records with fields of different nested list lengths, however, a single DataFrame cannot losslessly encode the information, though a collection related by a foreign key can.
+
+Other third-party libraries, such as NumExpr, are similarly wrapped to generalize their treatment of NumPy arrays to Awkward Arrays.
+
 GPU backend
 -----------
 
@@ -445,6 +494,19 @@ The kernels library contains many functions (428 with an "extern C" interface, 1
    :scale: 45%
 
    CPU kernels by algorithmic complexity, as of February 2020. :label:`kernels-survey`
+
+Transition from Awkward 0.x
+---------------------------
+
+Awkward Array is one of the most widely used Python packages for particle physics. In part, this is because it is a dependency of Uproot, which interprets ROOT files as arrays in the scientific Python ecosystem. (ROOT is the most widely used software package for particle physics; more than an exabyte of data are stored in ROOT files.) However, Awkward Arrays are increasingly being used apart from Uproot and ROOT, in scientific workflows that communicate via Arrow, Parquet, or HDF5. Figure :ref:`awkward-0-popularity` shows the adoption rate in a common metric with other major particle physics Python packages.
+
+.. figure:: figures/awkward-0-popularity.pdf
+   :align: center
+   :scale: 58%
+
+   Adoption of Awkward 0.x, measured by PyPI statistics, compared to other popular particle physics packages (root-numpy, iminuit, rootpy) and popular data science packages. :label:`awkward-0-popularity`
+
+Motivated by the success of Awkward 0.x, but learning from its limitations, Awkward 1.x was developed separately from the original library and it includes much needed interface changes as well as refactoring. To avoid disrupting ongoing physics analysis, is still deployed with :code:`awkward1` as its PyPI and Python module name. Although the new library is ready for data analysis, the ecosystem is not: at the time of writing, Uproot is still being updated to present ROOT data as Awkward 1.x arrays. Therefore, :code:`awkward` and :code:`awkward1` will coexist until a point later this year, when PyPI, Conda, Python, and GitHub names will simultaneously transfer :code:`awkward` to :code:`awkward0` and :code:`awkward1` to :code:`awkward`.
 
 Conclusions
 -----------
