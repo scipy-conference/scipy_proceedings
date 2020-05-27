@@ -366,10 +366,56 @@ Figure~\ref{convertedfig:SPD} (left) shows the performance of these similarities
 Tutorial: Learning graph representations with Hyperbolic spaces
 ---------------------------------------------------------------
 
+Hyperbolic spaces and machine learning applications
+***************************************************
+
+Before going into this tutorial, let us recall a few applications of hyperbolic spaces
+in the machine learning literature. Hyperbolic spaces arise in information and
+learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher
+metric densities is a hyperbolic space :cite:`1531851`. This characterization
+is used in various fields, such as in image processing, where each image pixel is
+represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
+processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`.
+
+The hyperbolic spaces can also be stanfordeen as continuous versions of trees and are
+therefore interesting when learning hierarchical representations of data
+:cite:`Nickel2017`. Hyperbolic geometric graphs (HGG) have also been suggested
+as a promising model for social networks, where the hyperbolicity appears through
+a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`.
+
+Tutorial context and description
+********************************
+
+Recently, the embedding of Graph Structured Data (GSD) on manifolds has
+received considerable attention. Learning GSD has known major achievements in recent years thanks to the
+discovery of hyperbolic embeddings. Although it has been speculated since
+several years that hyperbolic spaces would better represent GSD than
+Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`, it is only recently
+that these speculations have been proven effective through concrete studies
+and applications :cite:`Nickel2017` :cite:`DBLP:journals/corr/ChamberlainCD17` :cite:`DBLP:conf/icml/SalaSGR18` :cite:`gerald2019node`.
+As outlined by :cite:`Nickel2017`, Euclidean embeddings require large
+dimensions to capture certain complex relations such as the Wordnet
+noun hierarchy. On the other hand, this complexity can be captured by
+a simple model of hyperbolic geometry such as the Poincaré disc of two
+dimensions :cite:`DBLP:conf/icml/SalaSGR18`.
+Additionally, hyperbolic embeddings provide better visualisation of
+clusters on graphs than Euclidean embeddings
+:cite:`DBLP:journals/corr/ChamberlainCD17`.
+
+In the scope of these recent
+discoveries, this tutorial shows how to learn such embeddings in ``geomstats``
+using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
+We will first recall a few properties of hyperbolic spaces. Then show how to
+import the necessary modules from `geomstats` and initialize embedding parameters.
+The embedding method is then presented formally while showing how it is
+implemented in `geomstats`. Finally the resulting embedding is plotted.
 
 Hyperbolic space
 ****************
-The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embedding in the :math:`(n+1)`-dimensional Minkowski space, which is a flat pseudo-Riemannian manifold, as:
+
+The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its
+embedding in the :math:`(n+1)`-dimensional Minkowski space, which is a flat
+pseudo-Riemannian manifold, as:
 
 .. math::
    :label: hyperbolic
@@ -378,33 +424,463 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
         x \in \mathbb{R}^{n+1}: - x_1^2 + ... + x_1{n+1}^2 = -1
     \right\}.
 
-Visualizations of the Hyperbolic space
-**************************************
-
-We can visualize the hyperbolic space $H_2$ through the Poincare disk representation, where the border of the disk is at infinity. The user can then observe how a geodesic grid and a geodesic square are deformed in the hyperbolic geometry on Figure~\ref{fig:poincaredisk}.
+We can visualize the hyperbolic space :math:`H_2` through the Poincare disk representation,
+where the border of the disk is at infinity. Geodesics are
+the shortest path between two points.
+The user can then observe how a geodesic grid and a geodesic square are deformed in the
+hyperbolic geometry on Figures :ref:`fig:grid` and :ref:`fig:square`. Additionally, Figure :ref:`fig:geopoincare` shows how
+geodesics between pairs of points behave when the pairs gradually
+move away from the center of the disk and from each other.
+Denote as :math:`d` the distance between two points, it corresponds to the length
+of the geodesic that links them.
 
 .. figure:: grid_h2.pdf
    :align: center
-   :scale: 30%
+   :scale: 35%
 
-   Regular geodesic grid on the Hyperbolic space $H^2$ in Poincare disk representation.
+   Regular geodesic grid on the Hyperbolic space :math:`H_2` in Poincare disk representation :label:`fig:grid`.
 
 
 .. figure:: square_h2.pdf
    :align: center
-   :scale: 30%
+   :scale: 35%
 
-   Geodesic square on the Hyperbolic space $H_2$, with points regularly spaced on the geodesics defining the square's edges.
+   Geodesic square on the Hyperbolic space :math:`H_2`, with points regularly spaced on the geodesics defining the square's edges :label:`fig:square`.
+
+.. figure:: learning_graph_structured_data_h2_files/geodesics.png
+    :scale: 30%
+    :align: center
+
+    Geodesics passing through pairs of points in the Poincaré disc :label:`fig:geopoincare`.
 
 
-Hyperbolic spaces in the literature
-***********************************
+Learning graph representations with hyperbolic spaces in `Geomstats`
+********************************************************************
 
-We now focus on the applications of hyperbolic spaces in the machine learning literature. Hyperbolic spaces arise in information and learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher metric densities is a hyperbolic space \cite{costa2005fisher}. This characterization is used in various fields, such as in image processing, where each image pixel is represented by a Gaussian distribution \cite{Angulo2014}, or in radar signal processing where the corresponding echo is represented by a stationary Gaussian process \cite{Arnaudon2013}.
+Setup
+~~~~~
 
-The hyperbolic spaces can also be stanfordeen as continuous versions of trees and are therefore interesting when learning hierarchical representations of data \cite{Nickel2017}. Hyperbolic geometric graphs (HGG) have also been suggested as a promising model for social networks, where the hyperbolicity appears through a competition between similarity and popularity of an individual \cite{Papadopoulos2012}.
+We start by importing standard tools for logging and visualization,
+allowing us to draw the embedding of the GSD on the manifold. Next, we
+import the manifold of interest, visualization tools, and other methods
+from ``geomstats``.
 
-Learning graph representations with hyperbolic spaces in Geomstats
-******************************************************************
+.. code:: ipython3
 
--> Example here to be converted to a notebook: https://github.com/geomstats/geomstats/blob/master/examples/learning_graph_structured_data_h2.py
+    import logging
+
+    import matplotlib.pyplot as plt
+
+    import geomstats
+    import geomstats.backend as gs
+    import geomstats.visualization as visualization
+    from geomstats.datasets
+        import graph_data_preparation as gdp
+    from geomstats.geometry.poincare_ball
+        import PoincareBall
+
+
+Parameters and Initialization
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Table :ref:`tabparam` defines the parameters needed for embedding.
+Let us discuss a few things about the parameters of the above table. The
+number of dimensions should be high (i.e., 10+) for large datasets
+(i.e., where the number of nodes/edges is significantly large). In this
+tutorial we consider a dataset that is quite small with only 34 nodes.
+The Poincaré disk of only two dimensions is therefore sufficient to
+capture the complexity of the graph and provide a faithful
+representation. Some parameters are hard to know in advance, such as
+``max_epochs`` and ``lr``. These should be tuned specifically for each
+dataset. Visualization can help with tuning the parameters. Also, one
+can perform a grid search to find values of these parameters which
+maximize some performance function. In learning embeddings, one can
+consider performance metrics such as a measure for cluster seperability
+or normalized mutual information (NMI) or others. Similarly, the number
+of negative samples and context size can also be thought of as
+hyperparameters and will be further discussed in the sequel. An instance
+of the ``Graph`` class is created and set to the Karate club dataset.
+The latter and several others can be found in the ``datasets.data`` module.
+
+.. table:: Embedding parameters :label:`tabparam`
+
+    +--------------+------------------------------------------------+
+    | Parameter    | Description                                    |
+    +==============+================================================+
+    | random.seed  | An initial manually set number                 |
+    |              | for generating pseudorandom                    |
+    |              | numbers                                        |
+    +--------------+------------------------------------------------+
+    | dim          | Dimensions of the manifold used for embedding  |
+    +--------------+------------------------------------------------+
+    | max_epochs   | Number of iterations for learning the embedding|
+    +--------------+------------------------------------------------+
+    | lr           | Learning rate                                  |
+    +--------------+------------------------------------------------+
+    | n_negative   | Number of negative samples                     |
+    +--------------+------------------------------------------------+
+    | context_size | Size of the considered context                 |
+    |              | for each node of the graph                     |
+    +--------------+------------------------------------------------+
+
+
+.. code:: ipython3
+
+    gs.random.seed(1234)
+    dim = 2
+    max_epochs = 15
+    lr = .05
+    n_negative = 2
+    context_size = 1
+    karate_graph = gdp.Graph(
+        graph_matrix_path=
+            geomstats.datasets.utils.KARATE_PATH,
+        labels_path=
+            geomstats.datasets.utils.KARATE_LABELS_PATH)
+
+The Zachary karate club network was collected from the members of a
+university karate club by Wayne Zachary in 1977. Each node represents a
+member of the club, and each edge represents an undirected relation
+between two members. An often discussed problem using this dataset is to
+find the two groups of people into which the karate club split after an
+argument between two teachers. Figure :ref:`karafig` displays the dataset graph.
+Further information about the dataset is
+displayed to provide insight into its complexity.
+
+.. figure:: learning_graph_structured_data_h2_files/karate_graph.png
+    :scale: 30%
+    :align: center
+
+    Karate club dataset graph. :label:`karafig`
+
+
+.. code:: ipython3
+
+    nb_vertices_by_edges =\
+        [len(e_2) for _, e_2 in
+            karate_graph.edges.items()]
+    logging.info('
+        Number of edges: %s', len(karate_graph.edges))
+    logging.info(
+        'Mean vertices by edges: %s',
+        (sum(nb_vertices_by_edges, 0) /
+            len(karate_graph.edges)))
+
+.. parsed-literal::
+
+    INFO: Number of edges: 34
+    INFO: Mean vertices by edges: 4.588235294117647
+
+
+Let us now prepare the hyperbolic space for embedding.
+Recall that :math:`H_2` is the Poincaré disk equipped with the distance function
+:math:`d`. Declaring an instance of the ``PoincareBall`` manifold of two dimensions
+in ``geomstats`` is straightforward:
+
+.. code:: ipython3
+
+    hyperbolic_manifold = PoincareBall(2)
+
+
+**End of part 1**
+
+
+
+Learning embedding by optimizing a loss function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
+set of edges. The goal of embedding GSD is to provide a faithful and
+exploitable representation of the graph structure. It is mainly achieved
+by preserving *first-order* proximity that enforces nodes sharing edges
+to be close to each other. It can additionally preserve *second-order*
+proximity that enforces two nodes sharing the same context (i.e., nodes
+that are neighbours but not necessarily directly connected) to be close.
+To preserve first and second-order proximities we adopt a loss function
+similar to :cite:`NIPS2017_7213` and consider the negative sampling
+approach as in :cite:`NIPS2013_5021` :
+
+.. math::      \mathcal{L} = - \sum_{v_i\in V} \sum_{v_j \in C_i} \bigg[ log(\sigma(-d^2(\phi_i, \phi_j'))) + \sum_{v_k\sim \mathcal{P}_n} log(\sigma(d^2(\phi_i, \phi_k')))  \bigg]
+
+where :math:`\sigma(x)=\frac{1}{1+e^{-x}}` is the sigmoid function and
+:math:`\phi_i \in \mathbb{B}^m` is the embedding of the :math:`i`-th
+node of :math:`V`, :math:`C_i` the nodes in the context of the
+:math:`i`-th node, :math:`\phi_j'\in \mathbb{B}^m` the embedding of
+:math:`v_j\in C_i` and :math:`\mathcal{P}_n` the negative sampling
+distribution over :math:`V`:
+:math:`\mathcal{P}_n(v)=\frac{deg(v)^{3/4}}{\sum_{v_i\in V}deg(v_i)^{3/4}}`.
+Intuitively one can see that to minimizing :math:`L`, the distance
+between :math:`v_i` and :math:`v_j` should get smaller, while the one
+between :math:`v_i` and :math:`v_k` would get larger.
+
+.. figure:: learning_graph_structured_data_h2_files/Notations.png
+    :scale: 40%
+    :align: center
+
+    Distances between embedded nodes after applying one optimization iteration.
+
+Riemannian optimization
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Following the idea of we use the following formula to optimize
+:math:`L`:
+
+.. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial L}{\partial \phi} \right)
+
+where :math:`\phi` is a parameter of :math:`L`,
+:math:`t\in\{1,2,\cdots\}` is the epoch iteration number and :math:`lr`
+is the learning rate. The formula consists of first computing the usual
+gradient of the loss function giving the direction in which the
+parameter should move. The Riemannian exponential map :math:`\text{Exp}`
+is a function that takes a base point :math:`\phi^t` and some direction
+vector :math:`T` and returns the point :math:`\phi^{t+1}` such that
+:math:`\phi^{t+1}` belongs to the geodesic initiated from
+:math:`\phi{t}` in the direction of :math:`T` and the length of the
+geoedesic curve between :math:`\phi^t` and :math:`\phi^{t+1}` is of 1
+unit. The Riemannian exponential map is implemented as a method of the
+``PoincareBallMetric`` class in the ``geometry`` module of
+``geomstats``.
+
+Therefore to minimize :math:`L` we will need to compute its gradient.
+Several steps are required to do so, 1. Compute the gradient of the
+squared distance 2. Compute the gradient of the log sigmoid 3. Compute
+the gradient of the composision of 1. and 2.
+
+For 1., we use the formula proposed by which uses the Riemannian
+logarithmic map to compute the gradient of the distance. This is
+implemented as
+
+.. code:: ipython3
+
+    def grad_squared_distance(point_a, point_b):
+        """Gradient of squared hyperbolic distance.
+
+        Gradient of the squared distance based on the
+        Ball representation according to point_a
+
+        Parameters
+        ----------
+        point_a : array-like, shape=[n_samples, dim]
+            First point in hyperbolic space.
+        point_b : array-like, shape=[n_samples, dim]
+            Second point in hyperbolic space.
+
+        Returns
+        -------
+        dist : array-like, shape=[n_samples, 1]
+            Geodesic squared distance between the two points.
+        """
+        hyperbolic_metric = PoincareBall(2).metric
+        log_map = hyperbolic_metric.log(point_b, point_a)
+
+        return -2 * log_map
+
+For 2. define the ``log_sigmoid`` corresponding as follows:
+
+.. code:: ipython3
+
+    def log_sigmoid(vector):
+        """Logsigmoid function.
+
+        Apply log sigmoid function
+
+        Parameters
+        ----------
+        vector : array-like, shape=[n_samples, dim]
+
+        Returns
+        -------
+        result : array-like, shape=[n_samples, dim]
+        """
+        return gs.log((1 / (1 + gs.exp(-vector))))
+
+The gradient of the logarithm of sigmoid function is implemented as:
+
+.. code:: ipython3
+
+    def grad_log_sigmoid(vector):
+        """Gradient of log sigmoid function.
+
+        Parameters
+        ----------
+        vector : array-like, shape=[n_samples, dim]
+
+        Returns
+        -------
+        gradient : array-like, shape=[n_samples, dim]
+        """
+        return 1 / (1 + gs.exp(vector))
+
+For 3., apply the composition rule to obtain the gradient of :math:`L`.
+The following function given :math:`\phi_i`, :math:`\phi'_j` and
+:math:`\phi'_k` returns the total value of :math:`L` and its gradient
+vector at :math:`\phi_i`. For the value of :math:`L` the loss function
+formula is simply applied. For the gradient, we apply the composition of
+``grad_log_sigmoid`` with ``grad_squared_distance`` while paying
+attention to the signs.
+
+.. code:: ipython3
+
+    def loss(example_embedding, context_embedding, negative_embedding,
+             manifold):
+        """Compute loss and grad.
+
+        Compute loss and grad given embedding of the current example,
+        embedding of the context and negative sampling embedding.
+        """
+        n_edges, dim =\
+            negative_embedding.shape[0], example_embedding.shape[-1]
+        example_embedding = gs.expand_dims(example_embedding, 0)
+        context_embedding = gs.expand_dims(context_embedding, 0)
+        positive_distance =\
+            manifold.metric.squared_dist(
+                example_embedding, context_embedding)
+        positive_loss =\
+            log_sigmoid(-positive_distance)
+
+        reshaped_example_embedding =\
+            gs.repeat(example_embedding, n_edges, axis=0)
+        negative_distance =\
+            manifold.metric.squared_dist(
+                reshaped_example_embedding, negative_embedding)
+        negative_loss = log_sigmoid(negative_distance)
+
+        total_loss = -(positive_loss + negative_loss.sum())
+
+        positive_log_sigmoid_grad =\
+            -grad_log_sigmoid(-positive_distance)
+
+        positive_distance_grad =\
+            grad_squared_distance(example_embedding, context_embedding)
+
+        positive_grad =\
+            gs.repeat(positive_log_sigmoid_grad, dim, axis=-1)\
+            * positive_distance_grad
+
+        negative_distance_grad =\
+            grad_squared_distance(reshaped_example_embedding, negative_embedding)
+
+        negative_distance = gs.to_ndarray(negative_distance,
+                                          to_ndim=2, axis=-1)
+        negative_log_sigmoid_grad =\
+            grad_log_sigmoid(negative_distance)
+
+        negative_grad = negative_log_sigmoid_grad\
+            * negative_distance_grad
+        example_grad = -(positive_grad + negative_grad.sum(axis=0))
+
+        return total_loss, example_grad
+
+Capturing the graph structure
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+At this point we have the necessary bricks to compute the resulting
+gradient of :math:`L`. We are ready to prepare the nodes :math:`v_i`,
+:math:`v_j` and :math:`v_k` and initialise their embeddings
+:math:`\phi_i`, :math:`\phi^{'}_j` and :math:`\phi^{'}_k`. First,
+initialize an array that will hold embeddings :math:`\phi_i` of each
+node :math:`v_i\in V` with random points belonging to the Poincaré disk.
+
+.. code:: ipython3
+
+    embeddings = gs.random.normal(size=(karate_graph.n_nodes, dim))
+    embeddings = embeddings * 0.2
+
+Next, to prepare the context nodes :math:`v_j` for each node
+:math:`v_i`, we compute random walks initialised from each :math:`v_i`
+up to some length (5 by default). The latter is done via a special
+function within the ``Graph`` class. The nodes :math:`v_j` will be later
+picked from the random walk of :math:`v_i`.
+
+.. code:: ipython3
+
+    random_walks = karate_graph.random_walk()
+
+Negatively sampled nodes :math:`v_k` are chosen according to the
+previously defined probability distribution function
+:math:`\mathcal{P}_n(v_k)` implemented as
+
+.. code:: ipython3
+
+    negative_table_parameter = 5
+    negative_sampling_table = []
+
+    for i, nb_v in enumerate(nb_vertices_by_edges):
+        negative_sampling_table +=\
+            ([i] * int((nb_v**(3. / 4.))) * negative_table_parameter)
+
+    negative_sampling_table = gs.array(negative_sampling_table)
+
+Numerically optimizing the loss function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Optimising the loss function is performed numerically over the number of
+epochs. At each iteration, we will compute the gradient of :math:`L`.
+Then the graph nodes are moved in the direction pointed by the gradient.
+The movement of the nodes is performed by following geodesics in the
+gradient direction. The key to obtain an embedding representing
+accurately the dataset, is to move the nodes smoothly rather than brutal
+movements. This is done by tuning the learning rate, such as at each
+epoch all the nodes made small movements.
+
+A *first level* loop iterates over the epochs, the table ``total_loss``
+will record the value of :math:`L` at each iteration and help us track
+the minimization of :math:`L`.
+
+A *second level* nested loop iterates over each path in the previously
+computed random walks. Observing these walks, notice that nodes having
+many edges appear more often. Such nodes can be considered as important
+crossroads and will therefore be subject to a greater number of
+embedding updates. This is one of the main reasons why random walks have
+proven to be effective in capturing the structure of graphs. The context
+of each :math:`v_i` will be the set of nodes :math:`v_j` belonging to
+the random walk from :math:`v_i`. The ``context_size`` specified earlier
+will limit the length of the walk to be considered. Similarly, we use
+the same ``context_size`` to limit the number of negative samples. We
+find :math:`\phi_i` from the ``embeddings`` array.
+
+A *third level* nested loop will iterate on each :math:`v_j` and
+:math:`v_k`. From within, we find :math:`\phi'_j` and :math:`\phi'_k`
+then call the ``loss`` function to compute the gradient. Then the
+Riemannian exponential map is applied to find the new value of
+:math:`\phi_i` as we mentioned before.
+
+.. code:: ipython3
+
+    for epoch in range(max_epochs):
+        total_loss = []
+        for path in random_walks:
+
+            for example_index, one_path in enumerate(path):
+                context_index = path[max(0, example_index - context_size):
+                                     min(example_index + context_size,
+                                     len(path))]
+                negative_index =\
+                    gs.random.randint(negative_sampling_table.shape[0],
+                                      size=(len(context_index),
+                                      n_negative))
+                negative_index = negative_sampling_table[negative_index]
+
+                example_embedding = embeddings[one_path]
+                for one_context_i, one_negative_i in zip(context_index,
+                                                         negative_index):
+                    context_embedding = embeddings[one_context_i]
+                    negative_embedding = embeddings[one_negative_i]
+                    l, g_ex = loss(
+                        example_embedding,
+                        context_embedding,
+                        negative_embedding,
+                        hyperbolic_manifold)
+                    total_loss.append(l)
+
+                    example_to_update = embeddings[one_path]
+                    embeddings[one_path] = hyperbolic_manifold.metric.exp(
+                        -lr * g_ex, example_to_update)
+        logging.info(
+            'iteration %d loss_value %f',
+            epoch, sum(total_loss, 0) / len(total_loss))
+
+
+.. parsed-literal::
+
+    INFO: iteration 0 loss_value 1.819844
+    INFO: iteration 14 loss_value 1.363593
