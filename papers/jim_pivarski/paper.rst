@@ -324,11 +324,15 @@ This is fast, but possibly non-intuitive. For more natural user code, we introdu
 
     find_quarks(particles, ak.ArrayBuilder()).snapshot()
 
-The ArrayBuilder is presented in more detail in the next section.
+The ArrayBuilder is described in more detail in the next section.
 
+Whereas the C++ implementation uses (relatively) slow runtime objects because the number of nodes touched by a vectorized operation scales with the complexity of the type, not the number elements in the array, a user function written in Numba would walk over the same nodes for each element of the array, and therefore must be more thoroughly optimized. Each node type is implemented as a Numba type, but the only runtime objects are lookup tables pointing to elements of the array's buffers. The node types generate specialized code for walking over these lookup tables (no dynamic dispatch) and apart from the ArrayBuilder interface, Awkward Arrays cannot be created in a Numba-compiled function (no memory management).
 
+Since the Numba models are so different from the C++ classes, Awkward's full suite of vectorized functions can't be applied in the compiled block. However, the following features are supported:
 
-
+* iteration and :code:`__len__` for arrays,
+* simple :code:`__getitem__`: integers indexes, slices, and strings for record fields that are compile-time constants,
+* attribute :code:`__getattr__` as an alternative for constant-string :code:`__getitem__`.
 
 ArrayBuilder: creating columnar data in-place
 ---------------------------------------------
