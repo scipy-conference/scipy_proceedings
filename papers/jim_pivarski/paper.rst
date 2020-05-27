@@ -432,7 +432,7 @@ As a special case, strings are not defined as an array type, but as a parameter 
 Pandas and other third-party libraries
 --------------------------------------
 
-Awkward Arrays are Pandas extensions, so they can be used as a :code:`Series` and :code:`DataFrame` column type. NumPy ufuncs on the resulting Pandas objects are correctly passed through to the Awkward Arrays (including behavioral overrides), though many special cases are missing for general use.
+Awkward Arrays are Pandas extensions, so they can be used as a :code:`Series` and :code:`DataFrame` column type. NumPy ufuncs on the resulting Pandas objects are correctly passed through to the Awkward Arrays (including behavioral overrides), though general use-cases of Awkward Arrays in Pandas are largely untested.
 
 Rather than directly embedding complex data structures in Pandas, however, it is often more useful to translate Awkward structures into Pandas structures. Variable-length lists translate naturally into MultiIndex rows:
 
@@ -476,7 +476,7 @@ and nested records translate into MultiIndex column names:
 
 If an array contains records with fields of different nested list lengths, however, a single DataFrame cannot losslessly encode the information, though several DataFrames related by a key can.
 
-Other third-party libraries, such as NumExpr, are similarly wrapped to generalize their treatment of NumPy arrays to Awkward Arrays.
+Other third-party libraries, such as NumExpr, are similarly wrapped to generalize their applicability from NumPy arrays to Awkward Arrays.
 
 GPU backend
 -----------
@@ -487,7 +487,7 @@ To allow for a future GPU backend, all instances of reading or writing to an arr
 
 In May 2020, we began developing the "GPU kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "GPU kernels" may be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
 
-The kernels library contains many functions (428 with an "extern C" interface, 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one uses dynamic memory, but there may be alternatives). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
+The kernels library contains many functions (428 with an :code:`"extern C"` interface, 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one uses dynamic memory, but there may be alternatives). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
 
 .. figure:: figures/kernels-survey.pdf
    :align: center
@@ -498,7 +498,7 @@ The kernels library contains many functions (428 with an "extern C" interface, 1
 Transition from Awkward 0.x
 ---------------------------
 
-Awkward Array is one of the most widely used Python packages for particle physics. In part, this is because it is a dependency of Uproot, which interprets ROOT files as arrays in the scientific Python ecosystem. (ROOT is the most widely used software package for particle physics; more than an exabyte of data are stored in ROOT files.) However, Awkward Arrays are increasingly being used apart from Uproot and ROOT, in scientific workflows that communicate via Arrow, Parquet, or HDF5. Figure :ref:`awkward-0-popularity` shows the adoption rate in a common metric with other major particle physics Python packages.
+Awkward Array is one of the most widely used Python packages for particle physics. In part, this is because it is a dependency of Uproot, which interprets ROOT files as arrays in the scientific Python ecosystem. (ROOT is the most widely used software package for particle physics; more than an exabyte of data are stored in ROOT files [11]_.) However, Awkward Arrays are increasingly being used apart from Uproot and ROOT, in scientific workflows that communicate via Arrow, Parquet, or HDF5. Figure :ref:`awkward-0-popularity` shows the adoption rate in a common metric with other major particle physics Python packages.
 
 .. figure:: figures/awkward-0-popularity.pdf
    :align: center
@@ -553,3 +553,6 @@ Reference
 
 .. [10] Wes McKinney. *Data Structures for Statistical Computing in Python*,
         Proceedings of the 9th Python in Science Conference, 51-56 (2010).
+
+.. [11] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
+        https://indico.cern.ch/event/913205/contributions/3840338 (2020).
