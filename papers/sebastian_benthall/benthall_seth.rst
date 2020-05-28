@@ -1,12 +1,11 @@
 :author: Sebastian Benthall
 :email: spb413@nyu.edu
-:institution: NYU School of Law
+:institution: New York University School of Law
+:institution: Econ-ARK
 
 :author: Mridul Seth
 :email: mridul@seth.com
 :institution: Econ-ARK
-
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 :bibliography: mybib
 
@@ -16,19 +15,31 @@ Aligning Across Use Cases for Domain Specific Scientific Software
 
 .. class:: abstract
 
-   An abstract
+   While general purpose scientific software has enjoyed
+   great success in industry and academia, domain specific
+   scientific software has not yet become well-established
+   in many disciplines where it has potential.
+   Based on a survey of the literature as well as
+   the authors' experiences contributing to Econ-ARK,
+   a structural modeling toolkit for Economics, we argue
+   that this is due to the well-documented skills gap
+   that prevents researchers, publishers, and professors
+   from making the most of the opportunities afforded by
+   scientific software.
+   Members of all three roles depend on research software
+   engineers to professionalize their code, produce publishable
+   computational artifacts, and support pedagogical objectives.
+   This gap will not be closed until software engineering
+   is considered a core skill for the discipline.
+   Software engineering should be reconceived as a research
+   method. 
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   computational method, computional thinking, constructionist learning, research software engineering
 
-Introduction
-------------
-
-...
-
-Literature review
-------------------
+Computing in Education and Science
+-------------------------------------
 
 Ever since :cite:`papert1980mindstorms` introduced
 'constructionist' learning using computers, educators
@@ -69,23 +80,38 @@ to the popularization of computer science.
 demand as "inferential thinking".
 Together, computational thinking and inferential thinking
 have been reimagined by some as the foundation for a
-new form of cross-disciplinary "data science" curriculum
-:cite:`adhikari2017computational`
+new form of cross-disciplinary "data science"
+curriculum :cite:`adhikari2017computational`
 :cite:`van2019accelerating`.
+A key technological feature of these new curricula are
+digital "notebooks" that enable users to compose
+"computational narratives" that make computing more
+cognitively digestible to humans :cite:`perez2015project`.
+Now, Jupyter notebooks are widely used for collaboration
+on research and, in some places, as part of pedagogy.
 
 Open source scientific software development has benefited
 from the influx of capital due to industry interest in
-"data science" applications. Software packages such as Numpy (cite)
-Pandas (cite) and Scikit-learn (cite) have become popular as
-infrastructure for data science--computational and inferential thinking.
-At the same time, these tools have provided a foundation and aspirational
-example for more domain specific scientific libraries, such as (need a list: astropy, what else?).
-Scientific educators continue to see potential in the use of these
-tools to support the education of their students not only
-*about computation*, but *about the world* :cite:`barba2016computational`,
+"data science" applications. Software packages such as
+Numpy :cite:`walt2011numpy`
+Pandas :cite:`mckinney2011pandas`
+and Scikit-learn :cite:`pedregosa2011scikit`
+have become popular as
+infrastructure for data science--computational and
+inferential thinking.
+At the same time, these tools have provided a
+foundation and aspirational
+example for more domain specific scientific libraries,
+such as
+astropy :cite:`robitaille2013astropy`,
+Biopython :cite:`cock2009biopython`,
+PsychoPy :cite:`peirce2007psychopy`,
+and SunPy :cite:`mumford2013sunpy`.
+Scientific educators continue to see potential in the use
+of these tools to support the education of their students
+not only *about computation*, but
+*about the world* :cite:`barba2016computational`,
 in a return to Papert's constructionist paradigm.
-
--- cf computational narratives :cite:`perez2015project`
 
 This vision of scientific research and education supported by
 open source domain specific scientific libraries faces two
@@ -117,14 +143,13 @@ scientific practice is that software-based learning
 requires additional education infrastructure.
 :cite:`suen2018equity` document the challenges in providing
 JupyterHub with automatic grading extensions at universities
-and colleges; they find that many institutions do not have the
-resources or deep IT expertise necessary to build and maintain this
-infrastructure. Cloud-based computational notebooks for assignments
-and exploration are coming to be necessary for computation-based
-scientific education, with implications for social equity in scientific
-education.
-
-
+and colleges; they find that many institutions do not
+have the resources or deep IT expertise necessary to
+build and maintain this infrastructure.
+Cloud-based computational notebooks for assignments
+and exploration are coming to be necessary for
+computation-based scientific education, with implications
+for social equity in scientific education.
 
 Discipline Specifics
 ---------------------
@@ -132,40 +157,56 @@ Discipline Specifics
 The Econ-ARK project :cite:`carroll2018econ`
 is a toolkit for the structural
 modeling of optimizing economic choices by heterogenous agents.
-A primary goal of its flagship software library, HARK (Heterogenous
-Agent Research toolKit) is to support economic research
-into heterogeneous agent (HA) modeling, which became a research priority
+A primary goal of its flagship software library, HARK
+(Heterogenous Agent Research toolKit) is to support economic
+research into heterogeneous agent (HA)
+modeling :cite:`hommes2006heterogeneous`,
+which became a research priority
 after the 2008 financial crisis revealed the weaknesses in the
-then-dominant representative agent (RA) based paradigm.
-It has been designed so that researchers and students can take a hands-on approach to economic modeling in software :cite:`carroll2018hands`.
-It lies roughly in the Papertian educational tradition, similar to
-other agent-based modeling software such as NetLogo :cite:`tisue2004netlogo` and Mesa :cite:`masad2015mesa`.
-However, in Econ-ARK models, agents that optimize their behavior strategically with respect to predicted effects over time.
-In this respect, Econ-ARK has some characteristics of a reinforcement learning or "AI" toolkit.
+then-dominant representative agent (RA) based paradigm
+(which had been known since the work of :cite:`kirman1992whom`).
+It has been designed so that researchers and students can
+take a hands-on approach to economic modeling in
+software :cite:`carroll2018hands`.
+Econ-ARK is in some respects a port of
+Dynare :cite:`adjemian2011dynare`,
+an earlier computing library for economic models,
+into Python.
 
-(Example of a problem, here: bellman equations, etc.)
+It lies roughly in the Papertian educational tradition,
+similar to other agent-based modeling software such as
+NetLogo :cite:`tisue2004netlogo` and Mesa :cite:`masad2015mesa`.
+However, in Econ-ARK models, agents that optimize their
+behavior strategically with respect to predicted effects
+over time.
+In this respect, Econ-ARK has some characteristics of a
+reinforcement learning or "AI" toolkit.
 
-(Emphasis on structural modeling as reasoning about counterfactuals and interventions))
+[TODO: Example of a problem, here: bellman equations, etc.]
 
-Models in HARK are, at a certain level of mathematical abstraction,
-equivalent to Markov Decision Problems (MDP).
-However, generic MDP software is not adequate for research in this
-field, for several reasons.
+Models in HARK are, at a certain level of mathematical
+abstraction, equivalent to Markov Decision Problems (MDP).
+However, generic MDP software is not adequate for research
+in this field, for several reasons.
 
-- **Substantive, policy-oriented model-building.**
+- **Substantive, policy-oriented structural modeling.**
   Unlike many recent fields of "data science", in which generic
   model-fitting and machine-learning techniques are applied to
-  a large data set for the purpose of maximizing predictive potential,
+  a large data set for the purpose of maximizing predictive
+  potential,
   this branch of economics operates with relatively scarce data and
-  a drive for model veracity. Besides the academic field of researchers,
-  the intended audience for these models are national central banks
-  and other policy-makers. For example, one policy application of these
+  a drive for model veracity. Besides the academic field of
+  researchers, the intended audience for these models are
+  national central banks and other policy-makers.
+  For example, one policy application of these
   models is predicting the impact of the CARES stimulus bill on
-  consumption. :cite:`carroll2020modeling` These models are scientifically
-  valued for their ability to approximate real social dynamics, and
-  for their ability to build consensus towards policy-making, in addition
-  to their goodness of fit to available data.
-- **Analytical results informing solvers.** Like many other sciences,
+  consumption :cite:`carroll2020modeling`.
+  These models are scientifically
+  valued for their ability to approximate real social dynamics,
+  and for their ability to build consensus towards policy-making,
+  in addition to their goodness of fit to available data.
+- **Analytical results informing solvers.**
+  Like many other sciences,
   this branch of economics has a theoretical component consisting in
   mathematical proofs about the models in question.
   In addition to providing
@@ -218,7 +259,7 @@ categories have been useful as
 "ideal types" :cite:`hekman1983weber` with which to reason
 about requirements and skills.
 
-- **Researcher**. The role at the heart of the Econ-ARK
+**Researcher**. The role at the heart of the Econ-ARK
 system is that of the Researcher. This user is trying to
 advance the frontier of economic thinking by drawing on
 deep domain knowledge (economics) as well as general training
@@ -238,7 +279,8 @@ As a consequence there is a skills gap: researchers often
 have programming ability, but not the software engineering
 and IT training that is necessary to fully realize the
 vision of the software's potential. :cite:`crouch2013software`
-- **Publisher**. One way to untie the Gordian knot of
+
+**Publisher**. One way to untie the Gordian knot of
 incentives around the Econ-ARK is to provide a more
 reliable and efficent path towards recognized scholarly
 publication using Econ-ARK tools.
@@ -258,7 +300,8 @@ challenges of _publication_ require IT skills that are
 in general not available to researchers who may be
 technically capable fo programming models that show
 substantive academic results.
-- **Teacher and Student**. In an academic context,
+
+**Teacher and Student**. In an academic context,
 the pedagogical use case is as important as the
 researcher's use case. While the researcher is building new
 models to communicate new discoveries, the teacher guides
@@ -279,7 +322,7 @@ not part of normal disciplinary training in economics.
 Economics professors currently require others to fill the social
 role that enables these tools to be useful.
 
-- **Software engineer**. The elephant in the room in
+**Software engineer**. The elephant in the room in
 all discussions of scientific software and computational
 education is that building and deploying robust software
 is its own complex field that often shares few disciplinary
@@ -395,21 +438,67 @@ classroom, effectively publishing results, and contributing
 new features to scientific libraries.
 Yet they are currently considered a peripheral part of
 disciplinary education in economics.
-What if there were an introductory course for first year
-Economics PhD students, "Software Engineering for Economists",
-that guided students in using the necessary tools?
-There are basic research methods course for such programs:
-quantitative research, qualitative research, econometrics,
-applied statistics. So far, computational narratives and
-constructionism have not been considered a _method_ in
-a way that would require such basic treatment.
-And yet :cite:`epstein2006generative` among others have
+Researchers and professors are not taught these skills
+as part of their training as students.
+This contributes to a systemic skills gap between the
+discipline and technology.
+
+One potential solution to this problem would be to
+introduce more software engineering training into the
+core curriculum for graduate students.
+Some Economics departments already offer a course
+on Computational Methods, analogous to earlier courses
+on Mathematical Methods", Econometrics, or other methods
+courses.
+As the pragmatic needs of computational methods increasingly
+require such activities as setting up local development
+environments, preparing cloud computing infrastructure,
+and utilizing autodocumentation, version control
+and package management tools, these techniques could be
+included as part of a computational methods curriculum.
+
+This is a departure from both the
+computational thinking :cite:`wing2006computational`
+approach, which emphasizes abstract, conceptual skills
+explicitly in contrast to the mechanical skills of programming,
+let alone software engineering.
+It is also a departure from
+constructionist learning :cite:`papert1980mindstorms`,
+in that the method of learning is not childlike play
+but what is instead most often considered a form of laborious work.
+Rather, it is perhaps best conceived and taught in the paradigm of
+situated learning :cite:`lave1991situated`, or an apprenticeship
+based model.
+In this model, students engage in
+"legitimate peripheral participation" by working
+with tools under the mentorship of experts,
+gradually becoming more central in the "community of practice".
+This model has been applied to both
+software engineering education
+and open source community participation :cite:`ye2003toward`.
+
+Preparing scientists with more general software engineering
+skills would pave the way for more general acceptance of
+computational narrative :cite:`perez2015project`
+as a core method in scientific practice.
+In the social sciences especially, this would open
+the research fields to wider ranges of discoveries
+through computational methods.
+:cite:`epstein2006generative` has
 argued that computational modeling in social science is
 the natural successor to game theoretic and rational choice
 modeling, which has a long social scientific history,
 allowing a wider range of models with greater realism
 and theoretical insight.
-
+While :cite:`hommes2006heterogeneous`
+and :cite:`tesfatsion2006agent` have shown the applicability
+of these methods to economics in particular,
+progress has been limited by the lack of research software
+engineering skills available in the field.
+To unlock the potential of computational science,
+research software engineering must become recognized
+as a research method.
+  
 
 .. Customised LaTeX packages
 .. -------------------------
