@@ -643,54 +643,69 @@ Performance of the ECEI workflow
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 After having benchmarked the performance of individual components we continue by benchmarking the performance 
-of ``Delta`` on the entire ECEI workflow. The task at hand is to calculate Eqs.(:ref:`eq-S`) - (ref:`eq-R`) 
-for 18836 unique channel pairs per time chunk. Each time chunk represents 10,000 samples for 192 individual
-samples and in total we process 500 time chunks. The size of the data to analize is approximately 5 GByte.
+of ``Delta`` on the entire ECEI analysis workflow. The task at hand is to calculate Eqs.(:ref:`eq-S`) - (:ref:`eq-R`) 
+for 18836 unique channel pairs per time chunk. Each time chunk consists of 10,000 samples for 192 individual
+channels. A total of 500 time chunks are to be processed, for a total of about 5 GByte of data.
 
-To better understand the interplay of the individual compoments and the performance of the design
-choices, we benchmarked the runtime of the ``Delta`` ECEI workflow in three scenarios. In the
-``file`` scenario, the processor reads data from a local data file. No data is streamed. In the
+The performance of ``Delta`` depends on the individual performance of multiple components, such as ADIOS data streaming,
+the queues, the spawning of processes and data communication in PoolExecutors, and their interplay with one another.
+To better understand this complex scenario
+
+To better understand the interplay of the individual framework compoments and the performance of the
+design choices, we benchmark the runtime of the ``Delta`` ECEI workflow in three scenarios. In the
+``file`` scenario, the processor reads data from a local ADIOS BP4 file. No data is streamed. In the
 ``2-node`` scenario, data is streamed from the NERSC DTN to Cori using the ADIOS2 DataMan backend.
 In the ``3-node`` scenario, data is streamed from the KSTAR DTN to the NERSC DTN and forwared to
-Cori. The workflow walltimes of these scenarios are listed in :ref:`walltimes`.  All runs are
-performed on an allocation using 8 Cori nodes partitioned into 32 MPI ranks with 16 Threads each for
-a total of 2048 CPU cores.
+Cori. The ``2``- and ``3-node`` scenario use ADIOS2 DataMan engine. 
+
+As performance metrics we list the Data bandwidth, defined as the I/O velocity when reading
+from disk in the ``file`` scenario, the average network bandwidth for data transfers from the NERSC
+DTN to Cori in the ``2-node`` scenario and as the average achieved network bandwidth for data
+transfers from the KSTAR DTN to the NERSC DTN in the ``3-node scenario``. We also list the Walltime,
+the number of processed time chunks and the average Walltime per time chunk. All runs are performed
+on an allocation using 32 Cori nodes partitioned into 128 MPI ranks with 16 Threads each for a total
+of 2048 CPU cores.
 
 
 .. table:: Walltime and number of processesed time chunk for the ECEI workflow in different configurations .  :label:`walltimes`
 
-    +-------------+----------+-----------+----------+
-    | Scenario    | Walltime | processed |  Average |
-    +=============+==========+===========+==========+
-    | file        | 352s     | 500       | 0.70s    |
-    +-------------+----------+-----------+----------+
-    | 2-node      | 221s     | 318       | 0.69     |
-    +-------------+----------+-----------+----------+
-    | 3-node      | 148s     | 193       | 0.77     |
-    +-------------+----------+-----------+----------+
+    +-------------+---------------------+-----------+-----------+----------|
+    | Scenario    | Data bandwidth      | Walltime  | processed |  Average |
+    +=============+=====================+===========+===========+==========|
+    | file        | 350 MByte/sec       | 352s      | 500       | 0.70s    |
+    +-------------+---------------------+-----------+-----------+----------|
+    | 2-node      | 250 MByte/sec       | 221s      | 318       | 0.69     |
+    +-------------+---------------------+-----------+-----------+----------|
+    | 3-node      | ???? MByte/sec      | 148s      | 193       | 0.77     |
+    +-------------+---------------------+-----------+-----------+----------|
 
 
-The walltime for the file-based workflow is 352s, about 221s for the 2-node scenario and ... for the
-3-node scenario. A reason for this can be found in how the high-velocity data I/O affects the
-receive-publish-submit architecture implemented by the processor and is explained in the following.
+The walltime for the file-based workflow is 352s, about 221s for the 2-node scenario and 148s for the
+3-node scenario. Since we are using the DataMan engine, some packet loss is expected due to implementation
+details. Dividing the Walltime by the number of processed time chunks, all three scenarios perform about
+equally well. 
 
-``Delta`` uses a queue to communicate between the reader and the PoolExecutor. Figure :ref:`delta-perf-queue` shows 
-the time that the time chunks are enqueued. We find that even tough reading from the filesystem should be faster
-than streaming, data spends on average less time in the 2-node streaming scenario than in the file scenario.
+Figure :ref:`delta-perf-queue` shows the average time that a time chunk is enqueued by the processor. Here
+all three scenarios show a similar trend - the amount of time a time chunk is enqueued increases with 
+the time it is enqueued. This is expected, as the data transfer rate from the source to the queue is faster
+than from the PoolExecutor to the storage backend. In other words, data transfer is faster than compute.
+Note that the ``file`` scenario shows a sudden drop in time enqueued at :math:`n_{\mathrm{ch}} \approx 100`. 
+We do not know the reason for this behaviour.
 
 .. figure:: plots/performance_time_subcon.png
    :scale: 100%
 
    Time that the individual time chunks are queued. The color legend is shown in Figure 6 :label:`delta-perf-queue`
 
-As a time chunk is read from the queue, a STFT is executed. The time where this occurs to the individual time-chunks 
-is shown in :ref:`delta-fft-tstart`. The beginning of each horizontal bar indicates where a time chunk is submitted 
-to **executor_fft** and the length of each bar denotes the time it takes to execute the STFT. The beginning of 
-each horizontal bar co-incides with the end of the bar in :ref:`delta-perf-queue`. In :ref:delta-fft-perf` we plot
-the distribution of the walltimes it takes to perform the STFT. In both scenarios, the time it takes to perform 
-an STFT on the executor is approximately one second. Both cases also show outliers where it takes up to 10 seconds 
-to perform a STFT. These outliers usually occur in the first few time steps where the many processes are spawned.
-MPI process spawning is an expensive process we do not observe such long execution times after the startup.
+As a time chunk data are dequeued, they are subject to a STFT. Figure :ref:`delta-fft-tstart` shows the start end end times
+of the STFTs for the individual time chunk data. The beginning of each horizontal bar indicates where the STFT with the
+time chunk data is submitted on **executor** and the length of each bar denotes the time it takes to execute the STFT.
+Common for all three scenarios is that the STFTs with the longest execution time are the ones for the first time chunks
+received. Also, the majority of the STFTs is executed about less than one second. Figure
+:ref:delta-fft-perf` shows the distribution of STFT execution times for each scenario. This confirms that some outlier
+executuion times are larger than 10 seconds while the majority is performed in about less than one second. Experiments 
+on Cori show that the STFT routine when directly called and with the same parameters and data as used here takes
+about 0.15 seconds. On average the STFT when called from the streaming workflow is slower by a factor of 6. 
 
 
 .. figure:: plots/performance_fft.png
@@ -705,10 +720,10 @@ MPI process spawning is an expensive process we do not observe such long executi
    Distribution of the time it takes to perform a Fourier Transformation on **executor_fft** :label:`delta-fft-perf`
 
 
-In Figures :ref:`delta-perf-file` and :ref:`delta-perf-2node` we show the timing and utilization of MPI ranks
-running data analysis kernels. These show that once all data has been Fourier transformed, all available MPI ranks start 
-executing data analysis kernels. There is little difference between the kernel runtime in the total workflow and in the
-benchmarks shown in the previous section.
+Finally, Figures :ref:`delta-perf-file`, :ref:`delta-perf-2node` and :ref:`delta-perf-3node` show the utilization of
+the MPI ranks over time. The MPI ranks execute the STFT and analysis kernels. All three scenarios show a low usage
+of available MPI ranks, approximately 16 - 20 in the beginning of the run. After all time chunks are processed 
+in the respective runs we see a sudden increase of utilized MPI ranks, up to the maximum number allowed.
 
 
 .. figure:: plots/nodes_walltime_file.png
@@ -729,30 +744,28 @@ benchmarks shown in the previous section.
    Timing and utilization of the MPI ranks executing data analysis kernels for the ``3-node`` scenario :label:`delta-perf-3node`
 
 
+
+
+
 Conclusions and future work
 ---------------------------
 
-We have demonstrated that ``Delta`` can facilitate near real-time analysis of high-velicty big streaming data.
-``Delta`` on Cori can execute the ECEI workflow in less than 4 minutes. Using a single-core pure python implementation this
+We have demonstrated that ``Delta`` can facilitate near real-time analysis of high-velocity
+streaming data. In our experiments we achieved streaming rates of about 350 MByte/sec and execute an
+ECEI analysis workflow in less than 4 minutes. Using a single-core pure python implementation this
 would take about 4 hours. 
+In the current form, there are multiple shortcomings of the framework that need to be addressed.
+Firstly, the DataMan engine will be upgraded to remove packet loss. Secondly, implementation details
+of MPI on Cori limit us to using only a single PoolExecutor. We are planning to investigate the
+performance when separating the execution space of the STFT and the analysis kernels. Thirdly, the
+framework will be generalized in order to facilitate other data analysis tasks. Finally, we are working 
+on adapting ``Delta`` for next generation HPC facilities which rely heavily on graphical processing units
+to provide their maximum compute power.
+Another issue we plan on addressing is to make ``Delta`` more adaptive. While using federated data
+analysis resources is useful, it may not be worthwhile to perform this analysis be default. As such,
+a machine-learning based decision process may be implemented that governs the level of detail with
+which certain data sources may be analyzed.
 
-Due to limitations on Cori, we are limited to using a single PoolExecutor. Separate Executors should be used for the
-analysis kernels and the FFT.
-
-Future work will extend ``Delta`` on multiple fronts. For one, the next generation HPC facilities will use 
-nVidias Ampere GPU. These will come available in 2021 and we are looking to explore GPU computing for the
-computationally demanding parts of the framework.
-Second, we look to include machine learning inference workloads on the processor. This could be disruption 
-detection as described for ECEI data in RMCs paper.
-
-We also investigate how to make ``Delta`` more adaptive. This could include using machine learning 
-at the sender side to stream only really interesting data and have it analyzed extra carefully. And for standard
-cases you would only run default analysis.
-
-Making delta adaptiv by
-Allow other diagnostic data to be transferred
-Real-time detection of interesting features, coupled to compression
-ECEi has large view, maybe we need fewer channels
 
 
 
