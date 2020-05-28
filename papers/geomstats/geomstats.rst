@@ -404,12 +404,15 @@ clusters on graphs than Euclidean embeddings
 :cite:`DBLP:journals/corr/ChamberlainCD17`.
 
 In the scope of these recent
-discoveries, this tutorial shows how to learn such embeddings in ``geomstats``
+discoveries, this tutorial shows how to learn such embeddings in :code:`geomstats`
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
+Please note that in the sequel we omit details regarding resizing the data arrays.
+A full working code is available in the ``examples`` directory and additionally a detailed notebook under ``notebooks``.
+
 We will first recall a few properties of hyperbolic spaces. Then show how to
-import the necessary modules from `geomstats` and initialize embedding parameters.
+import the necessary modules from :code:`geomstats` and initialize embedding parameters.
 The embedding method is then presented formally while showing how it is
-implemented in `geomstats`. Finally the resulting embedding is plotted.
+implemented in :code:`geomstats`. Finally the resulting embedding is plotted.
 
 Hyperbolic space
 ****************
@@ -464,7 +467,7 @@ Learning graph representations with hyperbolic spaces in `Geomstats`
 We start by importing standard tools for logging and visualization,
 allowing us to draw the embedding of the GSD on the manifold. Next, we
 import the manifold of interest, visualization tools, and other methods
-from ``geomstats``.
+from :code:`geomstats`.
 
 .. code:: ipython3
 
@@ -484,7 +487,7 @@ from ``geomstats``.
 `Parameters and Initialization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Table :ref:`tabparam` defines the parameters needed for embedding.
-Let us discuss a few things about the parameters of the above table. The
+Let us discuss a few things about these parameters. The
 number of dimensions should be high (i.e., 10+) for large datasets
 (i.e., where the number of nodes/edges is significantly large). In this
 tutorial we consider a dataset that is quite small with only 34 nodes.
@@ -575,7 +578,7 @@ displayed to provide insight into its complexity.
 Let us now prepare the hyperbolic space for embedding.
 Recall that :math:`H_2` is the Poincaré disk equipped with the distance function
 :math:`d`. Declaring an instance of the ``PoincareBall`` manifold of two dimensions
-in ``geomstats`` is straightforward:
+in :code:`geomstats` is straightforward:
 
 .. code:: ipython3
 
@@ -592,7 +595,7 @@ by preserving first-order proximity that enforces nodes sharing edges
 to be close to each other. It can additionally preserve second-order
 proximity that enforces two nodes sharing the same context (i.e., nodes
 that are neighbours but not necessarily directly connected) to be close.
-To preserve first and second-order proximities we adopt a loss function
+To preserve first and second-order proximities we adopt the following loss function
 similar to :cite:`NIPS2017_7213` and consider the negative sampling
 approach as in :cite:`NIPS2013_5021`:
 
@@ -606,9 +609,10 @@ node of :math:`V`, :math:`C_i` the nodes in the context of the
 the distribution :math:`\mathcal{P}_n` such that
 :math:`\mathcal{P}_n(v)=(deg(v)^{3/4}).(\sum_{v_i\in V}deg(v_i)^{3/4})^{-1}`.
 
-Intuitively one can see on Figure :ref:`fignotation` that to minimizing :math:`L`, the distance
+Intuitively one can see on Figure :ref:`fignotation` that to minimizing :math:`\mathcal{L}`, the distance
 between :math:`\phi_i` and :math:`\phi_j` should get smaller, while the one
-between :math:`\phi_i` and :math:`\phi_k` would get larger.
+between :math:`\phi_i` and :math:`\phi_k` would get larger. Therefore
+by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
 
 .. figure:: learning_graph_structured_data_h2_files/Notations.png
     :scale: 40%
@@ -620,11 +624,11 @@ between :math:`\phi_i` and :math:`\phi_k` would get larger.
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Following the idea of :cite:`ganea2018hyperbolic` we use the following formula
-to optimize :math:`L`:
+to optimize :math:`\mathcal{L}`:
 
-.. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial L}{\partial \phi} \right)
+.. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial \mathcal{L}}{\partial \phi} \right)
 
-where :math:`\phi` is a parameter of :math:`L`,
+where :math:`\phi` is a parameter of :math:`\mathcal{L}`,
 :math:`t\in\{1,2,\cdots\}` is the epoch iteration number and :math:`lr`
 is the learning rate. The formula consists of first computing the usual
 gradient of the loss function giving the direction in which the
@@ -636,18 +640,20 @@ vector :math:`T` and returns the point :math:`\phi^{t+1}` such that
 geoedesic curve between :math:`\phi^t` and :math:`\phi^{t+1}` is of 1
 unit. The Riemannian exponential map is implemented as a method of the
 ``PoincareBallMetric`` class in the ``geometry`` module of
-``geomstats``.
+:code:`geomstats`.
 
-Therefore to minimize :math:`L` we will need to compute its gradient.
+As a summary to minimize :math:`\mathcal{L}`, we will need to compute its gradient.
 To do so, we will need the gradient of:
+
 
 1. the squared distance :math:`d^2(x,y)`
 2. the log sigmoid :math:`log(\sigma(x))`
-3. the composision of 1. and 2.
+3. the composition of 1. with 2.
+
 
 For 1., we use the formula proposed by :cite:`Arnaudon2013` which uses the Riemannian
-logarithmic map to compute the gradient of the distance. This is
-implemented as
+logarithmic map to compute the gradient of the distance implemented below. Similarly as the exponential
+:math:`\text{Exp}`, the logarithmic map is implemented under the ``PoincareBallMetric``.
 
 .. code:: ipython3
 
@@ -656,7 +662,8 @@ implemented as
         log_map = hyperbolic_metric.log(point_b, point_a)
         return -2 * log_map
 
-For 2. define the ``log_sigmoid`` corresponding as follows:
+For 2. define the ``log_sigmoid`` as below. Note that the used `log` here is
+the usual function and not the Riemannian logarithmic map.
 
 .. code:: ipython3
 
@@ -670,70 +677,48 @@ The gradient of the logarithm of sigmoid function is implemented as:
     def grad_log_sigmoid(vector):
         return 1 / (1 + gs.exp(vector))
 
-For 3., apply the composition rule to obtain the gradient of :math:`L`.
-The following function given :math:`\phi_i`, :math:`\phi'_j` and
-:math:`\phi'_k` returns the total value of :math:`L` and its gradient
-vector at :math:`\phi_i`. To obtain the value of :math:`L` the loss function
-formula is simply applied. For the gradient of :math:`L`, we apply the composition of
+For 3., apply the composition rule to obtain the gradient of :math:`\mathcal{L}`.
+To obtain the value of :math:`\mathcal{L}` the loss function
+formula is simply applied. For the gradient of :math:`\mathcal{L}`, we apply the composition of
 ``grad_log_sigmoid`` with ``grad_squared_distance`` while paying
-attention to the signs. Please note that we omitted details regarding reshaping
-the arrays. The full code is available in in the `examples` directory.
+attention to the signs. For simplicity, the following function computes the loss function and gradient of
+:math:`\mathcal{L}` while ignoring the part dealing with the negative samples (The code
+implementing the whole loss function is available in in the `examples` directory).
 
 .. code:: ipython3
 
-    def loss(
-        example_embedding, context_embedding,
-        negative_embedding, manifold):
+    def context_loss(
+        example_embedding, context_embedding, manifold):
 
-        n_edges, dim =\
-            negative_embedding.shape[0],
-            example_embedding.shape[-1]
+        dim = example_embedding.shape[-1]
 
-        positive_distance =\
+        context_distance =\
             manifold.metric.squared_dist(
                 example_embedding,
                 context_embedding)
-        positive_loss =\
-            log_sigmoid(-positive_distance)
+        context_loss =\
+            log_sigmoid(-context_distance)
 
-        negative_distance =\
-            manifold.metric.squared_dist(
-                example_embedding,
-                negative_embedding)
-        negative_loss = log_sigmoid(negative_distance)
+        context_log_sigmoid_grad =\
+            -grad_log_sigmoid(-context_distance)
 
-        total_loss = -(positive_loss + negative_loss.sum())
-
-        positive_log_sigmoid_grad =\
-            -grad_log_sigmoid(-positive_distance)
-
-        positive_distance_grad =\
+        context_distance_grad =\
             grad_squared_distance(example_embedding,
             context_embedding)
 
-        positive_grad =\
-            positive_log_sigmoid_grad,
-            * positive_distance_grad
+        context_grad =\
+            context_log_sigmoid_grad,
+            * context_distance_grad
 
-        negative_distance_grad =\
-            grad_squared_distance(
-                example_embedding,
-                negative_embedding)
+        example_grad = -context_grad
+        return context_loss, example_grad
 
-        negative_log_sigmoid_grad =\
-            grad_log_sigmoid(negative_distance)
-
-        negative_grad = negative_log_sigmoid_grad\
-            * negative_distance_grad
-        example_grad =
-                -(positive_grad + negative_grad)
-        return total_loss, example_grad
 
 `Capturing the graph structure`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 At this point we have the necessary bricks to compute the resulting
-gradient of :math:`L`. We are ready to prepare the nodes :math:`v_i`,
+gradient of :math:`\mathcal{L}`. We are ready to prepare the nodes :math:`v_i`,
 :math:`v_j` and :math:`v_k` and initialise their embeddings
 :math:`\phi_i`, :math:`\phi^{'}_j` and :math:`\phi^{'}_k`. First,
 initialize an array that will hold embeddings :math:`\phi_i` of each
@@ -773,7 +758,7 @@ Numerically optimizing the loss function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Optimising the loss function is performed numerically over the number of
-epochs. At each iteration, we will compute the gradient of :math:`L`.
+epochs. At each iteration, we will compute the gradient of :math:`\mathcal{L}`.
 Then the graph nodes are moved in the direction pointed by the gradient.
 The movement of the nodes is performed by following geodesics in the
 gradient direction. The key to obtain an embedding representing
@@ -782,9 +767,8 @@ movements. This is done by tuning the learning rate, such as at each
 epoch all the nodes made small movements.
 
 A first level loop iterates over the epochs, the table ``total_loss``
-will record the value of :math:`L` at each iteration and help us track
-the minimization of :math:`L`.
-
+will record the value of :math:`\mathcal{L}` at each iteration and help us track
+the minimization of :math:`\mathcal{L}`.
 A second level nested loop iterates over each path in the previously
 computed random walks. Observing these walks, notice that nodes having
 many edges appear more often. Such nodes can be considered as important
@@ -797,7 +781,7 @@ will limit the length of the walk to be considered. Similarly, we use
 the same ``context_size`` to limit the number of negative samples. We
 find :math:`\phi_i` from the ``embeddings`` array.
 
-A third level nested loop will iterate on each :math:`v_j` and
+A third and fourth level nested loops will iterate on each :math:`v_j` and
 :math:`v_k`. From within, we find :math:`\phi'_j` and :math:`\phi'_k`
 then call the ``loss`` function to compute the gradient. Then the
 Riemannian exponential map is applied to find the new value of
@@ -846,8 +830,15 @@ Riemannian exponential map is applied to find the new value of
             'iteration %d loss_value %f',
             epoch, sum(total_loss, 0) / len(total_loss))
 
-
 .. parsed-literal::
 
     INFO: iteration 0 loss_value 1.819844
     INFO: iteration 14 loss_value 1.363593
+
+Figure :ref:`embeddingiterations` shows how the node embeddings move at different iterations.
+
+.. figure:: learning_graph_structured_data_h2_files/embedding_iterations.png
+    :align: center
+    :scale: 60%
+
+    Embedding at different `epoch` iterations. :label:`embeddingiterations`
