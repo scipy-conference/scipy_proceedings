@@ -1,5 +1,6 @@
 .DS_Store
 .ipynb_checkpoints
+.hypothesis
 output
 _build
 *.pyc
