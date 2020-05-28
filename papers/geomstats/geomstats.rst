@@ -82,7 +82,7 @@ Introduction
 
 Data on manifolds naturally arise in different fields. Hyperspheres model directional data in molecular and protein biology :cite:`Kent2005UsingStructure`, and some aspects of 3D shapes :cite:`Jung2012AnalysisSpheres, Hong2016`. Density estimation on hyperbolic spaces arises to model electrical impedances :cite:`Huckemann2010MobiusEstimation`, networks :cite:`Asta2014GeometricComparison` or reflection coefficients extracted from a radar signal :cite:`Chevallier2015ProbabilityProcessing`. Symmetric Positive Definite (SPD) matrices are used to characterize data from Diffusion Tensor Imaging (DTI) :cite:`Pennec2006b, Yuan2012` and functional Magnetic Resonance Imaging (fMRI) :cite:`Sporns2005TheBrain`. Examples of manifold data are numerous: as a result, there is a growing interest in leveraging differential geometry in the machine learning community.
 
-Yet, the adoption of differential geometry computations has been inhibited by the lack of a reference implementation. Code sequences are often custom-tailored for specific problems and are not easily reused. Some python packages do exist, but focus on optimization (Pymanopt :cite:`Townsend2016Pymanopt:Differentiation`, Geoopt :cite:`Becigneul2018RiemannianMethods, Kochurov2019Geoopt:Optim`, and McTorch :cite:`Meghwanshi2018McTorchLearning`), are dedicated to a single manifold (PyRiemann :cite:`Barachant2015PyRiemann:Interface`, PyQuaternion :cite:`Wynn2014PyQuaternions:Quaternions`, PyGeometry :cite:`Censi2012PyGeometry:Manifolds.`), or lack unit-tests and continuous integration (TheanoGeometry :cite:`Kuhnel2017ComputationalTheano`). There is a need for an open-source low-level implementation of differential geometry, and associated learning algorithms, for manifold-valued data.
+Yet, the adoption of differential geometry computations has been inhibited by the lack of a reference implementation. Code sequences are often custom-tailored for specific problems and are not easily reused. Some python packages do exist, but focus on optimization (Pymanopt :cite:`Townsend2016Pymanopt:Differentiation`, Geoopt :cite:`Becigneul2018RiemannianMethods, Kochurov2019Geoopt:Optim`, and McTorch :cite:`Meghwanshi2018McTorchLearning`), are dedicated to a single manifold (PyRiemann :cite:`Barachant2015PyRiemann:Interface`, PyQuaternion :cite:`Wynn2014PyQuaternions:Quaternions`, PyGeometry :cite:`Censi2012PyGeometry:Manifolds.`), or lack unit-tests and continuous integration (TheanoGeometry :cite:`Kuhnel2017ComputationalTheano`). An open-source low-level implementation of differential geometry, and associated learning algorithms, for manifold-valued data is thus thoroughly welcome.
 
 We present :code:`geomstats`, an open-source Python package of computations and statistics for data on non-linear manifolds: a field called Geometric Statistics. We provide object-oriented and extensively unit-tested implementations, supported for different execution backends -- namely NumPy, PyTorch, and TensorFlow. This paper illustrates the use of :code:`geomstats` through hands-on introductory tutorials of geometric statistics. The tutorials enable users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric statistical learning algorithms seemlessly, without delving into the mathematical details.
 
@@ -102,7 +102,7 @@ Tutorial: Computing with data on manifolds
 
 This section shows how to use :code:`geomstats` to learn the essential concepts of differential geometry and Riemannian geometry. This hands-on approach complements traditional textbooks, that often focus on the theoretical explanations.
 
-Set up
+Setup
 ******
 
 Before starting this tutorial, we import the backend that will be used for geomstats computation, as well as the visualization module. In the command line::
@@ -128,7 +128,7 @@ From data on linear spaces to data on manifolds
 ***********************************************
 
 We first illustrate how Geometric Statistics differ from traditional Statistics. Statistical theory is usually defined
-for data belonging to vector spaces, which are *linear spaces*. For
+for data belonging to vector spaces, which are linear spaces. For
 example, we know how to compute the mean of a data set of numbers, like
 the mean of students’ weights in a classroom, or of multidimensional
 arrays, like the average 3D velocity vector of blood cells in a vessel.
@@ -187,13 +187,13 @@ leads to errors in statistical computations. The line:
 
 returns :code:`False`. For this reason, researchers aim to build a theory of statistics that is
 by construction compatible with any structure we equip the manifold
-with. This theory is called *Geometric Statistics*.
+with. This theory is called Geometric Statistics.
 
 
 From vector spaces to manifolds
 *******************************
 
-**Geometric Statistics** is a theory of statistics on manifolds, that
+Geometric Statistics is a theory of statistics on manifolds, that
 takes into account their geometric structures. Geometric Statistics is
 therefore the child of two major pillars of Mathematics: Geometry and
 Statistics.
@@ -284,7 +284,7 @@ So far, we have given examples of geodesics on the sphere. The sphere is
 a simple manifold that is easy to visualize. Yet, :code:`geomstats` provides
 many more manifolds, on which the exp and log are defined.
 
-We consider the special euclidean group in 3D, which is the group of 3D
+We consider the special Euclidean group in 3D, which is the group of 3D
 rotations and 3D translations. One element of this group can be
 represented by a frame, oriented by the 3D rotation, and located by the
 3D translation from the origin.
@@ -294,7 +294,7 @@ geodesic in the group SE(3), which is a path of frames in 3D.
 
 .. code:: ipython3
 
-    from geomstats.geometry.special_euclidean import \
+    from geomstats.geometry.special_Euclidean import \
         SpecialEuclidean
 
     se3 = SpecialEuclidean(n=3, point_type='vector')
@@ -333,7 +333,7 @@ We consider a manifold embedded in the general linear group of invertible matric
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall herez \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-There class \texttt{SPDMatricesSpace} inherits from the class \texttt{EmbeddedManifold} and has an \texttt{embedding\_manifold} attribute which stores an object of the class \texttt{GeneralLinearGroup}. We equip the manifold of SPD matrices with an object of the class \texttt{SPDMetric} that implements the affine-invariant Riemannian metric of \cite{Pennec2006b} and inherits from the class \texttt{RiemannianMetric}.
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`.
 
 Visualization of SPD matrices
 *****************************
@@ -341,24 +341,25 @@ Visualization of SPD matrices
 SPD matrices in the literature
 ******************************
 
-SPD matrices are ubiquitous in machine learning across many fields \cite{Cherian2016}, either as input or output to the problem. In diffusion tensor imaging (DTI) for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices. These ellipsoids spatially characterize the diffusion of water molecules in the tissues. Each DTI thus consists in a field of SPD matrices, which are inputs to regression models. In \cite{Yuan2012} for example, the authors use an intrinsic local polynomial regression applied to comparison of fiber tracts between HIV subjects and a control group. Similarly, in functional magnetic resonance imaging (fMRI), it is possible to extract connectivity graphs from a set of patients' resting-state images' time series \cite{sporns2005human,wang2013disrupted,ingalhalikar2014sex}-- a framework known as brain connectomics. The regularized graph Laplacians of the graphs form a dataset of SPD matrices. They represent a compact summary of the brain's connectivity patterns which is used to assess neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
+SPD matrices are ubiquitous in machine learning across many fields :cite:`Cherian2016`, either as input or output to the problem. In diffusion tensor imaging (DTI) for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices. These ellipsoids spatially characterize the diffusion of water molecules in the tissues. Each DTI thus consists in a field of SPD matrices, which are inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression applied to comparison of fiber tracts between HIV subjects and a control group. Similarly, in functional magnetic resonance imaging (fMRI), it is possible to extract connectivity graphs from a set of patients' resting-state images' time series :cite:`wang2013disruptedDisease` --a framework known as brain connectomics. The regularized graph Laplacians of the graphs form a dataset of SPD matrices. They represent a compact summary of the brain's connectivity patterns which is used to assess neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
 
-More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems \cite{Shinohara2010} or for material classification \cite{Faraki2015} among others. Covariance descriptors are also popular image or video descriptors \cite{Harandi2014}.
+More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015` among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of \cite{Gao2017} show that an aggregation of learned deep convolutional features into a SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into a SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
 
 Classification of SPD matrices with Geomstats
 *********************************************
 
-We show through a concrete brain connectome application to show \texttt{geomstats} can be easily leveraged for efficient supervised learning on the space of SPD matrices. The folder \texttt{brain\_connectome} of the supplementary materials contains the implementation of this use case.
+We show through a concrete brain connectome application to show :code:`geomstats` can be easily leveraged for efficient supervised learning on the space of SPD matrices. The folder :code:`brain_connectome` of the supplementary materials contains the implementation of this use case.
 
-We consider the fMRI data from the 2014 MLSP Schizophrenia Classification challenge\footnote{Data openly available at \url{https://www.kaggle.com/c/mlsp-2014-mri}}, consisting of the resting-state fMRIs of 86 patients split into two balanced categories: control vs people suffering schizophrenia. Consistently with the connectome literature, we tackle the classification task by using a SVM classifier on the precomputed pairwise-similarities between subjects. The critical step lies in our ability to correctly identify similar brain structures, here represented by regularized Laplacian SPD matrices $\hat{L}=(D-A)+\gamma I$, where A and D are respectively the adjacency and the degree matrices of a given connectome. The parameter $\gamma$ is a regularization shown to have little effect on the classification performance \cite{Dodero2015}.
+We consider the fMRI data from the 2014 MLSP Schizophrenia Classification challenge [#f1]_, consisting of the resting-state fMRIs of 86 patients split into two balanced categories: control vs people suffering schizophrenia. Consistently with the connectome literature, we tackle the classification task by using a SVM classifier on the precomputed pairwise-similarities between subjects. The critical step lies in our ability to correctly identify similar brain structures, here represented by regularized Laplacian SPD matrices $\hat{L}=(D-A)+\gamma I$, where A and D are respectively the adjacency and the degree matrices of a given connectome. The parameter $\gamma$ is a regularization shown to have little effect on the classification performance :cite:`Dodero2015`.
 
-Following two popular approaches in there literature \cite{Dodero2015}, we define similarities between connectomes through kernels relying on the Riemannian distance :math:`d_R(\hat{L}_1,\hat{L}_2)= ||\log(\hat{L}_1^{-1/2}.\hat{L}_2.\hat{L}_1^{-1/2})||_F` and on the log-Euclidean distance, a computationally-lighter proxy for the first:
-:math:`d_{LED}(\hat{L}_1,\hat{L}_2)= ||\log_{I}(\hat{L}_2) -\log_{I}(\hat{L}_1)||_F`. In these formulae, :math:`\log` is the matrix logarithm and :math:`F` refers to the Frobenius norm. Both of these similarities are easily computed with \texttt{geomstats}, for example the Riemannian distance is obtained through \texttt{metric.squared\_dist} where \texttt{metric} is an instance of the class \texttt{SPDMetric}.
+Following two popular approaches in the literature :cite:`Dodero2015`, we define similarities between connectomes through kernels relying on the Riemannian distance :math:`d_R(\hat{L}_1,\hat{L}_2)= ||\log(\hat{L}_1^{-1/2}.\hat{L}_2.\hat{L}_1^{-1/2})||_F` and on the log-Euclidean distance, a computationally-lighter proxy for the first:
+:math:`d_{LED}(\hat{L}_1,\hat{L}_2)= ||\log_{I}(\hat{L}_2) -\log_{I}(\hat{L}_1)||_F`. In these formulae, :math:`\log` is the matrix logarithm and :math:`F` refers to the Frobenius norm. Both of these similarities are easily computed with :code:`geomstats`, for example the Riemannian distance is obtained through :code:`metric.squared_dist` where :code:`metric` is an instance of the class :code:`SPDMetric`.
 
+.. [#f1] Data openly available at https://www.kaggle.com/c/mlsp-2014-mri.
 
-Figure~\ref{convertedfig:SPD} (left) shows the performance of these similarities for graph classification, which we benchmark against a standard Frobenius distance. With an out-of-sample accuracy of 61.2\%, the log-Euclidean distance here achieves the best performance. Interestingly, the affine-invariant Riemannian distance on SPD matrices is the distance that picks up the most differences between connectomes. While both the Frobenius and the log-Euclidean recover only very slight differences between connectomes --placing them almost uniformly afar from each other--, the Riemannian distance exhibits greater variability, as shown by the clustermap in Figure~\ref{fig:SPD} (right). Given the ease of implementation of these similarities with \texttt{geomstats}, comparing them further opens research directions for in-depth connectome analysis.
+Figure~\ref{convertedfig:SPD} (left) shows the performance of these similarities for graph classification, which we benchmark against a standard Frobenius distance. With an out-of-sample accuracy of 61.2\%, the log-Euclidean distance here achieves the best performance. Interestingly, the affine-invariant Riemannian distance on SPD matrices is the distance that picks up the most differences between connectomes. While both the Frobenius and the log-Euclidean recover only very slight differences between connectomes --placing them almost uniformly afar from each other--, the Riemannian distance exhibits greater variability, as shown by the clustermap in Figure~\ref{fig:SPD} (right). Given the ease of implementation of these similarities with :code:`geomstats`, comparing them further opens research directions for in-depth connectome analysis.
 
 
 -> Application here to be converted to a notebook: https://github.com/geomstats/applications/tree/master/brain_connectome
@@ -590,8 +591,8 @@ in :code:`geomstats` is straightforward:
 Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
 set of edges of the graph. The goal of embedding GSD is to provide a faithful and
 exploitable representation of the graph structure. It is mainly achieved
-by preserving *first-order* proximity that enforces nodes sharing edges
-to be close to each other. It can additionally preserve *second-order*
+by preserving first-order proximity that enforces nodes sharing edges
+to be close to each other. It can additionally preserve second-order
 proximity that enforces two nodes sharing the same context (i.e., nodes
 that are neighbours but not necessarily directly connected) to be close.
 To preserve first and second-order proximities we adopt the following loss function
@@ -765,10 +766,10 @@ accurately the dataset, is to move the nodes smoothly rather than brutal
 movements. This is done by tuning the learning rate, such as at each
 epoch all the nodes made small movements.
 
-A *first level* loop iterates over the epochs, the table ``total_loss``
+A first level loop iterates over the epochs, the table ``total_loss``
 will record the value of :math:`\mathcal{L}` at each iteration and help us track
 the minimization of :math:`\mathcal{L}`.
-A *second level* nested loop iterates over each path in the previously
+A second level nested loop iterates over each path in the previously
 computed random walks. Observing these walks, notice that nodes having
 many edges appear more often. Such nodes can be considered as important
 crossroads and will therefore be subject to a greater number of
@@ -779,7 +780,8 @@ the random walk from :math:`v_i`. The ``context_size`` specified earlier
 will limit the length of the walk to be considered. Similarly, we use
 the same ``context_size`` to limit the number of negative samples. We
 find :math:`\phi_i` from the ``embeddings`` array.
-A *third* and *fourth level* nested loops will iterate on each :math:`v_j` and
+
+A third and fourth level nested loops will iterate on each :math:`v_j` and
 :math:`v_k`. From within, we find :math:`\phi'_j` and :math:`\phi'_k`
 then call the ``loss`` function to compute the gradient. Then the
 Riemannian exponential map is applied to find the new value of
