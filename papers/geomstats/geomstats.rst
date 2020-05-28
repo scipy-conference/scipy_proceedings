@@ -12,7 +12,7 @@
 :author: Christian Shewmake
 :email: cshewmake2@gmail.com
 
-:author: Daniel Brooks:
+:author: Daniel Brooks
 :email: daniel.brooks@lip6.fr
 
 :author: Alice Le Brigant
