@@ -207,6 +207,15 @@ and have it execute on multi-core CPUs and GPGPUs. We provide a convenient
 notebook on google colab where users can run the simple examples on a GPU as
 well.
 
+Installation
+-------------
+
+Discuss these in brief.
+
+- pip
+- github
+- Dependencies and requirements.
+
 
 Parallel algorithms
 --------------------
