@@ -26,7 +26,7 @@ digraph {
 	/* Sub State */
 	substate [
 		label=
-	"snapshot\llocal_snapshot\lparticle_types\lbond_types\langle_types\l...\l"
+	"snapshot\lcpu_local_snapshot\lgpu_local_snapshot\lparticle_types\lbond_types\l"
 	];
 	
 	State -> substate [arrowhead=none];
@@ -39,7 +39,7 @@ digraph {
 
 	/* Sub Device */
 	subdevice [
-		label="comm (communicator)\lnum_ranks\lmode\lnotice_level\l"];
+		label="communicator\lnum_ranks\lmode\lnotice_level\l"];
 
 	Device -> subdevice [arrowhead=none];
 }
