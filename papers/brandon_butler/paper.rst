@@ -58,13 +58,14 @@ flexibility and generality of such tools has dramatically increased the usage of
 simulations, which has in turn led to demands for even more customizable software packages that can
 be tailored to very specific simulation requirements.  Different tools have taken different
 approaches to enabling this, such as the text-file scripting in LAMMPS, the command line interface
-provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
+provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM. In addition to
+simulation engines, projects such as MoSDeF :cite:`cummings.gilmer2019` are seeking to improve the
+how scientist interact with molecular simulation software.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
-engine with a C++ back end, chose to use a Python API facilitated through pybind11
+engine with a C++ back end, provides to use a Python API facilitated through pybind11
 :cite:`jakob.etal2017`.  HOOMD-blue was initially released in 2008 as the first fully GPU-enabled MD
-simulation engine using NVIDIA GPUs through CUDA.  In its second release, HOOMD-blue also adopted
-Python for use as a front end to the C++ code.  Since its initial release, HOOMD-blue has remained
+simulation engine using NVIDIA GPUs through CUDA. Since its initial release, HOOMD-blue has remained
 under active development, adding numerous features over the years that have increased its range of
 applicability, including adding support for domain decomposition (dividing the simulation box among
 MPI ranks) in 2014 and recent developments that enable support for AMD in addition to NVIDIA GPUs.
@@ -166,13 +167,13 @@ Simulation, Device, State, Operations
 +++++++++++++++++++++++++++++++++++++
 
 Each simulation in HOOMD-blue is now controlled through 3 main objects which are joined together by
-the :code:`Simulation` class: the :code:`Device`, :code:`State`, and :code:`Operations` classes. A
-simple figure of this relationship with some core attributes/methods for each class is given in
-Figure (:ref:`core-objects`). Each :code:`Simulation` object holds the requisite information to run
-a full molecular dynamics or Monte Carlo simulation, thereby circumventing any need for global state
-information. The :code:`Device` class denotes whether a simulation should be run on CPUs or GPUs and
-the number of cores/GPUS it should run on. In addition, the device manages custom memory tracebacks,
-profiler configurations, and the MPI communicator among other things.
+the :code:`Simulation` class: the :code:`Device`, :code:`State`, and :code:`Operations` classes.
+Figure (:ref:`core-objects`) shows this relationship with some core attributes/methods for each
+class. Each :code:`Simulation` object holds the requisite information to run a full molecular
+dynamics or Monte Carlo simulation, thereby circumventing any need for global state information. The
+:code:`Device` class denotes whether a simulation should be run on CPUs or GPUs and the number of
+cores/GPUs it should run on. In addition, the device manages custom memory tracebacks, profiler
+configurations, and the MPI communicator among other things.
 
 .. figure:: figures/object-diagram.pdf
     :align: center
@@ -328,19 +329,20 @@ Logging simulation data for analysis is a critical feature of molecular simulati
 packages. Up to now, HOOMD-blue has supported logging through an analyzer interface that simply
 accepted a list of quantities to log, where the set of valid quantities was based on what objects
 had been created at any point and stored to the global state. The creation of the base
-:code:`_Operation` class has allowed us to simultaneously simplify and increase the power of our
-logging infrastructure. The :code:`Loggable` metaclass of :code:`_Operation` allows all subclasses
-to expose their loggable quantities by simply marking Python properties or methods to query.
+:code:`_Operation` class has allowed us to simultaneously simplify and increase the flexibility of
+our logging infrastructure. The :code:`Loggable` metaclass of :code:`_Operation` allows all
+subclasses to expose their loggable quantities by marking Python properties or methods to query.
 
 The actual task of logging data is acomplished by the :code:`Logger` class, which provides an
-interface for logging most HOOMD-blue objects and custom user quantities. Adding all loggable
-quantities of a HOOMD-blue object to a logger for logging is as simple as :code:`logger += obj`. The
-utility of this class lies in its intermediate representation of the data. Using the HOOMD-blue
-namespace as the basis for distinguishing between quantities, the :code:`Logger` maps logged
-quantities into a nested dictionary. For example, logging the Lennard-Jones pair potentials total
-energy would produce this dictionary by a :code:`Logger` object :code:`{'md': {'pair': {'LJ':
-{'energy': (-1.4, 'scalar')}}}}` where :code:`'scalar'` is a flag to make processing the logged
-output easier. In real use cases, the dictionary would likely be filled with many other quantities.
+interface for logging most HOOMD-blue objects and custom user quantities. In the example script from
+the General API Design section above, we show that the :code:`Logger` can add an operation's
+loggable quantities using the :code:`+=` operator. The utility of this class lies in its
+intermediate representation of the data. Using the HOOMD-blue namespace as the basis for
+distinguishing between quantities, the :code:`Logger` maps logged quantities into a nested
+dictionary. For example, logging the Lennard-Jones pair potentials total energy would produce this
+dictionary by a :code:`Logger` object :code:`{'md': {'pair': {'LJ': {'energy': (-1.4, 'scalar')}}}}`
+where :code:`'scalar'` is a flag to make processing the logged output easier. In real use cases, the
+dictionary would likely be filled with many other quantities.
 
 Version 3.0 of HOOMD-blue uses properties extensively to expose object data such as the total
 potential energy in all our pair potentials, the trial move acceptance rate in MC integrators, and
@@ -689,3 +691,9 @@ HOOMD-blue version 3.0 presents a Pythonic API that encourages experimentation a
 Through subclassing C++ classes, providing wrappers for custom actions, and exposing data in
 zero-copy arrays/buffers, we allow HOOMD-blue users to utilize the full potential of Python and the
 scientific Python community.
+
+Acknowledgements
+----------------
+
+The development of HOOMD-blue version 3.0 is supported by the National Science Foundataion, Office
+of Advanced Cyberinfrastructure  Award # OAC 834612.  Thanks to all past and current contributors to HOOMD-blue.
