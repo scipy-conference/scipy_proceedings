@@ -20,27 +20,19 @@ import options
 
 header = r'''
 .. role:: ref
-
 .. role:: label
-
 .. role:: cite(raw)
    :format: latex
-
 .. raw::  latex
-
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
     \newcommand*\DUrolecode[1]{#1}
     \providecommand*\DUrolecite[1]{\cite{#1}}
-
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
     :trim:
-
 .. |--| unicode:: U+2013   .. en dash
     :trim:
-
-
 '''
 
 def rst2tex(in_path, out_path):
