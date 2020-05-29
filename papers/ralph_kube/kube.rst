@@ -677,7 +677,7 @@ DTN to Cori in the ``2-node`` scenario and as the average achieved network bandw
 transfers from the KSTAR DTN to the NERSC DTN in the ``3-node scenario``. We also list the Walltime,
 the number of processed time chunks and the average Walltime per time chunk. All runs are performed
 on an allocation using 32 Cori nodes partitioned into 128 MPI ranks with 16 Threads each for a total
-of 2048 CPU cores.
+of 2048 CPU cores. 
 
 
 .. table:: Performance metrics for the ECEI workflow in different configurations. :label:`walltimes`
@@ -685,20 +685,25 @@ of 2048 CPU cores.
     +-------------+-------------------+-----------+-----------+----------+
     | Scenario    | Data bandwidth    | Walltime  | processed | Average  |
     +=============+===================+===========+===========+==========+
-    | file        | 350 MByte/sec     | 352s      | 500       | 0.70s    |
+    | file        | 350 MByte/sec     | 347s      | 500       | 0.70s    |
     +-------------+-------------------+-----------+-----------+----------+
-    | 2-node      | 250 MByte/sec     | 221s      | 318       | 0.69s    |
+    | 2-node      | 95 MByte/sec      | 358s      | 485       | 0.74s    |
     +-------------+-------------------+-----------+-----------+----------+
-    | 3-node      | 123 MByte/sec     | 148s      | 193       | 0.77s    |
+    | 3-node      | 450 MByte/sec     | 339s      | 463       | 0.73s    |
     +-------------+-------------------+-----------+-----------+----------+
 
 
 
 
-The walltime for the file-based workflow is 352s, about 221s for the 2-node scenario and 148s for the
-3-node scenario. Since we are using the DataMan engine, some packet loss is expected due to implementation
-details. Dividing the Walltime by the number of processed time chunks, all three scenarios perform about
-equally well. 
+The walltime for the file-based workflow is 352s, about 358 for the 2-node scenario and 339s for the
+3-node scenario, as shown in :ref:`walltimes`. Some packet loss can be expected in the current implementation of the DataMan 
+engine. In order to mitigate packet loss we wait an additional tenth of a second after sending any packet 
+from the NERSC DTN to Cori. This results in a data bandwidth of 95 MByte/sec in the ``2-node`` scenario.
+In the ``3-node`` scenario we show that we can sustain high velocity data streams using ADIOS2 from KSTAR 
+to NERSC. As in the ``2-node`` scenario, we limit the bandwidth from the NERSC DTN to Cori by pausing a fraction
+of a second after sending a time chunk. On average, analysis runs equally fast for the ``file`` based IO scenario 
+or for the streaming scenarios.
+
 
 Figure :ref:`delta-perf-queue` shows the average time that a time chunk is enqueued by the processor. Here
 all three scenarios show a similar trend - the amount of time a time chunk is enqueued increases with 
