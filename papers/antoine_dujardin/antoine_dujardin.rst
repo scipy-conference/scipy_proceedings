@@ -235,6 +235,11 @@ We could note that, at that speed, the main computation gets close to the time r
 
 In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required playing around with the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
 
+Parallelization: effortless scaling with Pygion
+-----------------------------------------------
+
+<Placeholder>
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
