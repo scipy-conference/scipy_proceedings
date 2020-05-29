@@ -41,21 +41,36 @@ Fluctuation X-ray Scattering real-time app
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
+LCLS-II, an upgrade to LCLS
++++++++++++++++++++++++++++
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+The Linac Coherent Light Source (LCLS) at the SLAC national accelerator laboratory is an X-ray Free Electron Laser providing femtosecond pulses with an ultrabright beam approximately one billion times brighter than synchrotrons. Such a brightness allows to work with much smaller sample sizes while the shortness allows imaging below the rotational diffusion time of the molecules. With pulses of such an unprecedented brightness and shortness, scientists are able to take snapshots of single macromolecules without the need for crystallization at ambient temperature.
 
+To push the boundaries of the science available at the lightsource, LCLS is currently being upgraded after 10 years of operation. The LCLS-II upgrade will progressively increase the sampling rate from 120 pulses per second to 1 million. At these rates, the LCLS instruments will generate multiple terabytes per second of science data and it will therefore be critical to know what data is worth saving, requiring on-the-fly processing of the data. Earlier, users could classify and preprocess their data after the experiment, but this approach will become either prohibitive or plainly impossible. This leads us to the requirement of performing some parts of the analysis in real time during the experiment.
+
+Quasi real time analysis of the LCLS-II datasets will require High Performance Computing, potentially at the Exascale, which cannot be offered in-house. Therefore, a pipeline to a supercomputing center is required. The Pipeline itself starts with a Data Reduction step to reduce the data size, using vetoing, feature extraction, and compression in real time. We then pass the data over the Energy Sciences Network (ESnet) to the National Energy Research Scientific Computing Center (NERSC). ESNet is a high-speed network with a current capability of 100Gbps, which will have to be increased to the Tbps range. At the end of the pipeline, the actual analysis can take place on NERSC’s supercomputers. This makes the whole process, from the sample to the analysis, quite challenging to change and adapt.
+
+However, LCLS experiments are typically high-risk / high-reward and involve novel setups, varying levels of requirements, and last only for a few days of beam time. The novelty in the science can require adaptations in the algorithms, requiring the data analysis itself to be highly flexible. Furthermore, we want to give users as much freedom as possible in the way they analyze their data without expecting them to have a deep knowledge of large-scale computer programming.
+
+Therefore, we require real time analysis, high performance computing capabilities and a complex pipeline, while at the same time requiring enough flexibility to adapt to novel experimental setups and analysis algorithms. We believe Python helps us in this compromise pretty well.
+
+FXS: an example analysis requiring HPC
+++++++++++++++++++++++++++++++++++++++
+
+While a variety of experiments that can be performed at LCLS, we will here focus on one specific example: Fluctuation X-ray Scattering (FXS).
+
+X-ray scattering of particles in a solution is a common technique in the study of the structure and dynamics of macromolecules in biologically-relevant conditions and gives an understanding of their function. However, traditional methods currently used at synchrotrons suffer from the fact that the exposure time is longer than the rotation time of the particle, leading to the capture of angularly-averaged patterns.
+FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. 1). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. It has been described in the late 1970s (Kam, 1977; Kam et al., 1981) and has then been performed at LCLS before the upgrade (Pande et al., 2018; Kurta et al., 2017; Medez et al., 2014 & 2016).
+
+While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution (Kurta et al., 2017), the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, billions or more snapshots could be required.
+
+We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
+
+In FXS, each diffraction pattern contains several identical particles in random orientations. Information about the structure of the individual particle can be recovered by studying the two-point angular correlation of the data. To do so, the 2D images are expanded in a 3D, orientation-invariant space, where they are aggregated using the following formula:
+
+C2(q,q',DeltaPhi)=1/2piN Sum(j=1->N) Int(0->2pi) Ij(q,Phi) Ij(q',Phi+DeltaPhi) dPhi, (1)
+
+where  Ij(q,) represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. 2), using an algorithm described elsewhere (Donatelli et al., 2015; Pande et al., 2018).
 
 Bibliographies, citations and block quotes
 ------------------------------------------
