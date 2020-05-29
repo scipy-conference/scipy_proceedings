@@ -419,17 +419,18 @@ In this example using Riemannian geometry, we observe that the choice of metric 
 There are published results that show how useful geometry can be
 with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
 
- .. code::ipython3
+ .. code:: ipython3
 
     pairwise_dist = []
     for i, x in enumerate(data):
         for y in data[i:]:
             pairwise_dist.append(ai_metric.dist(x,y))
-    pairwise_dist = manifold.from_vector(pairwise_dist)
+    pairwise_dist = manifold.from_vector(
+        pairwise_dist)
 
 We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
 
-.. code::ipython3
+.. code:: ipython3
 
     from sklearn.neighbors import KNeighborsClassifier
     classifier = KNeighborsClassifier(metric='precomputed')
