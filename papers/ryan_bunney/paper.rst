@@ -113,7 +113,7 @@ is to minimise the execution length of the final schedule; this is referred to
 as the *makespan*.
 
 
-.. figure:: fig/sample_dag.eps
+.. figure:: fig/sample_dag.png
   :scale: 200 %
 
   A sample DAG; vertices represent compute tasks, and edges show precedence
@@ -234,7 +234,7 @@ command line interface to quickly run one of the in-built algorithms.
 These components are all contained within the main ``shadow`` directory;
 there are also additional codes that are located in ``utils``, which are covered in the **Additional Tools** section.
 
-.. figure:: fig/heft_with_calc.eps
+.. figure:: fig/heft_with_calc.png
   :scale: 80 %
 
   An example workflow DAG adapted from; weights on the edges describe data
@@ -396,7 +396,7 @@ of specifications, using the SHADOWGen utility.
 It is also possible to use pre-calculated costs (i.e. completion time in
 seconds) when scheduling with shadow.
 
-.. figure:: fig/heft_example.eps
+.. figure:: fig/heft_example.png
 
    This is a replication of the costs provided in the original HEFT paper
    :cite:`topcuoglu2002`. The table shows a different runtime for each
@@ -535,7 +535,7 @@ that information. For example, Figure  is the result of visualising the
 ``HEFTWorkflow`` example mentioned previously:
 
 
-.. figure:: fig/samplea_allocation.pdf
+.. figure:: samplea_allocation.pdf
 
    Result of running ``shadow.heuristic.heft`` on the graph shown in Figure
    :ref:`heftcalc`. Final makespan is 98; gaps between tasks are indicative
