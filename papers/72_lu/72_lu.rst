@@ -5,6 +5,11 @@
 :author: Adrian Kwong
 :email: akwong@westhealth.org
 :institution: Gary and Mary West Health Institute
+
+:author: José Unpingco
+:email: jhunpingco@westhealth.org
+:institution: Gary and Mary West Health Institute
+
 :bibliography: ourbib
 
 ------------------------------------------------------------------------------------------------------
