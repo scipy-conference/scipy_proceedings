@@ -9,8 +9,7 @@
 :email: adityapb1546@gmail.com
 :institution: Department of Aerospace Engineering
 :institution: IIT Bombay, Mumbai, India
-
-.. :bibliography: references
+:bibliography: references
 
 
 ------------------------------------
@@ -32,9 +31,9 @@ Compyle: Python once, HPC anywhere!
    In this article, we show how to implement a simple molecular dynamics
    simulation package in pure Python using Compyle. The result is a fully
    parallel program that is quite easy to implement and solves a non-trivial
-   problem. The code transparently executes on multi-core CPUs and GPGPUs.
-   This is not possible with any of the other tools that are available
-   currently in the Python ecosystem.
+   problem. The code transparently executes on multi-core CPUs and GPGPUs. As
+   far as we are aware, this is not possible with any of the other tools that
+   are available currently in the Python ecosystem.
 
 
 .. class:: keywords
@@ -76,8 +75,9 @@ be that compyle grew out of a project that pre-dates numba but the real reason
 is that compyle solves a different problem. Understanding this requires a bit
 of a context. As a prototypical example, we look at a simple molecular
 dynamics simulation where we create :math:`N` particles and these particles
-interact with each other via a Lennard-Jones potential as discussed in XXX
-(Cite the Schroeder paper).
+interact with each other via a Lennard-Jones potential as discussed in
+:cite:`schroeder2015`.
+
 
 The typical workflow for a Python programmer would be to prototype this in
 pure Python and get a working proof of concept. One would then try to optimize
@@ -125,16 +125,17 @@ Compyle has the following features:
 
 We use the prototypical example given above of writing a simple N-particle
 molecular dynamics system that is described and discussed in the article by
-[XXX Schroeder]. Our goal is to implement this system in pure Python using
-Compyle. Through this we demonstrate the ease of use and power of Compyle. We
-write a single code that executes efficiently in parallel on CPUs and GPUs. We
-use this example to also discuss the three important parallel algorithms and
-show how they nicely allow us to solve non-trivial problems.
+:cite:`schroeder2015`. Our goal is to implement this system in pure Python
+using Compyle. Through this we demonstrate the ease of use and power of
+Compyle. We write a single code that executes efficiently in parallel on CPUs
+and GPUs. We use this example to also discuss the three important parallel
+algorithms and show how they nicely allow us to solve non-trivial problems.
 
 Compyle is not a toy and is actively used by a non-trivial, open source, SPH
-framework called PySPH (https://pysph.rtfd.io). Compyle makes it possible for
-users to write their SPH codes in high-level Python and have it executed on
-multi-core and GPU accelerators with negligible changes to their code.
+framework called PySPH (https://pysph.rtfd.io) and discussed in some detail in
+:cite:`pysph2019` and :cite:`pysph16`. Compyle makes it possible for users to
+write their SPH codes in high-level Python and have it executed on multi-core
+and GPU accelerators with negligible changes to their code.
 
 
 
@@ -210,48 +211,96 @@ well.
 Installation
 -------------
 
-Discuss these in brief.
+Installation of Compyle is by itself straightforward and this can be done with
+pip_ using::
 
-- pip
-- github
-- Dependencies and requirements.
+  pip install compyle
 
+For execution on a CPU, Compyle depends on Cython and a C++ compiler on the
+local machine. Detailed instructions for installation are available at the
+`compyle installation documentation
+<https://compyle.readthedocs.io/en/latest/installation.html>`_. For execution
+on a GPU compyle requires that either PyOpenCL_ or PyCUDA_ be installed. It is
+possible to install the required dependencies using the extras argument as
+follows::
+
+  pip install compyle[opencl]
+
+Compyle is still under heavy development and one can also easily install the
+package using a git checkout from the repository on github at
+https://github.com/pypr/compyle
+
+
+.. _pip: https://pip.pypa.io/
 
 Parallel algorithms
 --------------------
 
-We will work through a molecular dynamics simulation of N particles
-using the Lennard Jones potential energy for interaction.
+We will work through a molecular dynamics simulation of N particles (in two
+dimensions) using the Lennard Jones potential energy for interaction. Each
+particle interacts with every other particle and together the system of
+particles evolves in time. The Lennard-Jones potential energy is given by,
 
 .. math::
     u(r) = 4\epsilon \left( \left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6 \right)
 
-We use :math:`\sigma = \epsilon = m = 1` for our implementation.
-We use the velocity Verlet algorithm as integrator simulation.
-As outlined in [XXX], the position and velocity of 
-the particles are updated in the following sequence:
+Each particle introduces an energy potential and if another particle is at a
+distance of :math:`r` from it, then the potential experienced by the particle
+is given by the above equation. The gradient of this potential energy function
+produces the force on the particle. Therefore if we are given two particles at
+positions, :math:`\vec{r}_i` and :math:`\vec{r}_j` respectively then the force
+on the particle :math:`j` is dependent on the value of :math:`|\vec{r_j} -
+\vec{r_i}|` and the gradient is:
 
-1. Positions of all particles are updated using the current velocities
-   as :math:`x_i = x_i + v_i dt + \frac{1}{2} a_i dt`. The velocities
-   are then updated by half a step as :math:`v_i = v_i + \frac{1}{2} a_i dt`
+.. math::
+   \vec{F}_{i \leftarrow j} = \frac{24 \epsilon}{r_{ij}^2} \left( 2\left(\frac{\sigma}{r_{ij}}\right)^{12} - \left(\frac{\sigma}{r_{ij}}\right)^6 \right) \vec{r}_{ij}
+
+Where :math:`r_{ij} = |\vec{r}_{ij}|` and :math:`\vec{r}_{ij} = \vec{r}_i -
+\vec{r}_j`. The left hand side is the force on particle :math:`i` due to
+particle at :math:`j`. Here, we use :math:`\sigma = \epsilon = m = 1` for our
+implementation. We use the velocity Verlet algorithm in order to integrate the
+system in time. We use a timestep of :math:`\Delta t` and as outlined in
+:cite:`schroeder2015`, the position and velocity of the particles are updated
+in the following sequence:
+
+1. Positions of all particles are updated using the current velocities as
+   :math:`x_i = x_i + v_i \Delta t + \frac{1}{2} a_i \Delta t`. The velocities
+   are then updated by half a step as :math:`v_i = v_i + \frac{1}{2} a_i
+   \Delta t`.
+
 2. The new acceleration of all particles are calculated using the
    updated positions.
+
 3. The velocities are then updated by another half a step.
 
-All of these steps can be implemented as elementwise operations.
+In the simplest implementation of this, all particles influence all other
+particles. This can be implemented very easily in Python. We first look at how
+to implement this using Compyle. Our implementation will be parallel from the
+get-go and will work on both CPUs and GPUs.
+
+Once we complete the simple implementation we consider a very important
+performance improvement where particles that are beyond 3 natural units, i.e.
+:math:`r_{ij} > 3` do not influence each other (beyond this distance the force
+is negligible). This can be used to reduce the complexity of the computation
+of the mutual forces from an :math:`O(N^2)` to an :math:`O(N)` computation.
+However, implementing this easily in parallel is not so straightforward.
+
+Due to the simplicity of the initial implementation, all of these steps can be
+implemented using what are called "elementwise" operations. This is the
+simplest building block for parallel computing and is also known as the
+"parallel map" operation.
 
 Elementwise
 ~~~~~~~~~~~
 
-An elementwise operation can be thought of as a parallel for loop.
-It can be used to map every element of an input array to a
-corresponding output.
-Here is a simple elementwise function implemented using compyle
-to execute step 1 of the above algorithm.
+An elementwise operation can be thought of as a parallel for loop. It can be
+used to map every element of an input array to a corresponding output. Here is
+a simple elementwise function implemented using compyle to execute step 1 of
+the above algorithm.
 
 .. code-block:: python
 
-    @annotate(float='m, dt', 
+    @annotate(float='m, dt',
               gfloatp='x, y, vx, vy, fx, fy')
     def integrate_step1(i, m, dt, x, y, vx, vy, fx, fy):
         axi, ayi = declare('float', 2)
@@ -262,10 +311,10 @@ to execute step 1 of the above algorithm.
         vx[i] += 0.5 * axi * dt
         vy[i] += 0.5 * ayi * dt
 
-The annotate decorator is used to specify types of arguments and 
+The annotate decorator is used to specify types of arguments and
 the declare function is used to specify types of variables
 declared in the function. This can be avoided by using the JIT
-compilation feature which infers the types of arguments and 
+compilation feature which infers the types of arguments and
 variables based on the types of arguments passed to the function
 at runtime . Following is the implementation of steps 2 and 3
 without the type declarations.
@@ -273,7 +322,7 @@ without the type declarations.
 .. code-block:: python
 
     @annotate
-    def calculate_force(i, x, y, fx, fy, pe, 
+    def calculate_force(i, x, y, fx, fy, pe,
                         num_particles):
         force_cutoff = 3.
         force_cutoff2 = force_cutoff * force_cutoff
@@ -306,16 +355,16 @@ the step functions for our simulation,
 
     @annotate
     def step_method1(i, x, y, vx, vy, fx, fy, pe, xmin,
-                     xmax, ymin, ymax, m, dt, 
+                     xmax, ymin, ymax, m, dt,
                      num_particles):
         integrate_step1(i, m, dt, x, y, vx, vy, fx, fy)
 
 
     @annotate
-    def step_method2(i, x, y, vx, vy, fx, fy, pe, xmin, 
-                     xmax, ymin, ymax, m, dt, 
+    def step_method2(i, x, y, vx, vy, fx, fy, pe, xmin,
+                     xmax, ymin, ymax, m, dt,
                      num_particles):
-        calculate_force(i, x, y, fx, fy, pe, 
+        calculate_force(i, x, y, fx, fy, pe,
                         num_particles)
         integrate_step2(i, m, dt, x, y, vx, vy, fx, fy)
 
@@ -324,16 +373,16 @@ class and called as normal python functions.
 
 .. code-block:: python
 
-        step1 = Elementwise(step_method1, 
+        step1 = Elementwise(step_method1,
                             backend=self.backend)
-        step2 = Elementwise(step_method2, 
+        step2 = Elementwise(step_method2,
                             backend=self.backend)
 
 Reduction
 ~~~~~~~~~
 
 To check the accuracy of the simulation, the total energy of the
-system can be monitored. 
+system can be monitored.
 The total energy for each particle can be calculated as the sum of
 its potential and kinetic energy. The total energy of the system
 can then be calculated by summing the total energy over all
@@ -345,7 +394,7 @@ The reduction operator reduces an array to a single value. Given an input array
 value :math:`a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}`.
 
 Compyle also allows users to give a map expression to map the
-input before applying the reduction operator. 
+input before applying the reduction operator.
 The total energy of our system can thus be found as follows using
 reduction operator in compyle.
 
