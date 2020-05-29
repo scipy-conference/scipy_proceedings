@@ -254,7 +254,9 @@ The logarithm map is the operation that generalizes the substraction of two poin
         point=beijing, base_point=paris)
 
 
-Using the Riemannian exponential and logarithm instead of the linear addition and substraction, allows to generalize many learning algorithms to manifolds. We presented their use on the sphere; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module. The next tutorials show more involved examples of learning algorithms on manifold, that rely on these elementary operations.
+Using the exponential and logarithm maps instead of the linear addition and substraction, allows to generalize many learning algorithms to manifolds. We emphasize that these operations depend on the "Riemannian metric" chosen for a given manifold. The metric defines the notion of geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere, that would have changed the distance between the points: with a different metric, the "sphere" could, for example, look like an ellipsoid.
+
+We presented the use on the exponential and logarithm maps on the sphere; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module, with different Riemannian metrics. The next tutorials show more involved examples of learning algorithms on manifold, that rely on these elementary operations.
 
 Tutorial: Classification of SPD matrices
 ----------------------------------------
@@ -283,7 +285,7 @@ This strategy can be applied to any manifold-valued data and to any learning alg
 Manifold of SPD matrices
 ************************
 
-Let us recall the mathematical definition of the manifold of SPD matrices. The manifold of symmetric positive definite (SPD) matrices in :math:`n` dimensions is defined as:
+Let us recall the mathematical definition of the manifold of SPD matrices. The manifold of symmetric positive definite (SPD) matrices in :math:`n` dimensions is embedded in the General Linear group of invertible matrices and defined as:
 
 .. math::
     SPD = \left\{
@@ -321,9 +323,7 @@ Classifying brain connectomes in Geomstats
 ******************************************
 
 We use data from the `MSLP 2014 Schizophrenia
-Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of Symmetric Positive-Definite (SPD) matrices in 28 dimensions. Patients are separated in two classes: schizophrenic and control. The goal is to classify them.
-
-First we load the data.
+Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of Symmetric Positive-Definite (SPD) matrices in 28 dimensions. Patients are separated in two classes: schizophrenic and control. Our goal is to classify them. First we load the data.
 
 .. code:: ipython3
 
@@ -332,11 +332,9 @@ First we load the data.
     data, patient_ids, labels = \
         data_utils.load_connectomes()
 
-As mentionned above, correlation matrices are SPD matrices. Because
-multiple metrics could be used on SPD matrices, we also import two of
+Because multiple metrics could be used on SPD matrices, we also import two of
 the most commonly used ones: the Log-Euclidean metric and the
-Affine-Invariant metric :cite:`Pennec2006b`. We can use the SPD module from
-``geomstats`` to handle all the geometry, and check that our data indeed
+Affine-Invariant metric :cite:`Pennec2006b`. We check that our data indeed
 belongs to the manifold of SPD matrices:
 
 .. code:: ipython3
@@ -424,8 +422,7 @@ And with the log-Euclidean metric:
 
     INFO: 0.67
 
-We observe that the results depend on the metric used! The Riemannian metric indeed defines the notion of geodesics and distance on the manifold. Both notions are used to compute the Fréchet Mean and the logarithms. Thus, changing the metric changes the results, and some metrics may be more suitable than others for different applications. There are published results that show how useful geometry can be
-with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`).
+We observe that the results depend on the metric used! The Riemannian metric indeed defines the notions of geodesic and distance on the manifold. Both notions are used to compute the Fréchet Mean and the logarithms. Thus, changing the metric changes the results, and some metrics may be more suitable than others for different applications. There are published results that show how useful geometry can be with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`).
 
 We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
 
@@ -498,10 +495,6 @@ discoveries, this tutorial shows how to learn such embeddings in :code:`geomstat
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
 Please note that in the sequel we omit details regarding re-shaping/dimensioning the data arrays and those regarding visualizations and plot.
 A full working code is available in the ``examples`` directory and additionally a detailed notebook under ``notebooks``.
-First we recall hyperbolic spaces, then
-import the necessary modules from :code:`geomstats`. The embedding method is then presented
-formally while showing how it is implemented in :code:`geomstats`.
-Finally the resulting embedding is plotted.
 
 Hyperbolic space
 ****************
@@ -518,11 +511,7 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
 
 In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and
 :code:`PoincareBall` depending on the coordinate system used to represent the points.
-These classes  inherit from the class :code:`EmbeddedManifold`.
-They implement methods such as: conversion functions from intrinsic :math:`n`-dimensional coordinates
-to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa);
-the projection of a point in the embedding space to the embedded manifold and the corresponding
-projection of a vector in the embedding space to a tangent vector at a point of the embedded manifold.
+These classes  inherit from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`Minkowski`.
 
 
 Learning graph representations with hyperbolic spaces in `Geomstats`
