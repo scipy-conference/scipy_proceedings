@@ -466,6 +466,7 @@ We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classific
 
     0.72
 
+
 We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
 
 Tutorial: Learning graph representations with Hyperbolic spaces
