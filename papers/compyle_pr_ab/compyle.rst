@@ -152,7 +152,7 @@ High-level overview
 --------------------
 
 We now provide a high-level overview of Compyle and its basic approach. This
-is helpful when using ocmpyle.
+is helpful when using compyle.
 
 It is important to keep in mind that Compyle does **not** provide a greater
 abstraction of the hardware but allows a user to write code in pure Python and
@@ -220,77 +220,124 @@ Discuss these in brief.
 Parallel algorithms
 --------------------
 
+We will work through a molecular dynamics simulation of N particles
+using the Lennard Jones potential energy for interaction.
+
+.. math::
+    u(r) = 4\epsilon \left( \left(\frac{\sigma}{r}\right)^{12} - \left(\frac{\sigma}{r}\right)^6 \right)
+
+We use :math:`\sigma = \epsilon = m = 1` for our implementation.
+We use the velocity Verlet algorithm as integrator simulation.
+As outlined in [XXX], the position and velocity of 
+the particles are updated in the following sequence:
+
+1. Positions of all particles are updated using the current velocities
+   as :math:`x_i = x_i + v_i dt + \frac{1}{2} a_i dt`. The velocities
+   are then updated by half a step as :math:`v_i = v_i + \frac{1}{2} a_i dt`
+2. The new acceleration of all particles are calculated using the
+   updated positions.
+3. The velocities are then updated by another half a step.
+
+All of these steps can be implemented as elementwise operations.
+
 Elementwise
 ~~~~~~~~~~~
 
-The elementwise operator operates on each element of an input array and maps it to
-an output array. Below is a simple example of calculating :math:`y = a\sin{x} + b`.
+An elementwise operation can be thought of as a parallel for loop.
+It can be used to map every element of an input array to a
+corresponding output.
+Here is a simple elementwise function implemented using compyle
+to execute step 1 of the above algorithm.
 
 .. code-block:: python
 
-    import numpy as np
-    from compyle.api import annotate, Elementwise, \
-        get_config
+    @annotate(float='m, dt', 
+              gfloatp='x, y, vx, vy, fx, fy')
+    def integrate_step1(i, m, dt, x, y, vx, vy, fx, fy):
+        axi, ayi = declare('float', 2)
+        axi = fx[i] / m
+        ayi = fy[i] / m
+        x[i] += vx[i] * dt + 0.5 * axi * dt * dt
+        y[i] += vy[i] * dt + 0.5 * ayi * dt * dt
+        vx[i] += 0.5 * axi * dt
+        vy[i] += 0.5 * ayi * dt
 
-    @annotate
-    def axpb(i, x, y, a, b):
-        y[i] = a[i]*sin(x[i]) + b[i]
-
-    # Setup the input data
-    n = 1000000
-    x = np.linspace(0, 1, n)
-    y = np.zeros_like(x)
-    a = np.random.random(n)
-    b = np.random.random(n)
-
-    # Use OpenMP
-    get_config().use_openmp = True
-
-    # Now run this in parallel with Cython.
-    backend = 'cython'
-    e = Elementwise(axpb, backend=backend)
-    e(x, y, a, b)
-
-This will call the axpb function in parallel using OpenMP. To call this
-function on the GPU, the arrays need to be sent to the device. This can
-be acheived by using the :code:`Array` wrapper as follows,
-
-.. code-block:: python
-
-    from compyle.api import wrap
-
-    backend = 'opencl'
-    x, y, a, b = wrap(x, y, a, b, backend=backend)
-
-This wraps the arrays and sends the data to the device. :code:`x.pull()` gets
-the data from device to host and :code:`x.push()` sends the data from
-host to device.
-
-Here is an example of using elementwise for implementing the step
-function for solving laplace equation.
+The annotate decorator is used to specify types of arguments and 
+the declare function is used to specify types of variables
+declared in the function. This can be avoided by using the JIT
+compilation feature which infers the types of arguments and 
+variables based on the types of arguments passed to the function
+at runtime . Following is the implementation of steps 2 and 3
+without the type declarations.
 
 .. code-block:: python
 
     @annotate
-    def laplace_step(i, u, res, err, nx, ny, dx2, dy2,
-                     dnr_inv):
-        xid = i % nx
-        yid = i / nx
+    def calculate_force(i, x, y, fx, fy, pe, 
+                        num_particles):
+        force_cutoff = 3.
+        force_cutoff2 = force_cutoff * force_cutoff
+        for j in range(num_particles):
+            if i == j:
+                continue
+            xij = x[i] - x[j]
+            yij = y[i] - y[j]
+            rij2 = xij * xij + yij * yij
+            if rij2 > force_cutoff2:
+                continue
+            irij2 = 1.0 / rij2
+            irij6 = irij2 * irij2 * irij2
+            irij12 = irij6 * irij6
+            pe[i] += (4 * (irij12 - irij6))
+            f_base = 24 * irij2 * (2 * irij12 - irij6)
 
-        if xid == 0 or xid == nx - 1 or yid == 0 or \
-            yid == ny - 1:
-            return
+            fx[i] += f_base * xij
+            fy[i] += f_base * yij
 
-        res[i] = ((u[i - 1] + u[i + 1]) * dx2 +
-                  (u[i - nx] + u[i + nx]) * dy2) * \
-                  dnr_inv
+    @annotate
+    def integrate_step2(i, m, dt, x, y, vx, vy, fx, fy):
+        vx[i] += 0.5 * fx[i] * dt / m
+        vy[i] += 0.5 * fy[i] * dt / m
 
-        diff = res[i] - u[i]
+Finally, these components can be brought together to write
+the step functions for our simulation,
 
-        err[i] = diff * diff
+.. code-block:: python
+
+    @annotate
+    def step_method1(i, x, y, vx, vy, fx, fy, pe, xmin,
+                     xmax, ymin, ymax, m, dt, 
+                     num_particles):
+        integrate_step1(i, m, dt, x, y, vx, vy, fx, fy)
+
+
+    @annotate
+    def step_method2(i, x, y, vx, vy, fx, fy, pe, xmin, 
+                     xmax, ymin, ymax, m, dt, 
+                     num_particles):
+        calculate_force(i, x, y, fx, fy, pe, 
+                        num_particles)
+        integrate_step2(i, m, dt, x, y, vx, vy, fx, fy)
+
+These can then be wrapped using the :code:`Elementwise`
+class and called as normal python functions.
+
+.. code-block:: python
+
+        step1 = Elementwise(step_method1, 
+                            backend=self.backend)
+        step2 = Elementwise(step_method2, 
+                            backend=self.backend)
 
 Reduction
 ~~~~~~~~~
+
+To check the accuracy of the simulation, the total energy of the
+system can be monitored. 
+The total energy for each particle can be calculated as the sum of
+its potential and kinetic energy. The total energy of the system
+can then be calculated by summing the total energy over all
+particles.
 
 The reduction operator reduces an array to a single value. Given an input array
 :math:`(a_0, a_1, a_2, \cdots, a_{n-1})` and an associative binary operator
@@ -298,32 +345,21 @@ The reduction operator reduces an array to a single value. Given an input array
 value :math:`a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}`.
 
 Compyle also allows users to give a map expression to map the
-input before applying the reduction operator. Following is a simple
-example.
+input before applying the reduction operator. 
+The total energy of our system can thus be found as follows using
+reduction operator in compyle.
 
 .. code-block:: python
 
-    from math import cos, sin
-    x = np.linspace(0, 1, 1000)/1000
-    y = x.copy()
-    x, y = wrap(x, y, backend=backend)
-
     @annotate
-    def map(i=0, x=[0.0], y=[0.0]):
-        return cos(x[i])*sin(y[i])
+    def calculate_energy(i, vx, vy, pe, num_particles):
+        ke = 0.5 * (vx[i] * vx[i] + vy[i] * vy[i])
+        return pe[i] + ke
 
-    r = Reduction('a+b', map_func=map, backend=backend)
-    result = r(x, y)
-
-Trivial examples
-~~~~~~~~~~~~~~~~~
-
-Brute-force N-body simulation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Simple Laplace equation?
-~~~~~~~~~~~~~~~~~~~~~~~~
-
+    energy_calc = Reduction('a+b',
+                            map_func=calculate_energy,
+                            backend=backend)
+    total_energy = energy_calc(vx, vy, pe, num_particles)
 
 Scans
 ~~~~~
@@ -355,30 +391,7 @@ required. The output function also operates on the input array and an
 index but also has the scan result, the previous item and the last item
 in the scan result available as arguments.
 
-Following is a simple example of a cumulative sum over all elements of an
-array.
-
-.. code-block:: python
-
-    ary = np.arange(10000, dtype=np.int32)
-    ary = wrap(ary, backend=backend)
-
-    @annotate
-    def input_expr(i, ary):
-        return ary[i]
-
-    @annotate
-    def output_expr(i, item, ary):
-        ary[i] = item
-
-    scan = Scan(input_expr, output_expr, 'a+b',
-                dtype=np.int32, backend=backend)
-    scan(ary=ary)
-    ary.pull()
-
-    # Result = ary.data
-
-Below is a more complex example of implementing a parallel "where".
+Below is an example of implementing a parallel "where".
 This returns elements of an array where a given condition is satisfied.
 The following example returns elements of the array that are smaller
 than 50.
@@ -420,18 +433,8 @@ for reduction and the required size of result could be found
 before running the scan and the result array can be allocated
 accordingly.
 
-Example using local memory
---------------------------
-
-Simple nearest neighbors
-------------------------
-
-
-Simple n-body treecode
------------------------
-
-Performance comparison with numba
----------------------------------
+Performance comparison
+----------------------
 
 Limitations
 ------------
