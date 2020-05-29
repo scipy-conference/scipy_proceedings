@@ -3,7 +3,7 @@
 :institution: Princeton University
 
 :author: Jim Pivarski
-:email: jpivarski@gmail.com
+:email: pivarski@princeton.edu
 :institution: Princeton University
 
 :author: Hans Dembinski
@@ -34,20 +34,20 @@ Boost-histogram: High-Performance Histograms as Objects
 
 .. class:: keywords
 
-   histogram, analysis, data processing, data reduction
+   Histogram, Analysis, Data processing, Data reduction, NumPy, Aggregation
 
 Introduction
 ------------
 
-.. Why is it necissary to come up with a histogram library?
+.. Why is it necessary to come up with a histogram library?
 
-In the High Energy Physics (HEP) community, histogramming is vital to most of our analysis. As part of building tools in Python to provide a friendly and powerful alternative to the ROOT C++ analysis stack[^1], histogramming was targeted as an area in the Python ecosystem that needed significant improvement. The "histograms are objects" mindset is a general, powerful way of interacting with histograms that can be utilized across disciplines. We have built boost-histogram in cooperation with the Boost C++ community for general use, and also have separate more specialized tools built on top of boost-histogram that customize it for HEP analysis (which will be relegated to a brief mention at the end of this document).
+In the High Energy Physics (HEP) community, histogramming is vital to most of our analysis. As part of building tools in Python to provide a friendly and powerful alternative to the ROOT C++ analysis stack [ROOT]_, histogramming was targeted as an area in the Python ecosystem that needed significant improvement. The "histograms are objects" mindset is a general, powerful way of interacting with histograms that can be utilized across disciplines. We have built boost-histogram in cooperation with the Boost C++ community [Boost]_ for general use, and also have separate more specialized tools built on top of boost-histogram that customize it for HEP analysis (which will be relegated to a brief mention at the end of this document).
 
 At the start of the project, there were many existing histogram libraries for Python (at least 24 were identified by the authors), but none of them fulfilled the requirements and expectations of users coming from custom C++ analysis tools. Four key areas were identified as key to a good library for creating histograms: Design, Flexibility, Speed, and Distribution.
 
-Before we continue, a brief description of a histogram should suffice to set the stage until we describe boost-histogram's approach in more detail. A histogram reduces an arbitrarily large dataset into a finite set of bins. A histogram consists of one or more *axes* (sometimes called "binnings") that describe a conversion from *data coordinates* to *bin coordinates*. The data coordinates may be continuous or discrete (often called categories); the bin coordinates are always discrete. In NumPy, this conversion is internally derived from a combination of the ``bin`` and ``range`` arguments. Each *bin* in the histogram stores some sort of aggregate information (a simple sum in NumPy) for each value that falls into it via the axes conversion. Histograms often have an extra "weight" value that is available to this aggregate (a weighted sum in NumPy).
+Before we continue, a brief description of a histogram should suffice to set the stage until we describe boost-histogram's approach in more detail. A histogram reduces an arbitrarily large dataset into a finite set of bins. A histogram consists of one or more *axes* (sometimes called "binnings") that describe a conversion from *data coordinates* to *bin coordinates*. The data coordinates may be continuous or discrete (often called categories); the bin coordinates are always discrete. In NumPy [NumPy]_, this conversion is internally derived from a combination of the ``bin`` and ``range`` arguments. Each *bin* in the histogram stores some sort of aggregate information (a simple sum in NumPy) for each value that falls into it via the axes conversion. Histograms often have an extra "weight" value that is available to this aggregate (a weighted sum in NumPy).
 
-Almost as important as defining a histogram is limiting what a histogram is. Notice the missing item above: a histogram, in this definition, is not a plot. It is not a plot any more than a NumPy array is a plot. You can plot a Histogram, certainly, and custom plotting is useful (much as Pandas has custom plotting for Series), but that is not part of a core histogram library, and is not part of boost-histogram (though most tutorials how how to plot using matplotlib).
+Almost as important as defining a histogram is limiting what a histogram is. Notice the missing item above: a histogram, in this definition, is not a plot. It is not a plot any more than a NumPy array is a plot. You can plot a Histogram, certainly, and custom plotting is useful (much as Pandas has custom plotting for Series [Pandas]_), but that is not part of a core histogram library, and is not part of boost-histogram (though most tutorials how how to plot using matplotlib).
 
 .. HIII: Make sure that the tense remains consistent here.
 
@@ -61,7 +61,7 @@ The fourth and final area identified was **Distribution**. A great library is no
 
 .. History
 
-About a year ago, a new C++14 library was being proposed to the Boost C++ libraries called Boost.Histogram. It would later be unanimously accepted and released as part of the Boost C++ libraries version 1.70. It was a well designed header-only package that fulfilled exactly what we wanted, but in C++14 rather than Python. A proposal was made to get a full-featured Python binding developed as part of IRIS-HEP, an institute for sustainable software for HEP, as one of the foundations for a Python based software stack. We built boost-histogram for Python in close collaboration with the original Histogram for Boost author, Hans Dembinski, who had always intended Boost.Histogram to be accessible from Python. Due to this close collaboration, concepts and design closely mimic the spirit of the Boost counterpart.
+About a year ago, a new C++14 library was being proposed to the Boost C++ libraries called Boost.Histogram. It would later be unanimously accepted and released as part of the Boost C++ libraries version 1.70. It was a well designed header-only package that fulfilled exactly what we wanted, but in C++14 rather than Python. A proposal was made to get a full-featured Python binding developed as part of IRIS-HEP, an institute for sustainable software for HEP, as one of the foundations for a Python based software stack being designed in the Scikit-HEP community [SkHEP]_. We built boost-histogram for Python in close collaboration with the original Histogram for Boost author, Hans Dembinski, who had always intended Boost.Histogram to be accessible from Python. Due to this close collaboration, concepts and design closely mimic the spirit of the Boost counterpart.
 
 An example of the boost-histogram library approach, creating a 1D-histogram and a 2D-histogram and adding values to them, is shown below in Figure :ref:`eg1dfig` and :ref:`eg2dfig`:
 
@@ -101,7 +101,7 @@ The components in a bin are the smallest atomic piece of boost-histogram, and ar
 
 The above accumulators are then provided in a container called a **Storage**, of which boost-histogram provides several. The available storages include choices for the four accumulators listed above (the storage using ``Sum`` is just called ``Double()``, and is the default; unlike the other accumulator-based storages it provides a simple NumPy array rather than a specialized record array when viewed). Other storages include ``Int64()``, which stores integers directly, ``AtomicInt64``, which stores atomic integers, so can be filled from different threads concurrently, and ``Unlimited()``. which is a special growing storage that starts at 8-bit integers and grows as needed, or even converts to doubles if filled with a weighted fill or scaled with a float.
 
-The next piece of a histogram is an **Axis**. A ``Regular`` axis describes an evenly spaced binning with start and end points, and takes advantage of the simplicity of the transform to provide :math:`\mathcal{O}(1)` computational complexity. You can also provide a **Transform** for a Regular axes; this is a pair of C function pointers (possibly generated by Numba) that can apply a function to the transform, allowing for things like log-scale axes to be supported at the same sort of complexity as a Regular axis. Several common transforms are supplied, including log and power spacings. You can also supply a list of bin edges with a ``Variable`` axis. If you want discrete axes, ``Integer`` provides a slightly simpler version of a Regular axes, and ``IntCategory``/``StrCategory`` provide true non-continuous categorical axes for arbitrary integers or strings, respectively. Most axes have configurable end behaviors for when a value is encountered by a fill that is outside the range described by the axis, allowing underflow/overflow bins to be turned off, or replaced with growing bins. All axes also have a metadata slot that can store arbitrary Python objects for each axis; no special meaning is applied by boost-histogram, but these can be used for titles, units, or other information.
+The next piece of a histogram is an **Axis**. A ``Regular`` axis describes an evenly spaced binning with start and end points, and takes advantage of the simplicity of the transform to provide :math:`\mathcal{O}(1)` computational complexity. You can also provide a **Transform** for a Regular axes; this is a pair of C function pointers (possibly generated by a JIT compiler [Numba]_) that can apply a function to the transform, allowing for things like log-scale axes to be supported at the same sort of complexity as a Regular axis. Several common transforms are supplied, including log and power spacings. You can also supply a list of bin edges with a ``Variable`` axis. If you want discrete axes, ``Integer`` provides a slightly simpler version of a Regular axes, and ``IntCategory``/``StrCategory`` provide true non-continuous categorical axes for arbitrary integers or strings, respectively. Most axes have configurable end behaviors for when a value is encountered by a fill that is outside the range described by the axis, allowing underflow/overflow bins to be turned off, or replaced with growing bins. All axes also have a metadata slot that can store arbitrary Python objects for each axis; no special meaning is applied by boost-histogram, but these can be used for titles, units, or other information.
 
 An example of a custom transform is shown below using Numba to create C pointers; any ctypes pointer is accepted.
 
@@ -251,7 +251,7 @@ Conclusion and Plans
 
 .. Conclusion and plans, Hist and more
 
-The future for histogramming in Python is bright. At least three more projects are being developed on top or using boost-histogram. **Hist** is a histogram front-end for analysts, much like Pandas is to NumPy, it is intended to make plotting, statistics, file IO, and more simple and easy; a Google Summer of Code student is working on that this Summer. One feature of note is named axes; you can assign names to axes and then fill and index by name. Conversions between histogram libraries, such as the HEP-specific ROOT toolkit and file format are being developed in **Aghast**. And a new library, **histoprint**, is being reviewed for including in Scikit-HEP to print up to five histograms at a time on the command line, either from ROOT or boost-histogram.
+The future for histogramming in Python is bright. At least three more projects are being developed on top or using boost-histogram. **Hist** is a histogram front-end for analysts, much like Pandas is to NumPy, it is intended to make plotting, statistics, file IO, and more simple and easy; a Google Summer of Code student is working on that this Summer. One feature of note is named axes; you can assign names to axes and then fill and index by name. Conversions between histogram libraries, such as the HEP-specific ROOT toolkit and file format are being developed in **Aghast**. The **mplhep** library is making common plot styles and types for HEP easy to make, including plots with histograms. The **scikit-hep-tutorials** project is beginning to show how the different pieces of Scikit-HEP packages work together, and one of the first tutorials shows boost-histogram and Aghast. And a new library, **histoprint**, is being reviewed for including in Scikit-HEP to print up to five histograms at a time on the command line, either from ROOT or boost-histogram.
 
 We hope that more libraries will be interested in building on top of boost-histogram. It was designed to be a powerful back-end for any front-end, with Hist planned as the reference front-end implementation. The high performance, excellent flexibility, and universal availability make an ideal choice for any toolkit.
 
@@ -260,4 +260,37 @@ We hope that more libraries will be interested in building on top of boost-histo
 In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well.
 
 
+Acknowledgements
+----------------
+
+Support for this work was provided by the National Science Foundation cooperative agreement OAC-1836650 (IRIS-HEP) and OAC-1450377 (DIANA/HEP).
+
+
+References
+----------
+
+
+.. [SkHEP] Eduardo Rodrigues. *The Scikit-HEP Project*
+        EPJ Web Conf. **214** 06005 (2019), DOI:10.1051/epjconf/201921406005
+
+.. [ROOT] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
+        https://indico.cern.ch/event/913205/contributions/3840338 (2020).
+
+.. [Boost] *The Boost Software Libraries*
+        https://www.boost.org
+
+.. [NumPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The NumPy Array: A Structure for Efficient Numerical Computation*,
+       Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
+
+.. [Numba] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert. *Numba: a LLVM-based Python JIT compiler*,
+       LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015), DOI:10.1145/2833157.2833162
+
+.. [Pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
+        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
+
+
+
+
+
 .. _Scikit-HEP project: https://scikit-hep.org
+
