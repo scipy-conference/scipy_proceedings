@@ -279,7 +279,7 @@ SPD matrices are ubiquitous in machine learning across many fields :cite:`Cheria
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015` among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
 
 
 Tutorial context and description
@@ -305,9 +305,9 @@ Let us recall the definition of manifold of SPD matrices. The manifold of symmet
 The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`. In 2d, SPD matrices are often visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module. We generate a toy data-set
 
 .. code:: ipython3
-    
+
     import geomstats.datasets.sample_sdp_2d as sampler
-    
+
     n_samples=100
     dataset_generator = sampler.DatasetSPD2D(
         n_samples, n_features=2, n_classes=3)
@@ -315,7 +315,7 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
 And plot it:
 
 .. code:: ipython3
-    
+
     ellipsis = visualization.Ellipsis2D()
     for i in range(n_samples):
         x = data[i]
@@ -481,43 +481,40 @@ learning theory. Indeed, the space of univariate Gaussians endowed with the Fish
 metric densities is a hyperbolic space :cite:`1531851`. This characterization
 is used in various fields, such as in image processing, where each image pixel is
 represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
-processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`.
-
-The hyperbolic spaces can also be stanfordeen as continuous versions of trees and are
+processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. The hyperbolic spaces can
+also be stanfordeen as continuous versions of trees and are
 therefore interesting when learning hierarchical representations of data
 :cite:`Nickel2017`. Hyperbolic geometric graphs (HGG) have also been suggested
 as a promising model for social networks, where the hyperbolicity appears through
-a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`.
+a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
+and in learning communities on large graphs :cite:`gerald2019node`.
 
 Tutorial context and description
 ********************************
 
-Recently, the embedding of Graph Structured Data (GSD) on manifolds has
-received considerable attention. Learning GSD has known major achievements in recent years thanks to the
-discovery of hyperbolic embeddings. Although it has been speculated since
+Learning GSD has known major achievements in recent years thanks to the
+discovery of hyperbolic embeddings. It has been speculated since
 several years that hyperbolic spaces would better represent GSD than
-Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`, it is only recently
-that these speculations have been proven effective through concrete studies
+Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`.
+These speculations have recently been proven effective through concrete studies
 and applications :cite:`Nickel2017` :cite:`DBLP:journals/corr/ChamberlainCD17` :cite:`DBLP:conf/icml/SalaSGR18` :cite:`gerald2019node`.
 As outlined by :cite:`Nickel2017`, Euclidean embeddings require large
 dimensions to capture certain complex relations such as the Wordnet
 noun hierarchy. On the other hand, this complexity can be captured by
 a simple model of hyperbolic geometry such as the Poincaré disc of two
-dimensions :cite:`DBLP:conf/icml/SalaSGR18`.
-Additionally, hyperbolic embeddings provide better visualisation of
-clusters on graphs than Euclidean embeddings
+dimensions :cite:`DBLP:conf/icml/SalaSGR18`. Additionally, hyperbolic embeddings provide
+better visualisation of clusters on graphs than Euclidean embeddings
 :cite:`DBLP:journals/corr/ChamberlainCD17`.
 
 In the scope of these recent
 discoveries, this tutorial shows how to learn such embeddings in :code:`geomstats`
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
-Please note that in the sequel we omit details regarding resizing the data arrays.
+Please note that in the sequel we omit details regarding re-shaping/dimensioning the data arrays and those regarding visualizations and plot.
 A full working code is available in the ``examples`` directory and additionally a detailed notebook under ``notebooks``.
-
-We will first recall a few properties of hyperbolic spaces. Then show how to
-import the necessary modules from :code:`geomstats` and initialize embedding parameters.
-The embedding method is then presented formally while showing how it is
-implemented in :code:`geomstats`. Finally the resulting embedding is plotted.
+First we recall hyperbolic spaces, then
+import the necessary modules from :code:`geomstats`. The embedding method is then presented
+formally while showing how it is implemented in :code:`geomstats`.
+Finally the resulting embedding is plotted.
 
 Hyperbolic space
 ****************
@@ -532,9 +529,15 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
     \right\}.
 
 
-In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and :code:`PoincareBall` depending on the coordinate system used to represent the points. These classes  inherit from the class :code:`EmbeddedManifold`. They implement methods such as: conversion functions from intrinsic :math:`n`-dimensional coordinates to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa); the projection of a point in the embedding space to the embedded manifold and the corresponding projection of a vector in the embedding space to a tangent vector at a point of the embedded manifold.
-
-The Riemannian metric defined on :math:`H_n` is derived from the Minkowski metric in the embedding space and is implemented in the class :code:`HyperbolicMetric`.
+In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and
+:code:`PoincareBall` depending on the coordinate system used to represent the points.
+These classes  inherit from the class :code:`EmbeddedManifold`.
+They implement methods such as: conversion functions from intrinsic :math:`n`-dimensional coordinates
+to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa);
+the projection of a point in the embedding space to the embedded manifold and the corresponding
+projection of a vector in the embedding space to a tangent vector at a point of the embedded manifold.
+The Riemannian metric defined on :math:`H_n` is derived from the Minkowski metric in the embedding
+space and is implemented in the class :code:`HyperbolicMetric`.
 
 
 Learning graph representations with hyperbolic spaces in `Geomstats`
@@ -543,8 +546,8 @@ Learning graph representations with hyperbolic spaces in `Geomstats`
 `Setup`
 ~~~~~~~
 
-We start by importing standard tools for logging and visualization,
-allowing us to draw the embedding of the GSD on the manifold. Next, we
+Start by importing standard tools for logging and visualization,
+allowing us to draw the embedding of the GSD on the manifold. Next,
 import the manifold of interest, visualization tools, and other methods
 from :code:`geomstats`.
 
@@ -565,21 +568,18 @@ from :code:`geomstats`.
 
 `Parameters and Initialization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Table :ref:`tabparam` defines the parameters needed for embedding.
-Let us discuss a few things about these parameters. The
+Table :ref:`tabparam` defines the parameters needed for embedding that we now discuss. The
 number of dimensions should be high (i.e., 10+) for large datasets
-(i.e., where the number of nodes/edges is significantly large). In this
-tutorial we consider a dataset that is quite small with only 34 nodes.
-The Poincaré disk of only two dimensions is therefore sufficient to
-capture the complexity of the graph and provide a faithful
-representation. Some parameters are hard to know in advance, such as
+(i.e., large number of nodes/edges). In this
+tutorial we consider a dataset with only 34 nodes.
+The Poincaré disk of two dimensions is therefore sufficient to
+capture the complexity of the graph. Some parameters are hard to know in advance, such as
 ``max_epochs`` and ``lr``. These should be tuned specifically for each
 dataset. Visualization can help with tuning the parameters. Also, one
 can perform a grid search to find values of these parameters which
-maximize some performance function. In learning embeddings, one can
-consider performance metrics such as a measure for cluster seperability
-or normalized mutual information (NMI) or others. Similarly, the number
-of negative samples and context size can also be thought of as
+maximize some performance function (a measure for cluster seperability
+or normalized mutual information (NMI) or others). Similarly, the number
+of negative samples and context size are considered
 hyperparameters and will be further discussed in the sequel. An instance
 of the ``Graph`` class is created and set to the Karate club dataset.
 The latter and several others can be found in the ``datasets.data`` module.
@@ -589,10 +589,6 @@ The latter and several others can be found in the ``datasets.data`` module.
     +--------------+------------------------------------------------+
     | Parameter    | Description                                    |
     +==============+================================================+
-    | random.seed  | An initial manually set number                 |
-    |              | for generating pseudorandom                    |
-    |              | numbers                                        |
-    +--------------+------------------------------------------------+
     | dim          | Dimensions of the manifold used for embedding  |
     +--------------+------------------------------------------------+
     | max_epochs   | Number of iterations for learning the embedding|
@@ -608,7 +604,6 @@ The latter and several others can be found in the ``datasets.data`` module.
 
 .. code:: ipython3
 
-    gs.random.seed(1234)
     dim = 2
     max_epochs = 15
     lr = .05
@@ -620,7 +615,7 @@ The latter and several others can be found in the ``datasets.data`` module.
         labels_path=
             geomstats.datasets.utils.KARATE_LABELS_PATH)
 
-The Zachary karate club network was collected from the members of a
+The karate club network was collected from the members of a
 university karate club by Wayne Zachary in 1977. Each node represents a
 member of the club, and each edge represents an undirected relation
 between two members. An often discussed problem using this dataset is to
@@ -630,7 +625,7 @@ Further information about the dataset is
 displayed to provide insight into its complexity.
 
 .. figure:: learning_graph_structured_data_h2_files/karate_graph.png
-    :scale: 30%
+    :scale: 20%
     :align: center
 
     Karate club dataset graph. :label:`karafig`
@@ -654,14 +649,13 @@ displayed to provide insight into its complexity.
     INFO: Mean edge-vertex ratio: 4.588235294117647
 
 
-Let us now prepare the hyperbolic space for embedding.
 Recall that :math:`H_2` is the Poincaré disk equipped with the distance function
 :math:`d`. Declaring an instance of the ``PoincareBall`` manifold of two dimensions
 in :code:`geomstats` is straightforward:
 
 .. code:: ipython3
 
-    hyperbolic_manifold = PoincareBall(2)
+    hyperbolic_manifold = PoincareBall(dim)
 
 
 `Learning embedding by optimizing a loss function`
@@ -669,7 +663,7 @@ in :code:`geomstats` is straightforward:
 
 Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
 set of edges of the graph. The goal of embedding GSD is to provide a faithful and
-exploitable representation of the graph structure. It is mainly achieved
+exploitable representation of the graph. It is mainly achieved
 by preserving first-order proximity that enforces nodes sharing edges
 to be close to each other. It can additionally preserve second-order
 proximity that enforces two nodes sharing the same context (i.e., nodes
@@ -870,8 +864,8 @@ Riemannian exponential map is applied to find the new value of
     for epoch in range(max_epochs):
         total_loss = []
         for path in random_walks:
-
-            for example_index, one_path in enumerate(path):
+            for example_index,
+                    one_path in enumerate(path):
                 context_index = path[max(
                     0, example_index - context_size):
                     min(example_index + context_size,
@@ -883,7 +877,6 @@ Riemannian exponential map is applied to find the new value of
                         n_negative))
                 negative_index =
                     negative_sampling_table[negative_index]
-
                 example_embedding =
                     embeddings[one_path]
                 for one_context_i, one_negative_i in
@@ -913,13 +906,38 @@ Riemannian exponential map is applied to find the new value of
     INFO: iteration 0 loss_value 1.819844
     INFO: iteration 14 loss_value 1.363593
 
-Figure :ref:`embeddingiterations` shows how the node embeddings move at different iterations.
+Figure :ref:`embeddingiterations` shows the graph embedding at different epochs with the true labels of each node
+whether belonging to a first or a second group. Notice
+how the converged embedding separates well the two clusters and is a quite accurate representation
+to be used for predicting the labels of each node.
 
 .. figure:: learning_graph_structured_data_h2_files/embedding_iterations.png
     :align: center
-    :scale: 60%
+    :scale: 45%
 
     Embedding at different `epoch` iterations. :label:`embeddingiterations`
+
+Let us apply :math:`K`-means algorithm to label the nodes of the embedding in an unsupervized way.
+For this import the :math:`K`-means class, set the number of clusters and plot the results.
+
+.. code:: ipython3
+
+    from geomstats.learning.kmeans import RiemannianKMeans
+
+    kmeans = RiemannianKMeans(
+        riemannian_metric= hyperbolic_manifold.metric,
+        n_clusters=n_clusters, init='random',
+        mean_method='frechet-poincare-ball')
+    centroids = kmeans.fit(X=embeddings, max_iter=100)
+    labels = kmeans.predict(X=embeddings)
+
+Figure :ref:`fig:kmeans` shows the true labels versus the predicted ones.
+
+.. figure:: learning_graph_structured_data_h2_files/prediction_labels.png
+    :align: center
+    :scale: 50%
+
+    Known true labels on the right and predicted labels via :math:`K`-means. :label:`fig:kmeans`
 
 Conclusion
 ----------
