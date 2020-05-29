@@ -20,19 +20,27 @@ import options
 
 header = r'''
 .. role:: ref
+
 .. role:: label
+
 .. role:: cite(raw)
    :format: latex
+
 .. raw::  latex
+
     \InputIfFileExists{page_numbers.tex}{}{}
     \newcommand*{\docutilsroleref}{\ref}
     \newcommand*{\docutilsrolelabel}{\label}
     \newcommand*\DUrolecode[1]{#1}
     \providecommand*\DUrolecite[1]{\cite{#1}}
+
 .. |---| unicode:: U+2014  .. em dash, trimming surrounding whitespace
     :trim:
+
 .. |--| unicode:: U+2013   .. en dash
     :trim:
+
+
 '''
 
 def rst2tex(in_path, out_path):
@@ -79,7 +87,7 @@ def rst2tex(in_path, out_path):
 
     with io.open(rst, mode='r', encoding='utf-8') as f:
         content = header + f.read()
-
+    
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
 
@@ -204,8 +212,8 @@ def build_paper(paper_id, start=1):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
-
-
+    
+    
     options.mkdir_p(out_path)
     page_number_file = os.path.join(out_path, 'page_numbers.tex')
     with io.open(page_number_file, 'w', encoding='utf-8') as f:
