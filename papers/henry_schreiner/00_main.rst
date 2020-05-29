@@ -10,6 +10,10 @@
 :email: hans.dembinski@gmail.com 
 :institution: TU Dortmund
 
+:author: Shuo Liu
+:email: ninomyemail@gmail.com 
+:institution: Sun Yat-sen University
+
 
 -------------------------------------------------------
 Boost-histogram: High-Performance Histograms as Objects
