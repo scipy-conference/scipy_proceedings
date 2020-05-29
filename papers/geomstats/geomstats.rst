@@ -117,7 +117,7 @@ then, in the python script:
 
     INFO: Using numpy backend
 
-Modules related to :code:`matplotlib` should be imported during setup too.
+Modules related to :code:`matplotlib` and :code:`logging` should be imported during setup too.
 
 Tutorial: Statistics and Geometric Statistics
 ---------------------------------------------
@@ -357,12 +357,12 @@ belongs to the manifold of SPD matrices:
     manifold = spd.SPDMatrices(28)
     ai_metric = spd.SPDMetricAffine(28)
     le_metric = spd.SPDMetricLogEuclidean(28)
-    print(gs.all(manifold.belongs(data)))
+    logging.info(gs.all(manifold.belongs(data)))
 
 
 .. parsed-literal::
 
-    True
+    INFO: True
 
 
 Great! Now, although the sum of two SPD matrices is an SPD matrix, their
@@ -429,12 +429,12 @@ And with the log-Euclidean metric:
              LogisticRegression(C=2))])
 
     result = cross_validate(pipeline, data, labels)
-    print(result['test_score'].mean())
+    logging.info(result['test_score'].mean())
 
 
 .. parsed-literal::
 
-    0.67
+    INFO: 0.67
 
 But wait, why do the results depend on the metric used? The Riemannian metric defines the notion of geodesics and distance on the manifold. Both notions are used to compute the Frechet Mean and the logarithms, so changing the metric changes the results, and some metrics may be more suitable than others for different applications.
 
@@ -460,11 +460,11 @@ We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classific
     classifier = KNeighborsClassifier(metric='precomputed')
 
     result = cross_validate(classifier, pairwise_dist, labels)
-    print(result['test_score'].mean())
+    logging.info(result['test_score'].mean())
 
 .. parsed-literal::
 
-    0.72
+    INFO: 0.72
 
 
 We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
@@ -553,8 +553,8 @@ from :code:`geomstats`.
 
 .. code:: ipython3
 
-    import logging
-
+    import logging    
+    
     import matplotlib.pyplot as plt
 
     import geomstats
