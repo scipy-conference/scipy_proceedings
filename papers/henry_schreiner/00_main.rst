@@ -63,7 +63,7 @@ The fourth and final area identified was **Distribution**. A great library is no
 
 About a year ago, a new C++14 library was being proposed to the Boost C++ libraries called Boost.Histogram. It would later be unanimously accepted and released as part of the Boost C++ libraries version 1.70. It was a well designed header-only package that fulfilled exactly what we wanted, but in C++14 rather than Python. A proposal was made to get a full-featured Python binding developed as part of IRIS-HEP, an institute for sustainable software for HEP, as one of the foundations for a Python based software stack being designed in the Scikit-HEP community [SkHEP]_. We built boost-histogram for Python in close collaboration with the original Histogram for Boost author, Hans Dembinski, who had always intended Boost.Histogram to be accessible from Python. Due to this close collaboration, concepts and design closely mimic the spirit of the Boost counterpart.
 
-An example of the boost-histogram library approach, creating a 1D-histogram and a 2D-histogram and adding values to them, is shown below in Figure :ref:`eg1dfig` and :ref:`eg2dfig`:
+An example of the boost-histogram library approach, creating a 1D-histogram and adding values, is shown below, with results plotted in Figure :ref:`eg1dfig`:
 
 .. code-block:: python
 
@@ -71,22 +71,38 @@ An example of the boost-histogram library approach, creating a 1D-histogram and 
   import numpy as np
   import matplotlib.pyplot as plt
 
-  hist_1d = bh.Histogram(bh.axis.Regular(100, start=-5, stop=5))
-  hist_1d.fill(np.random.randn(1_000_000))
-  plt.bar(hist_1d.axes[0].centers, hist_1d.view(), width=hist_1d.axes[0].widths)
+  ax = bh.axes.Regular(100, start=-5, stop=5)
+  hist = bh.Histogram(ax)
+  
+  hist.fill(np.random.randn(1_000_000))
+ 
+  plt.bar(hist.axes[0].centers,
+          hist.view(),
+          width=hist.axes[0].widths)
 
-  hist_2d = bh.Histogram(bh.axis.Regular(100, start=-3, stop=3),
-                         bh.axis.Regular(100, start=-3, stop=3))
-  hist_2d.fill(np.random.randn(1_000_000), np.random.randn(1_000_000))
-  plt.pcolormesh(hist_2d.axes[0].centers, hist_2d.axes[1].centers, hist_2d.view())
 
 .. figure:: histogram_example_1d.pdf
    
    The example of a 1D-histogram. :label:`eg1dfig`
 
+For future code snippets, the imports used here will be assumed. Using ``.view()`` is optional, but is included to make these explicit.
+You can access ``ax`` as ``hist.axes[0]``. Note that boost-histogram is not plotting; this is simply using the simple access to histogram properties and existing matplotlib functionality. A similar example, but this time in 2D, is shown in Figure :ref:`eg2dfig`, illustrating the identical API regardless of the number of dimensions:
+
+.. code-block:: python
+
+  hist_2d = bh.Histogram(bh.axis.Regular(100, -3, 3),
+                         bh.axis.Regular(100, -3, 3))
+
+  hist_2d.fill(np.random.randn(1_000_000),
+               np.random.randn(1_000_000))
+
+  X, Y = hist_2d.axes.centers
+  plt.pcolormesh(X.T, Y.T, hist_2d.view().T)
+
 .. figure:: histogram_example_2d.pdf
    
    The example of a 2D-histogram. :label:`eg2dfig`
+
 
 The Design of a Histogram
 -------------------------
@@ -171,11 +187,11 @@ Setting is also supported, and comes with one more nice feature. When you set a 
     hist[:] = np.arange(12) # Fills flow bins too
 
 
-You can force the flow bins off if you want to:
+You can force the flow bins to be explicitly excluded if you want to by adding endpoints to the slice:
 
 .. code-block:: python
 
-    hist[0:len] = np.arange(10) # Flow explicitly excluded
+    hist[0:len] = np.arange(10)
 
 Finally, for advanced indexing, dictionaries are supported, where the key is the axis number. This allows easy access into a large number of axes, or simple programmatic access. With dictionary-based indexing, Ellipsis are not required. There is also a ``.project(*axes)`` method, which allows you to sum over all axes except the ones listed, which is the inverse to listing ``::bh.sum`` operations on the axes you want to remove.
 
@@ -214,7 +230,9 @@ One further performance benefit comes from the flexibility of combining axes. In
 .. code-block:: python
 
     value_ax = bh.axis.Regular(100, -5, 5)
-    valid_ax = bh.axis.Integer(0, 2, underflow=False, overflow=False)
+    valid_ax = bh.axis.Integer(0, 2,
+                               underflow=False,
+                               overflow=False)
     label_ax = bh.axis.StrCategory([], growth=True)
 
     hist = bh.Histogram(value_ax, valid_ax, label_ax)
