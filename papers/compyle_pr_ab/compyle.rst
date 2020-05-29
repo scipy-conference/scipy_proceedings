@@ -316,7 +316,7 @@ the declare function is used to specify types of variables
 declared in the function. This can be avoided by using the JIT
 compilation feature which infers the types of arguments and
 variables based on the types of arguments passed to the function
-at runtime . Following is the implementation of steps 2 and 3
+at runtime. Following is the implementation of steps 2 and 3
 without the type declarations.
 
 .. code-block:: python
@@ -378,6 +378,16 @@ class and called as normal python functions.
         step2 = Elementwise(step_method2,
                             backend=self.backend)
 
+
+- Elaborate a little bit about the annotation decorator. Mention that Python3
+  type annotation also works.
+- Mention the ``@elementwise`` decorator.
+
+
+- Create the arrays at this point and complete the program showing how to
+  run the code -- pseudo code should do.
+
+
 Reduction
 ~~~~~~~~~
 
@@ -410,8 +420,24 @@ reduction operator in compyle.
                             backend=backend)
     total_energy = energy_calc(vx, vy, pe, num_particles)
 
+
+
+Initial Results
+~~~~~~~~~~~~~~~~~
+
+Show the results of the above work, along with simple comparisons on CPU and
+GPU.
+
+
 Scans
 ~~~~~
+
+- Provide background and motivation of why we need scans in the context of the
+  LJ problem.
+
+- Show a simpler example first to illustrate the ideas.
+
+
 Scans are generalizations of prefix sums / cumulative sums and can be used as
 building blocks to construct a number of parallel algorithms. These include but
 not are limited to sorting, polynomial evaluation, and tree operations.
