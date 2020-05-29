@@ -22,7 +22,10 @@ High-performance operator evaluations with ease of use: libCEED's Python interfa
 
 .. class:: abstract
 
-   libCEED is a new open-source, lightweight matrix-free Finite Element library designed to leverage the next generation exascale machines by allowing a wide variety of applications to share highly optimized kernels. libCEED offers implementations, selectable at runtime, tuned for a variety of computational device types, including CPUs and GPUs. libCEED’s purely algebraic framework can unobtrusively be integrated in new and legacy software to provide performance portable applications. In this work, we present libCEED's newly available Python interface that opens up new strategies for parallelism and scaling in high-performance Python, without having to compromise ease of use.
+   libCEED is a new lightweight, open-source library for high-performance matrix-free finite element computations.
+   libCEED offers a portable interface to high-performance implementations, selectable at runtime, tuned for a variety of current and emerging computational architectures, including CPUs and GPUs.
+   libCEED’s interface is purely algebraic, facilitating co-design with vendors and enabling unintrusive integration in new and legacy software.
+   In this work, we present libCEED's newly-available Python interface, which opens up new strategies for parallelism and scaling in high-performance Python, without compromising ease of use.
 
 .. class:: keywords
 
