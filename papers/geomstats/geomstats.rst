@@ -279,7 +279,7 @@ SPD matrices are ubiquitous in machine learning across many fields :cite:`Cheria
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015` among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into a SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into a SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
 
 
 Tutorial context and description
@@ -440,7 +440,8 @@ The hyperbolic spaces can also be stanfordeen as continuous versions of trees an
 therefore interesting when learning hierarchical representations of data
 :cite:`Nickel2017`. Hyperbolic geometric graphs (HGG) have also been suggested
 as a promising model for social networks, where the hyperbolicity appears through
-a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`.
+a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
+and in learning communities on large graphs :cite:`gerald2019node`.
 
 Tutorial context and description
 ********************************
@@ -464,7 +465,7 @@ clusters on graphs than Euclidean embeddings
 In the scope of these recent
 discoveries, this tutorial shows how to learn such embeddings in :code:`geomstats`
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
-Please note that in the sequel we omit details regarding resizing the data arrays.
+Please note that in the sequel we omit details regarding re-shaping/dimensioning the data arrays.
 A full working code is available in the ``examples`` directory and additionally a detailed notebook under ``notebooks``.
 
 We will first recall a few properties of hyperbolic spaces. Then show how to
@@ -485,7 +486,11 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
     \right\}.
 
 
-In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and :code:`PoincareBall` depending on the coordinate system used to represent the points. These classes  inherit from the class :code:`EmbeddedManifold`. They implement methods such as: conversion functions from intrinsic $n$-dimensional coordinates to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa); projection of a point in the embedding space to the embedded manifold; projection of a vector in the embedding space to a tangent space at the embedded manifold.
+In :code:`geomstats`, the hyperbolic space is implemented in the classes
+:code:`Hyperboloid` and :code:`PoincareBall` depending on the coordinate system
+used to represent the points. These classes  inherit from the class
+:code:`EmbeddedManifold`. They implement methods such as:
+conversion functions from intrinsic :math:`n`-dimensional coordinates to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa); projection of a point in the embedding space to the embedded manifold; projection of a vector in the embedding space to a tangent space at the embedded manifold.
 
 The Riemannian metric defined on :math:`H_n` is derived from the Minkowski metric in the embedding space and is implemented in the class :code:`HyperbolicMetric`.
 
