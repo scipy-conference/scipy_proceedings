@@ -28,7 +28,7 @@ Fluctuation X-ray Scattering real-time app
 
 .. class:: abstract
 
-   The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser (X-FEL) enabling scientists to take snapshots of single macromolecules to study their structure and dynamics. A major LCLS upgrade, LCLS-II, will bring the repetition rate of the X-ray source from 120 to 1 million pulses per second.  and High Performance Computing capabilities in the exascale will be required for the data analysis to keep up with the future data taking rates.
+   The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser (X-FEL) enabling scientists to take snapshots of single macromolecules to study their structure and dynamics. A major LCLS upgrade, LCLS-II, will bring the repetition rate of the X-ray source from 120 to 1 million pulses per second and High Performance Computing capabilities in the exascale will be required for the data analysis to keep up with the future data taking rates.
 
    We present here a Python application for Fluctuation X-ray Scattering (FXS), an emerging technique for analyzing biomolecular structure from the angular correlations of FEL diffraction snapshots with one or more particles in the beam. This FXS application for experimental data analysis is being developed to run on supercomputers in near real-time while an experiment is taking place.
 
@@ -44,7 +44,7 @@ Introduction
 LCLS-II, an upgrade to LCLS
 +++++++++++++++++++++++++++
 
-The Linac Coherent Light Source (LCLS) at the SLAC national accelerator laboratory is an X-ray Free Electron Laser providing femtosecond pulses with an ultrabright beam approximately one billion times brighter than synchrotrons. Such a brightness allows to work with much smaller sample sizes while the shortness allows imaging below the rotational diffusion time of the molecules. With pulses of such an unprecedented brightness and shortness, scientists are able to take snapshots of single macromolecules without the need for crystallization at ambient temperature.
+The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser providing femtosecond pulses with an ultrabright beam approximately one billion times brighter than synchrotrons. Such a brightness allows to work with much smaller sample sizes while the shortness allows imaging below the rotational diffusion time of the molecules. With pulses of such an unprecedented brightness and shortness, scientists are able to take snapshots of single macromolecules without the need for crystallization at ambient temperature.
 
 To push the boundaries of the science available at the lightsource, LCLS is currently being upgraded after 10 years of operation. The LCLS-II upgrade will progressively increase the sampling rate from 120 pulses per second to 1 million. At these rates, the LCLS instruments will generate multiple terabytes per second of science data and it will therefore be critical to know what data is worth saving, requiring on-the-fly processing of the data. Earlier, users could classify and preprocess their data after the experiment, but this approach will become either prohibitive or plainly impossible. This leads us to the requirement of performing some parts of the analysis in real time during the experiment.
 
@@ -66,7 +66,7 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 
    Fluctuation X-ray Scattering experiment setup. :label:`fig:fxs`
 
-While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, billions or more snapshots could be required.
+While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
 
 We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
 
