@@ -795,22 +795,21 @@ Conclusions and future work
 
 We demonstrate that ``Delta`` can facilitate near real-time analysis of high-velocity streaming
 data. In our experiments we achieved streaming rates of about 350 MByte/sec and execute a spectral
-analysis workflow on ECEI measurements in less than 4 minutes. Using a pure-python single-core
-implementation, such a workflow would take about 4 hours. Performing the analysis in the streaming
-scenario illustrated in Figure :ref:`fig-topo` comes with only negligible performance impacts
+analysis workflow on ECEI measurements in less than 4 minutes. Performing the analysis in the streaming
+scenario, illustrated in Figure :ref:`fig-topo`, comes with only a negligible performance impact as
 compared to using local filesystem IO. ADIOS manages to utilize about 70% of the available bandwidth
-for data streaming from KSTAR to NERSC when used in the streaming analysis workflow. ``mpi4py``
+for data streaming from KSTAR to NERSC in the streaming analysis workflow. ``mpi4py``
 PoolExecutors facilitate an flexible execution of work items on Cori, as required for our workflow
 where data arrive at high velocity. Furthermore, python queues reliably facilitate inter-process
 communication and act as a data cache under the tested IO loads.
 
 In the current form, there are multiple shortcomings of the framework that need to be addressed.
-Firstly, the DataMan engine received an experimental feature to mitigate packet loss. Secondly, implementation details
-of MPI on Cori limit us to effectively a single PoolExecutor. We are planning to investigate this more closely 
-and aim to separate the execution space of the STFT and the analysis kernels. Thirdly, the
-framework will be generalized in order to facilitate more data analysis tasks. Finally, we are working 
-on adapting ``Delta`` for next generation HPC facilities which rely heavily on graphical processing units
-to provide their maximum compute power.
+Firstly, the DataMan engine received an experimental feature to mitigate packet loss. Secondly,
+implementation details of MPI on Cori limit us to effectively a single PoolExecutor. We are planning
+to investigate this more closely and aim to properly separate the execution space of the STFT and
+the analysis kernels. Thirdly, the framework will be generalized in order to facilitate more data
+analysis tasks. Finally, we are working on adapting ``Delta`` for next generation HPC facilities
+which heavily rely on graphical processing units to provide processing power.
 
 Another issue we plan to address is to make ``Delta`` more adaptive. While using federated data
 analysis resources is useful, it may not be practical to do so by default. A possible way to implement 
