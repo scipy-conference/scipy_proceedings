@@ -703,5 +703,9 @@ scientific Python community.
 Acknowledgements
 ----------------
 
-The development of HOOMD-blue version 3.0 is supported by the National Science Foundataion, Office
-of Advanced Cyberinfrastructure  Award # OAC 834612.  Thanks to all past and current contributors to HOOMD-blue.
+This research was supported by the National Science Foundation, Division of Materials Research Award
+# DMR 1808342 (HOOMD-blue algorithm and performance development) and by the National Science
+Foundation, Office of Advanced Cyberinfrastructure Award # OAC 835612 (pythonic architecture for
+MoSDeF). Hardware provided by NVIDIA Corp. is gratefully acknowledged. This research was supported
+in part through computational resources and services supported by Advanced Research Computing at the
+University of Michigan, Ann Arbor.
