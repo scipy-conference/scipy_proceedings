@@ -137,6 +137,8 @@ You can force the flow bins off if you want to:
 
     hist[0:len] = np.arange(10) # Flow explicitly excluded
 
+Finally, for advanced indexing, dictionaries are supported, where the key is the axis number. This allows easy access into a large number of axes, or simple programmatic access. With dictionary-based indexing, Ellipsis are not required. There is also a ``.project(*axes)`` method, which allows you to sum over all axes except the ones listed, which is the inverse to listing ``::bh.sum`` operations on the axes you want to remove.
+
 Performance when Filling
 ------------------------
 
@@ -156,12 +158,37 @@ Performance when Filling
    BH 1D        41.6 ± 0.7 ms       1.8    13.3 ± 0.2 ms       5.5
    BHNP 1D      43.1 ± 0.8 ms       1.7    13.8 ± 0.2 ms       5.4
    NumPy 2D     874 ± 22 ms         1
-   BH 1D        77.6 ± 0.6 ms       11     28.7 ± 0.7 ms       30
-   BHNP 1D      85 ± 3 ms           10     29.6 ± 0.5 ms       29
+   BH 2D        77.6 ± 0.6 ms       11     28.7 ± 0.7 ms       30
+   BHNP 2D      85 ± 3 ms           10     29.6 ± 0.5 ms       29
    ============ =================== ====== =================== =====
 
 
-Performance was a key design goal. In table :ref:`preftable` you can see a comparison of filling methods with NumPy.
+Performance was a key design goal. In table :ref:`preftable` you can see a comparison of filling methods with NumPy. The first comparison, a 1D histogram, shows a nearly 2x speedup compared to NumPy on a single core. For a 1D Regular axes, NumPy has a custom fill routine that takes advantage of the regular binning to avoid an edge lookup. If you use multiple cores, you can get an extra 2x-4x speedup. Note that histogramming is not trivial to parallelize. Internally, boost-histogram is just using simple Python threading and relying on releasing the GIL while it fills multiple histograms; the histograms are then added into your current histogram. The overhead of doing the copy must be small compared to the fill being done.
+
+If we move down the table to the 2D case, you will see Boost-histogram pull away from NumPy's 2D regular bin edge lookup with an over 10x speedup. This can be further improved to about 30x using threads. In both cases, boost-histogram is not actually providing specialized code for the 1D or 2D cases; it is the same variadic vector that it would use for any number and any mixture of axes. So you can expect excellent performance that scales well with the complexity of your problem.
+
+The rows labeled "BHNP" deserve special mention. A special module is provided, `bh.numpy`, that contains functions that exactly mimic the functions in NumPy. They even use a special, internal axes type that mimics NumPy's special handling of the final upper edge, including it in the final bin. You can use it as a drop-in replacement for the histogram functions in NumPy, and take advantage of the performance boost available. You can also add the ``threads=`` keyword. You can pass ``histogram=bh.Histogram`` to return a Histogram object, and you can select the storage with ``storage=``, as well. Combined with the ability to convert Histograms via ``.to_numpy()``, this should enable smooth transitions between boost-histogram and NumPy for Histogram filling.
+
+One further performance benefit comes from the flexibility of combining axes. In a traditional, NumPy based analysis, you may have a collection of related histograms with different cuts or criteria for filling. We have already seen that it is possible to use axis and then access the portion you want later with indexing; but if you have categories or boolean selectors, you can still combine multiple histograms into one. Then you no longer loop over the input multiple times, but just once, filling the histogram, and then make your selections later. Here is an example:
+
+.. code-block:: python
+
+    value_ax = bh.axis.Regular(100, -5, 5)
+    valid_ax = bh.axis.Integer(0, 2, underflow=False, overflow=False)
+    label_ax = bh.axis.StrCategory([], growth=True)
+
+    hist = bh.Histogram(value_ax, valid_ax, label_ax)
+
+    hist.fill([-2, 2, 4, 3],
+              [True, False, True, True],
+              ["a", "b", "a", "b"])
+
+    all_valid = hist[:, bh.loc(True), ::bh.sum]
+    a_only = hist[..., bh.loc("a")]
+
+Above, we create three axes. The second axis is a boolean axes, which hold a valid/invalid bool flag. The third axis holds some sort of string-based category, which could label datasets, for example. We then fill this in one shot. Then, we can select the histograms that we might have originally filled separately, like the ``all_valid`` histogram, which is a 1D histogram that contains all labels and all events where ``valid=True``. In the second selection, ``a_only``, a 2D histogram is returned that consists of all the events labeled with ``"a"``.
+
+This way of thinking can radically change how you design for a problem. Instead of running a series of histograms over a piece of data every time you want a new selection, instead you can build a large histogram that contains all the information you want, prebinned and ready to select; much like the way Pandas can restructure how you group and select data.
 
 
 Distributing
@@ -169,14 +196,28 @@ Distributing
 
 .. Building wheels (ideas, contributions, using cibuildwheel now/soon)
 
-Building a Python library on a C++14 library provided several challenges. Distributing wheels was automated through Azure DevOps and supports all major platforms; some tricks were employed to make the latest compilers available. The Azure build-system is now used in at least three other Scikit-HEP projects. Conda-Forge is also supported. Binding was done with PyBind11, all Boost dependencies are included, so a compatible compiler is the only requirement for building if a binary is not available.
+Building a Python library designed to work absolutely anywhere on a C++14 code base provided several challenges. Binding for boost-histogram is accomplished with PyBind11, and all Boost dependencies are included via git submodules and header-only, so a compatible compiler is the only requirement for building if a binary is not available. Serialization, which optionally depends on the non-header only Boost.Serialization, was redesigned to work on top of Python tuple picking in PyBind11 reusing the same interface internally in Boost.Histogram (one of the many benefits of a close collaboration with the original author).
+
+The first phase of wheel building was a custom set of shareable YAML template files for Azure DevOps. This tool, azure-wheel-helpers, became the basis for building several other projects in Scikit-HEP, including the iMinuit fitter and the new AwkwardArray 1.0. Building a custom wheel production from scratch is somewhat involved; and since boost-histogram is expected to support Python 2.7 until after the first LTS release, it had to include Python 2.7 builds, which make the process even more convoluted. To get C++14 support in manylinux1, a custom docker repository (``skhep/manylinuxgcc``) was developed with GCC 9. The azure-wheel-helpers repository is a good place to look for anyone wishing to learn about wheel building, but recently boost-histogram moved to a better solution.
+
+As the cibuildwheel project matured, boost-histogram became the first Scikit-HEP azure-wheel-helpers project to migrate over. Several of the special cases that were originally supported in boost-histogram are now supported by cibuildwheel, and it allows a custom docker image, so the modified manylinux1 image is available as well. This has freed us from lock-in to a particular CI provider; boost-histogram now uses GitHub Actions for everything except ARM and Power PC builds, which are done on Travis CI. This greatly simplified the release process. The scikit-hep.org developer pages now have extensive tutorials for new developers, including setting up wheels; much of that work was inspired by boost-histogram.
+
+An extremely important resource for HEP is Conda; many of our projects (such as CERN's ROOT toolkit) cannot reasonably (at least yet) be distributed by pip. Scikit-HEP has a large number of packages in conda-forge; and boost-histogram is also available there, including ARM and PowerPC builds. Only Python 2.7 on Windows is excluded due to conda-forge policies on using extra SDKs with Python.
+
+
 
 Conclusion and Plans
 --------------------
 
 .. Conclusion and plans, Hist and more
 
-In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes and storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, we are building on this foundation and expect other libraries may want to build on this as well.
+The future for histogramming in Python is bright. At least three more projects are being developed on top or using boost-histogram. **Hist** is a histogram front-end for analysts, much like Pandas is to NumPy, it is intended to make plotting, statistics, file IO, and more simple and easy; a Google Summer of Code student is working on that this Summer. One feature of note is named axes; you can assign names to axes and then fill and index by name. Conversions between histogram libraries, such as the HEP-specific ROOT toolkit and file format are being developed in **Aghast**. And a new library, **histoprint**, is being reviewed for including in Scikit-HEP to print up to five histograms at a time on the command line, either from ROOT or boost-histogram.
+
+We hope that more libraries will be interested in building on top of boost-histogram. It was designed to be a powerful back-end for any front-end, with Hist planned as the reference front-end implementation. The high performance, excellent flexibility, and universal availability make an ideal choice for any toolkit.
+
+.. Call for other libraries to be built on top of boost histogram - designed to be extended
+
+In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well.
 
 
 .. _Scikit-HEP project: https://scikit-hep.org
