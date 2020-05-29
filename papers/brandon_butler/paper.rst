@@ -49,8 +49,8 @@ include colloids :cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal201
 
 Today many software packages exist for this purpose for MD, LAMMPS :cite:`plimpton1993`, GROMACS
 :cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, and Amber
-:cite:`salomon-ferrer.etal2013, case.etal2005` and MC, Cassandra :cite:`shah.etal2017` and Towhee
-:cite:`martin2013`, to name a few. Implementations on high performance GPUs
+:cite:`salomon-ferrer.etal2013, case.etal2005` and MC, Cassandra :cite:`shah.etal2017` and MCCS
+Towhee :cite:`martin2013`, to name a few. Implementations on high performance GPUs
 :cite:`spellings.etal2017`, parallel architectures :cite:`niethammer.etal2014`, and the greater
 accessibility of computational power have improved tremendously the length :cite:`byna.etal2012` and
 time :cite:`shaw.etal2009` scales of simulations from those conducted in the mid 1900s. The
@@ -58,9 +58,15 @@ flexibility and generality of such tools has dramatically increased the usage of
 simulations, which has in turn led to demands for even more customizable software packages that can
 be tailored to very specific simulation requirements.  Different tools have taken different
 approaches to enabling this, such as the text-file scripting in LAMMPS, the command line interface
-provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM. In addition to
-simulation engines, projects such as MoSDeF :cite:`cummings.gilmer2019` are seeking to improve the
-how scientist interact with molecular simulation software.
+provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
+
+In the development of these tools, the requirements for the software to enable good science became
+more obvious. Having computational research that is transferable, reproducible, usable (by others),
+and extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
+computational molecular science. That is why HOOMD-blue is part of the MoSDeF project which seeks to
+bring these traits to the wider computational molecular science community through packages like
+mbuild and foyer :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased TRUEness is
+partly behind the push towards HOOMD-blue version 3.0.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
 engine with a C++ back end, provides to use a Python API facilitated through pybind11
