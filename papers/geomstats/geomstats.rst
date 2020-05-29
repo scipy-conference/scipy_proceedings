@@ -75,7 +75,7 @@ There is a growing interest in leveraging differential geometry in the machine l
 
 .. class:: keywords
 
-   different geometry, statistics, manifold, machine learning
+   differential geometry, statistics, manifold, machine learning
 
 Introduction
 ------------
