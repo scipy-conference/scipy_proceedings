@@ -9,9 +9,9 @@
 
 :bibliography: mybib
 
--------------------------------------------------------------------
-Aligning Across Use Cases for Domain Specific Scientific Software
--------------------------------------------------------------------
+--------------------------------------------------------------------
+Software Engineering as Research Method: Aligning Roles in Econ-ARK
+--------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -237,7 +237,7 @@ in order to learn insights about the economy. This blending of roles,
 between researchers, students, and software engineers, leads to
 complicates the software architecture of the toolkit.
 
-Case Study: Econ-ARK Use Cases
+Case Study: Roles in Econ-ARK
 ------------------------------------
 
 Econ-ARK has been broadly conceived as a collection
@@ -330,7 +330,7 @@ roots with the domain sciences. These skills are often
 specific to technologies that originated in industry or open
 source technology production, not in academia. For example,
 the version control system Git was not originally an academic
-project, but it neverthless is now ubiquitously used for
+project, but it nevertheless is now ubiquitously used for
 computational academic research through its popularization
 via GitHub. The workflow patterns of collaboratively
 developing software using GitHub and managing release cycles
