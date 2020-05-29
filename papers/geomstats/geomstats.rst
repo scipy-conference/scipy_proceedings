@@ -279,7 +279,7 @@ SPD matrices are ubiquitous in machine learning across many fields :cite:`Cheria
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015` among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into a SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deeep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
 
 
 Tutorial context and description
@@ -302,7 +302,31 @@ Let us recall the definition of manifold of SPD matrices. The manifold of symmet
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`.
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`. In 2d, SPD matrices are often visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module. We generate a toy data-set
+
+.. code:: ipython3
+    
+    import geomstats.datasets.sample_sdp_2d as sampler
+    
+    n_samples=100
+    dataset_generator = sampler.DatasetSPD2D(
+        n_samples, n_features=2, n_classes=3)
+
+And plot it:
+
+.. code:: ipython3
+    
+    ellipsis = visualization.Ellipsis2D()
+    for i in range(n_samples):
+        x = data[i]
+        y = sampler.get_label_at_index(
+            i, labels)
+        ellipsis.draw(
+            x, color=ellipsis.colors[y], alpha=.1)
+
+.. figure:: samples_spd.png
+   :align: center
+   :scale: 50%
 
 Classifying brain connectomes in Geomstats
 ******************************************
@@ -417,8 +441,33 @@ But wait, why do the results depend on the metric used? The Riemannian metric de
 
 In this example using Riemannian geometry, we observe that the choice of metric has an impact on the classification accuracy.
 There are published results that show how useful geometry can be
-with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices.
+with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
 
+ .. code:: ipython3
+
+    pairwise_dist = []
+    for i, x in enumerate(data):
+        for y in data[i:]:
+            pairwise_dist.append(ai_metric.dist(x,y))
+    pairwise_dist = manifold.from_vector(
+        pairwise_dist)
+
+We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
+
+.. code:: ipython3
+
+    from sklearn.neighbors import KNeighborsClassifier
+    classifier = KNeighborsClassifier(metric='precomputed')
+
+    result = cross_validate(classifier, pairwise_dist, labels)
+    print(result['test_score'].mean())
+
+.. parsed-literal::
+
+    0.72
+
+
+We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
 
 Tutorial: Learning graph representations with Hyperbolic spaces
 ---------------------------------------------------------------
@@ -479,11 +528,11 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
    :label: hyperbolic
 
    H_{n} = \left\{
-        x \in \mathbb{R}^{n+1}: - x_1^2 + ... + x_1{n+1}^2 = -1
+        x \in \mathbb{R}^{n+1}: - x_1^2 + ... + x_{n+1}^2 = -1
     \right\}.
 
 
-In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and :code:`PoincareBall` depending on the coordinate system used to represent the points. These classes  inherit from the class :code:`EmbeddedManifold`. They implement methods such as: conversion functions from intrinsic $n$-dimensional coordinates to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa); projection of a point in the embedding space to the embedded manifold; projection of a vector in the embedding space to a tangent space at the embedded manifold.
+In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and :code:`PoincareBall` depending on the coordinate system used to represent the points. These classes  inherit from the class :code:`EmbeddedManifold`. They implement methods such as: conversion functions from intrinsic :math:`n`-dimensional coordinates to extrinsic :math:`(n+1)`-dimensional coordinates in the embedding space (and vice-versa); the projection of a point in the embedding space to the embedded manifold and the corresponding projection of a vector in the embedding space to a tangent vector at a point of the embedded manifold.
 
 The Riemannian metric defined on :math:`H_n` is derived from the Minkowski metric in the embedding space and is implemented in the class :code:`HyperbolicMetric`.
 
@@ -593,16 +642,16 @@ displayed to provide insight into its complexity.
         [len(e_2) for _, e_2 in
             karate_graph.edges.items()]
     logging.info('
-        Number of edges: %s', len(karate_graph.edges))
+        Number of vertices: %s', len(karate_graph.edges))
     logging.info(
-        'Mean vertices by edges: %s',
+        'Mean edge-vertex ratio: %s',
         (sum(nb_vertices_by_edges, 0) /
             len(karate_graph.edges)))
 
 .. parsed-literal::
 
-    INFO: Number of edges: 34
-    INFO: Mean vertices by edges: 4.588235294117647
+    INFO: Number of vertices: 34
+    INFO: Mean edge-vertex ratio: 4.588235294117647
 
 
 Let us now prepare the hyperbolic space for embedding.
@@ -624,12 +673,12 @@ exploitable representation of the graph structure. It is mainly achieved
 by preserving first-order proximity that enforces nodes sharing edges
 to be close to each other. It can additionally preserve second-order
 proximity that enforces two nodes sharing the same context (i.e., nodes
-that are neighbours but not necessarily directly connected) to be close.
+that share a neighbor but are not necessarily directly connected) to be close.
 To preserve first and second-order proximities we adopt the following loss function
 similar to :cite:`NIPS2017_7213` and consider the negative sampling
 approach as in :cite:`NIPS2013_5021`:
 
-.. math::      \mathcal{L} = - \sum_{v_i\in V} \sum_{v_j \in C_i} \bigg[ log(\sigma(-d^2(\phi_i, \phi_j'))) + \sum_{v_k\sim \mathcal{P}_n} log(\sigma(d^2(\phi_i, \phi_k')))  \bigg]
+.. math::      \mathcal{L} = - \sum_{v_i\in V} \sum_{v_j \in C_i} \bigg[ \log(\sigma(-d^2(\phi_i, \phi_j'))) + \sum_{v_k\sim \mathcal{P}_n} \log(\sigma(d^2(\phi_i, \phi_k')))  \bigg]
 
 where :math:`\sigma(x)=(1+e^{-x})^{-1}` is the sigmoid function and
 :math:`\phi_i \in H_2` is the embedding of the :math:`i`-th
@@ -637,9 +686,9 @@ node of :math:`V`, :math:`C_i` the nodes in the context of the
 :math:`i`-th node, :math:`\phi_j'\in H_2` the embedding of
 :math:`v_j\in C_i`. Negatively sampled nodes :math:`v_k` are chosen according to
 the distribution :math:`\mathcal{P}_n` such that
-:math:`\mathcal{P}_n(v)=(deg(v)^{3/4}).(\sum_{v_i\in V}deg(v_i)^{3/4})^{-1}`.
+:math:`\mathcal{P}_n(v)=(\mathrm{deg}(v)^{3/4}).(\sum_{v_i\in V}\mathrm{deg}(v_i)^{3/4})^{-1}`.
 
-Intuitively one can see on Figure :ref:`fignotation` that to minimizing :math:`\mathcal{L}`, the distance
+Intuitively one can see on Figure :ref:`fignotation` that minimizing :math:`\mathcal{L}`, the distance
 between :math:`\phi_i` and :math:`\phi_j` should get smaller, while the one
 between :math:`\phi_i` and :math:`\phi_k` would get larger. Therefore
 by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
@@ -653,7 +702,7 @@ by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
 `Riemannian optimization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Following the idea of :cite:`ganea2018hyperbolic` we use the following formula
+Following the literature on optimization on manifolds :cite:`ganea2018hyperbolic` we use the following gradient updates
 to optimize :math:`\mathcal{L}`:
 
 .. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial \mathcal{L}}{\partial \phi} \right)
@@ -666,18 +715,18 @@ parameter should move. The Riemannian exponential map :math:`\text{Exp}`
 is a function that takes a base point :math:`\phi^t` and some direction
 vector :math:`T` and returns the point :math:`\phi^{t+1}` such that
 :math:`\phi^{t+1}` belongs to the geodesic initiated from
-:math:`\phi{t}` in the direction of :math:`T` and the length of the
+:math:`\phi^{t}` in the direction of :math:`T` and the length of the
 geoedesic curve between :math:`\phi^t` and :math:`\phi^{t+1}` is of 1
 unit. The Riemannian exponential map is implemented as a method of the
 ``PoincareBallMetric`` class in the ``geometry`` module of
-:code:`geomstats`.
+:code:`geomstats`. It is a straightforward generalization of standard gradient update in the Euclidean case.
 
 As a summary to minimize :math:`\mathcal{L}`, we will need to compute its gradient.
 To do so, we will need the gradient of:
 
 
 1. the squared distance :math:`d^2(x,y)`
-2. the log sigmoid :math:`log(\sigma(x))`
+2. the log sigmoid :math:`\log(\sigma(x))`
 3. the composition of 1. with 2.
 
 
@@ -784,16 +833,15 @@ previously defined probability distribution function
                 * negative_table_parameter)
 
 
-Numerically optimizing the loss function
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+`Numerically optimizing the loss function`
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Optimising the loss function is performed numerically over the number of
-epochs. At each iteration, we will compute the gradient of :math:`\mathcal{L}`.
+Optimising the loss function is performed numerically. At each iteration, we will compute the gradient of :math:`\mathcal{L}`.
 Then the graph nodes are moved in the direction pointed by the gradient.
 The movement of the nodes is performed by following geodesics in the
 gradient direction. The key to obtain an embedding representing
-accurately the dataset, is to move the nodes smoothly rather than brutal
-movements. This is done by tuning the learning rate, such as at each
+accurately the dataset, is to move the nodes smoothly rather than by brutal
+movements. This is done by tuning the learning rate, such that at each
 epoch all the nodes made small movements.
 
 A first level loop iterates over the epochs, the table ``total_loss``
