@@ -1,22 +1,24 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Antoine Dujardin
+:email: dujardin@slac.stanford.edu
+:institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Elliott Slaugther
+:institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
+:author: Jeffrey Donatelli
+:institution: Lawrence Berkeley National Laboratory, Berkeley, CA 94720-8142, USA
 
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
+:author: Peter Zwart
+:institution: Lawrence Berkeley National Laboratory, Berkeley, CA 94720-8142, USA
+
+:author: Amedeo Perazzo
+:institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
+
+:author: Chun Hong Yoon
+:email: yoon82@slac.stanford.edu
+:institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
+
 :bibliography: mybib
-
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
