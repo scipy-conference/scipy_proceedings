@@ -60,7 +60,11 @@ FXS: an example analysis requiring HPC
 While a variety of experiments that can be performed at LCLS, we will here focus on one specific example: Fluctuation X-ray Scattering (FXS).
 
 X-ray scattering of particles in a solution is a common technique in the study of the structure and dynamics of macromolecules in biologically-relevant conditions and gives an understanding of their function. However, traditional methods currently used at synchrotrons suffer from the fact that the exposure time is longer than the rotation time of the particle, leading to the capture of angularly-averaged patterns.
-FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. 1). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. It has been described in the late 1970s (Kam, 1977; Kam et al., 1981) and has then been performed at LCLS before the upgrade (Pande et al., 2018; Kurta et al., 2017; Medez et al., 2014 & 2016).
+FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. :ref:`fig:fxs`). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. It has been described in the late 1970s (Kam, 1977; Kam et al., 1981) and has then been performed at LCLS before the upgrade (Pande et al., 2018; Kurta et al., 2017; Medez et al., 2014 & 2016).
+
+.. figure:: FXS-overview.jpg
+
+   Fluctuation X-ray Scattering experiment setup. :label:`fig:fxs`
 
 While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution (Kurta et al., 2017), the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, billions or more snapshots could be required.
 
