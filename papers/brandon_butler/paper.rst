@@ -63,10 +63,12 @@ provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
 In the development of these tools, the requirements for the software to enable good science became
 more obvious. Having computational research that is transferable, reproducible, usable (by others),
 and extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
-computational molecular science. That is why HOOMD-blue is part of the MoSDeF project which seeks to
+computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to
 bring these traits to the wider computational molecular science community through packages like
-mbuild and foyer :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased TRUEness is
-partly behind the push towards HOOMD-blue version 3.0.
+mbuild and foyer which are Python packages that generalize generating initial particle
+configurations and force fields respectively across a variety of simulation back
+ends:cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased TRUEness is one of many
+motivating factors for HOOMD-blue version 3.0.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
 engine with a C++ back end, provides to use a Python API facilitated through pybind11
