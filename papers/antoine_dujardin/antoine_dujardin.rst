@@ -76,6 +76,165 @@ C2(q,q',DeltaPhi)=1/2piN Sum(j=1->N) Int(0->2pi) Ij(q,Phi) Ij(q',Phi+DeltaPhi) d
 
 where  Ij(q,) represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. 2), using an algorithm described elsewhere (Donatelli et al., 2015; Pande et al., 2018).
 
+Acceleration: getting the best out of numpy
+-------------------------------------------
+
+The expansion/aggregation step presented in Equation (1) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each Ij(q,)image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using numpy functions and slightly better performances using numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
+
+Let us start by simplifying Equation (1). The integral corresponds to the correlation over  of Ij(q,) and Ij(q',). Thanks to the Convolution Theorem, we have
+C2(q,q',)=12N j=1NF-1[F[Ij(q,)] F[Ij(q',)]], (2)
+where F represents the Fourier transform over . The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+
+Using  as the equivalent of  in the Fourier transform and Aj(q,) as a shorthand for F[Ij(q,)], we have:
+C2(q,q',)=12N j=1NAj(q,) Aj(q',). (3)
+We end up with the naive implementation below:
+
+.. code-block:: python
+
+  C2 = np.zeros(C2_SHAPE, np.complex128)
+  for i in range(N_IMGS):
+      A = np.fft.fft(images[i], axis=-1)
+      for j in range(N_RAD_BINS):
+          for k in range(N_RAD_BINS):
+              C2[j, k, :] += A[j] * A[k].conj()
+
+taking 42.4 seconds (for 100 images), using the following parameters:
+
+.. code-block:: python
+
+  N_IMGS = 100
+  N_RAD_BINS = 300
+  N_PHI_BINS = 256
+  IMGS_SHAPE = (N_IMGS, N_RAD_BINS, N_PHI_BINS)
+  C2_SHAPE = (N_RAD_BINS, N_RAD_BINS, N_PHI_BINS)
+
+and the dataset
+
+.. code-block:: python
+
+  images = np.random.random(IMGS_SHAPE)
+
+We will note that a typical application would be processing millions of images, but let us use 100 for the example.
+
+This naive version can be slightly accelerated using the fact that our matrix is conjugate-symmetric:
+
+.. code-block:: python
+
+  C2 = np.zeros(C2_SHAPE, np.complex128)
+  for i in range(N_IMGS):
+      A = np.fft.fft(images[i], axis=-1)
+      for j in range(N_RAD_BINS):
+          C2[j, j, :] += A[j] * A[j].conj()
+          for k in range(j+1, N_RAD_BINS):
+              tmp = A[j] * A[k].conj()
+              C2[j, k, :] += tmp
+              C2[k, j, :] += tmp.conj()
+
+which takes 36.0 seconds. Let us note that this is only 1.18 times faster, far from a 2x speed-up.
+
+That naive implementation should not be confused with a pure Python implementation, which would be expected to be slow, since we already operate on numpy arrays along the  axis. Such an implementation could be approximated by:
+
+.. code-block:: python
+
+  A = np.fft.fft(images[i], axis=-1)
+  for j in range(N_RAD_BINS):
+      for k in range(N_RAD_BINS):
+          for l in range(N_PHI_BINS):
+              C2[j, k, l] += A[j, l] * A[k, l].conj()
+
+which takes 49.1 seconds per image, i.e. about 100 times slower, in accordance with the stereotype of Python being much slower than other languages.
+
+A common acceleration strategy is to use numba:
+
+.. code-block:: python
+
+  @numba.jit
+  def A_to_C2(A):
+      C2 = np.zeros(C2_SHAPE, np.complex128)
+      for j in range(N_RAD_BINS):
+          C2[j, j, :] += A[j] * A[j].conj()
+          for k in range(j+1, N_RAD_BINS):
+              tmp = A[j] * A[k].conj()
+              C2[j, k, :] += tmp
+              C2[k, j, :] += tmp.conj()
+      return C2
+  C2 = np.zeros(C2_SHAPE, np.complex128)
+  for i in range(N_IMGS):
+      A = np.fft.fft(images[i], axis=-1)
+      C2 += A_to_C2(A)
+
+which takes 38.5 seconds, i.e. 1.10 times faster than the naive implementation.
+
+When considering our problem size of up to millions of images, processing images one at a time makes sense. However, focusing on a small batch as we have been doing in these examples, a strategy can be to have numpy and/or numba work on arrays of images, rather than the individual images. We then have the following:
+
+.. code-block:: python
+
+  @numba.jit
+  def As_to_C2(As):
+      C2 = np.zeros(C2_SHAPE, np.complex128)
+      for i in range(N_IMGS):
+          A = As[i]
+          for j in range(N_RAD_BINS):
+              C2[j, j, :] += A[j] * A[j].conj()
+              for k in range(j+1, N_RAD_BINS):
+                  tmp = A[j] * A[k].conj()
+                  C2[j, k, :] += tmp
+                  C2[k, j, :] += tmp.conj()
+      return C2
+  As = np.fft.fft(images, axis=-1)
+  C2 = As_to_C2(As)
+
+which takes 11.9 seconds, i.e. 3.56 times faster. We will note also here the batching of the Fast Fourier Transform.
+
+However, such an implementation does not sound trivial using numpy… although one can recognize a nice (generalized) Einstein sum in Equation (3), leading to:
+
+.. code-block:: python
+
+  As = np.fft.fft(images, axis=-1)
+  C2 = np.einsum('hik,hjk->ijk', As, As.conj())
+
+This takes 17.9 seconds, which is slower than the version using numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to numpy’s `asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
+
+.. code-block:: python
+
+  images_F = np.asfortranarray(images)
+
+We observe, for the Einstein sum:
+
+.. code-block:: python
+
+  As = np.fft.fft(images_F, axis=-1)
+  C2 = np.einsum('hik,hjk->ijk', As, As.conj())
+
+taking 4.05 seconds, i.e. 4.42 times faster than the C-ordered Einstein sum and 10.5 times faster than the naive implementation.
+
+Further than that, in our precise case, we can actually express it as a more optimized dot product:
+
+.. code-block:: python
+
+  As = np.fft.fft(images, axis=-1)
+  C2 = np.zeros(C2_SHAPE, np.complex128)
+  for k in range(N_PHI_BINS):
+      C2[..., k] += np.dot(As[..., k].T,
+                           As[..., k].conj())
+
+which now brings us down to 1.37 seconds, i.e. 30.9 times faster than the naive version.
+
+For the F-ordered case, we have:
+
+.. code-block:: python
+
+  As = np.fft.fft(images_F, axis=-1)
+  C2 = np.zeros(C2_SHAPE, np.complex128, order='F')
+  for k in range(N_PHI_BINS):
+      C2[..., k] += np.dot(As[..., k].T,
+                           As[..., k].conj())
+
+taking 1.06 seconds, i.e. 1.29 times faster than the C-ordered case and 40.0 times faster than the naive implementation.
+We could note that, at that speed, the main computation gets close to the time required to perform the Fast Fourier Transform, which is, in our case at least, faster on C-ordered (107 ms) than F-ordered (230 ms) data. Removing the FFT computation would yield an even starker contrast (977 ms vs. 499 ms), but would neglect the cost of the re-alignment.
+
+In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required playing around with the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
