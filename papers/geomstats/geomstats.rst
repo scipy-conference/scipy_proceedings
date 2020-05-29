@@ -106,7 +106,7 @@ Before starting any tutorial, we need to download and set-up geomstats. We choos
 
 then, in the Python script:
 
-.. code:: ipython3
+.. code:: python
 
     import geomstats.backend as gs
     import geomstats.visualization as visualization
@@ -137,7 +137,7 @@ statistics on the coordinates of world cities, which lie on the earth: a
 sphere? Let us compute the mean of two data points on the sphere, using the traditional definition of mean.
 
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.geometry.hypersphere import \
         Hypersphere
@@ -166,7 +166,7 @@ with. This theory is called Geometric Statistics, and the associated learning al
 In this specific example of mean computation, Geometric Statistics recommend to use a generalization of
 the definition of “mean” to manifolds: the Fréchet mean.
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.learning.frechet_mean import \
         FrechetMean
@@ -194,7 +194,7 @@ The previous tutorial showed why we need to generalize traditional statistics fo
 
 We import data that lie on a manifold: the dataset :code:`cities` of the coordinates of cities on the earth, and visualize it on Figure :ref:`fig:cities`.
 
-.. code:: ipython3
+.. code:: python
 
     import geomstats.datasets.utils as data_utils
 
@@ -216,7 +216,7 @@ For points on a manifold, like the sphere, the same operations are not permitted
 The exponential map is the operation that generalizes the addition of a vector to a point, on manifolds. The exponential map takes the following inputs: a point and a tangent vector to the manifold at that point, which are the blue point and its tangent vector on Figure :ref:`fig:operations`. It outputs the point on the manifold that is reached by “shooting” with the tangent vector from the point. “Shooting” means following a “geodesic” on the manifold, which is the dotted path on Figure :ref:`fig:operations`. This code snippet shows how to compute the exponential map and the geodesic with :code:`geomstats`.
 
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.geometry.hypersphere import \
         Hypersphere
@@ -245,7 +245,7 @@ The exponential map is the operation that generalizes the addition of a vector t
 
 The logarithm map is the operation that generalizes the substraction of two points, to manifolds. The logarithm map takes two points on the manifold as inputs, and outputs the tangent vector that is required to “shoot” from one point to the other. On Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point outputs the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
 
-.. code:: ipython3
+.. code:: python
 
     paris = data[19]
     beijing = data[15]
@@ -294,7 +294,7 @@ Let us recall the mathematical definition of the manifold of SPD matrices. The m
 
 The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in 2 dimensions can be visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module of :code:`geomstats`. We generate a toy data-set:
 
-.. code:: ipython3
+.. code:: python
 
     import geomstats.datasets.sample_sdp_2d as sampler
 
@@ -304,7 +304,7 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
 
 and plot it on Figure :ref:`fig:spd`.
 
-.. code:: ipython3
+.. code:: python
 
     ellipsis = visualization.Ellipsis2D()
     for i in range(n_samples):
@@ -325,7 +325,7 @@ Classifying brain connectomes in Geomstats
 We use data from the `MSLP 2014 Schizophrenia
 Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of Symmetric Positive-Definite (SPD) matrices in 28 dimensions. Patients are separated in two classes: schizophrenic and control. Our goal is to classify them. First we load the data.
 
-.. code:: ipython3
+.. code:: python
 
     import geomstats.datasets.utils as data_utils
 
@@ -337,7 +337,7 @@ the most commonly used ones: the Log-Euclidean metric and the
 Affine-Invariant metric :cite:`Pennec2006b`. We check that our data indeed
 belongs to the manifold of SPD matrices:
 
-.. code:: ipython3
+.. code:: python
 
     import geomstats.geometry.spd_matrices as spd
 
@@ -357,7 +357,7 @@ difference or their linear combination with non-positive weights are not
 necessarily! Therefore we need to work in a tangent space to perform
 simple machine learning. All the geometric operations are handled by :code:`geomstats`, thanks to the preprocessing module.
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.learning.preprocessing import \
         ToTangentSpace
@@ -375,7 +375,7 @@ Because the mean of the input data is computed, ``ToTangentSpace``
 should be used in a pipeline (as e.g. scikit-learn’s ``StandardScaler``)
 not to leak information from the test set at train time.
 
-.. code:: ipython3
+.. code:: python
 
     from sklearn.pipeline import Pipeline
     from sklearn.linear_model import LogisticRegression
@@ -392,7 +392,7 @@ We now have all the material to classify connectomes, and we evaluate
 the model with cross validation. With the affine-invariant metric we
 obtain:
 
-.. code:: ipython3
+.. code:: python
 
     result = cross_validate(pipeline, data, labels)
     print(result['test_score'].mean())
@@ -405,7 +405,7 @@ obtain:
 
 And with the log-Euclidean metric:
 
-.. code:: ipython3
+.. code:: python
 
     pipeline = Pipeline(
         steps=[
@@ -426,7 +426,7 @@ We observe that the results depend on the metric used! The Riemannian metric ind
 
 We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
 
- .. code:: ipython3
+ .. code:: python
 
     pairwise_dist = []
     for i, x in enumerate(data):
@@ -437,7 +437,7 @@ We saw how to use the representation of points on the manifold as tangent vector
 
 We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
 
-.. code:: ipython3
+.. code:: python
 
     from sklearn.neighbors import KNeighborsClassifier
     classifier = KNeighborsClassifier(metric='precomputed')
@@ -554,7 +554,7 @@ The latter and several others can be found in the ``datasets.data`` module.
     +--------------+------------------------------------------------+
 
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.datasets
         import graph_data_preparation as gdp
@@ -586,7 +586,7 @@ displayed to provide insight into its complexity.
     Karate club dataset graph. :label:`karafig`
 
 
-.. code:: ipython3
+.. code:: python
 
     nb_vertices_by_edges =\
         [len(e_2) for _, e_2 in
@@ -608,7 +608,7 @@ Recall that :math:`H_2` is the Poincaré ball equipped with the distance functio
 :math:`d`. Declaring an instance of the ``PoincareBall`` manifold of two dimensions
 in :code:`geomstats` is straightforward, as shown by this code snippet.
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.geometry.poincare_ball
         import PoincareBall
@@ -686,7 +686,7 @@ For 1., we use the formula proposed by :cite:`Arnaudon2013` which uses the Riema
 logarithmic map to compute the gradient of the distance implemented below. Similarly as the exponential
 :math:`\text{Exp}`, the logarithmic map is implemented under the ``PoincareBallMetric``.
 
-.. code:: ipython3
+.. code:: python
 
     def grad_squared_distance(point_a, point_b):
         hyperbolic_metric = PoincareBall(2).metric
@@ -696,14 +696,14 @@ logarithmic map to compute the gradient of the distance implemented below. Simil
 For 2. define the ``log_sigmoid`` as below. Note that the used `log` here is
 the usual function and not the Riemannian logarithmic map.
 
-.. code:: ipython3
+.. code:: python
 
     def log_sigmoid(vector):
         return gs.log((1 / (1 + gs.exp(-vector))))
 
 The gradient of the logarithm of sigmoid function is implemented as:
 
-.. code:: ipython3
+.. code:: python
 
     def grad_log_sigmoid(vector):
         return 1 / (1 + gs.exp(vector))
@@ -716,7 +716,7 @@ attention to the signs. For simplicity, the following function computes the loss
 :math:`\mathcal{L}` while ignoring the part dealing with the negative samples (The code
 implementing the whole loss function is available in in the `examples` directory).
 
-.. code:: ipython3
+.. code:: python
 
     def context_loss(
         example_embedding, context_embedding, manifold):
@@ -755,7 +755,7 @@ gradient of :math:`\mathcal{L}`. We are ready to prepare the nodes :math:`v_i`,
 initialize an array that will hold embeddings :math:`\phi_i` of each
 node :math:`v_i\in V` with random points belonging to the Poincaré disk.
 
-.. code:: ipython3
+.. code:: python
 
     embeddings = gs.random.normal(
         size=(karate_graph.n_nodes, dim)) * 0.2
@@ -766,7 +766,7 @@ up to some length (5 by default). The latter is done via a special
 function within the ``Graph`` class. The nodes :math:`v_j` will be later
 picked from the random walk of :math:`v_i`.
 
-.. code:: ipython3
+.. code:: python
 
     random_walks = karate_graph.random_walk()
 
@@ -774,7 +774,7 @@ Negatively sampled nodes :math:`v_k` are chosen according to the
 previously defined probability distribution function
 :math:`\mathcal{P}_n(v_k)` implemented as
 
-.. code:: ipython3
+.. code:: python
 
     negative_table_parameter = 5
     negative_sampling_table = []
@@ -817,7 +817,7 @@ then call the ``loss`` function to compute the gradient. Then the
 Riemannian exponential map is applied to find the new value of
 :math:`\phi_i` as we mentioned before.
 
-.. code:: ipython3
+.. code:: python
 
     for epoch in range(max_epochs):
         total_loss = []
@@ -878,7 +878,7 @@ to be used for predicting the labels of each node.
 Let us apply :math:`K`-means algorithm to label the nodes of the embedding in an unsupervized way.
 For this import the :math:`K`-means class, set the number of clusters and plot the results.
 
-.. code:: ipython3
+.. code:: python
 
     from geomstats.learning.kmeans import RiemannianKMeans
 
