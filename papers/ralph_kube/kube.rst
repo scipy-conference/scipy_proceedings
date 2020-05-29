@@ -369,7 +369,9 @@ Pseudo-code for the processor looks like this
       executor_anl = MPIPoolExecutor(max_workers=NA)
       a2_reader = reader(cfg["transport_rx"])
       reader.Open()
-      task_list = task_list_spectral(executor_anl, executor_fft, cfg)
+      task_list = task_list_spectral(executor_anl, 
+                                     executor_fft, 
+                                     cfg)
 
       dq = Queue.Queue()
       workers = []
@@ -421,7 +423,9 @@ as
       
    def submit(self, executor, data, tidx):
      ...
-     _ = [executor.submit(self.calc_and_store, data, ch_it, tidx) for ch_it in (self.get_dispatch_sequence())]
+     _ = [executor.submit(self.calc_and_store, data, 
+                          ch_it, tidx) 
+                          for ch_it in self.get_dispatch_sequence()]
 
 
 The call of an analysis kernel happens in ``calc_and_store``. Once the kernel returns, the analyzed 
@@ -445,10 +449,12 @@ by the ``task_list`` class:
    class task_list():
 
      def submit(self, data, tidx):
-       fft_future = self.executor_fft.submit(stft, data, **kwargs)
+       fft_future = self.executor_fft.submit(stft, data, 
+                                             **kwargs)
 
        for task in self.task_list:
-         task.submit(self.executor_anl, fft_future.result(), tidx)
+         task.submit(self.executor_anl, 
+                     fft_future.result(), tidx)
 
 Executing the analysis tasks after the Fourier transformation further reduces inter-dependencies in
 the workflow, i.e. this implementation awaits only a single future. Without collecting the analysis
@@ -612,9 +618,9 @@ multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is imple
                                          ndim=3] data, 
                                          ch_it, 
                                          fft_config):
-      cdef size_t num_idx = len(ch_it)      # Length of index array
-      cdef size_t num_fft = data.shape[1]   # Number of fft frequencies
-      cdef size_t num_bins = data.shape[2]  # Number of ffts
+      cdef size_t num_idx = len(ch_it)      
+      cdef size_t num_fft = data.shape[1]   
+      cdef size_t num_bins = data.shape[2]  
       cdef size_t ch1_idx, ch2_idx
       cdef size_t idx, nn, bb # Loop variables
       cdef double complex Sxx, Syy, _tmp
