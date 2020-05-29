@@ -72,21 +72,34 @@ We present here a Python application for FXS data analysis that is being develop
 
 In FXS, each diffraction pattern contains several identical particles in random orientations. Information about the structure of the individual particle can be recovered by studying the two-point angular correlation of the data. To do so, the 2D images are expanded in a 3D, orientation-invariant space, where they are aggregated using the following formula:
 
-C2(q,q',DeltaPhi)=1/2piN Sum(j=1->N) Int(0->2pi) Ij(q,Phi) Ij(q',Phi+DeltaPhi) dPhi, (1)
+.. math::
+   :label: eq:intro
 
-where  Ij(q,) represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. 2), using an algorithm described elsewhere (Donatelli et al., 2015; Pande et al., 2018).
+   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \int_0^{2 \pi} I_j(q, \phi) I_j(q\prime, \phi+\Delta\phi) d\phi
+
+where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. 2), using an algorithm described elsewhere (Donatelli et al., 2015; Pande et al., 2018).
 
 Acceleration: getting the best out of numpy
 -------------------------------------------
 
-The expansion/aggregation step presented in Equation (1) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each Ij(q,)image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using numpy functions and slightly better performances using numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
+The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using numpy functions and slightly better performances using numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
 
-Let us start by simplifying Equation (1). The integral corresponds to the correlation over  of Ij(q,) and Ij(q',). Thanks to the Convolution Theorem, we have
-C2(q,q',)=12N j=1NF-1[F[Ij(q,)] F[Ij(q',)]], (2)
-where F represents the Fourier transform over . The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q\prime, \phi)`. Thanks to the Convolution Theorem, we have
 
-Using  as the equivalent of  in the Fourier transform and Aj(q,) as a shorthand for F[Ij(q,)], we have:
-C2(q,q',)=12N j=1NAj(q,) Aj(q',). (3)
+.. math::
+   :label: eq:fourier
+
+   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N F^{-1}[F[I_j(q, \phi)] \overline{F[I_j(q\prime, \phi)]}],
+
+where F represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+
+Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`F[I_j(q, \phi)]`, we have:
+
+.. math::
+   :label: eq:A
+
+   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N A_j(q, \psi) \overline{A_j(q', \psi)}.
+
 We end up with the naive implementation below:
 
 .. code-block:: python
@@ -186,7 +199,7 @@ When considering our problem size of up to millions of images, processing images
 
 which takes 11.9 seconds, i.e. 3.56 times faster. We will note also here the batching of the Fast Fourier Transform.
 
-However, such an implementation does not sound trivial using numpy… although one can recognize a nice (generalized) Einstein sum in Equation (3), leading to:
+However, such an implementation does not sound trivial using numpy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
 
 .. code-block:: python
 
