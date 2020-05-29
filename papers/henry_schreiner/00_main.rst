@@ -7,7 +7,7 @@
 :institution: Princeton University
 
 :author: Hans Dembinski
-:email: hans.dembinski@gmail.com 
+:email: hans.dembinski@tu-dortmund.de
 :institution: TU Dortmund
 
 :author: Shuo Liu
@@ -83,7 +83,7 @@ An example of the boost-histogram library approach, creating a 1D-histogram and 
 
 .. figure:: histogram_example_1d.pdf
    
-   The example of a 1D-histogram. :label:`eg1dfig`
+   An example of a 1D-histogram. :label:`eg1dfig`
 
 For future code snippets, the imports used here will be assumed. Using ``.view()`` is optional, but is included to make these explicit.
 You can access ``ax`` as ``hist.axes[0]``. Note that boost-histogram is not plotting; this is simply using the simple access to histogram properties and existing matplotlib functionality. A similar example, but this time in 2D, is shown in Figure :ref:`eg2dfig`, illustrating the identical API regardless of the number of dimensions:
@@ -101,7 +101,7 @@ You can access ``ax`` as ``hist.axes[0]``. Note that boost-histogram is not plot
 
 .. figure:: histogram_example_2d.pdf
    
-   The example of a 2D-histogram. :label:`eg2dfig`
+   An example of a 2D-histogram. :label:`eg2dfig`
 
 
 The Design of a Histogram
@@ -270,6 +270,18 @@ Conclusion and Plans
 .. Conclusion and plans, Hist and more
 
 The future for histogramming in Python is bright. At least three more projects are being developed on top or using boost-histogram. **Hist** is a histogram front-end for analysts, much like Pandas is to NumPy, it is intended to make plotting, statistics, file IO, and more simple and easy; a Google Summer of Code student is working on that this Summer. One feature of note is named axes; you can assign names to axes and then fill and index by name. Conversions between histogram libraries, such as the HEP-specific ROOT toolkit and file format are being developed in **Aghast**. The **mplhep** library is making common plot styles and types for HEP easy to make, including plots with histograms. The **scikit-hep-tutorials** project is beginning to show how the different pieces of Scikit-HEP packages work together, and one of the first tutorials shows boost-histogram and Aghast. And a new library, **histoprint**, is being reviewed for including in Scikit-HEP to print up to five histograms at a time on the command line, either from ROOT or boost-histogram.
+
+An example of mplhep and boost-histogram interaction is shown in Figure :ref:`mplhep1d`:
+
+.. code-block:: python
+
+    import mplhelp
+    mplhep.histplot(hist)
+
+.. figure:: mpl_example_1d.pdf
+
+    An example of a 1D plot with mplhep. It is not completely trivial to get a proper "skyline" histogram plot from matplotlib with prebinned data, while here it is simple. :label:`mplhep1d`
+
 
 We hope that more libraries will be interested in building on top of boost-histogram. It was designed to be a powerful back-end for any front-end, with Hist planned as the reference front-end implementation. The high performance, excellent flexibility, and universal availability make an ideal choice for any toolkit.
 
