@@ -32,9 +32,9 @@ SHADOW: An algorithm reference and testing framework for scheduling data-intensi
   environments, and objective functions; however, in the main systems that are
   used to deploy science workflows for major science projects, the same
   algorithms and heuristics are used. In order to develop and test new algorithms
-  against the *de-facto* standards, we have developed SHADOW, a
+  against the de facto standards, we have developed SHADOW, a
   workflow-oriented scheduling algorithm framework. SHADOW has implementations
-  of these *de-facto* scheduling heuristics, with the intention of continually
+  of these common scheduling heuristics, with the intention of continually
   updating the library with heuristics, metaheuristics, and mathematical
   optimisation approaches in the near future. In addition to the algorithm
   implementations, there is also a number of workflow and environment generation
@@ -70,8 +70,7 @@ graph and network implementations in Python, MOEA for Java, and DEAP for
 distributed EAs in Python :cite:`derainville2012`. Science workflow scheduling
 is a field with varied contributions in algorithm development and
 optimisation, which address a number of different sub-problems within the
-field.
-:cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
+field :cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
 Unfortunately, implementations of these contributions are difficult to find;
 for example, implementations of HEFT :cite:`topcuoglu2002` can only be found
 in code that uses it - such as in simulation frameworks like WorkflowSim
@@ -87,9 +86,9 @@ material, especially when a common workflow model cannot be verified. SHADOW
 addresses this issue by providing a workflow-oriented algorithm library
 and testing environment, in which the performance of single- and
 multi-objective workflow scheduling algorithms may be compared to
-implementations of de-facto algorithms. To the best of our knowledge, there is
+implementations of de facto algorithms. To the best of our knowledge, there is
 no single-source repository of implementations of DAG or Workflow scheduling
-algorithms. The emphasis in SHADOW is on reproducible and accuracy in
+algorithms. The emphasis in SHADOW is on reproducibility   and accuracy in
 algorithm performance analysis, rather than a simulated demonstration of the
 application of a particular algorithm in certain environments. Additionally,
 with the popularity of Python in other domains that are also growing within
@@ -101,10 +100,10 @@ commonly used in those domains.
 Workflow Scheduling
 ~~~~~~~~~~~~~~~~~~~
 
-The workflow scheduling problem  is a known NP-Hard
-problem :cite:`coffman1972,kwok1999,kousalya2017,pinedo2012`.It
+The workflow scheduling problem is a known NP-Hard
+problem :cite:`coffman1972,kwok1999,kousalya2017`. It
 is commonly represented in the literature as a Directed Acyclic Graph
-(DAG) :cite:`casavant1988,chaudhary1993,ullman1975,kwok1999`;a
+(DAG) :cite:`casavant1988,chaudhary1993,ullman1975,kwok1999`; a
 sequence of tasks will have precedence constraints that limit when a task may
 start. A DAG task-graph is represented formally as a graph :math:`G = (V,E)`, where
 :math:`V` is a set of :math:`v` vertices and :math:`E` is a set of :math:`e`
@@ -134,7 +133,7 @@ Existing approaches
 ~~~~~~~~~~~~~~~~~~~
 It should be noted that existing work already addresses testing workflow
 scheduling algorithms in real-world environments; tools like SimGrid
-:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002`, - and
+:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002` - and
 its extensions, CloudSim :cite:`calheiros2011` and WorkflowSim
 :cite:`chen2012a` - all feature strongly in the literature. These are
 excellent resources for determining the effectiveness of the implementations
@@ -182,16 +181,16 @@ three important outcomes are achieved:
 
 
 -  Examples: We have implemented  popular and well-documented algorithms that
-    are commonly used to benchmark new algorithms and approaches. There is no need
-    to follow the approaches taken by these implementations, but they provide a
-    useful starting point for those interested in developing their own.
+   are commonly used to benchmark new algorithms and approaches. There is no need
+   to follow the approaches taken by these implementations, but they provide a
+   useful starting point for those interested in developing their own.
 
 Additionally, by using the ``NetworkX.DiGraph`` as the storage object
 for the workflow structure, users may extend the SHADOW ``Workflow`` object in
 any way as they would a ``NetworkX`` object.
 
-SHADOW is not intended to accurately simulated the execution of a
-workflow in an environment; for example, working with delays in
+SHADOW is not intended to accurately simulate the execution of a
+workflow in an real-world environment; for example, working with delays in
 processing, or node failure in a cluster. Strategies to mitigate these
 are often implemented secondary to the scheduling algorithms -
 especially in the case of static scheduling - and would not be a fair
@@ -200,7 +199,7 @@ application. Instead, it provides algorithms that may be used -
 statically or dynamically - in a larger
 simulation environment, where one would be able to compare the specific
 environmental performance of one algorithm over another. Integrating
-shadow into a larger simulation has been done by the authors of this
+SHADOW into a larger simulation has been done by the authors of this
 paper, and the framework has been designed with the intention that this
 will continue to be a supported feature.
 
@@ -233,8 +232,7 @@ graphical components to a benchmarking recipe, or can be invoked using the
 command line interface to quickly run one of the in-built algorithms.
 
 These components are all contained within the main ``shadow`` directory;
-there are also additional codes that are located in ``utils``, which will be
-covered in more detail in Section [Insert Section].
+there are also additional codes that are located in ``utils``, which are covered in the **Additional Tools** section.
 
 .. figure:: fig/heft_with_calc.eps
   :scale: 80 %
@@ -386,6 +384,15 @@ manner:
    HEFTWorkflow.add_environment(env)
 
 
+
+The ``Machine`` class is also defined in environment.py - this is a
+helper-class that makes developer access to specifications (provided compute,
+memory, bandwidth etc.) convenient and intuitive. The Workflow class
+calculates task runtime and other values based on its current environment when the environment is passed to the Workflow); however, users of the
+environment class may interact with these compute values if necessary.
+Configuration files may be generated in a number of ways, following a variety
+of specifications, using the SHADOWGen utility.
+
 It is also possible to use pre-calculated costs (i.e. completion time in
 seconds) when scheduling with shadow.
 
@@ -404,7 +411,8 @@ following header:
 
 .. code-block:: python
 
-   {
+
+    {
        "header" : {
        "time": true
        },
@@ -422,15 +430,6 @@ following header:
        ...
    }
 
-The ``Machine`` class is also defined in environment.py - this is a
-helper-class that makes developer access to specifications (provided compute,
-memory, bandwidth etc.) convenient and intuitive. The Workflow lass will
-calculate the runtime and other values based on its current environment (this
-occurs when the environment is passed to the Workflow); however, users of the
-environment class may interact with these compute values if necessary.
-Configuration files may be generated in a number of ways, following a variety
-of specifications, using the SHADOWGen utility.
-
 The final class that may be of interest to algorithm developers is the
 ``Solution`` class. For single-objective heuristics like HEFT or min-min,
 the final result is a single solution, which is a set of machine-task
@@ -441,7 +440,7 @@ sanity-checked in order to ensure that randomly generated task-machine
 pairs still follow the precedence constraints defined by the original
 workflow DAG. The ``Solution`` provides a basic object structure that
 stores machines and task pairs as a dictionary of ``Allocations``;
-allocations store he task, and its start and finish time on the
+allocations store the task-ID and its start and finish time on the
 machine. This provides an additional ease-of-use functionality for
 developers, who can interact with allocations using intuitive attributes
 (rather than navigating a dictionary of stored keywords). The ``Solution``
@@ -455,7 +454,6 @@ global solution class whilst providing the flexibility for designers to
 create more elaborate solutions (and algorithms).
 
 
-
 Algorithms
 ~~~~~~~~~~
 
@@ -464,9 +462,9 @@ comparisons and benchmarking. The ``examples`` directory gives you an
 overview of recipes that one can follow to use the algorithms to perform
 benchmarking.
 
-The shadow approach to describing an algorithm presents the algorithm as a
+The SHADOW approach to describing an algorithm presents the algorithm as a
 single entity (e.g. heft()), with an initialised workflow object passed as a
-function parameter. The typical structure of a shadow algorithm function is as
+function parameter. The typical structure of a SHADOW algorithm function is as
 follows:
 
 - The main algorithm - that is, the function to which a Workflow well be
@@ -477,7 +475,7 @@ follows:
   structured in a similar way to the pseudo-code as presented in the respective
   paper. For example, HEFT has two main components to the algorithm; Upward
   Ranking of tasks in the workflow, and the Insertion Policy allocation scheme.
-  This is presented in shadow as:
+  This is presented in SHADOW as:
 
 
 .. code-block:: python
@@ -497,7 +495,7 @@ follows:
 
 Complete information of the final schedule is stored in the
 ``HEFTWorkflow.solution`` object, which provides additional information, such as
-task-machine allocation pairs.  It is convention in shadow to have the
+task-machine allocation pairs.  It is convention in SHADOW to have the
 algorithm return the Solution object attached to the workflow:
 
 .. code-block:: python
@@ -512,10 +510,11 @@ NSGAII algorithm uses a sub-class for this purpose, as it generates multiple
 solutions before ranking each solution using the crowded distance or
 non-dominated sort :cite:`srinivas1994`:
 
-.. code-block::python
+.. code-block:: python
 
   class NSGASolution(Solution):
-    """ A simple class to store each solutions' related information
+    """ A simple class to store each solutions' 
+        related information
     """
 
     def __init__(self, machines):
@@ -529,19 +528,19 @@ non-dominated sort :cite:`srinivas1994`:
 Visualiser
 ~~~~~~~~~~
 
-
 SHADOW provides wrappers to ``matplotlib`` that are structured around the
 ``Workflow`` and ``Solution`` classes. The ``Visualiser`` uses the
 ``Solution`` class to retrieve allocation data, and generates a plot based on
 that information. For example, Figure  is the result of visualising the
 ``HEFTWorkflow`` example mentioned previously:
 
-..figure:: fig/samplea_allocation.pdf
 
-  Result of running ``shadow.heuristic.heft`` on the graph shown in Figure
-  :ref:`heftcalc`. Final makespan is 98; gaps between tasks are indicative
-  of data transfer times between parent and child tasks on different
-  machines. This is generated using the ``AllocationPlot`` wrapper from the ``Visualiser``. 
+.. figure:: fig/samplea_allocation.pdf
+
+   Result of running ``shadow.heuristic.heft`` on the graph shown in Figure
+   :ref:`heftcalc`. Final makespan is 98; gaps between tasks are indicative
+   of data transfer times between parent and child tasks on different
+   machines. This is generated using the ``AllocationPlot`` wrapper from the ``Visualiser``.
 
 
 
@@ -592,7 +591,7 @@ SHADOWGen
 ~~~~~~~~~~~
 
 SHADOWGen is a utility built into the framework to generate
-workflows that are reproducible and . It is built to
+workflows that are reproducible and interpretable. It is designed to
 generate a variety of workflows that have been documented and
 characterised in the literature in a way that augments current
 techniques, rather than replacing them entirely.
@@ -602,7 +601,7 @@ This includes the following:
 -  Python code that runs the GGen graph generator [#]_, which produces
    graphs in a variety of shapes and sizes based on provided parameters.
    This was originally designed to produce task graphs to test the
-   performance of DAG scheduling algorithms
+   performance of DAG scheduling algorithms.
 
 -  DAX Translator: This takes the commonly used Directed Acyclic XML
    (DAX) file format, used to generate graphs for Pegasus, and
@@ -638,10 +637,10 @@ This is dealt with in varied ways across the literature. For example,
 and change the units from seconds to MIPS, rather than doing a conversion
 between the two. Others use the values taken from distribution and workflow
 generator, without explaining how their runtime differ between resources
-:cite:`abrishami2013,malawski2015`; Malawski et al generate different workflow
-instances... using parameters and task runtime distributions from real
+:cite:`abrishami2013,malawski2015`; Malawski et al. generate different workflow
+instances. using parameters and task runtime distributions from real
 workflow traces, but do not provide these parameters :cite:`malawski2015`.
-Recent research rom :cite:`wang2019` still uses the workflows identified n
+Recent research rom :cite:`wang2019` still uses the workflows identified in
 :cite:`bharathi2008,juve2013`, but only the structure of the workflows is
 assessed, replacing the tasks from the original with other, unrelated
 examples.
