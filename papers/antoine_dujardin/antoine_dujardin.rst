@@ -36,7 +36,7 @@ Fluctuation X-ray Scattering real-time app
 
 .. class:: keywords
 
-   To Be Determined
+   fluctuation scattering, free electron laser, real-time analysis
 
 Introduction
 ------------
