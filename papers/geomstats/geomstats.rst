@@ -324,7 +324,7 @@ First we load the data (reshaped as matrices):
 As mentionned above, correlation matrices are SPD matrices. Because
 multiple metrics could be used on SPD matrices, we also import two of
 the most commonly used ones: the Log-Euclidean metric and the
-Affine-Invariant metric [PFA2006]. We can use the SPD module from
+Affine-Invariant metric :cite:`Pennec2006b`. We can use the SPD module from
 ``geomstats`` to handle all the geometry, and check that our data indeed
 belongs to the manifold of SPD matrices:
 
@@ -365,7 +365,7 @@ algorithm.
 
 Because the mean of the input data is computed, ``ToTangentSpace``
 should be used in a pipeline (as e.g. scikit-learn’s ``StandardScaler``)
-not to leak information from the training set at test time.
+not to leak information from the test set at train time.
 
 .. code:: ipython3
 
@@ -419,7 +419,7 @@ But wait, why do the results depend on the metric used? The Riemannian metric de
 
 In this example using Riemannian geometry, we observe that the choice of metric has an impact on the classification accuracy.
 There are published results that show how useful geometry can be
-with this type of data (e.g [NDV2014], [WAZ2918]). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices.
+with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices.
 
 
 Tutorial: Learning graph representations with Hyperbolic spaces
