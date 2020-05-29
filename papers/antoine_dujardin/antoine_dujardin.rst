@@ -20,7 +20,7 @@
 
 :bibliography: mybib
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: <To Be Determined>
 
 ------------------------------------------------
 A Numerical Perspective to Terraforming a Desert
