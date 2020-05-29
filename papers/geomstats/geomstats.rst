@@ -302,7 +302,31 @@ Let us recall the definition of manifold of SPD matrices. The manifold of symmet
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`.
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinearGroup`. We equip the manifold of SPD matrices with an object of the class :code:`SPDMetric` that implements the affine-invariant Riemannian metric of :cite:`Pennec2006b` and inherits from the class :code:`RiemannianMetric`. In 2d, SPD matrices are often visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module. We generate a toy data-set
+
+.. code:: ipython3
+    
+    import geomstats.datasets.sample_sdp_2d as sampler
+    
+    n_samples=100
+    dataset_generator = sampler.DatasetSPD2D(
+        n_samples, n_features=2, n_classes=3)
+
+And plot it:
+
+.. code:: ipython3
+    
+    ellipsis = visualization.Ellipsis2D()
+    for i in range(n_samples):
+        x = data[i]
+        y = sampler.get_label_at_index(
+            i, labels)
+        ellipsis.draw(
+            x, color=ellipsis.colors[y], alpha=.1)
+
+.. figure:: samples_spd.png
+   :align: center
+   :scale: 50%
 
 Classifying brain connectomes in Geomstats
 ******************************************
