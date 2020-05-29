@@ -63,15 +63,30 @@ The fourth and final area identified was **Distribution**. A great library is no
 
 About a year ago, a new C++14 library was being proposed to the Boost C++ libraries called Boost.Histogram. It would later be unanimously accepted and released as part of the Boost C++ libraries version 1.70. It was a well designed header-only package that fulfilled exactly what we wanted, but in C++14 rather than Python. A proposal was made to get a full-featured Python binding developed as part of IRIS-HEP, an institute for sustainable software for HEP, as one of the foundations for a Python based software stack. We built boost-histogram for Python in close collaboration with the original Histogram for Boost author, Hans Dembinski, who had always intended Boost.Histogram to be accessible from Python. Due to this close collaboration, concepts and design closely mimic the spirit of the Boost counterpart.
 
-An example of the boost-histogram library approach, creating a histogram and adding few values to it, is shown below:
+An example of the boost-histogram library approach, creating a 1D-histogram and a 2D-histogram and adding values to them, is shown below in Figure :ref:`eg1dfig` and :ref:`eg2dfig`:
 
 .. code-block:: python
 
-   import boost_histogram as bh
-   hist = bh.Histogram(
-       bh.axes.Regular(bins=10, start=0, stop=1)
-   )
-   hist.fill([.3, .2, .4])
+  import boost_histogram as bh
+  import numpy as np
+  import matplotlib.pyplot as plt
+
+  hist_1d = bh.Histogram(bh.axis.Regular(100, start=-5, stop=5))
+  hist_1d.fill(np.random.randn(1_000_000))
+  plt.bar(hist_1d.axes[0].centers, hist_1d.view(), width=hist_1d.axes[0].widths)
+
+  hist_2d = bh.Histogram(bh.axis.Regular(100, start=-3, stop=3),
+                         bh.axis.Regular(100, start=-3, stop=3))
+  hist_2d.fill(np.random.randn(1_000_000), np.random.randn(1_000_000))
+  plt.pcolormesh(hist_2d.axes[0].centers, hist_2d.axes[1].centers, hist_2d.view())
+
+.. figure:: histogram_example_1d.pdf
+   
+   The example of a 1D-histogram. :label:`eg1dfig`
+
+.. figure:: histogram_example_2d.pdf
+   
+   The example of a 2D-histogram. :label:`eg2dfig`
 
 The Design of a Histogram
 -------------------------
@@ -188,7 +203,7 @@ Performance when Filling
    ============ =================== ====== =================== =====
 
 
-Performance was a key design goal. In table :ref:`preftable` you can see a comparison of filling methods with NumPy. The first comparison, a 1D histogram, shows a nearly 2x speedup compared to NumPy on a single core. For a 1D Regular axes, NumPy has a custom fill routine that takes advantage of the regular binning to avoid an edge lookup. If you use multiple cores, you can get an extra 2x-4x speedup. Note that histogramming is not trivial to parallelize. Internally, boost-histogram is just using simple Python threading and relying on releasing the GIL while it fills multiple histograms; the histograms are then added into your current histogram. The overhead of doing the copy must be small compared to the fill being done.
+Performance was a key design goal. In Table :ref:`perftable` you can see a comparison of filling methods with NumPy. The first comparison, a 1D histogram, shows a nearly 2x speedup compared to NumPy on a single core. For a 1D Regular axes, NumPy has a custom fill routine that takes advantage of the regular binning to avoid an edge lookup. If you use multiple cores, you can get an extra 2x-4x speedup. Note that histogramming is not trivial to parallelize. Internally, boost-histogram is just using simple Python threading and relying on releasing the GIL while it fills multiple histograms; the histograms are then added into your current histogram. The overhead of doing the copy must be small compared to the fill being done.
 
 If we move down the table to the 2D case, you will see Boost-histogram pull away from NumPy's 2D regular bin edge lookup with an over 10x speedup. This can be further improved to about 30x using threads. In both cases, boost-histogram is not actually providing specialized code for the 1D or 2D cases; it is the same variadic vector that it would use for any number and any mixture of axes. So you can expect excellent performance that scales well with the complexity of your problem.
 
