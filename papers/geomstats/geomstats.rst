@@ -417,8 +417,31 @@ But wait, why do the results depend on the metric used? The Riemannian metric de
 
 In this example using Riemannian geometry, we observe that the choice of metric has an impact on the classification accuracy.
 There are published results that show how useful geometry can be
-with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices.
+with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`). We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the space of symmetric positive-definite matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
 
+ .. code::ipython3
+
+    pairwise_dist = []
+    for i, x in enumerate(data):
+        for y in data[i:]:
+            pairwise_dist.append(ai_metric.dist(x,y))
+    pairwise_dist = manifold.from_vector(pairwise_dist)
+
+We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
+
+.. code::ipython3
+
+    from sklearn.neighbors import KNeighborsClassifier
+    classifier = KNeighborsClassifier(metric='precomputed')
+
+    result = cross_validate(classifier, pairwise_dist, labels)
+    print(result['test_score'].mean())
+
+.. parsed-literal::
+
+    0.72
+
+We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
 
 Tutorial: Learning graph representations with Hyperbolic spaces
 ---------------------------------------------------------------
@@ -791,7 +814,7 @@ Optimising the loss function is performed numerically. At each iteration, we wil
 Then the graph nodes are moved in the direction pointed by the gradient.
 The movement of the nodes is performed by following geodesics in the
 gradient direction. The key to obtain an embedding representing
-accurately the dataset, is to move the nodes smoothly rather than brutal
+accurately the dataset, is to move the nodes smoothly rather than by brutal
 movements. This is done by tuning the learning rate, such that at each
 epoch all the nodes made small movements.
 
