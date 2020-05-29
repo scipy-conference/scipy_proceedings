@@ -289,9 +289,7 @@ We demonstrate how any standard machine learning
 algorithm can be used on data that live on a manifold yet respecting its
 geometry. In the previous tutorials we saw that linear operations (mean, linear weighting) do not work on manifold. However, to each point on a manifold, is associated a tangent space, which is a vector space, where all our off-the-shelf machine learning operations are well defined!
 
-We will use the `logarithm
-map <02_from_vector_spaces_to_manifolds.ipynb#From-substraction-to-logarithm-map>`__
-to go from points of the manifolds to vectors in the tangent space at a reference point. This will enable to use a simple logistic regression to classify our data.
+We will use the logarithm map (Figure :ref:`fig:operations`) to go from points of the manifolds to vectors in the tangent space at a reference point. This will enable to use a simple logistic regression to classify our data.
 
 
 Manifold of SPD matrices
