@@ -796,12 +796,13 @@ Conclusions and future work
 We demonstrate that ``Delta`` can facilitate near real-time analysis of high-velocity streaming
 data. In our experiments we achieved streaming rates of about 350 MByte/sec and execute a spectral
 analysis workflow on ECEI measurements in less than 4 minutes. Using a pure-python single-core
-implementation, such a workflow would take about 4 hours. Performing the analysis in a streaming
-scenario shown in :ref:`top` requires no more time than when reading data from the local file
-system. Using ADIOS we manage to utilize about 70% of the measured bandwidth for data streaming. We
-also find that mpi4py PoolExecutors facilitate a flexible execution of work packages, as required
-for our workflow where data packets arrive with high velocity. For our workflow, python queues 
-reliable facilitate inter-process communication and reliable act as a data cache under the tested IO loads.
+implementation, such a workflow would take about 4 hours. Performing the analysis in the streaming
+scenario illustrated in Figure :ref:`fig-topo` comes with only negligible performance impacts
+compared to using local filesystem IO. ADIOS manages to utilize about 70% of the available bandwidth
+for data streaming from KSTAR to NERSC when used in the streaming analysis workflow. ``mpi4py``
+PoolExecutors facilitate an flexible execution of work items on Cori, as required for our workflow
+where data arrive at high velocity. Furthermore, python queues reliably facilitate inter-process
+communication and act as a data cache under the tested IO loads.
 
 In the current form, there are multiple shortcomings of the framework that need to be addressed.
 Firstly, the DataMan engine received an experimental feature to mitigate packet loss. Secondly, implementation details
