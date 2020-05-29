@@ -49,7 +49,7 @@ def rst2tex(in_path, out_path):
 
     base_dir = os.path.dirname(__file__)
     out_file = shutil.copy(status_file, out_path)
-    os.replace(out_file, os.path.join(out_path, 'status.sty'))
+    os.rename(out_file, os.path.join(out_path, 'status.sty'))
     scipy_style = os.path.join(base_dir, '_static/scipy.sty')
     shutil.copy(scipy_style, out_path)
     preamble = u'''\\usepackage{scipy}'''
@@ -87,7 +87,7 @@ def rst2tex(in_path, out_path):
 
     with io.open(rst, mode='r', encoding='utf-8') as f:
         content = header + f.read()
-    
+
     tex = dc.publish_string(source=content, writer=writer,
                             settings_overrides=settings)
 
@@ -212,8 +212,8 @@ def build_paper(paper_id, start=1):
     out_path = os.path.join(output_dir, paper_id)
     in_path = os.path.join(papers_dir, paper_id)
     print("Building:", paper_id)
-    
-    
+
+
     options.mkdir_p(out_path)
     page_number_file = os.path.join(out_path, 'page_numbers.tex')
     with io.open(page_number_file, 'w', encoding='utf-8') as f:
