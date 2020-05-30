@@ -47,11 +47,9 @@ In the High Energy Physics (HEP) community, histogramming is vital to most of ou
 
 At the start of the project, there were many existing histogram libraries for Python (at least 24 were identified by the authors), but none of them fulfilled the requirements and expectations of users coming from custom C++ analysis tools. Four key areas were identified as key to a good library for creating histograms: Design, Flexibility, Performance, and Distribution.
 
-Before we continue, a brief description of a histogram should suffice to set the stage until we describe boost-histogram's approach in more detail. A histogram reduces an arbitrarily large dataset into a finite set of bins. A histogram consists of one or more *axes* (sometimes called "binnings") that describe a conversion from *data coordinates* to *bin coordinates*. The data coordinates may be continuous or discrete (often called categories); the bin coordinates are always discrete. In NumPy [NumPy]_, this conversion is internally derived from a combination of the ``bin`` and ``range`` arguments. Each *bin* in the histogram stores some sort of aggregate information (a simple sum in NumPy) for each value that falls into it via the axes conversion. Histograms often have an extra "weight" value that is available to this aggregate (a weighted sum in NumPy).
+Before we continue, a brief description of a histogram should suffice to set the stage until we describe boost-histogram's approach in more detail. A histogram reduces an arbitrarily large dataset into a finite set of bins. A histogram consists of one or more *axes* (sometimes called "binnings") that describe a conversion from *data coordinates* to *bin coordinates*. The data coordinates may be continuous or discrete (often called categories); the bin coordinates are always discrete. In NumPy [NumPy]_, this conversion is internally derived from a combination of the ``bin`` and ``range`` arguments. Each *bin* in the histogram stores some sort of aggregate information for each value that falls into it via the axes conversion. This is a simple sum in NumPy. When something besides a sum is used, this is a "generalized histogram", which is called a ``binned_statistic`` in ``scipy.stats`` [SciPy]_; for our purposes, we will avoid this distinction for the sake of brevity, but our histogram definition does include generalized histograms. Histograms often have an extra "weight" value that is available to this aggregate (a weighted sum in NumPy).
 
 Almost as important as defining what a histogram is limiting what a histogram is not. Notice the missing item above: a histogram, in this definition, is not a plot or a visual aid. It is not a plot any more than a NumPy array is a plot. You can plot a Histogram, certainly, and customisations for plotting are useful (much as Pandas has custom plotting for Series [Pandas]_), but that should not part of a core histogram library, and is not part of boost-histogram (though most tutorials include how to plot using matplotlib).
-
-.. HIII: Make sure that the tense remains consistent here.
 
 The first area identified was **Design**; here many popular libraries fell short. Histograms need to be represented as an object, rather than a collection of NumPy arrays, in order to naturally manipulate histograms after filling. You should be able to continue to fill a histogram after creating it as well; filling in one pass is not always possible due to memory limits or live data taking conditions. Once a histogram is filled, it should be possible to perform common operations on it, such as rebinning to a courser binning scheme, projecting on a subset of axes, selecting a subset of bins then working with or summing over just that piece, and more. You should be able easily sum histograms, such as from different threads. You also should be able to easily access the transform between data coordinates and bin coordinates for each axes. Axis should be able to store extra information, such as a title or label of some sort, to assist the user and external plotting tools.
 
@@ -115,13 +113,13 @@ The Design of a Histogram
 
 .. figure:: histogram_design.pdf
    
-   The design of a histogram in Boost.Histogram. The only difference for the Python bindings is that the storage is always dynamic. :label:`histfig`
+   The components of a histogram, shown for a 2D histogram.  :label:`histfig`
 
 Let's revisit our description of a histogram, this time mapping boost-histogram components to each piece. See Figure :ref:`histfig` for an example of how these visually fit together to create an 2D histogram.
 
 The components in a bin are the smallest atomic piece of boost-histogram, and are called **Accumulators**. Four such accumulators are available. ``Sum`` just provides a high-accuracy floating point sum using the Neumaier algorithm [Neu74]_, and is automatically used for floating point histograms. ``WeightedSum`` provides an extra term to allow sample sizes to be given. ``Mean`` stores a mean instead of a sum, created what is sometimes called a "profile histogram". And ``WeightedMean`` adds an extra term allowing the user to provide samples. Accumulators are like a 0D or scalar histogram, much like dtypes are like 0D scalar arrays in NumPy.
 
-The above accumulators are then provided in a container called a **Storage**, of which boost-histogram provides several. The available storages include choices for the four accumulators listed above (the storage using ``Sum`` is just called ``Double()``, and is the default; unlike the other accumulator-based storages it provides a simple NumPy array rather than a specialized record array when viewed). Other storages include ``Int64()``, which stores integers directly, ``AtomicInt64``, which stores atomic integers, so can be filled from different threads concurrently, and ``Unlimited()``. which is a special growing storage that starts at 8-bit integers and grows as needed, or even converts to doubles if filled with a weighted fill or scaled with a float.
+The above accumulators are then provided in a container called a **Storage**, of which boost-histogram provides several. The available storages include choices for the four accumulators listed above (the storage using ``Sum`` is just called ``Double()``, and is the default; unlike the other accumulator-based storages it provides a simple NumPy array rather than a specialized record array when viewed). Other storages include ``Int64()``, which stores integers directly, ``AtomicInt64``, which stores atomic integers, so can be filled from different threads concurrently, and ``Unlimited()``. which is a special growing storage that offers a no-overflow guarantee and automatically uses the least possible amount of memory for a dense uniform array of counters, which is very helpful for high-dimensional histograms. It also automatically converts to doubles if filled with a weighted fill or scaled by a float. 
 
 The next piece of a histogram is an **Axis**. A ``Regular`` axis describes an evenly spaced binning with start and end points, and takes advantage of the simplicity of the transform to provide :math:`\mathcal{O}(1)` computational complexity. You can also provide a **Transform** for a ``Regular`` axes; this is a pair of C function pointers (possibly generated by a JIT compiler [Numba]_) that can apply a function to the transform, allowing for things like log-scale axes to be supported at the same sort of complexity as a ``Regular`` axis. Several common transforms are supplied, including log and power spacings. You can also supply a list of bin edges with a ``Variable`` axis. If you want discrete axes, ``Integer`` provides a slightly simpler version of a ``Regular`` axes, and ``IntCategory``/``StrCategory`` provide true non-continuous categorical axes for arbitrary integers or strings, respectively. Most axes have configurable end behaviors for when a value is encountered by a fill that is outside the range described by the axis, allowing underflow/overflow bins to be turned off, or replaced with growing bins. All axes also have a metadata slot that can store arbitrary Python objects for each axis; no special meaning is applied by boost-histogram, but these can be used for titles, units, or other information.
 
@@ -146,7 +144,7 @@ An example of a custom transform applied to a ``Regular`` axis is shown below us
 You need to provide both directions in the transform, so that boost-histogram can add values to bins and find bin edges. Note: don't actually use exactly this code; there is a ``bh.axis.transform.log`` already compiled in the library.
 
 
-A **Histogram** is the combination of a storage and one or more axes. Histograms always reserve their own memory, though they provide a view of that storage to Python via the buffer protocol and NumPy. Histograms have the same API regardless of whether they have one axes or thirty-two, and they have a rich set of interactions defined, which will be the topic of the next section.
+A **Histogram** is the combination of a storage and one or more axes. Histograms always manage their own memory, though they provide a view of that storage to Python via the buffer protocol and NumPy. Histograms have the same API regardless of whether they have one axes or thirty-two, and they have a rich set of interactions defined, which will be the topic of the next section. This is an incredibly flexible design; you can orthogonally combine any mixture of axes and storages with associated accumulators, and in the future, new axes types or accumulators and storages can be added.
 
 
 Interactions with a Histogram
@@ -181,9 +179,9 @@ Indexing in boost-histogram, based on a proposal called Unified Histogram Indexi
 
 The key design is that any indexing expression valid in both NumPy and boost-histogram should return the same thing regardless of whether you have converted the histogram into an array via ``.view()`` or ``np.asarray`` or not. Freedom to access the unique parts of boost-histogram are only granted through syntax that is not valid on a NumPy array. This is done through special tags that are not valid in NumPy indexing. These tags do not depend on the internals of boost-histogram, however, and could be written by a user or come from a different library; the are mostly simple callables, with minor additions to make their `repr`'s look nicer.
 
-There are several tags provided: ``loc(float)`` converts a data-coordinate into bin coordinates, and supports addition/subtraction. For example, ``hist[loc(2.0) + 2]`` would find the bin number containing 2.0, then add two to it. There are also ``underflow`` and ``overflow`` tags for accessing the flow bins.
+There are several tags provided: ``bh.loc(float)`` converts a data-coordinate into bin coordinates, and supports addition/subtraction. For example, ``hist[bh.loc(2.0) + 2]`` would find the bin number containing 2.0, then add two to it. There are also ``bh.underflow`` and ``bh.overflow`` tags for accessing the flow bins.
 
-Slicing is supported, and works much like NumPy, though it does return a new Histogram object. You can use tags when slicing. A single value, when mixed with a slice, will select out a single value from the axes and remove it, just like it would in NumPy (you will see later why this is very useful). Most interesting, though, is the third parameter of a slice - normally called the step. Stepping in histograms is not supported, as that would be a set of non-continuous but non-discrete bins; but you can pass two different types of tags in. The first is a "rebinning" tag, which can modify the axis -- ``rebin(2)`` would double the size of the bins. The second is a reduction, of which ``sum`` is provided; this reduces the bins along an axes to a scalar and removes the axes. Endpoints on these special operations are important; leaving off the endpoints will include the flow bins, including the endpoints will remove the flow bins. So ``hist[::sum]`` will sum over the entire histogram, including the flow bins, and ``hist[0:len:sum]`` will sum over the contents of the histogram, not including the flow bin. Note that Python's `len` is a perfectly valid tag in this system!
+Slicing is supported, and works much like NumPy, though it does return a new Histogram object. You can use tags when slicing. A single value, when mixed with a slice, will select out a single value from the axes and remove it, just like it would in NumPy (you will see later why this is very useful). Most interesting, though, is the third parameter of a slice - normally called the step. Stepping in histograms is not supported, as that would be a set of non-continuous but non-discrete bins; but you can pass two different types of tags in. The first is a "rebinning" tag, which can modify the axis -- ``bh.rebin(2)`` would double the size of the bins. The second is a reduction, of which ``bh.sum`` is provided; this reduces the bins along an axes to a scalar and removes the axes. Endpoints on these special operations are important; leaving off the endpoints will include the flow bins, including the endpoints will remove the flow bins. So ``hist[::bh.sum]`` will sum over the entire histogram, including the flow bins, and ``hist[0:len:bh.sum]`` will sum over the contents of the histogram, not including the flow bin. Note that Python's `len` is a perfectly valid tag in this system - start and stop tags are simply callables that accept an axis and return an index from ``-1`` (underflow bin) to ``len(axis)+1`` (overflow bin).
 
 Setting is also supported, and comes with one more nice feature. When you set a histogram with an array and one or more endpoints are empty and include a flow bin, you have two options; you can either match the inner size, which will leave the flow bin(s) alone, or you can match the total size, which will fill the flow bins too. For example, in the following snippet the array can be either size 10 or size 12:
 
@@ -304,7 +302,7 @@ We hope that more libraries will be interested in building on top of boost-histo
 
 .. Call for other libraries to be built on top of boost histogram - designed to be extended
 
-In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well.
+In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well. And Boost.Histogram C++ is continuing to be improved and expanded, and boost-histogram will nearly automatically benefit from improvements in functionality and performance, which is a great benefits of having a shared code base, while boost-histogram is feeding back ideas from the Python community to the C++ community, making this a win-win situation.
 
 
 Acknowledgements
@@ -323,10 +321,14 @@ References
 .. [Boost]  *The Boost Software Libraries*,
         https://www.boost.org
 
-.. [NumPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux
+.. [NumPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux.
         *The NumPy Array: A Structure for Efficient Numerical Computation*,
         Computing in Science & Engineering, 13, 22-30 (2011),
         `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`
+
+.. [SciPy] Pauli Virtanen et al.
+        *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
+        SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
 
 .. [Pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
         Proceedings of the 9th Python in Science Conference, 51-56 (2010).
@@ -348,12 +350,12 @@ References
         LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015),
         `DOI:10.1145/2833157.2833162 <https://doi.org/10.1145/2833157.2833162>`
 
-.. [PyBind] Wenzel Jakob, Jason Rhinelander, Dean Moldovan,
+.. [PyBind] Wenzel Jakob, Jason Rhinelander, Dean Moldovan.
         *pybind11 -- Seamless operability between C++11 and Python*,
         https://github.com/pybind/pybind11
 
-.. [Awkward] Jim Pivarski, Peter Elmer, David Lange, *Awkward Arrays in Python, C++, and Numba*
+.. [Awkward] Jim Pivarski, Peter Elmer, David Lange. *Awkward Arrays in Python, C++, and Numba*
         Preprint `arXiv:2001.06307 <https://arxiv.org/abs/2001.06307>`_
 
-.. [CIBW] Joe Rickerby, Yannick Jadoul, Matthieu Darbois, *cibuildwheel*,
+.. [CIBW] Joe Rickerby, Yannick Jadoul, Matthieu Darbois. *cibuildwheel*,
         https://github.com/joerick/cibuildwheel
