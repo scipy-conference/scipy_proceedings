@@ -21,11 +21,6 @@ Modeling organellar morphologies can provide valuable insight into the health of
 Introduction
 ------------
 
-.. figure:: figures/Sliding_Window_Signals_Plot.png
-   :scale: 20%
-
-   Example text.
-
 Morphological perturbations of organellar structures inside cells are useful for characterizing infection patterns and, ultimately, developing therapies. In particular, tuberculosis, an infectious disease caused by Mycobacterium tuberculosis (Mtb), induces distinct structural changes of the mitochondria in invaded cells. :cite:`fc2015` This is significant because tuberculosis is responsible for approximately 1.5 million human fatalities annually, with growing resistance to currently antibacterial treatment regimens. :cite:`fc2015` Studying the changes in subcellular structures pre- versus post-infection will set the stage for genetic screens, whereby these changes can be studied under different mutations of the Mtb pathogen; with enough such studies and a subsequent understanding of how the Mtb pathogen affects its host, we can leverage that knowledge to develop tests, treatments, and vaccines.
 
 Modeling mitochondria is no trivial task; these organelles are amorphous, spatially diffuse structures, and their lack of rigidity renders traditional shape-based, parametric modeling techniques ineffective. Subsequently, early imaging analyses of mitochondrial structures relied solely on qualitative inspections of protein-stained cells. :cite:`durden18` However, purely qualitative approaches are error prone, and generate results that are difficult to reproduce. :cite:`durden18` These shortcomings have motivated many to research methodologies that quantitatively model the organelle and assess its dynamics. :cite:`durden18, song08, mitra10`
@@ -237,11 +232,27 @@ We have amassed a collection of confocal imaging videos of live HeLa cells fluor
 Experiments
 -----------
 
-We first evaluated the temporal anomaly detection methodology by plotting the eigenvalue spectrum and outlier signal for each cell. [Refer to figures showing the signal plot and respective video frames]. Next, we evaluated the video frames that corresponded with each anomalous time point. In each frame, significant changes in the morpholgoy are visible, especially in the llo and mdivi videos. This is meaningful because the morphology of mitochondria changes subtly between frames, making it a tedious task to manually determine when any important event occurred. However, the anomalous time points indicate specific video frames where morphological changes are visible; the anomalous llo video frames illustrate the fragmentation process by depicting the clusters at distinct times where they are visibly smaller, and conversely, the anomalous mdivi frames highlight times where the clusters are noticeably larger.
+We first evaluated the temporal anomaly detection methodology by plotting the eigenvalue spectrum and outlier signal for each cell. Next, we evaluated the video frames that corresponded with each anomalous time point. In each frame, significant changes in the morpholgoy are visible, especially in the llo and mdivi videos. This is meaningful because the morphology of mitochondria changes subtly between frames, making it a tedious task to manually determine when any important event occurred. However, the anomalous time points indicate specific video frames where morphological changes are visible; the anomalous llo video frames illustrate the fragmentation process by depicting the clusters at distinct times where they are visibly smaller, and conversely, the anomalous mdivi frames highlight times where the clusters are noticeably larger.
 
 Unexpectedly, we noticed anomalous behavior was indicated in a subset of our control videos. This was not anticipated because the control cells were not exposed to any stimuli, and their mitochondrial structures did not display any significant changes during the duration of the videos. This phenomenon highlighted the sensitivity of our approach; any significant movement of the mitochondria, such as a sudden migration, is likely to be detected as an anomalous event. Therefore, the temporal indicators will denote frames where morphological events are occurring, but they should not be relied on solely for any behavioral inference regarding the  mitochondria’s morphology.
 
+.. figure:: figures/LLO_Signal_Plot.png
+   :scale: 30%
+   :figclass: w
+
+   The top plot illustrates the eigenvalue time-series data of an LLO video, and the bottom figure shows the corresponding signal plot. Peaks represent time points declared anomalous by the temporal anomaly detection technique.
+
+.. figure:: figures/LLO_time_lapse.png
+   :scale: 50%
+   :figclass: w
+
+   Anomalous frames from an LLO video that corresponds to time points indicated by the temporal anomaly detection technique. These frames correspond with the signal plot in figure 1.
+
 Our spatial anomaly detection methodology was evaluated by inspecting the regions highlighted by the bounding boxes in each cell type. The effectiveness of this approach was demonstrated through assessment of the llo and mdivi videos because mitochondrial clusters of both types were displaced as their videos progressed. Mitochondria in the llo videos fragment and become much smaller, and in some instances this occurs until the clusters are no longer visible; in mdivi videos many of the smaller clusters merge with larger ones, effectively, making some regions of the cell no longer occupied by any mitochondrial structures. Yet, the bounding boxes were able to adapt accordingly to these spatial changes because the spatiotemporal relationships of clusters were captured within the dynamic social networks. The coordinates of the bounding boxes were computed using the parameters, specifically the mean and covariance, of the corresponding mixture distributions. As a result, the boxes were able to track the mitochondrial clusters as they moved around the cell or shrunk in size. In many cases, the clusters moved completely outside the area highlighted by initial bounding boxes, so the ability to adjust the shape and spatial locations of the boxes allows for the regions demonstrating anomalous behavior to always remain the areas being highlighted. [Refer to a figure showing the initial area of a bounding box, and the bounding box and region after some morphological event]. 
+
+.. figure:: figures/mdivi_boxes.png
+
+   Image on the left shows the initial spatial location of the bounding box, and the image on the right shows the spatial location andsize of the bounding box on the final frame of an mdivi video. This figure highlights the ability of our spatial anomaly detection technique to accurately track the mitochondria as it undergoes morphological transformations.
 
 Discussion
 ----------
