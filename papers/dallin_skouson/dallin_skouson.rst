@@ -109,7 +109,15 @@ Internally the SpyDrNet tool is composed of a flow that begins with a parser, ac
 The Intermediate Representation
 -------------------------------
 
-The intermediate representation is a generic structural netlist representation employed by SpyDrNet.  Structural netlists refer to a class of netlists that represent circuit components but not necessarily their behaviour. These netlists are useful because when modifying netlists for reliability we are less concerned with the general purpose of the circuit and more concerned with how that circuit is implemented. SpyDrNet’s internal intermediate representation is an in-memory construct. Currently there is no serialization of the intermediate representation directly, although future work may create one. Instead users can manipulate the structure while in memory and write out a supported format using one of the composers that is included with SpyDrNet. More advanced users with special requrements could also create their own composer to support the format that they desire. The API is complete enough to support full parser and composer support. Users need not learn excess information about the internals of the netlist to create an effective composer or parser.
+The intermediate representation is a generic structural netlist representation employed by SpyDrNet.  Structural 
+netlists refer to a class of netlists that represent circuit components but not necessarily their behaviour. These 
+netlists are useful because when modifying netlists for reliability we are less concerned with the general purpose of 
+the circuit and more concerned with how that circuit is implemented. SpyDrNet’s internal intermediate representation is 
+an in-memory construct. Users can manipulate the structure while in memory and write out a supported format using one of
+the export modules or *composers* that is included with SpyDrNet. More advanced users with special requrements could 
+also create their own composer to support the format that they desire. The API is complete enough to support full parser
+and composer support. Users need not learn excess information about the internals of the netlist to create an effective
+composer or parser.
 
 Constructs Employed
 *******************
@@ -173,9 +181,9 @@ In addition, the metadata dictionary can be used to contain any desired user dat
 Callback Framework
 ------------------
 
-Additionally SpyDrNet includes a callback framework. These callbacks allow users to create plugins that can keep track of the current state of the netlist. Currently, a namespace manager is included with SpyDrNet. Plans exist to include a netlist visualizer that takes advantage of the callback framework to maintain an up to date visualization of the netlist as changes are made. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
+Additionally SpyDrNet includes a callback framework. These callbacks allow users to create plugins that can keep track of the current state of the netlist. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
 
-Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the api defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
+Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the API defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
 
 
 Modularity by design
@@ -204,7 +212,7 @@ SpyDrNet has several high level features currently included. All of these featur
 
 Base API
 ********
-Functionality is provided through the api to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The base API includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
+Functionality is provided through the API to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The base API includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
 
 Hierarchy
 *********
@@ -248,7 +256,7 @@ SpyDrNet includes the ability to create a hierarchical reference graph of all of
 Getter functions
 ****************
 
-SpyDrNet includes getter functions which are helpful in the analysis of netlists. These functions were created as an extension to the base api to help a user more quickly traverse the netlist. These functions provide the user with quick access to adjacent components. A get call can get any other related elements from the existing element that the user has a handle to. Similar to clone there are multiple methods which could be used to implement a correct getter function. We again strove to apply the most logical and consistent rules for the getter functions. There are some places in which the object returned may not be the only possible object to be returned. In these cases generators are returned. In cases in which there are 2 possible classes of relationships upon which to return objects, the user may specify wether they would like to get the more inward related or outward related objects. For example a port may have outer pins on instances or inner pins within the port in the definition. Both of these pins can be obtained separately by passing a flag.
+SpyDrNet includes getter functions which are helpful in the analysis of netlists. These functions were created as an extension to the base API to help a user more quickly traverse the netlist. These functions provide the user with quick access to adjacent components. A get call can get any other related elements from the existing element that the user has a handle to. Similar to clone there are multiple methods which could be used to implement a correct getter function. We again strove to apply the most logical and consistent rules for the getter functions. There are some places in which the object returned may not be the only possible object to be returned. In these cases generators are returned. In cases in which there are 2 possible classes of relationships upon which to return objects, the user may specify wether they would like to get the more inward related or outward related objects. For example a port may have outer pins on instances or inner pins within the port in the definition. Both of these pins can be obtained separately by passing a flag.
 
 .. figure:: SpyDrNetConnectivity2.png
    :scale: 40%
