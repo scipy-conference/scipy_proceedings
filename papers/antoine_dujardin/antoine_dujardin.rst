@@ -75,7 +75,7 @@ In FXS, each diffraction pattern contains several identical particles in random 
 .. math::
    :label: eq:intro
 
-   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \int_0^{2 \pi} I_j(q, \phi) I_j(q\prime, \phi+\Delta\phi) d\phi
+   C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \int_0^{2 \pi} I_j(q, \phi) I_j(q', \phi+\Delta\phi) d\phi
 
 where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. :ref:`fig:reconstruction`), using an algorithm described elsewhere :cite:`Donatelli2015,Pande2018`.
 
@@ -84,12 +84,12 @@ Acceleration: getting the best out of numpy
 
 The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using numpy functions and slightly better performances using numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
 
-Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q\prime, \phi)`. Thanks to the Convolution Theorem, we have
+Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the Convolution Theorem, we have
 
 .. math::
    :label: eq:fourier
 
-   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N F^{-1}[F[I_j(q, \phi)] \overline{F[I_j(q\prime, \phi)]}],
+   C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N F^{-1}[F[I_j(q, \phi)] \overline{F[I_j(q', \phi)]}],
 
 where :math:`F` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
 
@@ -98,7 +98,7 @@ Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform an
 .. math::
    :label: eq:A
 
-   C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N A_j(q, \psi) \overline{A_j(q', \psi)}.
+   C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N A_j(q, \psi) \overline{A_j(q', \psi)}.
 
 We end up with the naive implementation below:
 
@@ -263,7 +263,7 @@ We scale up to 64 nodes of NERSC’s Cori Haswell using Pygion, with 10 to 30 pr
 
    Weak scaling behavior on Cori Haswell with Lustre filesystem (top) and Burst Buffer (bottom). :label:`fig:scaling`
 
-As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q\prime, \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
+As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q', \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
 However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
 Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case (MPI+MPI), we use MPI to parallelize between nodes and within a node. To take the present optimization into account, one would have to create a 2-level structure such as::
 
@@ -296,7 +296,7 @@ where the data exchange is implied by the image-axis partition :code:`A_image_pa
 Results
 -------
 
-To test our framework, a dataset of 100,000 single-particle diffraction images was simulated from a lidless chaperone (mm-cpn) in its open state, using Protein Data Bank entry 3IYF :cite:`Zhang2010`. These images were processed by the algorithm described above to get the 2-point correlation function, :math:`C_2(q, q\prime, \Delta\phi)`, described in Equation (:ref:`eq:intro`). This correlation function was first filtered and reduced using the methods described in :cite:`Pande2018`, and then the reconstruction algorithm in :cite:`Donatelli2015` was applied to reconstruct the electron density of the chaperone from the reduced correlations, yielding the reconstruction shown in Figure :ref:`fig:reconstruction`.
+To test our framework, a dataset of 100,000 single-particle diffraction images was simulated from a lidless chaperone (mm-cpn) in its open state, using Protein Data Bank entry 3IYF :cite:`Zhang2010`. These images were processed by the algorithm described above to get the 2-point correlation function, :math:`C_2(q, q', \Delta\phi)`, described in Equation (:ref:`eq:intro`). This correlation function was first filtered and reduced using the methods described in :cite:`Pande2018`, and then the reconstruction algorithm in :cite:`Donatelli2015` was applied to reconstruct the electron density of the chaperone from the reduced correlations, yielding the reconstruction shown in Figure :ref:`fig:reconstruction`.
 
 .. figure:: reconstruction.png
 
