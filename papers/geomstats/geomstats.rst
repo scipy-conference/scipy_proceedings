@@ -207,11 +207,11 @@ We import data that lie on a manifold: the dataset :code:`cities` containing coo
 
 
 How can we compute with data that lie on such a manifold? The elementary operations on a vector space are addition and subtraction. In a vector space, we can add a vector to a point and
-subtract two points to get a vector. Can we generalize these operations to compute on manifolds?
+subtract two points to get a vector. Can we generalize these operations in order to compute on manifolds?
 
-For points on a manifold, like the sphere, the same operations are not permitted. Indeed, adding a vector to a point will not give a point that belongs to the manifold. We need to generalize to manifolds the operations of addition and substraction.
+For points on a manifold, such as the sphere, the same operations are not permitted. Indeed, adding a vector to a point will not give a point that belongs to the manifold. So, we need to generalize to manifolds the operations of addition and subtraction.
 
-The exponential map is the operation that generalizes the addition of a vector to a point, on manifolds. The exponential map takes the following inputs: a point and a tangent vector to the manifold at that point, which are the blue point and its tangent vector on Figure :ref:`fig:operations`. It outputs the point on the manifold that is reached by “shooting” with the tangent vector from the point. “Shooting” means following a “geodesic” on the manifold, which is the dotted path on Figure :ref:`fig:operations`. This code snippet shows how to compute the exponential map and the geodesic with :code:`geomstats`.
+On manifolds, the exponential map is the operation that generalizes the addition of a vector to a point. The exponential map takes the following inputs: a point and a tangent vector to the manifold at that point. These are shown in Figure :ref:`fig:operations` using the blue point and its tangent vector, respectively. The exponential map returns the point on the manifold that is reached by “shooting” with the tangent vector from the point. “Shooting” means following a “geodesic” on the manifold, which is the dotted path on Figure :ref:`fig:operations`. A geodesic, roughly, is the analog of a straight line for general manifolds - the path which, in a sense, minimizes the distance between two points. This code snippet shows how to compute the exponential map and the geodesic with :code:`geomstats`.
 
 
 .. code:: python
@@ -238,10 +238,10 @@ The exponential map is the operation that generalizes the addition of a vector t
    :align: center
    :scale: 50%
 
-   Exponential map, Logarithm map and geodesic on a manifold: the sphere :label:`fig:operations`.
+   Exponential map, Logarithm map, and geodesic on a manifold: the sphere :label:`fig:operations`.
 
 
-The logarithm map is the operation that generalizes the substraction of two points, to manifolds. The logarithm map takes two points on the manifold as inputs, and outputs the tangent vector that is required to “shoot” from one point to the other. On Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point outputs the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
+Correspondingly, on manifolds, the logarithm map is the operation that generalizes the subtraction of two points. The logarithm map takes two points on the manifold as inputs and returns the tangent vector required to “shoot” from one point to the other. In Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point returns the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
 
 .. code:: python
 
@@ -252,9 +252,9 @@ The logarithm map is the operation that generalizes the substraction of two poin
         point=beijing, base_point=paris)
 
 
-Using the exponential and logarithm maps instead of the linear addition and substraction, allows to generalize many learning algorithms to manifolds. We emphasize that these operations depend on the "Riemannian metric" chosen for a given manifold. The metric defines the notion of geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere, that would have changed the distance between the points: with a different metric, the "sphere" could, for example, look like an ellipsoid.
+Using the exponential and logarithm maps instead of linear addition and subtraction, many learning algorithms can be generalized to manifolds. We emphasize that these operations depend on the "Riemannian metric" chosen for a given manifold. The metric defines the notion of geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere that would have changed the distance between the points: with a different metric, the "sphere" could, for example, look like an ellipsoid.
 
-We presented the use on the exponential and logarithm maps on the sphere; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module, with different Riemannian metrics. The next tutorials show more involved examples of learning algorithms on manifold, that rely on these elementary operations.
+We presented the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. The next tutorials show more involved examples of learning algorithms that rely on these elementary operations on manifolds.
 
 Tutorial: Classification of SPD matrices
 ----------------------------------------
