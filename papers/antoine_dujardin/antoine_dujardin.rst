@@ -177,7 +177,7 @@ A common acceleration strategy is to use numba:
       A = np.fft.fft(images[i], axis=-1)
       C2 += A_to_C2(A)
 
-which takes 38.5 seconds, i.e. 1.10 times faster than the naive implementation.
+which takes 38.5 seconds, i.e. 10% faster than the naive implementation.
 
 When considering our problem size of up to millions of images, processing images one at a time makes sense. However, focusing on a small batch as we have been doing in these examples, a strategy can be to have numpy and/or numba work on arrays of images, rather than the individual images. We then have the following:
 
