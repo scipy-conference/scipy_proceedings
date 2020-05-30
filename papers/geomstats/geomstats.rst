@@ -527,7 +527,7 @@ maximize some performance function (a measure for cluster separability, normaliz
 of negative samples and context size are considered
 hyperparameters and will be further discussed below.
 An instance of the ``Graph`` class is created and set to the Karate Club dataset.
-This and several other datasets can be found in the :code:`datasets.data' module.
+This and several other datasets can be found in the :code:`datasets.data` module.
 
 .. table:: Embedding parameters :label:`tabparam`
 
