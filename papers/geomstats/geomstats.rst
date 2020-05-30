@@ -256,17 +256,17 @@ Using the exponential and logarithm maps instead of linear addition and subtract
 
 We presented the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. The next tutorials show more involved examples of learning algorithms that rely on these elementary operations on manifolds.
 
-Tutorial: Classification of SPD matrices
+Tutorial: Classification of SPD Matrices
 ----------------------------------------
 
 
 SPD matrices in the literature
 ******************************
 
-Before going into this tutorial, let us recall a few applications of symmetric positive definite (SPD) matrices
-in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input or output to the problem. In diffusion tensor imaging (DTI) for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices. These ellipsoids spatially characterize the diffusion of water molecules in the tissues. Each DTI thus consists in a field of SPD matrices, which are inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression applied to comparison of fiber tracts between HIV subjects and a control group. Similarly, in functional magnetic resonance imaging (fMRI), researchers model brain activity using SPD matrices :cite:`wang2013disruptedDisease`.
+Before diving into the tutorial, let us recall a few applications of symmetric positive definite (SPD) matrices
+in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input of or output to a given problem. In Diffusion Tensor Imaging (DTI) for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices representing ellipsoids in their structure. These ellipsoids spatially characterize the diffusion of water molecules in various tissues. Each DTI thus consists of a field of SPD matrices, where each point in space corresponds to an SPD matrix. These matrices then serve as inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression to compare fiber tracts between HIV subjects and a control group. Similarly, in functional Magnetic Resonance Imaging (fMRI), researchers have modeled brain activity using SPD matrices :cite:`wang2013disruptedDisease`.
 
-More generally speaking, covariance matrices are also SPD matrices which appear in many settings. We find covariance clustering used for sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015` among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
+More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
 Lastly, SPD matrices have found applications in deep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
 
