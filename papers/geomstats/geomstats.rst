@@ -277,7 +277,7 @@ Tutorial context and description
 We demonstrate that any standard machine learning
 algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This enables the use of traditional learning algorithms.
 
-This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease` - a framework known as brain connectomics. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
+This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
 
 
 Manifold of SPD matrices
@@ -290,7 +290,7 @@ Let us recall the mathematical definition of the manifold of SPD matrices. The m
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in 2 dimensions can be visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module of :code:`geomstats`. We generate a toy data-set:
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in two dimensions can be visualized as ellipses arising from their eigenvalues and eigenvectors. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set:
 
 .. code:: python
 
@@ -300,7 +300,7 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
     dataset_generator = sampler.DatasetSPD2D(
         n_samples, n_features=2, n_classes=3)
 
-and plot it on Figure :ref:`fig:spd`.
+and plot it in Figure :ref:`fig:spd`.
 
 .. code:: python
 
@@ -321,7 +321,7 @@ Classifying brain connectomes in Geomstats
 ******************************************
 
 We use data from the `MSLP 2014 Schizophrenia
-Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of Symmetric Positive-Definite (SPD) matrices in 28 dimensions. Patients are separated in two classes: schizophrenic and control. Our goal is to classify them. First we load the data.
+Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset corresponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of SPD matrices in 28 dimensions. Our goal is to classify patients who are separated into two classes: schizophrenic and control. First we load the data.
 
 .. code:: python
 
@@ -352,8 +352,8 @@ belongs to the manifold of SPD matrices:
 
 Great! Now, although the sum of two SPD matrices is an SPD matrix, their
 difference or their linear combination with non-positive weights are not
-necessarily! Therefore we need to work in a tangent space to perform
-simple machine learning. All the geometric operations are handled by :code:`geomstats`, thanks to the preprocessing module.
+necessarily! Therefore we need to work in the tangent space to perform
+simple machine learning. All the geometric operations are handled by :code:`geomstats` thanks to the :code:`preprocessing` module.
 
 .. code:: python
 
@@ -363,7 +363,7 @@ simple machine learning. All the geometric operations are handled by :code:`geom
 What ``ToTangentSpace`` does is simple: it computes the Fréchet Mean of
 the data set, then takes the logarithm map of
 each data point from the mean. This results in a set of tangent vectors,
-and in the case of the SPD manifold, these are simply symmetric
+and, in the case of the SPD manifold, these are simply symmetric
 matrices. It then squeezes them to a 1d-vector of size
 ``dim = 28 * (28 + 1) / 2``, and thus outputs an array of shape
 ``[n_patients, dim]``, which can be fed to your favorite scikit-learn
@@ -371,7 +371,7 @@ algorithm.
 
 Because the mean of the input data is computed, ``ToTangentSpace``
 should be used in a pipeline (as e.g. scikit-learn’s ``StandardScaler``)
-not to leak information from the test set at train time.
+to avoid leaking information from the test set at train time.
 
 .. code:: python
 
