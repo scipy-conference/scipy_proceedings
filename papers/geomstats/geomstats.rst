@@ -268,16 +268,16 @@ in the machine learning literature. SPD matrices are ubiquitous across many fiel
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deep learning. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images which outperforms state-of-the-art methods for visual classification.
 
 
 Tutorial context and description
 ********************************
 
-We demonstrate how any standard machine learning
-algorithm can be used on data that live on a manifold yet respecting its geometry. In the previous tutorials we saw that linear operations (mean, linear weighting, addition and substraction) do not work on manifold. However, to each point on a manifold, is associated a tangent space, which is a vector space, where all our off-the-shelf machine learning operations are well defined! Therefore, we will use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points of the manifolds to vectors in the tangent space at a reference point. This will enable to use traditional learning algorithms.
+We demonstrate that any standard machine learning
+algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This enables the use of traditional learning algorithms.
 
-This strategy can be applied to any manifold-valued data and to any learning algorithm. In this tutorial we consider SPD matrices data from brain connectomics and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from a set of patients' resting-state images' time series :cite:`wang2013disruptedDisease` - a framework known as brain connectomics. The regularized graph Laplacians of the graphs form a dataset of SPD matrices. They represent a compact summary of the brain's connectivity patterns which is used to assess neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
+This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease` - a framework known as brain connectomics. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
 
 
 Manifold of SPD matrices
