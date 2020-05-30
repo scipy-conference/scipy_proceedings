@@ -97,10 +97,10 @@ The module :code:`learning` implements statistics and machine learning algorithm
 The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, and incorporates both TensorFlow and PyTorch backends to allow for GPU acceleration. The package comes with a :code:`visualization` module that enables users to visualize and further develop an intuition for differential geometry.
 
 
-First steps
+First Steps
 -----------
 
-Before starting any tutorial, we need to download and set-up geomstats. We choose the backend of interest: :code:`numpy`, :code:`pytorch`, or :code:`tensorflow` and import it, together with the visualization module. In the command line::
+Before starting any tutorial, we need to install :code:`geomstats`. We first choose the backend of interest: :code:`numpy`, :code:`pytorch`, or :code:`tensorflow` and import it, together with the visualization module. In the command line::
 
     export GEOMSTATS_BACKEND=numpy
 
