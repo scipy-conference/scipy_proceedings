@@ -40,18 +40,20 @@ pandas API in various ways. For instance, ``pyjanitor``, ``pandas-ply``, and
 inspired by the R ecosystem, and ``dask`` provides parallelization capabilities
 for a variety of data structures, pandas dataframes among them.
 
-.. TODO: add list of problem statements that pandera aims to solve
-
 This paper introduces a data validation tool called ``pandera``, which provides
 an intuitive, flexible, and expressive API for validating pandas data
-structures at runtime. The primary problem this library attempts to address
-is the following: even though ensuring data quality is critical in many
-contexts like scientific reporting, data analytics, and machine learning,
-the data validation process can produce considerable cognitive and software
-engineering overhead. Therefore, this tool focuses on making it as easy as
-possible to perform data validation in a variety of contexts.
+structures at runtime. The problems that this library attempts to address
+are two-fold. The first is that dataframes can be difficult to reason about in
+terms of their contents and properties, especially when they undergo many steps
+of transformations in complex data processing pipelines. The second is that,
+even though ensuring data quality is critical in many contexts like scientific
+reporting, data analytics, and machine learning, the data validation process
+can produce considerable cognitive and software development overhead.
+Therefore, this tool focuses on making it as easy as possible to perform data
+validation in a variety of contexts and workflows in order to lower the
+barrier to explicitly defining and enforcing the assumptions about about data.
 
-In the following sections outline the theoretical and practical underpinnings
+In the following sections I outline the theoretical and practical underpinnings
 of data validation, describe in more detail the specific architecture and
 implementation of the ``pandera`` package, and compare and contrast it with
 similar tools in the Python and R ecosystems.
@@ -61,14 +63,14 @@ Data Validation Definition
 --------------------------
 
 Data validation is the process by which the data analyst decides whether or not
-a particular dataset fulfills certain properties that should hold true for that
-data to be useful for some purpose, like modeling or visualization. In other
+a particular dataset fulfills certain properties that should hold true in order
+to be useful for some purpose, like modeling or visualization. In other
 words, data validation is a falsification process by which data is deemed valid
 with respect to a set of logical and statistical assumptions
 :cite:`van2018statistical`. These assumptions are typically formed by
 interacting with the data, where the analyst may bring to bear some prior
 domain knowledge pertaining to the dataset and data manipulation task at hand.
-However, even with prior knowledge, exploratory data analysis is an essential
+Notably, even with prior knowledge, exploratory data analysis is an essential
 part of the workflow that is part of the data wrangling process.
 
 More formally, we can define data validation in its most simple form as a
@@ -106,14 +108,16 @@ Data validation is part of a larger workflow that involves processing raw data
 to produce of some sort of statistical artifact like a model, visualization, or
 report. In principle, if one can write perfect, bug-free code that parses,
 cleans, and reshapes the data to produce these artifacts, data validation would
-not be necessary. In practice, however, data validation is necessary for
+not be necessary. In practice, however, data validation is critical for
 preventing the silent passing of an insidious class of data integrity error,
 which is otherwise difficult to catch without explicitly making assertions at
-runtime. Doing so becomes even more important when the end product artifacts
-inform business decisions, support scientific findings, or generate predictions
-about people or things in the real world.
+runtime. These errors could lead to misleading visualizations, incorrect
+statistical inferences, and unexpected behavior in machine learning models.
+Explicit data validation becomes even more important when the end product
+artifacts inform business decisions, support scientific findings, or generate
+predictions about people or things in the real world.
 
-.. TODO: nice-to-have - insert figure with iterative loop
+.. TODO: nice-to-have - insert figure of data validation process
 
 Consider the process of constructing a dataset for training a machine learning
 model. In this context, the act of data validation is an iterative loop that
@@ -136,45 +140,44 @@ the benefit of future readers or maintainers of the codebase.
 
 .. [#] In the latter scenario, the degenerate case is to remove the validation
        function altogether, which exposes the program to the risks associated
-       with silently passing critical data integrity errors. Practically, it is
-       up to the analyst to determine an appropriate level of strictness that
+       with silently passing data integrity errors. Practically, it is up to
+       the analyst to determine an appropriate level of strictness that
        catches cases that would produce invalid outputs.
 
 The role of the analyst, therefore, is to encode assumptions about data as a
 validation function and maintain that function as new datasets pass through the
-processing pipeline to be validated. One thing to note here is that using
-version control software like git :cite:`git` would keep track of the history
-changes of the validation rules, enabling maintainers or readers of the
-codebase to inspect the evolution of the contract that the data must fulfill to
-be considered valid.
+processing pipeline. One thing to note here is that using version control
+software like git :cite:`git` would keep track of the history changes of the
+validation rules, enabling maintainers or readers of the codebase to inspect
+the evolution of the contract that the data must fulfill to be considered
+valid.
 
 Design Principles
 -----------------
 
-``pandera`` is a flexible and expressive API for pandas data validation,
+``pandera`` is a flexible and expressive API for ``pandas`` data validation,
 where the goal is to provide a data engineering tool that (i) helps pandas
 users reason about what clean data means for their particular data processing
-task and (ii) check those assumptions at run-time against some data. The
-following are the principles that have thus far guided the development of this
-project:
+task and (ii) enforce those assumptions at run-time. The following are the
+principles that have thus far guided the development of this project:
 
 * Expressing validation rules should feel familiar to ``pandas`` users.
 * Data validation should be compatible with the different workflows and tools
   in the data science toolbelt.
 * Defining custom validation rules should be easy.
-* The validation interface should make debugging data processing code easier.
-* Integration with existing code should be seamless.
+* The validation interface should make the debugging process easier.
+* Integration with existing code should be as seamless as possible.
 
 
 Architecture
 ------------
 
-``pandera`` is a library that helps users define schemas as contracts that a
-:code:`pandas` dataframe must fulfill. This contract specifies deterministic
-and statistical properties that must hold true to be considered valid with
-respect to a particular analysis. Since ``pandera`` is primarily a data
-engineering tool, the validation function defined in Equation (:ref:`valfunc`)
-needs to be slightly refactored:
+``pandera`` helps users define schemas as contracts that a :code:`pandas`
+dataframe must fulfill. This contract specifies deterministic and statistical
+properties that must hold true to be considered valid with respect to a
+particular analysis. Since ``pandera`` is primarily a data engineering tool,
+the validation function defined in Equation (:ref:`valfunc`) needs to be
+slightly refactored:
 
 .. math::
    :label: schemafunc
@@ -186,10 +189,10 @@ Equation (:ref:`valfunc`) and some data as input and returns the data itself if
 it is valid and an :math:`error` otherwise. In ``pandera``, the :math:`error`
 is implemented as a :code:`SchemaError` exception that contains the invalid
 data as well as a ``pandas`` dataframe of failure cases that contains the index
-and failure case values that caused the validation failure.
+and failure case values that caused the exception.
 
 The primary rationale for extending validation functions in this way is
-that it enables users to compose them with data processing functions, for
+that it enables users to compose schemas with data processing functions, for
 example, :math:`s \circ f(x)` is a composite function that first applies a
 data processing function :math:`f` to the dataset :math:`x` and then validates
 the output with the schema :math:`s`. Another possible composite function,
@@ -288,12 +291,12 @@ populate those columns:
 The schema definition above establishes the following properties about the
 data:
 
-* the ``person_id`` column is a positive integer, which is a commnon
+* the ``person_id`` column is a positive integer, which is a common
   way of encode unique identifiers in a dataset. By setting
   ``allow_duplicates`` to ``False``, the schema indicates that this column
   is a unique identifier in this dataset.
 * ``height_in_feet`` is a positive float whose maximum value is 10 feet, which
-  is a reasonable assumption for the maximum  height of human beings.
+  is a reasonable assumption for the maximum height of human beings.
 * ``gender`` can take on the acceptable values in the set ``{F, M, N}`` for
   female, male, and non-binary, respectively. Supposing that these data were
   collected in an online form where the ``gender`` field input was optional,
@@ -334,8 +337,8 @@ The causes of the ``SchemaError`` are displayed as a dataframe where the
 ``failure_case`` index is the particular data value that failed the
 ``Check.in_range`` validation rule, the ``index`` column contains a list of
 index locations in the invalidated dataframe of the offending data values, and
-and ``count`` column summarizes the number of failure cases of that particular
-data value.
+and the ``count`` column summarizes the number of failure cases of that
+particular data value.
 
 For finer-grained debugging, the analyst can catch the exception using the
 ``try...except`` pattern to access the data and failure cases as attributes in
@@ -397,11 +400,12 @@ Pipeline Integration
 ~~~~~~~~~~~~~~~~~~~~
 
 There are several ways to interleave ``pandera`` validation code with data
-processing code. As shown in the example above, one can use a schema by simple
-using it as a callable. Users can also sandwich data preprocessing code with
-two schemas; one that ensures the raw data fulfills certain assumptions, and
-another that ensures the processed data fulfills another set of assumptions.
-The following code provides a toy example of this pattern:
+processing code. As shown in the example above, one can use a schema by simply
+using it as a callable. Users can also sandwich data preprocessing code between
+two schemas; one schema that ensures the raw data fulfills certain assumptions,
+and another that ensures the processed data fulfills another set of
+assumptions that arise as a consequence of the data processing. The following
+code provides a toy example of this pattern:
 
 .. code-block:: python
 
@@ -447,7 +451,7 @@ Custom Validation Rules
 
 The ``Check`` class defines a suite of built-in methods for common operations,
 but expressing custom validation rules are easy. In the simplest case, a custom
-column check can be defined simply by passing a function the ``Check``
+column check can be defined simply by passing a function into the ``Check``
 constructor. This function needs to take as input a pandas ``Series`` and
 output either a boolean or a boolean ``Series``, like so:
 
@@ -478,12 +482,12 @@ Hypothesis Testing
 
 To provide a feature-complete data validation tool for data scientists,
 ``pandera`` subclasses the ``Check`` class to define the ``Hypothesis`` class
-for hypothesis testing. To illustrate one of the use cases for this feature,
-consider a toy scientific study where a control group receives a placebo and a
-treatment group receives a pill that is supposed to improve physical endurance.
-The participants in this study then run on a treadmill (set at the same speed)
-for as long as they can, and running durations are collected for each
-individual.
+for the purpose of expressing statistical hypothesis tests. To illustrate one
+of the use cases for this feature, consider a toy scientific study where a
+control group receives a placebo and a treatment group receives a pill that is
+hypothesized to improve physical endurance. The participants in this study then
+run on a treadmill (set at the same speed) for as long as they can, and running
+durations are collected for each individual.
 
 Even before collecting the data, we can define a schema that expresses our
 expectations about a positive result:
@@ -502,6 +506,9 @@ expectations about a positive result:
            pa.Float, checks=[
               Check.greater_than(0),
               Hypothesis.two_sample_ttest(
+                  # null hypothesis: the mean duration
+                  # of the treatment group is equal
+                  # to that of the control group.
                   sample1="treatment",
                   relationship="greater_than",
                   sample2="control",
@@ -519,7 +526,7 @@ physical endurance, as measured by running duration.
 As of version ``0.4.0``, the suite of built-in hypotheses is limited to the
 ``two_sample_ttest`` and ``one_sample_ttest``, but creating custom hypotheses
 is straight-forward. To illustrate this, another common hypothesis test might
-be to check if a sample is normally distributed. Using
+be to check if a sample is normally distributed. Using the
 `scipy.stats.normaltest <https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.normaltest.html>`_
 function, one can write:
 
@@ -549,7 +556,7 @@ function, one can write:
 Conditional Validation Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When one wants to validate the values of one column conditioned on another, the
+If we want to validate the values of one column conditioned on another, the
 ``Check`` function signature is slightly modified to expect an input dictionary
 where the keys are discrete group the values in the conditional column and
 values are pandas ``Series`` objects containing subsets of the column of
@@ -633,44 +640,45 @@ to full API documentation.
 Limitations
 -----------
 
-The most notable limitation of ``pandera`` is the computation cost of
-running validation checks at runtime. The project is currently using
-airspeed-velocity for a few basic run-time and memory usage benchmarks, but
-more a more extensive performance benchmarking is warranted. In fact, this
-limitation applies to any data validation code, which trades off increased
-run-time for type safety and data integrity. The other trade-off to consider
-is additional the development time of robust and meaningful schemas for the
-time spent debugging silent data integrity issues, which particularly
-costly in fields like machine learning.
+The most notable limitation of ``pandera`` is the computation cost of running
+validation checks at runtime. This limitation applies to any data validation
+code, which trades off increased run-time for type safety and data integrity.
+The project is currently using ``airspeed-velocity`` :cite:`asv` for a few
+basic run-time and memory usage benchmarks, but more extensive performance
+profiling is warranted to give users a better sense of this trade-off. The
+other trade-off to consider is the additional development time associated with
+defining robust and meaningful schemas versus the time spent debugging silent
+data integrity issues, which is particularly costly in areas like machine
+learning where model debugging occurs after training a model.
 
-A related limitation is that only type-checking schemas are practical for large
+A related limitation is that type-checking schemas are practical for large
 datasets, e.g. datasets that do not fit onto disk in a modern laptop. In
 theory, ``pandera`` schemas can be coupled with parallelization tools like
 ``dask`` :cite:`rocklin2015dask` to perform data validation in these settings.
 
 Two other limitations of the current state of the package are that:
 
-* The built-in ``Hypothesis`` methods are currently limited, and implementing
-  wrappers methods to the ``scipy`` implementations of commonly used
-  distributional tests, e.g. normality test, chi-squared test, and
-  KL-divergence would lower the barrier to adding hypothesis tests to schemas.
+* The built-in ``Hypothesis`` methods are currently limited in scope, and
+  implementing wrapper methods to the ``scipy`` implementations of commonly
+  used distributional tests (e.g. normality test, chi-squared test, and
+  KL-divergence) would encourage the use of hypothesis tests in schemas.
 * Expressing functional dependencies is currently inelegant and would benefit
   from a higher-level abstraction to improve usability.
 
 Roadmap
 -------
 
-The ``pandera`` project started as an attempt to see whether pandas
-dataframes could be typed, as gradual typing is becoming adopted by the Python
-community since the :code:`typing` module introduced in python 3.5. The project
-evolved into a tool that emphasizes verification of the statistical properties
-of data, which required run-time validation.
+The ``pandera`` project started as a naive excursion into seeing whether pandas
+dataframes could be statically typed, as gradual typing is becoming adopted by
+the Python community since the :code:`typing` module introduced in python 3.5.
+The project evolved into a tool that emphasizes verification of the statistical
+properties of data, which requires run-time validation.
 
 The future direction of this project has been driven, in large part, by its
 contributors, and will continue to be via feature requests on the github repo.
 There a number of experimental features that are currently available in version
-:code:`0.4.0+` that aim to speed up the iteration loop for defining schemas
-at development time:
+:code:`0.4.0+` that aim to speed up the iteration loop of defining schemas
+at development time through interactive analysis:
 
 * `schema inference <https://pandera.readthedocs.io/en/v0.4.0/API_reference.html#schema-inference>`_:
   the ``pandera.infer_schema`` function takes as input a dataframe and outputs
@@ -682,12 +690,13 @@ at development time:
 Additionally, a few feature proposals would benefit from discussion and feedback
 from the wider scientific computing and data science community:
 
-* Synthetic data generation from schema definitions
+* Synthetic data generation based on schema definitions
   [`issue 200 <https://github.com/pandera-dev/pandera/issues/200>`_].
 * Domain-specific schemas, types, and checks, e.g. for the machine learning
-  use case, define validation checks between target and feature variables
+  use case, provide first-class support for validation checks between target
+  and feature variables
   [`issue 179 <https://github.com/pandera-dev/pandera/issues/179>`_].
-* Expressing tolerance level for propertion of values that fail in
+* Expressing a tolerance level for the proportion of values that fail a
   validation ``Check``
   [`issue 183 <https://github.com/pandera-dev/pandera/issues/183>`_].
 
@@ -705,25 +714,24 @@ for interested readers:
 Related Tools
 -------------
 
-This project was inspired by the ``schema`` and ``pandas_schema`` python
-packages and the ``validate`` R package :cite:`van2019data`, but there are
-many existing tools in both the R and Python ecosystems. Here is the
-author's assessment of other data validation tools that are currently being
-maintained in the Python ecosystem:
+This project was inspired by the ``schema`` and ``pandas_schema`` Python
+packages and the ``validate`` R package :cite:`van2019data`. Here is my
+assessment of data validation tools that are currently being maintained
+in the Python ecosystem:
 
 * ``great_expectations`` :cite:`ge`: this is a mature, batteries-included data
   validation library centered around the concept of **expectations**. It
-  provides a UI to manage validation rules and integrations with many database
-  systems and data manipulation tools.
+  provides a UI to manage validation rules and supports integrations with many
+  database systems and data manipulation tools.
 * ``schema`` :cite:`schema`: a light-weight data validator for generic Python
   data structures. This package and ``pandera`` share the schema interface
   where the schema object returns the data itself if valid and raises an
   ``Exception`` otherwise.
-* ``pandas_schema`` :cite:`ps`: a ``pandas`` data validation library with a wide
-  suite of built-in validators. This package was the inspiration for the
-  *schema component* design where a ``Column`` object specifies properties of
-  a dataframe column, albeit the specific implementations are considerably
-  different.
+* ``pandas_schema`` :cite:`ps`: a ``pandas`` data validation library with a
+  comprehensive suite of built-in validators. This package was the inspiration
+  for the *schema component* design where a ``Column`` object specifies
+  properties of a dataframe column, albeit the specific implementations are
+  considerably different.
 
 Conclusion
 ----------
