@@ -389,24 +389,35 @@ The simulation can then be executed simply as follows,
 
 .. code-block:: python
 
-    Initialize x, y
-    Initialize vx, vy, fx, fy, pe to zeros
+    # Initialize x, y
+    # Initialize vx, vy, fx, fy, pe to zeros
 
     num_steps = int(t // dt)
     for i in range(num_steps):
         step1(x, y, vx, vy, fx, fy, pe, xmin, xmax,
               ymin, ymax, m, dt, self.num_particles)
-        step2(x, y, vx, vy, fx, fy, pe, xmin, xmax, 
+        step2(x, y, vx, vy, fx, fy, pe, xmin, xmax,
               ymin, ymax, m, dt, self.num_particles)
         curr_t += dt
 
-We have used a fixed wall non-periodic boundary condition for our 
-implemetation.
-The details on the implementation of the boundary condition can
-be found in the example section of compyle's github page.
+We have used a fixed wall non-periodic boundary condition for our
+implementation. The details on the implementation of the boundary condition
+can be found in the example section of compyle's github page.
+
+The backend used is changed using the following code::
+
+  from compyle.api import get_config
+  # On OpenMP
+  get_config().use_openmp = True
+
+  # Run with OpenCL
+  get_config().use_cuda = True
+
+No other code changes are needed.
 
 - Elaborate a little bit about the annotation decorator. Mention that Python3
   type annotation also works.
+
 
 
 Reduction
@@ -448,40 +459,65 @@ Initial Results
 
 .. figure:: sim.png
 
-    Snapshot of simulation with 500 particles
+    Snapshot of simulation with 500 particles. :label:`simulation`
 
 .. figure:: openmp.png
 
-    Speed up over serial cython using OpenMP.
+    Speed up over serial cython using OpenMP.  :label:`openmp`
 
 .. figure:: gpu.png
-   
-    Speed up over serial cython using CUDA and OpenCL.
 
-Figure ?? shows a snapshot of simulation using 500 particles
-and bounding box size 50 with a non-periodic boundary
-condition.
+    Speed up over serial cython using CUDA and OpenCL. :label:`gpu`
 
-For evaluating our performance, we ran our implementation on a dual core 
-Intel Core i5 processor and an NVIDIA Tesla T4 GPU. 
-We used :math:`dt = 0.02` and ran the simulation
-for 25 timesteps.
-Figures ?? and ?? show speedup acheived over serial
-execution using Cython by using OpenMP, OpenCL and CUDA.
+Figure :ref:`simulation` shows a snapshot of simulation using 500 particles
+and bounding box size 50 with a non-periodic boundary condition.
 
-- Figure out these labels
+For evaluating our performance, we ran our implementation on a dual core Intel
+Core i5 processor and an NVIDIA Tesla T4 GPU. We used :math:`dt = 0.02` and
+ran the simulation for 25 timesteps. Figures :ref:`openmp` and :ref:`gpu` show
+the speedup achieved over serial execution using Cython by using OpenMP,
+OpenCL and CUDA. As you can see on the CPUs we get close to a 2x speedup.
+However, on the GPU we get over a 200x speedup. This is compared to very fast
+execution on a single core. The fact that we can use both OpenCL and CUDA is
+also very important as on some operating systems, there is no CUDA support
+even though OpenCL is supported (like the GPUs on MacOS).
+
+This is in itself remarkable given that all we do to change the backend is to
+simply set the appropriate backend. In most of the compyle examples, we use a
+command line argument to switch the backend. So with exactly the same driver
+code we are able to immediately run our program fully in parallel and have it
+run on both multi-core CPUs as well as GPUs.
+
+Many problems can be solved using the map-reduce approach above. However,
+almost all non-trivial applications require a bit more than that and this is
+where the parallel scan becomes very important.
+
 
 Scans
 ~~~~~
 
-- Provide background and motivation of why we need scans in the context of the
-  LJ problem.
+Up to now we have found the influence of all particles on each other. Since
+the force on two particles is negligible when they are more than 3 units
+apart, we do not have to loop over all the particles, we can therefore reduce
+the computation to an :math:`O(N)` computation and solve for a much larger
+number of particles. One way of doing this is to "bin the particles" into
+small boxes and given a particle in a box, only interact with the box and its
+nearest neighbor boxes.
 
-- Show a simpler example first to illustrate the ideas.
+Implementing this in serial is very easy, but if we want this to work fast and
+scale on a GPU this is simply not an option and we must implement a parallel
+algorithm. This is where the scan comes in and why this extremely powerful
+parallel algorithm is so important. The parallel prefix scan is described in
+detail in the excellent article by Blelloch :cite:`blelloch90`. Compyle
+provides an implementation of the scan algorithm on the CPU and the GPU.
+
+Since the scan algorithm is a bit more complex and most folks are unfamiliar
+with it, we first provide a simpler example application that we solve and then
+move back to our molecular dynamics application.
 
 Scans are generalizations of prefix sums / cumulative sums and can be used as
-building blocks to construct a number of parallel algorithms. These include but
-not are limited to sorting, polynomial evaluation, and tree operations.
+building blocks to construct a number of parallel algorithms. These include
+but not are limited to sorting, polynomial evaluation, and tree operations.
 
 Given an input array
 :math:`a = (a_0, a_1, a_2, \cdots, a_{n-1})` and an associative binary operator
@@ -490,11 +526,12 @@ Given an input array
 .. math::
    y = \left(a_0, (a_0 \oplus a_1), \cdots, (a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}) \right)
 
-The scan semantics in compyle are similar to those of the :code:`GenericScanKernel` in PyOpenCL.
-This allows us to construct generic scans by having an input expression, an output expression
-and a scan operator. The input function takes the input array and the array
-index as arguments.
-Assuming an input function :math:`f`, the generic scan will return the following array,
+The scan semantics in compyle are similar to those of the
+:code:`GenericScanKernel` in PyOpenCL. This allows us to construct generic
+scans by having an input expression, an output expression and a scan operator.
+The input function takes the input array and the array index as arguments.
+Assuming an input function :math:`f`, the generic scan will return the
+following array,
 
 .. math::
    y_i = \bigoplus_{k=0}^{i} f(a, k)
@@ -542,29 +579,68 @@ than 50.
     result_count = result_count.data[0]
     result = result.data[:result_count]
 
-    # Result = result
-
 The :code:`input_expr` could also be used as the map function
 for reduction and the required size of result could be found
 before running the scan and the result array can be allocated
 accordingly.
 
+Back to the MD problem
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Implement the binning algorithm as a scan and compare the performance.
+
+TBD
+
 Performance comparison
 ----------------------
 
+TBD
+
 Limitations
 ------------
+
+While compyle is really powerful and convenient, it does use a rather verbose
+and low-level syntax. In practice we have found that this is not a major
+problem. The more serious issue is the fact that we cannot directly use
+external libraries in a platform neutral way. For example, there are ways to
+use an external OpenCL or CUDA library but this will not be usable on a CPU.
+Obviously one cannot use normal Python code and use basic Python data
+structures. Furthermore, one cannot use well established libraries like scipy
+from within the parallel constructs.
+
+The low-level API that compyle provides turns out to be quite an advantage as
+compyle code is usually very fast the first time it runs. This is because it
+will simply refuse to run any code that uses Python objects. By forcing the
+user to write the algorithms in a low-level way the code is very performant.
+It also forces the user to think along the lines of parallel algorithms. This
+is a major factor. We have used Compyle in the context of a larger scientific
+computing project and have found that while the limitations are annoying, the
+benefits are generally worth it.
 
 
 Future work
 -------------
 
 In the future, we would like to improve the package by adding support for
-"objects" that would allow users to compose their libraries in a more object
-oriented manner. This would also open up the possibility of implementing more
-high-level data structures in an easy way.
+simple "objects" that would allow users to compose their libraries in a more
+object oriented manner. This would also open up the possibility of
+implementing more high-level data structures in an easy way.
 
 
 
 Conclusions
 -----------
+
+In this article we have shown how one can implement a simple molecular
+dynamics solver using compyle. The code is parallel from the beginning and
+runs effortlessly on multi-core CPUs and GPUs without any changes. We have
+used the example to illustrate elementwise, reduction, and prefix sums. We
+show how a non-trivial optimization of the example problem is possible using a
+prefix scan.
+
+The results clearly show that we are able to write the code once and have it
+run on massively parallel architectures. This is very convenient and this is
+possible because of our approach to the problem which puts parallel algorithms
+first and forces the user to write code with a hard set of restrictions. With
+this, we are able to make good use of multi-core CPUs and GPUs with pure
+Python.
