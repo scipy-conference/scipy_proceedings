@@ -265,7 +265,7 @@ visual sensor, in which object size changes as a product of varied depth. Becaus
 captured from a top-down perspective without possibility of dilation, we limit our computation to curl 
 and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. 
 	
-.. figure:: of_Ex.png
+.. figure:: of_ex.png
     
 	Raw imagery and corresponding optical flow visualization :label:`of`
 
@@ -458,8 +458,8 @@ expense of the clinically critical cilia information. To remedy this, we leverag
 segmentation masks created during the preprocessing phase to focus the network on only the 
 critical portions of the image.
 
-To that effect, we mask the augmented frame data :---: the raw images concatenated with 
-additional information such as optical flow quantities :---: using the segmentation 
+To that effect, we mask the augmented frame data |---| the raw images concatenated with 
+additional information such as optical flow quantities |---| using the segmentation 
 masks and train the network on these masked quantities. Mathematically we refer to a single 
 augmented frame with :math:`k` channels as :math:`f`, a doubly-indexed collection of vectors, 
 writing the channel information of pixel :math:`(i,j)` as :math:`f_{i,j}\in\mathbb{R}^k`. 
