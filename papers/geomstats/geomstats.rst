@@ -124,17 +124,17 @@ Tutorial: Statistics and Geometric Statistics
 
 This tutorial illustrates how Geometric Statistics and Learning differ from traditional Statistics. Statistical theory is usually defined
 for data belonging to vector spaces, which are linear spaces. For
-example, we know how to compute the mean of a data set of numbers or of multidimensional
+example, we know how to compute the mean of a set of numbers or of multidimensional
 arrays.
 
 Now consider a non-linear space: a manifold. A manifold
-:math:`M` of dimension :math:`m` is a space that is allowed to be
-curved but that looks like an :math:`m`-dimensional vector space in the
+:math:`M` of dimension :math:`m` is a space that is possibly
+curved but that looks like an :math:`m`-dimensional vector space in a small
 neighborhood of every point. A sphere, like the earth, is a good example of a manifold.
 What happens to the usual statistical theory when the data does not
-naturally belong to a linear space. For example, if we want to perform
-statistics on the coordinates of world cities, which lie on the earth: a
-sphere? Let us compute the mean of two data points on the sphere, using the traditional definition of mean.
+naturally belong to a linear space? For example, what happens if we want to perform
+statistics on the coordinates of world cities lying on the earth's surface: a
+sphere? Let us compute the mean of two data points on the sphere using the traditional definition of the mean.
 
 
 .. code:: python
@@ -157,13 +157,11 @@ sphere? Let us compute the mean of two data points on the sphere, using the trad
    Linear mean of two points on a manifold, the sphere :label:`fig:linearmean`.
 
 
-The result in shown on Figure :ref:`fig:linearmean`. What happened? The mean of two points on a manifold (the sphere) is not
-on the manifold. In our example, the mean city is not on the earth. This
-leads to errors in statistical computations. The line :code:`sphere.belongs(linear_mean)` returns :code:`False`. For this reason, researchers aim to build a theory of statistics that is
-by construction compatible with any structure we equip the manifold
-with. This theory is called Geometric Statistics, and the associated learning algorithms: Geometric Learning.
+The result is shown in Figure :ref:`fig:linearmean`. What happened? The mean of two points on a manifold (the sphere) is not
+on the manifold. In our example, the mean of these cities is not on the earth's surface. This
+leads to errors in statistical computations. The line :code:`sphere.belongs(linear_mean)` returns :code:`False`. For this reason, researchers aim to build a theory of statistics that is - by construction - compatible with any structure with which we equip the manifold. This theory is called Geometric Statistics, and the associated learning algorithms: Geometric Learning.
 
-In this specific example of mean computation, Geometric Statistics recommend to use a generalization of
+In this specific example of mean computation, Geometric Statistics provides a generalization of
 the definition of “mean” to manifolds: the Fréchet mean.
 
 .. code:: python
@@ -176,7 +174,7 @@ the definition of “mean” to manifolds: the Fréchet mean.
     frechet_mean = estimator.estimate_
 
 
-You can observe that the syntax of this code snippet follows the syntax of :code:`scikit-learn`'s learning algorithms. We plot the result on Figure :ref:`fig:frechetmean`. We observe that the Fréchet mean now belongs to
+You can observe that the syntax of this code snippet follows the syntax of :code:`scikit-learn`'s learning algorithms. We plot the result in Figure :ref:`fig:frechetmean`. Observe that the Fréchet mean now belongs to the surface of
 the sphere!
 
 .. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_22_0.png
@@ -185,14 +183,14 @@ the sphere!
 
    Fréchet mean of two points on a manifold, the sphere :label:`fig:frechetmean`.
 
-Beyond the computation of the mean, Geometric Learning provides learning algorithms on manifolds, that take into account the geometric structures. Geometric Learning is therefore the child of two major pillars: Geometry and Machine Learning.
+Beyond the computation of the mean, Geometric Learning provides learning algorithms on manifolds by taking into account their specific geometric structure. Geometric Learning is therefore the child of two major pillars: Geometry and Machine Learning.
 
 Tutorial: Elementary Operations for Data on Manifolds
 -----------------------------------------------------
 
-The previous tutorial showed why we need to generalize traditional statistics for data on manifold. This tutorial shows how to perform the elementary operations that allow to "translate" learning algorithms from linear spaces to manifolds.
+The previous tutorial showed why we need to generalize traditional statistics for data on manifolds. This tutorial shows how to perform the elementary operations that allow us to "translate" learning algorithms from linear spaces to manifolds.
 
-We import data that lie on a manifold: the dataset :code:`cities` of the coordinates of cities on the earth, and visualize it on Figure :ref:`fig:cities`.
+We import data that lie on a manifold: the dataset :code:`cities` containing coordinates of cities on the earth's surface. We visualize it in Figure :ref:`fig:cities`.
 
 .. code:: python
 
@@ -208,8 +206,8 @@ We import data that lie on a manifold: the dataset :code:`cities` of the coordin
    World cities as data on a manifold, the sphere :label:`fig:cities`.
 
 
-How can we compute with data that lie on such a manifold? The elementary operations on a vector space are addition and substraction. In a vector space, we can add a vector to a point,
-substract two points to get a vector. Can we generalize these operations to compute on manifolds?
+How can we compute with data that lie on such a manifold? The elementary operations on a vector space are addition and subtraction. In a vector space, we can add a vector to a point and
+subtract two points to get a vector. Can we generalize these operations to compute on manifolds?
 
 For points on a manifold, like the sphere, the same operations are not permitted. Indeed, adding a vector to a point will not give a point that belongs to the manifold. We need to generalize to manifolds the operations of addition and substraction.
 
