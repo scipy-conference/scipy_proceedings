@@ -70,7 +70,7 @@ Introduction to Geometric Learning in Python with Geomstats
 
 .. class:: abstract
 
-There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we introduce the open-source Python package :code:`geomstats` and present hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`www.geomstats.ai`.
+There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we introduce the open-source Python package :code:`geomstats` and present hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`geomstats.ai`.
 
 
 .. class:: keywords
@@ -117,7 +117,7 @@ then, in the Python script:
 
     INFO: Using numpy backend
 
-Modules related to :code:`matplotlib` and :code:`logging` should be imported during setup too. More details on setup can be found on the documentation website: :code:`www.geomstats.ai`.
+Modules related to :code:`matplotlib` and :code:`logging` should be imported during setup too. More details on setup can be found on the documentation website: :code:`geomstats.ai`.
 
 Tutorial: Statistics and Geometric Statistics
 ---------------------------------------------
