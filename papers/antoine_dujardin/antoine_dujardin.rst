@@ -256,11 +256,13 @@ Parallelization: effortless scaling with Pygion
 Results
 -------
 
-<Placeholder>
+To test our framework, a dataset of 100,000 single-particle diffraction images was simulated from a lidless chaperone (mm-cpn) in its open state, using Protein Data Bank entry 3IYF :cite:`Zhang2010`. These images were processed by the algorithm described above to get the 2-point correlation function, :math:`C_2(q, q\prime, \Delta\phi)`, described in Equation (:ref:`eq:intro`). This correlation function was first filtered and reduced using the methods described in :cite:`Pande2018`, and then the reconstruction algorithm in :cite:`Donatelli2015` was applied to reconstruct the electron density of the chaperone from the reduced correlations, yielding the reconstruction shown in Figure :ref:`fig:reconstruction`.
 
 .. figure:: reconstruction.png
 
    Reconstruction of a lidless chaperone (mm-cpn) in its open state from simulated diffraction patterns. :label:`fig:reconstruction`
+
+Interestingly, the size of the correlation function only increases with the desired resolution and is independent from the number of images in the dataset. Therefore, the post-processing of the correlation function and the reconstruction algorithm do not scale with the amount of data being processed.
 
 Conclusion
 ----------
