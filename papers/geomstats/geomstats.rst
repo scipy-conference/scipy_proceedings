@@ -90,7 +90,7 @@ We present :code:`geomstats`, an open-source Python package built for machine le
 Presentation of Geomstats
 -------------------------
 
-The package :code:`geomstats` is organized into two main modules: :code:`geometry` and :code:`learning`. The module `geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, etc.
+The package :code:`geomstats` is organized into two main modules: :code:`geometry` and :code:`learning`. The module :code:`geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, etc.
 
 The module :code:`learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixins: :code:`BaseEstimator`, :code:`ClassifierMixin`, :code:`RegressorMixin`, etc. This module provides implementations of Frechet mean estimators, K-means, and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
 
@@ -100,7 +100,7 @@ The code follows international standards for readability and ease of collaborati
 First Steps
 -----------
 
-Before starting any tutorial, we need to install :code:`geomstats`. We first choose the backend of interest: :code:`numpy`, :code:`pytorch`, or :code:`tensorflow` and import it, together with the visualization module. In the command line::
+To begin, we need to install :code:`geomstats`. We follow the installation procedure described at :code:`https://geomstats.github.io/first-steps.html`. Next, in the command line, we choose the backend of interest: :code:`numpy`, :code:`pytorch`, or :code:`tensorflow`, open the ipython notebook, then import the backend together with the visualization module. In the command line::
 
     export GEOMSTATS_BACKEND=numpy
 
