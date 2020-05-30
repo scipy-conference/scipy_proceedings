@@ -89,11 +89,11 @@ Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds
 .. math::
    :label: eq:fourier
 
-   C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N F^{-1}[F[I_j(q, \phi)] \overline{F[I_j(q', \phi)]}],
+   C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \mathcal{F}^{-1}[\mathcal{F}[I_j(q, \phi)] \overline{\mathcal{F}[I_j(q', \phi)]}],
 
-where :math:`F` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+where :math:`\mathcal{F}` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
 
-Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`F[I_j(q, \phi)]`, we have:
+Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`\mathcal{F}[I_j(q, \phi)]`, we have:
 
 .. math::
    :label: eq:A
