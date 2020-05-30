@@ -91,7 +91,7 @@ Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds
 
    C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N F^{-1}[F[I_j(q, \phi)] \overline{F[I_j(q\prime, \phi)]}],
 
-where F represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+where :math:`F` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
 
 Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`F[I_j(q, \phi)]`, we have:
 
@@ -121,7 +121,7 @@ taking 42.4 seconds (for 100 images), using the following parameters:
   IMGS_SHAPE = (N_IMGS, N_RAD_BINS, N_PHI_BINS)
   C2_SHAPE = (N_RAD_BINS, N_RAD_BINS, N_PHI_BINS)
 
-and the dataset
+where :code:`N_RAD_BINS` and :code:`N_PHI_BINS` represent the image dimensions over the :math:`q`- and :math:`\phi`-axes, as well as the dataset:
 
 .. code-block:: python
 
@@ -171,6 +171,7 @@ A common acceleration strategy is to use numba:
               C2[j, k, :] += tmp
               C2[k, j, :] += tmp.conj()
       return C2
+
   C2 = np.zeros(C2_SHAPE, np.complex128)
   for i in range(N_IMGS):
       A = np.fft.fft(images[i], axis=-1)
@@ -194,6 +195,7 @@ When considering our problem size of up to millions of images, processing images
                   C2[j, k, :] += tmp
                   C2[k, j, :] += tmp.conj()
       return C2
+
   As = np.fft.fft(images, axis=-1)
   C2 = As_to_C2(As)
 
@@ -206,7 +208,7 @@ However, such an implementation does not sound trivial using numpy… although o
   As = np.fft.fft(images, axis=-1)
   C2 = np.einsum('hik,hjk->ijk', As, As.conj())
 
-This takes 17.9 seconds, which is slower than the version using numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to numpy’s `asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
+This takes 17.9 seconds, which is slower than the version using numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to numpy’s :code:`asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
 
 .. code-block:: python
 
@@ -246,7 +248,7 @@ For the F-ordered case, we have:
 taking 1.06 seconds, i.e. 1.29 times faster than the C-ordered case and 40.0 times faster than the naive implementation.
 We could note that, at that speed, the main computation gets close to the time required to perform the Fast Fourier Transform, which is, in our case at least, faster on C-ordered (107 ms) than F-ordered (230 ms) data. Removing the FFT computation would yield an even starker contrast (977 ms vs. 499 ms), but would neglect the cost of the re-alignment.
 
-In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required playing around with the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
+In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
 
 Parallelization: effortless scaling with Pygion
 -----------------------------------------------
@@ -261,9 +263,9 @@ We scale up to 64 nodes of NERSC’s Cori Haswell using Pygion, with 10 to 30 pr
 
    Weak scaling behavior on Cori Haswell with Lustre filesystem (top) and Burst Buffer (bottom). :label:`fig:scaling`
 
-As an example, the most computationally intensive part is the :math:`C_2(q, q\prime, \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
+As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q\prime, \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
 However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
-Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case (MPI+MPI), we use MPI to parallelize between nodes and within a node. To take the present optimization into account, one would have to create a 2-level structure like::
+Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case (MPI+MPI), we use MPI to parallelize between nodes and within a node. To take the present optimization into account, one would have to create a 2-level structure such as::
 
   In each node:
     Define node-level communicator
@@ -273,6 +275,8 @@ Given the size of the data, parallelizing between nodes would involve a lot of d
       to angular sections
     In each rank:
       Process the received angular section
+
+where all the data exchange has to be coded by hand.
 
 In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with
 
