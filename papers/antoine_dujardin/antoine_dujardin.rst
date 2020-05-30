@@ -143,7 +143,7 @@ This naive version can be slightly accelerated using the fact that our matrix is
               C2[j, k, :] += tmp
               C2[k, j, :] += tmp.conj()
 
-which takes 36.0 seconds. Let us note that this is only 1.18 times faster, far from a 2x speed-up.
+which takes 36.0 seconds. Let us note that this is only 18% faster, far from a 2x speed-up.
 
 That naive implementation should not be confused with a pure Python implementation, which would be expected to be slow, since we already operate on numpy arrays along the  axis. Such an implementation could be approximated by:
 
@@ -245,7 +245,7 @@ For the F-ordered case, we have:
       C2[..., k] += np.dot(As[..., k].T,
                            As[..., k].conj())
 
-taking 1.06 seconds, i.e. 1.29 times faster than the C-ordered case and 40.0 times faster than the naive implementation.
+taking 1.06 seconds, i.e. 29% faster than the C-ordered case and 40.0 times faster than the naive implementation.
 We could note that, at that speed, the main computation gets close to the time required to perform the Fast Fourier Transform, which is, in our case at least, faster on C-ordered (107 ms) than F-ordered (230 ms) data. Removing the FFT computation would yield an even starker contrast (977 ms vs. 499 ms), but would neglect the cost of the re-alignment.
 
 In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
