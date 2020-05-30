@@ -509,7 +509,7 @@ These classes inherit from the class :code:`EmbeddedManifold` and have an :code:
 
 
 Learning graph representations with hyperbolic spaces in :code:`geomstats`
-********************************************************************
+**************************************************************************
 
 
 `Parameters and Initialization`
@@ -610,7 +610,7 @@ in :code:`geomstats` is straightforward, as shown by this code snippet.
 
 
 `Learning the embedding by optimizing a loss function`
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
 set of edges of the graph. The goal of embedding GSD is to provide a faithful and
