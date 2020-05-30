@@ -77,7 +77,7 @@ In FXS, each diffraction pattern contains several identical particles in random 
 
    C_2(q, q\prime, \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \int_0^{2 \pi} I_j(q, \phi) I_j(q\prime, \phi+\Delta\phi) d\phi
 
-where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. 2), using an algorithm described elsewhere :cite:`Donatelli2015,Pande2018`.
+where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. :ref:`fig:reconstruction`), using an algorithm described elsewhere :cite:`Donatelli2015,Pande2018`.
 
 Acceleration: getting the best out of numpy
 -------------------------------------------
@@ -257,6 +257,10 @@ Results
 -------
 
 <Placeholder>
+
+.. figure:: reconstruction.png
+
+   Reconstruction of a lidless chaperone (mm-cpn) in its open state from simulated diffraction patterns. :label:`fig:reconstruction`
 
 Conclusion
 ----------
