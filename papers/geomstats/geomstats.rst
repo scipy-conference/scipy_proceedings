@@ -268,16 +268,16 @@ in the machine learning literature. SPD matrices are ubiquitous across many fiel
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
-Lastly, SPD matrices have found applications in deep learning, where they are used as features extracted by a neural network. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images that enables to outperform state-of-the-art methods on visual classification.
+Lastly, SPD matrices have found applications in deep learning. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images which outperforms state-of-the-art methods for visual classification.
 
 
 Tutorial context and description
 ********************************
 
-We demonstrate how any standard machine learning
-algorithm can be used on data that live on a manifold yet respecting its geometry. In the previous tutorials we saw that linear operations (mean, linear weighting, addition and substraction) do not work on manifold. However, to each point on a manifold, is associated a tangent space, which is a vector space, where all our off-the-shelf machine learning operations are well defined! Therefore, we will use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points of the manifolds to vectors in the tangent space at a reference point. This will enable to use traditional learning algorithms.
+We demonstrate that any standard machine learning
+algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This enables the use of traditional learning algorithms.
 
-This strategy can be applied to any manifold-valued data and to any learning algorithm. In this tutorial we consider SPD matrices data from brain connectomics and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from a set of patients' resting-state images' time series :cite:`wang2013disruptedDisease` - a framework known as brain connectomics. The regularized graph Laplacians of the graphs form a dataset of SPD matrices. They represent a compact summary of the brain's connectivity patterns which is used to assess neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
+This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
 
 
 Manifold of SPD matrices
@@ -290,7 +290,7 @@ Let us recall the mathematical definition of the manifold of SPD matrices. The m
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in 2 dimensions can be visualized as ellipses, that give insights into their eigenvalues and eigenvectors. This is implemented in the ``visualization`` module of :code:`geomstats`. We generate a toy data-set:
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in two dimensions can be visualized as ellipses arising from their eigenvalues and eigenvectors. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set:
 
 .. code:: python
 
@@ -300,7 +300,7 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
     dataset_generator = sampler.DatasetSPD2D(
         n_samples, n_features=2, n_classes=3)
 
-and plot it on Figure :ref:`fig:spd`.
+and plot it in Figure :ref:`fig:spd`.
 
 .. code:: python
 
@@ -321,7 +321,7 @@ Classifying brain connectomes in Geomstats
 ******************************************
 
 We use data from the `MSLP 2014 Schizophrenia
-Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of Symmetric Positive-Definite (SPD) matrices in 28 dimensions. Patients are separated in two classes: schizophrenic and control. Our goal is to classify them. First we load the data.
+Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset corresponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of SPD matrices in 28 dimensions. Our goal is to classify patients who are separated into two classes: schizophrenic and control. First we load the data.
 
 .. code:: python
 
@@ -352,8 +352,8 @@ belongs to the manifold of SPD matrices:
 
 Great! Now, although the sum of two SPD matrices is an SPD matrix, their
 difference or their linear combination with non-positive weights are not
-necessarily! Therefore we need to work in a tangent space to perform
-simple machine learning. All the geometric operations are handled by :code:`geomstats`, thanks to the preprocessing module.
+necessarily! Therefore we need to work in the tangent space to perform
+simple machine learning. All the geometric operations are handled by :code:`geomstats` thanks to the :code:`preprocessing` module.
 
 .. code:: python
 
@@ -363,7 +363,7 @@ simple machine learning. All the geometric operations are handled by :code:`geom
 What ``ToTangentSpace`` does is simple: it computes the Fréchet Mean of
 the data set, then takes the logarithm map of
 each data point from the mean. This results in a set of tangent vectors,
-and in the case of the SPD manifold, these are simply symmetric
+and, in the case of the SPD manifold, these are simply symmetric
 matrices. It then squeezes them to a 1d-vector of size
 ``dim = 28 * (28 + 1) / 2``, and thus outputs an array of shape
 ``[n_patients, dim]``, which can be fed to your favorite scikit-learn
@@ -371,7 +371,7 @@ algorithm.
 
 Because the mean of the input data is computed, ``ToTangentSpace``
 should be used in a pipeline (as e.g. scikit-learn’s ``StandardScaler``)
-not to leak information from the test set at train time.
+to avoid leaking information from the test set at train time.
 
 .. code:: python
 
@@ -451,48 +451,44 @@ We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classific
 
 We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
 
-Tutorial: Learning graph representations with Hyperbolic spaces
+Tutorial: Learning Graph Representations with Hyperbolic Spaces
 ---------------------------------------------------------------
 
 Hyperbolic spaces and machine learning applications
 ***************************************************
 
-Before going into this tutorial, let us recall a few applications of hyperbolic spaces
+Before going into this tutorial, let us review a few applications of hyperbolic spaces
 in the machine learning literature. Hyperbolic spaces arise in information and
 learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher
 metric densities is a hyperbolic space :cite:`1531851`. This characterization
-is used in various fields, such as in image processing, where each image pixel is
+is used in various fields, such as in image processing, where each image pixel can be
 represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
-processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. The hyperbolic spaces can
-also be stanfordeen as continuous versions of trees and are
-therefore interesting when learning hierarchical representations of data
-:cite:`Nickel2017`. Hyperbolic geometric graphs (HGG) have also been suggested
-as a promising model for social networks, where the hyperbolicity appears through
+processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. Hyperbolic spaces can
+also be seen as continuous versions of trees and are
+therefore interesting when learning representations of hierarchical data
+:cite:`Nickel2017`. Hyperbolic Geometric Graphs (HGG) have also been suggested
+as a promising model for social networks--where the hyperbolicity appears through
 a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
 and in learning communities on large graphs :cite:`gerald2019node`.
 
 Tutorial context and description
 ********************************
 
-Learning GSD has known major achievements in recent years thanks to the
-discovery of hyperbolic embeddings. It has been speculated since
-several years that hyperbolic spaces would better represent GSD than
-Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`.
-These speculations have recently been proven effective through concrete studies
+Thanks to the discovery of hyperbolic embeddings, learning on Graph-Structured Data (GSD) has seen major achievements in recent years. It had been speculated for years that hyperbolic spaces may better represent GSD than Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`.
+These speculations have recently been shown effective through concrete studies
 and applications :cite:`Nickel2017` :cite:`DBLP:journals/corr/ChamberlainCD17` :cite:`DBLP:conf/icml/SalaSGR18` :cite:`gerald2019node`.
 As outlined by :cite:`Nickel2017`, Euclidean embeddings require large
 dimensions to capture certain complex relations such as the Wordnet
 noun hierarchy. On the other hand, this complexity can be captured by
 a simple model of hyperbolic geometry such as the Poincaré disc of two
 dimensions :cite:`DBLP:conf/icml/SalaSGR18`. Additionally, hyperbolic embeddings provide
-better visualisation of clusters on graphs than Euclidean embeddings
+better visualizations of clusters on graphs than their Euclidean counterparts
 :cite:`DBLP:journals/corr/ChamberlainCD17`.
 
-In the scope of these recent
-discoveries, this tutorial shows how to learn such embeddings in :code:`geomstats`
+This tutorial shows how to learn such embeddings in :code:`geomstats`
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
-Please note that in the sequel we omit details regarding re-shaping/dimensioning the data arrays and those regarding visualizations and plot.
-A full working code is available in the ``examples`` directory and additionally a detailed notebook under ``notebooks``.
+Note that here we omit details regarding reshaping the data and creating visualizations.
+An unabridged example and a detailed notebook can be found in the GitHub repository in the ``examples`` and ``notebooks`` directories, respectively.
 
 Hyperbolic space
 ****************
@@ -509,30 +505,29 @@ The :math:`n`-dimensional hyperbolic space :math:`H_n` is defined by its embeddi
 
 In :code:`geomstats`, the hyperbolic space is implemented in the classes :code:`Hyperboloid` and
 :code:`PoincareBall` depending on the coordinate system used to represent the points.
-These classes  inherit from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`Minkowski`.
+These classes inherit from the class :code:`EmbeddedManifold` and have an :code:`embedding_manifold` attribute which stores an object of the class :code:`Minkowski`.
 
 
-Learning graph representations with hyperbolic spaces in `Geomstats`
+Learning graph representations with hyperbolic spaces in :code:`geomstats`
 ********************************************************************
 
 
 `Parameters and Initialization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Table :ref:`tabparam` defines the parameters needed for embedding that we now discuss. The
+Table :ref:`tabparam` defines the parameters needed for embedding. The
 number of dimensions should be high (i.e., 10+) for large datasets
 (i.e., large number of nodes/edges). In this
 tutorial we consider a dataset with only 34 nodes.
 The Poincaré disk of two dimensions (also called the Poincaré Ball) is therefore sufficient to
 capture the complexity of the graph. Some parameters are hard to know in advance, such as
 ``max_epochs`` and ``lr``. These should be tuned specifically for each
-dataset. Visualization can help with tuning the parameters. Also, one
+dataset. Visualization can also help with tuning the parameters. Also, one
 can perform a grid search to find values of these parameters which
-maximize some performance function (a measure for cluster seperability
-or normalized mutual information (NMI) or others). Similarly, the number
+maximize some performance function (a measure for cluster separability, normalized mutual information (NMI), or others). Similarly, the number
 of negative samples and context size are considered
-hyperparameters and will be further discussed in the sequel. An instance
-of the ``Graph`` class is created and set to the Karate club dataset.
-The latter and several others can be found in the ``datasets.data`` module.
+hyperparameters and will be further discussed below.
+An instance of the ``Graph`` class is created and set to the Karate Club dataset.
+This and several other datasets can be found in the :code:`datasets.data' module.
 
 .. table:: Embedding parameters :label:`tabparam`
 
@@ -572,7 +567,7 @@ The karate club network was collected from the members of a
 university karate club by Wayne Zachary in 1977. Each node represents a
 member of the club, and each edge represents an undirected relation
 between two members. An often discussed problem using this dataset is to
-find the two groups of people into which the karate club split after an
+predict the two groups into which the karate club split after an
 argument between two teachers. Figure :ref:`karafig` displays the dataset graph.
 Further information about the dataset is
 displayed to provide insight into its complexity.
@@ -614,16 +609,15 @@ in :code:`geomstats` is straightforward, as shown by this code snippet.
     hyperbolic_manifold = PoincareBall(dim)
 
 
-`Learning embedding by optimizing a loss function`
+`Learning the embedding by optimizing a loss function`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Denote :math:`V` as the set of nodes and :math:`E \subset V\times V` the
 set of edges of the graph. The goal of embedding GSD is to provide a faithful and
 exploitable representation of the graph. It is mainly achieved
-by preserving first-order proximity that enforces nodes sharing edges
+by preserving first-order proximity that encourages nodes sharing edges
 to be close to each other. It can additionally preserve second-order
-proximity that enforces two nodes sharing the same context (i.e., nodes
-that share a neighbor but are not necessarily directly connected) to be close.
+proximity by encouraging two nodes sharing the same context (i.e., not necessarily directly connected but sharing a neighbor) to be close.
 To preserve first and second-order proximities we adopt the following loss function
 similar to :cite:`NIPS2017_7213` and consider the negative sampling
 approach as in :cite:`NIPS2013_5021`:
@@ -638,40 +632,39 @@ node of :math:`V`, :math:`C_i` the nodes in the context of the
 the distribution :math:`\mathcal{P}_n` such that
 :math:`\mathcal{P}_n(v)=(\mathrm{deg}(v)^{3/4}).(\sum_{v_i\in V}\mathrm{deg}(v_i)^{3/4})^{-1}`.
 
-Intuitively one can see on Figure :ref:`fignotation` that minimizing :math:`\mathcal{L}`, the distance
+Intuitively one can see in Figure :ref:`fignotation` that by minimizing :math:`\mathcal{L}`, the distance
 between :math:`\phi_i` and :math:`\phi_j` should get smaller, while the one
-between :math:`\phi_i` and :math:`\phi_k` would get larger. Therefore
+between :math:`\phi_i` and :math:`\phi_k` should get larger. Therefore
 by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
 
 .. figure:: learning_graph_structured_data_h2_files/Notations.png
     :scale: 40%
     :align: center
 
-    Distances between node embeddings after applying one optimization iteration :label:`fignotation`.
+    Distances between node embeddings after the first iteration :label:`fignotation`.
 
 `Riemannian optimization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Following the literature on optimization on manifolds :cite:`ganea2018hyperbolic` we use the following gradient updates
+Following the literature on optimization on manifolds :cite:`ganea2018hyperbolic`, we use the following gradient updates
 to optimize :math:`\mathcal{L}`:
 
 .. math::  \phi^{t+1} = \text{Exp}_{\phi^t} \left( -lr \frac{\partial \mathcal{L}}{\partial \phi} \right)
 
 where :math:`\phi` is a parameter of :math:`\mathcal{L}`,
-:math:`t\in\{1,2,\cdots\}` is the epoch iteration number and :math:`lr`
+:math:`t\in\{1,2,\cdots\}` is the epoch iteration number, and :math:`lr`
 is the learning rate. The formula consists of first computing the usual
-gradient of the loss function giving the direction in which the
+gradient of the loss function for the direction in which the
 parameter should move. The Riemannian exponential map :math:`\text{Exp}`
 is a function that takes a base point :math:`\phi^t` and some direction
 vector :math:`T` and returns the point :math:`\phi^{t+1}` such that
 :math:`\phi^{t+1}` belongs to the geodesic initiated from
-:math:`\phi^{t}` in the direction of :math:`T` and the length of the
-geoedesic curve between :math:`\phi^t` and :math:`\phi^{t+1}` is of 1
-unit. The Riemannian exponential map is implemented as a method of the
+:math:`\phi^{t}` in the direction of :math:`T`, and the length of the
+geoedesic curve between :math:`\phi^t` and :math:`\phi^{t+1}` is one. The Riemannian exponential map is implemented as a method of the
 ``PoincareBallMetric`` class in the ``geometry`` module of
 :code:`geomstats`. It is a straightforward generalization of standard gradient update in the Euclidean case.
 
-As a summary to minimize :math:`\mathcal{L}`, we will need to compute its gradient.
+In summary, to minimize :math:`\mathcal{L}`, we will need to compute its gradient.
 To do so, we will need the gradient of:
 
 
@@ -681,7 +674,7 @@ To do so, we will need the gradient of:
 
 
 For 1., we use the formula proposed by :cite:`Arnaudon2013` which uses the Riemannian
-logarithmic map to compute the gradient of the distance implemented below. Similarly as the exponential
+logarithmic map to compute the gradient of the distance implemented below. Like the exponential
 :math:`\text{Exp}`, the logarithmic map is implemented under the ``PoincareBallMetric``.
 
 .. code:: python
@@ -691,7 +684,7 @@ logarithmic map to compute the gradient of the distance implemented below. Simil
         log_map = hyperbolic_metric.log(point_b, point_a)
         return -2 * log_map
 
-For 2. define the ``log_sigmoid`` as below. Note that the used `log` here is
+For 2., define the ``log_sigmoid`` as below. Note that the `log` used here is
 the usual function and not the Riemannian logarithmic map.
 
 .. code:: python
@@ -699,20 +692,20 @@ the usual function and not the Riemannian logarithmic map.
     def log_sigmoid(vector):
         return gs.log((1 / (1 + gs.exp(-vector))))
 
-The gradient of the logarithm of sigmoid function is implemented as:
+The gradient of the logarithm of the sigmoid function is:
 
 .. code:: python
 
     def grad_log_sigmoid(vector):
         return 1 / (1 + gs.exp(vector))
 
-For 3., apply the composition rule to obtain the gradient of :math:`\mathcal{L}`.
+For 3., we apply the composition rule to obtain the gradient of :math:`\mathcal{L}`.
 To obtain the value of :math:`\mathcal{L}` the loss function
 formula is simply applied. For the gradient of :math:`\mathcal{L}`, we apply the composition of
 ``grad_log_sigmoid`` with ``grad_squared_distance`` while paying
 attention to the signs. For simplicity, the following function computes the loss function and gradient of
 :math:`\mathcal{L}` while ignoring the part dealing with the negative samples (The code
-implementing the whole loss function is available in in the `examples` directory).
+implementing the whole loss function is available in the `examples` directory).
 
 .. code:: python
 
@@ -746,11 +739,10 @@ implementing the whole loss function is available in in the `examples` directory
 `Capturing the graph structure`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-At this point we have the necessary bricks to compute the resulting
+At this point we have the necessary pieces to compute the resulting
 gradient of :math:`\mathcal{L}`. We are ready to prepare the nodes :math:`v_i`,
-:math:`v_j` and :math:`v_k` and initialise their embeddings
-:math:`\phi_i`, :math:`\phi^{'}_j` and :math:`\phi^{'}_k`. First,
-initialize an array that will hold embeddings :math:`\phi_i` of each
+:math:`v_j` and :math:`v_k` and initialize their embeddings
+:math:`\phi_i`, :math:`\phi^{'}_j` and :math:`\phi^{'}_k`. First, we initialize an array that will hold embeddings :math:`\phi_i` of each
 node :math:`v_i\in V` with random points belonging to the Poincaré disk.
 
 .. code:: python
@@ -759,8 +751,8 @@ node :math:`v_i\in V` with random points belonging to the Poincaré disk.
         size=(karate_graph.n_nodes, dim)) * 0.2
 
 Next, to prepare the context nodes :math:`v_j` for each node
-:math:`v_i`, we compute random walks initialised from each :math:`v_i`
-up to some length (5 by default). The latter is done via a special
+:math:`v_i`, we compute random walks initialized from each :math:`v_i`
+up to some length (five by default). This is done via a special
 function within the ``Graph`` class. The nodes :math:`v_j` will be later
 picked from the random walk of :math:`v_i`.
 
@@ -786,19 +778,16 @@ previously defined probability distribution function
 `Numerically optimizing the loss function`
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Optimizing the loss function is performed numerically. At each iteration, we will compute the gradient of :math:`\mathcal{L}`.
-Then the graph nodes are moved in the direction pointed by the gradient.
+At each iteration, we will compute the gradient of :math:`\mathcal{L}`.
+The graph nodes are then moved in the direction pointed by the gradient.
 The movement of the nodes is performed by following geodesics in the
-gradient direction. The key to obtain an embedding representing
-accurately the dataset, is to move the nodes smoothly rather than by brutal
-movements. This is done by tuning the learning rate, such that at each
-epoch all the nodes made small movements.
+gradient direction. Practically speaking, the key to obtaining a representative embedding is to carefully tune the learning rate so that at each
+epoch all of the nodes make small movements.
 
-A first level loop iterates over the epochs, the table ``total_loss``
-will record the value of :math:`\mathcal{L}` at each iteration and help us track
-the minimization of :math:`\mathcal{L}`.
+A first level loop iterates over the epochs while the table ``total_loss``
+will record the value of :math:`\mathcal{L}` at each iteration.
 A second level nested loop iterates over each path in the previously
-computed random walks. Observing these walks, notice that nodes having
+computed random walks. Observing these walks, note that nodes having
 many edges appear more often. Such nodes can be considered as important
 crossroads and will therefore be subject to a greater number of
 embedding updates. This is one of the main reasons why random walks have
@@ -862,10 +851,8 @@ Riemannian exponential map is applied to find the new value of
     INFO: iteration 0 loss_value 1.819844
     INFO: iteration 14 loss_value 1.363593
 
-Figure :ref:`embeddingiterations` shows the graph embedding at different epochs with the true labels of each node
-whether belonging to a first or a second group. Notice
-how the converged embedding separates well the two clusters and is a quite accurate representation
-to be used for predicting the labels of each node.
+Figure :ref:`embeddingiterations` shows the graph embedding at different epochs with the true labels of each node represented with color. Notice
+how the converged embedding separates well the two clusters and is a quite useful representation for predicting the labels of each node.
 
 .. figure:: learning_graph_structured_data_h2_files/embedding_iterations.png
     :align: center
@@ -873,8 +860,8 @@ to be used for predicting the labels of each node.
 
     Embedding at different `epoch` iterations. :label:`embeddingiterations`
 
-Let us apply :math:`K`-means algorithm to label the nodes of the embedding in an unsupervized way.
-For this import the :math:`K`-means class, set the number of clusters and plot the results.
+Let us apply a :math:`K`-means algorithm to label the nodes of the embedding in an unsupervised way.
+For this, we import the :math:`K`-means class, set the number of clusters, and plot the results.
 
 .. code:: python
 
@@ -898,7 +885,7 @@ Figure :ref:`fig:kmeans` shows the true labels versus the predicted ones.
 Conclusion
 ----------
 
-This paper demonstrated the use of :code:`geomstats` to perform geometric learning on data that belong to manifolds. These tutorials, as well as many other learning examples on different manifolds, can be found at :code:`geomstats.ai`. We hope that this hands-on presentation of Geometric Learning will further democratize the use of differential geometry in the machine learning community.
+This paper demonstrated the use of :code:`geomstats` in performing geometric learning on data belonging to manifolds. These tutorials, as well as a great many other learning examples on a variety of manifolds, can be found at :code:`geomstats.ai`. We hope that this hands-on presentation of Geometric Learning will help to further democratize the use of differential geometry in the machine learning community.
 
 Acknowledgements
 ----------------
