@@ -893,7 +893,7 @@ Figure :ref:`fig:kmeans` shows the true labels versus the predicted ones.
     :align: center
     :scale: 50%
 
-    Known true labels on the right and predicted labels via :math:`K`-means. :label:`fig:kmeans`
+    True labels (left) and predicted labels (right) via :math:`K`-means. :label:`fig:kmeans`
 
 Conclusion
 ----------
