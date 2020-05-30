@@ -26,42 +26,6 @@ Introduction
 
    Example text.
 
-.. code-block:: python
-
-    def approach_three(vid_name, eigen_vals, outdir_path, k=10, 
-                   window=20, threshold=2): #10, 2
-    '''
-    Compute z-scores using a sliding window.
-    '''
-    eigen_vals_avgs = [np.mean(x) for x in eigen_vals]
-    moving_avgs = np.empty(shape=(eigen_vals.shape[0],),
-                           dtype=np.float)
-    moving_stds = np.empty(shape=(eigen_vals.shape[0],),
-                           dtype=np.float)
-    z_scores = np.empty(shape=(eigen_vals.shape[0],),
-                        dtype=np.float)
-    signals = np.empty(shape=(eigen_vals.shape[0],),
-                       dtype=np.float)
-    moving_avgs[:window] = 0
-    moving_stds[:window] = 0
-    z_scores[:window] = 0
-    for i in range(window, moving_avgs.shape[0]):
-        moving_avgs[i] = np.mean(eigen_vals_avgs[i - window:i])
-        moving_stds[i] = np.std(eigen_vals_avgs[i - window:i])
-        z_scores[i] = (eigen_vals_avgs[i] - moving_avgs[i]) 
-                      / moving_stds[i]
-
-    for i, score in enumerate(z_scores):
-        if score > threshold:
-            signals[i] = 1
-        elif score < threshold * -1:
-            signals[i] = -1
-        else:
-            signals[i] = 0
-
-    title = vid_name + ' Signals Plot'
-    plot(eigen_vals[:,:k], signals, title, True, outdir_path)
-
 Morphological perturbations of organellar structures inside cells are useful for characterizing infection patterns and, ultimately, developing therapies. In particular, tuberculosis, an infectious disease caused by Mycobacterium tuberculosis (Mtb), induces distinct structural changes of the mitochondria in invaded cells. :cite:`fc2015` This is significant because tuberculosis is responsible for approximately 1.5 million human fatalities annually, with growing resistance to currently antibacterial treatment regimens. :cite:`fc2015` Studying the changes in subcellular structures pre- versus post-infection will set the stage for genetic screens, whereby these changes can be studied under different mutations of the Mtb pathogen; with enough such studies and a subsequent understanding of how the Mtb pathogen affects its host, we can leverage that knowledge to develop tests, treatments, and vaccines.
 
 Modeling mitochondria is no trivial task; these organelles are amorphous, spatially diffuse structures, and their lack of rigidity renders traditional shape-based, parametric modeling techniques ineffective. Subsequently, early imaging analyses of mitochondrial structures relied solely on qualitative inspections of protein-stained cells. :cite:`durden18` However, purely qualitative approaches are error prone, and generate results that are difficult to reproduce. :cite:`durden18` These shortcomings have motivated many to research methodologies that quantitatively model the organelle and assess its dynamics. :cite:`durden18, song08, mitra10`
@@ -85,9 +49,84 @@ Temporal Anomaly Detection
 
 Detecting when morphology-altering events occur is an important aspect to understanding mitochondrial dynamics. Temporal indicators of organellar activity improve qualitative assessments of microscopy imagery by eliminating the need to manually inspect every frame, only those that immediately precede or succeed an anomalous event. Additionally, the effects of local events on the global mitochondrial structure are more distinct. [Refer to a figure displaying changes preceding and succeeding an event]. This process of indicating time points when distinct organellar activity is occurring is a temporal anomaly detection task. We addressed this task by utilizing the graph connectivity information provided by the eigenvalue vectors to detect anomalous behaviors. 
 
-Eigendecomposition of a social network results in a number of eigenvalue vectors and eigenvector matrices that correspond to the number of graph states that comprise the network. Because these vectors and matrices have a natural ordering, the information is essentially a time series dataset. We extract anomalous time points from the data by first computing the average of each eigenvalue vector, then indicating time points whose averages are statistical outliers. Outliers are determined by computing the z-score, or standard score, for every time point based on the distance between the average of its associated eigenvalue vector and the mean of a few preceding averages; if the distance exceeds some threshold value, typically two standard deviations, then it is considered an outlier. The number of preceding averages used is predetermined by a fixed window size. This fixed-sized sliding window approach enables adaptive thresholding values to be computed for declaring anomalous behavior that are derived from local morphological events, rather than a fixed global constant. [Refer to a code snippet]. 
+Eigendecomposition of a social network results in a number of eigenvalue vectors and eigenvector matrices that correspond to the number of graph states that comprise the network. Because these vectors and matrices have a natural ordering, the information is essentially a time series dataset. We extract anomalous time points from the data by first computing the average of each eigenvalue vector, then indicating time points whose averages are statistical outliers. Outliers are determined by computing the z-score, or standard score, for every time point based on the distance between the average of its associated eigenvalue vector and the mean of a few preceding averages; if the distance exceeds some threshold value, typically two standard deviations, then it is considered an outlier. The number of preceding averages used is predetermined by a fixed window size. This fixed-sized sliding window approach enables adaptive thresholding values to be computed for declaring anomalous behavior that are derived from local morphological events, rather than a fixed global constant. 
 
 In essence, this approach utilizes the eigenvalues to characterize the magnitude of spatial transformations experienced by the morphology. Therefore, morphology-altering events are likely to be discovered by highlighting time points where eigenvalue vectors are demonstrating anomalous behavior.
+
+.. code-block:: python
+
+   import numpy as np
+   import seaborn as sns
+   import matplotlib.pyplot as plt
+
+   def temporal_anomaly_detection(eigen_vals, window=20, 
+                                  threshold=2):
+    '''
+    Generates a figure comprised of a time-series plot
+    of the eigenvalue vectors, and an outlier detection 
+    signals plot.
+
+    Parameters
+    ----------
+    eigen_vals: NumPy array (NXM)
+        Matrix comprised of eigenvalue vectors. 
+        N represents the number of frames in the
+        corresponding video, and M is the number of
+        mixture components.
+    window: int
+        The size of the window to be used for anomaly 
+        detection.
+    threshold: float
+        Value used to determine whether a signal value
+        is anomalous.  
+
+    Returns
+    -------
+    '''
+    eigen_vals_avgs = [np.mean(x) for x in eigen_vals]
+    moving_avgs = np.empty(shape=(eigen_vals.shape[0],), 
+                           dtype=np.float)
+    moving_stds = np.empty(shape=(eigen_vals.shape[0],), 
+                           dtype=np.float)
+    z_scores = np.empty(shape=(eigen_vals.shape[0],), 
+                        dtype=np.float)
+    signals = np.empty(shape=(eigen_vals.shape[0],), 
+                       dtype=np.float)
+
+    moving_avgs[:window] = 0
+    moving_stds[:window] = 0
+    z_scores[:window] = 0
+    for i in range(window, moving_avgs.shape[0]):
+        moving_avgs[i] = \ 
+            np.mean(eigen_vals_avgs[i - window:i])
+        moving_stds[i] = \
+            np.std(eigen_vals_avgs[i - window:i])
+        z_scores[i] = \
+            eigen_vals_avgs[i] - moving_avgs[i]
+        
+        z_scores[i] /= moving_stds[i]
+
+    for i, score in enumerate(z_scores):
+        if score > threshold:
+            signals[i] = 1
+        elif score < threshold * -1:
+            signals[i] = -1
+        else:
+            signals[i] = 0
+
+    sns.set()
+    fig = plt.figure()
+    ax = fig.add_subplot(211)
+    ax.plot(eigen_vals)
+    ax.set_ylabel('Magnitude')
+    ax = fig.add_subplot(212)
+    ax.plot(z_scores)
+    ax.set_xlabel('Frame')
+    ax.set_ylabel('Signal')
+    plt.show()
+    plt.close()
+
+
 
 Spatial Anomaly Detection
 -------------------------
@@ -96,7 +135,99 @@ After indicating discrete times points where the morphology experienced signific
 
 Anomalous morphological behavior can be defined as spatial regions shifting suddenly, or major structural changes taking place in the underlying social network: edges being dropped or formed, nodes appearing or disappearing. The process of tracking such regions is, in essence, an object detection task because specific mitochondrial clusters are being monitored as the global structure evolves over time. By treating this task as such, we utilized bounding boxes to highlight the regions of significance. The coordinates of the bounding boxes were computed based on the pixel coordinates denoted by the GMMs that corresponded to the spatial locations of the mitochondrial clusters. Therefore, a bounding box can be displayed for each mitochondrial cluster determined by the GMM. However, rendering every bounding box can obfuscate the regions demonstrating anomalous behavior, so it is encouraged to display only the most significant regions for analysis.
 
-Regions demonstrating the most significant amount of structural variance are determined via analysis of the eigenvector matrices. The number of eigenvector matrices corresponds with the number of graph states recorded in the social network. Each row in an eigenvalue matrix is related to a mixture distribution, and by extension a spatial region of the imagery. To determine the regions demonstrating the most amount of variance, the total euclidean distance of each row vector between graph states is computed. [Refer to a code snippet]. Ultimately, the spatial regions that corresponded to the eigenvector rows demonstrating the highest amounts of variance were selected as regions of interest to be highlighted by the bounding boxes.
+Regions demonstrating the most significant amount of structural variance are determined via analysis of the eigenvector matrices. The number of eigenvector matrices corresponds with the number of graph states recorded in the social network. Each row in an eigenvalue matrix is related to a mixture distribution, and by extension a spatial region of the imagery. To determine the regions demonstrating the most amount of variance, the total euclidean distance of each row vector between graph states is computed. Ultimately, the spatial regions that corresponded to the eigenvector rows demonstrating the highest amounts of variance were selected as regions of interest to be highlighted by the bounding boxes.
+
+.. code-block:: python
+
+   import imageio
+   import numpy as np
+
+   def spatial_anomaly_detection(frames, means, covars, 
+                                 eigen_vecs, fps, size, 
+                                 outdir_path, std_threshold=3):
+    '''
+    Draws bounding boxes around the mixture component
+    regions demonstrating the most variance.
+
+    Parameters
+    ----------
+    frames: list
+        Video frames to be drawn on.
+    means: NumPy array (NxMx2)
+        Pixel coordinates corresponding to the mixture
+        component means. N is the number of video frames,
+        M the number of mixture components, and 2 denotes
+        the 2D pixel coordinate.
+    covars: NumPy array (NxMx2x2)
+        Covariance matrices of the guassian mixture 
+        components. N is the number of video frames,
+        M is the number of mixture components, and 2x2
+        denotes the covariance matrix.
+    eigen_vecs: NumPy array (NxMxM)
+        Eigenvector matrix. N represents the number of
+        frames in the corresponding video, M is the
+        number of mixture components.
+    fps: int
+        Frames per second of the video.
+    size: tuple (2,)
+        Width and height of the video.
+    outdir_path: string
+        Path to save the bounding box video.
+    std_threshold: float 
+        The number of standard deviations to use to compute
+        the spatial region of the bounding box. Default is
+        three.
+    '''
+
+    out_vid_path = os.path.join(
+        outdir_path, 'spatial_anomaly_detection.mp4'
+    )
+    box_color = (30, 144, 255)
+    distances = absolute_distance_traveled(eigen_vecs)   
+    descending_distances_indices = \
+        np.flip(np.argsort(distances))
+
+    with imageio.get_writer(out_vid_path, \
+                            mode='I', fps=1) as writer:
+        for i, frame in enumerate(tqdm(frames)):
+            for j in descending_distances_indices[:1]:
+                x_diff = std_threshold 
+                         * math.sqrt(covars[i][j][0][0])
+                y_diff = std_threshold 
+                         * math.sqrt(covars[i][j][1][1])
+                x_bounds = [
+                    int(means[i][j][0] - x_diff), 
+                    int(means[i][j][0] + x_diff)
+                ]
+                y_bounds = [
+                    int(means[i][j][1] - y_diff), 
+                    int(means[i][j][1] + y_diff)
+                ]
+
+                if x_bounds[0] < 0:
+                    x_bounds[0] = 0
+
+                if x_bounds[0] >= size[0]:
+                    x_bounds[0] = size[0] - 1;
+
+                if y_bounds[0] < 0:
+                    y_bounds[0] = 0
+
+                if y_bounds[1] >= size[1]:
+                    y_bounds[1] = size[1] - 1;
+                
+                frames[i, x_bounds[0]:x_bounds[1], \
+                       y_bounds[0], :] = box_color
+                frames[i, x_bounds[0]:x_bounds[1], \
+                       y_bounds[1], :] = box_color
+                frames[i, x_bounds[0], \
+                       y_bounds[0]:y_bounds[1], :] = \
+                       box_color
+                frames[i, x_bounds[1], \
+                       y_bounds[0]:y_bounds[1], :] = \
+                       box_color
+            
+            writer.append_data(frames[i])
 
 Data Acquisition
 ----------------
