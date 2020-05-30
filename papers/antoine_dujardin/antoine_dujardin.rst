@@ -251,7 +251,43 @@ In conclusion, implementing using numpy or numba naively gives significant impro
 Parallelization: effortless scaling with Pygion
 -----------------------------------------------
 
-<Placeholder>
+To parallelize and scale the application we use Pygion, a Python interface for the Legion task-based programming system :cite:`Slaughter2019`. In Pygion, the user decorates functions as *tasks*, and annotates task parameters with *privileges* (read, write, reduce), but otherwise need not be concerned with how tasks execute on the underlying machine. Pygion infers the dependencies between tasks based on their privileges and the values of arguments passed to tasks, and ensures that the program executes correctly, even when running on a parallel and distributed supercomputer.
+
+To enable the task-based system, it is necessary to separate the data handling from the data itself. This reification of the data flow is achieved by declaring *regions*, similar to multi-dimensional Pandas dataframes :cite:`McKinney2010`. Regions contain *fields*, each of which being similar to and exposed as a numpy array. Regions can be partitioned into subregions, which can be processed by different tasks, allowing the parallelism.
+
+We scale up to 64 nodes of NERSC’s Cori Haswell using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion scales out of the box as it manages the load-balancing and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
+
+.. figure:: scaling_merged.png
+
+   Weak scaling behavior on Cori Haswell with Lustre filesystem (top) and Burst Buffer (bottom). :label:`fig:scaling`
+
+As an example, the most computationally intensive part is the :math:`C_2(q, q\prime, \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
+However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
+Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case (MPI+MPI), we use MPI to parallelize between nodes and within a node. To take the present optimization into account, one would have to create a 2-level structure like::
+
+  In each node:
+    Define node-level communicator
+    In each rank:
+      Receive and pre-process some stacks of images
+    All-to-all exchange from stacks of images
+      to angular sections
+    In each rank:
+      Process the received angular section
+
+In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with
+
+.. code-block:: python
+
+  @task(privileges=[...])
+  def node_level_task(...):
+      for i, batch in enumerate(data_batches):
+          preprocess(input_=batch,
+                     output=A_image_partition[i])
+      for i in range(NUMBER_OF_PROCESSES):
+          process(input_=A_angular_partition[i],
+                  output=C2_angular_partition[i])
+
+where the data exchange is implied by the image-axis partition :code:`A_image_partition` and the angular-axis partition :code:`A_angular_partition` of the same region :code:`A`.
 
 Results
 -------
