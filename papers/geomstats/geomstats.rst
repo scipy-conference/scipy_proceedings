@@ -451,23 +451,23 @@ We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classific
 
 We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
 
-Tutorial: Learning graph representations with Hyperbolic spaces
+Tutorial: Learning Graph Representations with Hyperbolic Spaces
 ---------------------------------------------------------------
 
 Hyperbolic spaces and machine learning applications
 ***************************************************
 
-Before going into this tutorial, let us recall a few applications of hyperbolic spaces
+Before going into this tutorial, let us review a few applications of hyperbolic spaces
 in the machine learning literature. Hyperbolic spaces arise in information and
 learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher
 metric densities is a hyperbolic space :cite:`1531851`. This characterization
-is used in various fields, such as in image processing, where each image pixel is
+is used in various fields, such as in image processing, where each image pixel can be
 represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
-processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. The hyperbolic spaces can
-also be stanfordeen as continuous versions of trees and are
-therefore interesting when learning hierarchical representations of data
-:cite:`Nickel2017`. Hyperbolic geometric graphs (HGG) have also been suggested
-as a promising model for social networks, where the hyperbolicity appears through
+processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. Hyperbolic spaces can
+also be seen as continuous versions of trees and are
+therefore interesting when learning representations of hierarchical data
+:cite:`Nickel2017`. Hyperbolic Geometric Graphs (HGG) have also been suggested
+as a promising model for social networks--where the hyperbolicity appears through
 a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
 and in learning communities on large graphs :cite:`gerald2019node`.
 
