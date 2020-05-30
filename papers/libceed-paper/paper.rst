@@ -1,6 +1,7 @@
 :author: Valeria Barra
 :email: valeria.barra@colorado.edu
 :institution: University of Colorado Boulder
+:corresponding:
 
 :author: Jed Brown
 :email: jed@jedbrown.org
