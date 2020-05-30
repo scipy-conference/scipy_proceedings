@@ -1,10 +1,44 @@
 :author: Marcus Hill
 :email: marcdh@uga.edu
-:institution: Department of Computer Science, University of Georgia, Athens, Ga 30602
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
 
-:author: Dr. Shannon Quinn 
+:author: Mojtaba Fazli
+:email: Mojtaba@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+
+:author: Rachel Mattson
+:email: rachel.mattson@uga.edu
+:institution: Department of Cognitive Science, University of Georgia, Athens, GA 30602 USA
+
+:author: Andrew Durden
+:email: andrewdurden@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+
+:author: Allyson T Loy
+:email: allyson.loy@uga.edu
+:institution: Department of Microbiology, University of Georgia, Athens, GA 30602 USA
+
+:author: Barbara Reaves
+:email: bjreaves@uga.edu
+:institution: Department of Infectious Diseases, University of Georgia, Athens, GA 30602 USA
+
+:author: Abigail Courtney
+:email: abigail.courtney@uga.edu
+:institution: Department of Microbiology, University of Georgia, Athens, GA 30602 USA
+
+:author: Frederick D Quinn
+:email: fquinn@uga.edu
+:institution: Department of Infectious Diseases, University of Georgia, Athens, GA 30602 USA
+
+:author: S Chakra Chennubhotla
+:email: chakracs@pitt.edu
+:institution: Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA 15232 USA
+
+:author: Shannon P Quinn
 :email: spq@uga.edu
-:institution: Department of Computer Science, University of Georgia, Athens, Ga 30602
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:institution: Department of Cellular Biology, University of Georgia, Athens, GA 30602 USA
+
 :corresponding:
 
 :bibliography: paper
