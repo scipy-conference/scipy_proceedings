@@ -313,7 +313,10 @@ the above algorithm.
 
 The annotate decorator is used to specify types of arguments and
 the declare function is used to specify types of variables
-declared in the function. This can be avoided by using the JIT
+declared in the function. Compyle also supports Python3 style
+type annotations using the types defined in :code:`compyle.types`.
+
+Specifying types can be avoided by using the JIT
 compilation feature which infers the types of arguments and
 variables based on the types of arguments passed to the function
 at runtime. Following is the implementation of steps 2 and 3
@@ -378,14 +381,32 @@ class and called as normal python functions.
         step2 = Elementwise(step_method2,
                             backend=self.backend)
 
+One can also use the :code:`@elementwise` decorator on the step
+functions and those can then be directly called without having to
+wrap them using :code:`Elementwise`.
+
+The simulation can then be executed simply as follows,
+
+.. code-block:: python
+
+    Initialize x, y
+    Initialize vx, vy, fx, fy, pe to zeros
+
+    num_steps = int(t // dt)
+    for i in range(num_steps):
+        step1(x, y, vx, vy, fx, fy, pe, xmin, xmax,
+              ymin, ymax, m, dt, self.num_particles)
+        step2(x, y, vx, vy, fx, fy, pe, xmin, xmax, 
+              ymin, ymax, m, dt, self.num_particles)
+        curr_t += dt
+
+We have used a fixed wall non-periodic boundary condition for our 
+implemetation.
+The details on the implementation of the boundary condition can
+be found in the example section of compyle's github page.
 
 - Elaborate a little bit about the annotation decorator. Mention that Python3
   type annotation also works.
-- Mention the ``@elementwise`` decorator.
-
-
-- Create the arrays at this point and complete the program showing how to
-  run the code -- pseudo code should do.
 
 
 Reduction
@@ -425,9 +446,30 @@ reduction operator in compyle.
 Initial Results
 ~~~~~~~~~~~~~~~~~
 
-Show the results of the above work, along with simple comparisons on CPU and
-GPU.
+.. figure:: sim.png
 
+    Snapshot of simulation with 500 particles
+
+.. figure:: openmp.png
+
+    Speed up over serial cython using OpenMP.
+
+.. figure:: gpu.png
+   
+    Speed up over serial cython using CUDA and OpenCL.
+
+Figure ?? shows a snapshot of simulation using 500 particles
+and bounding box size 50 with a non-periodic boundary
+condition.
+
+For evaluating our performance, we ran our implementation on a dual core 
+Intel Core i5 processor and an NVIDIA Tesla T4 GPU. 
+We used :math:`dt = 0.02` and ran the simulation
+for 25 timesteps.
+Figures ?? and ?? show speedup acheived over serial
+execution using Cython by using OpenMP, OpenCL and CUDA.
+
+- Figure out these labels
 
 Scans
 ~~~~~
@@ -436,7 +478,6 @@ Scans
   LJ problem.
 
 - Show a simpler example first to illustrate the ideas.
-
 
 Scans are generalizations of prefix sums / cumulative sums and can be used as
 building blocks to construct a number of parallel algorithms. These include but
