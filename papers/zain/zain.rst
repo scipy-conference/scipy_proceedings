@@ -499,7 +499,9 @@ Dynamics
 ========
 
 .. figure:: aag.png
-	:scale: 20%
+	:scale: 50%
+	:align: center
+	:figclass: w
 	
 	The Dynamics Module pipeline :label:`dyn`
 
@@ -540,7 +542,7 @@ and would then constitute a latent vector in the dynamics semantic space :math:`
 The dynamics decoder LSTM :math:`D_\text{dyn}` starts from from a latent dynamics vector as its hidden 
 state :math:`s_\text{dec}^0=w`, a blank output state vector :math:`h_\text{dec}^0=0` and an initial 
 supplied appearance vector to act as the beginning output frame. Note that this supplied vector can be 
-any point but the last within the original input sequence, thus we write :math:`\hat z_0 = z_i\text{ for some }i\in\{1,\dots,n-1\}`. 
+any point but the last within the original input sequence, thus we set :math:`\hat z_0 = z_i\text{ for some }i\in\{1,\dots,n-1\}`. 
 Applying each step results in a change vector :math:`c^{t+1}=h^{t+1}` (output state vector), that gets 
 applied to the most recent appearance vector in the output sequence to predict the next appearance vector 
 :math:`\hat z_{t+1}=\phi(\hat z_t,c^{t+1})`, which in turn is used as an input vector to the next LSTM step. 
