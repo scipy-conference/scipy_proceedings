@@ -128,7 +128,7 @@ by time shifting and truncating and then sampling by letting
 Residual errors at the matched filter output when using a simple
 truncated square-root raised cosine (SRC) finite impulse response (FIR)
 are noted in both [Harris]_ and [Xing]_. Later in this paper we make the filter
-length :math:`\pm 6` symbols in duration, but also make this a design
+length :math:`\pm 8` symbols in duration, but also make this a design
 parameter as shown in Figure :ref:`SRCresidual`.
 
 .. figure:: Residual_compare_4QAM.pdf
@@ -422,34 +422,143 @@ Results
 -------
 
 Detailed performance scenarios are being compiled and will be presented
-in both plots and tables. A sample of two result types: (A) without
-equalization and (B) with equalization are given below.
+in both plots and tables. First we overview three digital communications waveforms characterization approaches. 
+Then we consider in detail filter mismatch in MPSK followed by MQAM. Equalization is not included in these 
+first two studies. Next we consider how a short length equalizer can be employed to  mitigate the mismatch 
+performance losses, at increased system complexity.
 
-Without Equalization
-====================
+Characterizing Digital Communications at the Waveform Level
+===========================================================
 
-Start with basic compare of 0.25/0.35 32MPSK. From a Jupyter notebook we
-execute the following to produce the BEP performance plot of
-Figure :ref:`32MPSK25to35` and obtain :math:`E_b/N_0` degradation in
-dB at a BEP threshold of :math:`10^{-6}`:
+The results of this paper are displayed using three common digital communication characterization techniques: 
+*IQ Diagrams*, *eye diagrams*, and *bit error probability* (BEP) versus received signal energy-to-noise power 
+spectral density (:math:`E_b/N_0`) curves.
 
+IQ Diagrams 
+^^^^^^^^^^^
+An IQ diagram is a representation of a signal modulated by a digital modulation scheme such
+as MQAM or MPSK. It displays the signal as a two-dimensional :math:`xy`-plane scatter diagram in
+the complex plane at symbol sampling instants. The angle of a point, measured counterclockwise from the 
+horizontal axis, represents the phase shift of the carrier wave from a reference phase. The distance of 
+a point from the origin represents a measure of the amplitude or power of the signal.
+The number of IQ points in a diagram gives the size of the *alphabet* of symbols that can be transmitted 
+by each sample, and so determines the number of bits transmitted per sample. For the purposed of this paper 
+it will be a power of 2. A diagram with four points, for example, represents a modulation scheme that can 
+separately encode all 4 combinations of two bits: 00, 01, 10, and 11 and so can transmit two bits per sample. 
+Figure :ref:`IQdiagram` shows an 8-PSK IQ Diagram.
 
-.. figure:: BEP_32PSK_25to35_5d_plt.pdf
+.. figure:: IQ_plot_defined.pdf
    :scale: 65%
    :align: center
    :figclass: htb
-   
 
-   32PSK BEP with 0.25/0.35 mismatch and no equalizer. :label:`32MPSK25t035`
+   8-PSK IQ Diagram shows information is transmitted as one of 8 symbols, each representing 3 bits of data. 
+   :label:`IQdiagram` 
 
-The degradation is less than 0.5 dB for this rather small mismatch ratio
-of 0.25/0.35. For a larger mismatch ratio the degradation will increase
-rapidly, forcing the use of an equalizer should better knowledge of the
-transmit excess bandwidth factor not be available at the receiver.
+Eye Diagrams
+^^^^^^^^^^^^
 
-A tabular summary of mismatch losses for both MPSK and MQAM can be found respectively in Table :ref:`mismatchloss1` 
-and Table :ref:`mismatchloss2`.
-   
+An eye diagram is a tool for the evaluation of the combined effects of channel noise and inter-symbol interference 
+(ISI) on the performance of a channel. Several system performance measures can be derived by analyzing the display. 
+If the signals are too long, too short, poorly synchronized with the system clock, too high, too low, too noisy, 
+or too slow to change, or have too much undershoot or overshoot, this can be observed from the eye diagram. An open 
+eye pattern corresponds to minimal signal distortion. Distortion of the signal waveform due
+to ISI and noise appears as closure of the eye pattern. The waveform is complex so the eye diagram shows either the 
+real part or the imaginary part of the signal. The tight waveform bundles of the eye diagram correspond to the scatter 
+points of the IQ diagram. For the purposes of this paper we will be looking at 
+the closure of the eye pattern as the mismatch of the filters increases. The left eye pattern of Figure :ref:`EYEdiagram` is an 
+example of an *open-eye* with respect sampling instant 10 while the eye patter on the right is *partially closed* (degraded).
+
+
+.. figure:: EYE_diagram_defined.pdf
+   :scale: 62%
+   :align: center
+   :figclass: htb
+
+   4PSK eye diagram: perfect channel (left), channel distortions present (right), both assuming 10 samples per symbol. 
+   :label:`EYEdiagram`
+
+
+Bit Error Probability (BEP) Curves
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In digital transmission, the number of bit errors is the number of received bits over a communication channel that 
+have been altered due to noise, interference, distortion (improper filtering), carrier phase tracking errors, and bit 
+synchronization errors. The bit error probability (BEP) in a practical setting 
+is the number of bit errors divided by the total number 
+of transferred bits during a studied time interval. The BEP curves are plotted as 
+:math:`\log_{10} P_e` versus the received :math:`E_b/N_0`. BEP curves are often compared to theory curves to measure 
+how impairments in the end-to-end transmission path, including the demodulator (think symbol classifier), increases 
+the BEP for a given operating scenario. In a Wireless LAN or cable modem, for example, a low BEP is required to insure 
+reliable information exchange. A large :math:`M` is used here to send a large number of bits per second, per Hz of bandwidth.
+BEP curves were first utilized in Figure :ref:`BEPMPSKcompare`.
+
+
+Effects of Mismatch Filtering on MPSK
+=====================================
+
+To limit the amount of data presented to the reader the figures shown for MPSK have a constant :math:`\alpha_\text{tx} = .25` while varying 
+:math:`\alpha_\text{rx} = .3`, .4, and  .5. Later we provide degradation results over a range of :math:`\alpha_\text{tx}` and 
+:math:`\alpha_\text{rx}` scenarios. Figure :ref:`IQsetMPSK` shows IQ Diagrams across orders of :math:`M` while varying :math:`\alpha_\text{rx}`. 
+The IQ Diagrams plot the received symbols of the ideal matched filter system overlaid with the received symbols of a 
+mismatched filter system. 
+The left column shows that a small mismatch results in minimal error with every symbol being clearly defined, even at 32PSK. 
+However, on the far right we see a more extreme case of mismatch filtering resulting in more ISI. With less separation 
+between symbols it is expected that higher orders of :math:`M` are more affected by mismatch filtering.
+
+
+.. figure:: IQ_diagram_set_MPSK.pdf
+   :scale: 110%
+   :align: center
+   :figclass: w
+
+   Two rows of IQ Diagrams showing the effects of mismatch filtering; The order of :math:`M` increases with row number, 
+   :math:`M=4, 8, 16, 32`; :math:`\alpha_\text{tx} = .25` across all columns, while :math:`\alpha_\text{rx}` increases with 
+   column number as .3, .4, .5. :label:`IQsetMPSK`
+
+
+Figure :ref:`BEPsetMPSK` shows a row of BEP curves for :math:`M=16` while varying :math:`\alpha_\text{rx}`. The BEP Curves 
+show how mismatch filtering affects :math:`P_E` across :math:`E_b/N_0` while comparing it to a theory curve. Each curve 
+plots the theory curve for the modulation type, a SA-BEP curve with a perfect matched filter, and a SA-BEP Curve that varies 
+:math:`\alpha_\text{rx}` with a constant :math:`\alpha_\text{tx}`. These results of this s ingle follow the first row of IQ 
+diagrams presented in Figure :ref:`IQsetMPSK`. On the left we see a small mismatch results in minimal error with all three 
+curves tightly together. On the right we a large degradation, denoted as the increase in :math:`E_b/N_0` to achieve the same 
+:math:`P_E` with perfect matched filter.
+
+.. figure:: BEP_curve_set_MPSK.pdf
+   :scale: 110%
+   :align: center
+   :figclass: w
+
+   One row of BEP Curves showing the effects of mismatch filtering; Here :math:`M` is fixed at 16; :math:`\alpha_\text{tx} = .25` 
+   across the columns, while :math:`\alpha_\text{rx}` increases with column number as excess bandwidth factors of 
+   .3, .4, .5. :label:`BEPsetMPSK`
+
+
+Figure :ref:`EYEsetMPSK` shows one row of eye diagrams across for :math:`M=8` while varying :math:`\alpha_\text{rx}`. The eye diagrams show 
+the effects of the added ISI introduced by mismatched filtering at the maximum eye opening sampling instant of the symbols. 
+The same pattern of Figures :ref:`IQsetMPSK` and :ref:`BEPsetMPSK` are seen here in terms of eye diagrams: a wide eye on 
+the left side at the sampling instance meaning less ISI and noise. While on the right side the ISI begins to close the eye. 
+Not shown here, higher orders of :math:`M` are more perturbed by the introduction of mismatch filtering.
+
+.. figure:: EYE_diagram_set_MPSK.pdf
+   :scale: 110%
+   :align: center
+   :figclass: w
+
+   One row of of eye diagrams showing the effects of mismatch filtering; here :math:`M` is fixed at 8; 
+   :math:`\alpha_\text{tx} = .25` across the columns, while :math:`\alpha_\text{rx}` increases with column number 
+   as  excess bandwidth factors of .3, .4, .5. :label:`EYEsetMPSK`
+
+
+Table :ref:`mismatchloss1` shows the degradation over various BEP threshold values of 
+:math:`\{10^{-5},10^{-6},10^{-7},10^{-8},10^{-9}\}`, :math:`M = 4`, 8, 16, and 32, and 
+many combinations of :math:`\alpha_\text{tx}/\alpha_\text{rx}\in [1/2, 2]`. The degradation is the measured 
+shift in :math:`E_b/N_0` in dB between ideal theory and a system with filter mismatch at a particular BEP threshold. 
+As :math:`M` increases and :math:`\alpha_\text{tx}/\alpha_\text{rx}` moves above or below 1 the 
+degradation gets worse. With the worse degradation happening at :math:`M = 32` and 
+:math:`\alpha_\text{tx}/\alpha_\text{rx}` reaching the extremes of 1.2 and 2. Note degradation values 
+of less than 0.01 dB are considered insignificant and are entered in the table as zero values. 
    
 .. table:: MPSK degradation resulting from filter mismatch. :label:`mismatchloss1`
    :class: w
@@ -492,18 +601,23 @@ and Table :ref:`mismatchloss2`.
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
    | 16 | :math:`10^{-9}`                   | 1.58e-2 | 8.09e-2 | 2.71e-1 | 6.18e-1 | 1.11e+0 | 1.58e-2 | 8.10e-2 | 2.71e-1 | 6.18e-1 | 1.11e+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-   | 32 | :math:`10^{-5}`                   | 2.89e-2 | 1.46e-1 | 5.06e-1 | 1.22e+0 | 2.38e+0 | 2.90e-2 | 1.46e-1 | 5.06e-1 | 1.22e+0 | 2.54E+0 |
+   | 32 | :math:`10^{-5}`                   | 2.89e-2 | 1.46e-1 | 5.06e-1 | 1.22e+0 | 2.38e+0 | 2.90e-2 | 1.46e-1 | 5.06e-1 | 1.22e+0 | 2.38E+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-   | 32 | :math:`10^{-6}`                   | 3.72e-2 | 1.86e-1 | 6.43e-1 | 1.55e+0 | 3.04e+0 | 3.73e-2 | 1.86e-1 | 6.43e-1 | 1.55e+0 | 2.96E+0 |
+   | 32 | :math:`10^{-6}`                   | 3.72e-2 | 1.86e-1 | 6.43e-1 | 1.55e+0 | 3.04e+0 | 3.73e-2 | 1.86e-1 | 6.43e-1 | 1.55e+0 | 3.04E+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-   | 32 | :math:`10^{-7}`                   | 4.56e-2 | 2.26e-1 | 7.80e-1 | 1.87e+0 | 3.65e+0 | 4.56e-2 | 2.26e-1 | 7.80e-1 | 1.87e+0 | 3.83E+0 |
+   | 32 | :math:`10^{-7}`                   | 4.56e-2 | 2.26e-1 | 7.80e-1 | 1.87e+0 | 3.65e+0 | 4.56e-2 | 2.26e-1 | 7.80e-1 | 1.87e+0 | 3.64E+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-   | 32 | :math:`10^{-8}`                   | 5.40e-2 | 2.67e-1 | 9.14e-1 | 2.18e+0 | 4.17e+0 | 5.40e-2 | 2.67e-1 | 9.14e-1 | 2.18e+0 | 4.07E+0 |
+   | 32 | :math:`10^{-8}`                   | 5.40e-2 | 2.67e-1 | 9.14e-1 | 2.18e+0 | 4.17e+0 | 5.40e-2 | 2.67e-1 | 9.14e-1 | 2.18e+0 | 4.17E+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-   | 32 | :math:`10^{-9}`                   | 6.24e-2 | 3.07e-1 | 1.04e+0 | 2.46e+0 | 4.61e+0 | 6.25e-2 | 3.07e-1 | 1.04e+0 | 2.46e+0 | 4.37E+0 |
+   | 32 | :math:`10^{-9}`                   | 6.24e-2 | 3.07e-1 | 1.04e+0 | 2.46e+0 | 4.61e+0 | 6.25e-2 | 3.07e-1 | 1.04e+0 | 2.46e+0 | 4.61E+0 |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
    | \* degradation less than 0.01 dB; Tx/Rx Pulse Shape Span = :math:`\pm 8` symbols                                                           |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
+
+Effects of Mismatch Filtering on MQAM
+=====================================
+
 
 
 .. table:: MQAM degradation resulting from filter mismatch. :label:`mismatchloss2`
@@ -521,7 +635,7 @@ and Table :ref:`mismatchloss2`.
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | 4   | :math:`10^{-6}`                   | 0\*      | 0\*      | 1.26e-2 | 3.00e-2 | 5.50e-2 | 0\*      | 0\*      | 1.26e-2 | 3.00e-2 | 5.50e-2 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 4   | :math:`10^{-7}`                   | 0\*      | 0\*      | 1.53e-2 | 3.60e-2 | 6.59e-2 | 0\*      | 0\*      | 1.53e-2 | 3.60e-2 | 6.59e-2 |
+   | 4   | :math:`10^{-7}`                   | 0\*      | 0\*      | 1.53e-2 | 3.61e-2 | 6.59e-2 | 0\*      | 0\*      | 1.53e-2 | 3.60e-2 | 6.59e-2 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | 4   | :math:`10^{-8}`                   | 0\*      | 0\*      | 1.79e-2 | 4.21e-2 | 7.67e-2 | 0\*      | 0\*      | 1.79e-2 | 4.21e-2 | 7.67e-2 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
@@ -539,7 +653,7 @@ and Table :ref:`mismatchloss2`.
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | 64  | :math:`10^{-5}`                   | 3.80e-2  | 8.87e-2  | 2.40e-1 | 5.29e-1 | 9.67e-1 | 3.80e-2  | 8.87e-2  | 2.40e-1 | 5.29e-1 | 9.67e-1 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 64  | :math:`10^{-6}`                   | 4.16e-2  | 1.05e-1  | 2.96e-1 | 6.60e-1 | 1.21e+0 | 4.16e-2  | 1.05e-1  | 2.96e-1 | 6.60e-1 | 1.21e+0 |
+   | 64  | :math:`10^{-6}`                   | 4.17e-2  | 1.05e-1  | 2.96e-1 | 6.60e-1 | 1.21e+0 | 4.16e-2  | 1.05e-1  | 2.96e-1 | 6.60e-1 | 1.21e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | 64  | :math:`10^{-7}`                   | 4.53e-2  | 1.22e-1  | 3.51e-1 | 7.89e-1 | 1.46e+0 | 4.53e-2  | 1.22e-1  | 3.51e-1 | 7.89e-1 | 1.46e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
@@ -547,15 +661,15 @@ and Table :ref:`mismatchloss2`.
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | 64  | :math:`10^{-9}`                   | 5.25e-2  | 1.56e-1  | 4.61e-1 | 1.04e+0 | 1.92e+0 | 5.25e-2  | 1.56e-1  | 4.61e-1 | 1.04e+0 | 1.92e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 256 | :math:`10^{-5}`                   | 3.85e-2  | 2.44e-1  | 8.86e-1 | 2.27e+0 | 5.06e+0 | 1.24E-1  | 2.44e-1  | 8.86e-1 | 2.27e+0 | 5.06e+0 |
+   | 256 | :math:`10^{-5}`                   | 3.83e-2  | 2.44e-1  | 8.86e-1 | 2.27e+0 | 5.06e+0 | 3.85E-2  | 2.44e-1  | 8.86e-1 | 2.27e+0 | 5.06e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 256 | :math:`10^{-6}`                   | 5.25e-2  | 3.13e-1  | 1.14e+0 | 2.98e+0 | 7.24e+0 | 1.68E-1  | 3.13e-1  | 1.14e+0 | 2.98e+0 | 7.24e+0 |
+   | 256 | :math:`10^{-6}`                   | 5.23e-2  | 3.13e-1  | 1.13e+0 | 2.98e+0 | 7.24e+0 | 5.25E-2  | 3.13e-1  | 1.14e+0 | 2.98e+0 | 7.24e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 256 | :math:`10^{-7}`                   | 6.66e-2  | 3.83e-1  | 1.39e+0 | 3.72e+0 | 9.92e+0 | 3.21E-2  | 3.83e-1  | 1.39e+0 | 3.72e+0 | 9.92e+0 |
+   | 256 | :math:`10^{-7}`                   | 6.64e-2  | 3.83e-1  | 1.39e+0 | 3.72e+0 | 9.92e+0 | 6.66E-2  | 3.83e-1  | 1.39e+0 | 3.72e+0 | 9.96e+0 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 256 | :math:`10^{-8}`                   | 8.08e-2  | 4.53e-1  | 1.64e+0 | 4.48e+0 | 1.17e+1 | -3.30E-2 | 4.53e-1  | 1.64e+0 | 4.48e+0 | 1.17e+1 |
+   | 256 | :math:`10^{-8}`                   | 8.06e-2  | 4.52e-1  | 1.64e+0 | 4.48e+0 | 1.17e+1 | 8.08E-2  | 4.53e-1  | 1.64e+0 | 4.48e+0 | 1.17e+1 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
-   | 256 | :math:`10^{-9}`                   | 9.50e-2  | 5.22e-1  | 1.89e+0 | 5.18e+0 | 1.28e+1 | 5.65E-2  | 5.22e-1  | 1.89e+0 | 5.18e+0 | 1.28e+1 |
+   | 256 | :math:`10^{-9}`                   | 9.47e-2  | 5.22e-1  | 1.89e+0 | 5.18e+0 | 1.28e+1 | 9.50E-2  | 5.22e-1  | 1.89e+0 | 5.18e+0 | 1.28e+1 |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    | \* degradation less than 0.01 dB; Tx/Rx Pulse Shape Span = :math:`\pm 8` symbols                                                                |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
@@ -589,8 +703,27 @@ bandwidth factor ratio is rather large, i.e., 0.25/0.5.
 Conclusion and Planned Extensions
 ---------------------------------
 
-A few results are included in this draft, but more will be provided in
-the final version.
+The effects of mismatch filtering on lower orders of :math:`M` in both MPSK and MQAM, in particular 
+:math:`M = 4`, are almost negligible. With greater than .1dB :math:`E_b/N_0` degradation with the 
+:math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio reaching the extremes of 1/2 and 2. The effects of mismatch 
+filtering grow drastically as :math:`M` increases and the BEP threshold point increases.
+
+.. By comparing the eye diagrams of :math:`M = 32` in MPSK and :math:`M=256` in MQAM (not shown in this paper) 
+   between 𝛼wG =.3 𝑡𝑜 𝛼wG = .5 you can see a clear separation and an eye opening to a distorted eye opening with obvious ISI. 
+   This is the expected results, as you send more data per symbol and you increase the magnitude of the 
+   mismatch you would expect the degradation to increase.
+ 
+One interesting observation is the IQ Diagrams show that the symbol clusters with mismatch are not 
+circularly symmetric about the ideal symbol points. In general these *cluster clouds*, which we know result 
+from ISI, appear biased toward the center of the IQ diagram. Characterizing the cluster cloud probability 
+density function could serve as an alternative to SA-BEP technique presented in this paper.  
+
+The use of SA-BEP modeling allowed this data to be quickly compiled and be easily repeatable. 
+The code could quickly be modified to run any combination of MPSK,
+:math:`\alpha_\text{tx}/\alpha_\text{rx}` and present the data in any of the above formats. A purpose of this paper 
+was reproducible science, for not only the Author to be able to run the code but for any user to use the created 
+code for their purposes and produce the same results. The use of SA-BEP modeling paired with the power 
+and flexibility of object-oriented Python running in Jupyter notebooks accomplishes this goal.
 
 Planned extensions include degradations due to phase jitter, static
 phase error, and timing errors.
@@ -599,7 +732,7 @@ phase error, and timing errors.
 Acknowledgment
 --------------
 
-The author wishes to thank Jim Rasmussen for generating interest in this
+The first author wishes to thank Jim Rasmussen for generating interest in this
 topic and related discussions that have taken place over the last few
 years working at Cosmic AES.
 
@@ -627,10 +760,6 @@ References
 .. [Wickert1] M. Wickert, “Scikit-dsp-comm: a collection of functions and classes to support signal processing and communications theory teaching and research,” https://github.com/mwickert/scikit-dsp-comm. 
 
 .. [Wickert2] M. Wickert, “Matched filter mismatch losses: a Python sofware repository”, https://github.com/mwickert/Matched_Filter_Mismatch_Losses.
-
-.. [Fitzpatrick] Fitzpatrick, W., Wickert, M., and Semwal, S. (2013) 3D Sound Imaging with Head Tracking, *Proceedings IEEE 15th Digital Signal Processing Workshop/7th Signal Processing Education Workshop*.
-
-.. [Beranek] Beranek, L. and Mellow, T (2012). *Acoustics: Sound Fields and Transducers*. London: Elsevier.
 
 .. _`https://github.com/mwickert/scikit-dsp-comm`: https://github.com/mwickert/scikit-dsp-comm
 
