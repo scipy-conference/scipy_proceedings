@@ -429,7 +429,7 @@ reconstruction of the pseudo-input responsible for that posterior distribution.
 .. figure:: pseudoComparisonHorizontal.png
 	:scale: 20%
 	
-	Pseudo-inputs of a VampPrior based VAE on MNIST without additional regularization term (top row), and with regularization term (bottom row) :label:`pseudo`
+	Pseudo-inputs of a VampPrior based VAE on MNIST without additional regularization term (top row), and with regularization term (bottom row) :label:`pseudos`
 
 Appearance
 ==========
