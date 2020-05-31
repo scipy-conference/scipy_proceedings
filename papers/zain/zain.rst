@@ -434,10 +434,6 @@ reconstruction of the pseudo-input responsible for that posterior distribution.
 Appearance
 ==========
 
-.. figure:: app.png
-	:scale: 30%
-	
-	The Appearance Module pipeline :label:`app`
 
 The appearance module's role is to learn a sufficient representation so that, frames are 
 reconstructed accurately on an individual basis, and that spatial differences of frames 
@@ -492,6 +488,11 @@ is trained to reconstruct the input from a sampled :math:`z \sim \mathcal{N}(\mu
 by minimizing the :math:`L2` loss between the input and the reconstructed output. The pseudo-inputs 
 :math:`\chi_{1..k}` are only used during the training, to enforce the prior constraint through a 
 Monte Carlo estimation of the KL-divergence, as mentioned earlier.
+
+.. figure:: app.png
+	:scale: 30%
+	
+	The Appearance Module pipeline :label:`app`
 
 
 
