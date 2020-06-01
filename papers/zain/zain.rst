@@ -286,7 +286,7 @@ Both the appearance and dynamics modules ultimately rely on a choice of a partic
 The chosen model greatly affects the rendered representation, and thus the efficacy of the entire 
 pipeline. Our current choice of generative model is a variational autoencoder (VAE) 
 [Kingma and Welling, 2014], an architecture that generates a low-dimensional representation of 
-the data, parameterized as a probability distribution. A VAE can be considered a modified autoencoder 
+the data, parameterized as a probability distribution:cite:`kingma2013auto`. A VAE can be considered a modified autoencoder 
 (AE). A general autoencoder (AE) attempts to learn a low-dimensional representation of the data by 
 enforcing a so-called "bottleneck" in the network. This bottleneck is usually in the form of a 
 hidden layer whose number of nodes is significantly smaller than the dimensionality of the input. 
