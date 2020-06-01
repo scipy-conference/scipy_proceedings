@@ -498,9 +498,9 @@ Effects of Mismatch Filtering on MPSK
 =====================================
 
 To limit the amount of data presented to the reader the figures shown for MPSK have a constant :math:`\alpha_\text{tx} = .25` while varying 
-:math:`\alpha_\text{rx} = .3`, .4, and  .5. Later we provide degradation results over a range of :math:`\alpha_\text{tx}` and 
-:math:`\alpha_\text{rx}` scenarios. Figure :ref:`IQsetMPSK` shows IQ Diagrams across orders of :math:`M` while varying :math:`\alpha_\text{rx}`. 
-The IQ Diagrams plot the received symbols of the ideal matched filter system overlaid with the received symbols of a 
+:math:`\alpha_\text{rx} = .3`, .4, and  .5. Later we provide a table :math:`E_b/N_0` degradation results over a range of :math:`\alpha_\text{tx}` and 
+:math:`\alpha_\text{rx}` scenarios. Figure :ref:`IQsetMPSK` shows IQ diagrams across orders of :math:`M` while varying :math:`\alpha_\text{rx}`. 
+The IQ diagrams plot the received symbols of the ideal matched filter system overlaid with the received symbols of a 
 mismatched filter system. 
 The left column shows that a small mismatch results in minimal error with every symbol being clearly defined, even at 32PSK. 
 However, on the far right we see a more extreme case of mismatch filtering resulting in more ISI. With less separation 
@@ -513,7 +513,7 @@ between symbols it is expected that higher orders of :math:`M` are more affected
    :figclass: w
 
    Two rows of IQ Diagrams showing the effects of mismatch filtering; The order of :math:`M` increases with row number, 
-   :math:`M=4, 8, 16, 32`; :math:`\alpha_\text{tx} = .25` across all columns, while :math:`\alpha_\text{rx}` increases with 
+   :math:`M=8, 32`; :math:`\alpha_\text{tx} = .25` is fixed across all columns, while :math:`\alpha_\text{rx}` increases with 
    column number as .3, .4, .5. :label:`IQsetMPSK`
 
 
@@ -618,6 +618,29 @@ of less than 0.01 dB are considered insignificant and are entered in the table a
 Effects of Mismatch Filtering on MQAM
 =====================================
 
+To limit the number of figures presented to the reader for the MQAM case and manage the limited paper lengths, we show only IQ diagrams for 
+:math:`\alpha_\text{tx} = .25` while varying :math:`\alpha_\text{rx} = .3`, .4, and  .5. As in the MPSK case later we provide 
+:math:`E_b/N_0` degradation results over a range of :math:`\alpha_\text{tx}` and :math:`\alpha_\text{rx}` values. 
+Figure :ref:`IQsetMPSK` shows two rows of IQ diagrams for :math:`M=16, 256` while varying :math:`\alpha_\text{rx}`. 
+The IQ diagrams plot the received symbols of the ideal matched filter system overlaid with the received symbols of a 
+mismatched filter system. 
+The left column shows that a small mismatch results in minimal error with every symbol being clearly defined, even at 256QAM. 
+However, on the far right we see a more extreme case of mismatch filtering resulting in serious ISI, particularly for 256QAM. With less separation 
+between symbols we expected large :math:`E_b/N_0` degradation will occur in the BEP plots.
+
+
+.. figure:: IQ_diagram_set_MQAM.pdf
+   :scale: 110%
+   :align: center
+   :figclass: w
+
+   Two rows of IQ Diagrams showing the effects of mismatch filtering; The order of :math:`M` increases with row number, 
+   :math:`M=16, 256`; :math:`\alpha_\text{tx} = .25` fixed across all columns, while :math:`\alpha_\text{rx}` increases with 
+   column number as .3, .4, .5. :label:`IQsetMQAM`
+
+Table :ref:`mismatchloss2` repeats Table :ref:`mismatchloss1` for MQAM. Results are similar for low modulation :math:`M`, 
+but the degradation for 256QAM is more serious than 32MPSK. This is not surprising when one considers the IQ diagrams, 
+i.e., signal points are closer in MQAM than MPSK. 
 
 
 .. table:: MQAM degradation resulting from filter mismatch. :label:`mismatchloss2`
@@ -677,46 +700,58 @@ Effects of Mismatch Filtering on MQAM
 With Constrained Use of Equalization
 ====================================
 
-Continue from previous subsection but bring in 11-tap and 21 tap
-equalizers. Consider also the setting of the LMS convergence parameter
-:math:`\mu` and the training duration. Again we show the Python code
-that runs in Jupyter notebook to model pulse shape mismatch and this
-time implements a short tap length adaptive equalizer to mitigate the
-BEP degradation. The gradation with and without equalization is shown in
-the listing below:
-|
+The above results for MPSK and MQAM show that the ISI introduced from mismatch filtering is the greatest at highest modulation 
+orders of, i.e., :math:`M`, i.e., 32PSK and 256QAM, and when :math:`\alpha_\text{tx} = .25` and :math:`\alpha_\text{rx} = .5`. 
+In this subsection we briefly show how even a very simple adaptive equalizer can mitigate filter mismatch. In particular we consider  
+an 11-tap equalizer to jointly minimize mismatch ISI yet balance noise enhancement. The short tap 
+design was chosen since we need it to adapt quickly and to minimize system complexity. 
+To fit the SA-BEP analysis framework the equalizer is designed for fixed operation at :math:`E_b/N_0 = 20` dB, while the SA-BEP simulation 
+is run for 20 dB :math:`\leq (E_b/N_0)_\text{dB} \leq` 25dB. In general an equalizer for digital communications 
+is made adaptive using the least mean-square (LMS) adaptation algorithm [Ziemer]_ to minimize the mean-square error (MMSE) 
+between the filter output and hard decision symbol estimates. For this paper the optimal operating point was over the 
+range of Eb/N0 that cross the :math:`10^{-6}` BEP point on the theoretical BEP curve.
 
-The BEP plot shown in Figure :ref:`16QAM25to50` demonstrates how a
-21-tap equalizer can mitigate the mismatch losses when the excess
-bandwidth factor ratio is rather large, i.e., 0.25/0.5.
+Figure :ref:`IQBEP11TapEQ256QAM` shows the effects of mismatch filtering when paired with a short length equalizer on 
+256QAM and :math:`\alpha_\text{tx}/\alpha_\text{rx} = . 25⁄. 5`. The :math:`E_b/N_0` degradation is brought to 
+about 1 dB at :math:`P_E = 10^{-6}`. As you can see from Figure :ref:`IQBEP11TapEQ256QAM` the equalizer drastically 
+reduces the ISI introduced by the filter mismatch. Even though the equalizer is designed for an operating point 
+of 20dB it performs well across the entire range of :math:`E_b/N_0`.
 
-.. figure:: BEP_16QAM_25to5_eq21.pdf
-   :scale: 65%
+.. figure:: IQ_BEP_11tap_EQ_256QAM.pdf
+   :scale: 75%
    :align: center
-   :figclass: htb
+   :figclass: w
    
 
-   16QAM BEP with large mismatch and then the inclusion of a 21-tap
-   equalizer. :label:`16QAM25to50`
+   BEP Curve and IQ diagram showing the effects of mismatch filtering when using an 11-tap equalizer on 256QAM with 
+   :math:`\alpha_\text{tx} = .25` and :math:`\alpha_\text{rx} = .5`; 11 taps offers a lot of improvement. :label:`IQBEP11TapEQ256QAM`
 
 
-Conclusion and Planned Extensions
----------------------------------
+Concluding Discussion and Future Work
+-------------------------------------
 
 The effects of mismatch filtering on lower orders of :math:`M` in both MPSK and MQAM, in particular 
-:math:`M = 4`, are almost negligible. With greater than .1dB :math:`E_b/N_0` degradation with the 
+:math:`M = 4`, are almost negligible. With greater than .1dB :math:`E_b/N_0` degradation when the 
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio reaching the extremes of 1/2 and 2. The effects of mismatch 
 filtering grow drastically as :math:`M` increases and the BEP threshold point increases.
-
-.. By comparing the eye diagrams of :math:`M = 32` in MPSK and :math:`M=256` in MQAM (not shown in this paper) 
-   between 𝛼wG =.3 𝑡𝑜 𝛼wG = .5 you can see a clear separation and an eye opening to a distorted eye opening with obvious ISI. 
-   This is the expected results, as you send more data per symbol and you increase the magnitude of the 
-   mismatch you would expect the degradation to increase.
  
 One interesting observation is the IQ Diagrams show that the symbol clusters with mismatch are not 
 circularly symmetric about the ideal symbol points. In general these *cluster clouds*, which we know result 
 from ISI, appear biased toward the center of the IQ diagram. Characterizing the cluster cloud probability 
-density function could serve as an alternative to SA-BEP technique presented in this paper.  
+density function could serve as an alternative to SA-BEP technique presented in this paper.
+
+A second interesting observation is that the degradation values in the tables are essentially symmetric for both MPSK and 
+MQAM, with regard to the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio. What this means is that the  
+:math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse give essentially the same :math:`E_b/N_0` 
+dB degradation values. Does this make sense? The signal path is identical since the same two filters are 
+connected in series (see Figure :ref:`BlockSAsim`) in either case. Linear processing means the filter order can be 
+reversed without changing the mismatch. What is different is that the white noise enters at  
+the second filter, which is the receiver input. If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is less than one 
+more WGN arrives at the receiver decision stage, but more signal energy also enters the receiver, in spite of being mismatched. 
+If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is greater than one less WGN arrives at the receiver decision 
+stage, but less signal energy also enters the receiver, again in spite of being mismatched. Although a 
+conjecture at the start of this research, the SA-BEP simulation results in Tables :ref:`mismatchloss1` 
+and :ref:`mismatchloss2` support the above argument. 
 
 The use of SA-BEP modeling allowed this data to be quickly compiled and be easily repeatable. 
 The code could quickly be modified to run any combination of MPSK,
