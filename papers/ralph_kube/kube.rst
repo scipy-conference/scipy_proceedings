@@ -832,9 +832,13 @@ be forwarded to in-depth analysis routines.
 Acknowledgements
 ----------------
 The authors would like to acknowledge the excellent technical support from engineers and developers
-at the National Energy Research Scientific Computing Center in developing delta. This work used
+at the National Energy Research Scientific Computing Center. This work used
 resources of the National Energy Research Scientific Computing Center (NERSC), a U.S. DOE Office of
-Science User Facility operated under Contract No. DE-AC02-05CH11231.
+Science User Facility operated under Contract No. DE-AC02-05CH11231. 
+``Delta`` is available on github: [Git]_
+All data used to generate the plots in this article can be accessed on Zenodo [Zen]_ .
+
+
 
 
 References
@@ -905,3 +909,7 @@ References
 
 .. [FFT] G. Heinzel, A. Rüdiger, R. Schilling, *Spectrum and spectral density estimation by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some new flat-top windows*
          Max Planck Institute für Gravitationsphysik (Albert-Einstein-Institut) Feb. 2002
+
+.. [Git] https://github.com/rkube/delta
+
+.. [Zen] https://doi.org/10.5281/zenodo.3871700
