@@ -181,7 +181,7 @@ The key design is that any indexing expression valid in both NumPy and boost-his
 
 There are several tags provided: ``bh.loc(float)`` converts a data-coordinate into bin coordinates, and supports addition/subtraction. For example, ``hist[bh.loc(2.0) + 2]`` would find the bin number containing 2.0, then add two to it. There are also ``bh.underflow`` and ``bh.overflow`` tags for accessing the flow bins.
 
-Slicing is supported, and works much like NumPy, though it does return a new Histogram object. You can use tags when slicing. A single value, when mixed with a slice, will select out a single value from the axes and remove it, just like it would in NumPy (you will see later why this is very useful). Most interesting, though, is the third parameter of a slice - normally called the step. Stepping in histograms is not supported, as that would be a set of non-continuous but non-discrete bins; but you can pass two different types of tags in. The first is a "rebinning" tag, which can modify the axis -- ``bh.rebin(2)`` would double the size of the bins. The second is a reduction, of which ``bh.sum`` is provided; this reduces the bins along an axes to a scalar and removes the axes. Endpoints on these special operations are important; leaving off the endpoints will include the flow bins, including the endpoints will remove the flow bins. So ``hist[::bh.sum]`` will sum over the entire histogram, including the flow bins, and ``hist[0:len:bh.sum]`` will sum over the contents of the histogram, not including the flow bin. Note that Python's `len` is a perfectly valid tag in this system - start and stop tags are simply callables that accept an axis and return an index from ``-1`` (underflow bin) to ``len(axis)+1`` (overflow bin).
+Slicing is supported, and works much like NumPy, though it does return a new Histogram object. You can use tags when slicing. A single value, when mixed with a slice, will select out a single value from the axes and remove it, just like it would in NumPy (you will see later why this is very useful). Most interesting, though, is the third parameter of a slice - normally called the step. Stepping in histograms is not supported, as that would be a set of non-continuous but non-discrete bins; but you can pass two different types of tags in. The first is a "rebinning" tag, which can modify the axis -- ``bh.rebin(2)`` would double the size of the bins. The second is a reduction, of which ``bh.sum`` is provided; this reduces the bins along an axes to a scalar and removes the axes; ``builtins.sum`` will trigger this behavior as well. User provided functions will eventually work here, as well. Endpoints on these special operations are important; leaving off the endpoints will include the flow bins, including the endpoints will remove the flow bins. So ``hist[::sum]`` will sum over the entire histogram, including the flow bins, and ``hist[0:len:sum]`` will sum over the contents of the histogram, not including the flow bin. Note that Python's `len` is a perfectly valid in this system - start and stop tags are simply callables that accept an axis and return an index from ``-1`` (underflow bin) to ``len(axis)+1`` (overflow bin), and axes support ``len()``.
 
 Setting is also supported, and comes with one more nice feature. When you set a histogram with an array and one or more endpoints are empty and include a flow bin, you have two options; you can either match the inner size, which will leave the flow bin(s) alone, or you can match the total size, which will fill the flow bins too. For example, in the following snippet the array can be either size 10 or size 12:
 
@@ -198,7 +198,7 @@ You can force the flow bins to be explicitly excluded if you want to by adding e
 
     hist[0:len] = np.arange(10)
 
-Finally, for advanced indexing, dictionaries are supported, where the key is the axis number. This allows easy access into a large number of axes, or simple programmatic access. With dictionary-based indexing, Ellipsis are not required. There is also a ``.project(*axes)`` method, which allows you to sum over all axes except the ones listed, which is the inverse to listing ``::bh.sum`` operations on the axes you want to remove.
+Finally, for advanced indexing, dictionaries are supported, where the key is the axis number. This allows easy access into a large number of axes, or simple programmatic access. With dictionary-based indexing, Ellipsis are not required. There is also a ``.project(*axes)`` method, which allows you to sum over all axes except the ones listed, which is the inverse to listing ``::sum`` operations on the axes you want to remove.
 
 Performance when Filling
 ------------------------
@@ -246,7 +246,7 @@ One further performance benefit comes from the flexibility of combining axes. In
               [True, False, True, True],
               ["a", "b", "a", "b"])
 
-    all_valid = hist[:, bh.loc(True), ::bh.sum]
+    all_valid = hist[:, bh.loc(True), ::sum]
     a_only = hist[..., bh.loc("a")]
 
 Above, we create three axes. The second axis is a boolean axes, which hold a valid/invalid bool flag. The third axis holds some sort of string-based category, which could label datasets, for example. We then fill this in one shot. Then, we can select the histograms that we might have originally filled separately, like the ``all_valid`` histogram, which is a 1D histogram that contains all labels and all events where ``valid=True``. In the second selection, ``a_only``, a 2D histogram is returned that consists of all the events labeled with ``"a"``.
@@ -302,7 +302,8 @@ We hope that more libraries will be interested in building on top of boost-histo
 
 .. Call for other libraries to be built on top of boost histogram - designed to be extended
 
-In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well. And Boost.Histogram C++ is continuing to be improved and expanded, and boost-histogram will nearly automatically benefit from improvements in functionality and performance, which is a great benefits of having a shared code base, while boost-histogram is feeding back ideas from the Python community to the C++ community, making this a win-win situation.
+In conclusion, boost-histogram provides a powerful abstraction for histograms as a collection of axes with an accumulator-backed storage. Filling and manipulating histograms is simple and natural, while being highly performant. In the future, Scikit-HEP is rapidly building on this foundation and we expect other libraries may want to build on this as well. At the same time, Boost.Histogram in C++ is continuously improved and expanded with new features, from which boost-histogram benefits nearly automatically. The shared code-base with C++ allows Python to profit, while boost-histogram in C++ is profiting from ideas feed back from Python, creating a win-win situation for all parties.
+
 
 
 Acknowledgements
