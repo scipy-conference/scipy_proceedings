@@ -691,6 +691,9 @@ module may be forgone, and altering the appearance encoder/decoder to a generic 
 with point clouds, e.g. a geometric neural network or GCNN is all that is necessary. The dynamics module 
 could be readily applied without significant changes.
 
+Acknowledgements
+----------------
+
 This study was supported in part by Google Cloud. We gratefully acknowledge the support of NVIDIA Corporation 
 with the donation of the Titan X Pascal GPU used for this research. This study was supported in part by 
 NSF CAREER #1845915. The PI would like to thank all the students who made this work possible, 
@@ -698,8 +701,3 @@ especially the graduates of the class of 2020 who persevered in making the SciPy
 most extraordinary circumstances one could have possibly imagined. The PI would also like to acknowledge 
 the students who are continuing to work on this project, bringing its future goals to eventual fruition.
 
-Acknowledgements
-----------------
-
-We gratefully acknowledge the support of NVIDIA Corporation with the donation of the Titan X 
-Pascal GPU used for this research. This study was supported in part by NSF CAREER #1845915.
