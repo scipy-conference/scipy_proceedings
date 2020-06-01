@@ -10,6 +10,11 @@
 :email: rachel.mattson@uga.edu
 :institution: Department of Cognitive Science, University of Georgia, Athens, GA 30602 USA
 
+:author: Meekail Zain
+:email: meekail.zain@uga.edu
+:institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
+:institution: Department of Mathematics, University of Georgia, Athens, GA 30602 USA
+
 :author: Andrew Durden
 :email: andrewdurden@uga.edu
 :institution: Department of Computer Science, University of Georgia, Athens, GA 30602 USA
