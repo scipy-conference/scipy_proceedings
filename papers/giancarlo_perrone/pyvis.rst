@@ -136,7 +136,7 @@ Layout
 | In situations where your network involves complex connections, Pyvis allows you to manually explore these relationships with intuitive mouse interactions. Nodes can be dragged into more visible positions if the view is obstructed.  
 | All of this is made possible by the front end engine provided by VisJS. Their extensive documentation defines several options for supplying layout and physics configurations to instances of a network. These physics options are fundamental to VisJS, so tweaking the physics of the rendered simulation is as simple as providing the parameters to the specific solver. 
 
-The physics options dictates how a user can interact with the objects in the graph. The intent of the physic options is to make manipulating graph objects feel more intuitive when moving nodes around. As an example, the user can manipulate a portion of a graph that is densely populated to view a graph segment of the interest more clearly. VisJS implements several physical simulations such as Barnes Hut :cite:`barneshut`. Others are mentioned in the VisJS documentation :cite:`visjs-physics`.
+The physics options dictates how a user can interact with the objects in the graph. The intent of the physic options is to make manipulating graph objects feel more intuitive when moving nodes around. As an example, the user can manipulate a portion of a graph that is densely populated to view a graph segment of the interest more clearly. VisJS implements several physical simulations such as Barnes Hut :cite:`barneshut`. Others are mentioned in the VisJS documentation :cite:`visjsphysics`.
 
 | We can configure the physics engine from within Pyvis:
 
