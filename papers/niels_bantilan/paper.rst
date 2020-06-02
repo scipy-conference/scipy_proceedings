@@ -51,7 +51,7 @@ reporting, data analytics, and machine learning, the data validation process
 can produce considerable cognitive and software development overhead.
 Therefore, this tool focuses on making it as easy as possible to perform data
 validation in a variety of contexts and workflows in order to lower the
-barrier to explicitly defining and enforcing the assumptions about about data.
+barrier to explicitly defining and enforcing the assumptions about data.
 
 In the following sections I outline the theoretical and practical underpinnings
 of data validation, describe in more detail the specific architecture and
@@ -129,7 +129,7 @@ domain knowledge about the dataset.
 
 She can then codify this intuition as a set of assumptions, implemented as a
 validation function, which can be called against the data to ensure that they
-adhere to those assumptions. If the validation function evalutes to ``False``
+adhere to those assumptions. If the validation function evaluates to ``False``
 against the data during development time, the analyst must decide whether to
 refactor the processing logic to fulfill the validation rules or modify the
 rules themselves [#]_.
@@ -146,11 +146,11 @@ the benefit of future readers or maintainers of the codebase.
 
 The role of the analyst, therefore, is to encode assumptions about data as a
 validation function and maintain that function as new datasets pass through the
-processing pipeline. One thing to note here is that using version control
-software like git :cite:`git` would keep track of the history changes of the
-validation rules, enabling maintainers or readers of the codebase to inspect
-the evolution of the contract that the data must fulfill to be considered
-valid.
+processing pipeline and the definition of valid data evolves over time. One
+thing to note here is that using version control software like git :cite:`git`
+would keep track of the changes of the validation rules, enabling maintainers
+or readers of the codebase to inspect the evolution of the contract that the
+data must fulfill to be considered valid.
 
 Design Principles
 -----------------
@@ -315,7 +315,7 @@ pass validation checks, ``pandera`` provides an informative error message:
    invalid_dataframe = pd.DataFrame({
        "person_id": [6, 7, 8, 9],
        "height_in_feet": [-10, 20, 20, 5.1],
-       "gender": ["F", "X", "N", "M"],
+       "gender": ["F", "M", "N", "M"],
    })
 
    checked_schema(invalid_dataframe)
@@ -459,6 +459,18 @@ output either a boolean or a boolean ``Series``, like so:
 
    Column(checks=Check(lambda s: s.between(0, 1)))
 
+The ``element_wise`` keyword argument changes the expected function signature
+to a single element in the column, for example, a logically equivalent
+implementation of the above validation rule would be:
+
+.. code-block:: python
+
+   Column(
+       checks=Check(
+           lambda x: 0 <= x <= 1, element_wise=True
+       )
+   )
+
 ``Check`` objects can also be used in the context of a ``DataFrameSchema``,
 in which case the function argument should take as input a pandas ``DataFrame``
 and output a boolean, a boolean ``Series``, or a boolean ``DataFrame``.
@@ -484,7 +496,7 @@ To provide a feature-complete data validation tool for data scientists,
 ``pandera`` subclasses the ``Check`` class to define the ``Hypothesis`` class
 for the purpose of expressing statistical hypothesis tests. To illustrate one
 of the use cases for this feature, consider a toy scientific study where a
-control group receives a placebo and a treatment group receives a pill that is
+control group receives a placebo and a treatment group receives a drug that is
 hypothesized to improve physical endurance. The participants in this study then
 run on a treadmill (set at the same speed) for as long as they can, and running
 durations are collected for each individual.
@@ -520,7 +532,7 @@ expectations about a positive result:
    })
 
 Once the dataset is collected for this study, we can then pass it through the
-schema to validate the hypothesis that the group receiving the pill increases
+schema to validate the hypothesis that the group receiving the drug increases
 physical endurance, as measured by running duration.
 
 As of version ``0.4.0``, the suite of built-in hypotheses is limited to the
@@ -558,11 +570,11 @@ Conditional Validation Rules
 
 If we want to validate the values of one column conditioned on another, the
 ``Check`` function signature is slightly modified to expect an input dictionary
-where the keys are discrete group the values in the conditional column and
+where the keys are discrete group levels in the conditional column and
 values are pandas ``Series`` objects containing subsets of the column of
 interest. Returning to the endurance study example, we could simply assert that
 the mean running duration of the treatment group is greater than that of the
-control group:
+control group without assessing statistical significance:
 
 .. code-block:: python
 
@@ -608,6 +620,7 @@ two species are in the same ``phylum``, then they must be in the same
                    kingdoms.nunique() == 1
                    for phylum in phyla.values()
                ),
+               # this can also be a list of columns
                groupby="phylum"
            )
        )
@@ -616,7 +629,7 @@ two species are in the same ``phylum``, then they must be in the same
 However, in order to make the assertion "if two species are in the same
 ``order``, then they must be in the same ``class`` and ``phylum``", we have to
 use dataframe-level checks since the above pattern can only operate on values
-of a single column grouped by one or multiple columns.
+of a single column grouped by one or more columns.
 
 .. code-block:: python
 
@@ -640,10 +653,10 @@ to full API documentation.
 Limitations
 -----------
 
-The most notable limitation of ``pandera`` is the computation cost of running
+The most notable limitation of ``pandera`` is the computational cost of running
 validation checks at runtime. This limitation applies to any data validation
 code, which trades off increased run-time for type safety and data integrity.
-The project is currently using ``airspeed-velocity`` :cite:`asv` for a few
+The project currently uses ``airspeed-velocity`` :cite:`asv` for a few
 basic run-time and memory usage benchmarks, but more extensive performance
 profiling is warranted to give users a better sense of this trade-off. The
 other trade-off to consider is the additional development time associated with
@@ -652,9 +665,13 @@ data integrity issues, which is particularly costly in areas like machine
 learning where model debugging occurs after training a model.
 
 A related limitation is that type-checking schemas are practical for large
-datasets, e.g. datasets that do not fit onto disk in a modern laptop. In
-theory, ``pandera`` schemas can be coupled with parallelization tools like
-``dask`` :cite:`rocklin2015dask` to perform data validation in these settings.
+datasets (e.g. datasets that do not fit onto disk in a modern laptop), but
+validation checks that verify statistics on one or more columns can become
+expensive. For this reason, the default ``Check`` function signature is
+expected to be a ``Series`` in order to encourage users to use the optimized
+``pandas.Series`` methods. In theory, ``pandera`` schemas can be coupled with
+parallelization tools like ``dask`` :cite:`rocklin2015dask` to perform data
+validation in these settings.
 
 Two other limitations of the current state of the package are that:
 
@@ -674,11 +691,11 @@ the Python community since the :code:`typing` module introduced in python 3.5.
 The project evolved into a tool that emphasizes verification of the statistical
 properties of data, which requires run-time validation.
 
-The future direction of this project has been driven, in large part, by its
+The direction of this project has been driven, in large part, by its
 contributors, and will continue to be via feature requests on the github repo.
 There a number of experimental features that are currently available in version
-:code:`0.4.0+` that aim to speed up the iteration loop of defining schemas
-at development time through interactive analysis:
+:code:`0.4.0+` that aim to speed up the iteration loop of defining schemas at
+development time through interactive analysis:
 
 * `schema inference <https://pandera.readthedocs.io/en/v0.4.0/API_reference.html#schema-inference>`_:
   the ``pandera.infer_schema`` function takes as input a dataframe and outputs
@@ -706,8 +723,8 @@ for interested readers:
 
 * Improving documentation by adding examples, fixing bugs, or clarifying the
   the writing.
-* Feature requests: e.g. requests for additional built-in Checks and Hypotheses
-  methods.
+* Feature requests: e.g. requests for additional built-in ``Check`` and
+  ``Hypotheses`` methods.
 * Submit new issues or pull requests for existing issues.
 
 
