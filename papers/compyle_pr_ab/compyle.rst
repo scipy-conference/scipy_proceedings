@@ -1,14 +1,14 @@
+:author: Aditya Bhosale
+:email: adityapb1546@gmail.com
+:institution: Department of Aerospace Engineering
+:institution: IIT Bombay, Mumbai, India
+
 :author: Prabhu Ramachandran
 :email: prabhu@aero.iitb.ac.in
 :institution: Department of Aerospace Engineering
 :institution: IIT Bombay, Mumbai, India
 :corresponding:
 
-
-:author: Aditya Bhosale
-:email: adityapb1546@gmail.com
-:institution: Department of Aerospace Engineering
-:institution: IIT Bombay, Mumbai, India
 :bibliography: references
 
 
@@ -459,22 +459,22 @@ Initial Results
 
 .. figure:: sim.png
 
-    Snapshot of simulation with 500 particles. 
+    Snapshot of simulation with 500 particles. :label:`simulation`
 
 .. figure:: openmp.png
 
-    Speed up over serial cython using OpenMP. 
+    Speed up over serial cython using OpenMP. :label:`openmp`
 
 .. figure:: gpu.png
 
-    Speed up over serial cython using CUDA and OpenCL.
+    Speed up over serial cython using CUDA and OpenCL. :label:`gpu`
 
 Figure :ref:`simulation` shows a snapshot of simulation using 500 particles
 and bounding box size 50 with a non-periodic boundary condition.
 
 For evaluating our performance, we ran our implementation on a dual core Intel
 Core i5 processor and an NVIDIA Tesla T4 GPU. We used :math:`dt = 0.02` and
-ran the simulation for 25 timesteps. Figures openmp and gpu show
+ran the simulation for 25 timesteps. Figures :ref:`openmp` and :ref:`gpu` show
 the speedup achieved over serial execution using Cython by using OpenMP,
 OpenCL and CUDA. As you can see on the CPUs we get close to a 2x speedup.
 However, on the GPU we get over a 200x speedup. This is compared to very fast
@@ -598,7 +598,7 @@ coordinates :math:`c = (m, n)`, these 9 bins will be,
 
     N(c) = \{ c + d \ | \ d \in \{-1, 0, 1\} \times \{-1, 0, 1\} \}
 
-The idea is to for each query particle iterate over all particles in 
+The idea is to for each query particle iterate over all particles in
 these 9 bins and check if the distance between the particle and the
 query particle is less than 3.
 To implement this, we first find the bin to which each particle
@@ -613,14 +613,14 @@ and :math:`h` is the required radius which in our case is 3.
 We then flatten these bin coordinates to map each bin to a unique
 integer we call the 'key'. We then sort these keys and an array of
 indices of the particles such that the sorted indices have all
-particles in the same cell as contiguous elements. 
+particles in the same cell as contiguous elements.
 Compyle has a sort functionality which uses the PyOpenCL radix
 sort for OpenCL backend, thrust sort for the CUDA
 backend and simple numpy sort for the cython backend.
 
-To find the particles belonging to the 9 neighboring bins, 
-we now need to find the index in the sorted indices array 
-at which each key starts. 
+To find the particles belonging to the 9 neighboring bins,
+we now need to find the index in the sorted indices array
+at which each key starts.
 This can be found in parallel using a scan as follows,
 
 .. code-block:: python
@@ -631,7 +631,7 @@ This can be found in parallel using a scan as follows,
 
 
     @annotate
-    def output_scan_keys(i, item, prev_item, keys, 
+    def output_scan_keys(i, item, prev_item, keys,
                          start_indices):
         key = keys[i]
         if item != prev_item:
@@ -644,7 +644,7 @@ follows,
 .. code-block:: python
 
     @annotate
-    def fill_bin_counts(i, keys, start_indices, 
+    def fill_bin_counts(i, keys, start_indices,
                         bin_counts, num_particles):
         if i == num_particles - 1:
             last_key = keys[num_particles - 1]
