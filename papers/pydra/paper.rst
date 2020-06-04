@@ -94,13 +94,14 @@ The combination of several key features makes Pydra a customizable and powerful 
   container (via Docker or Singularity) enabling greater consistency for reproducibility.
 
 
-Pydra has a small set of dependencies, it is a pure Python package that depends mostly
-on the Python Standard Library, with an exception for *attr* package and testing framework,
-that is based on *pytest*.
-It is important to note, that Pydra is not designed to replace a pure Python to run
-single algorithms or functions.
-It is not design to help with algorithms that has to handle everything in the memory.
-Pydra is design to support file based computation instead.
+Pydra is a pure Python package with a limited set of dependencies, which are themselves only dependent on
+the Python Standard library. Pydra uses the *attr* package for type annotation and validation of inputs and 
+outputs of tasks, the *cloudpickle* package to pickle interactive task definitions, and the *pytest* testing 
+framework. Pydra is intended to help scientific workflows which rely on significant file-based operations and 
+which evaluate outcomes of complex dataflows over a hyper-space of parameters. It is important to note, that
+Pydra is not a framework for writing efficient scientific algorithms or for use in applications where caching and 
+distributed execution are not necessary. Since Pydra relies on a filesystem cache at present it is also not
+designed for dataflows that need to operate purely in memory. 
 
 
 The next section will describe the Pydra architecture --- main package classes
