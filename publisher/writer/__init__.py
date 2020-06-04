@@ -70,7 +70,6 @@ class Translator(LaTeXTranslator):
     def visit_author(self, node):
         self.author_names.append(self.encode(node.astext()))
         self.author_institution_map[self.author_names[-1]] = []
-        self.author_orcid_map[self.author_names[-1]] = ''
         raise nodes.SkipNode
 
     def depart_author(self, node):
