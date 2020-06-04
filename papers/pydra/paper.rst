@@ -83,7 +83,7 @@ The combination of several key features makes Pydra a customizable and powerful 
 
 * Flexible semantics for creating nested loops over input.
   Any Task or dataflow can be run over input parameter sets and the outputs can be recombined
-  (similar concept to Map-Reduce model, but applies to nested graphs).
+  (similar concept to Map-Reduce model, but Pydra extends this to graphs with nested dataflows).
 
 * A content-addressable global cache: hash values are computed for each graph and each Task.
   Supports reuse of previously computed and stored dataflows and Tasks.
