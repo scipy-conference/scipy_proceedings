@@ -74,7 +74,8 @@ to support any scientific domain.
 
 The goal of Pydra is to provide a lightweight dataflow engine for computational graph construction,
 manipulation, and distributed execution, as well as ensuring reproducibility of scientific pipelines.
-In Pydra, a dataflow is represented as a graph, where each node is a Task object.
+In Pydra, a dataflow is represented as a directed acyclic graph, where each node represents a 
+Python function, execution of an external tool, or another reusable dataflow.
 The combination of several key features makes Pydra a customizable and powerful dataflow engine:
 
 * Composable dataflows: any node of a dataflow graph can be another dataflow,
