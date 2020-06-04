@@ -156,8 +156,9 @@ class XrefMeta:
             given_name.text = first_name
             surname = xml.SubElement(person_name, 'surname')
             surname.text = last_name
-            orcid = xml.SubElement(person_name, 'orcid')
-            orcid.text = orcid_map[contributor]
+            if contributor in orcid_map:
+                orcid = xml.SubElement(person_name, 'ORCID')
+                orcid.text = 'https://orcid.org/' + orcid_map[contributor]
         titles = xml.SubElement(paper, 'titles')
         title = xml.SubElement(titles, 'title')
         title.text = entry.get('title', '')
