@@ -79,7 +79,7 @@ Python function, execution of an external tool, or another reusable dataflow.
 The combination of several key features makes Pydra a customizable and powerful dataflow engine:
 
 * Composable dataflows: any node of a dataflow graph can be another dataflow,
-  allowing for nested dataflows to arbitrary depths.
+  allowing for nested dataflows to arbitrary depths and encourages creating reusable dataflows.
 
 * Flexible semantics for creating nested loops over input.
   Any Task or dataflow can be run over input parameter sets and the outputs can be recombined
