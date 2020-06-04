@@ -402,7 +402,8 @@ The simulation can then be executed simply as follows,
 
 We have used a fixed wall non-periodic boundary condition for our
 implementation. The details on the implementation of the boundary condition
-can be found in the example section of compyle's github page.
+can be found in the example section of compyle's github repository
+`here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_simple.py>`_.
 
 The backend used is changed using the following code::
 
@@ -411,7 +412,7 @@ The backend used is changed using the following code::
   get_config().use_openmp = True
 
   # Run with OpenCL
-  get_config().use_cuda = True
+  get_config().use_opencl = True
 
 No other code changes are needed.
 
@@ -551,13 +552,6 @@ than 50.
 
 .. code-block:: python
 
-    ary = np.random.randint(0, 100, 1000, dtype=np.int32)
-    result = np.zeros(len(ary.data), dtype=np.int32)
-    result = wrap(result, backend=backend)
-    result_count = np.zeros(1, dtype=np.int32)
-    result_count = wrap(result_count, backend=backend)
-    ary = wrap(ary, backend=backend)
-
     @annotate
     def input_expr(i, ary):
         return 1 if ary[i] < 50 else 0
@@ -570,6 +564,13 @@ than 50.
         if i == N - 1:
             result_count[0] = item
 
+    ary = np.random.randint(0, 100, 1000, dtype=np.int32)
+    result = np.zeros(len(ary.data), dtype=np.int32)
+    result = wrap(result, backend=backend)
+    result_count = np.zeros(1, dtype=np.int32)
+    result_count = wrap(result_count, backend=backend)
+    ary = wrap(ary, backend=backend)
+
     scan = Scan(input_expr, output_expr, 'a+b',
                 dtype=np.int32, backend=backend)
     scan(ary=ary, result=result,
@@ -578,6 +579,20 @@ than 50.
     result_count.pull()
     result_count = result_count.data[0]
     result = result.data[:result_count]
+
+The argument :code:`i`, similar to elementwise
+is the current index, the argument :code:`item` is the result
+of the scan including the input at index :code:`i`. The
+:code:`prev_item` is the result of the array at index
+:code:`i-1`.
+
+In the above example, the input expression returns 1 only
+when the value at index i is less than 50. So as long as the
+array elements are greater than 50, the value of :code:`item`
+will remain the same and will only increase when an element
+less than 50 is found at the index. Thus, the condition
+:code:`item != prev_item` will only be satisifed for indices
+at which the value of :code:`ary[i]` is less than 50.
 
 The :code:`input_expr` could also be used as the map function
 for reduction and the required size of result could be found
@@ -625,7 +640,7 @@ This can be found in parallel using a scan as follows,
 
 .. code-block:: python
 
-   @annotate
+    @annotate
     def input_scan_keys(i, keys):
         return 1 if i == 0 or keys[i] != keys[i - 1] else 0
 
@@ -694,10 +709,33 @@ all neighbor lengths. The second pass is then another elementwise
 operation where each particle writes its neighbors starting
 from the start index calculated from the scan.
 
+More details on this implementation can be found in the
+examples section of our repository 
+`here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_nnps.py>`__.
+We have also implemented a more efficient version of the nearest neighbor
+searching algorithm using counting sort instead of radix sort
+which is 30% faster that can be found 
+`here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/nnps.py>`__.
+
 Performance comparison
 ----------------------
 
-TBD
+.. figure:: speedup_cython_opencl_cuda.png
+
+    Speed up over serial cython using CUDA and OpenCL.
+
+
+.. figure:: time_opencl_cuda.png
+
+    Time taken for simulation on GPU using CUDA and OpenCL.
+
+
+As can be seen from figure, the algorithm is linear at
+large values of number of particles.
+Figure shows the speed up of the above implementation
+using CUDA and OpenCL backend as compared to a serial cython backend.
+We again see a speed up of about 120x when using the GPU
+as compared to a serial cython implementation.
 
 Limitations
 ------------
@@ -728,7 +766,6 @@ In the future, we would like to improve the package by adding support for
 simple "objects" that would allow users to compose their libraries in a more
 object oriented manner. This would also open up the possibility of
 implementing more high-level data structures in an easy way.
-
 
 
 Conclusions
