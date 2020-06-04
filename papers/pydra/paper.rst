@@ -311,7 +311,7 @@ State and Nested Loops over Input
 
 
 
-One of the main goal of *Pydra* wa sto support flexible creation
+One of the main goal of *Pydra* is to support flexible creation
 of loops over inputs, i.e. flexible mapping of the values of the
 user provided inputs to the specific *Task*'s execution,
 similarly to the concept of the *Map-Reduce*.
