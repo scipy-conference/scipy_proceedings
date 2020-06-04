@@ -105,9 +105,9 @@ designed for dataflows that need to operate purely in memory.
 
 
 The next section will describe the Pydra architecture --- main package classes
-and interaction between them. In *Key Feature* section focuses on several features
-that makes *Pydra* powerful and worth trying package.
-In the *Application* section, a few example will be presented ...[todo]
+and interactions between them. The *Key Features* section focuses on a set of features whose
+combination distinguishes Pydra from other dataflow engines. The paper concludes with a set
+of applied examples demonstrating the power and utility of Pydra.
 
 
 TODO: provenance
