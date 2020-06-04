@@ -49,6 +49,8 @@ Introduction
 
 Scientific workflows often require sophisticated analyses that encompass
 a large collection of algorithms.
+The algorithms, that were originally not necessarily designed to work together,
+often written by different authors in different times.
 Some may be written in Python, while others might require calling external programs.
 It is a common practice to create semi-manual workflows that require scientist
 interaction to handle files and partial results between algorithms and external tools.
@@ -67,9 +69,9 @@ workflows for a decade, providing a uniform interface to such neuroimaging packa
 as FSL [ref], ANTs [ref], AFNI [ref], FreeSurfer [ref] and SPM [ref].
 This flexibility has made it an ideal basis for popular preprocessing tools,
 such as fMRIPrep [ref] and C-PAC[ref].
-The second generation of *Nipype* ecosystem is meant to provides additional flexibility
+The second generation of *Nipype* ecosystem is meant to provide additional flexibility
 and is being developed with reproducibility, ease of use, and scalability in mind.
-Pydra is a standalone project and is designed as a general-purpose dataflow engine
+*Pydra* itself is a standalone project and is designed as a general-purpose dataflow engine
 to support any scientific domain.
 
 The goal of Pydra is to provide a lightweight dataflow engine for computational graph construction,
@@ -82,7 +84,7 @@ The combination of several key features makes Pydra a customizable and powerful 
   allowing for nested dataflows to arbitrary depths and encourages creating reusable dataflows.
 
 * Flexible semantics for creating nested loops over input.
-  Any Task or dataflow can be run over input parameter sets and the outputs can be recombined
+  Any *Task* or dataflow can be run over input parameter sets and the outputs can be recombined
   (similar concept to Map-Reduce model, but Pydra extends this to graphs with nested dataflows).
 
 * A content-addressable global cache: hash values are computed for each graph and each Task.
@@ -95,12 +97,15 @@ The combination of several key features makes Pydra a customizable and powerful 
 
 
 Pydra is a pure Python package with a limited set of dependencies, which are themselves only dependent on
-the Python Standard library. Pydra uses the *attr* package for type annotation and validation of inputs and 
-outputs of tasks, the *cloudpickle* package to pickle interactive task definitions, and the *pytest* testing 
-framework. Pydra is intended to help scientific workflows which rely on significant file-based operations and 
-which evaluate outcomes of complex dataflows over a hyper-space of parameters. It is important to note, that
-Pydra is not a framework for writing efficient scientific algorithms or for use in applications where caching and 
-distributed execution are not necessary. Since Pydra relies on a filesystem cache at present it is also not
+the Python Standard library.
+Pydra uses the *attr* package for type annotation and validation of inputs and
+outputs of tasks, the *cloudpickle* package to pickle interactive task definitions,
+and the *pytest* testing framework.
+Pydra is intended to help scientific workflows which rely on significant file-based operations and
+which evaluate outcomes of complex dataflows over a hyper-space of parameters.
+It is important to note, that Pydra is not a framework for writing efficient scientific algorithms
+or for use in applications where caching and distributed execution are not necessary.
+Since Pydra relies on a filesystem cache at present it is also not
 designed for dataflows that need to operate purely in memory. 
 
 
@@ -110,7 +115,7 @@ combination distinguishes Pydra from other dataflow engines. The paper concludes
 of applied examples demonstrating the power and utility of Pydra.
 
 
-TODO: provenance
+TODO: provenance??
 
 Architecture
 ------------
@@ -118,6 +123,7 @@ Architecture
 *Submitter* and *Worker*.
 There is one type of *Submitter*, but several types of *Tasks*
 and *Workers* have been developed, see schematic presentation in Fig. :ref:`classes`.
+In the following subsection all of these components will be briefly described.
 
 
 
@@ -128,17 +134,16 @@ and *Workers* have been developed, see schematic presentation in Fig. :ref:`clas
    A schematic presentation of principal classes in Pydra. :label:`classes`
 
 
-
 Dataflows Components: Task and Workflow
 =======================================
-A *Task* is the basic runnable component of Pydra and is descibed by the class ``TaskBase``.
+A *Task* is the basic runnable component of *Pydra* and is descibed by the class ``TaskBase``.
 There are several classes that inherit from ``TaskBase`` and each has a different application:
 
 * ``FunctionTask`` is a *Task* that is design as a wrapper for Python function.
-  Every Python defined function could be tranformed to the ``FunctionTask`` by using Pydra
+  Every Python defined function could be transformed to the ``FunctionTask`` by using Pydra
   decorator - ``mark.task``.
   In addition, the user can use Python's function annotation or another Pydra decorator
-  |---| ``mark.annotate`` to specify the output, see an example below:
+  |---| ``mark.annotate`` in order to specify the output, see an example below:
 
   .. code-block:: python
 
@@ -152,8 +157,8 @@ There are several classes that inherit from ``TaskBase`` and each has a differen
 
      task = mean_dev(my_data=[...])
 
-* ``ShellCommandTask`` is a *Task* that is built around shell commands.
-  It can be used with a simple command without any arguments, or with specific set of arguments, e.g.:
+* ``ShellCommandTask`` is a *Task* that is built around shell commands and executables.
+  It can be used with a simple command without any arguments, or with specific set of arguments and flags, e.g.:
 
   .. code-block:: python
 
@@ -163,9 +168,9 @@ There are several classes that inherit from ``TaskBase`` and each has a differen
 
 
 
-  The *Task* can accomodate  much more complicated commands by allowing to customize input and output
-  to specify position name of the input, position in the command, flag, type, etc. FSL's BET command
-  (Brain Extraction Tool) could be used as an example (note, this is only a short version
+  The *Task* can accommodate  much more complicated commands by allowing to customize input and output
+  to specify name of the input, position in the command, flag, type, etc.
+  FSL's BET command (Brain Extraction Tool) could be used as an example (note, this is only a short version
   of specification and not fully working example):
 
   .. code-block:: python
@@ -206,11 +211,14 @@ There are several classes that inherit from ``TaskBase`` and each has a differen
     ShellCommandTask(executable="bet",
                      input_spec=bet_input_spec)
 
-* ``ContainerTask`` class is child class of ``ShellCommandTask`` an a parent class
-  for ``DockerClass`` and ``SingularityTask``.
-  Both *Container Tasks* run shell commands within containers with specific user defined environments
-  using *Docker* [ref] and *Singularity* [ref] software respectively.
-  These classes can be defined directly, or can be created automatically,
+* ``ContainerTask`` class is a child class of ``ShellCommandTask`` an a parent class
+  for ``DockerTask`` and ``SingularityTask``.
+  Both *Container Tasks* run shell commands or executables within containers with specific user defined
+  environments using *Docker* [ref] and *Singularity* [ref] software respectively.
+  This might be extremely useful for users and projects that require environment encapsulation and sharing.
+  Using container technologies allows to ensure scientific workflows reproducibility.
+  These *Container Tasks* can be defined by using ``DockerTask`` and ``SingularityTask`` directly,
+  or can be created automatically from ``ShellCommandTask``,
   when an optional argument ``container_info`` is used when creating a *Shell Task*.
   These two syntax are equivalent:
 
@@ -223,11 +231,13 @@ There are several classes that inherit from ``TaskBase`` and each has a differen
 
 
 * ``Workflow`` - is a special *Task* that has an additional attribute - an executable graph.
-  Each node of the graph contains a *Task* of any type, and can be add simply by calling ``add`` method,
-  and the connections are defined by using so called *Lazy Input* or *Lazy Output*, e.g.:
+  Each node of the graph contains a *Task* of any type, and can be add to the *Workflow* simply by calling ``add`` method.
+  The connections between *Tasks* are defined by using so called *Lazy Input* or *Lazy Output*,
+  as it is presented by this example:
 
   .. code-block:: python
 
+    # creating workflow with two input fields - x and y
     wf = Workflow(input_spec=["x", "y"])
     # adding a task and connecting task's input
     # to the workflow input
@@ -243,18 +253,19 @@ State
 =====
 
 All *Tasks*, including *Workflows*, could have an optional ``State`` attribute,
-that is used when *Task* should be run multiple times for various sets of input.
+that is used when *Task* should be run multiple times for various sets of input fields.
 In order to specify how the input should be split, and optionally combined after
-the *Task* execution, the user could set so called *splitter* and *combiner*,
-by calling ``split`` and ``combine`` methods, e.g.:
+the *Task* execution, the user could set so called *splitter* and *combiner*.
+These attributes can be set by calling ``split`` and ``combine`` methods respectively, e.g.:
 
 .. code-block:: python
 
   task_state = add2(x=[1, 5]).split("x").combine("x")
 
-Implemented types of *splietters* will be discussed in details in the next section.
 If *Task* has to be split, ``State`` class is responsible for creating list of proper
-set of inputs indices and values, that should be run for each run.
+set of inputs indices and values, that should be passed to the *Task* for each run.
+The way how this *Task* is executed and the types of implemented *splietters*
+will be discussed in details in the next section.
 
 
 Submitter
@@ -262,22 +273,35 @@ Submitter
 
 In order to execute *Workflows* and single *Task* with multiple set of inputs,
 ``Submitter`` class was created.
-The goal of this class is to manage properly the *Tasks*,
-that is needed when *Tasks* has *state*, or is a *Workflow*.
-This class is responsible for checking if particular *Tasks* are ready
-to run, i.e. if all the inputs that are connected to outputs from different *Tasks*
-are available.
+The goal of this class is to  start proper *Worker* depending on the user defined plugin name
+and manage properly the *Tasks* execution.
+The execution depends whether the *runnable* is a single *Task*, or in fact is a *Workflow*.
+It does also depend whether the *Task has a *State* or not.
+When the *runnable* is a *Workflow*, the *Submitter* is responsible for checking if
+the *Tasks* from the graph are ready to run, i.e. if all the inputs are available,
+including the inputs that are set to the *Lazy Outputs* from previous *Tasks*.
+Once the *Task* is ready to run, the *Submitter* sends it to the *Worker*.
+When the runnable has a *State*, than the input has to be properly split, and multiple
+copy of the *Task* are sent to the *Worker*.
+In order to avoid big memory consumption, the *Tasks* are sent as a pointer to a pickle file,
+together with information about its state, so the proper input could be retrieved just before
+running the *Task*
 
 
 Workers
 =======
 
-*Workers* in *Pydra* are responsible for execution the *Tasks*.
+*Workers* in *Pydra* are responsible for execution the *Tasks* and are connected
+directly to the *Submitter*
 At this moment *Pydra* supports three types of software: *ConcurrentFutures* [ref],
 *Slurm* [ref] and *Dask* [ref].
-Currently ``ConcurrentFuturesWorker`` has the biggest support, but ``SlurmWorker``
+Currently ``ConcurrentFuturesWorker`` has the best support, but ``SlurmWorker``
 and ``DaskWorker`` are planned to have a full support.
-
+When  ``ConcurrentFuturesWorker`` is created, ``ProcessPoolExecutor`` is used
+to create a "pool" for adding the runnables.
+``SlurmWorker`` creates a proper bash script in order to execute the runnable, using *sbatch* command,
+and ``DaskWorker`` make use of ``Client`` class and the ``submit`` method.
+All workers use *async functions* from *AsyncIO* in order to handle asynchronous processes.
 
 
 Key Features
