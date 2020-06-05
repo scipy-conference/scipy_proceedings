@@ -953,6 +953,28 @@ TODO explain results and return inputs
 
 Summary and Future Directions
 -----------------------------
+*Pydra* is a new lightweight dataflow engine written in Python.
+The combination of several key features - including flexible option for splitting and combining
+input fields, and *Global Cache* - makes Pydra a customizable and powerful dataflow engine.
+The *Pydra*'s developers are mostly from the Neuroimaging community, but the package is designed
+as a general-purpose dataflow engine to support any scientific domain.
+As the next step, the developer team would like to invite more scientist to use *Pydra*,
+in order to test package in diverse application.
+In the nearest future, the developer team is also planning to work on:
+
+* extension of *Workers* classes in order to fully support application that use *Slurm* or *Dask*
+* export all interfaces from *Nipype 1* and become the default engine for *Nipype*
+* improve the documentation
+* extend the *Pydra-ml* :cite:`pydra-ml` that uses `scikit-learn`
+  to perform model comparison across a set of classifier
+* and many other things...
+
+All scientist and developers are very welcome to join the project.
+The project repository is available on GitHub under *Nipype* organization:
+https://github.com/nipype/pydra.
+In addition, there is also a repository that contains Jupyter Notebooks with
+*Pydra* tutorial: https://github.com/nipype/pydra-tutorial.
+The tutorial could be run locally or using the Binder service.
 
 
 
