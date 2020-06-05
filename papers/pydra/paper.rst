@@ -3,7 +3,7 @@
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
 :author: Mathias Goncalves
-:email: todo
+:email: mathiasg@stanford.edu
 :institution: Stanford University, Stanford, CA, USA
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
