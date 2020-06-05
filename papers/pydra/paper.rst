@@ -102,41 +102,42 @@ The combination of several key features makes Pydra a customizable and powerful 
   graph. These messages track inputs and outputs of each task in a dataflow, and
   the resources consumed by the task.
 
-Pydra is a pure Python 3.7+ package with a limited set of dependencies, which are
+
+*Pydra* is a pure Python 3.7+ package with a limited set of dependencies, which are
 themselves only dependent on the Python Standard library. It leverages *type annotation*
 and *AsyncIO* in its core operations. Pydra uses the *attr* package for extended
 annotation and validation of inputs and outputs of tasks, the *cloudpickle* package
 to pickle interactive task definitions, and the *pytest* testing framework.
-Pydra is intended to help scientific workflows which rely on significant file-based operations and
+*Pydra* is intended to help scientific workflows which rely on significant file-based operations and
 which evaluate outcomes of complex dataflows over a hyper-space of parameters.
-It is important to note, that Pydra is not a framework for writing efficient scientific algorithms
+It is important to note, that *Pydra* is not a framework for writing efficient scientific algorithms
 or for use in applications where caching and distributed execution are not necessary.
-Since Pydra relies on a filesystem cache at present it is also not
+Since *Pydra* relies on a filesystem cache at present it is also not
 designed for dataflows that need to operate purely in memory. 
 
-The next section will describe the Pydra architecture --- main package classes
+The next section will describe the *Pydra* architecture --- main package classes
 and interactions between them. The *Key Features* section focuses on a set of features whose
-combination distinguishes Pydra from other dataflow engines. The paper concludes with a set
-of applied examples demonstrating the power and utility of Pydra.
+combination distinguishes *Pydra* from other dataflow engines. The paper concludes with a set
+of applied examples demonstrating the power and utility of *Pydra*.
 
 
 Architecture
 ------------
-*Pydra* architecture has three core components: *Task*, *Submitter* and *Worker*.
+*Pydra architecture has three core components: *Task*, *Submitter* and *Worker*.
 *Tasks* form the basic building blocks of the dataflow, while *Submitter*
 orchestrates the dataflow execution model. Different types of *Workers* allow
-Pydra to execute the task on different compute architectures. Fig. :ref:`classes`
+
+*Pydra* to execute the task on different compute architectures. Fig. :ref:`classes`
 shows the Class hierarchy and links between them in the present Pydra
 architecture. It was designed this way to decouple and allow *Workers* to
-operate
-In order to describe Pydra's most notable features in the next
+operate.  In order to describe *Pydra*'s most notable features in the next
 section, we briefly describe the role and function of each of these classes.
 
 .. figure:: classes.pdf
    :figclass: h!
    :scale: 30%
 
-   A schematic presentation of principal classes in Pydra. :label:`classes`
+   A schematic presentation of principal classes in *Pydra*. :label:`classes`
 
 Dataflows Components: Task and Workflow
 =======================================
@@ -148,7 +149,7 @@ a different application:
 
 * ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
   declared in an existing library, package, or interactively in a terminal can
-  be converted to a ``FunctionTask`` by using Pydra decorator - ``mark.task``.
+  be converted to a ``FunctionTask`` by using *Pydra* decorator - ``mark.task``.
 
   .. code-block:: python
 
@@ -158,6 +159,7 @@ a different application:
                       'return': float})(np.fft.fft)
      fft_task = mark.task(fft)()
      result = fft_task(a=np.random.rand(512))
+
 
   `fft_task` is now a Pydra task and result will contain a Pydra ``Result`` object.
   In addition, the user can use Python's function annotation or another Pydra
@@ -249,7 +251,7 @@ a different application:
           container_info=("docker", "busybox"))
 
 
-* ``Workflow`` - is a subclass of *Task* that provides support for creating Pydra
+* ``Workflow`` - is a subclass of *Task* that provides support for creating *Pydra*
   dataflows. As a subclass, a *Workflow* acts like a *Task* and has inputs, outputs,
   is hashable, and is treated as a single unit. Unlike *Tasks*, workflows embed
   a directed acyclic graph. Each node of the graph contains a *Task* of any type,
@@ -257,7 +259,7 @@ a different application:
   the ``add`` method. The connections between *Tasks* are defined by using so
   called *Lazy Inputs* or *Lazy Outputs*. These are special attributes that allow
   assignment of values when a *Workflow* is executed rather than at the point of
-  assignment. The following example creates a *Workflow* from two Pydra *Tasks*.
+  assignment. The following example creates a *Workflow* from two *Pydra* *Tasks*.
 
   .. code-block:: python
 
@@ -646,13 +648,224 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
 
 
-Machine Learning: Model Comparison
+Machine Learning: Model Comparison 
 ==================================
+
+The massive parameter space in machine learning makes it a perfect use case for *Pydra*. 
+
+Here we show an example of a general-purpose machine learning *Pydra* *Workflow*, which perform model comparison 
+across a given dictionary of classifiers and associated hyperparameters:
+
+*pandas* and *Pydra* 
+
+.. code-block:: python
+
+  clfs = [
+   ('sklearn.ensemble', 'ExtraTreesClassifier', dict(n_estimators=100)),
+   ('sklearn.neural_network', 'MLPClassifier',  dict(alpha=1, max_iter=1000)),
+   ('sklearn.neighbors', 'KNeighborsClassifier', dict(),
+          [{'n_neighbors': [3, 7, 15], 'weights': ['uniform','distance']}]),
+   ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
+
+
+It leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.  
+It will also use *Pydra*'s caching to not redo model training and evaluation when new metrics 
+are added, or when number of iterations is increased.  This is a shorten version of the *pydraml*
+package implemented here TODO
+
+
+Let use the iris dataset as an example.
+
+.. code-block:: python
+
+  from sklearn import datasets
+  import pandas as pd
+  X, y = datasets.load_iris(return_X_y=True)
+  dat = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+  dat['label'] = y
+
+
+Have a look at the structure of the data and save it to a csv.  Goal is to write a workflow that will read 
+and process any data in the same format.
+
+.. code-block:: python
+
+  print(dat.sample(5))
+         sepal_length  sepal_width  petal_length  petal_width  label
+  137           6.4          3.1           5.5          1.8      2
+  55            5.7          2.8           4.5          1.3      1
+  127           6.1          3.0           4.9          1.8      2
+  4             5.0          3.6           1.4          0.2      0
+  68            6.2          2.2           4.5          1.5      1
+  dat.to_csv('iris.csv')
+
+
+
+
+Our *Workflow* consist of 3 *Task*s, each *Task* approximately corresponds to:
+
+  1. Load & split data
+  2. Set up model selection method
+  3. Preprocessed, tune & compare models 
+
+
+*Task* 1 reads csv data as a *pandas* *DataFrame* from a path, with the option define name of target 
+variables, row indices to train and data grouping.  It returns the training data, labels
+and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
+
+.. code-block:: python
+
+  @mark.task 
+  @mark.annotate({"return": {"X": ty.Any, "Y": ty.Any, "groups": ty.Any}})  
+  def read_data(filename, x_indices=None, target_vars=None, group='groups'):
+     import pandas as pd
+     data = pd.read_csv(filename)
+     X = data.iloc[:, x_indices]
+     Y = data[target_vars]
+     if group in data.keys():
+         groups = data[:, [group]]
+     else:
+         groups = list(range(X.shape[0]))
+     return X.values, Y.values, groups
+
+
+*Task* 2 generates a set of train-test splits with `GroupShuffleSplit` in `scikit-learn` given `n_splits` 
+and `test_size`, with the option to define `group` and `random_state`. It returns `train_test_splits`
+
+.. code-block:: python
+
+  @mark.task  
+  @mark.annotate({"return": {"splits": ty.Any, "split_indices": ty.Any}}) 
+  def gen_splits(n_splits, test_size, X, Y, groups=None, random_state=0):
+   """Generate a set of train-test splits"
+   from sklearn.model_selection import GroupShuffleSplit
+   gss = GroupShuffleSplit(n_splits=n_splits, test_size=test_size,
+                           random_state=random_state)
+   train_test_splits = list(gss.split(X, Y, groups=groups))
+   split_indices = list(range(n_splits))
+   return train_test_splits, split_indices
+
+
+Now we need to train the classifiers. The most optimized model for a classifer can be easily found
+using *scikit-learn*'s `GridSearchCV` given a parameter grid.   However, there isn't a easy way in 
+*scikit-learn* to compare models across a variety of classifiers without using loops, especially
+when some classifier don't requires tuning.  
+
+
+*Task* 3 train and tests classifiers on actual or permuted labels given outputs of *Task* 2 and 
+ a dictionary in the same format as `clfs` shown earlier.  We can then compare f1 scores from 
+ models fit on actual and permuted data to evaluate
 
 
 .. code-block:: python
 
-  ml example TODO
+  @mark.task
+  @mark.annotate({"return": {"f1": ty.Any}})
+  def train_test_kernel(X, y, train_test_split, split_index, clf_info, permute):
+     
+     from sklearn.preprocessing import StandardScaler
+     from sklearn.pipeline import Pipeline
+     from sklearn.metrics import f1_score
+     import numpy as np
+     mod = __import__(clf_info[0], fromlist=[clf_info[1]])
+     clf = getattr(mod, clf_info[1])(**clf_info[2])
+     if len(clf_info) > 3: # Run a GridSearch when param_grid available
+         from sklearn.model_selection import GridSearchCV
+         clf = GridSearchCV(clf, param_grid=clf_info[3])
+     train_index, test_index = train_test_split[split_index]
+     pipe = Pipeline([('std', StandardScaler()), (clf_info[1], clf)])
+     y = y.ravel()
+     if permute: # Run a generic permutation to create a null model
+         pipe.fit(X[train_index], y[np.random.permutation(train_index)])
+     else:
+         pipe.fit(X[train_index], y[train_index])
+     f1 = f1_score(y[test_index], pipe.predict(X[test_index]), average='weighted')
+     return round(f1, 4)
+
+
+Now we add everything together in a *Workflow*.  Here is where *Pydra*'s splitter really gets to shine. 
+An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier and permutation
+combination gets run through the pipeline.   TODO
+
+
+
+
+.. code-block:: python
+
+  # Encapsulate tasks in a Workflow reuse script output cache
+  wf = pydra.Workflow(name="ml_wf", input_spec=list(inputs.keys()),
+                 **inputs, cache_dir=wf_cache_dir, # workflow cache 
+                     cache_locations=[cache_dir]) # reuses script cache
+  
+  wf.split(['clf_info', 'permute'])              # joint map over classifiers and permutation
+  wf.add(read_file(name="readcsv",               
+                  filename=wf.lzin.filename,     # connect workflow input
+                  x_indices=wf.lzin.x_indices,
+                  target_vars=wf.lzin.target_vars))
+
+  wf.add(gen_splits(name="gensplit",             
+                   n_splits=wf.lzin.n_splits,    # connect workflow input
+                   test_size=wf.lzin.test_size,
+                   # connect lazy-eval outputs of previous task
+                   X=wf.readcsv.lzout.X, Y=wf.readcsv.lzout.Y,
+                   groups=wf.readcsv.lzout.groups))
+
+  wf.add(train_test_kernel(name="fit_clf",       # use outputs from both tasks
+                     X=wf.readcsv.lzout.X, y=wf.readcsv.lzout.Y,
+                     train_test_split=wf.gensplit.lzout.splits,
+                     split_index=wf.gensplit.lzout.split_indices,
+                     clf_info=wf.lzin.clf_info, permute=wf.lzin.permute))
+
+  wf.fit_clf.split('split_index').combine('split_index') # Parallel spec
+  wf.set_output([("f1", wf.fit_clf.lzout.f1)]) # connect workflow output
+
+
+
+TODO explain results and return inputs
+
+
+.. code-block:: python
+
+  inputs = {"filename": 'iris.csv',
+           "x_indices": range(4), "target_vars": ("label"),
+           "n_splits": 3, "test_size": 0.2,
+            "permute": [True, False], "clf_info": clfs       # same clf shown earlier
+           }    
+  n_procs = 8 # for parallel processing
+  cache_dir = os.path.join(os.getcwd(), 'cache')
+  wf_cache_dir = os.path.join(os.getcwd(), 'cache-wf')
+
+  # Execute the workflow in parallel using multiple processes
+  with pydra.Submitter(plugin="cf", n_procs=n_procs) as sub:
+    sub(runnable=wf)
+  
+  print(wf.result(return_inputs=True))
+
+  [({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
+  'ml_wf.permute': True}, Result(output=Output(f1=[0.2622, 0.1733, 0.2975]), 
+  runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
+  'ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9333, 0.9333]), 
+  runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
+  ml_wf.permute': True}, Result(output=Output(f1=[0.2026, 0.1468, 0.2952]), 
+  runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
+  ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9667, 0.9668]), 
+  runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {}, 
+  [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': True}, 
+  Result(output=Output(f1=[0.1813, 0.1111, 0.4326]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {},
+   [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': False}, 
+   Result(output=Output(f1=[0.9658, 0.9665, 0.9664]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': True}, 
+  Result(output=Output(f1=[0.3276, 0.1702, 0.2091]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': False}, 
+  Result(output=Output(f1=[0.9658, 0.9333, 0.8992]), runtime=None, errored=False))]
+
+
+
 
 
 Summary and Future Directions
