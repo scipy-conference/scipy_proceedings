@@ -532,32 +532,36 @@ allow actions to stop the simulation when they complete which for example, could
 tuning MC trial move sizes. With respect to performance, with zero copy access to the data on the
 CPU or GPU, custom actions can also achieve high performance using standard Python libraries like
 NumPy, SciPy, numba, CuPy and others. Below we show an example of a :code:`Action` that
-switches a :code:`fraction` of particles of type :code:`initial_type` to type :code:`final_type`
-each time it is run. This action could be refined to implement a reactive MC move reminiscent of
-:cite:`glotzer.etal1994`. Refining the class to obey detailed balance or have a variable switch rate
-is left to the reader.
+switches a of particles of type :code:`initial_type` to type :code:`final_type` by a specified
+:code:`rate` each time it is run. This action could be refined to implement a reactive MC move
+reminiscent of :cite:`glotzer.etal1994` or to have a variable switch rate. These exercises are left
+to the reader.
 
 .. code-block:: python
 
+    import hoomd
+    from hoomd.filter import (
+        Intersection, All, Type)
     from hoomd.custom import Action
 
     class SwapType(Action):
         def __init__(self, initial_type,
-                     final_type, fraction):
-            self._intitial_type = initial_type
-            self._final_type = final_type
-            self._frac = fraction
+                     final_type, rate, filter=All()):
+            self.final_type = final_type
+            self.rate = rate
+            self.filter = Intersection(
+                [Type(initial_type), filter])
 
         def act(self, timestep):
+            tags = self.filter(self._state)
             with self._state.cpu_local_snapshot as data:
-                types = data.particles.typeid
-                type_index = np.where(
-                    types == self._initial_type)
-                N_swaps = int(
-                    len(type_index) * self._frac)
-                mask = np.random.choice(
-                    type_index, N_swaps, replace=False)
-                types[mask] = self._final_type
+                part = data.particles
+                filtered_index = part.rtags[tags]
+                N_swaps = int(len(tags) * self.rate)
+                mask = np.random.choice(filtered_index,
+                                        N_swaps,
+                                        replace=False)
+                part.typeid[mask] = self._final_type
 
 Larger Examples
 ---------------
