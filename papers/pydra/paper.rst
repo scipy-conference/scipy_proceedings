@@ -64,7 +64,7 @@ that is presented in this paper.
 The package is a part of the second generation of the *Nipype* ecosystem [TODO: ref]
 --- an open-source framework that provides a uniform interface to existing neuroimaging
 software and facilitates interaction between them.
-Nipype project was born in the neuroimaging community, and has been helping scientists build
+The *Nipype* project was born in the neuroimaging community, and has been helping scientists build
 workflows for a decade, providing a uniform interface to such neuroimaging packages
 as FSL [ref], ANTs [ref], AFNI [ref], FreeSurfer [ref] and SPM [ref].
 This flexibility has made it an ideal basis for popular preprocessing tools,
