@@ -145,8 +145,8 @@ directory. There are several classes that inherit from ``TaskBase`` and each has
 a different application:
 
 * ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
-  declared in an existing library, package, or interactively can be converted to
-  a ``FunctionTask`` by using Pydra decorator - ``mark.task``.
+  declared in an existing library, package, or interactively in a terminal can
+  be converted to a ``FunctionTask`` by using Pydra decorator - ``mark.task``.
 
   .. code-block:: python
 
@@ -179,8 +179,9 @@ a different application:
   and `std`. These named outputs allowing passing different outputs to
   different downstream nodes in a dataflow.
 
-* ``ShellCommandTask`` is a *Task* that is built around shell commands and executables.
-  It can be used with a simple command without any arguments, or with specific set of arguments and flags, e.g.:
+* ``ShellCommandTask`` is a *Task* used to run shell commands and executables.
+  It can be used with a simple command without any arguments, or with specific
+  set of arguments and flags, e.g.:
 
   .. code-block:: python
 
@@ -188,61 +189,54 @@ a different application:
 
      ShellCommandTask(executable="ls", args="my_dir")
 
+  The *Task* can accommodate more complex shell commands by allowing the user to
+  customize inputs to and output of commands. Once can generate an input
+  specification to specify names of inputs, positions in the command, types of
+  the inputs, and other metadata. As a specific example, FSL's BET command (Brain
+  Extraction Tool) can be called on the command line as:
 
+  .. code-block:: python
 
-  The *Task* can accommodate  much more complicated commands by allowing to customize input and output
-  to specify name of the input, position in the command, flag, type, etc.
-  FSL's BET command (Brain Extraction Tool) could be used as an example (note, this is only a short version
-  of specification and not fully working example):
+    bet input_file output_file -m
+
+  Each of these inputs can be augmented as a named argument to the
+``ShellCommandTask``. As shown next, even an output is specified by specifying
+how to construct the out_file field using a template:
 
   .. code-block:: python
 
     bet_input_spec = SpecInfo(
         name="Input",
         fields=[
-        (
-            "in_file",
-            File,
-            {
-             "help_string": "input file ...",
-             "position": 1,
-             "mandatory": True,
-            }
-        ),
-        (
-            "out_file",
-            str,
-            {
-             "help_string": "name of output ...",
-             "position": 2,
-             "output_file_template": "{in_file}_br",
-            }
-        ),
-        (
-            "mask",
-            bool,
-            {
-             "help_string": "create binary mask",
-             "argstr": "-m",
-             }
-        )
-        ],
-        bases=(ShellSpec,),
-    )
+        ( "in_file", File,
+          { "help_string": "input file ...",
+            "position": 1,
+            "mandatory": True } ),
+        ( "out_file", str,
+          { "help_string": "name of output ...",
+            "position": 2,
+            "output_file_template": "{in_file}_br" } ),
+        ( "mask", bool,
+          { "help_string": "create binary mask",
+            "argstr": "-m", } ) ],
+        bases=(ShellSpec,) )
 
     ShellCommandTask(executable="bet",
                      input_spec=bet_input_spec)
 
-* ``ContainerTask`` class is a child class of ``ShellCommandTask`` an a parent class
-  for ``DockerTask`` and ``SingularityTask``.
-  Both *Container Tasks* run shell commands or executables within containers with specific user defined
+  Outputs can also be specified separately using a similar output specification.
+
+* ``ContainerTask`` class is a child class of ``ShellCommandTask`` and serves as
+  a parent class for ``DockerTask`` and ``SingularityTask``. Both *Container Tasks*
+  run shell commands or executables within containers with specific user defined
   environments using *Docker* [ref] and *Singularity* [ref] software respectively.
-  This might be extremely useful for users and projects that require environment encapsulation and sharing.
-  Using container technologies allows to ensure scientific workflows reproducibility.
-  These *Container Tasks* can be defined by using ``DockerTask`` and ``SingularityTask`` directly,
-  or can be created automatically from ``ShellCommandTask``,
-  when an optional argument ``container_info`` is used when creating a *Shell Task*.
-  These two syntax are equivalent:
+  This might be extremely useful for users and projects that require environment
+  encapsulation and sharing. Using container technologies helps improve scientific
+  workflows reproducibility. These *Container Tasks* can be defined by using
+  ``DockerTask`` and ``SingularityTask`` classes directly, or can be created
+  automatically from ``ShellCommandTask``, when an optional argument
+  ``container_info`` is used when creating a *Shell Task*. The following two
+  syntaxes are equivalent:
 
   .. code-block:: python
 
@@ -252,10 +246,15 @@ a different application:
           container_info=("docker", "busybox"))
 
 
-* ``Workflow`` - is a special *Task* that has an additional attribute - an executable graph.
-  Each node of the graph contains a *Task* of any type, and can be add to the *Workflow* simply by calling ``add`` method.
-  The connections between *Tasks* are defined by using so called *Lazy Input* or *Lazy Output*,
-  as it is presented by this example:
+* ``Workflow`` - is a subclass of *Task* that provides support for creating Pydra
+  dataflows. As a subclass, a *Workflow* acts like a *Task* and has inputs, outputs,
+  is hashable, and is treated as a single unit. Unlike *Tasks*, workflows embed
+  a directed acyclic graph. Each node of the graph contains a *Task* of any type,
+  including another *Workflow*, and can be added to the *Workflow* simply by calling
+  the ``add`` method. The connections between *Tasks* are defined by using so
+  called *Lazy Inputs* or *Lazy Outputs*. These are special attributes that allow
+  assignment of values when a *Workflow* is executed rather than at the point of
+  assignment. The following example creates a *Workflow* from two Pydra *Tasks*.
 
   .. code-block:: python
 
