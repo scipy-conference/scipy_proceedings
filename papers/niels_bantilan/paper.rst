@@ -122,11 +122,11 @@ Reasonable validation rules might be:
        https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people
 
 
-Another approach to reasoning about validation rules is in terms of
-statistical or deterministic checks. In this context, statistical checks
-explicitly express the probabilistic and distributional properties of the data.
-Such validation rules indicate to the reader that the property under test is
-inherently stochastic. Deterministic checks express assertions about the data
+Another approach to reasoning about validation rules is in terms of statistical
+or deterministic checks. In this context, statistical checks explicitly express
+the probabilistic and distributional properties of the data. Such validation
+rules indicate to the reader that the property under test is inherently
+stochastic. Conversely, deterministic checks express assertions about the data
 that are based on logical rules or functional dependencies that do not
 explicitly incorporate any assumptions about randomness into the validation
 function.
