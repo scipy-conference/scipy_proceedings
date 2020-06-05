@@ -176,7 +176,7 @@ a different application:
      result = mean_dev(my_data=[...])()
 
   When the task is executed `result.output` will contain two attributes: `mean`
-  and `std`. This naming allows references to pass different outputs to
+  and `std`. These named outputs allowing passing different outputs to
   different downstream nodes in a dataflow.
 
 * ``ShellCommandTask`` is a *Task* that is built around shell commands and executables.
