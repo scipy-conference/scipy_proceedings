@@ -151,10 +151,10 @@ a different application:
   .. code-block:: python
 
      import numpy as np
-     import pydra
-     fft = pydra.mark.annotate({'a': np.ndarray,
+     from pydra import mark
+     fft = mark.annotate({'a': np.ndarray,
                       'return': float})(np.fft.fft)
-     fft_task = pydra.mark.task(fft)()
+     fft_task = mark.task(fft)()
      result = fft_task(a=np.random.rand(512))
 
   `fft_task` is now a Pydra task and result will contain Pydra ``Result`` object.
@@ -173,11 +173,11 @@ a different application:
          import statistics as st
          return st.mean(my_data), st.stdev(my_data)
 
-     result = mean_dev(my_data=[...])
+     result = mean_dev(my_data=[...])()
 
-   When the task is executed `result.output` will contain two attributes: `mean`
-   and `std`. This naming allows references to pass different outputs to
-   different downstream nodes in a dataflow.
+  When the task is executed `result.output` will contain two attributes: `mean`
+  and `std`. This naming allows references to pass different outputs to
+  different downstream nodes in a dataflow.
 
 * ``ShellCommandTask`` is a *Task* that is built around shell commands and executables.
   It can be used with a simple command without any arguments, or with specific set of arguments and flags, e.g.:
@@ -249,7 +249,7 @@ a different application:
      DockerTask(executable="pwd", image="busybox")
 
      ShellCommandTask(executable="ls",
-                      container_info=("docker", "busybox"))
+          container_info=("docker", "busybox"))
 
 
 * ``Workflow`` - is a special *Task* that has an additional attribute - an executable graph.
@@ -259,16 +259,16 @@ a different application:
 
   .. code-block:: python
 
-    # creating workflow with two input fields - x and y
+    # creating workflow with two input fields
     wf = Workflow(input_spec=["x", "y"])
     # adding a task and connecting task's input
     # to the workflow input
-    wf.add(multiply(name="mult", x=wf.lzin.x, y=wf.lzin.y))
+    wf.add(mult(name="mlt", x=wf.lzin.x, y=wf.lzin.y))
     # adding anoter task and connecting task's input
     # to the "mult" task's output
-    wf.add(add2(name="add2", x=wf.mult.lzout.out))
+    wf.add(add2(name="add", x=wf.mlt.lzout.out))
     # setting worflow output
-    wf.set_output([("out", wf.add2.lzout.out)])
+    wf.set_output([("out", wf.add.lzout.out)])
 
 
 State
