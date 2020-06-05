@@ -153,8 +153,8 @@ show a rendering of the particle configuration in Figure (:ref:`sim`).
     integrator.forces.append(lj)
 
     # Setup output
-    gsd = hoomd.dump.GSD('dump.gsd', trigger=100)
-    log = hoomd.Logger()
+    gsd = hoomd.output.GSD('trajectory.gsd', trigger=100)
+    log = hoomd.logging.Logger()
     log += lj
     gsd.log = log
 
@@ -310,7 +310,7 @@ To store lists of operations, that must be attached to a simulation, the analogo
 .. code-block:: python
 
     from hoomd import Operations
-    from hoomd.dump import GSD
+    from hoomd.output import GSD
 
     ops = Operations()
     gsd = GSD('example.gsd')
@@ -393,7 +393,7 @@ User Customization
 A major improvement in HOOMD-blue version 3 is the ease with which users can customize their
 simulations in previously impossible ways. The changes that enable this improvement generally come
 in two flavors, the generalization of existing concepts in HOOMD-blue and the introduction of a
-completely new :code:`CustomAction` class that enables the user to inject arbitrary actions into
+completely new :code:`Action` class that enables the user to inject arbitrary actions into
 the simulation loop. In this section, we first discuss how concepts like periods and groups have
 been generalized from previous iterations of HOOMD-blue and then show how users can inject
 completely novel routines to actually modify the behavior of simulations.
@@ -531,7 +531,7 @@ we are adding a signal for Actions to send that would stop a :code:`Simulation.r
 allow actions to stop the simulation when they complete which for example, could be useful for
 tuning MC trial move sizes. With respect to performance, with zero copy access to the data on the
 CPU or GPU, custom actions can also achieve high performance using standard Python libraries like
-NumPy, SciPy, numba, CuPy and others. Below we show an example of a :code:`CustomAction` that
+NumPy, SciPy, numba, CuPy and others. Below we show an example of a :code:`Action` that
 switches a :code:`fraction` of particles of type :code:`initial_type` to type :code:`final_type`
 each time it is run. This action could be refined to implement a reactive MC move reminiscent of
 :cite:`glotzer.etal1994`. Refining the class to obey detailed balance or have a variable switch rate
@@ -539,9 +539,9 @@ is left to the reader.
 
 .. code-block:: python
 
-    from hoomd import CustomAction
+    from hoomd.custom import Action
 
-    class SwapType(CustomAction):
+    class SwapType(Action):
         def __init__(self, initial_type,
                      final_type, fraction):
             self._intitial_type = initial_type
@@ -633,7 +633,7 @@ for simulation data. It will store the scalar and string quantities in a single
 .. code-block:: python
 
     import pandas as pd
-    from hoomd import CustomAction
+    from hoomd.custom import Action
     from hoomd.util import (
         dict_flatten, dict_filter, dict_map)
 
@@ -654,7 +654,7 @@ for simulation data. It will store the scalar and string quantities in a single
                 for i, col in enumerate(v[0].T)}
 
 
-    class DataFrameBackEnd(CustomAction):
+    class DataFrameBackEnd(Action):
         def __init__(self, logger):
             self.logger = logger
 
