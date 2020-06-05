@@ -37,7 +37,7 @@ Pydra - a flexible and lightweight dataflow engine for scientific analyses
 .. class:: abstract
 
 This paper presents a new lightweight dataflow engine written
-in Python: Pydra. TODO - check PR build
+in Python: Pydra. TODO
 
 
 .. class:: keywords
@@ -200,8 +200,8 @@ a different application:
     bet input_file output_file -m
 
   Each of these inputs can be augmented as a named argument to the
-``ShellCommandTask``. As shown next, even an output is specified by specifying
-how to construct the out_file field using a template:
+  ``ShellCommandTask``. As shown next, even an output is specified by specifying
+  how to construct the out_file field using a template:
 
   .. code-block:: python
 
@@ -215,7 +215,8 @@ how to construct the out_file field using a template:
         ( "out_file", str,
           { "help_string": "name of output ...",
             "position": 2,
-            "output_file_template": "{in_file}_br" } ),
+            "output_file_template":
+                              "{in_file}_br" } ),
         ( "mask", bool,
           { "help_string": "create binary mask",
             "argstr": "-m", } ) ],
