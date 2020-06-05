@@ -651,21 +651,11 @@ across a given dictionary of classifiers and associated hyperparameters:
 .. code-block:: python
 
   clfs = [
-   ('sklearn.ensemble', 'ExtraTreesClassifier',
-          dict(n_estimators=100, class_weight='balanced')),
-   ('sklearn.neural_network', 'MLPClassifier', 
-          dict(alpha=1, max_iter=1000)),
+   ('sklearn.ensemble', 'ExtraTreesClassifier', dict(n_estimators=100)),
+   ('sklearn.neural_network', 'MLPClassifier',  dict(alpha=1, max_iter=1000)),
    ('sklearn.neighbors', 'KNeighborsClassifier', dict(),
-          [{'n_neighbors': [3, 5, 7, 9, 11, 13, 15, 17, 19],
-            'weights': ['uniform','distance']}]),
-   ('sklearn.tree', 'DecisionTreeClassifier', 
-          dict(max_depth=5)),
+          [{'n_neighbors': [3, 7, 15], 'weights': ['uniform','distance']}]),
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
-  inputs = {"filename": os.path.abspath('breast_cancer.csv'),
-           "x_indices": range(30), "target_inds": -1,
-           "n_splits": 5, "test_size": 0.2,
-           "clf_info": clfs,  "permute": [True, False]
-           }
 
 
 It leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.  
@@ -717,7 +707,8 @@ and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
 
   @mark.task 
   @mark.annotate({"return": {"X": ty.Any, "Y": ty.Any, "groups": ty.Any}})  
-  def read_file(filename, x_indices=None, target_vars=None, group='groups'):
+  def read_data(filename, x_indices=None, target_vars=None, group='groups'):
+     import pandas as pd
      data = pd.read_csv(filename)
      X = data.iloc[:, x_indices]
      Y = data[target_vars]
@@ -748,24 +739,24 @@ and `test_size`, with the option to define `group` and `random_state`. It return
 Now we need to train the classifiers. The most optimized model for a classifer can be easily found
 using *scikit-learn*'s `GridSearchCV` given a parameter grid.   However, there isn't a easy way in 
 *scikit-learn* to compare models across a variety of classifiers without using loops, especially
-when not all classifier requires tuning.  
-
-Here is where *Pydra*'s' splitter really shine. 
+when some classifier don't requires tuning.  
 
 
-*Task* 3 train and test classifiers on actual or permuted labels given outputs of *Task* 2 and 
- a dictionary in the same format as `clfs` shown earlier.
+*Task* 3 train and tests classifiers on actual or permuted labels given outputs of *Task* 2 and 
+ a dictionary in the same format as `clfs` shown earlier.  We can then compare f1 scores from 
+ models fit on actual and permuted data to evaluate
 
 
 .. code-block:: python
 
   @mark.task
-  @mark.annotate({"return": {"auc": ty.Any}})
+  @mark.annotate({"return": {"f1": ty.Any}})
   def train_test_kernel(X, y, train_test_split, split_index, clf_info, permute):
-     # Train and test a classifier on actual or permuted labels
+     
      from sklearn.preprocessing import StandardScaler
      from sklearn.pipeline import Pipeline
-     from sklearn.metrics import roc_auc_score
+     from sklearn.metrics import f1_score
+     import numpy as np
      mod = __import__(clf_info[0], fromlist=[clf_info[1]])
      clf = getattr(mod, clf_info[1])(**clf_info[2])
      if len(clf_info) > 3: # Run a GridSearch when param_grid available
@@ -778,17 +769,73 @@ Here is where *Pydra*'s' splitter really shine.
          pipe.fit(X[train_index], y[np.random.permutation(train_index)])
      else:
          pipe.fit(X[train_index], y[train_index])
-     auc = roc_auc_score(y[test_index], pipe.predict(X[test_index]))
-     return auc
+     f1 = f1_score(y[test_index], pipe.predict(X[test_index]), average='weighted')
+     return f1
 
 
-TODO
+Now we add everything together in a *Workflow*.  Here is where *Pydra*'s splitter really gets to shine. 
+An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier gets
+run through 
+
 
 .. code-block:: python
 
+  # Encapsulate tasks in a Workflow reuse script output cache
+  wf = pydra.Workflow(name="ml_wf", input_spec=list(inputs.keys()),
+                 **inputs, cache_dir=wf_cache_dir, # workflow cache 
+                     cache_locations=[cache_dir]) # reuses script cache
+  
+  wf.split(['clf_info', 'permute'])              # joint map over classifiers and permutation
+  wf.add(read_file(name="readcsv",               
+                  filename=wf.lzin.filename,     # connect workflow input
+                  x_indices=wf.lzin.x_indices,
+                  target_vars=wf.lzin.target_vars))
+
+  wf.add(gen_splits(name="gensplit",             
+                   n_splits=wf.lzin.n_splits,    # connect workflow input
+                   test_size=wf.lzin.test_size,
+                   # connect lazy-eval outputs of previous task
+                   X=wf.readcsv.lzout.X, Y=wf.readcsv.lzout.Y,
+                   groups=wf.readcsv.lzout.groups))
+
+  wf.add(train_test_kernel(name="fit_clf",       # use outputs from both tasks
+                     X=wf.readcsv.lzout.X, y=wf.readcsv.lzout.Y,
+                     train_test_split=wf.gensplit.lzout.splits,
+                     split_index=wf.gensplit.lzout.split_indices,
+                     clf_info=wf.lzin.clf_info, permute=wf.lzin.permute))
+
+  wf.fit_clf.split('split_index').combine('split_index') # Parallel spec
+  wf.set_output([("f1", wf.fit_clf.lzout.f1)]) # connect workflow output
+
+
+
+When e
+
+
+.. code-block:: python
+
+  inputs = {"filename": 'iris.csv',
+           "x_indices": range(4), "target_vars": ("label"),
+           "n_splits": 3, "test_size": 0.2,
+            "permute": [True, False], "clf_info": clfs       # same clf shown earlier
+           }    
   n_procs = 8 # for parallel processing
   cache_dir = os.path.join(os.getcwd(), 'cache')
   wf_cache_dir = os.path.join(os.getcwd(), 'cache-wf')
+
+  # Execute the workflow in parallel using multiple processes
+  with pydra.Submitter(plugin="cf", n_procs=n_procs) as sub:
+    sub(runnable=wf)
+  
+  print(wf.result(return_inputs=True))
+
+  [({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 'ml_wf.permute': True}, Result(output=Output(f1=[0.2, 0.3990451832907077, 0.27089947089947086]), runtime=None, errored=False)), ({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 'ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9333333333333333, 0.9333333333333333]), runtime=None, errored=False)),
+  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), 'ml_wf.permute': True}, Result(output=Output(f1=[0.16745633593459677, 0.1925925925925926, 0.32037037037037036]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), 'ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9667356797791581, 0.9333333333333333]), runtime=None, errored=False)), ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {}, [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': True}, Result(output=Output(f1=[0.4444444444444444, 0.12352092352092352, 0.2862155388471178]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {}, [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': False}, Result(output=Output(f1=[0.9657687991021324, 0.9664561403508772, 0.9664109121909632]), runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': True}, Result(output=Output(f1=[0.41277777777777774, 0.23333333333333334, 0.3238180120533062]), runtime=None, errored=False)), ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': False}, Result(output=Output(f1=[0.9657687991021324, 0.9333333333333333, 0.8992327365728899]), runtime=None, errored=False))
+
+
 
 
 
