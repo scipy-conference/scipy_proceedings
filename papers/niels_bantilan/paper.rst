@@ -112,7 +112,7 @@ Reasonable validation rules might be:
 * The ``age`` variable must be below 122 [#]_.
 * Records where ``age`` is below the legal working age should have ``NA``
   values in the ``income`` field.
-* Elements in the ``sex`` column must be a member of the set unordered set
+* Elements in the ``sex`` column must be a member of the unordered set
   ``{male, female}``.
 * ``education`` is an ordinal variable that must be a member of the ordered
   set ``{high school, bachelors, graduate, post graduate}``.
