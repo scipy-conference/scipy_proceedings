@@ -638,13 +638,159 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
 
 
-Machine Learning: Model Comparison
+Machine Learning: Model Comparison 
 ==================================
+
+The massive parameter space in machine learning makes it a perfect use case for *Pydra*. 
+
+Here we show an example of a general-purpose machine learning *Pydra* *Workflow*, which perform model comparison 
+across a given dictionary of classifiers and associated hyperparameters:
+
+*pandas* and *Pydra* 
+
+.. code-block:: python
+
+  clfs = [
+   ('sklearn.ensemble', 'ExtraTreesClassifier',
+          dict(n_estimators=100, class_weight='balanced')),
+   ('sklearn.neural_network', 'MLPClassifier', 
+          dict(alpha=1, max_iter=1000)),
+   ('sklearn.neighbors', 'KNeighborsClassifier', dict(),
+          [{'n_neighbors': [3, 5, 7, 9, 11, 13, 15, 17, 19],
+            'weights': ['uniform','distance']}]),
+   ('sklearn.tree', 'DecisionTreeClassifier', 
+          dict(max_depth=5)),
+   ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
+  inputs = {"filename": os.path.abspath('breast_cancer.csv'),
+           "x_indices": range(30), "target_inds": -1,
+           "n_splits": 5, "test_size": 0.2,
+           "clf_info": clfs,  "permute": [True, False]
+           }
+
+
+It leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.  
+It will also use *Pydra*'s caching to not redo model training and evaluation when new metrics 
+are added, or when number of iterations is increased.  This is a shorten version of the `pydraml` 
+package implemented here TODO
+
+
+Let use the iris dataset as an example.
+
+.. code-block:: python
+
+  from sklearn import datasets
+  import pandas as pd
+  X, y = datasets.load_iris(return_X_y=True)
+  dat = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+  dat['label'] = y
+
+
+Have a look at the structure of the data and save it to a csv.  Goal is to write a workflow that will read 
+and process any data in the same format.
+
+.. code-block:: python
+
+  print(dat.sample(5))
+         sepal_length  sepal_width  petal_length  petal_width  label
+  137           6.4          3.1           5.5          1.8      2
+  55            5.7          2.8           4.5          1.3      1
+  127           6.1          3.0           4.9          1.8      2
+  4             5.0          3.6           1.4          0.2      0
+  68            6.2          2.2           4.5          1.5      1
+  dat.to_csv('iris.csv')
+
+
+
+
+Our *Workflow* consist of 3 *Task*s, each *Task* approximately corresponds to:
+
+  1. Load & split data
+  2. Set up model selection method
+  3. Preprocessed, tune & compare models 
+
+
+*Task* 1 reads csv data as a `pandas` *Dataframe* from a path, with the option define name of target 
+variables, row indices to train and data grouping.  It returns the training data, labels
+and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
+
+.. code-block:: python
+
+  @mark.task 
+  @mark.annotate({"return": {"X": ty.Any, "Y": ty.Any, "groups": ty.Any}})  
+  def read_file(filename, x_indices=None, target_vars=None, group='groups'):
+     data = pd.read_csv(filename)
+     X = data.iloc[:, x_indices]
+     Y = data[target_vars]
+     if group in data.keys():
+         groups = data[:, [group]]
+     else:
+         groups = list(range(X.shape[0]))
+     return X.values, Y.values, groups
+
+
+*Task* 2 generates a set of train-test splits with `GroupShuffleSplit` in `scikit-learn` given `n_splits` 
+and `test_size`, with the option to define `group` and `random_state`. It returns `train_test_splits`
+
+.. code-block:: python
+
+  @mark.task  
+  @mark.annotate({"return": {"splits": ty.Any, "split_indices": ty.Any}}) 
+  def gen_splits(n_splits, test_size, X, Y, groups=None, random_state=0):
+   """Generate a set of train-test splits"
+   from sklearn.model_selection import GroupShuffleSplit
+   gss = GroupShuffleSplit(n_splits=n_splits, test_size=test_size,
+                           random_state=random_state)
+   train_test_splits = list(gss.split(X, Y, groups=groups))
+   split_indices = list(range(n_splits))
+   return train_test_splits, split_indices
+
+
+Now we need to train the classifiers. The most optimized model for a classifer can be easily found
+using *scikit-learn*'s `GridSearchCV` given a parameter grid.   However, there isn't a easy way in 
+*scikit-learn* to compare models across a variety of classifiers without using loops, especially
+when not all classifier requires tuning.  
+
+Here is where *Pydra*'s' splitter really shine. 
+
+
+*Task* 3 train and test classifiers on actual or permuted labels given outputs of *Task* 2 and 
+ a dictionary in the same format as `clfs` shown earlier.
 
 
 .. code-block:: python
 
-  ml example TODO
+  @mark.task
+  @mark.annotate({"return": {"auc": ty.Any}})
+  def train_test_kernel(X, y, train_test_split, split_index, clf_info, permute):
+     # Train and test a classifier on actual or permuted labels
+     from sklearn.preprocessing import StandardScaler
+     from sklearn.pipeline import Pipeline
+     from sklearn.metrics import roc_auc_score
+     mod = __import__(clf_info[0], fromlist=[clf_info[1]])
+     clf = getattr(mod, clf_info[1])(**clf_info[2])
+     if len(clf_info) > 3: # Run a GridSearch when param_grid available
+         from sklearn.model_selection import GridSearchCV
+         clf = GridSearchCV(clf, param_grid=clf_info[3])
+     train_index, test_index = train_test_split[split_index]
+     pipe = Pipeline([('std', StandardScaler()), (clf_info[1], clf)])
+     y = y.ravel()
+     if permute: # Run a generic permutation to create a null model
+         pipe.fit(X[train_index], y[np.random.permutation(train_index)])
+     else:
+         pipe.fit(X[train_index], y[train_index])
+     auc = roc_auc_score(y[test_index], pipe.predict(X[test_index]))
+     return auc
+
+
+TODO
+
+.. code-block:: python
+
+  n_procs = 8 # for parallel processing
+  cache_dir = os.path.join(os.getcwd(), 'cache')
+  wf_cache_dir = os.path.join(os.getcwd(), 'cache-wf')
+
+
 
 
 Summary and Future Directions
