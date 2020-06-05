@@ -533,6 +533,29 @@ Some example of this flexible syntax will be presented in the next section.
 Global Cache
 ============
 
+One of the key feature of *Pydra* is the support for *Global Cache*.
+Each of the *Task* and *Workflow* has an attribute called `checksum`.
+In order to create the `checksum`, all of the input fields are collected
+and hash value is calculated.
+If *File* or *Directory* is used as an input, than the hash value
+of the content is used.
+For *Workflow*, the connections between the *Tasks* are also included
+in the final `checksum`.
+The ``checksum`` is used to create output directory path, and therefore
+it can be reused by any other *Tasks* or *Workflow* in the future.
+In order to achieve this, the user can specify ``cache_dir`` and ``cache_locations``
+when creating the *Task*.
+The ``cache_dir`` is a one specific path, where you want your output to be saved,
+but ``cache_location`` can include a list of paths.
+Before running any *Task* or *Workflow*, *Pydra* checks all the directories that are either
+in ``cache_dir`` or ``cache_locations``, and if the specific checksum could be found,
+than the results are reloaded without running the specific *Task*.
+It is important to emphasis that every element of the *Workflow* is checked,
+so even if the *Workflow* itself is a new pipeline, using `Global Cache` could
+significantly reduce the time.
+The same is valid for *Tasks* with *State*.
+If the number of element of the input is expanded, the previously computed results
+could be still used.
 
 
 Applications and Examples
