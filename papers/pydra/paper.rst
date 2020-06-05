@@ -524,6 +524,120 @@ Global Cache
 Applications and Examples
 -------------------------
 
+In this section a few example of *Pydra* usage will be presented.
+The first example will be a "toy example" to show the power of *Pydra*'s splitter and combiner.
+The second example will cover machine learning model comparison.
+
+Mathematical Toy Example: Sine Function Approximation
+=====================================================
+
+In this section a toy mathematical example will be used to present
+the flexibility of *Pydra*'s splitters and combiners.
+The exemplary workflow will calculate the approximated values of Sine function
+for various values of `x`.
+The *Workflow* uses a Taylor polynomial for Sine function:
+
+.. math::
+
+  \sum_{n=0}^{n_{max}} \frac{(-1)^n}{(2n+1)!} x^{2n+1} = x -\frac{x^3}{3!} + \frac{x^5}{5!} + ...
+
+where `n_{max}` (TODO) is a degree of approximation.
+
+Since the idea is to make the execution parallel as much as possible, each of the term
+for each value of `x` should be calculated separately, and this will be done by functin `term (x, n)`.
+In addition, `range_fun(n_max)` will be used to return a list of integers from `0` to `n_max`,
+and `summing(terms)` will sum all the terms for the specific value of `x` and `n_max`.
+
+
+.. code-block:: python
+
+  from pydra import Workflow, Submitter, mark
+  import math
+
+  @mark.task
+  def range_fun(n_max):
+      return list(range(n_max+1))
+
+  @mark.task
+  def term(x, n):
+      import math
+      fract = math.factorial(2 * n + 1)
+      polyn = x ** (2 * n + 1)
+      return (-1)**n * polyn / fract
+
+  @mark.task
+  def summing(terms):
+      return sum(terms)
+
+
+The *Workflow* itself will take two inputs - list of values of `x`
+and list of values of `n_max`.
+In order to calculate various degrees of the approximation for each value of `x`,
+the `outer splitter` has to be used `[x, n_max]`.
+At the end all approximations for the specific values of `x` will be combined
+together by using `n_max` as a combiner.
+
+
+.. code-block:: python
+
+  wf = Workflow(name="wf", input_spec=["x", "n_max"])
+  wf.split(["x", "n_max"]).combine("n_max")
+  wf.inputs.x = [0, 0.5 * math.pi, math.pi]
+  wf.inputs.n_max = [2, 4, 10]
+
+All three *Function Tasks* have to be added to the *Workflow* and connected together.
+The second task, `term`, has to be additionally split over `n`,
+and at the end combine all the terms together.
+
+.. code-block:: python
+
+
+  wf.add(range_fun(name="range", n_max=wf.lzin.n_max))
+  wf.add(term(name="term", x=wf.lzin.x, n=wf.range.lzout.out).
+         split("n").combine("n"))
+  wf.add(summing(name="sum", terms=wf.term.lzout.out))
+
+
+After setting the *Workflow* output by using ``set_output`` method,
+the *Workflow* could be run.
+
+.. code-block:: python
+
+   wf.set_output([("sin", wf.sum.lzout.out)])
+   res = wf(plugin="cf")
+
+
+The result gives a two dimensional list of `Results`, for each value of `x` will be a list of
+three approximations, as an example, for `x=\pi/2` there should be the following list:
+
+.. code-block:: python
+
+ [...[Result(output=Output(sin=1.0045248555348174),
+             runtime=None, errored=False),
+      Result(output=Output(sin=1.0000035425842861),
+             runtime=None, errored=False),
+      Result(output=Output(sin=1.0000000000000002),
+             runtime=None, errored=False)],
+ ...]
+
+
+Each `Result` contains three elements: `output`, `runtime` and `errored`.
+As expected, the values of the Sine function are getting closer to `1` with higher degree of the approximation.
+
+The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
+
+.. figure:: wf_10_poster-crop.pdf
+   :align: center
+   :figclass: wht
+   :scale: 60%
+
+   Diagram representing the Workflow for calculating SIne function approximations of various degrees
+   for various values of x.
+   The symbol convention as described in :ref:`ndspl1`.
+   :label:`wfsin`
+
+
+
 Machine Learning: Model Comparison
 ==================================
 
