@@ -635,12 +635,11 @@ As expected, the values of the Sine function are getting closer to `1` with high
 
 The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
-.. figure:: wf_10_poster-crop.pdf
-   :align: center
-   :figclass: wht
+.. figure:: wf_10_paper-crop.pdf
+   :figclass: ht
    :scale: 60%
 
-   Diagram representing the Workflow for calculating SIne function approximations of various degrees
+   Diagram representing part of the Workflow for calculating Sine function approximations of various degrees
    for various values of x.
    The symbol convention as described in :ref:`ndspl1`.
    :label:`wfsin`
