@@ -842,14 +842,18 @@ TODO explain results and return inputs
   
   print(wf.result(return_inputs=True))
 
-  [({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 'ml_wf.permute': True},
-  Result(output=Output(f1=[0.2622, 0.1733, 0.2975]), runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 'ml_wf.permute': False},
-  Result(output=Output(f1=[1.0, 0.9333, 0.9333]), runtime=None, errored=False)), 
+  [({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
+  'ml_wf.permute': True}, Result(output=Output(f1=[0.2622, 0.1733, 0.2975]), 
+  runtime=None, errored=False)), 
+  ({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
+  'ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9333, 0.9333]), 
+  runtime=None, errored=False)), 
   ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
-  ml_wf.permute': True}, Result(output=Output(f1=[0.2026, 0.1468, 0.2952]), runtime=None, errored=False)), 
+  ml_wf.permute': True}, Result(output=Output(f1=[0.2026, 0.1468, 0.2952]), 
+  runtime=None, errored=False)), 
   ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
-  ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9667, 0.9668]), runtime=None, errored=False)), 
+  ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9667, 0.9668]), 
+  runtime=None, errored=False)), 
   ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {}, 
   [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': True}, 
   Result(output=Output(f1=[0.1813, 0.1111, 0.4326]), runtime=None, errored=False)), 
