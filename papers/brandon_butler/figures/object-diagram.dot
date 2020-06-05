@@ -1,4 +1,5 @@
 digraph {
+	graph [bgcolor="#ffffff00"]
 	node [	file=white,
 		fontcolor=black,
 		shape=box,
