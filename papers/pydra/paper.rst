@@ -630,7 +630,8 @@ and at the end combine all the terms together.
 
 
   wf.add(range_fun(name="range", n_max=wf.lzin.n_max))
-  wf.add(term(name="term", x=wf.lzin.x, n=wf.range.lzout.out).
+  wf.add(term(name="term", x=wf.lzin.x,
+                           n=wf.range.lzout.out).
          split("n").combine("n"))
   wf.add(summing(name="sum", terms=wf.term.lzout.out))
 
@@ -679,10 +680,9 @@ Machine Learning: Model Comparison
 
 The massive parameter space in machine learning makes it a perfect use case for *Pydra*. 
 
-Here we show an example of a general-purpose machine learning *Pydra* *Workflow*, which perform model comparison 
-across a given dictionary of classifiers and associated hyperparameters:
+This section will show an example of a general-purpose machine learning *Pydra*'s *Workflow*,
+which perform model comparison across classifiers and associated hyperparameters:
 
-*pandas* and *Pydra* 
 
 .. code-block:: python
 
@@ -697,52 +697,20 @@ across a given dictionary of classifiers and associated hyperparameters:
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
 
 
-It leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.  
-It will also use *Pydra*'s caching to not redo model training and evaluation when new metrics 
-are added, or when number of iterations is increased.  This is a shorten version of the *pydraml*
-package implemented here TODO
+The exampel leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.
+It also uses *Pydra*'s caching to not redo model training and evaluation when new metrics
+are added, or when number of iterations is increased.  This is a shorten version of the *pydra-ml*
+package :cite:`pydra-ml`
 
 
-Let use the iris dataset as an example.
+The *Workflow* consist of three *Tasks*: the first tasks loads and splits the data;
+the second one sets up model selection method; and the last *Task* preprocesses, tunes and compare
+the models.
+All of the *Tasks* are ``FunctionTask``, i.e. they are based on Python functions.
 
-.. code-block:: python
-
-  from sklearn import datasets
-  import pandas as pd
-  X, y = datasets.load_iris(return_X_y=True)
-  dat = pd.DataFrame(X,
-          columns=['sepal_length', 'sepal_width',
-                   'petal_length', 'petal_width'])
-  dat['label'] = y
-
-
-Have a look at the structure of the data and save it to a csv.  Goal is to write a workflow that will read 
-and process any data in the same format.
-
-.. code-block:: python
-
-  print(dat.sample(5))
-     sepal_length sepal_width petal_length petal_width label
-  137     6.4         3.1         5.5         1.8        2
-  55      5.7         2.8         4.5         1.3        1
-  127     6.1         3.0         4.9         1.8        2
-  4       5.0         3.6         1.4         0.2        0
-  68      6.2         2.2         4.5         1.5        1
-  dat.to_csv('iris.csv')
-
-
-
-
-Our *Workflow* consist of 3 *Task*s, each *Task* approximately corresponds to:
-
-  1. Load & split data
-  2. Set up model selection method
-  3. Preprocessed, tune & compare models 
-
-
-*Task* 1 reads csv data as a *pandas* *DataFrame* from a path, with the option define name of target 
-variables, row indices to train and data grouping.  It returns the training data, labels
-and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
+The first function, `read_data`, reads csv data as a *pandas.DataFrame*,
+with the option to define name of target variables, row indices to train and data grouping.
+It returns the training data, `X`, labels, `Y`, and grouping, `groups`.
 
 .. code-block:: python
 
@@ -762,8 +730,11 @@ and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
      return X.values, Y.values, groups
 
 
-*Task* 2 generates a set of train-test splits with `GroupShuffleSplit` in `scikit-learn` given `n_splits` 
-and `test_size`, with the option to define `group` and `random_state`. It returns `train_test_splits`
+
+Next function, `gen_splits`, uses  `sklearn.model_selection.GroupShuffleSplit` to generates
+a set of train-test splits given `n_splits` and `test_size`,
+with the option to define `group` and `random_state`.
+It returns `train_test_splits`
 
 .. code-block:: python
 
@@ -783,15 +754,9 @@ and `test_size`, with the option to define `group` and `random_state`. It return
       return train_test_splits, split_indices
 
 
-Now we need to train the classifiers. The most optimized model for a classifer can be easily found
-using *scikit-learn*'s `GridSearchCV` given a parameter grid.   However, there isn't a easy way in 
-*scikit-learn* to compare models across a variety of classifiers without using loops, especially
-when some classifier don't requires tuning.  
-
-
-*Task* 3 train and tests classifiers on actual or permuted labels given outputs of *Task* 2 and 
-a dictionary in the same format as `clfs` shown earlier.  We can then compare f1 scores from
-models fit on actual and permuted data to evaluate
+The main function to train the classifier, `train_test`, uses `sklearn.model_selection.GridSearchCV`.
+to train and test a classifier on actual or permuted labels.
+It also compare f1 scores using `sklearn.metrics.f1_score`
 
 
 .. code-block:: python
@@ -800,7 +765,6 @@ models fit on actual and permuted data to evaluate
   @mark.annotate({"return": {"f1": ty.Any}})
   def train_test_kernel(X, y, train_test_split,
                  split_index, clf_info, permute):
-     
      from sklearn.preprocessing import StandardScaler
      from sklearn.pipeline import Pipeline
      from sklearn.metrics import f1_score
@@ -829,10 +793,19 @@ models fit on actual and permuted data to evaluate
      return round(f1, 4)
 
 
-Now we add everything together in a *Workflow*.  Here is where *Pydra*'s splitter really gets to shine. 
+
+All three *Task* can be combined together within a  *Workflow*, here is where *Pydra*'s splitter
+really gets to shine.
 An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier and permutation
 combination gets run through the pipeline.   TODO
 
+In addition `fit_clf` *Task*, that uses `train_test_kernel` (TODO: perhaps we can change nape of task or a fun?)
+has its own *splitter* and *combiner*.
+Usually, there is no easy way in *scikit-learn* to compare models across a variety of classifiers
+without using loops, especially classifier that do not require tuning.
+Using *Pydra*, it is possible to split over `split_index`, that comes from `gensplit` *Task*,
+and run `train_test_kernel` for each of them.
+At the end all of the split indecies are combined together.
 
 
 
@@ -878,8 +851,8 @@ combination gets run through the pipeline.   TODO
 
 
 
-TODO explain results and return inputs
 
+The exemplary input dictionary and the *Workflow*'s submission can look as follow:
 
 .. code-block:: python
 
@@ -895,10 +868,16 @@ TODO explain results and return inputs
   # Execute the workflow in parallel using multiple processes
   with pydra.Submitter(plugin="cf", n_procs=n_procs) as sub:
       sub(runnable=wf)
-  
-  print(wf.result(return_inputs=True))
 
-  [({'ml_wf.clf_info':
+  result = wf.result(return_inputs=True)
+
+The *Workflow*'s output was set to the output of the `fit_cls` *Task*,
+and should look:
+
+.. code-block:: python
+
+
+   [({'ml_wf.clf_info':
          ('sklearn.ensemble','ExtraTreesClassifier',
           {'n_estimators': 100}),
      'ml_wf.permute': True},
@@ -910,37 +889,9 @@ TODO explain results and return inputs
      'ml_wf.permute': False},
     Result(output=Output(f1=[1.0, 0.9333, 0.9333]),
            runtime=None, errored=False)),
-   ({'ml_wf.clf_info':
-          ('sklearn.neural_network', 'MLPClassifier',
-           {'alpha': 1, 'max_iter': 1000}),
-     'ml_wf.permute': True},
-    Result(output=Output(f1=[0.2026, 0.1468, 0.2952]),
-           runtime=None, errored=False)),
-   ({'ml_wf.clf_info':
-          ('sklearn.neural_network', 'MLPClassifier',
-           {'alpha': 1, 'max_iter': 1000}),
-     'ml_wf.permute': False},
-    Result(output=Output(f1=[1.0, 0.9667, 0.9668]),
-           runtime=None, errored=False)),
-   ({'ml_wf.clf_info':
-         ('sklearn.neighbors', 'KNeighborsClassifier', {},
-          [{'n_neighbors': [3, 7, 15],
-            'weights': ['uniform', 'distance']}]),
-     'ml_wf.permute': True},
-    Result(output=Output(f1=[0.1813, 0.1111, 0.4326]),
-           runtime=None, errored=False)),
-   ({'ml_wf.clf_info':
-         ('sklearn.neighbors', 'KNeighborsClassifier', {},
-          [{'n_neighbors': [3, 7, 15],
-            'weights': ['uniform', 'distance']}]),
-     'ml_wf.permute': False},
-    Result(output=Output(f1=[0.9658, 0.9665, 0.9664]),
-           runtime=None, errored=False)),
-   ({'ml_wf.clf_info':
-         ('sklearn.ensemble', 'AdaBoostClassifier', {}),
-     'ml_wf.permute': True},
-    Result(output=Output(f1=[0.3276, 0.1702, 0.2091]),
-           runtime=None, errored=False)),
+
+   ...
+
    ({'ml_wf.clf_info':
          ('sklearn.ensemble', 'AdaBoostClassifier', {}),
      'ml_wf.permute': False},
@@ -948,7 +899,12 @@ TODO explain results and return inputs
            runtime=None, errored=False))]
 
 
-
+The final result of the *Workflow* is a list, each element of the list is for one value
+of `clf_info` and `permute`, both fields were set as input fields to the *Workflow*.
+All `Result` objects have an `output.f1` field that is also a list.
+Each element of `f1` corresponds to a different value of `split_index`, that was set both
+as a `splitter` and `combiner` to the `fit_cls` *Task*.
+This gives an option to easily compare various models and sets of parameters.
 
 
 Summary and Future Directions
