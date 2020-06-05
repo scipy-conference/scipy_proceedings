@@ -661,10 +661,13 @@ across a given dictionary of classifiers and associated hyperparameters:
 .. code-block:: python
 
   clfs = [
-   ('sklearn.ensemble', 'ExtraTreesClassifier', dict(n_estimators=100)),
-   ('sklearn.neural_network', 'MLPClassifier',  dict(alpha=1, max_iter=1000)),
+   ('sklearn.ensemble', 'ExtraTreesClassifier',
+    dict(n_estimators=100)),
+   ('sklearn.neural_network', 'MLPClassifier',
+    dict(alpha=1, max_iter=1000)),
    ('sklearn.neighbors', 'KNeighborsClassifier', dict(),
-          [{'n_neighbors': [3, 7, 15], 'weights': ['uniform','distance']}]),
+   [{'n_neighbors': [3, 7, 15],
+     'weights': ['uniform','distance']}]),
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
 
 
@@ -681,7 +684,9 @@ Let use the iris dataset as an example.
   from sklearn import datasets
   import pandas as pd
   X, y = datasets.load_iris(return_X_y=True)
-  dat = pd.DataFrame(X, columns=['sepal_length', 'sepal_width', 'petal_length', 'petal_width'])
+  dat = pd.DataFrame(X,
+          columns=['sepal_length', 'sepal_width',
+                   'petal_length', 'petal_width'])
   dat['label'] = y
 
 
@@ -691,12 +696,12 @@ and process any data in the same format.
 .. code-block:: python
 
   print(dat.sample(5))
-         sepal_length  sepal_width  petal_length  petal_width  label
-  137           6.4          3.1           5.5          1.8      2
-  55            5.7          2.8           4.5          1.3      1
-  127           6.1          3.0           4.9          1.8      2
-  4             5.0          3.6           1.4          0.2      0
-  68            6.2          2.2           4.5          1.5      1
+     sepal_length sepal_width petal_length petal_width label
+  137     6.4         3.1         5.5         1.8        2
+  55      5.7         2.8         4.5         1.3        1
+  127     6.1         3.0         4.9         1.8        2
+  4       5.0         3.6         1.4         0.2        0
+  68      6.2         2.2         4.5         1.5        1
   dat.to_csv('iris.csv')
 
 
@@ -716,8 +721,10 @@ and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
 .. code-block:: python
 
   @mark.task 
-  @mark.annotate({"return": {"X": ty.Any, "Y": ty.Any, "groups": ty.Any}})  
-  def read_data(filename, x_indices=None, target_vars=None, group='groups'):
+  @mark.annotate({"return": {
+      "X": ty.Any, "Y": ty.Any, "groups": ty.Any}})
+  def read_data(filename, x_indices=None,
+                target_vars=None, group='groups'):
      import pandas as pd
      data = pd.read_csv(filename)
      X = data.iloc[:, x_indices]
@@ -735,15 +742,19 @@ and `test_size`, with the option to define `group` and `random_state`. It return
 .. code-block:: python
 
   @mark.task  
-  @mark.annotate({"return": {"splits": ty.Any, "split_indices": ty.Any}}) 
-  def gen_splits(n_splits, test_size, X, Y, groups=None, random_state=0):
-   """Generate a set of train-test splits"
-   from sklearn.model_selection import GroupShuffleSplit
-   gss = GroupShuffleSplit(n_splits=n_splits, test_size=test_size,
-                           random_state=random_state)
-   train_test_splits = list(gss.split(X, Y, groups=groups))
-   split_indices = list(range(n_splits))
-   return train_test_splits, split_indices
+  @mark.annotate({"return":
+      {"splits": ty.Any, "split_indices": ty.Any}})
+  def gen_splits(n_splits, test_size, X, Y,
+                 groups=None, random_state=0):
+      """Generate a set of train-test splits"""
+      from sklearn.model_selection import GroupShuffleSplit
+      gss = GroupShuffleSplit(n_splits=n_splits,
+                              test_size=test_size,
+                              random_state=random_state)
+      train_test_splits = list(gss.split(X, Y,
+                                         groups=groups))
+      split_indices = list(range(n_splits))
+      return train_test_splits, split_indices
 
 
 Now we need to train the classifiers. The most optimized model for a classifer can be easily found
@@ -753,33 +764,42 @@ when some classifier don't requires tuning.
 
 
 *Task* 3 train and tests classifiers on actual or permuted labels given outputs of *Task* 2 and 
- a dictionary in the same format as `clfs` shown earlier.  We can then compare f1 scores from 
- models fit on actual and permuted data to evaluate
+a dictionary in the same format as `clfs` shown earlier.  We can then compare f1 scores from
+models fit on actual and permuted data to evaluate
 
 
 .. code-block:: python
 
   @mark.task
   @mark.annotate({"return": {"f1": ty.Any}})
-  def train_test_kernel(X, y, train_test_split, split_index, clf_info, permute):
+  def train_test_kernel(X, y, train_test_split,
+                 split_index, clf_info, permute):
      
      from sklearn.preprocessing import StandardScaler
      from sklearn.pipeline import Pipeline
      from sklearn.metrics import f1_score
+     from sklearn.model_selection import GridSearchCV
      import numpy as np
-     mod = __import__(clf_info[0], fromlist=[clf_info[1]])
+     mod = __import__(clf_info[0],
+                      fromlist=[clf_info[1]])
      clf = getattr(mod, clf_info[1])(**clf_info[2])
-     if len(clf_info) > 3: # Run a GridSearch when param_grid available
-         from sklearn.model_selection import GridSearchCV
+     if len(clf_info) > 3:
+         # Run a GridSearch when param_grid available
          clf = GridSearchCV(clf, param_grid=clf_info[3])
-     train_index, test_index = train_test_split[split_index]
-     pipe = Pipeline([('std', StandardScaler()), (clf_info[1], clf)])
+     train_index, test_index =
+                  train_test_split[split_index]
+     pipe = Pipeline([('std', StandardScaler()),
+                      (clf_info[1], clf)])
      y = y.ravel()
-     if permute: # Run a generic permutation to create a null model
-         pipe.fit(X[train_index], y[np.random.permutation(train_index)])
+     if permute:
+         # Run a generic permut. to create a null model
+         pipe.fit(X[train_index],
+                  y[np.random.permutation(train_index)])
      else:
          pipe.fit(X[train_index], y[train_index])
-     f1 = f1_score(y[test_index], pipe.predict(X[test_index]), average='weighted')
+     f1 = f1_score(y[test_index],
+                   pipe.predict(X[test_index]),
+                   average='weighted')
      return round(f1, 4)
 
 
@@ -792,32 +812,43 @@ combination gets run through the pipeline.   TODO
 
 .. code-block:: python
 
-  # Encapsulate tasks in a Workflow reuse script output cache
-  wf = pydra.Workflow(name="ml_wf", input_spec=list(inputs.keys()),
-                 **inputs, cache_dir=wf_cache_dir, # workflow cache 
-                     cache_locations=[cache_dir]) # reuses script cache
-  
-  wf.split(['clf_info', 'permute'])              # joint map over classifiers and permutation
-  wf.add(read_file(name="readcsv",               
-                  filename=wf.lzin.filename,     # connect workflow input
+  # Encapsulate tasks in a Workflow,
+  # reuse script output cache
+  wf = Workflow(name="ml_wf", **inputs,
+                input_spec=list(inputs.keys()),
+                # workflow cache
+                cache_dir=wf_cache_dir,
+                # reuses script cache
+                cache_locations=[cache_dir])
+
+  # joint map over classifiers and permutation
+  wf.split(['clf_info', 'permute'])
+  wf.add(read_file(name="readcsv",
+                   # connect workflow input
+                  filename=wf.lzin.filename,
                   x_indices=wf.lzin.x_indices,
                   target_vars=wf.lzin.target_vars))
 
-  wf.add(gen_splits(name="gensplit",             
-                   n_splits=wf.lzin.n_splits,    # connect workflow input
-                   test_size=wf.lzin.test_size,
-                   # connect lazy-eval outputs of previous task
-                   X=wf.readcsv.lzout.X, Y=wf.readcsv.lzout.Y,
-                   groups=wf.readcsv.lzout.groups))
+  wf.add(gen_splits(name="gensplit",
+            # connect workflow input
+            n_splits=wf.lzin.n_splits,
+            test_size=wf.lzin.test_size,
+            # connect lazy-eval output of previous task
+            X=wf.readcsv.lzout.X, Y=wf.readcsv.lzout.Y,
+            groups=wf.readcsv.lzout.groups))
 
-  wf.add(train_test_kernel(name="fit_clf",       # use outputs from both tasks
-                     X=wf.readcsv.lzout.X, y=wf.readcsv.lzout.Y,
-                     train_test_split=wf.gensplit.lzout.splits,
-                     split_index=wf.gensplit.lzout.split_indices,
-                     clf_info=wf.lzin.clf_info, permute=wf.lzin.permute))
+  wf.add(train_test_kernel(name="fit_clf",
+            # use outputs from both tasks
+            X=wf.readcsv.lzout.X, y=wf.readcsv.lzout.Y,
+            train_test_split=wf.gensplit.lzout.splits,
+            split_index=wf.gensplit.lzout.split_indices,
+            clf_info=wf.lzin.clf_info,
+            permute=wf.lzin.permute))
 
-  wf.fit_clf.split('split_index').combine('split_index') # Parallel spec
-  wf.set_output([("f1", wf.fit_clf.lzout.f1)]) # connect workflow output
+  # Parallel spec
+  wf.fit_clf.split('split_index').combine('split_index')
+  # connect workflow output
+  wf.set_output([("f1", wf.fit_clf.lzout.f1)])
 
 
 
@@ -829,40 +860,66 @@ TODO explain results and return inputs
   inputs = {"filename": 'iris.csv',
            "x_indices": range(4), "target_vars": ("label"),
            "n_splits": 3, "test_size": 0.2,
-            "permute": [True, False], "clf_info": clfs       # same clf shown earlier
-           }    
+           # same clf shown earlier
+           "permute": [True, False], "clf_info": clfs}
   n_procs = 8 # for parallel processing
   cache_dir = os.path.join(os.getcwd(), 'cache')
   wf_cache_dir = os.path.join(os.getcwd(), 'cache-wf')
 
   # Execute the workflow in parallel using multiple processes
   with pydra.Submitter(plugin="cf", n_procs=n_procs) as sub:
-    sub(runnable=wf)
+      sub(runnable=wf)
   
   print(wf.result(return_inputs=True))
 
-  [({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
-  'ml_wf.permute': True}, Result(output=Output(f1=[0.2622, 0.1733, 0.2975]), 
-  runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.ensemble', 'ExtraTreesClassifier', {'n_estimators': 100}), 
-  'ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9333, 0.9333]), 
-  runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
-  ml_wf.permute': True}, Result(output=Output(f1=[0.2026, 0.1468, 0.2952]), 
-  runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.neural_network', 'MLPClassifier', {'alpha': 1, 'max_iter': 1000}), '
-  ml_wf.permute': False}, Result(output=Output(f1=[1.0, 0.9667, 0.9668]), 
-  runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {}, 
-  [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': True}, 
-  Result(output=Output(f1=[0.1813, 0.1111, 0.4326]), runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.neighbors', 'KNeighborsClassifier', {},
-   [{'n_neighbors': [3, 7, 15], 'weights': ['uniform', 'distance']}]), 'ml_wf.permute': False}, 
-   Result(output=Output(f1=[0.9658, 0.9665, 0.9664]), runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': True}, 
-  Result(output=Output(f1=[0.3276, 0.1702, 0.2091]), runtime=None, errored=False)), 
-  ({'ml_wf.clf_info': ('sklearn.ensemble', 'AdaBoostClassifier', {}), 'ml_wf.permute': False}, 
-  Result(output=Output(f1=[0.9658, 0.9333, 0.8992]), runtime=None, errored=False))]
+  [({'ml_wf.clf_info':
+         ('sklearn.ensemble','ExtraTreesClassifier',
+          {'n_estimators': 100}),
+     'ml_wf.permute': True},
+    Result(output=Output(f1=[0.2622, 0.1733, 0.2975]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+          ('sklearn.ensemble', 'ExtraTreesClassifier',
+           {'n_estimators': 100}),
+     'ml_wf.permute': False},
+    Result(output=Output(f1=[1.0, 0.9333, 0.9333]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+          ('sklearn.neural_network', 'MLPClassifier',
+           {'alpha': 1, 'max_iter': 1000}),
+     'ml_wf.permute': True},
+    Result(output=Output(f1=[0.2026, 0.1468, 0.2952]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+          ('sklearn.neural_network', 'MLPClassifier',
+           {'alpha': 1, 'max_iter': 1000}),
+     'ml_wf.permute': False},
+    Result(output=Output(f1=[1.0, 0.9667, 0.9668]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+         ('sklearn.neighbors', 'KNeighborsClassifier', {},
+          [{'n_neighbors': [3, 7, 15],
+            'weights': ['uniform', 'distance']}]),
+     'ml_wf.permute': True},
+    Result(output=Output(f1=[0.1813, 0.1111, 0.4326]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+         ('sklearn.neighbors', 'KNeighborsClassifier', {},
+          [{'n_neighbors': [3, 7, 15],
+            'weights': ['uniform', 'distance']}]),
+     'ml_wf.permute': False},
+    Result(output=Output(f1=[0.9658, 0.9665, 0.9664]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+         ('sklearn.ensemble', 'AdaBoostClassifier', {}),
+     'ml_wf.permute': True},
+    Result(output=Output(f1=[0.3276, 0.1702, 0.2091]),
+           runtime=None, errored=False)),
+   ({'ml_wf.clf_info':
+         ('sklearn.ensemble', 'AdaBoostClassifier', {}),
+     'ml_wf.permute': False},
+    Result(output=Output(f1=[0.9658, 0.9333, 0.8992]),
+           runtime=None, errored=False))]
 
 
 
