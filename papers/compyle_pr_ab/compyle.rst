@@ -451,7 +451,7 @@ implementation. The details on the implementation of the boundary condition
 can be found in the example section of compyle's github repository
 `here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_simple.py>`_.
 
-The backend used is changed using the following code::
+The backend used can be changed using the following code::
 
   from compyle.api import get_config
   # On OpenMP
@@ -494,8 +494,10 @@ found as follows using reduction operator in compyle.
                             backend=backend)
     total_energy = energy_calc(vx, vy, pe, num_particles)
 
-Here, in the expression ``'a+b'`` ``a, b`` represent :math:`a_i, a_{i+1}`
-respectively. For the maximum for example one would write ``'max(a, b)'``.
+Here, in the expression ``'a+b'`` ``a`` represents :math:`a_i` and
+``b`` represents the reduction result till :math:`i-1`, i.e. 
+:math:`\sum_0^{i-1} a_k`. 
+For the maximum for example one would write ``'max(a, b)'``.
 Common reductions like sum, max and min are also available but we show the
 general form above where we can also map the values using the function given
 before the reduction is applied.
@@ -576,16 +578,8 @@ Given an input array
 The scan semantics in compyle are similar to those of the
 :code:`GenericScanKernel` in PyOpenCL. This allows us to construct generic
 scans by having an input expression, an output expression and a scan operator.
-The input function takes the input array and the array index as arguments.
-Assuming an input function :math:`f`, the generic scan will return the
-following array,
-
-.. math::
-   y_i = \bigoplus_{k=0}^{i} f(a, k)
-
-Note that using an input expression :math:`f(a, k) = a_k` gives the same result as a
-prefix sum.
-
+The input function takes the input array and the array index as arguments
+and can be used to map the input array before running the scan.
 The output expression can then be used to map and write the scan result as
 required. The output function also operates on the input array and an
 index but also has the scan result, the previous item and the last item
@@ -630,7 +624,9 @@ The argument :code:`i`, similar to elementwise
 is the current index, the argument :code:`item` is the result
 of the scan including the input at index :code:`i`. The
 :code:`prev_item` is the result of the array at index
-:code:`i-1`.
+:code:`i-1`. :code:`item` and :code:`prev_item` are
+reserved variables and users should not use them when writing
+the input and output functions.
 
 In the above example, the input expression returns 1 only
 when the value at index i is less than 50. So as long as the
@@ -688,7 +684,8 @@ This can be found in parallel using a scan as follows,
 
     @annotate
     def input_scan_keys(i, keys):
-        return 1 if i == 0 or keys[i] != keys[i - 1] else 0
+        return 1 if i == 0 or keys[i] != keys[i - 1] \
+            else 0
 
 
     @annotate
@@ -775,13 +772,31 @@ Performance comparison
 
     Time taken for simulation on GPU using CUDA and OpenCL.
 
+.. figure:: time_comp_impl.png
 
-As can be seen from figure, the algorithm is linear at
-large values of number of particles.
-Figure shows the speed up of the above implementation
+    Time taken for simulation using :math:`O(N)` (Linear) and :math:`O(N^2)` (Simple) approach.
+
+.. figure:: speedup_comp_impl.png
+
+    Speed up using :math:`O(N)` over :math:`O(N^2)` approach
+
+Figure <> shows the time taken for simulation using :math:`O(N)`
+and :math:`O(N^2)` approach. Figure <> shows the speed up acheived
+by using the linear algorithm.
+It can be seen from figure <>, the algorithm using nearest neighbors
+is linear at large values of number of particles.
+Figure shows the speed up of the :math:`O(N)` implementation
 using CUDA and OpenCL backend as compared to a serial cython backend.
 We again see a speed up of about 120x when using the GPU
-as compared to a serial cython implementation.
+as compared to a serial cython backend.
+
+The performance of the algorithm can be further improved
+by aligning the :math:`x` and :math:`y` coordinate arrays
+according to the sorted indices. This will improve the global memory
+access pattern on the GPU giving a better performance.
+This can be done easily in Compyle using :code:`compyle.array.align`
+which uses a single elementwise operation to align multiple
+arrays in a given order.
 
 Limitations
 ------------
