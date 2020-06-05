@@ -102,11 +102,11 @@ The combination of several key features makes Pydra a customizable and powerful 
   graph. These messages track inputs and outputs of each task in a dataflow, and
   the resources consumed by the task.
 
-Pydra is a pure Python package with a limited set of dependencies, which are themselves only dependent on
-the Python Standard library.
-Pydra uses the *attr* package for type annotation and validation of inputs and
-outputs of tasks, the *cloudpickle* package to pickle interactive task definitions,
-and the *pytest* testing framework.
+Pydra is a pure Python 3.7+ package with a limited set of dependencies, which are
+themselves only dependent on the Python Standard library. It leverages *type annotation*
+and *AsyncIO* in its core operations. Pydra uses the *attr* package for extended
+annotation and validation of inputs and outputs of tasks, the *cloudpickle* package
+to pickle interactive task definitions, and the *pytest* testing framework.
 Pydra is intended to help scientific workflows which rely on significant file-based operations and
 which evaluate outcomes of complex dataflows over a hyper-space of parameters.
 It is important to note, that Pydra is not a framework for writing efficient scientific algorithms
@@ -127,7 +127,9 @@ Architecture
 orchestrates the dataflow execution model. Different types of *Workers* allow
 Pydra to execute the task on different compute architectures. Fig. :ref:`classes`
 shows the Class hierarchy and links between them in the present Pydra
-architecture. In order to describe Pydra's most notable features in the next
+architecture. It was designed this way to decouple and allow *Workers* to
+operate
+In order to describe Pydra's most notable features in the next
 section, we briefly describe the role and function of each of these classes.
 
 .. figure:: classes.pdf
@@ -157,7 +159,7 @@ a different application:
      fft_task = mark.task(fft)()
      result = fft_task(a=np.random.rand(512))
 
-  `fft_task` is now a Pydra task and result will contain Pydra ``Result`` object.
+  `fft_task` is now a Pydra task and result will contain a Pydra ``Result`` object.
   In addition, the user can use Python's function annotation or another Pydra
   decorator |---| ``mark.annotate`` in order to specify the output. In the
   following example, we decorate an arbitrary Python function to create named
@@ -263,9 +265,10 @@ a different application:
     wf = Workflow(input_spec=["x", "y"])
     # adding a task and connecting task's input
     # to the workflow input
-    wf.add(mult(name="mlt", x=wf.lzin.x, y=wf.lzin.y))
-    # adding anoter task and connecting task's input
-    # to the "mult" task's output
+    wf.add(mult(name="mlt",
+                   x=wf.lzin.x, y=wf.lzin.y))
+    # adding anoter task and connecting
+    # task's input to the "mult" task's output
     wf.add(add2(name="add", x=wf.mlt.lzout.out))
     # setting worflow output
     wf.set_output([("out", wf.add.lzout.out)])
@@ -274,56 +277,62 @@ a different application:
 State
 =====
 
-All *Tasks*, including *Workflows*, could have an optional ``State`` attribute,
-that is used when *Task* should be run multiple times for various sets of input fields.
-In order to specify how the input should be split, and optionally combined after
-the *Task* execution, the user could set so called *splitter* and *combiner*.
-These attributes can be set by calling ``split`` and ``combine`` methods respectively, e.g.:
+All *Tasks*, including *Workflows*, can have an optional attribute representing
+an instance of the ``State`` class. This attribute controls the execution of a
+*Task* over different input parameter sets. This class is at the heart of *Pydra's*
+powerful map-reduce over arbitrary inputs of nested dataflows feature. The ``State``
+class formalizes how users can specify arbitrary combinations. Its functionality
+is used to create and track different combinations of input parameters, and
+optionally allow limited or complete recombinations. In order to specify how the
+inputs should be split into parameter sets, and optionally combined after
+the *Task* execution, the user can set *splitter* and *combiner* attributes of the
+``State`` class. These attributes can be set by calling ``split`` and ``combine``
+methods in the *Task* class. Here we provide a simple map-reduce example:
 
 .. code-block:: python
 
-  task_state = add2(x=[1, 5]).split("x").combine("x")
+  task_with_state =
+        add2(x=[1, 5]).split("x").combine("x")
 
-If *Task* has to be split, ``State`` class is responsible for creating list of proper
-set of inputs indices and values, that should be passed to the *Task* for each run.
-The way how this *Task* is executed and the types of implemented *splietters*
-will be discussed in details in the next section.
+In this example, the ``State`` class is responsible for creating a list of two
+separate inputs, which should be passed to the *Task* for each run, and grouped
+back when returning the result from the *Task*. While this example
+illustrates mapping and grouping of results over a single parameter, Pydra
+extends this to arbitrary combinations of input fields and downstream grouping
+over nested dataflows. Details of how splitters and combiners power Pydra's
+scalable dataflows are described later.
 
 
 Submitter
 =========
 
-In order to execute *Workflows* and single *Task* with multiple set of inputs,
-``Submitter`` class was created.
-The goal of this class is to  start proper *Worker* depending on the user defined plugin name
-and manage properly the *Tasks* execution.
-The execution depends whether the *runnable* is a single *Task*, or in fact is a *Workflow*.
-It does also depend whether the *Task has a *State* or not.
-When the *runnable* is a *Workflow*, the *Submitter* is responsible for checking if
-the *Tasks* from the graph are ready to run, i.e. if all the inputs are available,
-including the inputs that are set to the *Lazy Outputs* from previous *Tasks*.
-Once the *Task* is ready to run, the *Submitter* sends it to the *Worker*.
-When the runnable has a *State*, than the input has to be properly split, and multiple
-copy of the *Task* are sent to the *Worker*.
-In order to avoid big memory consumption, the *Tasks* are sent as a pointer to a pickle file,
-together with information about its state, so the proper input could be retrieved just before
-running the *Task*
-
+The ``Submitter`` class is responsible for unpacking *Workflows* and single
+*Tasks* with or without ``State`` into standalone stateless jobs that are then
+executed on *Workers*. When the *runnable* is a *Workflow*, the *Submitter* is
+responsible for checking if the *Tasks* from the graph are ready to run, i.e. if
+all the inputs are available, including the inputs that are set to the
+*Lazy Outputs* from previous *Tasks*. Once a *Task* is ready to run, the
+*Submitter* sends it to a *Worker*. When the runnable has a *State*, then the
+*Submitter* unpacks the *State* and sends multiple jobs to the *Worker* for the
+same *Task*. In order to avoid memory consumption as a result of scaling of *Tasks*,
+each job is sent as a pointer to a pickle file, together with information about
+its state, so that proper input can be retrieved just before running the *Task*.
+*Submitter* uses *AsyncIO* to manage all job executions to work in parallel,
+allowing scaling of execution as *Worker* resources are made available.
 
 Workers
 =======
 
-*Workers* in *Pydra* are responsible for execution the *Tasks* and are connected
-directly to the *Submitter*
-At this moment *Pydra* supports three types of software: *ConcurrentFutures* [ref],
-*Slurm* [ref] and *Dask* [ref].
-Currently ``ConcurrentFuturesWorker`` has the best support, but ``SlurmWorker``
-and ``DaskWorker`` are planned to have a full support.
+*Workers* in *Pydra* are responsible for the actual execution of the *Tasks* and
+are initialized by the *Submitter*. *Pydra* supports three types of execution
+managers: *ConcurrentFutures* [ref], *Slurm* [ref] and *Dask* [ref] (experimental).
 When  ``ConcurrentFuturesWorker`` is created, ``ProcessPoolExecutor`` is used
-to create a "pool" for adding the runnables.
-``SlurmWorker`` creates a proper bash script in order to execute the runnable, using *sbatch* command,
-and ``DaskWorker`` make use of ``Client`` class and the ``submit`` method.
-All workers use *async functions* from *AsyncIO* in order to handle asynchronous processes.
+to create a "pool" for adding the runnables. ``SlurmWorker`` creates an`sbatch`
+submission script in order to execute the task, and ``DaskWorker`` make use of
+Dask's ``Client`` class and its ``submit`` method. All workers use
+*async functions* from *AsyncIO* in order to handle asynchronous processes. All
+*Workers* rely on a `load_and_run` function to execute each job from its pickled
+state.
 
 
 Key Features
