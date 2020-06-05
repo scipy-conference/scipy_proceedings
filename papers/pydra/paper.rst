@@ -80,21 +80,27 @@ In Pydra, a dataflow is represented as a directed acyclic graph, where each node
 Python function, execution of an external tool, or another reusable dataflow.
 The combination of several key features makes Pydra a customizable and powerful dataflow engine:
 
-* Composable dataflows: any node of a dataflow graph can be another dataflow,
+* **Composable dataflows:** Any node of a dataflow graph can be another dataflow,
   allowing for nested dataflows to arbitrary depths and encourages creating reusable dataflows.
 
-* Flexible semantics for creating nested loops over input.
+* **Flexible semantics for creating nested loops over input sets:**
   Any *Task* or dataflow can be run over input parameter sets and the outputs can be recombined
   (similar concept to Map-Reduce model, but Pydra extends this to graphs with nested dataflows).
 
-* A content-addressable global cache: hash values are computed for each graph and each Task.
+* **A content-addressable global cache:** Hash values are computed for each graph and each Task.
   Supports reuse of previously computed and stored dataflows and Tasks.
 
-* Support for Python functions and external (shell) commands.
+* **Can integrate Python functions and external (shell) commands:** Pydra can
+  decorate and use existing functions in Python libraries alongside external
+  command line tools, allowing easy integration of existing code and software.
 
-* Native container execution support. Any dataflow or Task can be executed in an associated
+* **Native container execution support:** Any dataflow or Task can be executed in an associated
   container (via Docker or Singularity) enabling greater consistency for reproducibility.
 
+* **Auditing and provenance tracking:** Pydra provides a simple JSON-LD -based message
+  passing mechanism to capture the dataflow execution activties as a provenance
+  graph. These messages track inputs and outputs of each task in a dataflow, and
+  the resources consumed by the task.
 
 Pydra is a pure Python package with a limited set of dependencies, which are themselves only dependent on
 the Python Standard library.
@@ -108,24 +114,21 @@ or for use in applications where caching and distributed execution are not neces
 Since Pydra relies on a filesystem cache at present it is also not
 designed for dataflows that need to operate purely in memory. 
 
-
 The next section will describe the Pydra architecture --- main package classes
 and interactions between them. The *Key Features* section focuses on a set of features whose
 combination distinguishes Pydra from other dataflow engines. The paper concludes with a set
 of applied examples demonstrating the power and utility of Pydra.
 
 
-TODO: provenance??
-
 Architecture
 ------------
-*Pydra* architecture has three main components |---| runnable objects, i.e. *Tasks*,
-*Submitter* and *Worker*.
-There is one type of *Submitter*, but several types of *Tasks*
-and *Workers* have been developed, see schematic presentation in Fig. :ref:`classes`.
-In the following subsection all of these components will be briefly described.
-
-
+*Pydra* architecture has three core components: *Task*, *Submitter* and *Worker*.
+*Tasks* form the basic building blocks of the dataflow, while *Submitter*
+orchestrates the dataflow execution model. Different types of *Workers* allow
+Pydra to execute the task on different compute architectures. Fig. :ref:`classes`
+shows the Class hierarchy and links between them in the present Pydra
+architecture. In order to describe Pydra's most notable features in the next
+section, we briefly describe the role and function of each of these classes.
 
 .. figure:: classes.pdf
    :figclass: h!
@@ -133,17 +136,32 @@ In the following subsection all of these components will be briefly described.
 
    A schematic presentation of principal classes in Pydra. :label:`classes`
 
-
 Dataflows Components: Task and Workflow
 =======================================
-A *Task* is the basic runnable component of *Pydra* and is descibed by the class ``TaskBase``.
-There are several classes that inherit from ``TaskBase`` and each has a different application:
+A *Task* is the basic runnable component of *Pydra* and is described by the
+class ``TaskBase``. A *Task* has named inputs and outputs thus allowing
+construction of dataflows. It can be hashed and executes in a specific working
+directory. There are several classes that inherit from ``TaskBase`` and each has
+a different application:
 
-* ``FunctionTask`` is a *Task* that is design as a wrapper for Python function.
-  Every Python defined function could be transformed to the ``FunctionTask`` by using Pydra
-  decorator - ``mark.task``.
-  In addition, the user can use Python's function annotation or another Pydra decorator
-  |---| ``mark.annotate`` in order to specify the output, see an example below:
+* ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
+  declared in an existing library, package, or interactively can be converted to
+  a ``FunctionTask`` by using Pydra decorator - ``mark.task``.
+
+  .. code-block:: python
+
+     import numpy as np
+     import pydra
+     fft = pydra.mark.annotate({'a': np.ndarray,
+                      'return': float})(np.fft.fft)
+     fft_task = pydra.mark.task(fft)()
+     result = fft_task(a=np.random.rand(512))
+
+  `fft_task` is now a Pydra task and result will contain Pydra ``Result`` object.
+  In addition, the user can use Python's function annotation or another Pydra
+  decorator |---| ``mark.annotate`` in order to specify the output. In the
+  following example, we decorate an arbitrary Python function to create named
+  outputs.
 
   .. code-block:: python
 
@@ -155,7 +173,11 @@ There are several classes that inherit from ``TaskBase`` and each has a differen
          import statistics as st
          return st.mean(my_data), st.stdev(my_data)
 
-     task = mean_dev(my_data=[...])
+     result = mean_dev(my_data=[...])
+
+   When the task is executed `result.output` will contain two attributes: `mean`
+   and `std`. This naming allows references to pass different outputs to
+   different downstream nodes in a dataflow.
 
 * ``ShellCommandTask`` is a *Task* that is built around shell commands and executables.
   It can be used with a simple command without any arguments, or with specific set of arguments and flags, e.g.:
