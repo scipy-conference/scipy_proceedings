@@ -53,10 +53,10 @@ Therefore, this tool focuses on making it as easy as possible to perform data
 validation in a variety of contexts and workflows in order to lower the
 barrier to explicitly defining and enforcing the assumptions about data.
 
-In the following sections I outline the theoretical and practical underpinnings
-of data validation, describe in more detail the specific architecture and
-implementation of the ``pandera`` package, and compare and contrast it with
-similar tools in the Python and R ecosystems.
+In the following sections I outline the theoretical underpinnings and practical
+appications of data validation, describe in more detail the specific
+architecture and implementation of the ``pandera`` package, and compare and
+contrast it with similar tools in the Python and R ecosystems.
 
 
 Data Validation Definition
@@ -91,14 +91,58 @@ validation function that always returns :math:`True` or always returns
 validity of any dataset [#]_. Although the above formulation covers a wide
 variety of data structures, this paper will focus on tabular data.
 
-
 .. [#] There are nuances around how to formulate the domain of the function
        :math:`v`. For a more comprehensive formal treatment of data validation,
        refer to :cite:`van2019data` and :cite:`van2018statistical`
 
-.. TODO: nice-to-have - add section on types of validation checks: deterministic
-   and statistical. Contrast with van der Loo's concept of technical and
-   topcal checks.
+Types of Validation Rules
+-------------------------
+
+:cite:`van2019data` distinguishes between technical validation rules and
+domain-specific validation rules. Technical validation rules describe the
+variables, data types, and meta-properties of what constitutes a valid or
+invalid data structure, such as uniqueness and nullability. On the other hand,
+domain-specific validation rules describe properties of the data that are
+specific to the particular topic under study. For example, a census dataset
+might contain ``age``, ``income``, ``education``, and ``sex`` columns that are
+encoded in specific ways depending on the way the census was conducted.
+Reasonable validation rules might be:
+
+* The ``age`` and ``income`` variables must be positive integers.
+* The ``age`` variable must be below 122 [#]_.
+* Records where ``age`` is below the legal working age should have ``NA``
+  values in the ``income`` field.
+* Elements in the ``sex`` column must be a member of the set unordered set
+  ``{male, female}``.
+* ``education`` is an ordinal variable that must be a member of the ordered
+  set ``{high school, bachelors, graduate, post graduate}``.
+
+
+.. [#] The age of the oldest person:
+       https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people
+
+
+Another approach to reasoning about validation rules is in terms of
+statistical or deterministic checks. In this context, statistical checks
+explicitly express the probabilistic and distributional properties of the data.
+Such validation rules indicate to the reader that the property under test is
+inherently stochastic. Deterministic checks express assertions about the data
+that are based on logical rules or functional dependencies that do not
+explicitly incorporate any assumptions about randomness into the validation
+function.
+
+Note that all technical checks are deterministic because by definition these
+checks have to do with metadata properties like column presence, variable
+data types, nullability, and uniqueness. Domain-specific checks can come in
+either statistical or deterministic flavors. The enumerated list above are all
+deterministic checks. Examples of statistical checks would be:
+
+* The ``income`` variable is positively correlated with the ``education``
+  variable.
+* ``age`` among the ``female`` sample tends to be higher than the ``male``
+  sample in the surveyed population.
+* ``income`` is negatively correlated with the dummy variable ``is_female`` ,
+  which is a variable derived from the ``sex`` column.
 
 
 Data Validation in Practice
@@ -117,7 +161,11 @@ Explicit data validation becomes even more important when the end product
 artifacts inform business decisions, support scientific findings, or generate
 predictions about people or things in the real world.
 
-.. TODO: nice-to-have - insert figure of data validation process
+.. figure:: process.png
+   :scale: 95%
+
+   Data validation as an iterative software development process.
+   :label:`datavalprocess`
 
 Consider the process of constructing a dataset for training a machine learning
 model. In this context, the act of data validation is an iterative loop that
@@ -205,7 +253,13 @@ processing and validation code in a flexible manner, allowing the user to
 decide the critical points of failure in a pipeline where data validation would
 make it more robust to abherrant data values.
 
-.. TODO: insert figure of architecture workflow
+.. figure:: architecture.png
+   :scale: 95%
+
+   High-level architecture of ``pandera``. In the simplest case, raw data
+   passes through a data processor, is checked by a schema validator, and
+   flows through to the next stage of the analysis pipeline if the validation
+   checks pass, otherwise an error is raised. :label:`architecture`
 
 
 Core Features
@@ -554,10 +608,11 @@ function, one can write:
    schema = pa.DataFrameSchema({
        "x1": Column(
            checks=Hypothesis(
-              samples="x1",
               test=stats.normaltest,
-              # null hypothesis: x1 is normally distributed
-              relationship=lambda k2, p, alpha=0.01: p > alpha
+              # null hypothesis:
+              # x1 is normally distributed with
+              # alpha value of 0.01
+              relationship=lambda k2, p: p > 0.01
            )
        ),
    })
