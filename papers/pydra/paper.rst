@@ -314,11 +314,15 @@ of the following features makes *Pydra* a powerful tool in scientific computatio
 Nested Workflows
 ================
 
-*Workflows* in *Pydra* can contain multiple *Tasks*, but they are still *Tasks*,
-and have all of the *Tasks* attributes and methods.
-As a consequence, a *Workflow* can be also used as a node in the executable graph.
+*Pydra* was design to provide an easy way of creating very complex scientific workflows,
+and flexible reusing already existing workflows in new applications.
+This is the reason why ``Workflow`` class has been implemented as a child class of the ``TaskBase`` class,
+and can be treated by users as any other *Task* and added to a new *Workflow*.
+The *Submitter* is responsible for checking the type of each runnable and is able
+to dynamically extend the execution graph.
 This provides an easy way of creating nested workflows of arbitrary depth,
-as shown in Fig. :ref:`nested`.
+and reuse already existing *Workflows*.
+This is schematically shown in Fig. :ref:`nested`.
 
 .. figure:: nested_workflow-crop.pdf
    :figclass: h!
@@ -338,88 +342,102 @@ State and Nested Loops over Input
 One of the main goal of *Pydra* is to support flexible creation
 of loops over inputs, i.e. flexible mapping of the values of the
 user provided inputs to the specific *Task*'s execution,
-similarly to the concept of the *Map-Reduce*.
+similarly to the concept of the *Map-Reduce* [ref].
 In order to set input splitting (or mapping), *Pydra* requires to set
-so called *splitter*, it can be done by using method ``split``.
-The simplest example if for *Task* that have one field in the input,
-and therefore there is only one way of splitting the input:
+so called *splitter*, it can be done by using *Task*'s ``split`` method.
+The simplest example would be a *Task* that have one field *x* in the input,
+and therefore there is only one way of splitting its input.
+Assuming that the user provides a list as a value of *x*, *Pydra* slits
+the list, so each copy of the *Task* will get one element of the list:
 
 
 .. math::
 
    \textcolor{red}{\mathnormal{S} = x}: x=[x_1, x_2, ..., x_n] \longmapsto x=x_1, x=x_2, ..., x=x_n
 
-(TODO: mathcall font doesn't work, using mathnormal for now)
-
-That is also represented in Fig. :ref:`ndspl1`
+That is also represented in Fig. :ref:`ndspl1`, where *x=[1, 2, 3]* as an example.
 
 .. figure:: nd_spl_1-crop.pdf
    :figclass: h!
    :scale: 100%
 
-   Diagram representing a Task with one input and a simple splitter. :label:`ndspl1`
+   Diagram representing a Task with one input and a simple splitter. The white node represents
+   an original Task with x=[1,2,3], as an input. The coloured nodes represent copies of
+   the original Task after splitting the input, these are the runnables that are executed by Workers.
+   :label:`ndspl1`
 
 
 Whenever *Task* has more complicated input, i.e. multiple fields, there are
-two ways of creating the mapping and in *Pydra* API there are called *scalar splitter*,
+two ways of creating the mapping and they are called *scalar splitter*,
 and *outer splitter*.
 
-The first one, the *scalar splitter* requires that the lists of values for two fields
+The first one, the *scalar splitter*, requires that the lists of values for two fields
 have the same length, since "element wise" mapping is made.
-It is represented by parenthesis, ``()``:
+The *scalar splitter* is represented by parenthesis, ``()``:
 
 .. math::
+   :type: eqnarray
 
-   \textcolor{red}{\mathnormal{S} = (x, y)}: x=[x_1, .., x_n], y=[y_1, .., y_n], \longmapsto (x, y)=(x_1, y_1), ..., (x, y)=(x_n, y_n)
+   \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, .., x_n], y=[y_1, .., y_n] \\
+    &\mapsto& (x, y)=(x_1, y_1), ..., (x, y)=(x_n, y_n)
 
 
-This is also represented as a diagram in Fig. :ref:`ndspl4`
+The situation is also represented as a diagram in Fig. :ref:`ndspl4`
 
 .. figure:: nd_spl_4-crop.pdf
    :figclass: h!
    :scale: 90%
 
-   Diagram representing a Task with two input fields and a scalar splitter. :label:`ndspl4`
+   Diagram representing a Task with two input fields and a scalar splitter.
+   The symbol convention as described in :ref:`ndspl1`.
+   :label:`ndspl4`
 
-The second option of mapping the input when there are multiple fields is supported by the *outer splitter*
-and representhed by square brackets, ``[]``.
-When *outer splitter* is used all combination are created:
+The second option of mapping the input, when there are multiple fields, is provided by
+so called *outer splitter*.
+The *outer splitter* creates all combination of the input values, and does not require
+the lists to have the same lengths.
+The *outer splitter* is represented by square brackets, ``[]``:
 
 .. math::
    :type: eqnarray
 
    \textcolor{red}{\mathnormal{S} = [x, y]} &:& x=[x_1, .., x_n], y=[y_1, .., y_m], \\
-   &\longmapsto& (x, y)=(x_1, y_1), (x, y)=(x_1, y_2)..., (x, y)=(x_n, y_m)
+   &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_1, y_2)..., (x, y)=(x_n, y_m)
 
 (todo: perhaps I can remove repetition of ``(x,y)=``??)
 
-This is schematically represented in Fig. :ref:`ndspl3`
+The *outer splitter* for a node with two input fields is schematically represented in Fig. :ref:`ndspl3`
 
 .. figure:: nd_spl_3-crop.pdf
    :figclass: h!
    :scale: 75%
 
-   Diagram representing a Task with two input fields and an outer splitter. :label:`ndspl3`
+   Diagram representing a Task with two input fields and an outer splitter.
+   The symbol convention as described in :ref:`ndspl1`.
+   :label:`ndspl3`
 
 
 In addition to the splitting the input, *Pydra* supports grouping or combining the output together.
 Taking as an example the simple *Task* represented in Fig. :ref:`ndspl1`, in some application
-it could be useful to combine all the outputs at the end.
-In order to do it *Task* has to have so called *combiner* that could be set by calling ``combine`` method.
-This could be written as follow:
-
+it could be useful to combine at the end all the values of output.
+In order to do it, *Task* has so called *combiner*, that could be set by calling ``combine`` method.
+Note, that the *combiner* makes only sense when *splitter* is set first.
+When *combiner=x*, all values are combined together within one list, and each element of the list
+represents an output of the *Task* for the specific value of the input *x*.
+Splitting and combining for this example can be written as follow:
 
 .. math::
    :type: eqnarray
 
-   \textcolor{red}{\mathnormal{S} = x} &:& x=[x_1, x_2, ..., x_n] \longmapsto x=x_1, x=x_2, ..., x=x_n \\
-   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), out(x_2), ...out(x_n) \longmapsto out=[out(x_1), out(x_2), ...out(x_n)]
+   \textcolor{red}{\mathnormal{S} = x} &:& x=[x_1, x_2, ..., x_n] \mapsto x=x_1, x=x_2, ..., x=x_n \\
+   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out=[out(x_1), ...out(x_n)]
 
 
-Again, in the situation where input has multiple fields, there are various way of combining the output.
-Taking as an example *Task* represented in Fig. :ref:`ndspl4`, it could be useful to combine all the outputs
-for one specific values of *x* and all the values of *y*.
-The combining operation could be written as follow:
+In the situation where input has multiple fields, there are various way of combining the output.
+Taking as an example *Task* represented in Fig. :ref:`ndspl3`, it might be useful to combine all the outputs
+for one specific values of *a* and all the values of *b*.
+The combined output is a two dimensional list, each inner element for each value of *a*,
+this could be written as follow:
 
 .. math::
    :type: eqnarray
@@ -436,11 +454,18 @@ And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b 
    :figclass: h!
    :scale: 75%
 
-   Diagram representing a Task with two input fields, an outer splitter and a combiner. :label:`ndspl3comb1`
+   Diagram representing a Task with two input fields, an outer splitter and a combiner.
+   The Tasks are run in exactly the same way as previously, but at the end the values of output
+   for all values of *b* are combined together.
+   The symbol convention as described in :ref:`ndspl1`.
+   :label:`ndspl3comb1`
 
-It is also possible to combine all values of *x* for a specifc values of *y*, but it is also possible
-to combine all the values by providing a list of fields to the combiner.
-When a full combiner is set, i.e. all fields are in the combiner, the output is a one dimensional list:
+However, for the diagram from :ref:`ndspl3`, it might be also useful to combine all values of *a* for
+specific values of *b*.
+It can be also needed to combine all the values together.
+This can be achieve by providing a list of fields, *[a, b]* to the combiner.
+When a full combiner is set, i.e. all the fields from splitter are also in the combiner,
+the output is a one dimensional list:
 
 .. math::
    :type: eqnarray
@@ -456,14 +481,18 @@ And is represented in Fig. :ref:`ndspl3comb3` (todo: should probably change a,b 
    :figclass: h!
    :scale: 75%
 
-   Diagram representing a Task with two input fields, an outer splitter and a full combiner. :label:`ndspl3comb3`
+   Diagram representing a Task with two input fields, an outer splitter and a full combiner.
+   The Tasks are run in exactly the same way as previously, but at the end all of the output values
+   are combined together.
+   The symbol convention as described in :ref:`ndspl1`.
+   :label:`ndspl3comb3`
 
 
-These are the basic examples of *splitters* and *combiners*, but *Pydra* allows for mixing
-*splitters* and *combiners* on various level.
+These are the basic examples of *Pydra*'s *splitter* and *combiners* concept.
+It is important to note, that *Pydra* allows for mixing *splitters* and *combiners* on various level.
 They could be set on a single *Task* level, or on *Workflow* level.
-They could be also passed from one *Task* to the followings within a *Workflow*.
-
+They could be also passed from one *Task* to the followings *Task* within a *Workflow*.
+Some example of this flexible syntax will be presented in the next section.
 
 Global Cache
 ============
