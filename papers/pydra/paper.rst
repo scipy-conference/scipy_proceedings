@@ -102,39 +102,39 @@ The combination of several key features makes Pydra a customizable and powerful 
   graph. These messages track inputs and outputs of each task in a dataflow, and
   the resources consumed by the task.
 
-Pydra is a pure Python package with a limited set of dependencies, which are themselves only dependent on
+*Pydra* is a pure Python package with a limited set of dependencies, which are themselves only dependent on
 the Python Standard library.
-Pydra uses the *attr* package for type annotation and validation of inputs and
+*Pydra* uses the *attr* package for type annotation and validation of inputs and
 outputs of tasks, the *cloudpickle* package to pickle interactive task definitions,
 and the *pytest* testing framework.
-Pydra is intended to help scientific workflows which rely on significant file-based operations and
+*Pydra* is intended to help scientific workflows which rely on significant file-based operations and
 which evaluate outcomes of complex dataflows over a hyper-space of parameters.
-It is important to note, that Pydra is not a framework for writing efficient scientific algorithms
+It is important to note, that *Pydra* is not a framework for writing efficient scientific algorithms
 or for use in applications where caching and distributed execution are not necessary.
-Since Pydra relies on a filesystem cache at present it is also not
+Since *Pydra* relies on a filesystem cache at present it is also not
 designed for dataflows that need to operate purely in memory. 
 
-The next section will describe the Pydra architecture --- main package classes
+The next section will describe the *Pydra* architecture --- main package classes
 and interactions between them. The *Key Features* section focuses on a set of features whose
-combination distinguishes Pydra from other dataflow engines. The paper concludes with a set
-of applied examples demonstrating the power and utility of Pydra.
+combination distinguishes *Pydra* from other dataflow engines. The paper concludes with a set
+of applied examples demonstrating the power and utility of *Pydra*.
 
 
 Architecture
 ------------
-*Pydra* architecture has three core components: *Task*, *Submitter* and *Worker*.
+*Pydra architecture has three core components: *Task*, *Submitter* and *Worker*.
 *Tasks* form the basic building blocks of the dataflow, while *Submitter*
 orchestrates the dataflow execution model. Different types of *Workers* allow
-Pydra to execute the task on different compute architectures. Fig. :ref:`classes`
-shows the Class hierarchy and links between them in the present Pydra
-architecture. In order to describe Pydra's most notable features in the next
+*Pydra* to execute the task on different compute architectures. Fig. :ref:`classes`
+shows the Class hierarchy and links between them in the present *Pydra*
+architecture. In order to describe *Pydra*'s most notable features in the next
 section, we briefly describe the role and function of each of these classes.
 
 .. figure:: classes.pdf
    :figclass: h!
    :scale: 30%
 
-   A schematic presentation of principal classes in Pydra. :label:`classes`
+   A schematic presentation of principal classes in *Pydra*. :label:`classes`
 
 Dataflows Components: Task and Workflow
 =======================================
@@ -146,7 +146,7 @@ a different application:
 
 * ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
   declared in an existing library, package, or interactively in a terminal can
-  be converted to a ``FunctionTask`` by using Pydra decorator - ``mark.task``.
+  be converted to a ``FunctionTask`` by using *Pydra* decorator - ``mark.task``.
 
   .. code-block:: python
 
@@ -157,8 +157,8 @@ a different application:
      fft_task = mark.task(fft)()
      result = fft_task(a=np.random.rand(512))
 
-  `fft_task` is now a Pydra task and result will contain Pydra ``Result`` object.
-  In addition, the user can use Python's function annotation or another Pydra
+  `fft_task` is now a *Pydra* task and result will contain *Pydra* ``Result`` object.
+  In addition, the user can use Python's function annotation or another *Pydra*
   decorator |---| ``mark.annotate`` in order to specify the output. In the
   following example, we decorate an arbitrary Python function to create named
   outputs.
@@ -247,7 +247,7 @@ a different application:
           container_info=("docker", "busybox"))
 
 
-* ``Workflow`` - is a subclass of *Task* that provides support for creating Pydra
+* ``Workflow`` - is a subclass of *Task* that provides support for creating *Pydra*
   dataflows. As a subclass, a *Workflow* acts like a *Task* and has inputs, outputs,
   is hashable, and is treated as a single unit. Unlike *Tasks*, workflows embed
   a directed acyclic graph. Each node of the graph contains a *Task* of any type,
@@ -255,7 +255,7 @@ a different application:
   the ``add`` method. The connections between *Tasks* are defined by using so
   called *Lazy Inputs* or *Lazy Outputs*. These are special attributes that allow
   assignment of values when a *Workflow* is executed rather than at the point of
-  assignment. The following example creates a *Workflow* from two Pydra *Tasks*.
+  assignment. The following example creates a *Workflow* from two *Pydra* *Tasks*.
 
   .. code-block:: python
 
@@ -660,7 +660,7 @@ across a given dictionary of classifiers and associated hyperparameters:
 
 It leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.  
 It will also use *Pydra*'s caching to not redo model training and evaluation when new metrics 
-are added, or when number of iterations is increased.  This is a shorten version of the `pydraml` 
+are added, or when number of iterations is increased.  This is a shorten version of the *pydraml*
 package implemented here TODO
 
 
@@ -699,7 +699,7 @@ Our *Workflow* consist of 3 *Task*s, each *Task* approximately corresponds to:
   3. Preprocessed, tune & compare models 
 
 
-*Task* 1 reads csv data as a `pandas` *Dataframe* from a path, with the option define name of target 
+*Task* 1 reads csv data as a *pandas* *DataFrame* from a path, with the option define name of target 
 variables, row indices to train and data grouping.  It returns the training data, labels
 and grouping, corresponding to the `X`, `Y` and `groups` inputs to *Task* 2.
 
@@ -774,8 +774,10 @@ when some classifier don't requires tuning.
 
 
 Now we add everything together in a *Workflow*.  Here is where *Pydra*'s splitter really gets to shine. 
-An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier gets
-run through 
+An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier and permutation
+combination gets run through the pipeline.   TODO
+
+
 
 
 .. code-block:: python
@@ -809,7 +811,7 @@ run through
 
 
 
-When e
+TODO explain results and return inputs
 
 
 .. code-block:: python
