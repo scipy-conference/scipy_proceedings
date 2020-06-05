@@ -37,7 +37,7 @@ Pydra - a flexible and lightweight dataflow engine for scientific analyses
 .. class:: abstract
 
 This paper presents a new lightweight dataflow engine written
-in Python: Pydra. TODO
+in Python: Pydra. TODO - check PR build
 
 
 .. class:: keywords
