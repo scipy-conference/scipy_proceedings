@@ -29,6 +29,7 @@
 :email: satra@mit.edu
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
+:bibliography: mybib
 
 --------------------------------------------------------------------------
 Pydra - a flexible and lightweight dataflow engine for scientific analyses
@@ -61,14 +62,16 @@ into fully automated pipelines.
 This was the motivation behind writting a new dataflow engine written in Python, *Pydra*,
 that is presented in this paper.
 
-The package is a part of the second generation of the *Nipype* ecosystem [TODO: ref]
+The package is a part of the second generation of the *Nipype* ecosystem
+(:cite:`Gorgolewski2011`, :cite:`Nipype`)
 --- an open-source framework that provides a uniform interface to existing neuroimaging
 software and facilitates interaction between them.
 The *Nipype* project was born in the neuroimaging community, and has been helping scientists build
 workflows for a decade, providing a uniform interface to such neuroimaging packages
-as FSL [ref], ANTs [ref], AFNI [ref], FreeSurfer [ref] and SPM [ref].
+as FSL :cite:`Woolrich09`, ANTs :cite:`ANTs`, AFNI :cite:`AFNI`, FreeSurfer :cite:`FreeSurfer`
+and SPM :cite:`spm_book`.
 This flexibility has made it an ideal basis for popular preprocessing tools,
-such as fMRIPrep [ref] and C-PAC[ref].
+such as fMRIPrep :cite:`fMRIPrep` and C-PAC :cite:`C-PAC`.
 The second generation of *Nipype* ecosystem is meant to provide additional flexibility
 and is being developed with reproducibility, ease of use, and scalability in mind.
 *Pydra* itself is a standalone project and is designed as a general-purpose dataflow engine
@@ -85,7 +88,7 @@ The combination of several key features makes Pydra a customizable and powerful 
 
 * **Flexible semantics for creating nested loops over input sets:**
   Any *Task* or dataflow can be run over input parameter sets and the outputs can be recombined
-  (similar concept to Map-Reduce model, but Pydra extends this to graphs with nested dataflows).
+  (similar concept to Map-Reduce model :cite:`Map-Reduce`, but Pydra extends this to graphs with nested dataflows).
 
 * **A content-addressable global cache:** Hash values are computed for each graph and each Task.
   Supports reuse of previously computed and stored dataflows and Tasks.
@@ -234,7 +237,7 @@ a different application:
 * ``ContainerTask`` class is a child class of ``ShellCommandTask`` and serves as
   a parent class for ``DockerTask`` and ``SingularityTask``. Both *Container Tasks*
   run shell commands or executables within containers with specific user defined
-  environments using *Docker* [ref] and *Singularity* [ref] software respectively.
+  environments using *Docker* :cite:`docker` and *Singularity* :cite:`singularity` software respectively.
   This might be extremely useful for users and projects that require environment
   encapsulation and sharing. Using container technologies helps improve scientific
   workflows reproducibility. These *Container Tasks* can be defined by using
@@ -282,14 +285,14 @@ State
 All *Tasks*, including *Workflows*, can have an optional attribute representing
 an instance of the ``State`` class. This attribute controls the execution of a
 *Task* over different input parameter sets. This class is at the heart of *Pydra's*
-powerful map-reduce over arbitrary inputs of nested dataflows feature. The ``State``
+powerful `Map-Reduce` over arbitrary inputs of nested dataflows feature. The ``State``
 class formalizes how users can specify arbitrary combinations. Its functionality
 is used to create and track different combinations of input parameters, and
 optionally allow limited or complete recombinations. In order to specify how the
 inputs should be split into parameter sets, and optionally combined after
 the *Task* execution, the user can set *splitter* and *combiner* attributes of the
 ``State`` class. These attributes can be set by calling ``split`` and ``combine``
-methods in the *Task* class. Here we provide a simple map-reduce example:
+methods in the *Task* class. Here we provide a simple `Map-Reduce` example:
 
 .. code-block:: python
 
@@ -327,7 +330,7 @@ Workers
 
 *Workers* in *Pydra* are responsible for the actual execution of the *Tasks* and
 are initialized by the *Submitter*. *Pydra* supports three types of execution
-managers: *ConcurrentFutures* [ref], *Slurm* [ref] and *Dask* [ref] (experimental).
+managers: *ConcurrentFutures*, *Slurm* and *Dask* (experimental).
 When  ``ConcurrentFuturesWorker`` is created, ``ProcessPoolExecutor`` is used
 to create a "pool" for adding the runnables. ``SlurmWorker`` creates an`sbatch`
 submission script in order to execute the task, and ``DaskWorker`` make use of
@@ -375,7 +378,7 @@ State and Nested Loops over Input
 One of the main goal of *Pydra* is to support flexible creation
 of loops over inputs, i.e. flexible mapping of the values of the
 user provided inputs to the specific *Task*'s execution,
-similarly to the concept of the *Map-Reduce* [ref].
+similarly to the concept of the *Map-Reduce* :cite:`Map-Reduce`.
 In order to set input splitting (or mapping), *Pydra* requires to set
 so called *splitter*, it can be done by using *Task*'s ``split`` method.
 The simplest example would be a *Task* that have one field *x* in the input,
