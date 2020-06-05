@@ -105,7 +105,7 @@ The combination of several key features makes Pydra a customizable and powerful 
 
 *Pydra* is a pure Python 3.7+ package with a limited set of dependencies, which are
 themselves only dependent on the Python Standard library. It leverages *type annotation*
-and *AsyncIO* in its core operations. *Pydra* uses the *attr* package for extended
+and *AsyncIO* in its core operations. Pydra uses the *attr* package for extended
 annotation and validation of inputs and outputs of tasks, the *cloudpickle* package
 to pickle interactive task definitions, and the *pytest* testing framework.
 *Pydra* is intended to help scientific workflows which rely on significant file-based operations and
@@ -126,10 +126,11 @@ Architecture
 *Pydra architecture has three core components: *Task*, *Submitter* and *Worker*.
 *Tasks* form the basic building blocks of the dataflow, while *Submitter*
 orchestrates the dataflow execution model. Different types of *Workers* allow
+
 *Pydra* to execute the task on different compute architectures. Fig. :ref:`classes`
-shows the Class hierarchy and links between them in the present *Pydra*
+shows the Class hierarchy and links between them in the present Pydra
 architecture. It was designed this way to decouple and allow *Workers* to
-operate.  In order to describe Pydra's most notable features in the next
+operate.  In order to describe *Pydra*'s most notable features in the next
 section, we briefly describe the role and function of each of these classes.
 
 .. figure:: classes.pdf
