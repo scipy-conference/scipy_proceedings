@@ -51,7 +51,7 @@ Introduction
 Scientific workflows often require sophisticated analyses that encompass
 a large collection of algorithms.
 The algorithms, that were originally not necessarily designed to work together,
-often written by different authors in different times.
+and were written by different authors.
 Some may be written in Python, while others might require calling external programs.
 It is a common practice to create semi-manual workflows that require scientist
 interaction to handle files and partial results between algorithms and external tools.
