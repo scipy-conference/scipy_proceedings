@@ -521,7 +521,7 @@ inner list for each value of *x*. This is written as follows:
     && ..., \\
     && [out(x_n, y_1), ..., out(x_n, y_m)]]
 
-And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b to x,y)
+And is represented in Fig. :ref:`ndspl3comb1`.
 
 
 .. figure:: nd_spl_3_comb1-crop.pdf
@@ -550,7 +550,7 @@ the splitter are also in the combiner, the output is a one dimensional list:
     \longmapsto [out(x_1, y_1), ..., out(x_n, y_m)]
 
 
-And is represented in Fig. :ref:`ndspl3comb3` (todo: should probably change a,b to x,y)
+And is represented in Fig. :ref:`ndspl3comb3`.
 
 
 .. figure:: nd_spl_3_comb3-crop.pdf
@@ -715,9 +715,11 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
    :scale: 60%
 
    Diagram representing part of the Workflow for calculating *Sine* function
-   approximations of various degrees for various values of x. The symbol
-   convention is described in :ref:`ndspl3comb1`. TODO (adding explanation
-   and small changes to the fig - some nodes should be white!!)
+   approximations of various degrees for various values of x.
+   Circles represents single Tasks and rectangles represent Workflows.
+   The white nodes represents Task or Workflow with a State.
+   The coloured nodes represent stateless copies of the original Task after splitting the input.
+   The gray nodes represent a Task that has no State.
    :label:`wfsin`
 
 
