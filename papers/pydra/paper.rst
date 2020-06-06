@@ -613,7 +613,7 @@ values of `x`. The *Workflow* uses the Taylor polynomial formula for *Sine* func
 
   \sum_{n=0}^{n_{max}} \frac{(-1)^n}{(2n+1)!} x^{2n+1} = x -\frac{x^3}{3!} + \frac{x^5}{5!} + ...
 
-where `n_{max}` (TODO - how to use math formatting inline?) is a degree of approximation.
+where :math:`n_{max}` is a degree of approximation.
 
 Since the idea is to make the execution as embarassingly parallel as possible,
 each of the term for each value of `x` should be calculated separately. This is
@@ -728,13 +728,88 @@ a given dataset. The example leverages *Pydra*'s powerful splitters and combiner
 to scale across a set of classifiers and metrics. It also uses *Pydra*'s caching
 to not redo model training and evaluation when new metrics are added, or when
 number of iterations is increased. The complete model comparison workflow is
-available as an installable package called *pydra-ml* :cite:`pydra-ml`.
+available as an installable package called *pydra-ml* :cite:`pydra-ml`, and
+includes SHAP-based feature importance evaluation in addition to model comparison.
 
-First, a set of classifiers to compare is provided. At present, scikit-learn based
-classifiers are used.
+The *Workflow* presented here comprises four *FunctionTasks*. For sake of clarity,
+we will not redisplay the task code here. They can be found in the `tasks.py` file
+in *pydra-ml* :cite:`pydra-ml`. The first function, `read_data`, reads csv data
+as a *pandas.DataFrame* and allows the user to extract specific columns as the
+input `X` to a learning model, a target column, and an optional `group` column. T
+he second function, `gen_splits`, uses `GroupShuffleSplit` from
+`sklearn.model_selection` to generate a set of train-test splits given `n_splits`
+and `test_size`, with an option to define `group` and `random_state`. It returns
+`train_test_splits` and `split_indices`. The main function to train the classifier,
+`train_test_kernel`, takes as input a specific train-test split pair, a target
+variable, a parameter providing information about which classifier to use and
+whether to generate a null model by permuting the labels. The final function
+`calc_metric` returns the value from a scoring function given the actual target
+and predicted values from the classifier.
+
+These tasks are combined together within a *Workflow* exploiting splitters and
+combiners. The *Workflow* itself has an outer split for `clf_info` and `permute`,
+allowing evaluation of null and non-null models for every classifier. The
+core model fitting and evaluation function `train_test_kernel` uses an internal
+splitter to iterate over all the bootstrapped iterations.  Using *Pydra*, it is
+possible to split over `split_index`, that comes from `gensplit` *Task*, and run
+`train_test_kernel` for each of them without combining. This maintains ``State``
+which can be used by the `calc_metric` function to evaluate different scoring
+methods on the classifier outputs and combine these results back together.
 
 .. code-block:: python
 
+    wf = pydra.Workflow(name="ml_wf",
+              input_spec=list(inputs.keys()),
+              **inputs,
+              cache_dir=cache_dir,
+              cache_locations=cache_locations)
+    # Workflow level splitting over combination
+    # of values
+    wf.split(["clf_info", "permute"])
+    wf.add(read_file(
+            name="readcsv",
+            filename=wf.lzin.filename,
+            x_indices=wf.lzin.x_indices,
+            target_vars=wf.lzin.target_vars))
+    wf.add(gen_splits(
+            name="gensplit",
+            n_splits=wf.lzin.n_splits,
+            test_size=wf.lzin.test_size,
+            X=wf.readcsv.lzout.X,
+            Y=wf.readcsv.lzout.Y,
+            groups=wf.readcsv.lzout.groups))
+    wf.add(train_test_kernel(
+            name="fit_clf",
+            X=wf.readcsv.lzout.X,
+            y=wf.readcsv.lzout.Y,
+            train_test_split=wf.gensplit.lzout.splits,
+            split_index=wf.gensplit.lzout.split_indices,
+            clf_info=wf.lzin.clf_info,
+            permute=wf.lzin.permute))
+    # Task level mapping over bootstrapped
+    # train-test pairs
+    wf.fit_clf.split("split_index")
+    wf.add(calc_metric(
+            name="metric",
+            output=wf.fit_clf.lzout.output,
+            metrics=wf.lzin.metrics))
+    # Downstream combination after calculating
+    # a set of metrics on each train-test pair
+    wf.metric.combine("fit_clf.split_index")
+    wf.set_output(
+        [
+         ("output", wf.metric.lzout.output),
+         ("score", wf.metric.lzout.score),
+         ("feature_names",
+                wf.readcsv.lzout.feature_names),
+        ]
+    )
+
+
+The workflow is executed by providing an input dictionary
+exemplary input dictionary and the *Workflow*'s submission can look as follow:
+
+.. code-block:: python
   clfs = [
    ('sklearn.ensemble', 'ExtraTreesClassifier',
     dict(n_estimators=100)),
@@ -745,165 +820,10 @@ classifiers are used.
      'weights': ['uniform','distance']}]),
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
 
-
-The *Workflow* itself consist of four *Tasks* (TODO:four of three??): the first tasks loads the data;
-the second one sets up bootstrapped splits; the third performs the model
-training and evaluation; and the fourth task performs the evaluation of the
-metrics. All of the *Tasks* are ``FunctionTask``, i.e. they are based on Python
-functions.
-
-The first function, `read_data`, reads csv data as a *pandas.DataFrame*,
-with the option to define name of target variables and row indices to train and data grouping.
-It returns the training data, `X`, labels, `Y`, and grouping, `groups`.
-
-.. code-block:: python
-
-  @mark.task 
-  @mark.annotate({"return": {
-      "X": ty.Any, "Y": ty.Any, "groups": ty.Any}})
-  def read_data(filename, x_indices=None,
-                target_vars=None, group='groups'):
-     import pandas as pd
-     data = pd.read_csv(filename)
-     X = data.iloc[:, x_indices]
-     Y = data[target_vars]
-     if group in data.keys():
-         groups = data[:, [group]]
-     else:
-         groups = list(range(X.shape[0]))
-     return X.values, Y.values, groups
-
-
-
-Next function, `gen_splits`, uses `GroupShuffleSplit` from `sklearn.model_selection` to generate
-a set of train-test splits given `n_splits` and `test_size`,
-with the option to define `group` and `random_state`.
-It returns `train_test_splits` and `split_indices`.
-
-.. code-block:: python
-
-  @mark.task  
-  @mark.annotate({"return":
-      {"splits": ty.Any, "split_indices": ty.Any}})
-  def gen_splits(n_splits, test_size, X, Y,
-                 groups=None, random_state=0):
-      """Generate a set of train-test splits"""
-      from sklearn.model_selection \
-          import GroupShuffleSplit
-      gss = GroupShuffleSplit(n_splits=n_splits,
-                              test_size=test_size,
-                              random_state=random_state)
-      train_test_splits = list(gss.split(X, Y,
-                                         groups=groups))
-      split_indices = list(range(n_splits))
-      return train_test_splits, split_indices
-
-
-The main function to train the classifier, `train_test`, uses `GridSearchCV`
-to train and test a classifier on actual or permuted labels.
-It also compare f1 scores using `sklearn.metrics.f1_score`
-
-
-.. code-block:: python
-
-  @mark.task
-  @mark.annotate({"return": {"f1": ty.Any}})
-  def train_test_kernel(X, y, train_test_split,
-                 split_index, clf_info, permute):
-     from sklearn.preprocessing import StandardScaler
-     from sklearn.pipeline import Pipeline
-     from sklearn.metrics import f1_score
-     from sklearn.model_selection import GridSearchCV
-     import numpy as np
-     mod = __import__(clf_info[0],
-                      fromlist=[clf_info[1]])
-     clf = getattr(mod, clf_info[1])(**clf_info[2])
-     if len(clf_info) > 3:
-         # Run a GridSearch when param_grid available
-         clf = GridSearchCV(clf, param_grid=clf_info[3])
-     train_index, test_index =
-                  train_test_split[split_index]
-     pipe = Pipeline([('std', StandardScaler()),
-                      (clf_info[1], clf)])
-     y = y.ravel()
-     if permute:
-         # Run a generic permut. to create a null model
-         pipe.fit(X[train_index],
-                  y[np.random.permutation(train_index)])
-     else:
-         pipe.fit(X[train_index], y[train_index])
-     f1 = f1_score(y[test_index],
-                   pipe.predict(X[test_index]),
-                   average='weighted')
-     return round(f1, 4)
-
-
-
-All three *Task* can be combined together within a  *Workflow*, here is where *Pydra*'s splitter
-really gets to shine.
-An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier and permutation
-combination gets run through the pipeline.
-In addition `fit_clf` *Task*, that uses `train_test_kernel` (TODO: perhaps we can change nape of task or a fun?)
-has its own *splitter* and *combiner*.
-Usually, there is no easy way in *scikit-learn* to compare models across a variety of classifiers
-without using loops, especially classifier that do not require tuning.
-Using *Pydra*, it is possible to split over `split_index`, that comes from `gensplit` *Task*,
-and run `train_test_kernel` for each of them.
-At the end all of the split indecies are combined together.
-
-
-
-.. code-block:: python
-
-  # Encapsulate tasks in a Workflow,
-  # reuse script output cache
-  wf = Workflow(name="ml_wf", **inputs,
-                input_spec=list(inputs.keys()),
-                # workflow cache
-                cache_dir=wf_cache_dir,
-                # reuses script cache
-                cache_locations=[cache_dir])
-
-  # joint map over classifiers and permutation
-  wf.split(['clf_info', 'permute'])
-  wf.add(read_file(name="readcsv",
-                   # connect workflow input
-                  filename=wf.lzin.filename,
-                  x_indices=wf.lzin.x_indices,
-                  target_vars=wf.lzin.target_vars))
-
-  wf.add(gen_splits(name="gensplit",
-            # connect workflow input
-            n_splits=wf.lzin.n_splits,
-            test_size=wf.lzin.test_size,
-            # connect lazy-eval output of previous task
-            X=wf.readcsv.lzout.X, Y=wf.readcsv.lzout.Y,
-            groups=wf.readcsv.lzout.groups))
-
-  wf.add(train_test_kernel(name="fit_clf",
-            # use outputs from both tasks
-            X=wf.readcsv.lzout.X, y=wf.readcsv.lzout.Y,
-            train_test_split=wf.gensplit.lzout.splits,
-            split_index=wf.gensplit.lzout.split_indices,
-            clf_info=wf.lzin.clf_info,
-            permute=wf.lzin.permute))
-
-  # Parallel spec
-  wf.fit_clf.split('split_index').combine('split_index')
-  # connect workflow output
-  wf.set_output([("f1", wf.fit_clf.lzout.f1)])
-
-
-
-
-The exemplary input dictionary and the *Workflow*'s submission can look as follow:
-
-.. code-block:: python
-
   inputs = {"filename": 'iris.csv',
            "x_indices": range(4), "target_vars": ("label"),
            "n_splits": 3, "test_size": 0.2,
-           # same clf shown earlier
+           "metrics": ["roc_auc_score"],
            "permute": [True, False], "clf_info": clfs}
   n_procs = 8 # for parallel processing
   cache_dir = os.path.join(os.getcwd(), 'cache')
@@ -915,8 +835,13 @@ The exemplary input dictionary and the *Workflow*'s submission can look as follo
 
   result = wf.result(return_inputs=True)
 
-The *Workflow*'s output was set to the output of the `fit_cls` *Task*,
-and should look:
+The result from the *Workflow* is a set of scores for permuted and non-permuted
+models. This is a list, each element of the list is for one value of `clf_info`
+and `permute`, both fields were set as input fields to the *Workflow*. All
+`Result` objects have an `output.score` field that is also a list. Each element
+of `score` corresponds to a different value of `split_index`, that was set both
+as a `splitter` and `combiner` to the `fit_cls` *Task*. This gives an option to
+easily compare various models and sets of parameters.
 
 .. code-block:: python
 
@@ -925,13 +850,13 @@ and should look:
          ('sklearn.ensemble','ExtraTreesClassifier',
           {'n_estimators': 100}),
      'ml_wf.permute': True},
-    Result(output=Output(f1=[0.2622, 0.1733, 0.2975]),
+    Result(output=Output(score=[0.2622, 0.1733, 0.2975]),
            runtime=None, errored=False)),
    ({'ml_wf.clf_info':
           ('sklearn.ensemble', 'ExtraTreesClassifier',
            {'n_estimators': 100}),
      'ml_wf.permute': False},
-    Result(output=Output(f1=[1.0, 0.9333, 0.9333]),
+    Result(output=Output(score=[1.0, 0.9333, 0.9333]),
            runtime=None, errored=False)),
 
    ...
@@ -939,16 +864,14 @@ and should look:
    ({'ml_wf.clf_info':
          ('sklearn.ensemble', 'AdaBoostClassifier', {}),
      'ml_wf.permute': False},
-    Result(output=Output(f1=[0.9658, 0.9333, 0.8992]),
+    Result(output=Output(score=[0.9658, 0.9333, 0.8992]),
            runtime=None, errored=False))]
 
 
-The final result of the *Workflow* is a list, each element of the list is for one value
-of `clf_info` and `permute`, both fields were set as input fields to the *Workflow*.
-All `Result` objects have an `output.f1` field that is also a list.
-Each element of `f1` corresponds to a different value of `split_index`, that was set both
-as a `splitter` and `combiner` to the `fit_cls` *Task*.
-This gives an option to easily compare various models and sets of parameters.
+Usually, there is no easy way in *scikit-learn* to compare models in parallel
+across a variety of classifiers without using loops. It is possible to do all
+this natively in scikit-learn and joblib, but would require much more code to do
+the maintenance of the dataflow and aggregation.
 
 
 Summary and Future Directions
