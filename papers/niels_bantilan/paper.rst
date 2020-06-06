@@ -35,10 +35,13 @@ Introduction
 an indispensible part of the data scientist's tool chain, providing a powerful
 interface for data processing and analysis for tabular data. In recent years
 numerous open source projects have emerged to enhance and complement the core
-pandas API in various ways. For instance, ``pyjanitor``, ``pandas-ply``, and
-``siuba`` are projects that provide alternative data manipulation interfaces
-inspired by the R ecosystem, and ``dask`` provides parallelization capabilities
-for a variety of data structures, pandas dataframes among them.
+pandas API in various ways. For instance, ``pyjanitor`` :cite:`ma2019pyjanitor`
+:cite:`pyjan`, ``pandas-ply`` :cite:`pdply`, and ``siuba`` :cite:`sba` are
+projects that provide alternative data manipulation interfaces inspired by the
+R ecosystem, ``pandas-profiling`` :cite:`pdpf` automatically creates data
+visualizations and statistics of dataframes, and ``dask`` :cite:`rocklin2015dask`
+provides parallelization capabilities for a variety of data structures, pandas
+dataframes among them.
 
 This paper introduces a data validation tool called ``pandera``, which provides
 an intuitive, flexible, and expressive API for validating pandas data
@@ -135,7 +138,7 @@ Note that all technical checks are deterministic because by definition these
 checks have to do with metadata properties like column presence, variable
 data types, nullability, and uniqueness. Domain-specific checks can come in
 either statistical or deterministic flavors. The enumerated list above are all
-deterministic checks. Examples of statistical checks would be:
+deterministic checks, while examples of statistical checks would be:
 
 * The ``income`` variable is positively correlated with the ``education``
   variable.
@@ -274,7 +277,7 @@ rules. When called with compatible data as an input argument, a schema object
 returns the data itself if the validation checks pass and raises a
 ``SchemaError`` when they fail. Schema components behave in the same way as
 schemas but are primarily used to specify validation rules for specific parts
-of a pandas object, e.g. columns in a dataframe. Finally, checks allow the
+of a ``pandas`` object, e.g. columns in a dataframe. Finally, checks allow the
 users to express validation rules in relation to the type of data that the
 schema or schema component are able to validate.
 
@@ -282,8 +285,8 @@ More specifically, the central objects in pandera are the ``DataFrameSchema``,
 ``Column``, and ``Check``. Together, these objects enable users to express
 schemas upfront as contracts of logically grouped sets of validation rules that
 operate on pandas dataframes. For example, consider a simple dataset containing
-data about people, where each person is a row and attributes about that person
-is a column:
+data about people, where each row is a person and each column is an attribute
+about that person:
 
 .. code-block:: python
 
@@ -354,7 +357,7 @@ data:
 * ``gender`` can take on the acceptable values in the set ``{F, M, N}`` for
   female, male, and non-binary, respectively. Supposing that these data were
   collected in an online form where the ``gender`` field input was optional,
-  it would appropriate to setting ``nullable`` to ``True`` (this argument is
+  it would be appropriate to set ``nullable`` to ``True`` (this argument is
   ``False`` by default).
 
 
@@ -362,7 +365,7 @@ Error Reporting and Debugging
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If a dataframe passed into the ``schema`` callable object does not
-pass validation checks, ``pandera`` provides an informative error message:
+pass the validation checks, ``pandera`` provides an informative error message:
 
 .. code-block:: python
 
@@ -391,8 +394,8 @@ The causes of the ``SchemaError`` are displayed as a dataframe where the
 ``failure_case`` index is the particular data value that failed the
 ``Check.in_range`` validation rule, the ``index`` column contains a list of
 index locations in the invalidated dataframe of the offending data values, and
-and the ``count`` column summarizes the number of failure cases of that
-particular data value.
+the ``count`` column summarizes the number of failure cases of that particular
+data value.
 
 For finer-grained debugging, the analyst can catch the exception using the
 ``try...except`` pattern to access the data and failure cases as attributes in
@@ -742,9 +745,9 @@ Roadmap
 
 The ``pandera`` project started as a naive excursion into seeing whether pandas
 dataframes could be statically typed, as gradual typing is becoming adopted by
-the Python community since the :code:`typing` module introduced in python 3.5.
-The project evolved into a tool that emphasizes verification of the statistical
-properties of data, which requires run-time validation.
+the Python community since the :code:`typing` module was introduced in Python 3.5.
+The project evolved into a tool that emphasizes the verification of the
+statistical properties of data, which requires run-time validation.
 
 The direction of this project has been driven, in large part, by its
 contributors, and will continue to be via feature requests on the github repo.
@@ -752,10 +755,10 @@ There a number of experimental features that are currently available in version
 :code:`0.4.0+` that aim to speed up the iteration loop of defining schemas at
 development time through interactive analysis:
 
-* `schema inference <https://pandera.readthedocs.io/en/v0.4.0/API_reference.html#schema-inference>`_:
+* `schema inference <https://pandera.readthedocs.io/en/v0.4.2/API_reference.html#schema-inference>`_:
   the ``pandera.infer_schema`` function takes as input a dataframe and outputs
   an automatically generated draft schema that the user can iterate on.
-* `yaml/module serialization <https://pandera.readthedocs.io/en/v0.4.0/API_reference.html#io-utils>`_:
+* `yaml/module serialization <https://pandera.readthedocs.io/en/v0.4.2/API_reference.html#io-utils>`_:
   this feature enables the user to write schemas (inferred or otherwise) to
   a yaml file or python script, which are editable artifacts to iterate on.
 
@@ -809,10 +812,10 @@ Conclusion
 ----------
 
 This paper introduces the :code:`pandera` package as a way of expressing
-assumptions about data and falsifying those assumptions at run time if they
-do not hold. This tool is geared toward helping data engineers and data
-scientists during the software development process, enabling users to make
-their data proprocessing workflows more readable, robust, and maintainable.
+assumptions about data and falsifying those assumptions at run time. This tool
+is geared toward helping data engineers and data scientists during the software
+development process, enabling users to make their data proprocessing workflows
+more readable, robust, and maintainable.
 
 
 Acknowledgements
