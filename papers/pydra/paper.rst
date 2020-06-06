@@ -354,7 +354,7 @@ Key Features
 
 In this section, features of *Pydra* that exemplify its utility for scientific
 dataflows are presented. Individually, some of these features are present in the
-numerous workflow packages that exist, but Pydra is the only software that brings
+numerous workflow packages that exist, but *Pydra* is the only software that brings
 them together using a very lighweight codebase. The combination of the following
 features makes *Pydra* a powerful tool in scientific computation.
 
@@ -363,12 +363,13 @@ Nested and Hashed Workflows
 
 Scientific dataflows typically involve significant refinement and extensions as
 science and instrumentation evolves. *Pydra* was designed to provide an easy way
-of creating scientific dataflows that range from simple linear steps to complex
-nested graphs. It also enables reproducibility and reduced cost of dataflow
+of creating scientific dataflows that range from simple linear pipelines to complex
+nested graphs.
+It enables reproducibility and reduces cost of dataflow
 maintenance through flexible reuse of already existing functions and *Workflows*
 in new applications. The ``Workflow`` class inherits from ``TaskBase`` class
-and can be treated by users as any other *Task* and can itself be added as a node
-in a *Workflow*. This provides an easy way of creating nested workflows of
+and can be treated by users as any other *Task*, so can itself be added as a node
+in a *Workflow*. This provides an easy way of creating nested *Workflows* of
 arbitrary depth, and reuse already existing *Workflows*. This is schematically
 shown in Fig. :ref:`nested`.
 
@@ -376,19 +377,20 @@ shown in Fig. :ref:`nested`.
    :figclass: h!
    :scale: 40%
 
-   A nested Pydra workflow, black circles represent single Task,
+   A nested Pydra Workflow, black circles represent single Tasks,
    and Workflows are represented by red rectangles. :label:`nested`
 
-Since a *Workflow* works like a *Task* and has inputs, outputs, and is hashable,
-once executed it does not need to recompute its operations if cached. The
-*Submitter* supports this nested architectuer and can dynamically extend the
+The *Pydra*'s *Submitter* supports this nested architecture and can dynamically extend the
 execution graph.
+Since a *Workflow* works like a *Task* |---| has inputs, outputs, and is hashable,
+once executed it does not need to recompute its operations if cached
+(*Pydra*'s caching is explained later in the section).
 
 State and Nested Loops over Input
 =================================
 
 One of the main goals of creating *Pydra* was to support flexible evaluation of
-a *Task* or *Workflow* and grouping of these results over combinations of input
+a *Task* or a *Workflow* over combinations of input
 parameters. This is the key feature that distinguishes it from most other dataflow
 engines. This is similar to the concept of the *Map-Reduce* :cite:`Map-Reduce`,
 but extends it to work over arbitrary nested graphs. In complex dataflows, this
@@ -429,8 +431,8 @@ Python tuples and its operation is therefore represented by a parenthesis, ``()`
 .. math::
    :type: eqnarray
 
-   \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, .., x_n], y=[y_1, .., y_n] \\
-    &\mapsto& (x, y)=(x_1, y_1), ..., (x, y)=(x_n, y_n)
+   \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, x_2, .., x_n],~~ y=[y_1, y_2, .., y_n] \\
+    &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_2, y_2),..., (x, y)=(x_n, y_n)
 
 This is also represented as a diagram in Fig. :ref:`ndspl4`
 
@@ -451,10 +453,9 @@ brackets, ``[]``:
 .. math::
    :type: eqnarray
 
-   \textcolor{red}{\mathnormal{S} = [x, y]} &:& x=[x_1, .., x_n], y=[y_1, .., y_m], \\
+   \textcolor{red}{\mathnormal{S} = [x, y]} &:& x=[x_1, x_2, ..., x_n],~~ y=[y_1, y_2, ..., y_m], \\
    &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_1, y_2)..., (x, y)=(x_n, y_m)
 
-(todo: perhaps I can remove repetition of ``(x,y)=``??)
 
 The *outer splitter* for a node with two input fields is schematically
 represented in Fig. :ref:`ndspl3`
