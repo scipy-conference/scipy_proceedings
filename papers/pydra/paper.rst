@@ -135,7 +135,7 @@ Fig. :ref:`classes`
 shows the Class hierarchy and links between them in the present Pydra
 architecture. It was designed this way to decouple and allow *Workers* to
 operate.  In order to describe *Pydra*'s most notable features in the next
-section, we briefly describe the role and function of each of these classes.
+section, we briefly describe the role of each of these classes.
 
 .. figure:: classes.pdf
    :figclass: h!
