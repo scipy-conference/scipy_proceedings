@@ -979,4 +979,5 @@ The tutorial could be run locally or using the Binder service.
 Acknowledgement
 ---------------
 This was supported by NIH grants P41EB019936, R01EB020740.
-We thank the neuroimaging community for feedback during development.
+We thank the neuroimaging community for feedback during development,
+and Anna Jaruga for her feedback on the paper.
