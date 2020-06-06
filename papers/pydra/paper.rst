@@ -704,8 +704,8 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
 
 
-Machine Learning: Model Comparison
-==================================
+Example2: Machine Learning Model Comparison
+===========================================
 
 The massive parameter search space of models and their parameters makes machine
 learning an ideal use case for *Pydra*. This section illustrates a
@@ -717,7 +717,7 @@ to not redo model training and evaluation when new metrics are added, or when
 number of iterations is increased. The complete model comparison workflow is
 available as an installable package called *pydra-ml* :cite:`pydra-ml`.
 
-First, a set of classifiers to compare is provided. At present scikit-learn based
+First, a set of classifiers to compare is provided. At present, scikit-learn based
 classifiers are used.
 
 .. code-block:: python
@@ -733,14 +733,14 @@ classifiers are used.
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
 
 
-The *Workflow* itself consist of four *Tasks*: the first tasks loads the data;
+The *Workflow* itself consist of four *Tasks* (TODO:four of three??): the first tasks loads the data;
 the second one sets up bootstrapped splits; the third performs the model
 training and evaluation; and the fourth task performs the evaluation of the
 metrics. All of the *Tasks* are ``FunctionTask``, i.e. they are based on Python
 functions.
 
 The first function, `read_data`, reads csv data as a *pandas.DataFrame*,
-with the option to define name of target variables, row indices to train and data grouping.
+with the option to define name of target variables and row indices to train and data grouping.
 It returns the training data, `X`, labels, `Y`, and grouping, `groups`.
 
 .. code-block:: python
@@ -762,10 +762,10 @@ It returns the training data, `X`, labels, `Y`, and grouping, `groups`.
 
 
 
-Next function, `gen_splits`, uses  `sklearn.model_selection.GroupShuffleSplit` to generates
+Next function, `gen_splits`, uses `GroupShuffleSplit` from `sklearn.model_selection` to generate
 a set of train-test splits given `n_splits` and `test_size`,
 with the option to define `group` and `random_state`.
-It returns `train_test_splits`
+It returns `train_test_splits` and `split_indices`.
 
 .. code-block:: python
 
@@ -775,7 +775,8 @@ It returns `train_test_splits`
   def gen_splits(n_splits, test_size, X, Y,
                  groups=None, random_state=0):
       """Generate a set of train-test splits"""
-      from sklearn.model_selection import GroupShuffleSplit
+      from sklearn.model_selection \
+          import GroupShuffleSplit
       gss = GroupShuffleSplit(n_splits=n_splits,
                               test_size=test_size,
                               random_state=random_state)
@@ -785,7 +786,7 @@ It returns `train_test_splits`
       return train_test_splits, split_indices
 
 
-The main function to train the classifier, `train_test`, uses `sklearn.model_selection.GridSearchCV`.
+The main function to train the classifier, `train_test`, uses `GridSearchCV`
 to train and test a classifier on actual or permuted labels.
 It also compare f1 scores using `sklearn.metrics.f1_score`
 
@@ -828,8 +829,7 @@ It also compare f1 scores using `sklearn.metrics.f1_score`
 All three *Task* can be combined together within a  *Workflow*, here is where *Pydra*'s splitter
 really gets to shine.
 An outer split for `clf_info` and `permute` on the *Workflow*-level means every classifier and permutation
-combination gets run through the pipeline.   TODO
-
+combination gets run through the pipeline.
 In addition `fit_clf` *Task*, that uses `train_test_kernel` (TODO: perhaps we can change nape of task or a fun?)
 has its own *splitter* and *combiner*.
 Usually, there is no easy way in *scikit-learn* to compare models across a variety of classifiers
