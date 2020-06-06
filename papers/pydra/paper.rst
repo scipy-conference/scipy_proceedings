@@ -62,7 +62,7 @@ into fully automated pipelines.
 This was the motivation behind *Pydra* - a new dataflow engine written in Python,
 that is presented in this paper.
 
-The package is a part of the second generation of the *Nipype* ecosystem
+The *Pydra* package is a part of the second generation of the *Nipype* ecosystem
 (:cite:`Gorgolewski2011`, :cite:`Nipype`)
 --- an open-source framework that provides a uniform interface to existing neuroimaging
 software and facilitates interaction between them.
