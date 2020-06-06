@@ -57,7 +57,7 @@ It is a common practice to create semi-manual workflows that require the scienti
 to handle the files and interact with partial results from algorithms and external tools.
 This approach is conceptually simple and easy to implement, but the resulting workflow
 is often time consuming, error-prone and difficult to share with others.
-Consistency, reproducibility and scalability demand scientific workflows be organized
+Consistency, reproducibility and scalability demand scientific workflows to be organized
 into fully automated pipelines.
 This was the motivation behind writting a new dataflow engine written in Python, *Pydra*,
 that is presented in this paper.
