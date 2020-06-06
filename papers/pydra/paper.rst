@@ -91,7 +91,7 @@ The combination of several key features makes Pydra a customizable and powerful 
   (similar concept to Map-Reduce model :cite:`Map-Reduce`, but Pydra extends this to graphs with nested dataflows).
 
 * **A content-addressable global cache:** Hash values are computed for each graph and each Task.
-  Supports reuse of previously computed and stored dataflows and Tasks.
+  This supports reusing of previously computed and stored dataflows and Tasks.
 
 * **Can integrate Python functions and external (shell) commands:** Pydra can
   decorate and use existing functions in Python libraries alongside external
