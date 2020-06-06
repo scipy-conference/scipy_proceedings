@@ -38,13 +38,12 @@ Pydra - a flexible and lightweight dataflow engine for scientific analyses
 .. class:: abstract
 
 This paper presents a new lightweight dataflow engine written
-in Python: *Pydra*.
-*Pydra* is developed as an open-source project in the neuroimaging community,
-but it is designed as a general-purpose dataflow engine to support any scientific domain.
-The paper describes the architecture of the software, as well as several useful features,
-that make *Pydra* a customizable and powerful dataflow engine.
-Two examples are presented to demonstrate the syntax and properties of the package.
-At the end, the future plans for the project are shortly addressed.
+in Python: *Pydra*. *Pydra* is developed as an open-source project in the
+neuroimaging community, but it is designed as a general-purpose dataflow engine
+to support any scientific domain. The paper describes the architecture of the
+software, as well as several useful features, that make *Pydra* a customizable
+and powerful dataflow engine. Two examples are presented to demonstrate the
+syntax and properties of the package.
 
 .. class:: keywords
 
@@ -817,6 +816,7 @@ The workflow is executed by providing an input dictionary
 exemplary input dictionary and the *Workflow*'s submission can look as follow:
 
 .. code-block:: python
+
   clfs = [
    ('sklearn.ensemble', 'ExtraTreesClassifier',
     dict(n_estimators=100)),
@@ -883,31 +883,32 @@ the maintenance of the dataflow and aggregation.
 
 Summary and Future Directions
 -----------------------------
-*Pydra* is a new lightweight dataflow engine written in Python.
-The combination of several key features - including flexible option for splitting and combining
-input fields, and *Global Cache* - makes Pydra a customizable and powerful dataflow engine.
-The *Pydra*'s developers are mostly from the Neuroimaging community, but the package is designed
-as a general-purpose dataflow engine to support any scientific domain.
-As the next step, the developer team would like to invite more scientist to use *Pydra*,
-in order to test package in diverse application.
-In the nearest future, the developer team is also planning to work on:
 
-* extension of *Workers* classes in order to fully support application that use *Slurm* or *Dask*
-* export all interfaces from *Nipype 1* and become the default engine for *Nipype*
-* improve the documentation
-* and many other things...
+*Pydra* is a new lightweight dataflow engine written in Python. The combination
+of several key features - including flexible option for splitting and combining
+input fields, and *Global Cache* - makes Pydra a customizable and powerful
+dataflow engine. The *Pydra*'s developers are mostly from the Neuroimaging
+community, which provides a plethora of use-cases for complex dataflows, but the
+package is designed as a general-purpose dataflow engine to support any
+scientific domain. As the next step, the developer team would like to invite more
+scientist to use *Pydra* in order to test the package for diverse applications.
+In the near future, the developer team is also planning to work on:
 
-All scientist and developers are very welcome to join the project.
-The project repository is available on GitHub under *Nipype* organization:
-https://github.com/nipype/pydra.
+* improvement of *Worker* classes to coordinate resource management
+* improved interaction with *Dask* and other resource managers (e.g., SLURM) in
+  HPC and Cloud environments.
+* updates to the *Nipype* software to use *Pydra* as its engine
+* improve the documentation and tutorials
+
+We welcome scientists and developers to join the project. The project repository
+is available on GitHub under *Nipype* organization: https://github.com/nipype/pydra.
 In addition, there is also a repository that contains Jupyter Notebooks with
-*Pydra* tutorial: https://github.com/nipype/pydra-tutorial.
-The tutorial could be run locally or using the Binder service.
+*Pydra* tutorial: https://github.com/nipype/pydra-tutorial. The tutorial can be
+run locally or using the Binder service.
 
 
-
-Acknowledgement
----------------
-This was supported by NIH grants P41EB019936, R01EB020740.
-We thank the neuroimaging community for feedback during development,
-and Anna Jaruga for her feedback on the paper.
+Acknowledgements
+----------------
+This was supported by NIH grants P41EB019936, R01EB020740. We thank the
+neuroimaging community for feedback during development, and Anna Jaruga for her
+feedback on the paper.
