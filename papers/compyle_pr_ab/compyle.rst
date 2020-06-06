@@ -136,12 +136,12 @@ CUDA, it does not support OpenCL. We were not aware of copperhead until very
 recently and are likely to try and incorporate ideas from it into compyle.
 
 Compyle is actively used by a non-trivial, open source, SPH framework called
-PySPH (https://pysph.rtfd.io) and discussed in some detail in
-:cite:`pysph2019` and :cite:`pysph16`. Compyle makes it possible for users to
-write their SPH codes in high-level Python and have it executed on multi-core
-and GPU accelerators with negligible changes to their code. Unfortunately,
-compyle is not used much outside of this context, so while it does solve many
-problems, it is still under heavy development.
+PySPH_ and discussed in some detail in :cite:`pysph2019` and :cite:`pysph16`.
+Compyle makes it possible for users to write their SPH codes in high-level
+Python and have it executed on multi-core and GPU accelerators with negligible
+changes to their code. Unfortunately, compyle is not used much outside of this
+context, so while it does solve many problems, it is still under heavy
+development.
 
 In this paper we write a simple two-dimensional molecular dynamics system that
 is described and discussed in the article by :cite:`schroeder2015`. Our goal
@@ -154,6 +154,7 @@ show how they allow us to solve non-trivial problems.
 
 
 .. _PyPy: https://pypy.prg
+.. _PySPH: https://pysph.readthedocs.io
 .. _Numba: http://numba.pydata.org/
 .. _Pythran: https://pythran.readthedocs.io/
 .. _PyOpenCL: https://documen.tician.de/pyopencl/
@@ -495,8 +496,8 @@ found as follows using reduction operator in compyle.
     total_energy = energy_calc(vx, vy, pe, num_particles)
 
 Here, in the expression ``'a+b'`` ``a`` represents :math:`a_i` and
-``b`` represents the reduction result till :math:`i-1`, i.e. 
-:math:`\sum_0^{i-1} a_k`. 
+``b`` represents the reduction result till :math:`i-1`, i.e.
+:math:`\sum_0^{i-1} a_k`.
 For the maximum for example one would write ``'max(a, b)'``.
 Common reductions like sum, max and min are also available but we show the
 general form above where we can also map the values using the function given
@@ -568,27 +569,27 @@ Scans are generalizations of prefix sums / cumulative sums and can be used as
 building blocks to construct a number of parallel algorithms. These include
 but not are limited to sorting, polynomial evaluation, and tree operations.
 
-Given an input array
-:math:`a = (a_0, a_1, a_2, \cdots, a_{n-1})` and an associative binary operator
-:math:`\oplus`, a prefix sum operation returns the following array
+Given an input array :math:`a = (a_0, a_1, a_2, \cdots, a_{n-1})` and an
+associative binary operator :math:`\oplus`, a prefix sum operation returns the
+following array
 
 .. math::
-   y = \left(a_0, (a_0 \oplus a_1), \cdots, (a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}) \right)
+   y = \left(a_0, (a_0 \oplus a_1), \cdots, (a_0 \oplus a_1 \oplus \cdots
+   \oplus a_{n-1}) \right)
 
 The scan semantics in compyle are similar to those of the
 :code:`GenericScanKernel` in PyOpenCL. This allows us to construct generic
 scans by having an input expression, an output expression and a scan operator.
-The input function takes the input array and the array index as arguments
-and can be used to map the input array before running the scan.
-The output expression can then be used to map and write the scan result as
-required. The output function also operates on the input array and an
-index but also has the scan result, the previous item and the last item
-in the scan result available as arguments.
+The input function takes the input array and the array index as arguments and
+can be used to map the input array before running the scan. The output
+expression can then be used to map and write the scan result as required. The
+output function also operates on the input array and an index but also has the
+scan result, the previous item and the last item in the scan result available
+as arguments.
 
-Below is an example of implementing a parallel "where".
-This returns elements of an array where a given condition is satisfied.
-The following example returns elements of the array that are smaller
-than 50.
+Below is an example of implementing a parallel "where". This returns elements
+of an array where a given condition is satisfied. The following example
+returns elements of the array that are smaller than 50.
 
 .. code-block:: python
 
@@ -620,26 +621,23 @@ than 50.
     result_count = result_count.data[0]
     result = result.data[:result_count]
 
-The argument :code:`i`, similar to elementwise
-is the current index, the argument :code:`item` is the result
-of the scan including the input at index :code:`i`. The
-:code:`prev_item` is the result of the array at index
-:code:`i-1`. :code:`item` and :code:`prev_item` are
-reserved variables and users should not use them when writing
-the input and output functions.
+The argument :code:`i`, similar to that seen in elementwise kernels is the
+current index, the argument :code:`item` is the result of the scan including
+the input at index :code:`i`. The :code:`prev_item` is the result of the array
+at index :code:`i-1`. :code:`item` and :code:`prev_item` are reserved
+variables and users should not use them when writing the input and output
+functions.
 
-In the above example, the input expression returns 1 only
-when the value at index i is less than 50. So as long as the
-array elements are greater than 50, the value of :code:`item`
-will remain the same and will only increase when an element
-less than 50 is found at the index. Thus, the condition
-:code:`item != prev_item` will only be satisifed for indices
-at which the value of :code:`ary[i]` is less than 50.
+In the above example, the input expression returns 1 only when the value at
+index :code:`i` is less than 50. So as long as the array elements are greater
+than 50, the value of :code:`item` will remain the same and will only increase
+when an element less than 50 is found at the index. Thus, the condition
+:code:`item != prev_item` will only be satisifed for indices at which the
+value of :code:`ary[i]` is less than 50.
 
-The :code:`input_expr` could also be used as the map function
-for reduction and the required size of result could be found
-before running the scan and the result array can be allocated
-accordingly.
+The :code:`input_expr` could also be used as the map function for reduction
+and the required size of result could be found before running the scan and the
+result array can be allocated accordingly.
 
 Back to the MD problem
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -655,25 +653,25 @@ coordinates :math:`c = (m, n)`, these 9 bins will be,
 
     N(c) = \{ c + d \ | \ d \in \{-1, 0, 1\} \times \{-1, 0, 1\} \}
 
-The idea is to for each query particle iterate over all particles in
-these 9 bins and check if the distance between the particle and the
-query particle is less than 3.
-To implement this, we first find the bin to which each particle
-belongs. This is done as follows,
+The idea is that for each particle we will iterate over all particles in these
+9 bins and check if the distance between the particle and the query particle
+is less than 3. The inter-particle force will be computed only then between
+the two particles. To implement this, we first find the bin to which each
+particle belongs. This is done as follows,
 
 .. math::
 
     c = \left( \left \lfloor{\frac{x}{h}} \right \rfloor, \left \lfloor{\frac{y}{h}} \right \rfloor \right)
 
-where :math:`x` and :math:`y` are the coordinates of the particle
-and :math:`h` is the required radius which in our case is 3.
-We then flatten these bin coordinates to map each bin to a unique
-integer we call the 'key'. We then sort these keys and an array of
-indices of the particles such that the sorted indices have all
-particles in the same cell as contiguous elements.
-Compyle has a sort functionality which uses the PyOpenCL radix
-sort for OpenCL backend, thrust sort for the CUDA
-backend and simple numpy sort for the cython backend.
+where :math:`x` and :math:`y` are the coordinates of the particle and
+:math:`h` is the required radius which in our case is 3. Note that our problem
+is setup such that the left bottom corner is at the origin. We then flatten
+these bin coordinates to map each bin to a unique integer we call the 'key'.
+We sort these keys and an array of indices of the particles such that the
+sorted indices have all particles in the same cell as contiguous elements.
+Compyle provides a sort function which uses the PyOpenCL radix sort for OpenCL
+backend, thrust sort for the CUDA backend and simple numpy sort for the cython
+backend.
 
 To find the particles belonging to the 9 neighboring bins,
 we now need to find the index in the sorted indices array
@@ -715,13 +713,12 @@ follows,
         bin_counts[prev_key] = start_indices[key] - \
                 start_indices[prev_key]
 
-Now we can iterate over all neighboring 9 bins, find the key
-corresponding to each of them, then lookup the start index for that
-key in the start indices array and the number of particles in
-the cell by looking up in the bin counts array. Then lookup the
-sorted indices array to find the indices of the particles
-belonging to these bins and find the particles within a distance
-of 3 units.
+Now we can iterate over all neighboring 9 bins, find the key corresponding to
+each of them, then lookup the start index for that key in the
+``start_indices`` array and the number of particles in the cell by looking up
+in the ``bin_counts`` array. Then lookup the sorted indices array to find the
+indices of the particles belonging to these bins and find the particles within
+a distance of 3 units.
 
 However, note that we still have a challenge in storing these
 neighboring particles as we do not know the number of neighboring
@@ -752,51 +749,76 @@ all neighbor lengths. The second pass is then another elementwise
 operation where each particle writes its neighbors starting
 from the start index calculated from the scan.
 
-More details on this implementation can be found in the
-examples section of our repository
-`here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_nnps.py>`__.
+More details on this implementation can be found in the examples section of
+our repository `here
+<https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_nnps.py>`__.
 We have also implemented a more efficient version of the nearest neighbor
-searching algorithm using counting sort instead of radix sort
-which is 30% faster that can be found
-`here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/nnps.py>`__.
+searching algorithm using a counting sort instead of the radix sort which is
+30% faster that can be found `here
+<https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/nnps.py>`__.
+
 
 Performance comparison
 ----------------------
 
 .. figure:: speedup_cython_opencl_cuda.png
 
-    Speed up over serial cython using CUDA and OpenCL.
+    Speed up over serial cython using CUDA and OpenCL using the NNPS.
+    :label:`speedup-nnps`
 
 
 .. figure:: time_opencl_cuda.png
 
-    Time taken for simulation on GPU using CUDA and OpenCL.
+    Time taken for simulation on a GPU using CUDA and OpenCL.
+    :label:`time-gpu`
 
 .. figure:: time_comp_impl.png
 
-    Time taken for simulation using :math:`O(N)` (Linear) and :math:`O(N^2)` (Simple) approach.
+    Time taken for simulation using :math:`O(N)` (Linear) and :math:`O(N^2)`
+    (Simple) approach. :label:`time-nnps-vs-simple`
 
 .. figure:: speedup_comp_impl.png
 
-    Speed up using :math:`O(N)` over :math:`O(N^2)` approach
+    Speed up using :math:`O(N)` over :math:`O(N^2)` approach.
+    :label:`nnps-simple`
 
-Figure <> shows the time taken for simulation using :math:`O(N)`
-and :math:`O(N^2)` approach. Figure <> shows the speed up acheived
-by using the linear algorithm.
-It can be seen from figure <>, the algorithm using nearest neighbors
-is linear at large values of number of particles.
-Figure shows the speed up of the :math:`O(N)` implementation
-using CUDA and OpenCL backend as compared to a serial cython backend.
-We again see a speed up of about 120x when using the GPU
-as compared to a serial cython backend.
+Figure :ref:`speedup-nnps` shows the speedup relative to serial code running
+using Cython for the OpenCL and CUDA backends using the NNPS algorithm and
+Figure :ref:`time-gpu` shows the time taken for these simulations. We again
+get more than a 120x speedup using the GPU over a single CPU core. Note that
+on the NVIDIA T4 GPU we are able to run a simulation with 25 timesteps for 10
+million particles in about a second, showing the excellent performance
+attained.
 
-The performance of the algorithm can be further improved
-by aligning the :math:`x` and :math:`y` coordinate arrays
-according to the sorted indices. This will improve the global memory
-access pattern on the GPU giving a better performance.
-This can be done easily in Compyle using :code:`compyle.array.align`
-which uses a single elementwise operation to align multiple
-arrays in a given order.
+Figure :ref:`time-nnps-vs-simple` shows the time taken for simulation using
+:math:`O(N)` and :math:`O(N^2)` approach. Figure :ref:`nnps-simple` shows the
+speed up acheived by using the :math:`O(N)` algorithm as compared to the
+:math:`O(N^2)` algorithm on the GPU. It can be seen that the algorithm using
+nearest neighbors is linear at large values of number of particles. Figure
+:ref:`nnps-simple` shows the speed up of the :math:`O(N)` implementation using
+the OpenCL implementation. We have more than a 200 fold speed up with the
+improved algorithm for about half a million particles. Overall, we again see a
+speed up of about 120x when using the GPU as compared to a serial cython
+backend.
+
+The performance of the algorithm can be further improved by aligning the
+:math:`x` and :math:`y` coordinate arrays according to the sorted indices.
+This will improve the global memory access pattern on the GPU giving a better
+performance. This can be done easily in Compyle using
+:code:`compyle.array.align` which uses a single elementwise operation to align
+multiple arrays in a given order. We have not explored this in this paper.
+While our code is implemented in 2D it is relatively straightforward to extend
+this to three dimensions.
+
+All of the code discussed above is available in the examples directory of the
+compyle repository `here
+<https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/>`__.
+All of the code, with two different NNPS implementations, and featuring a
+command line interface, comes to around 500 lines of code. This is quite
+exciting as this code be executed on either a multi-core CPU or a GPU with no
+code changes.
+
+
 
 Limitations
 ------------
@@ -808,36 +830,58 @@ external libraries in a platform neutral way. For example, there are ways to
 use an external OpenCL or CUDA library but this will not be usable on a CPU.
 Obviously one cannot use normal Python code and use basic Python data
 structures. Furthermore, one cannot use well established libraries like scipy
-from within the parallel constructs.
+from within the parallel constructs. These are limitations that are beyond the
+scope of compyle at this point.
 
 The low-level API that compyle provides turns out to be quite an advantage as
 compyle code is usually very fast the first time it runs. This is because it
-will simply refuse to run any code that uses Python objects. By forcing the
-user to write the algorithms in a low-level way the code is very performant.
+will refuse to run any code that uses Python objects. By forcing the user to
+write the algorithms conforming to the constraints makes the code efficient.
 It also forces the user to think along the lines of parallel algorithms. This
 is a major factor. We have used Compyle in the context of a larger scientific
 computing project and have found that while the limitations are annoying, the
 benefits are generally worth it.
 
+Compyle has also only been used in the context of the PySPH_ project and as
+such has not seen a lot of community adoption. This has meant that there are
+many rough edges. We are hoping to improve the package and are also hopeful
+for community contributions eventually.
+
 
 Future work
 -------------
 
-In the future, we would like to improve the package by adding support for
-simple "objects" that would allow users to compose their libraries in a more
-object oriented manner. This would also open up the possibility of
-implementing more high-level data structures in an easy way.
+There are several improvements that are planned for compyle.
+
+- The code is still not very clean and a lot of internal cleanup is necessary.
+  This is especially true of the Cython backend which has grown organically
+  and requires a reimplementation.
+- Many of the CPU related algorithms, like sorting, and many of the reductions
+  are still serial.  These are relatively easy to fix.
+- The Cython backend may be eventually replaced using pybind11_ if possible.
+- The API requires some cleanup in many places. We also hope to look at the
+  copperhead_ package to improve our API.
+- While compyle does support simple structs, this API is still not clean
+  enough to be used in general.
+- We also hope to add support for simple "objects" that would allow users to
+  compose their libraries in a more object oriented manner. This would also
+  open up the possibility of implementing more high-level data structures in
+  an easy way.
+
+There are many other improvements, and features we are considering and hope to
+implement as time permits. Despite its many warts, we already find compyle to
+be remarkably useful.
 
 
 Conclusions
 -----------
 
-In this article we have shown how one can implement a simple molecular
-dynamics solver using compyle. The code is parallel from the beginning and
-runs effortlessly on multi-core CPUs and GPUs without any changes. We have
-used the example to illustrate elementwise, reduction, and prefix sums. We
-show how a non-trivial optimization of the example problem is possible using a
-prefix scan.
+In this article we have shown how one can implement a two-dimensional
+molecular dynamics solver using compyle. The code is parallel from the
+beginning and runs effortlessly on multi-core CPUs and GPUs without any
+changes. We have used the example to illustrate the main parallel algorithms
+that compyle provides, i.e. elementwise, reduction, and scans. We show how a
+non-trivial optimization of the example problem is possible using a scan.
 
 The results clearly show that we are able to write the code once and have it
 run on massively parallel architectures. This is very convenient and this is
