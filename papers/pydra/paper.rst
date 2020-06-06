@@ -185,7 +185,7 @@ classes that inherit from ``TaskBase`` and each has a different application:
      result = mean_dev(my_data=[...])()
 
   When the task is executed `result.output` will contain two attributes: `mean`
-  and `std`. These named outputs allowing passing different outputs to
+  and `std`. Named attributes facilitate passing different outputs to
   different downstream nodes in a dataflow.
 
 * ``ShellCommandTask`` is a *Task* used to run shell commands and executables.
