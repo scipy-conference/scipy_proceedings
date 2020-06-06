@@ -93,7 +93,7 @@ The combination of several key features makes Pydra a customizable and powerful 
 * **A content-addressable global cache:** Hash values are computed for each graph and each Task.
   This supports reusing of previously computed and stored dataflows and Tasks.
 
-* **Can integrate Python functions and external (shell) commands:** Pydra can
+* **Support for Python functions and external (shell) commands:** Pydra can
   decorate and use existing functions in Python libraries alongside external
   command line tools, allowing easy integration of existing code and software.
 
@@ -132,9 +132,9 @@ orchestrates the dataflow execution model.
 Different types of *Workers* allow *Pydra* to execute the task
 on different compute architectures.
 Fig. :ref:`classes`
-shows the Class hierarchy and links between them in the present Pydra
-architecture. It was designed this way to decouple and allow *Workers* to
-operate.  In order to describe *Pydra*'s most notable features in the next
+shows the Class hierarchy and interaction between them in the present Pydra
+architecture. It was designed this way to decouple *Tasks* and *Workers*.
+In order to describe *Pydra*'s most notable features in the next
 section, we briefly describe the role of each of these classes.
 
 .. figure:: classes.pdf
@@ -210,8 +210,9 @@ classes that inherit from ``TaskBase`` and each has a different application:
 
     bet input_file output_file -m
 
-  Each of these inputs can be augmented as a named argument to the
-  ``ShellCommandTask``. As shown next, even an output is specified by constructing
+  Each of the command argument can be treated as a named input to the
+  ``ShellCommandTask``, and can be included in the input specification.
+  As shown next, even an output is specified by constructing
   the *out_file* field form a template:
 
   .. code-block:: python
@@ -321,7 +322,7 @@ Submitter
 =========
 
 The ``Submitter`` class is responsible for unpacking *Workflows* and single
-*Tasks* with or without ``State`` into standalone stateless jobs that are then
+*Tasks* with or without ``State`` into standalone stateless jobs, `runnables`, that are then
 executed by *Workers*. When the *runnable* is a *Workflow*, the *Submitter* is
 responsible for checking if the *Tasks* from the graph are ready to run, i.e. if
 all the inputs are available, including the inputs that are set to the
@@ -369,7 +370,7 @@ It enables reproducibility and reduces cost of dataflow
 maintenance through flexible reuse of already existing functions and *Workflows*
 in new applications. The ``Workflow`` class inherits from ``TaskBase`` class
 and can be treated by users as any other *Task*, so can itself be added as a node
-in a *Workflow*. This provides an easy way of creating nested *Workflows* of
+in another *Workflow*. This provides an easy way of creating nested *Workflows* of
 arbitrary depth, and reuse already existing *Workflows*. This is schematically
 shown in Fig. :ref:`nested`.
 
@@ -401,11 +402,14 @@ related attributes through *Task* methods. In order to set input splitting
 *Task*'s ``split`` method. The simplest example would be a *Task* that has one
 field *x* in the input, and therefore there is only one way of splitting its input.
 Assuming that the user provides a list as a value of *x*, *Pydra* splits
-the list, so each copy of the *Task* will get one element of the list:
+the list, so each copy of the *Task* will get one element of the list.
+This can be represented as follow:
 
 .. math::
 
    \textcolor{red}{\mathnormal{S} = x}: x=[x_1, x_2, ..., x_n] \longmapsto x=x_1, x=x_2, ..., x=x_n
+
+where `S` represents the *splitter*, and `x` is the input field.
 
 That is also represented in Fig. :ref:`ndspl1`, where *x=[1, 2, 3]* as an example.
 
@@ -414,8 +418,8 @@ That is also represented in Fig. :ref:`ndspl1`, where *x=[1, 2, 3]* as an exampl
    :scale: 100%
 
    Diagram representing a Task with one input and a simple splitter. The white
-   node represents an original Task with x=[1,2,3], as an input. The coloured
-   nodes represent copies of the original Task after splitting the input, these
+   node represents an original Task with x=[1,2,3] as an input and S=x as a splitter.
+   The coloured nodes represent stateless copies of the original Task after splitting the input, these
    are the runnables that are executed by Workers.
    :label:`ndspl1`
 
@@ -434,6 +438,8 @@ Python tuples and its operation is therefore represented by a parenthesis, ``()`
 
    \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, x_2, .., x_n],~~ y=[y_1, y_2, .., y_n] \\
     &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_2, y_2),..., (x, y)=(x_n, y_n)
+
+where `S` represents the *splitter*, `x` and `y` are the input fields.
 
 This is also represented as a diagram in Fig. :ref:`ndspl4`
 
@@ -489,8 +495,11 @@ as follows:
    :type: eqnarray
 
    \textcolor{red}{\mathnormal{S} = x} &:& x=[x_1, x_2, ..., x_n] \mapsto x=x_1, x=x_2, ..., x=x_n \\
-   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out=[out(x_1), ...out(x_n)]
+   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out_{comb}=[out(x_1), ...out(x_n)]
 
+where `S` represents the *splitter*, *C* represents the *combiner*, `x` is the input field,
+`out(x_i)` represents the output of the *Task* for `x_i`, and `out_comb` is the final output after applying
+the *combiner*.
 
 In the situation where input has multiple fields and an *outer splitter* is used,
 there are various ways of combining the output.
@@ -515,9 +524,12 @@ And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b 
    :scale: 75%
 
    Diagram representing a Task with two input fields, an outer splitter and a
-   combiner. The Tasks are run in exactly the same way as previously, but at the
-   end the values of output for all values of *b* are combined together. The
-   symbol convention is described in :ref:`ndspl1`.
+   combiner.
+   The white node represents an original Task with x=[1,2], y=[10, 100] as an input,
+   S=[x, y] as a splitter, and C=y as a combiner.
+   The coloured nodes represent stateless copies of the original Task after splitting the input, these
+   are the runnables that are executed by Workers.
+   At the end outputs for all values of y are combined together within`out_comb`.
    :label:`ndspl3comb1`
 
 However, for the diagram from :ref:`ndspl3`, the user might want to combine
@@ -543,7 +555,7 @@ And is represented in Fig. :ref:`ndspl3comb3` (todo: should probably change a,b 
    Diagram representing a Task with two input fields, an outer splitter and a
    full combiner. The Tasks are run in exactly the same way as previously, but
    at the end all of the output values are combined together. The symbol
-   convention as described in :ref:`ndspl1`.
+   convention is described in :ref:`ndspl3comb1`.
    :label:`ndspl3comb3`
 
 These are the basic examples of the *Pydra*'s *splitter-combiner* concept. It
@@ -699,7 +711,8 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
    Diagram representing part of the Workflow for calculating *Sine* function
    approximations of various degrees for various values of x. The symbol
-   convention is described in :ref:`ndspl1`.
+   convention is described in :ref:`ndspl3comb1`. TODO (adding explanation
+   and small changes to the fig - some nodes should be white!!)
    :label:`wfsin`
 
 
