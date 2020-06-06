@@ -126,11 +126,12 @@ of applied examples demonstrating the power and utility of *Pydra*.
 
 Architecture
 ------------
-*Pydra architecture has three core components: *Task*, *Submitter* and *Worker*.
+*Pydra* architecture has three core components: *Task*, *Submitter* and *Worker*.
 *Tasks* form the basic building blocks of the dataflow, while *Submitter*
-orchestrates the dataflow execution model. Different types of *Workers* allow
-
-*Pydra* to execute the task on different compute architectures. Fig. :ref:`classes`
+orchestrates the dataflow execution model.
+Different types of *Workers* allow *Pydra* to execute the task
+on different compute architectures.
+Fig. :ref:`classes`
 shows the Class hierarchy and links between them in the present Pydra
 architecture. It was designed this way to decouple and allow *Workers* to
 operate.  In order to describe *Pydra*'s most notable features in the next
@@ -140,7 +141,7 @@ section, we briefly describe the role and function of each of these classes.
    :figclass: h!
    :scale: 30%
 
-   A schematic presentation of principal classes in *Pydra*. :label:`classes`
+   A schematic presentation of principal classes in Pydra. :label:`classes`
 
 Dataflows Components: Task and Workflow
 =======================================
@@ -165,11 +166,11 @@ classes that inherit from ``TaskBase`` and each has a different application:
      result = fft_task(a=np.random.rand(512))
 
 
-  `fft_task` is now a Pydra task and result will contain a Pydra ``Result`` object.
-  In addition, the user can use Python's function annotation or another Pydra
+  `fft_task` is now a *Pydra* task and result will contain a *Pydra*'s ``Result`` object.
+  In addition, the user can use Python's function annotation or another *Pydra*
   decorator |---| ``mark.annotate`` in order to specify the output. In the
   following example, we decorate an arbitrary Python function to create named
-  outputs.
+  outputs:
 
   .. code-block:: python
 
@@ -198,9 +199,11 @@ classes that inherit from ``TaskBase`` and each has a different application:
      ShellCommandTask(executable="ls", args="my_dir")
 
   The *Task* can accommodate more complex shell commands by allowing the user to
-  customize inputs to and output of commands. Once can generate an input
+  customize inputs and outputs of the commands.
+  One can generate an input
   specification to specify names of inputs, positions in the command, types of
-  the inputs, and other metadata. As a specific example, FSL's BET command (Brain
+  the inputs, and other metadata.
+  As a specific example, FSL's BET command (Brain
   Extraction Tool) can be called on the command line as:
 
   .. code-block:: python
@@ -208,8 +211,8 @@ classes that inherit from ``TaskBase`` and each has a different application:
     bet input_file output_file -m
 
   Each of these inputs can be augmented as a named argument to the
-  ``ShellCommandTask``. As shown next, even an output is specified by specifying
-  how to construct the out_file field using a template:
+  ``ShellCommandTask``. As shown next, even an output is specified by constructing
+  the *out_file* field form a template:
 
   .. code-block:: python
 
@@ -240,12 +243,15 @@ classes that inherit from ``TaskBase`` and each has a different application:
   run shell commands or executables within containers with specific user defined
   environments using *Docker* :cite:`docker` and *Singularity* :cite:`singularity` software respectively.
   This might be extremely useful for users and projects that require environment
-  encapsulation and sharing. Using container technologies helps improve scientific
-  workflows reproducibility. These *Container Tasks* can be defined by using
+  encapsulation and sharing.
+  Using container technologies helps improve scientific
+  workflows reproducibility, one of the key concept behind *Pydra*.
+
+  These *Container Tasks* can be defined by using
   ``DockerTask`` and ``SingularityTask`` classes directly, or can be created
   automatically from ``ShellCommandTask``, when an optional argument
   ``container_info`` is used when creating a *Shell Task*. The following two
-  syntaxes are equivalent:
+  types of syntax are equivalent:
 
   .. code-block:: python
 
@@ -301,11 +307,13 @@ methods in the *Task* class. Here we provide a simple `Map-Reduce` example:
         add2(x=[1, 5]).split("x").combine("x")
 
 In this example, the ``State`` class is responsible for creating a list of two
-separate inputs, which should be passed to the *Task* for each run, and grouped
-back when returning the result from the *Task*. While this example
-illustrates mapping and grouping of results over a single parameter, Pydra
+separate inputs, *[{x: 1}, {x:5}]*, each run of the *Task* should get one
+element from the list.
+The results are grouped back when returning the result from the *Task*.
+While this example
+illustrates mapping and grouping of results over a single parameter, *Pydra*
 extends this to arbitrary combinations of input fields and downstream grouping
-over nested dataflows. Details of how splitters and combiners power Pydra's
+over nested dataflows. Details of how splitters and combiners power *Pydra*'s
 scalable dataflows are described later.
 
 
@@ -314,7 +322,7 @@ Submitter
 
 The ``Submitter`` class is responsible for unpacking *Workflows* and single
 *Tasks* with or without ``State`` into standalone stateless jobs that are then
-executed on *Workers*. When the *runnable* is a *Workflow*, the *Submitter* is
+executed by *Workers*. When the *runnable* is a *Workflow*, the *Submitter* is
 responsible for checking if the *Tasks* from the graph are ready to run, i.e. if
 all the inputs are available, including the inputs that are set to the
 *Lazy Outputs* from previous *Tasks*. Once a *Task* is ready to run, the
