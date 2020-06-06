@@ -65,7 +65,7 @@ that is presented in this paper.
 The *Pydra* package is a part of the second generation of the *Nipype* ecosystem
 (:cite:`Gorgolewski2011`, :cite:`Nipype`)
 --- an open-source framework that provides a uniform interface to existing neuroimaging
-software and facilitates interaction between them.
+software and facilitates interaction between different software components.
 The *Nipype* project was born in the neuroimaging community, and has been helping scientists build
 workflows for a decade, providing a uniform interface to such neuroimaging packages
 as FSL :cite:`Woolrich09`, ANTs :cite:`ANTs`, AFNI :cite:`AFNI`, FreeSurfer :cite:`FreeSurfer`
