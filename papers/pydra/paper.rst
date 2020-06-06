@@ -147,8 +147,9 @@ Dataflows Components: Task and Workflow
 A *Task* is the basic runnable component of *Pydra* and is described by the
 class ``TaskBase``. A *Task* has named inputs and outputs thus allowing
 construction of dataflows. It can be hashed and executes in a specific working
-directory. There are several classes that inherit from ``TaskBase`` and each has
-a different application:
+directory. Any Pydra *Task* can be used as a function in a script, thus allowing
+dual use in Pydra *Workflows* and in standalone scripts. There are several
+classes that inherit from ``TaskBase`` and each has a different application:
 
 * ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
   declared in an existing library, package, or interactively in a terminal can
@@ -343,22 +344,25 @@ state.
 Key Features
 ------------
 
-In this section, chosen features of *Pydra* will be presented.
-Some of the features are present in other packages, but the combination
-of the following features makes *Pydra* a powerful tool in scientific computation.
+In this section, features of *Pydra* that exemplify its utility for scientific
+dataflows are presented. Individually, some of these features are present in the
+numerous workflow packages that exist, but Pydra is the only software that brings
+them together using a very lighweight codebase. The combination of the following
+features makes *Pydra* a powerful tool in scientific computation.
 
-Nested Workflows
-================
+Nested and Hashed Workflows
+===========================
 
-*Pydra* was design to provide an easy way of creating very complex scientific workflows,
-and flexible reusing already existing workflows in new applications.
-This is the reason why ``Workflow`` class has been implemented as a child class of the ``TaskBase`` class,
-and can be treated by users as any other *Task* and added to a new *Workflow*.
-The *Submitter* is responsible for checking the type of each runnable and is able
-to dynamically extend the execution graph.
-This provides an easy way of creating nested workflows of arbitrary depth,
-and reuse already existing *Workflows*.
-This is schematically shown in Fig. :ref:`nested`.
+Scientific dataflows typically involve significant refinement and extensions as
+science and instrumentation evolves. *Pydra* was designed to provide an easy way
+of creating scientific dataflows that range from simple linear steps to complex
+nested graphs. It also enables reproducibility and reduced cost of dataflow
+maintenance through flexible reuse of already existing functions and *Workflows*
+in new applications. The ``Workflow`` class inherits from ``TaskBase`` class
+and can be treated by users as any other *Task* and can itself be added as a node
+in a *Workflow*. This provides an easy way of creating nested workflows of
+arbitrary depth, and reuse already existing *Workflows*. This is schematically
+shown in Fig. :ref:`nested`.
 
 .. figure:: nested_workflow-crop.pdf
    :figclass: h!
@@ -367,25 +371,27 @@ This is schematically shown in Fig. :ref:`nested`.
    A nested Pydra workflow, black circles represent single Task,
    and Workflows are represented by red rectangles. :label:`nested`
 
-
-
+Since a *Workflow* works like a *Task* and has inputs, outputs, and is hashable,
+once executed it does not need to recompute its operations if cached. The
+*Submitter* supports this nested architectuer and can dynamically extend the
+execution graph.
 
 State and Nested Loops over Input
 =================================
 
-
-
-One of the main goal of *Pydra* is to support flexible creation
-of loops over inputs, i.e. flexible mapping of the values of the
-user provided inputs to the specific *Task*'s execution,
-similarly to the concept of the *Map-Reduce* :cite:`Map-Reduce`.
-In order to set input splitting (or mapping), *Pydra* requires to set
-so called *splitter*, it can be done by using *Task*'s ``split`` method.
-The simplest example would be a *Task* that have one field *x* in the input,
-and therefore there is only one way of splitting its input.
-Assuming that the user provides a list as a value of *x*, *Pydra* slits
+One of the main goals of creating *Pydra* was to support flexible evaluation of
+a *Task* or *Workflow* and grouping of these results over combinations of input
+parameters. This is the key feature that distinguishes it from most other dataflow
+engines. This is similar to the concept of the *Map-Reduce* :cite:`Map-Reduce`,
+but extends it to work over arbitrary nested graphs. In complex dataflows, this
+would typically involve significant overhead for data management and use of
+multiple nested loops. In Pydra, this is controlled by setting specific ``State``
+related attributes through *Task* methods. In order to set input splitting
+(or mapping), *Pydra* requires setting up a *splitter*. This is done using
+*Task*'s ``split`` method. The simplest example would be a *Task* that has one
+field *x* in the input, and therefore there is only one way of splitting its input.
+Assuming that the user provides a list as a value of *x*, *Pydra* splits
 the list, so each copy of the *Task* will get one element of the list:
-
 
 .. math::
 
@@ -397,19 +403,20 @@ That is also represented in Fig. :ref:`ndspl1`, where *x=[1, 2, 3]* as an exampl
    :figclass: h!
    :scale: 100%
 
-   Diagram representing a Task with one input and a simple splitter. The white node represents
-   an original Task with x=[1,2,3], as an input. The coloured nodes represent copies of
-   the original Task after splitting the input, these are the runnables that are executed by Workers.
+   Diagram representing a Task with one input and a simple splitter. The white
+   node represents an original Task with x=[1,2,3], as an input. The coloured
+   nodes represent copies of the original Task after splitting the input, these
+   are the runnables that are executed by Workers.
    :label:`ndspl1`
 
+**Scalar and outer splitters:** Whenever a *Task* has more complicated inputs,
+i.e. multiple fields, there are two ways of creating the mapping and are called
+*scalar splitter* and *outer splitter*. These splitters use a special, but
+Python-based syntax as described next.
 
-Whenever *Task* has more complicated input, i.e. multiple fields, there are
-two ways of creating the mapping and they are called *scalar splitter*,
-and *outer splitter*.
-
-The first one, the *scalar splitter*, requires that the lists of values for two fields
-have the same length, since "element wise" mapping is made.
-The *scalar splitter* is represented by parenthesis, ``()``:
+A *scalar splitter* performs element-wise mapping and requires that the lists of
+values for two or more fields to have the same length. The *scalar splitter* uses
+Python tuples and its operation is therefore represented by a parenthesis, ``()``:
 
 .. math::
    :type: eqnarray
@@ -417,8 +424,7 @@ The *scalar splitter* is represented by parenthesis, ``()``:
    \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, .., x_n], y=[y_1, .., y_n] \\
     &\mapsto& (x, y)=(x_1, y_1), ..., (x, y)=(x_n, y_n)
 
-
-The situation is also represented as a diagram in Fig. :ref:`ndspl4`
+This is also represented as a diagram in Fig. :ref:`ndspl4`
 
 .. figure:: nd_spl_4-crop.pdf
    :figclass: h!
@@ -428,11 +434,11 @@ The situation is also represented as a diagram in Fig. :ref:`ndspl4`
    The symbol convention as described in :ref:`ndspl1`.
    :label:`ndspl4`
 
-The second option of mapping the input, when there are multiple fields, is provided by
-so called *outer splitter*.
-The *outer splitter* creates all combination of the input values, and does not require
-the lists to have the same lengths.
-The *outer splitter* is represented by square brackets, ``[]``:
+The second option of mapping the input, when there are multiple fields, is
+provided by the *outer splitter*. The *outer splitter* creates all combination
+of the input values and does not require the lists to have the same lengths.
+The *outer splitter* uses Python's list syntax and is represented by square
+brackets, ``[]``:
 
 .. math::
    :type: eqnarray
@@ -442,7 +448,8 @@ The *outer splitter* is represented by square brackets, ``[]``:
 
 (todo: perhaps I can remove repetition of ``(x,y)=``??)
 
-The *outer splitter* for a node with two input fields is schematically represented in Fig. :ref:`ndspl3`
+The *outer splitter* for a node with two input fields is schematically
+represented in Fig. :ref:`ndspl3`
 
 .. figure:: nd_spl_3-crop.pdf
    :figclass: h!
@@ -452,15 +459,21 @@ The *outer splitter* for a node with two input fields is schematically represent
    The symbol convention as described in :ref:`ndspl1`.
    :label:`ndspl3`
 
+Different types of splitters can be combined over inputs such as
+`["in1", ("in2", "in3)]`. In this example an *outer splitter* provides all
+combinations of values of "in1" with pairwise combinations of values of "in2"
+and "in3". This can be extended to arbitrary complexity.
 
-In addition to the splitting the input, *Pydra* supports grouping or combining the output together.
-Taking as an example the simple *Task* represented in Fig. :ref:`ndspl1`, in some application
-it could be useful to combine at the end all the values of output.
-In order to do it, *Task* has so called *combiner*, that could be set by calling ``combine`` method.
-Note, that the *combiner* makes only sense when *splitter* is set first.
-When *combiner=x*, all values are combined together within one list, and each element of the list
-represents an output of the *Task* for the specific value of the input *x*.
-Splitting and combining for this example can be written as follow:
+**Combiners**: In addition to the splitting the input, *Pydra* supports grouping
+or combining the output resulting from the splits. Taking as an example the
+simple *Task* represented in Fig. :ref:`ndspl1`, in some application it can be
+useful to group all output values of the individual splits. In order to achieve
+this for a *Task*, a user can specify a *combiner*. This can be set by calling
+``combine`` method. Note, the *combiner* only makes sense when a *splitter* is
+set first. When *combiner=x*, all values are combined together within one list,
+and each element of the list represents an output of the *Task* for the specific
+value of the input *x*. Splitting and combining for this example can be written
+as follows:
 
 .. math::
    :type: eqnarray
@@ -469,11 +482,11 @@ Splitting and combining for this example can be written as follow:
    \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out=[out(x_1), ...out(x_n)]
 
 
-In the situation where input has multiple fields, there are various way of combining the output.
-Taking as an example *Task* represented in Fig. :ref:`ndspl3`, it might be useful to combine all the outputs
-for one specific values of *a* and all the values of *b*.
-The combined output is a two dimensional list, each inner element for each value of *a*,
-this could be written as follow:
+In the situation where input has multiple fields, there are various way of
+combining the output. Taking as an example *Task* represented in Fig. :ref:`ndspl3`,
+it might be useful to combine all the outputs for one specific value of *a* and
+all the values of *b*. The combined output is a two dimensional list, each
+inner element for each value of *a*. This is written as follows:
 
 .. math::
    :type: eqnarray
@@ -490,18 +503,17 @@ And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b 
    :figclass: h!
    :scale: 75%
 
-   Diagram representing a Task with two input fields, an outer splitter and a combiner.
-   The Tasks are run in exactly the same way as previously, but at the end the values of output
-   for all values of *b* are combined together.
-   The symbol convention as described in :ref:`ndspl1`.
+   Diagram representing a Task with two input fields, an outer splitter and a
+   combiner. The Tasks are run in exactly the same way as previously, but at the
+   end the values of output for all values of *b* are combined together. The
+   symbol convention as described in :ref:`ndspl1`.
    :label:`ndspl3comb1`
 
-However, for the diagram from :ref:`ndspl3`, it might be also useful to combine all values of *a* for
-specific values of *b*.
-It can be also needed to combine all the values together.
-This can be achieve by providing a list of fields, *[a, b]* to the combiner.
-When a full combiner is set, i.e. all the fields from splitter are also in the combiner,
-the output is a one dimensional list:
+However, for the diagram from :ref:`ndspl3`, it might be also useful to combine
+all values of *a* for specific values of *b*. One may also want to combine all
+the values together. This can be achieve by providing a list of fields,
+*[a, b]* to the combiner. When a full combiner is set, i.e. all the fields from
+splitter are also in the combiner, the output is a one dimensional list:
 
 .. math::
    :type: eqnarray
@@ -517,45 +529,45 @@ And is represented in Fig. :ref:`ndspl3comb3` (todo: should probably change a,b 
    :figclass: h!
    :scale: 75%
 
-   Diagram representing a Task with two input fields, an outer splitter and a full combiner.
-   The Tasks are run in exactly the same way as previously, but at the end all of the output values
-   are combined together.
-   The symbol convention as described in :ref:`ndspl1`.
+   Diagram representing a Task with two input fields, an outer splitter and a
+   full combiner. The Tasks are run in exactly the same way as previously, but
+   at the end all of the output values are combined together. The symbol
+   convention as described in :ref:`ndspl1`.
    :label:`ndspl3comb3`
 
+These are the basic examples of *Pydra*'s *splitter* and *combiners* concept. It
+is important to note, that *Pydra* allows for mixing *splitters* and *combiners*
+on various levels of a dataflow. They can be set on a single *Task* or *Workflow*.
+They can be passed from one *Task* to following *Tasks* within a *Workflow*. An
+example of this more complex operation is presented later in the examples
+section.
 
-These are the basic examples of *Pydra*'s *splitter* and *combiners* concept.
-It is important to note, that *Pydra* allows for mixing *splitters* and *combiners* on various level.
-They could be set on a single *Task* level, or on *Workflow* level.
-They could be also passed from one *Task* to the followings *Task* within a *Workflow*.
-Some example of this flexible syntax will be presented in the next section.
+Checksums and Global Cache
+==========================
 
-Global Cache
-============
-
-One of the key feature of *Pydra* is the support for *Global Cache*.
-Each of the *Task* and *Workflow* has an attribute called `checksum`.
-In order to create the `checksum`, all of the input fields are collected
-and hash value is calculated.
-If *File* or *Directory* is used as an input, than the hash value
-of the content is used.
-For *Workflow*, the connections between the *Tasks* are also included
-in the final `checksum`.
-The ``checksum`` is used to create output directory path, and therefore
-it can be reused by any other *Tasks* or *Workflow* in the future.
-In order to achieve this, the user can specify ``cache_dir`` and ``cache_locations``
-when creating the *Task*.
-The ``cache_dir`` is a one specific path, where you want your output to be saved,
-but ``cache_location`` can include a list of paths.
-Before running any *Task* or *Workflow*, *Pydra* checks all the directories that are either
-in ``cache_dir`` or ``cache_locations``, and if the specific checksum could be found,
-than the results are reloaded without running the specific *Task*.
-It is important to emphasis that every element of the *Workflow* is checked,
-so even if the *Workflow* itself is a new pipeline, using `Global Cache` could
-significantly reduce the time.
-The same is valid for *Tasks* with *State*.
-If the number of element of the input is expanded, the previously computed results
-could be still used.
+One of the key feature of *Pydra* is the support for a *Global Cache*. This allows
+multiple people in a laboratory, or even across laboratories to use each other's
+execution outputs on the same data without having to rerun the same computation.
+Each *Task* and *Workflow* has an attribute called `checksum`. In order to create
+the `checksum`, all of the input fields are collected and hash value is calculated.
+If *File* or *Directory* is used as an input, than the hash value of the content
+is used. For *Workflows*, the connections between the *Tasks* are also included
+in the final `checksum`, and hence the checksum of a *Workflow* changes if its
+underlying graph changes. The ``checksum`` is used to create output directory
+path during execution and can be reused in future executions of the same exact
+*Task* or *Workflow*. To reuse, a user can specify ``cache_dir`` and
+``cache_locations`` when creating a *Task* or *Workflow*. The ``cache_dir`` is a
+read-write path, where you want your outputs to be saved, but ``cache_location``
+can include a list of paths, which allow re-using existing caches. Before running
+any *Task* or *Workflow*, *Pydra* checks all the directories that are either in
+``cache_dir`` or ``cache_locations``, and if the specific checksum is found,
+then the results are reloaded without running the specific *Task*. It is important
+to emphasize that without a cache, every element of a nested *Workflow* would be
+re-executed. Using `Global Cache` can reduce significant execution time when
+the same operations on the same data are repeated. This is also true for *Tasks*
+with *State*. If the number of input elements is expanded, the previously cached
+results can be reused without recomputation. For scientific workflows, where
+many tasks take significant computational resources, this can speed up reruns.
 
 
 Applications and Examples
