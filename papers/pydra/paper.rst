@@ -439,7 +439,7 @@ This is also represented as a diagram in Fig. :ref:`ndspl4`
    :scale: 90%
 
    Diagram representing a Task with two input fields and a scalar splitter.
-   The symbol convention as described in :ref:`ndspl1`.
+   The symbol convention is described in :ref:`ndspl1`.
    :label:`ndspl4`
 
 The second option of mapping the input, when there are multiple fields, is
@@ -464,7 +464,7 @@ represented in Fig. :ref:`ndspl3`
    :scale: 75%
 
    Diagram representing a Task with two input fields and an outer splitter.
-   The symbol convention as described in :ref:`ndspl1`.
+   The symbol convention is described in :ref:`ndspl1`.
    :label:`ndspl3`
 
 Different types of splitters can be combined over inputs such as
@@ -514,7 +514,7 @@ And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b 
    Diagram representing a Task with two input fields, an outer splitter and a
    combiner. The Tasks are run in exactly the same way as previously, but at the
    end the values of output for all values of *b* are combined together. The
-   symbol convention as described in :ref:`ndspl1`.
+   symbol convention is described in :ref:`ndspl1`.
    :label:`ndspl3comb1`
 
 However, for the diagram from :ref:`ndspl3`, it might be also useful to combine
@@ -581,18 +581,18 @@ many tasks take significant computational resources, this can speed up reruns.
 Applications and Examples
 -------------------------
 
-In this section a few example of *Pydra* usage will be presented.
-The first example will be a "toy example" to show the power of *Pydra*'s splitter and combiner.
-The second example will cover machine learning model comparison.
+In this section, we highlight *Pydra* through two examples. The first example
+is an intuitive scientific Python example to demonstrate the power of *Pydra*'s
+splitter and combiner. The second example extends this demonstration with a more
+practical machine learning model comparison workflow leveraging scikit-learn.
 
-Mathematical Toy Example: Sine Function Approximation
-=====================================================
+Example 1: Perform Sine Function Approximation
+==============================================
 
-In this section a toy mathematical example will be used to present
-the flexibility of *Pydra*'s splitters and combiners.
-The exemplary workflow will calculate the approximated values of Sine function
-for various values of `x`.
-The *Workflow* uses a Taylor polynomial for Sine function:
+This example illustrates the flexibility of *Pydra*'s splitters and combiners.
+We do not expect Pydra to be used to write algorithms like this. The exemplary
+workflow will calculate the approximated values of Sine function for various
+values of `x`. The *Workflow* uses a Taylor polynomial for Sine function:
 
 .. math::
 
@@ -600,10 +600,11 @@ The *Workflow* uses a Taylor polynomial for Sine function:
 
 where `n_{max}` (TODO) is a degree of approximation.
 
-Since the idea is to make the execution parallel as much as possible, each of the term
-for each value of `x` should be calculated separately, and this will be done by functin `term (x, n)`.
-In addition, `range_fun(n_max)` will be used to return a list of integers from `0` to `n_max`,
-and `summing(terms)` will sum all the terms for the specific value of `x` and `n_max`.
+Since the idea is to make the execution as embarassingly parallel as possible,
+each of the term for each value of `x` should be calculated separately. This is
+done by function `term (x, n)`. In addition, `range_fun(n_max)` is used to
+return a list of integers from `0` to `n_max` and `summing(terms)` will sum all
+the terms for the specific value of `x` and `n_max`.
 
 
 .. code-block:: python
@@ -627,13 +628,10 @@ and `summing(terms)` will sum all the terms for the specific value of `x` and `n
       return sum(terms)
 
 
-The *Workflow* itself will take two inputs - list of values of `x`
-and list of values of `n_max`.
-In order to calculate various degrees of the approximation for each value of `x`,
-the `outer splitter` has to be used `[x, n_max]`.
-At the end all approximations for the specific values of `x` will be combined
-together by using `n_max` as a combiner.
-
+The *Workflow* takes two inputs - a list of values of `x` and a list of values
+of `n_max`. In order to calculate various degrees of the approximation for each
+value of `x`, an `outer splitter` is used `[x, n_max]`. All approximations for
+a specific values of `x` is aggregated by using `n_max` as a combiner.
 
 .. code-block:: python
 
@@ -642,9 +640,11 @@ together by using `n_max` as a combiner.
   wf.inputs.x = [0, 0.5 * math.pi, math.pi]
   wf.inputs.n_max = [2, 4, 10]
 
-All three *Function Tasks* have to be added to the *Workflow* and connected together.
-The second task, `term`, has to be additionally split over `n`,
-and at the end combine all the terms together.
+All three *Function Tasks* are added to the *Workflow* and connected together
+using *lazy* connections. The second task, `term`, has to be additionally split
+over `n` to compute the different pieces of the Taylor approximation and the
+results of each term calculation are grouped together through the `combine`
+method.
 
 .. code-block:: python
 
@@ -656,8 +656,8 @@ and at the end combine all the terms together.
   wf.add(summing(name="sum", terms=wf.term.lzout.out))
 
 
-After setting the *Workflow* output by using ``set_output`` method,
-the *Workflow* could be run.
+Finally, the *Workflow* output is set as the approximation using ``set_output``
+method. Thus the *Workflow reflects a parallelizable self contained function.
 
 .. code-block:: python
 
@@ -665,8 +665,10 @@ the *Workflow* could be run.
    res = wf(plugin="cf")
 
 
-The result gives a two dimensional list of `Results`, for each value of `x` will be a list of
-three approximations, as an example, for `x=\pi/2` there should be the following list:
+When executed using the concurrent futures library, the result is a two
+dimensional list of `Results`. For each value of `x` the *Workflow* computes a
+list of three approximations. As an example, for `x=\pi/2` this returns the
+following list:
 
 .. code-block:: python
 
@@ -679,8 +681,11 @@ three approximations, as an example, for `x=\pi/2` there should be the following
  ...]
 
 
-Each `Result` contains three elements: `output`, `runtime` and `errored`.
-As expected, the values of the Sine function are getting closer to `1` with higher degree of the approximation.
+Each `Result` contains three elements: `output` reflecting the actual computed
+output, `runtime` reflecting the information related to resources used during
+execution (when a resource audit flag is set), and `errored` a boolean flag
+which indicates whether the task errored or not. As expected, the values of the
+Sine function are getting closer to `1` with increasing degrees of approximation.
 
 The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
@@ -688,9 +693,9 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
    :figclass: ht
    :scale: 60%
 
-   Diagram representing part of the Workflow for calculating Sine function approximations of various degrees
-   for various values of x.
-   The symbol convention as described in :ref:`ndspl1`.
+   Diagram representing part of the Workflow for calculating Sine function
+   approximations of various degrees for various values of x. The symbol
+   convention is described in :ref:`ndspl1`.
    :label:`wfsin`
 
 
@@ -698,11 +703,18 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 Machine Learning: Model Comparison 
 ==================================
 
-The massive parameter space in machine learning makes it a perfect use case for *Pydra*. 
+The massive parameter search space of models and their parameters makes machine
+learning an ideal use case for *Pydra*. This section illustrates a
+general-purpose machine learning *Pydra*'s *Workflow* for model comparison using
+a boostrapped shuffle-split mechanism for choosing training and test pairs from
+a given dataset. The example leverages *Pydra*'s powerful splitters and combiners
+to scale across a set of classifiers and metrics. It also uses *Pydra*'s caching
+to not redo model training and evaluation when new metrics are added, or when
+number of iterations is increased. The complete model comparison workflow is
+available as an installable package called *pydra-ml* :cite:`pydra-ml`.
 
-This section will show an example of a general-purpose machine learning *Pydra*'s *Workflow*,
-which perform model comparison across classifiers and associated hyperparameters:
-
+First, a set of classifiers to compare is provided. At present scikit-learn based
+classifiers are used.
 
 .. code-block:: python
 
@@ -717,16 +729,11 @@ which perform model comparison across classifiers and associated hyperparameters
    ('sklearn.ensemble', 'AdaBoostClassifier', dict())]
 
 
-The exampel leverages *Pydra*'s powerful splitters and combiners to scale across a set of classifiers and metrics.
-It also uses *Pydra*'s caching to not redo model training and evaluation when new metrics
-are added, or when number of iterations is increased.  This is a shorten version of the *pydra-ml*
-package :cite:`pydra-ml`
-
-
-The *Workflow* consist of three *Tasks*: the first tasks loads and splits the data;
-the second one sets up model selection method; and the last *Task* preprocesses, tunes and compare
-the models.
-All of the *Tasks* are ``FunctionTask``, i.e. they are based on Python functions.
+The *Workflow* itself consist of four *Tasks*: the first tasks loads the data;
+the second one sets up bootstrapped splits; the third performs the model
+training and evaluation; and the fourth task performs the evaluation of the
+metrics. All of the *Tasks* are ``FunctionTask``, i.e. they are based on Python
+functions.
 
 The first function, `read_data`, reads csv data as a *pandas.DataFrame*,
 with the option to define name of target variables, row indices to train and data grouping.
@@ -941,8 +948,6 @@ In the nearest future, the developer team is also planning to work on:
 * extension of *Workers* classes in order to fully support application that use *Slurm* or *Dask*
 * export all interfaces from *Nipype 1* and become the default engine for *Nipype*
 * improve the documentation
-* extend the *Pydra-ml* :cite:`pydra-ml` that uses `scikit-learn`
-  to perform model comparison across a set of classifier
 * and many other things...
 
 All scientist and developers are very welcome to join the project.
