@@ -522,7 +522,7 @@ And is represented in Fig. :ref:`ndspl3comb1` (todo: should probably change a,b 
 
 However, for the diagram from :ref:`ndspl3`, the user might want to combine
 all values of *x* for specific values of *y*. One may also need to combine all
-the values together. This can be achieve by providing a list of fields,
+the values together. This can be achieved by providing a list of fields,
 *[x, y]* to the combiner. When a full combiner is set, i.e. all the fields from
 the splitter are also in the combiner, the output is a one dimensional list:
 
