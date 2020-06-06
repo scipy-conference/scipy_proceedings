@@ -589,19 +589,19 @@ is an intuitive scientific Python example to demonstrate the power of *Pydra*'s
 splitter and combiner. The second example extends this demonstration with a more
 practical machine learning model comparison workflow leveraging scikit-learn.
 
-Example 1: Perform Sine Function Approximation
-==============================================
+Example 1: Sine Function Approximation
+======================================
 
-This example illustrates the flexibility of *Pydra*'s splitters and combiners.
-We do not expect Pydra to be used to write algorithms like this. The exemplary
-workflow will calculate the approximated values of Sine function for various
-values of `x`. The *Workflow* uses a Taylor polynomial for Sine function:
+This example illustrates the flexibility of the *Pydra*'s *splitters* and *combiners*
+(the example is not meant to convince scientist to use *Pydra* to write algorithms like this).
+The exemplary workflow will calculate the approximated values of *Sine* function for various
+values of `x`. The *Workflow* uses the Taylor polynomial formula for *Sine* function:
 
 .. math::
 
   \sum_{n=0}^{n_{max}} \frac{(-1)^n}{(2n+1)!} x^{2n+1} = x -\frac{x^3}{3!} + \frac{x^5}{5!} + ...
 
-where `n_{max}` (TODO) is a degree of approximation.
+where `n_{max}` (TODO - how to use math formatting inline?) is a degree of approximation.
 
 Since the idea is to make the execution as embarassingly parallel as possible,
 each of the term for each value of `x` should be calculated separately. This is
@@ -688,22 +688,23 @@ Each `Result` contains three elements: `output` reflecting the actual computed
 output, `runtime` reflecting the information related to resources used during
 execution (when a resource audit flag is set), and `errored` a boolean flag
 which indicates whether the task errored or not. As expected, the values of the
-Sine function are getting closer to `1` with increasing degrees of approximation.
+*Sine* function are getting closer to `1` with increasing degrees of approximation.
 
 The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
 .. figure:: wf_10_paper-crop.pdf
    :figclass: ht
+   :align: left
    :scale: 60%
 
-   Diagram representing part of the Workflow for calculating Sine function
+   Diagram representing part of the Workflow for calculating *Sine* function
    approximations of various degrees for various values of x. The symbol
    convention is described in :ref:`ndspl1`.
    :label:`wfsin`
 
 
 
-Machine Learning: Model Comparison 
+Machine Learning: Model Comparison
 ==================================
 
 The massive parameter search space of models and their parameters makes machine
