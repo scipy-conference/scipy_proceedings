@@ -515,7 +515,7 @@ Initial Results
 
     Speed up over serial cython using OpenMP. :label:`openmp`
 
-.. figure:: gpu.png
+.. figure:: simple_speedup_opencl_cuda_cython.png
 
     Speed up over serial cython using CUDA and OpenCL. :label:`gpu`
 
@@ -523,11 +523,11 @@ Figure :ref:`simulation` shows a snapshot of simulation using 500 particles
 and bounding box size 50 with a non-periodic boundary condition.
 
 For evaluating our performance, we ran our implementation on a dual core Intel
-Core i5 processor and an NVIDIA Tesla T4 GPU. We used :math:`dt = 0.02` and
+Core i5 processor and an NVIDIA Tesla P100 GPU. We used :math:`dt = 0.02` and
 ran the simulation for 25 timesteps. Figures :ref:`openmp` and :ref:`gpu` show
 the speedup achieved over serial execution using Cython by using OpenMP,
 OpenCL and CUDA. As you can see on the CPUs we get close to a 2x speedup.
-However, on the GPU we get over a 200x speedup. This is compared to very fast
+However, on the GPU we get over a 175x speedup. This is compared to very fast
 execution on a single core. The fact that we can use both OpenCL and CUDA is
 also very important as on some operating systems, there is no CUDA support
 even though OpenCL is supported (like the GPUs on MacOS).
@@ -761,15 +761,15 @@ searching algorithm using a counting sort instead of the radix sort which is
 Performance comparison
 ----------------------
 
-.. figure:: speedup_cython_opencl_cuda.png
+.. figure:: linear_speedup_opencl_cuda_cython.png
 
     Speed up over serial cython using CUDA and OpenCL using the NNPS.
     :label:`speedup-nnps`
 
 
-.. figure:: time_opencl_cuda.png
+.. figure:: linear_time_opencl_cuda_cython.png
 
-    Time taken for simulation on a GPU using CUDA and OpenCL.
+    Time taken for simulation using serial cython, CUDA and OpenCL.
     :label:`time-gpu`
 
 .. figure:: time_comp_impl.png
@@ -786,7 +786,7 @@ Figure :ref:`speedup-nnps` shows the speedup relative to serial code running
 using Cython for the OpenCL and CUDA backends using the NNPS algorithm and
 Figure :ref:`time-gpu` shows the time taken for these simulations. We again
 get more than a 120x speedup using the GPU over a single CPU core. Note that
-on the NVIDIA T4 GPU we are able to run a simulation with 25 timesteps for 10
+on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 10
 million particles in about a second, showing the excellent performance
 attained.
 
@@ -796,8 +796,8 @@ speed up acheived by using the :math:`O(N)` algorithm as compared to the
 :math:`O(N^2)` algorithm on the GPU. It can be seen that the algorithm using
 nearest neighbors is linear at large values of number of particles. Figure
 :ref:`nnps-simple` shows the speed up of the :math:`O(N)` implementation using
-the OpenCL implementation. We have more than a 200 fold speed up with the
-improved algorithm for about half a million particles. Overall, we again see a
+the cython implementation. We have about a 100 fold speed up with the
+improved algorithm for only 32,000 particles. Overall, we again see a
 speed up of about 120x when using the GPU as compared to a serial cython
 backend.
 
