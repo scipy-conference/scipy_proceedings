@@ -59,7 +59,7 @@ This approach is conceptually simple and easy to implement, but the resulting wo
 is often time consuming, error-prone and difficult to share with others.
 Consistency, reproducibility and scalability demand scientific workflows to be organized
 into fully automated pipelines.
-This was the motivation behind writting a new dataflow engine written in Python, *Pydra*,
+This was the motivation behind *Pydra* - a new dataflow engine written in Python,
 that is presented in this paper.
 
 The package is a part of the second generation of the *Nipype* ecosystem
