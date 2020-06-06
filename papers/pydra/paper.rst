@@ -468,7 +468,7 @@ represented in Fig. :ref:`ndspl3`
    :label:`ndspl3`
 
 Different types of splitters can be combined over inputs such as
-`["in1", ("in2", "in3)]`. In this example an *outer splitter* provides all
+`["in1", ("in2", "in3")]`. In this example an *outer splitter* provides all
 combinations of values of "in1" with pairwise combinations of values of "in2"
 and "in3". This can be extended to arbitrary complexity.
 
@@ -657,7 +657,7 @@ method.
 
 
 Finally, the *Workflow* output is set as the approximation using ``set_output``
-method. Thus the *Workflow reflects a parallelizable self contained function.
+method. Thus the *Workflow* reflects a parallelizable self contained function.
 
 .. code-block:: python
 
