@@ -54,7 +54,7 @@ The algorithms, that were originally not necessarily designed to work together,
 and were written by different authors.
 Some may be written in Python, while others might require calling external programs.
 It is a common practice to create semi-manual workflows that require the scientists
-interaction to handle files and partial results between algorithms and external tools.
+to handle the files and interact with partial results from algorithms and external tools.
 This approach is conceptually simple and easy to implement, but the resulting workflow
 is often time consuming, error-prone and difficult to share with others.
 Consistency, reproducibility and scalability demand scientific workflows be organized
