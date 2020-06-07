@@ -511,26 +511,31 @@ Initial Results
 
     Snapshot of simulation with 500 particles. :label:`simulation`
 
-.. figure:: openmp.png
+.. figure:: simple_speedup_cython_omp_cython.png
 
-    Speed up over serial cython using OpenMP. :label:`openmp`
+    Speed up over serial Cython using OpenMP. :label:`openmp`
 
 .. figure:: simple_speedup_opencl_cuda_cython.png
 
-    Speed up over serial cython using CUDA and OpenCL. :label:`gpu`
+    Speed up over serial Cython using CUDA and OpenCL. :label:`gpu`
 
 Figure :ref:`simulation` shows a snapshot of simulation using 500 particles
 and bounding box size 50 with a non-periodic boundary condition.
 
-For evaluating our performance, we ran our implementation on a dual core Intel
-Core i5 processor and an NVIDIA Tesla P100 GPU. We used :math:`dt = 0.02` and
-ran the simulation for 25 timesteps. Figures :ref:`openmp` and :ref:`gpu` show
-the speedup achieved over serial execution using Cython by using OpenMP,
-OpenCL and CUDA. As you can see on the CPUs we get close to a 2x speedup.
-However, on the GPU we get over a 175x speedup. This is compared to very fast
-execution on a single core. The fact that we can use both OpenCL and CUDA is
+For evaluating our performance, we ran our implementation on a 2.9 Ghz
+quad-core Intel Core i7 processor and an NVIDIA Tesla P100 GPU. We used
+:math:`dt = 0.02` and ran the simulation for 25 timesteps. Figures
+:ref:`openmp` and :ref:`gpu` show the speedup achieved over serial execution
+using Cython by using OpenMP, OpenCL and CUDA. As you can see on the CPUs we
+get more than a 5x speedup (despite having only 4 cores). However, on the GPU
+we get over a 175x speedup. This is compared to very fast execution on a
+single Intel Xeon 2.3GHz CPU. The fact that we can use both OpenCL and CUDA is
 also very important as on some operating systems, there is no CUDA support
-even though OpenCL is supported (like the GPUs on MacOS).
+even though OpenCL is supported (like the GPUs on MacOS). Note that by default
+Compyle uses floating point precision on the GPUs as most of the cheaper GPUs
+perform much better with floating point precision. We can use double precision
+on the GPU using ``get_config().use_double = True`` if we require it. Again,
+we do not need to change the solver to do this.
 
 This is in itself remarkable given that all we do to run on the GPU or CPU is
 to simply set the appropriate backend. In most of the compyle examples, we use
