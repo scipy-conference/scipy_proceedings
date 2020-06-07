@@ -791,22 +791,20 @@ Performance comparison
 
 Figure :ref:`speedup-nnps` shows the speedup relative to serial code running
 using Cython for the OpenCL and CUDA backends using the NNPS algorithm and
-Figure :ref:`time-gpu` shows the time taken for these simulations. We again
-get more than a 120x speedup using the GPU over a single CPU core. Note that
+Figure :ref:`time-gpu` shows the time taken for these simulations. It can be seen
+that the algorithm is linear for large values of number of particles. We again
+get more than a 100x speedup using the GPU over a single CPU core. Note that
 on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 5
 million particles in less than a second, showing the excellent performance
 attained.
 
 Figure :ref:`time-nnps-vs-simple` shows the time taken for simulation using
-:math:`O(N)` and :math:`O(N^2)` approach. Figure :ref:`nnps-simple` shows the
-speed up acheived by using the :math:`O(N)` algorithm as compared to the
-:math:`O(N^2)` algorithm on the GPU. It can be seen that the algorithm using
-nearest neighbors is linear at large values of number of particles. Figure
-:ref:`nnps-simple` shows the speed up of the :math:`O(N)` implementation using
-the cython implementation. We have about a 100 fold speed up with the
-improved algorithm for only 32,000 particles. Overall, we again see a
-speed up of about 120x when using the GPU as compared to a serial cython
-backend.
+:math:`O(N)` and :math:`O(N^2)` approach.
+Figure :ref:`nnps-simple` shows the speed up acheived by using the 
+:math:`O(N)` algorithm as compared to the
+:math:`O(N^2)` algorithm using the serial cython backend.
+We have about a 100 fold speed up with the improved algorithm for only 
+32,000 particles.
 
 The performance of the algorithm can be further improved by aligning the
 :math:`x` and :math:`y` coordinate arrays according to the sorted indices.
