@@ -528,14 +528,16 @@ quad-core Intel Core i7 processor and an NVIDIA Tesla P100 GPU. We used
 :ref:`openmp` and :ref:`gpu` show the speedup achieved over serial execution
 using Cython by using OpenMP, OpenCL and CUDA. As you can see on the CPUs we
 get more than a 5x speedup (despite having only 4 cores). However, on the GPU
-we get over a 175x speedup. This is compared to very fast execution on a
+we get around a 200x speedup. This is compared to very fast execution on a
 single Intel Xeon 2.3GHz CPU. The fact that we can use both OpenCL and CUDA is
 also very important as on some operating systems, there is no CUDA support
 even though OpenCL is supported (like the GPUs on MacOS). Note that by default
-Compyle uses floating point precision on the GPUs as most of the cheaper GPUs
+Compyle uses floating point precision on the GPUs as most GPUs
 perform much better with floating point precision. We can use double precision
 on the GPU using ``get_config().use_double = True`` if we require it. Again,
-we do not need to change the solver to do this.
+we do not need to change the solver to do this. Our implementation is about
+2x slower when using double precision on an NVIDIA Tesla P100 GPU which is
+typically expected.
 
 This is in itself remarkable given that all we do to run on the GPU or CPU is
 to simply set the appropriate backend. In most of the compyle examples, we use
@@ -791,8 +793,8 @@ Figure :ref:`speedup-nnps` shows the speedup relative to serial code running
 using Cython for the OpenCL and CUDA backends using the NNPS algorithm and
 Figure :ref:`time-gpu` shows the time taken for these simulations. We again
 get more than a 120x speedup using the GPU over a single CPU core. Note that
-on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 10
-million particles in about a second, showing the excellent performance
+on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 5
+million particles in less than a second, showing the excellent performance
 attained.
 
 Figure :ref:`time-nnps-vs-simple` shows the time taken for simulation using
@@ -820,7 +822,7 @@ compyle repository `here
 <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/>`__.
 All of the code, with two different NNPS implementations, and featuring a
 command line interface, comes to around 500 lines of code. This is quite
-exciting as this code be executed on either a multi-core CPU or a GPU with no
+exciting as this code can be executed on either a multi-core CPU or a GPU with no
 code changes.
 
 
