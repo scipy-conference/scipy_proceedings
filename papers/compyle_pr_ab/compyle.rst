@@ -528,14 +528,15 @@ quad-core Intel Core i7 processor and an NVIDIA Tesla P100 GPU. We used
 :ref:`openmp` and :ref:`gpu` show the speedup achieved over serial execution
 using Cython by using OpenMP, OpenCL and CUDA. As you can see on the CPUs we
 get more than a 5x speedup (despite having only 4 cores). However, on the GPU
-we get over a 175x speedup. This is compared to very fast execution on a
+we get around a 200x speedup. This is compared to very fast execution on a
 single Intel Xeon 2.3GHz CPU. The fact that we can use both OpenCL and CUDA is
 also very important as on some operating systems, there is no CUDA support
 even though OpenCL is supported (like the GPUs on MacOS). Note that by default
-Compyle uses floating point precision on the GPUs as most of the cheaper GPUs
+Compyle uses floating point precision on the GPUs as most GPUs
 perform much better with floating point precision. We can use double precision
 on the GPU using ``get_config().use_double = True`` if we require it. Again,
-we do not need to change the solver to do this.
+we do not need to change the solver to do this. Our implementation is about
+90% slower when using double precision on an NVIDIA Tesla P100 GPU.
 
 This is in itself remarkable given that all we do to run on the GPU or CPU is
 to simply set the appropriate backend. In most of the compyle examples, we use
