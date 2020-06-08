@@ -345,6 +345,9 @@ requires these skills. In other words, software engineering
 skills are required to make a software project robust
 and reusable across many different labs and
 groups of researchers :cite:`benthall_2019`.
+This has led to calls in some places for a better supported
+and formalized role for Research Software
+Engineers :cite:`philippe2016preliminary` :cite:`baxter2012research`.
 
 This division of roles and skills raises some quandaries
 for computational economics.
