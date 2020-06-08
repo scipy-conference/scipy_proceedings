@@ -8,20 +8,20 @@
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
 :author: Christopher J. Markiewicz
-:email:  todo
+:email:  effigies@gmail.com
 :institution: Stanford University, Stanford, CA, USA
 
 :author: Oscar Esteban
-:email: todo
+:email: oesteban@stanford.edu
 :institution: Stanford University, Stanford, CA, USA
 
 :author: Nicole Lo
-:email: todo
+:email: nlo@mit.edu
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
 
 :author: Jakub Kaczmarzyk
-:email: todo
+:email: jakub.kaczmarzyk@gmail.com
 :institution: Stony Brook University School of Medicine, Stony Brook, NY, USA
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
 
@@ -81,30 +81,30 @@ and is being developed with reproducibility, ease of use, and scalability in min
 *Pydra* itself is a standalone project and is designed as a general-purpose dataflow engine
 to support any scientific domain.
 
-The goal of Pydra is to provide a lightweight dataflow engine for computational graph construction,
+The goal of *Pydra* is to provide a lightweight dataflow engine for computational graph construction,
 manipulation, and distributed execution, as well as ensuring reproducibility of scientific pipelines.
-In Pydra, a dataflow is represented as a directed acyclic graph, where each node represents a 
+In *Pydra*, a dataflow is represented as a directed acyclic graph, where each node represents a
 Python function, execution of an external tool, or another reusable dataflow.
-The combination of several key features makes Pydra a customizable and powerful dataflow engine:
+The combination of several key features makes *Pydra* a customizable and powerful dataflow engine:
 
 * **Composable dataflows:** Any node of a dataflow graph can be another dataflow,
   allowing for nested dataflows of arbitrary depths and encouraging creating reusable dataflows.
 
 * **Flexible semantics for creating nested loops over input sets:**
   Any *Task* or dataflow can be run over input parameter sets and the outputs can be recombined
-  (similar concept to Map-Reduce model :cite:`Map-Reduce`, but Pydra extends this to graphs with nested dataflows).
+  (similar concept to Map-Reduce model :cite:`Map-Reduce`, but *Pydra* extends this to graphs with nested dataflows).
 
 * **A content-addressable global cache:** Hash values are computed for each graph and each Task.
-  This supports reusing of previously computed and stored dataflows and Tasks.
+  This supports reusing of previously computed and stored dataflows and *Tasks*.
 
-* **Support for Python functions and external (shell) commands:** Pydra can
+* **Support for Python functions and external (shell) commands:** *Pydra* can
   decorate and use existing functions in Python libraries alongside external
   command line tools, allowing easy integration of existing code and software.
 
-* **Native container execution support:** Any dataflow or Task can be executed in an associated
+* **Native container execution support:** Any dataflow or *Task* can be executed in an associated
   container (via Docker or Singularity) enabling greater consistency for reproducibility.
 
-* **Auditing and provenance tracking:** Pydra provides a simple JSON-LD -based message
+* **Auditing and provenance tracking:** *Pydra* provides a simple JSON-LD -based message
   passing mechanism to capture the dataflow execution activties as a provenance
   graph. These messages track inputs and outputs of each task in a dataflow, and
   the resources consumed by the task.
@@ -112,20 +112,21 @@ The combination of several key features makes Pydra a customizable and powerful 
 
 *Pydra* is a pure Python 3.7+ package with a limited set of dependencies, which are
 themselves only dependent on the Python Standard library. It leverages *type annotation*
-and *AsyncIO* in its core operations. Pydra uses the *attr* package for extended
+and *AsyncIO* in its core operations. *Pydra* uses the *attr* package for extended
 annotation and validation of inputs and outputs of tasks, the *cloudpickle* package
 to pickle interactive task definitions, and the *pytest* testing framework.
 *Pydra* is intended to help scientific workflows which rely on significant file-based operations and
 which evaluate outcomes of complex dataflows over a hyper-space of parameters.
 It is important to note, that *Pydra* is not a framework for writing efficient scientific algorithms
 or for use in applications where caching and distributed execution are not necessary.
-Since *Pydra* relies on a filesystem cache at present it is also not
+Since *Pydra* relies on a filesystem cache at present, it is also not
 designed for dataflows that need to operate purely in memory. 
 
 The next section will describe the *Pydra* architecture --- main package classes
 and interactions between them. The *Key Features* section focuses on a set of features whose
 combination distinguishes *Pydra* from other dataflow engines. The paper concludes with a set
-of applied examples demonstrating the power and utility of *Pydra*.
+of applied examples demonstrating the power and utility of *Pydra*,
+and short discussion on the future directions.
 
 
 Architecture
@@ -136,7 +137,7 @@ orchestrates the dataflow execution model.
 Different types of *Workers* allow *Pydra* to execute the task
 on different compute architectures.
 Fig. :ref:`classes`
-shows the Class hierarchy and interaction between them in the present Pydra
+shows the Class hierarchy and interaction between them in the present *Pydra*
 architecture. It was designed this way to decouple *Tasks* and *Workers*.
 In order to describe *Pydra*'s most notable features in the next
 section, we briefly describe the role of each of these classes.
@@ -150,15 +151,15 @@ section, we briefly describe the role of each of these classes.
 Dataflows Components: Task and Workflow
 =======================================
 A *Task* is the basic runnable component of *Pydra* and is described by the
-class ``TaskBase``. A *Task* has named inputs and outputs thus allowing
+class ``TaskBase``. A *Task* has named inputs and outputs, thus allowing
 construction of dataflows. It can be hashed and executes in a specific working
-directory. Any Pydra *Task* can be used as a function in a script, thus allowing
-dual use in Pydra *Workflows* and in standalone scripts. There are several
+directory. Any *Pydra*'s *Task* can be used as a function in a script, thus allowing
+dual use in *Pydra*'s *Workflows* and in standalone scripts. There are several
 classes that inherit from ``TaskBase`` and each has a different application:
 
 * ``FunctionTask`` is a *Task* that executes Python functions. Most Python functions
   declared in an existing library, package, or interactively in a terminal can
-  be converted to a ``FunctionTask`` by using *Pydra* decorator - ``mark.task``.
+  be converted to a ``FunctionTask`` by using *Pydra*'s decorator - ``mark.task``.
 
   .. code-block:: python
 
@@ -170,7 +171,7 @@ classes that inherit from ``TaskBase`` and each has a different application:
      result = fft_task(a=np.random.rand(512))
 
 
-  `fft_task` is now a *Pydra* task and result will contain a *Pydra*'s ``Result`` object.
+  `fft_task` is now a *Pydra* *Task* and result will contain a *Pydra*'s ``Result`` object.
   In addition, the user can use Python's function annotation or another *Pydra*
   decorator |---| ``mark.annotate`` in order to specify the output. In the
   following example, we decorate an arbitrary Python function to create named
@@ -188,7 +189,7 @@ classes that inherit from ``TaskBase`` and each has a different application:
 
      result = mean_dev(my_data=[...])()
 
-  When the task is executed `result.output` will contain two attributes: `mean`
+  When the *Task* is executed `result.output` will contain two attributes: `mean`
   and `std`. Named attributes facilitate passing different outputs to
   different downstream nodes in a dataflow.
 
@@ -350,7 +351,7 @@ to create a "pool" for adding the runnables. ``SlurmWorker`` creates an`sbatch`
 submission script in order to execute the task, and ``DaskWorker`` make use of
 Dask's ``Client`` class and its ``submit`` method. All workers use
 *async functions* from *AsyncIO* in order to handle asynchronous processes. All
-*Workers* rely on a `load_and_run` function to execute each job from its pickled
+*Workers* rely on a ``load_and_run`` function to execute each job from its pickled
 state.
 
 
@@ -400,7 +401,7 @@ parameters. This is the key feature that distinguishes it from most other datafl
 engines. This is similar to the concept of the *Map-Reduce* :cite:`Map-Reduce`,
 but extends it to work over arbitrary nested graphs. In complex dataflows, this
 would typically involve significant overhead for data management and use of
-multiple nested loops. In Pydra, this is controlled by setting specific ``State``
+multiple nested loops. In *Pydra*, this is controlled by setting specific ``State``
 related attributes through *Task* methods. In order to set input splitting
 (or mapping), *Pydra* requires setting up a *splitter*. This is done using
 *Task*'s ``split`` method. The simplest example would be a *Task* that has one
@@ -411,7 +412,7 @@ This can be represented as follow:
 
 .. math::
 
-   \textcolor{red}{\mathnormal{S} = x}: x=[x_1, x_2, ..., x_n] \longmapsto x=x_1, x=x_2, ..., x=x_n
+   \textcolor{red}{\mathnormal{S} = x}: x=[x_1, x_2, ..., x_n] \longmapsto x=x_1, x=x_2, ..., x=x_n~,
 
 where `S` represents the *splitter*, and `x` is the input field.
 
@@ -441,7 +442,7 @@ Python tuples and its operation is therefore represented by a parenthesis, ``()`
    :type: eqnarray
 
    \textcolor{red}{\mathnormal{S} = (x, y)} &:& x=[x_1, x_2, .., x_n],~~ y=[y_1, y_2, .., y_n] \\
-    &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_2, y_2),..., (x, y)=(x_n, y_n)
+    &\mapsto& (x, y)=(x_1, y_1),..., (x, y)=(x_n, y_n),
 
 where `S` represents the *splitter*, `x` and `y` are the input fields.
 
@@ -465,7 +466,7 @@ brackets, ``[]``:
    :type: eqnarray
 
    \textcolor{red}{\mathnormal{S} = [x, y]} &:& x=[x_1, x_2, ..., x_n],~~ y=[y_1, y_2, ..., y_m], \\
-   &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_1, y_2)..., (x, y)=(x_n, y_m)
+   &\mapsto& (x, y)=(x_1, y_1), (x, y)=(x_1, y_2)..., (x, y)=(x_n, y_m).
 
 
 The *outer splitter* for a node with two input fields is schematically
@@ -480,7 +481,7 @@ represented in Fig. :ref:`ndspl3`
    :label:`ndspl3`
 
 Different types of splitters can be combined over inputs such as
-`[inp1, (inp2, inp_3)]`. In this example an *outer splitter* provides all
+`[inp1, (inp2, inp3)]`. In this example an *outer splitter* provides all
 combinations of values of `inp1` with pairwise combinations of values of `inp2`
 and `inp3`. This can be extended to arbitrary complexity.
 
@@ -498,19 +499,19 @@ as follows:
 .. math::
    :type: eqnarray
 
-   \textcolor{red}{\mathnormal{S} = x} &:& x=[x_1, x_2, ..., x_n] \mapsto x=x_1, x=x_2, ..., x=x_n \\
-   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out_{comb}=[out(x_1), ...out(x_n)]
+   \textcolor{red}{\mathnormal{S} = x} &:& x=[x_1, x_2, ..., x_n] \mapsto x=x_1, x=x_2, ..., x=x_n, \\
+   \textcolor{red}{\mathnormal{C} = x} &:& out(x_1), ...,out(x_n) \mapsto out_{comb}=[out(x_1), ...out(x_n)],
 
-where `S` represents the *splitter*, *C* represents the *combiner*, `x` is the input field,
-`out(x_i)` represents the output of the *Task* for `x_i`, and `out_comb` is the final output after applying
+where `S` represents the *splitter*, *C* represents the *combiner*, :math:`x` is the input field,
+:math:`out(x_i)` represents the output of the *Task* for :math:`x_i`, and :math:`out_{comb}` is the final output after applying
 the *combiner*.
 
 In the situation where input has multiple fields and an *outer splitter* is used,
 there are various ways of combining the output.
 Taking as an example *Task* represented in Fig. :ref:`ndspl3`,
-user might want to combine all the outputs for one specific value of *x* and
-all the values of *y*. In this situation, the combined output would be a two dimensional list, each
-inner list for each value of *x*. This is written as follows:
+user might want to combine all the outputs for one specific value of :math:*x_i* and
+all the values of :math:*y*. In this situation, the combined output would be a two dimensional list, each
+inner list for each value of :math:*x*. This is written as follows:
 
 .. math::
    :type: eqnarray
@@ -518,7 +519,7 @@ inner list for each value of *x*. This is written as follows:
    \textcolor{red}{\mathnormal{C} = y} &:& out(x_1, y1), out(x_1, y2), ...out(x_n, y_m) \\
     &\longmapsto& [[out(x_1, y_1), ..., out(x_1, y_m)], \\
     && ..., \\
-    && [out(x_n, y_1), ..., out(x_n, y_m)]]
+    && [out(x_n, y_1), ..., out(x_n, y_m)]].
 
 And is represented in Fig. :ref:`ndspl3comb1`.
 
@@ -533,7 +534,7 @@ And is represented in Fig. :ref:`ndspl3comb1`.
    S=[x, y] as a splitter, and C=y as a combiner.
    The coloured nodes represent stateless copies of the original Task after splitting the input, these
    are the runnables that are executed by Workers.
-   At the end outputs for all values of y are combined together within`out_comb`.
+   At the end outputs for all values of y are combined together within :math:`out_{comb}`.
    :label:`ndspl3comb1`
 
 However, for the diagram from :ref:`ndspl3`, the user might want to combine
@@ -546,7 +547,7 @@ the splitter are also in the combiner, the output is a one dimensional list:
    :type: eqnarray
 
    \textcolor{red}{\mathnormal{C} = [x, y]} : out(x_1, y1), ...out(x_n, y_m)
-    \longmapsto [out(x_1, y_1), ..., out(x_n, y_m)]
+    \longmapsto [out(x_1, y_1), ..., out(x_n, y_m)].
 
 
 And is represented in Fig. :ref:`ndspl3comb3`.
@@ -565,8 +566,8 @@ And is represented in Fig. :ref:`ndspl3comb3`.
 These are the basic examples of the *Pydra*'s *splitter-combiner* concept. It
 is important to note, that *Pydra* allows for mixing *splitters* and *combiners*
 on various levels of a dataflow. They can be set on a single *Task* or a *Workflow*.
-They can be passed from one *Task* to following *Tasks* within the *Workflow*. An
-example of this more complex operation is presented later in the examples
+They can be passed from one *Task* to following *Tasks* within the *Workflow*.
+Examples of this more complex operation are presented in the next
 section.
 
 Checksums and Global Cache
@@ -580,7 +581,7 @@ the `checksum`, all of the input fields are collected and hash value is calculat
 If *File* or *Directory* is used as an input, than the hash value of the content
 is used. For *Workflows*, the connections between the *Tasks* are also included
 in the final `checksum`, and hence the checksum of a *Workflow* changes if its
-underlying graph changes. The ``checksum`` is used to create output directory
+underlying graph changes. The `checksum` is used to create output directory
 path during execution and can be reused in future executions of the same exact
 *Task* or *Workflow*. To reuse, a user can specify ``cache_dir`` and
 ``cache_locations`` when creating a *Task* or *Workflow*. The ``cache_dir`` is a
@@ -608,8 +609,8 @@ practical machine learning model comparison workflow leveraging scikit-learn.
 Example 1: Sine Function Approximation
 ======================================
 
-This example illustrates the flexibility of the *Pydra*'s *splitters* and *combiners*
-(the example is not meant to convince scientist to use *Pydra* to write algorithms like this).
+This example illustrates the flexibility of the *Pydra*'s *splitters* and *combiners*,
+but the example is not meant to convince scientist to use *Pydra* to write algorithms like this.
 The exemplary workflow will calculate the approximated values of *Sine* function for various
 values of `x`. The *Workflow* uses the Taylor polynomial formula for *Sine* function:
 
@@ -704,7 +705,7 @@ Each `Result` contains three elements: `output` reflecting the actual computed
 output, `runtime` reflecting the information related to resources used during
 execution (when a resource audit flag is set), and `errored` a boolean flag
 which indicates whether the task errored or not. As expected, the values of the
-*Sine* function are getting closer to `1` with increasing degrees of approximation.
+*Sine* function are getting closer to `1` with increasing degree of the approximation.
 
 The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
 
@@ -714,9 +715,9 @@ The described *Workflow* is schematically presented in Fig. :ref:`wfsin`.
    :scale: 60%
 
    Diagram representing part of the Workflow for calculating *Sine* function
-   approximations of various degrees for various values of x.
-   Circles represents single Tasks and rectangles represent Workflows.
-   The white nodes represents Task or Workflow with a State.
+   approximations of various degrees for values of x.
+   Circles represent single Tasks and rectangles represent Workflows.
+   The white nodes represent Task or Workflow with a State.
    The coloured nodes represent stateless copies of the original Task after splitting the input.
    The gray nodes represent a Task that has no State.
    :label:`wfsin`
@@ -737,12 +738,12 @@ number of iterations is increased. The complete model comparison workflow is
 available as an installable package called *pydra-ml* :cite:`pydra-ml`, and
 includes SHAP-based feature importance evaluation in addition to model comparison.
 
-The *Workflow* presented here comprises four *FunctionTasks*. For sake of clarity,
+The *Workflow* presented here comprises four *FunctionTasks*. For the sake of clarity,
 we will not redisplay the task code here. They can be found in the `tasks.py` file
 in *pydra-ml* :cite:`pydra-ml`. The first function, `read_data`, reads csv data
 as a *pandas.DataFrame* and allows the user to extract specific columns as the
-input `X` to a learning model, a target column, and an optional `group` column. T
-he second function, `gen_splits`, uses `GroupShuffleSplit` from
+input, `X`, to a learning model, a target column, `y`, and an optional `group` column.
+The second function, `gen_splits`, uses `GroupShuffleSplit` from
 `sklearn.model_selection` to generate a set of train-test splits given `n_splits`
 and `test_size`, with an option to define `group` and `random_state`. It returns
 `train_test_splits` and `split_indices`. The main function to train the classifier,
@@ -753,7 +754,7 @@ whether to generate a null model by permuting the labels. The final function
 and predicted values from the classifier.
 
 These tasks are combined together within a *Workflow* exploiting splitters and
-combiners. The *Workflow* itself has an outer split for `clf_info` and `permute`,
+combiners. The *Workflow* itself has an `outer split` for `clf_info` and `permute`,
 allowing evaluation of null and non-null models for every classifier. The
 core model fitting and evaluation function `train_test_kernel` uses an internal
 splitter to iterate over all the bootstrapped iterations.  Using *Pydra*, it is
@@ -792,7 +793,7 @@ methods on the classifier outputs and combine these results back together.
             split_index=wf.gensplit.lzout.split_indices,
             clf_info=wf.lzin.clf_info,
             permute=wf.lzin.permute))
-    # Task level mapping over bootstrapped
+    # Task level splitting over bootstrapped
     # train-test pairs
     wf.fit_clf.split("split_index")
     wf.add(calc_metric(
@@ -846,7 +847,7 @@ The result from the *Workflow* is a set of scores for permuted and non-permuted
 models. This is a list, each element of the list is for one value of `clf_info`
 and `permute`, both fields were set as input fields to the *Workflow*. All
 `Result` objects have an `output.score` field that is also a list. Each element
-of `score` corresponds to a different value of `split_index`, that was set both
+of the `score` corresponds to a different value of `split_index`, that was set both
 as a `splitter` and `combiner` to the `fit_cls` *Task*. This gives an option to
 easily compare various models and sets of parameters.
 
@@ -886,7 +887,7 @@ Summary and Future Directions
 
 *Pydra* is a new lightweight dataflow engine written in Python. The combination
 of several key features - including flexible option for splitting and combining
-input fields, and *Global Cache* - makes Pydra a customizable and powerful
+input fields, and *Global Cache* - makes *Pydra* a customizable and powerful
 dataflow engine. The *Pydra*'s developers are mostly from the Neuroimaging
 community, which provides a plethora of use-cases for complex dataflows, but the
 package is designed as a general-purpose dataflow engine to support any
