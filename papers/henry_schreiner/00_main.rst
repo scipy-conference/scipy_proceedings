@@ -2,10 +2,6 @@
 :email: henryfs@princeton.edu
 :institution: Princeton University
 
-:author: Jim Pivarski
-:email: pivarski@princeton.edu
-:institution: Princeton University
-
 :author: Hans Dembinski
 :email: hans.dembinski@tu-dortmund.de
 :institution: TU Dortmund
@@ -13,6 +9,10 @@
 :author: Shuo Liu
 :email: liush97@mail2.sysu.edu.cn 
 :institution: Sun Yat-sen University
+
+:author: Jim Pivarski
+:email: pivarski@princeton.edu
+:institution: Princeton University
 
 
 -------------------------------------------------------
