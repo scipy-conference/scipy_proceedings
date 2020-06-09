@@ -182,7 +182,59 @@ over time.
 In this respect, Econ-ARK has some characteristics of a
 reinforcement learning or "AI" toolkit.
 
-[TODO: Example of a problem, here: bellman equations, etc.]
+**Example**. An paradigmatic, simple example of the kind
+of problem studied using Econ-ARK is the microeconomic
+dynamic stochastic optimization problem of calculating
+the mathematically optimal amount to save. :cite:`carroll2011solution`
+
+This problem can be characterized by the equations:
+
+.. math::
+   :type: eqnarray
+          
+      U(c_t) &=& \frac{c_t^{1-\rho}}{1 - \rho} \\
+    m_{t+1}  &=& R(m_t - c_t) + p_{t+1} \\
+     p_{t+1} &=& \gamma p_t
+
+where :math:`U` is a utility function, :math:`\rho` is a
+coefficient of risk aversion, :math:`c` is the
+amount of resources the agent chooses to consume in each
+period, :math:`m` are the market resources available to
+the agent at each time period, and :math:`R` is a rate
+of return on savings.
+
+These equations define a Markov Decision Problem (MDP),
+which can be transformed into a Bellman equation given
+a discount factor :math:`\beta`:
+
+
+.. math::
+   :type: eqnarray
+          
+   V_t(m_t, p_t) &=& max_{c_t} U(c_t) + \beta V_{t+1}(m_{t+1}, p_{t+1})
+      
+The optimal consumer choice can be solved via dynamic programming.
+
+However, it is possible to reduce the complexity of this problem
+significantly through mathematical analysis.
+Because income is growing geometrically, it is possible to remove
+one of the state variables :math:`p` from the model, and solve
+for the MDP defined by:
+
+.. math::
+   :type: eqnarray
+          
+    m_{t+1}  &=& \frac{R}{\gamma}(m_t - \hat{c}_t) + 1
+
+The consumption function :math:`\hat{c}` can then be solved
+in a reduced (1-dimensional) state space. The optimal
+consumption function for the original problem is then
+recoverable as :math:`c_t = \hat{c}_t * p_t`.
+It is the goal of the Econ-ARK software to bundle the
+analytically reduced solution with the original model
+as a way of representing and making available the
+substantive knowledge gained in the mathematical
+derivation.
 
 Models in HARK are, at a certain level of mathematical
 abstraction, equivalent to Markov Decision Problems (MDP).
