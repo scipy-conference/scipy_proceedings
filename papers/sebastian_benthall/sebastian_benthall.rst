@@ -374,7 +374,7 @@ Case Study: Econ-ARK infrastructure
 ------------------------------------------
 The Econ-ARK infrastructure is built around creating a sustainable community with respect to various different use cases and the challenges of creating sustainable scientific software. We discuss some of the challenges of bridging work across user roles of Researchers, Publishers, Pedagogy and Software engineering. This is discussed from the point of view of economics research and tools in the SciPy ecosystem but it could be limitedly generalized for other domains and ecosystems.
 
-- **Decoupling scientific content from code** A lot of scientific code is written as part of academic research projects where the incentives aren't closely aligned with those of creating scientific software (The recent case of UK COVID microsimulation code :cite:`covidsim2020`, brings out a stronger need of creating scientific software with the correct incentives). Initiatives like Journal of Open Source Software (JOSS) helps to align the incentives in the right direction. The decision to draw the line between a research artifact and a software is a hard decision which varies a lot between different scientific domains and requires a high level overlap of the researchers, publishers and software engineer roles. A lot of scientific code written by researchers is geared towards the publishable end result like a paper, a quick example to explain this could be as trivial as the difference between a script and a modular function :cite:`scilec`.
+**Decoupling scientific content from code** A lot of scientific code is written as part of academic research projects where the incentives aren't closely aligned with those of creating scientific software (The recent case of UK COVID microsimulation code :cite:`covidsim2020`, brings out a stronger need of creating scientific software with the correct incentives). Initiatives like Journal of Open Source Software (JOSS) helps to align the incentives in the right direction. The decision to draw the line between a research artifact and a software is a hard decision which varies a lot between different scientific domains and requires a high level overlap of the researchers, publishers and software engineer roles. A lot of scientific code written by researchers is geared towards the publishable end result like a paper, a quick example to explain this could be as trivial as the difference between a script and a modular function :cite:`scilec`.
 
   .. code-block:: python
 
@@ -420,12 +420,34 @@ The Econ-ARK infrastructure is built around creating a sustainable community wit
   This decoupling exercise also helps with reproducibility part of research projects as it gives other researchers necessary tools to examine the research artifacts. The decoupling can also be extended to the data used in data-intensive research projects, which can also exist as a part of the scientific software library.
 
 
-- **Reproducible builds of scientific content**, Reproducibility crisis has been plaguing academic research for some time and the current ecosystem of software packaging and distribution certainly doesn't help it. To tackle this in Econ-ARK we have used containerization technologies like Docker to solve this problem. Tools like Repo2Docker :cite:`repo2d` further help us with creating reproducible builds of scientific content. Creating and working with these tools still require a basic background with software engineering, and end users like students and researchers in economics may not have the required background. We made tools to lower the barrier by using pre built containers and one click (commands) reproducible research artifacts :cite:`reproduce` . This part requires a strong overlap between Researchers and Software Engineers in a project. Pushing for reproducibility in the community benefits students by lowering the barrier and publishers/researchers by creating tools required to address the reproducibility crisis.
+**Reproducible builds of scientific content**, Reproducibility crisis has been plaguing academic research for some time and the current ecosystem of software packaging and distribution certainly doesn't help it. To tackle this in Econ-ARK we have used containerization technologies like Docker to solve this problem. Tools like Repo2Docker :cite:`repo2d` further help us with creating reproducible builds of scientific content. Creating and working with these tools still require a basic background with software engineering, and end users like students and researchers in economics may not have the required background. We made tools to lower the barrier by using pre built containers and one click (commands) reproducible research artifacts :cite:`reproduce` . This part requires a strong overlap between Researchers and Software Engineers in a project. Pushing for reproducibility in the community benefits students by lowering the barrier and publishers/researchers by creating tools required to address the reproducibility crisis.
 
 
-- **Pedagogy Teaching resources**  To keep the wheels turning in a research discipline we require effective pedagogical resources, especially in domains which are increasingly using scientific software to further research. After creating pedagogical content we are faced with the next hard challenge of creating an effective teaching infrastructure. The crème de la crème of the SciPy community has faced installation problems with software packages and it is not hard to create a monster out of your local environment but luckily tools like MyBinder and JupyterHub have drastically reduced the work required to set up a stable environment required for teaching courses which depends heavily scientific software. At Econ-ARK we have used MyBinder(public and privately hosted) extensively for teaching graduate economics courses and it has significantly reduced the overhead required for local setup, especially for students which are the primary users of a domain specific scientific software like HARK. We have also effectively used containerization for standardizing student assignments which streamlines the work for both students and teachers.
+**Pedagogy Teaching resources**  To keep the wheels turning in a research discipline we require effective pedagogical resources, especially in domains which are increasingly using scientific software to further research. After creating pedagogical content we are faced with the next hard challenge of creating an effective teaching infrastructure. The crème de la crème of the SciPy community has faced installation problems with software packages and it is not hard to create a monster out of your local environment but luckily tools like MyBinder and JupyterHub have drastically reduced the work required to set up a stable environment required for teaching courses which depends heavily scientific software. At Econ-ARK we have used MyBinder(public and privately hosted) extensively for teaching graduate economics courses and it has significantly reduced the overhead required for local setup, especially for students which are the primary users of a domain specific scientific software like HARK. We have also effectively used containerization for standardizing student assignments which streamlines the work for both students and teachers.
 
-- **Introductory training to scientific researchers about software design** We are definitely not the first ones to realize and push for more training to scientific researchers about general software design and best practices (software versioning, CI, testing). Organizations like Software Carpentry :cite:`wilson2014software` have been successful in this domain. Creating sustainable domain specific scientific software requires a strong decoupling from research artifacts so users from different backgrounds can successfully work with the software. Researchers writing code with knowledge about software design will have more success in creating a sustainable community. This also starts the conversation of empowering roles like Research Software Engineers which fills up the gap between researchers, students and publishers.
+**Introductory training to scientific researchers about software design** We are definitely not the first ones to realize and push for more training to scientific researchers about general software design and best practices (software versioning, CI, testing). Organizations like Software Carpentry :cite:`wilson2014software` have been successful in this domain. Creating sustainable domain specific scientific software requires a strong decoupling from research artifacts so users from different backgrounds can successfully work with the software. Researchers writing code with knowledge about software design will have more success in creating a sustainable community. This also starts the conversation of empowering roles like Research Software Engineers which fills up the gap between researchers, students and publishers.
+
+**Interactive scientific publication**. The publication of the Econ-ARK based analysis of the
+consumption response to the CARES Act :cite:`carroll2020modeling`
+was accompanying by an online Dashboard [#]_ that allowed users
+to change parameters of the model and visualized their impact
+on policy outcomes.
+This Dashboard was deployed by Binder and developed by an Econ-ARK
+Research Software Engineer.
+This dashboard supports the constructionist learning of the
+substance of the model. Here, that paradigm is used not to convey
+knowledge to students, but to public policy makers and other
+economists.
+
+.. [#] \url{https://mybinder.org/v2/gh/econ-ark/Pandemic/master?urlpath=voila%2Frender%2FCode%2FPython%2Fdashboard.ipynb}
+
+This new way of presenting economic models may be more digestible
+to a wider audience than a traditional research publication.
+However, researchers are not trained to create these Dashboards
+as they are trained to write research papers.
+This limits the scholarly impact that domains specific research
+software, as many computational models are not being presented
+in this rich interactive way.
 
 
 Discussion
@@ -499,20 +521,7 @@ engineering skills available in the field.
 To unlock the potential of computational science,
 research software engineering must become recognized
 as a research method.
-  
 
-.. Customised LaTeX packages
-.. -------------------------
-
-.. Please avoid using this feature, unless agreed upon with the
-.. proceedings editors.
-
-.. ::
-
-..   .. latex::
-..      :usepackage: somepackage
-
-..      Some custom LaTeX source here.
 
 References
 ----------
