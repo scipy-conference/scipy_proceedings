@@ -125,25 +125,31 @@ Reasonable validation rules might be:
        https://en.wikipedia.org/wiki/List_of_the_verified_oldest_people
 
 
-Another approach to reasoning about validation rules is in terms of statistical
-or deterministic checks. In this context, statistical checks explicitly express
-the probabilistic and distributional properties of the data. Such validation
-rules indicate to the reader that the property under test is inherently
-stochastic. Conversely, deterministic checks express assertions about the data
-that are based on logical rules or functional dependencies that do not
-explicitly incorporate any assumptions about randomness into the validation
-function.
+We can also reason about validation rules in terms of the statistical and
+distributional properties of the data under validation. We can think about at
+least two flavors of statistical validation rules: deterministic, and
+probabilistic. Probabilistic checks explicitly express uncertainty about the
+statistical property under test and encode notions of stochasticity and
+randomness. Conversely, deterministic checks express assertions about the data
+based on logical rules or functional dependencies that do not explicitly
+incorporate any assumptions about randomness into the validation function.
 
-Note that all technical checks are deterministic because by definition these
-checks have to do with metadata properties like column presence, variable
-data types, nullability, and uniqueness. Domain-specific checks can come in
-either statistical or deterministic flavors. The enumerated list above are all
-deterministic checks, while examples of statistical checks would be:
+Often times we can express statistical properties about data using
+deterministic or probabilistic checks. For example, "the mean age among the
+``female`` sample tends to be higher than that of the ``male`` sample in
+the surveyed population" can be verified deterministically by simply computing
+the means of the two samples and applying the logical rule
+:math:`mean(age_{female}) > mean(age_{male})`. A probabilistic version of this
+check would be to perform a hypothesis test, like a t-test with a pre-defined
+alpha value. Most probabilistic checks can be reduced to deterministic checks,
+for instance by simply evaluating the truth/falseness of a validation rule using
+the test statistic that results from the hypothesis test and ignoring the
+p-value. Doing this simplifies the validation rule but trades off simplicity
+for being unable to express uncertainty and statistical significance. Other
+examples of such probabilistic checks might be:
 
 * The ``income`` variable is positively correlated with the ``education``
   variable.
-* ``age`` among the ``female`` sample tends to be higher than the ``male``
-  sample in the surveyed population.
 * ``income`` is negatively correlated with the dummy variable ``is_female`` ,
   which is a variable derived from the ``sex`` column.
 
