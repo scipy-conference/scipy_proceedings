@@ -574,6 +574,15 @@ To unlock the potential of computational science,
 research software engineering must become recognized
 as a research method.
 
+Another incentive for making software engineering more
+central as a research method for scientific practice
+is that mature software products are a vector for technology
+transfer from academic labs to the market. :cite:`dalle2004toward`
+As national funding agencies anticipate a pivot towards
+bringing technology to market a top priority :cite:`ambrose_2020`
+it raises questions about what research methods are most
+commercially relevant.
+
 
 References
 ----------
