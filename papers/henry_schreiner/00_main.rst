@@ -259,7 +259,7 @@ Distributing
 
 .. Building wheels (ideas, contributions, using cibuildwheel now/soon)
 
-Building a Python library designed to work absolutely anywhere on a C++14 code base provided several challenges. Binding for boost-histogram is accomplished with PyBind11, and all Boost dependencies are included via git submodules and header-only, so a compatible compiler is the only requirement for building if a binary is not available. Serialization, which optionally depends on the non-header only Boost.Serialization, was redesigned to work on top of Python tuple picking in PyBind11 reusing the same interface internally in Boost.Histogram (one of the many benefits of a close collaboration with the original author).
+Building a Python library designed to work absolutely anywhere on a C++14 code base provided several challenges. Binding for boost-histogram is accomplished with PyBind11 [PyBind]_, and all Boost dependencies are included via git submodules and header-only, so a compatible compiler is the only requirement for building if a binary is not available. Serialization, which optionally depends on the non-header only Boost.Serialization, was redesigned to work on top of Python tuple picking in PyBind11 reusing the same interface internally in Boost.Histogram (one of the many benefits of a close collaboration with the original author).
 
 The first phase of wheel building was a custom set of shareable YAML template files for Azure DevOps. This tool, azure-wheel-helpers [#]_, became the basis for building several other projects in Scikit-HEP, including the iMinuit fitter [#]_ and the new Awkward 1.0 [Awkward]_. Building a custom wheel production from scratch is somewhat involved; and since boost-histogram is expected to support Python 2.7 until after the first LTS release, it had to include Python 2.7 builds, which make the process even more convoluted. To get C++14 support in manylinux1, a custom docker repository (``skhep/manylinuxgcc`` [#]_) was developed with GCC 9. The azure-wheel-helpers repository is a good place to look for anyone wishing to learn about wheel building, but recently boost-histogram moved to a better solution.
 
@@ -284,7 +284,7 @@ The future for histogramming in Python is bright. At least three more projects a
 .. [#] https://github.com/scikit-hep/aghast
 .. [#] https://github.com/scikit-hep/mplhep
 .. [#] https://github.com/scikit-hep/scikit-hep-tutorials
-.. [#] https://github.com/ast0815/histoprint
+.. [#] https://github.com/scikit-hep/histoprint
 
 An example of mplhep and boost-histogram interaction is shown in Figure :ref:`mplhep1d`:
 
