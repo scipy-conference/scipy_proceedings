@@ -60,7 +60,7 @@ central role in industry has prompted the spread of
 ideas that were once specific to "computer science"
 into other disciplines. :cite:`wing2006computational`
 coined the term "computational thinking" for the
-general skills of managine abstraction, modularity,
+general skills of managing abstraction, modularity,
 scalability, and robustness of systems.
 Now it refers to the cross-disciplinary use of these
 computational concepts :cite:`guzdial2008education`
@@ -122,7 +122,7 @@ Open source software projects in general are not guaranteed to
 succeed; most fail to gain wide adoption or reach sustainability.
 :cite:`schweik2012internet`
 In addition to these general difficulties, scientific software
-suffers from the fac that researchers, who are often required to
+suffers from the fact that researchers, who are often required to
 write and modify software, do not have formal training in software
 development. As a result, scientific software is often hampered
 by technical debt. These problems are mitigated by national
@@ -151,8 +151,24 @@ and exploration are coming to be necessary for
 computation-based scientific education, with implications
 for social equity in scientific education.
 
-Discipline Specifics
----------------------
+This paper explores these general themes through an
+analysis of Econ-ARK :cite:`carroll2018econ` as a case study.
+Econ-ARK is a domain specific software toolkit currently
+most widely used in economics. Launched in 2014, the project
+has recently experienced a phase transition in development
+because of the onboarding of research software engineers.
+The collaborations between Economics professors and software
+engineers have revealed a broad scope of potential in
+computational research, publication, and pedagogy.
+It has also exposed how disciplinary training in Economics
+does not include many concepts necessary to realizing
+that potential. We conclude that the gaps between disciplinary
+training and the conditions for realizing this potential
+can be partially closed by framing software engineering
+as a research method.
+
+Econ-ARK: Discipline Specifics
+-------------------------------
 
 The Econ-ARK project :cite:`carroll2018econ`
 is a toolkit for the structural
@@ -163,8 +179,7 @@ research into heterogeneous agent (HA)
 modeling :cite:`hommes2006heterogeneous`,
 which became a research priority
 after the 2008 financial crisis revealed the weaknesses in the
-then-dominant representative agent (RA) based paradigm
-(which had been known since the work of :cite:`kirman1992whom`).
+then-dominant representative agent (RA) based paradigm [#]
 It has been designed so that researchers and students can
 take a hands-on approach to economic modeling in
 software :cite:`carroll2018hands`.
@@ -173,7 +188,9 @@ Dynare :cite:`adjemian2011dynare`,
 an earlier computing library for economic models,
 into Python.
 
-It lies roughly in the Papertian educational tradition,
+.. [#] These weaknesses had been known since the work of :cite:`kirman1992whom`.
+
+Econ-ARK lies roughly in the Papertian educational tradition,
 similar to other agent-based modeling software such as
 NetLogo :cite:`tisue2004netlogo` and Mesa :cite:`masad2015mesa`.
 However, in Econ-ARK models, agents that optimize their
@@ -282,12 +299,19 @@ in this field, for several reasons.
 The upshot of these conditions is that Econ-ARK software is not only
 a tool for researchers doing empirical scientific work.
 Rather, its software is an encoding of substantive research results
-in mathematical theory. This entails that the success of Econ-ARK
+in mathematical theory.
+The software implementation, which integrates the results in
+a larger body of work and is subject to robust software testing,
+is an additional form of validation of the correctness and
+salience of the finding.
+This entails that the success of Econ-ARK
 will imply a practical change to the research field: students will
 study models that have been published by researchers in Python
 in order to learn insights about the economy. This blending of roles,
-between researchers, students, and software engineers, leads to
-complicates the software architecture of the toolkit.
+between researchers, students, and software engineers,
+complicates the software architecture of the toolkit
+and leads to a new conception of what research practice
+entails.
 
 Case Study: Roles in Econ-ARK
 ------------------------------------
@@ -318,9 +342,9 @@ deep domain knowledge (economics) as well as general training
 in computational and inferential thinking, applied math,
 and perhaps other fields. Research with Econ-ARK may be
 nebulously defined because while the question of how to
-implement class of economic models efficiently and robustly
+implement a class of economic models efficiently and robustly
 in Python is a "research question" in its own right, these
-kinds of contributions are rarely considered first-order research contributions in their own right. Researchers work within a complex field of economic capital incentives (such as
+kinds of contributions are rarely considered first-order research contributions. Researchers work within a complex field of economic capital incentives (such as
 university salaries and grant funding) and symbolic capital
 incentives (scholar recognition
 for published work) :cite:`bourdieu2004science`.
@@ -348,7 +372,7 @@ This approach has surfaced many challenges, mainly regarding
 the technical requirements of reliably hosting Python
 environments for each publishable unit, and managing
 dependencies across those environments. These technical
-challenges of _publication_ require IT skills that are
+challenges of *publication* require IT skills that are
 in general not available to researchers who may be
 technically capable of programming models that show
 substantive academic results.
