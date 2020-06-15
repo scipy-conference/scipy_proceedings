@@ -285,7 +285,7 @@ Generative Model
 Both the appearance and dynamics modules ultimately rely on a choice of a particular generative model. 
 The chosen model greatly affects the rendered representation, and thus the efficacy of the entire 
 pipeline. Our current choice of generative model is a variational autoencoder (VAE) 
-[Kingma and Welling, 2014], an architecture that generates a low-dimensional representation of 
+:cite:`introVAE`, an architecture that generates a low-dimensional representation of 
 the data, parameterized as a probability distribution. A VAE can be considered a modified autoencoder 
 (AE). A general autoencoder (AE) attempts to learn a low-dimensional representation of the data by 
 enforcing a so-called "bottleneck" in the network. This bottleneck is usually in the form of a 
@@ -343,7 +343,7 @@ with covariance :math:`\Sigma\in\mathbb{R}^{l\times l}`. It often suffices to as
 covariance be a diagonal matrix, allowing us to write :math:`\Sigma=\operatorname{diag}(\sigma)` 
 for some :math:`\sigma\in\mathbb{R}^l`. While the decision to model neighborhoods via distributions 
 deserves its own discussion and justification, it falls outside the scope of this paper and thus 
-we omit the technical details while referring you to [?] for further reading. Instead, we provide 
+we omit the technical details while referring you to :cite:`doersch2016tutorial` for further reading. Instead, we provide 
 a sort of rationalization of the conclusions of those discussions in the paragraphs that follow. 
 While this is a little backwards, we find it does a better job of communicating the nature of the 
 techniques to most audiences than does touring the complex mathematical underpinnings. The idea of 
@@ -393,8 +393,8 @@ Now we finally have a vanilla VAE, wherein it can not only encode and decode the
 but it can also decode points in the latent space that it hasn't explicitly trained with (though with 
 no strict promises on the resulting quality). Further improvements to the VAE framework have been made 
 in recent years. To empower the decoder without introducing a significant number of parameters, we 
-implement a spatial broadcast decoder (SBD), as outlined in [watters2019]. To achieve greater flexibility 
-in terms of the shape of the prior and posterior distributions, we employ the VampPrior in [tomczak2017] 
+implement a spatial broadcast decoder (SBD), as outlined in :cite:`watters2019spatial`. To achieve greater flexibility 
+in terms of the shape of the prior and posterior distributions, we employ the VampPrior in :cite:`TomczakW17` 
 with an added regularization term. Both these changes afford us greater flexibility and performance 
 in creating a semantically meaningful latent space. The VampPrior is an alternative prior distribution 
 that is constructed by aggregating the posteriors corresponding to :math:`K` learned pseudo-inputs 
