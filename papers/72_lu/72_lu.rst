@@ -46,14 +46,12 @@ Introduction
 This paper focuses on secure implementation of Jupyter Notebooks and Jupyter
 Labs in a cloud based platform and more specifically on Amazon Web Services
 (AWS) though many architectures and methods described here are applicable to
-other cloud platforms. 
-
-Project Jupyter includes Jupyter Hub, which provides a proxy and container
-management. In particular the Zero to Jupyter Hub with Kubernetes project,
-:cite:`z2k8s` provides a framework to implement Jupyter Hub on a Kubernetes
-platform but with many significant security drawbacks. Kubernetes is
-notoriously difficult to secure and has many vulnerabilities that are not
-addressed by default.
+other cloud platforms. As Jupyter is the mainstay of scientific
+programming in python, the ability to analyze data in a secure
+environment enables the researcher to access data that is either
+sensitive or encumbered by compliance to regulations such as Health
+Insurance Portability and Accountability Act (HIPAA) which might
+otherwise not be available.
 
 Security is paramount for applications that process sensitive data in areas
 such as defense, finance, and healthcare. Broadly speaking, security
@@ -77,6 +75,36 @@ vulnerabilities.
 Our specific implementation satisfies privacy and security concerns and can
 serve as a starting point to develop customized solutions for related use
 cases.
+
+Background
+----------
+
+To implement a cloud based Jupyter compute platform is not
+difficult. Project Jupyter includes Jupyter Hub, which provides a
+proxy and container management. In particular the Zero to Jupyter Hub
+with Kubernetes project, :cite:`z2k8s` provides a framework to
+implement Jupyter Hub on a Kubernetes platform. It is intended as a
+quick method to deploy a cluster of Jupyter notebooks or Jupyter labs
+easily. However, it has many significant drawbacks. 
+
+First, Kubernetes is notoriously difficult to secure and has
+many vulnerabilities that are not addressed by default as evidenced by
+these recommendations for securing a Kubernetes cluster
+:cite:`k8s`. One of the primary reasons is Kubernetes is immensely
+complex.
+
+Second, Zero to Jupyter Hub with Kubernetes to date does not have a
+simple solution to the problem of encryption in transit (encryption of
+all data over a network). All proposed solutions (e.g., ``istio`` or
+``weave``) rely on yet another overlay in Kubernetes making the
+solution even more complicated. 
+
+Literature on securing Jupyter in the cloud is scant but solutions to
+individual issues can sometimes be found searching through blogs,
+``github`` issues and help sites. In this paper, the reader is given a
+solution that can meet most security concerns in one place, while not
+placing an undue burden on the end user or the system administrator. 
+The mantra of `security through simplicity` is adopted. 
 
 Architecture
 ------------
@@ -252,7 +280,7 @@ The solution to the last requirement is for our provisioner to write an ``.id`` 
 Jupyter 
 +++++++
 
-Unfortunately, unlike JupyterHub, Jupyter notebook/lab do not come with a pluggable authentication module. In order to implement validation, the source file :code:`login.py` must be modified. This file is usually located in the :code:`notebook/auth/` directory in your :code:`site-packages` or ``dist-packages`` directory. Since Jupyter notebook and JupyterLab are not truly separate applications (in fact they are interchangeable using the path ``/tree`` or ``/lab``), the same ``login.py`` file facilitates authentication for both. If you build using a standard docker image such as :code:`jupyter/base-notebook` or any of its derivative notebooks, this directory would be :code:`/opt/conda/lib/python3.x/site-packages` directory. Please note that the specific python version may vary dependent on which version of the docker container is used and whether subsequent additional install modules might force a rollback of python versions.
+Implementing authentication for Jupyter notebook/lab is particularly challenging as they do not combe with a pluggable authentication module, unlike JupyterHub. In order to implement validation, the source file :code:`login.py` must be modified. This file is usually located in the :code:`notebook/auth/` directory in your :code:`site-packages` or ``dist-packages`` directory. Since Jupyter notebook and JupyterLab are not truly separate applications (in fact they are interchangeable using the path ``/tree`` or ``/lab``), the same ``login.py`` file facilitates authentication for both. If you build using a standard docker image such as :code:`jupyter/base-notebook` or any of its derivative notebooks, this directory would be :code:`/opt/conda/lib/python3.x/site-packages` directory. Please note that the specific python version may vary dependent on which version of the docker container is used and whether subsequent additional install modules might force a rollback of python versions.
 
 The specific modification to the :code:`login.py` file involves replacing two methods, the :code:`get` method and the :code:`get_user_token` class method of the :code:`LoginHandler` class.
 
@@ -532,7 +560,7 @@ For the firewall, we use ``iptables`` using the following commands:
    iptables -t nat -A PREROUTING -i docker0 \
       -d 172.17.0.1 -p tcp -j DNAT --to-destination :2
 
-The first command blocks all internet traffic coming from the `docker0` interface (where the containers must route through) to the `eth0` interface which is the external interface. The second command (see :cite:`costa`) blocks access to the node specific metadata service, which typical contains information about the EC2 instance and credentials for that instance.d. Blocking this prevents a compromised container from accessing the metadata about the EC2 instances blocking a potential escalation in privliges to that of the EC2 node. The third and fourth commands allows the container access to the EC2 instance (which in the docker world is IP address ``172.17.0.1``) only on port 8888, where the proxy is configured to listen. All other access is routed to port 2 which has no active listeners.
+The first command blocks all internet traffic coming from the `docker0` interface (where the containers must route through) to the `eth0` interface which is the external interface. The second command (see :cite:`costa`) blocks access to the node specific metadata service, which typical contains information about the EC2 instance and credentials for that instance.d. Blocking this prevents a compromised container from accessing the metadata about the EC2 instances blocking a potential escalation in privileges to that of the EC2 node. The third and fourth commands allows the container access to the EC2 instance (which in the docker world is IP address ``172.17.0.1``) only on port 8888, where the proxy is configured to listen. All other access is routed to port 2 which has no active listeners.
 
 On the container side, the environment variables ``http_proxy`` and ``https_proxy`` must be set to forward all http and https request to the EC2 instance at port 8888. In addition the ``no_proxy`` environment variable should be set to allow some traffic not to be forced into the proxy. Of course, ``localhost`` (and corresponding IP address ``127.0.0.1``) do not require proxy as the traffic doesn't leave the container. In addition, the metadata IP address ``169.254.169.254`` should be allowed out so that the ``iptables`` rule regarding the metadata traffic can be enforced. Finally, the IP address ``169.254.169.2`` is used by the ECS agent. 
 
@@ -553,13 +581,13 @@ The proxy can then determine whether to route the connection request directly ex
 Auditing
 ++++++++
 
-Beyond security reasons, many regulations such as HIPAA require auditing for compliance. Our approach is two fold. We use the ALB logging capabilities to track access to application containers and authentication. We use a logging agent to track potential privlege escalation or other security concerns on the underlying EC2 host.
+Beyond security reasons, many regulations such as HIPAA require auditing for compliance. Our approach is two fold. We use the ALB logging capabilities to track access to application containers and authentication. We use a logging agent to track potential privilege escalation or other security concerns on the underlying EC2 host.
 
 The ALB provides logging :cite:`aws:alb:logging` which will log all access to the application containers to an S3 bucket. Because in our architecture all authentication is performed using the ALB all authentication attempts both successful and more importantly failures are also logged to the bucket. Many third party log management tools are configurable to digest logs stored in this manner including Loggly, Splunk, Sumo Logic.
 
-Another good practice is to set the target S3 bucket in a separate AWS account and only grant privleges to the logging account to write to the bucket but not delete. This ensure that even if a container or the EC2 instance is compromised, the logs can not be tampered with.
+Another good practice is to set the target S3 bucket in a separate AWS account and only grant privileges to the logging account to write to the bucket but not delete. This ensure that even if a container or the EC2 instance is compromised, the logs can not be tampered with.
 
-To supplement the auditing and monitoring capability one or more logging agents are installed on the EC2 instance. Essentially, this agent transmits logs of interest such as the system log ``syslog`` to an external log management system. Through this mechanism behaviours such as privlege escalation (e.g. ``sudo``) are tracked. We use both the native AWS logging agent and a third party logging agent.
+To supplement the auditing and monitoring capability one or more logging agents are installed on the EC2 instance. Essentially, this agent transmits logs of interest such as the system log ``syslog`` to an external log management system. Through this mechanism behaviours such as privilege escalation (e.g. ``sudo``) are tracked. We use both the native AWS logging agent and a third party logging agent.
 
 With both mechanisms in place, the preferred log management system can be configured to provide alarms when severe incidents occurs and generate reports of incidents as may be required by compliance requirements.
 
@@ -606,9 +634,11 @@ Conclusion
 ----------
 
 Presented here is a secure, collaborative infrastructure for deploying a cloud
-computation resources. The primary purpose of our infrastructure is to provide
-Jupyter in this environment though due to the preference of some of our users
-RStudio and other tools are include. Our Data Science and infrastructure team
+computation resources vital to our organization for scientific
+analysis of health related data on the Jupyter platform.  The primary
+purpose of our infrastructure is to provide 
+Jupyter in this environment as well as other tools such as
+RStudio. Our Data Science and infrastructure team 
 is small so building a compliant infrastructure that requires little
 maintenance is paramount. Equally important is to safeguard against opening
 vulnerabilities due to misconfigurations. By following the suggestions
@@ -616,7 +646,13 @@ presented here, misconfigurations err on the side of loss of functionality
 rather than introducing vulnerabilites.
 
 The architecture presented here was successful in a recently performed
-penetration test. While the recommendations and architecture shown here rely
+penetration test. We hired a third party company that specializes in
+penetration testing and gave them normal user rights to a Jupyter
+notebook container and challenged them to escaped the container. The
+penetration testers was unable to escape the container to other parts
+of the system or escalate privileges to gain additional access to resources.
+
+While the recommendations and architecture shown here rely
 heavily on AWS resources. No doubt elements and counterparts can be found in
 other cloud services such as Google Cloud and Microsoft Azure.
 
