@@ -19,7 +19,7 @@ Learning from evolving data streams
 Introduction
 ------------
 
-The minimum pipeline in machine learning is composed of: (1) data collection and processing, (2) model training and (3) model deployment. Traditionally, data is collected and processed in batches. Although this approach is the state-of-the-art in multiple applications, it is not suitable in the context of evolving data streams as it implies important compromises. In batch learning, data is assumed to be accessible (usually stored on a physical device), the limitations on this approach have been pushed as storage and processing power became cheaper. Similarly, advances have been done towards data management and  advances in efficient   has enable to handle large volumes of data. However, there exist instances where storing large volumes of data is not practical. For example:
+The minimum pipeline in machine learning is composed of: (1) data collection and processing, (2) model training and (3) model deployment. Traditionally, data is collected and processed in batches. Although this approach is the state-of-the-art in multiple applications, it is not suitable in the context of evolving data streams as it implies important compromises. In batch learning, data is assumed to be accessible (usually stored on a physical device), the limitations on this approach have been pushed as storage and processing power became cheaper. Similarly, advances have been done towards data management and  advances in efficient has enable to handle large volumes of data. However, there exist instances where storing large volumes of data is not practical. Additionally, keeping an accurate model in dynamic systems implies running the batch learning pipeline multiple times, which represents a challenge in fast changing environments. For example:
 
 - Financial markets generate huge volumes of data on a daily basis. Depending on the state of such markets and multiple external factors data can become obsolete quickly rendering it useless for creating accurate models. Predictive models must be able to adapt fast in order to be useful in this dynamic environment.
 - Predictive maintenance. IoT sensors are a continuous source of data that reflects the health of multiple systems, from complex systems such as airplanes to simpler ones such as house appliances. Predictive systems are required to react fast as to prevent disruptions from malfunctioning elements.
@@ -31,8 +31,8 @@ The minimum pipeline in machine learning is composed of: (1) data collection and
 
 .. figure:: stream_opportunity.png
    :align: center
-   :scale: 70%
-   :figclass: w
+   :scale: 40%
+   :figclass: t
 
    Batch learning systems are bounded to a investment in resources like memory and training time as the data volume increases. Once a reasonable investment threshold is reached, data becomes unusable turning into a missed opportunity. On the other hand, efficient management of resources makes stream learning an interesting alternative for big data applications. :label:`fig:investment`
 
@@ -56,7 +56,7 @@ An challenging element of dynamic environments is the chances that the underlyin
 
 .. figure:: drift_patterns.png
    :align: center
-   :scale: 100%
+   :scale: 90%
    :figclass: wt
 
    Drift patterns depicted as the change of mean data values over time. Note that an outlier is not a change but *noise* in the data. This figure is based on :cite:`Gama2014Survey`. :label:`fig:driftpatterns` 
@@ -117,7 +117,7 @@ As of version 0.5.0, the following sub-packages are available:
 - :code:`data`: data stream methods including methods for batch-to-stream conversion and generators.
 - :code:`drift_detection`: methods for concept drift detection.
 - :code:`evaluation`: evaluation methods for stream learning.
-- :code:`lazy`: methods in which generalization of the training data is delayed until a query is received, e.g., neighbors-based methods such as kNN.
+- :code:`lazy`: methods in which generalization of the training data is delayed until a query is received, e.g., neighbors-based methods such as *kNN*.
 - :code:`meta`: meta learning (also known as ensemble) methods.
 - :code:`neural_networks`: methods based on neural networks.
 - :code:`prototype`: prototype-based learning methods.
@@ -177,10 +177,10 @@ As previously mentioned, a popular method to monitor the performance of stream l
    print('{} samples analyzed.'.format(n_samples))   
    print('Accuracy: {}'.format(correct_cnt / n_samples))
    
-   >> 2000 samples analyzed.
-   >> NaiveBayes classifier accuracy: 0.9395
+   > 2000 samples analyzed.
+   > NaiveBayes classifier accuracy: 0.9395
 
-The previous example shows that the Naive Bayes classifier achieves an accuracy of 93.95%. However, it is important to remember that learning from data streams is a continuous task, so it is desirable to observe performance at multiple points over the stream.
+The previous example shows that the Naive Bayes classifier achieves an accuracy of 93.95% after processing all the samples. However, learning from data streams is a continuous task and a best-practice is to monitor the performance of the model at different points of the stream. In this example, we use an instance of the ``Stream`` class as it provides the ``next_sample()`` method to request data and the returned data is a tuple of ``numpy.ndarray``. Thus, the above loop can be easily modified to read from other data structures such as ``numpy.ndarray`` or ``pandas.DataFrame``. For real-time application where data is represented as a an actual stream (e.g. Google's protocol buffers), the ``Stream`` class can be extended to wrap the necessary code to interact with the stream.
 
 .. figure:: experiment_1.png
    :align: center
@@ -236,10 +236,10 @@ In Fig. :ref:`fig:prequential`, we observe the evolution of both estimators as t
 Concept drift detection
 +++++++++++++++++++++++
 
-For this example, we will generate a synthetic data stream. The first half of the stream (500 samples) contains a sequence corresponding to a normal distribution with :math:`\mu=0.6`, :math:`\sigma=0.1` and the second half (500 samples) is a normal distribution with :math:`\mu=0.4`, :math:`\sigma=0.1`. We transform the values in the stream to binary values [0, 1] to simulate correct/incorrect predictions in a classification task. The distribution of data in the described synthetic stream is shown in Fig. :ref:`fig:drift`.
+For this example, we will generate a synthetic data stream. The first 1000 samples of the stream contain a sequence from a normal distribution with :math:`\mu_a=0.8`, :math:`\sigma_a=0.05`, followed by 1000 samples from a normal distribution with :math:`\mu_b=0.4`, :math:`\sigma_b=0.2`, and the last 1000 samples from a normal distribution with :math:`\mu_c=0.6`, :math:`\sigma_c=0.1`. The distribution of data in the described synthetic stream is shown in Fig. :ref:`fig:drift`.
 
 .. figure:: synthetic_drift.png
-   :scale: 200%
+   :figclass: hb
 
    Synthetic data simulating a drift. The stream is composed by two distributions of 500 samples. :label:`fig:drift`
 
@@ -252,11 +252,13 @@ For this example, we will generate a synthetic data stream. The first half of th
 
 .. code-block:: python
 
-   dist_a = np.random.normal(0.6, 0.1, 500)
-   dist_b = np.random.normal(0.4, 0.1, 500)
-   stream = np.rint(np.concatenate((dist_a, dist_b)))
+   random_state = np.random.RandomState(12345)
+   dist_a = random_state.normal(0.8, 0.05, 1000)
+   dist_b = random_state.normal(0.4, 0.02, 1000)
+   dist_c = random_state.normal(0.6, 0.1, 1000)
+   stream = np.concatenate((dist_a, dist_b, dist_c))
 
-We will use the ADaptive WINdowing (ADWIN) drift detection method. The goal is to detect that a drift has occurred after sample 500 in the synthetic data stream.
+We will use the ADaptive WINdowing (ADWIN) drift detection method. The goal is to detect that a drift has occurred after samples 1000 and 2000 in the synthetic data stream.
 
 .. code-block:: python
 
@@ -266,9 +268,11 @@ We will use the ADaptive WINdowing (ADWIN) drift detection method. The goal is t
       drift_detector.add_element(val)
       if drift_detector.detected_change():
          print('Change detected at index {}'.format(i))
+
          drift_detector.reset()
-   
-   >> Change detected at index 575
+
+   > Change detected at index 1055
+   > Change detected at index 2079
 
 Impact of drift on learning
 +++++++++++++++++++++++++++
