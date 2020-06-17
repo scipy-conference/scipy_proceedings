@@ -463,7 +463,7 @@ these constructions are theoretical and hard
 to follow. There are a number of combinatorial problems related such as
 spherical codes :cite:`wiki:spheres` and Steiner Triple Systems :cite:`wiki:steiner`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
 
-As a practical matter, optimal solutions are not necessary as long as the desired characteristics of the quasiorthonormal basis are obtained. As an example, while an optimal solution finds 28 quasiorthonormal vectors with dot products of 0.5 or under are possible in seven dimensions, you may only need 10 vectors. In other words, a suboptimal solution may yield fewer vectors than are possible for a given dimension, or a larger dimension may be required to obtain the desired number of vectors than is theoretically needed. 
+As a practical matter, optimal solutions are not necessary as long as the desired characteristics of the quasiorthonormal basis are obtained. As an example, while an optimal solution finds 28 quasiorthonormal vectors with dot products of 0.5 or under are possible in seven dimensions, you may only need 10 vectors. In other words, a suboptimal solution may yield fewer vectors that are possible for a given dimension, or a larger dimension may be required to obtain the desired number of vectors that is theoretically needed. 
 
 One practical way to construct a quasiorthonormal basis is to use spherical codes which has been studied in greater detail. Spherical codes try to find a set of points on the :math:`n`-dimensional hypersphere
 such that the minimum distance between two points is maximized. In most
