@@ -229,7 +229,7 @@ Quasiorthogonality
 ~~~~~~~~~~~~~~~~~~
 
 In a suitably high dimensional space, two randomly selected vectors are very likely to be nearly orthogonal or quasiorthogonal. In such an :math:`n`-dimensional vector space, there are sets of :math:`K` vectors which are mutually quasiorthogonal where :math:`K\gg n.`. A more formal definition can be stated as follows.
-Given an :math:`\epsilon` two vectors :math:`{\bf x}` and
+Given an :math:`\epsilon`, two vectors :math:`{\bf x}` and
 :math:`{\bf y}` are said to be *quasiorthogonal* if
 :math:`\frac{|{\bf x}\cdot {\bf y}|}{\|{\bf x}\| \|{\bf y}\|}<\epsilon`.
 This extends the orthogonality principle by allowing the inner product
