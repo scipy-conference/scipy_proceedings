@@ -418,9 +418,10 @@ approach enables much more sophisticated logic through composition of multiple t
 return value of the composed :code:`Triggers`.
 
 In addition, to the flexibility the :code:`Trigger` class provides by abstracting out the concept of
-triggering an operation, we can provide through pybind11 a way to subclass :code:`Trigger` in
-Python. This allows users to create their own triggers in pure Python. An example of such
-subclassing that reimplements the functionality of HOOMD-blue version 2.x can be seen below.
+triggering an operation, we use pybind11 to easily allow subclass the :code:`Trigger` class in
+Python. This allows users to create their own triggers in pure Python that will execute in
+HOOMD-blue's C++ back end. An example of such subclassing that reimplements the functionality of
+HOOMD-blue version 2.x can be seen below.
 
 .. code-block:: python
 
@@ -436,9 +437,9 @@ subclassing that reimplements the functionality of HOOMD-blue version 2.x can be
             v = timestep % self.period - self.phase == 0
             return v
 
-User created subclasses of :code:`Trigger` are not restricted to simple algorithms; they can
-implement arbitrarily complex Python code as demonstrated in the Large Examples section's first code
-snippet.
+User created subclasses of :code:`Trigger` are not restricted to simple algorithms or even stateless
+ones; they can implement arbitrarily complex Python code as demonstrated in the Large Examples
+section's first code snippet.
 
 Variants
 ++++++++
