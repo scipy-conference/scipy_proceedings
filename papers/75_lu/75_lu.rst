@@ -90,7 +90,7 @@ calculation of basic statistics. An associated data dictionary is used
 to convert the values back and forth between a number and a category.
 Take for example the case of gender, male could be encoded as 1 and
 female as 2, with a data dictionary as follows:
-:code:``{'male': 1, 'female': 2}``
+:code:`{'male': 1, 'female': 2}`
 
 Suppose we have three categories of ethnic groups: White, Black, and
 Asian. Under ordinal encoding, suppose White is encoded as 1, Black is
