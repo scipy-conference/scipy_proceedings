@@ -181,7 +181,7 @@ if two categories accidentally map into the same hash value. This is a
 mechanism. Bernardi's blog :cite:`hash` provides a good treatment of hash coding.
 
 Finally, baseN encoding is a generalization of binary encoding that uses
-a number base other than 2 (binary). Below is an example of the Japanese
+a number base other than 2 (binary). Table :ref:`tab:ternary` is an example of the Japanese
 car makes using base 3,
 
 .. raw:: latex
@@ -200,7 +200,7 @@ car makes using base 3,
      Mitsubishi & 5 & 12 & (1,2) & (1,-1) \\
      \bottomrule
      \end{longtable*}
-     \caption{Example of Ternary Codes}
+     \caption{Example of Ternary Codes \DUrole{label}{tab:ternary}}
    \end{table}
 
 A disadvantage of all three of these techniques is that while it does
@@ -359,7 +359,7 @@ Implementation
 Mathematical
 ~~~~~~~~~~~~
 
-While equations :ref:`eq:qargmax` and :ref:`eq:qsoftmax` describe precisely mathematically how to implement decoding and activation functions. Literal implementation would not exploit the modern vectorized and accelerated computation available in such packages as ``numpy``, ``tensorflow`` and ``pytorch``.
+While equations :ref:`eq:qargmax` and :ref:`eq:qsoftmax` describe precisely mathematically how to implement decoding and activation functions. A literal implementation would not exploit the modern vectorized and accelerated computation available in such packages as ``numpy``, ``tensorflow`` and ``pytorch``.
 
 To better exploit built-in functions of these packages, we define the following :math:`n\times K` *change of coordinates* matrix
 
@@ -370,11 +370,12 @@ To better exploit built-in functions of these packages, we define the following 
    \mathbf{q}_1 & \mathbf{q}_2 & \cdots & \mathbf{q}_K \\
    \bigg| & \bigg| & &\bigg | \end{matrix}\right].
 
-that transforms between the QOE space and the one hot encoding space. So
-given an argmax or softmax function, we can express the quasiorthonormal
-variant as follows
+This transformation makes it easier to convert a set of parallel operations into matrix operations for which these aforementioned computational packages are well suited. Mathematically, the transformation maps the representation of a category encoded by QOE to a vector representing one hot encoding. Understanding this transformation makes it a simple matter to express and ``argmax`` or ``softmax`` function's quasiorthoromal variant by equations :ref:`eq:convert:argmax and :ref:`eq:convert`, respectively.
 
-.. math:: \mathrm{qargmax}(\mathbf{z}) = \mathrm{argmax}(\mathbf{Qz})
+.. math::
+   :label: eq:convert:argmax
+
+   \mathrm{qargmax}(\mathbf{z}) = \mathrm{argmax}(\mathbf{Qz})
 
 and
 
@@ -383,16 +384,14 @@ and
 
    \mathrm{qsoftmax}(\mathbf{z}) = \mathrm{softmax}(\mathbf{Qz}).
 
-This facilitates the use of optimized functions such as ``softmax`` in libraries
-like ``tensorflow`` and using the above matrix enables quick
-implementation of QOE into these packages. Not only will using native functions accelerated performance it can exploit features such as auto differentiation built into the native functions. A useful property if one wishes to use the qsoftmax function as an activation function.
+The ``tensorflow`` and ``pytorch`` both supply optimized ``softmax`` functions as does ``scipy`` when using ``numpy``, making implementation of QOE not only easy but efficient. Not only will using native functions accelerated performance it can exploit features such as auto differentiation built into the native functions. A useful property if one wishes to use the qsoftmax function as an activation function.
 
 Since the matrix manipulation operations and input/output shape definitions differ from package to package, we provide a qsoftmax implementation in several popular packages. In order to facilitate the most general format possible, in our examples, we will express the quasiorthogonal basis as an list of list, but the input and the output is expressed in the appropriate native class (e.g. :code:`numpy.ndarray` in ``numpy``).
 
 Numpy
 ~~~~~
 
-For Numpy, the implementation is straight-forward and follows equation :ref:`eq:convert` almost literally and is given below.
+For ``numpy``, the implementation is straight-forward and follows equation :ref:`eq:convert` almost literally and is given below.
 
 .. code:: python
 
@@ -400,7 +399,7 @@ For Numpy, the implementation is straight-forward and follows equation :ref:`eq:
         qx = np.matmul(np.asarray(basis),x)
         return softmax(qx)
 
-This can be wrapped in a function factory or metafunction in applications where an unparameterized activation function is required. This metafunction returns a function ``qsoftmax`` function for a given basis.
+Since ``qsoftmax`` given above requires the basis as a parameter as well as the input vector, it is a parameterized activation function. In many packages, only unparameterized functions can be used. The following function factory or metafunction can be used to return a function ``qsoftmax`` function for a given basis, rather than encoding the function above in a ``lambda`` expression.
         
 .. code:: python
 
@@ -410,7 +409,7 @@ This can be wrapped in a function factory or metafunction in applications where 
             return softmax(qx)
         return func
 
-The ``softmax`` can be found in ``scipy.special.softmax`` or can easily be written as
+The ``softmax`` function used above can be found in ``scipy.special.softmax`` or can easily be written as
 
 .. code:: python
 
@@ -421,7 +420,7 @@ The ``softmax`` can be found in ``scipy.special.softmax`` or can easily be writt
 Tensorflow
 ~~~~~~~~~~
 
-The following segment of code is an implementation of the ``qsoftmax`` using ``tensorflow`` functions. By using native ``tensorflow`` functions, the resultant ``qsoftmax`` function will be automatically differentiated in a backwards neural network pass.
+For ``tensorflow``, the following segment of code is an implementation of the ``qsoftmax``functions. By using native ``tensorflow`` functions, the resultant ``qsoftmax`` function will be automatically differentiated in a backwards neural network pass. It is also worth noting that quite often due to the way ``tensorflow`` performs batch processing,  the input to the activation function is not a vector but an array of vectors as a ``Tensor`` class.
 
 .. code:: python
 
@@ -430,7 +429,7 @@ The following segment of code is an implementation of the ``qsoftmax`` using ``t
                        transpose_b=True)        
         return tf.nn.softmax(tf.transpose(qx))
 
-The wrapped metafunction version of ``qsoftmax`` is also presented as this will be used below in our example of MNIST handwriting classification employing QOE.
+A metafunction version of ``qsoftmax`` is also presented as this is used below in our example of MNIST handwriting classification employing QOE.
 
 .. code:: python
 
@@ -444,6 +443,7 @@ The wrapped metafunction version of ``qsoftmax`` is also presented as this will 
 
 Pytorch
 ~~~~~~~
+
 
 Presented below is a version of the ``qsoftmax`` function implemented using ``pytorch`` primitives. The use of the ``squeeze`` and ``unsqueeze`` operations convert between a 1-dimensional vector and a 2-dimension matrix having one column. This function is only designed to accept vector inputs. In some models, especially image related models, outputs of some layers may be multidimensional arrays. If your use case requires a multidimensional input to the ``qsoftmax`` function the code may need alteration.
 
@@ -571,7 +571,7 @@ Extending to Spherical Encodings
 
 A Deeper Look at Softmax
 ~~~~~~~~~~~~~~~~~~~~~~~~
-In principle, according to equation :ref:`eq:argmax`, the dot product against a basis be it orthonormal or quasiorthonormal recovers the category from a potentially noisy encoded value. If one takes a deeper dive into equations :ref:`eq:gsoftmax` and :ref:`eq:qsoftmax`, it is interesting to see what these functions are doing. Figure :ref:`fig:ortho` shows on the left, randomly selected values in a circle of radius 6. On the right shows the vectors after the softmax function is applied. Clearly with a few stragglers, most points either move very close to either of the basis vectors :math:`(0,1)` or :math:`(1,0)`. For this graphic the radius of 6 is chosen because upon examining the input to the softmax function in the example above, the average magnitude of each component is 5.5. In reality, 6 is probably a conservatively low value. Due to the exponential term in the softmax function, even large components would make the separation more pronounced.
+In principle, to recover a category from a potentially noisy encoded vector, the dot product of the encoded vector against each basis vector in accordance with equation :ref:`eq:argmax` whether the basis is orthonormal or quasiorthonormal. If one takes a deeper dive into equations :ref:`eq:gsoftmax` and :ref:`eq:qsoftmax`, it is interesting to see what these functions are doing. Figure :ref:`fig:ortho` shows on the left, randomly selected values in a circle of radius 6. On the right shows the vectors after the softmax function is applied. Clearly with a few stragglers, most points either move very close to either of the basis vectors :math:`(0,1)` or :math:`(1,0)`. For this graphic the radius of 6 is chosen because upon examining the input to the softmax function in the example above, the average magnitude of each component is 5.5. In reality, 6 is probably a conservatively low value. Due to the exponential term in the softmax function, even large components would make the separation more pronounced.
 
 .. figure:: 1.pdf
 
@@ -669,7 +669,7 @@ Though for the exercises presented here, the reduction of dimensionality is mode
 
 Practically speaking, while algorithms to generate spherical codes and quasiorthonormal sets are few, :cite:`sphere` has a vast complication of spherical codes. At the extreme end, a spherical code with 196,560 vectors is available in 24 dimensions, enough to encode nearly 100,000 labels using QOE or 200,000 labels using spherical codes, *in just 24 dimensions!*
 
-In sum, QOE and spherical codes are useful tools to be included in a data scientists tool box along side other established categorical coding techniques.
+In sum, the advantages of QOE and spherical codes is that they can reduce the dimensionality of the vector representation as compared to one-hot encoding, while not inducing artificial geometric relationships as ordinal or binary codes can. The disadvantage is that the accuracy of decoding an encoded vector in a noisy environment (such as classification output) is slightly less than one-hot encoding. This tradeoff ability makes QOE and spherical codes useful tools to be included in a data scientists tool box along side other established categorical coding techniques.
 
 Experiments and code samples are made available at `https://github.com/Westhealth/scipy2020/quasiorthonormal <https://github.com/Westhealth/scipy2020/quasiorthonormal/>`_.
 
