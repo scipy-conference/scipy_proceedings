@@ -313,7 +313,7 @@ substituted for the orthonormal basis :math:`\{{\bf u}_i\}` described above. So 
 quasiorthonormal basis, we can define a QOE for a set :math:`L=\{l_i\}`
 by :math:`l_i \mapsto \mathbf{q}_i`.
 
-Decoding :math:`\mathbf{z}` under QOE would use a *qargmax* function analogous to the argmax function for one-hot encoding as shown in equation :ref:`eq:qargmax` which is nearly identical to equation :ref:`eq:argmax`.
+Decoding :math:`\mathbf{z}` under QOE would use a *qargmax* function analogous to the argmax function for one-hot encoding as shown in equation :ref:`eq:qargmax`, which is nearly identical to equation :ref:`eq:argmax`.
 
 .. math::
    :label: eq:qargmax
