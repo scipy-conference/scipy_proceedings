@@ -65,7 +65,7 @@ encoding package :cite:`scikit`. Both
 contrast encoding and Bayesian encoding use the statistics of the data
 to facilitate encoding. These two categories may be of use when more
 statistical analysis is required, however there has not been widespread
-adoption of these emcoding techniques for machine learning.
+adoption of these encoding techniques for machine learning.
 
 In a category of its own, word embeddings deserve special mention
 :cite:`wiki:wordembeddings`. Word embeddings 
