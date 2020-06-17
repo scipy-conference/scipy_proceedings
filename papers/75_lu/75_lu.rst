@@ -488,7 +488,7 @@ leading to an angle of a little over 70\ :math:`^\circ`.
 
 We used a hidden layer with 64 units with a ReLU activation function.
 Next there is a 20% dropout layer to mitigate overtraining, then an
-output layer whose width depends on the encoding used. We elected for this demonstration to use one of the simplest models hence there are no convolutional or pooling layers used as often seen in other sample MNIST handwriting classifers. The following example is implemented using ``tensorflow`` and ``keras``.
+output layer whose width depends on the encoding used. We selected for this demonstration to use one of the simplest models hence there are no convolutional or pooling layers used as often seen in other sample MNIST handwriting classifiers. The following example is implemented using ``tensorflow`` and ``keras``.
 
 Validating the QSoftmax Function
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
