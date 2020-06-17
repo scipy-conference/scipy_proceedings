@@ -445,7 +445,7 @@ The wrapped metafunction version of ``qsoftmax`` is also presented as this will 
 Pytorch
 ~~~~~~~
 
-Presented below is a version of the ``qsoftmax`` function implemented using ``pytorch`` primitives. The use of the ``squeeze`` and ``unsqueeze`` operations convert between a 1-dimensional vector and a 2-dimension matrix having one column. This function is only designed to accept vector inputs. In some models, especially image related models, outputs of some layers maybe multidimensional arrays. If your use case requires a multidimensional imput to the ``qsoftmax`` function the code may need alteration.
+Presented below is a version of the ``qsoftmax`` function implemented using ``pytorch`` primitives. The use of the ``squeeze`` and ``unsqueeze`` operations convert between a 1-dimensional vector and a 2-dimension matrix having one column. This function is only designed to accept vector inputs. In some models, especially image related models, outputs of some layers may be multidimensional arrays. If your use case requires a multidimensional input to the ``qsoftmax`` function the code may need alteration.
 
 .. code:: python
 
