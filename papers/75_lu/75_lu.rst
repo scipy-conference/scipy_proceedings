@@ -457,7 +457,7 @@ Presented below is a version of the ``qsoftmax`` function implemented using ``py
 Construction of an Quasiorthonormal set
 ---------------------------------------
 
-It is difficult find explicit constructions of quasiorthonormal sets in
+It is difficult to find explicit constructions of quasiorthonormal sets in
 the literature. Several methods are mentioned by Kainen :cite:`kainan`, but
 these constructions are theoretical and hard
 to follow. There are a number of combinatorial problems related such as
