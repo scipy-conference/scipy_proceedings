@@ -134,7 +134,7 @@ shows a comparison of coding between ordinal and one-hot encodings.
      \caption{Examples of Ordinal and One-Hot Encodings \DUrole{label}{onehot}}
    \end{table}
 
-The advantage is that one hot encoding doesn't induce an implicit
+The advantage is that one hot encoding does not induce an implicit
 ordering or between categories. The primary disadvantage is that the
 dimensionality of the problem has increased with corresponding increases
 in complexity, computation and \`\`the curse of high dimensionality''.
