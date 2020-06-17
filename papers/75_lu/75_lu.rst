@@ -647,7 +647,7 @@ Since spherical codes can substitute directly into the equations for QOE, it is 
 
 In this case, the 5-dimensional spherical codes performed close to the
 one-hot encoding by not as closely as the 7-dimension QO codes. The
-3-dimensional spherical codes performed on par with the 4-dimensional QO
+3-dimensional spherical codes performed on par with the 4-dimensional QOE
 codes.
 
 While the extreme dimensionality reduction from 10 to 4 or 10 to 3 did
