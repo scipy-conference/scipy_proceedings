@@ -223,7 +223,7 @@ Typically, other classic encoding methods use thresholds to rectify a vector fir
 Theory
 ------
 
-In this section, we'll briefly define and discuss quasiorthogonality, show how it relates to one-hot encoding and describe how this relationship can be used to develop a categorical encoding with lower cardinality.
+In this section, we will briefly define and discuss quasiorthogonality, show how it relates to one-hot encoding and describe how this relationship can be used to develop a categorical encoding with lower cardinality.
 
 Quasiorthogonality
 ~~~~~~~~~~~~~~~~~~
