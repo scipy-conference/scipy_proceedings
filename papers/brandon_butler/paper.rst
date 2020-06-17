@@ -408,13 +408,13 @@ recognized that this concept could be made much more general and consequently mo
 do not have to be run on a periodic timescale; they just need some indication of when to run. In
 other words, the operations needed to be *triggered*. The :code:`Trigger` class encapsulates this
 concept providing a uniform way of specifying when an object should run without limiting options.
-:code:`Trigger` objects are essentially functors that returns a Boolean value when called.  Each
-operation that requires triggering is now associated with a corresponding :code:`Trigger` instance
-which informs the simulation when the operation should run. The previous behavior is now available
-through the :code:`Periodic` class in the :code:`hoomd.trigger` module. However, this approach
-enables much more sophisticated logic through composition of multiple triggers such as
+:code:`Trigger` objects are like functions that return a Boolean value when called (i.e functors).
+Each operation that requires triggering is now associated with a corresponding :code:`Trigger`
+instance which informs the simulation when the operation should run. The previous behavior is now
+available through the :code:`Periodic` class in the :code:`hoomd.trigger` module.  However, this
+approach enables much more sophisticated logic through composition of multiple triggers such as
 :code:`Before` and :code:`After` which return :code:`True` before or after a given timestep with the
-:code:`And`, :code:`Or`, and :code:`Not` subclasses whose function as logical operators on the
+:code:`And`, :code:`Or`, and :code:`Not` subclasses that function as logical operators on the
 return value of the composed :code:`Triggers`.
 
 In addition, to the flexibility the :code:`Trigger` class provides by abstracting out the concept of
