@@ -371,7 +371,7 @@ To better exploit built-in functions of these packages, we define the following 
    \bigg| & \bigg| & &\bigg | \end{matrix}\right].
 
 that transforms between the QOE space and the one hot encoding space. So
-given a argmax or softmax function, we can express the quasiorthonormal
+given an argmax or softmax function, we can express the quasiorthonormal
 variant as follows
 
 .. math:: \mathrm{qargmax}(\mathbf{z}) = \mathrm{argmax}(\mathbf{Qz})
