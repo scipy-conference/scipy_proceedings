@@ -26,7 +26,7 @@ they could include height, weight (numerical) and gender, race
 vector of some sort. 
 
 One-hot encoding which is discussed in the next section is very
-commonly used these days in machine learning but has the draw back
+commonly used these days in machine learning but has the drawback
 that it can increase the dimensionality of the data by the cardinality
 of the category. For small category, this is not a significant issue
 but when categories with high cardinality are present, many problems
