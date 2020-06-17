@@ -484,7 +484,7 @@ bases with 10 elements. We took the spherical code for 24 points in
 pairwise dot product was 0.5 leading to an angle of 60\ :math:`^\circ`.
 We also took the spherical code for 56 points in 7-dimensions, giving 28
 quasi-orthogonal vectors. The maximum pairwise dot product was .33
-leading to an angle of a little over 70\ :math:`^\circ`
+leading to an angle of a little over 70\ :math:`^\circ`.
 
 We used a hidden layer with 64 units with a ReLU activation function.
 Next there is a 20% dropout layer to mitigate overtraining, then an
