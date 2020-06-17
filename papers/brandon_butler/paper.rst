@@ -49,7 +49,7 @@ include colloids :cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal201
 
 Today many software packages exist for this purpose for MD, LAMMPS :cite:`plimpton1993`, GROMACS
 :cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, and Amber
-:cite:`salomon-ferrer.etal2013, case.etal2005` and MC, Cassandra :cite:`shah.etal2017` and MCCS
+:cite:`salomon-ferrer.etal2013, case.etal2005` and MC, Cassandra :cite:`shah.etal2017` and MCCCS
 Towhee :cite:`martin2013`, to name a few. Implementations on high performance GPUs
 :cite:`spellings.etal2017`, parallel architectures :cite:`niethammer.etal2014`, and the greater
 accessibility of computational power have improved tremendously the length :cite:`byna.etal2012` and
@@ -100,7 +100,7 @@ state has been completely removed, instead replaced by a highly object-oriented 
 users explicit and complete control over all aspects of simulation configuration. Where possible,
 the new version also provides performant, Pythonic interfaces to data stored by the C++ back end.
 Over the next few sections, we will use examples of HOOMD-blue's version 3.0 API (which is still in
-development at the time of writing) to highlight the improved extensibility, flexibilty, and ease of
+development at the time of writing) to highlight the improved extensibility, flexibility, and ease of
 use of the new HOOMD-blue API.
 
 General API Design
@@ -237,7 +237,7 @@ modifies the previous example to instead use the zero-copy API.
 The final of the three classes, :code:`Operations`, holds the different *operations* that will act
 on the simulation state. Broadly these consist of 3 categories: updaters, which modify simulation
 state; analyzers, which observe system state; and tuners, which tune the hyperparameters of other
-operations for performance. Although updaters and analzyers existed in version 2.x (tuners are a
+operations for performance. Although updaters and analyzers existed in version 2.x (tuners are a
 version 3.0 split from updaters), these *operations* have undergone a significant API overhaul for
 version 3.0 to support one of the more far-reaching changes to HOOMD-blue: the deferred
 initialization model.
@@ -287,7 +287,7 @@ the :code:`TypeParameterDict` class supports default specification with arbitrar
     TypeParameterDict(
         diameter=float,
         ignore_statistics=False,
-        orientatble=False,
+        orientable=False,
         len_keys=1)
 
     from hoomd.hpmc.integrate import Sphere
@@ -300,7 +300,7 @@ the :code:`TypeParameterDict` class supports default specification with arbitrar
     # sets for 'B', 'C', and 'D'
     sphere.shape[['B', 'C', 'D']] = {'diameter': 0.5}
 
-The specification defined above sets defaults for :code:`ignore_statistics` and :code:`orientatble`
+The specification defined above sets defaults for :code:`ignore_statistics` and :code:`orientable`
 (the purpose of these is outside the scope of the paper), but requires the setting of the
 :code:`diameter` for each type.
 
@@ -341,7 +341,7 @@ had been created at any point and stored to the global state. The creation of th
 our logging infrastructure. The :code:`Loggable` metaclass of :code:`_Operation` allows all
 subclasses to expose their loggable quantities by marking Python properties or methods to query.
 
-The actual task of logging data is acomplished by the :code:`Logger` class, which provides an
+The actual task of logging data is accomplished by the :code:`Logger` class, which provides an
 interface for logging most HOOMD-blue objects and custom user quantities. In the example script from
 the General API Design section above, we show that the :code:`Logger` can add an operation's
 loggable quantities using the :code:`+=` operator. The utility of this class lies in its
