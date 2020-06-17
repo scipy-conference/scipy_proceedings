@@ -61,8 +61,8 @@ approaches to enabling this, such as the text-file scripting in LAMMPS, the comm
 provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
 
 In the development of these tools, the requirements for the software to enable good science became
-more obvious. Having computational research that is transferable, reproducible, usable (by others),
-and extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
+more obvious. Having computational research that is Transferable, Reproducible, Usable (by others),
+and Extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
 computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to
 bring these traits to the wider computational molecular science community through packages like
 mbuild :cite:`klein.etal2016` foyer :cite:`klein.etal2019` which are Python packages that generalize generating initial particle
