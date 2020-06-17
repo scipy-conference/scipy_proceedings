@@ -83,7 +83,7 @@ Ordinal Encoding
 
 To begin our overview of fundamental encoding methods, we start with
 Ordinal (Label) Encoding. Ordinal encoding is the simplest and perhaps
-most naive approach encoding a categorical feature --- one simply
+most naive approach encoding for a categorical feature --- one simply
 assigns a number to each member of a category. This is often how data
 from surveys are encoded into spreadsheets for easy storage and
 calculation of basic statistics. An associated data dictionary is used
