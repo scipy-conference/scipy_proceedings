@@ -81,7 +81,7 @@
   url = {http://www.sciencedirect.com/science/article/pii/S0927025619306627},
   urldate = {2020-05-09},
   abstract = {HOOMD-blue is a particle simulation engine designed for nano- and colloidal-scale molecular dynamics and hard particle Monte Carlo simulations. It has been actively developed since March 2007 and available open source since August 2008. HOOMD-blue is a Python package with a high performance C++/CUDA backend that we built from the ground up for GPU acceleration. The Python interface allows users to combine HOOMD-blue with other packages in the Python ecosystem to create simulation and analysis workflows. We employ software engineering practices to develop, test, maintain, and expand the code.},
-  file = {/home/brandon/Zotero/storage/CLNFJ6KA/Anderson et al. - 2019 - HOOMD-blue A Python package for high-performance .pdf;/home/brandon/Zotero/storage/DYVKGTJZ/Anderson et al. - 2020 - HOOMD-blue A Python package for high-performance .pdf;/home/brandon/Zotero/storage/5JJ9N75I/S0927025619306627.html;/home/brandon/Zotero/storage/SETX2T5N/S0927025619306627.html},
+  file = {/home/brandon/Zotero/storage/DYVKGTJZ/Anderson et al. - 2020 - HOOMD-blue A Python package for high-performance .pdf;/home/brandon/Zotero/storage/5JJ9N75I/S0927025619306627.html},
   keywords = {computational,CUDA,GPU,methods,Molecular dynamics,Molecular simulation,Monte Carlo,Python},
   langid = {english}
 }
@@ -361,6 +361,42 @@ Two parameters relating to particle shape and nearest neighbors reveal the prefe
   author = {Jakob, Wenzel and Rhinelander, Jason and Moldovan, Dean},
   date = {2017},
   url = {https://github.com/pybind/pybind11}
+}
+
+@incollection{klein.etal2016,
+  title = {A {{Hierarchical}}, {{Component Based Approach}} to {{Screening Properties}} of {{Soft Matter}}},
+  booktitle = {Foundations of {{Molecular Modeling}} and {{Simulation}}: {{Select Papers}} from {{FOMMS}} 2015},
+  author = {Klein, Christoph and Sallai, János and Jones, Trevor J. and Iacovella, Christopher R. and McCabe, Clare and Cummings, Peter T.},
+  editor = {Snurr, Randall Q and Adjiman, Claire S. and Kofke, David A.},
+  date = {2016},
+  pages = {79--92},
+  publisher = {{Springer}},
+  location = {{Singapore}},
+  doi = {10.1007/978-981-10-1128-3_5},
+  url = {https://doi.org/10.1007/978-981-10-1128-3_5},
+  urldate = {2020-06-17},
+  abstract = {In prior work, Sallai, et al. introduced the concept and algorithms of building molecular topologies through the use of a hierarchical data structure and the use of an affine coordinate transformation to connect molecular components. In this work, we expand upon the original concept and present a refined version of this software, termed mBuild , which is a general tool for constructing arbitrarily complex input configurations for molecular simulation in a programmatic fashion. Basic molecular components are connected using an equivalence operator which reduces and often removes the need for users to explicitly rotate and translate components as they assemble systems. Additionally, the programmatic nature of this approach and integration with the scientific Python ecosystem seamlessly exposes high-level variables that users can tune to alter the chemical composition of their systems, such as mixtures of polymers of different chain lengths and surface patterning. Leveraging these features, we demonstrate how mBuild serves as a stepping stone towards screening and performing optimizations in chemical parameter space of complex materials by performing automated screening studies of monolayer systems as a function of graft type, degree of polymerization, and surface density.},
+  isbn = {978-981-10-1128-3},
+  keywords = {Molecular dynamics,Software,System construction},
+  langid = {english},
+  series = {Molecular {{Modeling}} and {{Simulation}}}
+}
+
+@article{klein.etal2019,
+  title = {Formalizing Atom-Typing and the Dissemination of Force Fields with Foyer},
+  author = {Klein, Christoph and Summers, Andrew Z. and Thompson, Matthew W. and Gilmer, Justin B. and McCabe, Clare and Cummings, Peter T. and Sallai, Janos and Iacovella, Christopher R.},
+  date = {2019-09-01},
+  journaltitle = {Computational Materials Science},
+  volume = {167},
+  pages = {215--227},
+  issn = {0927-0256},
+  doi = {10.1016/j.commatsci.2019.05.026},
+  url = {http://www.sciencedirect.com/science/article/pii/S0927025619303040},
+  urldate = {2020-06-17},
+  abstract = {A key component to enhancing reproducibility in the molecular simulation community is reducing ambiguity in the parameterization of molecular models used to perform a study. Ambiguity in molecular models often stems from inadequate usage documentation of molecular force fields and the fact that force fields are not typically disseminated in a format that is directly usable by software. Specifically, the lack of a generally applicable scheme for the annotation of the rules of a particular force field and a general purpose tool for performing automated parameterization (i.e., atom-typing) based on these rules, may lead to errors in model parameterization that are not easily identified. Here, we present Foyer, an open-source Python tool that enables users to define and apply force field atom-typing rules in a format that is both human- and machine-readable and provides a framework for force field dissemination, thus eliminating ambiguity in atom-typing and improving reproducibility. Foyer defines force fields in an XML format, where SMARTS strings are used to define the chemical context of a particular atom type and “overrides” are used to set rule precedence, rather than a rigid hierarchical scheme. Herein we describe the underlying methodology and force field annotation scheme of the Foyer software, demonstrate its application in several use-cases, and discuss specific aspects of the Foyer approach that are designed to improve reproducibility.},
+  file = {/home/brandon/Zotero/storage/KAKS9FHC/Klein et al. - 2019 - Formalizing atom-typing and the dissemination of f.pdf;/home/brandon/Zotero/storage/5EPGSNXV/S0927025619303040.html},
+  keywords = {Force fields,Molecular simulation,Open-source software,Reproducibility},
+  langid = {english}
 }
 
 @inproceedings{lam.etal2015,
