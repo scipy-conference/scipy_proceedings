@@ -651,7 +651,7 @@ one-hot encoding by not as closely as the 7-dimension QOE codes. The
 codes.
 
 While the extreme dimensionality reduction from 10 to 4 or 10 to 3 did
-not yield comparable performance to one-hot encoding. More modest
+not yield comparable performance to one-hot encoding, more modest
 reductions such as 10 to 7 and 10 to 5 did. It is worth considering that
 quasiorthogonal or spherical codes are much harder to find in low
 dimensions. One should note that, though we went from 10 to 7
