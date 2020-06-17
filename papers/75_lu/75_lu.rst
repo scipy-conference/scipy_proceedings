@@ -206,7 +206,7 @@ car makes using base 3,
 A disadvantage of all three of these techniques is that while it does
 reduce the dimension of the encoded feature, artificial geometric
 relationships may creep in between unrelated categories. For example,
-:code:``(0.7,0.7)`` may be confusion between Toyota and Honda or a weak Subaru
+:code:`(0.7,0.7)` may be confusion between Toyota and Honda or a weak Subaru
 result, although the effect is not as pronounced as ordinal encoding.
 
 Decoding
