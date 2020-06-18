@@ -658,5 +658,5 @@ other cloud services such as Google Cloud and Microsoft Azure.
 
 Snippets of code, Dockerfile, commands and other resources presented here and
 the corresponding poster are available at West Health's github repository at
-`https://github.com/Westhealth/scipy2020/cloud_infrastructure
-<https://github.com/Westhealth/scipy2020/cloud_infrastructure/>`_.
+`https://github.com/WestHealth/scipy2020/tree/master/cloud_infrastructure
+<https://github.com/WestHealth/scipy2020/tree/master/cloud_infrastructure>`_.
