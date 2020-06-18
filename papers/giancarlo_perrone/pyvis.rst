@@ -10,7 +10,6 @@
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
 
-:bibliography: ourbib
 
 -------------------------------------------
 Network visualizations with Pyvis and VisJS
@@ -74,7 +73,7 @@ Nodes can be added by providing an integer or string ``id`` and an optional labe
    }
 
 
-The ``add_nodes`` method consumes a list of nodes:
+The ``add_nodes`` method consumes a list of nodes (**Fig** :ref:`example1`):
 
 .. code-block:: python
    
@@ -97,8 +96,10 @@ Keyword arguments can be used to add properties to the nodes in ``Network``:
    )
    g.show("example.html")
 
-.. image:: example1.png
-  :width: 100px
+.. figure:: example1.png
+   :width: 100px
+
+   Multiple nodes and attributes added at once :label:`example1`
 
 | The following node properties influence the resulting visualization:
 
@@ -119,15 +120,17 @@ Keyword arguments can be used to add properties to the nodes in ``Network``:
    # will adjust edge thickness
    g.add_edge(2, 3, weight=5)
 
-Edges can be added all at once by supplying a list of tuples to a call to `add_edges()`. The following is an equivalent result:
+Edges can be added all at once by supplying a list of tuples to a call to `add_edges()`. The following is an equivalent result (**Fig** :ref:`example2`):
 
 .. code-block:: python
 
    g.add_edges([(1, 2), (2, 3, 5)])
    g.show("example.html")
 
-.. image:: example2.png
+.. figure:: example2.png
    :width: 400px
+
+   Edges with a custom weight :label:`example2`
 
 | Notice how an optional element is included in the 3-tuple above (2, 3, 5) representing the weight of the edge. This additional edge data allows for expressing weighted networks and is clearly noticeable in the visualization.
 
@@ -163,14 +166,16 @@ The physics options dictates how a user can interact with the objects in the gra
    object at 0x7f99e6de3710>}
 
 | In order to avoid the scenario of "guessing" parameter values for an optimal network physics configuration, VisJS offers a useful interaction for experimenting with theses values. 
-| These interactions are enabled via Pyvis:
+| These interactions are enabled via Pyvis (**Fig** :ref:`example5`):
 
 .. code-block:: python
 
    # choose to only show the physics options
    g.show_buttons(filter_=["physics"])
 
-.. image:: example5.png
+.. figure:: example5.png
+
+   Live layout GUI with physics filter :label:`example5`
 
 | Here, we choose to display the options for the physics component of the network. Omitting a filter in the call will display the configuration of the entire network including nodes, edges, layout, and interaction. The JSON options displayed in the visualization represent the current configuration depending on the displayed sliders. You can copy/paste those options to supply your network with custom settings:
 
@@ -211,7 +216,7 @@ The physics options dictates how a user can interact with the objects in the gra
 
 NetworkX Support
 ----------------
-Although Pyvis supports its own methods for constructing a network data structure, you might feel more comfortable using the more established and dedicated NetworkX package. Pyvis allows you to define a NetworkX graph instance to then supply it to Pyvis.
+Although Pyvis supports its own methods for constructing a network data structure, you might feel more comfortable using the more established and dedicated NetworkX package. Pyvis allows you to define a NetworkX graph instance to then supply it to Pyvis (**Fig** :ref:`example6`).
 
 .. code-block:: python
 
@@ -223,7 +228,9 @@ Although Pyvis supports its own methods for constructing a network data structur
    g.from_nx(nxg)
    g.show("networkx.html")
 
-.. image:: example6.png
+.. figure:: example6.png
+
+   NetworkX graph rendered with Pyvis :label:`example6`
 
 | Pyvis current behavior recognizes the basic topology of a NetworkX graph, not accounting for any custom attributes provided. Any other attributes like node color, size, and layout would need to be manually added to the resulting Pyvis graph.
 | Future plans are to fully integrate NetworkX graphs to fully interpret them, preserving attributes in the resulting Pyvis visualizations.
@@ -231,17 +238,19 @@ Although Pyvis supports its own methods for constructing a network data structur
 Jupyter Support
 ---------------
 For efficient prototyping of visualized graphs, Pyvis aims to utilize Jupyter's front-end IFrame features to embed the graph in a notebook output cell.
-With that in mind, embedding a Pyvis visualization into a Jupyter notebook is essentially the same as described above. The only difference is that one should pass in a notebook argument during instantiation. The result of the visualization is shown in the output cell below the ``show()`` invocation. Pyvis upon the call to ``show()`` writes the HTML that serves an IFrame, which displays the result in the output cell.
-|
+With that in mind, embedding a Pyvis visualization into a Jupyter notebook is essentially the same as described above. The only difference is that one should pass in a notebook argument during instantiation. The result of the visualization is shown in the output cell below the ``show()`` invocation. Pyvis upon the call to ``show()`` writes the HTML that serves an IFrame, which displays the result in the output cell (**Fig** :ref:`example7`).
 
-.. image:: example7.png
+
+.. figure:: example7.png
+
+   Network rendered in Jupyter Notebook cell :label:`example7`
 
 | One thing to keep in mind is that an HTML file is always generated due to the dependence on the VisJS JavaScript bindings.
 
 Example
 -------
 
-| To get a better understanding of the flow of a typical Pyvis network visualization, we can take a look at the following code snippet to show off a typical application of the features. I have taken a Game of Thrones dataset (:cite:`gthrones` Storm of Swords Dataset) defining the relationships between characters and the frequencies between them to create a network to naturally express this. Specifically, it is a csv file containing pairs of characters and a weight between them.
+| To get a better understanding of the flow of a typical Pyvis network visualization, we can take a look at the following code snippet to show off a typical application of the features. I have taken a Game of Thrones dataset (:cite:`gthrones` Storm of Swords Dataset) defining the relationships between characters and the frequencies between them to create a network to naturally express this. Specifically, it is a csv file containing pairs of characters and a weight between them. The final visualization contains 107 nodes. (**Fig** :ref:`example3`)
 
 .. code-block:: python
 
@@ -284,11 +293,17 @@ Example
 
    got_net.show("gameofthrones.html")
 
-.. image:: example3.png
+.. figure:: example3.png
 
-| At a glance, the resulting relationship network looks too intertwined to make any practical conclusions. However, the beauty of Pyvis is that each and every component of the network can be focused. For example, zooming in to a dense portion of the network, we can hover over a particular node to get a glimpse of the scenario:
+   Game of Thrones network dictates relationships between characters :label:`example3`
 
-.. image:: example4.png
+| In the network, the size of a node correlates to the number of relationships it contains. This calculation benefits from the use of an adjacency list to easily record the information pertaining to each node's neighbors. To see this, the character "Tyrion" contains many connections, resulting in a larger node. Furthermore, Tyrion's strongest connections are easily noticed by the thick edges, and it is easy to see that Tyrion and Sansa are a strong relationship in the network.
+| At a glance, the resulting relationship network looks too intertwined to make any practical conclusions. However, the beauty of Pyvis is that each and every component of the network can be focused. For example, zooming in to a dense portion of the network, we can hover over a particular node to get a glimpse of the scenario. (**Fig** :ref:`example4`)
+
+.. figure:: example4.png
+
+   Zooming into Game of Thrones network offers concise view :label:`example4`
+
 
 | This hover tooltip offers the context behind a particular node. We can see the immediate neighbors for each and every node since we provided a `title` attribute during the network construction. This simple example can be expanded upon to create more custom interactions tailored to specific needs of a dataset.
 | The network also uses weights. By providing a `value` attribute to each node we can see these values being represented by a node's size. In the code I used the amount of neighbors to dictate the node weight. This is a strong visual cue which makes it easy to see which nodes have the most connections.
