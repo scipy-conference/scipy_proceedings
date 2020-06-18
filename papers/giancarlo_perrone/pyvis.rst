@@ -354,5 +354,5 @@ Conclusion
 Pyvis is a powerful python module for visualizing and interactively manipulating network graphs in a standalone web application or a Jupyter notebook. Pyvis brings the power of VisJS to Python, thus enabling data scientists who use Jupyter to interactively visualize network graphs with all the fluid interactions of a pure-JavaScript application. 
 
 Code samples presented here, and with the corresponding poster presentation, as well as other supplemental material are available at West Health's github repository at
-`https://github.com/Westhealth/scipy2020/pyvis
-<https://github.com/Westhealth/scipy2020/pyvis/>`_.
+`https://github.com/WestHealth/scipy2020/tree/master/pyvis
+<https://github.com/WestHealth/scipy2020/tree/master/pyvis/>`_.
