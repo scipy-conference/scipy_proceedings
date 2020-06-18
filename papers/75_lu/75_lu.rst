@@ -420,7 +420,7 @@ The ``softmax`` function used above can be found in ``scipy.special.softmax`` or
 Tensorflow
 ~~~~~~~~~~
 
-For ``tensorflow``, the following segment of code is an implementation of the ``qsoftmax``functions. By using native ``tensorflow`` functions, the resultant ``qsoftmax`` function will be automatically differentiated in a backwards neural network pass. It is also worth noting that quite often due to the way ``tensorflow`` performs batch processing,  the input to the activation function is not a vector but an array of vectors as a ``Tensor`` class.
+For ``tensorflow``, the following segment of code is an implementation of the ``qsoftmax`` functions. By using native ``tensorflow`` functions, the resultant ``qsoftmax`` function will be automatically differentiated in a backwards neural network pass. It is also worth noting that quite often due to the way ``tensorflow`` performs batch processing,  the input to the activation function is not a vector but an array of vectors as a ``Tensor`` class.
 
 .. code:: python
 
