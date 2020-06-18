@@ -331,7 +331,7 @@ Analogous to the softmax function shown of equation :ref:`eq:gsoftmax`, is a *qs
 The only real difference in the formulation is that while still
 operating in :math:`{\mathbb R}^n` we are encoding :math:`K>n` labels.
 
-Returning to our example of Japanese car makes, Table :ref:`qoe` shows one-hot encoding and QOE of the five manufacturers. In the table, encodings are represented simply as vectors where :math:`\mathbf{u}_i` are unit vectors in :math:`\mathbb{R}^5` and
+Returning to our example of Japanese car makes, table :ref:`qoe` shows one-hot encoding and QOE of the five manufacturers. In the table, encodings are represented simply as vectors where :math:`\mathbf{u}_i` are unit vectors in :math:`\mathbb{R}^5` and
 :math:`{\mathbf{q}_i}` are a set of quasiorthonormal vectors in :math:`\mathbb{R}^3`. It can be shown that such a quasiorthonormal can be found in :cite:`sphere` with the minimum mutual angle of 66\ :math:`^\circ`. In short, the difference between one-hot encoding and QOE is that the one-hot requires 5 dimensions and in this case QOE requires only 3.
 
 .. raw:: latex
