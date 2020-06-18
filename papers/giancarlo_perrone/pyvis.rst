@@ -10,6 +10,7 @@
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
 
+:bibliography: ourbib
 
 -------------------------------------------
 Network visualizations with Pyvis and VisJS
