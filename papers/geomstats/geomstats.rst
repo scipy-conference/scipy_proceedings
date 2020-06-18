@@ -531,37 +531,24 @@ This and several other datasets can be found in the :code:`datasets.data` module
 
 .. table:: Embedding parameters :label:`tabparam`
 
-    +--------------+------------------------------------------------+
-    | Parameter    | Description                                    |
-    +==============+================================================+
-    | dim          | Dimensions of the manifold used for embedding  |
-    +--------------+------------------------------------------------+
-    | max_epochs   | Number of iterations for learning the embedding|
-    +--------------+------------------------------------------------+
-    | lr           | Learning rate                                  |
-    +--------------+------------------------------------------------+
-    | n_negative   | Number of negative samples                     |
-    +--------------+------------------------------------------------+
-    | context_size | Size of the considered context                 |
-    |              | for each node of the graph                     |
-    +--------------+------------------------------------------------+
+    +--------------+-----------------------------------------------------+-------+
+    | Parameter    | Description                                         | Value |
+    +==============+=====================================================+=======+
+    | dim          | Dimensions of the manifold used for embedding       |   2   |
+    +--------------+-----------------------------------------------------+-------+
+    | max_epochs   | Number of iterations for learning the embedding     |  15   |
+    +--------------+-----------------------------------------------------+-------+
+    | lr           | Learning rate                                       |  0.05 |
+    +--------------+-----------------------------------------------------+-------+
+    | n_negative   | Number of negative samples                          |   2   |
+    +--------------+-----------------------------------------------------+-------+
+    | context_size | Size of the considered context                      |   1   |
+    |              | for each node of the graph                          |       |
+    +--------------+-----------------------------------------------------+-------+
+    | karate_graph | An instance of the Graph class returned by                  |
+    |              | function ``load_karate_graph`` in ``datasets.utils``        |
+    +--------------+-----------------------------------------------------+-------+
 
-
-.. code:: python
-
-    from geomstats.datasets
-        import graph_data_preparation as gdp
-
-    dim = 2
-    max_epochs = 15
-    lr = .05
-    n_negative = 2
-    context_size = 1
-    karate_graph = gdp.Graph(
-        graph_matrix_path=
-            geomstats.datasets.utils.KARATE_PATH,
-        labels_path=
-            geomstats.datasets.utils.KARATE_LABELS_PATH)
 
 The karate club network was collected from the members of a
 university karate club by Wayne Zachary in 1977. Each node represents a
