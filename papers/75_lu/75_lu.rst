@@ -577,7 +577,7 @@ In principle, to recover a category from a potentially noisy encoded vector, the
 
    Softmax on an orthonormal basis :label:`fig:ortho`
 
-Similarly, figure :ref:`fig:qortho` shows on the the same type of distribution of randomly selected values and the right shows the effect after a quasiorthonormal softmax is applied with three basis vectors. Since the qsoftmax function would map the two dimensional input into a three dimensional space, for graphics sake, the three dimensional vectors are mapped back down to two dimensions using the quasiorthonormal basis. Again with the exception of a few stragglers, most points move very close to one of the three basis vectors.
+Similarly, figure :ref:`fig:qortho` shows the same type of distribution of randomly selected values and the right shows the effect after a quasiorthonormal softmax is applied with three basis vectors. Since the qsoftmax function maps the two dimensional input into a three-dimensional space, the three-dimensional vectors are mapped back down to two dimensions using the quasiorthonormal basis. Again with the exception of a few stragglers, most points move very close to one of the three basis vectors.
 
 .. figure:: 3.pdf
 
