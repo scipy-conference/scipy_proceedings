@@ -17,13 +17,13 @@ Learning from evolving data streams
    the goal is to learn from infinite data streams. This gives rise to additional challenges to those found in the
    traditional batch setting: First, data is not stored (it is infinite), thus models are exposed only once to single
    samples of the data, and once processed those samples are not seen again. Models shall be ready to provide
-   predictions at any time. Resources such are memory and time are limited, consequently, they shall be carefully
-   managed. The data can change (evolve) over time and models shall be able to adapt accordingly.
+   predictions at any time. Compute resources such as memory and time are limited, consequently, they shall be carefully
+   managed. The data can drift over time and models shall be able to adapt accordingly.
    This is a key difference with respect to batch learning, where data is assumed static and models will fail in the
    presence of change. Model degradation is a side-effect of batch learning in many real-world applications requiring
    additional efforts to address it. This papers provides a brief overview of the core concepts of machine learning for
-   data streams and describes ``scikit-multiflow``, an open-source Python library specifically created for machine
-   learning on data streams. ``scikit-multiflow`` is built to serve two main purposes: easy to design and run
+   data streams and describes scikit-multiflow, an open-source Python library specifically created for machine
+   learning on data streams. scikit-multiflow is built to serve two main purposes: easy to design and run
    experiments, easy to extend and modify existing methods.
 
 .. class:: keywords
@@ -64,7 +64,7 @@ For example:
   the associated risk of floodings. IoT sensors are now making environmental data available at a faster rate and machine
   learning systems must adapt to this new norm.
 
-.. [#] https://www.technologyreview.com/2020/05/11/1001563/covid-pandemic-broken-ai-machine-learning-amazon-retail-fraud-humans-in-the-loop/
+.. [#] Our weird behavior during the pandemic is messing with AI models". Will Douglas Heaven. MIT Technology Review. May 11, 2020.
 
 .. figure:: stream_opportunity.png
    :align: center
@@ -85,11 +85,11 @@ action is not trivial and involves multiple aspects. For example, should a new m
 depends on the amount of variation in the data. Small variations might not be enough to justify retraining and
 re-deploying a model. This is why a reactive approach is predominantly employed in the industry. Model degradation is
 monitored and corrective measures are enforced if a user-defined threshold is exceeded (accuracy, type I, and type II
-errors, etc.). Fig. :ref:`fig: investment` depicts another important aspect to consider, the tradeoff between the
+errors, etc.). Fig. :ref:`fig:investment` depicts another important aspect to consider, the tradeoff between the
 investment in resources such as memory and time (and associated cost) and the pay-off in predictive performance. In
 stream learning, resource-wise efficiency is fundamental, predictive models not only must be accurate but also must be
 able to handle theoretically infinite data streams. Models must fit in memory no matter the amount of data seen
-(constant memory). On the other hand, training time is expected to grow sub-linearly with respect to the volume of data
+(constant memory). Additionally, training time is expected to grow sub-linearly with respect to the volume of data
 processed. New samples must be processed as soon as they become available so it is vital to process them as fast as
 possible to be ready for the next sample in the stream.
 
@@ -106,9 +106,10 @@ In stream learning, models are trained incrementally, one sample at a time, as n
 become available. Since streams are theoretically infinite, the training phase is non-stop and predictive models are
 continuously updating their internal state in agreement with incoming data. This is fundamentally different from the
 batch learning approach, where models have access to all (available) data during training. As previously mentioned, in
-the stream learning paradigm, predictive models must be resource-wise efficient. For this purpose, a set of requirements :cite:`Bifet2011DataStreamMining` must be fulfilled by streaming methods:
+the stream learning paradigm, predictive models must be resource-wise efficient. For this purpose, a set of requirements
+:cite:`Bifet2011DataStreamMining` must be fulfilled by streaming methods:
 
-- **Process one example at a time, and inspect it only once.** The assumption is that there is not enough time nor
+- **Process one sample at a time, and inspect it only once.** The assumption is that there is not enough time nor
   space to store multiple samples, failing to meet this requirement implies the risk of missing incoming data.
 - **Use a limited amount of memory.** Data streams are assumed infinite, thus storing data for further processing is
   impractical.
@@ -134,14 +135,14 @@ time :math:`t_o, t_1` as
    :figclass: wt
 
    Drift patterns depicted as the change of mean data values over time. Note that an outlier is not a change but
-   *noise* in the data. This figure is based on :cite:`Gama2014Survey`. :label:`fig:driftpatterns` 
+   *noise* in the data. This figure is based on :cite:`Gama2014Survey`. :label:`fig:driftpatterns`
 
 .. math::
 
-   p_{t_0}(X,\vec{y}) \neq p_{t_1}(X,\vec{y}) 
+   p_{t_0}(X,\vec{y}) \neq p_{t_1}(X,\vec{y})
 
 Concept drift is known to harm learning  :cite:`Gama2014Survey`. The following patterns, shown in Fig.
-:ref:`fig:driftpatterns`, are usually considered: 
+:ref:`fig:driftpatterns`, are usually considered:
 
 - **Abrupt.** When a new concept is immediately introduced. The transition between concepts is minimal. In this case,
   adaptation time is vital since the old concept becomes is no longer valid.
@@ -150,20 +151,22 @@ Concept drift is known to harm learning  :cite:`Gama2014Survey`. The following p
 - **Gradual.** When old and new concepts concur within the transition period. It can be challenging since both concepts
   are somewhat valid during the transition.
 - **Recurring.** If an old concept is seen again as the stream progresses. For example, when the data corresponds to a
-  seasonal phenomenon such as the circadian rhythm.
+  periodic phenomenon such as the circadian rhythm.
+- **Outliers.** Not to be confused with true drift. A drift detection method must be robust to noise, in other words,
+  minimize the number of false positives in the presence of outliers or noise.
 
 Although the incremental nature of stream methods provides some robustness to concept drift, specialized methods have
-been proposed to detect drift. Multiple methods have been proposed in the literature, the authors in
-:cite:`Gama2014Survey` provide a thorough survey of this topic. In general, the goal of drift detection methods is to
-accurately detect changes in the data distribution while showing robustness to noise and being resources-wise efficient.
+been proposed to detect drift. Multiple methods have been proposed in the literature, :cite:`Gama2014Survey` provides a
+thorough survey of this topic. In general, the goal of drift detection methods is to accurately detect changes in the
+data distribution while showing robustness to noise and being resources-wise efficient.
 Drift-aware methods use drift detection mechanisms to react faster and efficiently to changes. For example, the
-*Hoeffding Tree* algorithm :cite:`Domingos2000HT`, a kind of decision tree for streams, does not handle concept drift
-explicitly. An drift-aware version is the *Hoeffding Adaptive Tree* :cite:`Bifet2009HAT`, which uses
-*ADaptive WINdowing* (*ADWIN*) :cite:`Bifet2007ADWIN` to detect drifts. If a drift is detected at a given branch, an
-alternate branch is created and eventually replaces the original branch if it shows better performance on new data.
+*Hoeffding Tree* algorithm :cite:`Domingos2000HT`, a kind of decision tree for data streams, does not handle concept
+drift explicitly, whereas the *Hoeffding Adaptive Tree* :cite:`Bifet2009HAT` uses *ADaptive WINdowing* (*ADWIN*)
+:cite:`Bifet2007ADWIN` to detect drifts. If a drift is detected at a given branch, an alternate branch is created and
+eventually replaces the original branch if it shows better performance on new data.
 
 *ADWIN*, a popular drift detection method with mathematical guarantees, keeps a variable-length window of recent items;
-such that it holds that there has no been change in the data distribution. Internally, two sub-windows
+guaranteeing that there has been no change in the data distribution within the window. Internally, two sub-windows
 :math:`(W_0, W_1)` are used to determine if a change has happened. With each new item observed, the average values of
 items in :math:`W_0` and :math:`W_1` are compared to confirm that they correspond to the same distribution. If the
 distribution equality no longer holds, then an alarm signal is raised indicating that drift has occurred. Upon
@@ -181,7 +184,7 @@ that evaluates the difference between expected (true) class labels :math:`y` and
    P(h) = \ell(y,\hat{y})
 
 A popular and straightforward loss function for classification is the *zero-one loss function* which corresponds to the
-notion of whether the model made a mistake or not when predicting. 
+notion of whether the model made a mistake or not when predicting.
 
 .. math::
 
@@ -190,40 +193,39 @@ notion of whether the model made a mistake or not when predicting.
                      \end{cases}
 
 Due to the incremental nature of stream leaning methods, special considerations are used to evaluate their performance.
-Two prevalent methods in the literature are *hold-out* and *prequential* evaluation. The hold-out evaluation is a
-popular method in both batch and stream learning where testing is performed on an independent set of samples. On the
-other hand, prequential evaluation :cite:`dawid1984prequential`, is specific to the stream setting. In prequential
-evaluation, tests are performed on new data samples *before* they are used to train (update) the model. The benefit of
-this approach is that all samples are used for both test and training.
+Two prevalent methods in the literature are *holdout* :cite:`kohavi1995cv` and *prequential*
+:cite:`dawid1984prequential` evaluation. Holdout evaluation is a popular method in both batch and stream learning where
+testing is performed on an independent set of samples. On the other hand, prequential evaluation, is specific to the
+stream setting. In prequential evaluation, tests are performed on new data samples *before* they are used to train
+(update) the model. The benefit of this approach is that all samples are used for both test and training.
 
 This is just a brief overview of machine learning for streaming data. However, it is important to mention that the
 field of machine learning for streaming data covers other tasks such as regression, clustering, anomaly detection, to
-name a few. we direct the reader to :cite:`Gomes2017` for an extensive and deeper description of this field, the
+name a few. We direct the reader to :cite:`Gomes2017` for an extensive and deeper description of this field, the
 state-of-the-art, and its active challenges.
 
-``scikit-multiflow``
---------------------
+The scikit-multiflow package
+----------------------------
 
 scikit-mutliflow :cite:`skmultiflow` is a machine learning library for multi-output/multi-label and stream data written
-in Python. Developed under the principles of free and open-source software and distributed under the BSD 3-Clause
+in Python. Developed as free and open-source software and distributed under the BSD 3-Clause
 License. Following the **SciKits** philosophy, scikit-multiflow extends the existing set of tools for scientific
 purposes. It features a collection of state-of-the-art methods for classification, regression, concept drift detection
-and anomaly detection, alongside a set of data generators and evaluators. scikit-multiflow is designed to seemingly
-interact with NumPy :cite:`NumPy` and SciPy :cite:`SciPy` and is compatible with Jupyter Notebooks. Additionally, it
-contributes to the democratization of machine learning for data streams by leveraging the popularity of the Python
-language. scikit-multiflow is mainly written in Python, and some core elements are written in Cython :cite:`Cython`
-for performance.
+and anomaly detection, alongside a set of data generators and evaluators. scikit-multiflow is designed to seamlessly
+interact with NumPy :cite:`NumPy` and SciPy :cite:`SciPy`. Additionally, it contributes to the democratization of
+stream learning by leveraging the popularity of the Python language. scikit-multiflow is mainly written in Python, and
+some core elements are written in Cython :cite:`Cython` for performance.
 
 scikit-multiflow is intended for users with different levels of expertise. Its design is intended to make it friendly
 to new users and familiar to more experienced ones. Its conception and development follow two main objectives:
 
 1. Easy to design and run experiments. This follows the need for a platform that allows fast prototyping and
    experimentation. Complex experiments can be easily performed using evaluation classes. Different data streams and
-   models can be analyzed and benchmarked under multiple conditions, and the amount of implementation required by the
+   models can be analyzed and benchmarked under multiple conditions, and the amount of code required from the
    user is kept to the minimum.
 2. Easy to extend existing methods. Advanced users can create new capabilities by extending or modifying existing
    methods. This way users can focus on the details of their work rather than on the overhead when working
-   from scratch 
+   from scratch
 
 scikit-multiflow is not intended as a stand-alone solution for machine learning. It integrates with other Python
 libraries such as Matplotlib :cite:`Matplotlib` for plotting, scikit-learn :cite:`scikit-learn`  for incremental
@@ -276,7 +278,7 @@ The ``ClassifierMixin`` defines the following methods:
 During a learning task, three main tasks are performed: data is provided by the stream, the estimator is trained on
 incoming data, the estimator performance is evaluated. In scikit-multiflow, data is represented by the ``Stream``
 class, where the ``next_sample()`` method is used to request new data. The ``StreamEvaluator`` class provides an easy
-way to set-up experiments. Implementations for the hold-out and prequential evaluation methods are available. A stream
+way to set-up experiments. Implementations for holdout and prequential evaluation methods are available. A stream
 and one or more estimators can be passed to an evaluator.
 
 Classification task
@@ -296,7 +298,7 @@ its internal state. The prequential evaluation can be easily implemented as a lo
 .. [#] Some data generators and estimators use random numbers generators. When set, the ``random_state`` parameter enforces reproducible results.
 
 .. code-block:: python
-   
+
    stream = SEAGenerator(random_state=1)
    classifier = NaiveBayes()
 
@@ -316,9 +318,9 @@ its internal state. The prequential evaluation can be easily implemented as a lo
        classifier.partial_fit(X, y)
        n_samples += 1
 
-   print('{} samples analyzed.'.format(n_samples))   
+   print('{} samples analyzed.'.format(n_samples))
    print('Accuracy: {}'.format(correct_cnt / n_samples))
-   
+
    > 2000 samples analyzed.
    > NaiveBayes classifier accuracy: 0.9395
 
@@ -352,7 +354,7 @@ We can run the same experiment on the SEA data. This time we compare two classif
 compatibility with incremental methods from scikit-learn.
 
 .. code-block:: python
-   
+
    stream = SEAGenerator(random_state=1)
    nb = NaiveBayes()
    svm = SGDClassifier()
@@ -387,12 +389,12 @@ considering the evaluation configuration::
 
 In Fig. :ref:`fig:prequential`, we observe the evolution of both estimators as they are trained on data from the stream.
 Although ``NaiveBayes`` has better performance at the beginning of the stream, ``SGDClassifier`` eventually outperforms
-it. In the plot we show performance measured by a given metric (accuracy, kappa, etc.) in two ways: *Mean* corresponds
-to the performance over the entire stream, resulting in a smooth line. *Current* indicates the performance over a
-sliding window with the latest data from the stream, The size of the sliding window can be defined by the user and is
-useful to analyze the 'current' performance of an estimator. In this experiment, we also measure resources in terms of
-time (training + testing) and memory. ``NaiveBayes``is faster and uses slightly more memory. On the other hand,
-``SGDClassifier`` is slower and has a smaller memory footprint.
+it. In the plot we show performance at multiple points, measured by the given metric (accuracy, kappa, etc.) in two
+ways: *Mean* corresponds to the average performance on all data seen previously, resulting in a smooth line. *Current*
+indicates the performance over a sliding window with the latest data from the stream, The size of the sliding window can
+be defined by the user and is useful to analyze the 'current' performance of an estimator. In this experiment, we also
+measure resources in terms of time (training + testing) and memory. ``NaiveBayes``is faster and uses slightly more
+memory. On the other hand, ``SGDClassifier`` is slower and has a smaller memory footprint.
 
 Concept drift detection
 +++++++++++++++++++++++
@@ -492,10 +494,11 @@ worth noting the difference in memory between these estimators. The ``HoeffdingA
 performance while requiring less space in memory. This indicates that the branch replacement mechanism triggered by
 ADWIN has been applied, resulting in a less complex tree structure representing the data.
 
-Note that the volume of data in the previous examples is for illustrative purposes only. Real streaming data applications usually are exposed to data in the magnitude of millions of samples.
+Note that the volume of data in the previous examples is for illustrative purposes only. Real streaming data
+applications usually are exposed to data in the magnitude of millions of samples.
 
-Get ``scikit-multiflow``
-------------------------
+Get scikit-multiflow
+--------------------
 
 scikit-multiflow work with Python 3.5+ and can be used on Linux, macOS, and Windows. The source code is publicly
 available in a GitHub. The stable release version is available via ``conda-forge`` (recommended) and ``pip``:
@@ -507,7 +510,8 @@ available in a GitHub. The stable release version is available via ``conda-forge
    $ pip install -U scikit-multiflow
 
 The latest development version is available in the project's repository:
-https://github.com/scikit-multiflow/scikit-multiflow. Stable and development versions are also available as ``docker`` images.
+https://github.com/scikit-multiflow/scikit-multiflow. Stable and development versions are also available as ``docker``
+images.
 
 Conclusions and final remarks
 -----------------------------
@@ -515,9 +519,9 @@ Conclusions and final remarks
 In this paper, we provide a brief overview of machine learning for data streams. Stream learning is an alternative to
 standard batch learning in dynamic environments where data is continuously generated (potentially infinite) and data is
 non-stationary but evolves (concept drift).  We present examples of applications and describe the challenges and
-requirements of machine learning techniques to be used on streaming data effectively and efficiently. 
+requirements of machine learning techniques to be used on streaming data effectively and efficiently.
 
-We also describe ``scikit-multiflow``, an open-source machine learning library for data streams in Python. The design
+We describe scikit-multiflow, an open-source machine learning library for data streams in Python. The design
 of scikit-multiflow is based on two principles: to be easy to design and run experiments, and to be easy to extend and
 modify existing methods. We provide a quick overview of the core elements of scikit-multiflow and show how it can be
 used for the tasks of classification and drift detection.
