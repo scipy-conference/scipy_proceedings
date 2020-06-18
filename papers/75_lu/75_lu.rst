@@ -370,7 +370,7 @@ To better exploit built-in functions of these packages, we define the following 
    \mathbf{q}_1 & \mathbf{q}_2 & \cdots & \mathbf{q}_K \\
    \bigg| & \bigg| & &\bigg | \end{matrix}\right].
 
-This transformation makes it easier to convert a set of parallel operations into matrix operations for which these aforementioned computational packages are well suited. Mathematically, the transformation maps the representation of a category encoded by QOE to a vector representing one hot encoding. Understanding this transformation makes it a simple matter to express and ``argmax`` or ``softmax`` function's quasiorthoromal variant by equations :ref:`eq:convert:argmax and :ref:`eq:convert`, respectively.
+This transformation makes it easier to convert a set of parallel operations into matrix operations for which these aforementioned computational packages are well suited. Mathematically, the transformation maps the representation of a category encoded by QOE to a vector representing one hot encoding. Understanding this transformation makes it a simple matter to express and ``argmax`` or ``softmax`` function's quasiorthoromal variant by equations :ref:`eq:convert:argmax` and :ref:`eq:convert`, respectively.
 
 .. math::
    :label: eq:convert:argmax
