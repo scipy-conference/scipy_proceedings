@@ -216,8 +216,8 @@ interact with NumPy :cite:`NumPy` and SciPy :cite:`SciPy`. Additionally, it cont
 stream learning by leveraging the popularity of the Python language. scikit-multiflow is mainly written in Python, and
 some core elements are written in Cython :cite:`Cython` for performance.
 
-scikit-multiflow is intended for users with different levels of expertise. Its design is intended to make it friendly
-to new users and familiar to more experienced ones. Its conception and development follow two main objectives:
+scikit-multiflow is intended for users with different levels of expertise. Its conception and development follow two
+main objectives:
 
 1. Easy to design and run experiments. This follows the need for a platform that allows fast prototyping and
    experimentation. Complex experiments can be easily performed using evaluation classes. Different data streams and
