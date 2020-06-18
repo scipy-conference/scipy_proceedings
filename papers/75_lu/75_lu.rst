@@ -584,7 +584,7 @@ Similarly, figure :ref:`fig:qortho` shows on the the same type of distribution o
    Softmax on a quasiorthogonal basis :label:`fig:qortho`
    
 It is clear from equation :ref:`eq:gsoftmax` that the exponential term in the numerator  dominates which is why the softmax is effective.  But consider if :math:`\mathbf{z}\cdot\mathbf{u}_i` is much less than zero such as :math:`\mathbf{z}=-5 \mathbf{u}_i`, then the exponential numerator for that term would severely attenuate the output even though the :math:`\mathbf{z}` lies along the same direction as :math:`\mathbf{u}_i`. 
-Since the :math:`\mathbf{z}\cdot\mathbf{u}_j=0` for all other *j*'s, it would still decode to :math:`i`, but because the :math:*i*-th term is so small, any noise could lead to decoding to a different value.
+Since the :math:`\mathbf{z}\cdot\mathbf{u}_j=0` for all other *j*'s, it would still decode to :math:`i`, but because the :math:`i`-th term is so small, any noise could lead to decoding to a different value.
 
 So why bring all this up? Clearly, values encoding to negative values along a basis vector would prove problematic. But it offers the prospect of further reducing dimensionality by encoding to no just the basis a vector but also its antipodal vector. To further our graphical example, in figure :ref:`fig:sphere`, we use :math:`(1,0)`, :math:`(0,1)` and their antipodal vectors :math:`(-1,0)` and :math:`(0,-1)` to encode values and apply a softmax using those vectors.
 
