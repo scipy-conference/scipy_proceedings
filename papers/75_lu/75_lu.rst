@@ -399,7 +399,7 @@ For ``numpy``, the implementation is straight-forward and follows equation :ref:
         qx = np.matmul(np.asarray(basis),x)
         return softmax(qx)
 
-Since ``qsoftmax`` given above requires the basis as a parameter as well as the input vector, it is a parameterized activation function. In many packages, only unparameterized functions can be used. The following function factory or metafunction can be used to return a function ``qsoftmax`` function for a given basis, rather than encoding the function above in a ``lambda`` expression.
+Since ``qsoftmax`` given above requires the basis as a parameter as well as the input vector, it is a parameterized activation function. In many packages, only unparameterized functions can be used. The following function factory or metafunction can be used to return a  ``qsoftmax`` function for a given basis, rather than encoding the function above in a ``lambda`` expression.
         
 .. code:: python
 
