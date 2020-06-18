@@ -182,7 +182,7 @@ mechanism. Bernardi's blog :cite:`hash` provides a good treatment of hash coding
 
 Finally, baseN encoding is a generalization of binary encoding that uses
 a number base other than 2 (binary). Table :ref:`tab:ternary` is an example of the Japanese
-car makes using base 3,
+car makes using base 3.
 
 .. raw:: latex
 
