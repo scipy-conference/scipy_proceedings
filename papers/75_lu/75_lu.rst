@@ -671,7 +671,7 @@ Practically speaking, while algorithms to generate spherical codes and quasiorth
 
 In sum, the advantages of QOE and spherical codes are that they can reduce the dimensionality of the vector representation as compared to one-hot encoding, while not inducing artificial geometric relationships as ordinal or binary codes can. The disadvantage is that the accuracy of decoding an encoded vector in a noisy environment (such as classification output) is slightly less than one-hot encoding. This tradeoff ability makes QOE and spherical codes useful tools to be included in a data scientists toolbox alongside other established categorical coding techniques.
 
-Experiments and code samples are made available at `https://github.com/Westhealth/scipy2020/quasiorthonormal <https://github.com/Westhealth/scipy2020/quasiorthonormal/>`_.
+Experiments and code samples are made available at `https://github.com/WestHealth/scipy2020/tree/master/quasiorthonormal <https://github.com/WestHealth/scipy2020/tree/master/quasiorthonormal>`_.
 
 References
 ----------
