@@ -463,6 +463,23 @@ these constructions are theoretical and hard
 to follow. There are a number of combinatorial problems related to such as
 spherical codes :cite:`wiki:spheres` and Steiner Triple Systems :cite:`wiki:steiner`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
 
+Since in a high dimensional space, two random vectors are likely to be
+quasiorthogonal, it is tempting to take a brute force approach and
+simply randomly select :math:`k` vectors at random and test the
+set. This approach is reasonable for small dimensions or small
+:math:`k`. However, the set must have every vector be mutually
+quasiorthogonal and combinatoric complications quickly set in.
+
+Suppose, the probability of any two vectors being quasiorthogonal to a
+given :math:`\epsilon` is :math:`p`. Since there are :math:`{k\choose 2}` 
+pairs of vectors, the probability that you have a quasiorthogonal set
+is :math:`p^{k\choose 2}`. To put in concrete terms, if two random
+vectors have a 99% chance of being quasiorthogonal. Picking a set of
+20 is only 14% and 30 is around 1%. Other factors conspire to make
+this difficult including the increasing computational complexity and
+the geometric differences between a cube and sphere become more
+pronounced as :math:`k` and :math:`N` grow.
+
 As a practical matter, optimal solutions are not necessary as long as the desired characteristics of the quasiorthonormal basis are obtained. As an example, while an optimal solution finds 28 quasiorthonormal vectors with dot products of 0.5 or under are possible in seven dimensions, you may only need 10 vectors. In other words, a suboptimal solution may yield fewer vectors that are possible for a given dimension, or a larger dimension may be required to obtain the desired number of vectors that is theoretically needed. 
 
 One practical way to construct a quasiorthonormal basis is to use spherical codes which has been studied in greater detail. Spherical codes try to find a set of points on the :math:`n`-dimensional hypersphere
