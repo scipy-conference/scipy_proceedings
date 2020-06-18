@@ -189,7 +189,7 @@ car makes using base 3.
    \begin{table}
      \begin{longtable*}{lcccc}
      \toprule
-     & \textbf{as} & \textbf{Ternary} & \textbf{Balanced} \\
+     && \textbf{as} & \textbf{Ternary} & \textbf{Balanced} \\
      \textbf{Make} & \textbf{Ordinal} & \textbf{Ternary} & \textbf{Code} & \textbf{Ternary Code} \\
      \midrule
      \endfirsthead
