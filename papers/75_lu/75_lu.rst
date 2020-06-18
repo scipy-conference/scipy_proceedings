@@ -339,7 +339,7 @@ Returning to our example of Japanese car makes, table :ref:`qoe` shows one-hot e
    \begin{table}
      \begin{longtable*}{lccc}
      \toprule
-     \textbf{make} & \textbf{Ordinal} & \textbf{One-Hot} & \textbf{QOE} \\
+     \textbf{Make} & \textbf{Ordinal} & \textbf{One-Hot} & \textbf{QOE} \\
      \midrule
      \endfirsthead
      Toyota & 1 & $\mathbf{u}_1$ & $\mathbf{q}_1$ \\
