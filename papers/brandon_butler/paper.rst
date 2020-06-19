@@ -66,12 +66,12 @@ provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
 In the development of these tools, the requirements for the software to enable good science became
 more obvious. Having computational research that is Transferable, Reproducible, Usable (by others),
 and Extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
-computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to
-bring these traits to the wider computational molecular science community through packages like
-mbuild :cite:`klein.etal2016` foyer :cite:`klein.etal2019` which are Python packages that generalize generating initial particle
-configurations and force fields respectively across a variety of simulation back
-ends :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased TRUEness is one of many
-motivating factors for HOOMD-blue version 3.0.
+computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to bring these
+traits to the wider computational molecular science community through packages like mbuild
+:cite:`klein.etal2016` foyer :cite:`klein.etal2019` which are Python packages that generalize
+generating initial particle configurations and force fields respectively across a variety of
+simulation back ends :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased
+TRUEness is one of many motivating factors for HOOMD-blue version 3.0.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
 engine with a C++ back end, provides to use a Python API facilitated through pybind11
@@ -201,7 +201,7 @@ construct a snapshot, all system data distributed across MPI ranks must be gathe
 the root rank. To set the state using the snapshot API requires assigning a modified snapshot to the
 system state (i.e. all system data is reset upon setting). The advantages to this approach come
 from the ease of use of working with a single object containing the complete description of the
-state. The following snippet showcases hows this approach can be used to set the z position of all
+state. The following snippet showcases how this approach can be used to set the z position of all
 particles to zero.
 
 .. code-block:: python
@@ -280,11 +280,11 @@ validation of arbitrarily nested dictionaries, lists, and tuples. Likewise, both
 support defaults, but to a varying degree due to their differing purposes. :code:`ParameterDict`
 acts as a dictionary with additional validation logic. However, the :code:`TypeParameterDict`
 represents a dictionary in which each entry is validated by the entire defined schema. This
-distinct occurs often in simulation contexts as simulations with multiple types of particles, bonds,
-angles, etc must specify certain parameters for each type. In practice this distinction means that
-the :code:`TypeParameterDict` class supports default specification with arbitrary nesting, while the
-:code:`ParameterDict` has defaults but these are equivalent to object attribute defaults. An example
-:code:`TypeParameterDict` initialization and use of both classes can be seen below.
+distinction occurs often in simulation contexts as simulations with multiple types of particles,
+bonds, angles, etc must specify certain parameters for each type. In practice this distinction means
+that the :code:`TypeParameterDict` class supports default specification with arbitrary nesting,
+while the :code:`ParameterDict` has defaults but these are equivalent to object attribute defaults.
+An example :code:`TypeParameterDict` initialization and use of both classes can be seen below.
 
 .. code-block:: python
 
