@@ -269,7 +269,7 @@ The above modification to the start up scripts ensures that when Jupyter exits t
 Authentication and Applications
 -------------------------------
 
-As mentioned above, the bulk of the authentication is performed by the ALB. However, it is important for the individual application to validate a request forwarded by the ALB, for two reasons. Validation prevents potential security vulnerablities due to a misconfiguration in the system or exposes security vulnerabilities during the initial system debugging. Additionally, validation ensures that the identity of the user is what is expected. The ALB ensures that the user has validly authenticated, but it is up to the application to ensure that the correct user has connected. 
+As mentioned above, the bulk of the authentication is performed by the ALB. However, it is important for the individual application to validate a request forwarded by the ALB, for two reasons. Validation prevents potential security vulnerabilities due to a misconfiguration in the system or exposes security vulnerabilities during the initial system debugging. Additionally, validation ensures that the identity of the user is what is expected. The ALB ensures that the user has validly authenticated, but it is up to the application to ensure that the correct user has connected. 
 
 Validation is achieved through the JWT token presented in the :code:`x-amzn-oidc-data` header by the ALB. These JWT tokens are signed by a public key retrievable from AWS ensuring that only the ALB could have signed them. Within the JWT token, the :code:`kid` field represents the *key ID* for the public key. To validate, the key ID should be extracted and corresponding public key should be retrieved from AWS. With the public key, the JWT token can then be validated. We use the :code:`python-jose` module available on PyPi. The :code:`sub` field in the JWT token is the same as the OIDC ID which is also presented in the :code:`x-amzn-oidc-identity` field. The application should then verify this is OIDC ID associated with the expected user. 
 
@@ -599,12 +599,12 @@ Building a custom AMI image to spin up an EC2 instance to support our ECS cluste
 **ECS Agent**
 ^^^^^^^^^^^^^
 
-The AWS ECS agent is required in order for the EC2 instance to serve ECS containers. However, periodically updating the ECS agent is important in that potential vulnerabilites may be fixed and newer agents offer more features to aid in maintenance. Furthermore, proper configuration of features can aid in security as well. For example, the ECS agent can be configure so that the maximum lifetime of an EC2 instance is set. This is particularly useful if the AMIs for the EC2 instances are constantly being updated with security patches etc. The limited lifetime guarantees that the EC2 instances running will not be based on an AMI that is too out of date.
+The AWS ECS agent is required in order for the EC2 instance to serve ECS containers. However, periodically updating the ECS agent is important in that potential vulnerabilities may be fixed and newer agents offer more features to aid in maintenance. Furthermore, proper configuration of features can aid in security as well. For example, the ECS agent can be configure so that the maximum lifetime of an EC2 instance is set. This is particularly useful if the AMIs for the EC2 instances are constantly being updated with security patches etc. The limited lifetime guarantees that the EC2 instances running will not be based on an AMI that is too out of date.
 
 **Systems Manager Agent**
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Another useful AWS Agent that can be employed is the AWS Systems Manager Agent (SSM) :cite:`aws:ssm`. The SSM agent allows the \`\`Systems Manager to update, manage and configure'' the EC2 instances. This agent makes it easier to maintain EC2 instances in a centralized manner. Once again keeping an EC2 instance up to date helps reduce vulnerabilites on the node.
+Another useful AWS Agent that can be employed is the AWS Systems Manager Agent (SSM) :cite:`aws:ssm`. The SSM agent allows the \`\`Systems Manager to update, manage and configure'' the EC2 instances. This agent makes it easier to maintain EC2 instances in a centralized manner. Once again keeping an EC2 instance up to date helps reduce vulnerabilities on the node.
 
 **Anti-virus**
 ^^^^^^^^^^^^^^
@@ -624,9 +624,9 @@ antivirus but you may have your own preferences.
 
 Another useful agent to be deployed on the EC2 instance is an intrusion
 detection agent. Like this antivirus agent, an intrusion detection agent that
-has container awareness capabilities is desireable and should have the
+has container awareness capabilities is desirable and should have the
 capability activated. The intrusion detection agent looks for activities that
-are anomolous and when high risk activity is detected, it will gather as much
+are anomalous and when high risk activity is detected, it will gather as much
 information around the incident as it can. We use ThreatStack for our intrusion
 detection.
 
@@ -643,7 +643,7 @@ is small so building a compliant infrastructure that requires little
 maintenance is paramount. Equally important is to safeguard against opening
 vulnerabilities due to misconfigurations. By following the suggestions
 presented here, misconfigurations err on the side of loss of functionality
-rather than introducing vulnerabilites.
+rather than introducing vulnerabilities.
 
 The architecture presented here was successful in a recently performed
 penetration test. We hired a third party company that specializes in
