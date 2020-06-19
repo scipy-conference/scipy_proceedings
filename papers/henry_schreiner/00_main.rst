@@ -11,6 +11,7 @@
 :author: Shuo Liu
 :email: liush97@mail2.sysu.edu.cn 
 :institution: Sun Yat-sen University
+:orcid: 0000-0003-0177-6102
 
 :author: Jim Pivarski
 :email: pivarski@princeton.edu
