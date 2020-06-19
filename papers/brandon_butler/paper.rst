@@ -213,20 +213,22 @@ particles to zero.
         snap.particles.position[:, 2] = 0
     sim.state.snapshot = snap
 
-The other API for accessing :code:`State` data is via a zero-copy, rank-local access to the
-state's data on either the GPU or CPU. On the CPU, we expose the buffers as
-:code:`numpy.ndarray`-like objects through provided hooks such as :code:`__array_ufunc__` and
-:code:`__array_interface__`. Similarly, on the GPU we mock much of the CuPy's
-:cite:`zotero-593` :code:`ndarray` class if it is installed; however, at present the CuPy
-package provides fewer hooks, so our integration is more limited. Whether or not CuPy is installed,
-we use the :code:`__cuda_array_interace__` protocol for GPU access. This provides support for
-libraries such as numba's :cite:`lam.etal2015` GPU just in time compiler and PyTorch
-:cite:`paszke.etal2019`. We chose to mock the interfaces of both NumPy and CuPy rather than just
-expose :code:`ndarray` objects directly out of consideration for memory safety. To ensure data
-integrity, we restrict the data to only be accessible within a specific context manager. This
-approach is much faster than using the snapshot API because it uses HOOMD-blue's data buffers
-directly, but it requires the user to deal directly with the domain decomposition. The example below
-modifies the previous example to instead use the zero-copy API.
+The other API for accessing :code:`State` data is via a zero-copy, rank-local access to the state's
+data on either the GPU or CPU. On the CPU, we expose the buffers as :code:`numpy.ndarray`-like
+objects through provided hooks such as :code:`__array_ufunc__` and :code:`__array_interface__`.
+Similarly, on the GPU we mock much of the CuPy's :cite:`zotero-593` :code:`ndarray` class if it is
+installed; however, at present the CuPy package provides fewer hooks, so our integration is more
+limited. Whether or not CuPy is installed, we use version 2 of the :code:`__cuda_array_interace__`
+protocol for GPU access (compatibility with our GPU buffers in Python therefore depends on the
+support of version 2 of this protocol). This provides support for libraries such as numba's
+:cite:`lam.etal2015` GPU just in time compiler and PyTorch :cite:`paszke.etal2019`. We chose to mock
+NumPy like interfaces rather than expose :code:`ndarray` objects directly out of consideration for
+memory safety. To ensure data integrity, we restrict the data to only be accessible within a
+specific context manager. This approach is much faster than using the snapshot API because it uses
+HOOMD-blue's data buffers directly, but the nature of providing zero-copy access requires that users
+deal directly with the domain decomposition since only data for a MPI rank's local simulation box
+is stored in a given rank. The example below modifies the previous example to instead use the
+zero-copy API.
 
 .. code-block:: python
 
