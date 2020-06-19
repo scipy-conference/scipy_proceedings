@@ -559,15 +559,20 @@ to the reader.
                 [Type(initial_type), filter])
 
         def act(self, timestep):
-            tags = self.filter(self._state)
-            with self._state.cpu_local_snapshot as data:
+            state = self._state
+            final_type_id = state.particle_types.index(
+                self.final_type)
+            tags = self.filter(state)
+            with state.cpu_local_snapshot as snap:
+                tags = np.intersect1d(
+                    tags, snap.particles.tag, True)
                 part = data.particles
                 filtered_index = part.rtags[tags]
                 N_swaps = int(len(tags) * self.rate)
                 mask = np.random.choice(filtered_index,
                                         N_swaps,
                                         replace=False)
-                part.typeid[mask] = self._final_type
+                part.typeid[mask] = final_type_id
 
 Larger Examples
 ---------------
