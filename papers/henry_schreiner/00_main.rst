@@ -1,10 +1,12 @@
 :author: Henry Schreiner
 :email: henryfs@princeton.edu
 :institution: Princeton University
+:orcid: 0000-0002-7833-783X
 
 :author: Hans Dembinski
 :email: hans.dembinski@tu-dortmund.de
 :institution: TU Dortmund
+:orcid: 0000-0003-3337-3850
 
 :author: Shuo Liu
 :email: liush97@mail2.sysu.edu.cn 
