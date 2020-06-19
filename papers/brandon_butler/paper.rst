@@ -314,11 +314,10 @@ To store lists of operations, that must be attached to a simulation, the analogo
 
 .. code-block:: python
 
-    from hoomd import Operations
-    from hoomd.output import GSD
+    import hoomd
 
-    ops = Operations()
-    gsd = GSD('example.gsd')
+    ops = hoomd.Operations()
+    gsd = hoomd.output.GSD('example.gsd')
     # use of SyncedList
     ops.analyzers.append(gsd)
 
@@ -477,10 +476,10 @@ directly subclassed from the C++ class. An example of a sinusoidal cycling varia
             return self.amplitude * tmp + self.center
 
         def _min(self):
-            return -self.amplitude + self.center
+            return self.center - self.amplitude
 
         def _max(self):
-            return self.amplitude + self.center
+            return self.center + self.amplitude
 
 ParticleFilters
 +++++++++++++++
