@@ -556,7 +556,7 @@ member of the club, and each edge represents an undirected relation
 between two members. An often discussed problem using this dataset is to
 predict the two groups into which the karate club split after an
 argument between two teachers. Figure :ref:`karafig` displays the dataset graph.
-Further information about the dataset is
+The dataset is loaded and further information is
 displayed to provide insight into its complexity.
 
 .. figure:: learning_graph_structured_data_h2_files/karate_graph.png
@@ -568,6 +568,7 @@ displayed to provide insight into its complexity.
 
 .. code:: python
 
+    karate_graph = data_utils.load_karate_graph()
     nb_vertices_by_edges =\
         [len(e_2) for _, e_2 in
             karate_graph.edges.items()]
