@@ -300,7 +300,7 @@ An example :code:`TypeParameterDict` initialization and use of both classes can 
     sphere = Sphere(seed=42)
     # example using ParameterDict
     sphere.nselect = 2
-    # examples using TypeParameter and TypeParameterDict
+    # examples using TypeParameterDict
     sphere.shape['A'] = {'diameter': 1.}
     # sets for 'B', 'C', and 'D'
     sphere.shape[['B', 'C', 'D']] = {'diameter': 0.5}
