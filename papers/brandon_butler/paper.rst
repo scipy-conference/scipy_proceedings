@@ -1,17 +1,17 @@
 :author: Brandon L. Butler
 :email: butlerbr@umich.edu
-:orcid:0000-0001-7739-7796
+:orcid: 0000-0001-7739-7796
 :institution: University of Michigan, Department of Chemical Engineering
 
 :author: Vyas Ramasubramani
-:orcid:0000-0001-5181-9532
+:orcid: 0000-0001-5181-9532
 :institution: University of Michigan, Department of Chemical Engineering
 
 :author: Joshua A. Anderson
 :institution: University of Michigan, Department of Chemical Engineering
 
 :author: Sharon C. Glotzer
-:orcid:0000-0002-7197-0085
+:orcid: 0000-0002-7197-0085
 :institution: University of Michigan, Department of Chemical Engineering
 :institution: University of Michigan, Department of Material Science and Engineering
 :institution: University of Michigan, Department of Physics
