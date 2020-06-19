@@ -1,19 +1,23 @@
 :author: Valeria Barra
 :email: valeria.barra@colorado.edu
 :institution: University of Colorado Boulder
+:orcid: 0000-0003-1129-2056
 :corresponding:
 
 :author: Jed Brown
 :email: jed@jedbrown.org
 :institution: University of Colorado Boulder
+:orcid: 0000-0002-9945-0639
 
 :author: Jeremy Thompson
 :email: jeremy.thompson@colorado.edu
 :institution: University of Colorado Boulder
+:orcid: 0000-0003-2980-0899
 
 :author: Yohann Dudouit
 :email: dudouit1@llnl.gov
 :institution: Lawrence Livermore National Laboratory
+:orcid: 0000-0001-5831-561X
 
 :bibliography: bibliography
 
