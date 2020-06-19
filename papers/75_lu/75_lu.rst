@@ -19,14 +19,14 @@ Introduction
 ------------
 
 While most popular machine learning methods such as deep learning
-require numerical data as input, categorical data is very common
-practice. For example, a person's vitals could be a combination of both,
+require numerical data as input, categorical data is very common.
+ For example, a person's vitals could be a combination of both,
 they could include height, weight (numerical) and gender, race
 (categorical). The challenge is to convert the categorical data into a
 vector of some sort. 
 
 One-hot encoding which is discussed in the next section is very
-commonly used these days in machine learning but has the drawback
+commonly used in machine learning but has the drawback
 that it can increase the dimensionality of the data by the cardinality
 of the category. For small category, this is not a significant issue
 but when categories with high cardinality are present, many problems
@@ -38,7 +38,7 @@ two random vectors are almost always orthogonal. The concept originated
 with Kůrková and Kainen :cite:`kurkova`. In many ways, QOE functions
 the same as one-hot encoding but does not increase the dimensionality
 of the data to the same degree as one-hot encoding. Historically, QOE
-was considered for a method of encoding words but modern techinques
+was considered for a method of encoding words but modern techniques
 such as *word embeddings* are now considered the state of the art
 method for encoding language.
 
@@ -67,12 +67,12 @@ to facilitate encoding. These two categories may be of use when more
 statistical analysis is required, however there has not been widespread
 adoption of these encoding techniques for machine learning.
 
-In a category of its own, word embeddings deserve special mention
+Word embeddings are their own special category. 
 :cite:`wiki:wordembeddings`. Word embeddings 
 are used to represent words, phrases or even entire documents as a
-vector. Their goal is that similar meaning or concepts get mapped to
+vector so that similar meanings/concepts are mapped to
 vectors that are close in the target vector space. Additionally, it is
-adapted for encoding a large categorical feature (i.e., words) into a
+adapted for encoding a large categorical features (i.e., words) into a
 relatively lower dimensional space.
 
 The remainder of the section will describe some common classic
@@ -212,12 +212,33 @@ result, although the effect is not as pronounced as ordinal encoding.
 Decoding
 ~~~~~~~~
 
-Of course, with categorical encoding, the ability to decode an encoded vector back to a category can be very important. If the categorical variable is only an input to a machine learning system, retrieving a category may not be very important. For example, one may have a product rating model which delivers a rating based on a number of variables, some numeric like price, but others might be categorical like color, but since the output does not require category decoding, it is not important.
+Of course, with categorical encoding, the ability to decode an encoded vector
+back to a category can be very important. If the categorical variable is only
+an input to a machine learning system, retrieving a category may not be very
+important. For example, one may have a product rating model which delivers a
+rating based on a number of variables, some numeric like price, but others
+might be categorical like color, but since the output does not require category
+decoding, it is not important.
 
-In an application such as categorization or imputation :cite:`gondara`, retrieving the category from a vector is crucial. In training a modern classification model, a categorical output is often subject to an activation function which converts a vector into a probability of each category such as a *softmax* function. Essentially, the softmax is a continuous and differential version of a \`\`hard max'' function which would assign a :code:`1` to the vector representing the most likely category and a :code:`0` to all the other categories. The conversion to a probability distribution allows the use of a negative log likelihood loss function rather than the standard root mean squared error.
+In an application such as categorization or imputation :cite:`gondara`,
+retrieving the category from a vector is crucial. In training a modern
+classification model, a categorical output is often subject to an activation
+function which converts a vector into a probability of each category such as a
+*softmax* function. Essentially, the softmax is a continuous and differentiable
+version of a \`\`hard max'' function which would assign a :code:`1` to the
+vector representing the most likely category and a :code:`0` to all the other
+categories. The conversion to a probability distribution allows the use of a
+negative log likelihood loss function rather than the standard root mean
+squared error.
 
 
-Typically, other classic encoding methods use thresholds to rectify a vector first into a binary or :math:`n`-ary value then decode the vector back to a label in accordance to the encoding. This makes them difficult to use as outputs of machine learning systems such as neural networks that rely on gradients due to lack of differentiability. Also, the decoding process is difficult to convert to a probability distribution, making negative log-likelihood or crossentropy loss functions more difficult to use.
+Typically, other classic encoding methods use thresholds to rectify a vector
+first into a binary or :math:`n`-ary value then decode the vector back to a
+label in accordance to the encoding. This makes these values difficult to use as
+outputs of machine learning systems such as neural networks that rely on
+gradients due to lack of differentiability. Also, the decoding process is
+difficult to convert to a probability distribution, making negative
+log-likelihood or crossentropy loss functions more difficult to use.
 
 
 Theory
@@ -250,9 +271,9 @@ This means that given an :math:`\epsilon`, the size of potential quasiorthonorma
 One Hot Encoding Revisited
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The method to exploit quasiorthogonality in categorical encoding
-parallels the use of orthonormal basis in one-hot encoding. In machine
-learning, the typical aspects of one hot encoding maps a 
+Exploiting quasiorthogonality in categorical encoding
+is analysis to using orthonormal basis in one-hot encoding. In a typical machine
+learning scenario, one hot encoding maps a 
 variable with :math:`n` categories into a set of unit vectors in a 
 :math:`n`-dimensional space: :math:`L=\{l_i\}` for :math:`i=1\ldots n`,
 then the one hot encoding :math:`E_L:L \mapsto \mathbb{R}^n`
@@ -370,7 +391,13 @@ To better exploit built-in functions of these packages, we define the following 
    \mathbf{q}_1 & \mathbf{q}_2 & \cdots & \mathbf{q}_K \\
    \bigg| & \bigg| & &\bigg | \end{matrix}\right].
 
-This transformation makes it easier to convert a set of parallel operations into matrix operations for which these aforementioned computational packages are well suited. Mathematically, the transformation maps the representation of a category encoded by QOE to a vector representing one hot encoding. Understanding this transformation makes it a simple matter to express and ``argmax`` or ``softmax`` function's quasiorthoromal variant by equations :ref:`eq:convert:argmax` and :ref:`eq:convert`, respectively.
+This transformation makes it easier to convert a set of parallel operations
+into matrix operations for which these aforementioned computational packages
+are well suited. Mathematically, the transformation maps the representation of
+a category encoded by QOE to a vector representing one hot encoding.
+Understanding this transformation makes it simple to express 
+``argmax`` or ``softmax`` function's quasiorthoromal variant by equations
+:ref:`eq:convert:argmax` and :ref:`eq:convert`, respectively.
 
 .. math::
    :label: eq:convert:argmax
@@ -384,7 +411,12 @@ and
 
    \mathrm{qsoftmax}(\mathbf{z}) = \mathrm{softmax}(\mathbf{Qz}).
 
-The ``tensorflow`` and ``pytorch`` both supply optimized ``softmax`` functions as does ``scipy`` when using ``numpy``, making implementation of QOE not only easy but efficient. Not only will using native functions accelerated performance it can exploit features such as auto differentiation built into the native functions. A useful property if one wishes to use the qsoftmax function as an activation function.
+The ``tensorflow`` and ``pytorch`` both supply optimized ``softmax`` functions
+as does ``scipy`` when using ``numpy`` arrays, making implementation of QOE not
+only easy, but efficient. Not only will using native functions accelerated
+performance, it can exploit features such as auto differentiation built into
+the native functions --- a useful property when using the qsoftmax
+function as an activation function.
 
 Since the matrix manipulation operations and input/output shape definitions differ from package to package, we provide a qsoftmax implementation in several popular packages. In order to facilitate the most general format possible, in our examples, we will express the quasiorthogonal basis as a list of list, but the input and the output is expressed in the appropriate native class (e.g. :code:`numpy.ndarray` in ``numpy``).
 
@@ -488,7 +520,12 @@ constructions of spherical codes, a given point's antipodal point is
 also in that code set. So in order to get a quasiorthogonal set, for
 each pair of antipodal points, only one element of the pair is selected. Perhaps to better understand the relationship, between quasiorthonormal basis and spherical codes is that a set of spherical codes can be constructed by taking every vector in a quasiorthonormal basis and add its antipodal point. 
 
-The area of algorithmically finding a quasiorthonormal basis is scant as is in the related area of finding suboptimal spherical codes. However, one such method was investigated by Gautam and Vaintrob :cite:`Gautam2013ANA`. Perhaps the easiest way to obtain a quasiorthonormal basis is to use spherical codes as described above but obtain the spherical code from the vast compliation of sphere codes by Sloane :cite:`sphere`. 
+The area of algorithmically finding a quasiorthonormal basis is scant as is
+finding suboptimal spherical codes. However, one such
+method was investigated by Gautam and Vaintrob :cite:`Gautam2013ANA`. Perhaps
+the easiest way to obtain a quasiorthonormal basis is to use spherical codes as
+described above but obtain the spherical code from the vast compliation of
+sphere codes by Sloane :cite:`sphere`. 
 
 Simple Example and Comparison
 -----------------------------
@@ -542,7 +579,12 @@ This is useful for troubleshooting if you have difficulty.
 Examples on Quasiorthogonal Basis
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To recap, for the two QOE experiments we take a set of 10 mutually quasiorthonormal vectors from a four dimensional space and from a seven dimensional space all derived from spherical codes from tables mentioned above and only took 10 vectors. For the code, the basis for each experiment are labeled  ``basis4`` and ``basis7``, respectively. This leads to the following models, ``basis4_model`` and ``basis7_model``.
+To recap, for the two QOE experiments we take a set of 10 mutually
+quasiorthonormal vectors from a four dimensional space, and from a seven
+dimensional space all derived from spherical codes from tables mentioned above,
+and only took 10 vectors. For the code, the basis for each experiment are
+labeled  ``basis4`` and ``basis7``, respectively. This leads to the following
+models, ``basis4_model`` and ``basis7_model``.
 
 .. code:: python
 
@@ -603,7 +645,13 @@ Similarly, figure :ref:`fig:qortho` shows the same type of distribution of rando
 It is clear from equation :ref:`eq:gsoftmax` that the exponential term in the numerator  dominates which is why the softmax is effective.  But consider if :math:`\mathbf{z}\cdot\mathbf{u}_i` is much less than zero such as :math:`\mathbf{z}=-5 \mathbf{u}_i`, then the exponential numerator for that term would severely attenuate the output even though the :math:`\mathbf{z}` lies along the same direction as :math:`\mathbf{u}_i`. 
 Since the :math:`\mathbf{z}\cdot\mathbf{u}_j=0` for all other *j*'s, it would still decode to :math:`i`, but because the :math:`i`-th term is so small, any noise could lead to decoding to a different value.
 
-So why bring all this up? Clearly, values encoding to negative values along a basis vector would prove problematic. But it offers the prospect of further reducing dimensionality by encoding to no just the basis a vector but also its antipodal vector. To further our graphical example, in figure :ref:`fig:sphere`, we use :math:`(1,0)`, :math:`(0,1)` and their antipodal vectors :math:`(-1,0)` and :math:`(0,-1)` to encode values and apply a softmax using those vectors.
+So why bring all this up? Clearly, values encoding to negative values along a
+basis vector would prove problematic. But it offers the prospect of further
+reducing dimensionality by encoding to not just the basis a vector but also its
+antipodal vector. To further our graphical example, in figure
+:ref:`fig:sphere`, we use :math:`(1,0)`, :math:`(0,1)` and their antipodal
+vectors :math:`(-1,0)` and :math:`(0,-1)` to encode values and apply a softmax
+using those vectors.
 
 .. figure:: 4.pdf
 
