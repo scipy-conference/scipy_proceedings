@@ -505,7 +505,7 @@ We begin by validating the ``qsoftmax`` function as provided above. This is done
       tf.keras.layers.Activation(tf.nn.softmax)
     ])
 
-To validate that the ``qsoftmax`` function and the use of a ``Lambda`` layer is propery used, the ``qsoftmax`` metafunction is used with the identity matrix to represent the basis. Mathematically, the resultant ``qsoftmax`` function in the ``Lambda`` layer is exactly the ``softmax`` function.  The code is shown below:
+To validate that the ``qsoftmax`` function and the use of a ``Lambda`` layer is properly used, the ``qsoftmax`` metafunction is used with the identity matrix to represent the basis. Mathematically, the resultant ``qsoftmax`` function in the ``Lambda`` layer is exactly the ``softmax`` function.  The code is shown below:
 
 .. code:: python
 
