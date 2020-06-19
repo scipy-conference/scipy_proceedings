@@ -2,6 +2,8 @@
 :email: spb413@nyu.edu
 :institution: New York University School of Law
 :institution: Econ-ARK
+:orcid: 0000-0002-1789-5109
+:corresponding:
 
 :author: Mridul Seth
 :email: mseth@pm.me
