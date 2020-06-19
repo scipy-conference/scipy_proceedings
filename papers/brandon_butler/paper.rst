@@ -423,7 +423,7 @@ approach enables much more sophisticated logic through composition of multiple t
 return value of the composed :code:`Triggers`.
 
 In addition, to the flexibility the :code:`Trigger` class provides by abstracting out the concept of
-triggering an operation, we use pybind11 to easily allow subclass the :code:`Trigger` class in
+triggering an operation, we use pybind11 to easily allow subclassing the :code:`Trigger` class in
 Python. This allows users to create their own triggers in pure Python that will execute in
 HOOMD-blue's C++ back end. An example of such subclassing that reimplements the functionality of
 HOOMD-blue version 2.x can be seen below.
