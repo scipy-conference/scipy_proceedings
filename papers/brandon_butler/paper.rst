@@ -149,8 +149,8 @@ show a rendering of the particle configuration in Figure (:ref:`sim`).
         hoomd.filter.All(), kT=1., seed=42)
     integrator.methods.append(langevin)
 
-    nlist = md.nlist.Cell()
-    lj = md.pair.LJ(nlist, r_cut=2.5)
+    nlist = hoomd.md.nlist.Cell()
+    lj = hoomd.md.pair.LJ(nlist, r_cut=2.5)
     lj.params[('A', 'A')] = dict(
         sigma=1., epsilon=1.)
     integrator.forces.append(lj)
