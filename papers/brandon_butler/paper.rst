@@ -573,10 +573,29 @@ to the reader.
                                         replace=False)
                 part.typeid[mask] = final_type_id
 
-Larger Examples
----------------
+Conclusion
+----------
 
-In this section we will provide more substantial applications of features new to HOOMD-blue.
+HOOMD-blue version 3.0 presents a Pythonic API that encourages experimentation and customization.
+Through subclassing C++ classes, providing wrappers for custom actions, and exposing data in
+zero-copy arrays/buffers, we allow HOOMD-blue users to utilize the full potential of Python and the
+scientific Python community.
+
+Acknowledgements
+----------------
+
+This research was supported by the National Science Foundation, Division of Materials Research Award
+# DMR 1808342 (HOOMD-blue algorithm and performance development) and by the National Science
+Foundation, Office of Advanced Cyberinfrastructure Award # OAC 835612 (pythonic architecture for
+MoSDeF). Hardware provided by NVIDIA Corp. is gratefully acknowledged. This research was supported
+in part through computational resources and services supported by Advanced Research Computing at the
+University of Michigan, Ann Arbor.
+
+
+Appendix
+--------
+
+In the appendix, we will provide more substantial applications of features new to HOOMD-blue.
 
 Trigger that detects nucleation
 +++++++++++++++++++++++++++++++
@@ -706,20 +725,3 @@ for simulation data. It will store the scalar and string quantities in a single
                 k: v.append(rdf[k])
                 for k, v in data['array'].items()}
 
-Conclusion
-----------
-
-HOOMD-blue version 3.0 presents a Pythonic API that encourages experimentation and customization.
-Through subclassing C++ classes, providing wrappers for custom actions, and exposing data in
-zero-copy arrays/buffers, we allow HOOMD-blue users to utilize the full potential of Python and the
-scientific Python community.
-
-Acknowledgements
-----------------
-
-This research was supported by the National Science Foundation, Division of Materials Research Award
-# DMR 1808342 (HOOMD-blue algorithm and performance development) and by the National Science
-Foundation, Office of Advanced Cyberinfrastructure Award # OAC 835612 (pythonic architecture for
-MoSDeF). Hardware provided by NVIDIA Corp. is gratefully acknowledged. This research was supported
-in part through computational resources and services supported by Advanced Research Computing at the
-University of Michigan, Ann Arbor.
