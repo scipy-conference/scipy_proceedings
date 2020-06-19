@@ -498,11 +498,6 @@ The Econ-ARK infrastructure is built around creating a sustainable community wit
 
 **Reproducible builds of scientific content**, Reproducibility crisis has been plaguing academic research for some time and the current ecosystem of software packaging and distribution certainly doesn't help it. To tackle this in Econ-ARK we have used containerization technologies like Docker to solve this problem. Tools like Repo2Docker :cite:`repo2d` further help us with creating reproducible builds of scientific content. Creating and working with these tools still require a basic background with software engineering, and end users like students and researchers in economics may not have the required background. We made tools to lower the barrier by using pre built containers and one click (commands) reproducible research artifacts :cite:`reproduce` . This part requires a strong overlap between Researchers and Software Engineers in a project. Pushing for reproducibility in the community benefits students by lowering the barrier and publishers/researchers by creating tools required to address the reproducibility crisis.
 
-
-**Pedagogy Teaching resources**  To keep the wheels turning in a research discipline we require effective pedagogical resources, especially in domains which are increasingly using scientific software to further research. After creating pedagogical content we are faced with the next hard challenge of creating an effective teaching infrastructure. The crème de la crème of the SciPy community has faced installation problems with software packages and it is not hard to create a monster out of your local environment but luckily tools like MyBinder and JupyterHub have drastically reduced the work required to set up a stable environment required for teaching courses which depends heavily scientific software. At Econ-ARK we have used MyBinder(public and privately hosted) extensively for teaching graduate economics courses and it has significantly reduced the overhead required for local setup, especially for students which are the primary users of a domain specific scientific software like HARK. We have also effectively used containerization for standardizing student assignments which streamlines the work for both students and teachers.
-
-**Introductory training to scientific researchers about software design** We are definitely not the first ones to realize and push for more training to scientific researchers about general software design and best practices (software versioning, CI, testing). Organizations like Software Carpentry :cite:`wilson2014software` have been successful in this domain. Creating sustainable domain specific scientific software requires a strong decoupling from research artifacts so users from different backgrounds can successfully work with the software. Researchers writing code with knowledge about software design will have more success in creating a sustainable community. This also starts the conversation of empowering roles like Research Software Engineers which fills up the gap between researchers, students and publishers.
-
 **Interactive scientific publication**. The publication of the Econ-ARK based analysis of the
 consumption response to the CARES Act :cite:`carroll2020modeling`
 was accompanying by an online Dashboard [#]_ that allowed users
@@ -525,6 +520,7 @@ This limits the scholarly impact that domains specific research
 software, as many computational models are not being presented
 in this rich interactive way.
 
+**Pedagogy Teaching resources**  To keep the wheels turning in a research discipline we require effective pedagogical resources, especially in domains which are increasingly using scientific software to further research. After creating pedagogical content we are faced with the next hard challenge of creating an effective teaching infrastructure. The crème de la crème of the SciPy community has faced installation problems with software packages and it is not hard to create a monster out of your local environment but luckily tools like MyBinder and JupyterHub have drastically reduced the work required to set up a stable environment required for teaching courses which depends heavily scientific software. At Econ-ARK we have used MyBinder(public and privately hosted) extensively for teaching graduate economics courses and it has significantly reduced the overhead required for local setup, especially for students which are the primary users of a domain specific scientific software like HARK. We have also effectively used containerization for standardizing student assignments which streamlines the work for both students and teachers.
 
 Discussion
 --------------------
@@ -607,6 +603,17 @@ bringing technology to market a top priority :cite:`ambrose_2020`
 it raises questions about what research methods are most
 commercially relevant.
 
+We are definitely not the first push for more training to
+scientific researchers about general software design and best
+practices (software versioning, CI, testing).
+Organizations like Software Carpentry :cite:`wilson2014software` have
+been successful in this domain. Creating sustainable domain specific
+scientific software requires a strong decoupling from research artifacts
+so users from different backgrounds can successfully work with the software.
+Researchers writing code with knowledge about software design will have
+more success in creating a sustainable community.
+Our contribution in this paper is to discuss how software design can be
+reconceived as a scientific method, as opposed to a peripheral skill.
 
 References
 ----------
