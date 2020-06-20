@@ -145,7 +145,6 @@ In the following example, we associate the data stored in a ``libceed.Vector`` w
 
    >>> import numpy as np
 
-   >>> ceed = libceed.Ceed()
    >>> x = ceed.Vector(size=3)
 
    >>> a = np.arange(1, 4, dtype="float64")
@@ -153,6 +152,8 @@ In the following example, we associate the data stored in a ``libceed.Vector`` w
 
    >>> with x.array_read() as b:
    ...     print(b)
+   ...
+   [1. 2. 3.]
 
 Similarly, we can set all entries of a ``libceed.Vector`` to the same value (e.g., 10) via
 
@@ -166,15 +167,17 @@ If the user has installed libCEED with CUDA support and Numba, they can use devi
 
    >>> ceed_gpu = libceed.Ceed('/gpu/cuda')
 
-   >>> n = 10
+   >>> n = 4
    >>> x = ceed_gpu.Vector(n)
 
-   >>> a = np.arange(1, 1 + n, dtype="float64")
+   >>> a = np.arange(1, n + 1, dtype="float64")
    >>> x.set_array(a, cmode=libceed.USE_POINTER)
 
    >>> with x.array_read(memtype=libceed.MEM_DEVICE) as
            device_array:
    ...     print(device_array)
+   ...
+   [1. 2. 3. 4.]
 
 Among the Finite Elements objects needed to compose an operator, in the following example we illustrate the creation and apply action of an element restriction, denoted by :math:`G` in equation (:ref:`eq-operator-decomposition`)
 
@@ -190,14 +193,18 @@ Among the Finite Elements objects needed to compose an operator, in the followin
    >>> for i in range(ne):
    ...     ind[2*i+0] = i
    ...     ind[2*i+1] = i+1
-
+   ...
    >>> r = ceed.ElemRestriction(ne, 2, 1, 1, ne+1, ind,
-           cmode=libceed.USE_POINTER)
+   ... cmode=libceed.USE_POINTER)
 
    >>> y = ceed.Vector(2*ne)
    >>> y.set_value(0)
 
    >>> r.apply(x, y)
+   >>> with y.array_read() as y_array:
+   ...     print('y =', y_array)
+   ...
+   y = [10. 11. 11. 12. 12. 13.]
 
 An :math:`H^1` Lagrange basis in :math:`d` dimensions can be defined with the following code snippet
 
@@ -205,27 +212,98 @@ An :math:`H^1` Lagrange basis in :math:`d` dimensions can be defined with the fo
 
    >>> d = 1
    >>> b = ceed.BasisTensorH1Lagrange(
-           dim=d,   # topological dimension
-           ncomp=1, # number of components
-           P=4,     # number of basis functions (nodes)
-                    # per dimension
-           Q=4,     # number of quadrature points
-                    # per dimension
-           qmode=libceed.GAUSS_LOBATTO)
+   ... dim=d,   # topological dimension
+   ... ncomp=1, # number of components
+   ... P=2,     # number of basis functions (nodes)
+   ...          # per dimension
+   ... Q=2,     # number of quadrature points
+   ...          # per dimension
+   ... qmode=libceed.GAUSS_LOBATTO)
+   >>> print(b)
+   CeedBasis: dim=1 P=2 Q=2
+         qref1d:	 -1.00000000	  1.00000000
+      qweight1d:	  1.00000000	  1.00000000
+       interp1d[0]:	  1.00000000	  0.00000000
+       interp1d[1]:	  0.00000000	  1.00000000
+         grad1d[0]:	 -0.50000000	  0.50000000
+         grad1d[1]:	 -0.50000000	  0.50000000
+   <BLANKLINE>
 
-In the following example, we show how to apply a 2D basis operator, denoted by :math:`B` in equation (:ref:`eq-operator-decomposition`), from an E-vector named ``Ev``, to a Q-vector named ``Qv``, and vice-versa, its transpose operator :math:`B^T`
+In the following example, we show how to apply a 1D basis operator, denoted by :math:`B` in equation (:ref:`eq-operator-decomposition`), from an E-vector named ``Ev``, to a Q-vector named ``Qv``, and vice-versa, its transpose operator :math:`B^T`
 
 .. code-block:: python
 
-   >>> b.apply(1, libceed.EVAL_INTERP, Ev, Qv)
-   >>> b.T.apply(1, libceed.EVAL_INTERP, Qv, Ev)
+   >>> Q = 4
+   >>> dim = 1
+   >>> Xdim = 2**dim
+   >>> Qdim = Q**dim
+   >>> x = np.empty(Xdim*dim, dtype="float64")
+   >>> for d in range(dim):
+   ...     for i in range(Xdim):
+   ...         x[d*Xdim + i] = 1 if (i % (2**(dim-d)))
+   ... // (2**(dim-d-1)) else -1
+   ...
+   >>> Ev = ceed.Vector(Xdim*dim)
+   >>> Ev.set_array(x, cmode=libceed.USE_POINTER)
+   >>> Qv = ceed.Vector(Qdim*dim)
+   >>> Qv.set_value(0)
+   >>> bx = ceed.BasisTensorH1Lagrange(dim, dim, 2, Q,
+   ... libceed.GAUSS_LOBATTO)
+   >>> bx.apply(1, libceed.EVAL_INTERP, Ev, Qv)
+   >>> print(Qv)
+   CeedVector length 4
+     -1.000000
+     -0.447214
+     0.447214
+     1.000000
+
+   >>> bx.T.apply(1, libceed.EVAL_INTERP, Qv, Ev)
+   >>> print(Ev)
+   CeedVector length 2
+   -1.200000
+   1.200000
+
 
 In the following example, we create two QFunctions (for the setup and apply, respectively, of the mass operator in 1D) from the gallery of available built-in QFunctions in libCEED
 
 .. code-block:: python
 
    >>> qf_setup = ceed.QFunctionByName("Mass1DBuild")
+   >>> print(qf_setup)
+   Gallery CeedQFunction Mass1DBuild
+     2 Input Fields:
+       Input Field [0]:
+         Name: "dx"
+         Size: 1
+         EvalMode: "gradient"
+       Input Field [1]:
+         Name: "weights"
+         Size: 1
+         EvalMode: "quadrature weights"
+     1 Output Field:
+       Output Field [0]:
+         Name: "qdata"
+         Size: 1
+         EvalMode: "none"
+
    >>> qf_mass = ceed.QFunctionByName("MassApply")
+   >>> print(qf_mass)
+   Gallery CeedQFunction MassApply
+     2 Input Fields:
+       Input Field [0]:
+         Name: "u"
+         Size: 1
+         EvalMode: "interpolation"
+       Input Field [1]:
+         Name: "qdata"
+         Size: 1
+         EvalMode: "none"
+     1 Output Field:
+       Output Field [0]:
+         Name: "v"
+         Size: 1
+         EvalMode: "interpolation"
+
 
 The setup QFunction, named ``qf_setup`` in the previous example, is the one that defines the formulation of the geometric factors given by the correspondence between deformed finite element coordinates and reference ones. The apply QFunction, named ``qf_mass`` in the previous example, is the one that defines the action of the physics (in terms of the spatial discretization of the weak form of the PDE) the user wants to solve for. In this simple example, this represented the action of the mass matrix.
 
@@ -233,31 +311,80 @@ Finally, once all ingredients for a ``libceed.Operator`` are defined (i.e., elem
 
 .. code-block:: python
 
-   >>> # Define Setup operator
+   >>> nelem = 15
+   >>> P = 5
+   >>> Q = 8
+   >>> nx = nelem + 1
+   >>> nu = nelem*(P-1) + 1
+
+   >>> # Vectors
+   >>> x = ceed.Vector(nx)
+   >>> x_array = np.zeros(nx)
+   >>> for i in range(nx):
+   ...     x_array[i] = i / (nx - 1.0)
+   ...
+   >>> x.set_array(x_array, cmode=libceed.USE_POINTER)
+   >>> qdata = ceed.Vector(nelem*Q)
+   >>> u = ceed.Vector(nu)
+   >>> v = ceed.Vector(nu)
+
+   >>> # Restrictions
+   >>> indx = np.zeros(nx*2, dtype="int32")
+   >>> for i in range(nx):
+   ...     indx[2*i+0] = i
+   ...     indx[2*i+1] = i+1
+   ...
+   >>> rx = ceed.ElemRestriction(nelem, 2, 1, 1, nx, indx,
+   ... cmode=libceed.USE_POINTER)
+   >>> indu = np.zeros(nelem*P, dtype="int32")
+   >>> for i in range(nelem):
+   ...     for j in range(P):
+   ...         indu[P*i+j] = i*(P-1) + j
+   ...
+   >>> ru = ceed.ElemRestriction(nelem, P, 1, 1, nu, indu,
+   ... cmode=libceed.USE_POINTER)
+   >>> strides = np.array([1, Q, Q], dtype="int32")
+   >>> rui = ceed.StridedElemRestriction(nelem, Q, 1,
+   ... Q*nelem, strides)
+
+   >>> # Bases
+   >>> bx = ceed.BasisTensorH1Lagrange(1, 1, 2, Q,
+   ... libceed.GAUSS)
+   >>> bu = ceed.BasisTensorH1Lagrange(1, 1, P, Q,
+   ... libceed.GAUSS)
+
+   >>> # QFunctions
+   >>> qf_setup = ceed.QFunctionByName("Mass1DBuild")
+   >>> qf_mass = ceed.QFunctionByName("MassApply")
+
+   >>> # Setup operator
    >>> op_setup = ceed.Operator(qf_setup)
    >>> op_setup.set_field("dx", rx, bx,
-                          libceed.VECTOR_ACTIVE)
+   ... libceed.VECTOR_ACTIVE)
    >>> op_setup.set_field("weights",
-                          libceed.ELEMRESTRICTION_NONE, bx,
-                          libceed.VECTOR_NONE)
+   ... libceed.ELEMRESTRICTION_NONE, bx,
+   ... libceed.VECTOR_NONE)
    >>> op_setup.set_field("qdata", rui,
-                          libceed.BASIS_COLLOCATED,
-                          libceed.VECTOR_ACTIVE)
-
-   >>> # Define Mass operator
-   >>> op_mass = ceed.Operator(qf_mass)
-   >>> op_mass.set_field("u", ru, bu,
-                         libceed.VECTOR_ACTIVE)
-   >>> op_mass.set_field("qdata", rui,
-                         libceed.BASIS_COLLOCATED, qdata)
-   >>> op_mass.set_field("v", ru, bu,
-                         libceed.VECTOR_ACTIVE)
+   ... libceed.BASIS_COLLOCATED,
+   ... libceed.VECTOR_ACTIVE)
+   >>> print('Setup operator: ', op_setup)
+   Setup operator:  CeedOperator
+     3 Fields
+     2 Input Fields:
+       Input Field [0]:
+         Name: "dx"
+         Active vector
+       Input Field [1]:
+         Name: "weights"
+         No vector
+     1 Output Field:
+       Output Field [0]:
+         Name: "dx"
+         Collocated basis
+         Active vector
 
    >>> # Apply Setup operator
    >>> op_setup.apply(x, qdata)
-
-   >>> # Apply Mass operator
-   >>> op_mass.apply(u, v)
 
 For all of the illustrated classes of objects, ``libceed.Ceed``, ``libceed.Vector``, ``libceed.ElemRestriction``, ``libceed.Basis``, ``libceed.QFunction``, and ``libceed.Operator``, libCEED's Python interface provides a representation method so that they can be viewed/printed by simply typing
 
