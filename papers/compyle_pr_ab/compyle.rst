@@ -7,14 +7,15 @@
 :email: prabhu@aero.iitb.ac.in
 :institution: Department of Aerospace Engineering
 :institution: IIT Bombay, Mumbai, India
+:orcid: 0000-0001-6337-1720
 :corresponding:
 
 :bibliography: references
 
 
-------------------------------------
-Compyle: Python once, HPC anywhere!
-------------------------------------
+-----------------------------------------------
+Compyle: a Pythonic DSL for parallel computing
+-----------------------------------------------
 
 
 .. class:: abstract
@@ -44,7 +45,7 @@ Compyle: Python once, HPC anywhere!
 Motivation and background
 --------------------------
 
-In this brief article we provide an overview of compyle
+In this brief article we provide an overview of Compyle
 (https://compyle.rtfd.io). Compyle is a BSD licensed, Python package that
 allows users to write code once in pure Python and have it execute
 transparently on both multi-core CPUs or GPGPUs via CUDA or OpenCL. Compyle is
@@ -66,15 +67,17 @@ facilitate high-performance computing. PyPy_ is a Python implementation in
 Python that features a JIT that allows one to execute pure Python code at
 close to C-speeds. Numba_ uses the LLVM_ compiler infrastructure to generate
 machine code that can rival native C code. Numba also supports execution on
-GPUs. There are also libraries like Pythran_ that transpile a subset of Python
-to C++ and support multi-core execution using OpenMP. Packages like cppimport_
-and pybind11_ make it a breeze to integrate Python with C++ code. In addition,
-there are powerful interfaces to GPUs via packages like PyOpenCL_ or PyCUDA_.
-Of these, Numba has matured a great deal and is both easy to use and
-versatile.
+GPUs. There are also compilers like Pythran_ that transpile a subset of Python
+to C++ and support multi-core execution using OpenMP. Cython_ is a much used
+and mature compiler that makes it possible to write code in a mixture of
+Python and C. Cython also provides loop parallelism using OpenMP. Packages
+like cppimport_ and pybind11_ make it a breeze to integrate Python with C++
+code. In addition, there are powerful interfaces to GPUs via packages like
+PyOpenCL_ or PyCUDA_. Of these, Numba has matured a great deal and is both
+easy to use and versatile.
 
-Given this context, one may wonder why Compyle exists at all. While compyle
-grew out of a project that pre-dates numba, the real reason that compyle
+Given this context, one may wonder why Compyle exists at all. While Compyle
+grew out of a project that pre-dates Numba, the real reason that Compyle
 exists is that solves a different problem from most of the existing tools.
 Understanding this requires a bit of a context. As a prototypical example, we
 look at a simple molecular dynamics simulation where :math:`N` particles
@@ -86,15 +89,16 @@ be to prototype the molecular dynamics simulation code in pure Python and
 obtain a proof of concept. One would then optimize this code so as to run
 larger problems in a smaller amount of time. Very often this would mean
 changing some data structures, writing vectorized code using NumPy arrays, and
-then resorting to tools like numba to extract even more performance. Numba is
-an impressive tool and one could say almost works magically well. In fact, for
-some problems it will even do a good job of parallelizing the code to run on
-multiple cores. However, one cannot execute this same code on a GPU without
-making significant modifications, to the point of practically rewriting it.
-While Numba offers some help here with the CUDA and ROCm support, one would
-still have to change quite a lot of code to have it work on these
-architectures. As such, the issue is that it is difficult to have the same
-Python code execute well on CPUs and GPUs.
+then resorting to tools like Numba to extract even more performance (sometimes
+this requires that the code be devectorized to make the looping explicit).
+Numba is an impressive tool and one could say almost works magically well. In
+fact, for some problems it will even do a good job of parallelizing the code
+to run on multiple cores. However, one cannot execute this same code on a GPU
+without making significant modifications, to the point of practically
+rewriting it. While Numba offers some help here with the CUDA and ROCm
+support, one would still have to change quite a lot of code to have it work on
+these architectures. As such, the issue is that it is difficult to have the
+same Python code execute well on CPUs and GPUs.
 
 The reason for this difficulty is that GPUs are inherently parallel with many
 thousands of cores. Writing code to effectively use such hardware requires a
@@ -103,13 +107,16 @@ to be fully parallelized. While this is easy to do for simple problems, most
 useful computational codes involve non-trivial algorithms, which are not
 always easy to parallelize.
 
-What compyle attempts to do is to allow one to write code **once** in a highly
+What Compyle attempts to do is to allow one to write code **once** in a highly
 restrictive subset of pure Python and have this run in parallel on both CPUs
 and GPUs. This is a significant difference from all the tools that we have
 mentioned above.
 
 The difficulty in doing this is that it does require a change in approach and
-also a loss of the typical conveniences with high-level Python.
+also a loss of the typical conveniences with high-level Python. While Compyle
+does not allow arbitrary Python code, since the code is still written in
+Python and not another language, it makes it much easier for users to write
+and manage the code.
 
 Compyle provides important parallel programming algorithms that one typically
 requires to in order to write parallel programs. These are the element-wise
@@ -118,7 +125,7 @@ are written such that the same program can be executed on both multi-core CPUs
 and GPUs with minimal or no changes to the code.
 
 This is currently not possible with any of the other tools. In addition,
-compyle has the following features:
+Compyle has the following features:
 
 - Generates either Cython or ANSI C code depending on the backend and this
   code is quite readable (to a user familiar with Cython or C). This makes it
@@ -133,13 +140,13 @@ appears that copperhead is no longer under development, the package has no
 commits after 2013 and is not available on PyPI (another unrelated package
 with the same name is available). While it does support execution via C++ and
 CUDA, it does not support OpenCL. We were not aware of copperhead until very
-recently and are likely to try and incorporate ideas from it into compyle.
+recently and are likely to try and incorporate ideas from it into Compyle.
 
 Compyle is actively used by a non-trivial, open source, SPH framework called
 PySPH_ and discussed in some detail in :cite:`pysph2019` and :cite:`pysph16`.
 Compyle makes it possible for users to write their SPH codes in high-level
 Python and have it executed on multi-core and GPU accelerators with negligible
-changes to their code. Unfortunately, compyle is not used much outside of this
+changes to their code. Unfortunately, Compyle is not used much outside of this
 context, so while it does solve many problems, it is still under heavy
 development.
 
@@ -163,13 +170,14 @@ show how they allow us to solve non-trivial problems.
 .. _pybind11: https://pybind11.readthedocs.io/
 .. _cppimport: https://github.com/tbenthompson/cppimport
 .. _copperhead: https://github.com/bryancatanzaro/copperhead
+.. _Cython: https://cython.org/
 
 
 High-level overview
 --------------------
 
 We now provide a high-level overview of Compyle and its basic approach. This
-is helpful when using compyle.
+is helpful when using Compyle.
 
 It is important to keep in mind that Compyle does **not** provide a greater
 abstraction of the hardware but allows a user to write code in pure Python and
@@ -192,10 +200,10 @@ Compyle does not provide support for any high level Python and only works with
 a highly restricted Python syntax. While this is not very user-friendly, we
 find that in practice this is vitally important as it ensures that the code
 users write will run efficiently and seamlessly execute on both a CPU and a
-GPU with minimum or ideally no modifications. In addition, compyle allows
+GPU with minimum or ideally no modifications. In addition, Compyle allows
 users to generate code using mako templates in order to maximize code reuse.
-Since compyle performs source transpilation, it is also possible to use
-compyle as a code-generation engine and put together code from pure Python to
+Since Compyle performs source transpilation, it is also possible to use
+Compyle as a code-generation engine and put together code from pure Python to
 build fairly sophisticated computational engines.
 
 The functionality that Compyle provides falls broadly in two categories,
@@ -210,7 +218,7 @@ The functionality that Compyle provides falls broadly in two categories,
   and execute Cython code, and also create and execute a GPU kernel. These
   features are not discussed in this article.
 
-In general the subset of Python that compyle supports are:
+In general the subset of Python that Compyle supports are:
 
 - Functions with a C-syntax, this means no default or keyword arguments.
 
@@ -243,14 +251,14 @@ In what follows we provide a high-level introduction to the basic parallel
 algorithms in the context of the prototypical molecular dynamics problem. By
 the end of the article we show how easy it is to write the code with Compyle
 and have it execute on multi-core CPUs and GPGPUs. The programs we document
-here are also available as part of the compyle examples. We provide a
+here are also available as part of the Compyle examples. We provide a
 convenient notebook on google colab where users can run the simple examples on
 a GPU as well.
 
 Installation
 -------------
 
-Installation of compyle is by itself straightforward and this can be done with
+Installation of Compyle is by itself straightforward and this can be done with
 pip_ using::
 
   pip install compyle
@@ -259,7 +267,7 @@ For execution on a CPU, Compyle depends on Cython and a C++ compiler on the
 local machine. Multi-core execution requires OpenMP to be available. Detailed
 instructions for installation are available at the `compyle installation
 documentation <https://compyle.readthedocs.io/en/latest/installation.html>`_.
-For execution on a GPU compyle requires that either PyOpenCL_ or PyCUDA_ be
+For execution on a GPU Compyle requires that either PyOpenCL_ or PyCUDA_ be
 installed. It is possible to install the required dependencies using the
 extras argument as follows::
 
@@ -313,7 +321,7 @@ in the following sequence:
 3. The velocities are then updated by another half a step.
 
 In the simplest implementation of this, all particles influence all other
-particles. This can be implemented very easily in Python and compyle. Our
+particles. This can be implemented very easily in Python and Compyle. Our
 implementation will be parallel from the get-go and will work on both CPUs and
 GPUs.
 
@@ -334,7 +342,7 @@ Elementwise
 
 An elementwise operation can be thought of as a parallel for loop. It can be
 used to map every element of an input array to a corresponding output. Here is
-a simple elementwise function implemented using compyle to execute step 1 of
+a simple elementwise function implemented using Compyle to execute step 1 of
 the above algorithm.
 
 .. code-block:: python
@@ -449,7 +457,7 @@ The simulation can then be executed simply as follows,
 
 We have used a fixed wall non-periodic boundary condition for our
 implementation. The details on the implementation of the boundary condition
-can be found in the example section of compyle's github repository
+can be found in the example section of Compyle's github repository
 `here <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/md_simple.py>`_.
 
 The backend used can be changed using the following code::
@@ -481,7 +489,7 @@ value :math:`a_0 \oplus a_1 \oplus \cdots \oplus a_{n-1}`.
 
 Compyle also allows users to give a map expression to map the input before
 applying the reduction operator. The total energy of our system can thus be
-found as follows using reduction operator in compyle.
+found as follows using reduction operator in Compyle.
 
 .. code-block:: python
 
@@ -540,7 +548,7 @@ we do not need to change the solver to do this. Our implementation is about
 typically expected.
 
 This is in itself remarkable given that all we do to run on the GPU or CPU is
-to simply set the appropriate backend. In most of the compyle examples, we use
+to simply set the appropriate backend. In most of the Compyle examples, we use
 a command line argument to switch the backend. So with exactly the same code
 we are able to immediately run our program fully in parallel and have it run
 on both multi-core CPUs as well as GPUs.
@@ -584,7 +592,7 @@ following array
    y = \left(a_0, (a_0 \oplus a_1), \cdots, (a_0 \oplus a_1 \oplus \cdots
    \oplus a_{n-1}) \right)
 
-The scan semantics in compyle are similar to those of the
+The scan semantics in Compyle are similar to those of the
 :code:`GenericScanKernel` in PyOpenCL. This allows us to construct generic
 scans by having an input expression, an output expression and a scan operator.
 The input function takes the input array and the array index as arguments and
@@ -663,8 +671,9 @@ coordinates :math:`c = (m, n)`, these 9 bins will be,
 The idea is that for each particle we will iterate over all particles in these
 9 bins and check if the distance between the particle and the query particle
 is less than 3. The inter-particle force will be computed only then between
-the two particles. To implement this, we first find the bin to which each
-particle belongs. This is done as follows,
+the two particles. This algorithm is often called a nearest-neighbor particle
+search (NNPS) algorithm. To implement this, we first find the bin to which
+each particle belongs. This is done as follows,
 
 .. math::
 
@@ -789,21 +798,21 @@ Performance comparison
     Speed up using :math:`O(N)` over :math:`O(N^2)` approach.
     :label:`nnps-simple`
 
-Figure :ref:`speedup-nnps` shows the speedup relative to serial code running
-using Cython for the OpenCL and CUDA backends using the NNPS algorithm and
-Figure :ref:`time-gpu` shows the time taken for these simulations. It can be seen
-that the algorithm is linear for large values of number of particles. We again
-get more than a 100x speedup using the GPU over a single CPU core. Note that
-on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 5
-million particles in less than a second, showing the excellent performance
-attained.
+Figure :ref:`speedup-nnps` shows the speedup achieved OpenCL and CUDA backends
+running on a GPU relative to serial code running using Cython (on a single CPU
+core) for the linear version of the algorithm. Figure :ref:`time-gpu` shows
+the time taken for these simulations. It can be seen that the algorithm is
+linear for large values of number of particles. We again get more than a 100x
+speedup using the GPU over a single CPU core. Note that on the NVIDIA P100 GPU
+we are able to run a simulation with 25 timesteps for 5 million particles in
+less than a second, showing the excellent performance attained.
 
 Figure :ref:`time-nnps-vs-simple` shows the time taken for simulation using
 :math:`O(N)` and :math:`O(N^2)` approach.
-Figure :ref:`nnps-simple` shows the speed up acheived by using the 
+Figure :ref:`nnps-simple` shows the speed up acheived by using the
 :math:`O(N)` algorithm as compared to the
 :math:`O(N^2)` algorithm using the serial cython backend.
-We have about a 100 fold speed up with the improved algorithm for only 
+We have about a 100 fold speed up with the improved algorithm for only
 32,000 particles.
 
 The performance of the algorithm can be further improved by aligning the
@@ -816,7 +825,7 @@ While our code is implemented in 2D it is relatively straightforward to extend
 this to three dimensions.
 
 All of the code discussed above is available in the examples directory of the
-compyle repository `here
+Compyle repository `here
 <https://github.com/pypr/compyle/blob/master/examples/molecular_dynamics/>`__.
 All of the code, with two different NNPS implementations, and featuring a
 command line interface, comes to around 500 lines of code. This is quite
@@ -828,18 +837,21 @@ code changes.
 Limitations
 ------------
 
-While compyle is really powerful and convenient, it does use a rather verbose
+While Compyle is really powerful and convenient, it does use a rather verbose
 and low-level syntax. In practice we have found that this is not a major
 problem. The more serious issue is the fact that we cannot directly use
 external libraries in a platform neutral way. For example, there are ways to
 use an external OpenCL or CUDA library but this will not be usable on a CPU.
 Obviously one cannot use normal Python code and use basic Python data
-structures. Furthermore, one cannot use well established libraries like scipy
-from within the parallel constructs. These are limitations that are beyond the
-scope of compyle at this point.
+structures. This is because the Python data structures would need to be
+implemented in the target language. Furthermore, one cannot use well
+established libraries like scipy from within the parallel constructs. The
+reason for this is that scipy and other libraries are not necessarily
+available for use on a GPU or even on multi-core CPUs. These are limitations
+that are beyond the scope of Compyle at this point.
 
-The low-level API that compyle provides turns out to be quite an advantage as
-compyle code is usually very fast the first time it runs. This is because it
+The low-level API that Compyle provides turns out to be quite an advantage as
+Compyle code is usually very fast the first time it runs. This is because it
 will refuse to run any code that uses Python objects. By forcing the user to
 write the algorithms conforming to the constraints makes the code efficient.
 It also forces the user to think along the lines of parallel algorithms. This
@@ -856,7 +868,7 @@ for community contributions eventually.
 Future work
 -------------
 
-There are several improvements that are planned for compyle.
+There are several improvements that are planned for Compyle.
 
 - The code is still not very clean and a lot of internal cleanup is necessary.
   This is especially true of the Cython backend which has grown organically
@@ -866,7 +878,7 @@ There are several improvements that are planned for compyle.
 - The Cython backend may be eventually replaced using pybind11_ if possible.
 - The API requires some cleanup in many places. We also hope to look at the
   copperhead_ package to improve our API.
-- While compyle does support simple structs, this API is still not clean
+- While Compyle does support simple structs, this API is still not clean
   enough to be used in general.
 - We also hope to add support for simple "objects" that would allow users to
   compose their libraries in a more object oriented manner. This would also
@@ -874,7 +886,7 @@ There are several improvements that are planned for compyle.
   an easy way.
 
 There are many other improvements, and features we are considering and hope to
-implement as time permits. Despite its many warts, we already find compyle to
+implement as time permits. Despite its many warts, we already find Compyle to
 be remarkably useful.
 
 
@@ -882,11 +894,13 @@ Conclusions
 -----------
 
 In this article we have shown how one can implement a two-dimensional
-molecular dynamics solver using compyle. The code is parallel from the
+molecular dynamics solver using Compyle. The code is parallel from the
 beginning and runs effortlessly on multi-core CPUs and GPUs without any
 changes. We have used the example to illustrate the main parallel algorithms
-that compyle provides, i.e. elementwise, reduction, and scans. We show how a
-non-trivial optimization of the example problem is possible using a scan.
+that Compyle provides, i.e. elementwise, reduction, and scans. We show how a
+non-trivial optimization of the example problem is possible using a scan. We
+have not discussed many other features of Compyle and urge readers to go over
+the Compyle documentation to learn more.
 
 The results clearly show that we are able to write the code once and have it
 run on massively parallel architectures. This is very convenient and this is
