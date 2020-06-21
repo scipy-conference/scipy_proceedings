@@ -1,14 +1,17 @@
 :author: Jim Pivarski
 :email: pivarski@princeton.edu
 :institution: Princeton University
+:orcid: 0000-0002-6649-343X
 
 :author: Ianna Osborne
 :email: Ianna.Osborne@cern.ch
 :institution: Princeton University
+:orcid: 0000-0002-6955-1033
 
 :author: Pratyush Das
 :email: reikdas@gmail.com
 :institution: Institute of Engineering and Management
+:orcid: 0000-0001-8140-0097
 
 :author: Anish Biswas
 :email: anishbiswas271@gmail.com
@@ -17,6 +20,7 @@
 :author: Peter Elmer
 :email: Peter.Elmer@cern.ch
 :institution: Princeton University
+:orcid: 0000-0001-6830-3356
 
 ------------------------------------------------
 Awkward Array: JSON-like data, NumPy-like idioms
