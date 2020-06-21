@@ -16,6 +16,7 @@
 :author: Jim Pivarski
 :email: pivarski@princeton.edu
 :institution: Princeton University
+:orcid: 0000-0002-6649-343X
 
 
 -------------------------------------------------------
