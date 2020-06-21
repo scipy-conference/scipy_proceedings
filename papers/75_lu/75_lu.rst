@@ -1,3 +1,4 @@
+
 :author: Haw-minn Lu
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
@@ -576,8 +577,8 @@ This should function identically as the reference model because it tests
 that the qsoftmax function operates as expected (which it does in this case).
 This is useful for troubleshooting if you have difficulty.
 
-Examples on Quasiorthogonal Basis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Examples on Quasiorthonormal Basis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 To recap, for the two QOE experiments we take a set of 10 mutually
 quasiorthonormal vectors from a four dimensional space, and from a seven
@@ -642,28 +643,44 @@ Similarly, figure :ref:`fig:qortho` shows the same type of distribution of rando
 
    Softmax on a quasiorthogonal basis :label:`fig:qortho`
    
-It is clear from equation :ref:`eq:gsoftmax` that the exponential term in the numerator  dominates which is why the softmax is effective.  But consider if :math:`\mathbf{z}\cdot\mathbf{u}_i` is much less than zero such as :math:`\mathbf{z}=-5 \mathbf{u}_i`, then the exponential numerator for that term would severely attenuate the output even though the :math:`\mathbf{z}` lies along the same direction as :math:`\mathbf{u}_i`. 
-Since the :math:`\mathbf{z}\cdot\mathbf{u}_j=0` for all other *j*'s, it would still decode to :math:`i`, but because the :math:`i`-th term is so small, any noise could lead to decoding to a different value.
 
-So why bring all this up? Clearly, values encoding to negative values along a
-basis vector would prove problematic. But it offers the prospect of further
-reducing dimensionality by encoding to not just the basis a vector but also its
-antipodal vector. To further our graphical example, in figure
-:ref:`fig:sphere`, we use :math:`(1,0)`, :math:`(0,1)` and their antipodal
-vectors :math:`(-1,0)` and :math:`(0,-1)` to encode values and apply a softmax
-using those vectors.
+Because the expectation on one-hot encoding is that the value of a
+given vector component be either :math:`0` or :math:`1` and that
+negative values are not expected even in a noisy environment. This is
+evident in figure :ref:`fig:ortho`, where the results are all in the
+first quadrant (i.e. no negative values). This begs the question could
+the negative values be exploited with minimal detrimental effects. 
+
+While equation :ref:`eq:qsoftmax` is intended to accept a
+quasiorthonormal basis, functionally there is no reason why this
+equation need be limited to a quasiorthonormal basis. The equation
+still make sense if :math:`\{\mathbf{q}_i\}` were replaced by any collection of
+normal vectors. However, the question remains as to how well that
+would work. So to exploit the negative regions of the coordinate
+system, we can see graphically what would happen if we add the
+antipodal vectors :math:`(-1,0)` and :math:`(0,-1)` to our standard
+orthonormal basis, :math:`\{(1,0), (0,1)\}`. Applying the same type of
+random vector analysis to the qsoftmax function we get figure
+:ref:`fig:sphere`. 
 
 .. figure:: 4.pdf
 
-            Softmax on encoded values using an orthonormal basis and antipodal points :label:`fig:sphere`
+      Softmax on encoded values using an orthonormal basis and antipodal points :label:`fig:sphere`
 
-Once again we see the power of the exponential term and most points move very close to one of the four encoding vectors.
 
-Of course nothing comes for free, if a prediction gets confused
-between two antipodal unit vectors, the result could be that they cancel
-out and allow the noise to dictate the resulting category. By contrast,
-for one-hot encoding, the result would get decoded as one of the two
-possible values.
+So why not just use a random set of normal vectors? Despite the
+intuition a truly random selection will have some
+clustering. Geometrically, the set of normal vectors should be as
+evenly distributed as possible which is precisely what spherical codes
+are.
+
+While it is likely that spherical codes for encoding work fine as an
+output such as in classification, there is an implicit relationship
+imposed by antipodal vector pairs especially when used as an input to
+a system. If you consider the spherical encoding offered in Table
+:ref:`tab:spherecar`, the vector for Toyota is the negative of the
+vector for Honda. This is essentially telling any number system that
+Honda is the negative of Toyota, which may not be desirable.
 
 With this risk in mind, we can further extend the idea to a
 quasiorthogonal basis by adding the antipodal vectors for each vector in
