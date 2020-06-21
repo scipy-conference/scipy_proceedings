@@ -20,7 +20,7 @@ Introduction
 
 While most popular machine learning methods such as deep learning
 require numerical data as input, categorical data is very common.
- For example, a person's vitals could be a combination of both,
+For example, a person's vitals could be a combination of both,
 they could include height, weight (numerical) and gender, race
 (categorical). The challenge is to convert the categorical data into a
 vector of some sort. 
@@ -411,7 +411,7 @@ and
 
    \mathrm{qsoftmax}(\mathbf{z}) = \mathrm{softmax}(\mathbf{Qz}).
 
-The ``tensorflow`` and ``pytorch`` both supply optimized ``softmax`` functions
+The ``tensorflow`` and ``pytorch`` packages both supply optimized ``softmax`` functions
 as does ``scipy`` when using ``numpy`` arrays, making implementation of QOE not
 only easy, but efficient. Not only will using native functions accelerated
 performance, it can exploit features such as auto differentiation built into
