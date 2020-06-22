@@ -648,8 +648,8 @@ Because the expectation on one-hot encoding is that the value of a
 given vector component be either :math:`0` or :math:`1` and that
 negative values are not expected even in a noisy environment. This is
 evident in figure :ref:`fig:ortho`, where the results are all in the
-first quadrant (i.e. no negative values). This begs the question could
-the negative values be exploited with minimal detrimental effects. 
+first quadrant (i.e. no negative values). This raises the question could
+the negative values be exploited with minimal detrimental effects?
 
 While equation :ref:`eq:qsoftmax` is intended to accept a
 quasiorthonormal basis, functionally there is no reason why this
