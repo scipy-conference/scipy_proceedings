@@ -1,6 +1,7 @@
 :author: Nina Miolane
 :email: nmiolane@stanford.edu
 :institution: Stanford University
+:orcid: 0000-0002-1200-9024
 :corresponding:
 
 :author: Nicolas Guigui
@@ -11,6 +12,9 @@
 
 :author: Christian Shewmake
 :email: cshewmake2@gmail.com
+
+:author: Hatem Hajri
+:email: hatem.hajri@irt-systemx.fr
 
 :author: Daniel Brooks
 :email: daniel.brooks@lip6.fr
@@ -35,9 +39,6 @@
 
 :author: Niklas Koep
 :email: niklas.koep@gmail.com
-
-:author: Hatem Hajri
-:email: hatem.hajri@irt-systemx.fr
 
 :author: Yann Cabanes
 :email: yann.cabanes@gmail.com
