@@ -70,7 +70,7 @@ Introduction to Geometric Learning in Python with Geomstats
 
 .. class:: abstract
 
-There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we introduce the open-source Python package :code:`geomstats` and present hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`www.geomstats.ai`.
+There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we introduce the open-source Python package :code:`geomstats` and present hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`geomstats.ai`.
 
 
 .. class:: keywords
@@ -120,7 +120,7 @@ then, in the Python script:
 
     INFO: Using numpy backend
 
-Modules related to :code:`matplotlib` and :code:`logging` should be imported during setup too. More details on setup can be found on the documentation website: :code:`www.geomstats.ai`.
+Modules related to :code:`matplotlib` and :code:`logging` should be imported during setup too. More details on setup can be found on the documentation website: :code:`geomstats.ai`.
 
 Tutorial: Statistics and Geometric Statistics
 ---------------------------------------------
@@ -521,37 +521,24 @@ This and several other datasets can be found in the :code:`datasets.data` module
 
 .. table:: Embedding parameters :label:`tabparam`
 
-    +--------------+------------------------------------------------+
-    | Parameter    | Description                                    |
-    +==============+================================================+
-    | dim          | Dimensions of the manifold used for embedding  |
-    +--------------+------------------------------------------------+
-    | max_epochs   | Number of iterations for learning the embedding|
-    +--------------+------------------------------------------------+
-    | lr           | Learning rate                                  |
-    +--------------+------------------------------------------------+
-    | n_negative   | Number of negative samples                     |
-    +--------------+------------------------------------------------+
-    | context_size | Size of the considered context                 |
-    |              | for each node of the graph                     |
-    +--------------+------------------------------------------------+
+    +--------------+-----------------------------------------------------+-------+
+    | Parameter    | Description                                         | Value |
+    +==============+=====================================================+=======+
+    | dim          | Dimensions of the manifold used for embedding       |   2   |
+    +--------------+-----------------------------------------------------+-------+
+    | max_epochs   | Number of iterations for learning the embedding     |  15   |
+    +--------------+-----------------------------------------------------+-------+
+    | lr           | Learning rate                                       |  0.05 |
+    +--------------+-----------------------------------------------------+-------+
+    | n_negative   | Number of negative samples                          |   2   |
+    +--------------+-----------------------------------------------------+-------+
+    | context_size | Size of the considered context                      |   1   |
+    |              | for each node of the graph                          |       |
+    +--------------+-----------------------------------------------------+-------+
+    | karate_graph | An instance of the Graph class returned by                  |
+    |              | function ``load_karate_graph`` in ``datasets.utils``        |
+    +--------------+-----------------------------------------------------+-------+
 
-
-.. code:: python
-
-    from geomstats.datasets
-        import graph_data_preparation as gdp
-
-    dim = 2
-    max_epochs = 15
-    lr = .05
-    n_negative = 2
-    context_size = 1
-    karate_graph = gdp.Graph(
-        graph_matrix_path=
-            geomstats.datasets.utils.KARATE_PATH,
-        labels_path=
-            geomstats.datasets.utils.KARATE_LABELS_PATH)
 
 The karate club network was collected from the members of a
 university karate club by Wayne Zachary in 1977. Each node represents a
@@ -559,7 +546,7 @@ member of the club, and each edge represents an undirected relation
 between two members. An often discussed problem using this dataset is to
 predict the two groups into which the karate club split after an
 argument between two teachers. Figure :ref:`karafig` displays the dataset graph.
-Further information about the dataset is
+The dataset is loaded and further information is
 displayed to provide insight into its complexity.
 
 .. figure:: learning_graph_structured_data_h2_files/karate_graph.png
@@ -571,6 +558,7 @@ displayed to provide insight into its complexity.
 
 .. code:: python
 
+    karate_graph = data_utils.load_karate_graph()
     nb_vertices_by_edges =\
         [len(e_2) for _, e_2 in
             karate_graph.edges.items()]
