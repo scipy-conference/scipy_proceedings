@@ -228,7 +228,18 @@ Performance when Filling
    ============ =================== ====== =================== =====
 
 
-Performance was a key design goal. In Table :ref:`perftable` you can see a comparison of filling methods with NumPy. The first comparison, a 1D histogram, shows a nearly 2x speedup compared to NumPy on a single core. For a 1D ``Regular`` axes, NumPy has a custom fill routine that takes advantage of the regular binning to avoid an edge lookup. If you use multiple cores, you can get an extra 2x-4x speedup. Note that histogramming is not trivial to parallelize. Internally, boost-histogram is just using simple Python threading and relying on releasing the GIL while it fills multiple histograms; the histograms are then added into your current histogram. The overhead of doing the copy must be small compared to the fill being done.
+A histogram can be viewed as a lossy data compression tool; you lose the exact
+details of each data point, but you have a have a representation that does not
+depend on the number of data points and has several very useful properties for
+computation.  One common use beyond plotting is distribution fitting; you can
+fit an arbitrarily large number of data points to a distribution as long as you
+choose a binning dense enough to capture the details of your distribution
+function. The performance of the fit is based on the number of bins, rather
+than the number of measurements made. Many distribution fitting packages
+available outside of HEP, such as lmfit [LMFIT]_, are designed to work with
+binned data, and binned fits are common in HEP as well.
+
+Filling performance was a key design goal for boost-histogram. In Table :ref:`perftable` you can see a comparison of filling methods with NumPy. The first comparison, a 1D histogram, shows a nearly 2x speedup compared to NumPy on a single core. For a 1D ``Regular`` axes, NumPy has a custom fill routine that takes advantage of the regular binning to avoid an edge lookup. If you use multiple cores, you can get an extra 2x-4x speedup. Note that histogramming is not trivial to parallelize. Internally, boost-histogram is just using simple Python threading and relying on releasing the GIL while it fills multiple histograms; the histograms are then added into your current histogram. The overhead of doing the copy must be small compared to the fill being done.
 
 If we move down the table to the 2D case, you will see Boost-histogram pull away from NumPy's 2D regular bin edge lookup with an over 10x speedup. This can be further improved to about 30x using threads. In both cases, boost-histogram is not actually providing specialized code for the 1D or 2D cases; it is the same variadic vector that it would use for any number and any mixture of axes. So you can expect excellent performance that scales well with the complexity of your problem.
 
@@ -358,6 +369,11 @@ References
         LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015),
         `DOI:10.1145/2833157.2833162 <https://doi.org/10.1145/2833157.2833162>`
 
+.. [LMFIT] Matthew Newville et al.
+        *LMFIT: Non-Linear Least-Square Minimization and Curve-Fitting for Python*,
+        Zenodo (2020),
+        DOI:10.5281/zenodo.3814709
+
 .. [PyBind] Wenzel Jakob, Jason Rhinelander, Dean Moldovan.
         *pybind11 -- Seamless operability between C++11 and Python*,
         https://github.com/pybind/pybind11
@@ -365,5 +381,6 @@ References
 .. [Awkward] Jim Pivarski, Peter Elmer, David Lange. *Awkward Arrays in Python, C++, and Numba*
         Preprint `arXiv:2001.06307 <https://arxiv.org/abs/2001.06307>`_
 
-.. [CIBW] Joe Rickerby, Yannick Jadoul, Matthieu Darbois. *cibuildwheel*,
+.. [CIBW] Joe Rickerby et al.
+        *cibuildwheel*,
         https://github.com/joerick/cibuildwheel
