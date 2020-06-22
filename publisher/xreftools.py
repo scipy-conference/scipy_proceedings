@@ -147,6 +147,7 @@ class XrefMeta:
         """Build metadata for all of the conference papers in a proceedings"""
         paper = xml.SubElement(conference, "conference_paper")
         paper_contributors = xml.SubElement(paper, 'contributors')
+        orcid_map = entry.get('author_orcid_map', {})
         for index, contributor in enumerate(entry.get('author', [])):
             # CrossRef has two kinds of authors: {'first', 'additional'}
             person_name = xml.SubElement(paper_contributors, 'person_name', contributor_role='author', sequence="additional" if index else "first") # first index value is 0
@@ -155,6 +156,9 @@ class XrefMeta:
             given_name.text = first_name
             surname = xml.SubElement(person_name, 'surname')
             surname.text = last_name
+            if contributor in orcid_map:
+                orcid = xml.SubElement(person_name, 'ORCID')
+                orcid.text = 'https://orcid.org/' + orcid_map[contributor]
         titles = xml.SubElement(paper, 'titles')
         title = xml.SubElement(titles, 'title')
         title.text = entry.get('title', '')
