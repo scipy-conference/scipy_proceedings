@@ -80,19 +80,22 @@ There is a growing interest in leveraging differential geometry in the machine l
 Introduction
 ------------
 
-Data on manifolds arise naturally in different fields. Hyperspheres model directional data in molecular and protein biology :cite:`Kent2005UsingStructure` and some aspects of 3D shapes :cite:`Jung2012AnalysisSpheres, Hong2016`. Density estimation on hyperbolic spaces arises to model electrical impedances :cite:`Huckemann2010MobiusEstimation`, networks :cite:`Asta2014GeometricComparison` or reflection coefficients extracted from a radar signal :cite:`Chevallier2015ProbabilityProcessing`. Symmetric Positive Definite (SPD) matrices are used to characterize data from Diffusion Tensor Imaging (DTI) :cite:`Pennec2006b, Yuan2012` and functional Magnetic Resonance Imaging (fMRI) :cite:`Sporns2005TheBrain`. Examples of manifold data are numerous. As a result, there is a growing interest in leveraging differential geometry in the machine learning community, supported by the growing fields of Geometric Learning and Geometric Deep Learning :cite:`Bronstein2017`.
+Data on manifolds arise naturally in different fields. Hyperspheres model directional data in molecular and protein biology :cite:`Kent2005UsingStructure` and some aspects of 3D shapes :cite:`Jung2012AnalysisSpheres, Hong2016`. Density estimation on hyperbolic spaces arises to model electrical impedances :cite:`Huckemann2010MobiusEstimation`, networks :cite:`Asta2014GeometricComparison` or reflection coefficients extracted from a radar signal :cite:`Chevallier2015ProbabilityProcessing`. Symmetric Positive Definite (SPD) matrices are used to characterize data from Diffusion Tensor Imaging (DTI) :cite:`Pennec2006b, Yuan2012` and functional Magnetic Resonance Imaging (fMRI) :cite:`Sporns2005TheBrain`. These manifolds are curved and differentiable generalizations of vector spaces. Learning from data on manifolds thus requires techniques from the mathematical discipline of differential geometry. As a result, there is a growing interest in leveraging differential geometry in the machine learning community, supported by the fields of Geometric Learning and Geometric Deep Learning :cite:`Bronstein2017`.
 
 Despite this need, the adoption of differential geometric computations has been inhibited by the lack of a reference implementation. Project code implementing geometric tools are often custom-built for specific problems and are not easily reused. Some Python packages do exist, but these mainly focus on optimization (Pymanopt :cite:`Townsend2016Pymanopt:Differentiation`, Geoopt :cite:`Becigneul2018RiemannianMethods, Kochurov2019Geoopt:Optim`, and McTorch :cite:`Meghwanshi2018McTorchLearning`), are dedicated to a single manifold (PyRiemann :cite:`Barachant2015PyRiemann:Interface`, PyQuaternion :cite:`Wynn2014PyQuaternions:Quaternions`, PyGeometry :cite:`Censi2012PyGeometry:Manifolds.`), or lack unit-tests and continuous integration (TheanoGeometry :cite:`Kuhnel2017ComputationalTheano`). An open-source, low-level implementation of differential geometry and associated learning algorithms for manifold-valued data is thus thoroughly welcome.
 
-We present :code:`geomstats`, an open-source Python package built for machine learning with data on non-linear manifolds: a field called Geometric Learning. We provide object-oriented and extensively unit-tested implementations of essential manifolds, operations, and learning methods with support for different execution backends - namely NumPy, PyTorch, and TensorFlow. This paper illustrates the use of :code:`geomstats` through hands-on introductory tutorials of Geometric Learning. These tutorials enable users: (i) to build intuition for differential geometry through a hands-on approach which is not often provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly without delving into the lower-level computational or mathematical details. We emphasize that the tutorials are not meant to replace theoretical expositions of differential geometry and geometric learning :cite:`Postnikov2001,Pennec2019RiemannianAnalysis`. Rather, they will complement them with an intuitive, didactic, and engineering-oriented approach.
+:code:`Geomstats` is an open-source Python package built for machine learning with data on non-linear manifolds :cite:`MiolaneGeomstatsLearning`: a field called Geometric Learning. The library provides object-oriented and extensively unit-tested implementations of essential manifolds, operations, and learning methods with support for different execution backends - namely NumPy, PyTorch, and TensorFlow. This paper illustrates the use of :code:`geomstats` through hands-on introductory tutorials of Geometric Learning. These tutorials enable users: (i) to build intuition for differential geometry through a hands-on approach which is not often provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly without delving into the lower-level computational or mathematical details. We emphasize that the tutorials are not meant to replace theoretical expositions of differential geometry and geometric learning :cite:`Postnikov2001,Pennec2019RiemannianAnalysis`. Rather, they will complement them with an intuitive, didactic, and engineering-oriented approach.
 
 
 Presentation of Geomstats
 -------------------------
 
-The package :code:`geomstats` is organized into two main modules: :code:`geometry` and :code:`learning`. The module :code:`geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, etc.
+The package :code:`geomstats` is organized into two main modules: :code:`geometry` [#]_ and :code:`learning` [#]_. The module :code:`geometry` implements low-level differential geometry with an object-oriented approach and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, among others.
 
-The module :code:`learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixins: :code:`BaseEstimator`, :code:`ClassifierMixin`, :code:`RegressorMixin`, etc. This module provides implementations of Frechet mean estimators, K-means, and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
+.. [#] https://github.com/geomstats/geomstats/tree/master/geomstats/geometry.
+.. [#] https://github.com/geomstats/geomstats/tree/master/geomstats/learning.
+
+The module :code:`learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixins, such as :code:`BaseEstimator`, :code:`ClassifierMixin`, or :code:`RegressorMixin`. This module provides implementations of Frechet mean estimators, K-means, and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
 
 The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, and incorporates both TensorFlow and PyTorch backends to allow for GPU acceleration. The package comes with a :code:`visualization` module that enables users to visualize and further develop an intuition for differential geometry.
 
@@ -130,9 +133,7 @@ arrays.
 Now consider a non-linear space: a manifold. A manifold
 :math:`M` of dimension :math:`m` is a space that is possibly
 curved but that looks like an :math:`m`-dimensional vector space in a small
-neighborhood of every point. A sphere, like the earth, is a good example of a manifold.
-What happens to the usual statistical theory when the data does not
-naturally belong to a linear space? For example, what happens if we want to perform
+neighborhood of every point. A sphere, like the earth, is a good example of a manifold. What happens when we apply statistical theory defined for linear vector spaces to data that does not naturally belong to a linear space? For example, what happens if we want to perform
 statistics on the coordinates of world cities lying on the earth's surface: a
 sphere? Let us compute the mean of two data points on the sphere using the traditional definition of the mean.
 
@@ -142,9 +143,10 @@ sphere? Let us compute the mean of two data points on the sphere using the tradi
     from geomstats.geometry.hypersphere import \
         Hypersphere
 
+    n_samples = 2
     sphere = Hypersphere(dim=2)
     points_in_manifold = sphere.random_uniform(
-         n_samples=2)
+         n_samples=n_samples)
 
     linear_mean = gs.sum(
         points_in_manifold, axis=0) / n_samples
@@ -174,7 +176,7 @@ the definition of “mean” to manifolds: the Fréchet mean.
     frechet_mean = estimator.estimate_
 
 
-You can observe that the syntax of this code snippet follows the syntax of :code:`scikit-learn`'s learning algorithms. We plot the result in Figure :ref:`fig:frechetmean`. Observe that the Fréchet mean now belongs to the surface of
+Notice in this code snippet that :code:`geomstats` provides classes and methods whose API will be instantly familiar to users of the widely-adopted :code:`scikit-learn`. We plot the result in Figure :ref:`fig:frechetmean`. Observe that the Fréchet mean now belongs to the surface of
 the sphere!
 
 .. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_22_0.png
@@ -183,7 +185,7 @@ the sphere!
 
    Fréchet mean of two points on a manifold, the sphere :label:`fig:frechetmean`.
 
-Beyond the computation of the mean, Geometric Learning provides learning algorithms on manifolds by taking into account their specific geometric structure. Geometric Learning is therefore the child of two major pillars: Geometry and Machine Learning.
+Beyond the computation of the mean, :code:`geomstats` provides statistics and learning algorithms on manifolds that leverage their specific geometric structure. Such algorithms rely on elementary operations that are introduced in the next tutorial.
 
 Tutorial: Elementary Operations for Data on Manifolds
 -----------------------------------------------------
@@ -254,22 +256,10 @@ Correspondingly, on manifolds, the logarithm map is the operation that generaliz
 
 Using the exponential and logarithm maps instead of linear addition and subtraction, many learning algorithms can be generalized to manifolds. We emphasize that these operations depend on the "Riemannian metric" chosen for a given manifold. The metric defines the notion of geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere that would have changed the distance between the points: with a different metric, the "sphere" could, for example, look like an ellipsoid.
 
-We presented the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. The next tutorials show more involved examples of learning algorithms that rely on these elementary operations on manifolds.
+We illustrated the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. Consequently, :code:`geomstats` also implements learning algorithms on manifolds, taking into account their specific geometric structure by relying on the operations we just introduced. The next tutorials show more involved examples of such geometric learning algorithms.
 
 Tutorial: Classification of SPD Matrices
 ----------------------------------------
-
-
-SPD matrices in the literature
-******************************
-
-Before diving into the tutorial, let us recall a few applications of symmetric positive definite (SPD) matrices
-in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input of or output to a given problem. In Diffusion Tensor Imaging (DTI) for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices representing ellipsoids in their structure. These ellipsoids spatially characterize the diffusion of water molecules in various tissues. Each DTI thus consists of a field of SPD matrices, where each point in space corresponds to an SPD matrix. These matrices then serve as inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression to compare fiber tracts between HIV subjects and a control group. Similarly, in functional Magnetic Resonance Imaging (fMRI), researchers have modeled brain activity using SPD matrices :cite:`wang2013disruptedDisease`.
-
-More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
-
-Lastly, SPD matrices have found applications in deep learning. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images which outperforms state-of-the-art methods for visual classification.
-
 
 Tutorial context and description
 ********************************
@@ -277,13 +267,23 @@ Tutorial context and description
 We demonstrate that any standard machine learning
 algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This enables the use of traditional learning algorithms.
 
-This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In functional Magnetic Resonance Imaging (fMRI), it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli (drug, pathology, patient's activity, etc.).
+This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider SPD matrices from brain connectomics data and perform a simple logistic regression. In fMRI, it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli, such as drugs or patient's activities.
+
+SPD matrices in the literature
+******************************
+
+Before diving into the tutorial, let us recall a few applications of symmetric positive definite (SPD) matrices
+in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input of or output to a given problem. In DTI for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices representing ellipsoids in their structure. These ellipsoids spatially characterize the diffusion of water molecules in various tissues. Each DTI thus consists of a field of SPD matrices, where each point in space corresponds to an SPD matrix. These matrices then serve as inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression to compare fiber tracts between HIV subjects and a control group. Similarly, in fMRI, researchers have modeled brain activity using SPD matrices :cite:`wang2013disruptedDisease`.
+
+More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
+
+Lastly, SPD matrices have found applications in deep learning. The authors of :cite:`Gao2017` show that an aggregation of learned deep convolutional features into an SPD matrix creates a robust representation of images which outperforms state-of-the-art methods for visual classification.
 
 
 Manifold of SPD matrices
 ************************
 
-Let us recall the mathematical definition of the manifold of SPD matrices. The manifold of symmetric positive definite (SPD) matrices in :math:`n` dimensions is embedded in the General Linear group of invertible matrices and defined as:
+Let us recall the mathematical definition of the manifold of SPD matrices. The manifold of SPD matrices in :math:`n` dimensions is embedded in the General Linear group of invertible matrices and defined as:
 
 .. math::
     SPD = \left\{
@@ -422,18 +422,7 @@ And with the log-Euclidean metric:
 
 We observe that the results depend on the metric used! The Riemannian metric indeed defines the notions of geodesic and distance on the manifold. Both notions are used to compute the Fréchet Mean and the logarithms. Thus, changing the metric changes the results, and some metrics may be more suitable than others for different applications. There are published results that show how useful geometry can be with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`).
 
-We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those that work with similarity matrices. With small datasets such as this one, we can easily compute the matrix of pairwise Riemannian distances:
-
- .. code:: python
-
-    pairwise_dist = []
-    for i, x in enumerate(data):
-        for y in data[i:]:
-            pairwise_dist.append(ai_metric.dist(x,y))
-    pairwise_dist = manifold.from_vector(
-        pairwise_dist)
-
-We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
+We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those relying on similarity matrices. We can compute the matrix of pairwise Riemannian distances, using the `dist` method of the Riemannian metric object. We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
 
 .. code:: python
 
@@ -454,23 +443,6 @@ We see that in this case, using pairwise distances is slightly more discriminati
 Tutorial: Learning Graph Representations with Hyperbolic Spaces
 ---------------------------------------------------------------
 
-Hyperbolic spaces and machine learning applications
-***************************************************
-
-Before going into this tutorial, let us review a few applications of hyperbolic spaces
-in the machine learning literature. Hyperbolic spaces arise in information and
-learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher
-metric densities is a hyperbolic space :cite:`1531851`. This characterization
-is used in various fields, such as in image processing, where each image pixel can be
-represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
-processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. Hyperbolic spaces can
-also be seen as continuous versions of trees and are
-therefore interesting when learning representations of hierarchical data
-:cite:`Nickel2017`. Hyperbolic Geometric Graphs (HGG) have also been suggested
-as a promising model for social networks--where the hyperbolicity appears through
-a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
-and in learning communities on large graphs :cite:`gerald2019node`.
-
 Tutorial context and description
 ********************************
 
@@ -489,6 +461,24 @@ This tutorial shows how to learn such embeddings in :code:`geomstats`
 using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
 Note that here we omit details regarding reshaping the data and creating visualizations.
 An unabridged example and a detailed notebook can be found in the GitHub repository in the ``examples`` and ``notebooks`` directories, respectively.
+
+Hyperbolic spaces and machine learning applications
+***************************************************
+
+Before going into this tutorial, let us review a few applications of hyperbolic spaces
+in the machine learning literature. Hyperbolic spaces arise in information and
+learning theory. Indeed, the space of univariate Gaussians endowed with the Fisher
+metric densities is a hyperbolic space :cite:`1531851`. This characterization
+is used in various fields, such as in image processing, where each image pixel can be
+represented by a Gaussian distribution :cite:`Angulo2014`, or in radar signal
+processing where the corresponding echo is represented by a stationary Gaussian process :cite:`Arnaudon2013`. Hyperbolic spaces can
+also be seen as continuous versions of trees and are
+therefore interesting when learning representations of hierarchical data
+:cite:`Nickel2017`. Hyperbolic Geometric Graphs (HGG) have also been suggested
+as a promising model for social networks--where the hyperbolicity appears through
+a competition between similarity and popularity of an individual :cite:`papadopoulos2012popularity`
+and in learning communities on large graphs :cite:`gerald2019node`.
+
 
 Hyperbolic space
 ****************
@@ -885,7 +875,7 @@ Figure :ref:`fig:kmeans` shows the true labels versus the predicted ones.
 Conclusion
 ----------
 
-This paper demonstrated the use of :code:`geomstats` in performing geometric learning on data belonging to manifolds. These tutorials, as well as a great many other learning examples on a variety of manifolds, can be found at :code:`geomstats.ai`. We hope that this hands-on presentation of Geometric Learning will help to further democratize the use of differential geometry in the machine learning community.
+This paper demonstrates the use of :code:`geomstats` in performing geometric learning on data belonging to manifolds. These tutorials, as well as a great many other learning examples on a variety of manifolds, can be found at :code:`geomstats.ai`. We hope that this hands-on presentation of Geometric Learning will help to further democratize the use of differential geometry in the machine learning community.
 
 Acknowledgements
 ----------------
