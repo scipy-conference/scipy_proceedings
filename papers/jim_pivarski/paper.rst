@@ -42,45 +42,37 @@ Awkward Array: JSON-like data, NumPy-like idioms
 Introduction
 ------------
 
-NumPy [1]_ is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
+NumPy [np]_ is a powerful tool for data processing, at the center of a large ecosystem of scientific software. Its built-in functions are general enough for many scientific domains, particularly those that analyze time series, images, or voxel grids. However, it is difficult to apply NumPy to tasks that require data structures beyond N-dimensional arrays of numbers.
 
-More general data structures can be expressed as JSON and processed in pure Python, but at an expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed contiguously in memory. Some expressions can be more concise in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
+More general data structures can be expressed as JSON and processed in pure Python, but at the expense of performance and often conciseness. NumPy is faster and more memory efficient than pure Python because its routines are precompiled and its arrays of numbers are packed in a regular way in contiguous memory. Some expressions are more concise in NumPy's "vectorized" notation, which describe actions to perform on whole arrays, rather than scalar values.
 
-In this paper, we will describe Awkward Array [2]_ [3]_, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. In doing so, we'll focus on the internal representation of data structures as columnar arrays, very similar to (and compatible with) Apache Arrow [4]_. The key feature of the Awkward Array library, however, is that calculations, including those that restructure data, are performed on the columnar arrays themselves, rather than instantiating objects. Since the logical data structure is implicit in the arrangement of columnar arrays and most operations only rearrange integer indexes, these functions can be precompiled for specialized data types, like NumPy.
+In this paper, we describe Awkward Array [ak1]_ [ak2]_, a generalization of NumPy's core functions to the nested records, variable-length lists, missing values, and heterogeneity of JSON-like data. The internal representation of these data structures is columnar, very similar to (and compatible with) Apache Arrow [arrow]_. But unlike Arrow, the focus of Awkward Array is to provide a suite of data manipulation routines, just as NumPy's role is focused on transforming arrays, rather than standardizing a serialization format.
 
-Motivation from particle physics
---------------------------------
+Our goal in developing Awkward Array is not to replace NumPy, but to extend the set of problems to which it can be applied. We use NumPy's extension mechanisms to generalize its interface in a way that returns identical output where the applicability of the two libraries overlap (i.e. rectilinear arrays), and the implementation of non-structure-changing, numerical math is deferred to NumPy itself. Thus, all the universal functions (ufuncs) in the SciPy project [scipy]_ and its ecosystem can already be applied to Awkward structures because they inherit NumPy and SciPy's own implementations.
 
-Awkward Array was created to make it easier to analyze particle physics data using scientific Python tools. Particle physics datasets are big and intrinsically structured: trillions of particle collisions result in thousands of particles each, grouped by type and clustered as jets. The operations to be performed depend on this structure.
+Origin and development
+----------------------
 
-The most basic operation reconstructs particles that decayed before they could be detected, using kinematic constraints on their visible decay products. For example, if a neutral kaon (:math:`K_S`) decays into two charged pions (:math:`\pi^+`, :math:`\pi^-`), the energy (:math:`E`) and momenta (:math:`\vec{p}`) of the observed pions can be combined to reconstruct the unobserved kaon's mass (:math:`m`):
+Awkward Array was intended as a way to enable particle physics analyses to take advantage of scientific Python tools. Particle physics problems are inherently structured, heavy on nested loops over variable-length lists. They also involve big data, typically tens to hundreds of terabytes per analysis. Traditionally, this required physicists to do data analysis in Fortran (with custom libraries for data structures [hydra]_ before Fortran 90) and C++, but many physicists are now moving to Python for end-stage analysis [phypy]_. Awkward Array provides the link between scalable, interactive, NumPy-based tools and the nested, variable-length data structures that physicists need.
 
-.. math::
+Since its release in September 2018, Awkward Array has become one of the most popular Python libraries for particle physics, as shown in Figure :ref:`awkward-0-popularity`. The Awkward 0.x branch was written using NumPy only, which limited its development because every operation must be vectorized for performance. We (the developers) also made some mistakes in interface design and learned from the physicists' feedback.
 
-   m_{K_S} = \sqrt{(E_{\pi^+} + E_{\pi^-})^2 - \left|\vec{p}_{\pi^+} + \vec{p}_{\pi^-}\right|^2}
-
-Since kaons have a well-defined mass, the :math:`m_{K_S}` values that correspond to real kaons form a peak in a histogram: see Figure :ref:`physics-example`. Not knowing which pions are due to kaon decays, every pair of pions in a collision event must be searched, in principle.
-
-.. figure:: figures/physics-example.pdf
+.. figure:: figures/awkward-0-popularity.pdf
    :align: center
-   :scale: 13%
-   
-   Example of a particle physics problem requiring combinatorial search: all pairs of pions in a collision event must be tested for compatibility with decay from a kaon. :label:`physics-example`
+   :scale: 58%
 
-Physicists employ many other techniques, but most of them involve combinatorial searches like this one. Since the numbers of particles of each type differ from event to event and they carry dozens of attributes that must be referenced in the combinatorial pairs, this would be a hard analysis to do in NumPy.
+   Adoption of Awkward 0.x, measured by PyPI statistics, compared to other popular particle physics packages (root-numpy, iminuit, rootpy) and popular data science packages. :label:`awkward-0-popularity`
 
-With Awkward Array, however, it would be
+Spurred by these shortcomings and the popularity of the general concept, we redesigned the library as Awkward 1.x in a half-year project starting in August 2019. The new library is a Python extension module to allow us to write custom precompiled loops, and its Python interface is improved: it is now a strict generalization of NumPy, is compatible with Pandas [pandas]_ (Awkward Arrays can be DataFrame columns), and is implemented as a Numba [numba]_ extension (Awkward Arrays can be used in Numba's just-in-time compiled functions).
 
-.. code-block:: python
+Although the Awkward 1.x branch is feature-complete, serialization to and from a popular physics file format (ROOT [root]_, which represents over an exabyte of physics data [root-EB]_) is not. Adoption among physicists is ongoing, but the usefulness of JSON-like structures in data analysis is not domain-specific and should be made known to the broader community.
 
-   kaon_masses = ak.combinations(pions[good], 2).mass
+Demonstration using a GeoJSON dataset
+-------------------------------------
 
-where :code:`ak.combinations` is a built-in function, :code:`pions[good]` preselects good pion objects in all events using an array of variable-length lists of booleans, and :code:`.mass` is a user-defined property that computes :math:`m_{K_S}` using NumPy universal functions.
+To show how Awkward Arrays can be applied beyond particle physics, this section presents a short exploratory analysis of Chicago bike routes [bikes]_ in GeoJSON format. GeoJSON has a complex structure with multiple levels of nested records and variable-length arrays of numbers, as well as strings and missing data. These structures could not be represented as a NumPy array (without :code:`dtype=object`, which are Python objects wrapped in an array), but there are reasons to want to perform NumPy-like math on the numerical longitude, latitude coordinates.
 
-Demonstration with GeoJSON bike routes
---------------------------------------
-
-However, nested data structures are not unique to particle physics, so we present a more complete example using GeoJSON map data. Suppose we want to analyze the following Chicago bike routes [5]_, a dataset with two nested levels of latitude, longitude polylines, string-valued street names, and metadata as a JSON file.
+To begin, we load the publicly available GeoJSON file,
 
 .. code-block:: python
 
@@ -92,14 +84,39 @@ However, nested data structures are not unique to particle physics, so we presen
     bikeroutes_json = urllib.request.urlopen(url).read()
     bikeroutes_pyobj = json.loads(bikeroutes_json)
 
-Importing this JSON object as an Awkward Array splits its record-oriented structure into a contiguous buffer for each field, making it ready for columnar operations. Heterogeneous data are split by type, such that each buffer in memory has a single numerical type.
+and convert it to an Awkward Array. The two main data types are :code:`ak.Array` (a sequence of items, which may contain records) and :code:`ak.Record` (a single object with named, typed fields, which may contain arrays). Since the dataset is a single JSON object, we pass it to the :code:`ak.Record` constructor.
 
 .. code-block:: python
 
     import awkward1 as ak
     bikeroutes = ak.Record(bikeroutes_pyobj)
 
-Longitude and latitude are in the first two components of fields named :code:`"coordinates"` of fields named :code:`"geometry"` of fields named :code:`"features"`. They can be accessed with NumPy-like slices, including ellipsis, :code:`np.newaxis`, masks, etc.
+The record-oriented structure of the JSON object, in which fields of the same object are serialized next to each other, has now been transformed into a columnar structure, in which data from a single field across all objects are contiguous in memory. This requires more than one buffer in memory, as heterogeneous data must be split into separate buffers by type.
+
+The structure of this particular file (expressed as a Datashape, obtained by calling :code:`ak.type(bikeroutes)`) is
+
+.. code-block:: javascript
+
+    {"type": string,
+     "crs": {
+         "type": string,
+         "properties": {"name": string}},
+     "features": var * {
+         "type": string,
+         "properties": {
+             "STREET": string,
+             "TYPE": string,
+             "BIKEROUTE": string,
+             "F_STREET": string,
+             "T_STREET": option[string]},
+         "geometry": {
+             "type": string,
+             "coordinates":
+                 var * var * var * float64}}}
+
+We are interested in the longitude, latitude coordinates, which are in the :code:`"coordinates"` field of the :code:`"geometry"` of the :code:`"features"`, at the end of several levels of variable-length lists (:code:`var`). At the deepest level, longitude values are in coordinate :code:`0` and latitude values are in coordinate :code:`1`.
+
+We can access each of these, eliminating all other fields, with a NumPy-like multidimensional slice. Strings in the slice select fields of records and ellipsis (:code:`...`) skips dimensions as it does in NumPy.
 
 .. code-block:: python
     
@@ -108,29 +125,53 @@ Longitude and latitude are in the first two components of fields named :code:`"c
     latitude  = bikeroutes["features", "geometry",
                            "coordinates", ..., 1]
 
-The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64` (expressed as a Datashape): 1061 routes with a variable number of variable-length polylines.
+The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64`; that is, 1061 routes with a variable number of variable-length polylines.
 
-To compute lengths of each route, we can use NumPy universal functions (like :code:`np.sqrt`) and reducers (like :code:`np.sum`), which are overridden by Awkward-aware functions using NumPy's NEP-13 [6]_ and NEP-18 [7]_ protocols. Distances between points can be computed with :code:`a[:, :, 1:] - a[:, :, :-1]` even though each inner list :code:`a[:, :]` may have a different length.
+At this point, we might want to compute the length of each route, and we can use NumPy ufuncs to do that, despite the irregular shape of the :code:`longitude` and :code:`latitude` arrays. First, we need to convert degrees into a unit of distance (:code:`82.7` and :code:`111.1` are conversion factors at Chicago's latitude).
 
 .. code-block:: python
 
     km_east = (longitude - np.mean(longitude)) * 82.7
     km_north = (latitude - np.mean(latitude)) * 111.1
 
+Subtraction and multiplication defer to :code:`np.subtract` and :code:`np.multiply`, respectively, and these are ufuncs, overridden using NumPy's :code:`__array_ufunc__` protocol [nep13]_. The :code:`np.mean` function is not a ufunc, but it, too, can be overridden using the :code:`__array_function__` protocol [nep18]_. All ufuncs and a handful of more generic functions can be applied to Awkward Arrays.
+
+To compute distances between points in an array :code:`a` in NumPy, we would use an expression like the following,
+
+.. code-block:: python
+
+    differences = a[1:] - a[:-1]
+
+which views the same array without the first element (:code:`a[1:]`) and without the last element (:code:`a[:-1]`) to subtract "between the fenceposts." We can do so in the nested lists with
+
+.. code-block:: python
+
+    differences = km_east[:, :, 1:] - km_east[:, :, :-1]
+
+even though the first two dimensions have variable lengths. They're derived from the same array (:code:`km_east`), so they have the same lengths and every element in the first term can be paired with an element in the second term.
+
+Two-dimensional distances are the square root of the sum of squares of these differences,
+
+.. code-block:: python
+
     segment_length = np.sqrt(
         (km_east[:, :, 1:] - km_east[:, :, :-1])**2 +
         (km_north[:, :, 1:] - km_north[:, :, :-1])**2)
 
-    route_length = np.sum(segment_length, axis=-1)
-    total_length = np.sum(route_length, axis=-1)
-
-The same could be performed with the following, though the vectorized form is shorter and 8 times faster; see Figure :ref:`bikeroutes-scaling`.
+and we can sum up the lengths of each segment in each polyline in each route by calling :code:`np.sum` on the deepest :code:`axis`.
 
 .. code-block:: python
 
-    total_length = []
+    polyline_length = np.sum(segment_length, axis=-1)
+    route_length = np.sum(polyline_length, axis=-1)
+
+The same could be performed with the following pure Python code, though the vectorized form is shorter, more exploratory, and 8× faster (Intel 2.6 GHz i7-9750H processor with 12 MB cache on a single thread); see Figure :ref:`bikeroutes-scaling`.
+
+.. code-block:: python
+
+    route_length = []
     for route in bikeroutes_pyobj["features"]:
-        route_length = []
+        polyline_length = []
         for polyline in route["geometry"]["coordinates"]:
             segment_length = []
             last = None
@@ -144,8 +185,8 @@ The same could be performed with the following, though the vectorized form is sh
                         np.sqrt(dx2 + dy2))
                 last = (km_east, km_north)
 
-            route_length.append(sum(segment_length))
-        total_length.append(sum(route_length))
+            polyline_length.append(sum(segment_length))
+        route_length.append(sum(polyline_length))
 
 .. figure:: figures/bikeroutes-scaling.pdf
    :align: center
@@ -153,12 +194,12 @@ The same could be performed with the following, though the vectorized form is sh
 
    Scaling of Awkward Arrays and pure Python loops for the bike routes calculation shown in the text. :label:`bikeroutes-scaling`
 
+The performance advantage is due to Awkward Array's precompiled loops, though this is mitigated by the creation of intermediate arrays and many passes over the same data (once per user-visible operation). When the single-pass Python code is just-in-time compiled by Numba *and* evaluated over Awkward Arrays, the runtime is 250× faster than pure Python (same architecture).
+
 Scope: data types and common operations
 ---------------------------------------
 
-Awkward Array supports the same suite of abstract data types and features as "typed JSON" serialization formats—Apache Arrow, Parquet, Protobuf, Thrift, Avro, etc.
-
-Namely, there are
+Awkward Array supports the same suite of abstract data types and features as "typed JSON" serialization formats—Arrow, Parquet, Protobuf, Thrift, Avro, etc. Namely, there are
 
 * primitive types: numbers and booleans,
 * variable-length lists,
@@ -170,9 +211,9 @@ Namely, there are
 * virtual arrays (functions generate arrays on demand),
 * partitioned arrays (for off-core and parallel analysis).
 
-Like Apache Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
+Like Arrow and Parquet, arrays with these features are laid out as columns in memory (more on that below).
 
-Like NumPy, the Awkward Array library contains a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy [8]_, and others already provide numerical math as universal functions (ufuncs). In each case where an Awkward function generalizes a NumPy function, it is provided with the same interface (corresponds exactly for rectilinear grids).
+Like NumPy, the Awkward Array library consists of a primary Python class, :code:`ak.Array`, and a collection of generic operations. Most of these operations change the structure of the data in the array, since NumPy, SciPy, and others already provide numerical math as ufuncs.
 
 Awkward functions include
 
@@ -184,20 +225,20 @@ Awkward functions include
 * flattening and padding to make rectilinear data,
 * Cartesian products (cross join) and combinations (self join) at :code:`axis >= 1` (per element of one or more arrays).
 
-Conversions to other formats, such as Arrow, access in third-party libraries, such as Numba [9]_ and Pandas [10]_, methods of building data structures, and customizing high-level behavior are also in the library's scope.
+Conversions to other formats, such as Arrow, and interoperability with common Python libraries, such as Pandas and Numba, are also in the library's scope.
 
 Columnar representation, columnar implementation
 ------------------------------------------------
 
-Like Arrow, Awkward data structures are not localized in memory. Instead of concentrating all data for one array element in nearby memory (as an "array of structs"), all data for a given field are contiguous, and all data for another field are elsewhere contiguous (as a "struct of arrays"). This favors a pattern of data access in which only a few fields are needed at a time.
+Awkward Arrays are columnar, not record-oriented, data structures. Instead of concentrating all data for one array element in nearby memory (as an "array of structs"), all data for a given field are contiguous, and all data for another field are elsewhere contiguous (as a "struct of arrays"). This favors a pattern of data access in which only a few fields are needed at a time, such as the longitude, latitude coordinates in the bike routes example.
 
-Additionally, Awkward operations are performed on columnar data without returning to the record-oriented format. To illustrate, consider a list of variable-length lists, such as longitude points along a bike route,
+Additionally, Awkward operations are performed on columnar data without returning to the record-oriented format. To illustrate, consider an array of variable-length lists, such as the following toy example:
 
 .. code-block:: python
 
     [[1.1, 2.2, 3.3], [4.4], [5.5, 6.6], [7.7, 8.8, 9.9]]
 
-Instead of creating objects to represent the four lists, we flatten the :code:`content` and introduce :code:`starts` and :code:`stops` buffers to indicate where each sublist starts and stops.
+Instead of creating four C++ objects to represent the four lists, we can put all of the numerical data in one buffer and indicate where the lists start and stop with two integer arrays:
 
 .. code-block:: python
 
@@ -205,7 +246,7 @@ Instead of creating objects to represent the four lists, we flatten the :code:`c
     stops:   3, 4, 6, 9
     content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
 
-A list of lists of lists would use these three buffers as the :code:`content` of another node with its own :code:`starts` and :code:`stops`. In general, a hierarchy of columnar array nodes mirrors the hierarchy of the nested data, except that the number of such nodes scales with the complexity of the data type, not the number of elements in the array. Particle physics use-cases require thousands of nodes to describe complex collision events, but billions of events in memory at once. Figure :ref:`example-hierarchy` shows a small example.
+For an array of lists of lists, we could introduce two levels of :code:`starts` and :code:`stops` arrays, one to specify where the outer square brackets start and stop, another to specify the inner square brackets. Any tree-like data structure can be built in this way; the hierarchy of nested array groups mirrors the hierarchy of the nested data, except that the number of these nodes scales with the complexity of the data type, not the number of elements in the array. Particle physics use-cases require thousands of nodes to describe complex collision events, but billions of events in memory at a time. Figure :ref:`example-hierarchy` shows a small example.
 
 .. figure:: figures/example-hierarchy.pdf
    :align: center
@@ -214,7 +255,9 @@ A list of lists of lists would use these three buffers as the :code:`content` of
 
    Hierarchy for an example data structure: an array of lists of records, in which field :code:`"x"` of the records are numbers and field :code:`"y"` of the records are lists of numbers. This might, for example, represent :code:`[[], [{"x": 1, "y": [1]}, {"x": 2, "y": [2, 2]}]]`, but it also might represent an array with billions of elements (of the same type). The number of nodes scales with complexity, not data volume. :label:`example-hierarchy`
 
-To compute distances in each bike route, we needed to compute :code:`a[:, 1:] - a[:, :-1]`. For :code:`a[:, 1:]`, we only have to add :code:`1` to the :code:`starts`:
+In the bike routes example, we computed distances using slices like :code:`km_east[:, :, 1:]`, which dropped the first element from each list. In the implementation, list objects are not created for the sake of removing one element before translating back into a columnar format; the operation is performed directly on the columnar data.
+
+For instance, to drop the first element from each list in an array of lists :code:`a`, we only need to add :code:`1` to the :code:`starts`:
 
 .. code-block:: python
 
@@ -222,129 +265,100 @@ To compute distances in each bike route, we needed to compute :code:`a[:, 1:] - 
     stops:   3, 4, 6, 9
     content: 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9
 
-This new array represents
+Without modifying the :code:`content`, this new array represents
 
 .. code-block:: python
 
     [[     2.2, 3.3], [   ], [     6.6], [     8.8, 9.9]]
 
-and we could reuse the original :code:`content` to construct it. Since :code:`content` is untouched, the slice can be a precompiled routine that treats the :code:`content` as an opaque pointer. The :code:`content` might contain other lists or records, like the example in Figure :ref:`example-hierarchy`. Similarly, :code:`a[:, :-1]` is computed by subtracting :code:`1` from the original :code:`stops`, and it is up to the :code:`-` operation to align the :code:`content` of its arguments before applying :code:`np.subtract`.
+because the first list starts at index :code:`1` and stops at :code:`3`, the second starts at :code:`4` and ends at :code:`4`, etc. The "removed" elements are still present in the :code:`content` array, but they are now unreachable, much like the stride tricks used for slicing in NumPy.
 
-Awkward 1.x
------------
+Leaving the :code:`content` untouched means that the precompiled slice operation does not depend on the :code:`content` type, not even whether the :code:`content` is a numeric array or a tree structure, as in Figure :ref:`example-hierarchy`. It also means that this operation does not cascade down such a tree structure, if it exists. Most operations leave nested structure untouched and return views, rather than copies, of most of the input buffers.
 
-The first widely used version of Awkward Array (0.x) was released in September 2018 as a pure Python module, in which all of the columnar operations were implemented using NumPy. This library was successful, but limited, since some data transformations are difficult or impossible to write without explicit loops.
+Architecture of Awkward 1.x
+---------------------------
 
-In August 2019, we began a half-year project to rewrite the library in C++ (1.x), isolating all of the array manipulations in a "CPU kernels" library that can be swapped for "GPU kernels." Apart from the implementation of the "GPU kernels," this project is complete, though users are still transitioning from the original "Awkward 0.x" to the new "Awkward 1.x," which are both available as separate libraries in PyPI.
+In August 2019, we began a half-year project to rewrite the library in C++ (Awkward 1.x), which is now complete. Whereas Awkward 0.x consists of Python classes that call NumPy on internal arrays to produce effects like the slice operation described in the previous section, Awkward 1.x consists of C++ classes that perform loops in custom compiled code, wrapped in a Python interface through pybind11.
 
-Figure :ref:`awkward-1-0-layers` shows how Awkward 1.x is organized:
+However, the distinction between slow, bookkeeping code and fast math enforced by Python and NumPy is a useful one: we maintained that distinction by building Awkward 1.x in layers that separate the (relatively slow) polymorphic C++ classes, whose job is to organize and track the ownership of data buffers, from the optimized loops in C that manipulate data in those buffers.
 
-* the high-level interface is in Python,
-* the array nodes (managing node hierarchy and ownership/lifetime) are in C++, accessed through pybind11,
-* an alternate implementation of array navigation was written for Python functions that are compiled by Numba,
-* array manipulation algorithms (without memory management) are independently implemented as "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
+These layers are fully broken down below and in Figure :ref:`awkward-1-0-layers`:
+
+* The high-level interface is in Python.
+* The array nodes (managing node hierarchy and ownership/lifetime) are in C++, accessed through pybind11.
+* An alternate implementation of array navigation was written for Python functions that are compiled by Numba.
+* Array manipulation algorithms (without memory management) are independently implemented as "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
 
 .. figure:: figures/awkward-1-0-layers.pdf
    :align: center
    :scale: 45%
 
-   Components of Awkward Array, as described in the text. :label:`awkward-1-0-layers`
+   Components of Awkward Array, as described in the text. All components have been implemented except for the "CUDA kernels." :label:`awkward-1-0-layers`
 
-Most array operations are shallow, affecting only one or a few levels of the hierarchy, but even in the worst case, an operation initiated by a Python call steps over at most all of the nodes of an array, which is no more than thousands in particle physics use-cases. The number of elements in the array can be billions (multi-GB memory). The loops over array elements are strictly contained in the kernels, so performance optimizations can focus on this layer.
-
-The C++ layer is therefore not motivated by performance, since that is the responsibility of the kernels. It exists because many particle physics libraries are written in C++ and having a full object model for the arrays in C++ allows us to pass data to and from C++ libraries as Awkward Arrays, avoiding unnecessary conversions. The C++ implementation freely uses dynamic dispatch (virtual methods) and atomic reference counting (shared pointers) to match Python's object model.
+The separation of "kernels" from "navigation" has two advantages: (1) optimization efforts can focus on the kernels, since these are the only loops that scale with data volume, and (2) CPU-based kernels can, in principle, be swapped for GPU-based kernels. The latter is an ongoing project.
 
 Numba for just-in-time compilation
 ----------------------------------
 
-Some expressions are simpler in "vectorized" form, such as :code:`pions[good]` to select :code:`pions` with a broadcastable array of booleans :code:`good`. However, some operations are more difficult to express in this form, particularly iterative algorithms.
+Some expressions are simpler in "vectorized" form, such as the Awkward Array solution to the bike routes calculation. Others are simpler to express as imperative code. This issue arose repeatedly as physicists used Awkward Array 0.x in real problems, both because they were more familiar with imperative code (in C++) and because the problems truly favored non-vectorized solutions. For instance, walking up a tree, looking for nodes of a particular type (such as a tree of particle decays) is hard to express in vectorized form because some elements of a test array reach the stopping condition before others; preventing them from continuing to walk the tree adds complexity to a data analysis. Any problem that must "iterate until converged" is also of this form.
 
-A common case in particle physics is following each particle of a decay tree to a particular type of ancestor, such as a quark. These trees are often expressed as a collection of :code:`particles`, which are records with a field named :code:`parent`—the index of its immediate ancestor.
+These problems are readily solved by Numba, a just-in-time compiler for Python, but Numba cannot compile code involving arrays from Awkward 0.x. To solve physics problems, we had to break the array abstraction described above. Ensuring that Numba would recognize Awkward 1.x arrays was therefore a high priority, and it is a major component of the final system.
 
-We can find immediate ancestors in a vectorized expression,
+Numba has an extension mechanism for registering new types and overloading operators for new types. We added Numba extensions for the :code:`ak.Array` and :code:`ak.Record` types, overloading :code:`__getitem__` (square bracket) and :code:`__getattr__` (dot) operators and iterators, so that users can walk over the data structures with conventional loops.
 
-.. code-block:: python
-
-    immediate_ancestors = particles[particles.parent]
-
-but this step must be repeated a different number of times for different elements. The same is true of numerical algorithms that must iterate until they converge.
-
-Iteration is easy to express in imperative Python code:
-
-.. code-block:: python
-
-    def find_quark(particle):
-        while not is_quark(particle):
-            particle = particles[particle.parent]
-        return particle
-
-Doing so, however, gives up on the performance advantage of using arrays. Iteration over Awkward Arrays is even slower than built-in Python objects. Ideally, we want to iterate over the arrays in compiled code, code that involves domain-specific logic and therefore must be written by the user. Users could write their functions in C++, accessing Awkward Array's C++ layer the way a third-party library might, but that would be an unreasonable amount of effort for common analysis tasks.
-
-Instead, we recommend using Numba, a just-in-time compiler for Python. All array nodes except :code:`UnionArray` have been implemented as Numba models, so Awkward Arrays can be used as arguments and return values from compiled Python functions. The function above can be compiled by simply adding a decorator,
+Returning to the bike routes example, the following performs the same calculation with Numba:
 
 .. code-block:: python
 
     import numba as nb
 
-    @nb.njit
-    def find_quark(particle):
-        while not is_quark(particle):
-            particle = particles[particle.parent]
-        return particle
+    @nb.jit
+    def compute_lengths(bikeroutes):
+        # allocate output array
+        route_length = np.zeros(len(bikeroutes.features))
 
-assuming that :code:`is_quark` is similarly defined,
+        # loop over routes
+        for i in range(len(bikeroutes.features)):
+            feature = bikeroutes.features[i]
 
-.. code-block:: python
+            # loop over polylines
+            for polyline in feature.geometry.coordinates:
+                first = True
+                last_east = 0.0
+                last_north = 0.0
 
-    @nb.njit
-    def is_quark(particle):
-        return abs(particle.pdg_id) <= 6
+                for lng_lat in polyline:
+                    km_east = lng_lat[0] * 82.7
+                    km_north = lng_lat[1] * 111.1
 
-Such an implementation would still suffer from poor performance because :code:`find_quark` takes a single particle as input, incurring overhead for each particle in the dataset. Users should write functions that take and return whole datasets, performing the loop inside the compiled block. For this example, we could do that by returning an integer index to use as a slice:
+                    # compute distances between points
+                    if not first:
+                        dx2 = (km_east - last_east)**2
+                        dy2 = (km_north - last_north)**2
+                        distance = np.sqrt(dx2 + dy2)
+                        route_length[i] += distance
 
-.. code-block:: python
+                    # keep track of previous value
+                    first = False
+                    last_east = km_east
+                    last_north = km_north
 
-    @nb.njit
-    def find_quarks(particles):
-        index = np.empty(len(particles), np.int64)
-        for i in range(len(particles)):
-            index[i] = i
-            while not is_quark(particles[index[i]]):
-                index[i] = particles[index[i]].parent
-        return index
+        return route_length
 
-    particles[find_quarks(particles)]
+This expression is not concise, but it is 250× faster than the pure Python solution and 30× faster than even the Awkward Array (precompiled) solution. It makes a single pass over all buffers, maximizing CPU cache efficiency, and it does not allocate or fill any intermediate arrays. This is possible because :code:`nb.jit` compiles specialized machine code for this particular problem.
 
-This is fast, but possibly non-intuitive. For more natural user code, we introduced an ArrayBuilder, which is an append-only structure that becomes an Awkward Array when a "snapshot" is taken.
+Combining Awkward Array with Numba has benefits that neither has alone. Ordinarily, complex data structures would have to be passed into Numba as Python objects, which means a second copy of the data that must be "unboxed" (converted into a compiler-friendly form) and "boxed" (converted back). If the datasets are large, this consumes memory and time. Awkward Arrays use less memory than the equivalent Python objects (5.2× smaller for the bike routes) and they use the same internal representation (columnar arrays) inside and outside functions just-in-time compiled by Numba.
 
-.. code-block:: python
-
-    @nb.njit
-    def find_quarks(particles, builder):
-        for particle in particles:
-            while not is_quark(particle):
-                particle = particles[particle.parent]
-            builder.append(particle)
-        return builder
-
-    find_quarks(particles, ak.ArrayBuilder()).snapshot()
-
-The ArrayBuilder is described in more detail in the next section.
-
-Whereas the C++ implementation uses (relatively) slow runtime objects because the number of nodes touched by a vectorized operation scales with the complexity of the type, not the number elements in the array, a user function written in Numba would walk over the same nodes for each element of the array, and therefore must be more thoroughly optimized.
-
-Each node type is implemented as a Numba type but not as runtime objects. The only runtime object is a lookup table of buffer pointers, and the node types generate specialized code to walk over the lookup table. Since this Numba model is so different from the C++ classes, Awkward's full suite of vectorized functions are not available in the compiled block. However, the following features are supported for imperative programming:
-
-* iteration and :code:`__len__` for arrays,
-* simple :code:`__getitem__`: integers indexes, slices, and strings for record fields that are compile-time constants,
-* attribute :code:`__getattr__` as an alternative to string-slices.
+At the time of writing, heterogeneous data (union type) is not supported in Numba, because code for a variable type can't be easily specialized.
 
 ArrayBuilder: creating columnar data in-place
 ---------------------------------------------
 
 Awkward Arrays are immutable; NumPy's ability to assign elements in place is not supported or generalized by the Awkward Array library. (As an exception, users can assign fields to records using :code:`__setitem__` syntax, but this *replaces* the inner tree with one having the new field.) Restricting Awkward Arrays to read-only access allows whole subtrees of nodes to be shared among different versions of an array.
 
-To create new arrays, we introduced ArrayBuilder, an append-only object that accumulates data and cteates :code:`ak.Arrays` by taking a "snapshot" of the current state. New data are attached at various levels of depth through method calls, which also dynamically refines the type of the provisional array.
+To create new arrays, we introduced :code:`ak.ArrayBuilder`, an append-only structure that accumulates data and cteates :code:`ak.Arrays` by taking a "snapshot" of the current state. The :code:`ak.ArrayBuilder` is also implemented for Numba, so just-in-time compiled Python can build arbitrary data structures.
+
+The :code:`ak.ArrayBuilder` is a dynamically typed object, inferring its type from the types and order of data appended to it. As elements are added, the :code:`ak.ArrayBuilder` builds a tree of columns *and* their types to refine the inferred type.
 
 .. code-block:: python
 
@@ -364,40 +378,39 @@ To create new arrays, we introduced ArrayBuilder, an append-only object that acc
     b.string("hello")  # 4 * ?union[{"x": float64,
                        #             "y": ?int64}, string]
 
-In the above example, an initially empty ArrayBuilder :code:`b` has unknown type and zero length. With :code:`begin_record`, its type becomes a record with no fields. Calling :code:`field` adds a field of unknown type, and following that with :code:`integer` sets the field type to an integer. The length of the array is only increased when the record is closed by :code:`end_record`.
+In the above example, an initially empty :code:`ak.ArrayBuilder` named :code:`b` has unknown type and zero length. With :code:`begin_record`, its type becomes a record with no fields. Calling :code:`field` adds a field of unknown type, and following that with :code:`integer` sets the field type to an integer. The length of the array is only increased when the record is closed by :code:`end_record`.
 
 In the next record, field :code:`"x"` is filled with a floating point number, which retroactively updates previous integers to floats. Calling :code:`b.field("y")` introduces a field :code:`"y"` to all records, though it has option type because this field is missing for all previous records. The third record is missing (:code:`b.null()`), which refines its type as optional, and in place of a fourth record, we append a string, so the type becomes a union.
 
-Internally, ArrayBuilder maintains a similar hierarchy of nodes as an array, except that all buffers can grow (when the preallocated space is used up, the buffer is reallocated and copied into a buffer 1.5× larger), and :code:`content` nodes can be replaced from specialized types to more general types. Taking a snapshot *shares* buffers with the new array, so it is a lightweight operation.
+Internally, :code:`ak.ArrayBuilder` maintains a similar tree of array buffers as an :code:`ak.Array`, except that all buffers can grow (when the preallocated space is used up, the buffer is reallocated and copied into a buffer 1.5× larger), and :code:`content` nodes can be replaced from specialized types to more general types. Taking a snapshot *shares* buffers with the new array, so it is a lightweight operation.
 
-ArrayBuilder's :code:`append` method dispatches to the other methods based on argument type, and if the argument is an array or record, it includes a preexisting subtree in its accumulated data. This is how the Numba example (previous section) appends :code:`particles`.
-
-Although ArrayBuilder is compiled code and calls into it are specialized by Numba, its dynamic typing has a runtime cost: filling NumPy arrays is faster. ArrayBuilder trades runtime performance for convenience; faster array-building methods would have to be specialized by type.
+Although :code:`ak.ArrayBuilder` is compiled code and calls into it are specialized by Numba, its dynamic typing has a runtime cost: filling NumPy arrays is faster. :code:`ak.ArrayBuilder` trades runtime performance for convenience; faster array-building methods would have to be specialized by type.
 
 High-level behaviors
 --------------------
 
-One of the most popular features of Awkward 0.x was the ability to create subclasses of array nodes (in Python) that add domain-specific methods to records in an array. This includes "object" methods:
+One of the surprisingly popular uses of Awkward 0.x has been to add domain-specific methods to records and arrays by subclassing their hierarchical node types. These can act on scalar records returning scalars, like a C++ or Python object,
 
 .. code-block:: python
 
-    # distance between pion 5 and pion 6 in event 1000
-    events[1000].pions[5].distance(events[1000].pions[6])
+    # distance between points1[0] and points2[0]
+    points1[0].distance(points2[0])
 
-and "vectorized" methods:
+or they may be "vectorized," like a ufunc,
 
 .. code-block:: python
 
-    # distances between pion 5 and 6 in all events
-    events.pions[5].distance(events.pions[6])
+    # distance between all points1[i] and points2[i]
+    points1.distance(points2)
 
 This capability has been ported to Awkward 1.x and expanded upon. In Awkward 1.x, records can be named (as part of more general "properties" metadata in C++) and record names are linked to Python classes through an :code:`ak.behavior` dict.
 
 .. code-block:: python
 
     class Point:
-        def magnitude(self):
-            return np.sqrt(self.x**2 + self.y**2)
+        def distance(self, other):
+            return np.sqrt((self.x - other.x)**2 +
+                           (self.y - other.y)**2)
 
     class PointRecord(Point, ak.Record):
         pass
@@ -407,16 +420,23 @@ This capability has been ported to Awkward 1.x and expanded upon. In Awkward 1.x
     ak.behavior["point"] = PointRecord
     ak.behavior["*", "point"] = PointArray
 
-    array = ak.Array([{"x": 1.1, "y": 1},
-                      {"x": 2.2, "y": 2},
-                      {"x": 3.3, "y": 3}],
-                     with_name="point")
+    points1 = ak.Array([{"x": 1.1, "y": 1},
+                        {"x": 2.2, "y": 2},
+                        {"x": 3.3, "y": 3}],
+                       with_name="point")
+    points2 = ak.Array([{"x": 1, "y": 1.1},
+                        {"x": 2, "y": 2.2},
+                        {"x": 3, "y": 3.3}],
+                       with_name="point")
 
-    array[2].magnitude()
-    # 4.459820624195552
+    points1[0].distance(points2[0])
+    # 0.14142135623730964
 
-    array.magnitude()
-    # <Array [1.49, 2.97, 4.46] type='3 * float64'>
+    points1.distance(points2)
+    # <Array [0.141, 0.283, 0.424] type='3 * float64'>
+
+    points1.distance(points2[0])   # broadcasting
+    <Array [0.141, 1.5, 2.98] type='3 * float64'>
 
 When an operation on array nodes completes and the result is wrapped in a high-level :code:`ak.Array` or :code:`ak.Record` class for the user, the :code:`ak.behavior` is checked for signatures that link records and arrays of records to user-defined subclasses. Only the name :code:`"point"` is stored with the data; methods are all added at runtime, which allows schemas to evolve.
 
@@ -425,12 +445,15 @@ Other kinds of behaviors can be assigned through different signatures in the :co
 .. code-block:: python
 
     # link np.absolute("point") to a custom function
-    ak.behavior[np.absolute, "point"] = Point.magnitude
+    def magnitude(point):
+        return np.sqrt(point.x**2 + point.y**2)
 
-    np.absolute(array)
+    ak.behavior[np.absolute, "point"] = magnitude
+
+    np.absolute(points1)
     # <Array [1.49, 2.97, 4.46] type='3 * float64'>
 
-custom broadcasting rules, and Numba extensions (typing and lowering functions).
+as well as custom broadcasting rules, and Numba extensions (typing and lowering functions).
 
 As a special case, strings are not defined as an array type, but as a parameter label on variable-length lists. Behaviors that present these lists as strings (overriding :code:`__repr__`) and define per-string equality (overriding :code:`np.equal`) are preloaded in the default :code:`ak.behavior`.
 
@@ -488,9 +511,9 @@ GPU backend
 
 One of the advantages of a vectorized user interface is that it is already optimal for calculations on a GPU. Imperative loops need to be redesigned when porting algorithms to GPUs, but CuPy, Torch, TensorFlow, and JAX demonstrate that array-at-a-time functions can hide the distinction between CPU calculations and GPU calculations.
 
-To allow for a future GPU backend, all instances of reading or writing to an array's buffers were restricted to the "array manipulation" layer of the project (see Figure :ref:`awkward-1-0-layers`). The first implementation of this layer, "CPU kernels," performs all operations that actually access the array buffers, and it is compiled into a physically separate file: :code:`libawkward-cpu-kernels.so`, as opposed to the main :code:`libawkward.so`, Python extension module, and Python code.
+Partly for the sake of adding a GPU backend, all instances of reading or writing to an array's buffers were restricted to the "array manipulation" layer of the project (see Figure :ref:`awkward-1-0-layers`). The first implementation of this layer, "CPU kernels," performs all operations that actually access the array buffers, and it is compiled into a physically separate file: :code:`libawkward-cpu-kernels.so`, as opposed to the main :code:`libawkward.so`, Python extension module, and Python code.
 
-In May 2020, we began developing the "GPU kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "GPU kernels" may be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
+In May 2020, we began developing the "CUDA kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "GPU kernels" may be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
 
 The kernels library contains many functions (428 with an :code:`"extern C"` interface, 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one uses dynamic memory, but there may be alternatives). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
 
@@ -503,61 +526,73 @@ The kernels library contains many functions (428 with an :code:`"extern C"` inte
 Transition from Awkward 0.x
 ---------------------------
 
-Awkward Array is one of the most widely used Python packages for particle physics. In part, this is because it is a dependency of Uproot, which interprets ROOT files as arrays in the scientific Python ecosystem. (ROOT is the most widely used software package for particle physics; more than an exabyte of data are stored in ROOT files [11]_.) However, Awkward Arrays are increasingly being used apart from Uproot and ROOT, in scientific workflows that communicate via Arrow, Parquet, or HDF5. Figure :ref:`awkward-0-popularity` shows the adoption rate in a common metric with other major particle physics Python packages.
+Awkward 0.x is popular among physicists, and some data analyses have come to depend on it and its interface. User feedback, however, has taught us that the Awkward 0.x interface has some inconsistencies, confusing names, and incompatibilities with NumPy that would always be a pain point for beginners if maintained, yet ongoing analyses must be supported. (Data analyses, unlike software stacks, have a finite lifetime and can't be required to "upgrade or perish," especially when a student's graduation is at stake.)
 
-.. figure:: figures/awkward-0-popularity.pdf
-   :align: center
-   :scale: 58%
+To support both new and ongoing analyses, we gave the Awkward 1.x project a different Python package name and PyPI package name from the original Awkward Array: :code:`awkward1` versus :code:`awkward`. This makes it possible to install both and load both in the same process (unlike Python 2 and Python 3). Conversion functions have also been provided to aid in the transition.
 
-   Adoption of Awkward 0.x, measured by PyPI statistics, compared to other popular particle physics packages (root-numpy, iminuit, rootpy) and popular data science packages. :label:`awkward-0-popularity`
+We are already recommending Awkward 1.x for new physics analyses, even though serialization to and from the popular ROOT file format is not yet complete. Nevertheless, the conversion functions introduce an extra step and we don't expect widespread adoption until the Uproot library natively converts ROOT data to and from Awkward 1.x arrays.
 
-Motivated by the success of Awkward 0.x, but learning from its limitations, Awkward 1.x was developed separately from the original library and it includes much needed interface changes as well as refactoring. To avoid disrupting ongoing physics analysis, is still deployed with :code:`awkward1` as its PyPI and Python module name. Although the new library is ready for data analysis, the ecosystem is not: at the time of writing, Uproot is still being updated to present ROOT data as Awkward 1.x arrays. Therefore, :code:`awkward` and :code:`awkward1` will coexist until a point later this year, when PyPI, Conda, Python, and GitHub names will simultaneously transfer :code:`awkward` to :code:`awkward0` and :code:`awkward1` to :code:`awkward`.
+Eventually, however, it will be time to give Awkward 1.x "official" status by naming it :code:`awkward` in Python and PyPI. At that time, Awkward 0.x will be renamed :code:`awkward0`, so that a single
 
-As an incentive, the Awkward 1.x project has been heavily documented, with complete docstring and doxygen coverage.
+.. code-block:: python
+
+    import awkward0 as awkward
+
+would be required to maintain old analysis scripts.
+
+As an incentive for adopting Awkward 1.x in new projects, it has been heavily documented, with complete docstring and doxygen coverage (already exceeding Awkward 0.x).
 
 Summary
 -------
 
-By providing NumPy-like idioms on JSON-like data, Awkward Array fills a need required by the particle physics community. The inclusion of data structures in array types and operations was an enabling factor in this community's adoption of other scientific Python tools. However, the Awkward Array library itself is not domain-specific and is open to use in other domains.
+By providing NumPy-like idioms on JSON-like data, Awkward Array satisfies a need required by the particle physics community. The inclusion of data structures in array types and operations was an enabling factor in this community's adoption of other scientific Python tools. However, the Awkward Array library itself is not domain-specific and is open to use in other domains. We are very interested in applications and feedback from the wider data analysis community.
 
 Acknowledgements
 ----------------
 
 Support for this work was provided by NSF cooperative agreement OAC-1836650 (IRIS-HEP), grant OAC-1450377 (DIANA/HEP) and PHY-1520942 (US-CMS LHC Ops).
 
-Reference
----------
+References
+----------
 
-.. [1] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The NumPy Array: A Structure for Efficient Numerical Computation*,
+.. [np] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux. *The NumPy Array: A Structure for Efficient Numerical Computation*,
        Computing in Science & Engineering, 13, 22-30 (2011), DOI:10.1109/MCSE.2011.37
 
-.. [2] Jim Pivarski, Jaydeep Nandi, David Lange, Peter Elmer. *Columnar data processing for HEP analysis*,
+.. [ak1] Jim Pivarski, Jaydeep Nandi, David Lange, Peter Elmer. *Columnar data processing for HEP analysis*,
        Proceedings of the 23rd International Conference on Computing in High Energy and Nuclear Physics (CHEP 2018). DOI:10.1051/epjconf/201921406026
 
-.. [3] Jim Pivarski, Peter Elmer, David Lange. *Awkward Arrays in Python, C++, and Numba*,
+.. [ak2] Jim Pivarski, Peter Elmer, David Lange. *Awkward Arrays in Python, C++, and Numba*,
        CHEP 2019 proceedings, EPJ Web of Conferences (CHEP 2019). arxiv:2001.06307
 
-.. [4] Apache Software Foundation. *Arrow: a cross-language development platform for in-memory data*,
+.. [arrow] Apache Software Foundation. *Arrow: a cross-language development platform for in-memory data*,
        https://arrow.apache.org
 
-.. [5] City of Chicago Data Portal,
-       https://data.cityofchicago.org
-
-.. [6] Pauli Virtanen, Nathaniel Smith, Marten van Kerkwijk, Stephan Hoyer. *NEP 13 — A Mechanism for Overriding Ufuncs*,
-       https://numpy.org/neps/nep-0013-ufunc-overrides.html
-
-.. [7] Stephan Hoyer, Matthew Rocklin, Marten van Kerkwijk, Hameer Abbasi, Eric Wieser. *NEP 18 — A dispatch mechanism for NumPy’s high level array functions*,
-       https://numpy.org/neps/nep-0018-array-function-protocol.html
-
-.. [8] Pauli Virtanen et al. *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
+.. [scipy] Pauli Virtanen et al. *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
        SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
 
-.. [9] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert. *Numba: a LLVM-based Python JIT compiler*,
-       LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015), DOI:10.1145/2833157.2833162
+.. [hydra] R. K. Böck. *Initiation to Hydra*,
+        https://cds.cern.ch/record/864527 (1974), DOI:10.5170/CERN-1974-023.402.
 
+.. [phypy] Jim Pivarski. *Programming languages and particle physics*,
+        https://events.fnal.gov/colloquium/events/event/pivarski-colloq-2019 (2019).
 
-.. [10] Wes McKinney. *Data Structures for Statistical Computing in Python*,
+.. [pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
         Proceedings of the 9th Python in Science Conference, 51-56 (2010).
 
-.. [11] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
+.. [numba] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert. *Numba: a LLVM-based Python JIT compiler*,
+       LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015), DOI:10.1145/2833157.2833162
+
+.. [root] Rene Brun and Fons Rademakers, *ROOT: an object oriented data analysis framework*,
+       Proceedings AIHENP'96 Workshop, Lausanne, (1996), Nucl. Inst. \& Meth. in Phys. Res. A 389 (1997) 81-86.
+
+.. [root-EB] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
         https://indico.cern.ch/event/913205/contributions/3840338 (2020).
+
+.. [bikes] City of Chicago Data Portal,
+       https://data.cityofchicago.org
+
+.. [nep13] Pauli Virtanen, Nathaniel Smith, Marten van Kerkwijk, Stephan Hoyer. *NEP 13 — A Mechanism for Overriding Ufuncs*,
+       https://numpy.org/neps/nep-0013-ufunc-overrides.html
+
+.. [nep18] Stephan Hoyer, Matthew Rocklin, Marten van Kerkwijk, Hameer Abbasi, Eric Wieser. *NEP 18 — A dispatch mechanism for NumPy’s high level array functions*,
+       https://numpy.org/neps/nep-0018-array-function-protocol.html
