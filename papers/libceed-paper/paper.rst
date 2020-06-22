@@ -227,7 +227,6 @@ An :math:`H^1` Lagrange basis in :math:`d` dimensions can be defined with the fo
        interp1d[1]:	  0.00000000	  1.00000000
          grad1d[0]:	 -0.50000000	  0.50000000
          grad1d[1]:	 -0.50000000	  0.50000000
-   <BLANKLINE>
 
 In the following example, we show how to apply a 1D basis operator, denoted by :math:`B` in equation (:ref:`eq-operator-decomposition`), from an E-vector named ``Ev``, to a Q-vector named ``Qv``, and vice-versa, its transpose operator :math:`B^T`
 
@@ -262,7 +261,6 @@ In the following example, we show how to apply a 1D basis operator, denoted by :
    CeedVector length 2
    -1.200000
    1.200000
-
 
 In the following example, we create two QFunctions (for the setup and apply, respectively, of the mass operator in 1D) from the gallery of available built-in QFunctions in libCEED
 
@@ -303,7 +301,6 @@ In the following example, we create two QFunctions (for the setup and apply, res
          Name: "v"
          Size: 1
          EvalMode: "interpolation"
-
 
 The setup QFunction, named ``qf_setup`` in the previous example, is the one that defines the formulation of the geometric factors given by the correspondence between deformed finite element coordinates and reference ones. The apply QFunction, named ``qf_mass`` in the previous example, is the one that defines the action of the physics (in terms of the spatial discretization of the weak form of the PDE) the user wants to solve for. In this simple example, this represented the action of the mass matrix.
 
