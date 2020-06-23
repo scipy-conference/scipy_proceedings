@@ -2,6 +2,7 @@
 :email: niels.bantilan@gmail.com
 :institution: Talkspace
 :institution: pyOpenSci
+:orcid: 0000-0003-1713-5772
 :corresponding:
 :bibliography: refs
 
@@ -107,18 +108,18 @@ variables, data types, and meta-properties of what constitutes a valid or
 invalid data structure, such as uniqueness and nullability. On the other hand,
 domain-specific validation rules describe properties of the data that are
 specific to the particular topic under study. For example, a census dataset
-might contain ``age``, ``income``, ``education``, and ``sex`` columns that are
-encoded in specific ways depending on the way the census was conducted.
-Reasonable validation rules might be:
+might contain ``age``, ``income``, ``education``, and ``job_category`` columns
+that are encoded in specific ways depending on the way the census was
+conducted. Reasonable validation rules might be:
 
 * The ``age`` and ``income`` variables must be positive integers.
 * The ``age`` variable must be below 122 [#]_.
 * Records where ``age`` is below the legal working age should have ``NA``
   values in the ``income`` field.
-* Elements in the ``sex`` column must be a member of the unordered set
-  ``{male, female}``.
 * ``education`` is an ordinal variable that must be a member of the ordered
-  set ``{high school, bachelors, graduate, post graduate}``.
+  set ``{none, high school, undergraduate, graduate}``.
+* ``job_category`` is an unordered categorical variable that must be a member of
+  the set ``{professional, manegerial, service, clerical, agricultural, technical}``.
 
 
 .. [#] The age of the oldest person:
@@ -136,22 +137,23 @@ incorporate any assumptions about randomness into the validation function.
 
 Often times we can express statistical properties about data using
 deterministic or probabilistic checks. For example, "the mean age among the
-``female`` sample tends to be higher than that of the ``male`` sample in
-the surveyed population" can be verified deterministically by simply computing
-the means of the two samples and applying the logical rule
-:math:`mean(age_{female}) > mean(age_{male})`. A probabilistic version of this
-check would be to perform a hypothesis test, like a t-test with a pre-defined
-alpha value. Most probabilistic checks can be reduced to deterministic checks,
-for instance by simply evaluating the truth/falseness of a validation rule using
-the test statistic that results from the hypothesis test and ignoring the
-p-value. Doing this simplifies the validation rule but trades off simplicity
-for being unable to express uncertainty and statistical significance. Other
-examples of such probabilistic checks might be:
+``graduate`` sample tends to be higher than that of the ``undergraduate``
+sample in the surveyed population" can be verified deterministically by simply
+computing the means of the two samples and applying the logical rule
+:math:`mean(age_{graduate}) > mean(age_{undergraduate})`. A probabilistic
+version of this check would be to perform a hypothesis test, like a t-test with
+a pre-defined alpha value. Most probabilistic checks can be reduced to
+deterministic checks, for instance by simply evaluating the truth/falseness of
+a validation rule using the test statistic that results from the hypothesis
+test and ignoring the p-value. Doing this simplifies the validation rule but
+trades off simplicity for being unable to express uncertainty and statistical
+significance. Other examples of such probabilistic checks might be:
 
 * The ``income`` variable is positively correlated with the ``education``
   variable.
-* ``income`` is negatively correlated with the dummy variable ``is_female`` ,
-  which is a variable derived from the ``sex`` column.
+* ``income`` is negatively correlated with the dummy variable
+  ``job_category_service``, which is a variable derived from the
+  ``job_category`` column.
 
 
 Data Validation in Practice
@@ -299,9 +301,14 @@ about that person:
    import pandas as pd
 
    dataframe = pd.DataFrame({
-       "person_id": [1, 2, 3, 4, 5],
-       "height_in_feet": [6.5, 7, 6.1, 5.1, 6.2],
-       "gender": ["M", "F", "N", None, "F"],
+       "person_id": [1, 2, 3, 4],
+       "height_in_feet": [6.5, 7, 6.1, 5.1],
+       "date_of_birth": pd.to_datetime([
+           "2005", "2000", "1995", "2000",
+       ]),
+       "education": [
+           "highschool", "undergrad", "grad", "undergrad",
+       ],
    })
 
 We can see from inspecting the column names and data values that we can bring
@@ -313,13 +320,28 @@ are considered valid data.
    import pandera as pa
    from pandera import Column
 
-   typed_schema = pa.DataFrameSchema({
-       "person_id": Column(pa.Int),
-       "height_in_feet": Column(pa.Float),
-       "gender": Column(pa.String),
-   })
+   typed_schema = pa.DataFrameSchema(
+       {
+           "person_id": Column(pa.Int),
 
-   schema(dataframe)  # returns the dataframe
+           # numpy and pandas data type string
+           # aliases are supported
+           "height_in_feet": Column("float"),
+           "date_of_birth": Column("datetime64[ns]"),
+
+           # pandas dtypes are also supported
+           # string dtype available in pandas v1.0.0+
+           "education": Column(
+               pd.StringDtype(),
+               nullable=True
+           ),
+       },
+
+       # coerce types when dataframe is validated
+       coerce=True
+   )
+
+   typed_schema(dataframe)  # returns the dataframe
 
 Validation Checks
 ~~~~~~~~~~~~~~~~~
@@ -334,22 +356,35 @@ populate those columns:
    import pandera as pa
    from pandera import Column, Check
 
-   schema = pa.DataFrameSchema({
-       "person_id": Column(
-           pa.Int,
-           Check.greater_than(0),
-           allow_duplicates=False,
-       ),
-       "height_in_feet": Column(
-           pa.Float,
-           Check.in_range(0, 10),
-       ),
-       "gender": Column(
-           pa.String,
-           Check.isin(["F", "M", "N"]),
-           nullable=True,
-       ),
-   })
+   checked_schema = pa.DataFrameSchema(
+       {
+           "person_id": Column(
+               pa.Int,
+               Check.greater_than(0),
+               allow_duplicates=False,
+           ),
+           "height_in_feet": Column(
+               "float",
+               Check.in_range(0, 10),
+           ),
+           "date_of_birth": Column(
+              "datetime64[ns]",
+              Check.less_than_or_equal_to(
+                  pd.Timestamp.now()
+              ),
+           ),
+           "education": Column(
+               pd.StringDtype(),
+               Check.isin([
+                   "highschool",
+                   "undergrad",
+                   "grad",
+               ]),
+               nullable=True,
+           ),
+       },
+       coerce=True
+   )
 
 The schema definition above establishes the following properties about the
 data:
@@ -360,9 +395,10 @@ data:
   is a unique identifier in this dataset.
 * ``height_in_feet`` is a positive float whose maximum value is 10 feet, which
   is a reasonable assumption for the maximum height of human beings.
-* ``gender`` can take on the acceptable values in the set ``{F, M, N}`` for
-  female, male, and non-binary, respectively. Supposing that these data were
-  collected in an online form where the ``gender`` field input was optional,
+* ``date_of_birth`` cannot be a date in the future.
+* ``education`` can take on the acceptable values in the set
+  ``{"highschool", "undergrad", "grad"}``. Supposing that these data
+  were collected in an online form where the ``education`` field input was optional,
   it would be appropriate to set ``nullable`` to ``True`` (this argument is
   ``False`` by default).
 
@@ -378,7 +414,12 @@ pass the validation checks, ``pandera`` provides an informative error message:
    invalid_dataframe = pd.DataFrame({
        "person_id": [6, 7, 8, 9],
        "height_in_feet": [-10, 20, 20, 5.1],
-       "gender": ["F", "M", "N", "M"],
+       "date_of_birth": pd.to_datetime([
+           "2005", "2000", "1995", "2000",
+       ]),
+       "education": [
+           "highschool", "undergrad", "grad", "undergrad",
+       ],
    })
 
    checked_schema(invalid_dataframe)
@@ -421,14 +462,14 @@ the ``SchemaError`` object:
 .. code-block:: python
 
    # Output:
-   Failed check <Check _in_range: in_range(0, 10)>
+   Failed check: <Check _in_range: in_range(0, 10)>
 
    Invalidated dataframe:
-      person_id  height_in_feet gender
-   0          6           -10.0      F
-   1          7            20.0      X
-   2          8            20.0      N
-   3          9             5.1      M
+      person_id  height_in_feet date_of_birth   education
+   0          6           -10.0    2005-01-01  highschool
+   1          7            20.0    2000-01-01   undergrad
+   2          8            20.0    1995-01-01        grad
+   3          9             5.1    2000-01-01        none
 
    Failure cases:
       index  failure_case
