@@ -266,7 +266,13 @@ One further performance benefit comes from the flexibility of combining axes. In
 
 Above, we create three axes. The second axis is a boolean axes, which hold a valid/invalid bool flag. The third axis holds some sort of string-based category, which could label datasets, for example. We then fill this in one shot. Then, we can select the histograms that we might have originally filled separately, like the ``all_valid`` histogram, which is a 1D histogram that contains all labels and all events where ``valid=True``. In the second selection, ``a_only``, a 2D histogram is returned that consists of all the events labeled with ``"a"``.
 
-This way of thinking can radically change how you design for a problem. Instead of running a series of histograms over a piece of data every time you want a new selection, you can build a large histogram that contains all the information you want, prebinned and ready to select; much like the way Pandas can restructure how you group and select data.
+This way of thinking can radically change how you design for a problem. Instead
+of running a series of histograms over a piece of data every time you want a
+new selection, you can build a large histogram that contains all the
+information you want, prebinned and ready to select. This combination of
+multiple histograms and later selecting or summing along axes is a close
+parallel to the way Pandas combines multiple NumPy arrays in a single DataFrame
+using columns, allowing you to group and select from the full set.
 
 
 Distributing
