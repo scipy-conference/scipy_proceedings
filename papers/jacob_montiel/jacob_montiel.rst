@@ -371,7 +371,9 @@ compatibility with incremental methods from scikit-learn.
    eval.evaluate(stream=stream, model=[nb, svm],
                         model_names=['NB', 'SVM']);
 
-During the evaluation, a dynamic plot displays the performance of both estimators over the stream, Fig.
+We set two metrics to measure predictive performance: accuracy and kappa statistics :cite:`cohen1960coefficient` (for 
+benchmarking classification accuracy under class imbalance, compares the models accuracy against that of a random
+classifier). During the evaluation, a dynamic plot displays the performance of both estimators over the stream, Fig.
 :ref:`fig:prequential`. Once the evaluation is completed, a summary is displayed in the terminal. For this example and
 considering the evaluation configuration::
 
