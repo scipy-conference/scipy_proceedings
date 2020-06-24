@@ -47,9 +47,10 @@ For example:
 - Financial markets generate huge volumes of data daily. Depending on the state of such markets and multiple external
   factors data can become obsolete quickly rendering it useless for creating accurate models. Predictive models must be
   able to adapt fast to be useful in this dynamic environment.
-- Predictive maintenance. IoT sensors are a continuous source of data that reflects the health of multiple systems,
-  from complex systems such as airplanes to simpler ones such as house appliances. Predictive systems are required to
-  react fast to prevent disruptions from malfunctioning elements.
+- Predictive maintenance. The contribution of IoT to the digital universe is substantial. Data only from embedded
+  systems accounted for 2% of the world’s data in 2013, and is expected to hit 10% by 2020. IoT sensors are used to
+  monitor the health of multiple systems, from complex systems such as airplanes to simpler ones such as household 
+  appliances. Predictive systems are required to react fast to prevent disruptions from malfunctioning elements.
 - Online fraud detection. The speed of reaction of an automatic system is also an important factor in multiple
   applications. Fraud detection in online banking presents similar challenges in terms of data collections and
   processing. However, it also involves additional challenges, fraud detection systems must adapt quickly to changes
@@ -65,7 +66,8 @@ For example:
   the associated risk of floodings. IoT sensors are now making environmental data available at a faster rate and machine
   learning systems must adapt to this new norm.
 
-.. [#] Our weird behavior during the pandemic is messing with AI models". Will Douglas Heaven. MIT Technology Review. May 11, 2020.
+.. [#] The Digital Universe of Opportunities: Rich Data and the Increasing Value of the Internet of Things, IDC, April 2014.
+.. [#] Our weird behavior during the pandemic is messing with AI models. Will Douglas Heaven. MIT Technology Review. May 11, 2020.
 
 .. figure:: stream_opportunity.png
    :align: center
