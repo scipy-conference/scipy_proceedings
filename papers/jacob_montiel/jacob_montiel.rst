@@ -1,6 +1,7 @@
 :author: Jacob Montiel
 :email: jacob.montiel@waikato.ac.nz
 :institution: Department of Computer Science, University of Waikato
+:orcid: 0000-0003-2245-0718
 
 :bibliography: bibliography
 
