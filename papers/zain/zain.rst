@@ -253,9 +253,9 @@ derivation of optical flow. Healthy cilia largely exhibit delicate textural beha
 of cilia move synchronously, slowly, and within a set spatial region near cell boundaries. Additionally, 
 our imaging modality allowed for consistent object brightness throughout sequences of frames. As such, 
 we explored optical flow solutions that focus on brightness constancy, small motion, and spatial coherence 
-systems of equations. Among Farneback, Horn-Schunck, and Lucas-Kanade optical flow computation algorithms, 
+systems of equations. Among Farneback :cite:`goos_two-frame_2003`, Horn-Schunck :cite:`horn_determining_1981`, and Lucas-Kanade :cite:`lucas_iterative_nodate` optical flow computation algorithms, 
 we incorporate a slightly modified Horn-Schunck algorithm that adequately captures synchronous ciliary 
-motion :cite:`horn_determining_1981`.
+motion.
 
 For further insight into behavioral patterns, we extract first-order differential image quantities from 
 our computed optical flow fields. Estimating linear combinations of optical flow derivatives results 
