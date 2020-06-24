@@ -1,33 +1,40 @@
 :author: Dorota Jarecka
 :email: djarecka@gmail.com
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
+:orcid: 0000-0001-8282-2988
 
 :author: Mathias Goncalves
 :email: mathiasg@stanford.edu
 :institution: Stanford University, Stanford, CA, USA
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
+:orcid: 0000-0002-7252-7771
 
 :author: Christopher J. Markiewicz
 :email:  effigies@gmail.com
 :institution: Stanford University, Stanford, CA, USA
+:orcid: 0000-0002-6533-164X
 
 :author: Oscar Esteban
 :email: oesteban@stanford.edu
 :institution: Stanford University, Stanford, CA, USA
+:orcid: 0000-0001-8435-6191
 
 :author: Nicole Lo
 :email: nlo@mit.edu
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
+:orcid: 0000-0002-7522-686X
 
 
 :author: Jakub Kaczmarzyk
 :email: jakub.kaczmarzyk@gmail.com
 :institution: Stony Brook University School of Medicine, Stony Brook, NY, USA
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
+:orcid: 0000-0002-5544-7577
 
 :author: Satrajit Ghosh
 :email: satra@mit.edu
 :institution: Massachusetts Institute of Technology, Cambridge, MA, USA
+:orcid: 0000-0002-5312-6729
 
 :bibliography: mybib
 
