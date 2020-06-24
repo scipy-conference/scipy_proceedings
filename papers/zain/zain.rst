@@ -207,7 +207,7 @@ with the principle goal of upsampling to recover input resolution :cite:`jegou_o
 straightforward upsampling path requires multiplication of high-resolution feature maps, resulting in a 
 computationally intractable number of feature maps. To mitigate this "feature explosion" issue, 
 FCDenseNets upsample only the preceding dense block instead of upsampling all feature maps concatenated 
-in previous layers. We modify and train a FCDenseNet to generate usable segmentation masks as input to 
+in previous layers. We construct, tune, and train a FCDenseNet to generate usable segmentation masks as input to 
 the appearance module. Our architecture, shown in :ref:`dense`, consists of dense blocks, transition 
 blocks, and skip connections totalling to 103 layers.
 
