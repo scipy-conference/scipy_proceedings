@@ -32,7 +32,7 @@ Fluctuation X-ray Scattering real-time app
 
    We present here a Python application for Fluctuation X-ray Scattering (FXS), an emerging technique for analyzing biomolecular structure from the angular correlations of FEL diffraction snapshots with one or more particles in the beam. This FXS application for experimental data analysis is being developed to run on supercomputers in near real-time while an experiment is taking place.
 
-   We will discuss how we accelerated the most compute intensive parts of the application and how we used Pygion, a Python interface for the Legion task-based programming model, to parallelize and scale the application.
+   We discuss how we accelerated the most compute intensive parts of the application and how we used Pygion, a Python interface for the Legion task-based programming model, to parallelize and scale the application.
 
 .. class:: keywords
 
@@ -57,7 +57,7 @@ Therefore, we require real time analysis, high performance computing capabilitie
 FXS: an example analysis requiring HPC
 ++++++++++++++++++++++++++++++++++++++
 
-While a variety of experiments can be performed at LCLS, we will focus on one specific example: Fluctuation X-ray Scattering (FXS).
+While a variety of experiments can be performed at LCLS, we focus here on one specific example: Fluctuation X-ray Scattering (FXS).
 
 X-ray scattering of particles in a solution is a common technique in the study of the structure and dynamics of macromolecules in biologically-relevant conditions and gives an understanding of their function. However, traditional methods currently used at synchrotrons suffer from the fact that the exposure time is longer than the rotation time of the particle, leading to the capture of angularly-averaged patterns.
 FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. :ref:`fig:fxs`). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. This technique was described in the late 1970s :cite:`Kam1977,Kam1981` and has been widely used at LCLS :cite:`Pande2018,Kurta2017,Mendez2014,Mendez2016`.
@@ -82,7 +82,7 @@ where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar 
 Acceleration: getting the best out of NumPy
 -------------------------------------------
 
-The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy functions and slightly better performances using Numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
+The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy functions and slightly better performances using Numba. As we illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
 
 Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the Convolution Theorem, we have
 
@@ -91,7 +91,7 @@ Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds
 
    C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \mathcal{F}^{-1}[\mathcal{F}[I_j(q, \phi)] \overline{\mathcal{F}[I_j(q', \phi)]}],
 
-where :math:`\mathcal{F}` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we will also neglect all coefficients.
+where :math:`\mathcal{F}` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we also neglect all coefficients.
 
 Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`\mathcal{F}[I_j(q, \phi)]`, we have:
 
@@ -127,7 +127,7 @@ where :code:`N_RAD_BINS` and :code:`N_PHI_BINS` represent the image dimensions o
 
   images = np.random.random(IMGS_SHAPE)
 
-We will note that a typical application would be processing millions of images, but let us use 100 for the example.
+We note that a typical application would be processing millions of images, but let us use 100 for the example.
 
 This naive version can be slightly accelerated using the fact that our matrix is conjugate-symmetric:
 
@@ -199,16 +199,16 @@ When considering our problem size of up to millions of images, processing images
   As = np.fft.fft(images, axis=-1)
   C2 = As_to_C2(As)
 
-which takes 11.9 seconds, i.e. 3.56 times faster. We will note also here the batching of the Fast Fourier Transform.
+which takes 11.9 seconds, i.e. 3.56 times faster. We note also here the batching of the Fast Fourier Transform.
 
-However, such an implementation does not sound trivial using NumPy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
+However, such an implementation does not sound trivial using NumPy, although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
 
 .. code-block:: python
 
   As = np.fft.fft(images, axis=-1)
   C2 = np.einsum('hik,hjk->ijk', As, As.conj())
 
-This takes 17.9 seconds, which is slower than the version using Numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to NumPy’s :code:`asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
+This takes 17.9 seconds, which is slower than the version using Numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to NumPy’s :code:`asfortranarray` function, however, that is not an issue. We then use the F-ordered dataset.
 
 .. code-block:: python
 
@@ -257,7 +257,7 @@ To parallelize and scale the application we use Pygion, a Python interface for t
 
 To enable the distributed execution, it is necessary to separate the question of what data is needed in a given task from the allocation of the data in a given memory or memories. This reification of the flow of data between tasks is achieved by declaring *regions*, similar to multi-dimensional Pandas dataframes :cite:`McKinney2010`. Regions contain *fields*, each of which is similar to and exposed as a NumPy array. Regions can be partitioned into subregions, which can be processed by different tasks, allowing the parallelism. Note that regions are allocated only when needed, so it is possible (and idiomatic) to allocate a region which is larger than any single machine’s memory, and then to partition into pieces that will be used by individual tasks.
 
-We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion is easier to scale out of the box as it manages load-balancing of tasks across cores, shared memory (between distinct Python processes on a node) and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
+We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figure :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion is easier to scale out of the box as it manages load-balancing of tasks across cores, shared memory (between distinct Python processes on a node) and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
 
 .. figure:: scaling_merged.png
 
