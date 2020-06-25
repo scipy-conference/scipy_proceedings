@@ -179,7 +179,7 @@ Segmentation masks are used to limit spatial representation learning to video re
 cilia, and optical flow fields are computed from consecutive frames as a compressed representation 
 of temporal behavior. The predicted segmentation masks and optical flow entities are concatenated 
 with the original video data as additional channels to each frame to form an augmented video. 
-Each expanded video is fed frame-by-frame to the appearance module which utilizes a Variational Autoencoder (VAE)
+Each expanded video is fed frame-by-frame to the appearance module which utilizes a Variational Autoencoder (VAE) :cite:`introVAE`
 to learn a compressed spatial representation for images of cilia. Videos are then embedded as sequences of points 
 in the compressed latent space. The dynamics module employs another VAE to learn a representation from this compressed 
 sequence, in order to reduce the amount of irrelevant information considered. If it were to instead 
@@ -297,8 +297,7 @@ Introduction To Autoencoders
 
 Both the appearance and dynamics modules ultimately rely on a choice of a particular generative model. 
 The chosen model greatly affects the rendered representation, and thus the efficacy of the entire 
-pipeline. Our current choice of generative model is a variational autoencoder (VAE) 
-:cite:`introVAE`, an architecture that generates a low-dimensional representation of 
+pipeline. Our current choice of generative model is a VAE, an architecture that generates a low-dimensional representation of 
 the data, parameterized as a probability distribution. A VAE can be considered a modified autoencoder 
 (AE). A general AE attempts to learn a low-dimensional representation of the data by 
 enforcing a so-called "bottleneck" in the network. This bottleneck is usually in the form of a 
