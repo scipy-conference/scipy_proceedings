@@ -278,7 +278,7 @@ Given the size of the data, parallelizing between nodes would involve a lot of d
 
 where all the data exchange has to be coded by hand.
 
-In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with::
+In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with:
 
 .. code-block:: python
 
