@@ -257,8 +257,7 @@ displacement, optical flow algorithms are contingent on several assumptions.
 
 Solving these constraints yields a series of dense optical flow vector fields; each vector represents 
 a pixel, and the magnitude and direction of each vector signal the estimated pixel position in the 
-following frame. We refer to Beauchemin and Barron :cite:`beauchemin_computation_1995` for a full 
-derivation of optical flow. Healthy cilia largely exhibit delicate textural behavior in which patches 
+following frame. We refer to Beauchemin and Barron :cite:`beauchemin_computation_1995` for detailed mathematical expression of optical flow derivation. Healthy cilia largely exhibit delicate textural behavior in which patches 
 of cilia move synchronously, slowly, and within a set spatial region near cell boundaries. Additionally, 
 our imaging modality allowed for consistent object brightness throughout sequences of frames. As such, 
 we explored optical flow solutions that focus on brightness constancy, small motion, and spatial coherence 
