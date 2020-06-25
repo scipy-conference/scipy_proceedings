@@ -53,7 +53,7 @@ Our goal in developing Awkward Array is not to replace NumPy, but to extend the 
 Origin and development
 ----------------------
 
-Awkward Array was intended as a way to enable particle physics analyses to take advantage of scientific Python tools. Particle physics problems are inherently structured, heavy on nested loops over variable-length lists. They also involve big data, typically tens to hundreds of terabytes per analysis. Traditionally, this required physicists to do data analysis in Fortran (with custom libraries for data structures [hydra]_ before Fortran 90) and C++, but many physicists are now moving to Python for end-stage analysis [phypy]_. Awkward Array provides the link between scalable, interactive, NumPy-based tools and the nested, variable-length data structures that physicists need.
+Awkward Array was intended as a way to enable particle physics analyses to take advantage of scientific Python tools. Particle physics problems are inherently structured, frequently needing nested loops over variable-length lists. They also involve big data, typically tens to hundreds of terabytes per analysis. Traditionally, this required physicists to do data analysis in Fortran (with custom libraries for data structures [hydra]_ before Fortran 90) and C++, but many physicists are now moving to Python for end-stage analysis [phypy]_. Awkward Array provides the link between scalable, interactive, NumPy-based tools and the nested, variable-length data structures that physicists need.
 
 Since its release in September 2018, Awkward Array has become one of the most popular Python libraries for particle physics, as shown in Figure :ref:`awkward-0-popularity`. The Awkward 0.x branch was written using NumPy only, which limited its development because every operation must be vectorized for performance. We (the developers) also made some mistakes in interface design and learned from the physicists' feedback.
 
@@ -63,7 +63,7 @@ Since its release in September 2018, Awkward Array has become one of the most po
 
    Adoption of Awkward 0.x, measured by PyPI statistics, compared to other popular particle physics packages (root-numpy, iminuit, rootpy) and popular data science packages. :label:`awkward-0-popularity`
 
-Spurred by these shortcomings and the popularity of the general concept, we redesigned the library as Awkward 1.x in a half-year project starting in August 2019. The new library is a Python extension module to allow us to write custom precompiled loops, and its Python interface is improved: it is now a strict generalization of NumPy, is compatible with Pandas [pandas]_ (Awkward Arrays can be DataFrame columns), and is implemented as a Numba [numba]_ extension (Awkward Arrays can be used in Numba's just-in-time compiled functions).
+Spurred by these shortcomings and the popularity of the general concept, we redesigned the library as Awkward 1.x in a half-year project starting in August 2019. The new library is compiled as an extension module to allow us to write custom precompiled loops, and its Python interface is improved: it is now a strict generalization of NumPy, is compatible with Pandas [pandas]_ (Awkward Arrays can be DataFrame columns), and is implemented as a Numba [numba]_ extension (Awkward Arrays can be used in Numba's just-in-time compiled functions).
 
 Although the Awkward 1.x branch is feature-complete, serialization to and from a popular physics file format (ROOT [root]_, which represents over an exabyte of physics data [root-EB]_) is not. Adoption among physicists is ongoing, but the usefulness of JSON-like structures in data analysis is not domain-specific and should be made known to the broader community.
 
@@ -127,7 +127,7 @@ We can access each of these, eliminating all other fields, with a NumPy-like mul
 
 The :code:`longitude` and :code:`latitude` arrays both have type :code:`1061 * var * var * float64`; that is, 1061 routes with a variable number of variable-length polylines.
 
-At this point, we might want to compute the length of each route, and we can use NumPy ufuncs to do that, despite the irregular shape of the :code:`longitude` and :code:`latitude` arrays. First, we need to convert degrees into a unit of distance (:code:`82.7` and :code:`111.1` are conversion factors at Chicago's latitude).
+At this point, we might want to compute the length of each route, and we can use NumPy ufuncs to do that, despite the irregular shape of the :code:`longitude` and :code:`latitude` arrays. First, we subtract off the mean and convert degrees into a unit of distance (:code:`82.7` and :code:`111.1` are conversion factors at Chicago's latitude).
 
 .. code-block:: python
 
@@ -287,13 +287,13 @@ These layers are fully broken down below and in Figure :ref:`awkward-1-0-layers`
 * The high-level interface is in Python.
 * The array nodes (managing node hierarchy and ownership/lifetime) are in C++, accessed through pybind11.
 * An alternate implementation of array navigation was written for Python functions that are compiled by Numba.
-* Array manipulation algorithms (without memory management) are independently implemented as "CPU kernels" and "GPU kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
+* Array manipulation algorithms (without memory management) are independently implemented as "cpu-kernels" and "cuda-kernels" plugins. The kernels' interface is pure C, allowing for reuse in other languages.
 
 .. figure:: figures/awkward-1-0-layers.pdf
    :align: center
    :scale: 45%
 
-   Components of Awkward Array, as described in the text. All components have been implemented except for the "CUDA kernels." :label:`awkward-1-0-layers`
+   Components of Awkward Array, as described in the text. All components have been implemented except for the "cuda-kernels." :label:`awkward-1-0-layers`
 
 The separation of "kernels" from "navigation" has two advantages: (1) optimization efforts can focus on the kernels, since these are the only loops that scale with data volume, and (2) CPU-based kernels can, in principle, be swapped for GPU-based kernels. The latter is an ongoing project.
 
@@ -315,14 +315,14 @@ Returning to the bike routes example, the following performs the same calculatio
     @nb.jit
     def compute_lengths(bikeroutes):
         # allocate output array
-        route_length = np.zeros(len(bikeroutes.features))
+        route_length = np.zeros(len(bikeroutes["features"]))
 
         # loop over routes
-        for i in range(len(bikeroutes.features)):
-            feature = bikeroutes.features[i]
+        for i in range(len(bikeroutes["features"])):
+            route = bikeroutes["features"][i]
 
             # loop over polylines
-            for polyline in feature.geometry.coordinates:
+            for polyline in route["geometry"]["coordinates"]:
                 first = True
                 last_east = 0.0
                 last_north = 0.0
@@ -349,14 +349,14 @@ This expression is not concise, but it is 250× faster than the pure Python solu
 
 Combining Awkward Array with Numba has benefits that neither has alone. Ordinarily, complex data structures would have to be passed into Numba as Python objects, which means a second copy of the data that must be "unboxed" (converted into a compiler-friendly form) and "boxed" (converted back). If the datasets are large, this consumes memory and time. Awkward Arrays use less memory than the equivalent Python objects (5.2× smaller for the bike routes) and they use the same internal representation (columnar arrays) inside and outside functions just-in-time compiled by Numba.
 
-At the time of writing, heterogeneous data (union type) is not supported in Numba, because code for a variable type can't be easily specialized.
+The disadvantage of Numba and Awkward Arrays in Numba is that neither support the whole language: Numba can only compile a subset of Python and the NumPy library and Awkward Arrays are limited to imperative-style access (no array-at-a-time functions) and homogeneous data (no union type). Any code that works in a just-in-time compiled function works without compilation, but not vice-versa. Thus, there is a user cost to preparing a function for compilation, which can be seen in a comparison of the code listing above with the pure Python example in the original bike routes section. However, this finagling is considerably less time-consuming than translating a Python function to a language like C or C++ and converting the data structures. It favors gradual transition of an analysis from no just-in-time compilation to a judicious use of it in the parts of the workflow where performance is critical.
 
 ArrayBuilder: creating columnar data in-place
 ---------------------------------------------
 
 Awkward Arrays are immutable; NumPy's ability to assign elements in place is not supported or generalized by the Awkward Array library. (As an exception, users can assign fields to records using :code:`__setitem__` syntax, but this *replaces* the inner tree with one having the new field.) Restricting Awkward Arrays to read-only access allows whole subtrees of nodes to be shared among different versions of an array.
 
-To create new arrays, we introduced :code:`ak.ArrayBuilder`, an append-only structure that accumulates data and cteates :code:`ak.Arrays` by taking a "snapshot" of the current state. The :code:`ak.ArrayBuilder` is also implemented for Numba, so just-in-time compiled Python can build arbitrary data structures.
+To create new arrays, we introduced :code:`ak.ArrayBuilder`, an append-only structure that accumulates data and creates :code:`ak.Arrays` by taking a "snapshot" of the current state. The :code:`ak.ArrayBuilder` is also implemented for Numba, so just-in-time compiled Python can build arbitrary data structures.
 
 The :code:`ak.ArrayBuilder` is a dynamically typed object, inferring its type from the types and order of data appended to it. As elements are added, the :code:`ak.ArrayBuilder` builds a tree of columns *and* their types to refine the inferred type.
 
@@ -414,6 +414,7 @@ This capability has been ported to Awkward 1.x and expanded upon. In Awkward 1.x
 
     class PointRecord(Point, ak.Record):
         pass
+
     class PointArray(Point, ak.Array):
         pass
 
@@ -424,6 +425,7 @@ This capability has been ported to Awkward 1.x and expanded upon. In Awkward 1.x
                         {"x": 2.2, "y": 2},
                         {"x": 3.3, "y": 3}],
                        with_name="point")
+
     points2 = ak.Array([{"x": 1, "y": 1.1},
                         {"x": 2, "y": 2.2},
                         {"x": 3, "y": 3.3}],
@@ -457,12 +459,12 @@ as well as custom broadcasting rules, and Numba extensions (typing and lowering 
 
 As a special case, strings are not defined as an array type, but as a parameter label on variable-length lists. Behaviors that present these lists as strings (overriding :code:`__repr__`) and define per-string equality (overriding :code:`np.equal`) are preloaded in the default :code:`ak.behavior`.
 
-Pandas and other third-party libraries
---------------------------------------
+Awkward Arrays and Pandas
+-------------------------
 
-Awkward Arrays are Pandas extensions, so they can be used as a :code:`Series` and :code:`DataFrame` column type. NumPy ufuncs on the resulting Pandas objects are correctly passed through to the Awkward Arrays (including behavioral overrides), though general use-cases of Awkward Arrays in Pandas are largely untested.
+Awkward Arrays are registered as a Pandas extension, so they can be losslessly embedded within a :code:`Series` or a :code:`DataFrame` as a column. Some Pandas operations can be performed on them—particularly, NumPy ufuncs and any high-level behaviors that override ufuncs—but best practices for using Awkward Arrays within Pandas are largely unexplored. Most Pandas functions were written without deeply nested structures in mind.
 
-Rather than directly embedding complex data structures in Pandas, however, it is often more useful to translate Awkward structures into Pandas structures. Variable-length lists translate naturally into MultiIndex rows:
+It is also possible (and perhaps more useful) to translate Awkward Arrays into Pandas's own ways of representing nested structures. Pandas's MultiIndex is particularly useful: variable-length lists translate naturally into MultiIndex rows:
 
 .. code-block:: python
 
@@ -502,20 +504,20 @@ and nested records translate into MultiIndex column names:
     # 3      30  30  30
     # 4      40  40  40
 
-If an array contains records with fields of different nested list lengths, however, a single DataFrame cannot losslessly encode the information, though several DataFrames related by a key can.
+In the first of these two examples, empty lists in the Awkward Array do not appear in the Pandas output, though their existence may be inferred from gaps between entry and subentry indexes. When analyzing both lists and non-list data, or lists of different lengths, it is more convenient to translate an Awkward Array into multiple DataFrames and :code:`JOIN` those DataFrames as relational data than to try to express it all in one DataFrame.
 
-Other third-party libraries, such as NumExpr, are similarly wrapped to generalize their applicability from NumPy arrays to Awkward Arrays.
+This example highlights a difference in applicability between Pandas and Awkward Array: Pandas is better at solving problems with long-range relationships, joining on relational keys, but the structures that a single DataFrame can represent (without resorting to Python objects) is limited. Awkward Array allows general data structures with different length lists in the same structure, but most calculations are elementwise, as in NumPy.
 
 GPU backend
 -----------
 
-One of the advantages of a vectorized user interface is that it is already optimal for calculations on a GPU. Imperative loops need to be redesigned when porting algorithms to GPUs, but CuPy, Torch, TensorFlow, and JAX demonstrate that array-at-a-time functions can hide the distinction between CPU calculations and GPU calculations.
+One of the advantages of a vectorized user interface is that it is already optimal for calculations on a GPU. Imperative loops have to be redesigned when porting algorithms to GPUs, but CuPy, Torch, TensorFlow, and JAX demonstrate that an interface consisting of array-at-a-time functions hides the distinction between CPU calculations and GPU calculations, making the hardware transparent to users.
 
-Partly for the sake of adding a GPU backend, all instances of reading or writing to an array's buffers were restricted to the "array manipulation" layer of the project (see Figure :ref:`awkward-1-0-layers`). The first implementation of this layer, "CPU kernels," performs all operations that actually access the array buffers, and it is compiled into a physically separate file: :code:`libawkward-cpu-kernels.so`, as opposed to the main :code:`libawkward.so`, Python extension module, and Python code.
+Partly for the sake of adding a GPU backend, all instances of reading or writing to an array's buffers were restricted to the "array manipulation" layer of the project (see Figure :ref:`awkward-1-0-layers`). The first implementation of this layer, "cpu-kernels," performs all operations that actually access the array buffers, and it is compiled into a physically separate file: :code:`libawkward-cpu-kernels.so`, as opposed to the main :code:`libawkward.so`, Python extension module, and Python code.
 
-In May 2020, we began developing the "CUDA kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "GPU kernels" may be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
+In May 2020, we began developing the "cuda-kernels" library, provisionally named :code:`libawkward-cuda-kernels.so` (to allow for future non-CUDA versions). Since the main codebase (:code:`libawkward.so`) never dereferences any pointers to its buffers, main memory pointers can be transparently swapped for GPU pointers with additional metadata to identify which kernel to call for a given set of pointers. Thus, the main library does not need to be recompiled to support GPUs and it can manage arrays in main memory and on GPUs in the same process, which could be important, given the limited size of GPU memory. The "cuda-kernels" will be deployed as a separate package in PyPI and Conda so that users can choose to install it separately as an "extras" package.
 
-The kernels library contains many functions (428 with an :code:`"extern C"` interface, 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one uses dynamic memory, but there may be alternatives). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
+The kernels library contains many functions (428 in the :code:`"extern C"` interface with 124 independent implementations, as of May 2020) because it defines all array manipulations. All of these must be ported to CUDA for the first GPU implementation. Fortunately, the majority are easy to translate: Figure :ref:`kernels-survey` shows that almost 70% are simple, embarrassingly parallel loops, 25% use a counting index that could be implemented with a parallel prefix sum, and the remainder have loop-carried dependencies or worse (one used dynamic memory, but it has since been rewritten). The kernels were written in a simple style that may be sufficiently analyzable for machine-translation, a prospect we are currently investigating with pycparser.
 
 .. figure:: figures/kernels-survey.pdf
    :align: center
