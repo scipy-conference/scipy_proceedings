@@ -109,8 +109,8 @@ This simultaneously reduces the barriers to access as a scientific tool, and the
 Our approach is to create a pipeline that learns a low-dimensional representation of ciliary motion on 
 unlabeled data. The model we propose considers the spatial and temporal dimensions of ciliary motion 
 separately. The pipeline encodes each frame of the input video and then encodes the paths between frames in the latent space. 
-The low-dimensional latent space in this pipeline will have semantic significance, and thus interpolation 
-and clustering on the latent space should be meaningful for those studying ciliary motion and its connection to ciliopathies. 
+The low-dimensional latent space in this pipeline will have semantic significance, and thus the distribution 
+and clustering of points in the latent space should be meaningful for those studying ciliary motion and its connection to ciliopathies. 
 
 
 Related Works
@@ -164,6 +164,14 @@ complex ciliary motion phenotypes beyond the normal-abnormal binary.
 Methods
 -------
 
+.. figure:: pipeline.jpg
+	:scale: 50%
+	:align: center
+	:figclass: w
+
+	The proposed framework for creating a disentangled spatiotemporal representation :label:`pipeline`
+
+
 Our proposed model is divided into three modules: preprocessing, appearance, and dynamics. 
 The preprocessing module primarily serves to supplement input data by generating segmentation 
 masks and extracting dense optical flow vector fields and pertinent differential quantities. 
@@ -181,9 +189,21 @@ out useful information in a sea of noise. This compressed sequence allows it to 
 motion of cilia. Through this construction, we factor the representation of cilia into disentangled 
 spatial and temporal components.
 
-Results
--------
 
+Data
+====
+
+Our data, obtained from the Quinn 2015 study, consist of nasal biopsy samples observed in patients 
+with diagnosed ciliopathies and in healthy controls :cite:`quinn2015automated`. Nasal epithelial 
+tissue was obtained from the inferior nasal turbinate using a Rhino-Pro curette, and cultured 
+for three passages prior to recording. Grayscale video data was recorded for 1.25 seconds using 
+a Phantom v4.2 high speed camera at 200 frames per second, resulting in 250 frames per sample. 
+Recorded videos vary in dimension, ranging from 256 to 640 pixels on either axis. Segmentation 
+masks used during the training of the preprocessing module were generated manually using ITK-SNAP, 
+where each pixel is a binary value corresponding to whether the pixel contains cilia. Our dataset 
+has a total of 325 sample videos, taken from Quinn 2015's cohort sampled at the University of 
+Pittsburgh, and 230 ground-truth segmentation masks. The preprocessing module supplemented the 
+95 raw videos without corresponding ground-truth segmentation masks with segmentation masks predicted by FCDN-103. 
 
 Preprocessing
 =============
@@ -191,7 +211,7 @@ Preprocessing
 The preprocessing module primarily functions to generate segmentation masks that distinguish spatial regions containing 
 cilia from background noise and supplement cilia data with measures of temporal behavior, such as optical flow and its derivative values.
 
-Because we are interested in modelling the spatio-temporal behavior of *only* cilia, segmentation masks, 
+Because we are interested in modelling the spatiotemporal behavior of *only* cilia, segmentation masks, 
 which provide a direct mapping to pixels of interest within each frame, are critical within the appearance 
 module to limit representation learning to cilia localities and ignore background noise. Although 
 the end-to-end pipeline provides an unsupervised framework to represent and characterize complex and 
@@ -207,7 +227,7 @@ with the principle goal of upsampling to recover input resolution :cite:`jegou_o
 straightforward upsampling path requires multiplication of high-resolution feature maps, resulting in a 
 computationally intractable number of feature maps. To mitigate this "feature explosion" issue, 
 FCDenseNets upsample only the preceding dense block instead of upsampling all feature maps concatenated 
-in previous layers. We construct, tune, and train a FCDenseNet to generate usable segmentation masks as input to 
+in previous layers. We modify and train a FCDenseNet to generate usable segmentation masks as input to 
 the appearance module. Our architecture, shown in :ref:`dense`, consists of dense blocks, transition 
 blocks, and skip connections totalling to 103 layers.
 
@@ -253,9 +273,9 @@ derivation of optical flow. Healthy cilia largely exhibit delicate textural beha
 of cilia move synchronously, slowly, and within a set spatial region near cell boundaries. Additionally, 
 our imaging modality allowed for consistent object brightness throughout sequences of frames. As such, 
 we explored optical flow solutions that focus on brightness constancy, small motion, and spatial coherence 
-systems of equations. Among Farneback :cite:`goos_two-frame_2003`, Horn-Schunck :cite:`horn_determining_1981`, and Lucas-Kanade :cite:`lucas_iterative_nodate` optical flow computation algorithms, 
+systems of equations. Among Farneback, Horn-Schunck, and Lucas-Kanade optical flow computation algorithms, 
 we incorporate a slightly modified Horn-Schunck algorithm that adequately captures synchronous ciliary 
-motion.
+motion :cite:`horn_determining_1981`.
 
 For further insight into behavioral patterns, we extract first-order differential image quantities from 
 our computed optical flow fields. Estimating linear combinations of optical flow derivatives results 
@@ -267,8 +287,8 @@ visual sensor, in which object size changes as a product of varied depth. Becaus
 captured from a top-down perspective without possibility of dilation, we limit our computation to curl 
 and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. 
 	
-.. figure:: of_ex.png
-	:scale: 35%
+.. figure:: of_ex_vert.png
+	:scale: 45%
 
 	Raw imagery and corresponding optical flow visualization :label:`of`
 
@@ -284,6 +304,9 @@ both ciliary location and temporal behavior.
 		
 Generative Model
 ================
+
+Introduction
+++++++++++++
 
 Both the appearance and dynamics modules ultimately rely on a choice of a particular generative model. 
 The chosen model greatly affects the rendered representation, and thus the efficacy of the entire 
@@ -503,7 +526,7 @@ Dynamics
 ========
 
 .. figure:: aag.png
-	:scale: 50%
+	:scale: 45%
 	:align: center
 	:figclass: w
 	
@@ -522,17 +545,17 @@ These vectors are not the extrapolated sequence themselves, but instead represen
 changes to be made on a supplied appearance vector :math:`\hat z_0`. This vector serves as an 
 initial frame |---| a starting point for extrapolation |---| and can be any frame from the 
 video since the vector :math:`w` encodes the dynamics of the *entire* video. Applying this sequence 
-of change vectors to the initial appearance vector one-by-one, using an aggregation operator :math:`\phi(z,c)` |---| 
-which could be as simple as vector addition |---|, results in a sequence of appearance vectors 
+of change vectors to the initial appearance vector one-by-one, using an aggregation operator :math:`\phi(z,c)`, 
+which could be as simple as vector addition, results in a sequence of appearance vectors 
 :math:`\hat z_{1..k}` which represent the extrapolated sequence. This sequence can then be decoded 
 back into video frames through the decoder of the appearance module :math:`D_\text{app}`.
  
 Since the encoder and the decoder of the dynamics module need to process sequences of vectors, they 
-are modeled using a Gated Recurrent Unit (GRU:cite:`Cho2014LearningPR`) and an LSTM 
+are modeled using a Gated Recurrent Unit (GRU) :cite:`Cho2014LearningPR` and an LSTM 
 unit, respectively. They are types of RNN with unique architectures that allow them to handle longer sequences of data than a generic RNN could. 
 A GRU cell operates on an input vector :math:`x_t`, and a hidden state vector :math:`s^t` at a 
 certain time-step :math:`t`. Applying a GRU step results in an updated state vector :math:`s^{t+1}`. 
-An LSTM cell is similar, but it also has an additional output state $h^t$ that gets updated as well like the hidden state.
+An LSTM cell is similar, but it also has an additional output state :math:`h^t` that gets updated as well like the hidden state.
 
 Figure :ref:`dyn` depicts the pipeline of the proposed dynamics module, showing the encoder steps, 
 sampling from the dynamics space, and the decoder steps. The dynamics encoder GRU, 
@@ -574,27 +597,8 @@ cilia motion patterns. The decoder applies motion patterns from a sampled dynami
 starting frame, and predicts the appearance vectors to future frames.
 
 
-Technical Discussion
---------------------
-
-Data
-====
-
-
-Our data, obtained from the Quinn 2015 study, consist of nasal biopsy samples observed in patients 
-with diagnosed ciliopathies and in healthy controls :cite:`quinn2015automated`. Nasal epithelial 
-tissue was obtained from the inferior nasal turbinate using a Rhino-Pro curette, and cultured 
-for three passages prior to recording. Grayscale video data was recorded for 1.25 seconds using 
-a Phantom v4.2 high speed camera at 200 frames per second, resulting in 250 frames per sample. 
-Recorded videos vary in dimension, ranging from 256 to 640 pixels on either axis. Segmentation 
-masks used during the training of the preprocessing module were generated manually using ITK-SNAP, 
-where each pixel is a binary value corresponding to whether the pixel contains cilia. Our dataset 
-has a total of 325 sample videos, taken from Quinn 2015's cohort sampled at the University of 
-Pittsburgh, and 230 ground-truth segmentation masks. The preprocessing module supplemented the 
-95 raw videos without corresponding ground-truth segmentation masks with segmentation masks predicted by FCDN-103. 
-
-Implementation Notes
-====================
+Results
+-------
 
 We train our FCDN-103 model, written in PyTorch :cite:`NEURIPS2019_9015`, with an Adam optimizer and cross-entropy 
 loss on one NVIDIA Titan X GPU card. We split our data to consist of 1785 training patches 
