@@ -201,7 +201,7 @@ When considering our problem size of up to millions of images, processing images
 
 which takes 11.9 seconds, i.e. 3.56 times faster. We will note also here the batching of the Fast Fourier Transform.
 
-However, such an implementation does not sound trivial using Numpy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
+However, such an implementation does not sound trivial using NumPy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
 
 .. code-block:: python
 
@@ -257,7 +257,7 @@ To parallelize and scale the application we use Pygion, a Python interface for t
 
 To enable the distributed execution, it is necessary to separate the question of what data is needed in a given task from the allocation of the data in a given memory or memories. This reification of the flow of data between tasks is achieved by declaring *regions*, similar to multi-dimensional Pandas dataframes :cite:`McKinney2010`. Regions contain *fields*, each of which is similar to and exposed as a NumPy array. Regions can be partitioned into subregions, which can be processed by different tasks, allowing the parallelism. Note that regions are allocated only when needed, so it is possible (and idiomatic) to allocate a region which is larger than any single machine’s memory, and then to partition into pieces that will be used by individual tasks.
 
-We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion is easier to scale out of the box as it manages load-balancing of tasks across cores, shared memory (between distrinct Python processes on a node) and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
+We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion is easier to scale out of the box as it manages load-balancing of tasks across cores, shared memory (between distinct Python processes on a node) and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
 
 .. figure:: scaling_merged.png
 
