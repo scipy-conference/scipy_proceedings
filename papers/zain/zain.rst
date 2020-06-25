@@ -262,9 +262,20 @@ derivation of optical flow. Healthy cilia largely exhibit delicate textural beha
 of cilia move synchronously, slowly, and within a set spatial region near cell boundaries. Additionally, 
 our imaging modality allowed for consistent object brightness throughout sequences of frames. As such, 
 we explored optical flow solutions that focus on brightness constancy, small motion, and spatial coherence 
-systems of equations. Among Farneback, Horn-Schunck, and Lucas-Kanade optical flow computation algorithms, 
-we incorporate a slightly modified Horn-Schunck algorithm that adequately captures synchronous ciliary 
-motion :cite:`horn_determining_1981`.
+systems of equations. 
+
+Our optical flow fields are computed using a coarse-to-fine implementation of Horn-Schunck's 
+influential algorithm. Although we tested other methods, namely Farneback :cite:`goos_two-frame_2003`, Lucas-Kanade :cite:`lucas_iterative_nodate`, 
+and TV-L1 :cite:`sanchez_perez_tv-l1_2013`, coarse-to-fine Horn-Schunck produced fields more robust to background movement. 
+Horn-Schunck operates by firstly assuming motion smoothness between two frames; the algorithm 
+then minimizes perceived distortions in flow by iteratively updating a global energy function. 
+The coarse-to-fine aspect transforms consecutive frames into Gaussian image pyramids; at each 
+iteration, corresponding to levels in the Gaussian pyramids, an optical flow field is generated 
+by Horn-Schunck, and then used to "warp" the images toward one another. This process is repeated 
+until the two images converge. While Horn-Schunck has potential to be noise-sensitive due to its 
+smoothness assumption, we observe that this is mitigated by the coarse-to-fine estimation and 
+hyperparameter tuning. Additionally, we find that this estimation is more computationally and 
+time efficient than its contemporaries. 
 
 For further insight into behavioral patterns, we extract first-order differential image quantities from 
 our computed optical flow fields. Estimating linear combinations of optical flow derivatives results 
@@ -274,7 +285,8 @@ local angular movement. Deformation is the shearing about two different axes, in
 while the other contracts. Divergence, or dilation, is the apparent movement toward or away from the 
 visual sensor, in which object size changes as a product of varied depth. Because our cilia data are 
 captured from a top-down perspective without possibility of dilation, we limit our computation to curl 
-and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. 
+and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. Curl and deformation fields are extracted from the 
+generated optical flow fields using SciPy's signal and ndimage packages :cite:`2020SciPy-NMeth`. 
 	
 .. figure:: of_ex_vert.png
 	:scale: 45%
@@ -615,20 +627,6 @@ than the ground truths and ignore the background in entirety. Previously, Lu 201
 a Fully Convolutional DenseNet with 109 layers in a tiramisu architecture trained on ciliary 
 data :cite:`lu_stacked_2018`; FCDN-103 achieves an average of 88.3% testing accuracy, 
 outperforming Lu 2018's FCDN-109 by two percentage points.
-
-The optical flow fields are computed using a coarse-to-fine implementation of Horn-Schunck's 
-influential algorithm. Although we tested other methods, namely Farneback, Lucas-Kanade, 
-and TV-L1, coarse-to-fine Horn-Schunck produced fields more robust to background movement. 
-Horn-Schunck operates by firstly assuming motion smoothness between two frames; the algorithm 
-then minimizes perceived distortions in flow by iteratively updating a global energy function. 
-The coarse-to-fine aspect transforms consecutive frames into Gaussian image pyramids; at each 
-iteration, corresponding to levels in the Gaussian pyramids, an optical flow field is generated 
-by Horn-Schunck, and then used to "warp" the images toward one another. This process is repeated 
-until the two images converge. While Horn-Schunck has potential to be noise-sensitive due to its 
-smoothness assumption, we observe that this is mitigated by the coarse-to-fine estimation and 
-hyperparameter tuning. Additionally, we find that this estimation is more computationally and 
-time efficient than its contemporaries. Curl and deformation fields are extracted from the 
-generated optical flow fields using SciPy's signal and ndimage packages :cite:`2020SciPy-NMeth`. 
 
 .. figure:: mask_example_b12.png
 	:scale: 50%
