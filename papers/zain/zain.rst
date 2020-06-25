@@ -291,8 +291,6 @@ and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`.
 Generative Model
 ================
 
-Introduction
-++++++++++++
 
 Both the appearance and dynamics modules ultimately rely on a choice of a particular generative model. 
 The chosen model greatly affects the rendered representation, and thus the efficacy of the entire 
@@ -655,6 +653,10 @@ and a mixture of Gaussians, the prior, and thus intractable. In order to estimat
 employ a Monte Carlo estimation technique, manually calculate the difference in log-probabilities for each 
 distribution at every pass of the loss function, asserting that throughout training these 
 values approximate the ideal KL Divergence.
+
+Discussion
+----------
+
 
 Conclusion
 ----------
