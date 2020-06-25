@@ -41,9 +41,9 @@
 
 :bibliography: mybib
 
-------------------------------------------------------------------------------------------------
-Unsupervised Spatiotemporal Representation of Cilia Video Using A Modular Generative Pipeline
-------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------
+Towards an Unsupervised Spatiotemporal Representation of Cilia Video Using A Modular Generative Pipeline
+--------------------------------------------------------------------------------------------------------
 
 .. class:: abstract
 
@@ -179,14 +179,15 @@ Segmentation masks are used to limit spatial representation learning to video re
 cilia, and optical flow fields are computed from consecutive frames as a compressed representation 
 of temporal behavior. The predicted segmentation masks and optical flow entities are concatenated 
 with the original video data as additional channels to each frame to form an augmented video. 
-Each expanded video is fed frame-by-frame to the appearance module which learns a compressed spatial 
-representation for images of cilia. After the appearance module learns a latent representation of 
-the spatial aspects of cilia in that frame, videos are embedded as sequences of points in the compressed 
-latent space. The dynamics module employs another VAE to learn a representation from this compressed 
+Each expanded video is fed frame-by-frame to the appearance module which utilizes a Variational Autoencoder (VAE)
+to learn a compressed spatial representation for images of cilia. Videos are then embedded as sequences of points 
+in the compressed latent space. The dynamics module employs another VAE to learn a representation from this compressed 
 sequence, in order to reduce the amount of irrelevant information considered. If it were to instead 
 train on the original video itself, the information would be too high-volume, potentially drowning 
 out useful information in a sea of noise. This compressed sequence allows it to focus only on the 
-motion of cilia. Through this construction, we factor the representation of cilia into disentangled 
+motion of cilia. The dynamics module VAE is trained on potentially random subsequences of the embedded representations
+of video in order to assure that the temporal representation learned is adequately robust to reconstruct
+arbitrary parts of the sequence. Through this construction, we factor the representation of cilia into disentangled 
 spatial and temporal components.
 
 
@@ -288,8 +289,8 @@ and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`.
 
 
 		
-Generative Model
-================
+Introduction To Autoencoders
+============================
 
 
 Both the appearance and dynamics modules ultimately rely on a choice of a particular generative model. 
@@ -345,6 +346,10 @@ of the input dataset, achieving perfect reconstruction at the expense of any gen
 Notably, even without this extreme hash example, there is no restraint on continuity on the decoder, 
 thus even if a point :math:`z\in E(S)\subset\mathbb{R}^l` in the latent space decodes into a nice, 
 plausible data point in the original dataset, points close to :math:`z` need not nicely decode.
+
+The Variational Autoencoder
+===========================
+
 
 A VAE attempts to solve this problem by decoding neighborhoods around the encoded points rather 
 than just the encoded points themselves. A neighborhood around a point :math:`z\in\mathbb{R}^l` 
@@ -653,9 +658,6 @@ and a mixture of Gaussians, the prior, and thus intractable. In order to estimat
 employ a Monte Carlo estimation technique, manually calculate the difference in log-probabilities for each 
 distribution at every pass of the loss function, asserting that throughout training these 
 values approximate the ideal KL Divergence.
-
-Discussion
-----------
 
 
 Conclusion
