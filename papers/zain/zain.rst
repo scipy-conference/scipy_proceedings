@@ -267,7 +267,7 @@ Our optical flow fields are computed using a coarse-to-fine implementation of Ho
 influential algorithm. Although we tested other methods, namely Farneback :cite:`goos_two-frame_2003`, Lucas-Kanade :cite:`lucas_iterative_nodate`, 
 and TV-L1 :cite:`sanchez_perez_tv-l1_2013`, coarse-to-fine Horn-Schunck produced fields more robust to background movement. 
 Horn-Schunck operates by firstly assuming motion smoothness between two frames; the algorithm 
-then minimizes perceived distortions in flow by iteratively updating a global energy function. 
+then minimizes perceived distortions in flow by iteratively updating a global energy function :cite:`horn_determining_1981`. 
 The coarse-to-fine aspect transforms consecutive frames into Gaussian image pyramids; at each 
 iteration, corresponding to levels in the Gaussian pyramids, an optical flow field is generated 
 by Horn-Schunck, and then used to "warp" the images toward one another. This process is repeated 
