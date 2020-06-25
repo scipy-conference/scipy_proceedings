@@ -50,17 +50,17 @@ To push the boundaries of the science available at the lightsource, LCLS is curr
 
 Quasi real time analysis of the LCLS-II datasets will require High Performance Computing, potentially at the Exascale, which cannot be offered in-house. Therefore, a pipeline to a supercomputing center is required. The Pipeline itself starts with a Data Reduction step to reduce the data size, using vetoing, feature extraction, and compression in real time. We then pass the data over the Energy Sciences Network (ESnet) to the National Energy Research Scientific Computing Center (NERSC). ESNet is a high-speed network with a current capability of 100Gbps, which will have to be increased to the Tbps range. At the end of the pipeline, the actual analysis can take place on NERSC’s supercomputers. This makes the whole process, from the sample to the analysis, quite challenging to change and adapt.
 
-However, LCLS experiments are typically high-risk / high-reward and involve novel setups, varying levels of requirements, and last only for a few days of beam time. The novelty in the science can require adaptations in the algorithms, requiring the data analysis itself to be highly flexible. Furthermore, we want to give users as much freedom as possible in the way they analyze their data without expecting them to have a deep knowledge of large-scale computer programming.
+Moreover, LCLS experiments are typically high-risk / high-reward and involve novel setups, varying levels of requirements, and last only for a few days of beam time. The novelty in the science can require adaptations in the algorithms, requiring the data analysis itself to be highly flexible. Furthermore, we want to give users as much freedom as possible in the way they analyze their data without expecting them to have a deep knowledge of large-scale computer programming.
 
-Therefore, we require real time analysis, high performance computing capabilities and a complex pipeline, while at the same time requiring enough flexibility to adapt to novel experimental setups and analysis algorithms. We believe Python helps us in this compromise pretty well.
+Therefore, we require real time analysis, high performance computing capabilities and a complex pipeline, while at the same time requiring enough flexibility to adapt to novel experimental setups and analysis algorithms. We believe Python helps us achieve this goal given the tradeoffs involved.
 
 FXS: an example analysis requiring HPC
 ++++++++++++++++++++++++++++++++++++++
 
-While a variety of experiments that can be performed at LCLS, we will here focus on one specific example: Fluctuation X-ray Scattering (FXS).
+While a variety of experiments can be performed at LCLS, we will focus on one specific example: Fluctuation X-ray Scattering (FXS).
 
 X-ray scattering of particles in a solution is a common technique in the study of the structure and dynamics of macromolecules in biologically-relevant conditions and gives an understanding of their function. However, traditional methods currently used at synchrotrons suffer from the fact that the exposure time is longer than the rotation time of the particle, leading to the capture of angularly-averaged patterns.
-FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. :ref:`fig:fxs`). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. It has been described in the late 1970s :cite:`Kam1977,Kam1981` and has then been performed at LCLS before the upgrade :cite:`Pande2018,Kurta2017,Mendez2014,Mendez2016`.
+FXS techniques fully utilize the femtosecond pulses to measure diffraction patterns from multiple identical macromolecules below the sample rotational diffusion times (Fig. :ref:`fig:fxs`). The patterns are then collected to reconstruct a 3D structure of the macromolecule or measure some of its properties. This technique was described in the late 1970s :cite:`Kam1977,Kam1981` and has been widely used at LCLS :cite:`Pande2018,Kurta2017,Mendez2014,Mendez2016`.
 
 .. figure:: FXS-overview.jpg
 
@@ -68,7 +68,7 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 
 While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
 
-We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
+We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US Department of Energy national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
 
 In FXS, each diffraction pattern contains several identical particles in random orientations. Information about the structure of the individual particle can be recovered by studying the two-point angular correlation of the data. To do so, the 2D images are expanded in a 3D, orientation-invariant space, where they are aggregated using the following formula:
 
@@ -79,10 +79,10 @@ In FXS, each diffraction pattern contains several identical particles in random 
 
 where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar coordinates. This correlator can then be used as a basis for the actual 3D reconstruction of the data (Fig. :ref:`fig:reconstruction`), using an algorithm described elsewhere :cite:`Donatelli2015,Pande2018`.
 
-Acceleration: getting the best out of numpy
+Acceleration: getting the best out of NumPy
 -------------------------------------------
 
-The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using numpy functions and slightly better performances using numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
+The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy functions and slightly better performances using Numba. As we will illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
 
 Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the Convolution Theorem, we have
 
@@ -145,7 +145,7 @@ This naive version can be slightly accelerated using the fact that our matrix is
 
 which takes 36.0 seconds. Let us note that this is only 18% faster, far from a 2x speed-up.
 
-That naive implementation should not be confused with a pure Python implementation, which would be expected to be slow, since we already operate on numpy arrays along the  axis. Such an implementation could be approximated by:
+This naive implementation should not be confused with a pure Python implementation, which would be expected to be slow, since we already operate on NumPy arrays along the  axis. Such an implementation could be approximated by:
 
 .. code-block:: python
 
@@ -155,9 +155,9 @@ That naive implementation should not be confused with a pure Python implementati
           for l in range(N_PHI_BINS):
               C2[j, k, l] += A[j, l] * A[k, l].conj()
 
-which takes 49.1 seconds per image, i.e. about 100 times slower, in accordance with the stereotype of Python being much slower than other languages.
+which takes 49.1 seconds per image, i.e. about 100 times slower, in accordance with the stereotype of Python being much slower than other languages for numerical computing.
 
-A common acceleration strategy is to use numba:
+A common acceleration strategy is to use Numba:
 
 .. code-block:: python
 
@@ -179,7 +179,7 @@ A common acceleration strategy is to use numba:
 
 which takes 38.5 seconds, i.e. 10% faster than the naive implementation.
 
-When considering our problem size of up to millions of images, processing images one at a time makes sense. However, focusing on a small batch as we have been doing in these examples, a strategy can be to have numpy and/or numba work on arrays of images, rather than the individual images. We then have the following:
+When considering our problem size of up to millions of images, processing images one at a time makes sense. However, focusing on a small batch as we have been doing in these examples, a strategy can be to have NumPy and/or Numba work on arrays of images, rather than the individual images. We then have the following:
 
 .. code-block:: python
 
@@ -201,14 +201,14 @@ When considering our problem size of up to millions of images, processing images
 
 which takes 11.9 seconds, i.e. 3.56 times faster. We will note also here the batching of the Fast Fourier Transform.
 
-However, such an implementation does not sound trivial using numpy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
+However, such an implementation does not sound trivial using NumPy… although one can recognize a nice (generalized) Einstein sum in Equation (:ref:`eq:A`), leading to:
 
 .. code-block:: python
 
   As = np.fft.fft(images, axis=-1)
   C2 = np.einsum('hik,hjk->ijk', As, As.conj())
 
-This takes 17.9 seconds, which is slower than the version using numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to numpy’s :code:`asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
+This takes 17.9 seconds, which is slower than the version using Numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to NumPy’s :code:`asfortranarray` function, however, that is not an issue. We will use the F-ordered dataset.
 
 .. code-block:: python
 
@@ -223,7 +223,7 @@ We observe, for the Einstein sum:
 
 taking 4.05 seconds, i.e. 4.42 times faster than the C-ordered Einstein sum and 10.5 times faster than the naive implementation.
 
-Further than that, in our precise case, we can actually express it as a more optimized dot product:
+Additionally, it turns out that in our precise case, we can actually express it as a more optimized dot product:
 
 .. code-block:: python
 
@@ -248,16 +248,16 @@ For the F-ordered case, we have:
 taking 1.06 seconds, i.e. 29% faster than the C-ordered case and 40.0 times faster than the naive implementation.
 We could note that, at that speed, the main computation gets close to the time required to perform the Fast Fourier Transform, which is, in our case at least, faster on C-ordered (107 ms) than F-ordered (230 ms) data. Removing the FFT computation would yield an even starker contrast (977 ms vs. 499 ms), but would neglect the cost of the re-alignment.
 
-In conclusion, implementing using numpy or numba naively gives significant improvement on computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. In our case, we showed that batching our computation helped in the numba case. From there, a batched numpy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to numpy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in numpy.
+In conclusion, implementing this algorithm using NumPy or Numba naively gives significant improvement in computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. We showed that batching our computation helped in the Numba case. From there, a batched NumPy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to NumPy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in NumPy.
 
 Parallelization: effortless scaling with Pygion
 -----------------------------------------------
 
 To parallelize and scale the application we use Pygion, a Python interface for the Legion task-based programming system :cite:`Slaughter2019`. In Pygion, the user decorates functions as *tasks*, and annotates task parameters with *privileges* (read, write, reduce), but otherwise need not be concerned with how tasks execute on the underlying machine. Pygion infers the dependencies between tasks based on their privileges and the values of arguments passed to tasks, and ensures that the program executes correctly, even when running on a parallel and distributed supercomputer.
 
-To enable the task-based system, it is necessary to separate the data handling from the data itself. This reification of the data flow is achieved by declaring *regions*, similar to multi-dimensional Pandas dataframes :cite:`McKinney2010`. Regions contain *fields*, each of which being similar to and exposed as a numpy array. Regions can be partitioned into subregions, which can be processed by different tasks, allowing the parallelism.
+To enable the distributed execution, it is necessary to separate the question of what data is needed in a given task from the allocation of the data in a given memory or memories. This reification of the flow of data between tasks is achieved by declaring *regions*, similar to multi-dimensional Pandas dataframes :cite:`McKinney2010`. Regions contain *fields*, each of which is similar to and exposed as a NumPy array. Regions can be partitioned into subregions, which can be processed by different tasks, allowing the parallelism. Note that regions are allocated only when needed, so it is possible (and idiomatic) to allocate a region which is larger than any single machine’s memory, and then to partition into pieces that will be used by individual tasks.
 
-We scale up to 64 nodes of NERSC’s Cori Haswell using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion scales out of the box as it manages the load-balancing and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
+We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, with 10 to 30 processes per node, to reach a throughput of more than 15,000 images per second, as illustrated in Figures :ref:`fig:scaling`. Compared to an equivalent MPI implementation, Pygion is easier to scale out of the box as it manages load-balancing of tasks across cores, shared memory (between distinct Python processes on a node) and provides high-level parallelization constructs. These constructs make it easy to rapidly explore different partitioning strategies, without writing or rewriting any communication code. This enabled us to quickly find a strategy that scales better than the straightforward but ultimately suboptimal strategy that we initially developed.
 
 .. figure:: scaling_merged.png
 
@@ -265,7 +265,7 @@ We scale up to 64 nodes of NERSC’s Cori Haswell using Pygion, with 10 to 30 pr
 
 As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q', \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
 However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
-Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case (MPI+MPI), we use MPI to parallelize between nodes and within a node. To take the present optimization into account, one would have to create a 2-level structure such as::
+Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case, we use MPI to parallelize between nodes and within a node (MPI+MPI). If we were to introduce this optimization into such a code, one would have to create a 2-level structure such as::
 
   In each node:
     Define node-level communicator
@@ -278,7 +278,7 @@ Given the size of the data, parallelizing between nodes would involve a lot of d
 
 where all the data exchange has to be coded by hand.
 
-In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with
+In the Pygion case, the ability to partition the data allows us to create tasks that are unaware of the extent of the regions on which they operate. We can therefore partition these regions both over the image axis and the angular one. We end up with:
 
 .. code-block:: python
 
@@ -308,9 +308,9 @@ Conclusion
 ----------
 
 The Linac Coherent Light Source provides scientists with the ability of X-ray diffraction patterns with much higher brightness and much shorter timescales, allowing experiments not possible elsewhere.
-With its upgrades LCLS-II in 2021 and LCLS-II-HE (High Energy) in 2025, LCLS experiments will produce up to millions of X-ray pulses per second and generate incommensurable amounts of data.
+With its upgrades LCLS-II in 2021 and LCLS-II-HE (High Energy) in 2025, LCLS experiments will produce up to millions of X-ray pulses per second and generate commensurate amounts of data.
 In some cases, such as the FXS technique described in this paper, the processing of the dataset will require High Performance Computing at a scale that can no longer be provided in-house.
 
-We mentioned that Python gives us and our users the flexibility to adapt the analysis pipeline to new experiments. The main drawback of Python is that implementing new algorithms without relying on specialized libraries can be problematically slow. However, we illustrate with our example that spending some time optimizing the math of the problem (rather than the code) and being aware of the strengths and weaknesses of numpy and numba can allow us to achieve drastically better performances, without the need to develop or use external libraries.
+We showed that Python gives us and our users the flexibility to adapt the analysis pipeline to new experiments. The main drawback of Python is that implementing new algorithms without relying on specialized libraries can be problematically slow. However, we illustrate with our example that spending some time optimizing the math of the problem (rather than the code) and being aware of the strengths and weaknesses of NumPy and Numba can allow us to achieve drastically better performances, without the need to develop or use external libraries.
 
-Finally, we used Pygion to manage the parallelization of the problem, which allows us to design applications that scale much more naturally than MPI at a given level of coding effort.
+Finally, we used Pygion to manage the parallelization of the problem, which allows us to design applications that scale much more naturally than MPI at a given level of coding effort, and in particular has allowed us to explore different parallelization strategies more rapidly, leading ultimately to a more scalable solution than what we otherwise might have been able to find.
