@@ -238,7 +238,9 @@ computationally intractable number of feature maps. To mitigate this "feature ex
 FCDenseNets upsample only the preceding dense block instead of upsampling all feature maps concatenated 
 in previous layers. We modify and train a FCDenseNet to generate usable segmentation masks as input to 
 the appearance module. Our architecture, shown in :ref:`dense`, consists of dense blocks, transition 
-blocks, and skip connections totalling to 103 layers.
+blocks, and skip connections totalling to 103 layers. Although we utilize a supervised segmentation network, 
+we note that this is not necessary. We will be pursuing unsupervised methodologies with comparable efficacy, 
+and chose the supervised network for the sake of creating an initial implementation and proof of concept
 
 
 .. figure:: fcdn_arch.png
@@ -378,7 +380,7 @@ the following construction
 
 .. math::
 
-	z\sim q_\theta(z|x) \iff z=\mu+\Sigma\epsilon\text{, where } \epsilon\sim\mathcal{N}(0,\mathcal{I}_l)
+	z\sim q_\theta(z|x) \iff z=\mu+\Sigma\epsilon\text{, where } \epsilon\sim\mathcal{N}(0,I_l)
 	
 to ensure that we may complete backpropagation, since :math:`\mu,\sigma` are dependent on weights 
 within the network. This is known as the reparameterization trick. Our modified loss is then
@@ -397,7 +399,7 @@ this means that the portions of the latent space that our model should be best t
 the prior distribution. A common choice for prior, due to simplicity, is the unit-variance Gaussian 
 distribution. This is implemented by imposing a Kullback–Leibler Divergence (KL Divergence) loss between the posterior distributions 
 (parameterized by our encoder via :math:`\mu, \sigma`) and the prior distribution (in this case 
-:math:`\mathcal{N}(0,\mathcal{I}_l)`). Thus our final loss function is 
+:math:`\mathcal{N}(0,I_l)`). Thus our final loss function is 
 
 .. math::
 
@@ -625,7 +627,7 @@ outperforming Lu 2018's FCDN-109 by two percentage points.
 	
 	
 .. figure:: of_ex_vert.png
-	:scale: 45%
+	:scale: 40%
 
 	Raw imagery and corresponding optical flow visualization :label:`of`
 
