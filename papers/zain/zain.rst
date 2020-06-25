@@ -284,21 +284,7 @@ local angular movement. Deformation is the shearing about two different axes, in
 while the other contracts. Divergence, or dilation, is the apparent movement toward or away from the 
 visual sensor, in which object size changes as a product of varied depth. Because our cilia data are 
 captured from a top-down perspective without possibility of dilation, we limit our computation to curl 
-and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. Curl and deformation fields are extracted from the 
-generated optical flow fields using SciPy's signal and ndimage packages :cite:`2020SciPy-NMeth`. 
-	
-.. figure:: of_ex_vert.png
-	:scale: 45%
-
-	Raw imagery and corresponding optical flow visualization :label:`of`
-
-Figure :ref:`of` shows an example of healthy cilia and its mid-cycle optical flow where vector magnitude 
-corresponds to color saturation; we can reasonably assume that the primary region of movement within 
-optical flow fields will contain healthy cilia. While optical flow fields can potentially provide 
-information on cilia location, we avoid solely using optical flow fields to generate segmentation 
-masks due to the presence of dyskinetic cilia. Identifying stationary cilia is a crucial step in 
-learning ciliary motion phenotype. However, it is possible that optical flow provides insight into 
-both ciliary location and temporal behavior. 
+and deformation, similar to Quinn 2011 :cite:`quinn_novel_2011`. 
 
 
 		
@@ -633,6 +619,21 @@ outperforming Lu 2018's FCDN-109 by two percentage points.
 	Segmentation examples from left to right: raw test frame, 
 	frame overlain with ground truth segmentation mask, 
 	frame overlain with FCDN-103 predicted segmentation maskline :label:`masks`
+	
+	
+.. figure:: of_ex_vert.png
+	:scale: 45%
+
+	Raw imagery and corresponding optical flow visualization :label:`of`
+
+Curl and deformation fields are extracted from the generated optical flow fields using SciPy's 
+signal and ndimage packages :cite:`2020SciPy-NMeth`. Figure :ref:`of` shows an example of healthy cilia 
+and its mid-cycle optical flow where vector magnitude corresponds to color saturation; we can reasonably 
+assume that the primary region of movement within optical flow fields will contain healthy cilia. While 
+optical flow fields can potentially provide information on cilia location, we avoid solely using optical
+flow fields to generate segmentation masks due to the presence of dyskinetic cilia. Identifying stationary cilia is a crucial step in 
+learning ciliary motion phenotype. However, it is possible that optical flow provides insight into 
+both ciliary location and temporal behavior. 
 
 During optimization of the appearance module, we observe that cilia do not tend to exhibit a 
 large degree of spatial differences over time, thus rather than processing every frame of the dataset, 
