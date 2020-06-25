@@ -250,7 +250,23 @@ For the F-ordered case, we have:
 taking 1.06 seconds, i.e. 29% faster than the C-ordered case and 40.0 times faster than the naive implementation.
 We could note that, at that speed, the main computation gets close to the time required to perform the Fast Fourier Transform, which is, in our case at least, faster on C-ordered (107 ms) than F-ordered (230 ms) data. Removing the FFT computation would yield an even starker contrast (977 ms vs. 499 ms), but would neglect the cost of the re-alignment.
 
-In conclusion, implementing this algorithm using NumPy or Numba naively gives significant improvement in computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. We showed that batching our computation helped in the Numba case. From there, a batched NumPy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to NumPy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in NumPy.
+.. table:: Summary of the major time improvements. :label:`timetable`
+
+   +---------------------+---------------------+---------------------+
+   | Implementation      | Time (/100)         | Speedup             |
+   +=====================+=====================+=====================+
+   | Naive               | 42.4 s              | :math:`1`           |
+   +---------------------+---------------------+---------------------+
+   | Numba               | 38.5 s              | :math:`10 \%`       |
+   +---------------------+---------------------+---------------------+
+   | Numba, batched      | 11.9 s              | :math:`3.56 \times` |
+   +---------------------+---------------------+---------------------+
+   | Einsum, F-order     | 4.05 s              | :math:`10.5 \times` |
+   +---------------------+---------------------+---------------------+
+   | Dot, F-order        | 1.06 s              | :math:`40.0 \times` |
+   +---------------------+---------------------+---------------------+
+
+In conclusion, and as summarized in Table :ref:`timetable`, implementing this algorithm using NumPy or Numba naively gives significant improvement in computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. We showed that batching our computation helped in the Numba case. From there, a batched NumPy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to NumPy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in NumPy.
 
 Parallelization: effortless scaling with Pygion
 -----------------------------------------------
