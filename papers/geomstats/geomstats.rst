@@ -153,14 +153,14 @@ sphere? Let us compute the mean of two data points on the sphere using the tradi
         points_in_manifold, axis=0) / n_samples
 
 
-.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_16_0.png
+.. figure:: 01_data_on_manifolds_files/all_means_paper.pdf
    :align: center
    :scale: 50%
 
-   Linear mean of two points on a manifold, the sphere :label:`fig:linearmean`.
+   Left: Linear mean of two points on the sphere. Right: Fréchet mean of two points on the sphere. The linear mean does not belong to the sphere, while the Fréchet mean does. This illustrates how linear statistics can be generalized to data on manifolds, such as points on the sphere. :label:`fig:linearmean`
 
 
-The result is shown in Figure :ref:`fig:linearmean`. What happened? The mean of two points on a manifold (the sphere) is not
+The result is shown in Figure :ref:`fig:linearmean` (left). What happened? The mean of two points on a manifold (the sphere) is not
 on the manifold. In our example, the mean of these cities is not on the earth's surface. This
 leads to errors in statistical computations. The line :code:`sphere.belongs(linear_mean)` returns :code:`False`. For this reason, researchers aim to build a theory of statistics that is - by construction - compatible with any structure with which we equip the manifold. This theory is called Geometric Statistics, and the associated learning algorithms: Geometric Learning.
 
@@ -177,14 +177,7 @@ the definition of “mean” to manifolds: the Fréchet mean.
     frechet_mean = estimator.estimate_
 
 
-Notice in this code snippet that :code:`geomstats` provides classes and methods whose API will be instantly familiar to users of the widely-adopted :code:`scikit-learn`. We plot the result in Figure :ref:`fig:frechetmean`. Observe that the Fréchet mean now belongs to the surface of
-the sphere!
-
-.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_22_0.png
-   :align: center
-   :scale: 50%
-
-   Fréchet mean of two points on a manifold, the sphere :label:`fig:frechetmean`.
+Notice in this code snippet that :code:`geomstats` provides classes and methods whose API will be instantly familiar to users of the widely-adopted :code:`scikit-learn`. We plot the result in Figure :ref:`fig:linearmean` (right). Observe that the Fréchet mean now belongs to the surface of the sphere!
 
 Beyond the computation of the mean, :code:`geomstats` provides statistics and learning algorithms on manifolds that leverage their specific geometric structure. Such algorithms rely on elementary operations that are introduced in the next tutorial.
 
@@ -202,11 +195,11 @@ We import data that lie on a manifold: the dataset :code:`cities` containing coo
     data, names = data_utils.load_cities()
 
 
-.. figure:: 01_data_on_manifolds_files/01_data_on_manifolds_33_0.png
+.. figure:: 01_data_on_manifolds_files/cities_on_manifolds_paper.pdf
    :align: center
    :scale: 50%
 
-   World cities as data on a manifold, the sphere :label:`fig:cities`.
+   Subset of the world cities dataset, available in :code:`geomstats` with the function :code:`load_cities` from the module :code:`datasets.utils`. Cities coordinates are data on the sphere, which is an example of manifold. :label:`fig:cities`
 
 
 How can we compute with data that lie on such a manifold? The elementary operations on a vector space are addition and subtraction. In a vector space, we can add a vector to a point and
@@ -237,11 +230,11 @@ On manifolds, the exponential map is the operation that generalizes the addition
         initial_tangent_vec=tangent_vector)
 
 
-.. figure:: 02_from_vector_spaces_to_manifolds_files/02_from_vector_spaces_to_manifolds_19_0.png
+.. figure:: 02_from_vector_spaces_to_manifolds_files/manifold_operations_paper.pdf
    :align: center
    :scale: 50%
 
-   Exponential map, Logarithm map, and geodesic on a manifold: the sphere :label:`fig:operations`.
+   Elementary operations on manifolds illustrated on the sphere. The exponential map at the initial point (blue point) shoots the black tangent vector along the geodesic, and gives the end point (orange point). Conversely, the logarithm map at the initial point (blue point) takes the end point (orange point) as input, and outputs the black tangent vector. The geodesic between the blue point and the orange point represents the path of shortest length between the two points. :label:`fig:operations`
 
 
 Correspondingly, on manifolds, the logarithm map is the operation that generalizes the subtraction of two points. The logarithm map takes two points on the manifold as inputs and returns the tangent vector required to “shoot” from one point to the other. In Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point returns the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
@@ -312,17 +305,17 @@ and plot it in Figure :ref:`fig:spd`.
         ellipsis.draw(
             x, color=ellipsis.colors[y], alpha=.1)
 
-.. figure:: samples_spd.png
+.. figure:: samples_spd_paper.pdf
    :align: center
-   :scale: 40%
+   :scale: 60%
 
-   Dataset of SPD matrices in 2D :label:`fig:spd`.
+   Simulated dataset of SPD matrices in 2D. We observe three classes of SPD matrices, illustrated the three colors red, green and blue. The centroid of each class is represented by an ellipse of larger width. :label:`fig:spd`
 
 Classifying brain connectomes in Geomstats
 ******************************************
 
 We use data from the `MSLP 2014 Schizophrenia
-Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset corresponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of SPD matrices in 28 dimensions. Our goal is to classify patients who are separated into two classes: schizophrenic and control. First we load the data.
+Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset corresponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of SPD matrices in 28 dimensions. Our goal is to classify patients who are separated into two classes: schizophrenic and control. First we load the connectomes and display two of them on Figure :ref:`fig:conn`.
 
 .. code:: python
 
@@ -330,6 +323,12 @@ Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correspo
 
     data, patient_ids, labels = \
         data_utils.load_connectomes()
+
+.. figure:: connectomes_paper.pdf
+   :align: center
+   :scale: 55%
+
+   Subset of the connectomes dataset, available in :code:`geomstats` with the function :code:`load_connectomes` from the module :code:`datasets.utils`. Connectomes are elements of the manifold of SPD matrices. Left: connectome of a healthy control. Right: connectome of a schizophrenic subject. :label:`fig:conn`
 
 Because multiple metrics could be used on SPD matrices, we also import two of
 the most commonly used ones: the Log-Euclidean metric and the
@@ -551,10 +550,10 @@ The dataset is loaded and further information is
 displayed to provide insight into its complexity.
 
 .. figure:: learning_graph_structured_data_h2_files/karate_graph.png
-    :scale: 20%
+    :scale: 30%
     :align: center
 
-    Karate club dataset graph. :label:`karafig`
+    Karate club dataset, available in :code:`geomstats` with the function :code:`load_karate_graph` from the module :code:`datasets.utils`. This dataset is a graph, where each node represents a member of the club and each edge represents a tie between two members of the club. :label:`karafig`
 
 
 .. code:: python
@@ -617,7 +616,7 @@ between :math:`\phi_i` and :math:`\phi_k` should get larger. Therefore
 by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
 
 .. figure:: learning_graph_structured_data_h2_files/Notations.png
-    :scale: 40%
+    :scale: 50%
     :align: center
 
     Distances between node embeddings after the first iteration :label:`fignotation`.
@@ -855,11 +854,11 @@ For this, we import the :math:`K`-means class, set the number of clusters, and p
 
 Figure :ref:`fig:kmeans` shows the true labels versus the predicted ones.
 
-.. figure:: learning_graph_structured_data_h2_files/prediction_labels.png
+.. figure:: learning_graph_structured_data_h2_files/kmeans_paper.pdf
     :align: center
-    :scale: 50%
+    :scale: 35%
 
-    True labels (left) and predicted labels (right) via :math:`K`-means. :label:`fig:kmeans`
+    Results of the Riemannian :math:`K`-means algorithm on the karate graph dataset embedded in the hyperbolic plane. Left: True labels associated to the club members. Right: Predicted labels via Riemannian :math:`K`-means on the hyperbolic plane. The centroids of the clusters are shown with a star marker. :label:`fig:kmeans`
 
 Conclusion
 ----------
