@@ -71,7 +71,7 @@ Introduction to Geometric Learning in Python with Geomstats
 
 .. class:: abstract
 
-There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we present the open-source Python package :code:`geomstats` and introduce hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`geomstats.ai`.
+There is a growing interest in leveraging differential geometry in the machine learning community. Yet, the adoption of the associated geometric computations has been inhibited by the lack of reference implementation. Such implementation should typically allow its users: (i) to get intuition on concepts from differential geometry through a hands-on approach, often not provided by traditional textbooks; and (ii) to run geometric machine learning algorithms seamlessly, without delving into the mathematical details. To address this gap, we present the open-source Python package :code:`geomstats` and introduce hands-on tutorials of differential geometry and geometric machine learning algorithms - Geometric Learning - that rely on it. Code and documentation: :code:`github.com/geomstats/geomstats` and :code:`geomstats.ai`.
 
 
 .. class:: keywords
@@ -91,20 +91,17 @@ Despite this need, the adoption of differential geometric computations has been 
 Presentation of Geomstats
 -------------------------
 
-The package :code:`geomstats` is organized into two main modules: :code:`geometry` [#]_ and :code:`learning` [#]_. The module :code:`geometry` implements low-level differential geometry with an object-oriented paradigm and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the hypersphere or the hyperbolic space are classes that inherit from :code:`Manifold`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, among others.
+The package `geomstats <https://github.com/geomstats/geomstats>`__ is organized into two main modules: `geometry <https://github.com/geomstats/geomstats/tree/master/geomstats/geometry>`__ and `learning <https://github.com/geomstats/geomstats/tree/master/geomstats/learning>`__. The module :code:`geometry` implements low-level differential geometry with an object-oriented paradigm and two main parent classes: :code:`Manifold` and :code:`RiemannianMetric`. Standard manifolds like the :code:`Hypersphere` or the :code:`Hyperbolic` space are classes that inherit from :code:`Manifold`. At the time of writing, there are over 15 manifolds implemented in :code:`geomstats`. The class :code:`RiemannianMetric` provides computations related to Riemannian geometry on such manifolds, such as the inner product of two tangent vectors at a base point, the geodesic distance between two points, the Exponential and Logarithm maps at a base point, among others.
 
-.. [#] https://github.com/geomstats/geomstats/tree/master/geomstats/geometry.
-.. [#] https://github.com/geomstats/geomstats/tree/master/geomstats/learning.
+The module :code:`learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixins, such as :code:`BaseEstimator`, :code:`ClassifierMixin`, or :code:`RegressorMixin`. This module provides implementations of Fréchet mean estimators, :math:`K`-means, and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
 
-The module :code:`learning` implements statistics and machine learning algorithms for data on manifolds. The code is object-oriented and classes inherit from :code:`scikit-learn` base classes and mixins, such as :code:`BaseEstimator`, :code:`ClassifierMixin`, or :code:`RegressorMixin`. This module provides implementations of Frechet mean estimators, K-means, and principal component analysis (PCA) designed for manifold data. The algorithms can be applied seamlessly to the different manifolds implemented in the library.
-
-The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, and incorporates both TensorFlow and PyTorch backends to allow for GPU acceleration. The package comes with a :code:`visualization` module that enables users to visualize and further develop an intuition for differential geometry.
+The code follows international standards for readability and ease of collaboration, is vectorized for batch computations, undergoes unit-testing with continuous integration, and incorporates both TensorFlow and PyTorch backends to allow for GPU acceleration. The package comes with a `visualization <https://github.com/geomstats/geomstats/blob/master/geomstats/visualization.py>`__ module that enables users to visualize and further develop an intuition for differential geometry, and with a `datasets <https://github.com/geomstats/geomstats/tree/master/geomstats/datasets>`__ module that provides toy datasets on manifolds.
 
 
 First Steps
 -----------
 
-To begin, we need to install :code:`geomstats`. We follow the installation procedure described at :code:`https://geomstats.github.io/first-steps.html`. In the command line, we choose the backend of interest: NumPy, PyTorch or TensorFlow. Next, we open the ipython notebook and import the backend together with the visualization module. In the command line::
+To begin, we need to install :code:`geomstats`. We follow the installation procedure described in the `first steps <https://geomstats.github.io/first-steps.html>`__ of the online documentation. Next, in the command line, we choose the backend of interest: NumPy, PyTorch or TensorFlow. Then, we open the iPython notebook and import the backend together with the visualization module. In the command line::
 
     export GEOMSTATS_BACKEND=numpy
 
@@ -205,9 +202,9 @@ We import data that lie on a manifold: the dataset :code:`cities` containing coo
 How can we compute with data that lie on such a manifold? The elementary operations on a vector space are addition and subtraction. In a vector space, we can add a vector to a point and
 subtract two points to get a vector. Can we generalize these operations in order to compute on manifolds?
 
-For points on a manifold, such as the sphere, the same operations are not permitted. Indeed, adding a vector to a point will not give a point that belongs to the manifold. So, we need to generalize to manifolds the operations of addition and subtraction.
+For points on a manifold, such as the sphere, the same operations are not permitted. Indeed, adding a vector to a point will not give a point that belongs to the manifold: in Figure :ref:`fig:operations`, adding the black tangent vector to the blue point gives a point that is outside the surface of the sphere. So, we need to generalize to manifolds the operations of addition and subtraction.
 
-On manifolds, the exponential map is the operation that generalizes the addition of a vector to a point. The exponential map takes the following inputs: a point and a tangent vector to the manifold at that point. These are shown in Figure :ref:`fig:operations` using the blue point and its tangent vector, respectively. The exponential map returns the point on the manifold that is reached by “shooting” with the tangent vector from the point. “Shooting” means following a “geodesic” on the manifold, which is the dotted path on Figure :ref:`fig:operations`. A geodesic, roughly, is the analog of a straight line for general manifolds - the path which, in a sense, minimizes the distance between two points. This code snippet shows how to compute the exponential map and the geodesic with :code:`geomstats`.
+On manifolds, the exponential map is the operation that generalizes the addition of a vector to a point. The exponential map takes the following inputs: a point and a tangent vector to the manifold at that point. These are shown in Figure :ref:`fig:operations` using the blue point and its tangent vector, respectively. The exponential map returns the point on the manifold that is reached by “shooting” with the tangent vector from the point. “Shooting” means following a “geodesic” on the manifold, which is the dotted path in Figure :ref:`fig:operations`. A geodesic, roughly, is the analog of a straight line for general manifolds - the path which, in a sense, minimizes the distance between two points. This code snippet shows how to compute the exponential map and the geodesic with :code:`geomstats`.
 
 
 .. code:: python
@@ -217,16 +214,16 @@ On manifolds, the exponential map is the operation that generalizes the addition
 
     sphere = Hypersphere(dim=2)
 
-    paris = data[19]
+    initial_point = paris = data[19]
     vector = gs.array([1, 0, 0.8])
     tangent_vector = sphere.to_tangent(
-         vector, base_point=paris)
+         vector, base_point=initial_point)
 
-    result = sphere.metric.exp(
-        tangent_vector, base_point=paris)
+    end_point = sphere.metric.exp(
+        tangent_vector, base_point=initial_point)
 
     geodesic = sphere.metric.geodesic(
-        initial_point=paris,
+        initial_point=initial_point,
         initial_tangent_vec=tangent_vector)
 
 
@@ -237,20 +234,17 @@ On manifolds, the exponential map is the operation that generalizes the addition
    Elementary operations on manifolds illustrated on the sphere. The exponential map at the initial point (blue point) shoots the black tangent vector along the geodesic, and gives the end point (orange point). Conversely, the logarithm map at the initial point (blue point) takes the end point (orange point) as input, and outputs the black tangent vector. The geodesic between the blue point and the orange point represents the path of shortest length between the two points. :label:`fig:operations`
 
 
-Correspondingly, on manifolds, the logarithm map is the operation that generalizes the subtraction of two points. The logarithm map takes two points on the manifold as inputs and returns the tangent vector required to “shoot” from one point to the other. In Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point returns the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
+Similarly, on manifolds, the logarithm map is the operation that generalizes the subtraction of two points on vector spaces. The logarithm map takes two points on the manifold as inputs and returns the tangent vector required to “shoot” from one point to the other. In Figure :ref:`fig:operations`, the logarithm map of the orange point at the blue point returns the tangent vector in black. This code snippet shows how to compute the logarithm map with :code:`geomstats`.
 
 .. code:: python
 
-    paris = data[19]
-    beijing = data[15]
-
     log = sphere.metric.log(
-        point=beijing, base_point=paris)
+        point=end_point, base_point=initial_point)
 
 
-Using the exponential and logarithm maps instead of linear addition and subtraction, many learning algorithms can be generalized to manifolds. We emphasize that these operations depend on the “Riemannian metric” chosen for a given manifold. The metric defines the notion of geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere that would have changed the distance between the points: with a different metric, the “sphere” could, for example, look like an ellipsoid.
+We emphasize that the exponential and logarithm maps depend on the “Riemannian metric” chosen for a given manifold: observe in the code snippets that they are not methods of the :code:`sphere` object, but rather of its :code:`metric` attribute. The Riemannian metric defines the notion of exponential, logarithm, geodesic and distance between points on the manifold. We could have chosen a different metric on the sphere that would have changed the distance between the points: with a different metric, the “sphere” could, for example, look like an ellipsoid.
 
-We illustrated the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. Consequently, :code:`geomstats` also implements learning algorithms on manifolds, taking into account their specific geometric structure by relying on the operations we just introduced. The next tutorials show more involved examples of such geometric learning algorithms.
+Using the exponential and logarithm maps instead of linear addition and subtraction, many learning algorithms can be generalized to manifolds. We illustrated the use of the exponential and logarithm maps on the sphere only; yet, :code:`geomstats` provides their implementation for over 15 different manifolds in its :code:`geometry` module with support for a variety of Riemannian metrics. Consequently, :code:`geomstats` also implements learning algorithms on manifolds, taking into account their specific geometric structure by relying on the operations we just introduced. The next tutorials show more involved examples of such geometric learning algorithms.
 
 Tutorial: Classification of SPD Matrices
 ----------------------------------------
@@ -259,15 +253,17 @@ Tutorial context and description
 ********************************
 
 We demonstrate that any standard machine learning
-algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This enables the use of traditional learning algorithms.
+algorithm can be applied to data on manifolds while respecting their geometry. In the previous tutorials, we saw that linear operations (mean, linear weighting, addition and subtraction) do not apply on manifolds. However, each point on a manifold has an associated tangent space which is a vector space. As such, in the tangent space, these operations are well defined! Therefore, we can use the logarithm map (see Figure :ref:`fig:operations` from the previous tutorial) to go from points on manifolds to vectors in the tangent space at a reference point. This first strategy enables the use of traditional learning algorithms on manifolds.
 
-This strategy can be applied to any manifold-valued data and learning algorithm. In this tutorial, we consider symmetric positive definite (SPD) matrices from brain connectomics data and perform a simple logistic regression. In fMRI, it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns which is useful for assessing neurological responses to a variety of stimuli, such as drugs or patient's activities.
+A second strategy can be designed for learning algorithms, such as :math:`K`-Nearest Neighbors classification, that rely only on distances or dissimilarity metrics. In this case, we can compute the pairwise distances between the data points on the manifold, using the method :code:`metric.dist`, and feed them to the chosen algorithm.
+
+Both strategies can be applied to any manifold-valued data. In this tutorial, we consider symmetric positive definite (SPD) matrices from brain connectomics data and perform logistic regression and :math:`K`-Nearest Neighbors classification.
 
 SPD matrices in the literature
 ******************************
 
 Before diving into the tutorial, let us recall a few applications of SPD matrices
-in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input of or output to a given problem. In DTI for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices representing ellipsoids in their structure. These ellipsoids spatially characterize the diffusion of water molecules in various tissues. Each DTI thus consists of a field of SPD matrices, where each point in space corresponds to an SPD matrix. These matrices then serve as inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression to compare fiber tracts between HIV subjects and a control group. Similarly, in fMRI, researchers have modeled brain activity using SPD matrices :cite:`wang2013disruptedDisease`.
+in the machine learning literature. SPD matrices are ubiquitous across many fields :cite:`Cherian2016`, either as input of or output to a given problem. In DTI for instance, voxels are represented by "diffusion tensors" which are 3x3 SPD matrices representing ellipsoids in their structure. These ellipsoids spatially characterize the diffusion of water molecules in various tissues. Each DTI thus consists of a field of SPD matrices, where each point in space corresponds to an SPD matrix. These matrices then serve as inputs to regression models. In :cite:`Yuan2012` for example, the authors use an intrinsic local polynomial regression to compare fiber tracts between HIV subjects and a control group. Similarly, in fMRI, it is possible to extract connectivity graphs from time series of patients' resting-state images :cite:`wang2013disruptedDisease`. The regularized graph Laplacians of these graphs form a dataset of SPD matrices. This provides a compact summary of brain connectivity patterns - called connectome - which is useful for assessing neurological responses to a variety of stimuli, such as drugs or patient's activities.
 
 More generally speaking, covariance matrices are also SPD matrices which appear in many settings. Covariance clustering can be used for various applications such as sound compression in acoustic models of automatic speech recognition (ASR) systems :cite:`Shinohara2010` or for material classification :cite:`Faraki2015`, among others. Covariance descriptors are also popular image or video descriptors :cite:`Harandi2014`.
 
@@ -284,7 +280,7 @@ Let us recall the mathematical definition of the manifold of SPD matrices. The m
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in two dimensions can be visualized as ellipses arising from their eigenvalues and eigenvectors. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set and plot it in Figure :ref:`fig:spd` with the following code snippet.
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in 2 dimensions can be visualized as ellipses with principal axes given by the eigenvectors of the SPD matrix, and lengths of axes proportional to the square-root of its eigenvalues. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set and plot it in Figure :ref:`fig:spd` with the following code snippet.
 
 .. code:: python
 
@@ -303,15 +299,17 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
 
 .. figure:: samples_spd_paper.pdf
    :align: center
-   :scale: 60%
+   :scale: 50%
 
-   Simulated dataset of SPD matrices in 2D. We observe three classes of SPD matrices, illustrated the three colors red, green and blue. The centroid of each class is represented by an ellipse of larger width. :label:`fig:spd`
+   Simulated dataset of SPD matrices in 2 dimensions. We observe 3 classes of SPD matrices, illustrated the 3 colors red, green and blue. The centroid of each class is represented by an ellipse of larger width. :label:`fig:spd`
+
+Figure :ref:`fig:spd` shows a dataset of SPD matrices in 2 dimensions organized into 3 classes. This visualization helps developing an intuition on the connectomes dataset that is used in the upcoming tutorial, where we will classify SPD matrices in 28 dimensions into 2 classes.
 
 Classifying brain connectomes in Geomstats
 ******************************************
 
-We now delve into the tutorial in order to illustrate the use of traditional learning algorithms on the tangent spaces of manifolds implemented in :code:`geomstats`. We use data from the `MSLP 2014 Schizophrenia
-Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset corresponds to the Functional Connectivity Networks (FCN) extracted from resting-state fMRIs of 86 patients at 28 Regions Of Interest (ROIs). Roughly, an FCN corresponds to a correlation matrix and can be seen as a point on the manifold of SPD matrices in 28 dimensions. Our goal is to classify patients who are separated into two classes: schizophrenic and control. First we load the connectomes and display two of them on Figure :ref:`fig:conn`.
+We now delve into the tutorial in order to illustrate the use of traditional learning algorithms on the tangent spaces of manifolds implemented in :code:`geomstats`. We use brain connectome data from the `MSLP 2014 Schizophrenia
+Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The connectomes are correlation matrices extracted from the time-series of resting-state fMRIs of 86 patients at 28 brain regions of interest: they are points on the manifold of SPD matrices in :math:`n=28` dimensions. Our goal is to use the connectomes to classify patients into two classes: schizophrenic and control. First we load the connectomes and display two of them in Figure :ref:`fig:conn`.
 
 .. code:: python
 
@@ -324,11 +322,11 @@ Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The dataset correspo
    :align: center
    :scale: 50%
 
-   Subset of the connectomes dataset, available in :code:`geomstats` with the function :code:`load_connectomes` from the module :code:`datasets.utils`. Connectomes are elements of the manifold of SPD matrices. Left: connectome of a healthy control. Right: connectome of a schizophrenic subject. :label:`fig:conn`
+   Subset of the connectomes dataset, available in :code:`geomstats` with the function :code:`load_connectomes` from the module :code:`datasets.utils`. Connectomes are correlation matrices of 28 time-series extracted from fMRI data: they are elements of the manifold of SPD matrices in 28 dimensions. Left: connectome of a healthy control. Right: connectome of a schizophrenic subject. :label:`fig:conn`
 
-Because multiple metrics could be used on SPD matrices, we also import two of
-the most commonly used ones: the Log-Euclidean metric and the
-Affine-Invariant metric :cite:`Pennec2006b`. We check that our data indeed
+Multiple metrics can be used to compute on the manifold of SPD matrices. As we explained in the previous tutorial, different metrics define different exponential and logarithm maps and therefore different algorithms on a given manifold. Here, we import two of
+the most commonly used metrics on the SPD matrices, the log-Euclidean metric and the
+affine-invariant metric :cite:`Pennec2006b`, but we highlight that :code:`geomstats` contains many more. We also check that our connectome data indeed
 belongs to the manifold of SPD matrices:
 
 .. code:: python
@@ -336,8 +334,8 @@ belongs to the manifold of SPD matrices:
     import geomstats.geometry.spd_matrices as spd
 
     manifold = spd.SPDMatrices(28)
-    ai_metric = spd.SPDMetricAffine(28)
     le_metric = spd.SPDMetricLogEuclidean(28)
+    ai_metric = spd.SPDMetricAffine(28)
     logging.info(gs.all(manifold.belongs(data)))
 
 
@@ -348,25 +346,24 @@ belongs to the manifold of SPD matrices:
 
 Great! Now, although the sum of two SPD matrices is an SPD matrix, their
 difference or their linear combination with non-positive weights are not
-necessarily! Therefore we need to work in the tangent space to perform
-simple machine learning. All the geometric operations are handled by :code:`geomstats` thanks to the :code:`preprocessing` module.
+necessarily! Therefore we need to work in a tangent space of the SPD manifold to perform
+simple machine learning that relies on linear operations. The :code:`preprocessing` module with its :code:`ToTangentSpace` class allows to do exactly this.
 
 .. code:: python
 
     from geomstats.learning.preprocessing import \
         ToTangentSpace
 
-What ``ToTangentSpace`` does is simple: it computes the Fréchet Mean of
-the data set, then takes the logarithm map of
-each data point from the mean. This results in a set of tangent vectors,
-and, in the case of the SPD manifold, these are simply symmetric
-matrices. It then squeezes them to a 1d-vector of size
-``dim = 28 * (28 + 1) / 2``, and thus outputs an array of shape
-``[n_patients, dim]``, which can be fed to your favorite scikit-learn
+``ToTangentSpace`` has a simple purpose: it computes the Fréchet Mean of
+the data set, and takes the logarithm map of
+each data point from the mean. This results in a data set of tangent vectors at the mean. In the case of the SPD manifold, these are simply symmetric
+matrices. ``ToTangentSpace`` then squeezes each symmetric matrix into a 1d-vector of size
+``dim = 28 * (28 + 1) / 2``, and outputs an array of shape
+``[n_connectomes, dim]``, which can be fed to your favorite :code:`scikit-learn`
 algorithm.
 
-Because the mean of the input data is computed, ``ToTangentSpace``
-should be used in a pipeline (as e.g. scikit-learn’s ``StandardScaler``)
+We emphasize that ``ToTangentSpace`` computes the mean of the input data, and thus
+should be used in a pipeline (as e.g. :code:`scikit-learn`’s ``StandardScaler``)
 to avoid leaking information from the test set at train time.
 
 .. code:: python
@@ -378,12 +375,12 @@ to avoid leaking information from the test set at train time.
     pipeline = Pipeline(
         steps=[
             ('feature_ext',
-             ToTangentSpace(geometry=ai_metric)),
+             ToTangentSpace(geometry=le_metric)),
             ('classifier',
              LogisticRegression(C=2))])
 
-We now have all the material to classify connectomes, and we evaluate
-the model with cross validation. With the affine-invariant metric we
+We use a logistic regression on the tangent space at the Fréchet mean to classify connectomes, and evaluate
+the model with cross-validation. With the log-Euclidean metric we
 obtain:
 
 .. code:: python
@@ -394,31 +391,18 @@ obtain:
 
 .. parsed-literal::
 
-    0.71
+    0.67
 
 
-And with the log-Euclidean metric:
-
-.. code:: python
-
-    pipeline = Pipeline(
-        steps=[
-            ('feature_ext',
-             ToTangentSpace(geometry=le_metric)),
-            ('classifier',
-             LogisticRegression(C=2))])
-
-    result = cross_validate(pipeline, data, labels)
-    logging.info(result['test_score'].mean())
-
+And with the affine-invariant metric, replacing :code:`le_metric` by :code:`ai_metric` in the above snippet:
 
 .. parsed-literal::
 
-    INFO: 0.67
+    INFO: 0.71
 
-We observe that the results depend on the metric used! The Riemannian metric indeed defines the notions of geodesic and distance on the manifold. Both notions are used to compute the Fréchet Mean and the logarithms. Thus, changing the metric changes the results, and some metrics may be more suitable than others for different applications. There are published results that show how useful geometry can be with this type of data (e.g :cite:`Wong2018`, :cite:`Ng2014`).
+We observe that the result depends on the metric used! The Riemannian metric indeed defines the notion of logarithm map, which is used to compute the Fréchet Mean and the tangent vectors corresponding to the input data points. Thus, changing the metric changes the result. Furthermore, some metrics may be more suitable than others for different applications. Indeed, we find published results that show how useful geometry can be with data on the SPD manifold (e.g :cite:`Wong2018`, :cite:`Ng2014`).
 
-We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those relying on similarity matrices. We can compute the matrix of pairwise Riemannian distances, using the `dist` method of the Riemannian metric object. We can then pass this matrix to ``scikit-learn``'s k-nearest-neighbors classification algorithm:
+We saw how to use the representation of points on the manifold as tangent vectors at a reference point to fit any machine learning algorithm, and compared the effect of different metrics on the manifold of SPD matrices. Another class of machine learning algorithms can be used very easily on manifolds with ``geomstats``: those relying on dissimilarity matrices. We can compute the matrix of pairwise Riemannian distances, using the `dist` method of the Riemannian metric object. In the following code-snippet, we use :code:`ai_metric.dist` and pass the corresponding matrix :code:`pairwise_dist` of pairwise distances to ``scikit-learn``'s :math:`K`-Nearest-Neighbors (KNN) classification algorithm:
 
 .. code:: python
 
@@ -434,7 +418,7 @@ We saw how to use the representation of points on the manifold as tangent vector
     INFO: 0.72
 
 
-We see that in this case, using pairwise distances is slightly more discriminative than using directions (and distances) to the mean only.
+This tutorial showed how to leverage :code:`geomstats` to use standard learning algorithms for data on a manifold. In the next tutorial, we see a more complicated situation: the data points are not provided by default as elements of a manifold. We will need to use the low-level :code:`geomstats` operations to design a method that embeds the dataset in the manifold of interest. Only then, we can use a learning algorithm.
 
 Tutorial: Learning Graph Representations with Hyperbolic Spaces
 ---------------------------------------------------------------
@@ -442,19 +426,19 @@ Tutorial: Learning Graph Representations with Hyperbolic Spaces
 Tutorial context and description
 ********************************
 
-Thanks to the discovery of hyperbolic embeddings, learning on Graph-Structured Data (GSD) has seen major achievements in recent years. It had been speculated for years that hyperbolic spaces may better represent GSD than Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`.
+This tutorial shows how to harvest the low-level geometric computations in :code:`geomstats` to implement a method that embeds graph data into the hyperbolic plane, which is an example of manifold also called the Poincaré disk or the Poincaré ball. Thanks to the discovery of hyperbolic embeddings, learning on Graph-Structured Data (GSD) has seen major achievements in recent years. It had been speculated for years that hyperbolic spaces may better represent GSD than Euclidean spaces :cite:`Gromov1987` :cite:`PhysRevE` :cite:`hhh` :cite:`6729484`.
 These speculations have recently been shown effective through concrete studies
 and applications :cite:`Nickel2017` :cite:`DBLP:journals/corr/ChamberlainCD17` :cite:`DBLP:conf/icml/SalaSGR18` :cite:`gerald2019node`.
 As outlined by :cite:`Nickel2017`, Euclidean embeddings require large
 dimensions to capture certain complex relations such as the Wordnet
 noun hierarchy. On the other hand, this complexity can be captured by
-a simple model of hyperbolic geometry such as the Poincaré disc of two
+a simple model of hyperbolic geometry such as the Poincaré disk of two
 dimensions :cite:`DBLP:conf/icml/SalaSGR18`. Additionally, hyperbolic embeddings provide
 better visualizations of clusters on graphs than their Euclidean counterparts
 :cite:`DBLP:journals/corr/ChamberlainCD17`.
 
 This tutorial shows how to learn such embeddings in :code:`geomstats`
-using the Poincaré Ball manifold applied to the well-known ‘Karate Club’ dataset.
+using the Poincaré ball manifold applied to the `Karate Club graph <http://konect.cc/networks/ucidata-zachary/>`__ dataset.
 Note that here we omit details regarding reshaping the data and creating visualizations.
 An unabridged example and a detailed notebook can be found in the GitHub repository in the ``examples`` and ``notebooks`` directories, respectively.
 
