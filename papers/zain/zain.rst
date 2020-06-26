@@ -505,7 +505,7 @@ by minimizing the :math:`L2` loss between the input and the reconstructed output
 :math:`\chi_{1..k}` are only used during the training, to enforce the prior constraint through a 
 Monte Carlo estimation of the KL divergence, as mentioned earlier.
 
-.. figure:: app.jpg
+.. figure:: app.pdf
 	:scale: 35%
 	
 	The Appearance Module pipeline :label:`app`
@@ -515,7 +515,7 @@ Monte Carlo estimation of the KL divergence, as mentioned earlier.
 Dynamics
 ========
 
-.. figure:: aag.jpg
+.. figure:: aag.pdf
 	:scale: 55%
 	:align: center
 	:figclass: w
