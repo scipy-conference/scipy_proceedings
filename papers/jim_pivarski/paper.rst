@@ -573,13 +573,13 @@ References
        SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python. Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
 
 .. [hydra] R. K. Böck. *Initiation to Hydra*,
-        https://cds.cern.ch/record/864527 (1974), DOI:10.5170/CERN-1974-023.402.
+        https://cds.cern.ch/record/864527 (1974), DOI:10.5170/CERN-1974-023.402
 
 .. [phypy] Jim Pivarski. *Programming languages and particle physics*,
         https://events.fnal.gov/colloquium/events/event/pivarski-colloq-2019 (2019).
 
 .. [pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
-        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
+        Proceedings of the 9th Python in Science Conference, 51-56 (2010), DOI:10.25080/Majora-92bf1922-00a
 
 .. [numba] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert. *Numba: a LLVM-based Python JIT compiler*,
        LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015), DOI:10.1145/2833157.2833162
