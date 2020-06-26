@@ -28,10 +28,20 @@ Software Engineering as Research Method: Aligning Roles in Econ-ARK
    that prevents researchers, publishers, and professors
    from making the most of the opportunities afforded by
    scientific software.
-   Members of all three roles depend on research software
-   engineers to professionalize their code, produce publishable
-   computational artifacts, and support pedagogical objectives.
-   This gap will not be closed until software engineering
+   When researchers professionalize their code,
+   it enables more cumulative progress in research
+   and facilitates technology transfer.
+   When publishers release interactive computational artifacts,
+   it enables constructionist learning of the material.
+   When students trained in a computational environment
+   learn computational and inferential thinking,
+   but are not equipped to participate in the full reproduction
+   of the scientific field unless they are also trained in
+   software engineering.
+   This is especially the case for fields where scientific
+   knowledge is represented in software code, as in the
+   case of Economics.
+   The skills gap will not be closed until software engineering
    is considered a core skill for the discipline.
    Software engineering should be reconceived as a research
    method. 
@@ -51,11 +61,14 @@ While originally used as a tool for teaching mathematics,
 it was not long before Papert's Logo tool was also
 used in scientific education, teaching students not just
 about the abstract mathematical sphere, but about the
-physical world. :cite:`resnick1990lego`.
+physical world :cite:`resnick1990lego`.
 The legacy of Logo is alive and well in NetLogo :cite:`tisue2004netlogo`,
 which is used by both students and researchers alike in the study of
-complex and agent-based systems, and the Python ABM toolkit
+complex and agent-based systems, and in the Python
+agent-based modeling (ABM) toolkit
 Mesa :cite:`masad2015mesa`.
+
+.. Example of ABM 
 
 Since, the ubiquity of computing and its increasingly
 central role in industry has prompted the spread of
@@ -181,7 +194,7 @@ research into heterogeneous agent (HA)
 modeling :cite:`hommes2006heterogeneous`,
 which became a research priority
 after the 2008 financial crisis revealed the weaknesses in the
-then-dominant representative agent (RA) based paradigm [#]
+then-dominant representative agent (RA) based paradigm [#]_
 It has been designed so that researchers and students can
 take a hands-on approach to economic modeling in
 software :cite:`carroll2018hands`.
@@ -195,13 +208,13 @@ into Python.
 Econ-ARK lies roughly in the Papertian educational tradition,
 similar to other agent-based modeling software such as
 NetLogo :cite:`tisue2004netlogo` and Mesa :cite:`masad2015mesa`.
-However, in Econ-ARK models, agents that optimize their
+However, in Econ-ARK models, agents optimize their
 behavior strategically with respect to predicted effects
 over time.
 In this respect, Econ-ARK has some characteristics of a
 reinforcement learning or "AI" toolkit.
 
-**Example**. An paradigmatic, simple example of the kind
+**Example**. A paradigmatic, simple example of the kind
 of problem studied using Econ-ARK is the microeconomic
 dynamic stochastic optimization problem of calculating
 the mathematically optimal amount to save. :cite:`carroll2011solution`
@@ -218,7 +231,7 @@ This problem can be characterized by the equations:
 where :math:`U` is a utility function, :math:`\rho` is a
 coefficient of risk aversion, :math:`c` is the
 amount of resources the agent chooses to consume in each
-period, :math:`m` are the market resources available to
+period, :math:`m` is the amount of market resources available to
 the agent at each time period, and :math:`R` is a rate
 of return on savings.
 
@@ -308,12 +321,14 @@ is an additional form of validation of the correctness and
 salience of the finding.
 This entails that the success of Econ-ARK
 will imply a practical change to the research field: students will
-study models that have been published by researchers in Python
+study models that have been published in Python by researchers
 in order to learn insights about the economy. This blending of roles,
 between researchers, students, and software engineers,
 complicates the software architecture of the toolkit
 and leads to a new conception of what research practice
 entails.
+
+.. How does this complicate the software architecture?
 
 Case Study: Roles in Econ-ARK
 ------------------------------------
@@ -390,11 +405,11 @@ assignments and assisting students with the availability
 of an adequate computing environment that does not distract
 them from the course materials. Technical solutions
 have been developed for both hurdles. `nbgrader` enables
-the creation of assignments with Jupyter notebooks. :cite:`hamrick2016creatin` :cite:`blank2019nbgrader`
+the creation of assignments with Jupyter notebooks :cite:`hamrick2016creating` :cite:`blank2019nbgrader`.
 JupyterHub has been deployed to allow students to get around the
 hardware limitations of their laptops and the difficulties of
-setting up a local coding environment. :cite:`kim_2018`
-Noteably, both technical solutions, which have been developed only
+setting up a local coding environment :cite:`kim_2018`.
+Notably, both technical solutions, which have been developed only
 in the past few years, require skills that are
 not part of normal disciplinary training in economics.
 Economics professors currently require others to fill the social
@@ -413,8 +428,8 @@ computational academic research through its popularization
 via GitHub. The workflow patterns of collaboratively
 developing software using GitHub and managing release cycles
 are not part of any conventional Economics curriculum,
-and yet these are researcher increasingly need to learn and
-use in order to participate in computational research.
+and yet researchers increasingly need to learn and use these in order to
+participate in computational research.
 Software engineering skills are not only useful for these
 infrastructural requirements of publication and pedagogy.
 Integrating new features, expressing substantive disciplinary
@@ -442,17 +457,35 @@ or at another workplace.
 This interrupts the cycle, from student to researcher to
 professor, who teaches more students, which is necessary
 for the autonomy of economics as a field of knowledge.
-If at every point in the process--even at the point where
-new discoveries are integrated into the core software library--
+If at every point in the process -- even at the point where
+new discoveries are integrated into the core software library --
 there is a dependence on an externally sourced skillset, 
 then the discipline will fail to reproduce scholars with
 the competence to participate in its own field.
 
 Case Study: Econ-ARK infrastructure
 ------------------------------------------
-The Econ-ARK infrastructure is built around creating a sustainable community with respect to various different use cases and the challenges of creating sustainable scientific software. We discuss some of the challenges of bridging work across user roles of Researchers, Publishers, Pedagogy and Software engineering. This is discussed from the point of view of economics research and tools in the SciPy ecosystem but it could be limitedly generalized for other domains and ecosystems.
+The Econ-ARK infrastructure is built around creating a sustainable community with respect to various different use cases and the challenges of creating sustainable scientific software. We discuss some of the challenges of bridging work across user roles of Researchers, Publishers, Professors and Software Engineers. This is discussed from the point of view of economics research and tools in the SciPy ecosystem but it could be limitedly generalized for other domains and ecosystems.
 
-**Decoupling scientific content from code** A lot of scientific code is written as part of academic research projects where the incentives aren't closely aligned with those of creating scientific software (The recent case of UK COVID microsimulation code :cite:`covidsim2020`, brings out a stronger need of creating scientific software with the correct incentives). Initiatives like Journal of Open Source Software (JOSS) helps to align the incentives in the right direction. The decision to draw the line between a research artifact and a software is a hard decision which varies a lot between different scientific domains and requires a high level overlap of the researchers, publishers and software engineer roles. A lot of scientific code written by researchers is geared towards the publishable end result like a paper, a quick example to explain this could be as trivial as the difference between a script and a modular function :cite:`scilec`.
+**Decoupling scientific content from code.** A lot of scientific code
+is written as part of academic research projects where the incentives
+aren't closely aligned with those of creating scientific software
+(The recent case of UK COVID microsimulation code :cite:`covidsim2020`,
+brings out a stronger need of creating scientific software with the
+correct incentives).
+Initiatives like Journal of Open Source Software (JOSS) helps to align
+the incentives in the right direction.
+The decision to draw the line
+between a research artifact and a software is a hard decision which varies
+a lot between different scientific domains and requires a high level
+overlap of the researcher, publisher and software engineer roles.
+
+When scientific code written by researchers is geared towards the
+publishable end result like a paper, it can lead to short-sighted
+design choices that in a broader software context are known as
+"technical debt" :cite: `kruchten2012technical`. An illustraiont
+is this example of a difference between a script and a modular
+function :cite:`scilec`.
 
   .. code-block:: python
 
@@ -493,16 +526,57 @@ The Econ-ARK infrastructure is built around creating a sustainable community wit
     print(calculate_MA(data, 'GOOG', 5))
 
 
-  Initial decisions like hard coding variables (which happens in a lot of academic research projects) in the code while creating the research artifact could lead away from creating a well defined reusable scientific software library. This seems trivial for people with a software engineering background but not necessarily for others. We discuss this further in our recommendation of software design training to researchers. We know this is a hard problem to solve in domain specific scientific code where the boundaries between a research paper and code could be blurry and to tackle this is Econ-ARK we extracted generalized code from research artifacts to create our software package HARK :cite:`carroll2018econ` and we maintain the research artifacts which heavily rely on HARK as REMARKS(Replications and Explorations Made using the ARK). We are working on creating generalized software used in various research projects in the area of heterogeneous agent modeling.
+Initial decisions like hard coding variables
+(which happens in a lot of academic research projects)
+in the code while creating the research artifact could
+lead away from creating a well defined reusable scientific
+software library. This seems trivial for people with a software
+engineering background but not necessarily for others.
+We discuss this further in our recommendation of software
+design training to researchers. We know this is a hard
+problem to solve in domain specific scientific code where
+the boundaries between a research paper and code could be
+blurry.
+To tackle this is Econ-ARK, we extracted generalized
+code from research artifacts to create our software package
+HARK :cite:`carroll2018econ` and maintained the research
+artifacts which heavily rely on HARK as REMARKS (Replications
+and Explorations Made using the ARK).
+We are working on creating generalized software used in various
+research projects in the area of heterogeneous agent modeling.
   
-  This decoupling exercise also helps with reproducibility part of research projects as it gives other researchers necessary tools to examine the research artifacts. The decoupling can also be extended to the data used in data-intensive research projects, which can also exist as a part of the scientific software library.
+This decoupling exercise also helps with the reproducibility of
+research projects as it gives other researchers the necessary
+tools to examine the research artifacts. The decoupling can
+also be extended to the data used in data-intensive research
+projects, which can also exist as a part of the scientific
+software library.
 
 
-**Reproducible builds of scientific content**, Reproducibility crisis has been plaguing academic research for some time and the current ecosystem of software packaging and distribution certainly doesn't help it. To tackle this in Econ-ARK we have used containerization technologies like Docker to solve this problem. Tools like Repo2Docker :cite:`repo2d` further help us with creating reproducible builds of scientific content. Creating and working with these tools still require a basic background with software engineering, and end users like students and researchers in economics may not have the required background. We made tools to lower the barrier by using pre built containers and one click (commands) reproducible research artifacts :cite:`reproduce` . This part requires a strong overlap between Researchers and Software Engineers in a project. Pushing for reproducibility in the community benefits students by lowering the barrier and publishers/researchers by creating tools required to address the reproducibility crisis.
+**Reproducible builds of scientific content.**
+The reproducibility crisis has been plaguing academic research
+for some time and the current ecosystem of software packaging
+and distribution certainly doesn't help it.
+To tackle this in Econ-ARK we have used containerization
+technologies like Docker to solve this problem.
+Tools like Repo2Docker :cite:`repo2d` further help us with
+creating reproducible builds of scientific content.
+Creating and working with these tools still requires a basic
+background with software engineering, and end users like students
+and researchers in economics may not have the required background.
+We made tools to lower the barrier by using pre-built containers
+and one-click (commands) reproducible research
+artifacts :cite:`reproduce`.
+This part requires a strong overlap between Researchers and
+Software Engineers in a project.
+Pushing for reproducibility in the community benefits students
+by lowering the barrier and publishers/researchers by creating
+tools required to address the reproducibility crisis.
 
-**Interactive scientific publication**. The publication of the Econ-ARK based analysis of the
+**Interactive scientific publication.** The publication of the
+Econ-ARK based analysis of the
 consumption response to the CARES Act :cite:`carroll2020modeling`
-was accompanying by an online Dashboard [#]_ that allowed users
+was accompanied by an online Dashboard [#]_ that allowed users
 to change parameters of the model and visualized their impact
 on policy outcomes.
 This Dashboard was deployed by Binder and developed by an Econ-ARK
@@ -512,17 +586,35 @@ substance of the model. Here, that paradigm is used not to convey
 knowledge to students, but to public policy makers and other
 economists.
 
-.. [#] \url{https://mybinder.org/v2/gh/econ-ark/Pandemic/master?urlpath=voila%2Frender%2FCode%2FPython%2Fdashboard.ipynb}
+.. [#] https://mybinder.org/v2/gh/econ-ark/Pandemic/master?urlpath=voila%2Frender%2FCode%2FPython%2Fdashboard.ipynb
 
 This new way of presenting economic models may be more digestible
 to a wider audience than a traditional research publication.
 However, researchers are not trained to create these Dashboards
 as they are trained to write research papers.
-This limits the scholarly impact that domains specific research
+This limits the scholarly impact of domain specific research
 software, as many computational models are not being presented
 in this rich interactive way.
 
-**Pedagogy Teaching resources**  To keep the wheels turning in a research discipline we require effective pedagogical resources, especially in domains which are increasingly using scientific software to further research. After creating pedagogical content we are faced with the next hard challenge of creating an effective teaching infrastructure. The crème de la crème of the SciPy community has faced installation problems with software packages and it is not hard to create a monster out of your local environment but luckily tools like MyBinder and JupyterHub have drastically reduced the work required to set up a stable environment required for teaching courses which depends heavily scientific software. At Econ-ARK we have used MyBinder(public and privately hosted) extensively for teaching graduate economics courses and it has significantly reduced the overhead required for local setup, especially for students which are the primary users of a domain specific scientific software like HARK. We have also effectively used containerization for standardizing student assignments which streamlines the work for both students and teachers.
+**Teaching resources.**  To keep the wheels turning in a
+research discipline we require effective pedagogical resources,
+especially in domains which are increasingly using scientific
+software to further research. After creating pedagogical content
+we are faced with the next hard challenge of creating an effective
+teaching infrastructure. The crème de la crème of the SciPy
+community has faced installation problems with software packages
+and it is not hard to create a monster out of your local
+environment. But luckily tools like MyBinder and JupyterHub
+have drastically reduced the work required to set up a stable
+environment required for teaching courses that depend heavily
+scientific software. At Econ-ARK we have used MyBinder (publicly
+and privately hosted) extensively for teaching graduate economics
+courses and it has significantly reduced the overhead required for
+local setup, especially for students who are the primary users
+of a domain specific scientific software like HARK. We have
+also effectively used containerization for standardizing student
+assignments which streamlines the work for both students
+and teachers.
 
 Discussion
 --------------------
@@ -545,8 +637,7 @@ introduce more software engineering training into the
 core curriculum for graduate students.
 Some Economics departments already offer a course
 on Computational Methods, analogous to earlier courses
-on Mathematical Methods", Econometrics, or other methods
-courses.
+on Mathematical Methods, Econometrics, or other methods.
 As the pragmatic needs of computational methods increasingly
 require such activities as setting up local development
 environments, preparing cloud computing infrastructure,
