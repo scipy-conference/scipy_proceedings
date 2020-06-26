@@ -545,8 +545,8 @@ argument between two teachers. Figure :ref:`karafig` displays the dataset graph.
 The dataset is loaded and further information is
 displayed to provide insight into its complexity.
 
-.. figure:: learning_graph_structured_data_h2_files/karate_graph.png
-    :scale: 30%
+.. figure:: learning_graph_structured_data_h2_files/karate_club.pdf
+    :scale: 55%
     :align: center
 
     Karate club dataset, available in :code:`geomstats` with the function :code:`load_karate_graph` from the module :code:`datasets.utils`. This dataset is a graph, where each node represents a member of the club and each edge represents a tie between two members of the club. :label:`karafig`
@@ -611,11 +611,13 @@ between :math:`\phi_i` and :math:`\phi_j` should get smaller, while the one
 between :math:`\phi_i` and :math:`\phi_k` should get larger. Therefore
 by minimizing :math:`\mathcal{L}`, one obtains representative embeddings.
 
-.. figure:: learning_graph_structured_data_h2_files/Notations.png
-    :scale: 50%
+.. figure:: learning_graph_structured_data_h2_files/notations_pdf.pdf
+    :scale: 60%
     :align: center
 
-    Distances between node embeddings after the first iteration :label:`fignotation`.
+    Distances between node embeddings after one iteration :label:`fignotation`.
+
+
 
 `Riemannian optimization`
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -828,11 +830,11 @@ Riemannian exponential map is applied to find the new value of
 Figure :ref:`embeddingiterations` shows the graph embedding at different epochs with the true labels of each node represented with color. Notice
 how the converged embedding separates well the two clusters and is a quite useful representation for predicting the labels of each node.
 
-.. figure:: learning_graph_structured_data_h2_files/embedding_iterations.png
+.. figure:: learning_graph_structured_data_h2_files/embedding_iterations.pdf
     :align: center
-    :scale: 45%
+    :scale: 70%
 
-    Embedding at different `epoch` iterations. :label:`embeddingiterations`
+    Embedding at different `epoch` iterations with colors representing the true labels of each node. :label:`embeddingiterations`
 
 Let us apply a :math:`K`-means algorithm to label the nodes of the embedding in an unsupervised way.
 For this, we import the :math:`K`-means class, set the number of clusters, and plot the results.
