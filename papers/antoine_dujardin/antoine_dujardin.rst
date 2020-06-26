@@ -87,7 +87,7 @@ where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar 
 Acceleration: getting the best out of NumPy
 -------------------------------------------
 
-The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy :cite:`Oliphant2006,vanderWalt2011` functions and slightly better performances using Numba :cite:`Lam2015`. As we illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools.
+The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy :cite:`Oliphant2006,vanderWalt2011` functions and slightly better performances using Numba :cite:`Lam2015`. As we illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools. The tests were performed on a node of Cori Haswell.
 
 Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the Convolution Theorem :cite:`Arfken1985`, we have
 
