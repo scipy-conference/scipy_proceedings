@@ -91,7 +91,7 @@ of cross-institutional and longitudinal studies which include assessment of cili
 Therefore, we aim to develop an unsupervised, computational approach to analyze ciliary motion, 
 developing a quantitative "library" of well-defined, clinically relevant ciliary motion phenotypes. 
 Clustering and classification are established problems in machine learning. However, their 
-applications to ciliary waveform analysis are not straightforward, as cilia exhibit subtle, rotational, non-linear 
+applications to ciliary waveform analysis are made difficult, as cilia exhibit subtle, rotational, non-linear 
 motion :cite:`quinn_novel_2011`. While attempts have been made at addressing this problem, we note that 
 generic dynamics models fail to classify and cluster this type of motion accurately or meaningfully, 
 and are insufficient for generating a semantically potent representation. We thus apply a novel 
