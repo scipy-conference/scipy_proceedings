@@ -32,8 +32,6 @@
 
 
 
-:video: http://www.youtube.com/watch?v=AXG3ma_f-iM:
-
 ----------------------------------------------------------------------
 Leading magnetic fusion energy science into the big-and-fast data lane
 ----------------------------------------------------------------------
@@ -59,115 +57,125 @@ times faster than with a single-core implementation.
 Magnetic Fusion Energy research and its data analysis needs
 -----------------------------------------------------------
 
-Research on magnetic fusion energy (MFE) combines theoretical physics, experimental physics,
-engineering, and even economics to achieve the goal of developing an unlimited, clean energy source.
+Research on magnetic fusion energy combines physics, engineering, and even economics to deploy a
+virtually unlimited, clean, and competitively priced energy source to the grid.
 Python is well established in the fusion community through projects like plasmapy [PPY]_ or OMFIT
-[Men15]_. With a plethora of scientific disciplines at its foundation, scientific workflows in MFE vary
-significantly by the amount of data and computational time they require. We introduce ``Delta`` -
-the aDaptive nEar-reaL Time Analysis framework - and show how it can be used to perform a routine 
-spectral analysis workflow.
+[Men15]_. We introduce ``Delta`` - the aDaptive nEar-reaL Time Analysis framework - and show how it
+can be used to stream data from an experiment to a remote high performance computing (HPC) resource.
+There, Delta executes a routine spectral analysis workflow in near real-time. By making data analysis
+results available in near real-time, Delta allows  scientists to make more informed decisions on follow-up
+experiments and could accelerate scientific discovery.
 
-But before we begin, what is the goal of magnetic fusion energy research? If you could harvest the
-energy from controlled nuclear fusion reactions you would have a potentially unlimited,
-environmentally friendly energy source. Nuclear fusion reactions are the opposite to nuclear fission
-reactions which power todays nuclear power plants. In a fusion reaction two light atomic nuclei
-merge into a heavier one, while converting a fraction of the reactants binding energy into kinetic
-energy of the products. As a nuclear reaction, the amount of energy released is larger by orders of
-magnitude than for a chemical reaction that occurs when burning fossil fuels. Fuel for fusion
-reactions are readily extracted from sea water, which is available in near-infinite quantities. All
-this means that fusion energy is also inherently safe. Since the energy yield of a fusion reaction
-is so large, only little fusion plasma needs to be confined to power a fusion reactor. To produce 1
-GW of fusion power, enough to power about 700,000 homes, just 2 kg of fusion plasma would need to be
+
+To illustrate use-cases for Delta, we start with a primer of fusion energy, introduce tokamak
+devices that are used to perform fusion experiments and a diagnostic that is installed in many
+tokamaks. If one could harvest the energy from controlled nuclear fusion reactions you would have a
+potentially unlimited, environmentally friendly energy source. Fusion reactions release energy when
+two light nuclei merge into a heavier one. As part of the reaction, nuclear binding energy of the
+reactants is converted into kinetic energy of the products. Fission reactions on the other hand,
+which power todays nuclear power plants, release binding energy when a heavy nucleus decays into
+lighter products. Typical energies involved in nuclear reactions are measured in MeV, multiple
+orders of magnitude larger than the characteristic eV energy scale for chemical reactions. Thus, the
+energy yield for a nuclear reaction is much larger than for chemical reaction, which occur when
+fossil fuels are burnt. Fuel for fusion reactions are readily extracted from sea water, which is
+available in virtually inexhaustible quantities. Since the energy yield of a fusion reaction is so
+large, only little fusion plasma needs to be confined to power a fusion reactor. To produce 1 GW of
+fusion power, enough to power about 700,000 homes, just 2 kg of fusion plasma would need to be
 burned per day [Ent18]_. Thus, a catastrophic event such as total loss of plasma confinement can
 cause no more than local damage to the plasma vessel.
 
 
-To fuse positively charged atoms into one heavier one enormous energies are required. For the most
-feasible fusion reactions, temperatures upwards of 100 million degrees are required. Such a requirement
-unfortunately excludes any material container to confine a fusion fuel. The most promising approach
-is to confine the fusion fuel in the state of a plasma - a hot gas where the atoms are stripped of
-their electrons. Such a plasma can be confined in a strong magnetic field, shaped like a donut. 
-Confined like this, there is no possibility for an uncontrolled chain reaction. If a significant 
-amount of plasma would leak out of the vessel, the accompanying temperature drop would stop any 
-fusion reactions. At the same time, the leaked plasma would be rendered inert very quickly and not
-pose and danger.
+To fuse positively charged atoms into one heavier requires enormous energy. For the most feasible
+fusion reactions, Deuterium-Tritium, temperatures upwards of 100 million degrees are required. Such
+a requirement unfortunately excludes any material container to confine a fusion fuel. The most
+promising approach is to confine the fusion fuel in the state of a plasma - a hot gas where the
+atoms are stripped of their electrons. Such a plasma can be confined in a strong magnetic field,
+shaped like a donut. Confined like this, there is no possibility for an uncontrolled chain reaction.
+If a significant amount of plasma would leak out of the vessel, the accompanying temperature drop
+would stop any fusion reactions. At the same time there are only a few grams of plasma confined and
+it does not have enough stored energy to cause damages other than to the structure of the
+confinement vessel.
 
-The best performing plasma confinement devices, tokamaks, are donut shaped. Medium-sized tokamaks,
-such as KSTAR [KSTAR]_, DIII-D [D3D]_, NSTX-U [NSTX]_, ASDEX Upgrade [AUG]_, MAST [MAST]_, and TCV
-[TCV]_ have a major radius R=1-1.5m and a minor radius a=0.2-0.7m. In experiments at these
-facilities, researchers configure parameters such as the plasma density or the shaping and strength
-of the magnetic field and study the behaviour of the plasma in this setup. During a typical
-experimental workflow, about 10-30 ``shots`` are performed on a given day where each shot lasts for
-a couple of seconds up to minutes. Numerous measurements of the plasma and the mechanical components
-of the tokamak are performed during each discharge. After a cool-down phase (tokamaks contain
-cryogenic components) the device is ready for the next shot. 
+The best performing plasma confinement devices, tokamaks, have a toroidal shape, similar to a donut.
+Tokamaks (a transliteration of the Russian acronym for toroidal chamber with magnetic coils), such
+as KSTAR [KSTAR]_, DIII-D [D3D]_, NSTX-U [NSTX]_, ASDEX Upgrade [AUG]_, MAST [MAST]_, and TCV [TCV]_
+have a major radius R=1-1.5m and a minor radius a=0.2-0.7m. In experiments at these facilities,
+researchers configure parameters such as the plasma density or the shaping and strength of the
+magnetic field and study the behaviour of the plasma in this setup. During a typical experimental
+workflow, about 20-30 plasma discharges, so-called ``shots`` are performed on a given day where each
+shot lasts for a couple of seconds up to minutes. Numerous measurements of the plasma and the
+mechanical components of the tokamak are performed during each discharge. After a cool-down phase
+(tokamaks contain cryogenic components) the device is ready for the next shot. 
 
-A common diagnostic in magnetic fusion experiments are so-called Electron Cyclotron Emission Imaging
-(ECEI) systems [Cos74]_. They measure emission intensity by free electrons in the plasma, which
-allows one to infer their temperature as a function of radius. Modern ECEI systems, such as the one installed
-in the KSTAR tokamak [Yun14]_ have hundreds of spatial channels and sample data on a microsecond
-time-scale, producing data streams upwards of 500 MB/sec. 
+A common diagnostic in magnetic fusion experiments is a so-called Electron Cyclotron Emission (ECE)
+diagnostic [Cos74]_. They measure emission intensity by free electrons in the plasma, which allows
+one to infer their temperature as a function of radius. Physical models of the plasma describe it
+partially through the temperature. This measurement allows to compare the experiment such models.
+Modern ECE systems, such as the one installed in the KSTAR tokamak [Yun14]_ have hundreds of spatial
+channels and sample data on a microsecond time-scale, producing data streams upwards of 500 MB/sec. 
 
-``Delta`` aims to perform advanced data analysis in near real-time in order to inform decisions in
-experimental workflows. This use-case falls in between two other common data analysis workflows in
-fusion energy research, listed in Tab. :ref:`timescale`. Real-time control systems for plasma
-control require data on a millisecond time scale. This time scale is a hard constraint and limits
-the amount of data the algorithms can ingest. Post-shot batch analysis of measurements on the other
-hand serves scientific discovery. The data and the analysis methods are selected on a per-case
-basis. By providing timely analysis results of plasma measurements to the experimentalists, they can
-make more informed decisions about the next plasma shot. An experimental campaign at the TAE
-facility gives an example of the workflows ``Delta`` aims to accomodate. After each shot,
-measurements as well as scientists opinions were used as input for the ``optometrist`` algorithm
-which then suggested a configuration for the next shot with the overall aim to improve overall
-fusion performance [Bal17]_.  With ``Delta`` we aim to provide a framework that allows to implement
-such advanced analysis workflows.
-
+Analyzing large datasets, as produced by ECE diagnostics in between shots and generating actionable
+information in time for the next shot is a challenging task. The ``Delta`` framework aims to
+facilitate the analysis of such large datasets in near real-time." This use-case falls in between
+two other common data analysis workflows in fusion energy research, listed in Tab. :ref:`timescale`.
+Real-time control systems for plasma control require data on a millisecond time scale. This time
+scale is a hard constraint and limits the amount of data the algorithms can ingest. Post-shot batch
+analysis of measurements on the other hand serves scientific discovery. The data and the analysis
+methods are selected on a per-case basis. By providing timely analysis results of plasma
+measurements to the experimentalists, they can make more informed decisions about the next plasma
+shot. As an example of the workflows that we wish to facilitate with ``Delta`` we refer to a series of
+experiments performed at the TAE facility [Bal17]_. There, the so-called ``optometrist`` algorithm was
+used as a stochastic optimizer in conjunction with expert judgement of domain scientists to assess
+the performance of a just concluded plasma shot and optimize the machine parameters as to increase
+the performance in the following shot. By making advanced data analysis results available in near
+real-time to domain scientists, ``Delta`` will allow to improve such workflows at experimental fusion 
+facilities.
 
 
 .. table:: Time-scales on which analysis results of fusion data is required for different tasks.  :label:`timescale`
 
-    +-----------------------------+--------------------+
-    |    Task                     | Time-scale         |
-    +=============================+====================+
-    | real-time control           | millisecond        |
-    +-----------------------------+--------------------+
-    | live/inter-shot analysis    | seconds, minutes   |
-    +-----------------------------+--------------------+
-    | scientific discovery        | hours, days, weeks |
-    +-----------------------------+--------------------+
+    +---------------------------+--------------------+
+    |    Task                   | Time-scale         |
+    +===========================+====================+
+    | real-time control         | millisecond        |
+    +---------------------------+--------------------+
+    | live/inter-shot analysis  | seconds, minutes   |
+    +---------------------------+--------------------+
+    | scientific discovery      | hours, days, weeks |
+    +---------------------------+--------------------+
 
 
 Designing the Delta framework
 -----------------------------
 
 We are designing the ``Delta`` framework in a bottom-up approach, tailoring it to facilitate a
-specific spectral analysis workflow that uses measurements from an ECEI diagnostic as well as with a
-specific deployment platform in mind. While plasma diagnostics operated at fusion experiments
-produce a heterogeneous set of data streams, the ECEI spectral analysis workflow is representative
-for a large set of workflows used to analyze different measurements. HPC environments also differ
-for example in their local area network topologies, the speed of network links between data-transfer
-nodes to compute node and compute node interconnects and their network security policies.
-Furthermore granted allocations of compute time for research projects make it impractical to start
-with a top-down approach that generalizes well to arbitrary HPC platforms (though we endeavor to
-build the framework with flexibility and extensibility in mind). In the remainder of this section we
-describe the data analysis workflow for ECEI data, the targeted network and deployment architecture
-and give an overview of how ``Delta`` connects them together.
+specific spectral analysis workflow that uses measurements from an ECEI diagnostic. While plasma
+diagnostics operated at fusion experiments produce a heterogeneous set of data streams, the ECEI
+spectral analysis workflow is representative for a large set of workflows used to analyze different
+measurements. HPC environments also differ for example in their local area network topologies, the
+speed of network links between data-transfer nodes to compute node and compute node interconnects
+and their network security policies. Furthermore granted allocations of compute time for research
+projects make it impractical to start with a top-down approach that generalizes well to arbitrary
+HPC platforms (though we endeavor to build the framework with flexibility and extensibility in
+mind). In the remainder of this section we describe the data analysis workflow for ECEI data, the
+targeted network and deployment architecture and give an overview of how ``Delta`` connects them
+together.
 
 Electron Cyclotron Emission Imaging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The Electron Cyclotron Emission Imgaging diagnostic installed in KSTAR measures the electron
+The Electron Cyclotron Emission Imaging diagnostic installed in KSTAR measures the electron
 temperature :math:`T_e` on a 0.15m by 0.5m grid, resolved using 8 horizontal and 24 vertical
 channels [Yun10]_ [Yun14]_. Each individual channel produces an intensity time series :math:`I_{h,
 v}(t_i)` where h and v index the horizontal and vertical channel number and :math:`t_i = i 
 \Delta_t` denotes the time where the intensity is sampled with :math:`\Delta_t \approx 1 \mu s`
 being the sampling time. Digitized with a 16-bit digitizer, this diagnostic produces a data
-stream of 2 byte * 192 channels * 1,000,000 samples / sec = 366 MByte/sec. The spatial view of this
+stream of 2 byte * 192 channels * 5,000,000 samples / sec = 1836 MByte/sec. The spatial view of this
 diagnostic covers a significant area of the plasma cross-section which allows it to directly
 visualize the large-scale structures of the plasma. Besides analyzing the normalized intensity,
 several quantities calculated off the Fourier transformed intensity :math:`X(\omega)`, here
 :math:`\omega` denotes the angular frequency, are used to study the plasma dynamics. The cross-power
-S, the coherence C, the cross-phase P and the cross-coherence R are defined respectively for 
+S, the coherence C, the cross-phase P and the cross-correlation R are defined respectively for 
 channel pair combinations of Fourier transformed intensity signals :math:`X` and :math:`Y` as
 
 
@@ -205,24 +213,23 @@ disruption.
 
 
 
-
 Targeted HPC architecture
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Designed with a specific application in mind, we implement ``Delta`` for streaming data from KSTAR
-to the National Energy Research Scientific Computing Centre (NERSC). NERSC operates Cori, a Cray
+We implement ``Delta`` for streaming data from KSTAR
+to the National Energy Research Scientific Computing Centre (NERSC). NERSC operates Cori [cori]_, a Cray
 XC-40 supercomputer that is comprised of 2,388 Intel Xeon "Haswell" processor nodes, 9,688 Intel
-Xeon Phi "Knight's Landing" (KNL) nodes and ranks 13 on the Top500 list. Figure :ref:`fig-topo`
+Xeon Phi "Knight's Landing" (KNL) nodes and ranks 16 on the Top500 list [top500]_. Figure :ref:`fig-topo`
 illustrates the targeted network topology. Data transfers from KSTAR and NERSC originate and end at
-their respective Data Transfer Node (DTN). DTNs are servers dedicated to performing data transfers
-and are commonly used to transfer large file in and out of a network. As such, they feature
+their respective Data Transfer Node (DTN). DTNs are servers deployed and configured specifically for
+transferring data over networks [dtn]_. As such, they feature
 large-bandwidth network interfaces, both for internal and external connections. Table :ref:`tab1`
 lists the hardware of the DTNs and Cori's compute nodes. 100Gbit/s links connect both DTNs via the
 internet. At NERSC, the DTN is connected to Cori with dual 10 Gbit/s NICs. Coris individual compute
-nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s [cori]_. 
+nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s. 
 
 
-.. figure:: plots/delta_arch.png
+.. figure:: plots/delta_arch_no_storage.png
    :align: center
    :scale: 40%
    :figclass: w
@@ -230,8 +237,8 @@ nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s [cori]_
    The network topology for which the ``Delta`` framework is designed. Data is streamed in the
    direction indicated by the orange arrow. At KSTAR, measurement data is staged from its DTN to
    the NERSC DTN. Internally at NERSC, the data stream is forwarded to compute nodes at Cori 
-   and analyzed. Orange arrows mark sections of the network where ADIOS facilitates high-performance streaming. Black arrows denote standard TCP/IP connections. The analysis results are stored in a
-   database backend and can be ingested by visualizers. :label:`fig-topo`
+   and analyzed. Orange arrows mark sections of the network where ADIOS facilitates high-performance streaming. 
+   Black arrows denote standard TCP/IP connections. :label:`fig-topo`
    
 
 .. table:: Hardware and network interconnections of the data transfer nodes (DTNs) and compute nodes :label:`tab1`
@@ -254,29 +261,29 @@ nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s [cori]_
 Connecting science experiments to HPC resources
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In order to connect KSTAR to Cori, ``Delta`` uses three separate software components. A
-**generator** running on the KSTAR DTN, a **middleman** running on the NERSC DTN, and a
-**processor** running on Cori. To avoid performance hits when touching the filesystem, ``Delta``
-streams data between its components. By using only in-memory data transfers this avoids performance
-hits when touching the file system. Data transfers can of course be facilitated using traditional
-file-based I/O. Performance variability of file-based I/O on HPC systems is however a well studied
-problem [Xie12]_ . Furthermore, the workflow at hand and anticipated workflows require frequent
-transfer of relatively small data packets. By relying on streaming data transfers, ``Delta`` aims to
-avoid jitter due to I/O bottlenecks.
 
-The generator ingests data from an experiment and sends it to the NERSC DTN where the middleman is
-running. The middleman forwards the received data to the processor. The processor receives the data,
-executes the appropriate analysis kernels and stores the analysis results. ``Delta`` uses ADIOS
-[adios]_ [Liu14]_ to facilitate high bandwidth streaming on the paths marked with orange arrows in
-:ref:`fig-topo`. ADIOS is a unified input/output system that transports and transforms groups of
-self-describing data variables across different media with performance as a main goal. It is
-commonly used in the Department of Energy for high performance parallel I/O. Its transport interface
-is step-based, which resembles the generation of scientific data. ADIOS implements multiple
-transport mechanisms as engines, such as DataMan or a Sustainable Staging Transport (SST), which
-take advantage of underlying network communication mechanisms to provide optimal performance. For
-the topology at hand, ``Delta`` configures ADIOS to use the DataMan engine for both, trans-oceanic
-data and intra-datacenter transfer. Switching the engine used by ADIOS is trivial and requires only
-the change of a single line in a configuration file.
+``Delta`` uses three separate software components to connect KSTAR to Cori. A **generator** running
+on the KSTAR DTN, a **middleman** running on the NERSC DTN, and a **processor** running on Cori. To
+avoid performance hits when touching the filesystem, ``Delta`` streams data between its components.
+By using only in-memory data transfers this avoids performance hits when touching the file system.
+Performance variability of file-based I/O on HPC systems is however a well studied problem [Xie12]_
+. Furthermore, the workflow at hand and anticipated workflows require frequent transfer of
+relatively small data packets. By relying on streaming data transfers, ``Delta`` aims to avoid
+jitter due to I/O bottlenecks.
+
+The generator stages measurement data and sends it to the middleman. The middleman forwards the data
+to the processor. The processor receives the data, executes the appropriate analysis kernels and
+stores the analysis results. ``Delta`` uses ADIOS [adios]_ [Liu14]_ to facilitate high bandwidth
+streaming on the paths marked with orange arrows in :ref:`fig-topo`. ADIOS is a unified input/output
+system that transports and transforms groups of self-describing data variables across different
+media with performance as a main goal. It is commonly used in the Department of Energy for high
+performance parallel I/O. Its transport interface is step-based, which resembles the generation of
+scientific data. ADIOS implements multiple transport mechanisms as engines, such as DataMan or a
+Sustainable Staging Transport (SST), which take advantage of underlying network communication
+mechanisms to provide optimal performance. For the topology at hand, ``Delta`` configures ADIOS to
+use the DataMan engine for both, trans-oceanic data and intra-datacenter transfer. Switching the
+engine used by ADIOS is trivial and requires only the change of a single line in a configuration
+file.
 
 
 
@@ -291,11 +298,8 @@ their performance in the following section.
 Components of the ``Delta`` framework
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As shown in Fig. :ref:`fig-topo`, the architecture of ``Delta`` consists of a ``generator``, a
-``middleman``, and a ``processor``. Each is implemented as a separate python script which needs to
-be executed on the KSTAR DTN, the NERSC DTN, and Cori respectively. Figure :ref:`fig-sw-arch`
-visualizes their software but omits the ``middleman`` since its sole task is to relay data streams.
-
+We continue by discussing the architecture of the ``generator`` and the ``processor`` shown
+in Fig. :ref:`fig-sw-arch`. Here we omit the ``middleman`` as it only relays the data stream.
 
 .. figure:: plots/delta-sw-arch.png
    :align: center
@@ -307,14 +311,11 @@ visualizes their software but omits the ``middleman`` since its sole task is to 
    denotes the shot number and NN enumerates the ADIOS channels. The **processor** runs at the
    HPC site, recieves the data and submits it for processing through a ``task_list``. :label:`fig-sw-arch`.
 
-
-
-
-The ``generator`` is implemented as a single-threaded application. It sources using a ``loader``
-instance that handles all diagnostic specific data transformations and stages it for streaming. For
+The ``generator`` is a single-threaded application that sources data using a ``loader``
+instance which handles all diagnostic specific data transformations and stages it for streaming. For
 the ECEI diagnostic the tranformations includes for example calculating a channel-dependent
 normalization and the aggregation of data into time chunks, :math:`N_{ch}` blocks of :math:`s_{ch}`
-consecutive samples. A ``writer`` instance handles all calls to ADIOS.
+consecutive samples. A ``writer`` instance handles all streaming I/O using ADIOS.
 Pseudo-code for the generator looks like this:
 
 .. code:: python
@@ -331,18 +332,18 @@ Pseudo-code for the generator looks like this:
        writer.EndStep()
 
 
-Here, cfg is a framwork-wide json configuration file. Diagnostic-specific parameters, such as
+Here, cfg is a framework-wide json configuration file. Diagnostic-specific parameters, such as
 :math:`s_{ch}` and details on how to calculate data normalization are stored in the ``ECEI``
 section. ADIOS parameters for the writer, such as parameters for the IO engine and connection
-details are stored in the ``transport_tx`` section. Moving all diagnostic-dependent transformations
-into the loader class, the generator code appears diagnostic-agnostic. We note however that in the
-current version, the number of generated data batches, which is specific to the ECEI diagnostic,
-defines the number of steps. Furthermore, the pseudo-code  example above demonstrates the
-step-centered design of the ADIOS library. It encapsulates each time chunk in a single time step.
+details are stored in the ``transport_tx`` section. Because all of the data transformations are
+inside the loader class, the generator appears to be agnostic about what kind of diagnostic data it
+gets. However, the number of data batches is specific to the data at hand. Furthermore, the
+pseudo-code  example above demonstrates the step-centered design of the ADIOS library. It
+encapsulates each time chunk in a single time step.
 
 The middleman runs on the NERSC DTN and relays data streams from the generator to the processor.
 Using the classes available in ``Delta`` the pseudo-code looks similar to the
-``generator`` with a ``reader`` instance replacing the ``loader`` in th example above.
+``generator`` with a ``reader`` instance replacing the ``loader``..
 
 
 The ``processor`` runs on Cori. It reads time chunks from an ADIOS stream, publishes
@@ -368,7 +369,7 @@ Pseudo-code for the processor looks like this
       executor_fft = MPIPoolExecutor(max_workers=NF)
       executor_anl = MPIPoolExecutor(max_workers=NA)
       a2_reader = reader(cfg["transport_rx"])
-      reader.Open()
+      a2_reader.Open()
       task_list = task_list_spectral(executor_anl, 
                                      executor_fft, 
                                      cfg)
@@ -425,16 +426,16 @@ as
      ...
      _ = [executor.submit(self.calc_and_store, data, 
                           ch_it, tidx) 
-                          for ch_it in self.get_dispatch_sequence()]
+          for ch_it in self.get_dispatch_sequence()]
 
 
-The call of an analysis kernel happens in ``calc_and_store``. Once the kernel returns, the analyzed 
-data is immediately stored.  This allows to submit a large number of analysis task in parallel in a
-``fire-and-forget`` way. Implementing analysis and storage as separate functions on the other hand
-would introduce dependencies between futures returned by ``executor.submit``. Grouping analysis and
-storage together on the other hand guarantees that once ``calc_and_store`` returns, the data has
-been analyzed and stored. In order to minimize data communication, ``submit`` launches ``calc_and_store`` 
-for an exhaustive list of channel pair combinations which is accessed by ``get_dispatch_sequence()``.
+The call of an analysis kernel happens in ``calc_and_store``. Once the kernel returns, the analyzed
+data is immediately stored.  This allows us to submit a large number of analysis task in parallel in a
+``fire-and-forget`` way. Implementing analysis and storage as separate functions would introduce
+dependencies between futures returned by ``executor.submit``. Grouping analysis and storage together
+guarantees that once ``calc_and_store`` returns, the data has been analyzed and stored. In order to
+minimize data communication, ``submit`` launches ``calc_and_store`` for an exhaustive list of
+channel pair combinations which is accessed by ``get_dispatch_sequence()``.
 
 
 Since the ECEI analysis tasks for the workflow at hand expects Fourier transformed data, the analysis kernels 
@@ -456,7 +457,7 @@ by the ``task_list`` class:
          task.submit(self.executor_anl, 
                      fft_future.result(), tidx)
 
-Executing the analysis tasks after the Fourier transformation further reduces inter-dependencies in
+Executing the analysis tasks after the Fourier transformation further reduces interdependencies in
 the workflow, i.e. this implementation awaits only a single future. Without collecting the analysis
 tasks in a list one may for example execute Fourier transformations prior to launching each
 individual analysis kernel. This particular choice would increase the number of Fourier
@@ -470,7 +471,7 @@ Explored alternative architectures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``Delta`` relies on the ``futures`` interface defined in PEP 3148 to launch data analysis kernels on
-an HPC resource. Since both Cori and ADIOS are designed for MPI application we use the ``mpi4py``
+an HPC resource [PEP3148]_. Since both Cori and ADIOS are designed for MPI application we use the ``mpi4py``
 [mpi4py]_ implementation. Being a standard interface, other implemenations like
 ``concurrent.futures`` can readily be used.  The Python Standard Library defines the interface as
 :code:`executor.submit(fn, *args **kwargs)`. ``Delta`` wraps PEP 3148 ``submit`` calls in wrapper
@@ -517,11 +518,12 @@ scikit-learn as an example, the default way of applying it to data is
    from sklearn.decomposition import PCA 
    X = np.array([...])
    pca = PCA(n_components=2)
-   pca.fit(X)
+   pca.fit_transform(X)
 
 This approach has proven itself useful and is the common way of organizing libraries. ``Delta``
 deviates slightly from this approach and calls transformations in the ``calc_and_store`` member
-function of the ``task_ecei`` class. The specific kernel to be called is configured in the constructor:
+function of the ``task_ecei`` class. The specific kernel to be called is configured in the objects
+initialization:
 
 .. code:: python
    
@@ -544,15 +546,15 @@ function of the ``task_ecei`` class. The specific kernel to be called is configu
 
 At the time of writing, ``Delta`` only implements a workflow for ECEI data and this design choice 
 minimizes the number of classes present in the framework. Grouping the data analysis methods by 
-diagnostic also allows to collectively execute diagnostic-specific pre-transformations that are best
-performed after transfer to the ``processor``. One may wish for example to distribute calculations of
+diagnostic also allows to execute diagnostic-specific pre-transformations that are best
+performed after transfer to the ``processor`` collectively. One may wish for example to distribute calculations of
 the 18336 channel pair combinations among multiple ``task`` instances. This approach lets us seamlessly
 do that. Once the requirements and use cases have stabilized we will explore suitable generalizations
 such as object factories for the ``task_list`` class.
 
 In summary, the architecture of ``Delta`` implements data streaming using time-stepping interface of
 ADIOS and data analysis using PEP 3148 compatible executors. In order to increase performance we
-choose to use two PoolExecutors. The first executor is used to execute shor Fourier Transformations
+choose to use two PoolExecutors. The first executor is used to execute short Fourier Transformations
 of the the input data for the entire analysis task group. The second pool executor is available for
 running the analysis kernels and immediate storage of the results. 
 
@@ -561,13 +563,13 @@ Performance analysis
 --------------------
 
 While the overall performance of the framework can be measured by the walltime of the analysis
-workflow at hand, the complex composition of the framework requires to understand the performance of
+workflow at hand, the complex composition of the framework requires us to understand the performance of
 its building blocks. Referring to figure :ref:`fig-sw-arch`, IO performance of the ADIOS library,
 the asynchronous receive-publish-submit strategy implemented by processor and finally the speed of
 individual analysis kernels contribute to the workflow walltime. Furthermore, the workflow walltime
-may be sensitive to the individual components interact with one another For example, even though the
+may be sensitive to the individual components interacting with one another For example, even though the
 processor design aims to facilitate high-velocity data streams by using queues and multiple worker
-threads, a fast data stream ingested by the processor may negatively afftect the performance of the
+threads, a fast data stream ingested by the processor may negatively affect the performance of the
 PoolExecutors by submitting too many tasks in a short time. It may well be that slower data
 streaming rate result in a smaller workflow walltime. Given these considerations we start be
 investigating the performance of individual components in this section and finally investigate the
@@ -604,12 +606,14 @@ single process data transfers.
 Data Analysis Kernels 
 ^^^^^^^^^^^^^^^^^^^^^
 
-Foreshadowed in the code-example above, ``Delta`` implements data analysis routines as computational
+As seen in the code-example above, ``Delta`` implements data analysis routines as computational
 kernels. These are implemented in cython to circumvent the global interpreter lock and utilize 
 multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is implemented as
 
 
 .. code:: python
+
+  from cython.parallel import prange
 
   @cython.boundscheck(False)
   @cython.wraparound(False)
@@ -652,7 +656,7 @@ multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is imple
   
                   result[idx, nn] = creal(cabs(_tmp)) 
                                    / num_bins
-      return(result) 
+      return result
 
 The arguments passed to the kernel are the three-dimensional array of Fourier coefficients,
 ``ch_it`` - an iterator over the channel lists, and ``fft_config`` - a dictionary of parameters used 
@@ -737,12 +741,12 @@ about 0.7 seconds, independent of the workflow.
 
 Figure :ref:`delta-perf-queue` shows the amount of time that data for a given time chunk, :math:`n_{ch} = 1... N_{ch}`,
 spends in the queue of the processor.
-All three scenarios show a similar trend - the amount of time a time chunk is spends in the queue increases with 
+All three scenarios show a similar trend - the amount of time a time chunk spends in the queue increases with 
 the time when it is enqueued. This suggests that data is streamed faster to the ``processor`` than the MPI ranks 
 perform data analysis. This implies that the queue acts as a cache for the incoming time chunk data. Running the ``file``
 scenario, the processor loads data almost immediatetly after it starts up. For the ``2-node`` and ``3-node`` scenarios
 the start time of the components on their respective machines is not coordinated. This causes the first time chunk data 
-to arrive at avarying times for the three scenarios.
+to arrive at varying times for the three scenarios.
 
 .. figure:: plots/performance_time_subcon.png
    :scale: 100%
@@ -755,7 +759,7 @@ horizontal bar indicates where the STFT with the time chunk data is submitted on
 the end of a bar marks the time STFT is finished. Common for all three scenarios is that the STFTs
 with the longest execution time are the ones for the first time chunks received. Also, the majority
 of the STFTs is executed in approximately one second or less. Experiments on Cori show that the STFT
-routine when directly called and with the same parameters and data as used here takes about 0.15
+routine when directly called with the same parameters and data as used here takes about 0.15
 seconds. On average the STFT when called from the streaming workflow is slower by a factor of 6. We
 believe that this long execution time is in part explained by MPI communication overhead.
 
@@ -770,7 +774,7 @@ Finally, Figures :ref:`delta-perf-file`, :ref:`delta-perf-2node` and :ref:`delta
 the MPI ranks over time. The MPI ranks execute the STFT and analysis kernels, the figures only show the time 
 where analysis kernels are executed. All three scenarios show a low usage of available MPI ranks, approximately 16 - 20
 in the beginning of the run. After all time chunks are dequeued and Fourier transformed, all available MPI ranks are
-used. Color encodes the different analysis kernels. For example, green bars show time time at which a cross-correlation
+used. Color encodes the different analysis kernels. For example, green bars show time at which a cross-correlation
 kernel is executed. The majority of the compuation time is consumed by cross-correlation kernels. This observation 
 agrees with the performance analysis that showed that the cross-correlation kernel is the most time consuming. 
 
@@ -887,6 +891,11 @@ References
            https://doi.org/10.1088/1741-4326/aa86fe
 
 .. [cori] https://docs.nersc.gov/systems/cori/
+
+.. [top500] https://www.top500.org/lists/top500/list/2020/06/?page=1
+
+
+.. [dtn] http://es.net/science-engagement/technical-and-consulting-services/data-transfer-nodes/
 
 .. [Xie12] B. Xie, J. Chase, D. Dillow et al. *Characterizing output bottlenecks in a supercomputer*
            SC '12: Proceedings of the International conference on High Performance Computing, Networking, Storage and Analysis 
