@@ -68,6 +68,9 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 
    Fluctuation X-ray Scattering experiment setup. :label:`fig:fxs`
 
+   In an FXS experiment, femtosecond pulses from an X-ray Free Electron Laser are shot at a stream of particles in solution.
+   The scattered light forms a diffraction pattern on the detector, aggregating the contributions of the different particles.
+
 While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
 
 We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US Department of Energy national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
@@ -281,6 +284,8 @@ We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, wi
 
    Weak scaling behavior on Cori Haswell with Lustre filesystem (top) and Burst Buffer (bottom). :label:`fig:scaling`
 
+   The app was run on 100,000 images per node, for up to 64 nodes on Cori Haswell. The Lustre filesytem is a high performance system running on HDDs attached to the supercomputer. The Burst Buffer corresponds to SSDs placed within the supercomputer itself used for per-job storage.
+
 As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q', \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
 However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
 Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case, we use MPI to parallelize between nodes and within a node (MPI+MPI). If we were to introduce this optimization into such a code, one would have to create a 2-level structure such as::
@@ -319,6 +324,8 @@ To test our framework, a dataset of 100,000 single-particle diffraction images w
 .. figure:: reconstruction.png
 
    Reconstruction of a lidless chaperone (mm-cpn) in its open state from simulated diffraction patterns. :label:`fig:reconstruction`
+
+   The 2-point correlation function was computed on the simulated dataset as described in the present document. It was then filtered, reduced, and fed to a reconstruction algorithm described elsewhere :cite:`Pande2018,Donatelli2015` to yield the reconstruction above.
 
 Interestingly, the size of the correlation function only increases with the desired resolution and is independent from the number of images in the dataset. Therefore, the post-processing of the correlation function and the reconstruction algorithm do not scale with the amount of data being processed.
 
