@@ -52,9 +52,9 @@ To push the boundaries of the science available at the lightsource, LCLS is curr
 
 Quasi real time analysis of the LCLS-II datasets will require High Performance Computing, potentially at the Exascale, which cannot be offered in-house. Therefore, a pipeline to a supercomputing center is required. The Pipeline itself starts with a Data Reduction step to reduce the data size, using vetoing, feature extraction, and compression in real time. We then pass the data over the Energy Sciences Network (ESnet) to the National Energy Research Scientific Computing Center (NERSC). ESNet is a high-speed network with a current capability of 100Gbps, which will have to be increased to the Tbps range. At the end of the pipeline, the actual analysis can take place on NERSC’s supercomputers. This makes the whole process, from the sample to the analysis, quite challenging to change and adapt.
 
-Moreover, LCLS experiments are typically high-risk / high-reward and involve novel setups, varying levels of requirements, and last only for a few days of beam time. The novelty in the science can require adaptations in the algorithms, requiring the data analysis itself to be highly flexible. Furthermore, we want to give users as much freedom as possible in the way they analyze their data without expecting them to have a deep knowledge of large-scale computer programming.
+Moreover, LCLS experiments are typically high-risk / high-reward and involve novel setups, varying levels of requirements, and durations of only a few days. The novelty in the science can require adaptations in the algorithms, requiring the data analysis itself to be highly flexible. Furthermore, we want to give users as much freedom as possible in the way they analyze their data without expecting them to have a deep knowledge of large-scale computer programming.
 
-Therefore, we require real time analysis, high performance computing capabilities and a complex pipeline, while at the same time requiring enough flexibility to adapt to novel experimental setups and analysis algorithms. We believe Python helps us achieve this goal given the tradeoffs involved.
+Therefore, we require real time analysis, high performance computing capabilities and a complex pipeline, while requiring enough flexibility to adapt to novel experimental setups and analysis algorithms. We believe Python helps us achieve this goal given the tradeoffs involved.
 
 FXS: an example analysis requiring HPC
 ++++++++++++++++++++++++++++++++++++++
@@ -160,7 +160,7 @@ This naive implementation should not be confused with a pure Python implementati
           for l in range(N_PHI_BINS):
               C2[j, k, l] += A[j, l] * A[k, l].conj()
 
-which takes 49.1 seconds per image, i.e. about 100 times slower, in accordance with the stereotype of Python being much slower than other languages for numerical computing.
+which takes 49.1 seconds per image, i.e. about 100 times slower than the naive implementation, in accordance with the stereotype of Python being much slower than other languages for numerical computing.
 
 A common acceleration strategy is to use Numba:
 
@@ -269,7 +269,7 @@ We could note that, at that speed, the main computation gets close to the time r
    | Dot, F-order        | 1.06 s              | :math:`40.0 \times` |
    +---------------------+---------------------+---------------------+
 
-In conclusion, and as summarized in Table :ref:`timetable`, implementing this algorithm using NumPy or Numba naively gives significant improvement in computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. We showed that batching our computation helped in the Numba case. From there, a batched NumPy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to NumPy. Last but not least, the memory layout can have a sizable impact on the computation, while being easy to tweak in NumPy.
+In conclusion, and as summarized in Table :ref:`timetable`, implementing this algorithm using NumPy or Numba naively gives significant improvement in computational speed compared to pure Python, but there is still a lot of room for improvement. On the other hand, such improvement does not necessarily require using fancier tools. We showed that batching our computation helped in the Numba case. From there, a batched NumPy expression looked interesting. However, it required optimizing the mathematical formulation of the problem to come up with a canonical expression, which could then be handed over to NumPy. Finally, the memory layout can have a sizable impact on the computation, while being easy to tweak in NumPy.
 
 Parallelization: effortless scaling with Pygion
 -----------------------------------------------
