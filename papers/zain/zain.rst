@@ -169,7 +169,7 @@ Methods
 	:align: center
 	:figclass: w
 
-	The proposed framework for creating a disentangled spatiotemporal representation :label:`pipeline`
+	The proposed framework for creating a disentangled spatiotemporal representation :label:`flowchart`
 
 
 Our proposed model is divided into three modules: preprocessing, appearance, and dynamics. 
