@@ -284,7 +284,7 @@ Let us recall the mathematical definition of the manifold of SPD matrices. The m
     S \in \mathbb{R}_{n \times n}: S^T = S, \forall z \in \mathbb{R}^n, z \neq 0, z^TSz > 0
     \right\}.
 
-The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in two dimensions can be visualized as ellipses arising from their eigenvalues and eigenvectors. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set:
+The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifold` and has an :code:`embedding_manifold` attribute which stores an object of the class :code:`GeneralLinear`. SPD matrices in two dimensions can be visualized as ellipses arising from their eigenvalues and eigenvectors. This is implemented in the :code:`visualization` module of :code:`geomstats`. We generate a toy data-set and plot it in Figure :ref:`fig:spd` with the following code snippet.
 
 .. code:: python
 
@@ -293,10 +293,6 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
     n_samples=100
     dataset_generator = sampler.DatasetSPD2D(
         n_samples, n_features=2, n_classes=3)
-
-and plot it in Figure :ref:`fig:spd`.
-
-.. code:: python
 
     ellipsis = visualization.Ellipsis2D()
     for i in range(n_samples):
