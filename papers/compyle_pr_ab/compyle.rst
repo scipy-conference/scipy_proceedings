@@ -13,27 +13,30 @@
 :bibliography: references
 
 
------------------------------------------------
-Compyle: a Pythonic DSL for parallel computing
------------------------------------------------
+-------------------------------------------------
+Compyle: a Python package for parallel computing
+-------------------------------------------------
 
 
 .. class:: abstract
 
 
    Compyle allows users to execute a restricted subset of Python on a variety
-   of HPC platforms. It currently supports multi-core execution using Cython,
-   and OpenCL and CUDA for GPU devices. Users write low-level code in Python
-   that is automatically transpiled to high-performance Cython or C. Compyle
-   also provides a few very general purpose and useful parallel algorithms
-   that allow users to write code once and have them run on a variety of HPC
-   platforms.
+   of HPC platforms. It is an embedded domain-specific language (eDSL) for
+   parallel computing. It currently supports multi-core execution using
+   Cython, and OpenCL and CUDA for GPU devices. Users write low-level code in
+   Python that is automatically transpiled to high-performance Cython or C.
+   Compyle also provides a few very general purpose and useful parallel
+   algorithms that allow users to write code once and have them run on a
+   variety of HPC platforms.
 
    In this article, we show how to implement a simple two-dimensional
    molecular dynamics simulation package in pure Python using Compyle. The
    result is a fully parallel program that is relatively easy to implement and
    solves a non-trivial problem. The code transparently executes on multi-core
-   CPUs and GPGPUs allowing simulations with millions of particles.
+   CPUs and GPGPUs allowing simulations with millions of particles. A 3D
+   version is also provided and compares very favorably with a well known,
+   open source, molecular dynamics package.
 
 
 .. class:: keywords
@@ -156,7 +159,9 @@ is to implement this system in pure Python using Compyle. Through this we
 demonstrate the ease of use and power of Compyle. We write programs that
 execute efficiently in parallel on CPUs and GPUs without any modifications. We
 use this as a way to illustrate the three important parallel algorithms and
-show how they allow us to solve non-trivial problems.
+show how they allow us to solve non-trivial problems. A three-dimensional
+version is also implemented and compared with HooMD_. The results show that
+our code can be almost two-times faster for the problem considered.
 
 
 
@@ -171,7 +176,7 @@ show how they allow us to solve non-trivial problems.
 .. _cppimport: https://github.com/tbenthompson/cppimport
 .. _copperhead: https://github.com/bryancatanzaro/copperhead
 .. _Cython: https://cython.org/
-
+.. _HooMD: http://glotzerlab.engin.umich.edu/hoomd-blue/
 
 High-level overview
 --------------------
@@ -800,7 +805,7 @@ Performance comparison
 
 .. figure:: hoomd_time_cuda_hoomd.png
 
-    Time taken for HooMD and our implementation using CUDA backend.
+    Time taken for HooMD_ and our implementation using CUDA backend.
     :label:`time-hoomd`
 
 
@@ -828,14 +833,13 @@ performance. This can be done easily in Compyle using
 :code:`compyle.array.align` which uses a single elementwise operation to align
 multiple arrays in a given order. We have not explored this in this paper.
 
-We have also implemented a 3D version of the simulation with both periodic
-and non-periodic boundary conditions. We compared our implementation with
-HooMD for a 3D periodic simulation on an NVIDIA Tesla P100 GPU. 
-Figure :ref:`time-hoomd` shows the results of this comparison.
-We found our implementation to be about 2x faster than HooMD.
-Figures :ref:`hoomd-pe` and :ref:`hoomd-ke` show the kinetic and potential
-energy for 1,500 particles simulated for 10,000 timesteps in periodic
-boundary conditions.
+We have also implemented a 3D version of the simulation with both periodic and
+non-periodic boundary conditions. We compared our implementation with HooMD_
+for a 3D periodic simulation on an NVIDIA Tesla P100 GPU. Figure
+:ref:`time-hoomd` shows the results of this comparison. We found our
+implementation to be about 2x faster than HooMD. Figures :ref:`hoomd-pe` and
+:ref:`hoomd-ke` show the kinetic and potential energy for 1,500 particles
+simulated for 10,000 timesteps in periodic boundary conditions.
 
 .. figure:: hoomd_pe.png
 
