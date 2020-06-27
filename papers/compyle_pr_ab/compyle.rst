@@ -119,7 +119,7 @@ Python and not another language, it makes it much easier for users to write
 and manage the code.
 
 Compyle provides important parallel programming algorithms that one typically
-requires to in order to write parallel programs. These are the element-wise
+requires when writing parallel programs. These are the element-wise
 operations (or maps), reductions, and parallel prefix scans. These primitives
 are written such that the same program can be executed on both multi-core CPUs
 and GPUs with minimal or no changes to the code.
@@ -798,6 +798,12 @@ Performance comparison
     Speed up using :math:`O(N)` over :math:`O(N^2)` approach.
     :label:`nnps-simple`
 
+.. figure:: hoomd_time_cuda_hoomd.png
+
+    Time taken for HooMD and our implementation using CUDA backend.
+    :label:`time-hoomd`
+
+
 Figure :ref:`speedup-nnps` shows the speedup achieved OpenCL and CUDA backends
 running on a GPU relative to serial code running using Cython (on a single CPU
 core) for the linear version of the algorithm. Figure :ref:`time-gpu` shows
@@ -821,8 +827,25 @@ This will improve the global memory access pattern on the GPU giving a better
 performance. This can be done easily in Compyle using
 :code:`compyle.array.align` which uses a single elementwise operation to align
 multiple arrays in a given order. We have not explored this in this paper.
-While our code is implemented in 2D it is relatively straightforward to extend
-this to three dimensions.
+
+We have also implemented a 3D version of the simulation with both periodic
+and non-periodic boundary conditions. We compared our implementation with
+HooMD for a 3D periodic simulation on an NVIDIA Tesla P100 GPU. 
+Figure :ref:`time-hoomd` shows the results of this comparison.
+We found our implementation to be about 2x faster than HooMD.
+Figures :ref:`hoomd-pe` and :ref:`hoomd-ke` show the kinetic and potential
+energy for 1,500 particles simulated for 10,000 timesteps in periodic
+boundary conditions.
+
+.. figure:: hoomd_pe.png
+
+    Potential energy of system of 1,500 particles using HooMD and our implementation
+    :label:`hoomd-pe`
+
+.. figure:: hoomd_ke.png
+
+    Kinetic energy of system of 1,500 particles using HooMD and our implementation
+    :label:`hoomd-ke`
 
 All of the code discussed above is available in the examples directory of the
 Compyle repository `here
