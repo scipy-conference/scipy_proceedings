@@ -560,7 +560,7 @@ exploitable representation of the graph. This goal is mainly achieved
 by preserving first-order proximity that encourages nodes sharing edges
 to be close to each other. We can additionally preserve second-order
 proximity by encouraging two nodes sharing the “same context”, i.e. not necessarily directly connected but sharing a neighbor, to be close. We define a context size (here equal to 1) and call two nodes “context samples” if they share a neighbor, and “negative samples” otherwise. To preserve first and second-order proximities, we adopt the following loss function
-similar to :cite:`NIPS2017_7213` and consider the “negative sampling” approach from :cite:`NIPS2013_5021`:
+similar to :cite:`Nickel2017` and consider the “negative sampling” approach from :cite:`NIPS2013_5021`:
 
 .. math::
    :label: loss
