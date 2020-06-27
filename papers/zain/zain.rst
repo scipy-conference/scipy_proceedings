@@ -38,6 +38,7 @@
 :author: Shannon Quinn
 :email: spq@uga.edu	
 :institution: Computer Science Department, Franklin College of Arts and Sciences
+:corresponding:
 
 :bibliography: mybib
 
