@@ -473,7 +473,7 @@ Let us recall the mathematical definition of the hyperbolic space. The :math:`n`
     \right\}.
 
 
-In :code:`geomstats`, the hyperbolic space is implemented in the class :code:`Hyperboloid` and :code:`PoincareBall`, which use different coordinate system used to represent the points. These classes inherit from the class :code:`EmbeddedManifold` and have an :code:`embedding_manifold` attribute which stores an object of the class :code:`Minkowski`. The 2-dimensional hyperbolic space is called the hyperbolic plane or Poincaré disk.
+In :code:`geomstats`, the hyperbolic space is implemented in the class :code:`Hyperboloid` and :code:`PoincareBall`, which use different coordinate system to represent points. These classes inherit from the class :code:`EmbeddedManifold` and have an :code:`embedding_manifold` attribute which stores an object of the class :code:`Minkowski`. The 2-dimensional hyperbolic space is called the hyperbolic plane or Poincaré disk.
 
 
 Learning graph representations with hyperbolic spaces in :code:`geomstats`
