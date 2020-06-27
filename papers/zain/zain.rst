@@ -492,7 +492,7 @@ then used in downstream tasks such as phenotype discovery, by drawing a strong c
 between apparent patterns in the appearance latent space as and semantically meaningful patterns in the 
 underlying data as well.
 
-Our proposed model for the appearance module uses a variation of ResNet as an encoder, 
+Our proposed model for the appearance module uses a variation of ResNet :cite:`resnet` as an encoder, 
 while employing SBD in the decoder, as well as an upsampling, ResNet-like network in the 
 decoder. Figure :ref:`app` shows the training pipeline for the appearance module, the 
 encoder :math:`E_\text{app}` is the neural network implementing the variational distribution 
