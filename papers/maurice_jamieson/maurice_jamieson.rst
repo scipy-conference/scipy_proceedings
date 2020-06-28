@@ -4,6 +4,7 @@
 
 :author: Nick Brown
 :email: n.brown@epcc.ed.ac.uk
+:orcid: 0000-0003-2925-7275
 :institution: EPCC at the University of Edinburgh
 
 :author: Sihang Liu
