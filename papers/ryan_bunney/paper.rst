@@ -210,8 +210,7 @@ benchmark against the existing implementations. These components are:
 
 -  ``visualiser``
 
-Models
-~~~~~~
+
 
 The ``models`` module is likely the main entry point for researchers or
 developers of algorithms; it contains a number of key components of the
@@ -226,6 +225,9 @@ command line interface to quickly run one of the in-built algorithms.
 
 These components are all contained within the main ``shadow`` directory;
 there are also additional codes that are located in ``utils``, which are covered in the **Additional Tools** section.
+
+Models
+~~~~~~
 
 .. figure:: fig/heft_with_calc.png
   :scale: 80 %
