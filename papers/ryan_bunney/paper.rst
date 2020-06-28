@@ -24,17 +24,16 @@ SHADOW: An algorithm reference and testing framework for scheduling data-intensi
 .. class:: abstract
 
   As the scale of science projects increase, so does the demand on computing
-  infrastructures. Data-intensive workflows and science pipelines that are being
-  developed for new, exa-scale projects (e.g. the SKA) necessitate the
-  development of new individual applications, as well as techniques for the
-  processing of entire processing pipelines. Workflow scheduling algorithms are
-  continually being developed and optimised for different use cases,
-  environments, and objective functions; however, in the main systems that are
+  infrastructures. Data-intensive science pipelines that are being
+  developed for new, exa-scale projects (e.g. the Square Kilometre Array (SKA)) necessitate the
+  development of both new applications, as well as techniques for the
+  processing of entire application pipelines. Sheduling algorithms are
+  continually being developed and optimised for different science use cases,
+  environments, and objectives; however, in many systems that are
   used to deploy science workflows for major science projects, the same
-  algorithms and heuristics are used. In order to develop and test new algorithms
-  against the de facto standards, we have developed SHADOW, a
-  workflow-oriented scheduling algorithm framework. SHADOW has implementations
-  of these common scheduling heuristics, with the intention of continually
+  algorithms and heuristics are used. We have developed SHADOW, a
+  workflow-oriented scheduling algorithm framework to facilitate the development and testing of new algorithms against the 'industry standards'. SHADOW has implementations
+  of common scheduling heuristics, with the intention of continually
   updating the library with heuristics, metaheuristics, and mathematical
   optimisation approaches in the near future. In addition to the algorithm
   implementations, there is also a number of workflow and environment generation
@@ -59,6 +58,21 @@ SHADOW: An algorithm reference and testing framework for scheduling data-intensi
 Introduction
 ------------
 
+To obtain useful results from the raw data produced by science experiments, a series of scripts of applications is often required to produce tangible results. These application pipelines are referred to as Science Workflows :cite:`alkhanak2016`, which are typically a Directed-Acyclic Graph (DAG) representation of the dependency relationships between applications tasks in a pipeline. The processing of Science Workflows is therefore an example of the DAG-Task scheduling problem, which is in the class of NP-Hard problems :cite:`kwok1999`. Science workflow scheduling
+is a field with varied contributions in algorithm development and
+optimisation, which address a number of different sub-problems within the
+field :cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
+Unfortunately, implementations of these contributions are difficult to find;
+for example, implementations that are only be found
+in code that uses it --- such as in simulation frameworks like WorkflowSim
+:cite:`topcuoglu2002,chen2012a`; others are not implemented in any public way at all:cite:`yu2006, `abrishami2010`. These
+are also typically used as benchmarking or stepping stones for new algorithms;
+for example, the Heterogeneous Earliest Finish Time (HEFT) heuristic continues to be used as the foundation for scheduling
+heuristics :cite:`durillo2012,caniou2018`, meta-heuristics, and even
+mathematical optimisation procedures :cite:`bridi2016`, despite being 20 years
+old. The lack of a consistent testing environment and implementation of
+algorithms makes it hard to reproduce and verify the results of published
+material, especially when a common workflow model cannot be verified
 Researchers benefit as a community from having open implementations of
 algorithms, as it improves reproducibility and accuracy of benchmarking and
 algorithmic analysis :cite:`crick2014`. There exists a number of open-source
@@ -67,34 +81,19 @@ typical implementations, and provide an infrastructure for the development and
 testing of new algorithms; examples include NLOPT for non-linear optimisation
 in a number of languages (C/C++, Python, Java) :cite:`johnson`, NetworkX for
 graph and network implementations in Python, MOEA for Java, and DEAP for
-distributed EAs in Python :cite:`derainville2012`. Science workflow scheduling
-is a field with varied contributions in algorithm development and
-optimisation, which address a number of different sub-problems within the
-field :cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
-Unfortunately, implementations of these contributions are difficult to find;
-for example, implementations of HEFT :cite:`topcuoglu2002` can only be found
-in code that uses it - such as in simulation frameworks like WorkflowSim
-:cite:`chen2012a`; others are not implemented in any public way at all - such
-as highly cited NSGAII* :cite:`yu2006` and PCP :cite:`abrishami2010`. These
-are also typically used as benchmarking or stepping stones for new algorithms;
-for example, HEFT continues to be used as the foundation for scheduling
-heuristics :cite:`durillo2012,caniou2018`, meta-heuristics, and even
-mathematical optimisation procedures :cite:`bridi2016`, despite being 20 years
-old. The lack of a consistent testing environment and implementation of
-algorithms makes it hard to reproduce and verify the results of published
-material, especially when a common workflow model cannot be verified. SHADOW
-addresses this issue by providing a workflow-oriented algorithm library
-and testing environment, in which the performance of single- and
+distributed EAs in Python :cite:`derainville2012`. 
+SHADOW --- Scheduling Algorithms for DAG Workflows --- is our answer to the absence of Science Workflow Scheduling-based framework, like those discussed above. It is an algorithm repository  and testing environment, in which the performance of single- and
 multi-objective workflow scheduling algorithms may be compared to
-implementations of de facto algorithms. To the best of our knowledge, there is
+implementations of common algorithms. To the best of our knowledge, there is
 no single-source repository of implementations of DAG or Workflow scheduling
 algorithms. The emphasis in SHADOW is on reproducibility   and accuracy in
 algorithm performance analysis, rather than a simulated demonstration of the
 application of a particular algorithm in certain environments. Additionally,
 with the popularity of Python in other domains that are also growing within
-the workflow community - such as Machine and Deep Learning - SHADOW provides
+the workflow community --- such as Machine and Deep Learning --- SHADOW provides
 a frictionless opportunity to integrate with the frameworks and libraries
 commonly used in those domains.
+
 
 
 Workflow Scheduling
@@ -107,52 +106,49 @@ is commonly represented in the literature as a Directed Acyclic Graph
 sequence of tasks will have precedence constraints that limit when a task may
 start. A DAG task-graph is represented formally as a graph :math:`G = (V,E)`, where
 :math:`V` is a set of :math:`v` vertices and :math:`E` is a set of :math:`e`
-edges :cite:`kwok1999`. Vertices and Edges represent communication and
+edges :cite:`kwok1999` --- an example is featured in Figure :ref:`refdag`, which will be build upon as the paper progresses. Vertices and Edges represent communication and
 computation costs respectively.  The objective of the DAG-scheduling problem
 is to minimise the execution length of the final schedule; this is referred to
 as the *makespan*.
 
-
-.. figure:: fig/sample_dag.png
+.. figure:: fig/heft_with_calc.png
   :scale: 200 %
 
   A sample DAG; vertices represent compute tasks, and edges show precedence
   relationships between nodes. Vertex- and edge-weights are conventionally
-  used to describe computational and data costs, respectively.
+  used to describe computational and data costs, respectively. This is adapted from :cite:`topcuoglu2002`, and is a simple example of the DAG structure of a science workflow; a typical workflow in deployment will often be more complex and contain many hundres of nodes and edges. :label:`refdag`
 
 The complexity and size of data products from modern science projects necessitates
 dedicated infrastructure for compute, in a way that requires
-re-organisation of existing tasks and processes. As a result, it is often not enough to run
-a sequence of tasks in series, or submit them to batch processing;
+re-organisation of existing tasks and processes. As a result, it is often not enough to run a sequence of tasks in series, or submit them to batch processing;
 this would likely be computationally inefficient, as well taking as much longer than
 necessary. As a result, science projects that have computationally- and
 data-intensive programs, that are interrelated, have adopted the
-DAG-scheduling model for representing their compute pipelines.
+DAG-scheduling model for representing their compute pipelines; this is where Science Workflow Scheduling is derived. 
 
 Existing approaches
 ~~~~~~~~~~~~~~~~~~~
 It should be noted that existing work already addresses testing workflow
 scheduling algorithms in real-world environments; tools like SimGrid
-:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002` - and
+:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002` --- and
 its extensions, CloudSim :cite:`calheiros2011` and WorkflowSim
-:cite:`chen2012a` - all feature strongly in the literature. These are
+:cite:`chen2012a` --- all feature strongly in the literature. These are
 excellent resources for determining the effectiveness of the implementations
 at the application level; however, they do not  provide a standardised
 repository of existing algorithms, or a template workflow model that can be
 used to ensure consistency across performance testing. Current implementations
 of workflow scheduling algorithms may be found in a number of different
 environments; for example, HEFT and dynamic-HEFT implementations exist in
-WorkflowSim [#]_ - but one must traverse large repositories in order to reach
+WorkflowSim [#]_ --- but one must traverse large repositories in order to reach
 them. There are also a number of implementations that are present on
 open-source repositories such as GitHub, but these are not always official
-releases from papers, and it is difficult to keep track of multiple
-implementations to ensure quality and consistency. Kwok and Ahmed
+releases from papers, and it is diffic ult to keep track of multiple
+implementations to ensure quality and consistency.  SHADOW is intending to solve the meta of a 'meta-problem' with respect to task and workflow scheduling, by wrapping implementations of these algorithms in a popular language (Python) and providing a testing environment alongside them. Kwok and Ahmed
 :cite:`kwok1999` provide a comprehensive overview of the metrics and
 foundations of what is required when benchmarking DAG-scheduling algorithms,
 Maurya et al. :cite:`maurya2018` extend this work and describe key features of
 a potential framework for scheduling algorithms; SHADOW takes inspiration
 from, and extends, both approaches.
-
 .. _ssec:danda:
 
 Design and Core Architecture
@@ -192,16 +188,13 @@ any way as they would a ``NetworkX`` object.
 SHADOW is not intended to accurately simulate the execution of a
 workflow in an real-world environment; for example, working with delays in
 processing, or node failure in a cluster. Strategies to mitigate these
-are often implemented secondary to the scheduling algorithms -
-especially in the case of static scheduling - and would not be a fair
+are often implemented secondary to the scheduling algorithms ---
+especially in the case of static scheduling --- and would not be a fair
 approach to benchmarking the relative performance between each
 application. Instead, it provides algorithms that may be used -
-statically or dynamically - in a larger
+statically or dynamically --- in a larger
 simulation environment, where one would be able to compare the specific
-environmental performance of one algorithm over another. Integrating
-SHADOW into a larger simulation has been done by the authors of this
-paper, and the framework has been designed with the intention that this
-will continue to be a supported feature.
+environmental performance of one algorithm over another. 
 
 Architecture
 ------------
@@ -237,10 +230,10 @@ there are also additional codes that are located in ``utils``, which are covered
 .. figure:: fig/heft_with_calc.png
   :scale: 80 %
 
-  An example workflow DAG adapted from; weights on the edges describe data
+  An example workflow DAG adapted from :cite:`topcuoglu2002` (the same workflow as in Figure :ref:`); weights on the edges describe data
   products from the respective parent node being sent to the child. In SHADOW,
   task computation cost is represented by  the total number of Floating Point
-  Operations required to run the task (see Table ). This is intended to
+  Operations required to run the task (see Table :ref:`hefttable`). This is intended to
   alleviate the difficulty of converting the runtime between  different test
   environment configurations. :label:`heftcalc`
 
@@ -249,10 +242,10 @@ The ``models`` module provides the ``Workflow`` class, the foundational data
 structure of shadow. Currently, a ``Workflow`` object is initialised using a
 JSON configuration file that represents the underlying DAG structure of the
 workflow, along with storing different attributes for task-nodes and edges
-:ref:`heftcalc`.
+:ref:`heftcalc`. 
 
 
-.. table:: Table of Task (Giga) FLOP requirements, with the (Giga) FLOP/second provided by each respective machine
+.. table:: Table of Task (Giga) FLOP requirements, with the (Giga) FLOP/second provided by each respective machine :label:`hefttable`
 
    +------------+---------------+-----------+---------+
    |    Workflow and Costs      |  Environment        |
@@ -317,7 +310,7 @@ received when using networks. Nodes and their respective costs
            ...
        ],
 
-Edges in the graph - the precedence relationship between tasks - are
+Edges in the graph --- the precedence relationship between tasks --- are
 described by links, along with the related data-products:
 
 .. code-block:: python
@@ -337,7 +330,7 @@ described by links, along with the related data-products:
 
 NetworkX is used to form the base-graph structure for the workflow; it
 allows the user to specify nodes as Python objects, so tasks are stored
-using the shadow ``Task`` object structure.
+using the SHADOW ``Task`` object structure.
 
 In addition to the JSON configuration for the workflow DAG, a Workflow object
 also requires an ``Environment`` object. ``Environment`` objects represent the
@@ -385,26 +378,24 @@ manner:
 
 
 
-The ``Machine`` class is also defined in environment.py - this is a
-helper-class that makes developer access to specifications (provided compute,
-memory, bandwidth etc.) convenient and intuitive. The Workflow class
+The Workflow class
 calculates task runtime and other values based on its current environment when the environment is passed to the Workflow); however, users of the
 environment class may interact with these compute values if necessary.
 Configuration files may be generated in a number of ways, following a variety
 of specifications, using the SHADOWGen utility.
 
 It is also possible to use pre-calculated costs (i.e. completion time in
-seconds) when scheduling with shadow.
+seconds) when scheduling with SHADOW.
 
 .. figure:: fig/heft_example.png
 
-   This is a replication of the costs provided in the original HEFT paper
+   This is a replication of the costs provided in
    :cite:`topcuoglu2002`. The table shows a different runtime for each
-   task-machine pairing. :label:`heftnocalc`
+   task-machine pairing. It is the same structure as Figure :ref:`heftcalc`; however, the JSON specification is different to cater for the pre-calculated runtime on separate machines. :label:`heftnocalc`
 
 This approach is less flexible for
 scheduling workflows, but is a common approach used in the scheduling
-algorithm literature; an example of this is shown in Figure
+algorithm literature :cite:`kwok1999,kwok1999a,sakellariou2004,barbosa2008,yu2006`; an example of this is shown in Figure
 :ref:`heftnocalc`. This can be achieved by adding a list of
 costs-per-tasks to the workflow specification JSON file, in addition to the
 following header:
@@ -447,7 +438,7 @@ developers, who can interact with allocations using intuitive attributes
 currently stores a single objective (makespan) but can be expanded to
 include other, algorithm-specific requirements. For example, NSGAII\*
 ranks each generated solution using the non-dominated rank and crowding
-distance operator; as a result, the shadow implementation creates a
+distance operator; as a result, the SHADOW implementation creates a
 class, ``NSGASolution``, that inherits the basic ``Solution`` class and adds
 the these additional attributes. This reduces the complexity of the
 global solution class whilst providing the flexibility for designers to
@@ -467,8 +458,8 @@ single entity (e.g. heft()), with an initialised workflow object passed as a
 function parameter. The typical structure of a SHADOW algorithm function is as
 follows:
 
-- The main algorithm - that is, the function to which a Workflow well be
-  passed - is titled using its publication name or title (e.g. HEFT, PCP,
+- The main algorithm --- that is, the function to which a Workflow well be
+  passed --- is titled using its publication name or title (e.g. HEFT, PCP,
   NSGAII* etc.). Following PEP8, this is (ideally) in lower-case.
 
 - Within the main algorithm function, effort has been made to keep it
@@ -484,12 +475,12 @@ follows:
     """
     Implementation of the original 1999 HEFT algorithm.
 
-    :params wf: The workflow object to schedule
-    :returns: The makespan of the resulting schedule
+    :params workflow: The workflow object to schedule
+    :returns: The solution object from the scheduled workflow
     """
     upward_rank(workflow)
     workflow.sort_tasks('rank')
-    makespan = insertion_policy(workflow)
+    insertion_policy(workflow)
     return workflow.solution
 
 
@@ -531,16 +522,17 @@ Visualiser
 SHADOW provides wrappers to ``matplotlib`` that are structured around the
 ``Workflow`` and ``Solution`` classes. The ``Visualiser`` uses the
 ``Solution`` class to retrieve allocation data, and generates a plot based on
-that information. For example, Figure  is the result of visualising the
-``HEFTWorkflow`` example mentioned previously:
+that information. For example, Figure :ref:`examplealloc`  is the result of visualising the ``HEFTWorkflow`` example mentioned previously:
 
 
 .. figure:: samplea_allocation.pdf
 
+
    Result of running ``shadow.heuristic.heft`` on the graph shown in Figure
-   :ref:`heftcalc`. Final makespan is 98; gaps between tasks are indicative
-   of data transfer times between parent and child tasks on different
-   machines. This is generated using the ``AllocationPlot`` wrapper from the ``Visualiser``.
+   :ref:`heftcalc`. Final makespan is 98; gaps between tasks are indicative of
+   data transfer times between parent and child tasks on different machines.
+   This is generated using the ``AllocationPlot`` wrapper from the
+   ``Visualiser``. :label:`examplealloc`
 
 
 
@@ -723,9 +715,11 @@ to Table :ref:`table1` is shown in Table :ref:`table2`:
     mAdd & 12.50 & 6.11 & 48.83 & 13.41 & 34.34 & 8.70 & 0.70 & 0.08 & 0.37 & 0.00 \\
     mShrink & 2.75 & 1.93 & 17.15 & 0.30 & 0.02 & 0.00 & 0.18 & 0.00 & 0.09 & 0.00 \\
     mJPEG & 0.00 & 0.00 & 0.06 & 0.00 & 0.00 & 0.00 & 0.00 & 0.00 & 0.19 & 0.00 \\
+    \hline
     \end{tabular}
-    \caption{Updated relative cost values using the min-max feature scaling method described
-    in Equation :ref:`normalise`}
+    \caption{
+        Updated relative cost values using the min-max feature scaling method described in Equation ~\ref{normalise}.
+    }
     \label{table2}
   \end{table*}
 
@@ -754,7 +748,7 @@ WorkflowHub [#]_.
 Future work
 -----------
 Moving forward, heuristics and metaheuristics will continue to be added
-to the shadow algorithms module to facilitate broader benchmarking and
+to the SHADOW algorithms module to facilitate broader benchmarking and
 to provide a living repository of workflow scheduling algorithms.
 Further investigation into workflow visualisation techniques will also
 be conducted. There are plans to develop a tool that uses the
@@ -764,8 +758,7 @@ Computing facilities (e.g ``class PawseyGalaxy``). The motivation behind
 ``hpconfig`` is that classes can be quickly unwrapped into a large
 cluster or system, without having large JSON files in the repository or
 on disk; they also improve readability, as specification data is
-represented clearly as class attributes.
-
+represented clearly as class attributes. 
 
 .. ::
 
