@@ -93,7 +93,7 @@ Eigendecomposition of each mitochondrial cluster graph that comprises the dynami
 
 In essence, this approach utilizes the eigenvalues to characterize the magnitude of spatial transformations experienced by the morphology. Therefore, morphology-altering events, like fission and fusion, are likely to be discovered by highlighting time points where eigenvalue vectors are demonstrating anomalous behavior.
 
-The Python code we utilized to perform temporal anomaly detection is below: the function computes anomalous time points and displays the subsequent eigenvalue spectrum and outlier signal plots. The parameters to the function are the time-series of eigenvalue vectors that correspond to the dynamic social network, a window size, and a threshold value.
+The Python code we utilized to perform temporal anomaly detection is below: this function computes anomalous time points and displays the subsequent eigenvalue time-series and outlier signal plots. The parameters to the function are the time-series of eigenvalue vectors that correspond to the dynamic social network, a window size, and a threshold value.
 
 .. code-block:: python
 
@@ -174,33 +174,36 @@ The Python code we utilized to perform temporal anomaly detection is below: the 
 Spatial Anomaly Detection
 -------------------------
 
-After indicating discrete times points where the morphology experienced significant perturbations, quantitatively determining the spatial locations of significant structural changes is crucial for assessing mitochondrial dynamics. Mitochondria are spatially diffuse structures that occupy a vast amount of the cell, and as a result, many areas of the cell require detailed inspection to identify all significant spatial changes. However, many structural perturbations go unnoticed when evaluated with purely qualitative metrics because of the large search space and the inherent difficulty in tracking microscopic objects. Thus, we sought to provide a quantitative technique to indicate spatial regions demonstrating anomalous morphological behavior.  
+After indicating discrete times points where the morphology experienced significant perturbations, quantitatively determining the spatial locations of significant structural changes is crucial for assessing mitochondrial dynamics. Mitochondria are spatially diffuse structures that occupy a vast amount of the cell and, as a result, many areas of the cell require detailed inspection to identify all significant spatial changes. However, many structural perturbations go unnoticed when evaluated with purely qualitative metrics because of the large search space and the inherent difficulty in tracking microscopic objects. Thus, we sought to provide a quantitative technique to indicate spatial regions demonstrating anomalous morphological behavior.  
 
-Anomalous morphological behavior can be defined as spatial regions shifting suddenly, or major structural changes taking place in the underlying social network: edges being dropped or formed, nodes appearing or disappearing. The process of tracking such regions is, in essence, an object detection task because specific mitochondrial clusters are being monitored as the global structure evolves over time. By treating this task as such, we utilized bounding boxes to highlight the regions of significance. The coordinates of the bounding boxes were computed based on the pixel coordinates denoted by the GMMs that corresponded to the spatial locations of the mitochondrial clusters. Therefore, a bounding box can be displayed for each mitochondrial cluster determined by the GMM. However, rendering every bounding box can obfuscate the regions demonstrating anomalous behavior, so it is encouraged to display only the most significant regions for analysis.
+Anomalous morphological behavior can be defined as spatial regions shifting suddenly, or major structural changes taking place in the underlying social network: edges being dropped or formed, nodes appearing or disappearing. The process of tracking such regions is, in essence, an object detection task because specific mitochondrial clusters are being monitored as the global structure evolves over time. By treating this task as such, we utilized bounding boxes to highlight the regions of significance. The coordinates of the bounding boxes were computed based on the pixel coordinates denoted by the GMMs that corresponded to the spatial locations of the mitochondrial clusters. Therefore, a bounding box can be displayed for each mitochondrial cluster determined by the GMM. However, rendering every bounding box can obfuscate the regions demonstrating anomalous behavior because some of the mitochondrial cluster boundaries may overlap. As a result, we utilized only the most significant, non-overlapping regions for analysis. 
 
 Regions demonstrating the most significant amount of structural variance are determined via analysis of the eigenvector matrices. The number of eigenvector matrices corresponds with the number of graph states recorded in the social network. Each row in an eigenvalue matrix is related to a mixture distribution, and by extension a spatial region of the imagery. To determine the regions demonstrating the most amount of variance, the total euclidean distance of each row vector between graph states is computed. Ultimately, the spatial regions that corresponded to the eigenvector rows demonstrating the highest amounts of variance were selected as regions of interest to be highlighted by the bounding boxes.
+
+Below is the code utilized to perform spatial anomaly detection: this function draws bounding boxes for the mitochondrial cluster regions in a microscopy video. The parameters for the function are the file path to the input video; means and covariance matrices from the GMM; the eigenvector matrices; an integer that indicates the maximum number of boxes to display; the path to the directory where the output video will be saved; and the number of standard deviations away from center spatial coordinates, in both dimensions, to construct the box boundaries.
 
 .. code-block:: python
 
    import imageio
    import numpy as np
 
-   def spatial_anomaly_detection(frames, means, covars, 
-                                 eigen_vecs, fps, size, 
-                                 outdir_path, std_threshold=3):
+   def spatial_anomaly_detection(vid_path, means, 
+                                 covars, eigen_vecs, k, 
+                                 outdir_path, 
+                                 std_threshold=3):
     '''
     Draws bounding boxes around the mixture component
     regions demonstrating the most variance.
 
     Parameters
     ----------
-    frames: list
-        Video frames to be drawn on.
+    vid_path: string
+        Path to the input video.
     means: NumPy array (NxMx2)
         Pixel coordinates corresponding to the mixture
-        component means. N is the number of video frames,
-        M the number of mixture components, and 2 denotes
-        the 2D pixel coordinate.
+        component means. N is the number of video 
+        frames, M the number of mixture components, 
+        and 2 denotes the 2D pixel coordinate.
     covars: NumPy array (NxMx2x2)
         Covariance matrices of the guassian mixture 
         components. N is the number of video frames,
@@ -210,72 +213,74 @@ Regions demonstrating the most significant amount of structural variance are det
         Eigenvector matrix. N represents the number of
         frames in the corresponding video, M is the
         number of mixture components.
-    fps: int
-        Frames per second of the video.
-    size: tuple (2,)
-        Width and height of the video.
+    k: int
+        Number of the most significant non-overlapping 
+        regions to display bounding boxes for. The
+        actual number may be less than k, if the video
+        does not contain that many non-overlapping 
+        regions.
     outdir_path: string
-        Path to save the bounding box video.
+        Directory path to save the bounding box video.
     std_threshold: float 
-        The number of standard deviations to use to
-        compute the spatial region of the bounding 
+        The number of standard deviations to use 
+        to compute the spatial region of the bounding 
         box. Default is three.
     '''
 
-    out_vid_path = os.path.join(
-        outdir_path, 'spatial_anomaly_detection.mp4'
-    )
-    box_color = (30, 144, 255)
-    distances = absolute_distance_traveled(eigen_vecs)   
-    descending_distances_indices = \
-        np.flip(np.argsort(distances))
+    input_vid_title = os.path.split(vid_path)[1]
+    out_vid_title = \
+        input_vid_title.split('.')[0] + '.mp4'
+    out_vid_path = os.path.join(outdir_path, 
+                                out_vid_title)
+    with imageio.get_reader(vid_path) as reader, \
+         imageio.get_writer(
+            out_vid_path, mode='I', fps=1) as writer
+        fps = reader.get_meta_data()['fps']
+        size = reader.get_meta_data()['size']
+        distances = \
+            absolute_distance_traveled(eigen_vecs)   
+        descending_distances_indices = \
+           np.flip(np.argsort(distances))
+        region_indices = find_initial_boxes(
+            means, 
+            covars, 
+            size, 
+            descending_distances_indices, 
+            k
+        )
+        num_of_boxes = len(region_indices)
+        box_colors = \
+            np.random.randint(256, size=(num_of_boxes, 3))
 
-    with imageio.get_writer(out_vid_path, \
-                            mode='I', fps=1) as writer:
-        for i, frame in enumerate(tqdm(frames)):
-            for j in descending_distances_indices[:1]:
-                x_diff = std_threshold 
-                         * math.sqrt(covars[i][j][0][0])
-                y_diff = std_threshold 
-                         * math.sqrt(covars[i][j][1][1])
-                x_bounds = [
-                    int(means[i][j][0] - x_diff), 
-                    int(means[i][j][0] + x_diff)
-                ]
-                y_bounds = [
-                    int(means[i][j][1] - y_diff), 
-                    int(means[i][j][1] + y_diff)
-                ]
+        for i, frame in enumerate(reader):
+            current_frame = frame
+            for index, j in enumerate(region_indices):
 
-                if x_bounds[0] < 0:
-                    x_bounds[0] = 0
+                row_bounds, col_bounds = \
+                    compute_region_boundaries(
+                        means, covars, size, i, j
+                    )
+                row_diff = row_bounds[1] - row_bounds[0]
+                col_diff = col_bounds[1] - col_bounds[0]
 
-                if x_bounds[0] >= size[0]:
-                    x_bounds[0] = size[0] - 1;
+                color = box_colors[index]
+                current_frame[row_bounds[0]:row_bounds[1], \
+                              col_bounds[0],:] = color
+                current_frame[row_bounds[0]:row_bounds[1], \
+                              col_bounds[1],:] = color
+                current_frame[row_bounds[0], \
+                              col_bounds[0]:col_bounds[1],:] = \
+                             color
+                current_frame[row_bounds[1], \
+                              col_bounds[0]:col_bounds[1],:] = \ 
+                              color            
 
-                if y_bounds[0] < 0:
-                    y_bounds[0] = 0
-
-                if y_bounds[1] >= size[1]:
-                    y_bounds[1] = size[1] - 1;
-                
-                frames[i, x_bounds[0]:x_bounds[1], \
-                       y_bounds[0], :] = box_color
-                frames[i, x_bounds[0]:x_bounds[1], \
-                       y_bounds[1], :] = box_color
-                frames[i, x_bounds[0], \
-                       y_bounds[0]:y_bounds[1], :] = \
-                       box_color
-                frames[i, x_bounds[1], \
-                       y_bounds[0]:y_bounds[1], :] = \
-                       box_color
-            
-            writer.append_data(frames[i])
+            writer.append_data(current_frame)
 
 Experiments
 -----------
 
-We first evaluated the temporal anomaly detection methodology by plotting the eigenvalue spectrum and outlier signal for each cell. Next, we evaluated the video frames that corresponded with each anomalous time point. In each frame, significant changes in the morpholgoy are visible, especially in the llo and mdivi videos. This is meaningful because the morphology of mitochondria changes subtly between frames, making it a tedious task to manually determine when any important event occurred. However, the anomalous time points indicate specific video frames where morphological changes are visible; the anomalous llo video frames illustrate the fragmentation process by depicting the clusters at distinct times where they are visibly smaller, and conversely, the anomalous mdivi frames highlight times where the clusters are noticeably larger.
+We first evaluated the temporal anomaly detection methodology by plotting the eigenvalue time-series and outlier signal for each cell. For our experiments, we utilized a window size of 20 and a threshold value of 2. An example of the plots generated is shown in Figure :ref:`sigplot`. Next, we evaluated the video frames that corresponded with each anomalous time point in every video. In each frame, significant changes in the morphology are visible, especially in the llo and mdivi videos. This is meaningful because the morphology of mitochondria changes subtly between frames, making it a tedious task to manually determine when any important event occurred. However, the anomalous time points indicate specific video frames where morphological changes are visible: the anomalous llo video frames illustrate the fragmentation process by depicting the clusters at distinct times where they are visibly smaller, and conversely, the anomalous mdivi frames highlight times where the clusters are noticeably larger. Figure :ref:`framesplot` shows a display of all frames in a llo cell’s microscopy video that correspond to time points declared anomalous by our temporal anomaly detection technique to illustrate how a fission event is captured by our technique.
 
 Unexpectedly, we noticed anomalous behavior was indicated in a subset of our control videos. This was not anticipated because the control cells were not exposed to any stimuli, and their mitochondrial structures did not display any significant changes during the duration of the videos. This phenomenon highlighted the sensitivity of our approach; any significant movement of the mitochondria, such as a sudden migration, is likely to be detected as an anomalous event. Therefore, the temporal indicators will denote frames where morphological events are occurring, but they should not be relied on solely for any behavioral inference regarding the  mitochondria’s morphology.
 
@@ -283,26 +288,28 @@ Unexpectedly, we noticed anomalous behavior was indicated in a subset of our con
    :scale: 30%
    :figclass: w
 
-   The top plot illustrates the eigenvalue time-series data of an llo video, and the bottom figure shows the corresponding signal plot. Peaks represent time points declared anomalous by the temporal anomaly detection technique.
+   The top plot illustrates the eigenvalue time-series data of an llo cell that experienced a mitochondrial fission event, and the bottom plot shows the corresponding outlier signal plot. Peaks in the signal plot represent time points declared anomalous by the temporal anomaly detection technique. :label:`sigplot`
 
 .. figure:: figures/LLO_time_lapse.png
    :scale: 50%
    :figclass: w
 
-   Anomalous frames from an llo video that corresponds to time points indicated by the temporal anomaly detection technique. These frames correspond with the signal plot in figure 1.
+   Frames from an llo video that were declared anomalous by the temporal anomaly detecton technique. These frames correspond to the same cell whose eigenvalue time-series and outlier signal plots were displayed in Figure :ref:`sigplot`. :label:`framesplot`
 
-Our spatial anomaly detection methodology was evaluated by inspecting the regions highlighted by the bounding boxes in each cell type. The effectiveness of this approach was demonstrated through assessment of the llo and mdivi videos because mitochondrial clusters of both types were displaced as their videos progressed. Mitochondria in the llo videos fragment and become much smaller, and in some instances this occurs until the clusters are no longer visible; in mdivi videos many of the smaller clusters merge with larger ones, effectively, making some regions of the cell no longer occupied by any mitochondrial structures. Yet, the bounding boxes were able to adapt accordingly to these spatial changes because the spatiotemporal relationships of clusters were captured within the dynamic social networks. The coordinates of the bounding boxes were computed using the parameters, specifically the mean and covariance, of the corresponding mixture distributions. As a result, the boxes were able to track the mitochondrial clusters as they moved around the cell or shrunk in size. In many cases, the clusters moved completely outside the area highlighted by initial bounding boxes, so the ability to adjust the shape and spatial locations of the boxes allows for the regions demonstrating anomalous behavior to always remain the areas being highlighted. [Refer to a figure showing the initial area of a bounding box, and the bounding box and region after some morphological event]. 
+
+Our spatial anomaly detection methodology was evaluated by inspecting the regions highlighted by the bounding boxes in each cell type. The effectiveness of this approach was demonstrated through assessment of the llo and mdivi videos because mitochondrial clusters of both types were displaced as their videos progressed. Mitochondria in the llo videos fragment and become much smaller, and in some instances this occurs until the clusters are no longer visible; in mdivi videos many of the smaller clusters merge with larger ones, effectively, making some regions of the cell no longer occupied by any mitochondrial structures. Yet, the bounding boxes were able to adapt accordingly to these spatial changes because the spatiotemporal relationships of clusters were captured within the dynamic social networks. The coordinates of the bounding boxes were computed using the parameters, specifically the mean and covariance, of the corresponding mixture distributions. As a result, the boxes were able to track the mitochondrial clusters as they moved around the cell or shrunk in size. In many cases, the clusters moved completely outside the area highlighted by initial bounding boxes, so the ability to adjust the shape and spatial locations of the boxes allows for the regions demonstrating anomalous behavior to always remain the areas being highlighted. Figure :ref:`eventplot` depicts the spatial location and size of a bounding box corresponding to a mitochondrial region within a mdivi cell both before and after a fusion event occurs.
 
 .. figure:: figures/mdivi_boxes.png
 
-   Image on the left shows the initial spatial location of the bounding box, and the image on the right shows the spatial location andsize of the bounding box on the final frame of an mdivi video. This figure highlights the ability of our spatial anomaly detection technique to accurately track the mitochondria as it undergoes morphological transformations.
+   Image on the left shows the initial spatial location of the bounding box, and the image on the right shows the spatial location and size of the bounding box on the final frame of an mdivi cell's microscopy video after a fusion event. This figure highlights the ability of our spatial anomaly detection technique to accurately track the mitochondria as it undergoes morphological transformations. :label:`eventplot`
 
 Discussion
 ----------
 
-Both the temporal and spatial anomaly detection methodologies have proven effective in quantitatively characterizing mitochondrial dynamics, however, the extent of their effectiveness is largely dependent on the selection of adequate parameters. For the temporal methodology the free parameters are the threshold value, window size, and the statistical metric used to summarize a time point (e.g. mean or median). A threshold value too high will result in none of the time points being declared anomalous, while too low will result in a high number of frames being considered anomalous, even though the morphology may have only changed slightly between the time points. The window size is important for determining how distinct the current time point’s eigenvalues are compared to those of the previous frames, and it behaves similarly to the threshold parameters: if the value is too high or low, the number of time points declared anomalous can change drastically. The statistical metric used to summarize the eigenvalue vectors are essential for succinctly representing the magnitude of the spatial transformations the morphology is undergoing at that point in time. The spatial anomaly detection methodology has only one free parameter, the threshold value used to determine size of the bounding boxes. Due to the assumption that mitochondrial clusters are normally distributed, we found that three standard deviations away from the mean, with respect to each dimension, is sufficient for a bounding box to encompass all the mitochondria that are members of the cluster being highlighted. Ultimately, these approaches are sensitive to the parameters selected, and the usage of adequate values can enhance the anomaly detection process.
+Both the temporal and spatial anomaly detection methodologies have proven effective in quantitatively characterizing mitochondrial dynamics, however, the extent of their effectiveness is largely dependent on the selection of adequate parameters. For the temporal methodology the free parameters are the threshold value, window size. A threshold value too high will result in none of the time points being declared anomalous, while too low will result in a high number of frames being considered anomalous, even though the morphology may have only changed slightly between the time points. The window size is important for determining how distinct the current time point’s eigenvalues are compared to those of the previous frames, and it behaves similarly to the threshold parameters: if the value is too high or low, the number of time points declared anomalous can change drastically. The spatial anomaly detection methodology has only one free parameter, the threshold value used to determine size of the bounding boxes. Due to the assumption that the spatial locations of mitochondrial clusters are normally distributed :cite:`durden18`, we found that three standard deviations away from the mean, with respect to each dimension, is sufficient for a bounding box to encompass all the mitochondria that are members of the cluster being highlighted. Ultimately, these approaches are sensitive to the parameters selected, and the usage of adequate values can enhance the anomaly detection process.
 
 Conclusion
 ----------
 
-The morphology of mitochondria is perturbed in distinct ways by the presence of bacterial or viral infections in the cell, and modeling these structural changes can aid in understanding both the infection strategies of the pathogen, and cellular response. Modeling mitochondria poses many challenges because it is an amorphous, diffuse subcellular structure. Yet, dynamic social networks are well-suited for the task because they are capable of representing the global structure of mitochondria by flexibly modeling the many local clusters present in the cell. This extensible modeling approach enables the spatiotemporal relationships of the mitochondrial clusters to be explored using theoretic graph techniques. We proposed quantitative spatial and temporal anomaly detection methodologies that could be utilized in conjunction with traditional qualitative metrics to elucidate mitochondrial dynamics. We ultimately hope to use these spectral analytics and the OrNet software package to conduct large-scale genomic screens of Mycobacterium tuberculosis mutants, in an effort to build a deeper understanding of how the pathogen invades cells and induces cell death at the genetic level. This work is one of the first steps toward that ultimate goal.
+The morphology of mitochondria is perturbed in distinct ways by the presence of bacterial or viral infections in the cell, and modeling these structural changes can aid in understanding both the infection strategies of the pathogen, and cellular response. Modeling mitochondria poses many challenges because it is an amorphous, diffuse subcellular structure. Yet, dynamic social networks are well-suited for the task because they are capable of representing the global structure of mitochondria by flexibly modeling the many local clusters present in the cell. This extensible modeling approach enables the spatiotemporal relationships of the mitochondrial clusters to be explored using theoretic graph techniques. We proposed quantitative spatial and temporal anomaly detection methodologies that could be utilized in conjunction with traditional qualitative metrics to elucidate mitochondrial dynamics. We ultimately hope to use these spectral analytics and the OrNet software package to conduct large-scale genomic screens of *Mycobacterium tuberculosis* mutants, in an effort to build a deeper understanding of how the pathogen invades cells and induces cell death at the genetic level. This work is one of the first steps toward that ultimate goal.
+
