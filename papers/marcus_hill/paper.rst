@@ -262,7 +262,11 @@ Below is the code utilized to perform spatial anomaly detection: this function d
         )
         num_of_boxes = len(region_indices)
         box_colors = \
-            np.random.randint(256, size=(num_of_boxes, 3))
+            np.random.randint(
+                256, 
+                size=(num_of_boxes), 
+                3,
+            )
 
         for i, frame in enumerate(reader):
             current_frame = frame
@@ -276,16 +280,26 @@ Below is the code utilized to perform spatial anomaly detection: this function d
                 col_diff = col_bounds[1] - col_bounds[0]
 
                 color = box_colors[index]
-                current_frame[row_bounds[0]:row_bounds[1], \
-                              col_bounds[0],:] = color
-                current_frame[row_bounds[0]:row_bounds[1], \
-                              col_bounds[1],:] = color
-                current_frame[row_bounds[0], \
-                              col_bounds[0]:col_bounds[1],:] = \
-                             color
-                current_frame[row_bounds[1], \
-                              col_bounds[0]:col_bounds[1],:] = \ 
-                              color            
+                current_frame[
+                    row_bounds[0]:row_bounds[1],
+                    col_bounds[0],
+                    :,
+                ] = color
+                current_frame[
+                    row_bounds[0]:row_bounds[1],
+                    col_bounds[1],
+                    :,
+                ] = color
+                current_frame[
+                    row_bounds[0],
+                    col_bounds[0]:col_bounds[1],
+                    :,
+                ] = color
+                current_frame[
+                    row_bounds[1],
+                    col_bounds[0]:col_bounds[1],
+                    :,
+                ] = color            
 
             writer.append_data(current_frame)
 
