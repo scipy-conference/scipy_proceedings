@@ -352,7 +352,7 @@ VisJS reduces the definition of a network to a declarative set of objects. Nodes
 Conclusion
 ----------
 
-Pyvis is a powerful python module for visualizing and interactively manipulating network graphs in a standalone web application or a Jupyter notebook. Pyvis brings the power of VisJS to Python, thus enabling data scientists who use Jupyter to interactively visualize network graphs with all the fluid interactions of a pure-JavaScript application. 
+Pyvis is a powerful python module for visualizing and interactively manipulating network graphs in a standalone web application or a Jupyter notebook. Pyvis brings the power of VisJS to Python, thus enabling data scientists who use Jupyter to interactively visualize network graphs with all the fluid interactions of a pure-JavaScript application. Future directions for Pyvis include supporting the front end interactivity with more JavaScript enabled features, and optimization/caching of node positions for larger networks. Those with JavaScript and VisJS knowledge would be able to provide insight towards prospective front end features, since these will leverage actual VisJS references. As Pyvis use case grows in scope, additional features and suggestions will be requested, paving the path for a robust version of Pyvis meeting user experience expectations. 
 
 Code samples presented here, and with the corresponding poster presentation, as well as other supplemental material are available at West Health's github repository at
 `https://github.com/WestHealth/scipy2020/tree/master/pyvis
