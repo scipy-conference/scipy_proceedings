@@ -1,6 +1,8 @@
 :author: Mark Wickert
 :email: mwickert@uccs.edu
 :institution: University of Colorado Colorado Springs
+:orcid: 0000-0002-8302-3835
+:corresponding:
 
 :author: David Peckham
 :email: dpeckham@uccs.edu
@@ -21,7 +23,11 @@ Matched Filter Mismatch Losses in MPSK and MQAM Using Semi-Analytic BEP Modeling
    efficiency and noise mitigation is commonly achieved by using 
    square-root raised cosine (SRC) pulse shaping at both the transmitter 
    and receiver. The novelty of this paper primarily lies in the use 
-   semi-analytic BEP simulation for conditional error probability calculations, with transmit and receive filter mismatch, the optional inclusion of a small FIR equalizer. For lower order MPSK and MQAM, i.e., 8PSK and 16QAM :math:`E_b/N_0` power degradation at :math:`\text{BEP} = 10^{-6}` is 0.1 dB when the excess bandwidth mismatch tx/rx = 0.25/0.35 or 0.35/0.25, but quickly grows as the modulation order increases and/or the mismatch increases. 
+   semi-analytic BEP simulation for conditional error probability calculations, 
+   with transmit and receive filter mismatch, the optional inclusion of a small FIR equalizer. 
+   For lower order MPSK and MQAM, i.e., 8PSK and 16QAM :math:`E_b/N_0` power degradation at 
+   :math:`\text{BEP} = 10^{-6}` is 0.1 dB when the excess bandwidth mismatch tx/rx = 0.25/0.35 or 0.35/0.25, 
+   but quickly grows as the modulation order increases and/or the mismatch increases. 
 
 
 .. class:: keywords
@@ -41,7 +47,14 @@ systems [Ziemer]_, [Proakis]_, and [Goldsmith]_. The use of pulse
 shaping makes spectral efficiency possible, at the expense of non-constant 
 envelope waveforms [Ziemer]_. Today m-ary PSK (MPSK) and
 high density m-ary quadrature amplitude modulation (MQAM), both with
-pulse shaping, are found in satellite communications.
+pulse shaping, are found in satellite communications as well as 
+terrestrial communications, e.g., WiFi, cable modems, and 4th generation 
+cellular via long term evolution (LTE). The term m-ary refers to the 
+fact that bandwidth efficient signaling is accomplished using an :math:`M` 
+symbol alphabet of complex signal amplitudes, :math:`c_k = a_k + jb_k`, 
+to encode the transmission of a serial bit stream. In an m-ary digital 
+modulation scheme we send :math:`\log_2 M` bits per symbol. The objective 
+being to transmit more bits/s/Hz of occupied spectral bandwidth. 
 
 In certain applications the precise pulse shape used by the transmitter
 is not known by the receiver. The use of an equalizer is always an
@@ -63,7 +76,8 @@ adaptation in the case of burst mode transmission. We take advantage of
 semi-analytic simulation techniques described in 
 [Tranter]_ to allow fast and efficient performance
 evaluation. All of the simulation software is written in open-source
-Python.
+Python using classes to encapsulate the computations, waveform parameters, 
+and calculation results.
 
 
 .. figure:: Block_top.pdf
@@ -72,7 +86,7 @@ Python.
    :figclass: htb
 
    System top level block diagram showing transmit and receive pulse
-   shaping filters with mismatch, i.e., :math:`\alpha_t \neq \alpha_r`,
+   shaping filters with mismatch, i.e., :math:`\alpha_{tx} \neq \alpha_{rx}`,
    and optionally the inclusion of an adaptive equalizer. :label:`Topblock`
 
 
@@ -89,7 +103,7 @@ The remainder of this paper is organized as follows. We first consider
 residual errors at the matched filter output when using a simple
 truncated square-root raised cosine (SRC) finite impulse response (FIR).
 In particular we consider filter lengths of :math:`\pm L` symbols in
-duration, where :math:`L=6`, but also make this a design parameter. We
+duration, where :math:`L=8`, but also make this a design parameter. We
 then briefly explain how a symbol-spaced adaptive equalizer can be
 inserted at the output of the matched filter to compensate for pulse
 shape mismatch. We then move on to briefly review the concept of
@@ -102,7 +116,7 @@ Pulse Shaping Filter Considerations
 -----------------------------------
 
 The pulse shape used for this matched filter mismatch study is the
-discrete-time version of the squareroot raised-cosine pulse shape:
+discrete-time version of the square-root raised-cosine pulse shape:
 
 .. math::
    :label: SRCpulse
@@ -120,16 +134,36 @@ discrete-time version of the squareroot raised-cosine pulse shape:
 where :math:`T` is the symbol period. In the literature this is often
 referred to as the ideal root raised cosine filter (RRC)
 [Rappaport]_. The name used here is square-root
-raised cosine (SRC). For realizability considerations the discrete-time
+raised cosine (SRC). The transmitted signal bandwidth when using SRC shaping is approximately 
+:math:`(1+\alpha)R_s`, where :math:`R_s = R_b/\log_2 M` is the symbol rate and :math:`R_b` is 
+the serial bit rate. Note m-ary signaling and SRC pulse shaping together together serve to increase 
+spectral efficiency in all the applications mentioned in the introductory paragraph.  
+
+The upper plot of Figure :ref:`SRCpulseMFpulseOutput` shows the right half of an SRC pulse shape for 
+:math:`\alpha = 0.5` and 0.25. The lower plot shows the result of passing the transmit pulse through 
+a matched and mismatched receiver filter. The point of the SRC-SRC cascade is to provide 
+spectral efficiency and insure that the pulse zero crossing occur at the adjacent symbol 
+periods, i.e. zero ISI. For the mismatched case you can see ISI has crept in. 
+
+.. figure:: SRC_pulse_shape_plus_MF_output.pdf
+   :scale: 60%
+   :align: center
+   :figclass: htb
+
+   Plots of the SRC pulse shape (top) for :math:`\alpha = 0.25` and 0.5 and SRC-SRC cascading under a 
+   matched and mismatched receiver filter. :label:`SRCpulseMFpulseOutput`
+
+For realizability considerations the discrete-time
 transmit pulse shaping filter and receiver matched filter are obtained
 by time shifting and truncating and then sampling by letting
-:math:`t\rightarrow n T_s`.
-
-Residual errors at the matched filter output when using a simple
-truncated square-root raised cosine (SRC) finite impulse response (FIR)
-are noted in both [Harris]_ and [Xing]_. Later in this paper we make the filter
-length :math:`\pm 8` symbols in duration, but also make this a design
-parameter as shown in Figure :ref:`SRCresidual`.
+:math:`t\rightarrow n T`. Residual errors at the matched filter output are present 
+as a result of truncation as noted in both [Harris]_ and [Xing]_. 
+For small :math:`M` values :math:`\pm 6T` is acceptable, but for the higher schemes considered in 
+this paper we found increasing the filter
+length :math:`\pm 8` was required to avoid residual errors under matched pulse shape conditions. The residual 
+errors at the zero crossings shown in the bottom half of Figure :ref:`SRCpulseMFpulseOutput`, but now for an 
+ensemble transmit symbols, is shown in Figure :ref:`SRCresidual`. Here we see that the errors 
+increase as :math:`\alpha` decreases.
 
 .. figure:: Residual_compare_4QAM.pdf
    :scale: 50%
@@ -292,25 +326,27 @@ Since we have assumed that :math:`z_k = 1` we use :math:`\sigma_w` via
 :math:`N_0` to control the operating point, :math:`E_s/N_0`, and hence
 also :math:`E_b/N_0`. The over bound region, shown in light red in
 Figure :ref:`saMPSK`, is due to double counting the error
-probability in this region.
+probability in this region. 
 
-To demonstrate that this bound expression is adequate for the SA-BEP
-modeling needs of this paper, we consider :math:`M=4` and 8 with
-:math:`E_b/N_0` between 0 and 10 dB, focusing on BEP values above
-:math:`10^{-3}`. Overlay plots of the exact BEP obtained from
-(:ref:`MPSKexact`) and the bound of
-(:ref:`MPSKbound`) are shown in
-Figure :ref:`BEPMPSKcompare`.
+.. 
 
-.. figure:: 4PSK_8PSK_BEP_Exact_vs_Bound.pdf
-   :scale: 65%
-   :align: center
-   :figclass: htb
+.. To demonstrate that this bound expression is adequate for the SA-BEP
+   modeling needs of this paper, we consider :math:`M=4` and 8 with
+   :math:`E_b/N_0` between 0 and 10 dB, focusing on BEP values above
+   :math:`10^{-3}`. Overlay plots of the exact BEP obtained from
+   (:ref:`MPSKexact`) and the bound of
+   (:ref:`MPSKbound`) are shown in
+   Figure :ref:`BEPMPSKcompare`.
 
-   MPSK exact and bound BEP versus :math:`E_b/N_0` in dB for :math:`M=4`
-   and 8. :label:`BEPMPSKcompare`
+..  .. figure:: 4PSK_8PSK_BEP_Exact_vs_Bound.pdf
+      :scale: 65%
+      :align: center
+      :figclass: htb
 
-Only small differences are noted for the :math:`M=4` case, and then only
+..    MPSK exact and bound BEP versus :math:`E_b/N_0` in dB for :math:`M=4`
+      and 8. :label:`BEPMPSKcompare`
+
+With the bound only small differences are noted for the :math:`M=4` case, and then only
 at very low :math:`E_b/N_0` values. The bound becomes tighter as
 :math:`M` increases and as :math:`E_b/N_0` increases. We conclude that
 the bounding expression for :math:`P_{E,\text{symb}}` is adequate for
@@ -421,8 +457,7 @@ and code modules. All of this is open-source and freely available.
 Results
 -------
 
-Detailed performance scenarios are being compiled and will be presented
-in both plots and tables. First we overview three digital communications waveforms characterization approaches. 
+First we overview three digital communications waveforms characterization approaches. 
 Then we consider in detail filter mismatch in MPSK followed by MQAM. Equalization is not included in these 
 first two studies. Next we consider how a short length equalizer can be employed to  mitigate the mismatch 
 performance losses, at increased system complexity.
