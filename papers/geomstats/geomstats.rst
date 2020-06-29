@@ -753,7 +753,7 @@ how the converged embedding separates well the two clusters. Thus, it seems that
 
     Embedding of the Karate club graph into the hyperbolic plane at different iterations. The colors represent the true label of each node. :label:`embeddingiterations`
 
-To demonstrate the usefulness of the embedding learned, we show how to apply a :math:`K`-mean algorithm in the hyperbolic plane to predict the label of each node in an unsupervised approach. We use the :code:`learning` module of :code:`geomstats` and instantiate an object of the class :code:`RiemannianKMeans`. Observe again how :code:`geomstats` classes follow :code:`scikit-learn`'s API. We set the number of clusters and plot the results.
+To demonstrate the usefulness of the embedding learned, we show how to apply a :math:`K`-means algorithm in the hyperbolic plane to predict the label of each node in an unsupervised approach. We use the :code:`learning` module of :code:`geomstats` and instantiate an object of the class :code:`RiemannianKMeans`. Observe again how :code:`geomstats` classes follow :code:`scikit-learn`'s API. We set the number of clusters and plot the results.
 
 .. code:: python
 
