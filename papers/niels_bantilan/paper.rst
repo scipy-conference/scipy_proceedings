@@ -211,6 +211,7 @@ would keep track of the changes of the validation rules, enabling maintainers
 or readers of the codebase to inspect the evolution of the contract that the
 data must fulfill to be considered valid.
 
+
 Design Principles
 -----------------
 
@@ -222,10 +223,13 @@ principles that have thus far guided the development of this project:
 
 * Expressing validation rules should feel familiar to ``pandas`` users.
 * Data validation should be compatible with the different workflows and tools
-  in the data science toolbelt.
+  in the data science toolbelt without a lot of setup or configuration.
 * Defining custom validation rules should be easy.
 * The validation interface should make the debugging process easier.
 * Integration with existing code should be as seamless as possible.
+
+These principles articulate the use cases that I had when surveying the Python
+ecosystem for ``pandas`` data validation tools.
 
 
 Architecture
@@ -748,12 +752,179 @@ of a single column grouped by one or more columns.
        )
    )
 
+
+Use Case Vignettes
+------------------
+
+This section showcases the types of use cases that ``pandera`` is designed to
+address Via hypothetical vignettes that nevertheless illustrate how ``pandera``
+can be beneficial with respect to the maintainability and reproducibility of
+analysis/model pipeline code. These vignettes are based on my experience using
+this library in research and production contexts.
+
+
+Catching Type Errors Early
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Consider a dataset of records with the fields ``age``, ``occupation``, and
+``income``, and we would like to predict ``income`` as a function of the other
+variables. A common type error that arises, especially when processing
+unnormalized data or flat files, is the presence of values that violate our
+expectations based on domain knowledge about the world:
+
+.. code-block:: python
+
+   data = """age,occupation,income
+   30,nurse,90000
+   25,data_analyst,75000
+   45 years,mechanic,45000
+   21 year,community_organizer,41000
+   -100,wait_staff,27000
+   """
+
+In the above example, the ``age`` variable needs to be cleaned so that its
+values are positive integers, treating negative values as null.
+
+.. code-block:: python
+
+   import pandas as pd
+   import pandera as pa
+   from io import StringIO
+
+   schema = pa.DataFrameSchema(
+       {
+           "age": pa.Column(
+               pa.Float,
+               pa.Check.greater_than(0),
+               nullable=True,
+           ),
+           "occupation": pa.Column(pa.String),
+           "income": pa.Column(pa.Float),
+       },
+       coerce=True
+   )
+
+   pd.read_csv(StringIO(data)).pipe(schema)
+   # ValueError:
+   # invalid literal for int() with base 10: '45 years'
+
+
+Defining a data cleaning function would be standard practice, but here we can
+augment this function with guard-rails that would catch ``age`` values that
+cannot be cast into a float type and convert negative values to nulls. The
+implementation of ``clean_data`` now needs to adhere to the ``schema`` defined
+above. Supposing that the data source is refreshed after some time, additional
+records with age values like ``22 years and 7 months`` would be caught early in
+the data cleaning part of the pipeline, and the implementation within
+``clean_data`` would have to be refactored to normalize these kinds of more
+complicated values.
+
+.. code-block:: python
+
+   @pa.check_output(schema)
+   def clean_data(df):
+       return df.assign(
+           age=(
+               df.age.str.replace("years?", "")
+               .astype("float64").mask(lambda x: x < 0)
+           )
+       )
+
+   training_data = (
+       pd.read_csv(StringIO(data)).pipe(clean_data)
+   )
+
+Though this may appear to be a trivial problem, validation rules on
+unstructured data types like text benefit greatly from even simple validation
+rules, like checking that values are non-empty strings and values contain
+at least a minimum number of tokens, before sending the text through the
+tokenizer to produce a numerical vector representation of the text. Without
+these validation checks, these kinds of data integrity errors would pass
+silently through the pipeline, only to be unearthed after a potentially
+expensive model training run.
+
+
+Reusable Schema Definitions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In contexts where the components of an ML pipeline are handled by different
+services, we can reuse and modify schemas for the purpose of model training
+and prediction. Since schemas are just python objects, schema definition
+code can be place in a module e.g. ``schemas.py`` that can be imported by
+the model training and prediction modules.
+
+.. code-block:: python
+
+   # schemas.py
+   feature_schema = schema.remove_columns(["income"])
+   target_schema = pa.SeriesSchema(pa.Int, name="income")
+
+   # model_training.py
+   from schemas import feature_schema, target_schema
+
+   @pa.check_input(feature_schema, "features")
+   @pa.check_input(target_schema, "target")
+   def train_model(features, target):
+       estimator = ...
+       estimator.fit(features, target)
+       return estimator
+
+   # model_prediction.py
+   from schemas import feature_schema, target_schema
+
+   @pa.check_input(feature_schema, "features")
+   @pa.check_output(target_schema)
+   def predict(estimator, features):
+       predictions = estimator.predict(features)
+       return pd.Series(predictions, name="income")
+
+
+Unit Testing Statistically-Typed Functions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Once functions are decorated with ``check_input`` or ``check_output``, we can
+write unit tests for them by generating synthetic data that produces the
+expected results, for example, here is a test example using ``pytest``:
+
+.. code-block:: python
+
+   # test_clean_data.py
+   import pandera as pa
+   import pytest
+
+   def test_clean_data():
+       valid_data = pd.DataFrame({
+           "age": ["20", "52", "33"],
+           "occupation": ["barista", "doctor", "chef"],
+           "income": [28000, 150000, 41000],
+       })
+       clean_data(valid_data)
+
+       # non-normalized age raises an exception
+       invalid_data = valid_data.copy()
+       invalid_data.loc[0, "age"] = "20 years and 4 months"
+       with pytest.raises(ValueError):
+           clean_data(invalid_data)
+
+       # income cannot be null
+       invalid_null_income = valid_data.copy()
+       invalid_null_income.loc[-1, "income"] = None
+       with pytest.raises(pa.errors.SchemaError):
+           clean_data(invalid_null_income)
+
+This last use case would be further enhanced by property-based testing
+libraries like ``hypothesis`` :cite:`MacIver2019Hypothesis`
+:cite:`david_r_maciver_2020_3859851` that could be used to generate
+synthetic data against which to test schema-decorated functions.
+
+
 Documentation
 -------------
 
 Documentation for ``pandera`` is hosted on `ReadTheDocs <https://pandera.readthedocs.io/>`_,
 where tutorials on core and experimental features are available, in addition
 to full API documentation.
+
 
 Limitations
 -----------
@@ -786,6 +957,7 @@ Two other limitations of the current state of the package are that:
   KL-divergence) would encourage the use of hypothesis tests in schemas.
 * Expressing functional dependencies is currently inelegant and would benefit
   from a higher-level abstraction to improve usability.
+
 
 Roadmap
 -------
@@ -837,23 +1009,53 @@ Related Tools
 -------------
 
 This project was inspired by the ``schema`` and ``pandas_schema`` Python
-packages and the ``validate`` R package :cite:`van2019data`. Here is my
-assessment of data validation tools that are currently being maintained
-in the Python ecosystem:
+packages and the ``validate`` R package :cite:`van2019data`. Initially when
+assessing the Python landscape for ``pandas``-centric data validation tools, I
+found that they did not match my use cases because they (a) result in verbose
+and over-specified validation rulesets, (b) introduce many new library-specific
+concepts and configuration steps, (c) lacked documentation of core functionality
+and usage patterns, and/or (d) are no longer maintained.
+
+Here is my assessment of data validation tools that are currently being
+maintained in the Python ecosystem:
 
 * ``great_expectations`` :cite:`ge`: this is a mature, batteries-included data
   validation library centered around the concept of **expectations**. It
   provides a UI to manage validation rules and supports integrations with many
-  database systems and data manipulation tools.
+  database systems and data manipulation tools. This framework extends the
+  ``pandas.DataFrame`` class to include validation methods prefixed with
+  ``expect_*``, with a suite of built-in rules for various use cases. Defining
+  custom validation rules involves subclassing the ``PandasDataset`` class
+  and defining specially-decorated methods with function signatures that adhere
+  to library-specific standards.
 * ``schema`` :cite:`schema`: a light-weight data validator for generic Python
   data structures. This package and ``pandera`` share the schema interface
   where the schema object returns the data itself if valid and raises an
-  ``Exception`` otherwise.
+  ``Exception`` otherwise. However, this library does not provide additional
+  functionality for ``pandas`` data structures.
 * ``pandas_schema`` :cite:`ps`: a ``pandas`` data validation library with a
   comprehensive suite of built-in validators. This package was the inspiration
   for the *schema component* design where a ``Column`` object specifies
   properties of a dataframe column, albeit the specific implementations are
-  considerably different.
+  considerably different. It provides built-in validators and supports defining
+  custom validation rules. Unlike ``pandera`` which outputs the validated data,
+  the output of validating a dataframe with ``pandas_schema`` is an iterable of
+  errors that are intended to be inspected via ``print`` statements.
+
+The key features that differentiate ``pandera`` from similar packages in the
+Python ecosystem are:
+
+* ``check_input`` and ``check_output`` function decorators that enable seamless
+  integration with existing data processing/analysis code.
+* ``Check`` validation rules are designed primarily for customizability, with
+  built-in methods as a convenience for common validation rules.
+* ``Hypothesis`` validation rules provide a tidy-first interface for hypothesis
+  testing.
+* Schema inference capabilities to speed up the data validation software
+  development loop.
+* Schema serialization as human-readable YAML files or as a python scripts.
+* Clear and comprehensive documentation on core and advanced features.
+
 
 Conclusion
 ----------
@@ -861,7 +1063,7 @@ Conclusion
 This paper introduces the :code:`pandera` package as a way of expressing
 assumptions about data and falsifying those assumptions at run time. This tool
 is geared toward helping data engineers and data scientists during the software
-development process, enabling users to make their data proprocessing workflows
+development process, enabling them to make their data proprocessing workflows
 more readable, robust, and maintainable.
 
 
