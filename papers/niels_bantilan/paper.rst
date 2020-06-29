@@ -173,7 +173,7 @@ artifacts inform business decisions, support scientific findings, or generate
 predictions about people or things in the real world.
 
 .. figure:: process.png
-   :scale: 95%
+   :scale: 90%
 
    Data validation as an iterative software development process.
    :label:`datavalprocess`
@@ -269,7 +269,7 @@ decide the critical points of failure in a pipeline where data validation would
 make it more robust to abherrant data values.
 
 .. figure:: architecture.png
-   :scale: 95%
+   :scale: 90%
 
    High-level architecture of ``pandera``. In the simplest case, raw data
    passes through a data processor, is checked by a schema validator, and
@@ -757,7 +757,7 @@ Use Case Vignettes
 ------------------
 
 This section showcases the types of use cases that ``pandera`` is designed to
-address Via hypothetical vignettes that nevertheless illustrate how ``pandera``
+address via hypothetical vignettes that nevertheless illustrate how ``pandera``
 can be beneficial with respect to the maintainability and reproducibility of
 analysis/model pipeline code. These vignettes are based on my experience using
 this library in research and production contexts.
