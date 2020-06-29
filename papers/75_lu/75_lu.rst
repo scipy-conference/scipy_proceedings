@@ -494,7 +494,7 @@ It is difficult to find explicit constructions of quasiorthonormal sets in
 the literature. Several methods are mentioned by Kainen :cite:`kainan`, but
 these constructions are theoretical and hard
 to follow. There are a number of combinatorial problems related to such as
-spherical codes :cite:`wiki:spheres` and Steiner Triple Systems :cite:`wiki:steiner`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
+spherical codes :cite:`weisstein` and Steiner Triple Systems :cite:`wiki:steiner`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
 
 Since in a high dimensional space, two random vectors are likely to be
 quasiorthogonal, it is tempting to take a brute force approach and
