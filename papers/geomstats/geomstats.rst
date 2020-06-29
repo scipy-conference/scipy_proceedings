@@ -322,7 +322,7 @@ Challenge <https://www.kaggle.com/c/mlsp-2014-mri/data>`__. The connectomes are 
    :align: center
    :scale: 50%
 
-   Subset of the connectomes dataset, available in :code:`geomstats` with the function :code:`load_connectomes` from the module :code:`datasets.utils`. Connectomes are correlation matrices of 28 time-series extracted from fMRI data: they are elements of the manifold of SPD matrices in 28 dimensions. Left: connectome of a healthy control. Right: connectome of a schizophrenic subject. :label:`fig:conn`
+   Subset of the connectomes dataset, available in :code:`geomstats` with the function :code:`load_connectomes` from the module :code:`datasets.utils`. Connectomes are correlation matrices of 28 time-series extracted from fMRI data: they are elements of the manifold of SPD matrices in 28 dimensions. Left: connectome of a schizophrenic subject. Right: connectome of a healthy control. :label:`fig:conn`
 
 Multiple metrics can be used to compute on the manifold of SPD matrices. As we explained in the previous tutorial, different metrics define different exponential and logarithm maps and therefore different algorithms on a given manifold. Here, we import two of
 the most commonly used metrics on the SPD matrices, the log-Euclidean metric and the
