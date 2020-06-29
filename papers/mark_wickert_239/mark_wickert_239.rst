@@ -68,7 +68,10 @@ mismatched. The modulation schemes considered are MPSK and MQAM. In the
 additive white Gaussian noise (AWGN) channel both spectral efficiency
 and noise mitigation is commonly achieved by using square-root raised
 cosine (SRC) pulse shaping at both the transmitter and receiver. The
-system block diagram is shown in Figure :ref:`Topblock`.
+system block diagram is shown in Figure :ref:`Topblock`. The parameters 
+:math:`\alpha_{tx}` and :math:`\alpha_{rx}` control the excess bandwidth 
+factors of the transmit and received filters respectively. The Section 
+Pulse Shaping Filter Considerations provides more detail on this.
 Notice that this block diagram also shows a symbol-spaced equalizer to
 allow for the exploration of potential performance improvement, subject
 to how much complexity can be afforded, and the need for rapid
@@ -99,8 +102,9 @@ concerned with the situation where the receiver does not always know the
 exact design of the transmit pulse shape filter, in particular the
 excess bandwidth factor.
 
-The remainder of this paper is organized as follows. We first consider
-residual errors at the matched filter output when using a simple
+The remainder of this paper is organized as follows. We first provide a brief 
+tutorial on digital communications at the waveform level. Next we 
+consider residual errors at the matched filter output when using a simple
 truncated square-root raised cosine (SRC) finite impulse response (FIR).
 In particular we consider filter lengths of :math:`\pm L` symbols in
 duration, where :math:`L=8`, but also make this a design parameter. We
@@ -109,7 +113,77 @@ inserted at the output of the matched filter to compensate for pulse
 shape mismatch. We then move on to briefly review the concept of
 semi-analytic (SA)simulation and the develop conditional error
 probability expressions for MPSK and MQAM. Finally we move into
-performance.
+performance results.
+
+
+Characterizing Digital Communications at the Waveform Level
+-----------------------------------------------------------
+
+To provide more context for the theoretical development of the semi-analytic simulation 
+technique used in this paper and prepare for the system performance characterization 
+of the results section, we now consider three common digital communication 
+characterization techniques: *IQ Diagrams*, *eye diagrams*, and *bit error probability* 
+(BEP) versus received signal energy-to-noise power spectral density (:math:`E_b/N_0`) curves.
+
+IQ Diagrams 
+===========
+
+An IQ diagram is a representation of a signal modulated by a digital modulation scheme such
+as MQAM or MPSK. It displays the signal as a two-dimensional :math:`xy`-plane scatter diagram in
+the complex plane at symbol sampling instants. The angle of a point, measured counterclockwise from the 
+horizontal axis, represents the phase shift of the carrier wave from a reference phase. The distance of 
+a point from the origin represents a measure of the amplitude or power of the signal.
+The number of IQ points in a diagram gives the size of the *alphabet* of symbols that can be transmitted 
+by each sample, and so determines the number of bits transmitted per sample. For the purposed of this paper 
+it will be a power of 2. A diagram with four points, for example, represents a modulation scheme that can 
+separately encode all 4 combinations of two bits: 00, 01, 10, and 11 and so can transmit two bits per sample. 
+Figure :ref:`IQdiagram` shows an 8-PSK IQ Diagram.
+
+.. figure:: IQ_plot_defined.pdf
+   :scale: 65%
+   :align: center
+   :figclass: htb
+
+   8-PSK IQ Diagram shows information is transmitted as one of 8 symbols, each representing 3 bits of data. 
+   :label:`IQdiagram` 
+
+Eye Diagrams
+============
+
+An eye diagram is a tool for the evaluation of the combined effects of channel noise and inter-symbol interference 
+(ISI) on the performance of a channel. Several system performance measures can be derived by analyzing the display. 
+If the signals are too long, too short, poorly synchronized with the system clock, too high, too low, too noisy, 
+or too slow to change, or have too much undershoot or overshoot, this can be observed from the eye diagram. An open 
+eye pattern corresponds to minimal signal distortion. Distortion of the signal waveform due
+to ISI and noise appears as closure of the eye pattern. The waveform is complex so the eye diagram shows either the 
+real part or the imaginary part of the signal. The tight waveform bundles of the eye diagram correspond to the scatter 
+points of the IQ diagram. For the purposes of this paper we will be looking at 
+the closure of the eye pattern as the mismatch of the filters increases. The left eye pattern of Figure :ref:`EYEdiagram` is an 
+example of an *open-eye* with respect sampling instant 10 while the eye patter on the right is *partially closed* (degraded).
+
+
+.. figure:: EYE_diagram_defined.pdf
+   :scale: 62%
+   :align: center
+   :figclass: htb
+
+   4PSK eye diagram: perfect channel (left), channel distortions present (right), both assuming 10 samples per symbol. 
+   :label:`EYEdiagram`
+
+
+Bit Error Probability (BEP) Curves
+==================================
+
+In digital transmission, the number of bit errors is the number of received bits over a communication channel that 
+have been altered due to noise, interference, distortion (improper filtering), carrier phase tracking errors, and bit 
+synchronization errors. The bit error probability (BEP) in a practical setting 
+is the number of bit errors divided by the total number 
+of transferred bits during a studied time interval. The BEP curves are plotted as 
+:math:`\log_{10} P_e` versus the received :math:`E_b/N_0`. BEP curves are often compared to theory curves to measure 
+how impairments in the end-to-end transmission path, including the demodulator (think symbol classifier), increases 
+the BEP for a given operating scenario. In a Wireless LAN or cable modem, for example, a low BEP is required to insure 
+reliable information exchange. A large :math:`M` is used here to send a large number of bits per second, per Hz of bandwidth.
+BEP curves were first utilized in Figure :ref:`BEPMPSKcompare`.
 
 
 Pulse Shaping Filter Considerations
@@ -208,8 +282,8 @@ received energy per symbol :math:`E_s` (note the energy per bit
 density ratio, i.e., :math:`E_s/N_0` or :math:`E_b/N_0`. This allows
 full BEP curves to be generated using just a single ensemble of ISI
 patterns. The calculation of :math:`N_0`, taking into account the fact
-that the total noise power is split between real/imagninary (or in 
-digital communictions theory notation inphase/quadrature) parts is given by
+that the total noise power is split between real/imaginary (or in 
+digital communications theory notation inphase/quadrature) parts is given by
 
 .. math::
    :label: N0calc
@@ -229,9 +303,9 @@ the in-phase and quadrature components.
    :align: center
    :figclass: htb
 
-   Block diagram describing how for a linear channel from the WGN
-   injection to the detector enable the use of semi-analytic BEP
-   calculation. :label:`BlockSAsim`
+   Block diagram describing how for a linear channel from the noise
+   injection point to the detector, enables the use of semi-analytic BEP
+   calculation over a more time consuming Monte-Carlo simulation. :label:`BlockSAsim`
 
 The SA-BEP method first calculates the symbol error probability by
 averaging over the ensemble of conditional Gaussian probabilities
@@ -243,9 +317,9 @@ averaging over the ensemble of conditional Gaussian probabilities
    \sigma_w,\text{other impairments}\}    
 
 where :math:`N` is the number of symbols simulated to create the
-ensemble. For the m-ary schemes MPSK and MQAM we assume is employed
-[Ziemer]_, and the BEP values of interest are small
-so we can write
+ensemble. For the m-ary schemes MPSK and MQAM we further assume that Gray coding is employed 
+[Ziemer]_, and the BEP values of interest are small, allowing the bit error probability to 
+be directly obtained from the symbol error probability via
 
 .. math:: 
    :label: SEP2BEP
@@ -257,7 +331,7 @@ fact that SA-BEP can also be used to model carrier phase error or symbol
 timing error.
 
 For the SA-BEP analysis model what remains is to find expressions for
-the conditional error probabilities in (4). A feature in the analysis of
+the conditional error probabilities in (:ref:`SABEP`). A feature in the analysis of
 both MPSK and MQAM, is that both schemes reside in a two dimensional
 signal space and we can freely translate and scale signal points to a
 *normalized location* to make the error probability equations easier to
@@ -457,77 +531,10 @@ and code modules. All of this is open-source and freely available.
 Results
 -------
 
-First we overview three digital communications waveforms characterization approaches. 
-Then we consider in detail filter mismatch in MPSK followed by MQAM. Equalization is not included in these 
-first two studies. Next we consider how a short length equalizer can be employed to  mitigate the mismatch 
+In this section we consider the impact of filter mismatch in MPSK and MQAM. 
+Equalization is not included in these first two studies. Next we consider how 
+a short length equalizer can be employed to  mitigate the mismatch 
 performance losses, at increased system complexity.
-
-Characterizing Digital Communications at the Waveform Level
-===========================================================
-
-The results of this paper are displayed using three common digital communication characterization techniques: 
-*IQ Diagrams*, *eye diagrams*, and *bit error probability* (BEP) versus received signal energy-to-noise power 
-spectral density (:math:`E_b/N_0`) curves.
-
-IQ Diagrams 
-^^^^^^^^^^^
-An IQ diagram is a representation of a signal modulated by a digital modulation scheme such
-as MQAM or MPSK. It displays the signal as a two-dimensional :math:`xy`-plane scatter diagram in
-the complex plane at symbol sampling instants. The angle of a point, measured counterclockwise from the 
-horizontal axis, represents the phase shift of the carrier wave from a reference phase. The distance of 
-a point from the origin represents a measure of the amplitude or power of the signal.
-The number of IQ points in a diagram gives the size of the *alphabet* of symbols that can be transmitted 
-by each sample, and so determines the number of bits transmitted per sample. For the purposed of this paper 
-it will be a power of 2. A diagram with four points, for example, represents a modulation scheme that can 
-separately encode all 4 combinations of two bits: 00, 01, 10, and 11 and so can transmit two bits per sample. 
-Figure :ref:`IQdiagram` shows an 8-PSK IQ Diagram.
-
-.. figure:: IQ_plot_defined.pdf
-   :scale: 65%
-   :align: center
-   :figclass: htb
-
-   8-PSK IQ Diagram shows information is transmitted as one of 8 symbols, each representing 3 bits of data. 
-   :label:`IQdiagram` 
-
-Eye Diagrams
-^^^^^^^^^^^^
-
-An eye diagram is a tool for the evaluation of the combined effects of channel noise and inter-symbol interference 
-(ISI) on the performance of a channel. Several system performance measures can be derived by analyzing the display. 
-If the signals are too long, too short, poorly synchronized with the system clock, too high, too low, too noisy, 
-or too slow to change, or have too much undershoot or overshoot, this can be observed from the eye diagram. An open 
-eye pattern corresponds to minimal signal distortion. Distortion of the signal waveform due
-to ISI and noise appears as closure of the eye pattern. The waveform is complex so the eye diagram shows either the 
-real part or the imaginary part of the signal. The tight waveform bundles of the eye diagram correspond to the scatter 
-points of the IQ diagram. For the purposes of this paper we will be looking at 
-the closure of the eye pattern as the mismatch of the filters increases. The left eye pattern of Figure :ref:`EYEdiagram` is an 
-example of an *open-eye* with respect sampling instant 10 while the eye patter on the right is *partially closed* (degraded).
-
-
-.. figure:: EYE_diagram_defined.pdf
-   :scale: 62%
-   :align: center
-   :figclass: htb
-
-   4PSK eye diagram: perfect channel (left), channel distortions present (right), both assuming 10 samples per symbol. 
-   :label:`EYEdiagram`
-
-
-Bit Error Probability (BEP) Curves
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-In digital transmission, the number of bit errors is the number of received bits over a communication channel that 
-have been altered due to noise, interference, distortion (improper filtering), carrier phase tracking errors, and bit 
-synchronization errors. The bit error probability (BEP) in a practical setting 
-is the number of bit errors divided by the total number 
-of transferred bits during a studied time interval. The BEP curves are plotted as 
-:math:`\log_{10} P_e` versus the received :math:`E_b/N_0`. BEP curves are often compared to theory curves to measure 
-how impairments in the end-to-end transmission path, including the demodulator (think symbol classifier), increases 
-the BEP for a given operating scenario. In a Wireless LAN or cable modem, for example, a low BEP is required to insure 
-reliable information exchange. A large :math:`M` is used here to send a large number of bits per second, per Hz of bandwidth.
-BEP curves were first utilized in Figure :ref:`BEPMPSKcompare`.
-
 
 Effects of Mismatch Filtering on MPSK
 =====================================
