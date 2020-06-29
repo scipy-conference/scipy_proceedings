@@ -660,7 +660,7 @@ of less than 0.01 dB are considered insignificant and are entered in the table a
 Effects of Mismatch Filtering on MQAM
 =====================================
 
-To limit the number of figures presented to the reader for the MQAM case and manage the limited paper lengths, we show only IQ diagrams for 
+Here we show only IQ diagrams for 
 :math:`\alpha_\text{tx} = .25` while varying :math:`\alpha_\text{rx} = .3`, .4, and  .5. As in the MPSK case later we provide 
 :math:`E_b/N_0` degradation results over a range of :math:`\alpha_\text{tx}` and :math:`\alpha_\text{rx}` values. 
 Figure :ref:`IQsetMPSK` shows two rows of IQ diagrams for :math:`M=16, 256` while varying :math:`\alpha_\text{rx}`. 
@@ -783,7 +783,7 @@ from ISI, appear biased toward the center of the IQ diagram. Characterizing the 
 density function could serve as an alternative to SA-BEP technique presented in this paper.
 
 A second interesting observation is that the degradation values in the tables are essentially symmetric for both MPSK and 
-MQAM, with regard to the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio. What this means is that the  
+MQAM, with regard to the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse. What this means is that the  
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse give essentially the same :math:`E_b/N_0` 
 dB degradation values. Does this make sense? The signal path is identical since the same two filters are 
 connected in series (see Figure :ref:`BlockSAsim`) in either case. Linear processing means the filter order can be 
