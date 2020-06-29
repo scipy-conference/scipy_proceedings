@@ -381,7 +381,7 @@ Implementation
 Mathematical
 ~~~~~~~~~~~~
 
-While equations :ref:`eq:qargmax` and :ref:`eq:qsoftmax` describe precisely mathematically how to implement decoding and activation functions. A literal implementation would not exploit the modern vectorized and accelerated computation available in such packages as ``numpy``, ``tensorflow`` and ``pytorch``.
+While equations :ref:`eq:qargmax` and :ref:`eq:qsoftmax` describe precisely mathematically how to implement decoding and activation functions. A literal implementation would not exploit the modern vectorized and accelerated computation available in such packages as ``numpy``, ``tensorflow`` :cite:`tensorflow2015-whitepaper` and ``pytorch``.
 
 To better exploit built-in functions of these packages, we define the following :math:`n\times K` *change of coordinates* matrix
 
