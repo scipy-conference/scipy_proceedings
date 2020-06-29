@@ -236,42 +236,43 @@ ePython is currently focussed around version 2.7 of the language, and this reach
 References
 ----------
 .. [picorv32] C. Wolf. *PicoRV32 - A Size-Optimized RISC-V CPU*,
-          On Github, https://github.com/cliffordwolf/picorv32/
+          On Github, https://github.com/cliffordwolf/picorv32/, Last accessed June 2020
 
 .. [pezy-sc] T. Ishii. *Introduction to PEZY-SC*
-          http://accc.riken.jp/wp-content/uploads/2015/09/ishii.pdf
+          http://accc.riken.jp/wp-content/uploads/2015/09/ishii.pdf, Last accessed June 2020
 
 .. [kalray] B.D de Dinechin. *Kalray MPPA: Massively parallel processor array: Revisiting DSP acceleration with the Kalray MPPA Manycore processor*
           Hot Chips 27 Symposium (HCS), 2015 IEEE, pages 1--27
 
-.. [ajayi2017celerity] T. Ajayi. *Celerity: An Open-Source RISC-V Tiered Accelerator Fabric*
+.. [ajayi2017celerity] S. Davidson et al. *Celerity: An Open-Source RISC-V Tiered Accelerator Fabric*
+          IEEE Micro, Volume: 38, Issue: 2, March/April 2018, Pages 30 - 41
 
-.. [epiphany] A. Olofsson. *Kickstarting high-performance energy-efficient manycore architectures with epiphan*
-          Signals, Systems and Computers, 2014 48th Asilomar Conference on.
+.. [epiphany] A. Olofsson. *Kickstarting high-performance energy-efficient manycore architectures with epiphany*
+          48th Asilomar Conference on Signals, Systems and Computers, 2014
 
 .. [parallella] Adapteva. *Parallella-1.x Reference Manual*
-          http://www.parallella.org/docs/parallella\_manual.pdf
+          http://www.parallella.org/docs/parallella_manual.pdf, Rev 09, 2014
 
 .. [microblaze] Xilinx. *MicroBlaze Processor Reference Guide*
-          https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug984-vivado-microblaze-ref.pdf
+          https://www.xilinx.com/support/documentation/sw_manuals/xilinx2018_2/ug984-vivado-microblaze-ref.pdf, 2018
 
 .. [epiphany-specifications] Adapteva. *Epiphany Architecture Reference*
-          http://www.adapteva.com/docs/epiphany_arch_ref.pdf
+          http://www.adapteva.com/docs/epiphany_arch_ref.pdf, Rev 14, 2013
 
-.. [opencl] J.E. Stone. *OpenCL: A parallel programming standard for heterogeneous computing systems*
-          Computing in science and engineering
+.. [opencl] J.E. Stone. D. Gohara. G. Shi. *OpenCL: A parallel programming standard for heterogeneous computing systems*
+          Computing in science and engineering, Volume: 12, Issue: 3, May-June 2010, Pages 66 - 73
 
 .. [openmp] OpenMP Architecture Review Board. *OpenMP Application Program Interface Version 4.0*
-          http://www.openmp.org/mp-documents/OpenMP4.0.0.pdf
+          http://www.openmp.org/mp-documents/OpenMP4.0.0.pdf, 2013
 
 .. [micropython] D. P. George. *The MicroPython language*
-          http://docs.micropython.org/en/latest/pyboard/reference/index.html
+          http://docs.micropython.org/en/latest/pyboard/reference/index.html, Last accessed June 2020
 
 .. [micropython-website] MicroPython community. *MicroPython*
-          https://micropython.org/
+          https://micropython.org/, Last accessed June 2020
 
-.. [numba] S.K. Lam. *Numba: A LLVM-based Python JIT Compiler*
-          Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC
+.. [numba] S.K. Lam. A. Pitrou. S. Seibert. *Numba: A LLVM-based Python JIT Compiler*
+          Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 2015
 
 .. [epython] N. Brown. *ePython: An Implementation of Python for the Many-core Epiphany Coprocessor*
-          Proceedings of the 6th Workshop on Python for High-Performance and Scientific Computing
+          Proceedings of the 6th Workshop on Python for High-Performance and Scientific Computing, 2017
