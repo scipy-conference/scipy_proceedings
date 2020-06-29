@@ -767,8 +767,8 @@ Catching Type Errors Early
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Consider a dataset of records with the fields ``age``, ``occupation``, and
-``income``, and we would like to predict ``income`` as a function of the other
-variables. A common type error that arises, especially when processing
+``income``, where we would like to predict ``income`` as a function of the
+other variables. A common type error that arises, especially when processing
 unnormalized data or flat files, is the presence of values that violate our
 expectations based on domain knowledge about the world:
 
@@ -811,13 +811,7 @@ values are positive integers, treating negative values as null.
 
 Defining a data cleaning function would be standard practice, but here we can
 augment this function with guard-rails that would catch ``age`` values that
-cannot be cast into a float type and convert negative values to nulls. The
-implementation of ``clean_data`` now needs to adhere to the ``schema`` defined
-above. Supposing that the data source is refreshed after some time, additional
-records with age values like ``22 years and 7 months`` would be caught early in
-the data cleaning part of the pipeline, and the implementation within
-``clean_data`` would have to be refactored to normalize these kinds of more
-complicated values.
+cannot be cast into a float type and convert negative values to nulls.
 
 .. code-block:: python
 
@@ -834,24 +828,31 @@ complicated values.
        pd.read_csv(StringIO(data)).pipe(clean_data)
    )
 
+The implementation of ``clean_data`` now needs to adhere to the ``schema``
+defined above. Supposing that the data source is refreshed periodically from
+some raw data feed, additional records with age values like ``22 years and 7
+months`` would be caught early in the data cleaning portion of the pipeline, and
+the implementation within ``clean_data`` would have to be refactored to
+normalize these kinds of more complicated values.
+
 Though this may appear to be a trivial problem, validation rules on
 unstructured data types like text benefit greatly from even simple validation
-rules, like checking that values are non-empty strings and values contain
-at least a minimum number of tokens, before sending the text through the
-tokenizer to produce a numerical vector representation of the text. Without
-these validation checks, these kinds of data integrity errors would pass
-silently through the pipeline, only to be unearthed after a potentially
-expensive model training run.
+rules, like checking that values are non-empty strings and contain at least a
+minimum number of tokens, before sending the text through a tokenizer to
+produce a numerical vector representation of the text. Without these validation
+checks, these kinds of data integrity errors would pass silently through the
+pipeline, only to be unearthed after a potentially expensive model training
+run.
 
 
 Reusable Schema Definitions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In contexts where the components of an ML pipeline are handled by different
-services, we can reuse and modify schemas for the purpose of model training
+services, we can reuse and modify schemas for the purposes of model training
 and prediction. Since schemas are just python objects, schema definition
-code can be place in a module e.g. ``schemas.py`` that can be imported by
-the model training and prediction modules.
+code can be placed in a module e.g. ``schemas.py``, which can then be imported
+by the model training and prediction modules.
 
 .. code-block:: python
 
@@ -884,7 +885,8 @@ Unit Testing Statistically-Typed Functions
 
 Once functions are decorated with ``check_input`` or ``check_output``, we can
 write unit tests for them by generating synthetic data that produces the
-expected results, for example, here is a test example using ``pytest``:
+expected results. For example, here is a test example using ``pytest``
+:cite:`pytest`:
 
 .. code-block:: python
 
@@ -1011,10 +1013,10 @@ Related Tools
 This project was inspired by the ``schema`` and ``pandas_schema`` Python
 packages and the ``validate`` R package :cite:`van2019data`. Initially when
 assessing the Python landscape for ``pandas``-centric data validation tools, I
-found that they did not match my use cases because they (a) result in verbose
-and over-specified validation rulesets, (b) introduce many new library-specific
-concepts and configuration steps, (c) lacked documentation of core functionality
-and usage patterns, and/or (d) are no longer maintained.
+found that they did not match my use cases because they (a) often resulted in
+verbose and over-specified validation rulesets, (b) introduced many new
+library-specific concepts and configuration steps, (c) lacked documentation of
+core functionality and usage patterns, and/or (d) are no longer maintained.
 
 Here is my assessment of data validation tools that are currently being
 maintained in the Python ecosystem:
@@ -1024,7 +1026,7 @@ maintained in the Python ecosystem:
   provides a UI to manage validation rules and supports integrations with many
   database systems and data manipulation tools. This framework extends the
   ``pandas.DataFrame`` class to include validation methods prefixed with
-  ``expect_*``, with a suite of built-in rules for various use cases. Defining
+  ``expect_*`` and a suite of built-in rules for common use cases. Defining
   custom validation rules involves subclassing the ``PandasDataset`` class
   and defining specially-decorated methods with function signatures that adhere
   to library-specific standards.
@@ -1043,7 +1045,7 @@ maintained in the Python ecosystem:
   errors that are intended to be inspected via ``print`` statements.
 
 The key features that differentiate ``pandera`` from similar packages in the
-Python ecosystem are:
+Python ecosystem are the following:
 
 * ``check_input`` and ``check_output`` function decorators that enable seamless
   integration with existing data processing/analysis code.
@@ -1051,9 +1053,11 @@ Python ecosystem are:
   built-in methods as a convenience for common validation rules.
 * ``Hypothesis`` validation rules provide a tidy-first interface for hypothesis
   testing.
-* Schema inference capabilities to speed up the data validation software
-  development loop.
-* Schema serialization as human-readable YAML files or as a python scripts.
+* Ease of debugging, as ``SchemaErrors`` contain the invalidated data as well as
+  a tidy dataframe of the failure cases with their corresponding column/index
+  locations.
+* Schema inference and serialization capabilities enable the creation of draft
+  schemas that users can iterate on and refine.
 * Clear and comprehensive documentation on core and advanced features.
 
 
