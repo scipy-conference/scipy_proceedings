@@ -434,7 +434,7 @@ a perturbed :math:`z_k` is the real intent of
 Figure :ref:`saMPSK`, where it shows two perpendicular
 distances, :math:`d_a` and :math:`d_b`, for an arbitrary :math:`z_k`. We
 now use these distances to form the conditional probability of symbol
-error, and hence the gray coded BEP. Using simple geometry to write
+error, and hence the Gray coded BEP. Using simple geometry to write
 :math:`d_a` and :math:`d_b` in terms of the angle :math:`\pi/M` and
 :math:`z_k = |z_k|e^{j\theta_k}` we can finally write the conditional
 symbol error probability as
@@ -453,7 +453,7 @@ M-ary Quadrature Amplitude Modulation
 
 For MQAM the noise-free received symbols are scaled and translated to
 lie nominally at :math:`(0,0)` in the complex plane. Here we pattern the
-development of the SEP expression after Ziemer
+development of the SEP expression after 
 [Ziemer]_. The decision region for correct symbol
 detection detection is one of three types: (1) interior square, (2)
 left/right or top/bottom channel to infinity, (3) corners upper
@@ -540,7 +540,7 @@ Effects of Mismatch Filtering on MPSK
 =====================================
 
 To limit the amount of data presented to the reader the figures shown for MPSK have a constant :math:`\alpha_\text{tx} = .25` while varying 
-:math:`\alpha_\text{rx} = .3`, .4, and  .5. Later we provide a table :math:`E_b/N_0` degradation results over a range of :math:`\alpha_\text{tx}` and 
+:math:`\alpha_\text{rx} = .3`, .4, and  .5. Later we provide heatmaps of :math:`E_b/N_0` degradation results over a range of :math:`\alpha_\text{tx}` and 
 :math:`\alpha_\text{rx}` scenarios. Figure :ref:`IQsetMPSK` shows IQ diagrams across orders of :math:`M` while varying :math:`\alpha_\text{rx}`. 
 The IQ diagrams plot the received symbols of the ideal matched filter system overlaid with the received symbols of a 
 mismatched filter system. 
@@ -593,20 +593,23 @@ Not shown here, higher orders of :math:`M` are more perturbed by the introductio
    as  excess bandwidth factors of .3, .4, .5. :label:`EYEsetMPSK`
 
 
-Table :ref:`mismatchloss1` shows the degradation over various BEP threshold values of 
+Figure :ref:`mismatchloss1` shows the degradation over various BEP threshold values of 
 :math:`\{10^{-5},10^{-6},10^{-7},10^{-8},10^{-9}\}`, :math:`M = 4`, 8, 16, and 32, and 
 many combinations of :math:`\alpha_\text{tx}/\alpha_\text{rx}\in [1/2, 2]`. The degradation is the measured 
 shift in :math:`E_b/N_0` in dB between ideal theory and a system with filter mismatch at a particular BEP threshold. 
 As :math:`M` increases and :math:`\alpha_\text{tx}/\alpha_\text{rx}` moves above or below 1 the 
 degradation gets worse. With the worse degradation happening at :math:`M = 32` and 
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` reaching the extremes of 1.2 and 2. Note degradation values 
-of less than 0.01 dB are considered insignificant and are entered in the table as zero values. 
+of less than 0.01 dB are considered insignificant and are entered in the heatmap as zero values. 
    
-.. table:: MPSK degradation resulting from filter mismatch. :label:`mismatchloss1`
-   :class: w
-   :widths: auto
+.. figure:: Table1_HeatMapNC.pdf 
+   :scale: 100%
+   :align: center
+   :figclass: w
 
-   +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+   MPSK degradation resulting from filter mismatch. :label:`mismatchloss1`
+
+.. +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
    |    | :math:`\mathbf{\alpha}_\text{tx}` | 0.25    | 0.25    | 0.25    | 0.25    | 0.25    | 0.3     | 0.35    | 0.4     | 0.45    | 0.5     |
    +----+-----------------------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
    |    | :math:`\mathbf{\alpha}_\text{rx}` | 0.3     | 0.35    | 0.4     | 0.45    | 0.5     | 0.25    | 0.25    | 0.25    | 0.25    | 0.25    |
@@ -680,16 +683,19 @@ between symbols we expected large :math:`E_b/N_0` degradation will occur in the 
    :math:`M=16, 256`; :math:`\alpha_\text{tx} = .25` fixed across all columns, while :math:`\alpha_\text{rx}` increases with 
    column number as .3, .4, .5. :label:`IQsetMQAM`
 
-Table :ref:`mismatchloss2` repeats Table :ref:`mismatchloss1` for MQAM. Results are similar for low modulation :math:`M`, 
+Figure :ref:`mismatchloss2` repeats Figure :ref:`mismatchloss1` for MQAM. Results are similar for low modulation :math:`M`, 
 but the degradation for 256QAM is more serious than 32MPSK. This is not surprising when one considers the IQ diagrams, 
 i.e., signal points are closer in MQAM than MPSK. 
 
 
-.. table:: MQAM degradation resulting from filter mismatch. :label:`mismatchloss2`
-   :class: w
-   :widths: auto
+.. figure:: Table2_HeatMapNC.pdf 
+   :scale: 100%
+   :align: center
+   :figclass: w
 
-   +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
+   MQAM degradation resulting from filter mismatch. :label:`mismatchloss2`
+
+.. +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    |     | :math:`\mathbf{\alpha}_\text{tx}` | 0.25     | 0.25     | 0.25    | 0.25    | 0.25    | 0.3      | 0.35     | 0.4     | 0.45    | 0.5     |
    +-----+-----------------------------------+----------+----------+---------+---------+---------+----------+----------+---------+---------+---------+
    |     | :math:`\mathbf{\alpha}_\text{rx}` | 0.3      | 0.35     | 0.4     | 0.45    | 0.5     | 0.25     | 0.25     | 0.25    | 0.25    | 0.25    |
@@ -782,7 +788,7 @@ circularly symmetric about the ideal symbol points. In general these *cluster cl
 from ISI, appear biased toward the center of the IQ diagram. Characterizing the cluster cloud probability 
 density function could serve as an alternative to SA-BEP technique presented in this paper.
 
-A second interesting observation is that the degradation values in the tables are essentially symmetric for both MPSK and 
+A second interesting observation is that the degradation values in the heatmaps are essentially symmetric for both MPSK and 
 MQAM, with regard to the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse. What this means is that the  
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse give essentially the same :math:`E_b/N_0` 
 dB degradation values. Does this make sense? The signal path is identical since the same two filters are 
@@ -792,7 +798,7 @@ the second filter, which is the receiver input. If the :math:`\alpha_\text{tx}/\
 more WGN arrives at the receiver decision stage, but more signal energy also enters the receiver, in spite of being mismatched. 
 If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is greater than one less WGN arrives at the receiver decision 
 stage, but less signal energy also enters the receiver, again in spite of being mismatched. Although a 
-conjecture at the start of this research, the SA-BEP simulation results in Tables :ref:`mismatchloss1` 
+conjecture at the start of this research, the SA-BEP simulation results in Figures :ref:`mismatchloss1` 
 and :ref:`mismatchloss2` support the above argument. 
 
 The use of SA-BEP modeling allowed this data to be quickly compiled and be easily repeatable. 
