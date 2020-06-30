@@ -549,7 +549,7 @@ However, on the far right we see a more extreme case of mismatch filtering resul
 between symbols it is expected that higher orders of :math:`M` are more affected by mismatch filtering.
 
 
-.. figure:: IQ_diagram_set_MPSK.pdf
+.. figure:: IQ_diagram_set_MPSK.png
    :scale: 110%
    :align: center
    :figclass: w
@@ -674,7 +674,7 @@ However, on the far right we see a more extreme case of mismatch filtering resul
 between symbols we expected large :math:`E_b/N_0` degradation will occur in the BEP plots.
 
 
-.. figure:: IQ_diagram_set_MQAM.pdf
+.. figure:: IQ_diagram_set_MQAM.png
    :scale: 110%
    :align: center
    :figclass: w
