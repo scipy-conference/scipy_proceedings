@@ -64,15 +64,14 @@ Morphological perturbations of organellar structures inside cells are useful for
 
 Prior works have shown that the Mtb pathogen alters the shape of mitochondrial structures to disrupt vital functions provided by the organelle so that it can successfully invade a host :cite:`dubey16, Cumming18`. Modeling these perturbed subcellular structures for analysis is difficult because mitochondria are amorphous, spatially diffuse structures whose morphology exists within a dynamic continuum, ranging from fragmented individual mitochondrion to complex interconnected networks :cite:`ferree12`. The morphology of mitochondria transitions between many states along its spectrum, as a result of fission and fusion events :cite:`song08, suen08` and the observation of these morphological changes is referred to as mitochondrial dynamics :cite:`ferree12`. Thus, understanding mitochondrial dynamics is useful for gaining insight regarding a host’s response to infections and cellular invasions.
 
-.. figure:: figures/llo_dynamics.png
-   :scale: 22%
-   
-   Frames from a microscopy video depicting the mitochdonria in cell before and after a fission event. :label:`fission`
 
-.. figure:: figures/mdivi_dynamics.png
-   :scale: 22%
 
-   Frames from a microscopy video depicting the mitochdonria in cell before and after a fusion event. :label:`fusion`
+.. figure:: figures/dynamics.png
+   :scale: 30%
+
+   Frames from two different live microscopy videos depicting the mitochdonria before and after morphological events. 
+
+in cell before and after a fission event. :label:`fission`
 
 Early approaches to assessing mitochondrial dynamics involved manually observing fission and fusion events in live microscopy imagery. A notable early study tagged two distinct groups of mitochondria with red and green fluorescent proteins before introducing the two groups together in the presence of polyethylene glycol (PEG) to induce fusion, then manually observed the resultant heterogeneous fluorescent structures to understand mitochondrial dynamics :cite:`legros02`. However, manual microscopy studies are labor-intensive and fail to provide a high-throughput for screenings :cite:`ferree12`. These shortcomings have motivated many to research methodologies that are more automated by quantitatively modelling and assessing live microscopy imagery of mitochondria :cite:`durden18, song08, mitra10`.
 
