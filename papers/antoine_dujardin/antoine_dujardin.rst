@@ -67,9 +67,11 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 .. figure:: FXS-overview.jpg
 
    Fluctuation X-ray Scattering experiment setup. :label:`fig:fxs`
-
+   
    In an FXS experiment, femtosecond pulses from an X-ray Free Electron Laser are shot at a stream of particles in solution.
-   The scattered light forms a diffraction pattern on the detector, aggregating the contributions of the different particles.
+   The scattered light forms a diffraction pattern on the detector, aggregating the contributions of the different particles. [#]_
+
+.. [#] *Copyright © P. Zwart, under the CC BY-SA 4.0 license.*
 
 While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
 
@@ -328,7 +330,7 @@ To test our framework, a dataset of 100,000 single-particle diffraction images w
 
    The 2-point correlation function was computed on the simulated dataset as described in the present document. It was then filtered, reduced, and fed to a reconstruction algorithm described elsewhere :cite:`Pande2018,Donatelli2015` to yield the reconstruction above.
 
-To obtain this result, the correlation function was filtered and reduced using the Multi-Tiered Iterative Filtering (M-TIF) algorithm :cite:`Pande2018`. In particular, M-TIF uses several iterations of Tikhonov regularization, linear pseudoinversion, and principal component analysis to fit three tiers of expansions to the data: a Legendre polynomial expansion in theta, a Hankel-transformed Fourier-Bessel expansion in :math:`q` and :math:`q’`, and a low-rank eigenvalue decomposition on the matrices of Fourier-Bessel coefficients. The number of terms needed in each expansion step is limited and determined by an upper-bound diameter estimate of the protein sample. Once these coefficients are determined, their corresponding series expansions are computed to produce a filtered correlation function, along with a reduced set of Legendre polynomial expansion coefficients on a coarse :math:`q`-grid, which is used in the reconstruction (See :cite:`Pande2018` for more details on the filtering).
+To obtain this result, the correlation function was filtered and reduced using the Multi-Tiered Iterative Filtering (M-TIF) algorithm :cite:`Pande2018`. In particular, M-TIF uses several iterations of Tikhonov regularization, linear pseudo inversion, and principal component analysis to fit three tiers of expansions to the data: a Legendre polynomial expansion in theta, a Hankel-transformed Fourier-Bessel expansion in :math:`q` and :math:`q’`, and a low-rank eigenvalue decomposition on the matrices of Fourier-Bessel coefficients. The number of terms needed in each expansion step is limited and determined by an upper-bound diameter estimate of the protein sample. Once these coefficients are determined, their corresponding series expansions are computed to produce a filtered correlation function, along with a reduced set of Legendre polynomial expansion coefficients on a coarse :math:`q`-grid, which is used in the reconstruction (See :cite:`Pande2018` for more details on the filtering).
 
 These Legendre expansion coefficients can be directly related to the protein sample. In particular, the coefficients are equal to the inner products of spherical harmonic coefficients of the 3D intensity function, which is defined as the squared magnitude of the Fourier transform of the sample’s electron density :cite:`Kam1977`. This relation can be expressed as two tiers of phase problems that need to be solved to reconstruct the underlying density: a hyperphase problem to recover the intensity function from the Legendre coefficients, and the classical scalar phase problem to recover the density from the intensity. In order to reconstruct the sample, we apply the Multi-Tiered Iterative Phasing (M-TIP) algorithm :cite:`Donatelli2015` to the Legendre coefficients computed from the M-TIF filtering/reduction procedure. M-TIP works by using a set of computationally efficient projection operators in a self-consistent iteration to simultaneously solve both tiers of phase problems and reconstruct the sample from the Legendre coefficients.
 
