@@ -659,7 +659,10 @@ Since we use a modified VampPrior, the KL Divergence is between a single Gaussia
 and a mixture of Gaussians, the prior, and thus intractable. In order to estimate this, we 
 employ a Monte Carlo estimation technique, manually calculate the difference in log-probabilities for each 
 distribution at every pass of the loss function, asserting that throughout training these 
-values approximate the ideal KL Divergence.
+values approximate the ideal KL Divergence. All figures were generated using Matplotlib :cite:`matplot`.
+The current project can be found at our github repository_.
+
+.. _repository: https://github.com/quinngroup/CiliaRepresentation
 
 
 Conclusion
@@ -715,7 +718,4 @@ Acknowledgements
 This study was supported in part by Google Cloud. We gratefully acknowledge the support of NVIDIA Corporation 
 with the donation of the Titan X Pascal GPU used for this research. This study was supported in part by 
 NSF CAREER #1845915. The PI would like to thank all the students who made this work possible, 
-especially the graduates of the class of 2020 who persevered in making the SciPy submission under the 
-most extraordinary circumstances one could have possibly imagined. The PI would also like to acknowledge 
-the students who are continuing to work on this project, bringing its future goals to eventual fruition.
-
+especially the graduates of the class of 2020 who persevered even under extraordinary circumstances. 
