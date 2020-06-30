@@ -331,7 +331,10 @@ To obtain this result, the correlation function was filtered and reduced using t
 
 These Legendre expansion coefficients can be directly related to the protein sample. In particular, the coefficients are equal to the inner products of spherical harmonic coefficients of the 3D intensity function, which is defined as the squared magnitude of the Fourier transform of the sample’s electron density :cite:`Kam1977`. This relation can be expressed as two tiers of phase problems that need to be solved to reconstruct the underlying density: a hyperphase problem to recover the intensity function from the Legendre coefficients, and the classical scalar phase problem to recover the density from the intensity. In order to reconstruct the sample, we apply the Multi-Tiered Iterative Phasing (M-TIP) algorithm :cite:`Donatelli2015` to the Legendre coefficients computed from the M-TIF filtering/reduction procedure. M-TIP works by using a set of computationally efficient projection operators in a self-consistent iteration to simultaneously solve both tiers of phase problems and reconstruct the sample from the Legendre coefficients.
 
-Interestingly, the size of the correlation function only increases with the desired resolution and is independent from the number of images in the dataset. Therefore, the post-processing of the correlation function and the reconstruction algorithm do not scale with the amount of data being processed.
+Interestingly, one might note from Equations :ref:`eq:intro`, :ref:`eq:fourier`, or :ref:`eq:A` that computing the correlation function involes a sum over all the images.
+The output of that computation, however, no longer depends on the number of images in the dataset.
+The size of the correlation function :math:`C_2(q, q', \Delta\phi)` is, therefore, only dependant on the resolution over the :math:`q`, :math:`q’`, and :math:`\Delta\phi` axes.
+As a consequence, the post-processing of the correlation function and the reconstruction algorithm do not scale with the amount of data being processed.
 
 Conclusion
 ----------
