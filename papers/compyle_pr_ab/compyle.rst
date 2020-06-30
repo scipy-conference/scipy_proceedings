@@ -392,7 +392,7 @@ and 3 without the type declarations.
             irij2 = 1.0 / rij2
             irij6 = irij2 * irij2 * irij2
             irij12 = irij6 * irij6
-            pe[i] += (4 * (irij12 - irij6))
+            pe[i] += (2 * (irij12 - irij6))
             f_base = 24 * irij2 * (2 * irij12 - irij6)
 
             fx[i] += f_base * xij
@@ -458,7 +458,6 @@ The simulation can then be executed simply as follows,
               ymin, ymax, m, dt, self.num_particles)
         step2(x, y, vx, vy, fx, fy, pe, xmin, xmax,
               ymin, ymax, m, dt, self.num_particles)
-        curr_t += dt
 
 We have used a fixed wall non-periodic boundary condition for our
 implementation. The details on the implementation of the boundary condition
@@ -837,19 +836,10 @@ We have also implemented a 3D version of the simulation with both periodic and
 non-periodic boundary conditions. We compared our implementation with HooMD_
 for a 3D periodic simulation on an NVIDIA Tesla P100 GPU. Figure
 :ref:`time-hoomd` shows the results of this comparison. We found our
-implementation to be about 2x faster than HooMD. Figures :ref:`hoomd-pe` and
-:ref:`hoomd-ke` show the kinetic and potential energy for 1,500 particles
-simulated for 10,000 timesteps in periodic boundary conditions.
-
-.. figure:: hoomd_pe.png
-
-    Potential energy of system of 1,500 particles using HooMD and our implementation
-    :label:`hoomd-pe`
-
-.. figure:: hoomd_ke.png
-
-    Kinetic energy of system of 1,500 particles using HooMD and our implementation
-    :label:`hoomd-ke`
+implementation to be about 2x faster than HooMD. To check the correctness of our
+implementation, we have also provided a script to generate plots of potential
+and kinetic energy of the system at every 100 timesteps using HooMD and our
+implementation.
 
 All of the code discussed above is available in the examples directory of the
 Compyle repository `here
