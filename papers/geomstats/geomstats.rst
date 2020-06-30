@@ -6,7 +6,7 @@
 
 :author: Nicolas Guigui
 :orcid: 0000-0002-7901-0732
-:institution: Universite Cote d'Azur, Inria
+:institution: Université Côte d'Azur, Inria
 :email: nicolas.guigui@inria.fr
 
 :author: Hadi Zaatiti
