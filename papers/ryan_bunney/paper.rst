@@ -312,7 +312,8 @@ are described by links, along with the related data-products:
            },
            ...
 
-For example, looking at Figure :ref:`heftcalc` we see the dependency between tasks 0 and 1, and the weight $18$ on the edge. This is reflected in the above component of the JSON file.
+For example, looking at Figure :ref:`heftcalc` we see the dependency between tasks 0 and 1, and the weight 18 on the edge. This is reflected in the above component of the JSON file.
+
 
 NetworkX is used to form the base-graph structure for the workflow; it
 allows the user to specify nodes as Python objects, so tasks are stored
