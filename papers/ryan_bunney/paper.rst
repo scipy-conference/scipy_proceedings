@@ -29,8 +29,7 @@ heterogeneity of the environments on which they are run, continues to increase;
 in order to deal with this, the algorithmic approaches to executing these
 applications must also be adapted and improved to deal with this increased
 complexity. An example of this is workflow scheduling, algorithms for which are
-continually being developed and optimised for different science use cases,
-environments, and objectives; however, in many systems that are used to deploy
+continually being developed; however, in many systems that are used to deploy
 science workflows for major science projects, the same algorithms and
 heuristics are used for scheduling. We have developed SHADOW, a workflow-oriented
 scheduling algorithm framework built to address an absence of open
@@ -45,7 +44,7 @@ provided to improve the productivity of algorithm developers in experimenting
 with their new algorithms over a large variety of workflows and computing
 environments. SHADOWGen also has a translation utilities that will convert from
 other formats, like the Pegasus DAX file, into the SHADOW-JSON configuration.
-SHADOW is open-sourced and uses key SciPy libraries; the intention is for the
+SHADOW is open-source and uses key SciPy libraries; the intention is for the
 framework to become a reference implementation of scheduling algorithms, and
 provide algorithm designers an opportunity to develop and test their own
 algorithms with  the framework. SHADOW code is hosted on GitHub at
@@ -56,8 +55,11 @@ the repository, as well as at https://shadowscheduling.readthedocs.org.
 Introduction
 ------------
 
-To obtain useful results from the raw data produced by science experiments, a series of scripts or applications is often required to produce tangible results. These application pipelines are referred to as Science Workflows :cite:`alkhanak2016`, which are typically a Directed-Acyclic Graph (DAG) representation of the dependency relationships between application tasks in a pipeline. The processing of Science Workflows is therefore an example of the DAG-Task scheduling problem, which is in the class of NP-Hard problems :cite:`kwok1999`. Science workflow scheduling
-is a field with varied contributions in algorithm development and
+To obtain useful results from the raw data produced by science experiments, a series of scripts or applications is often required to produce tangible results. These application pipelines are referred to as Science Workflows :cite:`alkhanak2016`, which are typically a Directed-Acyclic Graph (DAG) representation of the dependency relationships between application tasks in a pipeline. An example of science workflow usage is Montage [#]_, which takes sky images and
+re-projects, background corrects and add astronomical images into custom
+mosaics of the sky :cite:`bharathi2008,juve2013`. A Montage pipeline may consist of more than 10,000 jobs, perform more than 200GB of I/O (read and write), and take 5 hours to run :cite:`juve2013`. This would be deployed using
+a workflow management system (for example, Pegasus :cite:`deelman2015`), which coordinates the deployment and execution of the workflow. It is this workflow management system that passes the workflow to a workflow scheduling algorithm, which will pre-allocate the individual application tasks to nodes on the execution environment (e.g. a local grid or a cloud environment) in preparation for the workflow's execution.
+The processing of Science Workflows is an example of the DAG-Task scheduling problem, a classic problem at the intersection of operations research and high performance computing :cite:`kwok1999`. Science workflow scheduling is a field with varied contributions in algorithm development and
 optimisation, which address a number of different sub-problems within the
 field :cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
 Unfortunately, implementations of these contributions are difficult to find;
@@ -100,13 +102,10 @@ Machine and Deep Learning, SHADOW provides a frictionless opportunity to
 integrate with the frameworks and libraries commonly used in those domains.
 
 
-
 Workflow Scheduling
 ~~~~~~~~~~~~~~~~~~~
 
-The workflow scheduling problem is a known NP-Hard
-problem :cite:`coffman1972,kwok1999,kousalya2017`. It
-is commonly represented in the literature as a Directed Acyclic Graph
+A workflow is commonly represented in the literature as a Directed Acyclic Graph
 (DAG) :cite:`casavant1988,chaudhary1993,ullman1975,kwok1999`; a
 sequence of tasks will have precedence constraints that limit when a task may
 start. A DAG task-graph is represented formally as a graph :math:`G = (V,E)`, where
@@ -114,7 +113,7 @@ start. A DAG task-graph is represented formally as a graph :math:`G = (V,E)`, wh
 edges :cite:`kwok1999`; an example is featured in Figure :ref:`refdag`, which
 will be build upon as the paper progresses. Vertices and Edges represent communication and
 computation costs respectively.  The objective of the DAG-scheduling problem
-is to minimise the execution length of the final schedule; this is referred to
+is to map tasks to a set of resources in an order and combination that minimise the execution length of the final schedule; this is referred to
 as the *makespan*.
 
 .. figure:: fig/heft_without_tables.png
@@ -131,36 +130,7 @@ this would likely be computationally inefficient, as well taking as much longer 
 necessary. As a result, science projects that have computationally- and
 data-intensive programs, that are interrelated, have adopted the
 DAG-scheduling model for representing their compute pipelines; this is where
-science workflow scheduling is derived.
-
-An example of science workflow usage is Montage [#]_, which takes sky images and
-re-projects, background corrects and add astronomical images into custom
-mosaics of the sky :cite:`bharathi2008,juve2013`. This workflow is deployed on
-a workflow management system (for example, Pegasus :cite:`deelman2015`), which coordinates the deployment and execution of the workflow. It is this workflow management system that passes the workflow to a workflow scheduling algorithm, which will pre-allocate the individual application tasks to nodes on the execution environment (e.g. a local grid or a cloud environment) in preparation for the workflow's execution.
-
-Existing approaches
-~~~~~~~~~~~~~~~~~~~
-It should be noted that existing work already addresses testing workflow
-scheduling algorithms in real-world environments; tools like SimGrid
-:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002`, and
-its extensions, CloudSim :cite:`calheiros2011` and WorkflowSim
-:cite:`chen2012a`, all feature strongly in the literature. These are
-excellent resources for determining the effectiveness of the implementations
-at the application level; however, they do not  provide a standardised
-repository of existing algorithms, or a template workflow model that can be
-used to ensure consistency across performance testing. Current implementations
-of workflow scheduling algorithms may be found in a number of different
-environments; for example, HEFT and dynamic-HEFT implementations exist in
-WorkflowSim [#]_ , but one must traverse large repositories in order to reach
-them. There are also a number of implementations that are present on
-open-source repositories such as GitHub, but these are not always official
-releases from papers, and it is difficult to keep track of multiple
-implementations to ensure quality and consistency.  SHADOW is intending to solve the meta of a 'meta-problem' with respect to task and workflow scheduling, by wrapping implementations of these algorithms in a popular language (Python) and providing a testing environment alongside them. Kwok and Ahmed
-:cite:`kwok1999` provide a comprehensive overview of the metrics and
-foundations of what is required when benchmarking DAG-scheduling algorithms,
-Maurya et al. :cite:`maurya2018` extend this work and describe key features of
-a potential framework for scheduling algorithms; SHADOW takes inspiration
-from, and extends, both approaches.
+science workflow scheduling is derived. 
 
 
 Design and Core Architecture
@@ -193,9 +163,6 @@ three important outcomes are achieved:
    to follow the approaches taken by these implementations, but they provide a
    useful starting point for those interested in developing their own.
 
-Additionally, by using the ``NetworkX.DiGraph`` as the storage object
-for the workflow structure, users may extend the SHADOW ``Workflow`` object in
-any way as they would a ``NetworkX`` object.
 
 SHADOW is not intended to accurately simulate the execution of a
 workflow in an real-world environment; for example, working with delays in
@@ -257,10 +224,10 @@ The ``models`` module provides the ``Workflow`` class, the foundational data
 structure of shadow. Currently, a ``Workflow`` object is initialised using a
 JSON configuration file that represents the underlying DAG structure of the
 workflow, along with storing different attributes for task-nodes and edges in
-Figure :ref:`heftcalc` (which is an extension of Figure :ref:`refdag`). 
+Figure :ref:`heftcalc` (which is an extension of Figure :ref:`refdag`).
 
 
-.. table:: Table of Task (Giga) FLOP requirements, with the (Giga) FLOP/second provided by each respective machine :label:`hefttable`
+.. table:: Table of Task (Giga) FLOP requirements, with the (Giga) FLOP/second provided by each respective machine. It is intended to be applied to Figure :ref:`heftcalc`. :label:`hefttable`
 
    +------------+---------------+-----------+---------+
    |    Workflow and Costs      |  Environment        |
@@ -293,9 +260,10 @@ These attributes are implicitly defined within the configuration
 file; for example, if the task graph has compute demand (as total
 number of FLOPs/task) but not memory demand (as average GB/task), then
 the Workflow object is initialised without memory, requiring no
-additional input from the developer. The following example is based on
-the original graph presented in the HEFT algorithm, and demonstrates the
-configuration file and how it is initialised:
+additional input from the developer. 
+
+
+Using the example workflow shown in Figures :ref:`refdag` and :ref:`heftcalc`, we can demonstrate how to initialise a ``Workflow`` in SHADOW, and what options exist for extending or adapting the object. 
 
 .. code-block:: python
 
@@ -304,7 +272,7 @@ configuration file and how it is initialised:
 
 The ``heft.json`` file contains the graph structure, based the JSON dump
 received when using networks. Nodes and their respective costs
-(computation, memory, monetary etc.) are stored with their IDs
+(computation, memory, monetary etc.) are stored with their IDs. 
 
 .. code-block:: python
 
@@ -325,9 +293,9 @@ received when using networks. Nodes and their respective costs
            ...
        ],
 
+It is clear from Figure HEFT
 Edges in the graph, which are the dependency relationship between tasks, 
-are
-described by links, along with the related data-products:
+are described by links, along with the related data-products:
 
 .. code-block:: python
 
@@ -344,9 +312,14 @@ described by links, along with the related data-products:
            },
            ...
 
+For example, looking at Figure :ref:`heftcalc` we see the dependency between tasks 0 and 1, and the weight $18$ on the edge. This is reflected in the above component of the JSON file.
+
 NetworkX is used to form the base-graph structure for the workflow; it
 allows the user to specify nodes as Python objects, so tasks are stored
-using the SHADOW ``Task`` object structure.
+using the SHADOW ``Task`` object structure. By using the
+``NetworkX.DiGraph`` as the storage object for the workflow structure, users
+familiar with NetworkX may use with the SHADOW ``Workflow`` object in any way they would normally interact with a NetworkX ``Graph``.
+
 
 In addition to the JSON configuration for the workflow DAG, a Workflow object
 also requires an ``Environment`` object. ``Environment`` objects represent the
@@ -354,7 +327,9 @@ compute platform on which the Workflow is executed; they are add to
 ``Workflow`` objects in the event that different environments are being
 analysed. The environment is also specified in JSON; currently, there is no
 prescribed way to specify an environment in code, although it is possible to
-do so if using JSON is not an option.
+do so if using JSON is not an option. 
+
+In our example, we have three machines on which we are attempting to schedule the workflow from Figure :ref:`heftcalc`. The different performance of each machine is described in Table :ref:`hefttable`, with the JSON equivalent below:
 
 
 .. code-block:: python
@@ -401,7 +376,8 @@ Configuration files may be generated in a number of ways, following a variety
 of specifications, using the SHADOWGen utility.
 
 It is also possible to use pre-calculated costs (i.e. completion time in
-seconds) when scheduling with SHADOW.
+seconds) when scheduling with SHADOW. 
+
 
 .. figure:: fig/heft_example.png
 
@@ -414,7 +390,8 @@ scheduling workflows, but is a common approach used in the scheduling
 algorithm literature :cite:`kwok1999,kwok1999a,sakellariou2004,barbosa2008,yu2006`; an example of this is shown in Figure
 :ref:`heftnocalc`. This can be achieved by adding a list of
 costs-per-tasks to the workflow specification JSON file, in addition to the
-following header:
+following header. For example, if instead of the total FLOPS we had provided to us in Table :ref:`hefttable`, we instead had timed the run-time of the applications on each machine separately, the JSON for Figure :ref:`heftcalc` would reflect the following:
+
 
 .. code-block:: python
 
@@ -624,35 +601,6 @@ This includes the following:
    convert this PGT into a SHADOW-based JSON workflow.
 
 
-.. _ssec:existing:
-
-Existing approaches
--------------------
-
-A majority of work published in workflow scheduling will use workflows
-generated using the approach laid out in :cite:`bharathi2008`. The five
-workflows described in the paper (Montage, CyberShake, Epigenomics, SIPHT and
-LIGO) had their task run-time, memory and I/O rates profiled, from which they
-created a WorkflowGenerator tool [#]_. This tool uses the distribution sizes
-for run-time etc., without requiring any information on the hardware on which
-the workflows are being scheduled. This means that the characterisation is
-only accurate for that particular hardware, if those values are to be used
-across the board; testing on heterogeneous systems, for example, is not
-possible unless the values are to be changed.
-
-This is dealt with in varied ways across the literature. For example,
-:cite:`rodriguez2018` use the distributions from :cite:`bharathi2008` paper,
-and change the units from seconds to MIPS, rather than doing a conversion
-between the two. Others use the values taken from distribution and workflow
-generator, without explaining how their run-time differ between resources
-:cite:`abrishami2013,malawski2015`; Malawski et al. generate different workflow
-instances. using parameters and task run-time distributions from real
-workflow traces, but do not provide these parameters :cite:`malawski2015`.
-Recent research from :cite:`wang2019` still uses the workflows identified in
-:cite:`bharathi2008,juve2013`, but only the structure of the workflows is
-assessed, replacing the tasks from the original with other, unrelated
-examples.
-
 Cost generation in SHADOWGen
 ------------------------------
 
@@ -686,13 +634,36 @@ Cost generation in SHADOWGen
       \end{table*}
 
 
-The cost generation method used by SHADOWGen is a normalised-cost
-approach, in which the values calculated for the run-time, memory, and
-I/O for each tasks is derived from the normalised size as profiled
-in :cite:`juve2013` and :cite:`bharathi2008`.
-This way, the costs per-workflow are indicative of the relative length
-and complexity of each task, and are more likely to transpose across
-different hardware configurations than using the varied approaches in
+A majority of work published in workflow scheduling will use workflows
+generated using the approach laid out in :cite:`bharathi2008`. The five
+workflows described in the paper (Montage, CyberShake, Epigenomics, SIPHT and
+LIGO) had their task run-time, memory and I/O rates profiled, from which they
+created a WorkflowGenerator tool [#]_. This tool uses the distribution sizes
+for run-time etc., without requiring any information on the hardware on which
+the workflows are being scheduled. This means that the characterisation is
+only accurate for that particular hardware, if those values are to be used
+across the board; testing on heterogeneous systems, for example, is not
+possible unless the values are to be changed.
+
+This is dealt with in varied ways across the literature. For example,
+:cite:`rodriguez2018` use the distributions from :cite:`bharathi2008` paper,
+and change the units from seconds to MIPS, rather than doing a conversion
+between the two. Others use the values taken from distribution and workflow
+generator, without explaining how their run-time differ between resources
+:cite:`abrishami2013,malawski2015`; Malawski et al. generate different workflow
+instances. using parameters and task run-time distributions from real
+workflow traces, but do not provide these parameters :cite:`malawski2015`.
+Recent research from :cite:`wang2019` still uses the workflows identified in
+:cite:`bharathi2008,juve2013`, but only the structure of the workflows is
+assessed, replacing the tasks from the original with other, unrelated
+examples.
+
+SHADOWGen differs from the literature by using a normalised-cost approach, in
+which the values calculated for the run-time, memory, and I/O for each tasks
+is derived from the normalised size as profiled in :cite:`juve2013` and
+:cite:`bharathi2008`. This way, the costs per-workflow are indicative of the
+relative length and complexity of each task, and are more likely to transpose
+across different hardware configurations than using the varied approaches in
 the literature.
 
 .. math::
@@ -749,6 +720,33 @@ Table :ref:`table2`, it is clear that
 mAdd and mBackground are still the longest running and I/O intensive
 tasks, making the units less of a concern.
 
+
+Alternatives to SHADOW
+----------------------
+
+It should be noted that existing work already addresses testing workflow
+scheduling algorithms in real-world environments; tools like SimGrid
+:cite:`casanova`, BatSim :cite:`dutot2017`, GridSim :cite:`buyya2002`, and its
+extensions, CloudSim :cite:`calheiros2011` and WorkflowSim :cite:`chen2012a`,
+all feature strongly in the literature. These are excellent resources for
+determining the effectiveness of the implementations at the application level;
+however, they do not  provide a standardised repository of existing
+algorithms, or a template workflow model that can be used to ensure
+consistency across performance testing. Current implementations of workflow
+scheduling algorithms may be found in a number of different environments; for
+example, HEFT and dynamic-HEFT implementations exist in WorkflowSim [#]_ , but
+one must traverse large repositories in order to reach them. There are also a
+number of implementations that are present on open-source repositories such as
+GitHub, but these are not always official releases from papers, and it is
+difficult to keep track of multiple implementations to ensure quality and
+consistency. The algorithms that form the ``algorithms`` module in SHADOW are
+open and continually updated, and share a consistent workflow model. Kwok and
+Ahmed :cite:`kwok1999` provide a comprehensive overview of the metrics and
+foundations of what is required when benchmarking DAG-scheduling algorithms,
+Maurya et al. maurya2018` extend this work and describe key features of a
+potential framework for scheduling algorithms; SHADOW takes inspiration from,
+and extends, both approaches.
+
 Conclusion
 ----------
 
@@ -775,7 +773,7 @@ Computing facilities (e.g ``class PawseyGalaxy``). The motivation behind
 ``hpconfig`` is that classes can be quickly unwrapped into a large
 cluster or system, without having large JSON files in the repository or
 on disk; they also improve readability, as specification data is
-represented clearly as class attributes. 
+represented clearly as class attributes.
 
 .. ::
 
