@@ -1,13 +1,14 @@
 :author: Meekail Zain
 :email: meekail.zain@uga.edu
-:institution: These authors contributed equally
 :institution: Computer Science Department, Franklin College of Arts and Sciences
 :institution: Mathematics Department, Franklin College of Arts and Sciences
+:equal-contributor:
+:orcid: 0000-0002-4624-7960
 
 :author: Sonia Rao
 :email:
 :institution: Computer Science Department, Franklin College of Arts and Sciences
-:institution: These authors contributed equally
+:equal-contributor:
 
 :author: Nathan Safir
 :email: 
