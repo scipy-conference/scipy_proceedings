@@ -180,7 +180,7 @@ synchronization errors. The bit error probability (BEP), :math:`P_e`, in a pract
 is the number of bit errors divided by the total number 
 of transferred bits during a studied time interval. The BEP curves are plotted as 
 :math:`\log_{10} P_e` versus the received energy per bit-to-noise power spectral density ratio in dB, i.e., 
-:math:`10\log_10(E_b/N_0)`. The shape of the curve is *waterfall like*
+:math:`10\log_{10}(E_b/N_0)`. The shape of the curve is *waterfall like*
 with a theoretical BEP curve to the left of curves for real-world systems. A system with impairments in the end-to-end 
 transmission path, including the demodulator (think symbol classifier), increase 
 the BEP for a given operating scenario. In a Wireless LAN or cable modem, for example, a low BEP is required to insure 
@@ -234,7 +234,7 @@ by time shifting and truncating and then sampling by letting
 as a result of truncation as noted in both [Harris]_ and [Xing]_. 
 For small :math:`M` values :math:`\pm 6T` is acceptable, but for the higher schemes considered in 
 this paper we found increasing the filter
-length :math:`\pm 8` was required to avoid residual errors under matched pulse shape conditions. The residual 
+length to :math:`\pm 8T` was required to avoid residual errors under matched pulse shape conditions. The residual 
 errors at the zero crossings shown in the bottom half of Figure :ref:`SRCpulseMFpulseOutput`, but now for an 
 ensemble transmit symbols, is shown in Figure :ref:`SRCresidual`. Here we see that the errors 
 increase as :math:`\alpha` decreases.
