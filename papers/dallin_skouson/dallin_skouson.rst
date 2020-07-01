@@ -192,7 +192,9 @@ In addition, the metadata dictionary can be used to contain any desired user dat
 Callback Framework
 ------------------
 
-Additionally SpyDrNet includes a callback framework. These callbacks allow users to create plugins that can keep track of the current state of the netlist. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
+Some potential use cases for SpyDrNet could involve making incremental changes to the netlist, and following each of them up with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. These checks could be performed over the whole netlist datastructure on user demand which would add complexity for the end user. To fill this gap a callback framework was implemented.
+
+These callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
 
 Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the API defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
 
