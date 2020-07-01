@@ -33,7 +33,7 @@ Performing Netlist Analysis and Transformations Using SpyDrNet
 
 .. class:: keywords
 
-   Hardware Design, Netlists, SpyDrNet, EDIF
+   Hardware Design, Netlists, EDA, CAD
 
 Introduction
 ------------
@@ -94,16 +94,21 @@ larger number of formats and unique applications.
 Related Work
 ------------
 
-SpyDrNet is not the first tool of its kind. The predecessor to SpyDrNet, BYU EDIF Tools :cite:`BYUediftools`, is a Java 
-based tool released in 2008 intended primarily for use with netlists targeting FPGAs produced by Xilinx. Xilinx itself 
-offers a robust tool command language (TCL) scripting environment for querying and modifying a netlist among other 
-specialized implementation tasks; a custom CAD tool framework has taken advantange of this environment :cite:`tincr`. A 
-tool similar to SpyDrNet built for hardware description languages (HDLs) is LiveHD :cite:`livehd`. LiveHD is an 
-infrastructure focused on the synthesis and simulation of HDLs. It looks more at the whole design cycle (from synthesis,
-to simulation, to place and route, and tapeout) with rapid turnaround for small changes, but it may also feasibly be 
-used to work with structural netlists. A tool more specific to Xilinx FPGA implementation is RapidWright 
-:cite:`rapid_wright`. It also contains a netlist representation, and is taylored towards low-level physical 
-implementation.
+SpyDrNet is the first tool of its kind written in Python. Tools with functionality similar to SpyDrNet exist, but they
+tend to be tied to a specific device, architecture, netlist format, or vendor. Some tools with similar functionality 
+such as Vivado :cite:`vivado` or Verific :cite:`verific` are proprietary. Other tools such as RapidWright 
+:cite:`rapid_wright` are intended for customizing the low-level physical implementation of a netlist on a vendor 
+specific hardware platform. LiveHD :cite:`livehd` is open-source tool that provides rapid synthesis and simulation 
+updates to small changes in hardware description languages (HDLs). Its framework and language support focuses on the 
+whole design cycle (from logic synthesis, to simulation, to place and route, and tapeout) whereas SpyDrNet focuses 
+specifically on working with structural netlists. SpyDrNet aims to provide a framework that is netlist format independent
+and generalized for use in a wide variety of applications.
+
+The predecessor to SpyDrNet, BYU EDIF Tools :cite:`BYUediftools`, is a Java based tool intended primarily for use with 
+netlists targeting FPGAs produced by Xilinx. The BYU EDIF tools provide two things. First, they provide an API for 
+working with EDIF netlists. Second, they provide a rich set of features for the automated insertion of redundancy. These 
+tools have been used extensively in reliability research :cite:`johnson_dwc,pratt_2008,Johnson:2010`. Using SpyDrNet, 
+the features included in the BYU EDIF tools can be made available to a wider range of applications.
 
 
 SpyDrNet Tool Flow
@@ -441,7 +446,7 @@ TMR has been applied using SpyDrNet. The current implementation selects subsets 
 Duplication With Compare 
 ************************
 
-.. figure:: dwc.png
+.. figure:: dwc.pdf
    :align: center
    :figclass: htbp
    
