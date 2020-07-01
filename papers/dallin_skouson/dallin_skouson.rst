@@ -220,12 +220,36 @@ Basic Functionality
 *******************
 Functionality is provided through the API to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The basic functionality includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
 
+Examples of some of the basic functionality are highlighted in the following code segment. Relationships, such as the reference member of the instances and the children of these references are members of the spydrnet objects. Additional key data can be accessed as members of the classes. Other format specific data can be accessed through dictionary lookups. Since the name is also key data but, is not required it can be looked up through either access method as noted in one of the single line comment.
+
+.. code-block:: python
+   
+   import spydrnet
+
+   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+   top_instance = netlist.top_instance
+  
+   def recurse(instance, depth):
+      '''print something like this:
+      top
+         child1
+             child1.child
+         child2
+             child2.child'''
+      s = depth * "\t"
+      #on the following line instance.name could be replaced with instance['NAME']
+      print(s, instance.name, "(", instance.reference.name, ")")
+      for c in instance.reference.children:  
+         recurse(c, depth + 1)
+   
+   recurse(top_instance, 0)
+
 Hierarchy
 *********
 
-Hierarchy is perhaps one of the most transparent features that is included in our tool. Hierarchy is by default a component of many netlist formats. One of the main advantages to including hierarchy in a design is the ability to abstract away some of the finer details on a level based system, while still including all of the information needed to build the design. The design’s hierarchy is represented in SpyDrNet by having instances of other definitions within existing definitions. This creates a structure similar to the file structure used by most modern computer file systems.
+Hierarchy is by default a component of many netlist formats. One of the main advantages to including hierarchy in a design is the ability to abstract away some of the finer details on a level based system, while still including all of the information needed to build the design. The design’s hierarchical information is maintained in SpyDrNet by having definitions instanced within other definitions.
 
-Hierarchy can slightly complicate some algorithms but it’s inclusion helps allow SpyDrNet to make the fewest possible changes to the design in an attempt to keep as much of the original format as possible. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to further analyze the impact of hierarchy on FPGA place and route steps.
+Hierarchy can slightly complicate some algorithms but it’s inclusion helps allow SpyDrNet to make the fewest possible changes to the design in an attempt to keep as much of the original format as possible. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to analyze the impact of hierarchy on later compilation steps.
 
 Flattening
 **********
@@ -233,6 +257,18 @@ Flattening
 SpyDrNet has the ability to flatten hierarchical designs. One method to remove hierarchy from a design is to move all of the sub components to the top level of the netlist repeatedly until each sub component at the top level is a terminal instance, where no more structural information is included below that instance’s level. In the example comparing hierarchy to files systems, flattening could be compared to moving each of the files in a file system directly into the root directory, then deleting the folders which contained them.
 
 Flattening was added to SpyDrNet because there are some algorithms which can be applied more simply on a flat design. Algorithms in which a flat design may be simpler to work with are graph analysis, and other algorithms where the connections between low level components are of interest.
+
+Included is an example of how one might flatten a netlist in spydrnet.
+
+.. code-block:: python
+
+   import spydrnet
+   from spydrnet.flatten import flatten
+
+   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+
+   #flattens in place. netlist will now be flat.
+   flatten(netlist)
 
 Uniquify
 ********
@@ -242,6 +278,18 @@ Uniquify is the name we give to the algorithm which helps ensure that each non-t
 The uniquify algorithm is very useful when modifications are desired on a specific part of the netlist but not to all instances of the particular component. For example in the four bit adder, if we assume that the highest bit does not need a carry out, the single bit adder there could be simplified. However, if we make modifications to the single bit adder before uniquifying the modifications will apply to all four adders. If we instead uniquify first then we can easily modify only the adder of interest.
 
 Currently :code:`Uniquify` is implemented to ensure that the entire netlist contains only unique definitions. This is one approach to uniquify, however an interesting area for future exploration is that of uniquify on demand. Or some other approach to only ensure and correct uniquification of modified components only. This is left for future work.
+
+The following code example shows uniquify being used in SpyDrNet.
+
+.. code-block:: python
+
+   import spydrnet
+   from spydrnet.uniquify import uniquify
+
+   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+
+   uniquify(netlist)
+
 
 Clone
 *****
@@ -254,10 +302,39 @@ Additionally connection modification was done at a level lower than the API in o
 
 The clone algorithm is very useful while implementing some of the higher level algorithms such as TMR and DWC with compare that we use for reliability research. In these algorithms cloning is essential, and having it built into the tool helps simplify their implementation.
 
+The example code included in this section will clone an element and then add that element back into the netlist which it originally belonged to. Comments are included for most lines in this example to illuminate why each step must be taken. 
+
+.. code-block:: python
+   import spydrnet
+
+   netlist = spydrnet.load_example_netlist_by_name('hierarchical_luts')
+
+   #the desired index can be determined by printing the names of the children first
+   sub_clone = netlist.top_instance.reference.children[2].clone()
+   
+   #the cloned element should be renamed to be added back into the netlist.
+   sub_clone.name = "sub_clone"
+
+   #The 'EDIF.identifier' must also be changed to avoid a naming conflict 
+   #The EDIF namespace plugin keeps track of this field when EDIF files are parsed
+   sub_clone["EDIF.identifier"] = "sub_clone"
+
+   #this line adds the cloned instance into the netlist.
+   netlist.top_instance.reference.add_child(sub_clone)
+
+
 Hierarchical References
 ************************
 
 SpyDrNet includes the ability to create a hierarchical reference graph of all of the instances, ports, cables, and other objects which may be instantiated. The goal behind hierarchical references is to create a graph on which other tools, such as NetworkX can more easily build a graph. each hierarchical reference will be unique, even if the underlying component is not unique. These components are also very light weight to minimize memory impact since there can be many of these in flight at one time.
+
+The code below shows how one can get and print hierarchical references. The hierarchical references can represent any spydrnet object that may be instanciated in a hierarchical manner.
+
+.. code-block:: python
+
+   for h in spydrnet.get_hinstances(ntlst.top_instance.reference.children):
+      print(h)
+
 
 Getter functions
 ****************
@@ -270,6 +347,20 @@ SpyDrNet includes getter functions which are helpful in the analysis and transfo
    :figclass: htbp
 
    Getter functions are able to get sets of any element related to any other element. :label:`getterfuncs`
+
+In the example only a few of the possible getter functions are shown. The same pattern can be used to get any type of object from another however. Each call to a getter function returns a generator.
+
+.. code-block::python
+
+   import spydrnet
+
+   netlist = spydrnet.load_example_netlist_by_name(fourBitCounter)
+
+   netlist.get_instances()
+
+   netlist.top_instance.get_libraries()
+
+   netlist.top_instance.get_ports()
 
 Applications
 ------------
