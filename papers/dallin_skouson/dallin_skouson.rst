@@ -96,11 +96,11 @@ implementation.
 
 
 SpyDrNet Tool Flow
----------------------------
+------------------
 
-SpyDrNet avoids many of the complexities of hardware description design, including the synthesis, and platform specific functionality that is required to create a hardware device. It also positions itself in a unique place in the design flow to give users access to the structure of the design where changes they make are less likely to be optimized out. Figure :ref:`exteriorfig` represents how a design can be prepared and processed prior to and after using SpyDrNet.
+Electronic designs may be converted a number of times before they are ready to be built, packaged, or programmed into their target device. For example, these designs may be created in a hardware description language, synthesized into a netlist, then placed, routed, and packged into a target file which will be used to fabricate the device. A CAD tool can begin to modify the functionality of the final design at various of these stages. The earlier stages in the design flow are slightly less static. Constructs may be optimized out of the design, and the actual hardware implementation of a construct may be unknown. Later in the design process these things are more stable, but the design is also less easy to work with (binary files, complex device specific information, etc). By working at the netlist level, SpyDrNet is able to avoid many of the pitfalls of both aspects of the design process. Figure :ref:`exteriorfig` represents how a design can be prepared and processed prior to and after using SpyDrNet.
 
-Internally the SpyDrNet tool is composed of a flow that begins with a parser, accepting any of the supported languages. The parser creates an in memory data structure of the design stored in the intermediate representation. After this the tool can perform any of its analysis or modification passes on the design. Once the design is in a state where the user is satisfied a supported composer is used to pass the design back out. Figure :ref:`flowfig` represents the internal flow within SpyDrNet.
+Internally the SpyDrNet tool is composed of a flow that begins with a parser, accepting any of the supported languages. The parser creates an in memory data structure of the design stored in the intermediate representation. After this the tool can perform any of its analysis or modification passes on the design. Once the design is in a state where the user is satisfied a supported export function called a composer is used to pass the design back out. Figure :ref:`flowfig` represents the internal flow within SpyDrNet.
 
 .. figure:: flow.png
    :align: center
