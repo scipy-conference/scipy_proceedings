@@ -929,8 +929,8 @@ this, we are able to make good use of multi-core CPUs and GPUs with pure
 Python.
 
 
-Acknowledgements
------------------
+Acknowledgments
+----------------
 
 We gratefully acknowledge the many open source packages without which this
 work would never be possible. In particular we thank Andreas Klöckner for many
