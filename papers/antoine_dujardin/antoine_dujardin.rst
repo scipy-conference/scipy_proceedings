@@ -30,7 +30,7 @@ Fluctuation X-ray Scattering real-time app
 
 .. class:: abstract
 
-   The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser (X-FEL) enabling scientists to take snapshots of single macromolecules to study their structure and dynamics. A major LCLS upgrade, LCLS-II, will bring the repetition rate of the X-ray source from 120 to 1 million pulses per second and High Performance Computing capabilities in the exascale will be required for the data analysis to keep up with the future data taking rates.
+   The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser (X-FEL) facility enabling scientists to take snapshots of single macromolecules to study their structure and dynamics. A major LCLS upgrade, LCLS-II, will bring the repetition rate of the X-ray source from 120 to 1 million pulses per second and exascale High Performance Computing (HPC) capabilities will be required for the data analysis to keep up with the future data taking rates.
 
    We present here a Python application for Fluctuation X-ray Scattering (FXS), an emerging technique for analyzing biomolecular structure from the angular correlations of FEL diffraction snapshots with one or more particles in the beam. This FXS application for experimental data analysis is being developed to run on supercomputers in near real-time while an experiment is taking place.
 
@@ -38,17 +38,17 @@ Fluctuation X-ray Scattering real-time app
 
 .. class:: keywords
 
-   fluctuation scattering, free electron laser, real-time analysis
+   fluctuation x-ray scattering, free electron laser, real-time analysis, coherent diffractive imaging
 
 Introduction
 ------------
 
-LCLS-II, an upgrade to LCLS
-+++++++++++++++++++++++++++
+LCLS-II, an LCLS upgrade
+++++++++++++++++++++++++
 
-The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser providing femtosecond pulses with an ultrabright beam approximately one billion times brighter than synchrotrons :cite:`White2015`. Such a brightness allows to work with much smaller sample sizes while the shortness allows imaging below the rotational diffusion time of the molecules. With pulses of such an unprecedented brightness and shortness, scientists are able to take snapshots of single macromolecules without the need for crystallization at ambient temperature.
+The Linac Coherent Light Source (LCLS) at the SLAC National Accelerator Laboratory is an X-ray Free Electron Laser facility providing femtosecond pulses with an ultrabright beam approximately one billion times brighter than synchrotrons :cite:`White2015`. Such a brightness allows it to work with much smaller sample sizes while the shortness allows imaging below the rotational diffusion time of the molecules and also outrunning radiation damage. With pulses of such an unprecedented brightness and shortness, scientists are able to take snapshots of single macromolecules without the need for crystallization at ambient temperature.
 
-To push the boundaries of the science available at the lightsource, LCLS is currently being upgraded after 10 years of operation. The LCLS-II upgrade will progressively increase the sampling rate from 120 pulses per second to 1 million. At these rates, the LCLS instruments will generate multiple terabytes per second of science data and it will therefore be critical to know what data is worth saving, requiring on-the-fly processing of the data. Earlier, users could classify and preprocess their data after the experiment, but this approach will become either prohibitive or plainly impossible. This leads us to the requirement of performing some parts of the analysis in real time during the experiment.
+To push the boundaries of the science available at the lightsource, LCLS is currently being upgraded after 10 years of operation. The LCLS-II upgrade will progressively increase the sampling rate from 120 pulses per second to 1 million. At these rates, the LCLS instruments will generate multiple terabytes per second of scientific data and it will therefore be critical to know what data is worth saving, requiring on-the-fly processing of the data. Earlier, users could classify and preprocess their data after the experiment, but this approach will become either prohibitive or plainly impossible. This leads us to the requirement of performing some parts of the analysis in real time during the experiment.
 
 Quasi real time analysis of the LCLS-II datasets will require High Performance Computing, potentially at the Exascale, which cannot be offered in-house. Therefore, a pipeline to a supercomputing center is required. The Pipeline itself starts with a Data Reduction step to reduce the data size, using vetoing, feature extraction, and compression in real time. We then pass the data over the Energy Sciences Network (ESnet) to the National Energy Research Scientific Computing Center (NERSC). ESNet is a high-speed network with a current capability of 100Gbps, which will have to be increased to the Tbps range. At the end of the pipeline, the actual analysis can take place on NERSC’s supercomputers. This makes the whole process, from the sample to the analysis, quite challenging to change and adapt.
 
@@ -73,7 +73,7 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 
 .. [#] *Copyright © P. Zwart, under the CC BY-SA 4.0 license.*
 
-While a few hundreds of diffraction patterns might be sufficient in good conditions and for a low resolution :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
+While a few hundreds of diffraction patterns might be sufficient to reconstruct a low resolution 3-dimensional structure under ideal conditions :cite:`Kurta2017`, the number of snapshots required can be dramatically increased when working with low signal-to-noise ratios (e.g. small proteins) or when studying low-probability events. More interestingly, the addition of a fourth dimension, time, to study dynamical processes expands again the amount of data required. At these points, hundreds of millions or more snapshots could be required.
 
 We present here a Python application for FXS data analysis that is being developed to run on supercomputing facilities at US Department of Energy national laboratories in near real-time while an experiment is taking place. As soon as data is produced, it is passed through a Data Reduction Pipeline on-site and sent to a supercomputer via ESNet, where reconstructions can be performed. It is critical to complete this analysis in near real-time to guide experimental decisions.
 
@@ -89,16 +89,16 @@ where :math:`I_j(q, \phi)` represents the intensity of the j-th image, in polar 
 Acceleration: getting the best out of NumPy
 -------------------------------------------
 
-The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy :cite:`Oliphant2006,vanderWalt2011` functions and slightly better performances using Numba :cite:`Lam2015`. As we illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in its speed, without any other libraries or tools. The tests were performed on a node of Cori Haswell.
+The expansion/aggregation step presented in Equation (:ref:`eq:intro`) was originally the most computation intensive part of the application, representing the vast majority of the computation time. The original implementation was processing each :math:`I_j(q, \phi)` image one after the other and aggregating the results. This resulted in taking 424 milliseconds per image using NumPy :cite:`Oliphant2006,vanderWalt2011` functions and a slightly better performance using Numba :cite:`Lam2015`. As we illustrate in this section, rewriting this critical step allowed us to gain a factor of 40 in speed, without any other libraries or tools. The tests were performed on a node of Cori Haswell.
 
-Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over of :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the Convolution Theorem :cite:`Arfken1985`, we have
+Let us start by simplifying Equation (:ref:`eq:intro`). The integral corresponds to the correlation over :math:`I_j(q, \phi)` and :math:`I_j(q', \phi)`. Thanks to the convolution theorem :cite:`Arfken1985`, we have
 
 .. math::
    :label: eq:fourier
 
    C_2(q, q', \Delta\phi) = \frac{1}{2 \pi N} \sum_{j=1}^N \mathcal{F}^{-1}[\mathcal{F}[I_j(q, \phi)] \overline{\mathcal{F}[I_j(q', \phi)]}],
 
-where :math:`\mathcal{F}` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside of the sum, and on the left side. For the simplicity of the argument, we also neglect all coefficients.
+where :math:`\mathcal{F}` represents the Fourier transform over :math:`\phi`. The inverse Fourier transform being linear, we can get it outside the sum, and on the left side. For the simplicity of the argument, we also neglect all coefficients.
 
 Using :math:`\psi` as the equivalent of :math:`\phi` in the Fourier transform and :math:`A_j(q, \psi)` as a shorthand for :math:`\mathcal{F}[I_j(q, \phi)]`, we have:
 
@@ -150,9 +150,9 @@ This naive version can be slightly accelerated using the fact that our matrix is
               C2[j, k, :] += tmp
               C2[k, j, :] += tmp.conj()
 
-which takes 36.0 seconds. Let us note that this is only 18% faster, far from a 2x speed-up.
+which takes 36.0 seconds. Note that this is only 18% faster, far from a 2x speed-up.
 
-This naive implementation should not be confused with a pure Python implementation, which would be expected to be slow, since we already operate on NumPy arrays along the  axis. Such an implementation could be approximated by:
+This naive implementation should not be confused with a pure Python implementation, which is expected to be slow, since we already operate on NumPy arrays along the angular axis. Such an implementation could be approximated by:
 
 .. code-block:: python
 
@@ -215,7 +215,9 @@ However, such an implementation does not sound trivial using NumPy, although one
   As = np.fft.fft(images, axis=-1)
   C2 = np.einsum('hik,hjk->ijk', As, As.conj())
 
-This takes 17.9 seconds, which is slower than the version using Numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others… and that the underlying alignment of the arrays matters. Thanks to NumPy’s :code:`asfortranarray` function, however, that is not an issue. We then use the F-ordered dataset.
+which corresponds to expressing :code:`C2[i, j, k]` as the sum over :code:`h` of :code:`As[h, i, k] * As.conj()[h, j, k]`.
+
+This takes 17.9 seconds, which is slower than the version using Numba per batch. However, we can realize that, at this batch level, the last axis is independent from the others and that the underlying alignment of the arrays matters. Thanks to NumPy’s :code:`asfortranarray` function, however, that is not an issue. We then use the F-ordered dataset.
 
 .. code-block:: python
 
@@ -286,9 +288,9 @@ We scale up to 64 Haswell nodes on NERSC’s Cori supercomputer using Pygion, wi
 
    Weak scaling behavior on Cori Haswell with Lustre filesystem (top) and Burst Buffer (bottom). :label:`fig:scaling`
 
-   The app was run on 100,000 images per node, for up to 64 nodes on Cori Haswell. The Lustre filesytem is a high performance system running on HDDs attached to the supercomputer. The Burst Buffer corresponds to SSDs placed within the supercomputer itself used for per-job storage.
+   The application was run on 100,000 images per node, for up to 64 nodes on Cori Haswell. The Lustre filesystem is a high performance system running on HDDs attached to the supercomputer. The Burst Buffer corresponds to SSDs placed within the supercomputer itself used for per-job storage.
 
-As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q', \Delta\phi)` computation discussed in details in the section above, which can trivially be parallelized over the last (angular) axis.
+As an example, the most computationally intensive part of our problem is the :math:`C_2(q, q', \Delta\phi)` computation discussed in detail in the section above, which can trivially be parallelized over the last (angular) axis.
 However, the image preprocessing and the Fast Fourier Transform can only be parallelized over the first (image) axis.
 Given the size of the data, parallelizing between nodes would involve a lot of data movement. Parallelizing within a node, however, could help. In the MPI case, we use MPI to parallelize between nodes and within a node (MPI+MPI). If we were to introduce this optimization into such a code, one would have to create a 2-level structure such as::
 
@@ -332,14 +334,14 @@ To test our framework, a dataset of 100,000 single-particle diffraction images w
 
 To obtain this result, the correlation function was filtered and reduced using the Multi-Tiered Iterative Filtering (M-TIF) algorithm :cite:`Pande2018`. In particular, M-TIF uses several iterations of Tikhonov regularization, linear pseudo inversion, and principal component analysis to fit three tiers of expansions to the data: a Legendre polynomial expansion in theta, a Hankel-transformed Fourier-Bessel expansion in :math:`q` and :math:`q’`, and a low-rank eigenvalue decomposition on the matrices of Fourier-Bessel coefficients. The number of terms needed in each expansion step is limited and determined by an upper-bound diameter estimate of the protein sample. Once these coefficients are determined, their corresponding series expansions are computed to produce a filtered correlation function, along with a reduced set of Legendre polynomial expansion coefficients on a coarse :math:`q`-grid, which is used in the reconstruction (See :cite:`Pande2018` for more details on the filtering).
 
-These Legendre expansion coefficients can be directly related to the protein sample. In particular, the coefficients are equal to the inner products of spherical harmonic coefficients of the 3D intensity function, which is defined as the squared magnitude of the Fourier transform of the sample’s electron density :cite:`Kam1977`. This relation can be expressed as two tiers of phase problems that need to be solved to reconstruct the underlying density: a hyperphase problem to recover the intensity function from the Legendre coefficients, and the classical scalar phase problem to recover the density from the intensity. In order to reconstruct the sample, we apply the Multi-Tiered Iterative Phasing (M-TIP) algorithm :cite:`Donatelli2015` to the Legendre coefficients computed from the M-TIF filtering/reduction procedure. M-TIP works by using a set of computationally efficient projection operators in a self-consistent iteration to simultaneously solve both tiers of phase problems and reconstruct the sample from the Legendre coefficients.
+These Legendre expansion coefficients can be directly related to the protein sample. In particular, the coefficients are equal to the inner products of spherical harmonic coefficients of the 3D intensity function, which is defined as the squared magnitude of the Fourier transform of the sample’s electron density :cite:`Kam1977`. This relation can be expressed as two tiers of phase problems that need to be solved to reconstruct the underlying density: a hyperphase problem to recover the intensity function from the Legendre coefficients, and a classical scalar phase problem to recover the density from the intensity. In order to reconstruct the sample, we apply the Multi-Tiered Iterative Phasing (M-TIP) algorithm :cite:`Donatelli2015` to the Legendre coefficients computed from the M-TIF filtering/reduction procedure. M-TIP works by using a set of computationally efficient projection operators in a self-consistent iteration to simultaneously solve both tiers of phase problems and reconstruct the sample from the Legendre coefficients.
 
 After acceleration and parallelization, we now reach a throughput of about 230 images per second on a single node of Cori Haswell. This would allow us to process in real time the output of an FXS experiment at LCLS-I, which produces 120 images per second. Such a rapid processing would make possible to give scientists immediate feedback on the quality of their data. After scaling to up to 64 nodes, the throughput of about 15,000 images per second would be sufficient to follow up with the early abilities of LCLS-II, although further acceleration and scaling will be required to match the data being produced as LCLS-II increases its pulse rate dramatically over the following years.
 
-Interestingly, one might note from Equations :ref:`eq:intro`, :ref:`eq:fourier`, or :ref:`eq:A` that computing the correlation function involes a sum over all the images.
+Interestingly, one might note from Equations :ref:`eq:intro`, :ref:`eq:fourier`, or :ref:`eq:A` that computing the correlation function involves a sum over all the images.
 The output of that computation, however, no longer depends on the number of images in the dataset.
-The size of the correlation function :math:`C_2(q, q', \Delta\phi)` is, therefore, only dependant on the resolution over the :math:`q`, :math:`q’`, and :math:`\Delta\phi` axes.
-As a consequence, the post-processing of the correlation function and the reconstruction algorithm do not scale with the amount of data being processed.
+The size of the correlation function :math:`C_2(q, q', \Delta\phi)` is, therefore, only dependent on the resolution over the :math:`q`, :math:`q’`, and :math:`\Delta\phi` axes.
+As a consequence, the computational complexity of the post-processing of the correlation function and the reconstruction algorithm does not scale with the amount of data being processed.
 
 Conclusion
 ----------
