@@ -1051,8 +1051,8 @@ Python ecosystem are the following:
   integration with existing data processing/analysis code.
 * ``Check`` validation rules are designed primarily for customizability, with
   built-in methods as a convenience for common validation rules.
-* ``Hypothesis`` validation rules provide a tidy-first interface for hypothesis
-  testing.
+* ``Hypothesis`` validation rules provide a tidy-first :cite:`wickham2014tidy`
+  interface for hypothesis testing.
 * Ease of debugging, as ``SchemaErrors`` contain the invalidated data as well as
   a tidy dataframe of the failure cases with their corresponding column/index
   locations.
