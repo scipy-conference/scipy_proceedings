@@ -70,8 +70,7 @@ and noise mitigation is commonly achieved by using square-root raised
 cosine (SRC) pulse shaping at both the transmitter and receiver. The
 system block diagram is shown in Figure :ref:`Topblock`. The parameters 
 :math:`\alpha_{tx}` and :math:`\alpha_{rx}` control the excess bandwidth 
-factors of the transmit and received filters respectively. The Section 
-Pulse Shaping Filter Considerations provides more detail on this.
+factors of the transmit and received filters respectively. 
 Notice that this block diagram also shows a symbol-spaced equalizer to
 allow for the exploration of potential performance improvement, subject
 to how much complexity can be afforded, and the need for rapid
@@ -84,7 +83,7 @@ and calculation results.
 
 
 .. figure:: Block_top.pdf
-   :scale: 85%
+   :scale: 75%
    :align: center
    :figclass: htb
 
@@ -107,12 +106,12 @@ tutorial on digital communications at the waveform level. Next we
 consider residual errors at the matched filter output when using a simple
 truncated square-root raised cosine (SRC) finite impulse response (FIR).
 In particular we consider filter lengths of :math:`\pm L` symbols in
-duration, where :math:`L=8`, but also make this a design parameter. We
+duration. We
 then briefly explain how a symbol-spaced adaptive equalizer can be
 inserted at the output of the matched filter to compensate for pulse
 shape mismatch. We then move on to briefly review the concept of
 semi-analytic (SA)simulation and the develop conditional error
-probability expressions for MPSK and MQAM. Finally we move into
+probability expressions for MPSK and MQAM. Finally, we move into
 performance results.
 
 
@@ -151,19 +150,20 @@ Eye Diagrams
 ============
 
 An eye diagram is a tool for the evaluation of the combined effects of channel noise and inter-symbol interference 
-(ISI) on the performance of a channel. Several system performance measures can be derived by analyzing the display. 
-If the signals are too long, too short, poorly synchronized with the system clock, too high, too low, too noisy, 
-or too slow to change, or have too much undershoot or overshoot, this can be observed from the eye diagram. An open 
-eye pattern corresponds to minimal signal distortion. Distortion of the signal waveform due
-to ISI and noise appears as closure of the eye pattern. The waveform is complex so the eye diagram shows either the 
-real part or the imaginary part of the signal. The tight waveform bundles of the eye diagram correspond to the scatter 
-points of the IQ diagram. For the purposes of this paper we will be looking at 
-the closure of the eye pattern as the mismatch of the filters increases. The left eye pattern of Figure :ref:`EYEdiagram` is an 
-example of an *open-eye* with respect sampling instant 10 while the eye patter on the right is *partially closed* (degraded).
+(ISI) on the performance of a channel. Several system performance measures can be derived by analyzing this display. 
+If the signals are poorly synchronized with the system clock, or filtered improperly, or too noisy, this can be 
+observed from the eye diagram. An open eye pattern corresponds to minimal signal distortion (clear diamond shape 
+in the left plot). Distortion of the signal waveform due
+to ISI and noise appears as closure of the eye pattern (note partial closure on the right plot). The tight 
+waveform bundles at the maximum opening correspond to tight scatter points of the IQ diagram, i.e., similar 
+to the opposing pair of points on the real axis of Figure :ref:`IQdiagram`. 
+Since the waveform is complex there is an eye diagram for both the real part and the imaginary part of the signal. 
+For the purposes of this paper we will be looking at the closure of the eye pattern as the mismatch of 
+the filters increases, similar to moving from the left to right side of Figure :ref:`EYEdiagram`.
 
 
 .. figure:: EYE_diagram_defined.pdf
-   :scale: 62%
+   :scale: 60%
    :align: center
    :figclass: htb
 
@@ -176,14 +176,16 @@ Bit Error Probability (BEP) Curves
 
 In digital transmission, the number of bit errors is the number of received bits over a communication channel that 
 have been altered due to noise, interference, distortion (improper filtering), carrier phase tracking errors, and bit 
-synchronization errors. The bit error probability (BEP) in a practical setting 
+synchronization errors. The bit error probability (BEP), :math:`P_e`, in a practical setting 
 is the number of bit errors divided by the total number 
 of transferred bits during a studied time interval. The BEP curves are plotted as 
-:math:`\log_{10} P_e` versus the received :math:`E_b/N_0`. BEP curves are often compared to theory curves to measure 
-how impairments in the end-to-end transmission path, including the demodulator (think symbol classifier), increases 
+:math:`\log_{10} P_e` versus the received energy per bit-to-noise power spectral density ratio in dB, i.e., 
+:math:`10\log_10(E_b/N_0)`. The shape of the curve is *waterfall like*
+with a theoretical BEP curve to the left of curves for real-world systems. A system with impairments in the end-to-end 
+transmission path, including the demodulator (think symbol classifier), increase 
 the BEP for a given operating scenario. In a Wireless LAN or cable modem, for example, a low BEP is required to insure 
-reliable information exchange. A large :math:`M` is used here to send a large number of bits per second, per Hz of bandwidth.
-BEP curves were first utilized in Figure :ref:`BEPMPSKcompare`.
+reliable information exchange. A large :math:`M` is used here to indicate a large number of bits per second, per Hz of bandwidth.
+To see a typical BEP curve jump forward to Figure :ref:`BEPsetMPSK`.
 
 
 Pulse Shaping Filter Considerations
@@ -205,9 +207,7 @@ discrete-time version of the square-root raised-cosine pulse shape:
            \Big\{\pi t\big[1 - (4\alpha t/T)^2\big]/T\Big\}^{-1}, & \text{otherwise}
        \end{cases}
 
-where :math:`T` is the symbol period. In the literature this is often
-referred to as the ideal root raised cosine filter (RRC)
-[Rappaport]_. The name used here is square-root
+where :math:`T` is the symbol period. The name used here is square-root
 raised cosine (SRC). The transmitted signal bandwidth when using SRC shaping is approximately 
 :math:`(1+\alpha)R_s`, where :math:`R_s = R_b/\log_2 M` is the symbol rate and :math:`R_b` is 
 the serial bit rate. Note m-ary signaling and SRC pulse shaping together together serve to increase 
@@ -220,7 +220,7 @@ spectral efficiency and insure that the pulse zero crossing occur at the adjacen
 periods, i.e. zero ISI. For the mismatched case you can see ISI has crept in. 
 
 .. figure:: SRC_pulse_shape_plus_MF_output.pdf
-   :scale: 60%
+   :scale: 55%
    :align: center
    :figclass: htb
 
@@ -254,7 +254,7 @@ Semi-Analytic Bit Error Probability
 -----------------------------------
 
 Semi-analytic BEP (SA-BEP) calculation allows for fast and efficient
-analysis when a linear channel exists from the WGN noise injection point
+analysis when a linear channel exists from the AWGN noise injection point
 to the receiver detector [Tranter]_. A block
 diagram, which applies to the matched filter mismatch scenario of this
 paper, is shown in Figure :ref:`BlockSAsim`. The variable
@@ -275,10 +275,10 @@ ensemble of conditional Gaussian probabilities. The variance
 where the variance of the additive white Gaussian noise is denoted
 :math:`N_0` and :math:`p_r[n]` is the matched filter impulse response
 consisting of :math:`N_\text{taps}`. The value of :math:`\sigma_w` found
-in the conditional error probability of the following subsections, is a
-function of :math:`N_0` which is set to give the desired average
+in the conditional error probability of the following subsections is a
+function of :math:`N_0`, which is set to give the desired average
 received energy per symbol :math:`E_s` (note the energy per bit
-:math:`E_b` is just :math:`E_s/\log_2(M)`) to noise power spectral
+:math:`E_b` is :math:`E_s/\log_2(M)`) to noise power spectral
 density ratio, i.e., :math:`E_s/N_0` or :math:`E_b/N_0`. This allows
 full BEP curves to be generated using just a single ensemble of ISI
 patterns. The calculation of :math:`N_0`, taking into account the fact
@@ -292,14 +292,14 @@ digital communications theory notation inphase/quadrature) parts is given by
 
 To be clear, :math:`(E_s/N_0)_\text{dB}` is the desired receiver
 operating point. In the software simulation model we set
-:math:`(E_b/N_0)_\text{dB}` convert to :math:`(E_s/N_0)_\text{dB}`,
+:math:`(E_b/N_0)_\text{dB}`, convert to :math:`(E_s/N_0)_\text{dB}`,
 arrive at :math:`N_0` for a fixed :math:`E_s`, then finally determine
 :math:`\sigma_w`. Note the 2 in the denominator of
 (:ref:`N0calc`) serves to split the total noise power between
 the in-phase and quadrature components.
 
 .. figure:: Block_SA.pdf
-   :scale: 90%
+   :scale: 75%
    :align: center
    :figclass: htb
 
@@ -317,7 +317,8 @@ averaging over the ensemble of conditional Gaussian probabilities
    \sigma_w,\text{other impairments}\}    
 
 where :math:`N` is the number of symbols simulated to create the
-ensemble. For the m-ary schemes MPSK and MQAM we further assume that Gray coding is employed 
+ensemble. For the m-ary schemes MPSK and MQAM we further assume that Gray coding 
+(adjacent symbols differ by only one bit) is employed 
 [Ziemer]_, and the BEP values of interest are small, allowing the bit error probability to 
 be directly obtained from the symbol error probability via
 
@@ -343,19 +344,24 @@ M-ary PSK
 
 For MPSK with :math:`M > 2` the optimum decision region for symbol
 detection is a wedge shaped region having interior angle :math:`\pi/M`,
-as shown in the right side of Figure :ref:`saMPSK`. In [Ziemer]_ an 
-exact SEP expression (and hence Gray coded BEP), attributed to [Craig]_, 
-is given by:
+as shown in the right side of Figure :ref:`saMPSK`.
 
-.. math::
+.. In [Ziemer]_ an 
+   exact SEP expression (and hence Gray coded BEP), attributed to [Craig]_, 
+   is given by:
+
+.. 
+   .. math::
    :label: MPSKexact
 
-   P_{E,\text{symb}} = \frac{1}{\pi}\int_0^{\pi-\pi/M} \exp\left(\frac{(E_s/N_0)
+.. P_{E,\text{symb}} = \frac{1}{\pi}\int_0^{\pi-\pi/M} \exp\left(\frac{(E_s/N_0)
    \sin^2(\pi/M)}{\sin^2(\phi)}\right)\, d\phi
 
-Avoiding numerical integration is desirable so that
-(:ref:`SABEP`) can be computed quickly. A simple upper bound,
-as described in [Ziemer]_ and
+.. Avoiding numerical integration is desirable so that
+   (:ref:`SABEP`) can be computed quickly. 
+
+A simple upper bound, accurate for our purposes, is 
+described in [Ziemer]_ and
 [Craig]_, considers the perpendicular distance
 between the nominal signal space point following the matched filter and
 the wedge shaped decision boundary as shown in
@@ -562,7 +568,7 @@ between symbols it is expected that higher orders of :math:`M` are more affected
 Figure :ref:`BEPsetMPSK` shows a row of BEP curves for :math:`M=16` while varying :math:`\alpha_\text{rx}`. The BEP Curves 
 show how mismatch filtering affects :math:`P_E` across :math:`E_b/N_0` while comparing it to a theory curve. Each curve 
 plots the theory curve for the modulation type, a SA-BEP curve with a perfect matched filter, and a SA-BEP Curve that varies 
-:math:`\alpha_\text{rx}` with a constant :math:`\alpha_\text{tx}`. These results of this s ingle follow the first row of IQ 
+:math:`\alpha_\text{rx}` with a constant :math:`\alpha_\text{tx}`. These results correspond to the first row of IQ 
 diagrams presented in Figure :ref:`IQsetMPSK`. On the left we see a small mismatch results in minimal error with all three 
 curves tightly together. On the right we a large degradation, denoted as the increase in :math:`E_b/N_0` to achieve the same 
 :math:`P_E` with perfect matched filter.
@@ -603,7 +609,7 @@ degradation gets worse. With the worse degradation happening at :math:`M = 32` a
 of less than 0.01 dB are considered insignificant and are entered in the heatmap as zero values. 
    
 .. figure:: Table1_HeatMapNC.pdf 
-   :scale: 100%
+   :scale: 90%
    :align: center
    :figclass: w
 
@@ -689,7 +695,7 @@ i.e., signal points are closer in MQAM than MPSK.
 
 
 .. figure:: Table2_HeatMapNC.pdf 
-   :scale: 100%
+   :scale: 90%
    :align: center
    :figclass: w
 
@@ -750,14 +756,16 @@ With Constrained Use of Equalization
 
 The above results for MPSK and MQAM show that the ISI introduced from mismatch filtering is the greatest at highest modulation 
 orders of, i.e., :math:`M`, i.e., 32PSK and 256QAM, and when :math:`\alpha_\text{tx} = .25` and :math:`\alpha_\text{rx} = .5`. 
-In this subsection we briefly show how even a very simple adaptive equalizer can mitigate filter mismatch. In particular we consider  
-an 11-tap equalizer to jointly minimize mismatch ISI yet balance noise enhancement. The short tap 
-design was chosen since we need it to adapt quickly and to minimize system complexity. 
+In this subsection we briefly show how even a very simple adaptive equalizer can mitigate filter mismatch. An 11-tap equalizer is chosen to jointly minimize mismatch ISI yet balance noise enhancement. The short tap 
+design can adapt quickly and minimize system complexity. 
 To fit the SA-BEP analysis framework the equalizer is designed for fixed operation at :math:`E_b/N_0 = 20` dB, while the SA-BEP simulation 
 is run for 20 dB :math:`\leq (E_b/N_0)_\text{dB} \leq` 25dB. In general an equalizer for digital communications 
 is made adaptive using the least mean-square (LMS) adaptation algorithm [Ziemer]_ to minimize the mean-square error (MMSE) 
-between the filter output and hard decision symbol estimates. For this paper the optimal operating point was over the 
-range of Eb/N0 that cross the :math:`10^{-6}` BEP point on the theoretical BEP curve.
+between the filter output and hard decision symbol estimates. 
+
+
+.. For this paper the optimal operating point was over the 
+   range of Eb/N0 that cross the :math:`10^{-6}` BEP point on the theoretical BEP curve.
 
 Figure :ref:`IQBEP11TapEQ256QAM` shows the effects of mismatch filtering when paired with a short length equalizer on 
 256QAM and :math:`\alpha_\text{tx}/\alpha_\text{rx} = . 25⁄. 5`. The :math:`E_b/N_0` degradation is brought to 
@@ -783,12 +791,12 @@ The effects of mismatch filtering on lower orders of :math:`M` in both MPSK and 
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio reaching the extremes of 1/2 and 2. The effects of mismatch 
 filtering grow drastically as :math:`M` increases and the BEP threshold point increases.
  
-One interesting observation is the IQ Diagrams show that the symbol clusters with mismatch are not 
+The IQ Diagrams show that the symbol clusters with mismatch are not 
 circularly symmetric about the ideal symbol points. In general these *cluster clouds*, which we know result 
 from ISI, appear biased toward the center of the IQ diagram. Characterizing the cluster cloud probability 
 density function could serve as an alternative to SA-BEP technique presented in this paper.
 
-A second interesting observation is that the degradation values in the heatmaps are essentially symmetric for both MPSK and 
+Also observe is that the degradation values in the heatmaps are essentially symmetric for both MPSK and 
 MQAM, with regard to the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse. What this means is that the  
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio and its inverse give essentially the same :math:`E_b/N_0` 
 dB degradation values. Does this make sense? The signal path is identical since the same two filters are 
@@ -796,7 +804,7 @@ connected in series (see Figure :ref:`BlockSAsim`) in either case. Linear proces
 reversed without changing the mismatch. What is different is that the white noise enters at  
 the second filter, which is the receiver input. If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is less than one 
 more WGN arrives at the receiver decision stage, but more signal energy also enters the receiver, in spite of being mismatched. 
-If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is greater than one less WGN arrives at the receiver decision 
+If the :math:`\alpha_\text{tx}/\alpha_\text{rx}` ratio is greater than one less AWGN arrives at the receiver decision 
 stage, but less signal energy also enters the receiver, again in spite of being mismatched. Although a 
 conjecture at the start of this research, the SA-BEP simulation results in Figures :ref:`mismatchloss1` 
 and :ref:`mismatchloss2` support the above argument. 
@@ -804,20 +812,20 @@ and :ref:`mismatchloss2` support the above argument.
 The use of SA-BEP modeling allowed this data to be quickly compiled and be easily repeatable. 
 The code could quickly be modified to run any combination of MPSK,
 :math:`\alpha_\text{tx}/\alpha_\text{rx}` and present the data in any of the above formats. A purpose of this paper 
-was reproducible science, for not only the Author to be able to run the code but for any user to use the created 
+was reproducible science, for not only the author to be able to run the code but for any user to use the created 
 code for their purposes and produce the same results. The use of SA-BEP modeling paired with the power 
 and flexibility of object-oriented Python running in Jupyter notebooks accomplishes this goal.
 
-Planned extensions include degradations due to phase jitter, static
-phase error, and timing errors.
+.. Planned extensions include degradations due to phase jitter, static
+   phase error, and timing errors.
 
 
-Acknowledgment
---------------
+.. Acknowledgment
+   --------------
 
-The first author wishes to thank Jim Rasmussen for generating interest in this
-topic and related discussions that have taken place over the last few
-years working at Cosmic AES.
+.. The first author wishes to thank Jim Rasmussen for generating interest in this
+   topic and related discussions that have taken place over the last few
+   years working at Cosmic AES.
 
 References
 ----------
