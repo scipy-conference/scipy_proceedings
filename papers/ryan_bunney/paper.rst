@@ -59,6 +59,7 @@ To obtain useful results from the raw data produced by science experiments, a se
 re-projects, background corrects and add astronomical images into custom
 mosaics of the sky :cite:`bharathi2008,juve2013`. A Montage pipeline may consist of more than 10,000 jobs, perform more than 200GB of I/O (read and write), and take 5 hours to run :cite:`juve2013`. This would be deployed using
 a workflow management system (for example, Pegasus :cite:`deelman2015`), which coordinates the deployment and execution of the workflow. It is this workflow management system that passes the workflow to a workflow scheduling algorithm, which will pre-allocate the individual application tasks to nodes on the execution environment (e.g. a local grid or a cloud environment) in preparation for the workflow's execution.
+
 The processing of Science Workflows is an example of the DAG-Task scheduling problem, a classic problem at the intersection of operations research and high performance computing :cite:`kwok1999`. Science workflow scheduling is a field with varied contributions in algorithm development and
 optimisation, which address a number of different sub-problems within the
 field :cite:`wu2015a,chaari2014,benoit2013,herroelen1998,rodriguez2016,burkimsher`.
@@ -73,7 +74,8 @@ heuristics :cite:`durillo2012,caniou2018`, meta-heuristics, and even
 mathematical optimisation procedures :cite:`bridi2016`, despite being 20 years
 old. The lack of a consistent testing environment and implementation of
 algorithms makes it hard to reproduce and verify the results of published
-material, especially when a common workflow model cannot be verified
+material, especially when a common workflow model cannot be verified.
+
 Researchers benefit as a community from having open implementations of
 algorithms, as it improves reproducibility and accuracy of benchmarking and
 algorithmic analysis :cite:`crick2014`. There exists a number of open-source
