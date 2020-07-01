@@ -230,9 +230,9 @@ Other functionality has been added on top of the core of SpyDrNet, including plu
 Analysis and Transformation Capabilities
 ----------------------------------------
 
-SpyDrNet was created with FPGA reliability in mind. One current application of SpyDrNet focuses on implementing duplication with compare (DWC) and triple modular redundancy (TMR) to circuit designs. Some of the design considerations that go into effect while choosing a tool to implement these reliability modifications, include avoiding optimizations, and algorithmic modification capability. It is desirable to have a flexible framework. Additionally behavioral modifications are not generally needed because the structural implementation is simple enough to be easily implemented directly.
+SpyDrNet provides a framework for the analysis and transformation of structural netlists. Structural netlists (i.e., a list of circuit components and their connects) capture a hardware design that is ready physical implementation where hardware files can be generated (see Figure :ref:`exteriorfig`). Information such as component importance or influence can be understood by examining structural relationships between components. Modifications made to the structual netlist are reflected in the hardware implementation.
 
-SpyDrNet grew to fill these needs. Modifications made with SpyDrNet are less likely to be optimized away. Additionally SpyDrNet allows users to create custom algorithms that will modify components of the netlist. Modifications are done at the structural level which is simple for our reliability algorithms of interest.
+The analysis and transformation capabilites presented in section form a basis from which custom analysis and transformation functions can be built for specifc applications. One current application that benefits from these capabilities is the implemention of duplication with compare (DWC) and triple modular redundancy (TMR) to circuit designs, which is discussed later on. Using SpyDrNet's analysis and transformations allows end-users to rapidly develop custom functions for specific needs.
 
 Utility Functions
 -----------------
