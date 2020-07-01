@@ -576,10 +576,14 @@ to the reader.
 Conclusion
 ----------
 
-HOOMD-blue version 3.0 presents a Pythonic API that encourages experimentation and customization.
-Through subclassing C++ classes, providing wrappers for custom actions, and exposing data in
-zero-copy arrays/buffers, we allow HOOMD-blue users to utilize the full potential of Python and the
-scientific Python community.
+With modern simulation analysis packages (freud :cite:`ramasubramani.etal2020`, MDTraj
+:cite:`mcgibbon.etal2015`, MDAnalysis :cite:`gowers.etal2016,michaud-agrawal.etal2011`),
+initialization tools such as mbuild and foyer, and visualization packages like OVITO and plato
+:cite:`spellings.dice2018` using Python APIs, HOOMD-blue, built from the ground up with Python in
+mind, fits in seamlessly.  Version 3.0 improves upon this and presents a Pythonic API that
+encourages experimentation and customization.  Through subclassing C++ classes, providing wrappers
+for custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
+utilize the full potential of Python and the scientific Python community.
 
 Acknowledgements
 ----------------
@@ -601,8 +605,7 @@ Trigger that detects nucleation
 +++++++++++++++++++++++++++++++
 
 This example demonstrates a :code:`Trigger` that returns true when a threshold :math:`Q_6`
-Steinhardt order parameter :cite:`steinhardt.etal1983` (as calculated by freud
-:cite:`ramasubramani.etal2020`) is reached. Such a :code:`Trigger` could be used for BCC nucleation
+Steinhardt order parameter :cite:`steinhardt.etal1983` (as calculated by freud) is reached. Such a :code:`Trigger` could be used for BCC nucleation
 detection which could trigger a decrease in cooling rate, the more frequent output of simulation
 trajectories, or any other desired action. Also, in this example we showcase the use of the
 zero-copy rank-local data access. This example also requires the use of ghost particles, which are
@@ -724,4 +727,3 @@ for simulation data. It will store the scalar and string quantities in a single
             data['array'] = {
                 k: v.append(rdf[k])
                 for k, v in data['array'].items()}
-
