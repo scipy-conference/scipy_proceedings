@@ -84,8 +84,8 @@ improving the reliability of computer circuits implemented on static random acce
 Development efforts moved toward SpyDrNet to bring the previous functionality to Python and open up its use to a
 larger number of formats and unique applications.
 
-.. figure:: spydrnetflow3.png
-   :scale: 30%
+.. figure:: SpyDrNetFlow.pdf
+   :scale: 70%
    :align: center
    :figclass: w
 
@@ -352,10 +352,6 @@ The example code included in this section will clone an element and then add tha
    
    #renamed needed to be added back into the netlist
    sub_clone.name = "sub_clone"
-
-   #The 'EDIF.identifier' must also be changed 
-   #Avoids EDIF namespace plugin naming conflict
-   sub_clone["EDIF.identifier"] = "sub_clone"
 
    #this line adds the cloned instance into the netlist
    netlist.top_instance.reference.add_child(sub_clone)
