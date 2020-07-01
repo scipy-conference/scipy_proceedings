@@ -893,9 +893,8 @@ Future work
 
 There are several improvements that are planned for Compyle.
 
-- The code is still not very clean and a lot of internal cleanup is necessary.
-  This is especially true of the Cython backend which has grown organically
-  and requires a reimplementation.
+- Some internal cleanup is necessary. This is especially true of the Cython
+  backend which has grown organically and requires a reimplementation.
 - Many of the CPU related algorithms, like sorting, and many of the reductions
   are still serial.  These are relatively easy to fix.
 - The Cython backend may be eventually replaced using pybind11_ if possible.
@@ -904,9 +903,9 @@ There are several improvements that are planned for Compyle.
 - While Compyle does support simple structs, this API is still not clean
   enough to be used in general.
 - We also hope to add support for simple "objects" that would allow users to
-  compose their libraries in a more object oriented manner. This would also
-  open up the possibility of implementing more high-level data structures in
-  an easy way.
+  compose their libraries in a more object oriented manner. This would open up
+  the possibility of implementing more high-level data structures in an easy
+  way.
 
 There are many other improvements, and features we are considering and hope to
 implement as time permits. Despite its many warts, we already find Compyle to
@@ -921,16 +920,19 @@ molecular dynamics solver using Compyle. The code is parallel from the
 beginning and runs effortlessly on multi-core CPUs and GPUs without any
 changes. We have used the example to illustrate the main parallel algorithms
 that Compyle provides, i.e. elementwise, reduction, and scans. We show how a
-non-trivial optimization of the example problem is possible using a scan. We
-have not discussed many other features of Compyle and urge readers to go over
-the Compyle documentation to learn more.
-
-The results clearly show that we are able to write the code once and have it
-run on massively parallel architectures. This is very convenient and this is
+non-trivial optimization of the example problem is possible using a scan. The
+results clearly show that we are able to write the code once and have it run
+on massively parallel architectures. This is very convenient and this is
 possible because of our approach to the problem which puts parallel algorithms
-first and forces the user to write code with a hard set of restrictions. With
-this, we are able to make good use of multi-core CPUs and GPUs with pure
-Python.
+first and forces the user to write code with a hard set of restrictions.
+
+We believe that Compyle allows computational scientists to quickly develop new
+methods that could benefit from effective parallelization. For molecular
+dynamics there are many challenges :cite:`md_opp_2015` where this could be
+useful. While the article used an MD example, and we have ourselves used it in
+the context of the SPH method :cite:`pysph2019` Compyle is potentially useful
+in a variety of other areas. We hope that others are able to use and benefit
+from using Compyle.
 
 
 Acknowledgments
