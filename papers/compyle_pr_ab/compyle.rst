@@ -930,7 +930,7 @@ We believe that Compyle allows computational scientists to quickly develop new
 methods that could benefit from effective parallelization. For molecular
 dynamics there are many challenges :cite:`md_opp_2015` where this could be
 useful. While the article used an MD example, and we have ourselves used it in
-the context of the SPH method :cite:`pysph2019` Compyle is potentially useful
+the context of the SPH method :cite:`pysph2019`, Compyle is potentially useful
 in a variety of other areas. We hope that others are able to use and benefit
 from using Compyle.
 
