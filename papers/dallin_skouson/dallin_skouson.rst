@@ -466,7 +466,7 @@ Graph Analysis and Feedback
 While triplictaing a design users must determine the best location to insert voters in the design. Voters could be inserted liberally at the cost of the timing of the critical path. Alternatively sparse voter insertion can yield a lower reliability. One consideration to take into account is that voters inserted on feedback loops in the directional graph represented by the netlist can help correct the circuit's state more readily. One study concluded that inserting voters after high fanout flip flops in a design yielded good results. :cite:`Johnson:2010` This voter insertion algorithm was implemented on SpyDrNet after doing analysis using NetworkX :cite:`networkx` to find the feedback loops.
 
 
-Future direction
+Future Direction
 ----------------
 
 As SpyDrNet matures several new features are planned to benefit SpyDrNet's users. Several of the upcoming features are discussed here but a more complete roadmap is maintained with the project's repository.
@@ -479,7 +479,7 @@ Several portions of SpyDrNet could be sped up by accelerating them in C/C++. Par
 An accelerated verion of the current parser would be of use in the future as more users with increasingly complex designs become interested in SpyDrnet.
 
 
-SpyDrNet was designed to be generic and modular to allow for support of a wide variety of netlist formats. One of the disadvantages to this decision is that some device specific information is not included in SpyDrNet. Future work to automate obtaining and using device specific data could help to simplify a number of different applications. Device data of interest may include device resource tracking, clock propagation behavior, and limitations on how components can be implemented on a specific technology. Providing users a simpler way of obtaining and applying this data will help provide better reporting and help inform decision making.
+SpyDrNet was designed to be generic and modular to allow for support of a wide variety of netlist formats. One of the disadvantages to this decision is that some device specific information is not included in SpyDrNet. Future work to automate obtaining and using device specific data could help to simplify a number of different applications. Device data of interest may include device resource constraints, clock propagation behavior, and limitations on how components can be implemented on a specific technology. Providing users a simpler way of obtaining and applying this data will help provide better reporting and help inform decision making.
 
 
 Conclusion
