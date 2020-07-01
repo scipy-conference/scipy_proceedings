@@ -224,9 +224,11 @@ Examples of some of the basic functionality are highlighted in the following cod
 
 .. code-block:: python
    
-   import spydrnet
+   import spydrnet as sdn
 
-   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+   netlist = sdn.load_example_netlist_by_name(
+      'fourBitCounter')
+   
    top_instance = netlist.top_instance
   
    def recurse(instance, depth):
@@ -237,8 +239,11 @@ Examples of some of the basic functionality are highlighted in the following cod
          child2
              child2.child'''
       s = depth * "\t"
-      #on the following line instance.name could be replaced with instance['NAME']
-      print(s, instance.name, "(", instance.reference.name, ")")
+      
+      #instance.name could also be instance["NAME"]
+      print(
+         s, instance.name,
+         "(", instance.reference.name, ")")
       for c in instance.reference.children:  
          recurse(c, depth + 1)
    
@@ -262,10 +267,11 @@ Included is an example of how one might flatten a netlist in spydrnet.
 
 .. code-block:: python
 
-   import spydrnet
-   from spydrnet.flatten import flatten
+   import spydrnet as sdn
+   from sdn.flatten import flatten
 
-   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+   netlist = sdn.load_example_netlist_by_name(
+      'fourBitCounter')
 
    #flattens in place. netlist will now be flat.
    flatten(netlist)
@@ -283,10 +289,11 @@ The following code example shows uniquify being used in SpyDrNet.
 
 .. code-block:: python
 
-   import spydrnet
-   from spydrnet.uniquify import uniquify
+   import spydrnet as sdn
+   from sdn.uniquify import uniquify
 
-   netlist = spydrnet.load_example_netlist_by_name('fourBitCounter')
+   netlist = sdn.load_example_netlist_by_name(
+      'fourBitCounter')
 
    uniquify(netlist)
 
@@ -306,21 +313,24 @@ The example code included in this section will clone an element and then add tha
 
 .. code-block:: python
 
-   import spydrnet
+   import spydrnet as sdn
 
-   netlist = spydrnet.load_example_netlist_by_name('hierarchical_luts')
+   netlist = sdn.load_example_netlist_by_name(
+      'hierarchical_luts')
 
-   #the desired index can be determined by printing the names of the children first
-   sub_clone = netlist.top_instance.reference.children[2].clone()
+   #index found by printing children's names
+   sub = netlist.top_instance.reference.children[2]
+   sub_clone = 
+      sub.clone()
    
-   #the cloned element should be renamed to be added back into the netlist.
+   #renamed needed to be added back into the netlist
    sub_clone.name = "sub_clone"
 
-   #The 'EDIF.identifier' must also be changed to avoid a naming conflict 
-   #The EDIF namespace plugin keeps track of this field when EDIF files are parsed
+   #The 'EDIF.identifier' must also be changed 
+   #Avoids EDIF namespace plugin naming conflict
    sub_clone["EDIF.identifier"] = "sub_clone"
 
-   #this line adds the cloned instance into the netlist.
+   #this line adds the cloned instance into the netlist
    netlist.top_instance.reference.add_child(sub_clone)
 
 
@@ -333,8 +343,11 @@ The code below shows how one can get and print hierarchical references. The hier
 
 .. code-block:: python
 
-   for h in spydrnet.get_hinstances(ntlst.top_instance.reference.children):
-      print(h)
+   top = netlist.top_instance
+   child_instances = top.reference.children
+
+   for h in sdn.get_hinstances(child_instances):
+      print(h, type(h.item).__name__)
 
 
 Getter functions
@@ -353,9 +366,10 @@ In the example only a few of the possible getter functions are shown. The same p
 
 .. code-block::python
 
-   import spydrnet
+   import spydrnet as sdn
 
-   netlist = spydrnet.load_example_netlist_by_name(fourBitCounter)
+   netlist = sdn.load_example_netlist_by_name(
+      'fourBitCounter')
 
    netlist.get_instances()
 
