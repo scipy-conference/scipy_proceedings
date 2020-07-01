@@ -469,18 +469,16 @@ While triplictaing a design users must determine the best location to insert vot
 Future Direction
 ----------------
 
-As SpyDrNet matures several new features are planned to benefit SpyDrNet's users. Several of the upcoming features are discussed here but a more complete roadmap is maintained with the project's repository.
+As SpyDrNet matures, several new features are planned to benefit SpyDrNet's users. Several of the upcoming features are discussed here but a more complete roadmap is maintained with the project's repository.
 
-Additional netlist format parsers and composers are planned. Adding additional formats will open the door for users to apply SpyDrNet in conjunction with a wider variety of technologies and device vendor tools. Future work will involve converting between formats as well, which would provide greater flexibility for end users. Some tools accept formats that are slightly different than the output files that they can provide for synthesized designs. Converting output files from these tools would provide further possibilities.
+Additional netlist format parsers and composers are planned. Supplying additional parser and composers will open the door for users to more easily use SpyDrNet with a wider variety of technologies and device vendor tools. This work will enable conversion between formats as well, which will provide greater flexibility for end users. Some vendor tools only accept specific netlist formats. Converting netlist formats would provide further possibilities.
 
 Plans to integrate more closely with other open source tools in analysis and hardware design have been made. These plans include further work to ensure NetworkX and other SciPy utilities can be easily leveraged by SpyDrNet. Integrating with additional open source electionic design tools is also of interest, which could help make SpyDrNet a useful part of an open source design flow.
 
+SpyDrNet was designed to be generic and modular to allow for support of a wide variety of netlist formats. Device specific information is not included in SpyDrNet. Future work may include providing a framwork to maintain and make use of device specific data. Such a framework could simplify a number of different applications that require device specific information. Device data of interest may include device resource constraints, clock propagation behavior, and limitations on how components can be implemented on a specific technology. Providing users a simpler way of maintaining and utilizing this data will help improve the flexibility of the tool.
+
 Several portions of SpyDrNet could be sped up by accelerating them in C/C++. Parseing netlists can take several minutes for very large designs using the current implementation. 
-An accelerated verion of the current parser would be of use in the future as more users with increasingly complex designs become interested in SpyDrnet.
-
-
-SpyDrNet was designed to be generic and modular to allow for support of a wide variety of netlist formats. One of the disadvantages to this decision is that some device specific information is not included in SpyDrNet. Future work to automate obtaining and using device specific data could help to simplify a number of different applications. Device data of interest may include device resource constraints, clock propagation behavior, and limitations on how components can be implemented on a specific technology. Providing users a simpler way of obtaining and applying this data will help provide better reporting and help inform decision making.
-
+An accelerated verion of the current parser would be of use in the future as more users with increasingly complex designs become interested in SpyDrNet.
 
 Conclusion
 ----------
