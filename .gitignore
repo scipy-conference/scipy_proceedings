@@ -5,7 +5,7 @@ _build
 *.pyc
 *.swp
 *~
-.giignore
+.gitignore
 .vscode/
 papers/ralph_kube/data/tests_performance/N128_OMP16_32nodes_2node_v10_fast/
 papers/ralph_kube/data/tests_performance/N128_OMP16_32nodes_2node_v10_fast_sleep05/

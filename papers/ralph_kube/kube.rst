@@ -58,31 +58,32 @@ Magnetic Fusion Energy research and its data analysis needs
 -----------------------------------------------------------
 
 Research on magnetic fusion energy combines physics, engineering, and even economics to deploy a
-virtually unlimited, clean, and competitively priced energy source to the grid.
-Python is well established in the fusion community through projects like plasmapy [PPY]_ or OMFIT
-[Men15]_. We introduce ``Delta`` - the aDaptive nEar-reaL Time Analysis framework - and show how it
-can be used to stream data from an experiment to a remote high performance computing (HPC) resource.
-There, Delta executes a routine spectral analysis workflow in near real-time. By making data analysis
-results available in near real-time, Delta allows  scientists to make more informed decisions on follow-up
-experiments and could accelerate scientific discovery.
+virtually unlimited, clean, and competitively priced energy source to the grid. Python is well
+established in the fusion community through projects like plasmapy [PPY]_ or OMFIT [Men15]_. We
+introduce another Python library for fusion energy reserch, ``Delta`` - the aDaptive nEar-reaL Time
+Analysis framework - and show how it can be used to stream data from an experiment to a remote high
+performance computing (HPC) resource. There, Delta executes a routine spectral analysis workflow in
+near real-time. By making data analysis results available in near real-time, Delta allows
+scientists to make more informed decisions on follow-up experiments and could accelerate scientific
+discovery.
 
 
 To illustrate use-cases for Delta, we start with a primer of fusion energy, introduce tokamak
-devices that are used to perform fusion experiments and a diagnostic that is installed in many
-tokamaks. If one could harvest the energy from controlled nuclear fusion reactions you would have a
-potentially unlimited, environmentally friendly energy source. Fusion reactions release energy when
-two light nuclei merge into a heavier one. As part of the reaction, nuclear binding energy of the
-reactants is converted into kinetic energy of the products. Fission reactions on the other hand,
-which power todays nuclear power plants, release binding energy when a heavy nucleus decays into
-lighter products. Typical energies involved in nuclear reactions are measured in MeV, multiple
-orders of magnitude larger than the characteristic eV energy scale for chemical reactions. Thus, the
-energy yield for a nuclear reaction is much larger than for chemical reaction, which occur when
-fossil fuels are burnt. Fuel for fusion reactions are readily extracted from sea water, which is
-available in virtually inexhaustible quantities. Since the energy yield of a fusion reaction is so
-large, only little fusion plasma needs to be confined to power a fusion reactor. To produce 1 GW of
-fusion power, enough to power about 700,000 homes, just 2 kg of fusion plasma would need to be
-burned per day [Ent18]_. Thus, a catastrophic event such as total loss of plasma confinement can
-cause no more than local damage to the plasma vessel.
+devices that are used to perform fusion experiments and describe a diagnostic that is installed in
+many tokamaks. If one could harvest the energy from controlled nuclear fusion reactions you would
+have a potentially unlimited, environmentally friendly energy source. Fusion reactions release
+energy when two light nuclei merge into a heavier one. As part of the reaction, a fraction of the
+reactants nuclear binding energy reactants is converted into kinetic energy of the products. Fission
+reactions on the other hand, which power todays nuclear power plants, release binding energy when a
+heavy nucleus decays into lighter products. Typical energies involved in nuclear reactions are
+measured in MeV, multiple orders of magnitude larger than the characteristic eV energy scale for
+chemical reactions. Thus, the energy yield for a nuclear reaction is much larger than for chemical
+reaction, which occur when fossil fuels are burnt. Fuel for fusion reactions are readily extracted
+from sea water, which is available in virtually inexhaustible quantities. Since the energy yield of
+a fusion reaction is so large, only little fusion plasma needs to be confined to power a fusion
+reactor. To produce 1 GW of fusion power, enough to power about 700,000 homes, just 2 kg of fusion
+plasma would need to be burned per day [Ent18]_. Thus, a catastrophic event such as total loss of
+plasma confinement can cause no more than local damage to the plasma vessel.
 
 
 To fuse positively charged atoms into one heavier requires enormous energy. For the most feasible
@@ -93,7 +94,7 @@ atoms are stripped of their electrons. Such a plasma can be confined in a strong
 shaped like a donut. Confined like this, there is no possibility for an uncontrolled chain reaction.
 If a significant amount of plasma would leak out of the vessel, the accompanying temperature drop
 would stop any fusion reactions. At the same time there are only a few grams of plasma confined and
-it does not have enough stored energy to cause damages other than to the structure of the
+it does not have enough stored energy to cause damage other than to the structure of the
 confinement vessel.
 
 The best performing plasma confinement devices, tokamaks, have a toroidal shape, similar to a donut.
@@ -110,9 +111,10 @@ mechanical components of the tokamak are performed during each discharge. After 
 A common diagnostic in magnetic fusion experiments is a so-called Electron Cyclotron Emission (ECE)
 diagnostic [Cos74]_. They measure emission intensity by free electrons in the plasma, which allows
 one to infer their temperature as a function of radius. Physical models of the plasma describe it
-partially through the temperature. This measurement allows to compare the experiment such models.
-Modern ECE systems, such as the one installed in the KSTAR tokamak [Yun14]_ have hundreds of spatial
-channels and sample data on a microsecond time-scale, producing data streams upwards of 500 MB/sec. 
+partially through the temperature. This measurement allows one to interpret the experiment in terms
+of such models. Modern ECE systems, such as the one installed in the KSTAR tokamak [Yun14]_ have
+hundreds of spatial channels and sample data on a microsecond time-scale, producing data streams
+upwards of 500 MB/sec. 
 
 Analyzing large datasets, as produced by ECE diagnostics in between shots and generating actionable
 information in time for the next shot is a challenging task. The ``Delta`` framework aims to
@@ -243,17 +245,17 @@ nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s.
 
 .. table:: Hardware and network interconnections of the data transfer nodes (DTNs) and compute nodes :label:`tab1`
  
-    +---------------+--------------------+----------+--------------------------+
-    | Where         |   CPU              |    RAM   |  NIC                     |
-    +===============+====================+==========+==========================+
-    | | KSTAR DTN   | | Xeon E5-2640 v4  | | 128GB  | | 100 Gbit (ext)         |
-    +---------------+--------------------+----------+--------------------------+
-    | |  NERSC DTN  | | Xeon E5-2680 v2  | | 128GB  | | 2 * 100 Gbit  (ext)    |
-    |               |                    |          | | 2 * 10 Gbit  (int)     |
-    +---------------+--------------------+----------+--------------------------+
-    | | Cori compute| | Xeon E5-2698 v3  |  | 128GB | | Cray Aries             | 
-    |               | |  32 threads      |          |                          |
-    +---------------+--------------------+----------+--------------------------+
+    +---------------+--------------------+----------+------------------+
+    | Where         |   CPU              |    RAM   |  NIC             |
+    +===============+====================+==========+==================+
+    | | KSTAR DTN   | | Xeon E5-2640 v4  | | 128GB  | | 100 Gbit       |
+    +---------------+--------------------+----------+------------------+
+    | |  NERSC DTN  | | Xeon E5-2680 v2  | | 128GB  | | 2 * 100 Gbit   |
+    |               |                    |          | | 2 * 10 Gbit    |
+    +---------------+--------------------+----------+------------------+
+    | | Cori compute| | Xeon E5-2698 v3  | | 128GB  | | Cray Aries     | 
+    |               | |  32 threads      |          |                  |
+    +---------------+--------------------+----------+------------------+
 
 
 
@@ -567,7 +569,7 @@ workflow at hand, the complex composition of the framework requires us to unders
 its building blocks. Referring to figure :ref:`fig-sw-arch`, IO performance of the ADIOS library,
 the asynchronous receive-publish-submit strategy implemented by processor and finally the speed of
 individual analysis kernels contribute to the workflow walltime. Furthermore, the workflow walltime
-may be sensitive to the individual components interacting with one another For example, even though the
+may be sensitive to the individual components interacting with one another. For example, even though the
 processor design aims to facilitate high-velocity data streams by using queues and multiple worker
 threads, a fast data stream ingested by the processor may negatively affect the performance of the
 PoolExecutors by submitting too many tasks in a short time. It may well be that slower data
