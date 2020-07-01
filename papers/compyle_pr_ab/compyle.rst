@@ -24,19 +24,19 @@ Compyle: a Python package for parallel computing
    Compyle allows users to execute a restricted subset of Python on a variety
    of HPC platforms. It is an embedded domain-specific language (eDSL) for
    parallel computing. It currently supports multi-core execution using
-   Cython, and OpenCL and CUDA for GPU devices. Users write low-level code in
-   Python that is automatically transpiled to high-performance Cython or C.
-   Compyle also provides a few very general purpose and useful parallel
-   algorithms that allow users to write code once and have them run on a
-   variety of HPC platforms.
+   Cython, and OpenCL and CUDA for GPU devices. Users write code in a
+   restricted subset of Python that is automatically transpiled to
+   high-performance Cython or C. Compyle also provides a few very general
+   purpose and useful parallel algorithms that allow users to write code once
+   and have them run on a variety of HPC platforms.
 
    In this article, we show how to implement a simple two-dimensional
-   molecular dynamics simulation package in pure Python using Compyle. The
-   result is a fully parallel program that is relatively easy to implement and
-   solves a non-trivial problem. The code transparently executes on multi-core
-   CPUs and GPGPUs allowing simulations with millions of particles. A 3D
-   version is also provided and compares very favorably with a well known,
-   open source, molecular dynamics package.
+   molecular dynamics (MD) simulation package in pure Python using Compyle.
+   The result is a fully parallel program that is relatively easy to implement
+   and solves a non-trivial problem. The code transparently executes on
+   multi-core CPUs and GPGPUs allowing simulations with millions of particles.
+   A 3D MD code is also provided and compares very favorably with a well
+   known, open source, molecular dynamics package.
 
 
 .. class:: keywords
@@ -76,8 +76,9 @@ and mature compiler that makes it possible to write code in a mixture of
 Python and C. Cython also provides loop parallelism using OpenMP. Packages
 like cppimport_ and pybind11_ make it a breeze to integrate Python with C++
 code. In addition, there are powerful interfaces to GPUs via packages like
-PyOpenCL_ or PyCUDA_. Of these, Numba has matured a great deal and is both
-easy to use and versatile.
+PyOpenCL_ or PyCUDA_. Furthermore, packages like Reikna_ provide an
+abstraction and higher level API using PyOpenCL and PyCUDA. Of these, Numba
+has matured a great deal and is both easy to use and versatile.
 
 Given this context, one may wonder why Compyle exists at all. While Compyle
 grew out of a project that pre-dates Numba, the real reason that Compyle
@@ -177,6 +178,7 @@ our code can be almost two-times faster for the problem considered.
 .. _copperhead: https://github.com/bryancatanzaro/copperhead
 .. _Cython: https://cython.org/
 .. _HooMD: http://glotzerlab.engin.umich.edu/hoomd-blue/
+.. _Reikna: http://reikna.publicfields.net/
 
 High-level overview
 --------------------
@@ -925,3 +927,12 @@ possible because of our approach to the problem which puts parallel algorithms
 first and forces the user to write code with a hard set of restrictions. With
 this, we are able to make good use of multi-core CPUs and GPUs with pure
 Python.
+
+
+Acknowledgements
+-----------------
+
+We gratefully acknowledge the many open source packages without which this
+work would never be possible. In particular we thank Andreas Klöckner for many
+of the parallel algorithms implemented as part of PyOpenCL_ and PyCUDA_ that
+are an inspiration for Compyle.
