@@ -163,7 +163,9 @@ execute efficiently in parallel on CPUs and GPUs without any modifications. We
 use this as a way to illustrate the three important parallel algorithms and
 show how they allow us to solve non-trivial problems. A three-dimensional
 version is also implemented and compared with HooMD_. The results show that
-our code can be almost two-times faster for the problem considered.
+our code can be almost two-times faster for the problem considered. A `Google
+Colaboratory notebook`_ is provided to make it easy to explore Compyle and
+these examples.
 
 
 
@@ -180,6 +182,7 @@ our code can be almost two-times faster for the problem considered.
 .. _Cython: https://cython.org/
 .. _HooMD: http://glotzerlab.engin.umich.edu/hoomd-blue/
 .. _Reikna: http://reikna.publicfields.net/
+.. _Google Colaboratory notebook: https://colab.research.google.com/drive/1SGRiArYXV1LEkZtUeg9j0qQ21MDqQR2U?usp=sharing
 
 High-level overview
 --------------------
@@ -260,8 +263,8 @@ algorithms in the context of the prototypical molecular dynamics problem. By
 the end of the article we show how easy it is to write the code with Compyle
 and have it execute on multi-core CPUs and GPGPUs. The programs we document
 here are also available as part of the Compyle examples. We provide a
-convenient notebook on google colab where users can run the simple examples on
-a GPU as well.
+convenient `Google Colaboratory notebook`_ where users can run the simple
+examples on a GPU as well.
 
 Installation
 -------------
