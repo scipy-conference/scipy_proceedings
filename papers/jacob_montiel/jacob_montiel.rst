@@ -44,30 +44,36 @@ storing large volumes of data is not practical. Additionally, keeping an accurat
 running the batch learning pipeline multiple times, which represents a challenge in fast-changing environments.
 For example:
 
-- Financial markets generate huge volumes of data daily. Depending on the state of such markets and multiple external
-  factors data can become obsolete quickly rendering it useless for creating accurate models. Predictive models must be
+- Financial markets generate huge volumes of data daily. For instance, the New York Stock Exchange captures 1    
+  terabyte of information each day [#]_. Depending on the state of such markets and multiple external factors data
+  can become obsolete quickly rendering it useless for creating accurate models. Predictive models must be
   able to adapt fast to be useful in this dynamic environment.
 - Predictive maintenance. The contribution of IoT to the digital universe is substantial. Data only from embedded
-  systems accounted for 2% of the world’s data in 2013, and is expected to hit 10% by 2020. IoT sensors are used to
+  systems accounted for 2% of the world’s data in 2013, and is expected to hit 10% by 2020 [#]_. IoT sensors are used to
   monitor the health of multiple systems, from complex systems such as airplanes to simpler ones such as household 
   appliances. Predictive systems are required to react fast to prevent disruptions from malfunctioning elements.
 - Online fraud detection. The speed of reaction of an automatic system is also an important factor in multiple
-  applications. Fraud detection in online banking presents similar challenges in terms of data collections and
-  processing. However, it also involves additional challenges, fraud detection systems must adapt quickly to changes
-  such as consumer behavior (for example during holidays), the stability of the financial markets, as well as the fact
-  that attackers constantly change their behavior to beat these systems.
+  applications. As a case in point, VisaNet has a capacity (as of June 2019) to handle more than 65,000 transactions
+  per second [#]_. Fraud detection in online banking involves additional challenges beside data collection and
+  processing. Fraud detection systems must adapt quickly to changes such as consumer behavior (for example during
+  holidays), the stability of the financial markets, as well as the fact that attackers constantly change their
+  behavior to beat these systems.
 - Supply chain. Several sectors use automatic systems in their supply chain to cope with the demand for products
   efficiently. However, the COVID-19 pandemic brought to attention the fragility of these systems to sudden changes,
   e.g., in less than 1 week, products related to the pandemic such as face masks filled the top 10 searched terms in
   Amazon [#]_. Many automatic systems failed to cope with change resulting in the disruption in the supply chain.
-- Climate change. Environmental data is a quintessential example of the five *v*'s of big data: volume, velocity,
-  variety, veracity, and value. Understanding this data has many implications in our daily lives, e.g., food production
-  can be severally impacted by climate change, disruption of the water cycle has resulted in a rise of heavy rains with
-  the associated risk of floodings. IoT sensors are now making environmental data available at a faster rate and machine
-  learning systems must adapt to this new norm.
+- Climate change. Environmental science data is a quintessential example of the five *v*'s of big data: volume, velocity,
+  variety, veracity, and value. In particular, NASA’s Earth Science Data and Information System project, holds 24
+  petabytes of data in its archive and distributed 1.3 billion files in 2017 [#]_. Understanding environmental data has many
+  implications in our daily lives, e.g., food production can be severally impacted by climate change, disruption of the
+  water cycle has resulted in a rise of heavy rains with the associated risk of floodings. IoT sensors are now making
+  environmental data available at a faster rate and machine learning systems must adapt to this new norm.
 
+.. [#] How Big Data Has Changed Finance, Trevir Nath, Investopedia, June 2019.
 .. [#] The Digital Universe of Opportunities: Rich Data and the Increasing Value of the Internet of Things, IDC, April 2014.
+.. [#] Visa fact sheet, July 2019.
 .. [#] Our weird behavior during the pandemic is messing with AI models. Will Douglas Heaven. MIT Technology Review. May 11, 2020.
+.. [#] Big data goes green, Neil Savage, Nature Index 2018 Earth and Environmental Sciences, June 2018
 
 .. figure:: stream_opportunity.png
    :align: center
