@@ -935,4 +935,5 @@ Acknowledgments
 We gratefully acknowledge the many open source packages without which this
 work would never be possible. In particular we thank Andreas Klöckner for many
 of the parallel algorithms implemented as part of PyOpenCL_ and PyCUDA_ that
-are an inspiration for Compyle.
+are an inspiration for Compyle. Our thanks to the reviewers for their feedback
+that has significantly improved the manuscript.
