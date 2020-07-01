@@ -48,10 +48,9 @@ connections.
 Netlists come in many different formats and organizational structures, but common constructs abound (within EDIF, 
 structural Verliog, and structural VHDL, etc.) :cite:`edif_based,verilog_netlist`. Most netlist formats have a notion of
 primitive or basic circuit components that form a basis from which any design can be created. If the contents of a 
-circuit component is unknown, it treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
+circuit component is unknown, it is treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
 cells, modules, or definitions, which can then be instanced individually into larger non-leaf definitions. These 
 definitions contains wires, nets, buses, or cables that together connect ports or pins on instances or on the definition
-itself. Definitions can be organized into libraries to keep things neat and tidy.
 
 Netlists can be hierarchical or they can be flat (see Figure :ref:`hierarchyflat`). Hierarchical netlists contain 
 non-leaf instances, which instance a definition that contains additional instances. Flat netlists contain only leaf 
@@ -65,14 +64,12 @@ analysis and transformations accross hierarchical boundaries. SpyDrNet focuses o
    :figclass: htbp
    
    A hierarchical netlist (left) versus a flat netlist (right). :label:`hierarchyflat`
-  
 
 SpyDrNet provides a common framework for representing, querying, and modifying netlists from which application specific
 analysis and transformation functions can be built. The data structure used to represent netlists is designed to provide
 quick pointer access to neighboring elements and it is designed to be extensible so that format specific constructs can 
-be stored along with the netlist for preservation when the netlist is exported. 
-
-.. SpyDrNet differs from most related tools in that its focus is on structural netlists as opposed to the synthesis or simulation of hardware description languages.
+be stored along with the netlist for preservation when the netlist is exported. This ability supports the
+representation of a wide variety of netlist formats.
 
 SpyDrNet is currently implemented in pure Python and provides a Python interface so that it can easily integrate with
 other Python packages such as NetworkX :cite:`networkx` and PyEDA :cite:`pyeda`. These library packages have been used
@@ -194,8 +191,8 @@ Wires are grouped inside cables and are elements that help hold connection infor
 
    Structure of the Intermediate Representation :label:`egfig`
 
-Multiple Formats
-****************
+Extensible Support for Multiple Netlist Formats
+***********************************************
 
 In addition to holding a generic netlist data structure, the universal netlist representation can hold information specific to individual formats. This is done through the inclusion of metadata dictionaries in many of the SpyDrNet objects. 
 
@@ -206,7 +203,9 @@ In addition, the metadata dictionary can be used to contain any desired user dat
 Callback Framework
 ------------------
 
-Additionally SpyDrNet includes a callback framework. These callbacks allow users to create plugins that can keep track of the current state of the netlist. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
+Some potential use cases for SpyDrNet could involve making incremental changes to the netlist, and following each of them up with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. These checks could be performed over the whole netlist datastructure on user demand which would add complexity for the end user. To fill this gap a callback framework was implemented.
+
+These callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
 
 Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the API defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
 
@@ -237,7 +236,9 @@ SpyDrNet has several high level features currently included. All of these featur
 
 Basic Functionality
 *******************
-Functionality is provided through the API to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The basic functionality includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
+Functionality is provided through the API to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are completely mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The basic functionality includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
+
+The mutability of the objects in SpyDrNet is of special mention. Many frameworks require that the object's name be set on creation, and disallow any changes to that name. SpyDrNet, on the other hand, allows name changes as well as any other changes to the connections, and properties of the objects. The callback framework, as discussed in another section, provides hooks that allow checks for violations of user defined rules if desired.
 
 Examples of some of the basic functionality are highlighted in the following code segment. Relationships, such as the reference member of the instances and the children of these references are members of the spydrnet objects. Additional key data can be accessed as members of the classes. Other format specific data can be accessed through dictionary lookups. Since the name is also key data but, is not required it can be looked up through either access method as noted in one of the single line comment.
 
@@ -273,12 +274,14 @@ Hierarchy
 
 Hierarchy is by default a component of many netlist formats. One of the main advantages to including hierarchy in a design is the ability to abstract away some of the finer details on a level based system, while still including all of the information needed to build the design. The design’s hierarchical information is maintained in SpyDrNet by having definitions instanced within other definitions.
 
-Hierarchy can slightly complicate some algorithms but it’s inclusion helps allow SpyDrNet to make the fewest possible changes to the design in an attempt to keep as much of the original format as possible. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to analyze the impact of hierarchy on later compilation steps.
+SpyDrNet allows the user to work with the structure of a netlist directly, having only one of each instance per hierarchical level, but it also allows the user view the netlist instances in a hierarchical context through the use of hierarchical references as outined below. Some other tools only provide the hierarchical representation of the design.
+
+There are drawbacks and advantages to each view on the netlist, but the inclusion of a hierarcical view helps allow users to make the fewest possible unneeded changes to the design. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to analyze the impact of hierarchy on later compilation steps.
 
 Flattening
 **********
 
-SpyDrNet has the ability to flatten hierarchical designs. One method to remove hierarchy from a design is to move all of the sub components to the top level of the netlist repeatedly until each sub component at the top level is a terminal instance, where no more structural information is included below that instance’s level. In the example comparing hierarchy to files systems, flattening could be compared to moving each of the files in a file system directly into the root directory, then deleting the folders which contained them.
+SpyDrNet has the ability to flatten hierarchical designs. One method to remove hierarchy from a design is to move all of the sub components to the top level of the netlist repeatedly until each sub component at the top level is a terminal instance, where no more structural information is included below that instance’s level.
 
 Flattening was added to SpyDrNet because there are some algorithms which can be applied more simply on a flat design. Algorithms in which a flat design may be simpler to work with are graph analysis, and other algorithms where the connections between low level components are of interest.
 
@@ -298,7 +301,7 @@ Included is an example of how one might flatten a netlist in spydrnet.
 Uniquify
 ********
 
-Uniquify is the name we give to the algorithm which helps ensure that each non-terminal instance is unique, meaning that it and it’s definition have a one to one relationship. Non-unique definitions and instances may exist in most netlist formats. One such example could be a four bit adder that is composed of four single bit adders. Assuming that each single bit adder is composed of more than just a single component on the target device, and that the single bit adders are all identical, the design may just define a single single bit adder which it uses in four places. To uniquify this design, new matching definitions for single bit adders would be created for each of the instances of the original single bit adder and the instances that correspond would be pointed to the new copied definitions. Thus each of the definitions would be left with a single instance. In our filesystem example, the uniquify algorithm could be thought of as a pass that removes all hard links in the filesystem, ensuring that when a file is edited in a given directory, files located in other directories are untouched, even if they contain all of the same information.
+Uniquify is the name we give to the algorithm which helps ensure that each non-terminal instance is unique, meaning that it and it’s definition have a one to one relationship. Non-unique definitions and instances may exist in most netlist formats. One such example could be a four bit adder that is composed of four single bit adders. Assuming that each single bit adder is composed of more than just a single component on the target device, and that the single bit adders are all identical, the design may just define a single single bit adder which it uses in four places. To uniquify this design, new matching definitions for single bit adders would be created for each of the instances of the original single bit adder and the instances that correspond would be pointed to the new copied definitions. Thus each of the definitions would be left with a single instance. 
 
 The uniquify algorithm is very useful when modifications are desired on a specific part of the netlist but not to all instances of the particular component. For example in the four bit adder, if we assume that the highest bit does not need a carry out, the single bit adder there could be simplified. However, if we make modifications to the single bit adder before uniquifying the modifications will apply to all four adders. If we instead uniquify first then we can easily modify only the adder of interest.
 
