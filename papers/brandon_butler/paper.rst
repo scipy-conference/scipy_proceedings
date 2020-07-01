@@ -75,11 +75,13 @@ TRUEness is one of many motivating factors for HOOMD-blue version 3.0.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
 engine with a C++ back end, provides to use a Python API facilitated through pybind11
-:cite:`jakob.etal2017`.  HOOMD-blue was initially released in 2008 as the first fully GPU-enabled MD
-simulation engine using NVIDIA GPUs through CUDA. Since its initial release, HOOMD-blue has remained
-under active development, adding numerous features over the years that have increased its range of
-applicability, including adding support for domain decomposition (dividing the simulation box among
-MPI ranks) in 2014 and recent developments that enable support for AMD in addition to NVIDIA GPUs.
+:cite:`jakob.etal2017`. The package is open-source under the 3-clause BSD license, and the code is
+hosted on GitHub (https://github.com/glotzerlab/hoomd-blue). HOOMD-blue was initially released in
+2008 as the first fully GPU-enabled MD simulation engine using NVIDIA GPUs through CUDA. Since its
+initial release, HOOMD-blue has remained under active development, adding numerous features over the
+years that have increased its range of applicability, including adding support for domain
+decomposition (dividing the simulation box among MPI ranks) in 2014 and recent developments that
+enable support for AMD in addition to NVIDIA GPUs.
 
 Despite its great flexibility, the package's API still has certain key limitations. In particular,
 since its inception HOOMD-blue has been designed around some maintenance of global state. The
