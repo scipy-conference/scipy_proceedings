@@ -121,6 +121,8 @@ also create their own composer to support the format that they desire. The API i
 and composer support. Users need not learn excess information about the internals of the netlist to create an effective
 composer or parser.
 
+SpyDrNet aims to be programmer friendly. The datastructure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. This ideology resulted in a slightly longer running time in some cases, but speed was taken into account as these decisions were made. If a feature increased the run time of the tests, it was examined and optimized.
+
 Constructs Employed
 *******************
 
@@ -134,38 +136,38 @@ Representing netlist data structures presents a unique challenge. These data str
 
 A short description of some of the more complex components is provide here as background to help the reader more easily understand how the various applications are working on the netlist datastructure.
 
-Element
-+++++++
+**Element**
++++++++++++
 
 This is the base class for all components of a netlist. Components are further divided into first class elements and regular elements. First class elements have a name field as well as a properties field.
 
-Definition
-++++++++++
+**Definition**
+++++++++++++++
 
 These objects are sometimes called cells or modules in other representations. They hold all of the information about what their instances contain.
 
-Instance
-++++++++
+**Instance**
+++++++++++++
 
 This element is a place holder to be replaced with the subelements of the corresponding definition upon build. It is contained in a different definition to its own. In the case of the top level instance it is the place holder that will be replaced by the entire netlist when it is implemented
 
-Port
-++++
+**Port**
+++++++++
 
 The Port element can be thought of as containing the information on how a Definition connects the outside world to the elements (instances and cables) it contains.
 
-Cable
-+++++
+**Cable**
++++++++++
 
 Cables are bundles of wires that connect components within a definition. They connect ports to their destination pins.
 
-Pin
-+++
+**Pin**
++++++++
 
 These objects represent points of connection between instances or ports and wires. Pins can be divided into inner and outer pin categories. The need for these distinctions lies in the fact that definitions may have more than one instance of itself. Thus components connected on the inside of a definition need to connect to pins related to the definition will connect to inner pins on the definition. Each of these inner pins will correspond to one or more outer pins on instances of the corresponding definition. In this way instances can be connected togehter while still allowing components within a definition to connect to the ports of that definition.
 
-Wire
-++++
+**Wire**
+++++++++
 
 Wires are grouped inside cables and are elements that help hold connection information between single pins on instances within a definition and within it’s ports.
 
