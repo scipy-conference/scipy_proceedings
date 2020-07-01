@@ -77,8 +77,8 @@ improving the reliability of computer circuits implemented on static random acce
 Development efforts moved towards SpyDrNet to bring the previous tools functionality to Python and open up its use to a
 larger number of formats and unique applications.
 
-.. figure:: SpyDrNetFlow2.png
-   :scale: 300%
+.. figure:: spydrnetflow3.png
+   :scale: 30%
    :align: center
    :figclass: w
 
