@@ -45,9 +45,9 @@ Molecular simulation has been an important technique for studying the equilibriu
 molecular systems since the 1950s. The two most common methods for this purpose are molecular
 dynamics and Monte Carlo simulations :cite:`metropolis.etal1953, alder.wainwright1959`. Molecular
 dynamics (MD) is the application of Newton's laws of motion to molecular system, while Monte Carlo
-simulations explore a system's degrees of freedom through a Markov chain to find equilibrium
-quantities. Since their inception these tools have been used to study numerous systems, examples
-include colloids :cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal2014`, and proteins
+(MC) methods employ a Markov chain to sample from equilibrium configurations. Since their inception
+these tools have been used to study numerous systems, examples include colloids
+:cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal2014`, and proteins
 :cite:`dignon.etal2018a`, among others.
 
 Today many software packages exist for these purposes. LAMMPS :cite:`plimpton1993`, GROMACS
