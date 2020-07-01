@@ -305,6 +305,7 @@ The clone algorithm is very useful while implementing some of the higher level a
 The example code included in this section will clone an element and then add that element back into the netlist which it originally belonged to. Comments are included for most lines in this example to illuminate why each step must be taken. 
 
 .. code-block:: python
+
    import spydrnet
 
    netlist = spydrnet.load_example_netlist_by_name('hierarchical_luts')
