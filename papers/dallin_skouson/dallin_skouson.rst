@@ -180,8 +180,8 @@ Wires are grouped inside cables and are elements that help hold connection infor
 
    Structure of the Intermediate Representation :label:`egfig`
 
-Multiple Formats
-****************
+Extensible Support for Multiple Netlist Formats
+***********************************************
 
 In addition to holding a generic netlist data structure, the universal netlist representation can hold information specific to individual formats. This is done through the inclusion of metadata dictionaries in many of the SpyDrNet objects. 
 
