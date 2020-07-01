@@ -35,6 +35,7 @@
 :author: BahaaEddin AlAila
 :email:
 :institution: Computer Science Department, Franklin College of Arts and Sciences
+:institution: Institute for Artificial Intelligence, Franklin College of Arts and Sciences
 
 :author: Shannon Quinn
 :email: spq@uga.edu	
