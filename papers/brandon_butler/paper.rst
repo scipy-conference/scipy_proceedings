@@ -50,18 +50,20 @@ quantities. Since their inception these tools have been used to study numerous s
 include colloids :cite:`damasceno.etal2012`, metallic glasses :cite:`fan.etal2014`, and proteins
 :cite:`dignon.etal2018a`, among others.
 
-Today many software packages exist for this purpose for MD, LAMMPS :cite:`plimpton1993`, GROMACS
-:cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, and Amber
-:cite:`salomon-ferrer.etal2013, case.etal2005` and MC, Cassandra :cite:`shah.etal2017` and MCCCS
-Towhee :cite:`martin2013`, to name a few. Implementations on high performance GPUs
+Today many software packages exist for these purposes. LAMMPS :cite:`plimpton1993`, GROMACS
+:cite:`berendsen.etal1995, abraham.etal2015`, OpenMM :cite:`eastman.etal2017`, ESPResSo
+:cite:`weik.etal2019,guzman.etal2019` and Amber :cite:`salomon-ferrer.etal2013, case.etal2005` are a
+few examples of popular MD packages, while Cassandra :cite:`shah.etal2017` and MCCCS Towhee
+:cite:`martin2013` provide MC simulation capabilities. Implementations on high performance GPUs
 :cite:`spellings.etal2017`, parallel architectures :cite:`niethammer.etal2014`, and the greater
-accessibility of computational power have improved tremendously the length :cite:`byna.etal2012` and
+accessibility of computational power have tremendously improved the length :cite:`byna.etal2012` and
 time :cite:`shaw.etal2009` scales of simulations from those conducted in the mid 1900s. The
 flexibility and generality of such tools has dramatically increased the usage of molecular
 simulations, which has in turn led to demands for even more customizable software packages that can
 be tailored to very specific simulation requirements.  Different tools have taken different
 approaches to enabling this, such as the text-file scripting in LAMMPS, the command line interface
-provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM.
+provided by GROMACS, and the Python, C++, C, and Fortran bindings of OpenMM. Recently, programs that
+have used other interfaces have also added Python bindings such as LAMMPS and GROMACS.
 
 In the development of these tools, the requirements for the software to enable good science became
 more obvious. Having computational research that is Transferable, Reproducible, Usable (by others),
