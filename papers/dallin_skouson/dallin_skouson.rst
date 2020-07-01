@@ -25,11 +25,11 @@ Performing Netlist Analysis and Transformations Using SpyDrNet
    Hardware circuits can contain a large number of discrete components and connections. These connections are defined by
    a data strauture called a "netlist". Important information can be gained by analyzing the structure of the circuit 
    netlist and relationships between components. Many specific circuit manipulations require component reorganization in
-   hierarchy and various circuit transformations.
-
-   SpyDrNet is an open-source netlist analysis and transformation tool that performs many of these functions written in 
-   Python. It provides a framework for netlist representation, querying, and modification. This tool is actively used to
-   enhance circuit reliability in radiation environments through partial circuit replication.
+   hierarchy and various circuit transformations. SpyDrNet is an open-source netlist analysis and transformation tool 
+   written in Python that performs many of these functions. SpyDrNet provides a framework for netlist representation, 
+   querying, and modification that is netlist format independent and generalized for use in a wide variety of 
+   applications. This tool is actively used to enhance circuit reliability and error detection in harsh radiation 
+   environments.
 
 .. class:: keywords
 
@@ -51,26 +51,40 @@ primitive or basic circuit components that form a basis from which any design ca
 circuit component is unknown, it treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
 cells, modules, or definitions, which can then be instanced individually into larger non-leaf definitions. These 
 definitions contains wires, nets, buses, or cables that together connect ports or pins on instances or on the definition
-itself. Instancing definitions within definitions provides hierarchy up to the top hierarchical instance and definitions
-can be further organized into libraries to keep things neat and tidy. 
+itself. Definitions can be organized into libraries to keep things neat and tidy.
+
+Netlists can be hierarchical or they can be flat (see Figure :ref:`hierarchyflat`). Hierarchical netlists contain 
+non-leaf instances, which instance a definition that contains additional instances. Flat netlists contain only leaf 
+instances, which instance a definition that is void of additional instances. SpyDrNet supports hierarchy and performing 
+analysis and transformations accross hierarchical boundaries. SpyDrNet focuses on structual netlists that are static 
+(i.e., netlists that do not change based on inputs to the netlist).
+
+.. figure:: hierarchy_vs_flat_horizontal.pdf
+   :scale: 68%
+   :align: center
+   :figclass: htbp
+   
+   A hierarchical netlist (left) versus a flat netlist (right). :label:`hierarchyflat`
+  
 
 SpyDrNet provides a common framework for representing, querying, and modifying netlists from which application specific
 analysis and transformation functions can be built. The data structure used to represent netlists is designed to provide
 quick pointer access to neighboring elements and it is designed to be extensible so that format specific constructs can 
-be stored along with the netlist for preservation when the netlist is exported. SpyDrNet differs from most related tools
-in that its focus is on structural netlists as opposed to the synthesis or simulation of hardware description languages.
+be stored along with the netlist for preservation when the netlist is exported. 
+
+.. SpyDrNet differs from most related tools in that its focus is on structural netlists as opposed to the synthesis or simulation of hardware description languages.
 
 SpyDrNet is currently implemented in pure Python and provides a Python interface so that it can easily integrate with
 other Python packages such as NetworkX :cite:`networkx` and PyEDA :cite:`pyeda`. These library packages have been used
 in tandem with SpyDrNet to prototype new analysis techniques for better understanding the connectivity and 
 relationships between circuit components as part of reliability research. The Python platform also makes this tool 
-readily available to anyone in the community that may be interested in using it. 
+readily available to anyone interested in the community. 
 
 This paper presents the SpyDrNet framework, some of its use cases, and highlights its use in the development of 
 advanced reliability enhancement techniques. This tool originates from a long line of reliability research focused on
 improving the reliability of computer circuits implemented on static random access memory based (SRAM-based) field programmable gate arrays (FPGAs)
 :cite:`johnson_dwc,pratt_2008,Johnson:2010`. The predecessor to this tool is BYU EDIF Tools :cite:`BYUediftools`. 
-Development efforts moved towards SpyDrNet to bring the previous tools functionality to Python and open up its use to a
+Development efforts moved toward SpyDrNet to bring the previous functionality to Python and open up its use to a
 larger number of formats and unique applications.
 
 .. figure:: SpyDrNetFlow2.png
@@ -104,7 +118,7 @@ Figure :ref:`exteriorfig` represents how a design can be prepared and processed 
 
 Internally the SpyDrNet tool is composed of a flow that begins with a parser, accepting any of the supported languages. The parser creates an in memory data structure of the design stored in the intermediate representation. After this the tool can perform any of its analysis or modification passes on the design. Once the design is in a state where the user is satisfied a supported export function called a composer is used to pass the design back out. Figure :ref:`flowfig` represents the internal flow within SpyDrNet.
 
-.. figure:: flow.png
+.. figure:: flow.pdf
    :align: center
    :figclass: htbp
 
@@ -132,7 +146,7 @@ Constructs Employed
 
 A short description of some of the datastructure components is provide here to help the reader more easily visualize how optimization trade offs were selected. This background will also assist as some of the core functionality of SpyDrNet is later discussed. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
 
-.. figure:: IR.png
+.. figure:: IR.pdf
    :align: center
    :figclass: htbp
 
