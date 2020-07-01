@@ -31,6 +31,9 @@ Performing Netlist Analysis and Transformations Using SpyDrNet
    Python. It provides a framework for netlist representation, querying, and modification. This tool is actively used to
    enhance circuit reliability in radiation environments through partial circuit replication.
 
+   Circuit representations come in a variety of formats, each having unique requirements. SpyDrNet aims to provide the
+   flexibility needed to meet the demands of a wide variety of structural netlist representations.
+
 .. class:: keywords
 
    Hardware Design, Netlists, SpyDrNet, EDIF
@@ -48,16 +51,17 @@ connections.
 Netlists come in many different formats and organizational structures, but common constructs abound (within EDIF, 
 structural Verliog, and structural VHDL, etc.) :cite:`edif_based,verilog_netlist`. Most netlist formats have a notion of
 primitive or basic circuit components that form a basis from which any design can be created. If the contents of a 
-circuit component is unknown, it treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
+circuit component is unknown, it is treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
 cells, modules, or definitions, which can then be instanced individually into larger non-leaf definitions. These 
 definitions contains wires, nets, buses, or cables that together connect ports or pins on instances or on the definition
 itself. Instancing definitions within definitions provides hierarchy up to the top hierarchical instance and definitions
-can be further organized into libraries to keep things neat and tidy. 
+can be further organized into libraries to keep things neat and tidy.
 
 SpyDrNet provides a common framework for representing, querying, and modifying netlists from which application specific
 analysis and transformation functions can be built. The data structure used to represent netlists is designed to provide
 quick pointer access to neighboring elements and it is designed to be extensible so that format specific constructs can 
-be stored along with the netlist for preservation when the netlist is exported. SpyDrNet differs from most related tools
+be stored along with the netlist for preservation when the netlist is exported. These constructs allow for the 
+representation of a wide variety of netlist formats. SpyDrNet differs from most related tools
 in that its focus is on structural netlists as opposed to the synthesis or simulation of hardware description languages.
 
 SpyDrNet is currently implemented in pure Python and provides a Python interface so that it can easily integrate with
