@@ -326,7 +326,6 @@ Results
 To test our framework, a dataset of 100,000 single-particle diffraction images was simulated from a lidless chaperone (mm-cpn) in its open state, using Protein Data Bank entry 3IYF :cite:`Zhang2010`. These images were processed by the algorithm described above to get the 2-point correlation function, :math:`C_2(q, q', \Delta\phi)`, described in Equation (:ref:`eq:intro`). This correlation function was first filtered and reduced using the methods described in :cite:`Pande2018`, and then the reconstruction algorithm in :cite:`Donatelli2015` was applied to reconstruct the electron density of the chaperone from the reduced correlations, yielding the reconstruction shown in Figure :ref:`fig:reconstruction`.
 
 .. figure:: reconstruction.png
-   :figclass: b
 
    Reconstruction of a lidless chaperone (mm-cpn) in its open state from simulated diffraction patterns. :label:`fig:reconstruction`
 
