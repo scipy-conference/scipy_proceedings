@@ -121,12 +121,14 @@ also create their own composer to support the format that they desire. The API i
 and composer support. Users need not learn excess information about the internals of the netlist to create an effective
 composer or parser.
 
-SpyDrNet aims to be programmer friendly. The datastructure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. This ideology resulted in a slightly longer running time in some cases, but speed was taken into account as these decisions were made. If a feature increased the run time of the tests, it was examined and optimized.
+SpyDrNet aims to be programmer friendly. The datastructure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. One example of this is the bidirectional references implemented throughout the netlist. This ideology resulted in a slightly longer running time in some cases (and shorter in others), but speed was taken into account as these decisions were made. If a feature significantly increased the run time of the tests, it was examined and optimized.
+
 
 Constructs Employed
 *******************
 
-Representing netlist data structures presents a unique challenge. These data structures are highly connected. Maintaining bidirectional references is also helpful to end users by providing quick traversal of netlist components. The basic constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components.
+
+A short description of some of the datastructure components is provide here to help the reader more easily visualize how optimization trade offs were selected. This background will also assist as some of the core functionality of SpyDrNet is later discussed. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
 
 .. figure:: IR.png
    :align: center
@@ -134,7 +136,6 @@ Representing netlist data structures presents a unique challenge. These data str
 
    Highlights the connectivity between components in the intermediate representation :label:`irfig`
 
-A short description of some of the more complex components is provide here as background to help the reader more easily understand how the various applications are working on the netlist datastructure.
 
 **Element**
 +++++++++++
