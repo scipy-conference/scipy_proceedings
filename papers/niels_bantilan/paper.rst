@@ -394,7 +394,7 @@ The schema definition above establishes the following properties about the
 data:
 
 * the ``person_id`` column is a positive integer, which is a common
-  way of encode unique identifiers in a dataset. By setting
+  way of encoding unique identifiers in a dataset. By setting
   ``allow_duplicates`` to ``False``, the schema indicates that this column
   is a unique identifier in this dataset.
 * ``height_in_feet`` is a positive float whose maximum value is 10 feet, which
@@ -677,13 +677,14 @@ function, one can write:
 Conditional Validation Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If we want to validate the values of one column conditioned on another, the
-``Check`` function signature is slightly modified to expect an input dictionary
-where the keys are discrete group levels in the conditional column and
-values are pandas ``Series`` objects containing subsets of the column of
-interest. Returning to the endurance study example, we could simply assert that
-the mean running duration of the treatment group is greater than that of the
-control group without assessing statistical significance:
+If we want to validate the values of one column conditioned on another, we can
+provide the other column name in the `groupby` argument. This changes the
+expected ``Check`` function signature to expect an input dictionary where the
+keys are discrete group levels in the conditional column and values are pandas
+``Series`` objects containing subsets of the column of interest. Returning to
+the endurance study example, we could simply assert that the mean running
+duration of the treatment group is greater than that of the control group
+without assessing statistical significance:
 
 .. code-block:: python
 
@@ -697,9 +698,9 @@ control group without assessing statistical significance:
            pa.Float, checks=[
               Check.greater_than(0),
               Check(
-                  lambda arms: (
-                      arms["treatment"].mean()
-                      > arms["control"].mean()
+                  lambda duration_by_arm: (
+                      duration_by_arm["treatment"].mean()
+                      > duration_by_arm["control"].mean()
                   ),
                   groupby="arm"
               )
@@ -725,9 +726,9 @@ two species are in the same ``phylum``, then they must be in the same
            Check(
                # there exists only one unique kingdom
                # for species of the same phylum
-               lambda phyla: all(
-                   kingdoms.nunique() == 1
-                   for phylum in phyla.values()
+               lambda kingdoms: all(
+                   kingdoms[phylum].nunique() == 1
+                   for phylum in kingdoms
                ),
                # this can also be a list of columns
                groupby="phylum"
@@ -972,9 +973,9 @@ statistical properties of data, which requires run-time validation.
 
 The direction of this project has been driven, in large part, by its
 contributors, and will continue to be via feature requests on the github repo.
-There a number of experimental features that are currently available in version
-:code:`0.4.0+` that aim to speed up the iteration loop of defining schemas at
-development time through interactive analysis:
+There are a number of experimental features that are currently available in
+version :code:`0.4.0+` that aim to speed up the iteration loop of defining
+schemas at development time through interactive analysis:
 
 * `schema inference <https://pandera.readthedocs.io/en/v0.4.2/API_reference.html#schema-inference>`_:
   the ``pandera.infer_schema`` function takes as input a dataframe and outputs
@@ -1047,7 +1048,7 @@ maintained in the Python ecosystem:
 The key features that differentiate ``pandera`` from similar packages in the
 Python ecosystem are the following:
 
-* ``check_input`` and ``check_output`` function decorators that enable seamless
+* ``check_input`` and ``check_output`` function decorators enable seamless
   integration with existing data processing/analysis code.
 * ``Check`` validation rules are designed primarily for customizability, with
   built-in methods as a convenience for common validation rules.
