@@ -382,35 +382,39 @@ References
 
 
 .. [Pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
-        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
+        Proceedings of the 9th Python in Science Conference, 51-56 (2010),
+        `DOI:10.25080/Majora-92bf1922-00a <https://doi.org/10.25080/Majora-92bf1922-00a>`_
 
 .. [NumPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux.
         *The NumPy Array: A Structure for Efficient Numerical Computation*,
         Computing in Science & Engineering, vol. 13, 22-30 (2011),
-        `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`
+        `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`_
 
-.. [iMinuit] *iminuit -- A Python interface to Minuit*,
+.. [iMinuit] *iminuit — A Python interface to Minuit*,
         https://github.com/scikit-hep/iminuit
 
 .. [Matplotlib] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
-        Computing in Science & Engineering, vol. 9, no. 3, 90-95 (2007).
+        Computing in Science & Engineering, vol. 9, no. 3, 90-95 (2007),
+        `DOI:10.1109/MCSE.2007.55 <https://doi.org/10.1109/MCSE.2007.55>`_
 
-.. [ROOT] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
-        https://indico.cern.ch/event/913205/contributions/3840338 (2020).
+.. [ROOT] Rene Brun and Fons Rademakers *ROOT — An Object Oriented Data Analysis Framework*
+        Nucl. Inst. & Meth. A, vol. 386, no. 1, 81-86 (1997),
+        `DOI:10.1016/S0168-9002(97)00048-X <https://doi.org/10.1016/S0168-9002(97)00048-X>`_
 
 .. [Boost]  *The Boost Software Libraries*,
-        https://www.boost.org
+        `https://www.boost.org <https://www.boost.org>`_
 
 .. [SciPy] Pauli Virtanen et al.
         *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
-        Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
+        Nature Methods, in press.
+        `DOI:10.1038/s41592-019-0686-2 <https://doi.org/DOI:10.1038/s41592-019-0686-2>`_
 
 .. [IRIS-HEP] *Institute for Research and Innovation in Software for High Energy Physics*,
         https://iris-hep.org
 
 .. [SkHEP] Eduardo Rodrigues. *The Scikit-HEP Project*,
         EPJ Web Conf. **214** 06005 (2019),
-        DOI:10.1051/epjconf/201921406005
+        `DOI:10.1051/epjconf/201921406005 <DOI:10.1051/epjconf/201921406005>`_
 
 .. [Neu74] A. Neumaier.
         *Rundungsfehleranalyse einiger Verfahren zur Summation endlicher Summen*,
@@ -420,12 +424,12 @@ References
 .. [Numba] Siu Kwan Lam, Antoine Pitrou, Stanley Seibert.
         *Numba: a LLVM-based Python JIT compiler*,
         LLVM '15: Proceedings of the Second Workshop on the LLVM Compiler Infrastructure in HPC, 7, 1-6 (2015),
-        `DOI:10.1145/2833157.2833162 <https://doi.org/10.1145/2833157.2833162>`
+        `DOI:10.1145/2833157.2833162 <https://doi.org/10.1145/2833157.2833162>`_
 
 .. [LMFIT] Matthew Newville et al.
         *LMFIT: Non-Linear Least-Square Minimization and Curve-Fitting for Python*,
         Zenodo (2020),
-        DOI:10.5281/zenodo.3814709
+        `DOI:10.5281/zenodo.3814709 <https://doi.org/10.5281/zenodo.3814709>`_
 
 .. [PyBind] Wenzel Jakob, Jason Rhinelander, Dean Moldovan.
         *pybind11 -- Seamless operability between C++11 and Python*,
