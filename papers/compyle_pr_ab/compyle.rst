@@ -631,20 +631,17 @@ returns elements of the array that are smaller than 50.
             result_count[0] = item
 
     ary = np.random.randint(0, 100, 1000, dtype=np.int32)
-    result = np.zeros(len(ary.data), dtype=np.int32)
-    result = wrap(result, backend=backend)
-    result_count = np.zeros(1, dtype=np.int32)
-    result_count = wrap(result_count, backend=backend)
-    ary = wrap(ary, backend=backend)
+    res = np.zeros(len(ary.data), dtype=np.int32)
+    count = np.zeros(1, dtype=np.int32)
 
+    res, count, ary = wrap(res, count, ary, backend=backend)
     scan = Scan(input_expr, output_expr, 'a+b',
                 dtype=np.int32, backend=backend)
-    scan(ary=ary, result=result,
-         result_count=result_count)
-    result.pull()
-    result_count.pull()
-    result_count = result_count.data[0]
-    result = result.data[:result_count]
+    scan(ary=ary, result=res, result_count=count)
+    res.pull()
+    count.pull()
+    count = count.data[0]
+    res = res.data[:count]
 
 The argument :code:`i`, similar to that seen in elementwise kernels is the
 current index, the argument :code:`item` is the result of the scan including
