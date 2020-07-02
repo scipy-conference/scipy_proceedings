@@ -62,12 +62,12 @@ For example:
   efficiently. However, the COVID-19 pandemic brought to attention the fragility of these systems to sudden changes,
   e.g., in less than 1 week, products related to the pandemic such as face masks filled the top 10 searched terms in
   Amazon [#]_. Many automatic systems failed to cope with change resulting in the disruption in the supply chain.
-- Climate change. Environmental science data is a quintessential example of the five *v*'s of big data: volume, velocity,
-  variety, veracity, and value. In particular, NASA’s Earth Science Data and Information System project, holds 24
-  petabytes of data in its archive and distributed 1.3 billion files in 2017 [#]_. Understanding environmental data has many
-  implications in our daily lives, e.g., food production can be severally impacted by climate change, disruption of the
-  water cycle has resulted in a rise of heavy rains with the associated risk of floodings. IoT sensors are now making
-  environmental data available at a faster rate and machine learning systems must adapt to this new norm.
+- Climate change. Environmental science data is a quintessential example of the five *v*'s of big data: volume, 
+  velocity, variety, veracity, and value. In particular, NASA’s Earth Science Data and Information System project, holds
+  24 petabytes of data in its archive and distributed 1.3 billion files in 2017 [#]_. Understanding environmental data
+  has many implications in our daily lives, e.g., food production can be severally impacted by climate change,
+  disruption of the water cycle has resulted in a rise of heavy rains with the associated risk of floodings. IoT sensors
+  are now making environmental data available at a faster rate and machine learning systems must adapt to this new norm.
 
 .. [#] How Big Data Has Changed Finance, Trevir Nath, Investopedia, June 2019.
 .. [#] The Digital Universe of Opportunities: Rich Data and the Increasing Value of the Internet of Things, IDC, April 2014.
@@ -221,7 +221,7 @@ in Python. Developed as free and open-source software and distributed under the 
 License. Following the **SciKits** philosophy, scikit-multiflow extends the existing set of tools for scientific
 purposes. It features a collection of state-of-the-art methods for classification, regression, concept drift detection
 and anomaly detection, alongside a set of data generators and evaluators. scikit-multiflow is designed to seamlessly
-interact with NumPy :cite:`NumPy` and SciPy :cite:`SciPy`. Additionally, it contributes to the democratization of
+interact with *NumPy* :cite:`NumPy` and *SciPy* :cite:`SciPy`. Additionally, it contributes to the democratization of
 stream learning by leveraging the popularity of the Python language. scikit-multiflow is mainly written in Python, and
 some core elements are written in Cython :cite:`Cython` for performance.
 
@@ -237,10 +237,10 @@ main objectives:
    from scratch
 
 scikit-multiflow is not intended as a stand-alone solution for machine learning. It integrates with other Python
-libraries such as Matplotlib :cite:`Matplotlib` for plotting, scikit-learn :cite:`scikit-learn`  for incremental
-learning [#]_ compatible with the streaming setting, Pandas :cite:`Pandas` for data manipulation, Numpy and SciPy for
-numerical and scientific computations. However, it is important to note that scikit-multiflow does not extend
-scikit-learn, whose main focus in on batch learning. A key difference is that estimators in scikit-multiflow are
+libraries such as *Matplotlib* :cite:`Matplotlib` for plotting, *scikit-learn* :cite:`scikit-learn`  for incremental
+learning [#]_ compatible with the streaming setting, *Pandas* :cite:`Pandas` for data manipulation, *Numpy* and *SciPy*
+for numerical and scientific computations. However, it is important to note that scikit-multiflow does not extend
+*scikit-learn*, whose main focus in on batch learning. A key difference is that estimators in scikit-multiflow are
 incremental by design and training is performed by calling multiple times the :code:`partial_fit()` method. The
 majority of estimators implemented in scikit-multiflow are instance-incremental, meaning single instances are used to
 update their internal state. A small number of estimators are batch-incremental, where mini-batches of data are used.
@@ -505,14 +505,62 @@ worth noting the difference in memory between these estimators. The ``HoeffdingA
 performance while requiring less space in memory. This indicates that the branch replacement mechanism triggered by
 ADWIN has been applied, resulting in a less complex tree structure representing the data.
 
-Note that the volume of data in the previous examples is for illustrative purposes only. Real streaming data
-applications usually are exposed to data in the magnitude of millions of samples.
+Real-time applications
+++++++++++++++++++++++
+
+We recognize that previous examples use static synthetic data for illustrative purposes. However, the goal is to
+work on real-world streaming applications where data is continuously generated and must be processed in real-time. In
+this context, scikit-multiflow is designed to interact with specialized streaming tools, providing flexibility to the
+users to deploy streaming models and tools in different environments. For instance, an IoT architecture on an
+edge/fog/cloud computing environment is proposed in :cite:`cao2019`. This architecture is designed to capture, manage,
+process, analyze, and visualize IoT data streams. In this architecture, scikit-multiflow is the stream machine learning
+library inside the processing and analytics block.
+
+In the following example, we show how we can leverage existing Python tools to interact with dynamic data. We use
+*Streamz* [#]_ to get data from Apache Kafka. The data from the stream is used to incrementally train, one sample at a
+time, a ``HoeffdingTreeClassifier`` model. The output on each iteration is a boolean value indicating if the model
+correctly classified the last sample from the stream.
+
+.. [#] https://github.com/python-streamz/streamz
+
+.. code-block:: python
+
+   from streamz import Stream
+   from skmultiflow.trees import HoeffdingTreeClassifier
+   
+   @Stream.register_api()
+   class extended(Stream):
+       def __init__(self, upstream, model, **kwargs):
+           self.model = model
+           super().__init__(upstream, **kwargs)
+   
+       def update(self, x, who=None):
+           # Tuple x represents one data sample
+           # x[0] is the features array and
+           # x[1] is the target label
+           y_pred = self.model.predict(x[0])
+           # incrementally learn the current sample
+           self.model.partial_fit(x[0], x[1])
+           # output indicating if the model
+           # correctly classified the sample
+           self._emit(y_pred == x[1])
+   
+   s_in = Stream.from_kafka(**config)
+   ht = HoeffdingTreeClassifier()
+   
+   s_learn = s.map(read).extended(model=ht)
+   out = s_learn.sink_to_list()
+   
+   s_in.start()
+
+Alternatively, we could define two nodes, one for training and one for predicting. In this case, we just need to make
+sure that we maintain the *test-then-train* order.
 
 Get scikit-multiflow
---------------------
+++++++++++++++++++++
 
 scikit-multiflow work with Python 3.5+ and can be used on Linux, macOS, and Windows. The source code is publicly
-available in a GitHub. The stable release version is available via ``conda-forge`` (recommended) and ``pip``:
+available in GitHub. The stable release version is available via ``conda-forge`` (recommended) and ``pip``:
 
 .. code-block:: console
 
@@ -538,11 +586,11 @@ modify existing methods. We provide a quick overview of the core elements of sci
 used for the tasks of classification and drift detection.
 
 Acknowledgments
-----------------
+---------------
 
 The author is particularly grateful to Prof. Albert Bifet from the Department of Computer Science at the University of
 Waikato for his continuous support. We also thank Saulo Martiello Mastelini from the Institute of Mathematics and
-Computer Sciences at the University of São Paulo, for his ongoing collaboration on scikit-multiflow and his valuable
+Computer Sciences at the University of São Paulo, for his active collaboration on scikit-multiflow and his valuable
 work as one of the maintainers of the project. We thank interns who have contributed to scikit-multiflow and the
-open-source community who helps and motivate us to improve this project. We gratefully acknowledge the constructive
+open-source community who help and motivate the improvement of this project. We gratefully acknowledge the constructive
 comments of the reviewers. 
