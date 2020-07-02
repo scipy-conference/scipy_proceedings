@@ -1,4 +1,3 @@
-
 :author: Haw-minn Lu
 :email: hlu@westhealth.org
 :institution: Gary and Mary West Health Institute
@@ -45,11 +44,13 @@ method for encoding language.
 
 Some advantages to QOE include a reduction of dimensionality over that
 of using one-hot encoding thus limiting effects of the \`\`curse of
-dimensionality'' :cite:`wiki:curse` or the problem of high dimension low sample size
+dimensionality'' [#]_ or the problem of high dimension low sample size
 (HDLSS). The advantage over other encodings such as binary, hash, etc.
 is that it does not induce artificial geometric relationships that can
 cause downstream bias in the results because each label in a category
 remains mathematically near orthogonal to the other labels.
+
+.. [#] Mukhtar :cite:`mukhtar` gives a good explanation of the curse of dimensionality as applied to data science.
 
 We will briefly survey *classic* encoding methods, discuss the
 theoretical aspects of QOE, and present a detailed example implementation
@@ -69,7 +70,7 @@ statistical analysis is required, however there has not been widespread
 adoption of these encoding techniques for machine learning.
 
 Word embeddings are their own special category. 
-:cite:`wiki:wordembeddings`. Word embeddings 
+:cite:`wordembeddings`. Word embeddings 
 are used to represent words, phrases or even entire documents as a
 vector so that similar meanings/concepts are mapped to
 vectors that are close in the target vector space. Additionally, it is
@@ -494,7 +495,7 @@ It is difficult to find explicit constructions of quasiorthonormal sets in
 the literature. Several methods are mentioned by Kainen :cite:`kainan`, but
 these constructions are theoretical and hard
 to follow. There are a number of combinatorial problems related to such as
-spherical codes :cite:`weisstein` and Steiner Triple Systems :cite:`wiki:steiner`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
+spherical codes :cite:`weisstein` and Steiner Triple Systems :cite:`lindner2017design`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
 
 Since in a high dimensional space, two random vectors are likely to be
 quasiorthogonal, it is tempting to take a brute force approach and
