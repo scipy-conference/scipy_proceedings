@@ -701,12 +701,11 @@ influence and inform the preprocessing module in a meaningful way? We hope to ex
 
 We also encourage the expansion and application of this framework to various other problem contexts. 
 The modular approach to its design ensures portability and adaptability to other projects. 
-For example, the preprocessing module can be replaced with whatever field-specific computations are appropriate, 
-or forgone entirely. Furthermore, the fact that the dynamics module is designed to operate within the abstract 
+The fact that the dynamics module is designed to operate within the abstract 
 latent space of the appearance module means that the appearance module acts as a buffer or converter between 
 the concrete data and the temporal analysis. Consequently, when applying the framework to new projects, 
 only the appearance module need be altered, while the preprocessing module may optionally be adapted or 
-dropped, and the dynamics module preserved.
+entirely dropped, and the dynamics module preserved.
 
 One example task this pipeline could be adapted to is that of RNA folding analysis. The study of RNA 
 folding patterns is essential in areas such as drug development. One way to model RNA folding is to consider 
@@ -720,5 +719,4 @@ Acknowledgements
 
 This study was supported in part by Google Cloud. We gratefully acknowledge the support of NVIDIA Corporation 
 with the donation of the Titan X Pascal GPU used for this research. This study was supported in part by 
-NSF CAREER #1845915. The PI would like to thank all the students who made this work possible, 
-especially the graduates of the class of 2020 who persevered even under extraordinary circumstances. 
+NSF CAREER #1845915. 
