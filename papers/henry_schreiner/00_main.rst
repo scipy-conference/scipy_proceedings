@@ -61,7 +61,7 @@ Now look at this with an object-based Histogram library, such as boost-histogram
 
 In the object-based version, you fill once. If your data doesn't fit into memory, just fill in batches. The API for ND histograms is identical to 1D histograms, so you don't have to use different functions or change significant portions of code  even if you add a new axes later.
 
-Now let's look at using the object to make a series of plots, with one shown in Figure :ref:`fig-versions`. The code required to make the plot is shown below, with minor formatting details removed. 
+Now let's look at using the object to make a series of plots, with one shown in Figure :ref:`fig-versions` [#]_. The code required to make the plot is shown below, with minor formatting details removed. 
 
 .. code-block:: python
 
@@ -83,6 +83,8 @@ Now let's look at using the object to make a series of plots, with one shown in 
    A downloads vs. time histogram plot for iMinuit [iMinuit]_ by Python version, made with Matplotlib [Matplotlib]_. :label:`fig-versions`
 
 Note how all the computation, and the version information is stored in a single histogram object. The datetime centers are accessible after the package and version number are selected. Looping over the categories is trivial. Since the histogram is already filled, there are no other loops over the data to slow down manipulation. We could rebin or set limints or sum over axes cleanly as well.
+
+.. [#] Code available at https://github.com/scikit-hep/scikit-hep-orgstats
 
 Introduction
 ------------
