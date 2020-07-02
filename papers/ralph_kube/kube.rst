@@ -143,11 +143,12 @@ facilities.
     +===========================+====================+
     | real-time control         | millisecond        |
     +---------------------------+--------------------+
+    | real-time control         | millisecond        |
+    +---------------------------+--------------------+
     | live/inter-shot analysis  | seconds, minutes   |
     +---------------------------+--------------------+
     | scientific discovery      | hours, days, weeks |
     +---------------------------+--------------------+
-
 
 Designing the Delta framework
 -----------------------------
@@ -164,6 +165,9 @@ HPC platforms (though we endeavor to build the framework with flexibility and ex
 mind). In the remainder of this section we describe the data analysis workflow for ECEI data, the
 targeted network and deployment architecture and give an overview of how ``Delta`` connects them
 together.
+
+
+
 
 Electron Cyclotron Emission Imaging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -214,7 +218,6 @@ phases, are used to identify macro-scale structures, so called magnetic islands,
 micro-scale instabilities in the plasma [Cho17]_. Understanding the physics resulting in magnetic
 islands is important for plasma confinement, and avoiding sudden loss of plasma control, known as a
 disruption.
-
 
 
 Targeted HPC architecture
@@ -288,6 +291,7 @@ mechanisms to provide optimal performance. For the topology at hand, ``Delta`` c
 use the DataMan engine for both, trans-oceanic data and intra-datacenter transfer. Switching the
 engine used by ADIOS is trivial and requires only the change of a single line in a configuration
 file.
+
 
 
 
@@ -471,6 +475,9 @@ communication between MPI ranks becomes a bottleneck.
 
 
 
+
+
+
 Explored alternative architectures
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -563,6 +570,9 @@ of the the input data for the entire analysis task group. The second pool execut
 running the analysis kernels and immediate storage of the results. 
 
 
+
+
+
 Performance analysis
 --------------------
 
@@ -622,10 +632,11 @@ multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is imple
   @cython.boundscheck(False)
   @cython.wraparound(False)
   @cython.cdivision(True)
-  def kernel_coherence_64_cy(cnp.ndarray[cnp.complex128_t, 
-                                         ndim=3] data, 
-                                         ch_it, 
-                                         fft_config):
+  def kernel_coherence_64_cy(
+         cnp.ndarray[cnp.complex128_t, 
+                     ndim=3] data, 
+         ch_it, 
+         fft_config):
       cdef size_t num_idx = len(ch_it)      
       cdef size_t num_fft = data.shape[1]   
       cdef size_t num_bins = data.shape[2]  
@@ -804,6 +815,7 @@ agrees with the performance analysis that showed that the cross-correlation kern
 
 
 
+
 Conclusions and future work
 ---------------------------
 
@@ -848,11 +860,16 @@ All data used to generate the plots in this article can be accessed on Zenodo [Z
 
 
 
-
 References
 ----------
 
-.. [PPY] https://www.plasmapy.org
+
+.. [PPY] PlasmaPy Community, Nicholas A. Murphy, Andrew J. Leonard, Dominik Stańczak, Pawel M.
+         Kozlowski, Samuel J. Langendorf, Colby C. Haggerty, Jasper P. Beckers, Stuart J. Mumford, Tulasi N.
+         Parashar, and Yi-Min Huang. (2018, April). PlasmaPy: an open source community-developed Python
+         package for plasma physics. 
+         Zenodo. 
+         http://doi.org/10.5281/zenodo.1238132
 
 .. [Men15] O. Meneghini, S.P. Smith, L.L. Lao et al. *Integrated modeling applications for tokamak experiments with OMFIT*
          Nucl. Fusion **55** 083008 (2015)
@@ -860,17 +877,29 @@ References
 .. [Ent18] S. Entler, J. Horacek, T. Dlouhy and V. Dostal *Approximation of the economy of fusion energy*
            Energy 152 p. 489 (2018)
 
-.. [D3D] DIII-D http://www.ga.com/diii-d
+.. [D3D] K.H. Burrell for the DIII-D Team *Overview of recent experimental results from the DIII-D advanced tokamak program*
+         Nucl. Fusion 43 1555 (2003)
+         https://doi.org/10.1088/0029-5515/43/12/003
 
-.. [NSTX] NSTX https://www.pppl.gov/nstx
+.. [NSTX] J.E. Menard, J.P. Allain, D. Battaglia et al. *Overview of NSTX Upgrade initial results and modelling highlights*
+          Nucl. Fusion 57 102006 (29017)
+          https://doi.org/10.1088/1741-4326/aa600a
 
-.. [KSTAR] KSTAR Tokamak https://www.nfri.re.kr/kor/index
+.. [KSTAR] G.S. Lee, J. Kim, S.M. Hwang et al. *The design of the KSTAR tokamak*
+           Fus. Eng. Design 46 405-411 (1999)
+           https://doi.org/10.1016/S0920-3796(99)00032-0
 
-.. [AUG] ASDEX Upgrade https://www.ipp.mpg.de/16195/asdex
+.. [AUG] H. Vernickel, M. Blaumoser, K. Ennen et al. *ASDEX upgrade: A poloidal divertor tokamak adapted to reactor requirements*
+         Journ. Nucl. Mater. 128-129, 71-77 (1984)
+         https://doi.org/10.1016/0022-3115(84)90330-1
 
-.. [MAST] Mega Amp Spherical Tokamak https://ccfe.ukaea.uk/research/mast-upgrade/
+.. [MAST] A. Sykes, R.J. Akers, L.C. Appel et al. *First results from MAST*
+          Nucl. Fusion 41 1423 (2001)
+          https://doi.org/10.1088/0029-5515/41/10/310
 
-.. [TCV] https://www.epfl.ch/research/domains/swiss-plasma-center/research/tcv/research_tcv_tokamak/
+.. [TCV] S. Coda, J. Ahn, R. Albanese et al. *Overview of the TCV tokamak program: scientific progress and facility upgrades*
+         Nucl. Fusion 57 102011 (2017)
+         https://doi.org/10.1088/1741-4326/aa6412
 
 .. [Cos74] A.E Costley, R.J. Hastie, J.W.M. Paul, and J. Chamberlain *Electron Cyclotron Emission from a Tokamak Plasma: Experiment and Theory*
            Phys. Rev. Lett. 33 p. 758 (1974).
@@ -894,35 +923,51 @@ References
            Nucl. Fusion **57** 126058 (2017)
            https://doi.org/10.1088/1741-4326/aa86fe
 
-.. [cori] https://docs.nersc.gov/systems/cori/
+.. [cori] National Energy Research Scientific Computing Center. Cori. Retrieved from https://docs.nersc.gov/systems/cori/
 
-.. [top500] https://www.top500.org/lists/top500/list/2020/06/?page=1
+.. [top500] @top500supercomp (2019, Nov) We are proud to announce the 54th edition of the TOP500 list! 
+            China extends lead in number of TOP500 supercomputers, US holds on to performance advantage.
+            To view the full list, visit https://top500.org/lists/2019/11/
+            Retrieved from https://twitter.com/top500supercomp/status/1196428698339160065
 
-
-.. [dtn] http://es.net/science-engagement/technical-and-consulting-services/data-transfer-nodes/
+.. [dtn] Energy Sciences Network. Data Transfer Nodes. Retrieved from http://es.net/science-engagement/technical-and-consulting-services/data-transfer-nodes/
 
 .. [Xie12] B. Xie, J. Chase, D. Dillow et al. *Characterizing output bottlenecks in a supercomputer*
            SC '12: Proceedings of the International conference on High Performance Computing, Networking, Storage and Analysis 
            https://doi.org/10.1109/SC.2012.28
 
-.. [nerscdtn] https://docs.nersc.gov/systems/dtn/
+.. [nerscdtn] National Energy Research Scientific Computing Center. Data Transfer Nodes. Retrieved from https://docs.nersc.gov/systems/dtn/
 
-.. [iperf] https://iperf.fr
+.. [iperf] ESnet / Lawrence Berkeley National Laboratory (2014, July 7) iPerf - The ultimate speed test tool for TCP, UDP and SCTP. https://iperf.fr
 
-.. [adios] https://adios2.readthedocs.io/en/latest/index.html
+.. [adios] Oak Ridge National Laboratory (2018, April 5) ADIOS 2: The Adaptable Input/Output System version 2. Retrieved from https://adios2.readthedocs.io/en/latest/index.html
 
 .. [Liu14] Q. Liu, J. Logan, Y. Tian et al. *Hello ADIOS: the challenges and lessons of developing leadership class I/O frameworks*
            Concurrency Computat.: Pract. Exper. **26** 1453-1473 (2014).
+           https://doi.org/10.1002/cpe.3125
 
-.. [PEP3148] https://www.python.org/dev/peps/pep-3148/
+.. [PEP3148] B. Quinlan *PEP 3148 futures - execute computations asynchronously* 
+             2009
+             Retrieved from https://www.python.org/dev/peps/pep-3148/
 
-.. [mpi4py] https://mpi4py.readthedocs.io/en/stable/
+.. [mpi4py] L. Dalcin, R. Paz and M. Storti *MPI for Python*
+            Journal of Parallel and Distributed Computing, 65(9): 1108–1115, 2005
+            https://doi.org/10.1016/j.jpdc.2005.03.010
 
-.. [dask] https://dask.org
+.. [dask] M. Rocklin *Dask: Parallel Computation with Blocked Algorithms and Task Scheduling*
+          Proceedings of the 14th Python in Science Conference p.126-132 2015
+          DOI: 10.25080/Majora-7b98e3ed-013
+          
 
-.. [FFT] G. Heinzel, A. Rüdiger, R. Schilling, *Spectrum and spectral density estimation by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some new flat-top windows*
-         Max Planck Institute für Gravitationsphysik (Albert-Einstein-Institut) Feb. 2002
+.. [FFT] Heinzel, G., Rüdiger, A., & Schilling, R. (2002). Spectrum and spectral density estimation
+         by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some
+         new at-top windows.
+         http://hdl.handle.net/11858/00-001M-0000-0013-557A-5
+
 
 .. [Git] https://github.com/rkube/delta
 
-.. [Zen] https://doi.org/10.5281/zenodo.3871700
+.. [Zen] Kube, Ralph, Churchill, R Michael, Chang, CS, et al. (2020). 
+         Leading magnetic fusion energy science into thebig-and-fast data lane. 
+         Zenodo
+         http://doi.org/10.5281/zenodo.3871700
