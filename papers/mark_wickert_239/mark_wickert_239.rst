@@ -79,7 +79,9 @@ semi-analytic simulation techniques described in
 [Tranter]_ to allow fast and efficient performance
 evaluation. All of the simulation software is written in open-source
 Python using classes to encapsulate the computations, waveform parameters, 
-and calculation results.
+and calculation results. The mathematical foundation is statistical decision 
+theory, which in the machine learning would be multiclass classification with 
+apriori decision boundaries.
 
 
 .. figure:: Block_top.pdf
@@ -529,7 +531,9 @@ Software Tools and Reproducible Science
 
 All of the analysis and simulation software developed for this study is
 written in Python. It makes use of the *scipy-stack* and the authors
-GitHub project *scikit-dsp-comm* [Wickert1]_.
+GitHub project *scikit-dsp-comm* [Wickert1]_. Two classes 
+:code:`MPSK_sa_BEP` and :code:`MQAM_sa_BEP` do all 
+of the heavy lifting. 
 The code base specifics for this paper can be found on GitHub at
 [Wickert2]_. The contents include Jupyter notebooks
 and code modules. All of this is open-source and freely available.
