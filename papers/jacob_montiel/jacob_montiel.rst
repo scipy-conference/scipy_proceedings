@@ -35,14 +35,16 @@ Introduction
 ------------
 
 The minimum pipeline in machine learning is composed of: (1) data collection and processing, (2) model training, and
-(3) model deployment. Traditionally, data is collected and processed in batches. Although this approach is
-state-of-the-art in multiple applications, it is not suitable in the context of evolving data streams as it implies
-important compromises. In batch learning, data is assumed to be accessible (usually stored on a physical device), the
-limitations on this approach have been pushed as storage and processing power became cheaper. Similarly, advances in
-data management and storage have enabled the handling of large volumes of data. However, there exist instances where
-storing large volumes of data is not practical. Additionally, keeping an accurate model in dynamic systems implies
-running the batch learning pipeline multiple times, which represents a challenge in fast-changing environments.
-For example:
+(3) model deployment. Conventionally, data is collected and processed in batches. Although this approach is
+state-of-the-art in multiple applications, it is not suitable in the context of evolving data streams. The batch
+learning approach assumes that data is sufficiently large and accessible. This is not the case in streaming data where
+data is available one sample at a time, and storing it is impractical given its (theoretically) infinite nature.
+In addition, non-stationary environments require to run the pipeline multiple times in order to minimize model
+degradation, in other words maintain optimal performance. This is especially challenging in fast-changing environments
+where efficient and effective adaptation is vital. 
+
+As a matter of fact, multiple real-world machine learning applications exhibit the characteristics of evolving data
+streams, in particular we can mention:
 
 - Financial markets generate huge volumes of data daily. For instance, the New York Stock Exchange captures 1    
   terabyte of information each day [#]_. Depending on the state of such markets and multiple external factors data
@@ -164,11 +166,11 @@ Concept drift is known to harm learning  :cite:`Gama2014Survey`. The following p
 - **Outliers.** Not to be confused with true drift. A drift detection method must be robust to noise, in other words,
   minimize the number of false positives in the presence of outliers or noise.
 
-Although the incremental nature of stream methods provides some robustness to concept drift, specialized methods have
-been proposed to detect drift. Multiple methods have been proposed in the literature, :cite:`Gama2014Survey` provides a
-thorough survey of this topic. In general, the goal of drift detection methods is to accurately detect changes in the
-data distribution while showing robustness to noise and being resources-wise efficient.
-Drift-aware methods use drift detection mechanisms to react faster and efficiently to changes. For example, the
+Although the continuous learning nature of stream methods provides some robustness to concept drift, specialized methods
+have been proposed to detect drift. Multiple methods have been proposed in the literature, :cite:`Gama2014Survey`
+provides a thorough survey of this topic. In general, the goal of drift detection methods is to accurately detect
+changes in the data distribution while showing robustness to noise and being resources-wise efficient.
+Drift-aware methods use specialized detection mechanisms to react faster and efficiently to drift. For example, the
 *Hoeffding Tree* algorithm :cite:`Domingos2000HT`, a kind of decision tree for data streams, does not handle concept
 drift explicitly, whereas the *Hoeffding Adaptive Tree* :cite:`Bifet2009HAT` uses *ADaptive WINdowing* (*ADWIN*)
 :cite:`Bifet2007ADWIN` to detect drifts. If a drift is detected at a given branch, an alternate branch is created and
