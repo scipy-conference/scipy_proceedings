@@ -157,7 +157,7 @@ specific spectral analysis workflow that uses measurements from an ECEI diagnost
 diagnostics operated at fusion experiments produce a heterogeneous set of data streams, the ECEI
 spectral analysis workflow is representative for a large set of workflows used to analyze different
 measurements. HPC environments also differ for example in their local area network topologies, the
-speed of network links between data-transfer nodes to compute node and compute node interconnects
+speed of network links between data-transfer nodes to compute node, compute node interconnects,
 and their network security policies. Furthermore granted allocations of compute time for research
 projects make it impractical to start with a top-down approach that generalizes well to arbitrary
 HPC platforms (though we endeavor to build the framework with flexibility and extensibility in
