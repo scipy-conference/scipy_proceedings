@@ -2,7 +2,8 @@
   title={Diagnosing primary ciliary dyskinesia},
   author={O'Callaghan, Christopher and Chilvers, Mark and Hogg, Claire and Bush, Andrew and Lucas, Jane},
   year={2007},
-  publisher={BMJ Publishing Group Ltd}
+  publisher={BMJ Publishing Group Ltd},
+  doi={10.1136/thx.2007.083147}
 }
 
 @article{garrod2014airway,
@@ -13,16 +14,23 @@
   number={9},
   pages={1426--1432},
   year={2014},
-  publisher={American Thoracic Society}
+  publisher={American Thoracic Society},
+  doi={10.1513/AnnalsATS.201405-222OC}
 }
 
 @misc{watters2019spatial,
     title={Spatial Broadcast Decoder: A Simple Architecture for Learning Disentangled Representations in VAEs},
     author={Nicholas Watters and Loic Matthey and Christopher P. Burgess and Alexander Lerchner},
-    year={2019},
-    eprint={1901.07017},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG}
+    title     = {Spatial Broadcast Decoder: {A} Simple Architecture for Learning Disentangled Representations in VAEs},
+	journal   = {CoRR},
+	volume    = {abs/1901.07017},
+	year      = {2019},
+	url       = {http://arxiv.org/abs/1901.07017},
+	archivePrefix = {arXiv},
+	eprint    = {1901.07017},
+	timestamp = {Fri, 01 Feb 2019 13:39:59 +0100},
+	biburl    = {https://dblp.org/rec/journals/corr/abs-1901-07017.bib},
+	bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{TomczakW17,
@@ -48,7 +56,8 @@
   number={299},
   pages={299ra124--299ra124},
   year={2015},
-  publisher={American Association for the Advancement of Science}
+  publisher={American Association for the Advancement of Science},
+  doi={10.1126/scitranslmed.aaa1233}
 }
 
 @misc{doersch2016tutorial,
@@ -80,7 +89,8 @@
     author={Bustamante-Marin, Ximena M. and Ostrowski, Lawrence E.},
     journal={Cold Spring Harbor perspectives in biology},
     volume={9(4)},
-    year={2017}
+    year={2017},
+	doi={10.1101/cshperspect.a028241}
     }
     
 @article{houtmeyers1999regulation,
@@ -91,7 +101,8 @@
   number={5},
   pages={1177--1188},
   year={1999},
-  publisher={Eur Respiratory Soc}
+  publisher={Eur Respiratory Soc},
+  doi={10.1034/j.1399-3003.1999.13e39.x}
 }
 
 @article{satir1990physiology,
@@ -102,9 +113,9 @@
   number={1},
   pages={137--155},
   year={1990},
-  publisher={Annual Reviews 4139 El Camino Way, PO Box 10139, Palo Alto, CA 94303-0139, USA}
+  publisher={Annual Reviews 4139 El Camino Way, PO Box 10139, Palo Alto, CA 94303-0139, USA},
+  doi={10.1146/annurev.ph.52.030190.001033}
 }
-
 
 @article{beauchemin_computation_1995,
 	title = {The computation of optical flow},
@@ -149,31 +160,37 @@
 }
 
 @article{lu_stacked_2018,
-	title = {Stacked {Neural} {Networks} for end-to-end ciliary motion analysis},
-	url = {http://arxiv.org/abs/1803.07534},
-	abstract = {Cilia are hairlike structures protruding from nearly every cell in the body. Diseases known as ciliopathies, where cilia function is disrupted, can result in a wide spectrum of disorders. However, most techniques for assessing ciliary motion rely on manual identification and tracking of cilia; this process is laborious and error-prone, and does not scale well. Even where automated ciliary motion analysis tools exist, their applicability is limited. Here, we propose an end-to-end computational machine learning pipeline that automatically identifies regions of cilia from videos, extracts patches of cilia, and classifies patients as exhibiting normal or abnormal ciliary motion. In particular, we demonstrate how convolutional LSTM are able to encode complex features while remaining sensitive enough to differentiate between a variety of motion patterns. Our framework achieves 90\% with only a few hundred training epochs. We find that the combination of segmentation and classification networks in a single pipeline yields performance comparable to existing computational pipelines, while providing the additional benefit of an end-to-end, fully-automated analysis toolbox for ciliary motion.},
-	urldate = {2020-05-26},
-	journal = {arXiv:1803.07534 [cs, stat]},
-	author = {Lu, Charles and Marx, M. and Zahid, M. and Lo, C. W. and Chennubhotla, C. and Quinn, S. P.},
-	month = mar,
-	year = {2018},
-	note = {arXiv: 1803.07534},
-	keywords = {Computer Science - Machine Learning, Statistics - Machine Learning},
-	file = {arXiv Fulltext PDF:/home/sonia/Zotero/storage/UUMWL7XZ/Lu et al. - 2018 - Stacked Neural Networks for end-to-end ciliary mot.pdf:application/pdf;arXiv.org Snapshot:/home/sonia/Zotero/storage/7LNM9JRE/1803.html:text/html}
+  author    = {Charles Lu and
+               M. Marx and
+               M. Zahid and
+               C. W. Lo and
+               Chakra Chennubhotla and
+               Shannon P. Quinn},
+  title     = {Stacked Neural Networks for end-to-end ciliary motion analysis},
+  journal   = {CoRR},
+  volume    = {abs/1803.07534},
+  year      = {2018},
+  url       = {http://arxiv.org/abs/1803.07534},
+  archivePrefix = {arXiv},
+  eprint    = {1803.07534},
+  timestamp = {Mon, 15 Jun 2020 14:56:52 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/abs-1803-07534.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
-
 @article{huang_densely_2018,
-	title = {Densely {Connected} {Convolutional} {Networks}},
-	url = {http://arxiv.org/abs/1608.06993},
-	abstract = {Recent work has shown that convolutional networks can be substantially deeper, more accurate, and efficient to train if they contain shorter connections between layers close to the input and those close to the output. In this paper, we embrace this observation and introduce the Dense Convolutional Network (DenseNet), which connects each layer to every other layer in a feed-forward fashion. Whereas traditional convolutional networks with L layers have L connections - one between each layer and its subsequent layer - our network has L(L+1)/2 direct connections. For each layer, the feature-maps of all preceding layers are used as inputs, and its own feature-maps are used as inputs into all subsequent layers. DenseNets have several compelling advantages: they alleviate the vanishing-gradient problem, strengthen feature propagation, encourage feature reuse, and substantially reduce the number of parameters. We evaluate our proposed architecture on four highly competitive object recognition benchmark tasks (CIFAR-10, CIFAR-100, SVHN, and ImageNet). DenseNets obtain significant improvements over the state-of-the-art on most of them, whilst requiring less computation to achieve high performance. Code and pre-trained models are available at https://github.com/liuzhuang13/DenseNet .},
-	urldate = {2020-05-26},
-	journal = {arXiv:1608.06993 [cs]},
-	author = {Huang, Gao and Liu, Zhuang and van der Maaten, Laurens and Weinberger, Kilian Q.},
-	month = jan,
-	year = {2018},
-	note = {arXiv: 1608.06993},
-	keywords = {Computer Science - Computer Vision and Pattern Recognition, Computer Science - Machine Learning},
-	file = {arXiv Fulltext PDF:/home/sonia/Zotero/storage/55DZZC8W/Huang et al. - 2018 - Densely Connected Convolutional Networks.pdf:application/pdf;arXiv.org Snapshot:/home/sonia/Zotero/storage/LHZNHJLH/1608.html:text/html}
+  author    = {Gao Huang and
+               Zhuang Liu and
+               Kilian Q. Weinberger},
+  title     = {Densely Connected Convolutional Networks},
+  journal   = {CoRR},
+  volume    = {abs/1608.06993},
+  year      = {2016},
+  url       = {http://arxiv.org/abs/1608.06993},
+  archivePrefix = {arXiv},
+  eprint    = {1608.06993},
+  timestamp = {Mon, 10 Sep 2018 15:49:32 +0200},
+  biburl    = {https://dblp.org/rec/journals/corr/HuangLW16a.bib},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
 @article{horn_determining_1981,
@@ -207,24 +224,6 @@
     url={https://doi.org/10.1023/A:1021669406132}
 }
 
-@misc{tomczak2017,
-    title={VAE with a VampPrior},
-    author={Jakub M. Tomczak and Max Welling},
-    year={2017},
-    eprint={1705.07120},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG}
-}
-
-@misc{watters2019,
-    title={Spatial Broadcast Decoder: A Simple Architecture for Learning Disentangled Representations in VAEs},
-    author={Nicholas Watters and Loic Matthey and Christopher P. Burgess and Alexander Lerchner},
-    year={2019},
-    eprint={1901.07017},
-    archivePrefix={arXiv},
-    primaryClass={cs.LG}
-}
-
 @article{raidt2014ciliary,
   title={Ciliary beat pattern and frequency in genetic variants of primary ciliary dyskinesia},
   author={Raidt, Johanna and Wallmeier, Julia and Hjeij, Rim and Onnebrink, J{\"o}rg Gro{\ss}e and Pennekamp, Petra and Loges, Niki T and Olbrich, Heike and H{\"a}ffner, Karsten and Dougherty, Gerard W and Omran, Heymut and others},
@@ -233,7 +232,8 @@
   number={6},
   pages={1579--1588},
   year={2014},
-  publisher={Eur Respiratory Soc}
+  publisher={Eur Respiratory Soc},
+  doi={10.1183/09031936.00052014}
 }
 
 @article{kempeneers2017variation,
@@ -244,7 +244,8 @@
   number={5},
   pages={993--1001},
   year={2017},
-  publisher={Elsevier}
+  publisher={Elsevier},
+  doi={10.1016/j.chest.2016.09.015}
 }
 
 @article{ferkol2012ciliopathies,
@@ -255,7 +256,8 @@
   number={3},
   pages={366},
   year={2012},
-  publisher={NIH Public Access}
+  publisher={NIH Public Access},
+  doi={10.1016/j.jpeds.2011.11.024}
 }
 
 @inproceedings{quinn_novel_2011,
@@ -276,14 +278,14 @@
 	file = {Quinn et al. - 2011 - Novel use of differential image velocity invariant.pdf:/home/sonia/Zotero/storage/37EWYT9F/Quinn et al. - 2011 - Novel use of differential image velocity invariant.pdf:application/pdf}
 }
 
-@article{Cho2014LearningPR,
-  title={Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation},
-  author={Kyunghyun Cho and Bart van Merrienboer and {\c{C}}aglar G{\"{u}}l{\c{c}}ehre and Dzmitry Bahdanau and Fethi Bougares and Holger Schwenk and Yoshua Bengio},
-  journal={ArXiv},
-  year={2014},
-  volume={abs/1406.1078}
+@misc{Cho2014LearningPR,
+    title={Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation},
+    author={Kyunghyun Cho and Bart van Merrienboer and Caglar Gulcehre and Dzmitry Bahdanau and Fethi Bougares and Holger Schwenk and Yoshua Bengio},
+    year={2014},
+    eprint={1406.1078},
+    archivePrefix={arXiv},
+    primaryClass={cs.CL}
 }
-
 @INPROCEEDINGS{LSTM1999,
   author={F. A. {Gers} and J. {Schmidhuber} and F. {Cummins}},
   booktitle={1999 Ninth International Conference on Artificial Neural Networks ICANN 99. (Conf. Publ. No. 470)}, 
@@ -291,7 +293,8 @@
   year={1999},
   volume={2},
   number={},
-  pages={850-855 vol.2},}
+  pages={850-855 vol.2}
+}
   
   
 @article{catana_determination_2017,
@@ -378,13 +381,13 @@ url = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-perf
 	file = {OpenCV\: Optical Flow:/home/sonia/Zotero/storage/TWSZQHV2/tutorial_optical_flow.html:text/html}
 }
 
-@article{lucas_iterative_nodate,
-	title = {An {Iterative} {Image} {Registration} {Technique} with an {Application} to {Stereo} {Vision}},
-	abstract = {Image registration finds a variety of applications in computer vision. Unfortunately, traditional image registration techniques tend to be costly. We present a new image registration technique that makes use of the spatial intensity gradient of the images to find a good match using a type of Newton-Raphson iteration. Our technique is faster because it examines far fewer potential matches between the images than existing techniques. Furthermore, this registration technique can be generalized to handle rotation, scaling and shearing. We show show our technique can be adapted for use in a stereo vision system.},
-	language = {en},
-	author = {Lucas, Bruce D and Kanade, Takeo},
-	pages = {10},
-	file = {Lucas and Kanade - An Iterative Image Registration Technique with an .pdf:/home/sonia/Zotero/storage/6ADG8NAR/Lucas and Kanade - An Iterative Image Registration Technique with an .pdf:application/pdf}
+@inproceedings{lucas_iterative_nodate,
+	author = {Lucas, Bruce and Kanade, Takeo},
+	year = {1981},
+	month = {04},
+	pages = {},
+	title = {An Iterative Image Registration Technique with an Application to Stereo Vision (IJCAI)},
+	volume = {81},
 }
 
 @article{sanchez_perez_tv-l1_2013,
@@ -448,4 +451,6 @@ url = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-perf
   year={2007},
   volume={9},
   number={3},
-  pages={90-95},}
+  pages={90-95}
+}
+
