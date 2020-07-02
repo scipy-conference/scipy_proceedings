@@ -16,20 +16,21 @@
 :bibliography: mybib
 :orcid: 0000-0003-0328-6713
 
---------------------------------------------------------------
-Performing Netlist Analysis and Transformations Using SpyDrNet
---------------------------------------------------------------
+---------------------------------------------------
+Netlist Analysis and Transformations Using SpyDrNet
+---------------------------------------------------
 
 .. class:: abstract
 
-   Hardware circuits can contain a large number of discrete components and connections. These connections are defined by
-   a data strauture called a "netlist". Important information can be gained by analyzing the structure of the circuit 
+   Digital hardware circuits (i.e., for application specific integrated circuits or field programmable gate array 
+   circuits) can contain a large number of discrete components and connections. These connections are defined by
+   a data structure called a "netlist". Important information can be gained by analyzing the structure of the circuit 
    netlist and relationships between components. Many specific circuit manipulations require component reorganization in
    hierarchy and various circuit transformations. SpyDrNet is an open-source netlist analysis and transformation tool 
    written in Python that performs many of these functions. SpyDrNet provides a framework for netlist representation, 
    querying, and modification that is netlist format independent and generalized for use in a wide variety of 
-   applications. This tool is actively used to enhance circuit reliability and error detection in harsh radiation 
-   environments.
+   applications. This tool is actively used to enhance circuit reliability and error detection for circuits operating in
+   harsh radiation environments.
 
 .. class:: keywords
 
@@ -38,32 +39,21 @@ Performing Netlist Analysis and Transformations Using SpyDrNet
 Introduction
 ------------
 
-Hardware circuits can contain a large number of discrete components and connections. These components work together 
-through their connections to implement a hardware design. Hardware circuits can be found on printed wiring boards or 
-in very large scale integration (VLSI) as implemented in integrated circuits. Discrete components can be analog or 
-digital in nature and each component and connection can be associated with specific attributes. All of this information
-can be stored inside a graphlike data structure called a "netlist" which details each component, its attributes, and 
-connections.
+Digital hardware circuits can contain a large number of discrete components and connections. These components work 
+together through their connections to implement a digitial hardware design. Digital hardware circuits are commonly 
+implemented on application specific integrated circuits (ASICs) or on field programmable gate arrays (FPGAs). Discrete 
+components and connections in a digital hardware circuit can be associated with a number of specific attributes. All of 
+this information can be stored inside a graphlike data structure called a "netlist" which details each component and 
+connection along with their respective attributes.
 
 Netlists come in many different formats and organizational structures, but common constructs abound (within EDIF, 
 structural Verliog, and structural VHDL, etc.) :cite:`edif_based,verilog_netlist`. Most netlist formats have a notion of
 primitive or basic circuit components that form a basis from which any design can be created. If the contents of a 
-circuit component is unknown, it is treated as a blackbox. Primitive or basic components and blackboxes are viewed as leaf 
-cells, modules, or definitions, which can then be instanced individually into larger non-leaf definitions. These 
-definitions contains wires, nets, buses, or cables that together connect ports or pins on instances or on the definition
-
-Netlists can be hierarchical or they can be flat (see Figure :ref:`hierarchyflat`). Hierarchical netlists contain 
-non-leaf instances, which instance a definition that contains additional instances. Flat netlists contain only leaf 
-instances, which instance a definition that is void of additional instances. SpyDrNet supports hierarchy and performing 
-analysis and transformations accross hierarchical boundaries. SpyDrNet focuses on structual netlists that are static 
-(i.e., netlists that do not change based on inputs to the netlist).
-
-.. figure:: hierarchy_vs_flat_horizontal.pdf
-   :scale: 68%
-   :align: center
-   :figclass: htbp
-   
-   A hierarchical netlist (left) versus a flat netlist (right). :label:`hierarchyflat`
+circuit component is unknown, it is treated as a blackbox. Primitive or basic components and blackboxes are viewed as 
+leaf cells. Cells are also refered to as modules, or definitions. Leaf definitions can then be instanced individually 
+inside a larger non-leaf definitions. Definitions and instances contain connection points called pins, which are 
+sometimes grouped togehter into ports. Nets connect pins togehter. Nets are also refered to as wires and can be grouped
+into a collection of nets called a bus or cable.
 
 SpyDrNet provides a common framework for representing, querying, and modifying netlists from which application specific
 analysis and transformation functions can be built. The data structure used to represent netlists is designed to provide
@@ -71,18 +61,16 @@ quick pointer access to neighboring elements and it is designed to be extensible
 be stored along with the netlist for preservation when the netlist is exported. This ability supports the
 representation of a wide variety of netlist formats.
 
-SpyDrNet is currently implemented in pure Python and provides a Python interface so that it can easily integrate with
-other Python packages such as NetworkX :cite:`networkx` and PyEDA :cite:`pyeda`. These library packages have been used
-in tandem with SpyDrNet to prototype new analysis techniques for better understanding the connectivity and 
+SpyDrNet is currently implemented in Python and provides a Python interface so that it can easily integrate with other 
+Python packages such as NetworkX :cite:`networkx` and PyEDA :cite:`pyeda`. These library packages have been used in 
+tandem with SpyDrNet to rapidly develop new analysis techniques for better understanding the connectivity and 
 relationships between circuit components as part of reliability research. The Python platform also makes this tool 
-readily available to anyone interested in the community. 
+readily available to anyone interested in the community and easily extensible.
 
-This paper presents the SpyDrNet framework, some of its use cases, and highlights its use in the development of 
+This paper presents the SpyDrNet framework, a few use cases, and highlights its use in the development of 
 advanced reliability enhancement techniques. This tool originates from a long line of reliability research focused on
-improving the reliability of computer circuits implemented on static random access memory based (SRAM-based) field programmable gate arrays (FPGAs)
-:cite:`johnson_dwc,pratt_2008,Johnson:2010`. The predecessor to this tool is BYU EDIF Tools :cite:`BYUediftools`. 
-Development efforts moved toward SpyDrNet to bring the previous functionality to Python and open up its use to a
-larger number of formats and unique applications.
+improving the reliability of computer circuits implemented on static random access memory based (SRAM-based) FPGAs
+:cite:`johnson_dwc,pratt_2008,Johnson:2010`.
 
 .. figure:: SpyDrNetFlow.pdf
    :scale: 70%
@@ -94,21 +82,29 @@ larger number of formats and unique applications.
 Related Work
 ------------
 
-SpyDrNet is the first tool of its kind written in Python. Tools with functionality similar to SpyDrNet exist, but they
-tend to be tied to a specific device, architecture, netlist format, or vendor. Some tools with similar functionality 
-such as Vivado :cite:`vivado` or Verific :cite:`verific` are proprietary. Other tools such as RapidWright 
-:cite:`rapid_wright` are intended for customizing the low-level physical implementation of a netlist on a vendor 
-specific hardware platform. LiveHD :cite:`livehd` is open-source tool that provides rapid synthesis and simulation 
-updates to small changes in hardware description languages (HDLs). Its framework and language support focuses on the 
-whole design cycle (from logic synthesis, to simulation, to place and route, and tapeout) whereas SpyDrNet focuses 
-specifically on working with structural netlists. SpyDrNet aims to provide a framework that is netlist format independent
-and generalized for use in a wide variety of applications.
+The predecessor to SpyDrNet, BYU EDIF Tools :cite:`BYUediftools`. The BYU EDIF tools provide two benefits. First, it 
+provides an API for working with electronic design interchange format (EDIF) netlists. Second, the BYU EDIF Tools 
+includes the Brigham Young University and Los Alamos National Labratory Triple Modular Redundancy (BL-TMR) Tool. The 
+BL-TMR tool provides a rich set of features for the automated insertion of circuit redundancy for the application of 
+fault-tolerance techniques on digital hardware circuits. These tools have been used extensively in FPGA reliability 
+research :cite:`johnson_dwc,pratt_2008,Johnson:2010`.
 
-The predecessor to SpyDrNet, BYU EDIF Tools :cite:`BYUediftools`, is a Java based tool intended primarily for use with 
-netlists targeting FPGAs produced by Xilinx. The BYU EDIF tools provide two things. First, they provide an API for 
-working with EDIF netlists. Second, they provide a rich set of features for the automated insertion of redundancy. These 
-tools have been used extensively in reliability research :cite:`johnson_dwc,pratt_2008,Johnson:2010`. Using SpyDrNet, 
-the features included in the BYU EDIF tools can be made available to a wider range of applications.
+The BYU EDIF Tools have limitations that motivate the development of SpyDrNet. First, the framework of the BYU EDIF 
+Tools is closely tied to the EDIF netlist format, which makes it challenging to use with alternate netlist formats. 
+Second, the BYU EDIF Tools are primarily intended for use with netlists targeting specific FPGAs. Finally, though not a 
+limitation per se, the BYU EDIF Tools are written in Java and mitgrating to Python is a motivating factor.
+
+SpyDrNet aims to provide a framework that is netlist format independent and generalized for use in a wide variety of 
+applications. Tools with functionality similar to SpyDrNet exist, but they tend to be tied to a specific device, 
+architecture, netlist format, or vendor. Some tools with similar functionality such as Vivado :cite:`vivado` or Verific 
+:cite:`verific` are proprietary. Other tools such as RapidWright :cite:`rapid_wright` and Tincr :cite:`tincr` are 
+intended for customizing the low-level physical implementation of a netlist on a vendor specific hardware platform. 
+LiveHD :cite:`livehd` is open-source tool that provides rapid synthesis and simulation updates to small changes in 
+hardware description languages (HDLs). Its framework and language support focuses on the whole design cycle (from logic 
+synthesis, to simulation, to place and route, and tapeout) whereas SpyDrNet focuses specifically on working with 
+structural netlists (i.e., netlists that do not change based on netlist inputs).
+
+
 
 
 SpyDrNet Tool Flow
@@ -276,6 +272,19 @@ Examples of some of the basic functionality are highlighted in the following cod
 
 Hierarchy
 *********
+
+Netlists can be hierarchical or they can be flat (see Figure :ref:`hierarchyflat`). Hierarchical netlists contain 
+non-leaf instances, which instance a definition that contains additional instances. Flat netlists contain only leaf 
+instances, which instance a definition that is void of additional instances. SpyDrNet supports hierarchy and performing 
+analysis and transformations accross hierarchical boundaries. SpyDrNet focuses on structual netlists that are static 
+(i.e., netlists that do not change based on inputs to the netlist).
+
+.. figure:: hierarchy_vs_flat_horizontal.pdf
+   :scale: 68%
+   :align: center
+   :figclass: htbp
+   
+   A hierarchical netlist (left) versus a flat netlist (right). :label:`hierarchyflat`
 
 Hierarchy is by default a component of many netlist formats. One of the main advantages to including hierarchy in a design is the ability to abstract away some of the finer details on a level based system, while still including all of the information needed to build the design. The design’s hierarchical information is maintained in SpyDrNet by having definitions instanced within other definitions.
 
