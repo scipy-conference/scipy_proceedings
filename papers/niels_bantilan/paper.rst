@@ -32,17 +32,17 @@ pandera: Statistical Data Validation of Pandas Dataframes
 Introduction
 ------------
 
-``pandas`` :cite:`reback2020pandas` has become
-an indispensible part of the data scientist's tool chain, providing a powerful
-interface for data processing and analysis for tabular data. In recent years
-numerous open source projects have emerged to enhance and complement the core
-pandas API in various ways. For instance, ``pyjanitor`` :cite:`ma2019pyjanitor`
+``pandas`` :cite:`mckinney-proc-scipy-2010` has become an indispensible part of
+the data scientist's tool chain, providing a powerful interface for data
+processing and analysis for tabular data. In recent years numerous open source
+projects have emerged to enhance and complement the core pandas API in various
+ways. For instance, ``pyjanitor`` :cite:`eric-ma-proc-scipy-2019`
 :cite:`pyjan`, ``pandas-ply`` :cite:`pdply`, and ``siuba`` :cite:`sba` are
 projects that provide alternative data manipulation interfaces inspired by the
 R ecosystem, ``pandas-profiling`` :cite:`pdpf` automatically creates data
-visualizations and statistics of dataframes, and ``dask`` :cite:`rocklin2015dask`
-provides parallelization capabilities for a variety of data structures, pandas
-dataframes among them.
+visualizations and statistics of dataframes, and ``dask``
+:cite:`rocklin2015dask` provides parallelization capabilities for a variety of
+data structures, pandas dataframes among them.
 
 This paper introduces a data validation tool called ``pandera``, which provides
 an intuitive, flexible, and expressive API for validating pandas data
