@@ -591,6 +591,6 @@ Acknowledgments
 The author is particularly grateful to Prof. Albert Bifet from the Department of Computer Science at the University of
 Waikato for his continuous support. We also thank Saulo Martiello Mastelini from the Institute of Mathematics and
 Computer Sciences at the University of São Paulo, for his active collaboration on scikit-multiflow and his valuable
-work as one of the maintainers of the project. We thank interns who have contributed to scikit-multiflow and the
-open-source community who help and motivate the improvement of this project. We gratefully acknowledge the constructive
-comments of the reviewers. 
+work as one of the maintainers of the project. We thank interns who have helped in the development of scikit-multiflow
+and the open-source community which motivates and contributes in the continuous improvement of this project. We
+gratefully acknowledge the reviewers from the SciPy 2020 conference for their constructive comments.
