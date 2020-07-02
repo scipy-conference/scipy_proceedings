@@ -225,7 +225,7 @@ purposes. It features a collection of state-of-the-art methods for classificatio
 and anomaly detection, alongside a set of data generators and evaluators. scikit-multiflow is designed to seamlessly
 interact with *NumPy* :cite:`NumPy` and *SciPy* :cite:`SciPy`. Additionally, it contributes to the democratization of
 stream learning by leveraging the popularity of the Python language. scikit-multiflow is mainly written in Python, and
-some core elements are written in Cython :cite:`Cython` for performance.
+some core elements are written in *Cython* :cite:`Cython` for performance.
 
 scikit-multiflow is intended for users with different levels of expertise. Its conception and development follow two
 main objectives:
