@@ -42,6 +42,48 @@ Boost-histogram: High-Performance Histograms as Objects
 
 .. [#] https://scikit-hep.org
 
+Motivation
+----------
+
+As an example of a problem that becomes much easier with histograms as objects, let's look at the Python 3 adoption of several libraries using PyPI download statistics. There are three columns of interest: The package name, the date of the download, and the Python version used when downloading the package. In order to look at trends, you will want to answer questions about the download behavior over time ranges, such as what is the fraction of Python 2 downloads out of all downloads for each month. Let's look at what a solution to this would entail using traditional histogramming methods [NumPy]:
+
+* *Date*: You could make a histogram over datetime objects, but then you will be responsible for finding the bin range (dates are just large numbers), probably using ``np.searchsorted`` on the edges array, and then making slices in the binned array yourself.
+* *Python version*: You would have to force some sort of artificial binning scheme, such as one with edges ``[2, 3.0, 3.59, 3.69, 3.79, 4]``, in order to collect information for each Python version of interest. You would have to use a 2D array, and keep the selections/edges straight yourself; in practice, you would probably just create a Python dict of 1D histograms for each major version.
+* *Package names*: This would require making a dict and storing each 2D (or set of 1D) histograms manually. NumPy does not support category axes or strings.
+
+If your data doesn't fit into memory, you will have to build in the batching and combining yourself. For each piece.
+
+Now look at this with an object-based Histogram library, such as boost-histogram:
+
+* *Package names*: This can be string categories.
+* *Python version*:  You could simply multiply by 10 and make these int categories, or just use string categories.
+* *Date*: Use a regular spaced binning from start to stop in the resolution you are interested, such as months. Use the loc indexer to convert when slicing. No manual tracking or searching. Use rebinning to convert months into years in one step.
+
+In the object-based version, you fill once. If your data doesn't fit into memory, just fill in batches. The API for ND histograms is identical to 1D histograms, so you don't have to use different functions or change significant portions of code  even if you add a new axes later.
+
+Now let's look at using the object to make a series of plots, with one shown in Figure :ref:`fig-versions`. The code required to make the plot is shown below, with minor formatting details removed. 
+
+.. code-block:: python
+
+    for name in hist.axes[0]:
+        fig, ax = plt.subplots()
+        ax.set_title(name)
+        for vers in hist.axes[1]:
+            dhist = hist[bh.loc(name), bh.loc(vers), :]
+            dt, = d.axes.centers
+            xs = mpl.dates.date2num(pd.to_datetime(dt))
+            ax.plot_date(xs, dhist, label=f"{vers/10}")
+
+
+.. figure:: histogram_iminuit.pdf
+   :align: center
+   :figclass: w
+   :scale: 50%
+   
+   A downloads vs. time histogram plot for iMinuit [iMinuit]_ by Python version, made with Matplotlib [Matplotlib]_. :label:`fig-versions`
+
+Note how all the computation, and the version information is stored in a single histogram object. The datetime centers are accessible after the package and version number are selected. Looping over the categories is trivial. Since the histogram is already filled, there are no other loops over the data to slow down manipulation. We could rebin or set limints or sum over axes cleanly as well.
+
 Introduction
 ------------
 
@@ -337,26 +379,29 @@ References
 ----------
 
 
-.. [ROOT] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
-        https://indico.cern.ch/event/913205/contributions/3840338 (2020).
-
-.. [Boost]  *The Boost Software Libraries*,
-        https://www.boost.org
+.. [Pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
+        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
 
 .. [NumPy] Stéfan van der Walt, S. Chris Colbert and Gaël Varoquaux.
         *The NumPy Array: A Structure for Efficient Numerical Computation*,
         Computing in Science & Engineering, vol. 13, 22-30 (2011),
         `DOI:10.1109/MCSE.2011.37 <https://doi.org/10.1109/MCSE.2011.37>`
 
-.. [SciPy] Pauli Virtanen et al.
-        *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
-        Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
-
-.. [Pandas] Wes McKinney. *Data Structures for Statistical Computing in Python*,
-        Proceedings of the 9th Python in Science Conference, 51-56 (2010).
+.. [iMinuit] *iminuit -- A Python interface to Minuit*,
+        https://github.com/scikit-hep/iminuit
 
 .. [Matplotlib] J. D. Hunter. *Matplotlib: A 2D graphics environment*,
         Computing in Science & Engineering, vol. 9, no. 3, 90-95 (2007).
+
+.. [ROOT] Axel Naumann. *ROOT as a framework and analysis tool in run 3 and the HL-LHC era*,
+        https://indico.cern.ch/event/913205/contributions/3840338 (2020).
+
+.. [Boost]  *The Boost Software Libraries*,
+        https://www.boost.org
+
+.. [SciPy] Pauli Virtanen et al.
+        *SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python*,
+        Nature Methods, in press. DOI:10.1038/s41592-019-0686-2
 
 .. [IRIS-HEP] *Institute for Research and Innovation in Software for High Energy Physics*,
         https://iris-hep.org
