@@ -70,7 +70,7 @@ Now let's look at using the object to make a series of plots, with one shown in 
         ax.set_title(name)
         for vers in hist.axes[1]:
             dhist = hist[bh.loc(name), bh.loc(vers), :]
-            dt, = d.axes.centers
+            (dt,) = d.axes.centers
             xs = mpl.dates.date2num(pd.to_datetime(dt))
             ax.plot_date(xs, dhist, label=f"{vers/10}")
 
