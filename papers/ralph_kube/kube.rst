@@ -45,7 +45,7 @@ MByte/sec from a remote experimental site in Korea to Cori, a Cray XC-40 superco
 National Energy Energy Research Scientific Computing Centre in California. There ``Delta``
 dispatches cython data analysis kernels using an mpi4py PoolExecutor in order to perform a spectral
 data analysis workflow. Internally ``Delta`` uses queues and worker threads for data communication.
-With this approach we perform a common spectral analysis suie on imaging measurements more than 100
+With this approach we perform a common spectral analysis suite on imaging measurements more than 100
 times faster than with a single-core implementation.
 
 
@@ -73,7 +73,7 @@ devices that are used to perform fusion experiments and describe a diagnostic th
 many tokamaks. If one could harvest the energy from controlled nuclear fusion reactions you would
 have a potentially unlimited, environmentally friendly energy source. Fusion reactions release
 energy when two light nuclei merge into a heavier one. As part of the reaction, a fraction of the
-reactants nuclear binding energy reactants is converted into kinetic energy of the products. Fission
+reactants nuclear binding energy is converted into kinetic energy of the products. Fission
 reactions on the other hand, which power todays nuclear power plants, release binding energy when a
 heavy nucleus decays into lighter products. Typical energies involved in nuclear reactions are
 measured in MeV, multiple orders of magnitude larger than the characteristic eV energy scale for
@@ -105,8 +105,8 @@ researchers configure parameters such as the plasma density or the shaping and s
 magnetic field and study the behaviour of the plasma in this setup. During a typical experimental
 workflow, about 20-30 plasma discharges, so-called ``shots`` are performed on a given day where each
 shot lasts for a couple of seconds up to minutes. Numerous measurements of the plasma and the
-mechanical components of the tokamak are performed during each discharge. After a cool-down phase
-(tokamaks contain cryogenic components) the device is ready for the next shot. 
+mechanical components of the tokamak are performed during each discharge. After a cool-down phase of 
+a few minutes (tokamaks contain cryogenic components) the device is ready for the next shot. 
 
 A common diagnostic in magnetic fusion experiments is a so-called Electron Cyclotron Emission (ECE)
 diagnostic [Cos74]_. They measure emission intensity by free electrons in the plasma, which allows
@@ -123,8 +123,10 @@ two other common data analysis workflows in fusion energy research, listed in Ta
 Real-time control systems for plasma control require data on a millisecond time scale. This time
 scale is a hard constraint and limits the amount of data the algorithms can ingest. Post-shot batch
 analysis of measurements on the other hand serves scientific discovery. The data and the analysis
-methods are selected on a per-case basis. By providing timely analysis results of plasma
-measurements to the experimentalists, they can make more informed decisions about the next plasma
+methods are selected on a per-case basis and are often performed manually hours, days, weeks, months,
+or years after an experiment has concluded. A goal of Delta is to facilitate scientific discovery at
+time-scale faster than the experimental cadence. Providing timely analysis results of plasma
+measurements to experimentalists aids them in making informed decisions about the next plasma
 shot. As an example of the workflows that we wish to facilitate with ``Delta`` we refer to a series of
 experiments performed at the TAE facility [Bal17]_. There, the so-called ``optometrist`` algorithm was
 used as a stochastic optimizer in conjunction with expert judgement of domain scientists to assess
