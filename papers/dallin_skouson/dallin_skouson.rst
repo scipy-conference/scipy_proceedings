@@ -194,10 +194,10 @@ Wires are grouped inside cables and are elements that help hold connection infor
    :align: center
    :figclass: htbp
 
-   Structure of the Intermediate Representation :label:`egfig`
+   Structure of the Intermediate Representation \*reference to definition :label:`egfig`
 
-Extensible Support for Multiple Netlist Formats
-***********************************************
+Support for Multiple Netlist Formats
+************************************
 
 In addition to holding a generic netlist data structure, the universal netlist representation can hold information specific to individual formats. This is done through the inclusion of metadata dictionaries in many of the SpyDrNet objects. 
 
@@ -208,27 +208,25 @@ In addition, the metadata dictionary can be used to contain any desired user dat
 Callback Framework
 ------------------
 
-Some potential use cases for SpyDrNet could involve making incremental changes to the netlist, and following each of them up with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. These checks could be performed over the whole netlist datastructure on user demand which would add complexity for the end user. To fill this gap a callback framework was implemented.
+A callback framework was implemented in SpyDrNet to support real time analysis of netlist modifications. Callbacks can assist with applications that make incremental changes to the netlist followed with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. Without callbacks these checks could be performed over the whole netlist datastructure on user demand which would add complexity for the end user.
 
-These callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
+SpyDrNet's callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
 
 Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the API defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
 
 
-Modularity by design
-********************
+Modularity Within SpyDrNet
+**************************
 
 In order to support expansion to a wide variety of netlists, our intermediate representation was designed to reflect a generic netlist data structure. Care was taken to ensure that additional user defined constructs could be easily included in the netlist.
 
-Additionally, to maintain modularity, the intermediate representation can be built entirely using the existing API calls. These calls also allow the netlist to be written out or composed after modification. The existing parsers and composers use the API to achieve their functions.
-
-Because of the generic nature of the netlist representation and the ability to build it using only the API additional netlist parsers and composers can be built separately and still take full advantage of the existing modification passes available in SpyDrNet. To build a parser or composer requires no more advanced knowledge than an end user may have from using the API to design a custom analysis or modification pass on the netlist.
+Because of the generic nature of the netlist representation, additional netlist parsers and composers can be built separately and still take full advantage of the existing modification passes available in SpyDrNet. To build a parser or composer requires no more advanced knowledge than an end user may have from using the API to design a custom analysis or modification pass on the netlist.
 
 Other functionality has been added on top of the core of SpyDrNet, including plugin support and the ability to modifiy the netlist at a higher level. These utility functions are used by applications. This layered approach aims to aid in code reusability and reliability allowing lower level functionality to be tested before the higher level functionality is added on.
 
 
-Analysis and Transformation Capabilities
-----------------------------------------
+Analysis and Transformation
+---------------------------
 
 SpyDrNet provides a framework for the analysis and transformation of structural netlists. Structural netlists (i.e., a list of circuit components and their connects) capture a hardware design that is ready physical implementation where hardware files can be generated (see Figure :ref:`exteriorfig`). Information such as component importance or influence can be understood by examining structural relationships between components. Modifications made to the structual netlist are reflected in the hardware implementation.
 
@@ -306,7 +304,7 @@ Included is an example of how one might flatten a netlist in spydrnet.
 Uniquify
 ********
 
-Uniquify is the name we give to the algorithm which helps ensure that each non-terminal instance is unique, meaning that it and it’s definition have a one to one relationship. Non-unique definitions and instances may exist in most netlist formats. One such example could be a four bit adder that is composed of four single bit adders. Assuming that each single bit adder is composed of more than just a single component on the target device, and that the single bit adders are all identical, the design may just define a single single bit adder which it uses in four places. To uniquify this design, new matching definitions for single bit adders would be created for each of the instances of the original single bit adder and the instances that correspond would be pointed to the new copied definitions. Thus each of the definitions would be left with a single instance. 
+Uniquify ensures that each non-terminal instance is unique, meaning that it and it’s definition have a one to one relationship. Non-unique definitions and instances may exist in most netlist formats. One such example could be a four bit adder that is composed of four single bit adders. Assuming that each single bit adder is composed of more than just a single component on the target device, and that the single bit adders are all identical, the design may just define a single single bit adder which it uses in four places. To uniquify this design, new matching definitions for single bit adders would be created for each of the instances of the original single bit adder and the instances that correspond would be pointed to the new copied definitions. Thus each of the definitions would be left with a single instance. 
 
 The uniquify algorithm is very useful when modifications are desired on a specific part of the netlist but not to all instances of the particular component. For example in the four bit adder, highlighted in the previous paragraph of this section, if we assume that the highest bit does not need a carry out, the single bit adder there could be simplified. However, if we make modifications to the single bit adder before uniquifying the modifications will apply to all four adders. If we instead uniquify first then we can easily modify only the adder of interest.
 
@@ -373,7 +371,7 @@ The code below shows how one can get and print hierarchical references. The hier
       print(h, type(h.item).__name__)
 
 
-Getter functions
+Getter Functions
 ****************
 
 SpyDrNet includes getter functions which are helpful in the analysis and transformation of netlists. These functions were created to help a user more quickly traverse the netlist. These functions provide the user with quick access to adjacent components. A call to a getter function can get any other related elements from the existing element that the user has a handle to (see Figure :ref:`getterfuncs`). Similar to clone there are multiple methods which could be used to implement a correct getter function. We again strove to apply the most logical and consistent rules for the getter functions. There are some places in which the object returned may not be the only possible object to be returned. In these cases generators are returned. In cases in which there are two possible classes of relationships upon which to return objects, the user may specify whether they would like to get the more inward related or outward related objects. For example, a port may have outer pins on instances or inner pins within the port in the definition. Both of these pins can be obtained separately by passing a flag.
@@ -400,8 +398,8 @@ In the example only a few of the possible getter functions are shown. The same p
 
    netlist.top_instance.get_ports()
 
-Applications
-------------
+Example Applications
+--------------------
 
 SpyDrNet may be used for a wide variety of applications. SpyDrNet grew out of a lab that is focused primarily on 
 improving circuit reliability and security.  An application that has had strong influence over its development is that 
