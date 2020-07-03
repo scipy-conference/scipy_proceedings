@@ -110,7 +110,7 @@ structural netlists (i.e., netlists that do not change based on netlist inputs).
 SpyDrNet Tool Flow
 ------------------
 
-Electronic designs may be converted a number of times before they are ready to be built, packaged, or programmed into their target device. For example, these designs may be created in a hardware description language, synthesized into a netlist, then placed, routed, and packged into a target file which will be used to fabricate the device. A CAD tool can begin to modify the functionality of the final design at various of these stages. The earlier stages in the design flow are slightly less static. Constructs may be optimized out of the design, and the actual hardware implementation of a construct may be unknown. Later in the design process these things are more stable, but the design is also less easy to work with (binary files, complex device specific information, etc). By working at the netlist level, SpyDrNet is able to avoid many of the pitfalls of both aspects of the design process. 
+Electronic designs may flow through a number of steps before they are built, packaged, or programmed into their target device. For example, these designs may be created in a hardware description language, synthesized into a netlist, then placed, routed, and packged into a target file which will be used to fabricate the device. A CAD tool can modify the functionality of the final design at any of these stages. The earlier stages in the design flow are slightly less static. Constructs may be optimized out of the design, and the actual hardware implementation of a construct may be unknown. Later in the design process constructs are more stable, but the design is also generally harder to work with (binary files, complex device specific information, etc). By working at the netlist level, SpyDrNet is able to avoid many of the pitfalls of both aspects of the design process. 
 
 Figure :ref:`exteriorfig` represents how a design can be prepared and processed prior to and after using SpyDrNet. Many designs start as a hand written hardware description language and are then converted into a netlist using a synthesizer. Netlists are then passed through additional tools to create a design file to be physically implemented
 
@@ -126,23 +126,19 @@ The Intermediate Representation
 -------------------------------
 
 The intermediate representation is a generic structural netlist representation employed by SpyDrNet.  Structural 
-netlists refer to a class of netlists that represent circuit components but not necessarily their behaviour. These 
+netlists refer to a class of netlists that represent the interconnection of primative circuit components. These 
 netlists are useful because when modifying netlists for reliability we are less concerned with the general purpose of 
-the circuit and more concerned with how that circuit is implemented. SpyDrNet’s internal intermediate representation is 
-an in-memory construct. Users can manipulate the structure while in memory and write out a supported format using one of
-the export modules or *composers* that is included with SpyDrNet. More advanced users with special requrements could 
-also create their own composer to support the format that they desire. The API is complete enough to support full parser
-and composer support. Users need not learn excess information about the internals of the netlist to create an effective
-composer or parser.
+the circuit and more concerned with how that circuit is implemented. Users can manipulate the structure while in memory and write out a supported format using one of
+the export modules or *composers* that is included with SpyDrNet. Built into the intermediate representation is an API for manipulating the datastructure.
 
-SpyDrNet aims to be programmer friendly. The datastructure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. One example of this is the bidirectional references implemented throughout the netlist. This ideology resulted in a slightly longer running time in some cases (and shorter in others), but speed was taken into account as these decisions were made. If a feature significantly increased the run time of the tests, it was examined and optimized.
+The data structure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. One example of this is the bidirectional references implemented throughout the netlist. This ideology resulted in a slightly longer running time in some cases (and shorter in others), but speed was taken into account as these decisions were made. If a feature significantly increased the run time of the tests, it was examined and optimized.
 
 
 Constructs Employed
 *******************
 
 
-A short description of some of the datastructure components is provide here to help the reader more easily visualize how optimization trade offs were selected. This background will also assist as some of the core functionality of SpyDrNet is later discussed. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
+A short description of some of the datastructure components is provided. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
 
 .. figure:: IR.pdf
    :align: center
@@ -154,17 +150,17 @@ A short description of some of the datastructure components is provide here to h
 **Element**
 +++++++++++
 
-This is the base class for all components of a netlist. Components are further divided into first class elements and regular elements. First class elements have a name field as well as a properties field.
+This is the base class for all components of a netlist. Some components are further classified as *first class elements*. First class elements have a name field as well as a properties field.
 
 **Definition**
 ++++++++++++++
 
-These objects are sometimes called cells or modules in other representations. They hold all of the information about what their instances contain.
+These first class elements are sometimes called cells or modules in other representations. They hold all of the information about what their instances contain.
 
 **Instance**
 ++++++++++++
 
-This element is a place holder to be replaced with the subelements of the corresponding definition upon build. It is contained in a different definition to its own. In the case of the top level instance it is the place holder that will be replaced by the entire netlist when it is implemented
+This first class element is a place holder to be replaced with the subelements of the corresponding definition upon build. It is contained in a different definition to its own. In the case of the top level instance it is the place holder that will be replaced by the entire netlist when it is implemented
 
 **Port**
 ++++++++
