@@ -40,19 +40,19 @@ Introduction
 ------------
 
 Digital hardware circuits can contain a large number of discrete components and connections. These components work 
-together through their connections to implement a digitial hardware design. Digital hardware circuits are commonly 
+together through their connections to implement a digital hardware design. Digital hardware circuits are commonly 
 implemented on application specific integrated circuits (ASICs) or on field programmable gate arrays (FPGAs). Discrete 
 components and connections in a digital hardware circuit can be associated with a number of specific attributes. All of 
-this information can be stored inside a graphlike data structure called a "netlist" which details each component and 
+this information can be stored inside a graph-like data structure called a "netlist" which details each component and 
 connection along with their respective attributes.
 
 Netlists come in many different formats and organizational structures, but common constructs abound (within EDIF, 
 structural Verliog, and structural VHDL, etc.) :cite:`edif_based,verilog_netlist`. Most netlist formats have a notion of
 primitive or basic circuit components that form a basis from which any design can be created. If the contents of a 
 circuit component is unknown, it is treated as a blackbox. Primitive or basic components and blackboxes are viewed as 
-leaf cells. Cells are also refered to as modules, or definitions. Leaf definitions can then be instanced individually 
+leaf cells. Cells are also referred to as modules, or definitions. Leaf definitions can then be instanced individually 
 inside a larger non-leaf definitions. Definitions and instances contain connection points called pins, which are 
-sometimes grouped togehter into ports. Nets connect pins togehter. Nets are also refered to as wires and can be grouped
+sometimes grouped together into ports. Nets connect pins together. Nets are also referred to as wires and can be grouped
 into a collection of nets called a bus or cable.
 
 SpyDrNet provides a common framework for representing, querying, and modifying netlists from which application specific
@@ -84,7 +84,7 @@ Related Work
 
 The predecessor to SpyDrNet, BYU EDIF Tools :cite:`BYUediftools`. The BYU EDIF tools provide two benefits. First, it 
 provides an API for working with electronic design interchange format (EDIF) netlists. Second, the BYU EDIF Tools 
-includes the Brigham Young University and Los Alamos National Labratory Triple Modular Redundancy (BL-TMR) Tool. The 
+includes the Brigham Young University and Los Alamos National Laboratory Triple Modular Redundancy (BL-TMR) Tool. The 
 BL-TMR tool provides a rich set of features for the automated insertion of circuit redundancy for the application of 
 fault-tolerance techniques on digital hardware circuits. These tools have been used extensively in FPGA reliability 
 research :cite:`johnson_dwc,pratt_2008,Johnson:2010`.
@@ -92,7 +92,7 @@ research :cite:`johnson_dwc,pratt_2008,Johnson:2010`.
 The BYU EDIF Tools have limitations that motivate the development of SpyDrNet. First, the framework of the BYU EDIF 
 Tools is closely tied to the EDIF netlist format, which makes it challenging to use with alternate netlist formats. 
 Second, the BYU EDIF Tools are primarily intended for use with netlists targeting specific FPGAs. Finally, though not a 
-limitation per se, the BYU EDIF Tools are written in Java and mitgrating to Python is a motivating factor.
+limitation per se, the BYU EDIF Tools are written in Java and migrating to Python is a motivating factor.
 
 SpyDrNet aims to provide a framework that is netlist format independent and generalized for use in a wide variety of 
 applications. Tools with functionality similar to SpyDrNet exist, but they tend to be tied to a specific device, 
@@ -110,17 +110,23 @@ structural netlists (i.e., netlists that do not change based on netlist inputs).
 SpyDrNet Tool Flow
 ------------------
 
-Electronic designs may flow through a number of steps before they are built, packaged, or programmed into their target device. For example, these designs may be created in a hardware description language, synthesized into a netlist, then placed, routed, and packged into a target file which will be used to fabricate the device. A CAD tool can modify the functionality of the final design at any of these stages. The earlier stages in the design flow are slightly less static. Constructs may be optimized out of the design, and the actual hardware implementation of a construct may be unknown. Later in the design process constructs are more stable, but the design is also generally harder to work with (binary files, complex device specific information, etc). By working at the netlist level, SpyDrNet is able to avoid many of the pitfalls of both aspects of the design process. 
+Electronic designs may flow through a number of steps before they are built, packaged, or programmed into their target device. For example, these designs may be created in a hardware description language, synthesized into a netlist, then placed, routed, and packaged into a target file which will be used to fabricate the device. A CAD tool can modify the functionality of the final design at any of these stages. The earlier stages in the design flow are slightly less static. Constructs may be optimized out of the design, and the actual hardware implementation of a construct may be unknown. Later in the design process constructs are more stable, but the design is also generally harder to work with (binary files, complex device specific information, etc). By working at the netlist level, SpyDrNet is able to avoid many of the pitfalls of both aspects of the design process. 
 
-Figure :ref:`exteriorfig` represents how a design can be prepared and processed prior to and after using SpyDrNet. Many designs start as a hand written hardware description language and are then converted into a netlist using a synthesizer. Netlists are then passed through additional tools to create a design file to be physically implemented
+Figure :ref:`exteriorfig` represents how a design can be prepared and processed prior to and after using SpyDrNet. Many designs start as a hand written hardware description language and are then converted into a netlist using a synthesizer. Netlists are then passed through additional tools to create a design file to be physically implemented.
 
-Internally the SpyDrNet tool is composed of a flow that begins with a parser, accepting any of the supported languages. The parser creates an in memory data structure of the design stored in the intermediate representation. After this the tool can perform any of its analysis or modification passes on the design. Once the design is in a state where the user is satisfied a supported export function called a composer is used to pass the design back out. Figure :ref:`flowfig` represents the internal flow within SpyDrNet.
+SpyDrNet currently includes a *parser* and *composer* that imports and exports netlists written in EDIF. Figure 
+:ref:`flowfig` shows how the SpyDrNet framework can be used to parse, analyze, transform, and compose netlists in many 
+different formats. Parsers populate an intermediate representation of the netlist in memory using information provided 
+by the input file. With the netlist in intermediate representation, analysis and transformation of the netlist can take 
+place. Once the design is in a state where the user is satisfied, a composer exports the netlist into a desired 
+format. Using the SpyDrNet framework, additional parsers and composers can be written for additional netlist formats.
 
 .. figure:: flow.pdf
    :align: center
+   :scale: 26%
    :figclass: htbp
 
-   Universal representation capabilities of the intermediate representation, Note that Verilog and VHDL refer to the structural subset of these languages :label:`flowfig`
+   Processing a netlist in SpyDrNet. Note that Verilog and VHDL refer to the structural subset of these languages. :label:`flowfig`
 
 The Intermediate Representation
 -------------------------------
@@ -134,17 +140,17 @@ the export modules or *composers* that is included with SpyDrNet. Built into the
 The data structure was built with a focus on simplifying access to adjacent points in the netlist. In some cases where simple accessors could be added at additional memory cost, the accessors were added. One example of this is the bidirectional references implemented throughout the netlist. This ideology resulted in a slightly longer running time in some cases (and shorter in others), but speed was taken into account as these decisions were made. If a feature significantly increased the run time of the tests, it was examined and optimized.
 
 
-Constructs Employed
-*******************
+Primary Data Structures
+***********************
 
 
-A short description of some of the datastructure components is provided. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
+A short description of some of the data structure components is provided. The constructs behind a structural Netlist are Libraries, Definitions, Instances, Ports, and Cables. Figure :ref:`irfig` shows the connectivity between these components. 
 
 .. figure:: IR.pdf
    :align: center
    :figclass: htbp
 
-   Highlights the connectivity between components in the intermediate representation :label:`irfig`
+   Highlights the connectivity between components in the intermediate representation. :label:`irfig`
 
 
 **Element**
@@ -160,7 +166,7 @@ These first class elements are sometimes called cells or modules in other repres
 **Instance**
 ++++++++++++
 
-This first class element is a place holder to be replaced with the subelements of the corresponding definition upon build. It is contained in a different definition to its own. In the case of the top level instance it is the place holder that will be replaced by the entire netlist when it is implemented
+This first class element is a place holder to be replaced with the sub-elements of the corresponding definition upon build. It is contained in a different definition to its own. In the case of the top level instance it is the place holder that will be replaced by the entire netlist when it is implemented
 
 **Port**
 ++++++++
@@ -186,7 +192,7 @@ Wires are grouped inside cables and are elements that help hold connection infor
    :align: center
    :figclass: htbp
 
-   Structure of the Intermediate Representation \*reference to definition :label:`egfig`
+   Structure of the Intermediate Representation. An asterisk references a definition. :label:`egfig`
 
 Support for Multiple Netlist Formats
 ************************************
@@ -195,14 +201,14 @@ In addition to holding a generic netlist data structure, the universal netlist r
 
 Parsers can take advantage of the flexibility of the metadata dictionary to carry extra information that source formats present through the tool. This includes information such as comments, parameters, and properties.
 
-In addition, the metadata dictionary can be used to contain any desired user data. Because the tool is implemented in python, any data type can be used for the key value in these dictionaries, however we only guarantee future support of string objects.
+In addition, the metadata dictionary can be used to contain any desired user data. Because SpyDrNet is implemented in Python, any data type can be used for the key value in these dictionaries.
 
 Callback Framework
 ------------------
 
-A callback framework was implemented in SpyDrNet to support real time analysis of netlist modifications. Callbacks can assist with applications that make incremental changes to the netlist followed with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. Without callbacks these checks could be performed over the whole netlist datastructure on user demand which would add complexity for the end user.
+A callback framework was implemented in SpyDrNet to support real time analysis of netlist modifications. Callbacks can assist with applications that make incremental changes to the netlist followed with an analysis of the netlist to determine what more needs to changed. Alternatively users may wish to be warned of violations of design rules such as maintaining unique names. Without callbacks these checks could be performed over the whole netlist data structure on user demand which would add complexity for the end user.
 
-SpyDrNet's callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in namming and structure of the netlist.
+SpyDrNet's callbacks allow users to create plugins that can keep track of the current state of the netlist as changes are made. Currently, a namespace manager is included with SpyDrNet. The callback framework is able to watch changes to the netlist, including addition and removal of elements, as well as changes in naming and structure of the netlist.
 
 Listeners may register to hear these changes as they happen. Each listener is called in the order in which it was registered and may update itself as it sees the netlist change. Plugins that implement listeners can be created and added through the API defined register functions. In general listener functions are expected to receive the same parameters as the function on which they listen.
 
@@ -220,9 +226,9 @@ Other functionality has been added on top of the core of SpyDrNet, including plu
 Analysis and Transformation
 ---------------------------
 
-SpyDrNet provides a framework for the analysis and transformation of structural netlists. Structural netlists (i.e., a list of circuit components and their connects) capture a hardware design that is ready physical implementation where hardware files can be generated (see Figure :ref:`exteriorfig`). Information such as component importance or influence can be understood by examining structural relationships between components. Modifications made to the structual netlist are reflected in the hardware implementation.
+SpyDrNet provides a framework for the analysis and transformation of structural netlists. Structural netlists (i.e., a list of circuit components and their connects) capture a hardware design that is ready for physical implementation where hardware files can be generated (see Figure :ref:`exteriorfig`). Information such as component importance or influence can be understood by examining structural relationships between components. Modifications made to the structural netlist are reflected in the hardware implementation.
 
-The analysis and transformation capabilites presented in section form a basis from which custom analysis and transformation functions can be built for specifc applications. One current application that benefits from these capabilities is the implemention of duplication with compare (DWC) and triple modular redundancy (TMR) to circuit designs, which is discussed later on. Using SpyDrNet's analysis and transformations allows end-users to rapidly develop custom functions for specific needs.
+The analysis and transformation capabilities presented in section form a basis from which custom analysis and transformation functions can be built for specific applications. One current application that benefits from these capabilities is the implementation of duplication with compare (DWC) and triple modular redundancy (TMR) to circuit designs, which is discussed later on. Using SpyDrNet's analysis and transformations allows end-users to rapidly develop custom functions for specific needs.
 
 Utility Functions
 -----------------
@@ -231,11 +237,11 @@ SpyDrNet has several high level features currently included. All of these featur
 
 Basic Functionality
 *******************
-Functionality is provided through the API to allow for creation and modification of elements in the netlist datastructures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are completely mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The basic functionality includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
+Functionality is provided through the API to allow for creation and modification of elements in the netlist data structures. Sufficient functionality is provided to create a netlist from the ground up, and read all available information from a created netlist. Netlist objects are completely mutable and allow for on demand modification. This provides a flexible framework upon which users can build and edit netlists data structures. The basic functionality includes functionality to create new children elements, modify the properties of elements, delete elements, and change the relationships of elements. All references bidirectional and otherwise are maintained behind the scenes to ensure the user can easily complete modification passes on the netlist while maintaining a valid representation.
 
 The mutability of the objects in SpyDrNet is of special mention. Many frameworks require that the object's name be set on creation, and disallow any changes to that name. SpyDrNet, on the other hand, allows name changes as well as any other changes to the connections, and properties of the objects. The callback framework, as discussed in another section, provides hooks that allow checks for violations of user defined rules if desired.
 
-Examples of some of the basic functionality are highlighted in the following code segment. Relationships, such as the reference member of the instances and the children of these references are members of the spydrnet objects. Additional key data can be accessed as members of the classes. Other format specific data can be accessed through dictionary lookups. Since the name is also key data but, is not required it can be looked up through either access method as noted in one of the single line comment.
+Examples of some of the basic functionality are highlighted in the following code segment. Relationships, such as the reference member of the instances and the children of these references are members of the SpyDrNet objects. Additional key data can be accessed as members of the classes. Other format specific data can be accessed through dictionary lookups. Since the name is also key data but, is not required it can be looked up through either access method as noted in one of the single line comment.
 
 .. code-block:: python
    
@@ -270,7 +276,7 @@ Hierarchy
 Netlists can be hierarchical or they can be flat (see Figure :ref:`hierarchyflat`). Hierarchical netlists contain 
 non-leaf instances, which instance a definition that contains additional instances. Flat netlists contain only leaf 
 instances, which instance a definition that is void of additional instances. SpyDrNet supports hierarchy and performing 
-analysis and transformations accross hierarchical boundaries. SpyDrNet focuses on structual netlists that are static 
+analysis and transformations across hierarchical boundaries. SpyDrNet focuses on structural netlists that are static 
 (i.e., netlists that do not change based on inputs to the netlist).
 
 .. figure:: hierarchy_vs_flat_horizontal.pdf
@@ -282,9 +288,9 @@ analysis and transformations accross hierarchical boundaries. SpyDrNet focuses o
 
 Hierarchy is by default a component of many netlist formats. One of the main advantages to including hierarchy in a design is the ability to abstract away some of the finer details on a level based system, while still including all of the information needed to build the design. The design’s hierarchical information is maintained in SpyDrNet by having definitions instanced within other definitions.
 
-SpyDrNet allows the user to work with the structure of a netlist directly, having only one of each instance per hierarchical level, but it also allows the user view the netlist instances in a hierarchical context through the use of hierarchical references as outined below. Some other tools only provide the hierarchical representation of the design.
+SpyDrNet allows the user to work with the structure of a netlist directly, having only one of each instance per hierarchical level, but it also allows the user view the netlist instances in a hierarchical context through the use of hierarchical references as outlined below. Some other tools only provide the hierarchical representation of the design.
 
-There are drawbacks and advantages to each view on the netlist, but the inclusion of a hierarcical view helps allow users to make the fewest possible unneeded changes to the design. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to analyze the impact of hierarchy on later compilation steps.
+There are drawbacks and advantages to each view on the netlist, but the inclusion of a hierarchical view helps allow users to make the fewest possible unneeded changes to the design. Additionally there are several advantages to maintaining hierarchy, smaller file sizes are possible in some cases, as sub components do not need to be replicated. Simulators may have an easier time predicting how the design will act once implemented :cite:`build_hierarchy`. Further research could be done to analyze the impact of hierarchy on later compilation steps.
 
 Flattening
 **********
@@ -293,7 +299,7 @@ SpyDrNet has the ability to flatten hierarchical designs. One method to remove h
 
 Flattening was added to SpyDrNet because there are some algorithms which can be applied more simply on a flat design. Algorithms in which a flat design may be simpler to work with are graph analysis, and other algorithms where the connections between low level components are of interest.
 
-Included is an example of how one might flatten a netlist in spydrnet.
+Included is an example of how one might flatten a netlist in SpyDrNet.
 
 .. code-block:: python
 
@@ -335,7 +341,7 @@ Cloning is another useful algorithm currently implemented in SpyDrNet. Currently
 
 Clone could be implemented a number of ways. We attempted to find the logical method for our clone algorithm at each level of the data structure. Our overall guiding principles were that at each level, lower level objects should maintain their connections, the cloned object should not belong to any other object, and the cloned object should not maintain its horizontal connections. There are of course some exceptions to these rules which seemed judicious. One such example is that when cloning an instance, That instance will maintain its original corresponding definition, unless the corresponding definition is also being cloned as in the case of cloning a whole library or netlist (in which case the new cloned definition will be used).
 
-Additionally connection modification was done at a level lower than the API in order to mantain consistency as different components were cloned. This promoted code reuse in the clone implementation and helped minimize the number of dictionaries used.
+Additionally connection modification was done at a level lower than the API in order to maintain consistency as different components were cloned. This promoted code reuse in the clone implementation and helped minimize the number of dictionaries used.
 
 The clone algorithm is very useful while implementing some of the higher level algorithms such as TMR and DWC with compare that we use for reliability research. In these algorithms cloning is essential, and having it built into the tool helps simplify their implementation.
 
@@ -365,7 +371,7 @@ Hierarchical References
 
 SpyDrNet includes the ability to create a hierarchical reference graph of all of the instances, ports, cables, and other objects which may be instantiated. The goal behind hierarchical references is to create a graph on which other tools, such as NetworkX can more easily build a graph. each hierarchical reference will be unique, even if the underlying component is not unique. These components are also very light weight to minimize memory impact since there can be many of these in flight at one time.
 
-The code below shows how one can get and print hierarchical references. The hierarchical references can represent any spydrnet object that may be instanciated in a hierarchical manner.
+The code below shows how one can get and print hierarchical references. The hierarchical references can represent any spydrnet object that may be instantiated in a hierarchical manner.
 
 .. code-block:: python
 
