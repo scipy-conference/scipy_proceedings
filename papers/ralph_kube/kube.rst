@@ -644,17 +644,24 @@ multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is imple
       cdef size_t idx, nn, bb # Loop variables
       cdef double complex Sxx, Syy, _tmp
       
-      cdef cnp.ndarray[cnp.uint64_t, ndim=1] ch1_idx_arr =
-         np.array([int(ch_pair.ch1.idx()) for ch_pair in ch_it], 
+      cdef cnp.ndarray[cnp.uint64_t, ndim=1] 
+         ch1_idx_arr = np.array(
+                  [int(ch_pair.ch1.idx()) 
+                   for ch_pair in ch_it], 
                   dtype=np.uint64)
-      cdef cnp.ndarray[cnp.uint64_t, ndim=1] ch2_idx_arr = 
-         np.array([int(ch_pair.ch2.idx()) for ch_pair in ch_it], 
-                  dtype=np.uint64)
-      cdef cnp.ndarray[cnp.float64_t, ndim=2] result = 
-         np.zeros([num_idx, num_fft], dtype=np.float64)
+      cdef cnp.ndarray[cnp.uint64_t, ndim=1] 
+           ch2_idx_arr = np.array(
+                 [int(ch_pair.ch2.idx()) 
+                  for ch_pair in ch_it], 
+                 dtype=np.uint64)
+      cdef cnp.ndarray[cnp.float64_t, 
+                       ndim=2] result = 
+         np.zeros([num_idx, num_fft], 
+                  dtype=np.float64)
 
       with nogil: 
-          for idx in prange(num_idx, schedule=static):
+          for idx in prange(num_idx, 
+                            schedule=static):
               ch1_idx = ch1_idx_arr[idx]
               ch2_idx = ch2_idx_arr[idx]
   
@@ -666,7 +673,8 @@ multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is imple
                       Syy = data[ch2_idx, nn, bb] * 
                         conj(data[ch2_idx, nn, bb])
                       _tmp +=  data[ch1_idx, nn, bb] * 
-                               conj(data[ch2_idx, nn, bb]) / 
+                               conj(data[ch2_idx,
+                                         nn, bb]) / 
                                csqrt(Sxx * Syy)
   
                   result[idx, nn] = creal(cabs(_tmp)) 
@@ -958,16 +966,14 @@ References
           Proceedings of the 14th Python in Science Conference p.126-132 2015
           DOI: 10.25080/Majora-7b98e3ed-013
           
-
 .. [FFT] Heinzel, G., Rüdiger, A., & Schilling, R. (2002). Spectrum and spectral density estimation
          by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some
          new at-top windows.
          http://hdl.handle.net/11858/00-001M-0000-0013-557A-5
 
-
-.. [Git] https://github.com/rkube/delta
+.. [Git] Ralph Kube (2020, June). DELTA-FUSION (aDaptive rEaL Time Analysis of big fusion data). Retrieved from https://github.com/rkube/delta
 
 .. [Zen] Kube, Ralph, Churchill, R Michael, Chang, CS, et al. (2020). 
-         Leading magnetic fusion energy science into thebig-and-fast data lane. 
+         Leading magnetic fusion energy science into the big-and-fast data lane. 
          Zenodo
          http://doi.org/10.5281/zenodo.3871700
