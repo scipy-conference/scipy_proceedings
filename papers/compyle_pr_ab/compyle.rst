@@ -811,14 +811,15 @@ Performance comparison
     :label:`time-hoomd`
 
 
-Figure :ref:`speedup-nnps` shows the speedup achieved OpenCL and CUDA backends
-running on a GPU relative to serial code running using Cython (on a single CPU
-core) for the linear version of the algorithm. Figure :ref:`time-gpu` shows
-the time taken for these simulations. It can be seen that the algorithm is
-linear for large values of number of particles. We again get more than a 100x
-speedup using the GPU over a single CPU core. Note that on the NVIDIA P100 GPU
-we are able to run a simulation with 25 timesteps for 5 million particles in
-less than a second, showing the excellent performance attained.
+Figure :ref:`speedup-nnps` shows the speedup achieved by the OpenCL and CUDA
+backends running on a GPU relative to serial code running using Cython (on a
+single CPU core) for the linear version of the algorithm. Figure
+:ref:`time-gpu` shows the time taken for these simulations. It can be seen
+that the algorithm is linear for large values of number of particles. We again
+get more than a 100x speedup using the GPU over a single CPU core. Note that
+on the NVIDIA P100 GPU we are able to run a simulation with 25 timesteps for 5
+million particles in less than a second, showing the excellent performance
+attained.
 
 Figure :ref:`time-nnps-vs-simple` shows the time taken for simulation using
 :math:`O(N)` and :math:`O(N^2)` approach.
