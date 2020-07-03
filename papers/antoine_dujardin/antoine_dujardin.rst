@@ -3,21 +3,26 @@
 :institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
 :author: Elliott Slaugther
+:email:
 :institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
 :author: Jeffrey Donatelli
+:email:
 :institution: Department of Applied Mathematics, Lawrence Berkeley National Laboratory, Berkeley, CA USA 94720-8142
 :institution: Center for Advanced Mathematics for Energy Research Applications, Lawrence Berkeley National Laboratory, Berkeley, CA USA 94720-8142
 
 :author: Peter Zwart
+:email:
 :institution: Molecular Biophysics and Integrated Bio-Imaging Division, Lawrence Berkeley National Laboratory, Berkeley, CA USA 94720-8142
 :institution: Center for Advanced Mathematics for Energy Research Applications, Lawrence Berkeley National Laboratory, Berkeley, CA USA 94720-8142
 
 :author: Amedeo Perazzo
+:email:
 :institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
 :author: Chun Hong Yoon
 :email: yoon82@slac.stanford.edu
+:corresponding:
 :institution: SLAC National Accelerator Laboratory, 2575 Sand Hill Road, Menlo Park, CA 94025, USA
 
 :bibliography: mybib
