@@ -62,7 +62,7 @@ virtually unlimited, clean, and competitively priced energy source to the grid. 
 established in the fusion community through projects like plasmapy [PPY]_ or OMFIT [Men15]_. We
 introduce another Python library for fusion energy reserch, ``Delta`` - the aDaptive nEar-reaL Time
 Analysis framework - and show how it can be used to stream data from an experiment to a remote high
-performance computing (HPC) resource. There, Delta executes a routine spectral analysis workflow in
+performance computing (HPC) resource [git]. There, Delta executes a routine spectral analysis workflow in
 near real-time. By making data analysis results available in near real-time, Delta allows
 scientists to make more informed decisions on follow-up experiments and could accelerate scientific
 discovery.
@@ -99,7 +99,7 @@ confinement vessel.
 
 The best performing plasma confinement devices, tokamaks, have a toroidal shape, similar to a donut.
 Tokamaks (a transliteration of the Russian acronym for toroidal chamber with magnetic coils), such
-as KSTAR [KSTAR]_, DIII-D [D3D]_, NSTX-U [NSTX]_, ASDEX Upgrade [AUG]_, MAST [MAST]_, and TCV [TCV]_
+as KSTAR [KSTAR]_
 have a major radius R=1-1.5m and a minor radius a=0.2-0.7m. In experiments at these facilities,
 researchers configure parameters such as the plasma density or the shaping and strength of the
 magnetic field and study the behaviour of the plasma in this setup. During a typical experimental
@@ -132,7 +132,7 @@ experiments performed at the TAE facility [Bal17]_. There, the so-called ``optom
 used as a stochastic optimizer in conjunction with expert judgement of domain scientists to assess
 the performance of a just concluded plasma shot and optimize the machine parameters as to increase
 the performance in the following shot. By making advanced data analysis results available in near
-real-time to domain scientists, ``Delta`` will allow to improve such workflows at experimental fusion 
+real-time to domain scientists, ``Delta`` will allow to improve workflows at experimental fusion 
 facilities.
 
 
@@ -141,8 +141,6 @@ facilities.
     +---------------------------+--------------------+
     |    Task                   | Time-scale         |
     +===========================+====================+
-    | real-time control         | millisecond        |
-    +---------------------------+--------------------+
     | real-time control         | millisecond        |
     +---------------------------+--------------------+
     | live/inter-shot analysis  | seconds, minutes   |
@@ -178,7 +176,7 @@ channels [Yun10]_ [Yun14]_. Each individual channel produces an intensity time s
 v}(t_i)` where h and v index the horizontal and vertical channel number and :math:`t_i = i 
 \Delta_t` denotes the time where the intensity is sampled with :math:`\Delta_t \approx 1 \mu s`
 being the sampling time. Digitized with a 16-bit digitizer, this diagnostic produces a data
-stream of 2 byte * 192 channels * 5,000,000 samples / sec = 1836 MByte/sec. The spatial view of this
+stream of 1836 MByte/sec. The spatial view of this
 diagnostic covers a significant area of the plasma cross-section which allows it to directly
 visualize the large-scale structures of the plasma. Besides analyzing the normalized intensity,
 several quantities calculated off the Fourier transformed intensity :math:`X(\omega)`, here
@@ -280,18 +278,16 @@ jitter due to I/O bottlenecks.
 
 The generator stages measurement data and sends it to the middleman. The middleman forwards the data
 to the processor. The processor receives the data, executes the appropriate analysis kernels and
-stores the analysis results. ``Delta`` uses ADIOS [adios]_ [Liu14]_ to facilitate high bandwidth
-streaming on the paths marked with orange arrows in :ref:`fig-topo`. ADIOS is a unified input/output
-system that transports and transforms groups of self-describing data variables across different
-media with performance as a main goal. It is commonly used in the Department of Energy for high
-performance parallel I/O. Its transport interface is step-based, which resembles the generation of
-scientific data. ADIOS implements multiple transport mechanisms as engines, such as DataMan or a
-Sustainable Staging Transport (SST), which take advantage of underlying network communication
-mechanisms to provide optimal performance. For the topology at hand, ``Delta`` configures ADIOS to
-use the DataMan engine for both, trans-oceanic data and intra-datacenter transfer. Switching the
-engine used by ADIOS is trivial and requires only the change of a single line in a configuration
-file.
-
+stores the analysis results. ``Delta`` uses ADIOS [adios]_ to facilitate high bandwidth streaming on
+the paths marked with orange arrows in :ref:`fig-topo`. ADIOS is a unified input/output system that
+transports and transforms groups of self-describing data variables across different media with
+performance as a main goal. It is commonly used in the Department of Energy for high performance
+parallel I/O. Its transport interface is step-based, which resembles the generation of scientific
+data. ADIOS implements multiple transport mechanisms as engines which take advantage of underlying
+network communication mechanisms to provide optimal performance. For the topology at hand, ``Delta``
+configures ADIOS to use the DataMan engine for both, trans-oceanic data and intra-datacenter
+transfer. Switching the engine used by ADIOS is trivial and requires only the change of a single
+line in a configuration file.
 
 
 
@@ -340,14 +336,12 @@ Pseudo-code for the generator looks like this:
        writer.EndStep()
 
 
-Here, cfg is a framework-wide json configuration file. Diagnostic-specific parameters, such as
-:math:`s_{ch}` and details on how to calculate data normalization are stored in the ``ECEI``
-section. ADIOS parameters for the writer, such as parameters for the IO engine and connection
-details are stored in the ``transport_tx`` section. Because all of the data transformations are
-inside the loader class, the generator appears to be agnostic about what kind of diagnostic data it
-gets. However, the number of data batches is specific to the data at hand. Furthermore, the
-pseudo-code  example above demonstrates the step-centered design of the ADIOS library. It
-encapsulates each time chunk in a single time step.
+Here, cfg is a framework-wide json configuration file. Diagnostic-specific parameters are stored in
+the ``ECEI`` section. ADIOS parameters for the writer are stored in the ``transport_tx`` section.
+Since all data transformations are applied inside the loader class the generator appears to be
+agnostic about what kind of diagnostic data it gets. However, the number of data batches is specific
+to the data at hand. Furthermore, the pseudo-code  example above demonstrates the step-centered
+design of the ADIOS library. It encapsulates each time chunk in a single time step.
 
 The middleman runs on the NERSC DTN and relays data streams from the generator to the processor.
 Using the classes available in ``Delta`` the pseudo-code looks similar to the
@@ -538,8 +532,7 @@ initialization:
 
 .. code:: python
    
-   from kernels import kernel_crossphase, kernel_crosspower, ...
-
+   from kernels import kernel_crossphase, ...
    class task():
       def __init__(self, cfg):
          ...
@@ -547,9 +540,7 @@ initialization:
          self.kernel = kernel_crossphase
       elif (cfg["analysis"] == cross-power"):
          self.kernel = kernel.crosspower
-
       ...
-
      def calc_and_store(self, data, ...):
         ...
         result = self.kernel(data, ...)
@@ -607,7 +598,7 @@ but the congestion avoidance starts at approximately 15 seconds where the transf
 recovery phase.
 
 .. figure:: plots/kstar_dtn_xfer.png
-   :scale: 100%
+   :scale: 90%
    :figclass: h
 
    Data transfer rates between the KSTAR and NERSC DTNs measured using iperf3
@@ -621,89 +612,18 @@ Data Analysis Kernels
 ^^^^^^^^^^^^^^^^^^^^^
 
 As seen in the code-example above, ``Delta`` implements data analysis routines as computational
-kernels. These are implemented in cython to circumvent the global interpreter lock and utilize 
-multiple cores. For example the coherence :math:`C`, Eq. (:ref:`eq-C`), is implemented as
+kernels. These are implemented in cython to circumvent the global interpreter lock and utilize
+multiple cores. Measuring the average execution time over 10 runs on a Cori compute node we find
+that the kernels demonstrate a strong scaling for up to 16 threads, shown in Fig.
+:ref:`kernel-perf`. Using more 32 threads results in sub-linear speedup.  
 
-
-.. code:: python
-
-  from cython.parallel import prange
-
-  @cython.boundscheck(False)
-  @cython.wraparound(False)
-  @cython.cdivision(True)
-  def kernel_coherence_64_cy(
-         cnp.ndarray[cnp.complex128_t, 
-                     ndim=3] data, 
-         ch_it, 
-         fft_config):
-      cdef size_t num_idx = len(ch_it)      
-      cdef size_t num_fft = data.shape[1]   
-      cdef size_t num_bins = data.shape[2]  
-      cdef size_t ch1_idx, ch2_idx
-      cdef size_t idx, nn, bb # Loop variables
-      cdef double complex Sxx, Syy, _tmp
-      
-      cdef cnp.ndarray[cnp.uint64_t, ndim=1] 
-         ch1_idx_arr = np.array(
-                  [int(ch_pair.ch1.idx()) 
-                   for ch_pair in ch_it], 
-                  dtype=np.uint64)
-      cdef cnp.ndarray[cnp.uint64_t, ndim=1] 
-           ch2_idx_arr = np.array(
-                 [int(ch_pair.ch2.idx()) 
-                  for ch_pair in ch_it], 
-                 dtype=np.uint64)
-      cdef cnp.ndarray[cnp.float64_t, 
-                       ndim=2] result = 
-         np.zeros([num_idx, num_fft], 
-                  dtype=np.float64)
-
-      with nogil: 
-          for idx in prange(num_idx, 
-                            schedule=static):
-              ch1_idx = ch1_idx_arr[idx]
-              ch2_idx = ch2_idx_arr[idx]
-  
-              for nn in range(num_fft):
-                  _tmp = 0.0
-                  for bb in range(num_bins):
-                      Sxx = data[ch1_idx, nn, bb] * 
-                        conj(data[ch1_idx, nn, bb])
-                      Syy = data[ch2_idx, nn, bb] * 
-                        conj(data[ch2_idx, nn, bb])
-                      _tmp +=  data[ch1_idx, nn, bb] * 
-                               conj(data[ch2_idx,
-                                         nn, bb]) / 
-                               csqrt(Sxx * Syy)
-  
-                  result[idx, nn] = creal(cabs(_tmp)) 
-                                   / num_bins
-      return result
-
-The arguments passed to the kernel are the three-dimensional array of Fourier coefficients,
-``ch_it`` - an iterator over the channel lists, and ``fft_config`` - a dictionary of parameters used 
-for the Fourier Transformation. While the data stream produced by the ECEI diagnostic is only 
-two-dimensional, ``fft_data`` is three-dimensional as we use a Short Time Fourier Transformation.
-The second argument ``ch_it`` is an iterator over a list of channel pair combinations, defining linear index pairs 
-for the channels :math:`X` and :math:`Y` for which to calculate :math:`C`. After defining the output
-array and temporary data, the kernel opens a section where it discards the global interpreter lock.
-This is crucial for executing the enclosed section with multiple threads.
-
-The ranges of the three for loops within these section decrease by order of magnitude. 
-For the full ECEI dataset, ``ch_it`` spans 18336 distinct channel pair combinations, 512 to 1024 Fourier 
-coefficients are calculated for a total of 19 to 38 sliding window bins. After each for-loop header we
-instruct to cache data. Additionally, the channel pair combinations in ``ch_it`` are a tuple of integers and sorted
-by the first item. These measures allow to better utilize the CPU cache. 
 
 .. figure:: plots/kernel_performance.png
-   :scale: 100%
+   :scale: 90%
 
    Runtime of the multi-threaded kernels for coherence :math:`C`, cross-power :math:`S` and cross-phase :math:`P` compared against numpy implementations. :label:`kernel-perf`
 
-Measuring the average execution time over 10 runs on a Cori compute node we find that the kernels demonstrate
-a strong scaling for up to 16 threads, shown in Fig. :ref:`kernel-perf`. Using more 32 threads
-results in sub-linear speedup.  
+
 
 
 
@@ -772,23 +692,23 @@ the start time of the components on their respective machines is not coordinated
 to arrive at varying times for the three scenarios.
 
 .. figure:: plots/performance_time_subcon.png
-   :scale: 100%
+   :scale: 90%
 
    Horizontal bars mark the time that the a given time chunk :math:`n_{ch}` spends in the queue of the processor. The color legend is shown in Figure 6 :label:`delta-perf-queue`
 
 As time chunks are dequeued, they are subject to a STFT. Figure :ref:`delta-fft-tstart` denotes the
 time where the STFT of each time chunk is performed with horizontal bars. The beginning of a
-horizontal bar indicates where the STFT with the time chunk data is submitted on ``executor_fft`` and
-the end of a bar marks the time STFT is finished. Common for all three scenarios is that the STFTs
-with the longest execution time are the ones for the first time chunks received. Also, the majority
-of the STFTs is executed in approximately one second or less. Experiments on Cori show that the STFT
-routine when directly called with the same parameters and data as used here takes about 0.15
-seconds. On average the STFT when called from the streaming workflow is slower by a factor of 6. We
-believe that this long execution time is in part explained by MPI communication overhead.
+horizontal bar indicates where the STFT with the time chunk data is submitted on ``executor_fft``
+and the end of a bar marks the time STFT is finished. Common for all three scenarios is that the
+STFTs with the longest execution time are the ones for the first time chunks received. Also, the
+majority of the STFTs is executed in approximately one second. Equivalent STFT evaluations outside
+Delta take about 0.15s on Cori. On average the STFT when called from the streaming workflow is
+slower by a factor of 6. We believe that this long execution time is in part explained by MPI
+communication overhead.
 
 
 .. figure:: plots/performance_fft.png
-   :scale: 100%
+   :scale: 90%
 
    Horizontal bars mark the during which the STFT for each time chunk data is executed :label:`delta-fft-tstart`
 
@@ -803,19 +723,19 @@ agrees with the performance analysis that showed that the cross-correlation kern
 
 
 .. figure:: plots/mpirank_utilization_file.png
-   :scale: 100%
+   :scale: 90%
     
    MPI rank utilization for the ``file`` scenario. Colored bars mark the execution time of analysis kernels. Blue bars denote cross-phase, orange bars denote cross-power, green bars denote cross-correlation and red bars denote coherence. :label:`delta-perf-file`
 
 
 
 .. figure:: plots/mpirank_utilization_2node.png
-   :scale: 100% 
+   :scale: 90% 
 
    MPI rank utilization for the ``2-node`` scenario. The color encoding of the analysis kernels is the same as in Figure 7 :label:`delta-perf-2node`
 
 .. figure:: plots/mpirank_utilization_3node.png
-   :scale: 100%
+   :scale: 90%
 
    MPI rank utilization for the ``3-node`` scenario. The color encoding of the analysis kernels is the same as in Figure 7 :label:`delta-perf-3node`
 
@@ -845,13 +765,11 @@ the analysis kernels. Thirdly, the framework will be generalized in order to fac
 analysis tasks. Finally, we are working on adapting ``Delta`` for next generation HPC facilities
 which heavily rely on graphical processing units to provide processing power.
 
-Another issue we plan to address is to make ``Delta`` more adaptive. While using federated data
-analysis resources is useful, it may not be practical to do so by default. A possible way to implement 
-real-time adaptibility to the data stream would be to have machine-learning based decision processes 
-at the sender decide level of analysis detail a given time chunk warrants and forward it to the 
-respective analysis site. For example, ECEI time chunk data that is not likely to be relevant for magnetic 
-island studies could be analyzed with fast, coarse routines at a local workstation while relevant data could 
-be forwarded to in-depth analysis routines.
+Another issue we plan to address is to make ``Delta`` more adaptive. This includes developing
+machine learning algorithm for data compression and to decide which data batches are to be offloaded
+to HPC resources for in-depth analysius. For example, ECEI time chunk data that is not likely to be
+relevant for magnetic island studies could be analyzed with fast, coarse routines at a local
+workstation while relevant data could be forwarded to in-depth analysis routines.
 
 
 
@@ -872,9 +790,8 @@ References
 ----------
 
 
-.. [PPY] PlasmaPy Community, Nicholas A. Murphy, Andrew J. Leonard, Dominik Stańczak, Pawel M.
-         Kozlowski, Samuel J. Langendorf, Colby C. Haggerty, Jasper P. Beckers, Stuart J. Mumford, Tulasi N.
-         Parashar, and Yi-Min Huang. (2018, April). PlasmaPy: an open source community-developed Python
+.. [PPY] PlasmaPy Community, Nicholas A. Murphy, Andrew J. Leonard et al.
+         PlasmaPy: an open source community-developed Python
          package for plasma physics. 
          Zenodo. 
          http://doi.org/10.5281/zenodo.1238132
@@ -882,32 +799,15 @@ References
 .. [Men15] O. Meneghini, S.P. Smith, L.L. Lao et al. *Integrated modeling applications for tokamak experiments with OMFIT*
          Nucl. Fusion **55** 083008 (2015)
 
+.. [Git] Ralph Kube (2020, June). DELTA-FUSION (aDaptive rEaL Time Analysis of big fusion data). Retrieved from https://github.com/rkube/delta
+
 .. [Ent18] S. Entler, J. Horacek, T. Dlouhy and V. Dostal *Approximation of the economy of fusion energy*
            Energy 152 p. 489 (2018)
-
-.. [D3D] K.H. Burrell for the DIII-D Team *Overview of recent experimental results from the DIII-D advanced tokamak program*
-         Nucl. Fusion 43 1555 (2003)
-         https://doi.org/10.1088/0029-5515/43/12/003
-
-.. [NSTX] J.E. Menard, J.P. Allain, D. Battaglia et al. *Overview of NSTX Upgrade initial results and modelling highlights*
-          Nucl. Fusion 57 102006 (29017)
-          https://doi.org/10.1088/1741-4326/aa600a
 
 .. [KSTAR] G.S. Lee, J. Kim, S.M. Hwang et al. *The design of the KSTAR tokamak*
            Fus. Eng. Design 46 405-411 (1999)
            https://doi.org/10.1016/S0920-3796(99)00032-0
 
-.. [AUG] H. Vernickel, M. Blaumoser, K. Ennen et al. *ASDEX upgrade: A poloidal divertor tokamak adapted to reactor requirements*
-         Journ. Nucl. Mater. 128-129, 71-77 (1984)
-         https://doi.org/10.1016/0022-3115(84)90330-1
-
-.. [MAST] A. Sykes, R.J. Akers, L.C. Appel et al. *First results from MAST*
-          Nucl. Fusion 41 1423 (2001)
-          https://doi.org/10.1088/0029-5515/41/10/310
-
-.. [TCV] S. Coda, J. Ahn, R. Albanese et al. *Overview of the TCV tokamak program: scientific progress and facility upgrades*
-         Nucl. Fusion 57 102011 (2017)
-         https://doi.org/10.1088/1741-4326/aa6412
 
 .. [Cos74] A.E Costley, R.J. Hastie, J.W.M. Paul, and J. Chamberlain *Electron Cyclotron Emission from a Tokamak Plasma: Experiment and Theory*
            Phys. Rev. Lett. 33 p. 758 (1974).
@@ -950,10 +850,6 @@ References
 
 .. [adios] Oak Ridge National Laboratory (2018, April 5) ADIOS 2: The Adaptable Input/Output System version 2. Retrieved from https://adios2.readthedocs.io/en/latest/index.html
 
-.. [Liu14] Q. Liu, J. Logan, Y. Tian et al. *Hello ADIOS: the challenges and lessons of developing leadership class I/O frameworks*
-           Concurrency Computat.: Pract. Exper. **26** 1453-1473 (2014).
-           https://doi.org/10.1002/cpe.3125
-
 .. [PEP3148] B. Quinlan *PEP 3148 futures - execute computations asynchronously* 
              2009
              Retrieved from https://www.python.org/dev/peps/pep-3148/
@@ -970,8 +866,6 @@ References
          by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some
          new at-top windows.
          http://hdl.handle.net/11858/00-001M-0000-0013-557A-5
-
-.. [Git] Ralph Kube (2020, June). DELTA-FUSION (aDaptive rEaL Time Analysis of big fusion data). Retrieved from https://github.com/rkube/delta
 
 .. [Zen] Kube, Ralph, Churchill, R Michael, Chang, CS, et al. (2020). 
          Leading magnetic fusion energy science into the big-and-fast data lane. 
