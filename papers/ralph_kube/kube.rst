@@ -62,15 +62,18 @@ virtually unlimited, clean, and competitively priced energy source to the grid. 
 established in the fusion community through projects like plasmapy [PPY]_ or OMFIT [Men15]_. We
 introduce another Python library for fusion energy reserch, ``Delta`` - the aDaptive nEar-reaL Time
 Analysis framework - and show how it can be used to stream data from an experiment to a remote high
-performance computing (HPC) resource [git]. There, Delta executes a routine spectral analysis workflow in
-near real-time. By making data analysis results available in near real-time, Delta allows
-scientists to make more informed decisions on follow-up experiments and could accelerate scientific
-discovery.
+performance computing (HPC) resource [git]. 
+
+There, Delta executes a routine spectral analysis workflow in near real-time. By making data
+analysis results available in near real-time, Delta allows scientists to make more informed
+decisions on follow-up experiments and could accelerate scientific discovery. To illustrate the
+use-case for Delta in fusion energy research, we start with a primer of fusion energy, introduce
+tokamak devices that are used to perform fusion experiments, describe a diagnostic that is installed
+in many tokamaks. With this at hand, we describe how near real-time data analysis can be used to
+accelerate experimental fusion energy workflows.
 
 
-To illustrate use-cases for Delta, we start with a primer of fusion energy, introduce tokamak
-devices that are used to perform fusion experiments and describe a diagnostic that is installed in
-many tokamaks. If one could harvest the energy from controlled nuclear fusion reactions you would
+If one could harvest the energy from controlled nuclear fusion reactions you would
 have a potentially unlimited, environmentally friendly energy source. Fusion reactions release
 energy when two light nuclei merge into a heavier one. As part of the reaction, a fraction of the
 reactants nuclear binding energy is converted into kinetic energy of the products. Fission
@@ -122,7 +125,8 @@ facilitate the analysis of such large datasets in near real-time." This use-case
 two other common data analysis workflows in fusion energy research, listed in Tab. :ref:`timescale`.
 Real-time control systems for plasma control require data on a millisecond time scale. This time
 scale is a hard constraint and limits the amount of data the algorithms can ingest. Post-shot batch
-analysis of measurements on the other hand serves scientific discovery. The data and the analysis
+analysis of measurements on the other hand serves scientific discovery, such as extraction about
+the plasma from ECE data. The data and the analysis
 methods are selected on a per-case basis and are often performed manually hours, days, weeks, months,
 or years after an experiment has concluded. A goal of Delta is to facilitate scientific discovery at
 time-scale faster than the experimental cadence. Providing timely analysis results of plasma
@@ -130,8 +134,8 @@ measurements to experimentalists aids them in making informed decisions about th
 shot. As an example of the workflows that we wish to facilitate with ``Delta`` we refer to a series of
 experiments performed at the TAE facility [Bal17]_. There, the so-called ``optometrist`` algorithm was
 used as a stochastic optimizer in conjunction with expert judgement of domain scientists to assess
-the performance of a just concluded plasma shot and optimize the machine parameters as to increase
-the performance in the following shot. By making advanced data analysis results available in near
+the performance of a just concluded plasma shot and optimize the machine parameters in order to increase
+the performance of the following shot. By making advanced data analysis results available in near
 real-time to domain scientists, ``Delta`` will allow to improve workflows at experimental fusion 
 facilities.
 
@@ -452,7 +456,8 @@ by the ``task_list`` class:
    class task_list():
 
      def submit(self, data, tidx):
-       fft_future = self.executor_fft.submit(stft, data, 
+       fft_future = self.executor_fft.submit(stft, 
+                                             data, 
                                              **kwargs)
 
        for task in self.task_list:
@@ -466,10 +471,6 @@ individual analysis kernel. This particular choice would increase the number of 
 transformations by a factor of four and may seem like a poor choice. On the other hand would this
 result in less communication across the MPI ranks and may perform better in situations where
 communication between MPI ranks becomes a bottleneck.
-
-
-
-
 
 
 Explored alternative architectures
@@ -495,9 +496,6 @@ dispatching them to an executor. In our tested implementation, the coroutines wo
 and communicate via a queue. Our experiments showed no measurable difference against a threaded
 implementation. On the other hand, the threaded implementation fits more naturally in the multi-processing
 design approach.
-
-
-
 
 
 Using data analysis codes  ``Delta``
@@ -559,9 +557,6 @@ ADIOS and data analysis using PEP 3148 compatible executors. In order to increas
 choose to use two PoolExecutors. The first executor is used to execute short Fourier Transformations
 of the the input data for the entire analysis task group. The second pool executor is available for
 running the analysis kernels and immediate storage of the results. 
-
-
-
 
 
 Performance analysis
@@ -741,9 +736,6 @@ agrees with the performance analysis that showed that the cross-correlation kern
 
 
 
-
-
-
 Conclusions and future work
 ---------------------------
 
@@ -770,8 +762,6 @@ machine learning algorithm for data compression and to decide which data batches
 to HPC resources for in-depth analysius. For example, ECEI time chunk data that is not likely to be
 relevant for magnetic island studies could be analyzed with fast, coarse routines at a local
 workstation while relevant data could be forwarded to in-depth analysis routines.
-
-
 
 
 
