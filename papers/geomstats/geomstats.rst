@@ -292,8 +292,7 @@ The class :code:`SPDMatricesSpace` inherits from the class :code:`EmbeddedManifo
         n_samples, n_features=2, n_classes=3)
 
     ellipsis = visualization.Ellipsis2D()
-    for i in range(n_samples):
-        x = data[i]
+    for i,x in enumerate(data):
         y = sampler.get_label_at_index(i, labels)
         ellipsis.draw(
             x, color=ellipsis.colors[y], alpha=.1)
@@ -367,16 +366,12 @@ to avoid leaking information from the test set at train time.
 
 .. code:: python
 
-    from sklearn.pipeline import Pipeline
+    from sklearn.pipeline import make_pipeline
     from sklearn.linear_model import LogisticRegression
     from sklearn.model_selection import cross_validate
 
-    pipeline = Pipeline(
-        steps=[
-            ('feature_ext',
-             ToTangentSpace(geometry=le_metric)),
-            ('classifier',
-             LogisticRegression(C=2))])
+    pipeline = make_pipeline(
+        ToTangentSpace(le_metric), LogisticRegression(C=2))
 
 We use a logistic regression on the tangent space at the Fréchet mean to classify connectomes, and evaluate the model with cross-validation. With the log-Euclidean metric we
 obtain:
@@ -485,11 +480,11 @@ We now proceed with the tutorial embedding the Karate club graph in a hyperbolic
 .. code:: python
 
     karate_graph = data_utils.load_karate_graph()
-    nb_vertices_by_edges =\
+    nb_vertices_by_edges = (
         [len(e_2) for _, e_2 in
-            karate_graph.edges.items()]
-    logging.info('
-        Number of vertices: %s', len(karate_graph.edges))
+            karate_graph.edges.items()])
+    logging.info(
+        'Number of vertices: %s', len(karate_graph.edges))
     logging.info(
         'Mean edge-vertex ratio: %s',
         (sum(nb_vertices_by_edges, 0) /
@@ -613,28 +608,21 @@ implementing the whole :code:`loss` function is available on GitHub.
 
 .. code:: python
 
-    def loss(
-        example_embedding, context_embedding, manifold):
+    def loss(example, context_embedding, manifold):
 
         context_distance = manifold.metric.squared_dist(
-            example_embedding, context_embedding)
-
+            example, context_embedding)
         context_loss = log_sigmoid(-context_distance)
-
         context_log_sigmoid_grad = -grad_log_sigmoid(
             -context_distance)
 
         context_distance_grad = grad_squared_distance(
-            example_embedding,
-            context_embedding,
-            manifold)
+            example, context_embedding, manifold)
 
-        context_grad =\
-            context_log_sigmoid_grad
-            * context_distance_grad
+        context_grad = (context_log_sigmoid_grad
+            * context_distance_grad)
 
-        example_grad = -context_grad
-        return context_loss, example_grad
+        return context_loss, -context_grad
 
 
 `Capturing the graph structure`
@@ -658,8 +646,8 @@ previously defined probability distribution function
     negative_sampling_table = []
 
     for i, nb_v in enumerate(nb_vertices_by_edges):
-        negative_sampling_table +=\
-            ([i] * int((nb_v**(3. / 4.)))
+        negative_sampling_table += (
+            [i] * int((nb_v**(3. / 4.)))
                 * negative_table_parameter)
 
 
@@ -702,21 +690,18 @@ Riemannian exponential map is applied to find the new value of
                     0, example_index - context_size):
                     min(example_index + context_size,
                     len(path))]
-                negative_index =\
-                    gs.random.randint(
-                        negative_sampling_table.shape[0],
-                        size=(len(context_index),
-                        n_negative))
-                negative_index =
-                    negative_sampling_table[negative_index]
-                example_embedding =
-                    embeddings[one_path]
-                for one_context_i, one_negative_i in
+                negative_index = gs.random.randint(
+                    negative_sampling_table.shape[0],
+                    size=(len(context_index), n_negative))
+                negative_index = (
+                    negative_sampling_table[negative_index])
+                example_embedding = embeddings[one_path]
+                for one_context_i, one_negative_i in \
                     zip(context_index, negative_index):
-                    context_embedding =
-                        embeddings[one_context_i]
-                    negative_embedding =
-                        embeddings[one_negative_i]
+                    context_embedding = (
+                        embeddings[one_context_i])
+                    negative_embedding = (
+                        embeddings[one_negative_i])
                     l, g_ex = loss(
                         example_embedding,
                         context_embedding,
@@ -724,11 +709,11 @@ Riemannian exponential map is applied to find the new value of
                         hyperbolic_manifold)
                     total_loss.append(l)
 
-                    example_to_update =
-                        embeddings[one_path]
-                    embeddings[one_path] =
+                    example_to_update = (
+                        embeddings[one_path])
+                    embeddings[one_path] = (
                         hyperbolic_metric.exp(
-                        -lr * g_ex, example_to_update)
+                        -lr * g_ex, example_to_update))
         logging.info(
             'iteration %d loss_value %f',
             epoch, sum(total_loss, 0) / len(total_loss))
@@ -753,8 +738,7 @@ To demonstrate the usefulness of the embedding learned, we show how to apply a :
     from geomstats.learning.kmeans import RiemannianKMeans
 
     kmeans = RiemannianKMeans(
-        riemannian_metric= hyperbolic_manifold.metric,
-        n_clusters=2, init='random',
+        hyperbolic_manifold.metric, n_clusters=2,
         mean_method='frechet-poincare-ball')
     centroids = kmeans.fit(X=embeddings, max_iter=100)
     labels = kmeans.predict(X=embeddings)
