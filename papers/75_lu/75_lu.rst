@@ -1,0 +1,760 @@
+:author: Haw-minn Lu
+:email: hlu@westhealth.org
+:institution: Gary and Mary West Health Institute
+:bibliography: ourbib
+
+============================================================
+Quasi-orthonormal Encoding for Machine Learning Applications
+============================================================
+
+.. class:: abstract
+
+Most machine learning models, especially artificial neural networks, require numerical, not categorical data. We briefly describe the advantages and disadvantages of common encoding schemes. For example, one-hot encoding is commonly used for attributes with a few unrelated categories and word embeddings for attributes with many related categories (e.g., words). Neither is suitable for encoding attributes with many unrelated categories, such as diagnosis codes in healthcare applications. Application of one-hot encoding for diagnosis codes, for example, can result in extremely high dimensionality with low sample size problems or artificially induce machine learning artifacts, not to mention the explosion of computing resources needed. Quasi-orthonormal encoding (QOE) fills the gap. We briefly show how QOE compares to one-hot encoding. We provide example code of how to implement QOE using popular ML libraries such as Tensorflow and PyTorch and a demonstration of QOE to MNIST handwriting samples.
+
+.. class:: keywords
+
+   machine learning, classification, categorical encoding
+
+Introduction
+------------
+
+While most popular machine learning methods such as deep learning
+require numerical data as input, categorical data is very common.
+For example, a person's vitals could be a combination of both,
+they could include height, weight (numerical) and gender, race
+(categorical). The challenge is to convert the categorical data into a
+vector of some sort. 
+
+One-hot encoding which is discussed in the next section is very
+commonly used in machine learning but has the drawback
+that it can increase the dimensionality of the data by the cardinality
+of the category. For small category, this is not a significant issue
+but when categories with high cardinality are present, many problems
+can arise as described below.
+
+Quasiorthonormal encoding (QOE) is a generalization of the one-hot
+encoding and exploits the fact that in high dimensional vector spaces,
+two random vectors are almost always orthogonal. The concept originated
+with Kůrková and Kainen :cite:`kurkova`. In many ways, QOE functions
+the same as one-hot encoding but does not increase the dimensionality
+of the data to the same degree as one-hot encoding. Historically, QOE
+was considered for a method of encoding words but modern techniques
+such as *word embeddings* are now considered the state of the art
+method for encoding language.
+
+Some advantages to QOE include a reduction of dimensionality over that
+of using one-hot encoding thus limiting effects of the \`\`curse of
+dimensionality'' [#]_ or the problem of high dimension low sample size
+(HDLSS). The advantage over other encodings such as binary, hash, etc.
+is that it does not induce artificial geometric relationships that can
+cause downstream bias in the results because each label in a category
+remains mathematically near orthogonal to the other labels.
+
+.. [#] Mukhtar :cite:`mukhtar` gives a good explanation of the curse of dimensionality as applied to data science.
+
+We will briefly survey *classic* encoding methods, discuss the
+theoretical aspects of QOE, and present a detailed example implementation
+of QOE in tensorflow.
+
+Background
+----------
+
+Coding methods can be categorized as *classic*, *contrast*,
+*Bayesian* and *word embeddings*. Classic, contrast and Bayseian
+encoding are given a good overview treatment by Hale's blog
+:cite:`Hale2018` with examples to be found as part of the ``scikit-learn`` category
+encoding package :cite:`scikit`. Both
+contrast encoding and Bayesian encoding use the statistics of the data
+to facilitate encoding. These two categories may be of use when more
+statistical analysis is required, however there has not been widespread
+adoption of these encoding techniques for machine learning.
+
+Word embeddings are their own special category. 
+:cite:`wordembeddings`. Word embeddings 
+are used to represent words, phrases or even entire documents as a
+vector so that similar meanings/concepts are mapped to
+vectors that are close in the target vector space. Additionally, it is
+adapted for encoding a large categorical features (i.e., words) into a
+relatively lower dimensional space.
+
+The remainder of the section will describe some common classic
+categorical encodings
+
+Ordinal Encoding
+~~~~~~~~~~~~~~~~
+
+To begin our overview of fundamental encoding methods, we start with
+Ordinal (Label) Encoding. Ordinal encoding is the simplest and perhaps
+most naive approach encoding for a categorical feature --- one simply
+assigns a number to each member of a category. This is often how data
+from surveys are encoded into spreadsheets for easy storage and
+calculation of basic statistics. An associated data dictionary is used
+to convert the values back and forth between a number and a category.
+Take for example the case of gender, male could be encoded as 1 and
+female as 2, with a data dictionary as follows:
+:code:`{'male': 1, 'female': 2}`
+
+Suppose we have three categories of ethnic groups: White, Black, and
+Asian. Under ordinal encoding, suppose White is encoded as 1, Black is
+encoded as 2 and Asian is encoded as 3. If a machine learning
+classification is somehow confused between Asian and White and decides
+to split the difference and report the in-between value (2) which
+encodes Black. The issue is that arbitrary gradation between 1 and 3
+introduces a natural interpolation (2) that may be nonsense. Thus, the
+natural ordering of the numbers imposes an ordered geometrical
+relationship between the categories that does not apply.
+
+Nonetheless there are situations where ordinal encoding makes sense. For
+example, a \`rate your satisfaction' survey typically encodes five levels
+(1) terrible, (2) acceptable (3) mediocre, (4) good, (5) excellent.
+
+One Hot Encoding
+~~~~~~~~~~~~~~~~
+
+This is the most common encoding used in machine learning. One hot
+encoding takes a category with cardinality :math:`N` and encodes each
+categorical value with an :math:`N`-dimensional vector with a single \`1'
+and the remainder \`0's. Take as an example encoding five makes of Japanese
+Cars: Toyota, Honda, Subaru, Nissan, Mitsubishi. Table :ref:`onehot`
+shows a comparison of coding between ordinal and one-hot encodings.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lcc}
+     \toprule
+     \textbf{Make} & \textbf{Ordinal} & \textbf{One-Hot} \\
+     \midrule
+     Toyota &  1 &  (1,0,0,0,0) \\
+     Honda &  2 &  (0,1,0,0,0) \\
+     Subaru &  3 &  (0,0,1,0,0) \\
+     Nissan &  4 &  (0,0,0,1,0) \\
+     Mitsubishi &  5 &  (0,0,0,0,1) \\
+     \bottomrule
+     \end{longtable*}
+
+     \caption{Examples of Ordinal and One-Hot Encodings \DUrole{label}{onehot}}
+   \end{table}
+
+The advantage is that one hot encoding does not induce an implicit
+ordering or between categories. The primary disadvantage is that the
+dimensionality of the problem has increased with corresponding increases
+in complexity, computation and \`\`the curse of high dimensionality''.
+This easily leads to the high dimensionality low sample size (HDLSS)
+situation, which is a problem for most machine learning methods.
+
+Binary Encoding, Hash Encoding, BaseN Encoding
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Somewhere in between these two are *binary encoding*, *hash encoding*,
+and *baseN* encoding. Binary encoding simply labels each category with a
+unique binary code and converts the binary code to a vector. Using the
+previous example of the Japanese car makes, table :ref:`binary` shows
+an example of binary encoding.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lccc}
+     \toprule
+     \textbf{Make} & \textbf{Ordinal} & \textbf{as Binary} & \textbf{Binary Code} \\
+     \midrule
+     \endfirsthead
+     Toyota &  1 &  001 &  (0,0,1) \\
+     Honda &  2 &  010 &  (0,1,0) \\
+     Subaru &  3 &  011 &  (0,1,1) \\
+     Nissan &  4 &  100 &  (1,0,0) \\
+     Mitsubishi &  5 &  101 &  (1,0,1) \\
+     \bottomrule
+     \end{longtable*}
+     \caption{Example of Binary Codes \DUrole{label}{binary}}
+
+   \end{table}
+
+Hash encoding assigns each category an ordinal value that is then
+converted into a binary hash value that is encoded as an :math:`n`-tuple
+in the same fashion as the binary encoding. You can view hash encoding
+as binary encoding applied to the hashed ordinal value. Hash encoding
+has several advantages. First, it is open ended so new categories can be
+added later. Second, the resultant dimensionality can be much lower than
+one-hot encoding. The chief disadvantage is that categories can collide
+if two categories accidentally map into the same hash value. This is a
+*hash collision* and must be fixed separately using a resolution
+mechanism. Bernardi's blog :cite:`hash` provides a good treatment of hash coding.
+
+Finally, baseN encoding is a generalization of binary encoding that uses
+a number base other than 2 (binary). Table :ref:`tab:ternary` is an example of the Japanese
+car makes using base 3.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lcccc}
+     \toprule
+     && \textbf{as} & \textbf{Ternary} & \textbf{Balanced} \\
+     \textbf{Make} & \textbf{Ordinal} & \textbf{Ternary} & \textbf{Code} & \textbf{Ternary Code} \\
+     \midrule
+     \endfirsthead
+     Toyota & 1 & 01 & (0,1) & (0,1) \\
+     Honda & 2 & 02 & (0,2) & (0,-1) \\
+     Subaru & 3 & 10 & (1,0) & (1,0) \\
+     Nissan & 4 & 11 & (1,1) & (1,1) \\
+     Mitsubishi & 5 & 12 & (1,2) & (1,-1) \\
+     \bottomrule
+     \end{longtable*}
+     \caption{Example of Ternary Codes \DUrole{label}{tab:ternary}}
+   \end{table}
+
+A disadvantage of all three of these techniques is that while it does
+reduce the dimension of the encoded feature, artificial geometric
+relationships may creep in between unrelated categories. For example,
+:code:`(0.7,0.7)` may be confusion between Toyota and Honda or a weak Subaru
+result, although the effect is not as pronounced as ordinal encoding.
+
+Decoding
+~~~~~~~~
+
+Of course, with categorical encoding, the ability to decode an encoded vector
+back to a category can be very important. If the categorical variable is only
+an input to a machine learning system, retrieving a category may not be very
+important. For example, one may have a product rating model which delivers a
+rating based on a number of variables, some numeric like price, but others
+might be categorical like color, but since the output does not require category
+decoding, it is not important.
+
+In an application such as categorization or imputation :cite:`gondara`,
+retrieving the category from a vector is crucial. In training a modern
+classification model, a categorical output is often subject to an activation
+function which converts a vector into a probability of each category such as a
+*softmax* function. Essentially, the softmax is a continuous and differentiable
+version of a \`\`hard max'' function which would assign a :code:`1` to the
+vector representing the most likely category and a :code:`0` to all the other
+categories. The conversion to a probability distribution allows the use of a
+negative log likelihood loss function rather than the standard root mean
+squared error.
+
+
+Typically, other classic encoding methods use thresholds to rectify a vector
+first into a binary or :math:`n`-ary value then decode the vector back to a
+label in accordance to the encoding. This makes these values difficult to use as
+outputs of machine learning systems such as neural networks that rely on
+gradients due to lack of differentiability. Also, the decoding process is
+difficult to convert to a probability distribution, making negative
+log-likelihood or crossentropy loss functions more difficult to use.
+
+
+Theory
+------
+
+In this section, we will briefly define and discuss quasiorthogonality, show how it relates to one-hot encoding and describe how this relationship can be used to develop a categorical encoding with lower cardinality.
+
+Quasiorthogonality
+~~~~~~~~~~~~~~~~~~
+
+In a suitably high dimensional space, two randomly selected vectors are very likely to be nearly orthogonal or quasiorthogonal. In such an :math:`n`-dimensional vector space, there are sets of :math:`K` vectors which are mutually quasiorthogonal where :math:`K\gg n`. A more formal definition can be stated as follows.
+Given an :math:`\epsilon`, two vectors :math:`{\bf x}` and
+:math:`{\bf y}` are said to be *quasiorthogonal* if
+:math:`\frac{|{\bf x}\cdot {\bf y}|}{\|{\bf x}\| \|{\bf y}\|}<\epsilon`.
+This extends the orthogonality principle by allowing the inner product
+to not exactly equal zero. As an extension, we can define a
+quasiorthonormal *basis* by a set of normal vectors
+:math:`\{{\bf q}_i\}` for :math:`i=1,\ldots,K` such that
+:math:`|{\bf q}_i\cdot {\bf q}_j| < \epsilon` and
+:math:`||{\bf q}_i||=1`, for all :math:`i,j\in\{1,\ldots,K\}`, where in
+principle for large enough :math:`n`, :math:`K\gg n`.
+
+The question of how large a quasiorthonormal basis can be found for a given :math:`n`-dimensional vector space and :math:`\epsilon` is answered in part by the mathematical literature. :cite:`Kainen2020` derived a lower bound for :math:`K` as a function of :math:`\epsilon`
+and :math:`n`. Namely,
+
+.. math:: K \ge e^{n\epsilon^2}.
+
+This means that given an :math:`\epsilon`, the size of potential quasiorthonormal basis grows at least exponentially as :math:`n` grows.
+
+One Hot Encoding Revisited
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Exploiting quasiorthogonality in categorical encoding
+is analysis to using orthonormal basis in one-hot encoding. In a typical machine
+learning scenario, one hot encoding maps a 
+variable with :math:`n` categories into a set of unit vectors in a 
+:math:`n`-dimensional space: :math:`L=\{l_i\}` for :math:`i=1\ldots n`,
+then the one hot encoding :math:`E_L:L \mapsto \mathbb{R}^n`
+given by :math:`l_i \mapsto \mathbf{u}_i` where :math:`\mathbf{u}_i` is
+an orthonormal basis in :math:`\mathbb{R}^n`. The simplest basis used is
+:math:`\mathbf{u}_i = (0,0,\ldots, 1, 0,\ldots, 0)` where the :math:`1`
+is in the :math:`i`\ th position which is know as the *standard basis*
+for :math:`\mathbb{R}^n`.
+
+Mapping of a vector back to the original category uses the *argmax*
+function, so for a vector :math:`\mathbf{z}`,
+:math:`\mathrm{argmax}(\mathbf{z}) = i` where :math:`z_i>z_j` for all
+:math:`j\ne i` and the vector :math:`\mathbf{z}` decodes to
+:math:`l_{\mathrm{argmax}(\mathbf{z})}`. Of course, the argmax function
+is not easily differentiable which presents problems in ML learning algorithms
+that require derivatives. To fix this, a *softer* version is used called
+the *softargmax* or now as simply *softmax* and is defined as follows:
+
+.. math::
+   :label: eq:csoftmax
+
+   \mathrm{softmax}(\mathbf{z})_i=\frac{e^{z_i}}{\sum_{j=1}^n e^{z_j}}
+
+for :math:`i=1,2,\ldots,n` and
+:math:`{\bf z}=(z_1, z_2,\ldots, z_n) \in \mathbb{R}^n` where
+:math:`\mathbf{z}` is the vector being decoded. The softmax function
+decodes a one-hot encoded vector into a probability density function
+which enables application of negative log likelihood loss functions or
+cross entropy losses.
+
+Though one-hot encoding uses unit vectors
+with one :code:`1` in the vector hence a *hot* component. The
+formalization of the one hot encoding above allows *any* orthonormal
+basis to be used. So to use a generalized one-hot encoding with
+orthonormal basis :math:`{\mathbf{u}_i}`, one would map the label
+:math:`j` to :math:`{\mathbf{u}_j}` for encoding where the
+:math:`{\mathbf{u}_i}` no longer have to take the standard basis form.
+To decode an encoded value in this framework, we would take
+
+.. math::
+   :label: eq:argmax
+
+   i = \mathrm{argmax}(\mathbf{z}\cdot\mathbf{u}_1,\mathbf{z}\cdot\mathbf{u}_2,\ldots,\mathbf{z}\cdot\mathbf{u}_n).
+
+This reduces to :math:`\mathrm{argmax}(\mathbf{z})` for the standard
+basis. Thus, the softmax function can be expressed as the following,
+
+.. math::
+   :label: eq:gsoftmax
+
+   \mathrm{softmax}({\bf z})_i={e^{{\bf z}\cdot {\bf u}_i}\over \sum_{j=1}^n e^{{\bf z}\cdot {\bf u}_j}}.
+
+Encoding
+~~~~~~~~
+
+The principle behind QOE is simple. A quasiorthonormal basis :math:`\{{\bf q}_i\}` is
+substituted for the orthonormal basis :math:`\{{\bf u}_i\}` described above. So given a
+quasiorthonormal basis, we can define a QOE for a set :math:`L=\{l_i\}`
+by :math:`l_i \mapsto \mathbf{q}_i`.
+
+Decoding :math:`\mathbf{z}` under QOE would use a *qargmax* function analogous to the argmax function for one-hot encoding as shown in equation :ref:`eq:qargmax`, which is nearly identical to equation :ref:`eq:argmax`.
+
+.. math::
+   :label: eq:qargmax
+
+   i = \mathrm{argmax}(\mathbf{z}\cdot\mathbf{q}_1,\mathbf{z}\cdot\mathbf{q}_2,\ldots,\mathbf{z}\cdot\mathbf{q}_n)
+
+Analogous to the softmax function shown of equation :ref:`eq:gsoftmax`, is a *qsoftmax* function which can be expressed as 
+
+.. math::
+   :label: eq:qsoftmax
+
+   \mathrm{qsoftmax}({\bf z})_i={e^{{\bf z}\cdot {\bf q}_i}\over \sum_{j=1}^K
+   e^{{\bf z}\cdot {\bf q}_j}}
+
+The only real difference in the formulation is that while still
+operating in :math:`{\mathbb R}^n` we are encoding :math:`K>n` labels.
+
+Returning to our example of Japanese car makes, table :ref:`qoe` shows one-hot encoding and QOE of the five manufacturers. In the table, encodings are represented simply as vectors where :math:`\mathbf{u}_i` are unit vectors in :math:`\mathbb{R}^5` and
+:math:`{\mathbf{q}_i}` are a set of quasiorthonormal vectors in :math:`\mathbb{R}^3`. It can be shown that such a quasiorthonormal can be found in :cite:`sphere` with the minimum mutual angle of 66\ :math:`^\circ`. In short, the difference between one-hot encoding and QOE is that the one-hot requires 5 dimensions and in this case QOE requires only 3.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lccc}
+     \toprule
+     \textbf{Make} & \textbf{Ordinal} & \textbf{One-Hot} & \textbf{QOE} \\
+     \midrule
+     \endfirsthead
+     Toyota & 1 & $\mathbf{u}_1$ & $\mathbf{q}_1$ \\
+     Honda & 2 & $\mathbf{u}_2$ & $\mathbf{q}_2$ \\
+     Subaru & 3 & $\mathbf{u}_3$ & $\mathbf{q}_3$ \\
+     Nissan & 4 & $\mathbf{u}_4$ & $\mathbf{q}_4$ \\
+     Mitsubishi & 5 & $\mathbf{u}_5$ & $\mathbf{q}_5$ \\
+     \bottomrule
+     \end{longtable*}
+     \caption{Example of Quasiorthonormal Encoding \DUrole{label}{qoe}}
+
+   \end{table}
+
+Implementation
+--------------
+
+Mathematical
+~~~~~~~~~~~~
+
+While equations :ref:`eq:qargmax` and :ref:`eq:qsoftmax` describe precisely mathematically how to implement decoding and activation functions. A literal implementation would not exploit the modern vectorized and accelerated computation available in such packages as ``numpy``, ``tensorflow`` :cite:`tensorflow2015-whitepaper` and ``pytorch``.
+
+To better exploit built-in functions of these packages, we define the following :math:`n\times K` *change of coordinates* matrix
+
+.. math::
+
+   \mathbf{Q}=  \left[\begin{matrix} 
+   \bigg| & \bigg| & &\bigg | \\ 
+   \mathbf{q}_1 & \mathbf{q}_2 & \cdots & \mathbf{q}_K \\
+   \bigg| & \bigg| & &\bigg | \end{matrix}\right].
+
+This transformation makes it easier to convert a set of parallel operations
+into matrix operations for which these aforementioned computational packages
+are well suited. Mathematically, the transformation maps the representation of
+a category encoded by QOE to a vector representing one hot encoding.
+Understanding this transformation makes it simple to express 
+``argmax`` or ``softmax`` function's quasiorthoromal variant by equations
+:ref:`eq:convert:argmax` and :ref:`eq:convert`, respectively.
+
+.. math::
+   :label: eq:convert:argmax
+
+   \mathrm{qargmax}(\mathbf{z}) = \mathrm{argmax}(\mathbf{Qz})
+
+and
+
+.. math::
+   :label: eq:convert
+
+   \mathrm{qsoftmax}(\mathbf{z}) = \mathrm{softmax}(\mathbf{Qz}).
+
+The ``tensorflow`` and ``pytorch`` packages both supply optimized ``softmax`` functions
+as does ``scipy`` when using ``numpy`` arrays, making implementation of QOE not
+only easy, but efficient. Not only will using native functions accelerated
+performance, it can exploit features such as auto differentiation built into
+the native functions --- a useful property when using the qsoftmax
+function as an activation function.
+
+Since the matrix manipulation operations and input/output shape definitions differ from package to package, we provide a qsoftmax implementation in several popular packages. In order to facilitate the most general format possible, in our examples, we will express the quasiorthogonal basis as a list of list, but the input and the output is expressed in the appropriate native class (e.g. :code:`numpy.ndarray` in ``numpy``).
+
+Numpy
+~~~~~
+
+For ``numpy``, the implementation is straight-forward and follows equation :ref:`eq:convert` almost literally and is given below.
+
+.. code:: python
+
+    def qsoftmax(x, basis):
+        qx = np.matmul(np.asarray(basis),x)
+        return softmax(qx)
+
+Since ``qsoftmax`` given above requires the basis as a parameter as well as the input vector, it is a parameterized activation function. In many packages, only unparameterized functions can be used. The following function factory or metafunction can be used to return a  ``qsoftmax`` function for a given basis, rather than encoding the function above in a ``lambda`` expression.
+        
+.. code:: python
+
+    def qsoftmax(basis):
+        def func(x):
+            qx = np.matmul(np.asarray(basis),x)
+            return softmax(qx)
+        return func
+
+The ``softmax`` function used above can be found in ``scipy.special.softmax`` or can easily be written as
+
+.. code:: python
+
+   def softmax(x):
+        ex=np.exp(x)
+        return ex/np.sum(ex)
+
+Tensorflow
+~~~~~~~~~~
+
+For ``tensorflow``, the following segment of code is an implementation of the ``qsoftmax`` functions. By using native ``tensorflow`` functions, the resultant ``qsoftmax`` function will be automatically differentiated in a backwards neural network pass. It is also worth noting that quite often due to the way ``tensorflow`` performs batch processing,  the input to the activation function is not a vector but an array of vectors as a ``Tensor`` class.
+
+.. code:: python
+
+    def qsoftmax(x, basis):
+        qx = tf.matmul(tf.constant(basis), x,
+                       transpose_b=True)        
+        return tf.nn.softmax(tf.transpose(qx))
+
+A metafunction version of ``qsoftmax`` is also presented as this is used below in our example of MNIST handwriting classification employing QOE.
+
+.. code:: python
+
+    def qsoftmax(basis):
+        def func(x):
+            qx = tf.matmul(tf.constant(basis), x,
+                           transpose_b=True)        
+            return tf.nn.softmax(tf.transpose(qx))
+        return func
+
+
+Pytorch
+~~~~~~~
+
+
+Presented below is a version of the ``qsoftmax`` function implemented using ``pytorch`` primitives. The use of the ``squeeze`` and ``unsqueeze`` operations convert between a 1-dimensional vector and a 2-dimension matrix having one column. This function is only designed to accept vector inputs. In some models, especially image related models, outputs of some layers may be multidimensional arrays. If your use case requires a multidimensional input to the ``qsoftmax`` function the code may need alteration.
+
+.. code:: python
+
+    def qsoftmax(x, basis):
+       qx = torch.mm(torch.tensor(basis), 
+                     x.unsqueeze(0).t()).t().squeeze()
+       return torch.nn.functional.softmax(qx,dim=0)
+
+Construction of an Quasiorthonormal set
+---------------------------------------
+
+It is difficult to find explicit constructions of quasiorthonormal sets in
+the literature. Several methods are mentioned by Kainen :cite:`kainan`, but
+these constructions are theoretical and hard
+to follow. There are a number of combinatorial problems related to such as
+spherical codes :cite:`weisstein` and Steiner Triple Systems :cite:`lindner2017design`, which strive to find optimal solutions. These are extremely complicated mathematical constructions and not every optimal solution has been found.
+
+Since in a high dimensional space, two random vectors are likely to be
+quasiorthogonal, it is tempting to take a brute force approach and
+simply randomly select :math:`k` vectors at random and test the
+set. This approach is reasonable for small dimensions or small
+:math:`k`. However, the set must have every vector be mutually
+quasiorthogonal and combinatoric complications quickly set in.
+
+Suppose, the probability of any two vectors being quasiorthogonal to a
+given :math:`\epsilon` is :math:`p`. Since there are :math:`{k\choose 2}` 
+pairs of vectors, the probability that you have a quasiorthogonal set
+is :math:`p^{k\choose 2}`. To put in concrete terms, if two random
+vectors have a 99% chance of being quasiorthogonal. Picking a set of
+20 is only 14% and 30 is around 1%. Other factors conspire to make
+this difficult including the increasing computational complexity and
+the geometric differences between a cube and sphere become more
+pronounced as :math:`k` and :math:`N` grow.
+
+As a practical matter, optimal solutions are not necessary as long as the desired characteristics of the quasiorthonormal basis are obtained. As an example, while an optimal solution finds 28 quasiorthonormal vectors with dot products of 0.5 or under are possible in seven dimensions, you may only need 10 vectors. In other words, a suboptimal solution may yield fewer vectors that are possible for a given dimension, or a larger dimension may be required to obtain the desired number of vectors that is theoretically needed. 
+
+One practical way to construct a quasiorthonormal basis is to use spherical codes which has been studied in greater detail. Spherical codes try to find a set of points on the :math:`n`-dimensional hypersphere
+such that the minimum distance between two points is maximized. In most
+constructions of spherical codes, a given point's antipodal point is
+also in that code set. So in order to get a quasiorthogonal set, for
+each pair of antipodal points, only one element of the pair is selected. Perhaps to better understand the relationship, between quasiorthonormal basis and spherical codes is that a set of spherical codes can be constructed by taking every vector in a quasiorthonormal basis and add its antipodal point. 
+
+The area of algorithmically finding a quasiorthonormal basis is scant as is
+finding suboptimal spherical codes. However, one such
+method was investigated by Gautam and Vaintrob :cite:`Gautam2013ANA`. Perhaps
+the easiest way to obtain a quasiorthonormal basis is to use spherical codes as
+described above but obtain the spherical code from the vast compliation of
+sphere codes by Sloane :cite:`sphere`. 
+
+Simple Example and Comparison
+-----------------------------
+
+To demonstrate how QOE can be used in machine learning, we provide a simple experiment/demonstration.
+This demonstration in addition to showing how to construct a classification system using QOE gives an sense of the effect of QOE on accuracy. As an initial experiment, we applied QOE to classification of the Modified National Institute of Standards and Technology (MNIST) handwriting dataset :cite:`mnist`, using the 60000 training examples with 10000 test
+examples. As there are 10 categories, we needed sets of quasiorthonormal
+bases with 10 elements. We took the spherical code for 24 points in
+4-dimensions, giving us 12 quasi-orthogonal vectors. The maximum
+pairwise dot product was 0.5 leading to an angle of 60\ :math:`^\circ`.
+We also took the spherical code for 56 points in 7-dimensions, giving 28
+quasi-orthogonal vectors. The maximum pairwise dot product was .33
+leading to an angle of a little over 70\ :math:`^\circ`.
+
+We used a hidden layer with 64 units with a ReLU activation function.
+Next there is a 20% dropout layer to mitigate overtraining, then an
+output layer whose width depends on the encoding used. We selected for this demonstration to use one of the simplest models hence there are no convolutional or pooling layers used as often seen in other sample MNIST handwriting classifiers. The following example is implemented using ``tensorflow`` and ``keras``.
+
+Validating the QSoftmax Function
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+We begin by validating the ``qsoftmax`` function as provided above. This is done by first constructing a reference model built on ``tensorflow`` and ``keras`` in the standard way. In fact this example is nearly identical to the presented in the *Quickstart for Beginners* guide :cite:`tensorflow` for ``tensorflow`` with the exception that we employ a separate ``Activation`` for clarity.
+
+.. code:: python
+
+    normal_model = tf.keras.models.Sequential([
+      tf.keras.layers.Flatten(input_shape=(28, 28)),
+      tf.keras.layers.Dense(64, activation=tf.nn.relu),
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(10)
+      tf.keras.layers.Activation(tf.nn.softmax)
+    ])
+
+To validate that the ``qsoftmax`` function and the use of a ``Lambda`` layer is properly used, the ``qsoftmax`` metafunction is used with the identity matrix to represent the basis. Mathematically, the resultant ``qsoftmax`` function in the ``Lambda`` layer is exactly the ``softmax`` function.  The code is shown below:
+
+.. code:: python
+
+    sanity_model = tf.keras.models.Sequential([
+      tf.keras.layers.Flatten(input_shape=(28, 28)),
+      tf.keras.layers.Dense(64, activation=tf.nn.relu),
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(10)
+      tf.keras.layers.Lambda(qsoftmax(numpy.identity(10,
+                                 dtype=numpy.float32)))
+    ])
+
+This should function identically as the reference model because it tests
+that the qsoftmax function operates as expected (which it does in this case).
+This is useful for troubleshooting if you have difficulty.
+
+Examples on Quasiorthonormal Basis
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To recap, for the two QOE experiments we take a set of 10 mutually
+quasiorthonormal vectors from a four dimensional space, and from a seven
+dimensional space all derived from spherical codes from tables mentioned above,
+and only took 10 vectors. For the code, the basis for each experiment are
+labeled  ``basis4`` and ``basis7``, respectively. This leads to the following
+models, ``basis4_model`` and ``basis7_model``.
+
+.. code:: python
+
+    basis4_model = tf.keras.models.Sequential([
+      tf.keras.layers.Flatten(input_shape=(28, 28)),
+      tf.keras.layers.Dense(64, activation=tf.nn.relu),
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(4),
+      tf.keras.layers.Lambda(qsoftmax(basis4))
+    ])
+    basis7_model = tf.keras.models.Sequential([
+      tf.keras.layers.Flatten(input_shape=(28, 28)),
+      tf.keras.layers.Dense(64, activation=tf.nn.relu),
+      tf.keras.layers.Dropout(0.2),
+      tf.keras.layers.Dense(7),
+      tf.keras.layers.Lambda(qsoftmax(basis7))
+    ])
+
+
+Table :ref:`tab:qoe` shows the mean of the accuracy over three training runs
+of the validation data with training data in parentheses.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lcccc}
+     \toprule
+     \textbf{Number of} & \textbf{One Hot} & \textbf{7-Dimensional} & \textbf{4-Dimensional} \\
+     \textbf{Epochs} & \textbf{Encoding} & \textbf{QOE} & \textbf{QOE} \\
+     \midrule
+     \endfirsthead
+     10 & 97.53\% (97.30\%) & 97.24\% (96.94\%) & 95.65\% (95.15\%) \\
+     20 & 97.68\% (98.02\%) & 97.49\% (97.75\%) & 95.94\% (96.15\%) \\
+     \bottomrule
+     \end{longtable*}
+     \caption{Results of MNIST QOE Experiment \DUrole{label}{tab:qoe}}
+   \end{table}
+
+From these results, it is clear that there is some degradation in performance as the number of dimensions is reduced, but clearly QOE can be used leading to a tradeoff between accuracy and resource reduction from the reduction of dimensionality.
+
+Extending to Spherical Encodings
+--------------------------------
+
+A Deeper Look at Softmax
+~~~~~~~~~~~~~~~~~~~~~~~~
+In principle, to recover a category from a potentially noisy encoded vector, the dot product of the encoded vector against each basis vector in accordance with equation :ref:`eq:argmax` whether the basis is orthonormal or quasiorthonormal. If one takes a deeper dive into equations :ref:`eq:gsoftmax` and :ref:`eq:qsoftmax`, it is interesting to see what these functions are doing. Figure :ref:`fig:ortho` shows on the left, randomly selected values in a circle of radius 6. On the right shows the vectors after the softmax function is applied. Clearly with a few stragglers, most points either move very close to either of the basis vectors :math:`(0,1)` or :math:`(1,0)`. Upon a cursory sampling of the output of the last ``Dense`` layer prior to application of the ``softmax`` function, shows that each vector component averages about 5.5 so a radius of 6 approximates the what a ``softmax`` function might encounter.
+
+.. figure:: 1.pdf
+
+   Softmax on an orthonormal basis :label:`fig:ortho`
+
+Similarly, figure :ref:`fig:qortho` shows the same type of distribution of randomly selected values and the right shows the effect after a quasiorthonormal softmax is applied with three basis vectors. Since the qsoftmax function maps the two dimensional input into a three-dimensional space, the three-dimensional vectors are mapped back down to two dimensions using the quasiorthonormal basis. Again with the exception of a few stragglers, most points move very close to one of the three basis vectors.
+
+.. figure:: 3.pdf
+
+   Softmax on a quasiorthogonal basis :label:`fig:qortho`
+   
+
+Because the expectation on one-hot encoding is that the value of a
+given vector component be either :math:`0` or :math:`1` and that
+negative values are not expected even in a noisy environment. This is
+evident in figure :ref:`fig:ortho`, where the results are all in the
+first quadrant (i.e. no negative values). This raises the question could
+the negative values be exploited with minimal detrimental effects?
+
+While equation :ref:`eq:qsoftmax` is intended to accept a
+quasiorthonormal basis, functionally there is no reason why this
+equation need be limited to a quasiorthonormal basis. The equation
+still make sense if :math:`\{\mathbf{q}_i\}` were replaced by any collection of
+normal vectors. However, the question remains as to how well that
+would work. So to exploit the negative regions of the coordinate
+system, we can see graphically what would happen if we add the
+antipodal vectors :math:`(-1,0)` and :math:`(0,-1)` to our standard
+orthonormal basis, :math:`\{(1,0), (0,1)\}`. Applying the same type of
+random vector analysis to the qsoftmax function we get figure
+:ref:`fig:sphere`. 
+
+.. figure:: 4.pdf
+
+      Softmax on encoded values using an orthonormal basis and antipodal points :label:`fig:sphere`
+
+
+So why not just use a random set of normal vectors? Despite the
+intuition a truly random selection will have some
+clustering. Geometrically, the set of normal vectors should be as
+evenly distributed as possible which is precisely what spherical codes
+are.
+
+While it is likely that spherical codes for encoding work fine as an
+output such as in classification, there is an implicit relationship
+imposed by antipodal vector pairs especially when used as an input to
+a system. If you consider the spherical encoding offered in Table
+:ref:`tab:spherecar`, the vector for Toyota is the negative of the
+vector for Honda. This is essentially telling any number system that
+Honda is the negative of Toyota, which may not be desirable.
+
+With this risk in mind, we can further extend the idea to a
+quasiorthogonal basis by adding the antipodal vectors for each vector in
+the basis. The result not only doubles the number of vectors that can be
+used for encoding, it reduces the problem of finding a basis to that of
+finding spherical codes.
+
+Spherical Codes
+~~~~~~~~~~~~~~~
+
+Spherical codes can be used in place of quasiorthonormal codes simply by allowing the :math:`\mathbf{q}_i` to be a collection of spherical codes not necessarily quasiorthonormal basis. Table :ref:`tab:spherecar` shows how the example of the five Japanese car makes could be encoded with a simple spherical code.
+
+.. table:: Examples of Spherical Codes :label:`tab:spherecar`
+
+     +-----------+-------------+----------------+
+     |Make       | One-Hot     | Spherical Code |
+     +===========+=============+================+
+     |Toyota     | (1,0,0,0,0) | (1,0,0)        |
+     +-----------+-------------+----------------+
+     |Honda      | (0,1,0,0,0) | (-1,0,0)       |
+     +-----------+-------------+----------------+
+     |Subaru     | (0,0,1,0,0) | (0,1,0)        |
+     +-----------+-------------+----------------+
+     |Nissan     | (0,0,0,1,0) | (0,-1,0)       |
+     +-----------+-------------+----------------+
+     |Mitsubishi | (0,0,0,0,1) | (0,0,1)        |
+     +-----------+-------------+----------------+
+
+Since spherical codes can substitute directly into the equations for QOE, it is a simple matter to implement spherical codes :math:`\{\mathbf{s}_i\}` instead of quasiorthonormal basis, :math:`\{\mathbf{q}_i\}`. As such it is a simple matter to run the same experiment on the MNIST handwriting samples as we did for QOE. First, a set of codes are defined in an ``ndarray`` called ``code5`` and ``code3``. The variable ``code5`` consists of the standard orthonormal basis in 5 dimensions along with their antipodal unit vector to produce a set of 10 vectors in 5 dimensions. The variable ``code3`` is taken from :cite:`sphere` for the 3 dimensional spherical codes with 10 vectors. Once these codes are defined, they can be substituted for ``basis4`` and ``basis7`` in the sample code above. Table :ref:`tab:spherecode` shows the results of the experiment with training accuracy shown in parentheses.
+
+.. raw:: latex
+
+   \begin{table}
+     \begin{longtable*}{lcccc}
+     \toprule
+     \textbf{Number of} & \textbf{One Hot} & \textbf{5-Dimensional} & \textbf{3-Dimensional} \\
+     \textbf{Epochs} & \textbf{Encoding} & \textbf{Spherical Code} & \textbf{Spherical Code} \\
+     \midrule
+     \endfirsthead
+     10 & 97.53\% (97.30\%) & 96.51\% (96.26\%) & 95.37\% (94.83\%) \\
+     20 & 97.68\% (98.02\%) & 96.82\% (97.11\%) & 95.74\% (95.83\%) \\
+     \bottomrule
+     \end{longtable*}
+     \caption{Results of MNIST Spherical Coding Experiment \DUrole{label}{tab:spherecode}}
+   \end{table}
+
+In this case, the 5-dimensional spherical codes performed close to the
+one-hot encoding by not as closely as the 7-dimension QOE codes. The
+3-dimensional spherical codes performed on par with the 4-dimensional QOE
+codes.
+
+While the extreme dimensionality reduction from 10 to 4 or 10 to 3 did
+not yield comparable performance to one-hot encoding, more modest
+reductions such as 10 to 7 and 10 to 5 did. It is worth considering that
+quasiorthogonal or spherical codes are much harder to find in low
+dimensions. One should note that, though we went from 10 to 7
+dimensions, we did not fully exploit the space spanned by the
+quasiorthogonal vector set. Otherwise, we would likely have had the
+similar results if the categorical labels had a cardinality of 28 rather
+than 10.
+
+Conclusion
+----------
+
+These reduced dimensionality codes are not expected to improve accuracy when the training data is plentiful, but to save computation and representation by reducing the dimensionality of the coded category. As an example, in applications such as autoencoders and specifically the imputation architectures presented by :cite:`gondara` and :cite:`lu`, where the dimensionality not only dictates the number of outputs and inputs but also the number of hidden layers, a reduction in dimensionality has a profound impact on the size of the model used. Beyond that, the reduced dimensionality codes such as QOE and spherical codes can address problems such as the curse of dimensionality and HDLSS where for small sample sizes it may improve accuracy.
+
+Though for the exercises presented here, the reduction of dimensionality is modest and may not seem worth the trouble. The real benefit of these codes is in extremely high cardinality situations on the order of hundreds, thousands and beyond, such as zip codes, area codes, or medical diagnostic codes.
+
+Practically speaking, while algorithms to generate spherical codes and quasiorthonormal sets are few, :cite:`sphere` has a vast complication of spherical codes. At the extreme end, a spherical code with 196,560 vectors is available in 24 dimensions, enough to encode nearly 100,000 labels using QOE or 200,000 labels using spherical codes, *in just 24 dimensions!*
+
+In sum, the advantages of QOE and spherical codes are that they can reduce the dimensionality of the vector representation as compared to one-hot encoding, while not inducing artificial geometric relationships as ordinal or binary codes can. The disadvantage is that the accuracy of decoding an encoded vector in a noisy environment (such as classification output) is slightly less than one-hot encoding. This tradeoff ability makes QOE and spherical codes useful tools to be included in a data scientists toolbox alongside other established categorical coding techniques.
+
+Experiments and code samples are made available at `https://github.com/WestHealth/scipy2020/tree/master/quasiorthonormal <https://github.com/WestHealth/scipy2020/tree/master/quasiorthonormal>`_.
+
+References
+----------
