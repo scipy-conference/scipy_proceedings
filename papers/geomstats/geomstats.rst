@@ -485,11 +485,11 @@ We now proceed with the tutorial embedding the Karate club graph in a hyperbolic
 .. code:: python
 
     karate_graph = data_utils.load_karate_graph()
-    nb_vertices_by_edges =\
+    nb_vertices_by_edges =(
         [len(e_2) for _, e_2 in
-            karate_graph.edges.items()]
-    logging.info('
-        Number of vertices: %s', len(karate_graph.edges))
+            karate_graph.edges.items()])
+    logging.info(
+        'Number of vertices: %s', len(karate_graph.edges))
     logging.info(
         'Mean edge-vertex ratio: %s',
         (sum(nb_vertices_by_edges, 0) /
@@ -625,13 +625,10 @@ implementing the whole :code:`loss` function is available on GitHub.
             -context_distance)
 
         context_distance_grad = grad_squared_distance(
-            example_embedding,
-            context_embedding,
-            manifold)
+            example_embedding, context_embedding, manifold)
 
-        context_grad =\
-            context_log_sigmoid_grad
-            * context_distance_grad
+        context_grad = (context_log_sigmoid_grad
+            * context_distance_grad)
 
         example_grad = -context_grad
         return context_loss, example_grad
@@ -702,21 +699,20 @@ Riemannian exponential map is applied to find the new value of
                     0, example_index - context_size):
                     min(example_index + context_size,
                     len(path))]
-                negative_index =\
-                    gs.random.randint(
+                negative_index = gs.random.randint(
                         negative_sampling_table.shape[0],
                         size=(len(context_index),
                         n_negative))
-                negative_index =
-                    negative_sampling_table[negative_index]
-                example_embedding =
-                    embeddings[one_path]
+                negative_index = (
+                    negative_sampling_table[negative_index])
+                example_embedding = (
+                    embeddings[one_path])
                 for one_context_i, one_negative_i in
                     zip(context_index, negative_index):
-                    context_embedding =
-                        embeddings[one_context_i]
-                    negative_embedding =
-                        embeddings[one_negative_i]
+                    context_embedding = (
+                        embeddings[one_context_i])
+                    negative_embedding = (
+                        embeddings[one_negative_i])
                     l, g_ex = loss(
                         example_embedding,
                         context_embedding,
