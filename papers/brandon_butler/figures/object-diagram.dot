@@ -1,0 +1,46 @@
+digraph {
+	graph [bgcolor="#ffffff00"]
+	node [	file=white,
+		fontcolor=black,
+		shape=box,
+		style=filled,
+		fontname="monospace",
+		color="#85c0f9"
+	];
+	
+	/* Base object */
+	Simulation [fontname="monospace bold", color="#f5793a"];
+	State [fontname="monospace bold", color="#f5793a"];
+	Operations [fontname="monospace bold", color="#f5793a"];
+	Device [fontname="monospace bold", color="#f5793a"];
+
+	Simulation -> State [headport=n];
+	Simulation -> Operations;
+	Simulation -> Device [headport=n];
+
+	/* Sub Simulation */
+	subsimulation [label="run()\ltimestep\l"];
+	{ rank=same; "Simulation"; "subsimulation"; }
+
+	Simulation -> subsimulation [arrowhead=none];
+
+	/* Sub State */
+	substate [
+		label=
+	"snapshot\lcpu_local_snapshot\lgpu_local_snapshot\lparticle_types\lbond_types\l"
+	];
+	
+	State -> substate [arrowhead=none];
+
+	/* Sub Operations */
+	suboperations [
+		label="integrator\lupdaters\lanalyzers\ltuners\lcomputes\l"];
+
+	Operations -> suboperations [arrowhead=none];
+
+	/* Sub Device */
+	subdevice [
+		label="communicator\lnum_ranks\lmode\lnotice_level\l"];
+
+	Device -> subdevice [arrowhead=none];
+}
