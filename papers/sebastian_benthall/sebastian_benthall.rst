@@ -185,7 +185,7 @@ Econ-ARK: Discipline Specifics
 The Econ-ARK project :cite:`carroll2018econ`
 is a toolkit for the structural
 modeling of optimizing economic choices by heterogenous agents.
-A primary goal of its flagship software library, HARK
+A primary goal of its flagship software library HARK
 (Heterogenous Agent Research toolKit) is to support economic
 research into heterogeneous agent (HA)
 modeling :cite:`hommes2006heterogeneous`,
@@ -214,7 +214,7 @@ reinforcement learning or artificial intelligence toolkit.
 **Example**. A paradigmatic, simple example of the kind
 of problem studied using Econ-ARK is the microeconomic
 dynamic stochastic optimization problem of calculating
-the mathematically optimal amount to save. :cite:`carroll2011solution`
+the mathematically optimal amount to save :cite:`carroll2011solution`.
 
 This problem can be characterized by the equations:
 
@@ -368,7 +368,7 @@ to work in the medium of robust software are few.
 As a consequence there is a skills gap: researchers often
 have programming ability, but not the software engineering
 and IT training that is necessary to fully realize the
-vision of the software's potential. :cite:`crouch2013software`
+vision of the software's potential :cite:`crouch2013software`.
 
 **Publisher**. One way to untie the Gordian knot of
 incentives around Econ-ARK research is to provide a more
@@ -379,7 +379,7 @@ of Open Source Economics :cite:`josecon2019`, modeled
 loosely on the Journal of Open Source Software (JOSS),
 which gives academic publication credit to the creators
 of scientific software tools.
-Preliminery efforts towards such a journal have been
+Preliminary efforts towards such a journal have been
 attempted through the Econ-ARK sub-project REMARK
 (Replications and Explorations Made using the ARK),
 which organizes contributed directories of material
@@ -553,7 +553,7 @@ and Explorations Made using the ARK).
 This decoupling exercise also helps with the reproducibility of
 research projects as it gives other researchers the necessary
 tools to examine the research artifacts. The decoupling can
-also enables the use of empirical data and model fitting techniques,
+also enable the use of empirical data and model fitting techniques,
 expanding the functional scope of the original script.
 
 
@@ -703,7 +703,7 @@ commercially relevant.
 
 We are definitely not the first push for more training to
 scientific researchers about general software design and best
-practices (software versioning, CI, testing).
+practices (software versioning, continuous integration, testing).
 Organizations like Software Carpentry :cite:`wilson2014software` have
 been successful in this domain. Creating sustainable domain specific
 scientific software requires a systematic decoupling of reusable library code
