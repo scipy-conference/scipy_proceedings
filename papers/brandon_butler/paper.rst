@@ -222,7 +222,7 @@ data on either the GPU or CPU. On the CPU, we expose the buffers as :code:`numpy
 objects through provided hooks such as :code:`__array_ufunc__` and :code:`__array_interface__`.
 Similarly, on the GPU we mock much of the CuPy's :cite:`zotero-593` :code:`ndarray` class if it is
 installed; however, at present the CuPy package provides fewer hooks, so our integration is more
-limited. Whether or not CuPy is installed, we use version 2 of the :code:`__cuda_array_interace__`
+limited. Whether or not CuPy is installed, we use version 2 of the :code:`__cuda_array_interface__`
 protocol for GPU access (compatibility with our GPU buffers in Python therefore depends on the
 support of version 2 of this protocol). This provides support for libraries such as numba's
 :cite:`lam.etal2015` GPU just in time compiler and PyTorch :cite:`paszke.etal2019`. We chose to mock
@@ -488,7 +488,7 @@ directly subclassed from the C++ class. An example of a sinusoidal cycling varia
 ParticleFilters
 +++++++++++++++
 
-Unlike :code:`Trigger` or :code:`Variant`, :code:`ParticleFitler` is not a generalization of an
+Unlike :code:`Trigger` or :code:`Variant`, :code:`ParticleFilter` is not a generalization of an
 existing concept but the splitting of one class into two. However, this split is also targeted at
 increasing flexibility and extensibility. In HOOMD-blue version 2.x, the :code:`ParticleGroup` class
 and subclasses served to provide a subset of particles within a simulation for file output,
@@ -500,9 +500,9 @@ on a set of particle tags (a means of identifying individual particles), while t
 objects lightweight and provides a means of implementing a :code:`State` instance specific cache of
 :code:`ParticleGroup` objects. The latter ensures that we do not create multiple of the same
 :code:`ParticleGroup` which can occupy large amounts of memory. The caching also allows the creation
-of many of the same :code:`ParticleFitler` object without needing to worry about memory constraints.
+of many of the same :code:`ParticleFilter` object without needing to worry about memory constraints.
 
-:code:`ParticleFitler` can be subclassed (like :code:`Trigger` and :code:`Variant`), but only
+:code:`ParticleFilter` can be subclassed (like :code:`Trigger` and :code:`Variant`), but only
 through the :code:`CustomParticleFilter` class. This is necessary to prevent some internal details
 from leaking to the user. An example of a :code:`CustomParticleFilter` that selects only particle
 with positive charge is given below.
