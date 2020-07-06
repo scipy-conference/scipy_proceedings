@@ -124,6 +124,7 @@ In addition to the following list, we break up the deadlines in the respective d
 - July 2: Final Recommendation and Comprehensive Review Deadlines
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
 - July 8: Time Window for Publishing Conference Ready Proceedings
+- July 17: Submission deadline for posters and slides
 
 ## Instructions for Authors
 
@@ -464,7 +465,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 
 1. Get a local copy of the `scipy_proceedings` repo.
 2. Update your local copy of the `scipy_proceedings` repo.
-3. [Create a new branch](#creating-a-new-branch-based-off-of-2019) for your paper based off the latest `2019` branch.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2020) for your paper based off the latest `2020` branch.
 4. Inside the `presentations` folder, there are directories for:
     1. 3-minute lightning talk slide decks (lightning)
     2. Posters presented at the poster session (posters)
@@ -485,3 +486,7 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 7. [Create a PR](#create-a-paper-pr)
 
 You can see examples of submissions in the `example` folder in each presentation directory.
+
+#### Slide/Poster deadlines
+
+- July 17: Submission deadline for posters and slides
