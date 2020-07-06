@@ -651,10 +651,11 @@ the :math:`Q_6` value for particles near the edges of the current rank's local s
                     part_data.position,
                     {'num_neighbors': 12,
                      'exclude_ii': True})
-                Q6 = np.mean(
-                    self.q6.compute(
-                        (box, part_data.position),
-                        nlist).particle_order)
+                q6 = self.q6.compute(
+                    (box,
+                     part_data.positions_with_ghosts),
+                    nlist).particle_order
+                Q6 = np.mean(q6)
                 if self.comm:
                     return self.comm.allreduce(
                         Q6 >= self.threshold,
