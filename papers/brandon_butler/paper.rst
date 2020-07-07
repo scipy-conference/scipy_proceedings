@@ -304,9 +304,9 @@ An example :code:`TypeParameterDict` initialization and use of both classes can 
     sphere = Sphere(seed=42)
     # Set nselect parameter using ParameterDict
     sphere.nselect = 2
-    # Set shape parameters for type 'A' using TypeParameterDict
+    # Set shape for type 'A' using TypeParameterDict
     sphere.shape['A'] = {'diameter': 1.}
-    # Set shape parameters for types 'B', 'C', and 'D'
+    # Set shape for types 'B', 'C', and 'D'
     sphere.shape[['B', 'C', 'D']] = {'diameter': 0.5}
 
 The specification defined above sets defaults for :code:`ignore_statistics` and :code:`orientable`
