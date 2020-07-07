@@ -610,7 +610,7 @@ Trigger that detects nucleation
 
 This example demonstrates a :code:`Trigger` that returns true when a threshold :math:`Q_6`
 Steinhardt order parameter :cite:`steinhardt.etal1983` (as calculated by freud) is reached. Such a :code:`Trigger` could be used for BCC nucleation
-detection which could trigger a decrease in cooling rate, an increase in frequency of simulation
+detection which could trigger a decrease in cooling rate, a more frequent output of simulation
 trajectories, or any other desired action. Also, in this example we showcase the use of the
 zero-copy rank-local data access. This example also requires the use of ghost particles, which are
 a subset of particles bordering a MPI rank's local box. Ghost particles are known by a rank, but the
