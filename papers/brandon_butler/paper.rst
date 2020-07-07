@@ -256,9 +256,9 @@ an internal C++ object which we denote as the *action* of the operation. On crea
 objects typically require a :code:`Device` and a C++ :code:`State` in order to, for instance,
 initialize appropriately sized arrays. Unfortunately this requirement restricts the order in which
 objects may be created since devices and states must exist first. This restriction could create
-potential confusion for users who forget this ordering, and it would also limits the composability of
+potential confusion for users who forget this ordering and would also limit the composability of
 modular simulation components by preventing, for instance, the creation of a simple force field
-without the prior existence of a :code:`Device` and a :code:`State`. To circumvent these potential
+without the prior existence of a :code:`Device` and a :code:`State`. To circumvent these
 difficulties, the new API has moved to a deferred initialization model in which C++ objects are not
 created until the corresponding Python objects are *attached* to a :code:`Simulation`, a model we
 discuss in greater detail below.
@@ -668,7 +668,7 @@ Pandas Logger Back-end
 
 Here we highlight the ability to use the :code:`Logger` class to create a Pandas back end
 for simulation data. It will store the scalar and string quantities in a single
-:code:`pandas.DataFrame` object while array-like objects are each stored in a separate
+:code:`pandas.DataFrame` object while each array-like object is stored in a separate
 :code:`DataFrame` object. All :code:`DataFrame` objects are stored in a single dictionary.
 
 .. code-block:: python
