@@ -269,7 +269,7 @@ Deferred C++ Initialization
 
 The core logic for the deferred initialization model is implemented in the :code:`_Operation` class,
 which is the base class for all operations in Python. This class contains the machinery for
-attaching and detaching operations to/from their C++ counterparts, and it defines the user
+attaching/detaching operations to/from their C++ counterparts, and it defines the user
 interface for setting and modifying operation-specific parameters while guaranteeing that such
 parameters are synchronized with attached C++ objects as appropriate. Rather than handling these
 concerns directly, the :code:`_Operation` class manages parameters using specially defined classes
