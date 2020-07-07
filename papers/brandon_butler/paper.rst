@@ -585,8 +585,8 @@ With modern simulation analysis packages such as freud :cite:`ramasubramani.etal
 initialization tools such as mbuild and foyer, and visualization packages like OVITO and plato
 :cite:`spellings.dice2018` using Python APIs, HOOMD-blue, built from the ground up with Python in
 mind, fits in seamlessly. Version 3.0 improves upon this and presents a Pythonic API that
-encourages experimentation and customization. Through allowing user-defined Python subclasses of internal C++ classes,
-providing wrappers for custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
+encourages customization. Through enabling Python subclasses of C++ classes,
+introducing custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
 utilize the full potential of Python and the scientific Python community.
 
 Acknowledgements
@@ -610,7 +610,7 @@ Trigger that detects nucleation
 
 This example demonstrates a :code:`Trigger` that returns true when a threshold :math:`Q_6`
 Steinhardt order parameter :cite:`steinhardt.etal1983` (as calculated by freud) is reached. Such a :code:`Trigger` could be used for BCC nucleation
-detection which could trigger a decrease in cooling rate, an increased output frequency of simulation
+detection which could trigger a decrease in cooling rate, an increase in frequency of simulation
 trajectories, or any other desired action. Also, in this example we showcase the use of the
 zero-copy rank-local data access. This example also requires the use of ghost particles, which are
 a subset of particles bordering a MPI rank's local box. Ghost particles are known by a rank, but the
@@ -642,20 +642,17 @@ the :math:`Q_6` value for particles near the edges of the current rank's local s
 
         def __call__(self, timestep):
             with self.state.cpu_local_snapshot as data:
-                part_data = data.particles
+                part = data.particles
                 box = data.box
                 aabb_box = freud.locality.AABBQuery(
-                    box,
-                    part_data.positions_with_ghosts)
+                    box, part.positions_with_ghosts)
                 nlist = aabb_box.query(
-                    part_data.position,
+                    part.position,
                     {'num_neighbors': 12,
                      'exclude_ii': True})
-                q6 = self.q6.compute(
-                    (box,
-                     part_data.positions_with_ghosts),
-                    nlist).particle_order
-                Q6 = np.mean(q6)
+                Q6 = np.mean(self.q6.compute(
+                    (box, part.positions_with_ghosts),
+                    nlist).particle_order)
                 if self.comm:
                     return self.comm.allreduce(
                         Q6 >= self.threshold,
