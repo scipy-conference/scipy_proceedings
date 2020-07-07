@@ -585,7 +585,7 @@ With modern simulation analysis packages such as freud :cite:`ramasubramani.etal
 initialization tools such as mbuild and foyer, and visualization packages like OVITO and plato
 :cite:`spellings.dice2018` using Python APIs, HOOMD-blue, built from the ground up with Python in
 mind, fits in seamlessly. Version 3.0 improves upon this and presents a Pythonic API that
-encourages customization. Through enabling Python subclasses of C++ classes,
+encourages customization. Through enabling Python subclassing of C++ classes,
 introducing custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
 utilize the full potential of Python and the scientific Python community.
 
