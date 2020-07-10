@@ -67,10 +67,10 @@ have used other interfaces have also added Python bindings such as LAMMPS and GR
 
 In the development of these tools, the requirements for the software to enable good science became
 more obvious. Having computational research that is Transferable, Reproducible, Usable (by others),
-and Extensible or TRUE :cite:`summers.etal2020` is necessary for fully realizing the potential of
+and Extensible (TRUE) :cite:`summers.etal2020` is necessary for fully realizing the potential of
 computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to bring these
 traits to the wider computational molecular science community through packages like mbuild
-:cite:`klein.etal2016` foyer :cite:`klein.etal2019` which are Python packages that generalize
+:cite:`klein.etal2016` and foyer :cite:`klein.etal2019` which are Python packages that generalize
 generating initial particle configurations and force fields respectively across a variety of
 simulation back ends :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased
 TRUEness is one of many motivating factors for HOOMD-blue version 3.0.
@@ -101,7 +101,7 @@ In this paper, we describe the upcoming 3.0 release of HOOMD-blue, which is a co
 the API from the ground up to present a more transparent and Pythonic interface for users.
 Version 3.0 aspires to match the intuitive APIs provided by other Python packages like SciPy
 :cite:`virtanen.etal2020`, NumPy :cite:`vanderwalt.etal2011`, scikit-learn
-:cite:`pedregosa.etal2011`, matplotlib :cite:`hunter2007`, while simultaneously adding seamless
+:cite:`pedregosa.etal2011`, and matplotlib :cite:`hunter2007`, while simultaneously adding seamless
 interfaces by which such packages may be integrated into simulation scripts using HOOMD-blue. Global
 state has been completely removed, instead replaced by a highly object-oriented model that gives
 users explicit and complete control over all aspects of simulation configuration. Where possible,
@@ -159,7 +159,7 @@ show a rendering of the particle configuration in Figure (:ref:`sim`).
         sigma=1., epsilon=1.)
     integrator.forces.append(lj)
 
-    # Setup output
+    # Set up output
     gsd = hoomd.output.GSD('trajectory.gsd', trigger=100)
     log = hoomd.logging.Logger()
     log += lj
@@ -175,13 +175,13 @@ show a rendering of the particle configuration in Figure (:ref:`sim`).
     A rendering of the Lennard-Jones fluid simulation script output. Particles are colored by the
     Lennard-Jones potential energy that is logged using the HOOMD-blue :code:`Logger` and
     :code:`GSD` class objects. Figure is rendered in OVITO :cite:`stukowski2009` using the Tachyon
-    :cite:`stone1998` render. :label:`sim`
+    :cite:`stone1998` renderer. :label:`sim`
 
 
 Simulation, Device, State, Operations
 +++++++++++++++++++++++++++++++++++++
 
-Each simulation in HOOMD-blue is now controlled through 3 main objects which are joined together by
+Each simulation in HOOMD-blue is now controlled through three main objects which are joined together by
 the :code:`Simulation` class: the :code:`Device`, :code:`State`, and :code:`Operations` classes.
 Figure (:ref:`core-objects`) shows this relationship with some core attributes/methods for each
 class. Each :code:`Simulation` object holds the requisite information to run a full molecular
@@ -201,8 +201,8 @@ The :code:`State` class stores the system data (e.g. particle positions, orienta
 the system box). As shown in our example, the state can be initialized from a snapshot, after which
 the data can be accessed and modified in two ways. One option is for users to operate on a new
 :code:`Snapshot` object, which exposes NumPy arrays that store a copy of the system data. To
-construct a snapshot, all system data distributed across MPI ranks must be gathered and combined to
-the root rank. To set the state using the snapshot API requires assigning a modified snapshot to the
+construct a snapshot, all system data distributed across MPI ranks must be gathered and combined by
+the root rank. Setting the state using the snapshot API requires assigning a modified snapshot to the
 system state (i.e. all system data is reset upon setting). The advantages to this approach come
 from the ease of use of working with a single object containing the complete description of the
 state. The following snippet showcases how this approach can be used to set the z position of all
@@ -220,18 +220,18 @@ particles to zero.
 The other API for accessing :code:`State` data is via a zero-copy, rank-local access to the state's
 data on either the GPU or CPU. On the CPU, we expose the buffers as :code:`numpy.ndarray`-like
 objects through provided hooks such as :code:`__array_ufunc__` and :code:`__array_interface__`.
-Similarly, on the GPU we mock much of the CuPy's :cite:`zotero-593` :code:`ndarray` class if it is
+Similarly, on the GPU we mock much of the CuPy :cite:`zotero-593` :code:`ndarray` class if it is
 installed; however, at present the CuPy package provides fewer hooks, so our integration is more
-limited. Whether or not CuPy is installed, we use version 2 of the :code:`__cuda_array_interace__`
+limited. Whether or not CuPy is installed, we use version 2 of the :code:`__cuda_array_interface__`
 protocol for GPU access (compatibility with our GPU buffers in Python therefore depends on the
-support of version 2 of this protocol). This provides support for libraries such as numba's
-:cite:`lam.etal2015` GPU just in time compiler and PyTorch :cite:`paszke.etal2019`. We chose to mock
-NumPy like interfaces rather than expose :code:`ndarray` objects directly out of consideration for
+support of version 2 of this protocol). This provides support for libraries such as Numba's
+:cite:`lam.etal2015` GPU just-in-time compiler and PyTorch :cite:`paszke.etal2019`. We chose to mock
+NumPy-like interfaces rather than expose :code:`ndarray` objects directly out of consideration for
 memory safety. To ensure data integrity, we restrict the data to only be accessible within a
 specific context manager. This approach is much faster than using the snapshot API because it uses
 HOOMD-blue's data buffers directly, but the nature of providing zero-copy access requires that users
 deal directly with the domain decomposition since only data for a MPI rank's local simulation box
-is stored in a given rank. The example below modifies the previous example to instead use the
+is stored by a given rank. The example below modifies the previous example to instead use the
 zero-copy API.
 
 .. code-block:: python
@@ -243,8 +243,8 @@ zero-copy API.
     with sim.state.gpu_local_snapshot as data:
         data.particles.position[:, 2] = 0
 
-The final of the three classes, :code:`Operations`, holds the different *operations* that will act
-on the simulation state. Broadly these consist of 3 categories: updaters, which modify simulation
+The last of the three classes, :code:`Operations`, holds the different *operations* that will act
+on the simulation state. Broadly, these consist of 3 categories: updaters, which modify simulation
 state; analyzers, which observe system state; and tuners, which tune the hyperparameters of other
 operations for performance. Although updaters and analyzers existed in version 2.x (tuners are a
 version 3.0 split from updaters), these *operations* have undergone a significant API overhaul for
@@ -255,8 +255,8 @@ initialization model.
 an internal C++ object which we denote as the *action* of the operation. On creation, these C++
 objects typically require a :code:`Device` and a C++ :code:`State` in order to, for instance,
 initialize appropriately sized arrays. Unfortunately this requirement restricts the order in which
-objects may be created since devices and states must always exist. This restriction creates
-potential confusion for users who forget this ordering, and it also limits the composability of
+objects may be created since devices and states must exist first. This restriction could create
+potential confusion for users who forget this ordering and would also limit the composability of
 modular simulation components by preventing, for instance, the creation of a simple force field
 without the prior existence of a :code:`Device` and a :code:`State`. To circumvent these
 difficulties, the new API has moved to a deferred initialization model in which C++ objects are not
@@ -268,24 +268,24 @@ Deferred C++ Initialization
 +++++++++++++++++++++++++++
 
 The core logic for the deferred initialization model is implemented in the :code:`_Operation` class,
-which is the base class for all operations in Python. This class contains the machinery for handling
-the attaching and detaching of operations to their C++ counterparts, and it defines the user
+which is the base class for all operations in Python. This class contains the machinery for
+attaching/detaching operations to/from their C++ counterparts, and it defines the user
 interface for setting and modifying operation-specific parameters while guaranteeing that such
 parameters are synchronized with attached C++ objects as appropriate. Rather than handling these
 concerns directly, the :code:`_Operation` class manages parameters using specially defined classes
 that handle the synchronization of attributes between Python and C++: the :code:`ParameterDict`
-and :code:`TypeParameterDict` classes. In addition to providing transparent dict-like APIs for the
+and :code:`TypeParameterDict` classes. In addition to providing transparent :code:`dict`-like APIs for the
 automatically synchronized setting of parameters, these classes also provide strict validation of
 input types, ensuring that user inputs are validated regardless of whether or not operations are
 attached to a simulation.
 
 Each class supports validation of their keys, and they can be used to define the structure and
 validation of arbitrarily nested dictionaries, lists, and tuples. Likewise, both
-support defaults, but to a varying degree due to their differing purposes. :code:`ParameterDict`
+support default values, but to a varying degree due to their differing purposes. :code:`ParameterDict`
 acts as a dictionary with additional validation logic. However, the :code:`TypeParameterDict`
 represents a dictionary in which each entry is validated by the entire defined schema. This
 distinction occurs often in simulation contexts as simulations with multiple types of particles,
-bonds, angles, etc must specify certain parameters for each type. In practice this distinction means
+bonds, angles, etc. must specify certain parameters for each type. In practice this distinction means
 that the :code:`TypeParameterDict` class supports default specification with arbitrary nesting,
 while the :code:`ParameterDict` has defaults but these are equivalent to object attribute defaults.
 An example :code:`TypeParameterDict` initialization and use of both classes can be seen below.
@@ -302,18 +302,18 @@ An example :code:`TypeParameterDict` initialization and use of both classes can 
     from hoomd.hpmc.integrate import Sphere
 
     sphere = Sphere(seed=42)
-    # example using ParameterDict
+    # Set nselect parameter using ParameterDict
     sphere.nselect = 2
-    # examples using TypeParameterDict
+    # Set shape for type 'A' using TypeParameterDict
     sphere.shape['A'] = {'diameter': 1.}
-    # sets for 'B', 'C', and 'D'
+    # Set shape for types 'B', 'C', and 'D'
     sphere.shape[['B', 'C', 'D']] = {'diameter': 0.5}
 
 The specification defined above sets defaults for :code:`ignore_statistics` and :code:`orientable`
 (the purpose of these is outside the scope of the paper), but requires the setting of the
 :code:`diameter` for each type.
 
-To store lists of operations, that must be attached to a simulation, the analogous
+To store lists of operations that must be attached to a simulation, the analogous
 :code:`SyncedList` class transparently handles attaching of operations.
 
 .. code-block:: python
@@ -322,7 +322,7 @@ To store lists of operations, that must be attached to a simulation, the analogo
 
     ops = hoomd.Operations()
     gsd = hoomd.output.GSD('example.gsd')
-    # use of SyncedList
+    # Append to the SyncedList ops.analyzers
     ops.analyzers.append(gsd)
 
 These classes also have the ancillary benefit of improving error messaging and handling. An example
@@ -361,10 +361,10 @@ where :code:`'scalar'` is a flag to make processing the logged output easier. In
 dictionary would likely be filled with many other quantities.
 
 Version 3.0 of HOOMD-blue uses properties extensively to expose object data such as the total
-potential energy in all our pair potentials, the trial move acceptance rate in MC integrators, and
-thermodynamic variables like temperature or pressure, all of which users can use directly or store
+potential energy of all pair potentials, the trial move acceptance rate in MC integrators, and
+thermodynamic variables like temperature or pressure, all of which can be used directly or stored
 through the logging interface. To support storing these properties, the logging is quite general and
-supports scalars, strings, arrays, and even general Python objects. By separating the data
+supports scalars, strings, arrays, and even generic Python objects. By separating the data
 collection from the writing to files, and by providing such a flexible intermediate representation,
 HOOMD-blue can now support a range of back ends for logging; moreover, it offers users the
 flexibility to define their own. For instance, while logging data to text files or standard out is
@@ -409,14 +409,14 @@ completely novel routines to actually modify the behavior of simulations.
 Triggers
 ++++++++
 
-In HOOMD-blue version 2.x, everything that was not run every timestep had a period and phase
+In HOOMD-blue version 2.x, everything that was not run on every timestep had a period and phase
 associated with it. The timesteps the operation was run on could then be determined by the
 expression, :code:`timestep % period - phase == 0`. In our refactoring and development, we
 recognized that this concept could be made much more general and consequently more flexible. Objects
 do not have to be run on a periodic timescale; they just need some indication of when to run. In
 other words, the operations needed to be *triggered*. The :code:`Trigger` class encapsulates this
-concept providing a uniform way of specifying when an object should run without limiting options.
-:code:`Trigger` objects are like functions that return a Boolean value when called (i.e functors).
+concept, providing a uniform way of specifying when an object should run without limiting options.
+:code:`Trigger` objects return a Boolean value when called with a timestep (i.e. they are functors).
 Each operation that requires triggering is now associated with a corresponding :code:`Trigger`
 instance which informs the simulation when the operation should run. The previous behavior is now
 available through the :code:`Periodic` class in the :code:`hoomd.trigger` module.  However, this
@@ -425,10 +425,10 @@ approach enables much more sophisticated logic through composition of multiple t
 :code:`And`, :code:`Or`, and :code:`Not` subclasses that function as logical operators on the
 return value of the composed :code:`Triggers`.
 
-In addition, to the flexibility the :code:`Trigger` class provides by abstracting out the concept of
-triggering an operation, we use pybind11 to easily allow subclassing the :code:`Trigger` class in
+In addition to the flexibility the :code:`Trigger` class provides by abstracting out the concept of
+triggering an operation, we use pybind11 to easily allow subclasses of the :code:`Trigger` class in
 Python. This allows users to create their own triggers in pure Python that will execute in
-HOOMD-blue's C++ back end. An example of such subclassing that reimplements the functionality of
+HOOMD-blue's C++ back end. An example of such a subclass that reimplements the functionality of
 HOOMD-blue version 2.x can be seen below.
 
 .. code-block:: python
@@ -445,7 +445,7 @@ HOOMD-blue version 2.x can be seen below.
             v = timestep % self.period - self.phase == 0
             return v
 
-User created subclasses of :code:`Trigger` are not restricted to simple algorithms or even stateless
+User-defined subclasses of :code:`Trigger` are not restricted to simple algorithms or even stateless
 ones; they can implement arbitrarily complex Python code as demonstrated in the Large Examples
 section's first code snippet.
 
@@ -454,11 +454,11 @@ Variants
 
 :code:`Variant` objects are used in HOOMD-blue to specify quantities like temperature, pressure, and
 box size which can vary over time. Similar to :code:`Trigger`, we generalized our ability to
-linearly interpolate values (:code:`hoomd.variant.liner_interp` in HOOMD-blue version 2.x) across
-timesteps to a base class :code:`Variant` which generalizes the concept of functions in the
-semi-infinite domain of timesteps :math:`t \in [0,\infty), t \in \mathbb{Z}`. This allows sinusoidal
-cycling, non-uniform ramps, and other behaviors. Like :code:`Trigger`, :code:`Variant` is able to be
-directly subclassed from the C++ class. An example of a sinusoidal cycling variant is shown below.
+linearly interpolate values across timesteps (:code:`hoomd.variant.linear_interp` in HOOMD-blue version 2.x)
+to a base class :code:`Variant` which generalizes the concept of functions in the
+semi-infinite domain of timesteps :math:`t \in \mathbb{Z}_0^+`. This allows sinusoidal
+cycling, non-uniform ramps, and other behaviors. Like :code:`Trigger`, :code:`Variant` can be a
+direct subclass of the C++ class. An example of a sinusoidal cycling variant is shown below.
 
 .. code-block:: python
 
@@ -488,7 +488,7 @@ directly subclassed from the C++ class. An example of a sinusoidal cycling varia
 ParticleFilters
 +++++++++++++++
 
-Unlike :code:`Trigger` or :code:`Variant`, :code:`ParticleFitler` is not a generalization of an
+Unlike :code:`Trigger` or :code:`Variant`, :code:`ParticleFilter` is not a generalization of an
 existing concept but the splitting of one class into two. However, this split is also targeted at
 increasing flexibility and extensibility. In HOOMD-blue version 2.x, the :code:`ParticleGroup` class
 and subclasses served to provide a subset of particles within a simulation for file output,
@@ -497,14 +497,14 @@ storing the subset of particles and filtering them out from the system. After th
 :code:`ParticleGroup` is only responsible for the logic to store and perform some basic operations
 on a set of particle tags (a means of identifying individual particles), while the new class
 :code:`ParticleFilter` implements the selection logic. This choice makes :code:`ParticleFilter`
-objects lightweight and provides a means of implementing a :code:`State` instance specific cache of
-:code:`ParticleGroup` objects. The latter ensures that we do not create multiple of the same
+objects lightweight and provides a means of implementing a :code:`State` instance-specific cache of
+:code:`ParticleGroup` objects. The latter ensures that we do not create multiples of the same
 :code:`ParticleGroup` which can occupy large amounts of memory. The caching also allows the creation
-of many of the same :code:`ParticleFitler` object without needing to worry about memory constraints.
+of many of the same :code:`ParticleFilter` object without needing to worry about memory constraints.
 
-:code:`ParticleFitler` can be subclassed (like :code:`Trigger` and :code:`Variant`), but only
+:code:`ParticleFilter` can be subclassed (like :code:`Trigger` and :code:`Variant`), but only
 through the :code:`CustomParticleFilter` class. This is necessary to prevent some internal details
-from leaking to the user. An example of a :code:`CustomParticleFilter` that selects only particle
+from leaking to the user. An example of a :code:`CustomParticleFilter` that selects only particles
 with positive charge is given below.
 
 .. code-block:: python
@@ -529,19 +529,19 @@ with positive charge is given below.
 Custom Actions
 ++++++++++++++
 
-In HOOMD-blue, we distinguish between the object that performs an action on the simulation state
-called *Actions* and their containing objects that deal with setting state and the user interface
-*Operations*. Through composition, HOOMD-blue offers the ability to create custom actions in Python
+In HOOMD-blue, we distinguish between the objects that perform an action on the simulation state
+(called *Actions*) and their containing objects that deal with setting state and the user interface
+(called *Operations*). Through composition, HOOMD-blue offers the ability to create custom actions in Python
 and wrap them in our :code:`_CustomOperation` subclasses (divided on the type of action performed)
 allowing the execution of the action in the :code:`Simulation` run loop. The feature makes user
 created actions behave indistinguishably from native C++ actions. Through custom actions, users can
 modify state, tune hyperparameters for performance, or observe parts of the simulation. In addition,
 we are adding a signal for Actions to send that would stop a :code:`Simulation.run` call. This would
-allow actions to stop the simulation when they complete which for example, could be useful for
+allow actions to stop the simulation when they complete, which could be useful for tasks like
 tuning MC trial move sizes. With respect to performance, with zero copy access to the data on the
 CPU or GPU, custom actions can also achieve high performance using standard Python libraries like
-NumPy, SciPy, numba, CuPy and others. Below we show an example of a :code:`Action` that
-switches a of particles of type :code:`initial_type` to type :code:`final_type` by a specified
+NumPy, SciPy, Numba, CuPy and others. Below we show an example of an :code:`Action` that
+switches particles of type :code:`initial_type` to type :code:`final_type` with a specified
 :code:`rate` each time it is run. This action could be refined to implement a reactive MC move
 reminiscent of :cite:`glotzer.etal1994` or to have a variable switch rate. These exercises are left
 to the reader.
@@ -580,13 +580,13 @@ to the reader.
 Conclusion
 ----------
 
-With modern simulation analysis packages (freud :cite:`ramasubramani.etal2020`, MDTraj
-:cite:`mcgibbon.etal2015`, MDAnalysis :cite:`gowers.etal2016,michaud-agrawal.etal2011`),
+With modern simulation analysis packages such as freud :cite:`ramasubramani.etal2020`, MDTraj
+:cite:`mcgibbon.etal2015`, and MDAnalysis :cite:`gowers.etal2016,michaud-agrawal.etal2011`,
 initialization tools such as mbuild and foyer, and visualization packages like OVITO and plato
 :cite:`spellings.dice2018` using Python APIs, HOOMD-blue, built from the ground up with Python in
-mind, fits in seamlessly.  Version 3.0 improves upon this and presents a Pythonic API that
-encourages experimentation and customization.  Through subclassing C++ classes, providing wrappers
-for custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
+mind, fits in seamlessly. Version 3.0 improves upon this and presents a Pythonic API that
+encourages customization. Through enabling Python subclassing of C++ classes,
+introducing custom actions, and exposing data in zero-copy arrays/buffers, we allow HOOMD-blue users to
 utilize the full potential of Python and the scientific Python community.
 
 Acknowledgements
@@ -594,7 +594,7 @@ Acknowledgements
 
 This research was supported by the National Science Foundation, Division of Materials Research Award
 # DMR 1808342 (HOOMD-blue algorithm and performance development) and by the National Science
-Foundation, Office of Advanced Cyberinfrastructure Award # OAC 1835612 (pythonic architecture for
+Foundation, Office of Advanced Cyberinfrastructure Award # OAC 1835612 (Pythonic architecture for
 MoSDeF). Hardware provided by NVIDIA Corp. is gratefully acknowledged. This research was supported
 in part through computational resources and services supported by Advanced Research Computing at the
 University of Michigan, Ann Arbor.
@@ -610,7 +610,7 @@ Trigger that detects nucleation
 
 This example demonstrates a :code:`Trigger` that returns true when a threshold :math:`Q_6`
 Steinhardt order parameter :cite:`steinhardt.etal1983` (as calculated by freud) is reached. Such a :code:`Trigger` could be used for BCC nucleation
-detection which could trigger a decrease in cooling rate, the more frequent output of simulation
+detection which could trigger a decrease in cooling rate, a more frequent output of simulation
 trajectories, or any other desired action. Also, in this example we showcase the use of the
 zero-copy rank-local data access. This example also requires the use of ghost particles, which are
 a subset of particles bordering a MPI rank's local box. Ghost particles are known by a rank, but the
@@ -642,19 +642,17 @@ the :math:`Q_6` value for particles near the edges of the current rank's local s
 
         def __call__(self, timestep):
             with self.state.cpu_local_snapshot as data:
-                part_data = data.particles
+                part = data.particles
                 box = data.box
                 aabb_box = freud.locality.AABBQuery(
-                    box,
-                    part_data.positions_with_ghosts)
+                    box, part.positions_with_ghosts)
                 nlist = aabb_box.query(
-                    part_data.position,
+                    part.position,
                     {'num_neighbors': 12,
                      'exclude_ii': True})
-                Q6 = np.mean(
-                    self.q6.compute(
-                        (box, part_data.position),
-                        nlist).particle_order)
+                Q6 = np.nanmean(self.q6.compute(
+                    (box, part.positions_with_ghosts),
+                    nlist).particle_order)
                 if self.comm:
                     return self.comm.allreduce(
                         Q6 >= self.threshold,
@@ -667,7 +665,7 @@ Pandas Logger Back-end
 
 Here we highlight the ability to use the :code:`Logger` class to create a Pandas back end
 for simulation data. It will store the scalar and string quantities in a single
-:code:`pandas.DataFrame` object while array-like objects are stored each in a separate
+:code:`pandas.DataFrame` object while each array-like object is stored in a separate
 :code:`DataFrame` object. All :code:`DataFrame` objects are stored in a single dictionary.
 
 .. code-block:: python
