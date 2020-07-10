@@ -67,12 +67,12 @@ have used other interfaces have also added Python bindings such as LAMMPS and GR
 
 In the development of these tools, the requirements for the software to enable good science became
 more obvious. Having computational research that is Transferable, Reproducible, Usable (by others),
-and Extensible (TRUE) :cite:`summers.etal2020` is necessary for fully realizing the potential of
+and Extensible (TRUE) :cite:`thompson.etal2020` is necessary for fully realizing the potential of
 computational molecular science. HOOMD-blue is part of the MoSDeF project which seeks to bring these
 traits to the wider computational molecular science community through packages like mbuild
 :cite:`klein.etal2016` and foyer :cite:`klein.etal2019` which are Python packages that generalize
 generating initial particle configurations and force fields respectively across a variety of
-simulation back ends :cite:`cummings.gilmer2019, summers.etal2020`. This effort in increased
+simulation back ends :cite:`cummings.gilmer2019, thompson.etal2020`. This effort in increased
 TRUEness is one of many motivating factors for HOOMD-blue version 3.0.
 
 HOOMD-blue :cite:`anderson.etal2008, glaser.etal2015, anderson.etal2020`, an MD and MC simulations
