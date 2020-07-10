@@ -1,0 +1,7 @@
+{
+    "title": "Bringing GPU Support to Datashader: A RAPIDS Case Study",
+    "authors": [
+        "Jon Mease"
+    ],
+    "description": "A case study on using RAPIDS technologies to add GPU support to the Datashader Python library"
+}
