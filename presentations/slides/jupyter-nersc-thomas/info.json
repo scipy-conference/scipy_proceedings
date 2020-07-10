@@ -1,0 +1,16 @@
+{
+    "title": "Interactive Supercomputing with Jupyter at the National Energy Research Scientific Computing Center",
+    "authors": [
+        "Rollin Thomas",
+        "Shane Canon",
+        "Shreyas Cholia",
+        "Matt Henderson",
+        "Kelly Rowland",
+        "Jon Hays",
+        "William Krinsman",
+        "Justin Ley",
+        "Labanya Mukhopadhyay",
+        "Trevor Slaton"
+    ],
+    "description": "At the National Energy Research Scientific Computing (NERSC) Center, interactive access to high-performance computing and data through Jupyter is a priority. We will discuss the nuts and bolts of how Jupyter is deployed at NERSC, and how we've adapted to engage the Jupyter ecosystem and open-source community to deliver this key capability to our users. Jupyter is a major component in our Superfacility initiative, which aims to connect experimental and observational big data facilities (telescopes, microscopes, genome sequencers, light sources, etc.) with next-generation supercomputing and data capabilities at NERSC."
+}
