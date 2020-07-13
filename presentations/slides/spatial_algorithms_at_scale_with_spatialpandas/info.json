@@ -1,0 +1,9 @@
+{
+  "title": "Spatial Algorithms at Scale with spatialpandas",
+  "authors": [
+      "Dharhas Pothina",
+      "Kim Pevey",
+      "Adam Lewis"
+  ],
+  "description": "How do you analyze 1 trillion rows of geospatial point data?  We recently solved this problem using spatialpandas, dask, and parquet file format to efficiently build and execute spatial algorithms at scale. We compare the spatialpandas solution's performance with other cases, and discuss the tradeoffs with various approaches."
+}
