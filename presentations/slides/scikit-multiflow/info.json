@@ -1,0 +1,7 @@
+{
+    "title": "Learning from evolving data streams",
+    "authors": [
+        "Jacob Montiel"
+    ],
+    "description": "A brief introduction to machine learning for evolving data streams. In this field data is assumed infinite and can change over time. scikit-multiflow, a package for stream learning in Python is also presented."
+}
