@@ -1,0 +1,10 @@
+{
+	"authors": [
+		"Matt Haberland",
+		"Katy Craig",
+        	"Karthik Elamvazhuthi",
+        	"Olga Turanova"
+	],
+	"title": "Decentralized, Deterministic Robot Swarm Control using Blob Methods for PDEs",
+	"description": "A Jupyter notebook about robot swarm control, simulation, digital experiments, and computational considerations"
+}
