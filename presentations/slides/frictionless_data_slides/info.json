@@ -1,0 +1,7 @@
+{
+    "title": "Frictionless Data for Reproducible Biology",
+    "authors": [
+        "Lilly Winfree"
+    ],
+    "description": "This talk discusses how biologists can make their data more reproducible using Frictionless Data's open source Python libraries"
+}
