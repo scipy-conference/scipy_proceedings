@@ -1,0 +1,7 @@
+{
+    "title": "Building an AutoML System for Fun and Non-profit",
+    "authors": [
+        "Niels Bantilan"
+    ],
+    "description": "This talk introduces metalearn, a MetaRL-based AutoML system that learns to learn how to propose hyperparameter selections that produce high validation scores on meta-test datasets."
+}
