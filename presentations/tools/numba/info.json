@@ -1,0 +1,7 @@
+{
+    "title": "SciPy Tools Plenary on Numba",
+    "authors": [
+        "Siu Kwan Lam"
+    ],
+    "description": "Numba is a just-in-time compiler for a subset of Python. This is a short presentation of Numba updates for 2019-2020. "
+}
