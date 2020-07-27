@@ -3,4 +3,4 @@
     "authors": [
         "Horacio V. Guzman"     ],
     "description": "We model full viruses by coupling short highly-detailed molecular dynamics simulations with lower-resolution (but faster) continuum electrostatic models. Such multiscale approach enables to model a full virus in a desktop/small cluster-level infrastructure, which are available for most researchers. Here, we propose a first interfacing of the pythonic-like packages in a multiscale approach that automatizes the access to state-of-the-art biomolecular simulations via Jupyter Notebooks."
-i}
+}
