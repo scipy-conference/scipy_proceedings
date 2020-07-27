@@ -1,0 +1,7 @@
+{
+    "title": "HoloViz: What's new and what's next",
+    "authors": [
+        "James A. Bednar",
+    ],
+    "description": "Updates and roadmaps for Panel, hvPlot, HoloViews, GeoViews, Datashader, Param, and Colorcet. The HoloViz suite of tools together form a unified approach for visualization from exploration to sharing applications and dashboards, building on the SciPy ecosystem to support easy visualization of large multidimensional or columnar datasets."
+}
