@@ -1,0 +1,7 @@
+{
+    "title": "Pandera: Statistical Data Validation of Pandas Dataframes",
+    "authors": [
+        "Niels Bantilan"
+    ],
+    "description": "This talk introduces pandera, an open source Python package for pandas data validation. It covers data validation in theory and practice, and goes through a case study analysis of the Fatal Encounters dataset to demonstrate how pandera can be used to make data analysis and machine learning more reproducible, robust, and reliable."
+}
