@@ -3,5 +3,6 @@
     "authors": [
         "Matthew Feickert"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961236",
     "description": "pyhf is a pure-Python implementation of the HistFactory statistical model for multi-bin histogram-based analysis with asymptotic interval estimation, and part of the Scikit-HEP project ecosystem. pyhf supports modern computational graph libraries as computational backends in order to make use of features such as auto-differentiation and GPU acceleration. Additionally, the statistical models are defined in a declarative JSON schema, readily enabling preservation and distribution through services such as the Durham High-Energy Physics Database (HEPData)."
 }

@@ -9,7 +9,7 @@
 :orcid: 0000-0003-3337-3850
 
 :author: Shuo Liu
-:email: liush97@mail2.sysu.edu.cn 
+:email: liush97@mail2.sysu.edu.cn
 :institution: Sun Yat-sen University
 :orcid: 0000-0003-0177-6102
 
@@ -18,6 +18,7 @@
 :institution: Princeton University
 :orcid: 0000-0002-6649-343X
 
+:video: https://youtu.be/ERraTfHkPd0
 
 -------------------------------------------------------
 Boost-histogram: High-Performance Histograms as Objects
@@ -61,7 +62,7 @@ Now look at this with an object-based Histogram library, such as boost-histogram
 
 In the object-based version, you fill once. If your data doesn't fit into memory, just fill in batches. The API for ND histograms is identical to 1D histograms, so you don't have to use different functions or change significant portions of code  even if you add a new axes later.
 
-Now let's look at using the object to make a series of plots, with one shown in Figure :ref:`fig-versions` [#]_. The code required to make the plot is shown below, with minor formatting details removed. 
+Now let's look at using the object to make a series of plots, with one shown in Figure :ref:`fig-versions` [#]_. The code required to make the plot is shown below, with minor formatting details removed.
 
 .. code-block:: python
 
@@ -79,7 +80,7 @@ Now let's look at using the object to make a series of plots, with one shown in 
    :align: center
    :figclass: w
    :scale: 50%
-   
+
    A downloads vs. time histogram plot for iMinuit [iMinuit]_ by Python version, made with Matplotlib [Matplotlib]_. :label:`fig-versions`
 
 Note how all the computation, and the version information is stored in a single histogram object. The datetime centers are accessible after the package and version number are selected. Looping over the categories is trivial. Since the histogram is already filled, there are no other loops over the data to slow down manipulation. We could rebin or set limints or sum over axes cleanly as well.
@@ -121,16 +122,16 @@ An example of the boost-histogram library approach, creating a 1D-histogram and 
 
   ax = bh.axes.Regular(100, start=-5, stop=5)
   hist = bh.Histogram(ax)
-  
+
   hist.fill(np.random.randn(1_000_000))
- 
+
   plt.bar(hist.axes[0].centers,
           hist.view(),
           width=hist.axes[0].widths)
 
 
 .. figure:: histogram_example_1d.pdf
-   
+
    An example of a 1D-histogram. :label:`eg1dfig`
 
 For future code snippets, the imports used above will be assumed. Using ``.view()`` is optional, but is included to make these explicit.
@@ -148,7 +149,7 @@ You can access ``ax`` as ``hist.axes[0]``. Note that boost-histogram is not plot
   plt.pcolormesh(X.T, Y.T, hist_2d.view().T)
 
 .. figure:: histogram_example_2d.pdf
-   
+
    An example of a 2D-histogram. :label:`eg2dfig`
 
 Boost-histogram is available on PyPI and conda-forge, and the source is BSD licensed and available on GitHub [#]_. Extensive documentation is available on ReadTheDocs [#]_.
@@ -160,14 +161,14 @@ The Design of a Histogram
 -------------------------
 
 .. figure:: histogram_design.pdf
-   
+
    The components of a histogram, shown for a 2D histogram.  :label:`histfig`
 
 Let's revisit our description of a histogram, this time mapping boost-histogram components to each piece. See Figure :ref:`histfig` for an example of how these visually fit together to create an 2D histogram.
 
 The components in a bin are the smallest atomic piece of boost-histogram, and are called **Accumulators**. Four such accumulators are available. ``Sum`` just provides a high-accuracy floating point sum using the Neumaier algorithm [Neu74]_, and is automatically used for floating point histograms. ``WeightedSum`` provides an extra term to allow sample sizes to be given. ``Mean`` stores a mean instead of a sum, created what is sometimes called a "profile histogram". And ``WeightedMean`` adds an extra term allowing the user to provide samples. Accumulators are like a 0D or scalar histogram, much like dtypes are like 0D scalar arrays in NumPy.
 
-The above accumulators are then provided in a container called a **Storage**, of which boost-histogram provides several. The available storages include choices for the four accumulators listed above (the storage using ``Sum`` is just called ``Double()``, and is the default; unlike the other accumulator-based storages it provides a simple NumPy array rather than a specialized record array when viewed). Other storages include ``Int64()``, which stores integers directly, ``AtomicInt64``, which stores atomic integers, so can be filled from different threads concurrently, and ``Unlimited()``. which is a special growing storage that offers a no-overflow guarantee and automatically uses the least possible amount of memory for a dense uniform array of counters, which is very helpful for high-dimensional histograms. It also automatically converts to doubles if filled with a weighted fill or scaled by a float. 
+The above accumulators are then provided in a container called a **Storage**, of which boost-histogram provides several. The available storages include choices for the four accumulators listed above (the storage using ``Sum`` is just called ``Double()``, and is the default; unlike the other accumulator-based storages it provides a simple NumPy array rather than a specialized record array when viewed). Other storages include ``Int64()``, which stores integers directly, ``AtomicInt64``, which stores atomic integers, so can be filled from different threads concurrently, and ``Unlimited()``. which is a special growing storage that offers a no-overflow guarantee and automatically uses the least possible amount of memory for a dense uniform array of counters, which is very helpful for high-dimensional histograms. It also automatically converts to doubles if filled with a weighted fill or scaled by a float.
 
 The next piece of a histogram is an **Axis**. A ``Regular`` axis describes an evenly spaced binning with start and end points, and takes advantage of the simplicity of the transform to provide :math:`\mathcal{O}(1)` computational complexity. You can also provide a **Transform** for a ``Regular`` axes; this is a pair of C function pointers (possibly generated by a JIT compiler [Numba]_) that can apply a function to the transform, allowing for things like log-scale axes to be supported at the same sort of complexity as a ``Regular`` axis. Several common transforms are supplied, including log and power spacings. You can also supply a list of bin edges with a ``Variable`` axis. If you want discrete axes, ``Integer`` provides a slightly simpler version of a ``Regular`` axes, and ``IntCategory``/``StrCategory`` provide true non-continuous categorical axes for arbitrary integers or strings, respectively. Most axes have configurable end behaviors for when a value is encountered by a fill that is outside the range described by the axis, allowing underflow/overflow bins to be turned off, or replaced with growing bins. All axes also have a metadata slot that can store arbitrary Python objects for each axis; no special meaning is applied by boost-histogram, but these can be used for titles, units, or other information.
 
@@ -263,7 +264,7 @@ Performance when Filling
    ============ =================== ====== =================== =====
     Setup         Single threaded     X       Multithreaded      X
    ============ =================== ====== =================== =====
-   NumPy 1D     74.5 ± 2.4 ms       1                        
+   NumPy 1D     74.5 ± 2.4 ms       1
    BH 1D        41.6 ± 0.7 ms       1.8    13.3 ± 0.2 ms       5.5
    BHNP 1D      43.1 ± 0.8 ms       1.7    13.8 ± 0.2 ms       5.4
    NumPy 2D     874 ± 22 ms         1

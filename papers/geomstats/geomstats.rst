@@ -63,7 +63,7 @@
 :author: Xavier Pennec
 :email: xavier.pennec@inria.fr%
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: https://youtu.be/Ju-Wsd84uG0
 
 :bibliography: main
 

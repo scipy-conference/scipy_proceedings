@@ -3,5 +3,6 @@
     "authors": [
         "Lilly Winfree"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961220",
     "description": "This talk discusses how biologists can make their data more reproducible using Frictionless Data's open source Python libraries"
 }

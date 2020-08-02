@@ -3,5 +3,6 @@
     "authors": [
         "Elliott Sales de Andrade"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961192",
     "description": "Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. This presentation summarizes changes over the past year, new features, and future plans."
 }
