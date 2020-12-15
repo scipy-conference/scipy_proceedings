@@ -30,7 +30,7 @@
 :email: Jinseop.PARK@nfri.re.kr
 :institution: National Fusion Research Institute, Daejeon 34133, Republic of Korea
 
-
+:video: https://youtu.be/rih7Hp9nPvM
 
 ----------------------------------------------------------------------
 Leading magnetic fusion energy science into the big-and-fast data lane
@@ -62,7 +62,7 @@ virtually unlimited, clean, and competitively priced energy source to the grid. 
 established in the fusion community through projects like plasmapy [PPY]_ or OMFIT [Men15]_. We
 introduce another Python library for fusion energy reserch, ``Delta`` - the aDaptive nEar-reaL Time
 Analysis framework - and show how it can be used to stream data from an experiment to a remote high
-performance computing (HPC) resource [git]. 
+performance computing (HPC) resource [git].
 
 There, Delta executes a routine spectral analysis workflow in near real-time. By making data
 analysis results available in near real-time, Delta allows scientists to make more informed
@@ -108,8 +108,8 @@ researchers configure parameters such as the plasma density or the shaping and s
 magnetic field and study the behaviour of the plasma in this setup. During a typical experimental
 workflow, about 20-30 plasma discharges, so-called ``shots`` are performed on a given day where each
 shot lasts for a couple of seconds up to minutes. Numerous measurements of the plasma and the
-mechanical components of the tokamak are performed during each discharge. After a cool-down phase of 
-a few minutes (tokamaks contain cryogenic components) the device is ready for the next shot. 
+mechanical components of the tokamak are performed during each discharge. After a cool-down phase of
+a few minutes (tokamaks contain cryogenic components) the device is ready for the next shot.
 
 A common diagnostic in magnetic fusion experiments is a so-called Electron Cyclotron Emission (ECE)
 diagnostic [Cos74]_. They measure emission intensity by free electrons in the plasma, which allows
@@ -117,7 +117,7 @@ one to infer their temperature as a function of radius. Physical models of the p
 partially through the temperature. This measurement allows one to interpret the experiment in terms
 of such models. Modern ECE systems, such as the one installed in the KSTAR tokamak [Yun14]_ have
 hundreds of spatial channels and sample data on a microsecond time-scale, producing data streams
-upwards of 500 MB/sec. 
+upwards of 500 MB/sec.
 
 Analyzing large datasets, as produced by ECE diagnostics in between shots and generating actionable
 information in time for the next shot is a challenging task. The ``Delta`` framework aims to
@@ -136,7 +136,7 @@ experiments performed at the TAE facility [Bal17]_. There, the so-called ``optom
 used as a stochastic optimizer in conjunction with expert judgement of domain scientists to assess
 the performance of a just concluded plasma shot and optimize the machine parameters in order to increase
 the performance of the following shot. By making advanced data analysis results available in near
-real-time to domain scientists, ``Delta`` will allow to improve workflows at experimental fusion 
+real-time to domain scientists, ``Delta`` will allow to improve workflows at experimental fusion
 facilities.
 
 
@@ -177,7 +177,7 @@ Electron Cyclotron Emission Imaging
 The Electron Cyclotron Emission Imaging diagnostic installed in KSTAR measures the electron
 temperature :math:`T_e` on a 0.15m by 0.5m grid, resolved using 8 horizontal and 24 vertical
 channels [Yun10]_ [Yun14]_. Each individual channel produces an intensity time series :math:`I_{h,
-v}(t_i)` where h and v index the horizontal and vertical channel number and :math:`t_i = i 
+v}(t_i)` where h and v index the horizontal and vertical channel number and :math:`t_i = i
 \Delta_t` denotes the time where the intensity is sampled with :math:`\Delta_t \approx 1 \mu s`
 being the sampling time. Digitized with a 16-bit digitizer, this diagnostic produces a data
 stream of 1836 MByte/sec. The spatial view of this
@@ -185,15 +185,15 @@ diagnostic covers a significant area of the plasma cross-section which allows it
 visualize the large-scale structures of the plasma. Besides analyzing the normalized intensity,
 several quantities calculated off the Fourier transformed intensity :math:`X(\omega)`, here
 :math:`\omega` denotes the angular frequency, are used to study the plasma dynamics. The cross-power
-S, the coherence C, the cross-phase P and the cross-correlation R are defined respectively for 
+S, the coherence C, the cross-phase P and the cross-correlation R are defined respectively for
 channel pair combinations of Fourier transformed intensity signals :math:`X` and :math:`Y` as
 
 
-.. math:: 
+.. math::
    S_{xy}(\omega) = E[X(\omega) Y^{\dagger}(\omega)],
    :label: eq-S
-   
-   
+
+
 .. math::
    C_{xy}(\omega) = |S_{xy}(\omega)| / \sqrt{S_{xx}(\omega)} / \sqrt{S_{yy}(\omega)},
    :label: eq-C
@@ -202,14 +202,14 @@ channel pair combinations of Fourier transformed intensity signals :math:`X` and
 .. math::
    P_{xy}(\omega) = arctan(Im(S_{xy}(\omega)) / Re(S_{xy}(\omega)),
    :label: eq-P
-   
+
 
 and
 
 .. math::
    R_{xy}(t) = IFFT(S_{xy}(\omega)).
    :label: eq-R
-   
+
 
 Here E denotes an ensemble average, :math:`^{\dagger}` denotes complex conjugation, :math:`Re` and
 :math:`Im` denote the real and imaginary part of a complex number and :math:`IFFT` denotes the
@@ -235,7 +235,7 @@ transferring data over networks [dtn]_. As such, they feature
 large-bandwidth network interfaces, both for internal and external connections. Table :ref:`tab1`
 lists the hardware of the DTNs and Cori's compute nodes. 100Gbit/s links connect both DTNs via the
 internet. At NERSC, the DTN is connected to Cori with dual 10 Gbit/s NICs. Coris individual compute
-nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s. 
+nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s.
 
 
 .. figure:: plots/delta_arch_no_storage.png
@@ -245,13 +245,13 @@ nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s.
 
    The network topology for which the ``Delta`` framework is designed. Data is streamed in the
    direction indicated by the orange arrow. At KSTAR, measurement data is staged from its DTN to
-   the NERSC DTN. Internally at NERSC, the data stream is forwarded to compute nodes at Cori 
-   and analyzed. Orange arrows mark sections of the network where ADIOS facilitates high-performance streaming. 
+   the NERSC DTN. Internally at NERSC, the data stream is forwarded to compute nodes at Cori
+   and analyzed. Orange arrows mark sections of the network where ADIOS facilitates high-performance streaming.
    Black arrows denote standard TCP/IP connections. :label:`fig-topo`
-   
+
 
 .. table:: Hardware and network interconnections of the data transfer nodes (DTNs) and compute nodes :label:`tab1`
- 
+
     +---------------+--------------------+----------+------------------+
     | Where         |   CPU              |    RAM   |  NIC             |
     +===============+====================+==========+==================+
@@ -260,7 +260,7 @@ nodes are connected with a Cray Aries interconnect, peaking at > 45 TB/s.
     | |  NERSC DTN  | | Xeon E5-2680 v2  | | 128GB  | | 2 * 100 Gbit   |
     |               |                    |          | | 2 * 10 Gbit    |
     +---------------+--------------------+----------+------------------+
-    | | Cori compute| | Xeon E5-2698 v3  | | 128GB  | | Cray Aries     | 
+    | | Cori compute| | Xeon E5-2698 v3  | | 128GB  | | Cray Aries     |
     |               | |  32 threads      |          |                  |
     +---------------+--------------------+----------+------------------+
 
@@ -315,7 +315,7 @@ in Fig. :ref:`fig-sw-arch`. Here we omit the ``middleman`` as it only relays the
    :scale: 40%
 
    Schematic of the ``Delta`` framework. The **generator** runs at the data staging site and
-   transmits time chunks via the ADIOS channels SSSSS_ECEI_NN. Here SSSSS 
+   transmits time chunks via the ADIOS channels SSSSS_ECEI_NN. Here SSSSS
    denotes the shot number and NN enumerates the ADIOS channels. The **processor** runs at the
    HPC site, recieves the data and submits it for processing through a ``task_list``. :label:`fig-sw-arch`.
 
@@ -376,14 +376,14 @@ Pseudo-code for the processor looks like this
       executor_anl = MPIPoolExecutor(max_workers=NA)
       a2_reader = reader(cfg["transport_rx"])
       a2_reader.Open()
-      task_list = task_list_spectral(executor_anl, 
-                                     executor_fft, 
+      task_list = task_list_spectral(executor_anl,
+                                     executor_fft,
                                      cfg)
 
       dq = Queue.Queue()
       workers = []
       for _ in range(n_thr):
-         w = threading.Thread(target=consume, 
+         w = threading.Thread(target=consume,
                               args=(dq, task_list))
          w.start()
          workers.append(w)
@@ -393,12 +393,12 @@ Pseudo-code for the processor looks like this
         stepStatus = reader.BeginStep()
         if stepStatus:
           stream_data = a2_reader.Get(varname)
-          dq.put_nowait((stream_data, 
+          dq.put_nowait((stream_data,
                          reader.CurrentStep()))
           reader.EndStep()
         else:
           break
-      
+
       worker.join()
       dq.join()
 
@@ -407,11 +407,11 @@ To access the many cores available, ``processor`` is launched as an MPI program 
 control of ``mpi4py.futures``: ``srun -n NP -m mpi4py.futures processor.py``. The ``mpi4py``
 documentation suggests to run as ``mpiexec -n 1 -usize NP processor.py`` but unfortunately Cori's job system
 supports neither ``mpiexec`` nor defining the universe size by environment variables.
-The number of MPI ranks should be approximately equal to the workers requested in the PoolExecutors, ``NP`` == ``NF`` + ``NA`` - 1. 
+The number of MPI ranks should be approximately equal to the workers requested in the PoolExecutors, ``NP`` == ``NF`` + ``NA`` - 1.
 
-Then ``a2_reader`` is instantiated with ``cfg[transport_rx]``, mirroring the configuration of the writer. 
+Then ``a2_reader`` is instantiated with ``cfg[transport_rx]``, mirroring the configuration of the writer.
 After defining a queue for inter-process communication, a group of worker threads is started. In the main loop ``a2_reader``
-consumes incoming time chunk data from the ADIOS stream and enqueues them. At the same time, the array of worker tasks 
+consumes incoming time chunk data from the ADIOS stream and enqueues them. At the same time, the array of worker tasks
 dequeues time chunks data and passes it to the ``task_list``.
 
 The data analysis code is implemented by cython kernels which are described in a later subsection.
@@ -427,11 +427,11 @@ as
    def calc_and_store(self, data, **kwargs):
      result = self.kernel(data, **kwargs)
      self.storage_backend.store(result, tidx)
-      
+
    def submit(self, executor, data, tidx):
      ...
-     _ = [executor.submit(self.calc_and_store, data, 
-                          ch_it, tidx) 
+     _ = [executor.submit(self.calc_and_store, data,
+                          ch_it, tidx)
           for ch_it in self.get_dispatch_sequence()]
 
 
@@ -444,8 +444,8 @@ minimize data communication, ``submit`` launches ``calc_and_store`` for an exhau
 channel pair combinations which is accessed by ``get_dispatch_sequence()``.
 
 
-Since the ECEI analysis tasks for the workflow at hand expects Fourier transformed data, the analysis kernels 
-are called sequentially right after the Fourier transformed data becomes available. This logic is implemented 
+Since the ECEI analysis tasks for the workflow at hand expects Fourier transformed data, the analysis kernels
+are called sequentially right after the Fourier transformed data becomes available. This logic is implemented
 by the ``task_list`` class:
 
 .. code:: python
@@ -456,12 +456,12 @@ by the ``task_list`` class:
    class task_list():
 
      def submit(self, data, tidx):
-       fft_future = self.executor_fft.submit(stft, 
-                                             data, 
+       fft_future = self.executor_fft.submit(stft,
+                                             data,
                                              **kwargs)
 
        for task in self.task_list:
-         task.submit(self.executor_anl, 
+         task.submit(self.executor_anl,
                      fft_future.result(), tidx)
 
 Executing the analysis tasks after the Fourier transformation further reduces interdependencies in
@@ -514,11 +514,11 @@ given some parameters :math:`\lambda_1 \ldots \lambda_n`. Translating the relati
 to have the application in mind when designing a library. The approach taken by general-purpose
 packages such as ``scipy`` or ``scikit-learn`` is to implement a transformation :math:`F` as a class
 and interface to data through its member functions. Taking Principal Component Analysis in
-scikit-learn as an example, the default way of applying it to data is 
+scikit-learn as an example, the default way of applying it to data is
 
 .. code:: python
 
-   from sklearn.decomposition import PCA 
+   from sklearn.decomposition import PCA
    X = np.array([...])
    pca = PCA(n_components=2)
    pca.fit_transform(X)
@@ -529,7 +529,7 @@ function of the ``task_ecei`` class. The specific kernel to be called is configu
 initialization:
 
 .. code:: python
-   
+
    from kernels import kernel_crossphase, ...
    class task():
       def __init__(self, cfg):
@@ -544,8 +544,8 @@ initialization:
         result = self.kernel(data, ...)
 
 
-At the time of writing, ``Delta`` only implements a workflow for ECEI data and this design choice 
-minimizes the number of classes present in the framework. Grouping the data analysis methods by 
+At the time of writing, ``Delta`` only implements a workflow for ECEI data and this design choice
+minimizes the number of classes present in the framework. Grouping the data analysis methods by
 diagnostic also allows to execute diagnostic-specific pre-transformations that are best
 performed after transfer to the ``processor`` collectively. One may wish for example to distribute calculations of
 the 18336 channel pair combinations among multiple ``task`` instances. This approach lets us seamlessly
@@ -556,7 +556,7 @@ In summary, the architecture of ``Delta`` implements data streaming using time-s
 ADIOS and data analysis using PEP 3148 compatible executors. In order to increase performance we
 choose to use two PoolExecutors. The first executor is used to execute short Fourier Transformations
 of the the input data for the entire analysis task group. The second pool executor is available for
-running the analysis kernels and immediate storage of the results. 
+running the analysis kernels and immediate storage of the results.
 
 
 Performance analysis
@@ -579,7 +579,7 @@ performance of the framework on the ECEI workflow.
 Performance of the WAN connection
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-As a first step we measure the practically available bandwidth between the KSTAR and NERSC DTNs using 
+As a first step we measure the practically available bandwidth between the KSTAR and NERSC DTNs using
 the network performance tool iperf3 [iperf]_.
 Multiple data streams are often necessary to exhaust high-bandwidth networks. Varying the number of
 senders from 1 to 8, we measure data transfer rates from 500 MByte/sec using 1 process up to a peak
@@ -599,18 +599,18 @@ recovery phase.
    Data transfer rates between the KSTAR and NERSC DTNs measured using iperf3
    using 1, 2, 4, and 8 processes :label:`kstar-dtn-xfer`
 
-While we measured the highest bandwidth when transferring with 8 process, ``Delta`` currently only implements 
+While we measured the highest bandwidth when transferring with 8 process, ``Delta`` currently only implements
 single process data transfers.
 
 
-Data Analysis Kernels 
+Data Analysis Kernels
 ^^^^^^^^^^^^^^^^^^^^^
 
 As seen in the code-example above, ``Delta`` implements data analysis routines as computational
 kernels. These are implemented in cython to circumvent the global interpreter lock and utilize
 multiple cores. Measuring the average execution time over 10 runs on a Cori compute node we find
 that the kernels demonstrate a strong scaling for up to 16 threads, shown in Fig.
-:ref:`kernel-perf`. Using more 32 threads results in sub-linear speedup.  
+:ref:`kernel-perf`. Using more 32 threads results in sub-linear speedup.
 
 
 .. figure:: plots/kernel_performance.png
@@ -631,17 +631,17 @@ calculate Eqs.(:ref:`eq-S`) - (:ref:`eq-R`) for 18836 unique channel pair combin
 chunk. Each time chunk consists of :math:`s_{ch}=10,000` samples for 192 individual channels. A
 total of :math:`N_{ch}=500` time chunks are to be processed, for a total of about 5 GByte of data.
 
-The performance of ``Delta`` depends on the individual performance of multiple components, such as 
-the data streaming velocity, lag introduced by using queue inter-process communication, spawning processes 
-on the executors, MPI communication as well as their interplay with one another. Having benchmarked 
-individual components in the previous section, we now benchmark the runtime of ``Delta`` performing 
+The performance of ``Delta`` depends on the individual performance of multiple components, such as
+the data streaming velocity, lag introduced by using queue inter-process communication, spawning processes
+on the executors, MPI communication as well as their interplay with one another. Having benchmarked
+individual components in the previous section, we now benchmark the runtime of ``Delta`` performing
 the ECEI spectral analysis workflow in three scenarios. In the
 ``file`` scenario, the ``processor`` reads data from a local ADIOS file. No data is streamed. In the
 ``2-node`` scenario, data is streamed from the ``generator`` running on the NERSC DTN to Cori. In the
 ``3-node`` scenario, data is streamed from the KSTAR DTN to the NERSC DTN and forwared to Cori
 - this is the scenario shown in :ref:`fig-sw-arch`. Both the ``2``- and ``3-node`` scenario use
 ADIOS DataMan engine for data streaming.  All runs are performed on an allocation using 32 Cori nodes
-partitioned into 128 MPI ranks with 16 Threads each for a total of 2048 CPU cores. 
+partitioned into 128 MPI ranks with 16 Threads each for a total of 2048 CPU cores.
 
 
 
@@ -679,11 +679,11 @@ about 0.7 seconds, independent of the workflow.
 
 Figure :ref:`delta-perf-queue` shows the amount of time that data for a given time chunk, :math:`n_{ch} = 1... N_{ch}`,
 spends in the queue of the processor.
-All three scenarios show a similar trend - the amount of time a time chunk spends in the queue increases with 
-the time when it is enqueued. This suggests that data is streamed faster to the ``processor`` than the MPI ranks 
+All three scenarios show a similar trend - the amount of time a time chunk spends in the queue increases with
+the time when it is enqueued. This suggests that data is streamed faster to the ``processor`` than the MPI ranks
 perform data analysis. This implies that the queue acts as a cache for the incoming time chunk data. Running the ``file``
 scenario, the processor loads data almost immediatetly after it starts up. For the ``2-node`` and ``3-node`` scenarios
-the start time of the components on their respective machines is not coordinated. This causes the first time chunk data 
+the start time of the components on their respective machines is not coordinated. This causes the first time chunk data
 to arrive at varying times for the three scenarios.
 
 .. figure:: plots/performance_time_subcon.png
@@ -709,23 +709,23 @@ communication overhead.
 
 
 Finally, Figures :ref:`delta-perf-file`, :ref:`delta-perf-2node` and :ref:`delta-perf-3node` show the utilization of
-the MPI ranks over time. The MPI ranks execute the STFT and analysis kernels, the figures only show the time 
+the MPI ranks over time. The MPI ranks execute the STFT and analysis kernels, the figures only show the time
 where analysis kernels are executed. All three scenarios show a low usage of available MPI ranks, approximately 16 - 20
 in the beginning of the run. After all time chunks are dequeued and Fourier transformed, all available MPI ranks are
 used. Color encodes the different analysis kernels. For example, green bars show time at which a cross-correlation
-kernel is executed. The majority of the compuation time is consumed by cross-correlation kernels. This observation 
-agrees with the performance analysis that showed that the cross-correlation kernel is the most time consuming. 
+kernel is executed. The majority of the compuation time is consumed by cross-correlation kernels. This observation
+agrees with the performance analysis that showed that the cross-correlation kernel is the most time consuming.
 
 
 .. figure:: plots/mpirank_utilization_file.png
    :scale: 90%
-    
+
    MPI rank utilization for the ``file`` scenario. Colored bars mark the execution time of analysis kernels. Blue bars denote cross-phase, orange bars denote cross-power, green bars denote cross-correlation and red bars denote coherence. :label:`delta-perf-file`
 
 
 
 .. figure:: plots/mpirank_utilization_2node.png
-   :scale: 90% 
+   :scale: 90%
 
    MPI rank utilization for the ``2-node`` scenario. The color encoding of the analysis kernels is the same as in Figure 7 :label:`delta-perf-2node`
 
@@ -770,7 +770,7 @@ Acknowledgements
 The authors would like to acknowledge the excellent technical support from engineers and developers
 at the National Energy Research Scientific Computing Center. This work used
 resources of the National Energy Research Scientific Computing Center (NERSC), a U.S. DOE Office of
-Science User Facility operated under Contract No. DE-AC02-05CH11231. 
+Science User Facility operated under Contract No. DE-AC02-05CH11231.
 ``Delta`` is available on github: [Git]_
 All data used to generate the plots in this article can be accessed on Zenodo [Zen]_ .
 
@@ -782,8 +782,8 @@ References
 
 .. [PPY] PlasmaPy Community, Nicholas A. Murphy, Andrew J. Leonard et al.
          PlasmaPy: an open source community-developed Python
-         package for plasma physics. 
-         Zenodo. 
+         package for plasma physics.
+         Zenodo.
          http://doi.org/10.5281/zenodo.1238132
 
 .. [Men15] O. Meneghini, S.P. Smith, L.L. Lao et al. *Integrated modeling applications for tokamak experiments with OMFIT*
@@ -823,7 +823,7 @@ References
 
 .. [cori] National Energy Research Scientific Computing Center. Cori. Retrieved from https://docs.nersc.gov/systems/cori/
 
-.. [top500] @top500supercomp (2019, Nov) We are proud to announce the 54th edition of the TOP500 list! 
+.. [top500] @top500supercomp (2019, Nov) We are proud to announce the 54th edition of the TOP500 list!
             China extends lead in number of TOP500 supercomputers, US holds on to performance advantage.
             To view the full list, visit https://top500.org/lists/2019/11/
             Retrieved from https://twitter.com/top500supercomp/status/1196428698339160065
@@ -831,7 +831,7 @@ References
 .. [dtn] Energy Sciences Network. Data Transfer Nodes. Retrieved from http://es.net/science-engagement/technical-and-consulting-services/data-transfer-nodes/
 
 .. [Xie12] B. Xie, J. Chase, D. Dillow et al. *Characterizing output bottlenecks in a supercomputer*
-           SC '12: Proceedings of the International conference on High Performance Computing, Networking, Storage and Analysis 
+           SC '12: Proceedings of the International conference on High Performance Computing, Networking, Storage and Analysis
            https://doi.org/10.1109/SC.2012.28
 
 .. [nerscdtn] National Energy Research Scientific Computing Center. Data Transfer Nodes. Retrieved from https://docs.nersc.gov/systems/dtn/
@@ -840,7 +840,7 @@ References
 
 .. [adios] Oak Ridge National Laboratory (2018, April 5) ADIOS 2: The Adaptable Input/Output System version 2. Retrieved from https://adios2.readthedocs.io/en/latest/index.html
 
-.. [PEP3148] B. Quinlan *PEP 3148 futures - execute computations asynchronously* 
+.. [PEP3148] B. Quinlan *PEP 3148 futures - execute computations asynchronously*
              2009
              Retrieved from https://www.python.org/dev/peps/pep-3148/
 
@@ -851,13 +851,13 @@ References
 .. [dask] M. Rocklin *Dask: Parallel Computation with Blocked Algorithms and Task Scheduling*
           Proceedings of the 14th Python in Science Conference p.126-132 2015
           DOI: 10.25080/Majora-7b98e3ed-013
-          
+
 .. [FFT] Heinzel, G., Rüdiger, A., & Schilling, R. (2002). Spectrum and spectral density estimation
          by the Discrete Fourier transform (DFT), including a comprehensive list of window functions and some
          new at-top windows.
          http://hdl.handle.net/11858/00-001M-0000-0013-557A-5
 
-.. [Zen] Kube, Ralph, Churchill, R Michael, Chang, CS, et al. (2020). 
-         Leading magnetic fusion energy science into the big-and-fast data lane. 
+.. [Zen] Kube, Ralph, Churchill, R Michael, Chang, CS, et al. (2020).
+         Leading magnetic fusion energy science into the big-and-fast data lane.
          Zenodo
          http://doi.org/10.5281/zenodo.3871700

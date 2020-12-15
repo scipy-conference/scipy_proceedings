@@ -3,5 +3,6 @@
     "authors": [
         "Siu Kwan Lam"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961194",
     "description": "Numba is a just-in-time compiler for a subset of Python. This is a short presentation of Numba updates for 2019-2020. "
 }

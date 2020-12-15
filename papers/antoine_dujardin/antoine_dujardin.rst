@@ -27,7 +27,7 @@
 
 :bibliography: mybib
 
-:video: <To Be Determined>
+:video: https://youtu.be/IYADjGOiJhA
 
 ------------------------------------------
 Fluctuation X-ray Scattering real-time app
@@ -72,7 +72,7 @@ FXS techniques fully utilize the femtosecond pulses to measure diffraction patte
 .. figure:: FXS-overview.jpg
 
    Fluctuation X-ray Scattering experiment setup. :label:`fig:fxs`
-   
+
    In an FXS experiment, femtosecond pulses from an X-ray Free Electron Laser are shot at a stream of particles in solution.
    The scattered light forms a diffraction pattern on the detector, aggregating the contributions of the different particles. [#]_
 

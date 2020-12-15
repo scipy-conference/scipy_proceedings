@@ -5,6 +5,7 @@
         	"Karthik Elamvazhuthi",
         	"Olga Turanova"
 	],
+	"zenodo_url": "https://zenodo.org/record/3961198",
 	"title": "Decentralized, Deterministic Robot Swarm Control using Blob Methods for PDEs",
 	"description": "A Jupyter notebook about robot swarm control, simulation, digital experiments, and computational considerations"
 }

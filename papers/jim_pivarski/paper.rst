@@ -23,6 +23,8 @@
 :institution: Princeton University
 :orcid: 0000-0001-6830-3356
 
+:video: https://youtu.be/WlnUF3LRBj4
+
 ------------------------------------------------
 Awkward Array: JSON-like data, NumPy-like idioms
 ------------------------------------------------
@@ -119,7 +121,7 @@ We are interested in the longitude, latitude coordinates, which are in the :code
 We can access each of these, eliminating all other fields, with a NumPy-like multidimensional slice. Strings in the slice select fields of records and ellipsis (:code:`...`) skips dimensions as it does in NumPy.
 
 .. code-block:: python
-    
+
     longitude = bikeroutes["features", "geometry",
                            "coordinates", ..., 0]
     latitude  = bikeroutes["features", "geometry",

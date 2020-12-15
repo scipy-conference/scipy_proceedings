@@ -11,6 +11,8 @@
 
 :bibliography: mybib
 
+:video: https://youtu.be/nxXr0LNdQUU
+
 --------------------------------------------------------------------
 Software Engineering as Research Method: Aligning Roles in Econ-ARK
 --------------------------------------------------------------------
@@ -42,7 +44,7 @@ Software Engineering as Research Method: Aligning Roles in Econ-ARK
    The skills gap will not be closed until software engineering
    is considered a core skill for the discipline.
    Software engineering should be reconceived as a research
-   method. 
+   method.
 
 .. class:: keywords
 
@@ -80,7 +82,7 @@ scalability, and robustness of systems.
 Now it refers to the cross-disciplinary use of these
 computational concepts :cite:`guzdial2008education`
 :cite:`settle2013beyond`.
-The question raised by computational thinking is 
+The question raised by computational thinking is
 how much computer science education is necessary for
 these cross-disciplinary uses of computation.
 Logo, after all, not only introduced students to mathematics,
@@ -90,7 +92,7 @@ But did it teach computational thinking?
 The industrial demand for students educated in handling
 "Big Data" systems has since prompted a generalization
 of statistics beyond its discipline in a way that's analogous
-to the generalization of computer science. 
+to the generalization of computer science.
 :cite:`jordan2016computational` discusses this new industry
 demand for "inferential thinking".
 Together, computational thinking and inferential thinking
@@ -220,7 +222,7 @@ This problem can be characterized by the equations:
 
 .. math::
    :type: eqnarray
-          
+
       U(c_t) &=& \frac{c_t^{1-\rho}}{1 - \rho} \\
     m_{t+1}  &=& R(m_t - c_t) + p_{t+1} \\
      p_{t+1} &=& \gamma p_t
@@ -241,9 +243,9 @@ a discount factor :math:`\beta`:
 
 .. math::
    :type: eqnarray
-          
+
    V_t(m_t, p_t) &=& max_{c_t} U(c_t) + \beta V_{t+1}(m_{t+1}, p_{t+1})
-      
+
 The optimal consumer choice can be solved via dynamic programming.
 
 However, it is possible to reduce the complexity of this problem
@@ -254,7 +256,7 @@ for the MDP with the following transition function:
 
 .. math::
    :type: eqnarray
-          
+
     m_{t+1}  &=& \frac{R}{\gamma}(m_t - \hat{c}_t) + 1
 
 The consumption function :math:`\hat{c}` can then be solved
@@ -458,7 +460,7 @@ professor who teaches more students, which is necessary
 for the autonomy of Economics as a field of knowledge.
 If at every point in the process -- even at the point where
 new discoveries are integrated into the core software library --
-there is a dependence on an externally sourced skillset, 
+there is a dependence on an externally sourced skillset,
 then the discipline will fail to reproduce scholars with
 the competence to participate in its own field.
 
@@ -549,7 +551,7 @@ code from research artifacts to create our software package
 HARK :cite:`carroll2018econ` and maintained the research
 artifacts which heavily rely on HARK as REMARKs (Replications
 and Explorations Made using the ARK).
-  
+
 This decoupling exercise also helps with the reproducibility of
 research projects as it gives other researchers the necessary
 tools to examine the research artifacts. The decoupling can
@@ -695,7 +697,7 @@ as a research method.
 Another incentive for making software engineering more
 central as a research method for scientific practice
 is that mature software products are a vector for technology
-transfer from academic labs to the market :cite:`dalle2004toward`. 
+transfer from academic labs to the market :cite:`dalle2004toward`.
 As national funding agencies anticipate a pivot towards
 bringing scientific results to market a top priority :cite:`ambrose_2020`
 it raises questions about what research methods are most

@@ -3,5 +3,6 @@
     "authors": [
         "Jon Mease"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961238",
     "description": "A case study on using RAPIDS technologies to add GPU support to the Datashader Python library"
 }

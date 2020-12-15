@@ -6,5 +6,6 @@
         "Jim Pivarski",
         "Shuo Liu"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961211",
     "description": "Boost-histogram is a new Python library that provides Histograms that can be filled, manipulated, sliced, and projected as objects."
 }

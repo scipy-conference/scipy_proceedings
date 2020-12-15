@@ -6,6 +6,8 @@
 :corresponding:
 :bibliography: refs
 
+:video: https://youtu.be/PxTLD-ueNd4
+
 
 =========================================================
 pandera: Statistical Data Validation of Pandas Dataframes
@@ -520,7 +522,7 @@ code provides a toy example of this pattern:
    in_schema = pa.DataFrameSchema({
        "x": Column(pa.Int)
    })
-   
+
    out_schema = pa.DataFrameSchema({
        "x": Column(pa.Int),
        "x_doubled": Column(pa.Int),
@@ -551,7 +553,7 @@ inputs and outputs of functions. The above example can be refactored into:
            x_doubled=lambda df: df["x"] * 2,
            x_squared=lambda df: df["x"] ** 2,
        )
-      
+
    processed_data = process_data(raw_data)
 
 Custom Validation Rules
@@ -673,7 +675,7 @@ function, one can write:
 
    schema(dataframe)
 
- 
+
 Conditional Validation Rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

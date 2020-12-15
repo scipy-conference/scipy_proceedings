@@ -6,14 +6,6 @@
         "William Reus",
         "Brad Chamberlain"
     ],
-    "description": "This talk describes Arkouda, a Python package that we have
-                    developed for doing exploratory analysis on massive data
-                    sets at interactive rates. Arkouda's API is based on
-                    NumPy/Pandas, yet its arrays can be transparently
-                    distributed across the compute nodes of a cluster or
-                    supercomputer to support large-scale analytics. In our
-                    work, we have run Arkouda operations from Jupyter notebooks
-                    on TB-sized data sets in seconds to small numbers of
-                    minutes—achieving scalability and performance that we have
-                    not observed with competing technologies."
+    "zenodo_url": "https://zenodo.org/record/3961209",
+    "description": "This talk describes Arkouda, a Python package that we have developed for doing exploratory analysis on massive data sets at interactive rates. Arkouda's API is based on NumPy/Pandas, yet its arrays can be transparently distributed across the compute nodes of a cluster or supercomputer to support large-scale analytics. In our work, we have run Arkouda operations from Jupyter notebooks on TB-sized data sets in seconds to small numbers of minutes—achieving scalability and performance that we have not observed with competing technologies."
 }

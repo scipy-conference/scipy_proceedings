@@ -6,5 +6,6 @@
         "Graham Markall",
         "Brad Rees"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961218",
     "description": "cuSignal is a GPU accelerated signal processing library built around a SciPy Signal-like API, CuPy, and custom Numba and CuPy CUDA kernels. cuSignal is written exclusively in Python and demonstrates GPU speeds without a C++ software layer."
 }

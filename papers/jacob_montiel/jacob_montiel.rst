@@ -5,6 +5,8 @@
 
 :bibliography: bibliography
 
+:video: https://youtu.be/sw85SCv847Y
+
 -----------------------------------
 Learning from evolving data streams
 -----------------------------------
@@ -41,18 +43,18 @@ learning approach assumes that data is sufficiently large and accessible. This i
 data is available one sample at a time, and storing it is impractical given its (theoretically) infinite nature.
 In addition, non-stationary environments require to run the pipeline multiple times in order to minimize model
 degradation, in other words maintain optimal performance. This is especially challenging in fast-changing environments
-where efficient and effective adaptation is vital. 
+where efficient and effective adaptation is vital.
 
 As a matter of fact, multiple real-world machine learning applications exhibit the characteristics of evolving data
 streams, in particular we can mention:
 
-- Financial markets generate huge volumes of data daily. For instance, the New York Stock Exchange captures 1    
+- Financial markets generate huge volumes of data daily. For instance, the New York Stock Exchange captures 1
   terabyte of information each day [#]_. Depending on the state of such markets and multiple external factors data
   can become obsolete quickly rendering it useless for creating accurate models. Predictive models must be
   able to adapt fast to be useful in this dynamic environment.
 - Predictive maintenance. The contribution of IoT to the digital universe is substantial. Data only from embedded
   systems accounted for 2% of the world’s data in 2013, and is expected to hit 10% by 2020 [#]_. IoT sensors are used to
-  monitor the health of multiple systems, from complex systems such as airplanes to simpler ones such as household 
+  monitor the health of multiple systems, from complex systems such as airplanes to simpler ones such as household
   appliances. Predictive systems are required to react fast to prevent disruptions from malfunctioning elements.
 - Online fraud detection. The speed of reaction of an automatic system is also an important factor in multiple
   applications. As a case in point, VisaNet has a capacity (as of June 2019) to handle more than 65,000 transactions
@@ -64,7 +66,7 @@ streams, in particular we can mention:
   efficiently. However, the COVID-19 pandemic brought to attention the fragility of these systems to sudden changes,
   e.g., in less than 1 week, products related to the pandemic such as face masks filled the top 10 searched terms in
   Amazon [#]_. Many automatic systems failed to cope with change resulting in the disruption in the supply chain.
-- Climate change. Environmental science data is a quintessential example of the five *v*'s of big data: volume, 
+- Climate change. Environmental science data is a quintessential example of the five *v*'s of big data: volume,
   velocity, variety, veracity, and value. In particular, NASA’s Earth Science Data and Information System project, holds
   24 petabytes of data in its archive and distributed 1.3 billion files in 2017 [#]_. Understanding environmental data
   has many implications in our daily lives, e.g., food production can be severally impacted by climate change,
@@ -379,7 +381,7 @@ compatibility with incremental methods from scikit-learn.
    eval.evaluate(stream=stream, model=[nb, svm],
                         model_names=['NB', 'SVM']);
 
-We set two metrics to measure predictive performance: accuracy and kappa statistics :cite:`cohen1960coefficient` (for 
+We set two metrics to measure predictive performance: accuracy and kappa statistics :cite:`cohen1960coefficient` (for
 benchmarking classification accuracy under class imbalance, compares the models accuracy against that of a random
 classifier). During the evaluation, a dynamic plot displays the performance of both estimators over the stream, Fig.
 :ref:`fig:prequential`. Once the evaluation is completed, a summary is displayed in the terminal. For this example and
@@ -529,13 +531,13 @@ correctly classified the last sample from the stream.
 
    from streamz import Stream
    from skmultiflow.trees import HoeffdingTreeClassifier
-   
+
    @Stream.register_api()
    class extended(Stream):
        def __init__(self, upstream, model, **kwargs):
            self.model = model
            super().__init__(upstream, **kwargs)
-   
+
        def update(self, x, who=None):
            # Tuple x represents one data sample
            # x[0] is the features array and
@@ -546,13 +548,13 @@ correctly classified the last sample from the stream.
            # output indicating if the model
            # correctly classified the sample
            self._emit(y_pred == x[1])
-   
+
    s_in = Stream.from_kafka(**config)
    ht = HoeffdingTreeClassifier()
-   
+
    s_learn = s.map(read).extended(model=ht)
    out = s_learn.sink_to_list()
-   
+
    s_in.start()
 
 Alternatively, we could define two nodes, one for training and one for predicting. In this case, we just need to make

@@ -18,6 +18,8 @@
 :institution: University of Michigan, Biointerfaces Institute
 :bibliography: references
 
+:video: https://youtu.be/fIFPYZsOVqI
+
 -----------------------------------------------------------------------------------------------------
 HOOMD-blue version 3.0 A Modern, Extensible, Flexible, Object-Oriented API for Molecular Simulations
 -----------------------------------------------------------------------------------------------------

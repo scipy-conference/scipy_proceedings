@@ -3,5 +3,6 @@
     "authors": [
         "C.A.M. Gerlach"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961228",
     "description": "From a humble beginning as a side effort using a Raspberry Pi to talk to lightning instruments, Project Mjolnir is evolving into a modular, open source client-server platform for developing scientific IoT sensor networks. Its goal is to enable scientists of many disciplines to employ low-cost hardware to robustly ingest, log and uplink periodic and on-demand science and engineering data and commands, controlled either autonomously or centrally, all with little or no bespoke code. The talk will discuss Mjolnir’s development and future, present examples of current projects built on it, and explore how to leverage it for new applications."
 }

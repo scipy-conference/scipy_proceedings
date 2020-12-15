@@ -7,5 +7,6 @@
         "Faith Giguere",
         "Long Pham"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961207",
     "description": "Gridded geospatial remote sensing (satellite) data has traditionally been stored in file-based multidimensional arrays to preserve the locality of data. Measurements from locations that are physically next to each other on earth remain next to each other in the arrays. Maintaining this locality is useful when running calculations like reprojection, but unnecessary for many other calculations. This talk will go through a real world example of a tool redesign at the Goddard Earth Sciences Data and Information Services Center (GES DISC), showing the advantages of using the data frame model for calculating summary statistics, where measurement proximity is unimportant."
 }

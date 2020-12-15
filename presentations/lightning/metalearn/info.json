@@ -3,5 +3,6 @@
     "authors": [
         "Niels Bantilan"
     ],
+    "zenodo_url": "https://zenodo.org/record/3961204",
     "description": "This talk introduces metalearn, a MetaRL-based AutoML system that learns to learn how to propose hyperparameter selections that produce high validation scores on meta-test datasets."
 }
