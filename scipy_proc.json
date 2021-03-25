@@ -19,19 +19,19 @@
     },
     "title": {
       "conference": "Python in Science Conference",
-      "full": "Proceedings of the 19th Python in Science Conference",
-      "short": "PROC. OF THE 19th PYTHON IN SCIENCE CONF. (SCIPY 2020)",
+      "full": "Proceedings of the 20th Python in Science Conference",
+      "short": "PROC. OF THE 20th PYTHON IN SCIENCE CONF. (SCIPY 2021)",
       "acronym": "SciPy",
-      "ordinal": "19th"
+      "ordinal": "20th"
     },
-    "citation_key": "proc-scipy-2020",
+    "citation_key": "proc-scipy-2021",
     "editor_email": [
       "agarwal.meghann@gmail.com",
       "cbc@unc.edu",
       "dillon.niederhut@gmail.com",
       "dave.shupe@gmail.com"
     ],
-    "dates": "July 6 - July 12",
+    "dates": "July 12 - July 18",
     "editor": [
       "Meghann Agarwal",
       "Chris Calloway",
@@ -39,10 +39,10 @@
       "David Shupe"
     ],
     "location": "Austin, Texas",
-    "volume": 5,
+    "volume": 6,
     "number": 1,
     "isbn": "noisbn",
-    "year": "2020"
+    "year": "2021"
   },
   "organization": [
     {
@@ -62,20 +62,8 @@
       "name": "Program Chairs",
       "members": [
         {
-          "org": "CapitalOne",
-          "name": "Gil Forsyth"
-        },
-        {
           "org": "Cal Poly",
           "name": "Matt Haberland"
-        },
-        {
-          "org": "Columbia University",
-          "name": "Nicolas Hug"
-        },
-        {
-          "org": "Bloomberg",
-          "name": "Paul Ivanov"
         },
         {
           "org": "University of Illinois",
@@ -87,12 +75,12 @@
       "name": "Communications",
       "members": [
         {
-          "org": "Microsoft",
-          "name": "Tania Allard"
-        },
-        {
           "org": "Populus",
           "name": "Matt Davis"
+        },
+        {
+          "org": "Embedded Intelligence",
+          "name": "David Nicholson"
         }
       ]
     },
@@ -100,8 +88,12 @@
       "name": "Birds of a Feather",
       "members": [
         {
-          "org": "University of California, Merced",
-          "name": "Matthias Bussonnier"
+          "org": "Mozilla",
+          "name": "Julie Hollek"
+        },
+        {
+          "org": "Université de Montréal",
+          "name": "Nadia Tahiri"
         }
       ]
     },
@@ -136,10 +128,6 @@
         {
           "org": "Novartis Institutes for Biomedical Research",
           "name": "Eric Ma"
-        },
-        {
-          "org": "Université de Montréal",
-          "name": "Nadia Tahiri"
         }
       ]
     },
@@ -147,12 +135,12 @@
       "name": "Tutorials",
       "members": [
         {
-          "org": "Enthought, Inc.",
-          "name": "Alexandre Chabot-Leclerc"
-        },
-        {
           "org": "USGS",
           "name": "Mike Hearne"
+        },
+        {
+          "org": "Enthought, Inc.",
+          "name": "Eric Olsen"
         },
         {
           "org": "The Carpentries",
@@ -164,16 +152,8 @@
       "name": "Sprints",
       "members": [
         {
-          "org": "University Corporation for Atmospheric Research",
-          "name": "Ryan May"
-        },
-        {
           "org": "Monash University",
           "name": "Juan Nunez-Iglesias"
-        },
-        {
-          "org": "US Army Engineer Research and Development Center",
-          "name": "Dharhas Pothina"
         }
       ]
     },
@@ -185,8 +165,8 @@
           "name": "Celia Cintas"
         },
         {
-          "org": "Federal University of Santa Catarina",
-          "name": "Melissa Weber Mendonca"
+          "org": "Microsoft Quantum​",
+          "name": "Guen Prawiroatmodjo"
         }
       ]
     },
@@ -198,10 +178,6 @@
           "name": "Paul Anze"
         },
         {
-          "org": "Oregon State University",
-          "name": "Kyle Neimeyer"
-        },
-        {
           "org": "Albus Code",
           "name": "Inessa Pawson"
         }
@@ -210,10 +186,6 @@
     {
       "name": "Sponsors",
       "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
         {
           "org": "Enthought, Inc.",
           "name": "Kristen Leiser"
@@ -240,10 +212,6 @@
     {
       "name": "Logistics",
       "members": [
-        {
-          "org": "Enthought, Inc.",
-          "name": "Jill Cowan"
-        },
         {
           "org": "Enthought, Inc.",
           "name": "Kristen Leiser"
