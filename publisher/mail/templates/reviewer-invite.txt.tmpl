@@ -1,36 +1,17 @@
-From: {{sender['name'] | html}}
-Subject: [{{conference}}] invitation to review proceedings
-To: {{email | html}}
-Cc: {{cced | html}}
-MIME-Version: 1.0
-Content-Type: text/plain
+Dear {{to_name}},
 
-Dear colleague and friend,
+We hope this note finds you and your loved ones healthy and well. Thank you for volunteering to review full papers for the {{proceedings['title']['acronym']}} {{proceedings['year']}}. As the proceedings co-chairs, we ask for your assistance in reviewing "{{title}}", which can be found at {{url}}.
 
-Considering your expertise, we would like to invite you to review the
-following papers for the {{conference}} conference proceedings:
+Our goal is to help this paper reach a point where it is easily readable, understandable, and verifiable. In the spirit of SciPy and of open-source development, we encourage an iterative process with early feedback to the paper authors. A good first step is to introduce yourself in a comment on the pull request.
 
+If you agree, please reply to this email with your GitHub username within the next week. We ask that you complete an initial review no later than June 10th, and to work with the author through June 24th, or until you feel the paper is ready for inclusion in the proceedings. More detailed instructions can be found in the README (https://github.com/scipy-conference/scipy_proceedings#instructions-for-reviewers). You can find the latest PDFs of all the papers at http://procbuild.scipy.org.
 
-{{for p in papers}}
-  {{download}}/{{p}}.html
+Please don't hesitate to contact us with any questions.
+
+Yours,
+The {{proceedings['title']['acronym']}} {{proceedings['year']}} Proceedings Committee
+{{for n in proceedings['editor']}}
+  {{n}}
 {{endfor}}
 
-We would appreciate it if, within the next week, you could confirm
-whether or not you'll be able to take part in this process.  Reviews are due by
-{{due}} and should be submitted via email to {{submit_email}}.
 
-For further instructions, please refer to the reviewer report:
-
- {{review_form}}
-
-Of course, you are more than welcome (and encouraged!) to review additional
-papers, if time and interest permits.  You can browse all submitted papers
-here:
-
-  {{download}}
-
-Please note that reviews are made public, including the reviewer's name.
-
-With best regards,
-
-{{editors}}
