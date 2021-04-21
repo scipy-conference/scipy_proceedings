@@ -103,7 +103,6 @@ Related Work
 * PyTokio, ask Glenn for ref and refs
 * OMNI (is there a paper?)
 * Other stories we can find? [Ordering of above probably not right]
-* TACC paper Laurie
 
 Methods
 =======
