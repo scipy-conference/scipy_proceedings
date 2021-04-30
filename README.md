@@ -180,6 +180,7 @@ have final say in whether to accept or reject a paper.
 - Figures and tables should be positioned inline, close to their explanatory text.
 - License conditions on images and figures must be respected (Creative Commons,
   etc.).
+- Images and figures should be reasonably sized and formatted for viewing online; typically a few hundred kilobytes and less than 1 MB.
 - Code snippets should be formatted to fit inside a single column without
   overflow.
 - Avoid custom LaTeX markup where possible.
