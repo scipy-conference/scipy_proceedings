@@ -1,7 +1,10 @@
 {
     "title": "Introducing JOSE: Journal of Open Source Education",
     "authors": [
-        "Kyle Niemeyer"
+        {
+            "name": "Kyle Niemeyer",
+            "orcid": "0000-0003-4425-7097"
+        }
     ],
     "description": "A cool presentation about a cooler open source journal"
 }
