@@ -472,18 +472,20 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
     3. 30-minute talk slide decks (slides)
     4. SciPy tools plenary slide decks (tools)
 5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
-6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields (using an empty string for orcid if one
-is not available):
+6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
+affiliation if these cannot be provided):
 ```json
 {
     "title": "The title of your presentation",
     "authors": [
         {
             "name": "The first author or presenter",
+            "affiliation": "first author's affiliation",
             "orcid": "0000-0000-0000-0000"
         },
         {
             "name": "The second author or presenter",
+            "affiliation": "second author's affiliation",
             "orcid": "0000-0000-0000-0001"
         }
     ],
