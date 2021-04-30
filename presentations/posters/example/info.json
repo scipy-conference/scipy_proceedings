@@ -1,8 +1,14 @@
 {
-	"authors": [
-		"First Author",
-		"Second Author"
-	],
-	"title": "A test title",
-	"description": "A brief description of what this object is"
+    "authors": [
+        {
+            "name": "First Author",
+            "orcid": "0101-0101-0101-0103"
+        },
+        {
+            "name": "Second Author",
+            "orcid": "0202-0211-0101-0141"
+        }
+    ],
+    "title": "A test title",
+    "description": "A brief description of what this object is"
 }
