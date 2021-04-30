@@ -520,25 +520,24 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
    4. SciPy tools plenary slide decks (tools)
    5. 45-minute keynote slide decks (keynote)
 5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
-6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
-   affiliation if these cannot be provided):
-
-```yaml
-version: 1
-extends: ../../proceedings.yml
-project:
-  title: 'The title of your presentation'
-  authors:
-    - name: First author or presenter
-      orcid: 0000-0000-0000-0000
-      affiliation: University of SciPy
-    - name: Second author or presenter
-      orcid: 0000-0000-0000-0001
-      affiliations:
-        - University of SciPy
-        - National Academy of NumFocus
-  abstract: |
-    The abstract or description of your talk/poster.
+6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields (using an empty string for orcid if one
+is not available):
+```json
+{
+    "title": "The title of your presentation",
+    "authors": [
+        {
+            "name": "The first author or presenter",
+            "orcid": "0000-0000-0000-0000"
+        },
+        {
+            "name": "The second author or presenter",
+            "orcid": "0000-0000-0000-0001"
+        }
+    ],
+    "description": "1-4 sentences explaining what your presentation is about"
+}
+>>>>>>> cca3e237 (add orcid instructions for presentations)
 ```
 
 7. [Create a PR](#create-a-paper-pr)
