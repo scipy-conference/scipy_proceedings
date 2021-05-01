@@ -36,7 +36,7 @@ Studying the dynamics of biological cells is key to understanding key biological
 
 
 
-
+Condition to check if the seed based on U-net has already been found by stardist algorithm, if so no new seed is introduced coming for U-net and only stardist seed is accepted as valid.
 .. code-block:: python
 
   def iou3D(boxA, centroid):
@@ -58,7 +58,119 @@ Studying the dynamics of biological cells is key to understanding key biological
           
            condition = True
            
-      return condition     
+      return condition    
+      
+  def WatershedwithMask3D(Image, Label,mask, grid): 
+  
+    properties = measure.regionprops(Label, Image) 
+    binaryproperties = measure.regionprops(label(mask), Image) 
+    
+    
+    Coordinates = [prop.centroid for prop in properties] 
+    BinaryCoordinates = [prop.centroid for prop in binaryproperties]
+    
+    Binarybbox = [prop.bbox for prop in binaryproperties]
+    Coordinates = sorted(Coordinates , key=lambda k: [k[0], k[1], k[2]]) 
+    
+    if len(Binarybbox) > 0:    
+            for i in range(0, len(Binarybbox)):
+                
+                box = Binarybbox[i]
+                inside = [iou3D(box, star) for star in Coordinates]
+                
+                if not any(inside) :
+                         Coordinates.append(BinaryCoordinates[i])    
+                         
+    
+    Coordinates.append((0,0,0))
+
+
+    Coordinates = np.asarray(Coordinates)
+    coordinates_int = np.round(Coordinates).astype(int) 
+    
+    markers_raw = np.zeros_like(Image) 
+    markers_raw[tuple(coordinates_int.T)] = 1 + np.arange(len(Coordinates)) 
+    markers = morphology.dilation(markers_raw.astype('uint16'), morphology.ball(2))
+
+
+    watershedImage = watershed(-Image, markers, mask = mask.copy()) 
+    
+    return watershedImage, markers     
+
+U-net model prediction:
+
+.. code-block:: python
+
+  def UNETPrediction3D(image, model, n_tiles, axis):
+    
+    
+    Segmented = model.predict(image, axis, n_tiles = n_tiles)
+    
+    try:
+       thresh = threshold_otsu(Segmented)
+       Binary = Segmented > thresh
+    except:
+        Binary = Segmented > 0
+    #Postprocessing steps
+    Filled = binary_fill_holes(Binary)
+    Finalimage = label(Filled)
+    Finalimage = fill_label_holes(Finalimage)
+    Finalimage = relabel_sequential(Finalimage)[0]
+    
+          
+    return Finalimage
+
+Stardist model prediction:
+
+
+  def STARPrediction3D(image, model, n_tiles, MaskImage = None, smartcorrection = None, UseProbability = True):
+    
+          copymodel = model
+          image = normalize(image, 1, 99.8, axis = (0,1,2))
+          shape = [image.shape[1], image.shape[2]]
+          image = zero_pad_time(image, 64, 64)
+          grid = copymodel.config.grid
+
+
+         MidImage, details = model.predict_instances(image, n_tiles = n_tiles)
+         SmallProbability, SmallDistance = model.predict(image, n_tiles = n_tiles)
+
+
+          StarImage = MidImage[:image.shape[0],:shape[0],:shape[1]]
+    	 SmallDistance = MaxProjectDist(SmallDistance, axis=-1)
+    	 Probability = np.zeros([SmallProbability.shape[0] * grid[0],SmallProbability.shape[1] * grid[1], SmallProbability.shape[2] * grid[2] ])
+    	 Distance = np.zeros([SmallDistance.shape[0] * grid[0], SmallDistance.shape[1] * grid[1], SmallDistance.shape[2] * grid[2] ])
+    	 #We only allow for the grid parameter to be 1 along the Z axis
+    	for i in range(0, SmallProbability.shape[0]):
+             Probability[i,:] = cv2.resize(SmallProbability[i,:], dsize=(SmallProbability.shape[2] * grid[2] , SmallProbability.shape[1] * grid[1] ))
+             Distance[i,:] = cv2.resize(SmallDistance[i,:], dsize=(SmallDistance.shape[2] * grid[2] , SmallDistance.shape[1] * grid[1] ))
+    
+        if UseProbability:
+        
+        			MaxProjectDistance = Probability[:image.shape[0],:shape[0],:shape[1]]
+
+        else:
+        
+        			MaxProjectDistance = Distance[:image.shape[0],:shape[0],:shape[1]]
+
+    	if MaskImage is not None:
+        
+       		if smartcorrection is None: 
+          
+         		 Watershed, Markers = WatershedwithMask3D(MaxProjectDistance.astype('uint16'), StarImage.astype('uint16'), MaskImage.astype('uint16'), grid )
+         		 Watershed = fill_label_holes(Watershed.astype('uint16'))
+    
+       		if smartcorrection is not None:
+           
+          		Watershed, Markers = WatershedSmartCorrection3D(MaxProjectDistance.astype('uint16'), StarImage.astype('uint16'), MaskImage.astype('uint16'), grid, smartcorrection = smartcorrection )
+          		Watershed = fill_label_holes(Watershed.astype('uint16'))
+
+    	if MaskImage is None:
+
+       		 Watershed, Markers = WatershedNOMask3D(MaxProjectDistance.astype('uint16'), StarImage.astype('uint16'), grid)
+       
+
+        return Watershed, Markers, StarImage  
 
 Maybe also in another language, and with line numbers:
 
