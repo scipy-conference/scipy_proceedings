@@ -1,0 +1,11 @@
+napari[all]
+scikit-image
+pandas
+scipy
+tifffile
+stardist
+csbdeep
+ffmpeg-python
+imageio_ffmpeg
+natsort
+napatrackmater
