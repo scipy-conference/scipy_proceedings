@@ -60,42 +60,7 @@ Condition to check if the seed based on U-net has already been found by stardist
            
       return condition    
       
-  def WatershedwithMask3D(Image, Label,mask, grid): 
-  
-    properties = measure.regionprops(Label, Image) 
-    binaryproperties = measure.regionprops(label(mask), Image) 
     
-    
-    Coordinates = [prop.centroid for prop in properties] 
-    BinaryCoordinates = [prop.centroid for prop in binaryproperties]
-    
-    Binarybbox = [prop.bbox for prop in binaryproperties]
-    Coordinates = sorted(Coordinates , key=lambda k: [k[0], k[1], k[2]]) 
-    
-    if len(Binarybbox) > 0:    
-            for i in range(0, len(Binarybbox)):
-                
-                box = Binarybbox[i]
-                inside = [iou3D(box, star) for star in Coordinates]
-                
-                if not any(inside) :
-                         Coordinates.append(BinaryCoordinates[i])    
-                         
-    
-    Coordinates.append((0,0,0))
-
-
-    Coordinates = np.asarray(Coordinates)
-    coordinates_int = np.round(Coordinates).astype(int) 
-    
-    markers_raw = np.zeros_like(Image) 
-    markers_raw[tuple(coordinates_int.T)] = 1 + np.arange(len(Coordinates)) 
-    markers = morphology.dilation(markers_raw.astype('uint16'), morphology.ball(2))
-
-
-    watershedImage = watershed(-Image, markers, mask = mask.copy()) 
-    
-    return watershedImage, markers     
 
 U-net model prediction:
 
@@ -122,6 +87,7 @@ U-net model prediction:
 
 Stardist model prediction:
 
+.. code-block:: python
 
   def STARPrediction3D(image, model, n_tiles, MaskImage = None, smartcorrection = None, UseProbability = True):
     
@@ -171,6 +137,45 @@ Stardist model prediction:
        
 
         return Watershed, Markers, StarImage  
+        
+Watershedding is done on either the probability map or the distance map coming from stardist using the seeds coming from a combination of U-net and stardist predictions.        
+ .. code-block:: python     
+  def WatershedwithMask3D(Image, Label,mask, grid): 
+  
+    properties = measure.regionprops(Label, Image) 
+    binaryproperties = measure.regionprops(label(mask), Image) 
+    
+    
+    Coordinates = [prop.centroid for prop in properties] 
+    BinaryCoordinates = [prop.centroid for prop in binaryproperties]
+    
+    Binarybbox = [prop.bbox for prop in binaryproperties]
+    Coordinates = sorted(Coordinates , key=lambda k: [k[0], k[1], k[2]]) 
+    
+    if len(Binarybbox) > 0:    
+            for i in range(0, len(Binarybbox)):
+                
+                box = Binarybbox[i]
+                inside = [iou3D(box, star) for star in Coordinates]
+                
+                if not any(inside) :
+                         Coordinates.append(BinaryCoordinates[i])    
+                         
+    
+    Coordinates.append((0,0,0))
+
+
+    Coordinates = np.asarray(Coordinates)
+    coordinates_int = np.round(Coordinates).astype(int) 
+    
+    markers_raw = np.zeros_like(Image) 
+    markers_raw[tuple(coordinates_int.T)] = 1 + np.arange(len(Coordinates)) 
+    markers = morphology.dilation(markers_raw.astype('uint16'), morphology.ball(2))
+
+
+    watershedImage = watershed(-Image, markers, mask = mask.copy()) 
+    
+    return watershedImage, markers         
 
 Maybe also in another language, and with line numbers:
 
