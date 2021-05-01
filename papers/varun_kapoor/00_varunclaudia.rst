@@ -13,7 +13,7 @@
 
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: 
 
 ------------------------------------------------
 Cell Tracking in 3D using deep learning segmentations
@@ -21,7 +21,7 @@ Cell Tracking in 3D using deep learning segmentations
 
 .. class:: abstract
 
-   Biological cells can be highly irregular in shape and move in Z making them difficult to detect and track in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
+Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
 
 
 
@@ -31,21 +31,9 @@ Cell Tracking in 3D using deep learning segmentations
 
 Introduction
 ------------
+Studying the dynamics of biological cells is key to understanding key biological questions. Such questions involve imaging the cells under different conditions, tracking their development over time and extracting relevant dynamical parameters such as cell intensity variation, cell size change, cell velocity, cell to tissue boundary distance change over time etc. Imaging conditions can be highly variable and have different sources of noise which degrades the quality of the image and with the increasing size of the data acquired using these microscopes it is imperative to have automated algorithms to enable their quantification. Such analysis requires reliable segmentation of cells followed by tracking software to track their motion and finally a track analysis software to extract the relevant information. In out work we develop a technique to segment cells if irregular shape in 3D including the cells that are very faint in their intensity signal. We use a combination of deep learning and computer vision techniques and by using a combination of these two we obtain a parameter free segmentation dependent only on the quality of the training data. 
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
 
 Of course, no paper would be complete without some source code.  Without
 highlighting, it would look like this::
