@@ -144,6 +144,8 @@ Watershedding is done on either the probability map or the distance map coming f
 
 
 .. code-block:: python     
+
+
   def WatershedwithMask3D(Image, Label,mask, grid): 
   
     properties = measure.regionprops(Label, Image) 
