@@ -6,7 +6,7 @@
 :corresponding:
 
 :author: Claudia Carabana Garcia
-:email: claudia.carabana@curie.fr
+:email: claudia.carabana-garcia@curie.fr
 :institution: Institut Curie
 :institution: Paris, France
 :orcid: 
