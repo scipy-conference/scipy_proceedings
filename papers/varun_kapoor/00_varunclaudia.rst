@@ -182,9 +182,9 @@ Watershedding is done on either the probability map or the distance map coming f
 
 References
 ----------
-.. [Stardist]U. Schmidt, M. Weigert, C. Broaddus, and G. Myers,Cell detection with star-convex polygons, in Proceedings of MICCAI'18,
+..  [Stardist] U. Schmidt, M. Weigert, C. Broaddus, and G. Myers,Cell detection with star-convex polygons, in Proceedings of MICCAI'18,
 2018, pp. 265-273.
-.. [U-Net]Olaf Ronneberger, Philipp Fischer, and Thomas Brox, U-Net: Convolutional Networks for Biomedical Image Segmentation, in Proceedings of MICCAI'15,
+..  [U-Net] Olaf Ronneberger, Philipp Fischer, and Thomas Brox, U-Net: Convolutional Networks for Biomedical Image Segmentation, in Proceedings of MICCAI'15,
 2015, pp. 234-241.
 
 
