@@ -37,6 +37,8 @@ Studying the dynamics of biological cells is key to understanding key biological
 
 
 Condition to check if the seed based on U-net has already been found by stardist algorithm, if so no new seed is introduced coming for U-net and only stardist seed is accepted as valid.
+
+
 .. code-block:: python
 
   def iou3D(boxA, centroid):
@@ -139,6 +141,8 @@ Stardist model prediction:
         return Watershed, Markers, StarImage  
         
 Watershedding is done on either the probability map or the distance map coming from stardist using the seeds coming from a combination of U-net and stardist predictions.        
+
+
  .. code-block:: python     
   def WatershedwithMask3D(Image, Label,mask, grid): 
   
