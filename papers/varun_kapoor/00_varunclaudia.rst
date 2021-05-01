@@ -21,7 +21,8 @@ Cell Tracking in 3D using deep learning segmentations
 
 .. class:: abstract
 
-Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
+Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.
+We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
 
 
 
@@ -93,21 +94,17 @@ Stardist model prediction:
 
   def STARPrediction3D(image, model, n_tiles, MaskImage = None, smartcorrection = None, UseProbability = True):
     
-          copymodel = model
-          image = normalize(image, 1, 99.8, axis = (0,1,2))
-          shape = [image.shape[1], image.shape[2]]
-          image = zero_pad_time(image, 64, 64)
-          grid = copymodel.config.grid
-
-
-         MidImage, details = model.predict_instances(image, n_tiles = n_tiles)
-         SmallProbability, SmallDistance = model.predict(image, n_tiles = n_tiles)
-
-
-          StarImage = MidImage[:image.shape[0],:shape[0],:shape[1]]
-    	 SmallDistance = MaxProjectDist(SmallDistance, axis=-1)
-    	 Probability = np.zeros([SmallProbability.shape[0] * grid[0],SmallProbability.shape[1] * grid[1], SmallProbability.shape[2] * grid[2] ])
-    	 Distance = np.zeros([SmallDistance.shape[0] * grid[0], SmallDistance.shape[1] * grid[1], SmallDistance.shape[2] * grid[2] ])
+      copymodel = model
+      image = normalize(image, 1, 99.8, axis = (0,1,2))
+      shape = [image.shape[1], image.shape[2]]
+      image = zero_pad_time(image, 64, 64)
+      grid = copymodel.config.grid
+      MidImage, details = model.predict_instances(image, n_tiles = n_tiles)
+      SmallProbability, SmallDistance = model.predict(image, n_tiles = n_tiles)
+      StarImage = MidImage[:image.shape[0],:shape[0],:shape[1]]
+      SmallDistance = MaxProjectDist(SmallDistance, axis=-1)
+      Probability = np.zeros([SmallProbability.shape[0] * grid[0],SmallProbability.shape[1] * grid[1], SmallProbability.shape[2] * grid[2] ])
+      Distance = np.zeros([SmallDistance.shape[0] * grid[0], SmallDistance.shape[1] * grid[1], SmallDistance.shape[2] * grid[2] ])
     	 #We only allow for the grid parameter to be 1 along the Z axis
     	for i in range(0, SmallProbability.shape[0]):
              Probability[i,:] = cv2.resize(SmallProbability[i,:], dsize=(SmallProbability.shape[2] * grid[2] , SmallProbability.shape[1] * grid[1] ))
@@ -138,7 +135,7 @@ Stardist model prediction:
        		 Watershed, Markers = WatershedNOMask3D(MaxProjectDistance.astype('uint16'), StarImage.astype('uint16'), grid)
        
 
-        return Watershed, Markers, StarImage  
+      return Watershed, Markers, StarImage  
         
 Watershedding is done on either the probability map or the distance map coming from stardist using the seeds coming from a combination of U-net and stardist predictions.        
 
