@@ -143,7 +143,7 @@ Stardist model prediction:
 Watershedding is done on either the probability map or the distance map coming from stardist using the seeds coming from a combination of U-net and stardist predictions.        
 
 
- .. code-block:: python     
+.. code-block:: python     
   def WatershedwithMask3D(Image, Label,mask, grid): 
   
     properties = measure.regionprops(Label, Image) 
@@ -181,17 +181,7 @@ Watershedding is done on either the probability map or the distance map coming f
     
     return watershedImage, markers         
 
-Maybe also in another language, and with line numbers:
 
-.. code-block:: c
-   :linenos:
-
-   int main() {
-       for (int i = 0; i < 10; i++) {
-           /* do something */
-       }
-       return 0;
-   }
 
 Or a snippet from the above code, starting at the correct line number:
 
