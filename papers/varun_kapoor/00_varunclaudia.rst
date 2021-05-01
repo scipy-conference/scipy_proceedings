@@ -21,8 +21,8 @@ Cell Tracking in 3D using deep learning segmentations
 
 .. class:: abstract
 
-Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.
-We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
+Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we created SmartSeeds algorithm to do instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with our use case.
+We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based tool for plotting relevant information coming out of the tracks.
 
 
 
