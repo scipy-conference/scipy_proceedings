@@ -35,22 +35,30 @@ Studying the dynamics of biological cells is key to understanding key biological
 
 
 
-Of course, no paper would be complete without some source code.  Without
-highlighting, it would look like this::
 
-   def sum(a, b):
-       """Sum two numbers."""
-
-       return a + b
-
-With code-highlighting:
 
 .. code-block:: python
 
-   def sum(a, b):
-       """Sum two numbers."""
+  def iou3D(boxA, centroid):
+    
+    ndim = len(centroid)
+    inside = False
+    
+    Condition = [Conditioncheck(centroid, boxA, p, ndim) for p in range(0,ndim)]
+        
+    inside = all(Condition)
+    
+    return inside
 
-       return a + b
+  def Conditioncheck(centroid, boxA, p, ndim):
+    
+      condition = False
+    
+      if centroid[p] >= boxA[p] and centroid[p] <= boxA[p + ndim]:
+          
+           condition = True
+           
+      return condition     
 
 Maybe also in another language, and with line numbers:
 
