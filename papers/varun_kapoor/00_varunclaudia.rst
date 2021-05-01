@@ -1,50 +1,33 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
-:orcid: 0101-0101-0101-0103
+:author: Varun Kapoor
+:email: varun.kapoor@curie.fr
+:institution: Institut Curie
+:institution: Paris, France
+:orcid: 
 :corresponding:
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:orcid: 0202-0211-0101-0141
+:author: Claudia Carabana Garcia
+:email: claudia.carabana@curie.fr
+:institution: Institut Curie
+:institution: Paris, France
+:orcid: 
 
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
-:orcid: 0303-0303-0101-010X
-:equal-contributor:
 
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
-:equal-contributor:
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
+Cell Tracking in 3D using deep learning segmentations
 ------------------------------------------------
 
 .. class:: abstract
 
-   A short version of the long version that is way too long to be written as a
-   short version anyway.  Still, when considering the facts from first
-   principles, we find that the outcomes of this introspective approach is
-   compatible with the guidelines previously established.
-
-   In such an experiment it is then clear that the potential for further
-   development not only depends on previous relationships found but also on
-   connections made during exploitation of this novel new experimental
-   protocol.
+   Biological cells can be highly irregular in shape and move in Z making them difficult to detect and track in 3D with high level of accuracy. In order to solve the detection problem of such cells we use deep learning based segmentations which can reliably segment oddly and differently shaped cells in the same image in 3D. We created SmartSeeds algorithm todo instance segmentation of oddly shaped cells in 3D and provide jupyter notebooks for training and applying model prediction with different use cases.We also present an open source tool that can use used for tracking such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is available as a Fiji plugin and post analysis of tracks is a python and Napari based plugin for plotting relevant information coming out of the tracks.
 
 
 
 .. class:: keywords
 
-   terraforming, desert, numerical perspective
+   segmentation, tracking, deep learning, irregular shaped cells
 
 Introduction
 ------------
