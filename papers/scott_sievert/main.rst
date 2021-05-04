@@ -10,9 +10,9 @@
 :bibliography: refs
 
 
-----------------------------------------
-Training PyTorch models faster with Dask
-----------------------------------------
+-------------------------------------------------
+Training machine learning models faster with Dask
+-------------------------------------------------
 
 .. class:: abstract
 
