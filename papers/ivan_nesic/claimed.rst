@@ -24,20 +24,18 @@ Therefore we provide an entirely open source, reusable component framework, visu
 Introduction
 ------------
 
-Twelve hundred years ago  |---| in a galaxy just across the hill...
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sapien
-tortor, bibendum et pretium molestie, dapibus ac ante. Nam odio orci, interdum
-sit amet placerat non, molestie sed dui. Pellentesque eu quam ac mauris
-tristique sodales. Fusce sodales laoreet nulla, id pellentesque risus convallis
-eget. Nam id ante gravida justo eleifend semper vel ut nisi. Phasellus
-adipiscing risus quis dui facilisis fermentum. Duis quis sodales neque. Aliquam
-ut tellus dolor. Etiam ac elit nec risus lobortis tempus id nec erat. Morbi eu
-purus enim. Integer et velit vitae arcu interdum aliquet at eget purus. Integer
-quis nisi neque. Morbi ac odio et leo dignissim sodales. Pellentesque nec nibh
-nulla. Donec faucibus purus leo. Nullam vel lorem eget enim blandit ultrices.
-Ut urna lacus, scelerisque nec pellentesque quis, laoreet eu magna. Quisque ac
-justo vitae odio tincidunt tempus at vitae tortor.
+Open source software for performing individual AI pipeline tasks are
+abundant, but the community lacks a fully integrated, trusted and
+scalable visual tool. Therefore we have built CLAIMED, the visual
+**C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
+**E**\ TL and **D**\ ata Science which runs on top of ElyraAI capable of
+pushing AI pipelines of any kind to Kubernetes. Any containerized
+application can become a component of the library. CLAIMED has been
+released [3]_ under the Apache v2 open source license. In the following
+we introduce the open source components we are integrating in our
+current release, followed by an overview of different component
+categories paired with a description of exemplary components used in
+health care. This pipeline is also available in open source  [4]_.
 
 
 Bibliographies, citations and block quotes
