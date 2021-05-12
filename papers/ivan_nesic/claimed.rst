@@ -225,3 +225,76 @@ a common task in data engineering - therefore the filter stage allows
 for exactly that. It is enough to provide a predicate - in this case the
 predicate ``~metadata.filename.str.contains('.gz')`` removes invalid
 images.
+
+Image Transformer Components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. figure:: images_folder_tree.png
+
+   De facto standard in folder structure for image classification data. :label:`fig4`
+
+The de facto standard for labeled image data is putting images into one
+folder per class/category. But in this particular case, the raw data
+isn’t in the required format. It’s just a folder full of images and
+their properties are described in a separate CSV file. In addition to
+the class (or label) - finding in this case - this CSV file also
+contains information on the gender and age. So first, we just use the
+information on the finding label given in the CSV file and arrange the
+images in the appropriate folder structure, as illustrated in
+Fig. :ref:`fig4`
+
+Training Components
+~~~~~~~~~~~~~~~~~~~
+
+Understanding, defining and training deep learning models is an art on
+it’s own. Training a deep learning image classification model requires a
+properly designed neural network architecture. Luckily, the community
+trends towards predefined model architectures, which are parameterized
+through hyper-parameters. At this stage, we are using the MobileNetV2, a
+small deep learning neural network architecture with the set of the most
+common parameters. It ships with the TensorFlow distribution - ready to
+use, without any further definition of neurons or layers. As shown in
+figure :ref:`trainingstage`, only a couple of parameters
+need to be specified.
+
+Although possible, hyper-parameter search is not considered in this
+processing stage as we want to make use of KubeFlow’s hyper-parameter
+search capabilities leveraged through Katib [katib]_ in
+the future.
+
+.. figure:: trainstage.png
+
+   Source code of the wrapped training component. :label:`trainingstage`
+
+
+Evaluation Components
+~~~~~~~~~~~~~~~~~~~~~
+
+Besides define, compile and fit, a model needs to be evaluated before it
+goes into production. Evaluating classification performance against the
+target labels has been state-of-the-art since the beginning of machine
+learning, therefore we have added components like confusion matrix. But
+taking TrustedAI measures into account is a newly emerging practice.
+Therefore, components for AI Fairness, AI Explainability and AI
+Adversarial Robustness have been added to the component library.
+
+Blessing Components
+~~~~~~~~~~~~~~~~~~~
+
+In Trusted AI it is important to obtain a blessing of assets like
+generated data, model or report to be published and used by other
+subsystems or humans. Therefore, a blessing component uses the results
+of the evaluation components to decide if the assets are ready for
+publishing.
+
+Publishing Components
+~~~~~~~~~~~~~~~~~~~~~
+
+Depending on the asset type, publishing means either persisting a data
+set to a data store, deploying a machine learning model for consumption
+of other subsystems or publishing a report to be consumed by humans.
+Here, we exemplify this category by a KFServing component which
+publishes the trained TensorFlow deep learning model to Kubernetes.
+KFServing, on top of KNative, is particular interesting as it draws from
+Kubernetes capabilities like canary deployment and scalability (including
+scale to zero) in addition to built-in Trusted AI functionality.
