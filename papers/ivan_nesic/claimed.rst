@@ -129,14 +129,14 @@ maps as image overlays to indicate regions of images which are most
 relevant for the classifier to perform best. In other words, we identify
 regions of the image the classifier is looking at.
 
-As Fig. :ref:`fig1` illustrates, the most relevant areas in an image
+As Fig. :ref:`limefig` illustrates, the most relevant areas in an image
 for classifying for COVID-19 are areas containing bones over lung tissue
 which indicates a problem with that particular classifier.
 
 .. figure:: lime2.png
 
    Example on how LIME helps to identify classification relevant
-   areas of an image. :label:`fig1`
+   areas of an image. :label:`limefig`
 
 AI Fairness and Bias
 --------------------
@@ -178,14 +178,14 @@ As already mentioned previously, pipelines are a great way to introduce
 reproducibility, scaling, auditability and collaboration in machine
 learning. Pipelines are often a central part of a ML-Ops strategy. This
 especially holds for TrustedAI pipelines since reproducibility and
-auditability are even more important there. Figure :ref:`fig2`
+auditability are even more important there. Figure :ref:`pipeline`
 illustrates the exemplary TrustedAI pipeline we have built using the
-component library and figure :ref:`fig3` is a screenshot taken from
+component library and figure :ref:`kfp` is a screenshot taken from
 Kubeflow displaying the pipeline after finishing it’s run.
 
 .. figure:: elyra_pipeline.png
 
-   The exemplary TrustedAI pipeline for the health care use case. :label:`fig2`
+   The exemplary TrustedAI pipeline for the health care use case. :label:`pipeline`
 
 Pipeline Components
 -------------------
@@ -205,7 +205,7 @@ databases.
 
 .. figure:: kfp.png
 
-   The pipeline once executed in Kubeflow. :label:`fig3`
+   The pipeline once executed in Kubeflow. :label:`kfp`
 
 Transform Components
 ~~~~~~~~~~~~~~~~~~~~
@@ -231,7 +231,7 @@ Image Transformer Components
 
 .. figure:: images_folder_tree.png
 
-   De facto standard in folder structure for image classification data. :label:`fig4`
+   De facto standard in folder structure for image classification data. :label:`imgdir`
 
 The de facto standard for labeled image data is putting images into one
 folder per class/category. But in this particular case, the raw data
@@ -241,7 +241,7 @@ the class (or label) - finding in this case - this CSV file also
 contains information on the gender and age. So first, we just use the
 information on the finding label given in the CSV file and arrange the
 images in the appropriate folder structure, as illustrated in
-Fig. :ref:`fig4`
+Fig. :ref:`imgdir`
 
 Training Components
 ~~~~~~~~~~~~~~~~~~~
@@ -348,10 +348,8 @@ JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
 KFServing, https://www.kubeflow.org/docs/components/serving/kfserving/.
 Last accessed 18 Feb 2021
 
-Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I
-Trust You?": Explaining the Predictions of Any Classifier. Proceedings
-of the 22nd ACM SIGKDD International Conference on Knowledge Discovery
-and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
+.. [lime]
+    Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
 
 .. [katib]
     Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
