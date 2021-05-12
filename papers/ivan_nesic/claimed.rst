@@ -298,3 +298,17 @@ publishes the trained TensorFlow deep learning model to Kubernetes.
 KFServing, on top of KNative, is particular interesting as it draws from
 Kubernetes capabilities like canary deployment and scalability (including
 scale to zero) in addition to built-in Trusted AI functionality.
+
+Future Work
+===========
+
+As of now, at least one representative component for each category has
+been released. Components are added to the library on a daily basis. The
+next components to be published are: Parallel Tensorflow Training with
+TFJob, Parallel Hyperparameter Tuning with Katib and Parallel Data
+Processing with Apache Spark. In addition, the next release of ElyraAI
+(v.2.3.0) will improve component’s configuration options rendering
+capabilities, e.g. support for check-boxes and drop down menus and
+facilitated integration of exiting, containerized applications into the
+library without needing to wrap them in jupyter notebooks or python
+scripts.
