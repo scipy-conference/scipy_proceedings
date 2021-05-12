@@ -167,6 +167,66 @@ the adversarial. Libraries like the Adversarial Robustness Toolbox
 ART [art]_ support all state-of-the-art attacks and
 defenses.
 
+System Implementation and Demo Use Case
+=======================================
+
+A TrustedAI image classification pipeline
+-----------------------------------------
+
+As already mentioned previously, pipelines are a great way to introduce
+reproducibility, scaling, auditability and collaboration in machine
+learning. Pipelines are often a central part of a ML-Ops strategy. This
+especially holds for TrustedAI pipelines since reproducibility and
+auditability are even more important there. Figure :ref:`fig2`
+illustrates the exemplary TrustedAI pipeline we have built using the
+component library and figure :ref:`fig3` is a screenshot taken from
+Kubeflow displaying the pipeline after finishing it’s run.
+
+.. figure:: elyra_pipeline.png
+
+   The exemplary TrustedAI pipeline for the health care use case. :label:`fig2`
+
+Pipeline Components
+-------------------
+
+In the following different categories of pipeline components are
+exemplified using components used in the Trusted AI image classification
+pipeline.
+
+Input Components
+~~~~~~~~~~~~~~~~
+
+In this particular case, we’re pulling data directly from a GitHub
+repository via a public and permanent link. We just pull the
+metadata.csv and images folder. The component library will contain a
+component for each different type of data source like files and
+databases.
+
+.. figure:: kfp.png
+
+   The pipeline once executed in Kubeflow. :label:`fig3`
+
+Transform Components
+~~~~~~~~~~~~~~~~~~~~
+
+Sometimes, transformations on the metadata (or any other structured
+dataset) are necessary. Therefore, we provide a generic transformation
+component - in this case we just used it to change to format of the
+categories as the original file contained forward slashes which made it
+hard to use on the file system. We just need to specify the column name
+and function to be applied on that column.
+
+Filter Components
+~~~~~~~~~~~~~~~~~
+
+Similar to changing content of rows in a data set also removing rows is
+a common task in data engineering - therefore the filter stage allows
+for exactly that. It is enough to provide a predicate - in this case the
+predicate ``~metadata.filename.str.contains('.gz')`` removes invalid
+images.
+
+
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
