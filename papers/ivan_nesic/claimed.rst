@@ -138,6 +138,24 @@ which indicates a problem with that particular classifier.
    Example on how LIME helps to identify classification relevant
    areas of an image. :label:`fig1`
 
+AI Fairness and Bias
+--------------------
+
+So what is bias? Wikipedia says: "Bias is a disproportionate weight in
+favor of or against an idea or thing, usually in a way that is
+closed-minded, prejudicial, or
+unfair [wikipedia_bias]_. So here we have it. We want
+our model to be fair and unbiased towards protected attributes like
+gender, race, age, socioeconomic status, religion and so on. So wouldn't
+it be easy to just not "give" the model those data during training? It
+turns out that it isn’t that simple. Protected attributes are often
+encoded in other attributes. For example, race, religion and
+socioeconomic status are latently encoded in attributes like zip code,
+contact method or types of products purchased. Fairness assessment and
+bias detection is an art on it’s own. Luckily a huge number of single
+number metrics exist to assess bias in data and models. Here, we are
+using the AIF360 [aif360]_ library which IBM donated to
+the Linux Foundation AI and therefore is under open governance.
 
 Bibliographies, citations and block quotes
 ------------------------------------------
