@@ -33,18 +33,26 @@ Introduction
 ============
 
 Training deep machine learning models takes a long time. For example, training
-a popular image classification model to reasonable accuracy takes "around 17
-hours" on Google server. [#]_ Another example includes training an NLP model
-for 10 days on 8 high-end GPUs :cite:`radford2018improving`. [#]_ And the time
-to train models is growing – the number of floating point operations (FLOPs)
-doubles every 3.4 months. [#]_
+a popular image classification model :cite:`recht2019imagenet` to reasonable
+accuracy takes "around 17 hours" on Google server. [#]_ Another example
+includes training an NLP model for 10 days on 8 high-end GPUs
+:cite:`radford2018improving`. [#]_ And the number of floating point operations
+(FLOPs) required for "the largest AI training runs" doubles every 3.4 months. [#]_
+
+.. [#] Specifically, a ResNet-50 model on the ImageNet database using a Google
+   Tensor Proceesing Unit (TPU)
+   (`github.com/tensorflow/tpu/.../resnet/README.md`_).
+
+.. [#] See OpenAI's blog post "`Improving Language Understanding with Unsupervised Learning`_."
+
+.. [#] See OpenAI's blog post "`AI and Compute`_."
 
 Model training is fundamentally an optimization problem: it tries to find a
 model :math:`\bm{\widehat{w}}` that minimizes a loss function :math:`F`:
 
 .. The number of FLOPs is proportional the number
 .. of `gradient computations` (aka "epochs") and determines the budget of a
-.. particular training run. [#]_
+.. particular training run. (deleted footnote)
 
 
 .. math::
@@ -80,9 +88,10 @@ These variants make modifications to the learning rate :math:`\gamma_k`
 
 Increasing the batch size :math:`B_k` will reduce the number of model updates
 while not requiring more FLOPs or gradient computations – both empirically
-:cite:`smith2017` and theoretically :cite:`sievert2021improving`. At first,
-fewer model updates seems like an internal benefit: for a single machine, the
-number of FLOPs controls the time required for training.
+:cite:`smith2017` and theoretically :cite:`sievert2021improving`. Typically,
+the number of FLOPs controls the training time because it's performed on a
+single machine/worker, so at first, fewer model updates seems like an internal
+benefit that doesn't affect training time.
 
 .. latex::
 
@@ -94,14 +103,6 @@ number of FLOPs controls the time required for training.
     batch size growing by a factor of 44~\cite[Sec.~5.5]{goyal2017accurate}.
     This acceleration has also been observed with an increasing batch size
     schedule~\cite[Sec.~5.4]{smith2017}.
-
-.. [#] Specifically, a ResNet-50 model on the ImageNet database using a Google
-   Tensor Proceesing Unit (TPU)
-   (`github.com/tensorflow/tpu/.../resnet/README.md`_).
-
-.. [#] See OpenAI's blog post "`Improving Language Understanding with Unsupervised Learning`_."
-
-.. [#] See OpenAI's blog post "`AI and Compute`_."
 
 .. On Amazon EC2, the cost of a machine with :math:`N` GPUs is proportional
    to :math:`N`.
@@ -131,16 +132,16 @@ schedule. Specifically, this work provides the following:
 
 .. [#] https://github.com/stsievert/adadamp
 
+.. [#] Including the default usage (through `LocalCluster`_), supercomputers
+       (through `Dask Job-Queue`_), YARN/Hadoop clusters (through `Dask Yarn`_)
+       and Kubernetes clusters (through `Dask Kubernetes`_).
+
 First, let's cover related work to gain understanding of why variable batch
 sizes provide a benefit in a distributed system. Then, let's cover the details
 of our software before presenting simulations. These simulations confirm that
 model training can be accelerated if the number of workers grows with the batch
 size. Methods to workaround limitations on the number of workers will be
 presented.
-
-.. [#] Including the default usage (through `LocalCluster`_), supercomputers
-       (through `Dask Job-Queue`_), YARN/Hadoop clusters (through `Dask Yarn`_)
-       and Kubernetes clusters (through `Dask Kubernetes`_).
 
 .. _LocalCluster: https://distributed.dask.org/en/latest/api.html#distributed.LocalCluster
 .. _Dask YARN: https://yarn.dask.org/en/latest/
@@ -223,11 +224,13 @@ Increasing the batch size
    :figclass: w
    :scale: 40%
 
-   An illustration of why the batch size should increase. Here, let's try to
-   find the mean datum. With the poor initialization of model 0, the gradient
-   for all examples are very similar.  When closer to the optimum at model 1,
-   the gradients are more "diverse," so the magnitude and orientation of each
-   datum's gradient varies more. :label:`fig:eg`
+   An illustration of why the batch size should increase. Here, let's find a
+   model :math:`\bm{w} = [w_x, w_y]` that minimizes the function :math:`f(w_x,
+   w_y) = \sum_{i=0}^3 (w_x - x_i)^2 + (w_y - y_i)^2` where :math:`x_i` and
+   :math:`y_i` are the :math:`x` and :math:`y` coordinates of each datum. When
+   closer to the optimum at model A, the gradients are more "diverse," so the
+   magnitude and orientation of each datum's gradient varies more
+   :cite:`yin2018`.  :label:`fig:eg`
 
 Model quality greatly influences the amount of information in the gradient
 – which influences the batch size :cite:`sievert2021improving`. For example, if
@@ -247,10 +250,11 @@ very similar numbers. In illustration is given in Figure :ref:`fig:eg`.
    convergence results for these adaptive methods suggest passive methods of
    increasing the batch size \cite{sievert2021improving}.
 
-   Increasing the batch size is a provably good measure that will require many
-   fewer model updates and no more computation than standard SGD for strongly
-   convex functions~\cite[Ch.~5]{bottou2018optimization}, and all function
-   classes if the batch size is provided by an oracle (or approximated
+   Increasing the batch size is a provably good measure that (mathematically)
+   requires far fewer model updates and no more computation than standard SGD
+   for strongly convex functions for training
+   loss~\cite[Ch.~5]{bottou2018optimization}, and all function classes if the
+   batch size is provided by an oracle (or approximated
    accurately)~\cite{sievert2021improving}.  Convergence proofs have also been
    given for the \emph{passively} increasing the batch size, both for strongly
    convex functions~\cite[Ch.~5]{bottou2018optimization} and for non-convex
@@ -282,15 +286,21 @@ Distributed training with Dask
 
 We have written AdaDamp, a package to to train a PyTorch model with a
 Scikit-learn API on any Dask cluster. [#]_  It supports the use of constant or
-variable batch sizes, which is fits nicely with Dask's ability to change the
-number of workers. Originally, the motivation for AdaDamp is to show that
-adaptively damping the noise in the gradient estimate requires fewer models – a
-non-user-facing benefit. We have added distributed support to show the primary
-benefit of batch size growth: reduced training time when the distributed system
-is configured appropriately.
+variable batch sizes, which fits nicely with Dask's ability to change the
+number of workers. [#]_ In this section, we will walk through the basic
+architecture of our software and an example usage. We will defer showing the
+primary benefit of our software to the experimental results.
 
-In this section, we will walk through the basic architecture of our software and an
-example usage.
+.. Originally, the motivation for AdaDamp included showing
+.. adaptively damping the noise in the gradient estimate requires fewer model
+.. updates – an internal benefit that is not user facing. We have added
+.. distributed support to show the primary benefit of batch size growth: reduced
+.. training time when the distributed system is configured appropriately.
+
+.. [#] While our software works with a constant batch size, the native
+       implementations work with constant batch sizes and very likely have
+       less overhead (e.g., PyTorch Distributed :cite:`li2020pytorch`).
+
 
 .. [#] https://github.com/stsievert/adadamp
 
@@ -306,11 +316,12 @@ distributed support). Specifically, the following happen on every model update:
 3. The workers communicate the gradients back to the master.
 4. The master performs a model update with the aggregated gradients.
 
-We use Dask to implement this data flow, which adds some overhead (reducing
-this overhead is future work). AdaDamp supports constant batch sizes; however,
-there is little incentive to use AdaDamp with a static batch sizes: the native
-solutions in PyTorch have less overhead :cite:`li2020pytorch`, and already has
-a Dask wrapper. [#]_
+We use Dask to implement this data flow, which adds some overhead. [#]_ AdaDamp
+supports constant batch sizes; however, there is little incentive to use
+AdaDamp with a static batch sizes: the native solutions in PyTorch have less
+overhead :cite:`li2020pytorch`, and already has a Dask wrapper. [#]_
+
+.. [#] An opportunity for future work.
 
 .. [#] https://github.com/saturncloud/dask-pytorch-ddp
 
@@ -403,6 +414,8 @@ the following points:
        https://github.com/stsievert/adadamp-experiments
 
 .. [#] Specifically, we used a NVIDIA T4 GPU with an Amazon ``g4dn.xlarge`` instance.
+       Training consumes 2.2GB of GPU memory with a batch size of 32, and 5.5GB
+       with a batch size of 256.
 
 1. Increasing the batch size reduces the number of model updates.
 2. The time required for model training is proportional the number of model
@@ -410,8 +423,6 @@ the following points:
 3. Adding more GPUs to a fixed increase schedule can further accelerate
    training.
 
-.. [#] Training consumes 2.2GB of GPU memory with a batch size of 32, and 5.5GB
-       with a batch size of 256.
 
 .. Model: Wide_ResNet w/ depth=16, widen_factor=4, dropout_rate=0.3, num_classes=10
 .. Dataset: CIFAR10.
@@ -461,8 +472,8 @@ optimizer uses Nesterov momentum :cite:`nesterov2013a` and the same momentum
 (0.9) and weight decay (:math:`0.5\cdot 10^{-3}`). They start with the same
 initial learning rate (0.05), [#]_ and either the learning rate is decreased or
 the batch size increases by a specified factor (5) at particular intervals
-(epochs 60, 120 and 180). This means that the variance of the model update is reduced by a
-constant factor at each update.
+(epochs 60, 120 and 180). This means that the variance of the model update is
+reduced by a constant factor at each update.
 
 .. [#] These are the same as Smith et al. :cite:`smith2017` with the exception
        of learning rate (which had to be reduced by a factor of 2).
@@ -479,7 +490,10 @@ constant factor at each update.
 
 These different decay schedules exhibit the same performance in terms of number
 of epochs, which is proportional to the number of FLOPs, as shown in Figure
-:ref:`fig:epochs`.  On Amazon EC2, the number of FLOPs is proportional to the
+:ref:`fig:epochs`.  The number of FLOPs is (approximately) to the cost, at
+least on Amazon EC2 where the cost to rent a server tends to be proportional to
+the number of CPU cores/GPUs.
+
 budget a computer twice as powerful (twice as many GPUs or CPU cores) costs
 (almost exactly) twice as much per hour.
 
@@ -493,7 +507,7 @@ budget a computer twice as powerful (twice as many GPUs or CPU cores) costs
 
 Importantly, this work focuses on increasing the number of workers with the
 batch size – the effect of which is hidden in Figure :ref:`fig:epochs`.
-However, the fact that all the performance does not change with different
+However, the fact that the performance does not change with different
 schedules means that choosing a different batch size increase schedule will not
 require more wall-clock time if only a single worker is available. Combined
 with the hyperparameter similarity between the different schedules, this
@@ -504,10 +518,8 @@ model updates is relevant to the wall-clock time. Figure :ref:`fig:updates` show
 time required to reach a model of a particular test accuracy. Of course, there
 is some overhead to our current framework, which is why the number of model
 updates does not exactly correlate with the wall-clock time required to
-complete training. [#]_ In summary, the time required to complete training is
+complete training. In summary, the time required to complete training is
 shown in Table :ref:`table:centralized`.
-
-.. [#] Reducing this overhead is future work.
 
 .. figure:: figs/centralized/updates.pdf
    :align: center
@@ -597,9 +609,11 @@ communication with two networks that use a decentralized all-reduce strategy:
 
 * ``decentralized-medium`` It assumes an a network with inter-worker bandwidth
   of 54Gb/s and a latency of :math:`0.05\mu\textrm{s}`.
-* ``decentralized-medium`` uses the same communication strategy as
-  ``decentralized-high``, but has an inter-worker bandwidth of 800Gb/s and a
-  latency of :math:`0.025\mu\textrm{s}`.
+* ``centralized`` uses a centralized communication strategy (as implemented)
+  and the same network as ``decentralized-medium``.
+* ``decentralized-high`` has the same network as ``decentralized-medium`` but
+  has an inter-worker bandwidth of 800Gb/s and a latency of
+  :math:`0.025\mu\textrm{s}`.
 
 To provide baseline performance, we also show the results with the current
 implementation:
@@ -628,14 +642,21 @@ implementation:
    ==================  ============= ======================== ====================
 
 ``decentralized-medium`` is most applicable for clusters that have decent
-bandwidth between nodes, specifically a 2011 Infiniband setup w/ 4 links. It's
-also applicable to for certain cases when Amazon EC2 is used with one GPU per
-worker. ``decentralized-high`` is a simulation of the network used by the
-PyTorch developers to illustrate their distributed communication
+bandwidth between nodes. It's also applicable to for certain cases when Amazon
+EC2 is used with one GPU per worker, [#]_ or workers have a very moderate
+Infiniband setup. [#]_ ``decentralized-high`` is a simulation of the network
+used by the PyTorch developers to illustrate their distributed communication
 :cite:`li2020pytorch`. We have run simulations to illustrate the effects of
-these networks. Of course, simulating different networks does not affect the
+these networks. Of course, changing the underlying networks does not affect the
 number of epochs or model updates, so Figures :ref:`fig:epochs` and
 :ref:`fig:updates` also apply here.
+
+.. [#] 50Gb/s and 25Gb/s networks can be obtained with ``g4dn.8xlarge`` and
+       ``g4dn.xlarge`` instances respectively. ``g4dn.xlarge`` machines have 1
+       GPU each and are the least expensive for a fixed number of FLOPs on the
+       GPU.
+
+.. [#] A 2011 Infiniband setup with 4 links (https://en.wikipedia.org/wiki/InfiniBand#Performance)
 
 A summary of how different networks affect training time is shown in Table
 :ref:`table:networks`. We show the training time for a particular network
@@ -690,12 +711,12 @@ computation is bottleneck with this model/dataset/hardware.
 Conclusion
 ==========
 
-In this work, we have provided a package of a service to train PyTorch ML
-models with Dask cluster. This package reduces the amount of time required to
-train a model with the current centralized setup. However, it can be further
-accelerated by integration with PyTorch's distributed communication package as
-illustrated by extensive simulations. In summary, the expected gains are to go
-from training requiring about 120 minutes to 45 minutes.
+In this work, we have provided a package to train PyTorch ML models with Dask
+cluster. This package reduces the amount of time required to train a model with
+the current centralized setup. However, it can be further accelerated by
+integration with PyTorch's distributed communication package as illustrated by
+extensive simulations. In summary, the expected gains are to go from training
+requiring about 120 minutes to 45 minutes.
 
 References
 ==========
