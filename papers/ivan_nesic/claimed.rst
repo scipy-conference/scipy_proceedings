@@ -31,11 +31,11 @@ scalable visual tool. Therefore we have built CLAIMED, the visual
 **E**\ TL and **D**\ ata Science which runs on top of ElyraAI capable of
 pushing AI pipelines of any kind to Kubernetes. Any containerized
 application can become a component of the library. CLAIMED has been
-released [3]_ under the Apache v2 open source license. In the following
+released [complib]_ under the Apache v2 open source license. In the following
 we introduce the open source components we are integrating in our
 current release, followed by an overview of different component
 categories paired with a description of exemplary components used in
-health care. This pipeline is also available in open source  [4]_.
+health care. This pipeline is also available in open source  [ect]_.
 
 
 Containerization and Kubernetes
@@ -323,3 +323,63 @@ provides reproducability and auditability. Using Kubernetes provides
 scalability and standardization. Using ElyraAI for visual development
 provides ease of use, such that all internal and external stakeholders
 are empowered to audit the system in all dimensions.
+
+
+References
+----------
+.. [art] P. Atreides. *How to catch a sandworm*,
+           Transactions on Terraforming, 21(3):261-300, August 2003.
+
+.. [bias]
+    8 Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
+
+.. [aif360]
+    AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
+
+AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360.
+Last accessed 18 Feb 2021
+
+Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
+
+Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
+
+JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
+
+KFServing, https://www.kubeflow.org/docs/components/serving/kfserving/.
+Last accessed 18 Feb 2021
+
+Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I
+Trust You?": Explaining the Predictions of Any Classifier. Proceedings
+of the 22nd ACM SIGKDD International Conference on Knowledge Discovery
+and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
+
+.. [katib]
+    Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
+
+.. [tf]
+    TensorFlow: Large-scale machine learning on heterogeneous systems, white paper from `tensorflow.org <tensorflow.org>`__ Martı́n Abadi et al.
+
+Adversarial Robustness Toolbox,
+https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last
+accessed 18 Feb 2021
+
+IBM joining CNCF,
+https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf/.
+Last accessed 18 Feb 2021
+
+Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18
+Feb 2021
+
+.. [1]
+   Supported by IBM Center for Open Source Data and AI Technologies
+   (CODAIT)
+
+.. [2]
+   Supported by IBM Center for Open Source Data and AI Technologies
+   (CODAIT)
+
+.. [complib]
+   https://github.com/elyra-ai/component-library
+
+.. [ect]
+   https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
