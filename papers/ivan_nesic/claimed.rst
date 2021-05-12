@@ -327,11 +327,9 @@ are empowered to audit the system in all dimensions.
 
 References
 ----------
-.. [art] P. Atreides. *How to catch a sandworm*,
-           Transactions on Terraforming, 21(3):261-300, August 2003.
 
 .. [bias]
-    8 Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
+    Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
 
 .. [aif360]
     AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
@@ -357,9 +355,8 @@ Last accessed 18 Feb 2021
 .. [tf]
     TensorFlow: Large-scale machine learning on heterogeneous systems, white paper from `tensorflow.org <tensorflow.org>`__ Martı́n Abadi et al.
 
-Adversarial Robustness Toolbox,
-https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last
-accessed 18 Feb 2021
+.. [art]
+    Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
 IBM joining CNCF,
 https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf/.
