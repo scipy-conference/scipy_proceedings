@@ -83,6 +83,15 @@ usability side, both eager and graph modes are supported. Meaning
 debugging is much simpler in the first case, and if there is the need
 for speed, one can use the latter.
 
+Kubeflow
+--------
+
+Kubeflow is a machine learning pipeline management and execution system
+running as first class citizen on top of Kubernetes. Besides making use
+of Kubernetes scalability it allows for reproducible work as machine
+learning pipelines and the results and intermediate artifacts of their
+executions are stored in a meta data repository.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
