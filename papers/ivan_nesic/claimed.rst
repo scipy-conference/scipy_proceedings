@@ -111,6 +111,34 @@ science. Therefore we started to support JupyterLab first. But the
 pipeline editor of ElyraAI will be supported in other environments as
 well, VSCode being next on the list.
 
+AI Explainability
+-----------------
+
+Besides their stunning performance, deep learning models face a lot of
+resistance for production usage because they are considered to be a
+black box. Technically (and mathematically) deep learning models are a
+series of non-linear feature space transformations - sounds scary, but
+in other words, per definition it is very hard to understand the
+individual processing steps a deep learning network performs. But
+techniques exist to look over a deep learning model’s shoulder. The one
+we are using here is called LIME [lime]_. LIME takes the
+existing classification model and permutes images taken from the
+validation set (therefore the real class label is known) as long as a
+misclassification is happening. That way LIME can be used to create heat
+maps as image overlays to indicate regions of images which are most
+relevant for the classifier to perform best. In other words, we identify
+regions of the image the classifier is looking at.
+
+As Fig. :ref:`fig1` illustrates, the most relevant areas in an image
+for classifying for COVID-19 are areas containing bones over lung tissue
+which indicates a problem with that particular classifier.
+
+.. figure:: lime2.png
+
+   Example on how LIME helps to identify classification relevant
+   areas of an image. :label:`fig1`
+
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
