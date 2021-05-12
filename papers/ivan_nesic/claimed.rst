@@ -21,7 +21,7 @@
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
 ------------------------------------------------
-A Numerical Perspective to Terraforming a Desert
+CLAIMED, a visual and scalable component library for Trusted AI
 ------------------------------------------------
 
 .. class:: abstract
@@ -30,8 +30,7 @@ A Numerical Perspective to Terraforming a Desert
 Therefore we provide an entirely open source, reusable component framework, visual editor and execution engine for production grade machine learning on top of Kubernetes, a joint effort between IBM and the University Hospital Basel. It uses Kubeflow Pipelines, the AI Explainability360 toolkit, the AI Fairness360 toolkit and the Adversarial Robustness Toolkit on top of ElyraAI, Kubeflow, Kubernetes and JupyterLab. Using the Elyra pipeline editor, AI pipelines can be developed visually with a set of jupyter notebooks. We explain how we've created a COVID-19 deep learning classification pipeline based on CT scans. We use the toolkit to highlight parts of the images which have been crucial for the model’s decisions. We detect bias against age and gender and finally, show how to deploy the model to KFServing to share it across different hospital data centers of the Swiss Personalized Health Network.
 
 .. class:: keywords
-
-   terraforming, desert, numerical perspective
+   Kubernetes, Kubeflow, JupyterLab, ElyraAI, KFServing, TrustedAI, AI Explainability, AI Fairness, AI Adversarial Robustness
 
 Introduction
 ------------
