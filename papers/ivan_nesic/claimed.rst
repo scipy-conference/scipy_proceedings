@@ -103,6 +103,14 @@ Airflow. This allows for non-programmers to read and understand but also
 create machine learning workflows. ElyraAI also supports visualizing
 such pipelines in the browser (e.g. from a github repository).
 
+JupyterLab
+----------
+
+JupyterLab is one of the most popular development environments for data
+science. Therefore we started to support JupyterLab first. But the
+pipeline editor of ElyraAI will be supported in other environments as
+well, VSCode being next on the list.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
