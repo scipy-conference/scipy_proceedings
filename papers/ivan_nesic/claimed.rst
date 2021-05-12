@@ -92,6 +92,17 @@ of Kubernetes scalability it allows for reproducible work as machine
 learning pipelines and the results and intermediate artifacts of their
 executions are stored in a meta data repository.
 
+ElyraAI
+-------
+
+ElyraAI started as a set of extensions for the JupyterLab ecosystem.
+Here we concentrate on the pipeline editor of ElyraAI which allows for
+expression of machine learning workflows using a drag’n’drop editor and
+send them for execution on top of different engines like Kubeflow or
+Airflow. This allows for non-programmers to read and understand but also
+create machine learning workflows. ElyraAI also supports visualizing
+such pipelines in the browser (e.g. from a github repository).
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
