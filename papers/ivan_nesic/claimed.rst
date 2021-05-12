@@ -67,6 +67,22 @@ dealing with sensitive data. For IBM, Kubernetes is also strategic,
 joining CNCF, having moved all Watson Services to Kubernetes and aquired
 RedHat, IBM is now 3rd largest committer to Kubernetes.
 
+Deep Learning with TensorFlow
+----------------------------
+
+It is the second incarnation of the Google Brain project’s scalable
+distributed training and inference system named DistBelief
+[tf]_. It supports myriad of hardware platforms, from
+mobile phones to GPU/TPU clusters, for both training and inference. It
+can even run in browser on the client’s side, without the data ever
+leaving the machine. Apart from being a valuable tool in research, it is
+also being used in demanding production environments. On a development
+side, representing machine learning algorithms in a tree-like structures
+makes it a very good expression interface. Lastly, on the performance vs
+usability side, both eager and graph modes are supported. Meaning
+debugging is much simpler in the first case, and if there is the need
+for speed, one can use the latter.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
