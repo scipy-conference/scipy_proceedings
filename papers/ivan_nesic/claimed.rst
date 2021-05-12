@@ -38,6 +38,35 @@ categories paired with a description of exemplary components used in
 health care. This pipeline is also available in open source  [4]_.
 
 
+Containerization and Kubernetes
+-------------------------------
+
+Virtualization opened up a lot of potential for managing the
+infrastructure, mainly the ability to run different operating systems on
+the same hardware at the same time. Next step of isolation can be
+performed for each of the microservices running on the server, but
+instead of managing access rights and resources on the host operating
+system, we can containerize these in separate packages with their own
+environments. Practical effect of this is that we are running each of
+the microservices as if they have their own dedicated virtual machine,
+but without the overhead of such endeavour. This is accomplished by
+running containers on top of the host operating system. An example of
+the containerization platform is Docker.
+
+Containerization made it possible to run a large number of containers,
+which introduced the need of their orchestration. This means something,
+and hopefully not someone, needs to constantly take care that the system
+is in the desired state, it needs to scale up or down, manage
+communication between containers, schedule them, manage authentications,
+balance the load etc. Although there are other options like Docker
+Swarm, Kubernetes is the market leader in this domain. It was donated to
+CNCF by Google, which means a lot of Google’s know-how and years of
+experience went into it. The system can run on public, on-prem or on
+hybrid clouds. On-prem installation is very important for institutions
+dealing with sensitive data. For IBM, Kubernetes is also strategic,
+joining CNCF, having moved all Watson Services to Kubernetes and aquired
+RedHat, IBM is now 3rd largest committer to Kubernetes.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
