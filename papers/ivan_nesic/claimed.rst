@@ -312,3 +312,14 @@ capabilities, e.g. support for check-boxes and drop down menus and
 facilitated integration of exiting, containerized applications into the
 library without needing to wrap them in jupyter notebooks or python
 scripts.
+
+Conclusion
+==========
+
+We’ve build and proposed a trustable, low-code, scalable and open source
+visual AI pipeline system on top of many de facto standard components
+used by the machine learning community. Using KubeFlow Pipelines
+provides reproducability and auditability. Using Kubernetes provides
+scalability and standardization. Using ElyraAI for visual development
+provides ease of use, such that all internal and external stakeholders
+are empowered to audit the system in all dimensions.
