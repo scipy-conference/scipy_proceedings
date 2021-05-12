@@ -144,7 +144,7 @@ AI Fairness and Bias
 So what is bias? Wikipedia says: "Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
 closed-minded, prejudicial, or
-unfair [wikipedia_bias]_. So here we have it. We want
+unfair [bias]_. So here we have it. We want
 our model to be fair and unbiased towards protected attributes like
 gender, race, age, socioeconomic status, religion and so on. So wouldn't
 it be easy to just not "give" the model those data during training? It
