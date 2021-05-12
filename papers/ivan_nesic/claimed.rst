@@ -157,6 +157,16 @@ number metrics exist to assess bias in data and models. Here, we are
 using the AIF360 [aif360]_ library which IBM donated to
 the Linux Foundation AI and therefore is under open governance.
 
+AI Adversarial Robustness
+-------------------------
+
+Another pillar of Trusted AI is adversarial robustness. As researchers
+found out, adversarial noise can be introduced in data (data poisoning)
+or models (model poisoning) to influence models decisions in favor of
+the adversarial. Libraries like the Adversarial Robustness Toolbox
+ART [art]_ support all state-of-the-art attacks and
+defenses.
+
 Bibliographies, citations and block quotes
 ------------------------------------------
 
