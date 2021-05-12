@@ -1,24 +1,13 @@
-:author: Gaius Caesar
-:email: jj@rome.it
-:institution: Senate House, S.P.Q.R.
-:institution: Egyptian Embassy, S.P.Q.R.
+:author: Romeo Kienzler
+:email: romeo.kienzler@ch.ibm.com
+:institution: IBM, Center for Open Source Data and AI Technologies (CODAIT)
 
-:author: Mark Anthony
-:email: mark37@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-
-:author: Jarrod Millman
-:email: millman@rome.it
-:institution: Egyptian Embassy, S.P.Q.R.
-:institution: Yet another place, S.P.Q.R.
-
-:author: Brutus
-:email: brutus@rome.it
-:institution: Unaffiliated
-:bibliography: mybib
+:author: Ivan Nesic
+:email: ivan.nesic@usb.ch
+:institution: University Hospital of Basel
 
 
-:video: http://www.youtube.com/watch?v=dhRUe-gz690
+:video: http://www.youtube.com/fake-link-to-video-1sf4a5d22
 
 ------------------------------------------------
 CLAIMED, a visual and scalable component library for Trusted AI
