@@ -61,6 +61,8 @@ via discussion or pull request.
 
 - All figures and tables should have captions.
 - Figure text should be of a readable size.
+- Images and figures should be reasonably sized and formatted for viewing online;
+  typically a few hundred kilobytes and less than 1 MB.
 
 ### Code Snippets
 
