@@ -1,0 +1,113 @@
+%% This BibTeX bibliography file was created using BibDesk.
+%% http://bibdesk.sourceforge.net/
+
+%% Created for AIMachine at 2021-05-16 10:56:24 +0200 
+
+
+%% Saved with string encoding Unicode (UTF-8) 
+
+
+
+@article{Rasse2020,
+	abstract = {Various pre-trained deep learning models for the segmentation of bioimages have been made available as developer-to-end-user solutions. They are optimized for ease of use and usually require neither knowledge of machine learning nor coding skills. However, individually testing these tools is tedious and success is uncertain. Here, we present the Open Segmentation Framework (OpSeF), a Python framework for deep learning-based instance segmentation. OpSeF aims at facilitating the collaboration of biomedical users with experienced image analysts. It builds on the analysts' knowledge in Python, machine learning, and workflow design to solve complex analysis tasks at any scale in a reproducible, well-documented way. OpSeF defines standard inputs and outputs, thereby facilitating modular workflow design and interoperability with other software. Users play an important role in problem definition, quality control, and manual refinement of results. OpSeF semi-automates preprocessing, convolutional neural network (CNN)-based segmentation in 2D or 3D, and postprocessing. It facilitates benchmarking of multiple models in parallel. OpSeF streamlines the optimization of parameters for pre- and postprocessing such, that an available model may frequently be used without retraining. Even if sufficiently good results are not achievable with this approach, intermediate results can inform the analysts in the selection of the most promising CNN-architecture in which the biomedical user might invest the effort of manually labeling training data. We provide Jupyter notebooks that document sample workflows based on various image collections. Analysts may find these notebooks useful to illustrate common segmentation challenges, as they prepare the advanced user for gradually taking over some of their tasks and completing their projects independently. The notebooks may also be used to explore the analysis options available within OpSeF in an interactive way and to document and share final workflows. Currently, three mechanistically distinct CNN-based segmentation methods, the U-Net implementation used in Cellprofiler 3.0, StarDist, and Cellpose have been integrated within OpSeF. The addition of new networks requires little; the addition of new models requires no coding skills. Thus, OpSeF might soon become both an interactive model repository, in which pre-trained models might be shared, evaluated, and reused with ease.},
+	author = {Rasse, Tobias M. and Hollandi, R{\'e}ka and Horvath, Peter},
+	date-added = {2021-05-16 10:01:58 +0200},
+	date-modified = {2021-05-16 10:03:33 +0200},
+	doi = \detokenize{10.3389/fbioe.2020.558880},
+	issn = {2296-4185},
+	journal = {Frontiers in Bioengineering and Biotechnology},
+	pages = {1171},
+	title = {OpSeF: Open Source Python Framework for Collaborative Instance Segmentation of Bioimages},
+	url = {https://www.frontiersin.org/article/10.3389/fbioe.2020.558880},
+	volume = {8},
+	year = {2020},
+	Bdsk-Url-1 = {https://www.frontiersin.org/article/10.3389/fbioe.2020.558880},
+	Bdsk-Url-2 = {https://doi.org/10.3389/fbioe.2020.558880}}
+
+@article{Ulicna2020,
+	abstract = {Single-cell methods are beginning to reveal the intrinsic heterogeneity in cell populations, which arises from the interplay or deterministic and stochastic processes. For example, the molecular mechanisms of cell cycle control are well characterised, yet the observed distribution of cell cycle durations in a population of cells is heterogenous. This variability may be governed either by stochastic processes, inherited in a deterministic fashion, or some combination of both. Previous studies have shown poor correlations within lineages when observing direct ancestral relationships but remain correlated with immediate relatives. However, assessing longer-range dependencies amid noisy data requires significantly more observations, and demands the development of automated procedures for lineage tree reconstruction. Here, we developed an open-source Python library, btrack, to facilitate retrieval of deep lineage information from live-cell imaging data. We acquired 3,500 hours of time-lapse microscopy data of epithelial cells in culture and used our software to extract 22,519 fully annotated single-cell trajectories. Benchmarking tests, including lineage tree reconstruction assessments, demonstrate that our approach yields high-fidelity results and achieves state-of-the-art performance without the requirement for manual curation of the tracker output data. To demonstrate the robustness of our supervision-free cell tracking pipeline, we retrieve cell cycle durations and their extended inter- and intra-generational family relationships, for up to eight generations, and up to fourth cousin relationships. The extracted lineage tree dataset represents approximately two orders of magnitude more data, and longer-range dependencies, than in previous studies of cell cycle heritability. Our results extend the range of observed correlations and suggest that strong heritable cell cycling is present. We envisage that our approach could be extended with additional live-cell reporters to provide a detailed quantitative characterisation of biochemical and mechanical origins to cycling heterogeneity in cell populations.Competing Interest StatementThe authors have declared no competing interest.},
+	author = {Ulicna, Kristina and Vallardi, Giulia and Charras, Guillaume and Lowe, Alan R.},
+	date-added = {2021-05-16 09:58:16 +0200},
+	date-modified = {2021-05-16 10:02:27 +0200},
+	doi = \detokenize{10.1101/2020.09.10.276980},
+	elocation-id = {2020.09.10.276980},
+	eprint = {https://www.biorxiv.org/content/early/2020/09/10/2020.09.10.276980.full.pdf},
+	journal = {bioRxiv},
+	publisher = {Cold Spring Harbor Laboratory},
+	title = {Automated deep lineage tree analysis using a Bayesian single cell tracking approach},
+	url = {https://www.biorxiv.org/content/early/2020/09/10/2020.09.10.276980},
+	year = {2020},
+	Bdsk-Url-1 = {https://www.biorxiv.org/content/early/2020/09/10/2020.09.10.276980},
+	Bdsk-Url-2 = {https://doi.org/10.1101/2020.09.10.276980}}
+
+@article{Tinevez2017,
+	abstract = {We present TrackMate, an open source Fiji plugin for the automated, semi-automated, and manual tracking of single-particles. It offers a versatile and modular solution that works out of the box for end users, through a simple and intuitive user interface. It is also easily scriptable and adaptable, operating equally well on 1D over time, 2D over time, 3D over time, or other single and multi-channel image variants. TrackMate provides several visualization and analysis tools that aid in assessing the relevance of results. The utility of TrackMate is further enhanced through its ability to be readily customized to meet specific tracking problems. TrackMate is an extensible platform where developers can easily write their own detection, particle linking, visualization or analysis algorithms within the TrackMate environment. This evolving framework provides researchers with the opportunity to quickly develop and optimize new algorithms based on existing TrackMate modules without the need of having to write de novo user interfaces, including visualization, analysis and exporting tools. The current capabilities of TrackMate are presented in the context of three different biological problems. First, we perform Caenorhabditis-elegans lineage analysis to assess how light-induced damage during imaging impairs its early development. Our TrackMate-based lineage analysis indicates the lack of a cell-specific light-sensitive mechanism. Second, we investigate the recruitment of NEMO (NF-κB essential modulator) clusters in fibroblasts after stimulation by the cytokine IL-1 and show that photodamage can generate artifacts in the shape of TrackMate characterized movements that confuse motility analysis. Finally, we validate the use of TrackMate for quantitative lifetime analysis of clathrin-mediated endocytosis in plant cells.},
+	author = {Jean-Yves Tinevez and Nick Perry and Johannes Schindelin and Genevieve M. Hoopes and Gregory D. Reynolds and Emmanuel Laplantine and Sebastian Y. Bednarek and Spencer L. Shorte and Kevin W. Eliceiri},
+	date-added = {2021-05-16 09:49:00 +0200},
+	date-modified = {2021-05-16 10:03:03 +0200},
+	doi = \detokenize{https://doi.org/10.1016/j.ymeth.2016.09.016},
+	issn = {1046-2023},
+	journal = {Methods},
+	keywords = {Single-particle tracking, Phototoxicity, Clathin-mediated endocytosis, Image analysis, Open-source software, Microscopy},
+	note = {Image Processing for Biologists},
+	pages = {80-90},
+	title = {TrackMate: An open and extensible platform for single-particle tracking},
+	url = {https://www.sciencedirect.com/science/article/pii/S1046202316303346},
+	volume = {115},
+	year = {2017},
+	Bdsk-Url-1 = {https://www.sciencedirect.com/science/article/pii/S1046202316303346},
+	Bdsk-Url-2 = {https://doi.org/10.1016/j.ymeth.2016.09.016}}
+
+@article{Lahmann2019,
+	abstract = {The balance between proliferation and differentiation of muscle stem cells is tightly controlled, ensuring the maintenance of a cellular pool needed for muscle growth and repair. We demonstrate here that the transcriptional regulator Hes1 controls the balance between proliferation and differentiation of activated muscle stem cells in both developing and regenerating muscle. We observed that Hes1 is expressed in an oscillatory manner in activated stem cells where it drives the oscillatory expression of MyoD. MyoD expression oscillates in activated muscle stem cells from postnatal and adult muscle under various conditions: when the stem cells are dispersed in culture, when they remain associated with single muscle fibers, or when they reside in muscle biopsies. Unstable MyoD oscillations and long periods of sustained MyoD expression are observed in differentiating cells. Ablation of the Hes1 oscillator in stem cells interfered with stable MyoD oscillations and led to prolonged periods of sustained MyoD expression, resulting in increased differentiation propensity. This interfered with the maintenance of activated muscle stem cells, and impaired muscle growth and repair. We conclude that oscillatory MyoD expression allows the cells to remain in an undifferentiated and proliferative state and is required for amplification of the activated stem cell pool.},
+	author = {Lahmann, Ines and Br{\"o}hl, Dominique and Zyrianova, Tatiana and Isomura, Akihiro and Czajkowski, Maciej T and Kapoor, Varun and Griger, Joscha and Ruffault, Pierre-Louis and Mademtzoglou, Despoina and Zammit, Peter S and Wunderlich, Thomas and Spuler, Simone and K{\"u}hn, Ralf and Preibisch, Stephan and Wolf, Jana and Kageyama, Ryoichiro and Birchmeier, Carmen},
+	date-added = {2021-05-16 09:45:59 +0200},
+	date-modified = {2021-05-16 10:03:11 +0200},
+	doi = \detokenize{10.1101/gad.322818.118},
+	issn = {0890-9369},
+	journal = {Genes &amp; development},
+	month = {May},
+	number = {9-10},
+	pages = {524---535},
+	title = {Oscillations of MyoD and Hes1 proteins regulate the maintenance of activated muscle stem cells},
+	url = {https://europepmc.org/articles/PMC6499323},
+	volume = {33},
+	year = {2019},
+	Bdsk-Url-1 = {https://europepmc.org/articles/PMC6499323},
+	Bdsk-Url-2 = {https://doi.org/10.1101/gad.322818.118}}
+
+@inproceedings{weigert2020,
+	author = {Martin Weigert and Uwe Schmidt and Robert Haase and Ko Sugawara and Gene Myers},
+	booktitle = {The IEEE Winter Conference on Applications of Computer Vision (WACV)},
+	date-added = {2021-05-16 09:44:38 +0200},
+	date-modified = {2021-05-16 09:44:38 +0200},
+	doi = \detokenize{10.1109/WACV45572.2020.9093435},
+	month = {March},
+	title = {Star-convex Polyhedra for 3D Object Detection and Segmentation in Microscopy},
+	year = {2020},
+	Bdsk-Url-1 = {https://doi.org/10.1109/WACV45572.2020.9093435}}
+
+@inproceedings{schmidt2018,
+	author = {Uwe Schmidt and Martin Weigert and Coleman Broaddus and Gene Myers},
+	booktitle = {Medical Image Computing and Computer Assisted Intervention - {MICCAI} 2018 - 21st International Conference, Granada, Spain, September 16-20, 2018, Proceedings, Part {II}},
+	date-added = {2021-05-16 09:44:36 +0200},
+	date-modified = {2021-05-16 09:44:36 +0200},
+	doi = \detokenize{10.1007/978-3-030-00934-2_30},
+	pages = {265--273},
+	title = {Cell Detection with Star-Convex Polygons},
+	year = {2018},
+	Bdsk-Url-1 = {https://doi.org/10.1007/978-3-030-00934-2_30}}
+
+@inproceedings{Ronneberger2015,
+	abstract = {There is large consent that successful training of deep networks requires many thousand annotated training samples. In this paper, we present a network and training strategy that relies on the strong use of data augmentation to use the available annotated samples more efficiently. The architecture consists of a contracting path to capture context and a symmetric expanding path that enables precise localization. We show that such a network can be trained end-to-end from very few images and outperforms the prior best method (a sliding-window convolutional network) on the ISBI challenge for segmentation of neuronal structures in electron microscopic stacks. Using the same network trained on transmitted light microscopy images (phase contrast and DIC) we won the ISBI cell tracking challenge 2015 in these categories by a large margin. Moreover, the network is fast. Segmentation of a 512x512 image takes less than a second on a recent GPU. The full implementation (based on Caffe) and the trained networks are available at http://lmb.informatik.uni-freiburg.de/people/ronneber/u-net.},
+	address = {Cham},
+	author = {Ronneberger, Olaf and Fischer, Philipp and Brox, Thomas},
+	booktitle = {Medical Image Computing and Computer-Assisted Intervention -- MICCAI 2015},
+	date-added = {2021-05-16 09:37:57 +0200},
+	date-modified = {2021-05-16 10:03:24 +0200},
+	editor = {Navab, Nassir and Hornegger, Joachim and Wells, William M. and Frangi, Alejandro F.},
+	isbn = {978-3-319-24574-4},
+	pages = {234--241},
+	publisher = {Springer International Publishing},
+	title = {U-Net: Convolutional Networks for Biomedical Image Segmentation},
+	year = {2015}}

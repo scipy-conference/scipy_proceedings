@@ -1,0 +1,37 @@
+{
+  "title": "Cell Tracking in 3D using deep learning segmentations",
+  "authors": "Varun Kapoor, Claudia Carabana Garcia",
+  "author": [
+    "Varun Kapoor",
+    "Claudia Carabana Garcia"
+  ],
+  "author_email": [
+    "varun.kapoor@curie.fr",
+    "claudia.carabana-garcia@curie.fr"
+  ],
+  "author_institution": [
+    "Institut Curie",
+    "Paris, France",
+    "Institut Curie",
+    "Paris, France"
+  ],
+  "author_institution_map": {
+    "Varun Kapoor": [
+      "Institut Curie",
+      "Paris, France"
+    ],
+    "Claudia Carabana Garcia": [
+      "Institut Curie",
+      "Paris, France"
+    ]
+  },
+  "author_orcid_map": {},
+  "abstract": [
+    "Biological cells can be highly irregular in shape and move across planes making it difficult to be detect and track them in 3D with high level of accuracy. In order to solve the detection problem of such cells we developed a deep learning based segmentation technique which can reliably segment oddly and differently shaped cells in the same image in 3D. In biological experiments cells are sometimes brighter in the first few frames and are more faint later on or there could be bright and faint cells in the same image. A single deep learning network may not be able to segment such variable intensities present in the same image dataset. Hence we developed a technique that combines semantic and instance segmentation information coming from two different networks, U-net and stardist. U-net is used to perform foreground-background semantic segmentation whereas stardist is used to obtain a convex polygon representation of the overlapping cells which we use to obtain seeds for doing watershed on.\nThe tools are available as open source python tools with front end user interface for training and applying model prediction as user friendly jupyter notebooks.\nPost segmentation we also developed a tool to track such cells using customised cost function to solve linear assignment problem and Jaqman linker for linking the tracks of dividing and merging cells. The tool is developed using widely used tool for tracking in Fiji, Trackmate. We perform the post analysis of tracks is Napari, which is an Euler angle based viewer providing user friendly track view of the obtained tracks along with analysis of the obtained trajectories. Napari tool for visualizing and analyzing the tracks is open source python based tool with front end jupyter notebooks for launching the customised widget."
+  ],
+  "keywords": "segmentation, tracking, deep learning, irregular shaped cells",
+  "copyright_holder": "Varun Kapoor et al.",
+  "video": "",
+  "bibliography": "",
+  "pages": 6
+}

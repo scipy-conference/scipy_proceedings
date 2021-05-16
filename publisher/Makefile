@@ -31,12 +31,11 @@ $(TEXDIR)/%.pdf: $(TEXDIR)/%.tex
 title-pdf: $(TEXDIR)/title.pdf
 copyright-pdf: $(TEXDIR)/copyright.pdf
 organization-pdf: $(TEXDIR)/organization.pdf
-students-pdf: $(TEXDIR)/students.pdf 
-slides-pdf: $(TEXDIR)/slides.pdf 
+students-pdf: $(TEXDIR)/students.pdf
 
-front-pdf: title-pdf copyright-pdf organization-pdf students-pdf slides-pdf
+front-pdf: title-pdf copyright-pdf organization-pdf students-pdf
 
-papers: clean
+papers:
 	./build_papers.py
 
 proceedings: papers $(TEXDIR)/proceedings.tex front-pdf

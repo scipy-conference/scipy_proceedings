@@ -1,9 +1,14 @@
-Dear {{to_name}},
+From: {{proceedings['xref']['depositor_email'] | html}}
+Subject: Your {{proceedings['title']['acronym']}} {{proceedings['year']}} Paper DOI
+To: {{author_email | html}}
+Cc: {{proceedings['editor_email'] | html}}
+MIME-Version: 1.0
+Content-Type: text/plain
 
-Your paper from the {{proceedings['title']['ordinal']}} {{proceedings['title']['conference']}} titled "{{title}}" has been assigned the DOI {{doi}}. Please use this DOI when providing citations for your paper, following the guidelines here: https://www.crossref.org/display-guidelines/#full
+Dear {{author}},
+
+Your paper from the {{proceedings['title']['ordinal']}} {{proceedings['title']['conference']}} titled “{{title}}” has been assigned the DOI {{doi}}. Please use this DOI when providing citations for your paper, following the guidelines here: https://www.crossref.org/display-guidelines/#full
 
 Yours,
-The {{proceedings['title']['acronym']}} {{proceedings['year']}} Proceedings Committee
-{{for n in proceedings['editor']}}
-  {{n}}
-{{endfor}}
+{{proceedings['xref']['depositor_name']}}, on behalf of the {{proceedings['title']['acronym']}} {{proceedings['year']}} Proceedings Committee:
+  {{committee}}
