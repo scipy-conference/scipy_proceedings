@@ -56,19 +56,21 @@ The full source code of all examples in this paper can be found online [#]_.
 
 .. [#] https://github.com/glotzerlab/signac-examples
 
+Research projects often address problems where questions change rapidly, data models are always in flux, and compute infrastructure varies widely from project to project.
+The signac data management framework is a tool designed by researchers, for researchers, to make prototyping quick and reproducibility easy.
+It foregoes serializing complex data files into a database in favor of working with these files directly, providing fast indexing utilities for a set of directories.
+Using signac, a data space on the file system is easily initialized, searched, and modified using either a Python or command-line interface.
+The companion package signac-flow interacts with the data space to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
+signac-flow can run arbitrary commands as part of a workflow, making it as flexible as a script in any language of choice.
 
-Research projects often address problems where questions change rapidly, data models are always in flux, and computing infrastructure varies widely from project to project.
-The signac data management framework, comprised of signac and signac-flow, is a tool designed by researchers for researchers to make prototyping quick and reproducibility easy.
-The signac workspace is easily initialized, searched, and modified from either the Python or command line interface.
-The companion package signac-flow interacts with the signac workspace to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
-In workflows involving disparate software, signac-flow has APIs to call and run non-Python commands.
-
-With signac, file-based data and metadata are organized in folders and JSON files (Figure 1).
-The structure of signac's database and the basics of signac-flow workflows are discussed in past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
+With signac, file-based data and metadata are organized in folders and JSON files, respectively (see Figure 1).
+A signac data space (or workspace) is composed of jobs, individual directories associated with a single primary key (or state point) stored in a file `signac_statepoint.json` in that directory.
+Signac uses these files to index the data space, providing a database-like interface to a collection of directories.
+Arbitrary user data may be stored in user-created-files in these jobs, although signac also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
+Readers seeking more detail on signac should refer to past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
 
 .. [#] https://signac.io
 .. [#] https://docs.signac.io
-
 
 Figure 1: Overview of the signac framework.
 Users first create a project, which initializes a workspace directory on disk.
@@ -79,29 +81,24 @@ Here, the `init.py` file initializes an empty project and adds one job with stat
 Next, users define a workflow using a subclass of signac-flow's ``FlowProject``.
 The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory.
 
-There are some advantages and disadvantages that are inherent to signac's design as a database built on top of the filesystem.
-For example, the framework is serverless, distributed, and portable.
-There is no need to share access via a server process like MongoDB, and data can be easily moved between filesystems.
-One key disadvantage is that signac cannot benefit from the performance advantages of centralized data stores with persistent indexes in memory (signac's internal caches only last for the lifetime of the Python process).
-Typically the signac approach works very well for projects up to 100,000 jobs.
-Significantly larger projects may have wait times that constrain interactive usage.
-These limits are inherent to signac's use of small files for each job's state point and document; the framework has been aggressively optimized and has features for caching/buffering that make the most out of the disk I/O.
-For safety, the implementation uses atomic operations on the filesystem wherever possible.
+This filesystem-based approach has both advantages and disadvantages.
+Its key advantages lie in flexibility and portability.
+The serverless design removes the need for any external running server process, making it easy to operate on any arbitrary filesystem.
+The design is also intrinsically distributed, making it well suited for highly-parallel workflows where each instance generates more file-based data.
+Conversely, this distributed approach precludes performance advantages of centralized data stores with persistent indexes in memory.
+Typically, the signac approach works very well for projects up to 100,000 jobs, while significantly larger projects may have wait times that constrain interactive usage.
+These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the throughput that can be achieved within this model.
 
-The most compelling use cases for signac are those involving prototyping, file-based workflows, and HPC clusters, especially where the amount of required computation per job is large.
+The framework is a strong choice for applications involving file-based workflows, especially those that are quickly evolving or will run on HPC clusters, especially where the amount of required computation per job is large.
 For example, (...TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc], project sizes [100,000 jobs], number of jobs / number of terabytes).
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
 
-In the last 3 years, the features, flexibility, usability, and performance of the signac framework have been improved.
-The core data structures in signac have been overhauled to provide a more generic and powerful implementation of "synced collections" based on Pythonic abstractions for dictionaries or lists.
-Synced collections can load, store, and buffer user data to and from a variety of backends, enabling seamless integration with other data sources on disk or in memory - including JSON files, MongoDB documents, and Redis caches.
-In signac-flow, we have added support for submitting groups of data operations with conditional dependencies, allowing for efficient utilization of large HPC resources as well as single-node workstations.
-Further developments in signac-flow allow for operations to act on arbitrary subsets of the data space.
+This paper will focus on developments to the signac framework over the last 3 years, during which features, flexibility, usability, and performance have been greatly improved.
+The core data structures in signac have been overhauled to provide a powerful, generic implementation of "synced collections," that we will leverage in future versions of signac to enable more performant data indexing and more flexible data layouts.
+In signac-flow, we have added support for submitting groups of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources, and further developments allow for operations to act on arbitrary subsets of the data space rather than single jobs alone.
 Meanwhile, performance enhancements have enabled scaling up to much larger data spaces.
-Implementations of lazy loading, buffering, and caching have reduced disk I/O, and profile-driven optimization of typical user workflows has identified bottlenecks that have been eliminated.
-
-This paper will discuss new features for workflow execution and enhanced scalability, the scientific work these features have enabled, and key partnerships and affiliations with scientific software initiatives and organizations such as MoSDeF and NumFOCUS that have widened the user base and spread expertise in both data science and open-source.
+Moving beyond code development, this paper will also discuss the scientific work these features have enabled, and key partnerships and affiliations with scientific software initiatives and organizations such as MoSDeF and NumFOCUS.
 We will share our project's experience in progressively revising project governance to catalyze sustained contributions of many kinds, while adding more points of entry for learning about the project (Slack support, office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
 
 Applications of signac
@@ -121,7 +118,6 @@ However, there are many other fields with similar hardware needs where signac ca
 These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics; data-intensive fields such as economics or machine learning; and applications needing fast, flexible prototypes for optimization and data analysis.
 
 TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
-
 
 While there is no "typical" signac project, factors such as computational complexity and data sizes offer some rough guidelines for when signac's database-on-the-filesystem is appropriate.
 For instance, the time to check the status of a workflow depends on the number of jobs, number of operations, and number of conditions to evaluate for those jobs.
@@ -335,27 +331,14 @@ Synced Collections: Backend-agnostic, persistent, mutable data structures
 Motivation
 ~~~~~~~~~~
 
-TODO: Motivation for synced collections: scalable and flexible implementations that can act on data structures in memory, stored on a filesystem, or accessed via a [No]SQL database.
+All of signac's principal functions are designed around efficiently indexing a collection of directories.
+By organizing job directories by the hash of their state point, signac can perform many operations in constant time.
+To present a Pythonic API, state points are exposed via a dictionary-like interface, making it very easy to modify a state point and have that change transparently reflected in both the JSON file and the name of the corresponding directory.
 
-Vyas: I think our starting point should be the discussions on this signac issue and in particular this comment, but that's largely centered on my recollections. If there are other good and relevant sources, please post them here. AFAICT there isn't too much in the signac 2 prototype that directly bears on this; however, a lot of the changes for synced collections came about as a prerequisite for enabling some of the features in the prototype (such as generalizing data models from our standard data model of project/workspace), so perhaps that's a good way to structure this story.
-
-If we want to start from the formerly 2.0, now 3.0 vision:
-
-Emphasize the various generalizations that we want to allow
-Discuss how abstracting all index handling is required.
-
-Vyas's very rough start:
-
-At its core, signac is a database-like layer on top of the file system.
-It is most suited for applications where data serialization into more traditional databases is impractical or imposes unnecessary overhead.
-As such, all its principal functions are designed around efficiently indexing a collection of directories.
-Historically, signac has utilized a simple, flat directory structure in which a unique key for every directory is stored in a collocated JSON file.
-To present a Pythonic API, these keys are exposed via a dictionary-like interface, making it very easy to modify a directory's unique key (its "state point") and have that change transparently reflected in both the underlying JSON file's contents and in the location of the corresponding directory, which is renamed to match the hash of the unique key.
-
-Over time, we found the intrinsically high performance overhead of this I/O-heavy approach to be a significant bottleneck that placed severe limits on the scalability of signac.
+The need to parse these JSON files for indexing and the complexity of modifying them represent the most significant barriers to scaling signac.
 Even in the absence of file modification, reading a large number of files simply to produce a database index becomes prohibitively expensive for large data spaces.
-Although we had success with some optimizations more limited in scope, we recognized that the most significant improvements we could make would stem from supporting an alternative means of storing the unique key and associated metadata that circumvented the heavy I/O costs of our current approach.
-However, replacing individual JSON files as the primary data source for signac without breaking signac's API entirely required a generic method for providing the same interface to the underlying index and metadata files irrespective of the underlying storage mechanism.
+Although various optimizations have incrementally improved signac's scalability, an alternative means of storing the state point and associated metadata that circumvents the heavy I/O costs of our current approach has the potential to make a much larger impact.
+However, replacing individual JSON files as the primary data source for signac without breaking signac's API required a generic method for providing the same interface to the underlying index and metadata files irrespective of the underlying storage mechanism.
 Once developed, however, such an API would abstract out enough of the internals of signac to enable other generalizations as well, such as making it relatively easy to support alternate (and nearly arbitrary) data space layouts.
 
 The synced collections subpackage of signac represents the culmination of our efforts to expose this functionality, providing a generic framework within which interfaces corresponding to any of Python's built-in types can be easily constructed with arbitrary underlying synchronization protocols.
