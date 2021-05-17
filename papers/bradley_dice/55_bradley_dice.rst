@@ -77,7 +77,7 @@ The signac data management framework is a tool designed by researchers, for rese
 It forgoes serializing complex data files into a database in favor of working with these files directly, providing fast indexing utilities for a set of directories.
 Using signac, a data space on the file system is easily initialized, searched, and modified using either a Python or command-line interface.
 The companion package signac-flow interacts with the data space to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
-signac-flow can run arbitrary commands as part of a workflow, making it as flexible as a script in any language of choice.
+Arbitrary shell commands can be run by signac-flow as part of a workflow, making it as flexible as a script in any language of choice.
 
 With signac, file-based data and metadata are organized in folders and JSON files, respectively (see Figure 1).
 
@@ -86,7 +86,7 @@ With signac, file-based data and metadata are organized in folders and JSON file
 
 A signac data space, or "workspace," is composed of jobs, which are individual directories associated with a single primary key known as a "state point" stored in a file `signac_statepoint.json` in that directory.
 Signac uses these files to index the data space, providing a database-like interface to a collection of directories.
-Arbitrary user data may be stored in user-created-files in these jobs, although signac also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
+Arbitrary user data may be stored in user-created files in these jobs, although signac also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
 Readers seeking more detail on signac may refer to past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
 
 .. [#] https://signac.io
@@ -106,22 +106,21 @@ Users working with large tabular data (e.g. flat files on disk or data from a SQ
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
 
 This paper will focus on developments to the signac framework over the last 3 years, during which features, flexibility, usability, and performance have been greatly improved.
-The core data structures in signac have been overhauled to provide a powerful, generic implementation of "synced collections," that we will leverage in future versions of signac to enable more performant data indexing and more flexible data layouts.
-In signac-flow, we have added support for submitting groups of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources, and further developments allow for operations to act on arbitrary subsets of the data space rather than single jobs alone.
-Meanwhile, performance enhancements have enabled scaling up to much larger data spaces.
-Moving beyond code development, this paper will also discuss the scientific work these features have enabled, and key partnerships and affiliations with scientific software initiatives and organizations such as MoSDeF and NumFOCUS.
+The core data structures in signac have been overhauled to provide a powerful and generic implementation of "synced collections," that we will leverage in future versions of signac to enable more performant data indexing and flexible data layouts.
+In signac-flow, we have added support for submitting groups of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources.
+Further developments allow for operations to act on arbitrary subsets of the data space, or "aggregates," rather than single jobs alone.
+Moving beyond code development, this paper will also discuss the scientific work these features have enabled and the organizational developments from key partnerships and affiliations with scientific software initiatives and organizations such as MoSDeF and NumFOCUS.
 We will share our project's experience in progressively revising project governance to catalyze sustained contributions of many kinds, while adding more points of entry for learning about the project (Slack support, office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
 
 Applications of signac
 ----------------------
 
-The signac framework has been cited 51 times, according to Google Scholar.
-The framework has been used in a range of scientific fields and with many types of computational workflows.
+The signac framework has been cited 51 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
 Some of these studies include quantum calculations of small molecules, screenings of ionic liquids and organic solvents, inverse design of pair potentials, optimizing photonic band gaps in colloidal materials, analyzing colloidal self-assembly with machine learning, and economic analysis of drought risk [no citation].
 Much of the published research using signac comes from chemical engineering, materials science, or physics, the home fields of many of signac's core developers and thus fields where the project has had greater exposure.
 In addition to social factors such as the "home field advantage," materials research commonly requires large HPC resources with shared file systems, a use case where signac excels.
 However, there are many other fields with similar hardware needs where signac can be applied.
-These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics; data-intensive fields such as economics or machine learning; and applications needing fast, flexible prototypes for optimization and data analysis.
+These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics, data-intensive fields such as economics or machine learning, and applications needing fast, flexible prototypes for optimization and data analysis.
 
 ..
     TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
@@ -153,12 +152,12 @@ This allows users to leverage scheduler resources effectively and minimize queue
 ..
     (TODO: Move this into the section above?) The framework emphasizes performance for common user workspaces and workflows.
 
-In early 2021, a significant portion of the codebase was profiled and refactored to improve performance, many of these are changes listed above.
-These improvements were released in signac v1.6.0 and signac-flow v0.12.0.
-Large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
+In early 2021, a significant portion of the codebase was profiled and refactored to improve performance, as described above, and these improvements were released in signac v1.6.0 and signac-flow v0.12.0.
+As a result of these changes, large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
 Similarly, performance of a sample workflow that checks status, runs, and submits a FlowProject with 1,000 jobs, 3 operations, and 2 label functions improved roughly 4x compared to the v0.11.0 release of signac-flow.
 
-Some signac developers have begun conversations with experimental researchers about how the framework might be useful for a broader range of research tasks, such as workflows that combine computational steps such as optimization or post processing with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot.
+Some signac developers have begun conversations with experimental researchers regarding how the signac framework might be useful for a broader range of research tasks.
+Workflows that combine computational steps, such as optimization or post processing, with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot, have complexities could benefit from the infrastructure signac's framework offers.
 
 Overview of New Features
 ------------------------
@@ -296,7 +295,9 @@ The concept of a group, implemented by the ``FlowGroup`` class and ``FlowProject
     def bar(job):
         job.doc.bar = True
 
-Groups also allow for specifying multiple machine specific resources (CPU v GPU) with the same operation. An operation can have unique directives for each group it is in. By associating an operation's directives with respect to a specific group, groups can represent distinct compute environments such as a local workstation or a remote supercomputing cluster.
+Groups also allow for specifying multiple machine specific resources (CPU or GPU) with the same operation.
+An operation can have unique directives for each distinct group to which it belongs.
+By associating an operation's directives with respect to a specific group, groups can represent distinct compute environments, such as a local workstation or a remote supercomputing cluster.
 
 .. code-block:: python
 
@@ -316,9 +317,9 @@ Groups also allow for specifying multiple machine specific resources (CPU v GPU)
 
 Users also frequently work with multiple jobs at once in a consistent manner.
 Though the signac package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no similar feature in signac-flow to allow operations to act on multiple jobs.
-The concept of _aggregation_ provides a straightforward way for users to write and submit operations that act on arbitrary subsets of a signac data space.
-Just as groups act as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
-The operation syntax changes from `def my_operation(job):` to `def my_operation(*jobs):`, using Python's argument unpacking syntax to support user input of one or more job instances (keeping backwards compatibility).
+The concept of _aggregation_ provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a signac data space.
+Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
+The operation syntax changes from `def my_operation(job):` to `def my_operation(*jobs):`, using Python's argument unpacking syntax to support user input of one or more job instances while maintaining backwards compatibility.
 Decorators are used to define aggregation behavior, encompassed in the ``aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
 
 .. code-block:: python
