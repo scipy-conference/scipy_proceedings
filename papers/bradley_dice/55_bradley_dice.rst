@@ -151,12 +151,6 @@ Moreover, signac-flow can combine operations and their directives in a number of
 
 This allows users to leverage scheduler resources effectively and minimize queue time (or optimize for HPC policies that prefer large submissions) by bundling many operations into a small number of scheduler submissions.
 
-..
-    (TODO: Move this into the section above?) The framework emphasizes performance for common user workspaces and workflows.
-
-In early 2021, a significant portion of the codebase was profiled and refactored to improve performance, as described above, and these improvements were released in signac v1.6.0 and signac-flow v0.12.0.
-As a result of these changes, large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
-Similarly, performance of a sample workflow that checks status, runs, and submits a FlowProject with 1,000 jobs, 3 operations, and 2 label functions improved roughly 4x compared to the v0.11.0 release of signac-flow.
 
 Some signac developers have begun conversations with experimental researchers regarding how the signac framework might be useful for a broader range of research tasks.
 Workflows that combine computational steps, such as optimization or post processing, with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot, have complexities could benefit from the infrastructure signac's framework offers.
@@ -226,11 +220,20 @@ Integrating with the PyData Ecosystem: Users can now summarize data from a signa
 
 Advanced searching and filtering of the workspace: The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
 
-Core Performance Enhancements (overlaps with content in Applications section)
-The scalability of the signac framework has been massively improved through performance enhancements that enable real-time interactive usage for workspaces with up to 100,000 jobs. The core of the signac Project and Job classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user. Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time ($O(1)$) instead of linear time ($O(N_{jobs})$). Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz. (TODO: include a graph of performance from 1.0 to now)
+Performance Enhancements (overlaps with content in Applications section)
 
-Flow Performance Enhancements (overlaps with content in Applications section)
-Performance enhancements were also made in the signac-flow package. Some of the optimizations identified include lazy evaluation of run commands and directives, caching of job status information, and faster iteration over large signac projects in shared code paths for signac-flow's primary functions: checking project status, executing operations, and submitting operations to a cluster.
+In early 2021, a significant portion of the codebase was profiled and refactored to improve performance and these improvements were released in signac v1.6.0 and signac-flow v0.12.0.
+As a result of these changes, large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
+Similarly, performance of a sample workflow that checks status, runs, and submits a FlowProject with 1,000 jobs, 3 operations, and 2 label functions improved roughly 4x compared to the v0.11.0 release of signac-flow.
+These improvements allow signac to scale to ~100,000 jobs.
+
+In signac, the core of the signac Project and Job classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user.
+Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time ($O(1)$) instead of linear time ($O(N_{jobs})$).
+Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz. (TODO: include a graph of performance from 1.0 to now)
+
+Similarly, performance enhancements were also made in the signac-flow package.
+Some of the optimizations identified include lazy evaluation of run commands and directives, and caching of job status information.
+In addition, the improvements in signac such as faster iteration over large signac projects used in signac-flow made signac-flow's primary functions -- checking project status, executing operations, and submitting operations to a cluster -- significantly faster.
 
 Improved User Output
 ~~~~~~~~~~~~~~~~~~~~
