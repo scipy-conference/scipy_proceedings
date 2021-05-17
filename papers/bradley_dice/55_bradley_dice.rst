@@ -134,20 +134,12 @@ One example of this would be executing a small number of expensive biomolecular 
 ..
     TODO Try to find example of a project with small number of state points in literature citing signac.
 
-The workflow submission features of signac-flow interoperate with popular HPC schedulers including SLURM, PBS/TORQUE, and LSF.
-Operations in a FlowProject can define directives, which indicate hardware to request such as the number of processors or GPUs, the amount of memory, or the walltime needed to complete the operation.
-
-..
-    TODO Address redundancy with above content about processors/GPUs
-
-These directives allow signac-flow to generate scripts for the currently present scheduler, enabling portability across HPC systems.
-Moreover, signac-flow can combine operations and their directives in a number of ways, such as in serial or parallel bundles, or the new features for groups and aggregation discussed below.
-
-..
-    TODO Make sure to discuss bundling in the aggregation section. Avoid discussing serial/parallel bundles right here, because it hasn't been defined.
-
-This allows users to leverage scheduler resources effectively and minimize queue time (or optimize for HPC policies that prefer large submissions) by bundling many operations into a small number of scheduler submissions.
-
+The workflow submission features of signac-flow interoperates with popular HPC schedulers including SLURM, PBS/TORQUE, and LSF automating the generation and submission of scheduler job scripts.
+Directives set through decorators manage resource and execution requests for operations; examples of directives include number of nodes or GPUs, the walltime, and memory.
+Use directives as an abstraction signac-flow can generate scripts for the whatever scheduler is currently present, enabling portability across HPC systems.
+Moreover, signac-flow can submit multiple operations and/or the same operation with multiple jobs in
+a single submission script either in parallel or serial.
+This allows users to leverage scheduler resources effectively and minimize queue time (or optimize for HPC policies that prefer large submissions) by many operations into a small number of scheduler submissions.
 
 Some signac developers have begun conversations with experimental researchers regarding how the signac framework might be useful for a broader range of research tasks.
 Workflows that combine computational steps, such as optimization or post processing, with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot, have complexities could benefit from the infrastructure signac's framework offers.
