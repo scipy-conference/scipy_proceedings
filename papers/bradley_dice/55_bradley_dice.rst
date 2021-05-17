@@ -15,8 +15,8 @@
 :institution: TODO Department, University of Michigan, Ann Arbor
 
 :author: Michael M. Henry
-:email: mike.henry@choderalab.org
-:institution: TODO
+:email: mikehenry@u.boisestate.edu
+:institution: Micron School of Materials Science and Engineering, Boise State University
 
 :author: Hardik Ojha
 :email: hojha@ee.iitr.ac.in
