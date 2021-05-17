@@ -183,8 +183,8 @@ This means that manipulating a job document or reading data can be done through 
 
     ~/project $ ls
     signac.rc workspace
-    ~/project $ cd workspace/42b7b4f2921788ea14dac5566e6f06d0/
-    ~/project/workspace/42b7b4f2921788ea14dac5566e6f06d0 $ signac shell
+    ~/project $ cd workspace/42b7b4f2921788e.../
+    ~/project/workspace/42b7b4f2921788e... $ signac shell
     Python 3.8.3
     signac 1.6.0
 
@@ -194,8 +194,10 @@ This means that manipulating a job document or reading data can be done through 
     Workspace:      ~/project/workspace
     Size:           1
 
-    Interact with the project interface using the "project" or "pr" variable.
-    Type "help(project)" or "help(signac)" for more information.
+    Interact with the project interface using the
+    "project" or "pr" variable. Type "help(project)"
+    or "help(signac)" for more information.
+
     >>> job.sp
     {'a': 1}
 
@@ -203,17 +205,19 @@ Alternative short snippet using -c command flag:
 
 .. code-block:: shell
 
-    ~/project/workspace/42b7b4f2921788ea14dac5566e6f06d0 $ signac shell -c "print(job.sp)"
+    ~/project/workspace/42b... $ signac shell -c "print(job.sp)"
     {'a': 1}
 
 HDF5 support for storing numerical data: Many applications used in research generate or consume large numerical arrays. For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation. However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome. The signac H5Store feature offers users a convenient wrapper around the h5py library for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format. The ``job.data`` attribute is an instance of the ``H5Store`` class, and is a key-value store saved on disk as ``signac_data.h5`` in the job workspace. Users who prefer to split data across multiple files can use the ``job.stores`` API to save in multiple HDF5 files. Corresponding ``project.data`` and ``project.stores`` attributes exist, which save data files in the project root directory. Using an instance of ``H5Store`` as a context manager allows users to keep the HDF5 file open while reading large chunks of the data.
 
 .. code-block:: python
 
-    job.stores[store_name][key_name] = np.random.rand(3, 3, 3)
+    job.stores[store_name][key_name] = np.random.rand(
+        3, 3, 3)
     with job.data:
-        # Copy array data from the file to memory (which will persist
-        # after the HDF5 file is closed) by slicing with an empty tuple:
+        # Copy array data from the file to memory
+        # (which will persist after the HDF5 file
+        # is closed) by slicing with an empty tuple:
         my_array = job.data["my_array"][()]
 
 Integrating with the PyData Ecosystem: Users can now summarize data from a signac project into a pandas DataFrame for analysis. The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data. (TODO: Make note about heterogeneous schemas, interesting use cases?) Support for Jupyter notebooks has also been added, enabling rich HTML representations of signac objects.
@@ -465,7 +469,7 @@ Conclusions
 From the birth of the signac framework to now, signac has grown in usability, performance, and use.
 Since our last proceedings papers, we have added exciting new features, like groups, aggregates, and synced collections and learned how to better manage outreach and governance in a burgeoning scientific open-source project.
 As maintainers and committers, we are looking to continue expanding the framework through user-oriented development and continued outreach to research fields that routinely have projects suited for signac.
-For example, extensions into experimental research labs is currently being sought after with an aim to provide the strong data management and providence signac provides into experimentalist communities.
+For example, extensions into experimental research labs are currently being sought after with an aim to provide the strong data management and providence signac provides into experimentalist communities.
 
 Getting signac
 --------------
@@ -477,7 +481,8 @@ To install, execute
 
 .. code-block:: bash
 
-    conda install -c conda-forge signac signac-flow signac-dashboard
+    conda install -c conda-forge signac \
+    signac-flow signac-dashboard
 
 or
 
