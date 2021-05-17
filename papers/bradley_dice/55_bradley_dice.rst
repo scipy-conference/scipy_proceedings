@@ -48,7 +48,7 @@ Newly implemented synced data structures, features for generalized workflow exec
 
 .. class:: keywords
 
-   data management, TODO
+   data management, data science, database, simulation, collaboration, workflow, HPC, reproducibility
 
 
 Introduction
