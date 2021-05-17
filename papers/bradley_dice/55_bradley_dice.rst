@@ -497,3 +497,4 @@ We would also like to thank NumFOCUS, whose staff have provided the signac proje
 (Who/what else should we thank besides our respective funding sources / grants?)
 
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260. (...)
+M.M.H is supported by the National Science Foundation under Grant No. 1835593. (...)
