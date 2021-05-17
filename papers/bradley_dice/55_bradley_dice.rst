@@ -1,10 +1,12 @@
 :author: Bradley D. Dice
 :email: bdice@umich.edu
 :institution: Department of Physics, University of Michigan, Ann Arbor
+:institution: These authors have an equal contribution to the work presented.
 
 :author: Brandon L. Butler
 :email: butlerbr@umich.edu
 :institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
+:institution: These authors have an equal contribution to the work presented.
 
 :author: Vyas Ramasubramani
 :email: vramasub@umich.edu
