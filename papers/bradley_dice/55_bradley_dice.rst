@@ -103,7 +103,7 @@ Typically, the signac approach works very well for projects up to 100,000 jobs, 
 These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the throughput that can be achieved within this model.
 
 The framework is a strong choice for applications involving file-based workflows, especially those that are quickly evolving or will run on HPC clusters, especially where the amount of required computation per job is large.
-For example, (...TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc], project sizes [100,000 jobs], number of jobs / number of terabytes).
+For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to study the screening of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations (...TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc], project sizes [100,000 jobs], number of jobs / number of terabytes).
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
 
