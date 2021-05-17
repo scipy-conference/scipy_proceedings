@@ -41,7 +41,10 @@ signac: Data Management and Workflows for Computational Researchers
 
 .. class:: abstract
 
-Abstract goes here.
+The signac data management framework (https://signac.io) helps researchers execute reproducible computational studies, scaling from laptops to supercomputers and emphasizing portability and fast prototyping.
+With signac, users can track, search, and archive data and metadata for file-based workflows and automate workflow submission on high performance computing (HPC) clusters.
+We will discuss recent improvements to the software’s feature set, scalability, scientific applications, usability, and community.
+Newly implemented synced data structures, workflow subgraph execution, and performance optimizations will be covered, as well as recent research using the framework and the project’s efforts on improving documentation, contributor onboarding, and governance.
 
 .. class:: keywords
 
@@ -51,6 +54,19 @@ Abstract goes here.
 Introduction
 ------------
 
+.. figure:: signac_overview.pdf
+    :align: center
+    :scale: 40 %
+    :figclass: w
+
+    Overview of the signac framework.
+    Users first create a project, which initializes a workspace directory on disk.
+    Users define state points which are dictionaries that uniquely identify a job.
+    The workspace holds a directory for each job, containing JSON files that store the state point and job document.
+    The job directory name is a hash of the state point's contents.
+    Here, the ``init.py`` file initializes an empty project and adds one job with state point ``{"a": 1}``.
+    Next, users define a workflow using a subclass of signac-flow's ``FlowProject``.
+    The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory.
 
 The full source code of all examples in this paper can be found online [#]_.
 
@@ -58,28 +74,23 @@ The full source code of all examples in this paper can be found online [#]_.
 
 Research projects often address problems where questions change rapidly, data models are always in flux, and compute infrastructure varies widely from project to project.
 The signac data management framework is a tool designed by researchers, for researchers, to make prototyping quick and reproducibility easy.
-It foregoes serializing complex data files into a database in favor of working with these files directly, providing fast indexing utilities for a set of directories.
+It forgoes serializing complex data files into a database in favor of working with these files directly, providing fast indexing utilities for a set of directories.
 Using signac, a data space on the file system is easily initialized, searched, and modified using either a Python or command-line interface.
 The companion package signac-flow interacts with the data space to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
 signac-flow can run arbitrary commands as part of a workflow, making it as flexible as a script in any language of choice.
 
 With signac, file-based data and metadata are organized in folders and JSON files, respectively (see Figure 1).
+
+..
+    TODO: Add figure label and update figure references -- Bradley couldn't get the paper to build after adding a label.
+
 A signac data space (or workspace) is composed of jobs, individual directories associated with a single primary key (or state point) stored in a file `signac_statepoint.json` in that directory.
 Signac uses these files to index the data space, providing a database-like interface to a collection of directories.
 Arbitrary user data may be stored in user-created-files in these jobs, although signac also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
-Readers seeking more detail on signac should refer to past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
+Readers seeking more detail on signac may refer to past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
 
 .. [#] https://signac.io
 .. [#] https://docs.signac.io
-
-Figure 1: Overview of the signac framework.
-Users first create a project, which initializes a workspace directory on disk.
-Users define state points which are dictionaries that uniquely identify a job.
-The workspace holds a directory for each job, containing JSON files that store the state point and job document.
-The job directory name is a hash of the state point's contents.
-Here, the `init.py` file initializes an empty project and adds one job with state point ``{"a": 1}``.
-Next, users define a workflow using a subclass of signac-flow's ``FlowProject``.
-The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory.
 
 This filesystem-based approach has both advantages and disadvantages.
 Its key advantages lie in flexibility and portability.
@@ -104,11 +115,6 @@ We will share our project's experience in progressively revising project governa
 Applications of signac
 ----------------------
 
-TODO: Cite papers that have cited signac, offer a description of the fields, data types and sizes, computational hardware, etc.
-This should be a fairly straightforward section to write, but it requires gathering some background info with citations, etc.
-Bradley has some of this info from a talk for AIChE 2019.
-We may wait on some details until the final rST format, because this section will be full of citations and we don't want to deal with citation formatting twice.
-
 The signac framework has been cited 51 times, according to Google Scholar.
 The framework has been used in a range of scientific fields and with many types of computational workflows.
 Some of these studies include quantum calculations of small molecules, screenings of ionic liquids and organic solvents, inverse design of pair potentials, optimizing photonic band gaps in colloidal materials, analyzing colloidal self-assembly with machine learning, and economic analysis of drought risk [no citation].
@@ -117,22 +123,36 @@ In addition to social factors such as the "home field advantage," materials rese
 However, there are many other fields with similar hardware needs where signac can be applied.
 These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics; data-intensive fields such as economics or machine learning; and applications needing fast, flexible prototypes for optimization and data analysis.
 
-TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
+..
+    TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
 
 While there is no "typical" signac project, factors such as computational complexity and data sizes offer some rough guidelines for when signac's database-on-the-filesystem is appropriate.
 For instance, the time to check the status of a workflow depends on the number of jobs, number of operations, and number of conditions to evaluate for those jobs.
 To give a rough idea of the limits of scalability, it can be difficult to scale signac projects beyond around 100,000 jobs while keeping tasks like checking workflow status in an "interactive" time scale of 1-2 minutes.
 Many signac projects have 100 to 10,000 jobs, with each job workspace containing arbitrarily large data sizes (the file size of the job workspace has little effect on the speed of the signac framework).
 Some users that primarily wish to leverage signac-flow's workflows for execution and submission may have a very small number of jobs (< 10).
-One example of this would be executing a small number of expensive biomolecular simulations using different random seeds in each job's state point (try to find example of this in literature citing signac).
+One example of this would be executing a small number of expensive biomolecular simulations using different random seeds in each job's state point.
+
+..
+    TODO Try to find example of a project with small number of state points in literature citing signac.
 
 The workflow submission features of signac-flow interoperate with popular HPC schedulers including SLURM, PBS/TORQUE, and LSF.
 Operations in a FlowProject can define directives, which indicate hardware to request such as the number of processors or GPUs, the amount of memory, or the walltime needed to complete the operation.
+
+..
+    TODO Address redundancy with above content about processors/GPUs
+
 These directives allow signac-flow to generate scripts for the currently present scheduler, enabling portability across HPC systems.
 Moreover, signac-flow can combine operations and their directives in a number of ways, such as in serial or parallel bundles, or the new features for groups and aggregation discussed below.
+
+..
+    TODO Make sure to discuss bundling in the aggregation section. Avoid discussing serial/parallel bundles right here, because it hasn't been defined.
+
 This allows users to leverage scheduler resources effectively and minimize queue time (or optimize for HPC policies that prefer large submissions) by bundling many operations into a small number of scheduler submissions.
 
-(TODO: Move this into the section above?) The framework emphasizes performance for common user workspaces and workflows.
+..
+    (TODO: Move this into the section above?) The framework emphasizes performance for common user workspaces and workflows.
+
 In early 2021, a significant portion of the codebase was profiled and refactored to improve performance, many of these are changes listed above.
 These improvements were released in signac v1.6.0 and signac-flow v0.12.0.
 Large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
@@ -214,7 +234,8 @@ Performance enhancements were also made in the signac-flow package. Some of the 
 Improved User Output
 ~~~~~~~~~~~~~~~~~~~~
 
-Workflow graph detection: The preconditions and postconditions of operations in a signac-flow ``FlowProject`` implicitly define a graph. For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze." This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
+Workflow graph detection: The preconditions and postconditions of operations in a signac-flow ``FlowProject`` implicitly define a graph. For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
+This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
 
 Templated status output: Querying the status of a signac-flow project now has many more options and has been templated to allow for raw, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
 
@@ -383,7 +404,8 @@ Moreover, while the framework was originally conceived to support synchronizatio
 One powerful example of this would be the use of a synced collection to provide a Pythonic API to a collection-like data structure implemented as a C or C++ extension module that could function like a Python dictionary with suitable plumbing but lacks the standard APIs expected of such a class.
 With the synced collections framework, creating a new class providing such an API is reduced to simply requiring the implementation of two straightforward methods defining the synchronization protocol.
 
-TODO: discuss independence from the rest of signac, possibility of releasing as a separate package?
+..
+    TODO: discuss independence from the rest of signac, possibility of releasing as a separate package?
 
 Related Software
 ~~~~~~~~~~~~~~~~
@@ -402,7 +424,9 @@ Project Evolution
 The signac project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
 The growth in involvement with signac is the result of our focus on developing features based on user needs, as well as our efforts to transition signac users to signac contributors, through many initiatives in the past few years.
 Through encouraging users to become contributors, we ensure that signac addresses real users' needs.
-TODO: mention GSoC
+
+..
+    TODO: mention GSoC
 
 We have expanded signac's contributor involvement to outside of the University of Michigan through expanded use in diverse research groups (and through maintainers graduating and staying involved?), but more notably through the Google Summer of Code (GSoC) program.
 Our experience from the GSoC led to a new committer (explained later in this section) and much work on some of the developments presented above, namely synced collections and aggregation.
