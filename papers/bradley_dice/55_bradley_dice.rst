@@ -68,7 +68,7 @@ Introduction
     The job directory name is a hash of the state point's contents.
     Here, the ``init.py`` file initializes an empty project and adds one job with state point ``{"a": 1}``.
     Next, users define a workflow using a subclass of signac-flow's ``FlowProject``.
-    The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory.
+    The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory. :label:`overview`
 
 The full source code of all examples in this paper can be found online [#]_.
 
@@ -81,10 +81,7 @@ Using signac, a data space on the file system is easily initialized, searched, a
 The companion package signac-flow interacts with the data space to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
 Arbitrary shell commands can be run by signac-flow as part of a workflow, making it as flexible as a script in any language of choice.
 
-With signac, file-based data and metadata are organized in folders and JSON files, respectively (see Figure 1).
-
-..
-    TODO: Add figure label and update figure references -- Bradley couldn't get the paper to build after adding a label.
+With signac, file-based data and metadata are organized in folders and JSON files, respectively (see Figure :ref:`overview`).
 
 A signac data space, or "workspace," is composed of jobs, which are individual directories associated with a single primary key known as a "state point" stored in a file `signac_statepoint.json` in that directory.
 Signac uses these files to index the data space, providing a database-like interface to a collection of directories.
@@ -503,7 +500,7 @@ Acknowledgments
 
 All authors should check to be sure their acknowledgements are included! Karen will help with this for Glotzer peeps.
 
-We would like to thank Kelly Wang for contributing the concept and content of Figure 1.
+We would like to thank Kelly Wang for contributing the concept and content of Figure :ref:`overview`.
 We would also like to thank NumFOCUS, whose staff have provided the signac project with helpful advice on open-source governance, project sustainability, and community outreach.
 (Who/what else should we thank besides our respective funding sources / grants?)
 
