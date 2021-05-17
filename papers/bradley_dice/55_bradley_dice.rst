@@ -84,7 +84,7 @@ With signac, file-based data and metadata are organized in folders and JSON file
 ..
     TODO: Add figure label and update figure references -- Bradley couldn't get the paper to build after adding a label.
 
-A signac data space (or workspace) is composed of jobs, individual directories associated with a single primary key (or state point) stored in a file `signac_statepoint.json` in that directory.
+A signac data space, or "workspace," is composed of jobs, which are individual directories associated with a single primary key known as a "state point" stored in a file `signac_statepoint.json` in that directory.
 Signac uses these files to index the data space, providing a database-like interface to a collection of directories.
 Arbitrary user data may be stored in user-created-files in these jobs, although signac also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
 Readers seeking more detail on signac may refer to past signac papers: :cite:`signac_commat, signac_scipy_2018` as well as the signac website [#]_ and documentation [#]_.
