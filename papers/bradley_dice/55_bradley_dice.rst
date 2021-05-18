@@ -17,7 +17,7 @@
 
 :author: Alyssa Travitz
 :email: atravitz@umich.edu
-:institution: TODO Department, University of Michigan, Ann Arbor
+:institution: Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor
 
 :author: Michael M. Henry
 :email: mikehenry@u.boisestate.edu
