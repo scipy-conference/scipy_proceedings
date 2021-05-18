@@ -45,7 +45,7 @@ signac: Data Management and Workflows for Computational Researchers
 
 .. class:: abstract
 
-The signac data management framework (https://signac.io) helps researchers execute reproducible computational studies, scaling from laptops to supercomputers and emphasizing portability and fast prototyping.
+The signac data management framework (https://signac.io) helps researchers execute reproducible computational studies, scales workflows from laptops to supercomputers, and emphasizes portability and fast prototyping.
 With signac, users can track, search, and archive data and metadata for file-based workflows and automate workflow submission on high performance computing (HPC) clusters.
 We will discuss recent improvements to the software's feature set, scalability, scientific applications, usability, and community.
 Newly implemented synced data structures, features for generalized workflow execution, and performance optimizations will be covered, as well as recent research using the framework and the project's efforts on improving documentation, contributor onboarding, and governance.
@@ -356,7 +356,7 @@ Users also frequently work or want to work with multiple jobs within a singular 
 Though the signac package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no similar feature in signac-flow to allow operations to act on multiple jobs.
 The concept of _aggregation_ provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a signac data space.
 Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
-The operation syntax changes from `def my_operation(job):` to `def my_operation(*jobs):`, using Python's argument unpacking syntax to support user input of one or more job instances while maintaining backwards compatibility.
+Operations now can accept multiple job instances as positional arguments though Python's argument unpacking while maintaining backwards compatibility.
 Decorators are used to define aggregation behavior, encompassed in the ``aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
 
 .. code-block:: python
@@ -433,7 +433,7 @@ One group includes methods for synchronizing with an underlying resource, while 
 For instance, a ``JSONDict`` would implement the first set of methods to define how to save a dictionary to a JSON file and reload it, while it would implement the second set of methods to define how to convert between a ``JSONDict`` instance and a standard Python dictionary.
 
 Critically, these two sets of functions are orthogonal.
-Therefore, it should be possible to implement different backend types and different data structures independently, then combine them after the fact.
+Therefore, it should be possible to implement different backend types and different data structures independently, then combine them into concrete classes using multiple inheritance.
 This solution is analogous to the way that language server protocols separate support for programming languages from support for editors, turning a :math:`M*N` problem into a simple :math:`M+N` problem.
 In practice, our synced collections framework comes bundled with a set of backend classes, such as the ``JSONCollection``, and a set of data structure classes, such as the ``SyncedDict``.
 Each of these inherits from ``SyncedCollection`` and implements a subset of its methods, but remains abstract until combined (via multiple inheritance) with a class implementing the remaining methods.
