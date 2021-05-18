@@ -24,8 +24,8 @@
 :institution: Micron School of Materials Science and Engineering, Boise State University
 
 :author: Hardik Ojha
-:email: hojha@ee.iitr.ac.in
-:institution: TODO Department, Indian Institute of Technology Roorkee
+:email: hojha@ch.iitr.ac.in
+:institution: Department of Chemical Engineering, Indian Institute of Technology Roorkee
 
 :author: Carl S. Adorf
 :email: TODO
