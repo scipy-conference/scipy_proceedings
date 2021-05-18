@@ -1,3 +1,6 @@
+..   .. latex::
+..      :usepackage: footmisc
+
 :author: Bradley D. Dice
 :email: bdice@umich.edu
 :institution: Department of Physics, University of Michigan, Ann Arbor
@@ -26,13 +29,12 @@
 
 :author: Carl S. Adorf
 :email: TODO
-:institution: TODO
+:institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
 
 :author: Sharon C. Glotzer
 :email: sglotzer@umich.edu
 :institution: Department of Physics, University of Michigan, Ann Arbor
 :institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
-:institution: Department of Materials Science and Engineering, University of Michigan, Ann Arbor
 :institution: Biointerfaces Institute, University of Michigan, Ann Arbor
 
 :bibliography: paper
@@ -101,12 +103,14 @@ These limits are inherent to signac's use of small files for each job's state po
 
 The framework is a strong choice for applications involving file-based workflows, especially those that are quickly evolving or will run on HPC clusters, especially where the amount of required computation per job is large.
 For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to study the screening of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations
+
 ..
     TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc],
     project sizes [100,000 jobs], number of jobs / number of terabytes).
 
     Brandon - I think asking Allen about his binary sphere paper may be useful. Most papers don't
     seem to mention in a simple way the approximate number of jobs they had.
+
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
 
@@ -225,8 +229,10 @@ HDF5 support for storing numerical data: Many applications used in research gene
 
 Integrating with the PyData Ecosystem: Users can now summarize data from a signac project into a pandas DataFrame for analysis.
 The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
+
 ..
     TODO: Make note about heterogeneous schemas, interesting use cases?
+
 Support for Jupyter notebooks has also been added, enabling rich HTML representations of signac objects.
 
 Advanced searching and filtering of the workspace: The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
@@ -241,6 +247,7 @@ These improvements allow signac to scale to ~100,000 jobs.
 In signac, the core of the signac Project and Job classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user.
 Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time ($O(1)$) instead of linear time ($O(N_{jobs})$).
 Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz.
+
 ..
     TODO: include a graph of performance from 1.0 to now
 
@@ -270,6 +277,7 @@ Although already capable of implementing reproducible quality workflows, signac-
 As both names imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
 In the conceptual model of signac-flow, flow builds on signac's notions of the project and job (the unit of the data space) through a FlowProject class that adds the ability to execute operations (the unit of a workflow) to a signac Project.
 Operations are functions (Python functions or shell commands) that act on a job within the data space, and are created using Python decorator syntax .
+
 ..
     Hardik - thinks that for this portion, the snippets should be consistent so that readers can
     easily run these,
@@ -386,6 +394,7 @@ By storing information on individual bundles signac-flow also will prevent resub
 the unbundled case.
 While the example used does not use either groups or aggregation, bundles works seamlessly with
 both.
+
 .. TODO: add figure and intro to figure here
 
 Synced Collections: Backend-agnostic, persistent, mutable data structures
