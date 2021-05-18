@@ -201,6 +201,14 @@ An advantage of this approach is that ``sitecustomize`` failures are nonfatal,
 and and placing the import reporting step into an exit hook (as opposed to
 instrumenting the ``import`` mechanism) means that it minimizes interference
 with normal operation of the host application.
+**Limitations, like virtualenv that Colin mentions, abnormal exit conditions,
+MPI_Abort() e.g. when run with python -m mpi4py**
+
+* Slurm may kill the job before it fires the exit hook
+* Mpi4py also: https://mpi4py.readthedocs.io/en/stable/mpi4py.run.html
+
+We also deemed the use of plain text log files on platform storage to be
+infeasible given the rate of Python jobs we would be monitoring.
 
 **Need a paragraph telling why we like this last method**
 
@@ -210,49 +218,48 @@ Methods
 ..
    How was the work done?
 
-* Goals
-* Short background on OMNI, MODS
-* Strategy of exit hook; potential shortcomings, implications and mitigations
+Users have a number of options when it comes to how they use Python at NERSC.
+NERSC provides a "default" Python to its users through software environment
+modules, based on the Anaconda Python distribution.
+Users may load this module, initialize the Conda tool, and create their own
+custom Conda environments.
+Projects or collaborations may provide their users with shared Python
+environments, often as a Conda environment or as an independent installation
+altogether (e.g. using the Miniconda installer and building up).
+Cray provides a basic Python module containing a few core scientific Python
+packages linked against Cray MPICH and LibSci libraries.
+Python packages are also installed by staff or users via the Spack HPC package
+manager.
+NERSC also provides Shifter, a container runtime that enables users to run
+custom Docker containers that can contain Python built however the author
+desired.
+With a properly defined kernel-spec file, a user is able to use a Python stack
+based on any of the above options as a kernel in NERSC's Jupyter service.
+We need to be able to perform workload analysis across all of these options, in
+part to understand the relative importance of each.
 
-  * Injection, but we do it from /opt (local to the node) and users can deactivate
-  * Libraries monitored is a subset of the whole
-  * Slurm may kill the job before it fires the exit hook
-  * Mpi4py also: https://mpi4py.readthedocs.io/en/stable/mpi4py.run.html
-  * What if monitoring downstream fails (canary jobs)
-
-* Explain the code
-* Path we take from exit hook execution through syslog/kafka(?), elastic
-* Talk about the analysis flow: Papermill, Dask, Jupyter, Voila
-* Talk about how/why we choose these various pieces
-
-There are a number of differences between our Python deployment and that on Blue
-Waters.
-NERSC provides Python to users through software environment modules.
-Users can type ``module load python`` at the command line and the module system
-will provide access to a staff-maintained Anaconda distribution.
-Users also have the option of creating their own Conda environments, or even
-installing their own Python from source or using the Anaconda/Miniconda
-installer scripts.
-The latter option is a common approach followed by projects, experiments, or
-collaborations of users to manage a collaboration-wide Python software stack.
-NERSC also provides a container runtime called Shifter that allows users to run
-Docker images they build, and it is another popular way for individual users and
-collaborations to use Python stacks.
-This variability means that we need a different point of injection than on Blue
-Waters.
-We also deemed the use of plain text log files on platform storage to be
-infeasible given the rate of Python jobs we would be monitoring.
-The amount of data being gathered is consequential enough that we turned to the
-Python data ecosystem to help us manage it and discuss our experiences with a
-Jupyter notebook-based workflow for exploring the data.
-We also talk about what kinds of things we learned from the data.
+Monitoring all of the above can be done using the strategy outlined in [Mac17]_
+with certain changes.
+As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
+installed in a directory included into all users' ``sys.path``.
+The file system where ``sitecustomize`` is installed should be local to the
+compute nodes that it runs on and not served over network, in order to avoid
+exacerbating poor performance of Python start-up at scale.
+We accomplish this by installing it and any associated Python modules into the
+compute node system images themselves, and configuring user environments to
+include a ``PYTHONPATH`` setting that injects ``sitecustomize`` into
+``sys.path``.
+Shifter containers have the system image path included as a volume mount.
+Users can opt out of monitoring by unsetting or overwriting ``PYTHONPATH``.
+**Explain why Python path --- easier to opt out than to ask users to opt in**
 
 Customs: Inspect and Report Packages
 ------------------------------------
 
-We call our package "Customs" since it is for inspecting and reporting on Python
-package imports of particular interest.
-Customs can be understood in terms of three very simple concepts.
+To organize ``sitecustomize`` we have created a Python package we call
+"Customs," since it is for inspecting and reporting on Python package imports of
+particular interest.
+Customs can be understood in terms of three simple concepts.
 A **Check** is a simple object that represents a Python package by its name and
 a callable that is used to verify that the package is present in a dictionary.
 In production this dictionary should be ``sys.modules`` but during testing it is
@@ -267,8 +274,8 @@ packages, but exactly how this is done is up to the implementor.
 Customs includes a few reference Reporter reference implementations and an
 example of a custom Customs Reporter.
 
-Generally, system administrators only interact with Customs through its primary
-entry point, the function ``register_exit_hook``.
+Generally, staff only interact with Customs through its primary entry point, the
+function ``register_exit_hook``.
 This function takes two arguments.
 The first argument is a list of strings or tuples that are converted into
 Checks.
@@ -285,26 +292,16 @@ When a user invokes Python, the exit hook will be registered using the
 at shutdown ``sys.modules`` is inspected and detected packages of interest are
 reported.
 
-There are a few ways that an administrator may choose to deploy
-``sitecustomize.py`` to ``sys.path``.
-One way is to simply install it to ``{prefix}/lib/python3.X/site-packages``
-and maintain it as part of the installation of Python.
-A system administrator may also set a default ``PYTHONPATH`` for all users on
-the system to broaden coverage to user-installed environments.
-This has the advantage (or from some perspectives, disadvantage) of allowing
-users to opt-out of data collection.
-It is advised that system administrators take care that extending ``sys.path``
-via ``PYTHONPATH`` be done in such a way that it does not harm performance at
-start up.
-For instance, installing the monitoring software to compute node images instead
-of serving it over a distributed file system.
-
 Message Logging and Storage
 ---------------------------
 
 We send our messages to Elastic via nerscjson.
 
+* MODS and OMNI
 * LDMS, ask Taylor/Eric for ref and refs
+* Libraries monitored is a subset of the whole
+* What if monitoring downstream fails (canary jobs)
+* Path we take from exit hook execution through syslog/kafka(?), elastic
 
 Talk about LDMS, [Age14]_.
 
@@ -319,6 +316,12 @@ The Story: Prototyping, Production and Publication with Jupyter
 
     -- Mike Loukides, `What is Data Science?
     <https://www.oreilly.com/radar/what-is-data-science/>`_
+
+* Talk about the analysis flow: Papermill, Dask, Jupyter, Voila.
+  The amount of data being gathered is consequential enough that we turned to the
+  Python data ecosystem to help us manage it and discuss our experiences with a
+  Jupyter notebook-based workflow for exploring the data.
+* Talk about how/why we choose these various pieces
 
 OMNI includes Kibana, a visualization interface that enables NERSC staff to
 visualize indexed Elasticsearch data collected from NERSC systems, including
@@ -380,74 +383,19 @@ Results
 ..
    What were the results of the work?  What did we learn, discover, etc?
 
-* Other alternatives analyses
-* How hard was it to set up, experiment with, maintain
-* May need to follow up with users
 * Most jobs are one node
 * Plotting/viz libraries rank higher than expected
 * Even on our GPU system, there are lots of CPU imports (unclear how high GPU utilization really is)
 * For Dask, users may be/sometimes unaware they are actually using it
 * Multiprocessing use is really heavy
 * Quantitative statements like
+
    * Top 10 libraries
    * Mean job size
    * Job size as a function of library
    * Correlated libraries and dependency patterns
 
-
-Python results preface
-----------------------
-
-**TODO: or maybe this should go in discussion, not sure**
-
-Several important caveats in our data and its interpretation should be
-discussed before we introduce our results. The first is that our data represent
-a helpful if incomplete picture of user activities on our system. What do we
-mean by this? First, we collect a list of Python libraries used within a job
-defined by our workflow manager/queuing system Slurm. These libraries may be
-called by each other (ex: SciPy imports multiprocessing, scikit-learn imports
-Joblib) with or without user knowledge, they may be explicitly imported
-together by the user in the same analysis (ex: CuPy and CuPyx), they may be
-unrelated but used at different times during the job (SciPy and Plotly), or the
-user may import libraries they never actually use. At the moment we cannot
-differentiate between any of these situations. We provide this illustrative
-example to support this point: we noticed that several users appeared to be
-running Dask at large scale as our data indicated that in the same job, they
-imported Dask in a jobsize of greater than 100 nodes. We emailed these users to
-ask them what kinds of things they were doing with Dask at scale, and two
-replied that they had no idea they were using Dask. One said, “I'm a bit
-curious as to why I got this email. I'm not aware to have used Dask in the
-past, but perhaps I did it without realizing it.” It is therefore important to
-emphasize that the data we have can be a helpful guide but is certainly not
-definitive and when we impart our own expectations onto it, it can even be
-misleading.
-
-Another caveat is that we are tracking a prescribed list of packages which does
-impart some bias into our data collection. We do our best to keep abreast of
-innovations and trends in the Python user community, but we are undoubtedly
-missing important packages that have escaped our notice. One notable example
-here is the Vaex library. We were not aware of this library when we implemented
-our list of packages to track. Even though we used it heavily ourselves during
-this work, at the moment we have no data regarding its general use on our
-system. (We are in the process of updating our monitoring infrastructure to
-track Vaex and other packages.)
-
-The last caveat is we currently only capture the Python facets of any given
-job. In another example, we reached out to some users who appeared to be
-running Python at large scale (greater than 100 nodes) on one of our slower
-filesystems. We emailed these users to suggest they use a faster filesystem or
-a container. The users wrote back that their job is largely not in Python--
-they have one Python process running on a single node to monitor the job
-status. Our data collection currently has no way of differentiating between
-running C++ on 100 nodes with a single Python monitoring process and running
-pure Python on 100 nodes-- we are blind to other parts of the job.
-
-In summary: we can make an educated guess based on our data, but without
-talking to the user or looking at their code, at present we have an incomplete
-picture of what they really are doing.
-
-Python results
---------------
+Introductory paragraph
 
 Perhaps the first question someone may ask is what the top Python libraries
 being used at NERSC are. Our top libraries from Jan-May 2021, deduplicated by
@@ -600,12 +548,14 @@ netCDF4 and xarray.
 
 **TODO: nltk without user data if time permits**
 
-
 Discussion
 ==========
 
 ..
    What do the results mean?  What are the implications and directions for future work?
+
+* How hard was it to set up, experiment with, maintain
+* May need to follow up with users
 
 * "Typical" Python user on our systems does what?
 * Qualitative statements about our process and its refinement
@@ -622,6 +572,56 @@ Discussion
     * Show it to stakeholder, get feedback,
     * Iterate on the actual notebook in a job
     * Productionize that notebook without rewriting to scripts etc
+
+Previously "Python Results Preference"
+--------------------------------------
+
+Several important caveats in our data and its interpretation should be
+discussed before we introduce our results. The first is that our data represent
+a helpful if incomplete picture of user activities on our system. What do we
+mean by this? First, we collect a list of Python libraries used within a job
+defined by our workflow manager/queuing system Slurm. These libraries may be
+called by each other (ex: SciPy imports multiprocessing, scikit-learn imports
+Joblib) with or without user knowledge, they may be explicitly imported
+together by the user in the same analysis (ex: CuPy and CuPyx), they may be
+unrelated but used at different times during the job (SciPy and Plotly), or the
+user may import libraries they never actually use. At the moment we cannot
+differentiate between any of these situations. We provide this illustrative
+example to support this point: we noticed that several users appeared to be
+running Dask at large scale as our data indicated that in the same job, they
+imported Dask in a jobsize of greater than 100 nodes. We emailed these users to
+ask them what kinds of things they were doing with Dask at scale, and two
+replied that they had no idea they were using Dask. One said, “I'm a bit
+curious as to why I got this email. I'm not aware to have used Dask in the
+past, but perhaps I did it without realizing it.” It is therefore important to
+emphasize that the data we have can be a helpful guide but is certainly not
+definitive and when we impart our own expectations onto it, it can even be
+misleading.
+
+Another caveat is that we are tracking a prescribed list of packages which does
+impart some bias into our data collection. We do our best to keep abreast of
+innovations and trends in the Python user community, but we are undoubtedly
+missing important packages that have escaped our notice. One notable example
+here is the Vaex library. We were not aware of this library when we implemented
+our list of packages to track. Even though we used it heavily ourselves during
+this work, at the moment we have no data regarding its general use on our
+system. (We are in the process of updating our monitoring infrastructure to
+track Vaex and other packages.)
+
+The last caveat is we currently only capture the Python facets of any given
+job. In another example, we reached out to some users who appeared to be
+running Python at large scale (greater than 100 nodes) on one of our slower
+filesystems. We emailed these users to suggest they use a faster filesystem or
+a container. The users wrote back that their job is largely not in Python--
+they have one Python process running on a single node to monitor the job
+status. Our data collection currently has no way of differentiating between
+running C++ on 100 nodes with a single Python monitoring process and running
+pure Python on 100 nodes-- we are blind to other parts of the job.
+
+In summary: we can make an educated guess based on our data, but without
+talking to the user or looking at their code, at present we have an incomplete
+picture of what they really are doing.
+
 
 Putting all the steps in the analysis (extraction, aggregation, indexing,
 selecting, plotting) into one narrative greatly improves communication,
