@@ -1,0 +1,6 @@
+
+{
+  "authors": "Roni Kobrosly",
+  "title": "causal-curve: tools to perform causal inference given a continuous treatment",
+  "description": "There are a multitude of scenarios in both research and industry where this would be useful to evaluate the impact of a continuous “treatment” on an outcome of interest in a causal inference framework. Unfortunately, we are not aware of an established python package that is able to perform this. The `causal-curve` package attempts to fill that gap, providing users with tools to generate causal dose-response curves (AKA causal curves)."
+}
