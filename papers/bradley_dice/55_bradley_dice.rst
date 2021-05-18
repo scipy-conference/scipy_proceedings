@@ -386,17 +386,22 @@ Another example is submitting aggregates with a fixed number of jobs in each agg
 
 A third concept while not new warrants attention in this section, bundling.
 Bundling is a third way to combine pieces of signac-flow's workflow.
-Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with
-combining what are effectively units of execution into a single submission script.
-The simplest case of a bundle is a submission script with the same operation being executed for
-multiple jobs either in parallel or serial.
+Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining what are effectively units of execution into a single submission script.
+The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs either in parallel or serial.
 Bundling is what allows the script to contain multiple jobs executing the same operation.
-By storing information on individual bundles signac-flow also will prevent resubmission just as in
-the unbundled case.
-While the example used does not use either groups or aggregation, bundles works seamlessly with
-both.
+By storing information on individual bundles, signac-flow prevents accidental resubmission just as in the unbundled case.
+While the example above does not use either groups or aggregation, bundles works seamlessly with both.
 
-.. TODO: add figure and intro to figure here
+.. figure:: signac-flow_aggregation-groups-bundling.pdf
+    :align: center
+    :scale: 90 %
+    :figclass: w
+
+    Aggregation, groups, and bundling allow users to build complex workflows.
+    The features are orthogonal, and can be used in any combination.
+    Aggregation enables one operation or group to act on multiple jobs.
+    Groups allow users to combine multiple operations into one, with dependencies among operations resolved at run time.
+    Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel.
 
 Synced Collections: Backend-agnostic, persistent, mutable data structures
 -------------------------------------------------------------------------
