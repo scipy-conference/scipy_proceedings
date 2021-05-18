@@ -104,6 +104,9 @@ For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs
 ..
     TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc],
     project sizes [100,000 jobs], number of jobs / number of terabytes).
+
+    Brandon - I think asking Allen about his binary sphere paper may be useful. Most papers don't
+    seem to mention in a simple way the approximate number of jobs they had.
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
 
@@ -126,6 +129,8 @@ These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nucl
 
 ..
     TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
+
+    Brandon - this is cool, but may be more work than is worth it.
 
 While there is no "typical" signac project, factors such as computational complexity and data sizes offer some rough guidelines for when signac's database-on-the-filesystem is appropriate.
 For instance, the time to check the status of a workflow depends on the number of jobs, number of operations, and number of conditions to evaluate for those jobs.
@@ -166,6 +171,9 @@ This is aligned with the principles of TRUE (Transparent, Reproducible, Usable b
 ..
     TODO: mention MIDAS Reproducibility Challenge? signac won an award.
     https://signac.io/talks/2020/08/05/midas-reproducibility.html
+
+    Brandon - I don't know if it fits in this section, except maybe as proof of our claims. I think
+    we are fine without mentioning it though especially since it is an internal to UM organization.
 
 Simplifying and streamlining existing functionalities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
