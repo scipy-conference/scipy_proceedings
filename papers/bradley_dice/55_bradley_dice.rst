@@ -253,9 +253,13 @@ Executing complex workflows via groups and aggregation
 Although already capable of implementing reproducible quality workflows, signac-flow has enhanced the usability through two new concepts: groups and aggregation.
 As both names imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
 In the conceptual model of signac-flow, flow builds on signac's notions of the project and job (the unit of the data space) through a FlowProject class that adds the ability to execute operations (the unit of a workflow) to a signac Project.
-Operations are functions (Python functions or shell commands) that act on a job within the data space, and are created using Python decorator syntax (show snippet).
-(Hardik added a snippet below -- Probably not the best example.
-He thinks that for this portion, the snippets should be consistent so that readers can easily run these,)
+Operations are functions (Python functions or shell commands) that act on a job within the data space, and are created using Python decorator syntax .
+..
+    Hardik - thinks that for this portion, the snippets should be consistent so that readers can
+    easily run these,
+
+    Brandon - I think that the snippets are best self contained. Without significant boilerplate
+    anyways these will not run since there is no underlying signac project.
 
 .. code-block:: python
 
@@ -270,10 +274,14 @@ He thinks that for this portion, the snippets should be consistent so that reade
     if __name__ == '__main__':
         FlowProject().main()
 
-When this project is run using signac-flow's command line API (``python project.py run``), the user's current city is written into the job document Ann Arbor in this case. (Hardik doesn't know if it's a good idea to display a high level of detail for the paper, but if we decide not to put this, we can delete later)
-Operations can have preconditions and postconditions that define their eligibility, e.g. the existence of an input file in a job's workspace or a key in the job document (as shown in the above snippet) can be a precondition that must be met before an operation can be executed, or a postcondition that indicates an operation is complete. However, this type of conditional workflow can be inefficient when sequential workflows are coupled with an HPC scheduler interface, because the user must log on to the HPC and submit the next operation after the previous operation is complete. This encourages large operations which are not modular and do not accurately represent the individual units of the work-flow limiting signac-flow's utility.
+When this project is run using signac-flow's command line API (``python project.py run``), the user's current city is written into the job document Ann Arbor in this case.
+Operations can have preconditions and postconditions that define their eligibility, e.g. the existence of an input file in a job's workspace or a key in the job document (as shown in the above snippet) can be a precondition that must be met before an operation can be executed, or a postcondition that indicates an operation is complete.
+However, this type of conditional workflow can be inefficient when sequential workflows are coupled with an HPC scheduler interface, because the user must log on to the HPC and submit the next operation after the previous operation is complete.
+This encourages large operations which are not modular and do not accurately represent the individual units of the work-flow limiting signac-flow's utility.
 
-The concept of a group, implemented by the ``FlowGroup`` class and ``FlowProject.make_group`` interface, allows users to combine multiple operations into a group. Submitting a group allows signac-flow to dynamically resolve preconditions and postconditions of operations as each operation is executed, making it possible to combine separate operations (e.g. for simulation and analysis and plotting) into a single submission script with the expectation that all will execute despite later operations depending on the former. Furthermore, groups are aware of directives and can properly combine the directives of their constituent operations to specify resources and quantities like walltime whether executing in parallel or serial.
+The concept of a group, implemented by the ``FlowGroup`` class and ``FlowProject.make_group`` method, allows users to combine multiple operations into a group.
+Submitting a group allows signac-flow to dynamically resolve preconditions and postconditions of operations as each operation is executed, making it possible to combine separate operations (e.g. for simulation and analysis and plotting) into a single submission script with the expectation that all will execute despite later operations depending on the former.
+Furthermore, groups are aware of directives and can properly combine the directives of their constituent operations to specify resources and quantities like walltime whether executing in parallel or serial.
 
 .. code-block:: python
 
@@ -311,13 +319,15 @@ By associating an operation's directives with respect to a specific group, group
 
     @cpu_env.with_directives({"np": 48})
     @gpu_env.with_directives({"ngpu": 4})
-    @FlowProject.operation
+    # For the operation when not run through the cpu
+    # or gpu group
+    @FlowProject.operation.with_directives({"np": 4})
     def expensive_operation(job):
         # expensive computation for either
         # CPU or GPU here
         pass
 
-Users also frequently work with multiple jobs at once in a consistent manner.
+Users also frequently work or want to work with multiple jobs within a singular repetitive task such as plotting.
 Though the signac package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no similar feature in signac-flow to allow operations to act on multiple jobs.
 The concept of _aggregation_ provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a signac data space.
 Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
