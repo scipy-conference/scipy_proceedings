@@ -162,8 +162,10 @@ New commands for import and export simplify the process of archiving signac proj
 Archival is an integral part of research data operations that is frequently overlooked.
 By using highly compatible and long-lived formats such as JSON for core data storage with simple name schemes, signac aims to preserve projects and make it easier for studies to be independently reproduced.
 This is aligned with the principles of TRUE (Transparent, Reproducible, Usable by others, and Extensible) simulations put forth by the MoSDeF collaboration (https://doi.org/10.1080/00268976.2020.1742938).
-(TODO: mention MIDAS Reproducibility Challenge? signac won an award.
-https://signac.io/talks/2020/08/05/midas-reproducibility.html)
+
+..
+    TODO: mention MIDAS Reproducibility Challenge? signac won an award.
+    https://signac.io/talks/2020/08/05/midas-reproducibility.html
 
 Simplifying and streamlining existing functionalities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -213,7 +215,11 @@ HDF5 support for storing numerical data: Many applications used in research gene
         # is closed) by slicing with an empty tuple:
         my_array = job.data["my_array"][()]
 
-Integrating with the PyData Ecosystem: Users can now summarize data from a signac project into a pandas DataFrame for analysis. The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data. (TODO: Make note about heterogeneous schemas, interesting use cases?) Support for Jupyter notebooks has also been added, enabling rich HTML representations of signac objects.
+Integrating with the PyData Ecosystem: Users can now summarize data from a signac project into a pandas DataFrame for analysis.
+The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
+..
+    TODO: Make note about heterogeneous schemas, interesting use cases?
+Support for Jupyter notebooks has also been added, enabling rich HTML representations of signac objects.
 
 Advanced searching and filtering of the workspace: The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
 
@@ -226,7 +232,9 @@ These improvements allow signac to scale to ~100,000 jobs.
 
 In signac, the core of the signac Project and Job classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user.
 Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time ($O(1)$) instead of linear time ($O(N_{jobs})$).
-Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz. (TODO: include a graph of performance from 1.0 to now)
+Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz.
+..
+    TODO: include a graph of performance from 1.0 to now
 
 Similarly, performance enhancements were also made in the signac-flow package.
 Some of the optimizations identified include lazy evaluation of run commands and directives, and caching of job status information.
