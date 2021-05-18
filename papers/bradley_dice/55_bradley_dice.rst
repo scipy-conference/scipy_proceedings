@@ -481,10 +481,6 @@ Project Evolution
 The signac project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
 The growth in involvement with signac is the result of our focus on developing features based on user needs, as well as our efforts to transition signac users to signac contributors, through many initiatives in the past few years.
 Through encouraging users to become contributors, we ensure that signac addresses real users' needs.
-
-..
-    TODO: mention GSoC
-
 We have expanded signac's contributor involvement to outside of the University of Michigan through expanded use in diverse research groups (and through maintainers graduating and staying involved?), but more notably through the Google Summer of Code (GSoC) program.
 Our experience from the GSoC led to a new committer (explained later in this section) and much work on some of the developments presented above, namely synced collections and aggregation.
 To encourage code contributions from existing users, we maintain active support and discussion through Slack.
