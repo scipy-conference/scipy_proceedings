@@ -102,7 +102,7 @@ Typically, the signac approach works very well for projects up to 100,000 jobs, 
 These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the throughput that can be achieved within this model.
 
 The framework is a strong choice for applications involving file-based workflows, especially those that are quickly evolving or will run on HPC clusters, especially where the amount of required computation per job is large.
-For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to study the screening of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations
+For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to study the screening of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations.
 
 ..
     TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc],
@@ -125,7 +125,7 @@ Applications of signac
 ----------------------
 
 The signac framework has been cited 51 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
-Some of these studies include quantum calculations of small molecules, screenings of ionic liquids and organic solvents, inverse design of pair potentials, optimizing photonic band gaps in colloidal materials, analyzing colloidal self-assembly with machine learning, and economic analysis of drought risk [no citation].
+Some of these studies include quantum calculations of small molecules :cite:`govoni.etal2018`, screenings of ionic liquids and organic solvents :cite:`thompson.etal2019a`, inverse design of pair potentials :cite:`adorf.etal2018`, optimizing photonic band gaps in colloidal materials :cite:`cersonsky.etal2018`, benchmarking atom-density representations for use in machine learning :cite:`musil.etal2021`, fluid flow in polymer solutions :cite:`howard.etal2019`, design of optical metamaterials :cite:`harper.etal2020`, and economic analysis of drought risk in coastal regions :cite:`rodziewicz.etal2020`.
 Much of the published research using signac comes from chemical engineering, materials science, or physics, the home fields of many of signac's core developers and thus fields where the project has had greater exposure.
 In addition to social factors such as the "home field advantage," materials research commonly requires large HPC resources with shared file systems, a use case where signac excels.
 However, there are many other fields with similar hardware needs where signac can be applied.
