@@ -416,7 +416,7 @@ To present a Pythonic API, state points are exposed via a dictionary-like interf
 The need to parse these JSON files for indexing and the complexity of modifying them represent the most significant barriers to scaling signac.
 Even in the absence of file modification, reading a large number of files simply to produce a database index becomes prohibitively expensive for large data spaces.
 Although various optimizations have incrementally improved signac's scalability, an alternative means of storing the state point and associated metadata that circumvents the heavy I/O costs of our current approach has the potential to make a much larger impact.
-However, replacing individual JSON files as the primary data source for signac without breaking signac's API would require a generic means for providing the same interface to the underlying index and metadata files irrespective of the underlying storage mechanism.
+However, replacing individual JSON files as the primary data source for signac without breaking signac's API would require a generic means for providing the same interface to the underlying index and metadata irrespective of the underlying storage mechanism.
 Once developed, however, such an API would abstract out enough of the internals of signac to enable other generalizations as well, such as making it relatively easy to support alternate (and nearly arbitrary) data space layouts.
 
 The synced collections subpackage of signac represents the culmination of our efforts to expose this functionality, providing a generic framework within which interfaces corresponding to any of Python's built-in types can be easily constructed with arbitrary underlying synchronization protocols.
