@@ -217,7 +217,7 @@ Integrating with the PyData Ecosystem: Users can now summarize data from a signa
 
 Advanced searching and filtering of the workspace: The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
 
-Performance Enhancements (overlaps with content in Applications section)
+Performance Enhancements
 
 In early 2021, a significant portion of the codebase was profiled and refactored to improve performance and these improvements were released in signac v1.6.0 and signac-flow v0.12.0.
 As a result of these changes, large signac projects saw 4-7x for operations such as iterating over the jobs in a project compared to the v1.5.0 release of signac.
