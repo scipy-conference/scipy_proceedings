@@ -185,8 +185,8 @@ This is aligned with the principles of TRUE (Transparent, Reproducible, Usable b
     Brandon - I don't know if it fits in this section, except maybe as proof of our claims. I think
     we are fine without mentioning it though especially since it is an internal to UM organization.
 
-Simplifying and streamlining existing functionalities
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Improved data storage, retrieval, and integrations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **Data access via the shell:**
 The ``signac shell`` command allows the user to quickly enter a Python interpreter that is pre-populated with variables for the current project or job (when in a project or job directory).
@@ -232,13 +232,23 @@ Using an instance of ``H5Store`` as a context manager allows users to keep the H
         # is closed) by slicing with an empty tuple:
         my_array = job.data["my_array"][()]
 
+**Advanced searching and filtering of the workspace:**
+The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the data space.
+By unifying state point and document queries, filtering, and searching workspaces can be more fine-grained and intuitive.
+
+Data Visualization and integrations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 **Integrating with the PyData Ecosystem:**
 Users can now summarize data from a **signac** project into a pandas DataFrame for analysis.
 The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
 Support for Jupyter notebooks has also been added, enabling rich HTML representations of **signac** objects.
 
-**Advanced searching and filtering of the workspace:**
-The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
+**Dashboards:**
+The companion package **signac-dashboard** allows users to quickly visualize data stored in a **signac** data space.
+The dashboard runs in a browser and allows users to display job state points, edit job documents, render images and videos, download any file from a job workspace, and search or browse through state points in their project.
+Dashboards can be hosted on remote servers and accessed via port forwarding, which makes it possible to review data generated on a remote HPC system without needing to copy it back to a local system for inspection.
+Users can quickly save notes into the job document and then search those notes, which is useful for high throughput studies that require some manual investigation (e.g. reviewing plots).
 
 Performance Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~
