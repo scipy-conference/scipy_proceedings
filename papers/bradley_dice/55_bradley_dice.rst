@@ -228,10 +228,6 @@ Using an instance of ``H5Store`` as a context manager allows users to keep the H
 
 .. code-block:: python
 
-    store_name = "population"
-    key_name = "Ney York"
-    job.stores[store_name][key_name] = np.random.rand(
-        3, 3, 3)
     with job.data:
         # Copy array data from the file to memory
         # (which will persist after the HDF5 file
