@@ -416,15 +416,14 @@ For example, a **signac** data space that describes weather data for multiple ci
 Similarly, aggregating over replicas (e.g. the same simulation with different random seeds) facilitates computing averaged quantities and error bars.
 Another example is submitting aggregates with a fixed number of jobs in each aggregate to enable massive parallelization by breaking a large MPI communicator into a smaller communicator for each independent job, which is necessary for efficient utilization of leadership-class supercomputers like OLCF Summit.
 
-
 Finally, bundling is another way to use workflows in conjunction with an HPC scheduling system.
 Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining what are effectively units of execution into a single submission script.
-This distinction makes bundling not part of the workflow definition, but a means of tailoring
-batch scripts for different HPC systems leveraging scheduler resources effectively and minimizing queue time.
+This distinction means that bundling is not part of the workflow definition, but a means of tailoring batch scripts for different HPC systems.
+Bundles allow users to leverage scheduler resources effectively and minimize queue time, and can be run in serial (the default) or parallel.
+Users enable bundling by passing the command line argument ``--bundle``, optionally with another argument ``--parallel`` to run each command in the bundle in parallel (the Python API has corresponding options as well).
 The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs.
 Bundling is what allows the submission script to contain multiple jobs executing the same operation.
-In addition, bundles can always be run in serial or parallel on user preference.
-By storing information on individual bundles, **signac-flow** prevents accidental resubmission just as in the unbundled case.
+By storing information about the generated bundles during submission, **signac-flow** prevents accidental resubmission just as in the unbundled case.
 While the example above does not use either groups or aggregation, bundles works seamlessly with both.
 
 Synced Collections: Backend-agnostic, persistent, mutable data structures
