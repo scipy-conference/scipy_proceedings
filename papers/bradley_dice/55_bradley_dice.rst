@@ -157,9 +157,6 @@ The workflow submission features of **signac-flow** interoperates with popular H
 Directives are set through Python function decorators and define resource and execution requests for operations.
 Examples of directives include number of CPUs or GPUs, the walltime, and memory.
 The use of directives allows **signac-flow** workflows to be portable across HPC systems by generating resource requests that are specific to each machine's scheduler.
-Moreover, **signac-flow** can submit multiple operations and/or the same operation with multiple jobs in
-a single submission script either in parallel or serial.
-This allows users to leverage scheduler resources effectively and minimize queue time (or optimize for HPC policies that prefer large submissions) by many operations into a small number of scheduler submissions.
 
 Some **signac** developers have begun conversations with experimental researchers regarding how the **signac** framework might be useful for a broader range of research tasks.
 Workflows that combine computational steps, such as optimization or post processing, with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot, have complexities that could benefit from the infrastructure **signac**'s framework offers.
@@ -408,12 +405,14 @@ For example, a **signac** data space that describes weather data for multiple ci
 Similarly, aggregating over replicas (e.g. the same simulation with different random seeds) facilitates computing averaged quantities and error bars.
 Another example is submitting aggregates with a fixed number of jobs in each aggregate to enable massive parallelization by breaking a large MPI communicator into a smaller communicator for each independent job, which is necessary for efficient utilization of leadership-class supercomputers like OLCF Summit.
 
+
 Finally, bundling is another way to use workflows in conjunction with an HPC scheduling system.
 Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining what are effectively units of execution into a single submission script.
-This distinction makes bundling not part of the workflow definition, but a means of tailoring HPC
-batch scripts for different HPC submission preferences.
-The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs either in parallel or serial.
+This distinction makes bundling not part of the workflow definition, but a means of tailoring
+batch scripts for different HPC systems leveraging scheduler resources effectively and minimizing queue time.
+The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs.
 Bundling is what allows the submission script to contain multiple jobs executing the same operation.
+In addition, bundles can always be run in serial or parallel on user preference.
 By storing information on individual bundles, **signac-flow** prevents accidental resubmission just as in the unbundled case.
 While the example above does not use either groups or aggregation, bundles works seamlessly with both.
 
