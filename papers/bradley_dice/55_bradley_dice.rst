@@ -178,7 +178,7 @@ The **signac** command line interface is a common entry point for users, and pro
 New commands for import and export simplify the process of archiving **signac** projects into a structure that is both human-readable and machine-readable for future access (with or without **signac**).
 Archival is an integral part of research data operations that is frequently overlooked.
 By using highly compatible and long-lived formats such as JSON for core data storage with simple name schemes, **signac** aims to preserve projects and make it easier for studies to be independently reproduced.
-This is aligned with the principles of TRUE (Transparent, Reproducible, Usable by others, and Extensible) simulations put forth by the MoSDeF collaboration (https://doi.org/10.1080/00268976.2020.1742938).
+This is aligned with the principles of TRUE (Transparent, Reproducible, Usable by others, and Extensible) simulations put forth by the MoSDeF collaboration :cite:`thompson.etal2020`.
 
 ..
     TODO: mention MIDAS Reproducibility Challenge? signac won an award.
