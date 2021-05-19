@@ -312,14 +312,16 @@ Operations are Python functions or shell commands that act on a job within the d
     from flow import FlowProject
 
     @FlowProject.operation
-    @Flowproject.post.true("city")
-    def store_current_city(job):
-        job.doc.city == "Ann Arbor"
+    @Flowproject.post.true("initialized")
+    def initialize(job):
+        # perform necessary initialize steps
+        # for simulation
+        job.doc.initialized == True
 
     if __name__ == "__main__":
         FlowProject().main()
 
-When this project is run using **signac-flow**'s command line API (``python project.py run``), the user's current city is written into the job document Ann Arbor in this case.
+When this project is run using **signac-flow**'s command line API (``python project.py run``), the current state point is prepared for simulation.
 Operations can have preconditions and postconditions that define their eligibility.
 All preconditions must be met in order for a operation to be eligible for a given job.
 If any postcondition is met, that indicates an operation is complete (and thus ineligible).
@@ -339,22 +341,30 @@ Furthermore, groups are aware of directives and can properly combine the directi
 
     @new_group.with_directives(
         {"ngpu": 2,
-         "walltime": lambda j: j.sp.size * 4})
-    @FlowProject.post.true("foo")
+         "walltime": lambda job: job.doc.hours_to_run})
+    @FlowProject.post.true("simulated")
     @FlowProject.operation
-    def foo(job):
-        job.doc.foo = True
+    def simulate(job):
+        # run simulation
+        job.doc.simulated = True
 
     @new_group
-    @FlowProject.pre.true("foo")
-    @FlowProject.post.true("bar")
+    @FlowProject.pre.after(simulate)
+    @FlowProject.post.true("analyzed")
     @FlowProject.operation
-    def bar(job):
-        job.doc.bar = True
+    def analzye(job):
+        # analyze simulation results
+        job.doc.analzyed = True
 
 Groups also allow for specifying multiple machine specific resources (CPU or GPU) with the same operation.
 An operation can have unique directives for each distinct group to which it belongs.
 By associating an operation's directives with respect to a specific group, groups can represent distinct compute environments, such as a local workstation or a remote supercomputing cluster.
+The below snippet shows an ``expensive_simulate`` operation which can be executed with three
+different directives depending on how it is written.
+If executed through ``cpu_env`` the operation will request 48 cores, if ``gpu_env`` 4 GPUs, if
+neither then it will request 4 cores.
+This represents the real use case where an user may want to run an operation locally (in this case
+without a group), or on a CPU or GPU focused HPC/workstation.
 
 .. code-block:: python
 
@@ -363,15 +373,12 @@ By associating an operation's directives with respect to a specific group, group
     cpu_env = FlowProject.make_group(name="cpu")
     gpu_env = FlowProject.make_group(name="gpu")
 
-
     @cpu_env.with_directives({"np": 48})
     @gpu_env.with_directives({"ngpu": 4})
-    # For the operation when not run through the cpu
-    # or gpu group
     @FlowProject.operation.with_directives({"np": 4})
-    def expensive_operation(job):
-        # expensive computation for either
-        # CPU or GPU here
+    def expensive_simulate(job):
+        # expensive simulation for running on either
+        # CPUs or GPUs
         pass
 
 Users also frequently work with multiple jobs when performing tasks such as plotting data from all jobs in the same figure.
@@ -387,16 +394,14 @@ Decorators are used to define aggregation behavior, encompassed in the ``@aggreg
 
     @aggregator
     @FlowProject.operation
-    def operation_on_all_jobs(*jobs):
+    def plot_enzyme_activity(*jobs):
         import matplotlib.pyplot as plt
         import numpy as np
 
-        x = np.array(
-            [job.sp.temperature for job in jobs])
-        y = np.array(
-            [job.doc.activity for job in jobs])
+        x = [job.sp.temperature for job in jobs]
+        y = [job.doc.activity for job in jobs]
         fig, ax = plt.subplots()
-        ax.plot(x, y)
+        ax.scatter(x, y)
         ax.set_title(
             "Enzymatic Activity Across Temperature")
         fig.savefig("enzyme-activity.png")
