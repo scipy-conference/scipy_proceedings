@@ -162,9 +162,6 @@ Directives are set through Python function decorators and define resource and ex
 Examples of directives include number of CPUs or GPUs, the walltime, and memory.
 The use of directives allows **signac-flow** workflows to be portable across HPC systems by generating resource requests that are specific to each machine's scheduler.
 
-Some **signac** developers have begun conversations with experimental researchers regarding how the **signac** framework might be useful for a broader range of research tasks.
-Workflows that combine computational steps, such as optimization or post processing, with steps that might be performed (or manually triggered) by a researcher, such as the collection of data files from a microscope or robot, have complexities that could benefit from the infrastructure **signac**'s framework offers.
-
 Overview of New Features
 ------------------------
 
@@ -516,8 +513,7 @@ Conclusions
 
 From the birth of the **signac** framework to now, **signac** has grown in usability, performance, and use.
 In the last three years, we have added exciting new features, like groups, aggregation, and synced collections, while learning how to manage outreach and establish sustainable project governance in a burgeoning scientific open-source project.
-As maintainers and committers, we are looking to continue expanding the framework through user-oriented development and continued outreach to research fields that routinely have projects suited for **signac**.
-For example, extensions into experimental research labs are currently being sought after with an aim to provide the strong data management and providence **signac** provides into experimentalist communities.
+As maintainers and committers, we hope to continue expanding the framework through user-oriented development, reach users in research fields beyond materials science that routinely have projects suited for **signac**, and welcome new contributors with diverse backgrounds and skills to the project.
 
 Getting signac
 --------------
