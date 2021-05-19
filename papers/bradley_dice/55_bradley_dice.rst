@@ -266,6 +266,17 @@ Dynamic Workspaces: The signac-flow package can now handle workspaces where jobs
 Executing complex workflows via groups and aggregation
 ------------------------------------------------------
 
+.. figure:: signac-flow_aggregation-groups-bundling.pdf
+    :align: center
+    :scale: 90 %
+    :figclass: w
+
+    Aggregation, groups, and bundling allow users to build complex workflows.
+    The features are orthogonal, and can be used in any combination.
+    Aggregation enables one operation or group to act on multiple jobs.
+    Groups allow users to combine multiple operations into one, with dependencies among operations resolved at run time.
+    Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel.
+
 Two new concepts in signac-flow provide users with significantly more power to implement complex workflows: groups and aggregation.
 As both names imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
 The conceptual model of signac-flow builds on signac's notions of the ``Project`` and ``Job`` (the unit of the data space) through a ``FlowProject`` class that adds the ability to define and execute operations (the unit of a workflow) that act on jobs.
@@ -384,17 +395,6 @@ The simplest case of a bundle is a submission script with the same operation bei
 Bundling is what allows the submission script to contain multiple jobs executing the same operation.
 By storing information on individual bundles, signac-flow prevents accidental resubmission just as in the unbundled case.
 While the example above does not use either groups or aggregation, bundles works seamlessly with both.
-
-.. figure:: signac-flow_aggregation-groups-bundling.pdf
-    :align: center
-    :scale: 90 %
-    :figclass: w
-
-    Aggregation, groups, and bundling allow users to build complex workflows.
-    The features are orthogonal, and can be used in any combination.
-    Aggregation enables one operation or group to act on multiple jobs.
-    Groups allow users to combine multiple operations into one, with dependencies among operations resolved at run time.
-    Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel.
 
 Synced Collections: Backend-agnostic, persistent, mutable data structures
 -------------------------------------------------------------------------
@@ -524,11 +524,9 @@ Source code is available on GitHub [#]_ [#]_ and documentation is hosted online 
 Acknowledgments
 ---------------
 
-All authors should check to be sure their acknowledgements are included! Karen will help with this for Glotzer peeps.
-
 We would like to thank Kelly Wang for contributing the concept and content of Figure :ref:`overview`.
 We would also like to thank NumFOCUS, whose staff have provided the signac project with helpful advice on open-source governance, project sustainability, and community outreach.
-(Who/what else should we thank besides our respective funding sources / grants?)
 
-B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260. (...)
-M.M.H is supported by the National Science Foundation under Grant No. 1835593. (...)
+(TODO: Acknowledgments are incomplete.)
+B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
+M.M.H is supported by the National Science Foundation under Grant No. 1835593.
