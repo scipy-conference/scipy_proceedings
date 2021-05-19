@@ -31,6 +31,10 @@
 :email: TODO
 :institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
 
+:author: Eric Jankowski
+:email: ericjankowski@boisestate.edu
+:institution: Micron School of Materials Science and Engineering, Boise State University
+
 :author: Sharon C. Glotzer
 :email: sglotzer@umich.edu
 :institution: Department of Physics, University of Michigan, Ann Arbor
