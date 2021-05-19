@@ -292,19 +292,16 @@ Executing complex workflows via groups and aggregation
     The features are orthogonal, and can be used in any combination.
     Aggregation enables one operation or group to act on multiple jobs.
     Groups allow users to combine multiple operations into one, with dependencies among operations resolved at run time.
-    Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel.
+    Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel. :label:`workflow`
 
 Two new concepts in **signac-flow** provide users with significantly more power to implement complex workflows: groups and aggregation.
-As both names imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
+A third concept bundling is also involved in providing flexibility to users in their workflows, but
+on the execution not definition side.
+Figure :ref:`workflow` show a graphical illustration of the three concepts.
+
+As the names of both groups and aggregation imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
 The conceptual model of **signac-flow** builds on **signac**'s notions of the ``Project`` and ``Job`` (the unit of the data space) through a ``FlowProject`` class that adds the ability to define and execute operations (the unit of a workflow) that act on jobs.
-Operations are Python functions or shell commands that act on a job within the data space, and are defined using Python decorator syntax:
-
-..
-    Hardik - thinks that for this portion, the snippets should be consistent so that readers can
-    easily run these,
-
-    Brandon - I think that the snippets are best self contained. Without significant boilerplate
-    anyways these will not run since there is no underlying signac project.
+Operations are Python functions or shell commands that act on a job within the data space, and are defined using Python decorator syntax.
 
 .. code-block:: python
 
@@ -413,6 +410,8 @@ Another example is submitting aggregates with a fixed number of jobs in each agg
 
 Finally, bundling is another way to use workflows in conjunction with an HPC scheduling system.
 Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining what are effectively units of execution into a single submission script.
+This distinction makes bundling not part of the workflow definition, but a means of tailoring HPC
+batch scripts for different HPC submission preferences.
 The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs either in parallel or serial.
 Bundling is what allows the submission script to contain multiple jobs executing the same operation.
 By storing information on individual bundles, **signac-flow** prevents accidental resubmission just as in the unbundled case.
