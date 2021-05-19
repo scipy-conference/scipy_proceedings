@@ -95,10 +95,10 @@ Readers seeking more details about signac may refer to past signac papers: :cite
 This filesystem-based approach has both advantages and disadvantages.
 Its key advantages lie in flexibility and portability.
 The serverless design removes the need for any external running server process, making it easy to operate on any filesystem.
-The design is also intrinsically distributed, making it well suited for highly-parallel workflows where each instance generates more file-based data.
+The design is also intrinsically distributed, making it well suited for highly parallel workflows where multiple processes concurrently read or write file-based data stored in job directories.
 Conversely, this distributed approach precludes the performance advantages of centralized data stores with persistent indexes in memory.
 Typically, the signac approach works very well for projects up to 100,000 jobs, while significantly larger projects may have wait times that constrain interactive usage.
-These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the throughput that can be achieved within this model.
+These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the achievable throughput within this model.
 
 The framework is a strong choice for applications meeting one or more of the following criteria:
 
