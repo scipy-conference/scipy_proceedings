@@ -76,7 +76,7 @@ Introduction
     Next, users define a workflow using a subclass of **signac-flow**'s ``FlowProject``.
     The workflow shown has three operations (simulate, analyze, visualize) that, when executed, produce two new files ``results.txt`` and ``plot.png`` in the job directory. :label:`overview`
 
-The full source code of all examples in this paper can be found online [#]_.
+Working examples of features presented in this paper can be found online at [#]_.
 
 .. [#] https://github.com/glotzerlab/signac-examples
 
