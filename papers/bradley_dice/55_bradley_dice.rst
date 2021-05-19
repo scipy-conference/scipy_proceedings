@@ -266,9 +266,9 @@ Dynamic Workspaces: The signac-flow package can now handle workspaces where jobs
 Executing complex workflows via groups and aggregation
 ------------------------------------------------------
 
-Although already capable of implementing reproducible quality workflows, signac-flow has enhanced the usability through two new concepts: groups and aggregation.
+Two new concepts in signac-flow provide users with significantly more power to implement complex workflows: groups and aggregation.
 As both names imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
-In the conceptual model of signac-flow, flow builds on signac's notions of the project and job (the unit of the data space) through a FlowProject class that adds the ability to execute operations (the unit of a workflow) to a signac Project.
+The conceptual model of signac-flow builds on signac's notions of the ``Project`` and ``Job`` (the unit of the data space) through a ``FlowProject`` class that adds the ability to define and execute operations (the unit of a workflow) that act on jobs.
 Operations are Python functions or shell commands that act on a job within the data space, and are defined using Python decorator syntax:
 
 ..
@@ -292,9 +292,12 @@ Operations are Python functions or shell commands that act on a job within the d
         FlowProject().main()
 
 When this project is run using signac-flow's command line API (``python project.py run``), the user's current city is written into the job document Ann Arbor in this case.
-Operations can have preconditions and postconditions that define their eligibility, e.g. the existence of an input file in a job's workspace or a key in the job document (as shown in the above snippet) can be a precondition that must be met before an operation can be executed, or a postcondition that indicates an operation is complete.
+Operations can have preconditions and postconditions that define their eligibility.
+All preconditions must be met in order for a operation to be eligible for a given job.
+If any postcondition is met, that indicates an operation is complete (and thus ineligible).
+Examples of such conditions include the existence of an input file in a job's workspace or a key in the job document (as shown in the above snippet).
 However, this type of conditional workflow can be inefficient when sequential workflows are coupled with an HPC scheduler interface, because the user must log on to the HPC and submit the next operation after the previous operation is complete.
-This encourages large operations which are not modular and do not accurately represent the individual units of the work-flow limiting signac-flow's utility.
+The desire to submit large and long-running jobs to HPC schedulers encourages users to write large operation functions which are not modular and do not accurately represent the individual units of the workflow, thereby limiting signac-flow's utility and reducing the readability of the workflow.
 
 Groups, implemented by the ``FlowGroup`` class and ``FlowProject.make_group`` method, allows users to combine multiple operations into a single entity that can be run or submitted.
 Submitting a group allows signac-flow to dynamically resolve preconditions and postconditions of operations as each operation is executed, making it possible to combine separate operations (e.g. for simulation and analysis and plotting) into a single submission script with the expectation that all will execute despite the dependencies between operations.
