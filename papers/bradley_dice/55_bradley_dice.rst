@@ -126,7 +126,14 @@ Applications of signac
 ----------------------
 
 The signac framework has been cited 51 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
-Some of these studies include quantum calculations of small molecules :cite:`govoni.etal2018`, screenings of ionic liquids and organic solvents :cite:`thompson.etal2019a`, inverse design of pair potentials :cite:`adorf.etal2018`, optimizing photonic band gaps in colloidal materials :cite:`cersonsky.etal2018`, benchmarking atom-density representations for use in machine learning :cite:`musil.etal2021`, simulating fluid flow in polymer solutions :cite:`howard.etal2019`, design of optical metamaterials :cite:`harper.etal2020`, and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
+Some of these studies include quantum calculations of small molecules :cite:`govoni.etal2018`,
+screenings of ionic liquids and organic solvents :cite:`thompson.etal2019a`,
+inverse design of pair potentials :cite:`adorf.etal2018`,
+identifying photonic band gaps in 151,593 crystal structures :cite:`cersonsky.etal2021`,
+benchmarking atom-density representations for use in machine learning :cite:`musil.etal2021`,
+simulating fluid flow in polymer solutions :cite:`howard.etal2019`,
+design of optical metamaterials :cite:`harper.etal2020`,
+and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
 Much of the published research using signac comes from chemical engineering, materials science, or physics, the home fields of many of signac's core developers and thus fields where the project has had greater exposure.
 In addition to social factors such as the "home field advantage," materials research commonly requires large HPC resources with shared file systems, a use case where signac excels.
 However, there are many other fields with similar hardware needs where signac can be applied.
