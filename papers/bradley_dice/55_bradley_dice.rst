@@ -204,7 +204,14 @@ This means that manipulating a job document or reading data can be done through 
     >>> job.sp
     {'a': 1}
 
-HDF5 support for storing numerical data: Many applications used in research generate or consume large numerical arrays. For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation. However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome. The signac H5Store feature offers users a convenient wrapper around the h5py library for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format. The ``job.data`` attribute is an instance of the ``H5Store`` class, and is a key-value store saved on disk as ``signac_data.h5`` in the job workspace. Users who prefer to split data across multiple files can use the ``job.stores`` API to save in multiple HDF5 files. Corresponding ``project.data`` and ``project.stores`` attributes exist, which save data files in the project root directory. Using an instance of ``H5Store`` as a context manager allows users to keep the HDF5 file open while reading large chunks of the data.
+HDF5 support for storing numerical data: Many applications used in research generate or consume large numerical arrays.
+For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation.
+However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome.
+The signac H5Store feature offers users a convenient wrapper around the ``h5py`` library for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format.
+The ``job.data`` attribute is an instance of the ``H5Store`` class, and is a key-value store saved on disk as ``signac_data.h5`` in the job workspace.
+Users who prefer to split data across multiple files can use the ``job.stores`` API to save in multiple HDF5 files.
+Corresponding ``project.data`` and ``project.stores`` attributes exist, which save data files in the project root directory.
+Using an instance of ``H5Store`` as a context manager allows users to keep the HDF5 file open while reading large chunks of the data:
 
 .. code-block:: python
 
