@@ -228,8 +228,8 @@ Using an instance of ``H5Store`` as a context manager allows users to keep the H
 
     with job.data:
         # Copy array data from the file to memory
-        # (which will persist after the HDF5 file
-        # is closed) by slicing with an empty tuple:
+        # (which will persist after the HDF5 file is
+        # closed) by indexing with an empty tuple:
         my_array = job.data["my_array"][()]
 
 **Advanced searching and filtering of the workspace:**
