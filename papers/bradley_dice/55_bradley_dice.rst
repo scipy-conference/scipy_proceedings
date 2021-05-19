@@ -77,7 +77,7 @@ The full source code of all examples in this paper can be found online [#]_.
 .. [#] https://github.com/glotzerlab/signac-examples
 
 Research projects often address problems where questions change rapidly, data models are always in flux, and compute infrastructure varies widely from project to project.
-The signac data management framework is a tool designed by researchers, for researchers, to make prototyping quick and reproducibility easy.
+The signac data management framework is a tool designed by researchers, for researchers, to simplify the process of prototyping and performing reproducible scientific computations.
 It forgoes serializing complex data files into a database in favor of working with these files directly, providing fast indexing utilities for a set of directories.
 Using signac, a data space on the file system is easily initialized, searched, and modified using either a Python or command-line interface.
 The companion package signac-flow interacts with the data space to generate and analyze data through reproducible workflows that easily scale from laptops to supercomputers.
