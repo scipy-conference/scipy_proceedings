@@ -307,8 +307,7 @@ Furthermore, groups are aware of directives and can properly combine the directi
 
     from flow import FlowProject
 
-    new_group = FlowProject.make_group(
-        name="new_group")
+    new_group = FlowProject.make_group(name="new_group")
 
     @new_group.with_directives(
         {"ngpu": 2,
