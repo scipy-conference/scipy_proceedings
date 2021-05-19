@@ -150,6 +150,8 @@ To give a rough idea of the limits of scalability, it can be difficult to scale 
 Many **signac** projects have 100 to 10,000 jobs, with each job workspace containing arbitrarily large data sizes (the total file size of the job workspace has little effect on the speed of the **signac** framework).
 Some users that primarily wish to leverage **signac-flow**'s workflows for execution and submission may have a very small number of jobs (< 10).
 One example of this would be executing a small number of expensive biomolecular simulations using different random seeds in each job's state point.
+Importantly, projects with a small number of jobs can be expanded at a later time, and make use of the same workflow defined for the initial set of jobs.
+The abilities to grow a project and change its schema on-the-fly catalyze the kind of exploration that is crucial to answering research questions.
 
 The workflow submission features of **signac-flow** interoperates with popular HPC schedulers including SLURM, PBS/TORQUE, and LSF automating the generation and submission of scheduler batch scripts.
 Directives are set through Python function decorators and define resource and execution requests for operations.
