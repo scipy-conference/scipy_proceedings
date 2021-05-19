@@ -256,7 +256,7 @@ These improvements allow **signac** to scale to ~100,000 jobs.
 
 In **signac**, the core of the ``Project`` and ``Job`` classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user.
 Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time (:math:`O(1)`) instead of linear time (:math:`O(N_{jobs})`).
-Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz.
+Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz :cite:`snakeviz`.
 
 ..
     TODO: include a graph of performance from 1.0 to now
