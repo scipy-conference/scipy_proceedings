@@ -375,7 +375,7 @@ Decorators are used to define aggregation behavior, encompassed in the ``@aggreg
 
 Like groups, there are many reasons why a user might wish to use aggregation.
 For example, a signac data space that describes weather data for multiple cities in multiple years might want to plot or analyze data that uses ``@aggregator.groupby("city")`` to show changes over time for each city in the data space.
-Similarly, aggregating over replicas facilitates computing averaged quantities and errors.
+Similarly, aggregating over replicas (e.g. the same simulation with different random seeds) facilitates computing averaged quantities and error bars.
 Another example is submitting aggregates with a fixed number of jobs in each aggregate to enable massive parallelization by breaking a large MPI communicator into a smaller communicator for each independent job, which is necessary for efficient utilization of leadership-class supercomputers like OLCF Summit.
 
 A third concept while not new warrants attention in this section, bundling.
