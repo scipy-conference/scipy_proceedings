@@ -100,15 +100,17 @@ Conversely, this distributed approach precludes the performance advantages of ce
 Typically, the signac approach works very well for projects up to 100,000 jobs, while significantly larger projects may have wait times that constrain interactive usage.
 These limits are inherent to signac's use of small files for each job's state point, but the framework has been aggressively optimized and uses extensive caching/buffering to maximize the throughput that can be achieved within this model.
 
-The framework is a strong choice for applications involving file-based workflows, especially those that are quickly evolving or will run on HPC clusters, especially where the amount of required computation per job is large.
-For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to study the screening of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations.
+The framework is a strong choice for applications meeting one or more of the following criteria:
 
-..
-    TODO: insert examples of real world projects with scientific applications [HOOMD, MPB, etc],
-    project sizes [100,000 jobs], number of jobs / number of terabytes).
+- input/output data is primarily file-based
+- prototype research code where data schemas may change or evolve
+- computations will use an HPC cluster
+- the amount of computation per job is large
+- parameter sweeps over a range of values (with values on a grid or dynamically determined by e.g. active learning)
+- heterogeneous data (not all jobs have the same keys present in their state points)
 
-    Brandon - I think asking Allen about his binary sphere paper may be useful. Most papers don't
-    seem to mention in a simple way the approximate number of jobs they had.
+For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to execute computer simulations of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations.
+The study investigated 18 compositions (by mass fraction) and 22 unique solvents from five chemical families (nitriles, alcohols, halocarbons, carbonyls, and glymes), with a state point for each pairing of mass fraction and solvent type.
 
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
 However, it is possible to create a signac project with state points corresponding to each row, which may be a good use of signac if there is file-based data affiliated with each row's parameters.
