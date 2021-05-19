@@ -190,7 +190,8 @@ This is aligned with the principles of TRUE (Transparent, Reproducible, Usable b
 Simplifying and streamlining existing functionalities
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Data access via the shell: The ``signac shell`` command allows the user to quickly enter a Python interpreter that is pre-populated with variables for the current project or job (when in a project or job directory).
+**Data access via the shell:**
+The ``signac shell`` command allows the user to quickly enter a Python interpreter that is pre-populated with variables for the current project or job (when in a project or job directory).
 This means that manipulating a job document or reading data can be done through a hybrid of bash/shell commands and Python commands that are fast to type.
 
 .. code-block:: shell
@@ -215,7 +216,8 @@ This means that manipulating a job document or reading data can be done through 
     >>> job.sp
     {'a': 1}
 
-HDF5 support for storing numerical data: Many applications used in research generate or consume large numerical arrays.
+**HDF5 support for storing numerical data:**
+Many applications used in research generate or consume large numerical arrays.
 For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation.
 However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome.
 The **signac** H5Store feature offers users a convenient wrapper around the ``h5py`` library for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format.
@@ -234,11 +236,13 @@ Using an instance of ``H5Store`` as a context manager allows users to keep the H
         # is closed) by slicing with an empty tuple:
         my_array = job.data["my_array"][()]
 
-Integrating with the PyData Ecosystem: Users can now summarize data from a **signac** project into a pandas DataFrame for analysis.
+**Integrating with the PyData Ecosystem:**
+Users can now summarize data from a **signac** project into a pandas DataFrame for analysis.
 The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
 Support for Jupyter notebooks has also been added, enabling rich HTML representations of **signac** objects.
 
-Advanced searching and filtering of the workspace: The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
+**Advanced searching and filtering of the workspace:**
+The ``signac diff`` command, available on both the command line and Python interfaces, returns the difference between two or more state points and allows for easily assessing subsets of the dataspace. By unifying sp and doc querying, filtering, and searching workspaces can be more fine-grained and intuitive.
 
 Performance Enhancements
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -262,17 +266,21 @@ In addition, the improvements in **signac** such as faster iteration over large 
 Improved User Output
 ~~~~~~~~~~~~~~~~~~~~
 
-Workflow graph detection: The preconditions and postconditions of operations in a **signac-flow** ``FlowProject`` implicitly define a graph. For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
+**Workflow graph detection:**
+The preconditions and postconditions of operations in a **signac-flow** ``FlowProject`` implicitly define a graph. For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
 This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
 
-Templated status output: Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for raw, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
+**Templated status output:**
+Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for raw, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
 
 Enhanced Workflows
 ~~~~~~~~~~~~~~~~~~
 
-Directives: Directives provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others. Directives can be a function of the job as well as the operation, allowing for great flexibility. In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
+**Directives:**
+Directives provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others. Directives can be a function of the job as well as the operation, allowing for great flexibility. In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
 
-Dynamic Workspaces: The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs. This is crucial for optimization workflows and iteratively sampling parameter spaces, and allows projects to become more automated with some data points only run if a prior condition on another data point is reached.
+**Dynamic Workspaces:**
+The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs. This is crucial for optimization workflows and iteratively sampling parameter spaces, and allows projects to become more automated with some data points only run if a prior condition on another data point is reached.
 
 Executing complex workflows via groups and aggregation
 ------------------------------------------------------
