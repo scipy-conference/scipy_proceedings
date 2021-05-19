@@ -246,7 +246,7 @@ Optimizations were identified by profiling the performance of common operations 
 
 Similarly, performance enhancements were also made in the signac-flow package.
 Some of the optimizations identified include lazy evaluation of run commands and directives, and caching of job status information.
-In addition, the improvements in signac such as faster iteration over large signac projects used in signac-flow made signac-flow's primary functions -- checking project status, executing operations, and submitting operations to a cluster -- significantly faster.
+In addition, the improvements in signac such as faster iteration over large signac projects used in signac-flow made signac-flow's primary functions — checking project status, executing operations, and submitting operations to a cluster — significantly faster.
 
 Improved User Output
 ~~~~~~~~~~~~~~~~~~~~
