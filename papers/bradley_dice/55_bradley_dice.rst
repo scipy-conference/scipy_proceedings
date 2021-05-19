@@ -127,7 +127,7 @@ Applications of signac
 
 The signac framework has been cited 51 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
 Some of these studies include quantum calculations of small molecules :cite:`govoni.etal2018`,
-screenings of ionic liquids and organic solvents :cite:`thompson.etal2019a`,
+4,480 simulations of epoxy curing (each containing millions of particles) :cite:`thomas.etal2018`,
 inverse design of pair potentials :cite:`adorf.etal2018`,
 identifying photonic band gaps in 151,593 crystal structures :cite:`cersonsky.etal2021`,
 benchmarking atom-density representations for use in machine learning :cite:`musil.etal2021`,
