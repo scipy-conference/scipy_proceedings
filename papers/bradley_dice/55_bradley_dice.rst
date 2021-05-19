@@ -377,7 +377,7 @@ without a group), or on a CPU or GPU focused HPC/workstation.
 
 Users also frequently work with multiple jobs when performing tasks such as plotting data from all jobs in the same figure.
 Though the **signac** package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no similar feature in **signac-flow** to allow operations to act on multiple jobs.
-The concept of _aggregation_ provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a **signac** data space.
+The concept of aggregation provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a **signac** data space.
 Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
 When decorated with an aggregator, operations can accept multiple job instances as positional arguments through Python's argument unpacking.
 Decorators are used to define aggregation behavior, encompassed in the ``@aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
