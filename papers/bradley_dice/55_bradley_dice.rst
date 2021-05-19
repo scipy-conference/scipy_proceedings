@@ -426,10 +426,10 @@ Motivation
 
 All of **signac**'s principal functions are designed around efficiently indexing a collection of directories.
 By organizing job directories by the hash of their state point, **signac** can perform many operations in constant time.
-To present a Pythonic API, state points are exposed via a dictionary-like interface, making it very easy to modify a state point and have that change transparently reflected in both the JSON file and the name of the corresponding directory.
+To present a Pythonic API, state points are exposed via a dictionary-like interface, making it very easy to modify a state point and have that change transparently reflected in both the JSON file and the name of the corresponding directory (which is the state point's hash).
 
 The need to parse these JSON files for indexing and the complexity of modifying them represent the most significant barriers to scaling **signac**.
-Even in the absence of file modification, reading a large number of files simply to produce a database index becomes prohibitively expensive for large data spaces.
+Even in the absence of file modification, simply reading a large number of files to produce a database index becomes prohibitively expensive for large data spaces.
 Although various optimizations have incrementally improved **signac**'s scalability, an alternative means of storing the state point and associated metadata that circumvents the heavy I/O costs of our current approach has the potential to make a much larger impact.
 However, replacing individual JSON files as the primary data source for **signac** without breaking **signac**'s API would require a generic means for providing the same interface to the underlying index and metadata irrespective of the underlying storage mechanism.
 Once developed, however, such an API would abstract out enough of the internals of **signac** to enable other generalizations as well, such as making it relatively easy to support alternate (and nearly arbitrary) data space layouts.
