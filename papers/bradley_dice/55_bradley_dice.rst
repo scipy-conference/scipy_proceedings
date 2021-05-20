@@ -564,6 +564,9 @@ We would also like to thank NumFOCUS, whose staff have provided the **signac** p
 (TODO: Acknowledgments are incomplete.)
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
 M.M.H is supported by the National Science Foundation under Grant No. 1835593.
+A.T. was supported by the National Science Foundation under Grant No. 1707640.
+
+Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of NSF.
 
 Author contributions
 --------------------
