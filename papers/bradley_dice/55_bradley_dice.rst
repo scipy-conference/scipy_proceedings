@@ -572,9 +572,8 @@ Author contributions
 --------------------
 
 Conceptualization, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
-data curation, B.D.D., B.L.B., V.R., A.T., and M.M.H.;
+data curation, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
 funding acquisition, E.J. and S.C.G.;
-investigation, B.D.D., B.L.B., V.R., and C.S.A.;
 methodology, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
 project administration, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
 software, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
