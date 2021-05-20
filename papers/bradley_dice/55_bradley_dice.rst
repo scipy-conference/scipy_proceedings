@@ -27,8 +27,12 @@
 :email: hojha@ch.iitr.ac.in
 :institution: Department of Chemical Engineering, Indian Institute of Technology Roorkee
 
+:author: Kelly Wang
+:email: kelwang@umich.edu
+:institution: Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor
+
 :author: Carl S. Adorf
-:email: TODO
+:email: csadorf@umich.edu
 :institution: Department of Chemical Engineering, University of Michigan, Ann Arbor
 
 :author: Eric Jankowski
@@ -560,3 +564,19 @@ We would also like to thank NumFOCUS, whose staff have provided the **signac** p
 (TODO: Acknowledgments are incomplete.)
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
 M.M.H is supported by the National Science Foundation under Grant No. 1835593.
+
+Author contributions
+--------------------
+
+Conceptualization, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
+data curation, B.D.D., B.L.B., V.R., A.T., and M.M.H.;
+funding acquisition, E.J. and S.C.G.;
+investigation, B.D.D., B.L.B., V.R., and C.S.A.;
+methodology, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
+project administration, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
+software, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., and C.S.A.;
+supervision, S.C.G.;
+visualization, B.D.D., B.L.B., A.T., and K.W.;
+writing – original draft, B.D.D., B.L.B., V.R., A.T., and H.O.;
+writing – review & editing, B.D.D., B.L.B., V.R., A.T., M.M.H., H.O., K.W., and S.C.G.
+All authors have read and agreed to the published version of the manuscript.
