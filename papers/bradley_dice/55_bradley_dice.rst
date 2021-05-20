@@ -506,6 +506,7 @@ In our growth with increasing contributors and users, we recognized a need to ch
 We based our new model on the Meritocratic Governance Model and our manager roles on Numba Czars.
 We decided on a four category system with maintainers, committers, contributors, and users.
 Code review and pull request merge responsibilities are granted to maintainers and committers, who are (self-) nominated and accepted by a vote of the project maintainers.
+Maintainers are additionally responsible for the strategic direction of the project and administrative duties.
 Contributors consist of all members of the community who have contributed in some way to the framework, which includes adding or refactoring code as well as filing issues and improving documentation.
 Finally, users refer to all those who use **signac** in any capacity.
 
