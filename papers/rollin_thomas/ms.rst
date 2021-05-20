@@ -29,6 +29,7 @@
               Lawrence Berkeley National Laboratory,
               1 Cyclotron Road MS59-4010A,
               Berkeley, California, 94720
+:orcid: 0000-0002-4203-4079
 
 :video: http://www.youtube.com/watch?v=dhRUe-gz690
 
@@ -296,6 +297,30 @@ interest are reported.
 
 Message Logging and Storage
 ---------------------------
+
+NERSC has developed a lightweight abstraction layer for message
+logging called nerscjson. nerscjson is a simple python package that
+consumes json format messages and forwards them to an appropriate
+transport layer that connects to the ONMI infrastructure. Currently
+this is primarily achieved by utilizing the ``SysLogHandler`` from the
+standard logging library with a small modification to the time format
+to satisfy RFC 3339. Downstream from these transport layers a message
+key is used to identify the nerscjson messages and json payloads are
+extracted then forwarded to the appropriate Elastic index.
+
+.. code-block:: python
+
+    import nersjson
+    nerscjson.log(routing_key, json_message)
+
+On Cori compute nodes we use the Cray Lightweight Log Manager (LLM)
+which is configured accept RFC 5424 protocol messages on tier2 service
+nodes. For invocation a random tier2 node is choosen as the recipient
+in order load balance messages. On other systems, such as login nodes,
+the local rsyslog is used as the transport. This abstract layer allows
+us to maintain a stable interface for logging while utilizing an
+appropriately scalable transport for the system. On future systems we
+are investigating kafka and LDMS event streams.
 
 We send our messages to Elastic via nerscjson.
 
