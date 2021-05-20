@@ -85,11 +85,11 @@ like funding agencies, vendors, developers, users, standards bodies, and other
 high-performance computing (HPC) centers.
 Actively monitoring the workload enables us to identify suboptimal or
 potentially problematic user practices and address them through direct
-intervention, improving our documentation, or adjusting software deployment to
-make it easier for users to use software in better ways.
+intervention, improving documentation, or making it easier for users to use
+software in better ways.
 Measuring the relative frequency of use of different software components can
-help us optimize delivery of software, retiring less-utilized packages,
-and promoting timely migration to newer versions.
+help us optimize delivery of software, retiring less-utilized packages and
+promoting timely migration to newer versions.
 Understanding which software packages are most useful to our users helps us
 focus support, explore opportunities for collaborating with key software
 developers and vendors, or at least advocate on our users' behalf to the right
@@ -108,17 +108,17 @@ intelligence workflows, visualizing massive data sets, and more.
 Adapting workload analysis practices to scientific Python gives its community
 the same data-driven leverage that other language communities in HPC now enjoy.
 This article documents the approach to Python workload analysis we have taken at
-NERSC and what we have learned from taking it.
+NERSC and what we have learned from the experience.
 
 In the next section we provide an overview of related work including existing
 tools for workload data collection, management, and analysis.
 In Methods, we describe an approach to Python-centric workload analysis that
-uses built-in Python features to capture usage data, and a Jupyter-notebook
+uses built-in Python features to capture usage data, and a Jupyter notebook
 based workflow for exploring the data set and communicating what we discover.
-Our results include high-level statements about what Python packages are used
+Our Results include high-level statements about what Python packages are used
 most often and at what scale on Cori, but also some interesting deeper dives
 into use of certain specific packages along with a few surprises.
-In the Discussion, we follow-up on the results from the previous section, share
+In the Discussion, we follow up on the results from the previous section, share
 the pluses and minuses of our workflow, the lessons we learned in setting it up,
 and outline plans for expanding the analysis to better fill out the picture of
 Python at NERSC.
@@ -132,45 +132,47 @@ Related Work
 ..
    What is the context for the work?
 
-The simplest approach that is actually used to get a sense of what applications
-run on a supercomputer is to scan submitted batch job scripts for executable
-names.
-In the case of Python applications, this is problematic since some potentially
-huge fraction of users will invoke Python scripts directly instead of as an
-argument to the ``python`` executable.
-This method also provides only a crude count of actual ``python`` invocations,
-and gives little insight into deeper questions about Python packages, libraries,
+The simplest approach used to get a sense of what applications run on a
+supercomputer is to scan submitted batch job scripts for executable names.
+In the case of Python applications, this is problematic since users often
+invoke Python scripts directly instead of as an argument to the ``python``
+executable.
+This method also provides only a crude count of Python invocations and gives
+little insight into deeper questions about specific Python packages, libraries,
 or frameworks in use.
 
-Software environment modules are a very common way for HPC centers to deliver
-software to users [Fur91]_ [Mcl11]_.
-Modules operate primarily by setting, modifying, or deleting environment
-variables upon invocation of a module command (such as load, swap, or unload).
-This provides an entrypoint for software usage monitoring: Staff can inject
-code into a module load operation to record the name of the module being
-loaded, its version, and other information about the user's environment.
-Lmod documentation includes a guide on how to configure Lmod to use syslog and
-MySQL to collect module loads through a hook function [lmod]_.
-Counting module loads as a way to track Python usage is simple but has issues.
-Users often include module load commands in their shell initialization/resource
-files (e.g., `.bashrc`), meaning that shell invocation or mere user login may
-trigger a detection even if the user never actually uses it.
+Software environment modules [Fur91]_ are a common way for HPC centers to
+deliver software to users.
+Environment modules operate primarily by setting, modifying, or deleting
+environment variables upon invocation of a module command (e.g. ``module
+load``, ``module swap``, or ``module unload``)
+This provides an entrypoint for software usage monitoring.
+Staff can inject code into a module load operation to record the name of the
+module being loaded, its version, and other information about the user's
+environment.
+Lmod, a newer implementation of environment modules [Mcl11]_, provides guide on
+how to configure it to use syslog and MySQL to collect module loads through a
+hook function [lmod]_.
+Counting module loads as a way to track Python usage has the virtue of
+simplicity.
+However, users often include module load commands in their shell resource files
+(e.g., `.bashrc`), meaning that shell invocation or mere user login may trigger
+a detection even if the user never actually uses it.
 Capturing information at the package, library, or framework level using module
-counts would also require that individual packages be installed as separate
-modules.
-Module counts also miss Python usage outside of the module environment, such as
-user-installed Python environments or stacks.
+load counts would also require that individual Python packages be installed as
+separate environment modules.
+Module load counts also miss Python usage that happens without loading modules,
+in particular user-installed Python environments or in containers.
 
 Tools like ALTD [Fah10]_ and XALT [Agr14]_ are commonly used in HPC contexts to
 track library usage in compiled HPC applications.
-The approach is to introduce wrappers that intercept and introduce operations at
-link time and when the job runs the application via batch job launcher (e.g.
-``srun`` in the case of Slurm).
-At link time, wrappers can inject metadata into the executable header, take a
-census of libraries being linked in, and forward that information to a file or
-database for subsequent analysis.
-At job launch, information stored in the header at link time can be dumped and
-forwarded also.
+The approach is to introduce wrappers that intercept the linker and batch job
+launcher (e.g. ``srun`` in the case of Slurm).
+The linker wrapper can inject metadata into the executable header, take a census
+of libraries being linked in, and forward that information to a file or database
+for subsequent analysis.
+Information stored in the header at link time is dumped and forwarded later by
+the job launch wrapper.
 On systems where all user applications are linked and launched with instrumented
 wrappers, this approach yields a great deal of actionable information to HPC
 center staff.
@@ -184,33 +186,24 @@ programs using a non-instrumented Python, but pure Python libraries currently
 are not detected.
 XALT is an active project so this may be addressed in a future release.
 
-In [Mac17]_ the author describes an approach based on instrumenting Python on
-Blue Waters capture information about Python package using only native Python
-built-in features: ``sitecustomize`` and ``atexit``.
+[Mac17]_ describes an approach to monitoring Python package use on Blue Waters
+using only built-in Python features: ``sitecustomize`` and ``atexit``.
 During normal Python interpreter start-up, an attempt is made to import a module
-named ``sitecustomize`` that has the ability to perform any site-specific
-customizations it contains.
+named ``sitecustomize`` intended to perform site-specific customizations.
 In this case, the injected code registers an exit handler through the ``atexit``
 standard library module.
-This exit handler inspects ``sys.modules`` which in normal circumstances
-includes a list of all packages imported in the course of execution.
+This exit handler inspects ``sys.modules``, a dictionary that normally describes
+all packages imported in the course of execution.
 On Blue Waters, ``sitecustomize`` was installed into the Python distribution
 installed and maintained by staff.
 Collected information was stored to plain text log files on Blue Waters.
 An advantage of this approach is that ``sitecustomize`` failures are nonfatal,
-and and placing the import reporting step into an exit hook (as opposed to
-instrumenting the ``import`` mechanism) means that it minimizes interference
-with normal operation of the host application.
-**Limitations, like virtualenv that Colin mentions, abnormal exit conditions,
-MPI_Abort() e.g. when run with python -m mpi4py**
-
-* Slurm may kill the job before it fires the exit hook
-* Mpi4py also: https://mpi4py.readthedocs.io/en/stable/mpi4py.run.html
-
-We also deemed the use of plain text log files on platform storage to be
-infeasible given the rate of Python jobs we would be monitoring.
-
-**Need a paragraph telling why we like this last method**
+and placing the import reporting step into an exit hook (as opposed to
+instrumenting the import mechanism) means that it minimizes interference with
+normal operation of the host application.
+The major limitation of this strategy is that abnormal process terminations
+prevent the Python interpreter from proceeding through its normal exit sequence
+and package import data are not recorded.
 
 Methods
 =======
@@ -219,8 +212,8 @@ Methods
    How was the work done?
 
 Users have a number of options when it comes to how they use Python at NERSC.
-NERSC provides a "default" Python to its users through software environment
-modules, based on the Anaconda Python distribution.
+NERSC provides a "default" Python to its users through a software environment
+module, based on the Anaconda Python distribution with modifications.
 Users may load this module, initialize the Conda tool, and create their own
 custom Conda environments.
 Projects or collaborations may provide their users with shared Python
@@ -230,13 +223,13 @@ Cray provides a basic Python module containing a few core scientific Python
 packages linked against Cray MPICH and LibSci libraries.
 Python packages are also installed by staff or users via the Spack HPC package
 manager.
-NERSC also provides Shifter, a container runtime that enables users to run
-custom Docker containers that can contain Python built however the author
+NERSC also provides Shifter **ref**, a container runtime that enables users to
+run custom Docker containers that can contain Python built however the author
 desired.
 With a properly defined kernel-spec file, a user is able to use a Python stack
 based on any of the above options as a kernel in NERSC's Jupyter service.
-We need to be able to perform workload analysis across all of these options, in
-part to understand the relative importance of each.
+We need to be able to gather data for workload analysis across all of these
+options, in part to understand the relative importance of each.
 
 Monitoring all of the above can be done using the strategy outlined in [Mac17]_
 with certain changes.
@@ -246,12 +239,18 @@ The file system where ``sitecustomize`` is installed should be local to the
 compute nodes that it runs on and not served over network, in order to avoid
 exacerbating poor performance of Python start-up at scale.
 We accomplish this by installing it and any associated Python modules into the
-compute node system images themselves, and configuring user environments to
-include a ``PYTHONPATH`` setting that injects ``sitecustomize`` into
+compute node system images themselves, and configuring default user environments
+to include a ``PYTHONPATH`` setting that injects ``sitecustomize`` into
 ``sys.path``.
-Shifter containers have the system image path included as a volume mount.
-Users can opt out of monitoring by unsetting or overwriting ``PYTHONPATH``.
-**Explain why Python path --- easier to opt out than to ask users to opt in**
+Shifter containers include the monitoring packages from the system image via
+volume mount set at runtime.
+Users can opt out of monitoring simply by unsetting or overwriting
+``PYTHONPATH``.
+We took the approach of provisioning a system-wide ``PYTHONPATH`` because it is
+far easier to give users the option of opting out of data collection by
+unsetting it than it is to ask them to install it as an add-on themselves.
+This also gives us a centrally managed source of truth for what is monitored at
+any given time.
 
 Customs: Inspect and Report Packages
 ------------------------------------
@@ -262,41 +261,45 @@ particular interest.
 Customs can be understood in terms of three simple concepts.
 A **Check** is a simple object that represents a Python package by its name and
 a callable that is used to verify that the package is present in a dictionary.
-In production this dictionary should be ``sys.modules`` but during testing it is
-allowed to be a mock ``sys.modules`` dictionary.
+In production this dictionary should be ``sys.modules`` but during testing it
+can be mock ``sys.modules`` dictionary.
 The **Inspector** is a container of Check objects, and is responsible for
 applying each Check to ``sys.modules`` (or mock) and returning the names of
 packages that are detected.
 Finally, the **Reporter** is an abstract class that takes some action given a
 list of detected package names.
-Reporter implementations should record or transmit the list of detected
-packages, but exactly how this is done is up to the implementor.
-Customs includes a few reference Reporter reference implementations and an
-example of a custom Customs Reporter.
+The Reporter action should be to record or transmit the list of detected
+packages, but exactly how this is done depends on implementation.
+Customs includes a few reference Reporter implementations and an example of a
+custom Customs Reporter.
 
-Generally, staff only interact with Customs through its primary entry point, the
-function ``register_exit_hook``.
+Customs provides an entry point to use in ``sitecustomize``, the function
+``register_exit_hook``.
 This function takes two arguments.
-The first argument is a list of strings or tuples that are converted into
-Checks.
+The first argument is a list of strings or (string, callable) tuples that are
+converted into Checks.
 The second argument is the type of Reporter to be used.
 The exit hook can be registered multiple times with different package
 specification lists or Reporters.
 
-The intended pattern is that a system administrator will create a list of
-package specifications they want to check for, select or implement an
-appropriate Reporter, and pass these to ``register_exit_hook`` within
-``sitecustomize.py`` and install the latter module into ``sys.path``.
+The intended workflow is that staff member creates a list of package
+specifications they want to check for, selects or implements an appropriate
+Reporter, and passes these two objects to ``register_exit_hook`` within
+``sitecustomize.py``.
+Installing ``sitecustomize`` to system images generally involves packaging the
+software as RPM to be installed into node system images and deployed by system
+administrators.
 When a user invokes Python, the exit hook will be registered using the
 ``atexit`` standard library module, the application proceeds as normal, and then
-at shutdown ``sys.modules`` is inspected and detected packages of interest are
-reported.
+at normal shutdown ``sys.modules`` is inspected and detected packages of
+interest are reported.
 
 Message Logging and Storage
 ---------------------------
 
 We send our messages to Elastic via nerscjson.
 
+* What do we collect
 * MODS and OMNI
 * LDMS, ask Taylor/Eric for ref and refs
 * Libraries monitored is a subset of the whole
@@ -305,37 +308,20 @@ We send our messages to Elastic via nerscjson.
 
 Talk about LDMS, [Age14]_.
 
-The Story: Prototyping, Production and Publication with Jupyter
----------------------------------------------------------------
+Prototyping, Production, and Publication
+----------------------------------------
 
-.. epigraph::
-
-    Data scientists are involved with gathering data, massaging it into a
-    tractable form, making it tell its story, and presenting that story to
-    others.
-
-    -- Mike Loukides, `What is Data Science?
-    <https://www.oreilly.com/radar/what-is-data-science/>`_
-
-* Talk about the analysis flow: Papermill, Dask, Jupyter, Voila.
-  The amount of data being gathered is consequential enough that we turned to the
-  Python data ecosystem to help us manage it and discuss our experiences with a
-  Jupyter notebook-based workflow for exploring the data.
-* Talk about how/why we choose these various pieces
-
-OMNI includes Kibana, a visualization interface that enables NERSC staff to
+OMNI includes Kibana, a visualization interface that NERSC staff can use to
 visualize indexed Elasticsearch data collected from NERSC systems, including
 data collected for MODS.
 The MODS team uses Kibana for creating plots of usage data, organizing these
-into attractive dashboard displays that communicate MODS metrics at a high
-level, at a glance.
-Kibana is very effective at easily providing a high-level picture of MODS, but
-the MODS team wanted deeper insights from the data and obtaining these through
-Kibana presented some difficulty.
-Given that the MODS team is fairly fluent in Python, and that NERSC provides
-users (including staff) with a good Python ecosystem for data analytics, using
+into attractive dashboard displays that communicate MODS high-level metrics.
+Kibana is very effective at providing a general picture of user behavior with
+the NERSC data stack, but the MODS team wanted deeper insights from the data and
+obtaining these through Kibana presented some difficulty.
+Given that the MODS team is fluent in Python, and that NERSC provides users
+(including staff) with a productive Python ecosystem for data analytics, using
 Python tools for understanding the data was a natural choice.
-**So we figured out the toolchain we needed and here it is.**
 
 Our first requirement was the ability to explore MODS Python data interactively
 to prototype new analyses, but we wanted to be able to record that process,
@@ -376,6 +362,12 @@ using Shifter, and in Spin they are just Docker containers managed by Rancher
 2, orchestrated with Kubernetes.
 We use cell notebook metadata to execute the Spin-appropriate cells and not the
 Cori-appropriate ones in Spin.
+
+* Talk about the analysis flow: Papermill, Dask, Jupyter, Voila.
+  The amount of data being gathered is consequential enough that we turned to the
+  Python data ecosystem to help us manage it and discuss our experiences with a
+  Jupyter notebook-based workflow for exploring the data.
+* Talk about how/why we choose these various pieces
 
 Results
 =======
@@ -553,6 +545,15 @@ Discussion
 
 ..
    What do the results mean?  What are the implications and directions for future work?
+
+.. epigraph::
+
+    Data scientists are involved with gathering data, massaging it into a
+    tractable form, making it tell its story, and presenting that story to
+    others.
+
+    -- Mike Loukides, `What is Data Science?
+    <https://www.oreilly.com/radar/what-is-data-science/>`_
 
 * How hard was it to set up, experiment with, maintain
 * May need to follow up with users
