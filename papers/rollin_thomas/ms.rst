@@ -359,40 +359,102 @@ service running alongside NERSC's JupyterHub.
 
 Iterative prototyping of big data analysis pipelines often starts with testing
 hypotheses or algorithms against a small subset of the data and then scaling
-that analysis up to the entire data set.
-The initial subset of the data used should be large and well-enough sampled to
-avoid prematurely presenting an overly biased impression of the entire data set.
-HPC hardware and software tools enable the prototyping phase to proceed with as
-much data as possible.
-Hardware is NVIDIA V100, A100 and to use the GPUs we used RAPIDS libraries like
-cuDF and CuPy.
-To scale up the analysis we use Dask.
-Software stack is in Docker container.
-**FIXME**
+that analysis up to the entire data set. Using Python we can interact with a
+subset of data with richer and more powerful way than through database queries.
+This initial, interactive protyping should then be able to scale to process all
+of our data efficiently on NERSC's HPC hardware.
 
-**FIXME**
-We want to also be able to convert this exploratory phase into something we
-can use in production, and it would be best not to have to start with a
-Jupyter notebook for an analysis and then have to convert it to a script.
-Making it possible to execute notebooks programmatically, on a scheduler
-(using our batch scheduler), means Papermill.
+**TODO** This paragraph is a little awkward and I'm not sure it's in the right place
+It should probably go under the Jupyter analysis
 
-**FIXME**
+To avoid version
+compatibility problems within the Python stack used for the analysis we use
+Docker containers.  At runtime the Docker containers are run using Shifter (our
+in-house HPC container solution), and in Spin they are just Docker containers
+managed by Rancher 2, orchestrated with Kubernetes.  For our Jupyter analysis,
+Wwe use cell notebook metadata to execute the Spin-appropriate cells and not
+the Cori-appropriate ones in Spin. (We use two separate sets of notebooks for
+Python analysis since our data analysis and plotting require incompatible 
+kernels.)
+
 Finally, we want to be able to share the results of our analysis using
-Python-backed dashboards.  For this we use Voila to run the notebooks generated
-by Papermill in our container-as-a-service system Spin.
-To avoid version compatibility problems within the Python stack used for the
-analysis we use Docker containers.  At runtime the Docker containers are run
-using Shifter, and in Spin they are just Docker containers managed by Rancher
-2, orchestrated with Kubernetes.
-We use cell notebook metadata to execute the Spin-appropriate cells and not the
-Cori-appropriate ones in Spin.
+Python-backed dashboards. For this we use Voila to run the dashboard notebooks
+we have created using our container-as-a-service system Spin. To achieve this
+vision we have developed the following workflow which we will now describe in
+more detail.
 
-* Talk about the analysis flow: Papermill, Dask, Jupyter, Voila.
-  The amount of data being gathered is consequential enough that we turned to the
-  Python data ecosystem to help us manage it and discuss our experiences with a
-  Jupyter notebook-based workflow for exploring the data.
-* Talk about how/why we choose these various pieces
+
+Jupyter data analysis
+---------------------
+
+**TODO** Describe Jupyter analysis, everything below is mostly Python-specific
+
+Python data analysis
+--------------------
+
+The first step of the Python analysis workflow is to pull the data out of the
+Elasticsearch database where it is stored. We do this using the Python
+Elasticsearch client API [elast]_. Since each day’s worth of data can take
+several minutes to pull, convert, and save, we run this process nightly as a
+cronjob to pull the previous day’s data. A typical day’s worth of data is about
+10 MB, once saved in compressed Parquet format. The total amount of data we
+have collected since August 2020 is approximately 7 GB, so this is likely not
+in the realm of “big data” as far as most are concerned. However the dataset is
+large and complex enough that analysis with CPU-based methods is cumbersome. We
+have therefore opted to use GPU-based methods for filtering, analyzing, and
+distilling the data into something reasonably quick to plot in our dashboards.
+
+We have written a flexible Jupyter notebook that can process data in a monthly,
+quarterly, or yearly fashion. It will decide which of these to perform based on
+the input from a Papermill parameter cell. To perform this
+analysis, we use Dask-cuDF and cuDF [dcdf]_ throughout the analysis, keeping
+the whole workflow on the GPU. We typically use 4 Nvidia Volta V100 GPUs
+coordinated by a Dask-CUDA cluster [dcuda]_ which we spin up directly in the
+notebook. We load the Parquet data using Dask-cuDF directly into GPU memory and
+perform various types of filtering and reduction operations. We ultimately save
+the distilled output in new Parquet files, again using direct GPU I/O in
+Dask-cuDF or cuDF.
+
+Since our analysis is split in several dimensions-- monthly, quarterly, or
+yearly-- the workflow must be flexible enough to facilitate this. Our design
+choice here was to use Papermill [pmill]_ to turn our single notebook into an
+extensible workflow. Papermill recognizes and replaces Jupyter cells tagged as
+parameters based on external input. (**TODO point to this script**) We can then
+launch a batch job on our shared GPU system which will call our Papermill >
+Jupyter > Dask-CUDA > Dask-cuDF. Each Papermill instance will run a single
+Jupyter notebook for one piece of our analysis. In each Jupyter notebook, a
+Dask CUDA cluster is spun up and then shutdown at the end for memory/worker
+cleanup.  Every notebook writes a set of output files to be used in our
+dashboards. Processing all data for all permutations of time currently takes
+about 1.5 hours on 4 V100 GPUs on the NERSC Cori cgpu system.
+
+**TODO: make figure that explains workflow**
+
+In this work our design choice is to use Voila [voila]_ to turn our Jupyter
+notebooks into dashboards. Generating usable interactive dashboards has been a
+challenge however for several reasons. The first obstacle is the data loading
+time. Our design choice has been to preload all possible data the dashboard
+may display while it starts. The tradeoff here is a long load time but a faster
+interactive response time once it has loaded (~30 s). Another significant
+problem is quickly generating plots. This may sound surprising given that we
+already spent a good deal of time preprocessing and distilling our data on
+GPUs. However, we still found that plotting operations, especially those
+performing operations like histogram binning, with Pandas DataFrames was
+unsatisfyingly slow for our vision of a responsive dashboard. Our choice here
+was to use the Vaex library instead [vaex]_ which provides similar
+functionality to Pandas but is significantly more performant as a result of
+multithreaded CPU parallelism. We did use some of Vaex’s native plotting
+functionality (notably Vaex’s viz.histogram functionality) which is wrappable
+in the standard Matploptlib plotting format. However we primarily used the
+Seaborn library for plotting with Vaex objects underneath which we found to be
+a fast and friendly way to generate visually appealing plots. We also used some
+traditional Matplotlib plotting functionality when Seaborn could not provide
+what we wanted.
+
+Together this approach provided a solution that satisfied our vision of a
+Python- and Jupyter-based, powerful, self-documenting and sharable, interactive
+dashboard solution. This richer analysis has provided us new insights into our
+data.
 
 Results
 =======
@@ -798,3 +860,15 @@ References
            Persson, K. A. (2015) FireWorks: a dynamic workflow system designed for
            high-throughput applications. Concurrency Computat.: Pract. Exper., 27:
            5037–5059. <https://doi.org/10.1002/cpe.3505>
+
+.. [elast] https://elasticsearch-py.readthedocs.io/en/7.10.0/
+
+.. [dcdf]  https://docs.rapids.ai/api/cudf/stable/dask-cudf.html
+
+.. [dcuda] https://dask-cuda.readthedocs.io/en/latest/
+
+.. [pmill] https://papermill.readthedocs.io/en/latest/
+
+.. [vaex]  https://vaex.io/docs/index.html
+
+.. [voila] https://voila.readthedocs.io/en/stable/index.html
