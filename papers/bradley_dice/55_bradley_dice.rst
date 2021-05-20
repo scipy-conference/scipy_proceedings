@@ -218,7 +218,7 @@ This means that manipulating a job document or reading data can be done through 
 Many applications used in research generate or consume large numerical arrays.
 For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation.
 However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome.
-The **signac** H5Store feature offers users a convenient wrapper around the ``h5py`` library for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format.
+The **signac** H5Store feature offers users a convenient wrapper around the ``h5py`` library :cite:`collette2013` for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format :cite:`hdf5`.
 The ``job.data`` attribute is an instance of the ``H5Store`` class, and is a key-value store saved on disk as ``signac_data.h5`` in the job workspace.
 Users who prefer to split data across multiple files can use the ``job.stores`` API to save in multiple HDF5 files.
 Corresponding ``project.data`` and ``project.stores`` attributes exist, which save data files in the project root directory.
@@ -506,6 +506,7 @@ In our growth with increasing contributors and users, we recognized a need to ch
 We based our new model on the Meritocratic Governance Model and our manager roles on Numba Czars.
 We decided on a four category system with maintainers, committers, contributors, and users.
 Code review and pull request merge responsibilities are granted to maintainers and committers, who are (self-) nominated and accepted by a vote of the project maintainers.
+Maintainers are additionally responsible for the strategic direction of the project and administrative duties.
 Contributors consist of all members of the community who have contributed in some way to the framework, which includes adding or refactoring code as well as filing issues and improving documentation.
 Finally, users refer to all those who use **signac** in any capacity.
 
