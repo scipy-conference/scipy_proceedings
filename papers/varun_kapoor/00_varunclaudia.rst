@@ -10,7 +10,7 @@
 :institution: Institut Curie
 :institution: Paris, France
 
-:bibliography:``vkcl.bib``
+:bibliography: ``vkcl.bib``
 
 ------------------------------------------------------------------------------------------------
 Cell Tracking in 3D using deep learning segmentations
@@ -18,15 +18,12 @@ Cell Tracking in 3D using deep learning segmentations
 
 .. class:: abstract
 
-
 Live-cell imaging is a highly used technique to study cell migration and dynamics over time. Although many computational tools have been developed during the past years to automatically detect and track cells, they are optimized to detect cell nuclei with similar shapes and/or cells not clustering together. However, automated analysis of fluorescently membrane-labeled cells can be highly challenging due to their irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them.
 Here we provide a detailed analysis pipeline to perform segmentation with accurate shape information, combined with a customized codebase of popular Fiji software Trackmate, BTrackmate, to perform cell tracking inside the tissue of interest. We developed VollSeg, a new segmentation method able to detect membrane-labeled cells with low signal-to-noise ratio and dense packing. Finally, we also created an interface in Napari, an Euler angle based viewer, to visualize the tracks along a chosen view making is possible to follow a cell along the plane of motion. Importantly, we provide a detailed protocol to implement this pipeline in a new dataset, together with the required Jupyter notebooks. Our code is released open source and BTrackmate is supplied as a plugin in ImageJ/Fiji available at the following links 
 
-VollSeg: https://github.com/kapoorlab/VollSeg
-BTrackMate: https://github.com/kapoorlab/BTrackMate
-NapaTrackMater: https://github.com/kapoorlab/NapaTrackMater 
-
-
+VollSeg: [https://github.com/kapoorlab/VollSeg]
+BTrackMate: [https://github.com/kapoorlab/BTrackMate]
+NapaTrackMater: [https://github.com/kapoorlab/NapaTrackMater] 
 
 .. class:: keywords
 
@@ -209,7 +206,20 @@ After the network has been trained it will save the config files of the training
 
 
 
+Tracking
+----------  
+After we obtain the segmentation using our approach we create a csv file of the cell attributes that include their location, size and volume of the segmented cells inside a tissue region. We use this csv file of the cell attributes as input to the tracker along with the Raw and the Mask image. The Raw image is used to measure the intensity signal of the segmented cells while the segmentation is used to do the localization of the cells which we want to track, the mask image is used to localize only the cells that are inside the tissue region and is used to exclude some segmentation labels that may be outside the region of interest. We do the tracking in Fiji, which is a popular software among the biologists. We developed our code over the existing tracking solution called Trackmate :cite:`Tinevez2017`. Trackmate uses linear assignment  problem (LAP) algorithm to do linking of the cells and uses Jaqman linker for linking the segments for dividing and merging trajectories. It also provides other trackers such as the Kalaman filter to do tracking of non-dividing cells. Post tracking it has an interactive interface to edit the tracks. It gives the users full freedom in removing some links, creating new links. Post editing the tracks are saved as an xml file which can then be used to re-start the track editing. In order to aid in track editing we introduced a new parameter of minimum tracklets length to remove tracklets in a track that are short in the time dimension. This introduces a biological context of not having very short trajectories and hence reduces the track editing effort to correct for the linking mistakes made by the program. For testing our tracking program we used a freely available dataset from the cell tracking challenge of a developing C.elegans embryo. Using our software we can remove cells from tracking which do not fit certain criteria such as being too small (hence most likely a segmentation mistake) or being low in intensity or outside the region of interest such as when we want to track cells only inside a tissue. For this dataset we kept 12,000 cells and after filtering short tracks kept about 50 tracks with and without division events. The track information is saved as an XML file and can be re-opened to perform track editing from the last saved checkpoint. This is particularly useful when editing tracks coming from a huge dataset.
 
+For this dataset the track scheme along with overlayed tracks in shown in Fig. The trackscheme is interactive as selecting a node in the trackscheme highlights the cell in Green and by selecting a cell in the image highlights its location in the trackscheme. Extensive manual for using the track editing is available on Fiji wiki.
+
+
+.. _fig-trackscheme:
+
+.. figure:: figs/trackscheme.png
+
+   Trackscheme display for the C-elegans dataset.
+   
+  
 
 Results
 --------
@@ -255,26 +265,6 @@ In Fig.:ref:metrics we show the stardist, unet and results from our approach (vo
 .. figure:: figs/GTStar.png
 
    Visual 3D segmentation comparison between 1) GT segmentation (top) and 2) Stardist segmentation (bottom).  
-   
-
-
-
-
-
-
-Tracking
-------------
-
-After we obtain the segmentation using our approach we create a csv file of the cell attributes that include their location, size and volume of the segmented cells inside a tissue region. We use this csv file of the cell attributes as input to the tracker along with the Raw and the Mask image. The Raw image is used to measure the intensity signal of the segmented cells while the segmentation is used to do the localization of the cells which we want to track, the mask image is used to localize only the cells that are inside the tissue region and is used to exclude some segmentation labels that may be outside the region of interest. We do the tracking in Fiji, which is a popular software among the biologists. We developed our code over the existing tracking solution called Trackmate :cite:`Tinevez2017`. Trackmate uses linear assignment  problem (LAP) algorithm to do linking of the cells and uses Jaqman linker for linking the segments for dividing and merging trajectories. It also provides other trackers such as the Kalaman filter to do tracking of non-dividing cells. Post tracking it has an interactive interface to edit the tracks. It gives the users full freedom in removing some links, creating new links. Post editing the tracks are saved as an xml file which can then be used to re-start the track editing. In order to aid in track editing we introduced a new parameter of minimum tracklets length to remove tracklets in a track that are short in the time dimension. This introduces a biological context of not having very short trajectories and hence reduces the track editing effort to correct for the linking mistakes made by the program. For testing our tracking program we used a freely available dataset from the cell tracking challenge of a developing C.elegans embryo. Using our software we can remove cells from tracking which do not fit certain criteria such as being too small (hence most likely a segmentation mistake) or being low in intensity or outside the region of interest such as when we want to track cells only inside a tissue. For this dataset we kept 12,000 cells and after filtering short tracks kept about 50 tracks with and without division events. The track information is saved as an XML file and can be re-opened to perform track editing from the last saved checkpoint. This is particularly useful when editing tracks coming from a huge dataset.
-
-For this dataset the track scheme along with overlayed tracks in shown in Fig. The trackscheme is interactive as selecting a node in the trackscheme highlights the cell in Green and by selecting a cell in the image highlights its location in the trackscheme. Extensive manual for using the track editing is available on Fiji wiki.
-
-
-.. _fig-trackscheme:
-
-.. figure:: figs/trackscheme.png
-
-   Trackscheme display for the C-elegans dataset.
    
    
 
