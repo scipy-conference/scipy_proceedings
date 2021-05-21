@@ -136,59 +136,10 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     
 The software package we provide comes with training and prediction notebooks for training the base U-net and stardist networks on your own dataset. We provide jupyter notebooks to do so on local GPU servers and also on Google Colab.
    
+Network Training and Prediction
+---------------------------------
 
-
-Network Training
----------------------
-
-To train U-net and stardist networks for the segmentation task we created labeled training dataset of the cells in 3D. There are several network hyper parameters that have to be chosen to ensure that the model is not over or under fitting to the data. Such hyper parameters include the network depth, the starting number of convolutional filters that double with depth thereby increasing the number of optimization parameters of the network. For a network to generalize well on unseen data we need to fine tune these parameters. We also trained a noise to void network to denoise the images and used them in segmentation training as well. In this way we were able to augment the dataset that had only few examples to make a dataset containing enough examples to learn the underlying data generating distribution needed to have a robust segmentation.
- 
-We trained several networks, compared their training and validation losses and also measured their performance on ground truth data the networks to asses their performance. In order to assess the performance of the segmentation we use object level metric used in :cite:`schmidt2018` :cite:`weigert2020`. We compute true positive (TP)  as intersection over union of the predicted and the ground truth being greater than a given threshold, :math:`$\tau \in [0,1]$` Unmatched objects are false positives (FP)  and unmatched ground truth objects are false negatives (FN). We then compute average precision :math:`$AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau} $`
-
-evaluated across several Z stacks. We also compute mean squared error between the ground truth and the predicted results. In Fig. we show the stardist, unet and results from our approach (vollseg). We also show the results as plots in Fig.:ref:metrics U-net has low performance when it comes to object level segmentation as two channel unet can not do instance segmentation and hence shows poor object level detection scores but good true positive rate. But at a semantic level U-net is better than stardist at resolving the shape of the objects, vollseg even has a better performance compared to both due to our pooling approach that obtains the instance level information from stardist and cell shape information from U-net. Fig.:ref:mse. 
-
-
-.. _fig-metrics:
-
-.. figure:: figs/Metrics.png
-
-   Metric of comparison between 1) VollSeg, 2) Stardist, 3) Unet.
-   
-.. _fig-mse:
-   
-.. figure:: figs/MSE.png
-
-   Mean Squared error comparison between VollSeg,  Stardist, Unet.
-   
-   
-.. _fig-GTVoll:
-
-.. figure:: figs/GTVoll.png
-
-   Visual 3D segmentation comparison between 1) GT segmentation (top) and 2) VollSeg segmentation (bottom).
-   
-.. _fig-GTUnet:
-   
-.. figure:: figs/GTUnet
-
-   Visual  3D segmentation comparison between 1) GT segmentation (top) and 2) Unet segmentation (bottom).     
-   
-   
-.. _fig-GTStar:
-   
-.. figure:: figs/GTStar.png
-
-   Visual 3D segmentation comparison between 1) GT segmentation (top) and 2) Stardist segmentation (bottom).  
-   
-
-
-
-
-
-Interactive codebase
------------------------------
-
-To train your networks using vollseg, install the code via pip install vollseg in your tensorflow environment with python > 3.7 and < 3.9. In the first notebook we create the dataset for U-net and Stardist training. In the first cell the required parameters are the path to your data that contains the folder of Raw and Segmentation images with the same name of images to create training pairs. Also to be specified is the name of the generated npz file along with the model directory to store the h5 files of the trained model and the model name.
+In the first notebook we create the dataset for U-net and Stardist training. In the first cell the required parameters are the path to your data that contains the folder of Raw and Segmentation images with the same name of images to create training pairs. Also to be specified is the name of the generated npz file along with the model directory to store the h5 files of the trained model and the model name.
 
 .. code-block:: python
 
@@ -207,12 +158,12 @@ In the next cell specify the model parameters, these parameters are the patch si
   Epochs = 100
   LearningRate = 1.0E-4 
   batch_size = 1
-  PatchX = 256
-  PatchY = 256
-  PatchZ = 64 
+  PatchX = 128
+  PatchY = 128
+  PatchZ = 16
   Kernel = 3
   n_patches_per_image = 16
-  Rays = 128 
+  Rays = 192 
   startfilter = 48
   use_gpu_opencl = True
   GenerateNPZ = True
@@ -255,6 +206,55 @@ After the network has been trained it will save the config files of the training
           min_size = min_size, 
           n_tiles = n_tiles, 
           UseProbability = False)
+
+
+
+
+
+Results
+--------
+
+We compare our proposed VollSeg segmentation approach to StarDist :cite:`schmidt2018` :cite:`weigert2020` and U-Net in 3D. StarDist in 3D was compared to other classicial method the IFT Watershed and was shown to perform better than the classical method which is why we use it as a baseline for comparision. We use accuracy score :math:`$AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau} $` over a range of overlap threshold, :math:`$\tau \in [0,1]$`. TP are the tru positives that are the pairs of predicted and ground truth labels having intersection over union (IOU) score value :math:` > $\tau`. FP are false positives, these predicted instances are not present in the ground truth image and FN are the false negatives, these are the unmateched ground truth instances that are not present in the predicted label image. We use the stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite: to compute an optimal matching to do a one to one assingement of predicted label to ground truth labels. The values of :math:`$\tau` used is specific to biological application, for our dataset value of 0.3 works well. We also compute mean squared error (mse) and structural similarity index measurement (ssim) between the ground truth and the predicted results. Low value of mse and high value of ssim implies tha tthe prediction match closely to the ground truth results showing a better shape resolution. From the results shown in Fig. we see that our method has the lowest mse and highest ssim compared to the other methods. 
+  
+In Fig. we show the stardist, unet and results from our approach (vollseg). We also show the results as plots in Fig.:ref:metrics U-net has low performance when it comes to object level segmentation as two channel unet can not do instance segmentation and hence shows poor object level detection scores but good true positive rate. But at a semantic level U-net is better than stardist at resolving the shape of the objects, vollseg even has a better performance compared to both due to our pooling approach that obtains the instance level information from stardist and cell shape information from U-net. Fig.:ref:mse. 
+
+
+.. _fig-metrics:
+
+.. figure:: figs/Metrics.png
+
+   Metric of comparison between 1) VollSeg, 2) Stardist, 3) Unet.
+   
+.. _fig-mse:
+   
+.. figure:: figs/MSE.png
+
+   Mean Squared error comparison between VollSeg,  Stardist, Unet.
+   
+   
+.. _fig-GTVoll:
+
+.. figure:: figs/GTVoll.png
+
+   Visual 3D segmentation comparison between 1) GT segmentation (top) and 2) VollSeg segmentation (bottom).
+   
+.. _fig-GTUnet:
+   
+.. figure:: figs/GTUnet
+
+   Visual  3D segmentation comparison between 1) GT segmentation (top) and 2) Unet segmentation (bottom).     
+   
+   
+.. _fig-GTStar:
+   
+.. figure:: figs/GTStar.png
+
+   Visual 3D segmentation comparison between 1) GT segmentation (top) and 2) Stardist segmentation (bottom).  
+   
+
+
+
+
 
 
 Tracking
