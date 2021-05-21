@@ -68,8 +68,8 @@ Some 8,000 scientists use NERSC to perform basic, non-classified research in
 predicting novel materials, modeling the Earth's climate, understanding the
 evolution of the Universe, analyzing experimental particle physics data,
 investigating protein structure, and much more.
-NERSC procures and operates supercomputers and large-scale storage systems under
-a strategy of balanced, timely introduction of new hardware and software
+NERSC procures and operates supercomputers and massive storage systems under a
+strategy of balanced, timely introduction of new hardware and software
 technologies to benefit the broadest possible subset of this workload.
 Since any research project aligned with the mission of the Office of Science may
 apply for access, NERSC's workload is diverse and demanding.
@@ -86,32 +86,38 @@ like funding agencies, vendors, developers, users, standards bodies, and other
 high-performance computing (HPC) centers.
 Actively monitoring the workload enables us to identify suboptimal or
 potentially problematic user practices and address them through direct
-intervention, improving documentation, or making it easier for users to use
-software in better ways.
+intervention, improving documentation, or simply making it easier for users to
+use software better.
 Measuring the relative frequency of use of different software components can
-help us optimize delivery of software, retiring less-utilized packages and
-promoting timely migration to newer versions.
+help us streamline delivery, retiring less-utilized packages and promoting
+timely migration to newer versions.
 Understanding which software packages are most useful to our users helps us
-focus support, explore opportunities for collaborating with key software
-developers and vendors, or at least advocate on our users' behalf to the right
-people.
+focus support, collaborate with key software developers and vendors, or at least
+advocate on our users' behalf to the right people.
 Detecting and analyzing trends in user behavior with software over time also
 helps us anticipate user needs and respond to those needs proactively.
 Comprehensive, quantitative workload analysis is a critical tool in keeping
 NERSC a productive supercomputer center for science.
 
 With Python assuming a key role in scientific computing, it makes sense to apply
-workload analysis to Python in production settings like NERSC.
+workload analysis to Python in production settings like NERSC's Cray XC-40
+supercomputer, Cori.
 Once viewed in HPC circles as merely a cleaner alternative to Perl or Shell
 scripting, Python has evolved into a robust platform for orchestrating
 simulations, running complex data processing pipelines, managing artificial
 intelligence workflows, visualizing massive data sets, and more.
 Adapting workload analysis practices to scientific Python gives its community
-the same data-driven leverage that other language communities in HPC now enjoy.
-This article documents the approach to Python workload analysis we have taken at
-NERSC and what we have learned from the experience.
+the same data-driven leverage that other language communities in HPC already
+enjoy.
 
-In the next section we provide an overview of related work including existing
+..
+   I think if we haven't published MODS in a paper, we could find a public OAR
+   release that describes MODS and reference that?
+
+This article documents NERSC's Python workload analysis efforts, part of an
+initative called Monitoring of Data Services (MODS), and what we have learned
+from the experience.
+In the next section, we provide an overview of related work including existing
 tools for workload data collection, management, and analysis.
 In Methods, we describe an approach to Python-centric workload analysis that
 uses built-in Python features to capture usage data, and a Jupyter notebook
@@ -124,8 +130,8 @@ the pluses and minuses of our workflow, the lessons we learned in setting it up,
 and outline plans for expanding the analysis to better fill out the picture of
 Python at NERSC.
 The Conclusion suggests areas for future work and includes an invitation to
-developers to contact us about having their packages added to our list of
-monitored scientific Python packages.
+developers to contact us about having their work added to the list of scientific
+Python packages we monitor at NERSC.
 
 Related Work
 ============
@@ -151,9 +157,9 @@ This provides an entrypoint for software usage monitoring.
 Staff can inject code into a module load operation to record the name of the
 module being loaded, its version, and other information about the user's
 environment.
-Lmod, a newer implementation of environment modules [Mcl11]_, provides guide on
-how to configure it to use syslog and MySQL to collect module loads through a
-hook function [lmod]_.
+Lmod, a newer implementation of environment modules [Mcl11]_, provides
+documentation on how to configure it to use syslog and MySQL to collect module
+loads through a hook function [lmod]_.
 Counting module loads as a way to track Python usage has the virtue of
 simplicity.
 However, users often include module load commands in their shell resource files
@@ -166,7 +172,7 @@ Module load counts also miss Python usage that happens without loading modules,
 in particular user-installed Python environments or in containers.
 
 Tools like ALTD [Fah10]_ and XALT [Agr14]_ are commonly used in HPC contexts to
-track library usage in compiled HPC applications.
+track library usage in compiled applications.
 The approach is to introduce wrappers that intercept the linker and batch job
 launcher (e.g. ``srun`` in the case of Slurm).
 The linker wrapper can inject metadata into the executable header, take a census
@@ -190,14 +196,14 @@ XALT is an active project so this may be addressed in a future release.
 [Mac17]_ describes an approach to monitoring Python package use on Blue Waters
 using only built-in Python features: ``sitecustomize`` and ``atexit``.
 During normal Python interpreter start-up, an attempt is made to import a module
-named ``sitecustomize`` intended to perform site-specific customizations.
-In this case, the injected code registers an exit handler through the ``atexit``
-standard library module.
+named ``sitecustomize`` that is intended to perform site-specific
+customizations.  In this case, the injected code registers an exit handler
+through the ``atexit`` standard library module.
 This exit handler inspects ``sys.modules``, a dictionary that normally describes
 all packages imported in the course of execution.
 On Blue Waters, ``sitecustomize`` was installed into the Python distribution
 installed and maintained by staff.
-Collected information was stored to plain text log files on Blue Waters.
+Collected information was stored to plain text log files.
 An advantage of this approach is that ``sitecustomize`` failures are nonfatal,
 and placing the import reporting step into an exit hook (as opposed to
 instrumenting the import mechanism) means that it minimizes interference with
@@ -205,6 +211,19 @@ normal operation of the host application.
 The major limitation of this strategy is that abnormal process terminations
 prevent the Python interpreter from proceeding through its normal exit sequence
 and package import data are not recorded.
+
+Short of introspecting processes at a very deep level, gaining insight into
+Python usage involves a few minimally invasive and easy to customize tools.
+Obviously, solutions that can overly impact application reliability or place an
+undue burden on system administrators and operations staff should be avoided.
+The fullest picture we can obtain will come from a combination of tooling and
+follow-up with users, using the story we can put together from the data we
+gather as a starting point for conversation.
+
+..
+   There are probably tools that do deep data collection on processes running
+   that we could mention.  If we do we should explain that getting those
+   installed and getting access to those data require 
 
 Methods
 =======
@@ -220,22 +239,23 @@ custom Conda environments.
 Projects or collaborations may provide their users with shared Python
 environments, often as a Conda environment or as an independent installation
 altogether (e.g. using the Miniconda installer and building up).
-Cray provides a basic Python module containing a few core scientific Python
-packages linked against Cray MPICH and LibSci libraries.
-Python packages are also installed by staff or users via the Spack HPC package
-manager.
-NERSC also provides Shifter **ref**, a container runtime that enables users to
+Cray provides a basic "Cray Python" module containing a few core scientific
+Python packages linked against Cray MPICH and LibSci libraries.
+Python packages are also installed by staff or users via Spack **REF**, an HPC
+package manager.
+NERSC also provides Shifter **REF**, a container runtime that enables users to
 run custom Docker containers that can contain Python built however the author
-desired.
-With a properly defined kernel-spec file, a user is able to use a Python stack
-based on any of the above options as a kernel in NERSC's Jupyter service.
+desires.
+With a properly defined kernel-spec file, a user is able to use a Python
+environment based on any of the above options as a kernel in NERSC's Jupyter
+service.
 We need to be able to gather data for workload analysis across all of these
 options, in part to understand the relative importance of each.
 
-Monitoring all of the above can be done using the strategy outlined in [Mac17]_
-with certain changes.
+Monitoring all of the above can be done quite easily by using the strategy
+outlined in [Mac17]_ with certain changes.
 As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
-installed in a directory included into all users' ``sys.path``.
+installed in a directory included into all users' Python ``sys.path``.
 The file system where ``sitecustomize`` is installed should be local to the
 compute nodes that it runs on and not served over network, in order to avoid
 exacerbating poor performance of Python start-up at scale.
@@ -248,20 +268,21 @@ volume mount set at runtime.
 Users can opt out of monitoring simply by unsetting or overwriting
 ``PYTHONPATH``.
 We took the approach of provisioning a system-wide ``PYTHONPATH`` because it is
-far easier to give users the option of opting out of data collection by
-unsetting it than it is to ask them to install it as an add-on themselves.
+much more tenable to give users the ability to opt out of data collection by
+unsetting it than it is to ask them to install ``sitecustomize`` voluntarily.
 This also gives us a centrally managed source of truth for what is monitored at
 any given time.
 
 Customs: Inspect and Report Packages
 ------------------------------------
 
-To organize ``sitecustomize`` we have created a Python package we call
+To organize ``sitecustomize`` logic we have created a Python package we call
 "Customs," since it is for inspecting and reporting on Python package imports of
 particular interest.
 Customs can be understood in terms of three simple concepts.
 A **Check** is a simple object that represents a Python package by its name and
-a callable that is used to verify that the package is present in a dictionary.
+a callable that is used to verify that the package is present in a given
+dictionary.
 In production this dictionary should be ``sys.modules`` but during testing it
 can be mock ``sys.modules`` dictionary.
 The **Inspector** is a container of Check objects, and is responsible for
@@ -281,15 +302,15 @@ The first argument is a list of strings or (string, callable) tuples that are
 converted into Checks.
 The second argument is the type of Reporter to be used.
 The exit hook can be registered multiple times with different package
-specification lists or Reporters.
+specification lists or Reporters if desired.
 
-The intended workflow is that staff member creates a list of package
+The intended workflow is that a staff member creates a list of package
 specifications they want to check for, selects or implements an appropriate
 Reporter, and passes these two objects to ``register_exit_hook`` within
 ``sitecustomize.py``.
 Installing ``sitecustomize`` to system images generally involves packaging the
-software as RPM to be installed into node system images and deployed by system
-administrators.
+software as an RPM to be installed into node system images and deployed by
+system administrators.
 When a user invokes Python, the exit hook will be registered using the
 ``atexit`` standard library module, the application proceeds as normal, and then
 at normal shutdown ``sys.modules`` is inspected and detected packages of
@@ -298,40 +319,73 @@ interest are reported.
 Message Logging and Storage
 ---------------------------
 
-NERSC has developed a lightweight abstraction layer for message
-logging called nerscjson. nerscjson is a simple python package that
-consumes json format messages and forwards them to an appropriate
-transport layer that connects to the ONMI infrastructure. Currently
-this is primarily achieved by utilizing the ``SysLogHandler`` from the
-standard logging library with a small modification to the time format
-to satisfy RFC 3339. Downstream from these transport layers a message
-key is used to identify the nerscjson messages and json payloads are
-extracted then forwarded to the appropriate Elastic index.
+NERSC has developed a lightweight abstraction layer for message logging called
+nerscjson.
+It is a simple Python package that consumes JSON messages and forwards them to
+an appropriate transport laer that connects to NERSC's central
+Elasticsearch-based telemetry collection framework, OMNI **REF**.
+Currently this is achieved by using the ``SysLogHandler`` from Python's standard
+logging library with a minor modification to the time format to satisfy RFC 3339
+**REF**.
+Downstream from these transport layers, a message key is used to identify the
+incoming messages, their JSON payloads are extracted, and then forwarded to the
+appropriate Elastic index.
 
-.. code-block:: python
+On Cori compute nodes, we use the Cray Lightweight Log Manager (LLM) **REF**,
+configured to accept RFC 5424 **REF** protocol messages on service nodes.
+A random service node is chosen as the recipient in order to balance load.
+On other nodes besides compute nodes, such as login nodes or nodes running
+user-facing services, rsyslog is used for message transport.
+This abstraction layer allows us to maintain a stable interface for logging
+while using an appropraitely scalable transport layer for the system.
+For instance, future systems will rely on Apache Kafka or the Lightweight
+Distributed Metrics Service [Age14]_.
 
-    import nersjson
-    nerscjson.log(routing_key, json_message)
+**FIXME** Cori has 10,000 compute nodes running jobs at very high utilization 24
+hours a day, some 350 days per year **Use the OA 2020 numbers**.
+The volume of messages arriving from Python jobs completing could be quite high,
+so we have taken the approach of monitoring a large list of key packages instead
+of reporting each job's entire ``sys.modules``.
+(Python 3.10 includes a very easy mechanism for identifying standard library
+packages that we could use to filter out, that we will investigate).
+At the same time we don't completely drop standard libraries, as we will show
+certain standard libraries are very important to our users.
 
-On Cori compute nodes we use the Cray Lightweight Log Manager (LLM)
-which is configured accept RFC 5424 protocol messages on tier2 service
-nodes. For invocation a random tier2 node is choosen as the recipient
-in order load balance messages. On other systems, such as login nodes,
-the local rsyslog is used as the transport. This abstract layer allows
-us to maintain a stable interface for logging while utilizing an
-appropriately scalable transport for the system. On future systems we
-are investigating kafka and LDMS event streams.
+SLURM_PROCID to cut down on duplications from mpi4py.
+Strategy of be liberal in what we report and worry about filtering it down
+later, if there are duplicates that's OK, our metrics are mostly focused on
+users and jobs, as long as we pass along that info we can deduplicate.
 
-We send our messages to Elastic via nerscjson.
+..
+   category        "mods-test"
+   event_timestamp isoformat timestamp
+   executable      ``sys.executable``
+   is_compute      Boolean if the node is a compute node based on its name
+                   ``socket.gethostname()``
+   is_shifter      Boolean based on presence of ``SHIFTER_RUNTIME`` being True
+   is_staff        Check for presence of the key staff group in users
+                   os.getgroups()
+   job_id          From SLURM_JOB_ID, /proc/self/cgroup  or empty string if not a job
+   main            Full path to the program running
+   num_nodes       Number of nodes
+   qos             Slurm partition the job is running in
+   repo            Charge account the job is running under
+   service         Python
+   subservice      Library name
+   subsystem       Cori GPU or DGX or cmem or HAswell or KNL
+   system          ``NERSC_HOST``
+   username        ``USER``
+   version         Version of library if it can be extracted
 
-* What do we collect
-* MODS and OMNI
-* LDMS, ask Taylor/Eric for ref and refs
-* Libraries monitored is a subset of the whole
-* What if monitoring downstream fails (canary jobs)
-* Path we take from exit hook execution through syslog/kafka(?), elastic
-
-Talk about LDMS, [Age14]_.
+In principle it is possible that messages may be dropped along the way to OMNI.
+**UDP**
+To control for this source of error, we submit scheduled "canary jobs" a few
+dozen times a day that run a Python script that imports libraries listed in
+``sitecustomize`` and then exits normally.
+Matching up job those submissions with entries in Elastic enables us to quantify
+the message failure rate.
+Perhaps disappointingly, we have never seen a message fail to arrive since we
+began monitoring one year ago.
 
 Prototyping, Production, and Publication
 ----------------------------------------
