@@ -2,14 +2,16 @@
 :email: varun.kapoor@curie.fr
 :institution: Institut Curie
 :institution: Paris, France
-:corresponding:
 
 :author: Claudia Carabana Garcia
 :email: claudia.carabana-garcia@curie.fr
 :institution: Institut Curie
 :institution: Paris, France
 
-:bibliography: ``vkc.bib``
+:bibliography: vkc
+
+
+
 ------------------------------------------------------------------------------------------------
 Cell Tracking in 3D using deep learning segmentations
 ------------------------------------------------------------------------------------------------
@@ -17,9 +19,7 @@ Cell Tracking in 3D using deep learning segmentations
 .. class:: abstract
 
 Live-cell imaging is a highly used technique to study cell migration and dynamics over time. Although many computational tools have been developed during the past years to automatically detect and track cells, they are optimized to detect cell nuclei with similar shapes and/or cells not clustering together. However, automated analysis of fluorescently membrane-labeled cells can be highly challenging due to their irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them.
-Here we provide a detailed analysis pipeline to perform segmentation with accurate shape information, combined with a customized codebase of popular Fiji software Trackmate, BTrackmate, to perform cell tracking inside the tissue of interest. We developed VollSeg, a new segmentation method able to detect membrane-labeled cells with low signal-to-noise ratio and dense packing. Finally, we also created an interface in Napari, an Euler angle based viewer, to visualize the tracks along a chosen view making is possible to follow a cell along the plane of motion. Importantly, we provide a detailed protocol to implement this pipeline in a new dataset, together with the required Jupyter notebooks. Our code is released open source and BTrackmate is supplied as a plugin in ImageJ/Fiji available at the following link.s 
-
-
+Here we provide a detailed analysis pipeline to perform segmentation with accurate shape information, combined with a customized codebase of popular Fiji software Trackmate, BTrackmate, to perform cell tracking inside the tissue of interest. We developed VollSeg, a new segmentation method able to detect membrane-labeled cells with low signal-to-noise ratio and dense packing. Finally, we also created an interface in Napari, an Euler angle based viewer, to visualize the tracks along a chosen view making is possible to follow a cell along the plane of motion. Importantly, we provide a detailed protocol to implement this pipeline in a new dataset, together with the required Jupyter notebooks. Our code is released open source and BTrackmate is supplied as a plugin in ImageJ/Fiji available at the following links. 
 
 .. class:: keywords
 
