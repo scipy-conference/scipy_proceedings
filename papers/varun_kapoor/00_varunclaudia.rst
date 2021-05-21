@@ -22,7 +22,9 @@ Cell Tracking in 3D using deep learning segmentations
 Live-cell imaging is a highly used technique to study cell migration and dynamics over time. Although many computational tools have been developed during the past years to automatically detect and track cells, they are optimized to detect cell nuclei with similar shapes and/or cells not clustering together. However, automated analysis of fluorescently membrane-labeled cells can be highly challenging due to their irregular shape, variability in size and dynamic movement across Z planes making it difficult to detect and track them.
 Here we provide a detailed analysis pipeline to perform segmentation with accurate shape information, combined with a customized codebase of popular Fiji software Trackmate, BTrackmate, to perform cell tracking inside the tissue of interest. We developed VollSeg, a new segmentation method able to detect membrane-labeled cells with low signal-to-noise ratio and dense packing. Finally, we also created an interface in Napari, an Euler angle based viewer, to visualize the tracks along a chosen view making is possible to follow a cell along the plane of motion. Importantly, we provide a detailed protocol to implement this pipeline in a new dataset, together with the required Jupyter notebooks. Our code is released open source and BTrackmate is supplied as a plugin in ImageJ/Fiji available at the following links 
 
-
+VollSeg: https://github.com/kapoorlab/VollSeg
+BTrackMate: https://github.com/kapoorlab/BTrackMate
+NapaTrackMater: https://github.com/kapoorlab/NapaTrackMater 
 
 
 
@@ -33,25 +35,108 @@ Here we provide a detailed analysis pipeline to perform segmentation with accura
 Introduction
 ------------
 
-Quantitative analysis to study morphogenesis requires an accurate image analysis workflow. Such a workflow entails volumetric (3D) imaging of cells via fluorescence microscopy, accurate detection and segmentation of cells followed by tracking and track analysis. Depending on the biological question of interest the cells can be stained either with nuclei, cytoplasm or membrane fluorescent marker. The segmentation pipeline is tailored based on the staining as when the experiment is done with nuclei statining segmenting the nuceli pixels are of interest in contrast to when it is membrane stainng in which case the boundary pixels prediction is of interest. Broadly speaking the task of segmentation can be separated into semantic (classifying pixels as background or pixels belonging to the cell) segmentation or instance (classifying pixels belonging to individual cells by assigning a unique label to each cell) segmentation. Segmentation is complicated due to presence of multiple objects in the image, overlapping object pixels and non-homogeneous intensity distribution. Several methods have been proposed for such automated detection and segmentation tasks such as the traditional intensity based thresholding, watershed transform :cite:`Beucher2018` and of recent machine learning methods based on random-forest classifiers and support vector machines :cite:`berg2019`. Methods based on deep learning have made improved the accuracy of segmentation for natural and biomedical images alike :cite:`Rasse2020`. For the purpose of semantic segmentation U-Net has emerged as the most widely used network. This network also forms the backbone of another successful network to do cell nuclei segmentation in 3D, stardist :cite:`schmidt2018` :cite:`weigert2020`. Stardist directly predicts a shape representation as star-convex polygons for cell nuclei. Cell membrane segmentation is more challenging because segmentation mistakes would lead to missing links whereas for cell nuclei segmentation this only would lead to few missing pixels. To predict cell contours together with cell centroids :cite:`eschweiler2018` proposed a 3D U-Net network using centroids as seeds for watershed in 3D confocal microscopy images. The drawback of this approach is misclassification due to sub-optimal seeding. Another approach is to directly predict the cell boundaries using a 3D U-Net and then using a volume partitioning algorithm to segment each cell based on the boundary prediction :cite:`Wolny2020`.
+Quantitative analysis to study morphogenesis requires an accurate image analysis workflow. Such a workflow entails volumetric (3D) imaging of cells via fluorescence microscopy, accurate detection and segmentation of cells followed by tracking and track analysis. Depending on the biological question of interest the cells can be stained either with nuclei, cytoplasm or membrane fluorescent marker. The segmentation pipeline is tailored based on the staining,if the experiment is done with nuclei staining segmenting the nuclei pixels are of interest in contrast to when it is membrane staining obtaining the boundary pixels are of interest. Broadly speaking the task of segmentation can be separated into semantic (classifying pixels as background or pixels belonging to the cell) segmentation or instance (classifying pixels belonging to individual cells by assigning a unique label to each cell) segmentation. Segmentation is complicated due to presence of multiple objects in the image, overlapping object pixels and non-homogeneous intensity distribution. Several methods have been proposed for such automated detection and segmentation tasks such as the traditional intensity based thresholding, watershed transform :cite:`Beucher2018` and of recent machine learning methods based on random-forest classifiers and support vector machines :cite:`berg2019`. Methods based on deep learning have improved the accuracy of segmentation for natural and biomedical images alike :cite:`Rasse2020`. For the purpose of semantic segmentation U-Net has emerged as the most widely used network. This network also forms the backbone of another successful network to do cell nuclei segmentation in 3D, stardist :cite:`schmidt2018` :cite:`weigert2020`. Stardist directly predicts a shape representation as star-convex polygons for cell nuclei. Cell membrane segmentation is more challenging because segmentation mistakes would lead to missing links whereas for cell nuclei segmentation this only would lead to few missing pixels. To predict cell contours together with cell centroids :cite:`eschweiler2018` proposed a 3D U-Net network using centroids as seeds for watershed in 3D confocal microscopy images. The drawback of this approach is misclassification due to sub-optimal seeding. Another approach is to directly predict the cell boundaries using a 3D U-Net and then using a volume partitioning algorithm to segment each cell based on the boundary prediction :cite:`Wolny2020`.
    
 Our data set comprised of epithelial cells of mouse mammary glands using membrane marker. The cells are highly irregular in shape and do not posses clear boundaries to have a segmentation based on the boundary information alone, hence we developed a segmentation package in python called VollSeg, as a method to perform segmentation of such cells. Instead of segmenting the membrane we try to segment the region inside the membrane. We use stardist in 3D to obtain a star convex shape approximation for the cells and extract the cell centroids from these polygons. We also train a 3D U-Net to obtain a semantic segmentation map of the cells. We then perform a marker controlled watershed on the probability map of stardist using the U-Net segmentation as a mask image to prevent the overflow of segmentation regions. To avoid the error of sub-optimal seeding we developed a seed pooling approach to take advantage of strength of both the stardist and U-Net network to create an optimal seed pool to start the watershed process. We benchmarked our segmentation result and obtain different metrics showing how our approach is able to obtain shape approximation for the overlapping cells that go beyond the star convex shape.    
    
-For analysis of the cell migration behavior we need to reliably track the cells and obtain certain attributes such as intensity, cell to tissue distance change over time. Cell tracking is challenging due to erratic volumetric motion, occlusion and cell divisions. Tracking using only the centroid information may lead to wrong cell assigmements hence we need to include other cell attributes such as the shape and intensity information while making the links between the cells in successive time frames. Trackmate :cite:`Tinevez2017` is a popular tracking software that uses customizable cost matrix for solving the linear assingement problem and uses Jaqman linker as a second step to link segments to dividing or merging cells. The software also comes with an interactive track editing interface. In our tracking solution called BTrackmate we only track the cells that are inside a tissue and allow the input to the tracking program as a csv file of cell attributes or image files of cell and tissue segmentation. We provide Jupyter notebooks to create such csv files that serve as an input to the tracker. Furthermore we also add some biological context in the tracking process of segment linking where after segment linking is done a track inspector removes tracklets that are shorter than a user defined time length. This avoids the tedious manual correction of removing such unphysical tracklets. 
+For analysis of the cell migration behavior we need to reliably track the cells and obtain certain attributes such as intensity, cell to tissue distance change over time. Cell tracking is challenging due to erratic volumetric motion, occlusion and cell divisions. Tracking using only the centroid information may lead to wrong cell assigmements hence we need to include other cell attributes such as the shape and intensity information while making the links between the cells in successive time frames. Trackmate :cite:`Tinevez2017` is a popular tracking software that uses customizable cost matrix for solving the linear assingement problem and uses Jaqman linker as a second step to link segments of dividing and merging cells. The software also comes with an interactive track editing interface. In our tracking solution called BTrackmate we only track the cells that are inside a tissue and allow the input to the tracking program as a csv file of cell attributes or image files of cell and tissue segmentation. We provide Jupyter notebooks to create such csv files that serve as an input to the tracker. Furthermore we also add some biological context in the tracking process of segment linking where after segment linking is done a track inspector removes tracklets that are shorter than a user defined time length. This avoids the tedious manual correction of removing such unphysical tracklets. 
 
 The tracking results are saved as an xml file, the xml file can be re-opened in the software again to do more track editing. Of recent there is an Euler angle based viewer in python called Napari that allows for volumetric viewing along any chosen view. Using the track layer of napari :cite:`Ulicna2020` the cell tracks can be viewed in the plane of cell motion. We made a python package napatrackmater to export the track xml file as tracks layer in Napari for dividing and non dividing tracks. We provide a customized Napari widget to view selected tracks and obtain cell migration attributes from the selected tracks. Our pipeline allows precise segmentation of epithelial cells with irregular shape and posterior analysis of cell migration behavior.
 
 
+Material and Methods
+----------------------- 
 
 
+Preparation of the dataset
+---------------------------
 
 
+We used fluorescent microscopy images of mouse embryonic mammary glands stabilized in ex vivo culture previously collected in the laboratory of Dr. S. Fre at Institut Curie. All images were acquired with an inverted CLSM or multiphoton microscope (e.g. Zeiss LSM780/880 or Leica SP8) equipped with long-working distance objectives to acquire high-resolution 3D image stacks. The quality at which these images are acquired is determined by the spatial resolution of the used optical device, desired temporal resolution, duration of the experiment, depth of the acquired Z stacks and phototoxicity. Microscopy always has trade offs between these aspects such as reduction of exposure time to gain imaging speed leads to sacrificing the signal to noise ratio. Some of these trade offs can be overcome by optimizing the microscope hardware while for other aspects computational procedures can be used to improve the quality of images which makes the downstream analysis easier. One such procedure is image restoration where a network can be trained to map the images acquired at low signal to noise ratio to as if they were acquired at high signal to noise ratio. The network is trained to learn this mapping function. Training of restoration networks can be done in supervised way by acquiring low and high signal to noise ratio image pairs to train the network :cite:`Weigert2017` or in an unsupervised way where training image pairs are not required :cite:`krull2019`. It was shown that using unsupervised denoising produces better results than using classical deconvolutional algorithms such as Lucy-Richardson denoising. Given our microscope settings the image acquisition of registered low and high signal to noise ratio images was not possible hence we used the unsupervised learning to restore the volumetric images. 
 
 Segmentation
------------------
-Our segmentation task required segmentation of cells coming from developing mouse embryo in 3D. These cells are imaged in low light to avoid photo-toxicity and are irregular in shape and intensity. Any bio image analysis task starts with segmentation of such cells coming out of a microscope. In order to avoid photo-toxicity that leads to cell death the imaging conditions have to be modulated to not have too high laser intensity under which the cells are imaged in. This leads to a low signal to noise ratio image dataset. Segmentation of such cells could be tedious with the conventional computer vision based techniques alone which almost always will lead to over segmentation in such images :cite:`Rasse2020` . However given enough training data, deep learning networks can be trained to achieve the same task with high degree of accuracy. Segmentation tasks can broadly be divided into semantic or instance segmentation methods. In the semantic segmentation approach only background-foreground segmentation is performed where the pixels are classified either belonging to an object class or not, in the instance segmentation approach the object pixels are classified as belonging to object A or B. In our case we use U-net to perform semantic segmentation of the cells in 3D. U-net is independent of shape of the cell hence can do a good semantic segmentation task, if the cells do not overlap connected component analysis alone is enough to segment the cells. But often in time lapses the cells often overlap and this requires a network that can do instance segmentation. Stardist has proven to be network that performs well in such segmentation tasks compared to other available networks for biological cells. Stardist is an N + 1 channel U-net network where N output channels are distance from the center of the cell to the boundary over a range of angles and a single channel for foreground-background pixel probability map. Using this distance information a mathematically abstract representation of a cell can be learnt by the network. The limitation of this network is that it works reliably for star-convex shapes and does not perform well if the shape of the cells is irregular. Furthermore it is dependent on two parameters to avoid over/under-segmentation, the probability threshold and the non-maximal suppression threshold.
+-------------
 
-We combine the strengths of both the networks in the following way: We denoise the image using the network trained using noise to void model train don our dataset. We perform the semantic segmentation using U-net, the foreground predicted pixels serve as the mask image we use later. The stardist prediction gives us convex polygon approximation to the cells and a distance map of the cell. Given our denoising step we are able to obtain a distance map that can then be used as base image of performing the watershed operation on. The convex polygons are shrunk down to obtain seeds, then use do connected components on the U-net result to obtain a label image and for each label we search in the stardist seed pool for existence of a seed. If no such seed is found the U-net seed is accepted as a valid seed else it is rejected. Post this seed pooling we perform watershed on the distance map and the overlapping/non-overlapping cells are basins of the energy map. With such an approach we are able to segment faint and bright cells alike in the same frame and obtain reliable shape as shown in Fig.
+Post restoration we developed a method to perform the segmentation of the cells using deep learning techniques as it was shown in :cite:`Rasse2020` that conventional computer vision and machine learning based techniques alone will almost always will lead to sub par segmentation :cite:`Rasse2020`.We create a training dataset with hand drawn segmentation of 14 Z stacks. We perform data augmentation on the microscopy images by denoising, adding Poisson and Gaussian noise, random rotations and flips to create 700 Z stacks. We choose a patch size of (16,128,128) and create 11264 patches for training stardist and U-Net network. For the stardist network we choose 256 rays to have a better shape resolution for the irregular shaped cells. Stardist predicts object instances based on probability threshold and non maximal suppression threshold to merge overlapping predictions. These parameters can be automatically determined using optimize threshold program we provide with the segmentation package. Higher values of the probability threshold yield fewer object instances, but avoids false positives. Higher values of the overlap threshold will allow segmented objects to overlap more. We used 32 Z stacks to determine the optimal parameters of probability threshold of 0.76 and non maximal suppression threshold of 0.3. We obtain the centroids of the star convex approximated cell shapes and create a seed pool with these centroid locations. Even with the optimized threshold values we find that the seeds found can be sub-optimal as many faint cells instances are missed. In order to make the seed pool optimal we use the U-Net prediction to obtain a binary image of semantic segmentation, perform connected component analysis to label the image and obtain bounding boxes for each label in 3D. For each bounding box we search for a seed from the stardist predicted seed pool. If a stardist seed is found in side the bounding box the centroid of the U-Net predicted bounding box is rejected else we add that centroid to the seed pool to make a complete set of seeds that we use to start a watershed process in 3D. The code for making this complete set of seeds is shown below. We use the probability map of stardist to start the watershed process to obtain a better shape approximation for the irregular shaped cells that goes beyond the star convex shape.  
+
+   
+ 
+The code for the merging U-Net and stardist seeds
+
+.. code-block:: python
+
+  def iou3D(boxA, centroid):
+    
+    ndim = len(centroid)
+    inside = False
+    
+    Condition = [Conditioncheck(centroid, boxA, p, ndim)
+     for p in range(0,ndim)]
+        
+    inside = all(Condition)
+    
+    return inside
+
+  def Conditioncheck(centroid, boxA, p, ndim):
+    
+      condition = False
+    
+      if centroid[p] >= boxA[p] 
+      and centroid[p] <= boxA[p + ndim]:
+          
+           condition = True
+           
+      return condition 
+      
+      
+The code for doing watershed in 3D using the complete set of seeds on the probability map of stardist.    
+
+.. code-block:: python     
+
+
+  def WatershedwithMask3D(Image, Label,mask, grid): 
+  
+    properties = measure.regionprops(Label, Image) 
+    binaryproperties = 
+    measure.regionprops(label(mask), Image) 
+    cord = 
+    [prop.centroid for prop in properties] 
+    bin_cord =
+    [prop.centroid for prop in binaryproperties]
+    Binarybbox = 
+    [prop.bbox for prop in binaryproperties]
+    cord = sorted(cord , 
+    key=lambda k: [k[0], k[1], k[2]]) 
+    if len(Binarybbox) > 0:    
+            for i in range(0, len(Binarybbox)):
+                
+                box = Binarybbox[i]
+                inside = 
+                [iou3D(box, star) for star in cord]
+                
+                if not any(inside) :
+                         cord.append(bin_cord[i])    
+                         
+    
+    cord.append((0,0,0))
+    cord = np.asarray(cord)
+    cord_int = np.round(cord).astype(int) 
+    
+    markers_raw = np.zeros_like(Image) 
+    markers_raw[tuple(cord_int.T)] =
+    1 + np.arange(len(cord)) 
+    markers = 
+    morphology.dilation(markers_raw,
+    morphology.ball(2))
+
+    watershedImage = 
+    watershed(-Image, markers, mask) 
+    
+    return watershedImage, markers 
+    
+The software package we provide comes with training and prediction notebooks for training the base U-net and stardist networks on your own dataset. We provide jupyter notebooks to do so on local GPU servers and also on Google Colab.
+   
+
 
 Network Training
 ---------------------
@@ -98,81 +183,7 @@ evaluated across several Z stacks. We also compute mean squared error between th
 
 
 
-The code for the seed criteria is shown below
 
-.. code-block:: python
-
-  def iou3D(boxA, centroid):
-    
-    ndim = len(centroid)
-    inside = False
-    
-    Condition = [Conditioncheck(centroid, boxA, p, ndim)
-     for p in range(0,ndim)]
-        
-    inside = all(Condition)
-    
-    return inside
-
-  def Conditioncheck(centroid, boxA, p, ndim):
-    
-      condition = False
-    
-      if centroid[p] >= boxA[p] 
-      and centroid[p] <= boxA[p + ndim]:
-          
-           condition = True
-           
-      return condition 
-      
-      
-After obtaining the pool of seeds we can perform watershedding on either the distance map coming from stardist or the pixel probability map that is also an output of the stardist algorithm. We use U-net semantic segmentation as a mask in the watershedding process. The code for doing so is shown below     
-
-.. code-block:: python     
-
-
-  def WatershedwithMask3D(Image, Label,mask, grid): 
-  
-    properties = measure.regionprops(Label, Image) 
-    binaryproperties = 
-    measure.regionprops(label(mask), Image) 
-    cord = 
-    [prop.centroid for prop in properties] 
-    bin_cord =
-    [prop.centroid for prop in binaryproperties]
-    Binarybbox = 
-    [prop.bbox for prop in binaryproperties]
-    cord = sorted(cord , 
-    key=lambda k: [k[0], k[1], k[2]]) 
-    if len(Binarybbox) > 0:    
-            for i in range(0, len(Binarybbox)):
-                
-                box = Binarybbox[i]
-                inside = 
-                [iou3D(box, star) for star in cord]
-                
-                if not any(inside) :
-                         cord.append(bin_cord[i])    
-                         
-    
-    cord.append((0,0,0))
-    cord = np.asarray(cord)
-    cord_int = np.round(cord).astype(int) 
-    
-    markers_raw = np.zeros_like(Image) 
-    markers_raw[tuple(cord_int.T)] =
-    1 + np.arange(len(cord)) 
-    markers = 
-    morphology.dilation(markers_raw,
-    morphology.ball(2))
-
-    watershedImage = 
-    watershed(-Image, markers, mask) 
-    
-    return watershedImage, markers 
-    
-Here the Label comes from stardist prediction and mask comes from the U-net prediction. 
-The result of this approach is a 3D instance segmentation which we obtain for the luminal cells as shown in Fig.{1}. In the software package we provide training and prediction notebooks for training the base U-net and stardist networks on your own dataset. The package comes with jupyter notebooks for training and prediction on local GPU servers and also on Google Colab.
 
 Interactive codebase
 -----------------------------
