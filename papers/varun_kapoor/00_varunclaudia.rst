@@ -304,6 +304,7 @@ V.K conceived the project and wrote the code; C.C performed the image acquisitio
 References
 --------------------
 
+
 .. [berg2019]  Berg, Stuart and Kutra, Dominik and Kroeger, Thorben and Straehle, Christoph N. and Kausler, Bernhard X. and Haubold, Carsten and Schiegg, Martin and Ales, Janez and Beier, Thorsten and Rudy, Markus and Eren, Kemal and Cervantes, Jaime I. and Xu, Buote and Beuttenmueller, Fynn and Wolny, Adrian and Zhang, Chong and Koethe, Ullrich and Hamprecht, Fred A. and Kreshuk, Anna *ilastik: interactive machine learning for (bio)image analysis*, Nature Methods 2019.
 
 .. [Beucher2018] S. Beucher and F. Meyer *The Morphological Approach to Segmentation: The Watershed Transformation*, 2018
