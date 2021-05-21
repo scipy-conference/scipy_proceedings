@@ -288,10 +288,7 @@ The results of track analysis can be saved as images or csv files.
      
 Conclusions
 --------------     
-We have presented a workflow to do segmentation, tracking and track analysis of cells in 3D for cells of irregular shape and intensity distribution. Our workflow is three step based approach:
-1) Create training models for denoising and segmentation using jupyter notebooks that can be run in local or in Colab environment.
-2) Using our Fiji plugin to do the tracking of cells inside the tissue and editing the tracks and creating a tracks xml file.
-3) Exporting the xml file into Napari for track visualization and analysis using Jupyter notebooks.        
+We have presented a workflow to do segmentation, tracking and track analysis of cells in 3D for cells of irregular shape and intensity distribution. For performing the segmentation we developed a jupyter notebook based python package VollSeg that combines the strengths of semantic and instance segmentation methods based on deep learning to deliver good performance for segmenting membrane marked cells in 3D. The training of the networks and the network prediction can be done on local GPU servers or on Google Colab. Our notebooks also come with a training notebook for doing unsupervised denoising using noise to void package. Post segmentation we create a csv file containing the information about the cells inside a region of interest which serves as an input to the Fiji plugin we created for doing the tracking. The tracking software uses existing track editing interfaceof Trackmate and saves the track information as an xml file. To view and analyze such volumetric tracks we created a python package to export such trajectories as track layer of Napari and we provide jupyter notebook based enviornment for track analysis with two example notebooks.
 
 Acknowledgements
 -----------------
