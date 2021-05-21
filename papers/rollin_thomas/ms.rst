@@ -387,6 +387,14 @@ the message failure rate.
 Perhaps disappointingly, we have never seen a message fail to arrive since we
 began monitoring one year ago.
 
+We summarize our process of collecting and storing Python data Fig.
+:ref:`save-data`.
+
+.. figure:: mods-save-data.png
+
+   This diagram summarizes the workflow for capturing Python
+   data at NERSC. :label:`save-data`
+
 Prototyping, Production, and Publication
 ----------------------------------------
 
@@ -480,9 +488,13 @@ Jupyter notebook for one piece of our analysis. In each Jupyter notebook, a
 Dask CUDA cluster is spun up and then shutdown at the end for memory/worker
 cleanup.  Every notebook writes a set of output files to be used in our
 dashboards. Processing all data for all permutations of time currently takes
-about 1.5 hours on 4 V100 GPUs on the NERSC Cori cgpu system.
+about 1.5 hours on 4 V100 GPUs on the NERSC Cori cgpu system. We
+summarize this workflow in Fig. :ref:`analyze-data`.
 
-**TODO: make figure that explains workflow**
+.. figure:: mods-analyze-data.png
+
+   This diagram summarizes the workflow for processing and analyzing Python
+   data at NERSC. :label:`analyze-data`
 
 In this work our design choice is to use Voila [voila]_ to turn our Jupyter
 notebooks into dashboards. Generating usable interactive dashboards has been a
@@ -503,7 +515,12 @@ in the standard Matploptlib plotting format. However we primarily used the
 Seaborn library for plotting with Vaex objects underneath which we found to be
 a fast and friendly way to generate visually appealing plots. We also used some
 traditional Matplotlib plotting functionality when Seaborn could not provide
-what we wanted.
+what we wanted. We summarize this workflow in Fig. :ref:`mods-dashboard`.
+
+.. figure:: mods-dashboard.png
+
+   This diagram summarizes the setup we use to provide our web-based,
+   interactive dashboards. :label:`mods-dashboard`
 
 Together this approach provided a solution that satisfied our vision of a
 Python- and Jupyter-based, powerful, self-documenting and sharable, interactive
