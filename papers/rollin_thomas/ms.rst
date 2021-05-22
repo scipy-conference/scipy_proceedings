@@ -174,7 +174,7 @@ in particular user-installed Python environments or in containers.
 Tools like ALTD [Fah10]_ and XALT [Agr14]_ are commonly used in HPC contexts to
 track library usage in compiled applications.
 The approach is to introduce wrappers that intercept the linker and batch job
-launcher (e.g. ``srun`` in the case of Slurm).
+launcher (e.g. ``srun`` in the case of Slurm used at NERSC).
 The linker wrapper can inject metadata into the executable header, take a census
 of libraries being linked in, and forward that information to a file or database
 for subsequent analysis.
@@ -252,8 +252,14 @@ service.
 We need to be able to gather data for workload analysis across all of these
 options, in part to understand the relative importance of each.
 
+.. figure:: mods-save-data.png
+
+   Infrastructure for capturing Python package usage data at NERSC.
+   :label:`save-data`
+
 Monitoring all of the above can be done quite easily by using the strategy
 outlined in [Mac17]_ with certain changes.
+Figure :ref:`save-data` illustrates the infrastructure we have configured.
 As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
 installed in a directory included into all users' Python ``sys.path``.
 The file system where ``sitecustomize`` is installed should be local to the
@@ -330,6 +336,7 @@ logging library with a minor modification to the time format to satisfy RFC 3339
 Downstream from these transport layers, a message key is used to identify the
 incoming messages, their JSON payloads are extracted, and then forwarded to the
 appropriate Elastic index.
+The Customs Reporter used on Cori simply uses nerscjson.
 
 On Cori compute nodes, we use the Cray Lightweight Log Manager (LLM) **REF**,
 configured to accept RFC 5424 **REF** protocol messages on service nodes.
@@ -341,59 +348,81 @@ while using an appropraitely scalable transport layer for the system.
 For instance, future systems will rely on Apache Kafka or the Lightweight
 Distributed Metrics Service [Age14]_.
 
-**FIXME** Cori has 10,000 compute nodes running jobs at very high utilization 24
-hours a day, some 350 days per year **Use the OA 2020 numbers**.
-The volume of messages arriving from Python jobs completing could be quite high,
-so we have taken the approach of monitoring a large list of key packages instead
-of reporting each job's entire ``sys.modules``.
-(Python 3.10 includes a very easy mechanism for identifying standard library
-packages that we could use to filter out, that we will investigate).
-At the same time we don't completely drop standard libraries, as we will show
-certain standard libraries are very important to our users.
+Cori has 10,000 compute nodes running jobs at very high utilization, 24 hours
+day for more than 340 days in a typical year.
+The volume of messages arriving from Python processes completing could be quite
+high, so we have taken a cautious approach of monitoring only a sizeable list of
+key scientific Python packages instead of reporting the entire contents of each
+process's ``sys.modules``.
+This introduces a potential source of bias that we return to in the Discussion,
+but we note here that Python 3.10 will include ``sys.stdlib_module_names``, a
+frozenset of strings containing the names of standard library modules, that
+could be used in addition to ``sys.builtin_module_names`` to remove standard
+library and built-in modules from ``sys.modules`` easily.
+Ultimately we plan to capture all imports excluding standard and built-in
+packages, except for ones we consider particularly relevant to scientific
+Python workflows like ``multiprocessing``.
 
-SLURM_PROCID to cut down on duplications from mpi4py.
-Strategy of be liberal in what we report and worry about filtering it down
-later, if there are duplicates that's OK, our metrics are mostly focused on
-users and jobs, as long as we pass along that info we can deduplicate.
+To reduce excessive duplication of messages from MPI-parallel Python
+applications, we prevent reporting from processes with nonzero MPI rank or
+``SLURM_PROCID``.
+Other multi-process parallel applications using ``multiprocess`` for instance
+are harder to deduplicate.
+This moves deduplication downstream to the analysis phase.
+The key is to carry along enough additional information to enable the kinds of
+deduplication needed (e.g., by user, by job, by node, etc).
+Table :ref:`metadata` contains a partial list of metadata captured and forwarded
+along with package names and versions.
 
-..
-   category        "mods-test"
-   event_timestamp isoformat timestamp
-   executable      ``sys.executable``
-   is_compute      Boolean if the node is a compute node based on its name
-                   ``socket.gethostname()``
-   is_shifter      Boolean based on presence of ``SHIFTER_RUNTIME`` being True
-   is_staff        Check for presence of the key staff group in users
-                   os.getgroups()
-   job_id          From SLURM_JOB_ID, /proc/self/cgroup  or empty string if not a job
-   main            Full path to the program running
-   num_nodes       Number of nodes
-   qos             Slurm partition the job is running in
-   repo            Charge account the job is running under
-   service         Python
-   subservice      Library name
-   subsystem       Cori GPU or DGX or cmem or HAswell or KNL
-   system          ``NERSC_HOST``
-   username        ``USER``
-   version         Version of library if it can be extracted
+.. table:: Additional monitoring metadata :label:`metadata`
+
+   +----------------+--------------------------------------------------+
+   | Field          | Description                                      |
+   +================+==================================================+
+   | ``executable`` | Path to Python executable used by this process   |
+   +----------------+--------------------------------------------------+
+   | ``is_compute`` | True if the process ran on a compute node        |
+   +----------------+--------------------------------------------------+
+   | ``is_shifter`` | True if the process ran in a Shifter container   |
+   +----------------+--------------------------------------------------+
+   | ``is_staff``   | True if the user is a member of NERSC staff      |
+   +----------------+--------------------------------------------------+
+   | ``job_id``     | Slurm job ID                                     |
+   +----------------+--------------------------------------------------+
+   | ``main``       | Path to application, if any                      |
+   +----------------+--------------------------------------------------+
+   | ``num_nodes``  | Number of nodes in the job                       |
+   +----------------+--------------------------------------------------+
+   | ``qos``        | Batch queue of the job                           |
+   +----------------+--------------------------------------------------+
+   | ``repo``       | Batch job charge account                         |
+   +----------------+--------------------------------------------------+
+   | ``subsystem``  | System partition or cluster                      |
+   +----------------+--------------------------------------------------+
+   | ``system``     | System name                                      |
+   +----------------+--------------------------------------------------+
+   | ``username``   | User handle                                      |
+   +----------------+--------------------------------------------------+
+
+Fields that only make sense in a batch job context are set to a default
+(``num_nodes: 1``) or left empty (``repo: ""``).
+Much of the job information is discoverable from separate databases specifically
+for Slurm, identity, and banking.
+Basic job quantities like node count help capture the most salient features of
+jobs being monitored; a downstream join with those external databases is
+required for more details.
+Much of the information needed is also stored and accessible in OMNI.
 
 In principle it is possible that messages may be dropped along the way to OMNI.
 **UDP**
 To control for this source of error, we submit scheduled "canary jobs" a few
 dozen times a day that run a Python script that imports libraries listed in
 ``sitecustomize`` and then exits normally.
-Matching up job those submissions with entries in Elastic enables us to quantify
+Matching up those job submissions with entries in Elastic enables us to quantify
 the message failure rate.
-Perhaps disappointingly, we have never seen a message fail to arrive since we
-began monitoring one year ago.
-
-We summarize our process of collecting and storing Python data Fig.
-:ref:`save-data`.
-
-.. figure:: mods-save-data.png
-
-   This diagram summarizes the workflow for capturing Python
-   data at NERSC. :label:`save-data`
+Canary jobs began running in October of 2020 and from that time until now (May
+2021), perhaps surprisingly, we actually have observed no message delivery
+failures.
 
 Prototyping, Production, and Publication
 ----------------------------------------
