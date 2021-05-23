@@ -3,7 +3,7 @@
 :institution: Institut Curie
 :institution: Paris, France
 
-:author: Claudia Carabana Garcia
+:author: Claudia Carabaña
 :email: claudia.carabana-garcia@curie.fr
 :institution: Institut Curie
 :institution: Paris, France
