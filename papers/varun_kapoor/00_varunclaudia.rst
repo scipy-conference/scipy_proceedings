@@ -129,12 +129,9 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     return watershedImage, markers 
     
     
-We benchmark our segmentation results using various metric for measuring the accuracy of instance level segmentation. We compute true positive (TP), false positives (FP) and false negatives (FN). 
+Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN). 
 TP are the true positives that are the pairs of predicted and ground truth labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the ground truth image and FN are the unmateched ground truth instances that are not present in the predicted label image. Matched score is the number of matching pixels between the predictions and the ground truth at a certain :math:`\tau` We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to ground truth labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall), mean true score (matched score/ TP), panoptic quality (matchedscore / (TP + FP/2 +FN/2)) and accuracy score 
-:math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}` 
-     
-over a range of overlap threshold, :math:`\tau \in [0,1]`.  The values of :math:`\tau` used is specific to biological application, for our dataset value of 0.3 works well.
-
+:math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}`.  
 To evaluate the accuracy of our method in resolving the shape of the cells we compute the mean squared error and structural similarity index measurment between the GT and obtained segmentation images post binarization operation on the obtained instance segmentation maps. 
     
     
@@ -238,9 +235,7 @@ For this dataset the track scheme along with overlayed tracks is shown in Figure
 Results
 --------
 
-We compare our proposed VollSeg segmentation approach to two commonly used methods for cell segmentation of fluorescent microscopy images, 3D Stardist :cite:`schmidt2018` :cite:`weigert2020` and 3D U-Net. StarDist in 3D was compared to other classicial method the IFT Watershed and was shown to perform better than the classical method which is why we use it as a baseline for comparision.  We also compute mean squared error (mse) and structural similarity index measurement (ssim) between the ground truth and the predicted results. Low value of mse and high value of ssim implies that the prediction match closely to the ground truth results showing a better shape resolution. From the results shown in Figure :ref:ssimmse. we see that our method has the lowest mse and highest ssim compared to the other methods. 
-
-In Figure :ref:`metrics` we show the Stardist, unet and results from our approach (vollseg). Our method has highest accuracy and true positive rate and lowest false positive and false negative rates. This is because we are able to obtain a more accurate shape representation of the epithelial cells which is a derived accuracy coming from U-Net prediction and are also able to seperate the overlapping instances which is a derived accuracy coming from Stardist prediction.  Visual segmentation comparision of network results along with the GT is shown in Figure :ref:`visseg`.
+We compare our proposed VollSeg segmentation approach to two commonly used methods for cell segmentation of fluorescent microscopy images, 3D Stardist :cite:`schmidt2018` :cite:`weigert2020` and 3D U-Net. StarDist in 3D was compared to other classicial method the IFT Watershed and was shown to perform better than the classical method which is why we use it as a baseline for comparision. We compute various metrics described in :ref:`Segmentation` to asses the performance of our segmentations. We show the metrics of comparision in Figure :ref:`metrics` and in Figure :ref:ssimmse we show mase and ssim computations. we see that our method has the lowest mse and highest ssim compared to the other methods. Our method has highest accuracy and true positive rate and lowest false positive and false negative rates. This is because we are able to obtain a more accurate shape representation of the epithelial cells which is a derived accuracy coming from U-Net prediction and are also able to seperate the overlapping instances which is a derived accuracy coming from Stardist prediction.  Visual segmentation comparision of network results along with the GT is shown in Figure :ref:`visseg`.
 
 
 
