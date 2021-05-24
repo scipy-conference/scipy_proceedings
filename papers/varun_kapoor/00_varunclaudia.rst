@@ -29,7 +29,7 @@ Here we provide a detailed analysis pipeline to perform segmentation with accura
 Introduction
 ------------
 
-Quantitative analysis to study morphogenesis requires an accurate image analysis workflow. Such a workflow entails volumetric (3D) imaging of cells via fluorescence microscopy, accurate detection and segmentation of cells followed by tracking and track analysis. Broadly speaking the task of segmentation can be separated into semantic segmentation (classifying pixels as background or pixels belonging to the cell) or instance segmentation (classifying pixels belonging to individual cells by assigning a unique label to each cell). Segmentation is complicated due to presence of multiple objects in the image, overlapping object pixels and non-homogeneous intensity distribution. Several methods have been proposed for such automated detection and segmentation tasks such as the traditional intensity based thresholding, watershed transform :cite:`Beucher2018` and of recent machine learning methods based on random-forest classifiers and support vector machines :cite:`berg2019`. Methods based on deep learning have improved the accuracy of segmentation for natural and biomedical images alike :cite:`Rasse2020`. For the purpose of semantic segmentation U-Net has emerged as the most widely used network for biological applications. This network also forms the backbone of another successful network to do cell nuclei segmentation in 3D, Stardist :cite:`schmidt2018` :cite:`weigert2020`. Stardist directly predicts a shape representation as star-convex polygons for cell nuclei in 2D and 3D. The task of segmenting cell membrane requires segmenting the boundaries of the cells as opposed to nuclei segmentation where interior pixels are segmented. Membrane segmentation task is hence more challenging as boundary pixels are fewer than the interior pixels hence segmentation mistakes for membrane would lead to merging of cells or open cell contour. To predict cell contours together with cell centroids, Eschweiler et al. :cite:`eschweiler2018` proposed a 3D U-Net network using centroids as seeds for watershed in 3D confocal microscopy images. The drawback of this approach is misclassification due to sub-optimal seeding. Another approach proposed by Wolny, is to directly predict the cell boundaries using a 3D U-Net followed by a volume partitioning algorithm to segment each cell based on the boundary prediction :cite:`Wolny2020`. This approach requires well defined defined cell boundaries which may create segmentation errors in low singla to noise imaging conditions.
+Quantitative analysis to study morphogenesis requires an accurate image analysis workflow. Such a workflow entails volumetric (3D) imaging of cells via fluorescence microscopy, accurate detection and segmentation of cells followed by tracking and track analysis. Broadly speaking the task of segmentation can be separated into semantic segmentation (classifying pixels as background or pixels belonging to the cell) or instance segmentation (classifying pixels belonging to individual cells by assigning a unique label to each cell). Segmentation is complicated due to presence of multiple objects in the image, overlapping object pixels and non-homogeneous intensity distribution. Several methods have been proposed for such automated detection and segmentation tasks such as the traditional intensity based thresholding, watershed transform :cite:`Beucher2018` and of recent machine learning methods based on random-forest classifiers and support vector machines :cite:`berg2019`. Methods based on deep learning have improved the accuracy of segmentation for natural and biomedical images alike :cite:`Rasse2020`. For the purpose of semantic segmentation U-Net :cite:`Ronn2015` has emerged as the most widely used network for biological applications. This network also forms the backbone of another successful network to do cell nuclei segmentation in 3D, Stardist :cite:`schmidt2018` :cite:`weigert2020`. Stardist directly predicts a shape representation as star-convex polygons for cell nuclei in 2D and 3D. The task of segmenting cell membrane requires segmenting the boundaries of the cells as opposed to nuclei segmentation where interior pixels are segmented. Membrane segmentation task is hence more challenging as boundary pixels are fewer than the interior pixels hence segmentation mistakes for membrane would lead to merging of cells or open cell contour. To predict cell contours together with cell centroids, Eschweiler et al. :cite:`eschweiler2018` proposed a 3D U-Net network using centroids as seeds for watershed in 3D confocal microscopy images. The drawback of this approach is misclassification due to sub-optimal seeding. Another approach proposed by Wolny et al., is to directly predict the cell boundaries using a 3D U-Net followed by a volume partitioning algorithm to segment each cell based on the boundary prediction :cite:`Wolny2020`. This approach requires well defined defined cell boundaries which may create segmentation errors in low singla to noise imaging conditions.
    
 Our data set is comprised of epithelial cells of mouse embryonic mammary glands with membrane labelling. These cells are highly irregular in shape and have a low signal-to-noise ratio to obtain an accurate segmentation only based on the boundary information. Therefore, here we developed a segmentation package in python called VollSeg, as a method to perform automated segmentation of such cells. In brief we use Stardist in 3D to obtain a star convex shape approximation for the cells and extract the cell centroids from these polygons. We also train a 3D U-Net model to obtain a semantic segmentation map of the cells. We then perform a marker controlled watershed on the probability map of Stardist using the U-Net segmentation as a mask image to prevent the overflow of segmentation regions. To avoid the error of sub-optimal seeding we developed a seed pooling approach to take advantage of strength of both the Stardist and U-Net networks to create an optimal seed pool to start the watershed. We benchmarked our segmentation result and obtain different metrics showing that our approach is able to obtain shape approximation for the overlapping cells that go beyond the star convex shape.    
    
@@ -46,7 +46,7 @@ Preparation of the dataset
 ***************************
 
 
-We used fluorescent microscopy images of mouse embryonic mammary glands stabilized in an ex vivo culture previously collected in the laboratory of Dr. S. Fre at Institut Curie. All images were acquired with an inverted CLSM equipped with long-working distance objectives to acquire high-resolution 3D image stacks. The quality at which these images are acquired is determined by the spatial resolution of the used optical device, desired temporal resolution, duration of the experiment and depth of the acquired Z stacks. Microscopy always has trade offs between these aspects such as reduction of exposure time to gain imaging speed leads to a lower signal to noise ratio. Some of these trade offs can be overcome by computational procedures that can be used to improve the quality of images which makes the down-stream analysis easier. One such procedure is image restoration where a network can be trained to map the images acquired at low signal to noise ratio to as if they were acquired at high signal to noise ratio. The network is trained to learn this mapping function. Training of restoration networks can be done in supervised way by acquiring low and high signal to noise ratio image pairs to train the network :cite:`Weigert2017` or in an unsupervised way where training image pairs are not required :cite:`krull2019`. It was shown that using unsupervised denoising produces better results than using classical deconvolutional algorithms such as Lucy-Richardson denoising :cite:`Richardson72`, :cite:`Lucy74`. Given our microscope settings, we used the unsupervised learning to restore the volumetric images. 
+We used fluorescent microscopy images of mouse embryonic mammary glands stabilized in an ex vivo culture previously collected in the laboratory of Dr. S. Fre at Institut Curie. All images were acquired with an inverted CLSM (e.g. Zeiss LSM780/880) equipped with long-working distance objectives to acquire high-resolution 3D image stacks. The quality at which these images are acquired is determined by the spatial resolution of the used optical device, desired temporal resolution, duration of the experiment and depth of the acquired Z stacks. Microscopy always has trade offs between these aspects such as reduction of exposure time to gain imaging speed leads to a lower signal to noise ratio. Some of these trade offs can be overcome by computational procedures that can be used to improve the quality of images which makes the down-stream analysis easier. One such procedure is image restoration where a network can be trained to map the images acquired at low signal to noise ratio to as if they were acquired at high signal to noise ratio. The network is trained to learn this mapping function. Training of restoration networks can be done in supervised way by acquiring low and high signal to noise ratio image pairs to train the network :cite:`Weigert2017` or in an unsupervised way where training image pairs are not required :cite:`krull2019`. It was shown that using unsupervised denoising produces better results than using classical deconvolutional algorithms such as Lucy-Richardson denoising :cite:`Richardson72`, :cite:`Lucy74`. Given our microscope settings, we used the unsupervised learning to restore the volumetric images. 
 
 
 Segmentation
@@ -84,7 +84,7 @@ The code for the merging U-Net and Stardist seeds is the following:
       return condition 
       
       
-The code for doing watershed in 3D using the complete set of seeds on the probability map of Stardist is the following.    
+The code for doing watershed in 3D using the complete set of seeds on the probability map of Stardist is the following:   
 
 .. code-block:: python     
 
@@ -131,7 +131,7 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     
     
 Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN). 
-TP are the true positives that are the pairs of predicted and ground truth labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the ground truth image and FN are the unmateched ground truth instances that are not present in the predicted label image. Matched score is the number of matching pixels between the predictions and the ground truth at a certain :math:`\tau` We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to ground truth labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall), mean true score (matched score/ TP), panoptic quality (matchedscore / (TP + FP/2 +FN/2)) and accuracy score 
+TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. Matched score is the number of matching pixels between the predictions and the GT at a certain :math:`\tau`. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
 :math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}`.  
 To evaluate the accuracy of our method in resolving the shape of the cells we compute the mean squared error and structural similarity index measurment between the GT and obtained segmentation images post binarization operation on the obtained instance segmentation maps. 
     
@@ -161,7 +161,7 @@ The model parameters are specified in the next notebook cell. These parameters a
 
 1) NetworkDepth = Depth of the network, with each increasing depth the image is downsampled by 2 hence the XYZ dimension of the data / 2^depth has to be greater than 1.
 
-2) Epochs, training for longer epochs ensures a well converged network and requires longer GPU runtimes.
+2) Epochs: training for longer epochs ensures a well converged network and requires longer GPU runtimes.
 
 3) Learning rate is the parameter which controls the step size used in the optimization process and it should not be greater than 0.001 at the start of the training.
 
@@ -169,9 +169,9 @@ The model parameters are specified in the next notebook cell. These parameters a
 
 5) Patch X,Y,Z is the patch size used for making patches out of the image data. The original image is broken down into patches for training. Patch size is chosen based on having enough context for the network to learn the details at different scales.
 
-6) Kernel is the receptive field of the neural network, usual choices are 3,5 or 7. This is the size of the convolutional kernel used in the network.
+6) Kernel is the receptive field of the neural network, usual choices are 3, 5 or 7. This is the size of the convolutional kernel used in the network.
 
-7) n_patches_per_image is the number of patches sampled for each image to create the npz file, choose an optimal value so that the file is not too big for the computer memory.
+7) n_patches_per_image is the number of patches sampled for each image to create the npz file, choose an optimal value so that the file is not too big for the CPU memory.
 
 8) Rays is the number of rays used the learn the distance map, low rays decreases the spatial resoultion and high rays are able to resolve the shape better.
 
@@ -179,7 +179,7 @@ The model parameters are specified in the next notebook cell. These parameters a
 
 10) Before starting the U-Net training an npz file containing the paried Raw and Binary segmentation images needs to be created, by setting GenerateNPZ = True such a file is created. 
 
-11) If there are multiple GPU's available the training of U-Net and stardist can be split between the GPU's set TrainUNET = True  for training a U-Net network, create a copy of the notebook and only set TrainSTAR = True for training a stardist network. If there are no multiple GPU's available the task set all of these parameters in 10) and 11) to be True to create and train both the networks in a single notebook run.
+11) If there are multiple GPU's available the training of U-Net and Stardist can be split between the GPU's. Set TrainUNET = True  for training a U-Net network, create a copy of the notebook and only set TrainSTAR = True for training a Stardist network. If there are no multiple GPU's available the task set all of these parameters in 10) and 11) to be True to create and train both the networks in a single notebook run.
  
 
   
@@ -245,7 +245,7 @@ The code below operates on a directory of XYZ shape images:
 Tracking
 ********* 
 
-After we obtain the segmentation using VollSeg we create a csv file of the cell attributes that include their location, size and volume inside a region of interest. For large datasets memory usage could be of concern while loading the images into memory hence inputs via csv could prove helpful in such cases. Tracking is performed in ImageJ/Fiji, an image processing package.  We developed our code over the existing tracking solution called Trackmate :cite:`Tinevez2017`. Trackmate uses linear assignment  problem (LAP) algorithm to do linking of the cells and uses Jaqman linker for linking the segments for dividing and merging trajectories. It also provides other trackers such as the Kalaman filter to do tracking of non-dividing cells. Trackmate comes with a fully interactive track editing interface with graph listener to show the selected cell in the trackscheme and vice versa to click on the graph and have the selected cell being highlighted in the image, making the process of track editing interactive. Post editing the tracks are saved as an xml file which can then be loaded back into the program to do more track editing if needed, the program reads the saved settings from the xml to restore the state of track editing as it was when the xml file was last saved. When a cell divides, the track is splitted up in two tracklets.  In order to aid in track editing we introduced a new parameter of minimum tracklet length to remove tracklets in a track that are short in the time dimension. This introduces a biological context of not having very short trajectories and hence reduces the track editing effort to correct for the linking mistakes made by the program. For testing our tracking program we used a freely available dataset from the cell tracking challenge of a developing C.elegans embryo :cite:`Celegans` :cite:`Murray2008`. Using our software we can remove cells from tracking which do not fit certain criteria such as being too small (hence most likely a segmentation mistake) or being low in intensity or outside the region of interest such as when we want to track cells only inside a tissue. For this dataset we kept 12,000 cells and after filtering short tracks kept about 50 tracks with and without division events.
+After we obtain the segmentation using VollSeg we create a csv file of the cell attributes that include their location, size and volume inside a region of interest. For large datasets memory usage could be of concern while loading the images into memory hence inputs via csv could prove helpful in such cases. Tracking is performed in ImageJ/Fiji, an image processing package.  We developed our code over the existing tracking solution called Trackmate :cite:`Tinevez2017`. Trackmate uses linear assignment  problem (LAP) algorithm to do linking of the cells and uses Jaqman linker for linking the segments for dividing and merging trajectories. It also provides other trackers such as the Kalaman filter to do tracking of non-dividing cells. Trackmate comes with a fully interactive track editing interface with graph listener to show the selected cell in the trackscheme and vice versa to click on the graph and have the selected cell being highlighted in the image, making the process of track editing interactive. Post editing the tracks are saved as an xml file which can then be loaded back into the program to do more track editing if needed, the program reads the saved settings from the xml to restore the state of track editing as it was when the xml file was last saved. When a cell divides, the track is splitted up in two tracklets.  In order to aid in track editing we introduced a new parameter of minimum tracklet length to remove tracklets in a track that are short in the time dimension. This introduces a biological context of not having very short trajectories and hence reduces the track editing effort to correct for the linking mistakes made by the program. For testing our tracking program we used a freely available dataset from the cell tracking challenge of a developing C. elegans embryo :cite:`Celegans` :cite:`Murray2008`. Using our software we can remove cells from tracking which do not fit certain criteria such as being too small (hence most likely a segmentation mistake) or being low in intensity or outside the region of interest such as when we want to track cells only inside a tissue. For this dataset we kept 12,000 cells and after filtering short tracks kept about 50 tracks with and without division events.
 
 For this dataset the track scheme along with overlayed tracks is shown in Figure :ref:`trackscheme`. Selected node in the trackscheme is highlighted in green and vice versa. Extensive manual for using the track editing is available on Fiji wiki :cite:`Fijiwiki`.
 
@@ -253,23 +253,30 @@ For this dataset the track scheme along with overlayed tracks is shown in Figure
 
 .. figure:: Figures/trackscheme.png
   
-     Trackscheme display for the C-elegans dataset. 
+     Trackscheme display for the C. elegans dataset. 
    
      :label:`trackscheme`
   
 Results
 --------
 
+.. figure:: Figures/Seg_compare-big.png
+   
+     
+     Visual 3D segmentation comparison between (left to right) the Raw image, Ground truth (GT) segmentation image, Stardist, U-Net and VollSeg results. The images are displayed in Napari viewer with 3D display view. 
+   
+     :label:`visseg`
+
 We compare our proposed VollSeg segmentation approach to two commonly used methods for cell segmentation of fluorescent microscopy images, 3D Stardist :cite:`schmidt2018` :cite:`weigert2020` and 3D U-Net.
-We show a 3D rendering of VollSeg segmentation results in 3D :ref:`visseg`.
-Stardist in 3D was compared to other classical method the IFT watershed ans was shown to perform better than the classical method which is why we use it as a baseline for comparision. We compute various metrics described in :ref:`segmentation` to asses the performance of our segmentations. We show the metrics of comparision in Figure :ref:`metrics` and in Figure :ref:`ssimmse` we show mse and ssim computations. We see that our method has the lowest mse and highest ssim compared to the other methods. Our method has highest accuracy, true positive rate and lowest false positive and false negative rates. This is because we are able to obtain a more accurate shape representation of the epithelial cells which is a derived accuracy coming from U-Net prediction and are also able to seperate the overlapping instances which is a derived accuracy coming from Stardist prediction. Furthermore our true positive rate is higher comapared to Stardist because for the cells with low signal Stardist misses those detections which we are able to make up for due to our seed pooling approach. We avoid the false positives by auto removing labels that are below a certain user chosen size in volume, as segmentation errors can come due to microscope camera noise and for a given experimental setup the cells have a certain minimum volume, using such context information int he segmentation pipeline helps in avoiding such false positives.
+We show a 3D rendering of VollSeg segmentation results in the Figure :ref:`visseg`.
+Stardist in 3D was compared to other classical method, the IFT watershed, and it was shown to perform better than the classical method hence we use Stardist as a baseline for comparison. To asses the performance of our segmentation, we compute the metrics described in the material and methods section. We show accuracy score in Figure :ref:`metrics` A which shows VollSeg and Stardist having comparable accuracy while U-Net tends to slightly oversegment the image leading to a low accuracy. We observe that pixel wise accuracy (F1-score) of VollSeg is comparable to Stardist whule U-Net performs poorly in this metric as well. However the mean squared error shown in Figure :ref:`ssimmse` A show that Stardist has highest error due to error in estimating the irregular shape of the cells while U-Net and Vollseg have similar performance. This result can also be seen from ssim calculation shown in Figure :ref:`ssimmse` B. From these metric calculations we can conclude that Vollseg has highest accuracy and produces better shape representations for the epithelial cells.  Vollseg derieves its shape accuracy coming from U-Net and its accuracy is seperating object instances coming from the Stadist network. 
 
 
 
 .. figure:: Figures/Metrics.png
-     :scale: 6%
+     
       
-     Segmentation comparision metrics between (top to bottom) 1) VollSeg, 2) Unet, 3) Stardist. VollSeg has highest TP and accuracy scores compared to the other methods. 
+     Segmentation comparision metrics between VollSeg, Stardist and U-Net. We plot (A) accuracy, (B) F1 and (C) true positive rates for all the networks. 
      
      :label:`metrics`
 
@@ -283,12 +290,7 @@ Stardist in 3D was compared to other classical method the IFT watershed ans was 
       :label:`ssimmse`
 
 
-.. figure:: Figures/Seg_compare-big.png
-   
-     
-     Visual 3D segmentation comparison between (left to right) the Raw image, Ground truth segmentation image, Stardist, U-Net and VollSeg results. The images are displayed in Napari viewer with 3D display view. 
-   
-     :label:`visseg`
+
      
      
    
@@ -296,11 +298,10 @@ Stardist in 3D was compared to other classical method the IFT watershed ans was 
 Track Analysis
 **********************
 
-After obtaining the tracks from BTrackmate we save them as Trackmate XML file, this file contains the information about all the cells in a track. Since the cells can be highly erratic in their volumetric motions, we use Napari, an Euler angle based viewer, to visualize such tracks from different reference positions.  We made a python package to export the XML files previously saved in Fiji and convert them into the tracks layer of Napari. We made a customised widget to view selected tracks, display the track information and save the cell track along user selected view. Such animation recordings can be saved as a mp4 file.
+After obtaining the tracks from BTrackmate we save them as Trackmate XML file, this file contains the information about all the cells in a track. Since the cells can be highly erratic in their volumetric motions, we use Napari, an Euler angle based viewer, to visualize such tracks from different reference positions.  We made a python package to export the XML files previously saved in Fiji and convert them into the tracks layer of Napari. We made a customised widget to view selected tracks, display the track information and save the cell track along user selected view, as shown in 
+Figure :ref:`intensity-napari` A, On the left panel we have the image and tracks layer whose display properties can be changed from the top left panel (1). In the bottom left we have the dropdown menu enlisting all the tracks (2). Users can select the track to be displayed in the central window where it is easy to switch between the hyperstack and the 3D view (3). The user can also choose to view all the tracks at once and then toggle the visibilty of the tracks using the eye icon next to the image and tracks layer (4). On the top right panel we show two plots displaying the track information (5). The 3D central view can be rotated, translated and the selected view can be saved as an animation using the bottom right animation panel (6). For the cells that divide we show the intensity variation and associated fast fourier transform for each tracklet.
 
-We created a cutomized Napari widget as shown in Figure :ref:`intensity-napari`. On the left panel we have the image and tracks layer whose display properties can be changed from the top left panel. In the bottom left we have the dropdown menu enlisting all the tracks. User can select the track to be displayed in the central window where it is easy to switch between the hyperstack and the 3D view using bottom left buttons. The user can also choose to view all the tracks at once and then toggle the visibilty of the tracks using the eye icon next to the image and tracks layer. On the top right panel we show two plots displaying the track information. The 3D central view can be rotated, translated and the selected view can be saved as an animation using the bottom right animation panel. For the cells that divide we show the intensity variation and associated fast fourier transform for each tracklet.
-
-We provide two example jupyter notebooks with the package. In the first one we compute the cell distance from the tissue boundary change over time for dividing and non-dividing trajectories seperately. The user selects a track of interest and it displays two plots next to the track view that show this distance change over time for the whole track (non-dividing trajectory) and the starting and end location of cell in the track as shown in Figure :ref:`division-napari-start`. For the tracks which had multiple events of cell division we show the distance change over time of each tracklet that comprises the track, in the localization plot the parent tracklet start and end location is shown in green while all the daughter cell start and end locations are shown in red. In the second example notebook we change the plots to show instead intensity change in the track over time along with the associated frequency of intensity oscillation present in each tracklet of the track if any is present. The frequency associated with each tracklet is computed using the scipy implementation of fast fourier transform.    
+We provide two example jupyter notebooks with the package. In the first one we compute the cell distance from the tissue boundary change over time for dividing and non-dividing trajectories. The user selects a track of interest and it displays two plots next to the track view that show this distance change over time for the whole track (non-dividing trajectory) and the starting and end location of cell in the track as shown in Figure :ref:`division-napari-start`. For the tracks with multiple events of cell division we show the distance change over time of each tracklet, in the localization plot the parent tracklet start and end location is shown in green while all the daughter cell start and end locations are shown in red. In the second example notebook the plots show intensity change in the track over time along with the associated frequency of intensity oscillation present in each tracklet. The frequency associated with each tracklet is computed using the scipy implementation of fast fourier transform. The results of track analysis can be saved as plots, mp4 files of the track animation or csv files.     
 
 
 .. figure:: Figures/IntensityFFT.png
@@ -308,23 +309,19 @@ We provide two example jupyter notebooks with the package. In the first one we c
       Napari widget to view tracks and plot track information in the top right plots. For the selected track we see the intensity change over time and its associated fast Fourier transform. For non-dividing trajectories the plot appears as in A) while for dividing trajectories we show the intensity variation over time and fourier transform of each tracklet.
       
       :label:`intensity-napari`
-   
-            
-        
-
-.. figure:: Figures/DistanceDividing.png
       
-      For a cell division event we show the track of the parent prior to division A) and we plot the track information in terms of the distance of the cell from the boundary. Post the division event we see the tracks of the daughter cells B). One daughter cells stays close to the cell boundary while the other moves away from it. Such analysis is complimentary to other biological techniques for studying cell fate. The second plot displays the start and end distance localization of the parent (green) and daughter cells (red). 
+.. figure:: Figures/DistanceDividing2.png
+      
+      For a cell division event we show the track of the parent and the daughter cells and we plot the track information in terms of the distance of the cell from the boundary. One daughter cells stays close to the cell boundary while the other moves away from it. Such analysis is complimentary to other biological techniques for studying cell fate. The second plot displays the start and end distance localization of the parent (green) and daughter cells (red). 
       
       :label:`division-napari-start`
-   
-The results of track analysis can be saved as plots, mp4 files of the track animation or csv files.  
-
-  
+ 
 
 Conclusions
 ---------------------    
-We have presented a workflow to do segmentation, tracking and track analysis of cells in 3D for cells of irregular shape and intensity distribution. For performing the segmentation we developed a jupyter notebook based python package VollSeg that combines the strengths of semantic and instance segmentation methods based on deep learning to deliver good performance for segmenting membrane marked cells in 3D. The training of the networks and the network prediction can be done on local GPU servers or on Google Colab. Our notebooks also come with a training notebook for doing unsupervised denoising using noise to void package. Post segmentation we create a csv file containing the information about the cells inside a region of interest which serves as an input to the Fiji plugin we created for doing the tracking. The tracking software uses existing track editing interfaceof Trackmate and saves the track information as an xml file. To view and analyze such volumetric tracks we created a python package to export such trajectories as track layer of Napari and we provide jupyter notebook based enviornment for track analysis with two example notebooks.
+We have presented a workflow to do segmentation, tracking and track analysis of cells in 3D for cells of irregular shape and intensity distribution. For performing the segmentation we developed a jupyter notebook based python package VollSeg that combines the strengths of semantic and instance segmentation methods based on deep learning to deliver good performance for segmenting membrane labelled cells in 3D. Post-segmentation we create a csv file containing the information about the cells inside a region of interest which serves as an input to Btrackmate, the Fiji plugin we created for doing the tracking. The tracking software uses existing track editing interface of Trackmate and saves the track information as an xml file. To view and analyze such volumetric tracks we created napatrackmater, a python package to export such trajectories as track layer of Napari and we provide jupyter notebook based enviornment for track analysis with two example notebooks. 
+
+The tools that we present here can also be useful for segmentation of cells coming from other organisms, imaging modalities as our method can be applied to segment cells that go beyond the star convex polyhedra. The example jupyter notebooks provided for track analysis can also be extended to compute other cell dynamical quantities such as motility, microtubule dynamical growth rates, catastrophe and rescue frequencies, co-localization analysis post tracking etc.
 
 
 Acknowledgements
@@ -337,9 +334,7 @@ Author Contributions
 V.K conceived the project and wrote the code; C.C performed the image acquisition of the used dataset and created labelled training dataset in 3D; V.K and C.C wrote the manuscript. 
 
         
-.. raw:: latex
 
-    \newpage
  
   
 References
