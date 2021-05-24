@@ -39,21 +39,24 @@ Monitoring Scientific Python Usage on a Supercomputer
 
 .. class:: abstract
 
-   **Kind of a placeholder**
    In 2020, more than 35% of users at the National Energy Research Scientific
-   Computing Center (NERSC) used Python on the Cori supercomputer.
-   How do we know this?
-   We developed a simple, minimally invasive monitoring framework that leverages
-   standard Python features to capture Python imports and other job data.
-   The data are analyzed with GPU-enabled Python libraries (Dask + cuDF) in a
-   Jupyter notebook, and results are summarized in a Voila dashboard.
-   After detailing our methodology, we provide a high-level tour of some of the
-   data we’ve gathered over the past year.
-   We conclude by outlining future work and potential broader applications.
+   Computing Center (NERSC) used Python on the Cori supercomputer. To determine
+   this we have developed a simple, minimally invasive monitoring framework that
+   leverages standard Python features to capture Python imports and other job data
+   via a package called ``customs`` **FIXME add public link to customs.** The data we
+   collect via customs are analyzed with Dask-cuDF in a Jupyter notebook, and
+   results are summarized in a Voila dashboard. We display these dashboards via
+   our Spin container-as-aservice platform **FIXME add public link to dashboards**
+   This new method of analyzing our data has led to insights including: our top 3
+   most popular libraries are NumPy, multiprocessing, and Matplotlib, our mean
+   jobsize is 2.4 nodes, information about the relationship between library and
+   jobsize, and information about which libraries are correlated and
+   anticorrelated. We will employ this framework to better understand Python user
+   behavior on our current and future NERSC systems.
 
 .. class:: keywords
 
-   keywords, procrastination
+   HPC, Python monitoring, GPUs, dashboards, parallel
 
 Introduction
 ============
@@ -61,7 +64,7 @@ Introduction
 ..
    Why is the work important?
 
-The National Energy Research Scientific Computing Center (NERSC_) is the primary
+The National Energy Research Scientific Computing Center [NERSC]_ is the primary
 scientific computing facility for the US Department of Energy's Office of
 Science.
 Some 8,000 scientists use NERSC to perform basic, non-classified research in
@@ -455,19 +458,6 @@ subset of data with richer and more powerful way than through database queries.
 This initial, interactive protyping should then be able to scale to process all
 of our data efficiently on NERSC's HPC hardware.
 
-**TODO** This paragraph is a little awkward and I'm not sure it's in the right place
-It should probably go under the Jupyter analysis
-
-To avoid version
-compatibility problems within the Python stack used for the analysis we use
-Docker containers.  At runtime the Docker containers are run using Shifter (our
-in-house HPC container solution), and in Spin they are just Docker containers
-managed by Rancher 2, orchestrated with Kubernetes.  For our Jupyter analysis,
-Wwe use cell notebook metadata to execute the Spin-appropriate cells and not
-the Cori-appropriate ones in Spin. (We use two separate sets of notebooks for
-Python analysis since our data analysis and plotting require incompatible 
-kernels.)
-
 Finally, we want to be able to share the results of our analysis using
 Python-backed dashboards. For this we use Voila to run the dashboard notebooks
 we have created using our container-as-a-service system Spin. To achieve this
@@ -478,7 +468,17 @@ more detail.
 Jupyter data analysis
 ---------------------
 
-**TODO** Describe Jupyter analysis, everything below is mostly Python-specific
+**FIXME** Describe Jupyter analysis, everything below is mostly Python-specific
+
+To avoid version
+compatibility problems within the Python stack used for the analysis we use
+Docker containers.  At runtime the Docker containers are run using Shifter (our
+in-house HPC container solution), and in Spin they are just Docker containers
+managed by Rancher 2, orchestrated with Kubernetes.  For our Jupyter analysis,
+Wwe use cell notebook metadata to execute the Spin-appropriate cells and not
+the Cori-appropriate ones in Spin. (We use two separate sets of notebooks for
+Python analysis since our data analysis and plotting require incompatible 
+kernels.)
 
 Python data analysis
 --------------------
@@ -498,21 +498,21 @@ distilling the data into something reasonably quick to plot in our dashboards.
 We have written a flexible Jupyter notebook that can process data in a monthly,
 quarterly, or yearly fashion. It will decide which of these to perform based on
 the input from a Papermill parameter cell. To perform this
-analysis, we use Dask-cuDF and cuDF [dcdf]_ throughout the analysis, keeping
+analysis, we use ``Dask-cuDF`` and ``cuDF`` [dcdf]_ throughout the analysis, keeping
 the whole workflow on the GPU. We typically use 4 Nvidia Volta V100 GPUs
-coordinated by a Dask-CUDA cluster [dcuda]_ which we spin up directly in the
+coordinated by a ``Dask-CUDA`` cluster [dcuda]_ which we spin up directly in the
 notebook. We load the Parquet data using Dask-cuDF directly into GPU memory and
 perform various types of filtering and reduction operations. We ultimately save
 the distilled output in new Parquet files, again using direct GPU I/O in
-Dask-cuDF or cuDF.
+``Dask-cuDF`` or ``cuDF``.
 
 Since our analysis is split in several dimensions-- monthly, quarterly, or
 yearly-- the workflow must be flexible enough to facilitate this. Our design
-choice here was to use Papermill [pmill]_ to turn our single notebook into an
+choice here was to use ``Papermill`` [pmill]_ to turn our single notebook into an
 extensible workflow. Papermill recognizes and replaces Jupyter cells tagged as
 parameters based on external input. (**TODO point to this script**) We can then
-launch a batch job on our shared GPU system which will call our Papermill >
-Jupyter > Dask-CUDA > Dask-cuDF. Each Papermill instance will run a single
+launch a batch job on our shared GPU system which will call our ``Papermill`` >
+``Jupyter`` > ``Dask-CUDA`` > ``Dask-cuDF``. Each ``Papermill`` instance will run a single
 Jupyter notebook for one piece of our analysis. In each Jupyter notebook, a
 Dask CUDA cluster is spun up and then shutdown at the end for memory/worker
 cleanup.  Every notebook writes a set of output files to be used in our
@@ -525,7 +525,7 @@ summarize this workflow in Fig. :ref:`analyze-data`.
    This diagram summarizes the workflow for processing and analyzing Python
    data at NERSC. :label:`analyze-data`
 
-In this work our design choice is to use Voila [voila]_ to turn our Jupyter
+In this work our design choice is to use ``Voila`` [voila]_ to turn our Jupyter
 notebooks into dashboards. Generating usable interactive dashboards has been a
 challenge however for several reasons. The first obstacle is the data loading
 time. Our design choice has been to preload all possible data the dashboard
@@ -534,16 +534,16 @@ interactive response time once it has loaded (~30 s). Another significant
 problem is quickly generating plots. This may sound surprising given that we
 already spent a good deal of time preprocessing and distilling our data on
 GPUs. However, we still found that plotting operations, especially those
-performing operations like histogram binning, with Pandas DataFrames was
+performing operations like histogram binning, with ``Pandas`` DataFrames was
 unsatisfyingly slow for our vision of a responsive dashboard. Our choice here
-was to use the Vaex library instead [vaex]_ which provides similar
+was to use the ``Vaex`` library instead [vaex]_ which provides similar
 functionality to Pandas but is significantly more performant as a result of
-multithreaded CPU parallelism. We did use some of Vaex’s native plotting
-functionality (notably Vaex’s viz.histogram functionality) which is wrappable
-in the standard Matploptlib plotting format. However we primarily used the
-Seaborn library for plotting with Vaex objects underneath which we found to be
+multithreaded CPU parallelism. We did use some of ``Vaex``’s native plotting
+functionality (notably ``Vaex``’s ``viz.histogram`` functionality) which is wrappable
+in the standard ``Matploptlib`` plotting format. However we primarily used the
+``Seaborn`` library for plotting with Vaex objects underneath which we found to be
 a fast and friendly way to generate visually appealing plots. We also used some
-traditional Matplotlib plotting functionality when Seaborn could not provide
+traditional ``Matplotlib`` plotting functionality when ``Seaborn`` could not provide
 what we wanted. We summarize this workflow in Fig. :ref:`mods-dashboard`.
 
 .. figure:: mods-dashboard.png
@@ -559,43 +559,33 @@ data.
 Results
 =======
 
-..
-   What were the results of the work?  What did we learn, discover, etc?
-
-* Most jobs are one node
-* Plotting/viz libraries rank higher than expected
-* Even on our GPU system, there are lots of CPU imports (unclear how high GPU utilization really is)
-* For Dask, users may be/sometimes unaware they are actually using it
-* Multiprocessing use is really heavy
-* Quantitative statements like
-
-   * Top 10 libraries
-   * Mean job size
-   * Job size as a function of library
-   * Correlated libraries and dependency patterns
-
-Introductory paragraph
+We will now summarize some of the results and insights we have gained
+from collecting and anayzing our data. There is a great deal more information
+in our dataset that we have not yet analyzed and there is much future work
+to be done. We should note that there are several important caveats to keep
+in mind when understanding and drawing conclusions from our data. These
+are outlined in our Discussion section.
 
 Perhaps the first question someone may ask is what the top Python libraries
-being used at NERSC are. Our top libraries from Jan-May 2021, deduplicated by
+being used at NERSC are. Our top 20 libraries from Jan-May 2021, deduplicated by
 user, are displayed in Fig. :ref:`lib-barplot`.
 
 .. figure:: library-barplot-2021.png
 
-   The top Python libraries at NERSC, deduplicated by user, in 2021. Note that
+   The top 20 Python libraries at NERSC, deduplicated by user, in 2021. Note that
    we only have data for libraries we have explictly
    tracked. :label:`lib-barplot`
 
-These top libraries, especially NumPy (ranked number 1) and SciPy (ranked
-number 4) are generally in line with what other HPC centers like TACC and Blue
-Waters have also reported [Mcl11]_ [Eva15]_. Nevertheless the ubiquitous use of
-multiprocessing (ranked number 2) surprised us, as did the heavy use of
-visualization/plotting libraries (Matplotlib ranked number 3). Conversely, we
-might have expected that libraries like mpi4py (ranked number 12) or Dask
+These top libraries, especially ``NumPy`` (ranked number 1) and ``SciPy`` (ranked
+number 4) are generally in line with what other HPC centers like Blue
+Waters and TACC have also reported [Mcl11]_ [Eva15]_. Nevertheless the ubiquitous use of
+``multiprocessing`` (ranked number 2) surprised us, as did the heavy use of
+visualization/plotting libraries (``Matplotlib`` ranked number 3). Conversely, we
+might have expected that libraries like ``mpi4py`` (ranked number 12) or ``Dask``
 (ranked number 13) would rank higher at an HPC center- both are outranked by
-Joblib (ranked number 8). ipykernel (ranked number 5), a proxy for Jupyter
-usage, confirms Jupyter’s popularity at NERSC. GPU libraries like TensorFlow
-(ranked number 16) and Pytorch (ranked number 19) are relatively low-ranked at
+``Joblib`` (ranked number 8). ``ipykernel`` (ranked number 5), a proxy for Jupyter
+usage, confirms Jupyter’s popularity at NERSC. GPU libraries like ``TensorFlow``
+(ranked number 16) and ``PyTorch`` (ranked number 19) are relatively low-ranked at
 the moment since we have only a modest 18 node GPU cluster with limited users,
 but we expect with our coming GPU system Perlmutter that this will change.
 
@@ -630,15 +620,16 @@ that unlike the barplot in Fig. :ref:`jobsize-lib`, these results are not
 deduplicated by user so library popularity has a different meaning in this
 context. We do however deduplicate using the subset of (job_id, library), so
 each library is only counted once per job. This plot demonstrates that far
-fewer libraries appear at the largest scales, notably mpi4py and NumPy. We
-observe that Dask jobs are generally 500 nodes and fewer, so Dask is not being
-used to scale as large as mpi4py presumably is. Workflow managers FireWorks and
-Parsl scale to 1000 nodes. PyTorch appears at larger scales than
-TensorFlow/Keras, which may speak to its ease of scaling at NERSC. Most Python
-libraries we track do not appear above 200 nodes. Are users able to satisfy
-their requirements with a single node or small handful of nodes? Would users
-like to scale but they don’t have the time or skills to write code at scale?
-Anecdotally from interacting with our users, we lean toward the latter.
+fewer libraries appear at the largest scales, notably ``mpi4py`` and ``NumPy``.
+We observe that ``Dask`` jobs are generally 500 nodes and fewer, so it appears
+that ``Dask`` is not being used to scale as large as mpi4py presumably is.
+Workflow managers ``FireWorks`` and ``Parsl`` scale to 1000 nodes. ``PyTorch``
+appears at larger scales than ``TensorFlow`` and ``Keras``, which may speak to
+its ease of scaling at NERSC. Most Python libraries we track do not appear
+above 200 nodes. Are users able to satisfy their requirements with a single
+node or small handful of nodes? Would users like to scale but they don’t have
+the time or skills to write code at scale?  Anecdotally from interacting with
+our users, we lean toward the latter.
 
 .. figure:: corr2d-2021.png
 
@@ -648,7 +639,7 @@ Anecdotally from interacting with our users, we lean toward the latter.
 
 Another area we seek to understand is the relationship between Python
 libraries. Since many libraries are often used within a single job_id, we can
-perform a groupby operation to study this. We have used the cuDF corr function
+study this relationship. We have used the cuDF corr function
 to determine the Pearson correlation coefficients of each library with all
 other libraries we are currently tracking per job. Note that in this
 calculation, we have assigned libraries with a value of 1 or 0. (Some users
@@ -656,76 +647,96 @@ import the same library many times during the same job, but we throw away these
 additional import counts if present.)  The resulting correlation coefficients
 are displayed as a heatmap in Fig. :ref:`corr2d`.
 
-Notable results are that some libraries are very strongly correlated (CuPy and
-CuPyx, astropy and astropy.fits.io), which is not surprising. Perhaps more
+Notable results are that some libraries are very strongly correlated (``CuPy`` and
+``CuPyx``, ``Astropy`` and ``Astropy.fits.io``), which is not surprising. Perhaps more
 surprising is that some libraries are anticorrelated. For example, the
-FireWorks workflow engine [Jai15]_ is anticorrelated with TensorFlow; we
-posit that this is because TensorFlow has its own distributed training
-strategies like Horovod. Seaborn is anticorrelated with Plotly; we posit that
+``FireWorks`` workflow engine [Jai15]_ is anticorrelated with ``TensorFlow``; we
+posit that this is because ``TensorFlow`` has its own distributed training
+strategies like ``Horovod``. ``Seaborn`` is anticorrelated with ``Plotly``; we posit that
 this is because these are very different approaches to Python plotting. In
-contrast, Seaborn is correlated with Matplotlib.
+contrast, ``Seaborn`` is correlated with ``Matplotlib``.
 
-Since NERSC is an HPC center, we are especially interested in libraries that
-allow Python jobs to achieve parallelism. As a result we have chosen mpi4py,
-Dask, and multiprocessing as case studies. We perform a deeper dive into the
-data associated with these libraries in order to better understand how users
-are using them.
+Finally, since NERSC is an HPC center, we are especially interested in
+libraries that allow Python jobs to achieve parallelism. We have
+selected ``mpi4py``, ``multiprocessing``, and ``Dask`` as case studies. We perform a deeper
+dive into the data associated with these libraries in order to better
+understand how users are using them.
 
-mpi4py is one of the main workhorse libraries of allowing Python code to scale
-to many nodes. We can see from in-depth analysis that jobs which use mpi4py
-have run at the largest scales (3000+ nodes). As we mentioned in the caveats,
-although this suggests mpi4py was used to achieve these scales, this is only an
-educated guess.
+``mpi4py`` is one of the main workhorse libraries of allowing Python code to
+scale to many nodes. We can see from in-depth analysis in Fig
+:ref:`jobsize-lib` that jobs which use `mpi4py` have run at the largest scales
+(3000+ nodes).
 
 .. figure:: mpi-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the mpi4py library. :label:`mpi-corr`
+   for the `mpi4py` library. :label:`mpi-corr`
 
 Based on the library correlation coefficients shown in Fig. :ref:`mpi-corr`,
 the use of mpi4py on our systems seems to be surprisingly domain-specific.
-mpi4py is most strongly correlated with astropy and astropy.io.fits which are
+``mpi4py`` is most strongly correlated with ``Astropy`` and ``Astropy.io.fits`` which are
 primarily used by users in the astronomy and cosmology community. Our
-assumption was that Python users in many domains would use mpi4py to achieve
+assumption was that Python users in many domains would use ``mpi4py`` to achieve
 scaling and/or parallelism, but these data imply that is not necessarily true.
-However, the caveat we mentioned above may apply here-- we may not be capturing
-the libraries used with mpi4py in other domains.  Other notable strong
-correlations include Matplotlib, NumPy, and SciPy, which are more in line with
-historically more popular HPC libraries. Notable anticorrelations include
-FireWorks, Keras, and TensorFlow, frameworks that all include their own methods
-of distributing work/scaling.
+However, we simply may not be capturing the libraries used with ``mpi4py`` in other
+domains due to our limited list. Other notable strong correlations include
+``Matplotlib``, ``NumPy``, and ``SciPy``, which are more in line with historically more
+popular HPC libraries. Notable anticorrelations include ``FireWorks``, ``Keras``, and
+``TensorFlow``, frameworks that all include their own methods of distributing
+work/scaling.
 
-**TODO: nltk without user data if time permits**
+To try to gain more insight into ``mpi4py`` use, we used the ``nltk`` [nltk]_ library to determine
+the paths most frequently used to launch ``mpi4py`` jobs. (We will not report or
+share these paths as a matter of user privacy.) In these paths we could
+identify user directories and contacted several of these users to ask them how
+they are using ``mpi4py``. One user reported that they used ``mpi4py`` to distribute a
+large-scale optimization problem: "My go-to approach is to broadcast data using
+``mpi4py``, split up input hyperparameters/settings/etc. across ranks, have each
+rank perform some number of computations, and then gather all the results
+(which are almost always ``NumPy`` arrays) using ``mpi4py``."
 
 .. figure:: multi-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the multiprocessing library. :label:`multi-corr`
+   for the ``multiprocessing`` library. :label:`multi-corr`
 
-Multiprocessing is one of our top two libraries at NERSC, even after filtering
-out records generated by the conda tool. The correlation coefficients for
-multiprocessing are shown in Fig. :ref:`multi-corr`. We do know that some
-libraries explicitly use the multiprocessing module, such as SciPy, which we
-believe contributes to this heavy usage.
-
-**TODO: nltk without user data if time permits**
+``multiprocessing`` is one of our top two libraries at NERSC, even after filtering
+out records generated by the ``conda`` tool. The correlation coefficients for
+``multiprocessing`` are shown in Fig. :ref:`multi-corr`. We do know that some
+libraries explicitly use the ``multiprocessing`` module, such as ``SciPy``, which we
+believe contributes to this heavy usage. To more thoroughly understand our
+``multiprocessing`` use, we used the same method we described above to determine
+top paths (and from this, users) of ``multiprocessing`` jobs. We contacted several
+of these users. One replied: "I'm using and testing many bioinformatics
+Python-based packages, some of them probably using Python ``multiprocessing``. But
+I'm not specifically writing myself scripts with ``multiprocessing``." Another
+reported: "The calculations are executing a workflow for computing the binding
+energies of ligands in metal complexes. Since each job is independent,
+``multiprocessing`` is used to start workflows on each available processor." We
+appear to have some mix of both direct and indirect use of ``multiprocessing`` as
+reported by these users; understanding this breakdown will be part of
+our future work.
 
 .. figure:: dask-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the Dask library. :label:`dask-corr`
+   for the ``Dask`` library. :label:`dask-corr`
 
-We are interested in Dask as an alternative to more traditional scaling methods
-like mpi4py since it is somewhat more flexible and resilient. We are interested
-in Dask adoption within the HPC community, especially as Dask has now assumed a
-key role in the NVIDIA RAPIDS ecosystem. As we noted above, jobs using Dask are
-generally smaller than those using mpi4py (500 nodes vs 3000+ nodes), which may
+We are interested in ``Dask`` as an alternative to more traditional scaling methods
+like ``mpi4py`` since it is somewhat more flexible and resilient. It also enables
+users to write multi-CPU/multi-GPU code without explicitly managing the parallelism. We are monitoring
+`Dask` adoption within the HPC community, especially as ``Dask`` has now assumed a
+key role in the NVIDIA RAPIDS ecosystem. As we noted above, jobs using ``Dask`` are
+generally smaller than those using ``mpi4py`` (500 nodes vs 3000+ nodes), which may
 speak to its ability to easily scale on NERSC systems. The correlation data
-shown in Fig. :ref:`dask-corr` suggest that Dask is being used by the climate
-community, as evidenced by relatively strong correlation coefficients in
-netCDF4 and xarray.
-
-**TODO: nltk without user data if time permits**
+shown in Fig. :ref:`dask-corr` suggest that ``Dask`` is being used by the climate
+and weather community, as evidenced by relatively strong correlation
+coefficients in ``netCDF4`` and ``xarray``. Similar to ``mpi4py`` and ``multiprocessing``, we
+reached out to several of our top ``Dask`` users. One reponded: "I don't remember
+having any Python `Dask`-related jobs running in the past 3 months." After some
+additional discussion and analysis, we discovered the user was using the ``xarray``
+library which we believe was using ``Dask`` unbeknownst to the user. This type of response was common among
+``Dask`` users in particular.
 
 Discussion
 ==========
@@ -742,14 +753,6 @@ Discussion
     -- Mike Loukides, `What is Data Science?
     <https://www.oreilly.com/radar/what-is-data-science/>`_
 
-* How hard was it to set up, experiment with, maintain
-* May need to follow up with users
-
-* "Typical" Python user on our systems does what?
-* Qualitative statements about our process and its refinement
-* How did we proceed and are there things others could learn from it?
-* Revisit limitations, implications, and mitigations
-
 * Why do we do it this way?
 
   * Test dog food
@@ -761,40 +764,36 @@ Discussion
     * Iterate on the actual notebook in a job
     * Productionize that notebook without rewriting to scripts etc
 
-Previously "Python Results Preference"
---------------------------------------
 
-Several important caveats in our data and its interpretation should be
-discussed before we introduce our results. The first is that our data represent
-a helpful if incomplete picture of user activities on our system. What do we
-mean by this? First, we collect a list of Python libraries used within a job
-defined by our workflow manager/queuing system Slurm. These libraries may be
-called by each other (ex: SciPy imports multiprocessing, scikit-learn imports
-Joblib) with or without user knowledge, they may be explicitly imported
-together by the user in the same analysis (ex: CuPy and CuPyx), they may be
-unrelated but used at different times during the job (SciPy and Plotly), or the
-user may import libraries they never actually use. At the moment we cannot
-differentiate between any of these situations. We provide this illustrative
-example to support this point: we noticed that several users appeared to be
-running Dask at large scale as our data indicated that in the same job, they
-imported Dask in a jobsize of greater than 100 nodes. We emailed these users to
-ask them what kinds of things they were doing with Dask at scale, and two
-replied that they had no idea they were using Dask. One said, “I'm a bit
-curious as to why I got this email. I'm not aware to have used Dask in the
-past, but perhaps I did it without realizing it.” It is therefore important to
-emphasize that the data we have can be a helpful guide but is certainly not
-definitive and when we impart our own expectations onto it, it can even be
-misleading.
+We should emphasize several important caveats in the nature and interpretation
+of our data. The first is that our data represent a helpful if incomplete
+picture of user activities on our system. What do we mean by this? First, we
+collect a list of Python libraries used within a job defined by our workflow
+manager/queuing system Slurm. These libraries may be called by each other (ex:
+``SciPy`` imports ``multiprocessing``, ``scikit-learn`` imports ``Joblib``) with or without
+user knowledge, they may be explicitly imported together by the user in the
+same analysis (ex: ``CuPy`` and ``CuPyx``), they may be unrelated but used at different
+times during the job (``SciPy`` and ``Plotly``), or the user may import libraries they
+never actually use. At the moment we cannot differentiate between any of these
+situations. For example, we contacted several users appeared to be running ``Dask`` at large scale as our
+data indicated that in the same job, they imported ``Dask`` in a jobsize of greater
+than 100 nodes. We contacted these users to ask them what kinds of things they
+were doing with ``Dask`` at scale, and two replied that they had no idea they were
+using ``Dask``. One said, "I'm a bit curious as to why I got this email. I'm not
+aware to have used Dask in the past, but perhaps I did it without realizing
+it." Thus it is important to emphasize that the data we have can be a
+helpful guide but is certainly not definitive and when we impart our own
+expectations onto it, it can even be misleading.
 
-Another caveat is that we are tracking a prescribed list of packages which does
-impart some bias into our data collection. We do our best to keep abreast of
+Another caveat is that we are tracking a prescribed list of packages which
+imparts some bias into our data collection. We do our best to keep abreast of
 innovations and trends in the Python user community, but we are undoubtedly
 missing important packages that have escaped our notice. One notable example
-here is the Vaex library. We were not aware of this library when we implemented
+here is the ``Vaex`` library. We were not aware of this library when we implemented
 our list of packages to track. Even though we used it heavily ourselves during
 this work, at the moment we have no data regarding its general use on our
-system. (We are in the process of updating our monitoring infrastructure to
-track Vaex and other packages.)
+system. We have recently updated our monitoring infrastructure to track ``Vaex``,
+``Numexpr``, ``psycopg2`` and other packages.
 
 The last caveat is we currently only capture the Python facets of any given
 job. In another example, we reached out to some users who appeared to be
@@ -806,10 +805,13 @@ status. Our data collection currently has no way of differentiating between
 running C++ on 100 nodes with a single Python monitoring process and running
 pure Python on 100 nodes-- we are blind to other parts of the job.
 
-In summary: we can make an educated guess based on our data, but without
+We can make an educated guess based on our data, but without
 talking to the user or looking at their code, at present we have an incomplete
-picture of what they really are doing.
-
+picture of what they really are doing. We should however note that
+even users may not fully realize which libaries they are using (as in our Dask
+examples), so users may not be the final authority either. The important
+point is that taking data and trusting user assessments alone are not enough
+to capture user behavior on our system. Both approaches are necessary.
 
 Putting all the steps in the analysis (extraction, aggregation, indexing,
 selecting, plotting) into one narrative greatly improves communication,
@@ -893,14 +895,36 @@ match our filter, being able to easily filter out standard library packages by
 default as will be possible in Python 3.10 would help with this.
 Part of the problem is the message transport layer.
 
-* Future work includes watching users transition to new GPU-based system
+Future work will include continuing to uncover information in this large and
+rich dataset. There are pieces of information in our data such as project name
+that we have not yet considered; this will give us insight into user
+demographics. There are also many methods such as those in machine learning
+that we have not yet applied in our analysis. We should emphasize that MODS is
+not the only data being collected at NERSC. In fact we are awash in data from
+our job scheduler Slurm, from our user information database Iris, from our OMNI
+center metrics that include power consumption, rack temperature, etc, and from
+libraries like Darshan which track I/O patterns. Analyzed together these
+datasets could provide a much more nuanced understanding of user and job
+characteristics at our center and could eventually provide many opportunities
+for improving throughput and performance, preloading helpful system defaults,
+reducing power consumption, etc. There are substantial possibilities in this
+area.
 
-  * Do these users run the same kind of workflow?
-  * Do they change in response to the system change?
+Finally, our new GPU-based system Perlmutter is coming online at the time of
+this writing. We will be using our Python monitoring framework to watch how our
+users adapt and utilize our new system. There are several questions in our
+mind: 1) Will Python users simply keep doing the same things on Perlmutter as
+they are currently doing on Cori? Will they adapt their codes to use the GPUs
+or will the remain on the CPUs? 2) Will this different, more powerful system
+enable new kinds of analyses that were previously untenable?  Will deep
+learning and more sophisticated image processing become more prevalent? 3) Can
+we use this system to understand user problems and help address them? For
+example, our jobsize data indicate that most Python jobs on Cori are quite
+small. Is this because users prefer small jobs? Or is it because users simply
+lack the skills they need to scale to the full potential of our supercomputers?
+An open question is how can we leverage the data we collect to help NERSC
+become a more user-friendly and scientifically productive center.
 
-* More sophisticated, AI-based analysis and responses for further insights
-
-  * Anomaly/problem detection and alert to us/user?
 
 Acknowledgments
 ===============
@@ -917,7 +941,7 @@ Dask-cuDF.
 References
 ==========
 
-.. _NERSC: https://www.nersc.gov/about/
+.. [NERSC] https://www.nersc.gov/about/
 
 .. [Age14] A. Agelastos, B. Allan, J. Brandt, P. Cassella, J. Enos, J. Fullop,
            A. Gentile, S. Monk, N. Naksinehaboon, J. Ogden, M. Rajan, M. Showerman,
@@ -972,3 +996,7 @@ References
 .. [vaex]  https://vaex.io/docs/index.html
 
 .. [voila] https://voila.readthedocs.io/en/stable/index.html
+
+.. [nltk]  https://www.nltk.org/
+
+
