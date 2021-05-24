@@ -272,11 +272,6 @@ We show a 3D rendering of VollSeg segmentation results in the Figure :ref:`visse
 Stardist in 3D was compared to other classical method, the IFT watershed, and it was shown to perform better than the classical method hence we use Stardist as a baseline for comparison. To assess the performance of our segmentation, we compute the metrics described in the material and methods section. We show accuracy score in Figure :ref:`metrics` A which shows VollSeg and Stardist having comparable accuracy while U-Net can not perform instance segmentation of overlapping cells leading to a lower score when computing IOU. We observe that pixel wise accuracy (F1-score) of VollSeg is comparable to Stardist while U-Net has lower performance in this metric as well. However the mean squared error shown in Figure :ref:`ssimmse` A show that Stardist has highest error due to error in estimating the irregular shape of the cells while U-Net and Vollseg have similar performance. This result can also be seen from ssim calculation shown in Figure :ref:`ssimmse` B. Stardist produces imperfect shapes while U-Net is able to obtain only perform semantic segmentation. In contrast, VollSeg is able to strength the shape accuracy from U-Net and the ability to separate the overlapping instances from Stardist. 
 
 
-
-From these metric calculations we can conclude that Vollseg has highest accuracy and produces better shape representations for the epithelial cells.  Vollseg derieves its shape accuracy coming from U-Net and its accuracy is seperating object instances coming from the Stadist network. 
-
-
-
 .. figure:: Figures/Metrics.png
      
       
