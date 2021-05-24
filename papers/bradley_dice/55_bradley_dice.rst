@@ -143,7 +143,7 @@ simulating fluid flow in polymer solutions :cite:`howard.etal2019`,
 design of optical metamaterials :cite:`harper.etal2020`,
 and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
 Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greater exposure.
-In addition to social factors such as the "home field advantage," materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
+Computational materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
 However, there are many other fields with similar hardware needs where **signac** can be applied.
 These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics, data-intensive fields such as economics or machine learning, and applications needing fast, flexible prototypes for optimization and data analysis.
 
@@ -281,7 +281,7 @@ The preconditions and postconditions of operations in a **signac-flow** ``FlowPr
 This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
 
 **Templated status output:**
-Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for raw, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
+Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for plain text, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
 
 Enhanced Workflows
 ~~~~~~~~~~~~~~~~~~
@@ -307,8 +307,7 @@ Executing complex workflows via groups and aggregation
     Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel. :label:`workflow`
 
 Two new concepts in **signac-flow** provide users with significantly more power to implement complex workflows: groups and aggregation.
-A third concept bundling is also involved in providing flexibility to users in their workflows, but
-on the execution not definition side.
+A related third concept – bundling – which is not new, also provides flexibility to users in their workflows, but exclusively affects scheduler submission, not workflow definition.
 Figure :ref:`workflow` show a graphical illustration of the three concepts.
 
 As the names of both groups and aggregation imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
