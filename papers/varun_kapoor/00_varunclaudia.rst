@@ -156,8 +156,28 @@ In the first Jupyter notebook we create the dataset for U-Net and Stardist train
   Model_Name = 'VolumeSeg'
   
   
-The model parameters are specified in the next notebook cell. These parameters are the size and number of patches chosen for the training in XYZ. 
-The image is downsampled by 2 at each network depth level. Deeper networks have more parameters and given the size of the training data have higher generalization capacity, the depth however is limited by the patch size of the image used in the training as the size of the downsampled image in the innermost layer has to be non negative in all the dimensions. Start number of convolutional filters is another crucial hyperparameter controlling the network learning capacity. These double up at each layer of the network and depending on the size of the training dataset and of the GPU memory capacity this parameter can be tuned when doing hyperparameter optimization to obtain the best model parameters for the given dataset. As a first step we generate the npz file for U-Net training by setting the boolean GenerateNPZ to be true. Then in the next cell we can either train U-net and Stardist network sequentially by setting TrainUNET and TrainSTAR booleans to be true or the users can split the training task between two GPUs by making a copy of the notebook and training one network per notebook. The other parameters to be chosen are the number of epochs for training, kernel size of the convolutional filter, the number of rays for Stardist network to create a distance map along these directions. Additionally some of the OpenCL computations can be performed on a GPU using gputools library and if that is installed in the environment you can set use_gpu_opencl to be true. 
+The model parameters are specified in the next notebook cell. These parameters are described as follows:
+
+1) NetworkDepth = Depth of the network, with each increasing depth the image is downsampled by 2 hence the XYZ dimension of the data / 2^depth has to be greater than 1.
+
+2) Epochs, training for longer epochs ensures a well converged network and requires longer GPU runtimes.
+
+3) Learning rate is the parameter which controls the step size used in the optimization process and it should not be greater than 0.001 at the start of the training.
+
+4) batch size controls the number of images used for doing stochastic gradient descent and is a parameter that is limited by the GPU RAM available, if you do not have a lot of ran batch size < 10 should be optimal.
+
+5) PatchX,Y,Z is the patch size used for making patches out of the image data. The original image is broken down into patches for training. Patch size is chosen based on having enough context for the network to learn but at the same time not being too big to obscure memory usage.
+
+6) Kernel is the receptive field of the neural network, usual choices are 3,5 or 7 but not larger than that. This is the size of the convolutional kernel used in the network
+
+7) n_patches_per_image is the number of patches sampled for each image to create the npz file, choose an optimal value so that the file is not too big for the computer memory.
+
+8) Rays is the number of rays used the learn the distance map, low rays decreases the spatial resoultion and high rays are able to resolve the shape better.
+
+9) OpenCL is a boolean parameter that is set true if you want to do some opencl computations on the GPU, this requires GPU tools but if you do not have them set this to false.
+
+ 
+As a first step we generate the npz file for U-Net training by setting the boolean GenerateNPZ to be true. Then in the next cell we can either train U-Net and Stardist network sequentially by setting TrainUNET and TrainSTAR booleans to be true or the users can split the training task between two GPUs by making a copy of the notebook and training one network per notebook. 
   
 .. code-block:: python
 
