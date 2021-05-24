@@ -120,7 +120,7 @@ The framework is a strong choice for applications meeting one or more of the fol
 For example, M. W. Thompson *et al.* in :cite:`thompson.etal2019a` used 396 jobs/state points to execute computer simulations of room-temperature ionic liquids with GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` simulations.
 The study investigated 18 compositions (by mass fraction) and 22 unique solvents from five chemical families (nitriles, alcohols, halocarbons, carbonyls, and glymes), with a state point for each pairing of mass fraction and solvent type.
 
-Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas, dask, or RAPIDS that are specifically designed for those use cases.
+Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas :cite:`pandas,pandas-paper`, Dask :cite:`dask,dask-paper`, or RAPIDS :cite:`rapids` that are specifically designed for those use cases.
 However, it is possible to create a **signac** project with state points corresponding to each row, which may be a good use of **signac** if there is file-based data affiliated with each row's parameters.
 
 This paper will focus on developments to the **signac** framework over the last 3 years, during which features, flexibility, usability, and performance have been greatly improved.
@@ -234,7 +234,7 @@ Data Visualization and integrations
 **Integrating with the PyData Ecosystem:**
 Users can now summarize data from a **signac** project into a pandas DataFrame for analysis.
 The ``project.to_dataframe()`` feature exports state point and job document information to a pandas DataFrame in a consistent way that allows for quick analysis of all jobs' data.
-Support for Jupyter notebooks has also been added, enabling rich HTML representations of **signac** objects.
+Support for Jupyter notebooks :cite:`jupyter` has also been added, enabling rich HTML representations of **signac** objects.
 
 **Dashboards:**
 The companion package **signac-dashboard** allows users to quickly visualize data stored in a **signac** data space.
@@ -264,7 +264,7 @@ Improved User Output
 **Workflow graph detection:**
 The preconditions and postconditions of operations in a **signac-flow** ``FlowProject`` implicitly define a graph.
 For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
-This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
+This graph can now be detected from the workflow conditions and returned in a NetworkX :cite:`networkx` compatible format for display or inspection.
 
 **Templated status output:**
 Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for plain text, Markdown, or HTML output.
@@ -492,7 +492,8 @@ Office hours creating space for users to make contributions has also led to more
 Contributing to documentation has been a productive starting point for new users-turned-contributors, both for the users and the project, since it improves the users' familiarity with the API as well as addresses weak spots in the documentation that are more obvious to new users.
 
 In our growth with increasing contributors and users, we recognized a need to change our governance structure to make contributing easier and provide a clear organizational structure to the community.
-We based our new model on the Meritocratic Governance Model and our manager roles on Numba Czars.
+We based our new model on the Meritocratic Governance Model and our manager roles on Numba
+:cite:`numba` Czars.
 We decided on a four category system with maintainers, committers, contributors, and users.
 Code review and pull request merge responsibilities are granted to maintainers and committers, who are (self-) nominated and accepted by a vote of the project maintainers.
 Maintainers are additionally responsible for the strategic direction of the project and administrative duties.
