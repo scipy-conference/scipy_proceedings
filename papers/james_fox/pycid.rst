@@ -26,7 +26,7 @@ PyCID: A Python Library for Causal Influence Diagrams
    certain objective incentivise? How can we improve this behaviour and ensure
    that a decision-maker chooses decisions with safer or fairer consequences?
    This paper introduces the Python package *PyCID*, built upon *pgmpy*, that
-   implements (causal) influence diagrams, a well-studied graphical model for 
+   implements (causal) influence diagrams, a well-studied graphical modelling framework for 
    decision-making problems. By providing numerous methods to solve and analyse
    (causal) influence diagrams, *PyCID* helps answer questions about behaviour
    and incentives in both single-agent and multi-agent settings.
@@ -38,7 +38,8 @@ PyCID: A Python Library for Causal Influence Diagrams
 Introduction
 ------------
    
-Influence diagrams (IDs) are a type of graphical model for decision-making (:cite:`howard2005influence`, :cite:`miller1976development`). They are used to analyse decision-making scenarios in order to improve decisions or understand an agent’s incentives.
+Influence diagrams (IDs) are a type of graphical model for decision-making (:cite:`howard2005influence`, :cite:`miller1976development`) 
+that are used to analyse decision-making scenarios in order to improve decisions or understand an agent’s incentives.
 Like Bayesian networks, IDs have at their core a directed acyclic graph, and describe interactions between a set of variables
 with conditional probability distributions. However, IDs differ in that they also specify decision and utility nodes.
 A decision-maker is tasked with choosing a decision (conditional on the values of its parents), in order to maximize its expected utility.
@@ -57,10 +58,10 @@ We found two Python wrappers of C++ influence diagram libraries: *pyAgrum* and *
 This paper therefore introduces *PyCID*, a Python package built on *pgmpy* that implements IDs (including causal and multi-agent variants)
 and provides researchers and practitioners with convenient methods for analysing them.
    
-There are several benefits to having a Python library that implements (C)IDs. First, (causal) IDs is an area of active research and so the library will serve as a testbed for guiding intuitions and stresstesting new ideas. 
-Second, implementing quantified examples can substantiate the claims made by ID researchers about the benefit of their work; one can assess how different quantities vary over the parameter space or empirically verify complexity results (:cite:`causalgames`). 
+There are several benefits to having a Python library that implements (C)IDs. First, (causal) IDs are an area of active research and so the library will serve as a testbed for guiding intuitions and stresstesting new ideas. 
+Second, implementing examples programmatically can substantiate the claims made by ID researchers about the benefit of their work; one can assess how different quantities vary over the parameter space or empirically verify complexity results (:cite:`causalgames`). 
 Third, statistical and causal IDs have already shown promise for a wide variety of applications from the design of AI systems with safe and fair incentives (:cite:`everitt2021agent`, :cite:`carey2020incentives`, :cite:`everitt2019reward`, :cite:`holtman2020towards`, :cite:`everitt2019modeling`, :cite:`langlois2021rl`, and :cite:`cohen2020asymptotically`) to applications in business and medical decision making (:cite:`gomez2004real`, :cite:`kjaerulff2008bayesian`). Therefore, 
-*PyCID* acts as a tool to explore and probe these applications further. Finally, the library makes it easier for new reserachers to start active reserach on (C)IDs.
+*PyCID* acts as a tool for further exploring and probing these applications. Finally, the library makes it easier for new researchers to start active research on (C)IDs.
 
 The next section will describe *PyCID*'s architecture along with installation instructions and some necessary background knowledge. We then move to showcasing some of *PyCID*'s features through applications to incentives and analysing games. In the *Causal Influence Diagrams* section, we demonstrate how to instantiate a simple CID in *PyCID* before demonstrating how to find which nodes admit which incentives
 in the *Incentives* section. Next, we turn to multi-agent CIDs and show how to use them to compute Nash equilibria. Finally, we explain how *PyCID* can construct random (MA)CIDs and conclude by discussing the future of *PyCID*. 
@@ -101,7 +102,7 @@ Base Classes
    
 Figure :ref:`pycidfig` provides an overview of *PyCID*'s library [#]_. *PyCID*'s key classes inherit from *pgmpy*'s ``BayesianModel``, ``TabularCPD``, and ``BeliefPropagation`` classes :cite:`ankan2015pgmpy`. The ``BayesianModel`` class represents a *Bayesian Network* - a model consisting of a directed
 acyclic graph (DAG) and a joint distribution Markov compatible with that graph :cite:`pearl2009causality`. The nodes in the DAG denote random variables and the directed edges represent the associational 
-relationships between them. To parametierise the DAG and encode the joint distribution, each random variable, :math:`V`, in the DAG is assigned a conditional probability distribution
+relationships between them. To parameterise the DAG and encode the joint distribution, each random variable, :math:`V`, in the DAG is assigned a conditional probability distribution
 (CPD), :math:`P(V\vert \textbf{Pa}_V)`, dependent on its set of graphical parents, :math:`\textbf{Pa}_V`, using instances of the ``TabularCPD`` class. These CPDs define the *Bayesian Network*'s joint distribution
 and the ``BeliefPropagation`` class is then used to perform probabilstic inference on a ``BayesianModel`` object; for instance, one can query the probability that node :math:`V` takes value 
 :math:`v` given some instantiation of other variables in the DAG (known as a *context*). 
@@ -137,7 +138,7 @@ subgame perfect Nash equilibria :cite:`selten1965spieltheoretische` in a MACIM. 
 *PyCID's other folders*
 +++++++++++++++++++++++
    
-The *core/* folder also contains `get_paths.py`, which provides functions that exploit relationships between the (MA)CID's variables including functions for finding find all (active)(un)directed paths between variables. `relevance_graph.py` provides classes
+The *core/* folder also contains `get_paths.py`, which provides functions that exploit relationships between the (MA)CID's variables including functions for finding find all (active) (directed) paths between variables. `relevance_graph.py` provides classes
 that find the relevance graphs :cite:`koller2003multi` associated with ``MACIDBase`` objects. The *analyse/* folder includes functions for determining incentives in CIDs :cite:`everitt2021agent` and reasoning patterns in MA(C)IDs :cite:`pfeffer2007reasoning` as well as a function for computing the *total effect* of intervening on a variable with different values. *examples/* contains pre-implemented CIDs and MACIDs,
 whilst *random/* contains functions for generating random CIDs and MACIDs. *notebooks/* contains *jupyter notebook* tutorials with demonstrations of how to use the codebase; these can also be run directly as *Google Colab notebooks*.
 Finally, *tests/* houses unit tests for all functions and public class methods; it contains a bash script `check-code.sh` for ensuring that all unit tests pass with *pytest*, for checking linting with *flake8*, and for checking types have been declared with *mypy*.
@@ -215,7 +216,7 @@ If the agent plays according to this optimal decision rule, we find that their e
 Incentives
 ----------
    
-In this section, we demonstrate how to use *PyCID* to find which nodes in a single-decision CID face which type of incentive :cite:`everitt2021agent`. Incentives have been shown to be helpful for applications in Safety and Fairness (:cite:`everitt2021agent`, :cite:`holtman2020towards`), understanding the behaviour of RL algorithms :cite:`everitt2019reward` and comparing the promise of different AGI safety frameworks :cite:`everitt2019modeling`.
+In this section, we demonstrate how to use *PyCID* to find which nodes in a single-decision CID face which type of incentive :cite:`everitt2021agent`. Incentives have been shown to be helpful for applications in safety and fairness (:cite:`everitt2021agent`, :cite:`holtman2020towards`), understanding the behaviour of RL algorithms :cite:`everitt2019reward` and comparing the promise of different AGI safety frameworks :cite:`everitt2019modeling`.
 We believe that *PyCID* can futher mature these enquiries.
    
 The incentives we can currently find using *PyCID* in a single-decision CID are:
