@@ -128,7 +128,7 @@ The core data structures in **signac** have been overhauled to provide a powerfu
 In **signac-flow**, we have added support for submitting groups of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources.
 Further developments allow for operations to act on arbitrary subsets of the data space, or "aggregates," rather than single jobs alone.
 Moving beyond code development, this paper will also discuss the scientific work these features have enabled and the organizational developments from key partnerships and affiliations with scientific software initiatives and organizations such as MoSDeF and NumFOCUS.
-We will share our project's experience in progressively revising project governance to catalyze sustained contributions of many kinds, while adding more points of entry for learning about the project (Slack support, weekly public office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
+We will share our project's experience in continuously revising project governance to encourage sustained contributions, adding more entry points for learning about the project (Slack support, weekly public office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
 
 Applications of signac
 ----------------------
@@ -162,7 +162,7 @@ Importantly, projects with a small number of jobs can be expanded at a later tim
 The abilities to grow a project and change its schema on-the-fly catalyze the kind of exploration that is crucial to answering research questions.
 
 The workflow submission features of **signac-flow** interoperates with popular HPC schedulers including SLURM, PBS/TORQUE, and LSF automating the generation and submission of scheduler batch scripts.
-Directives are set through Python function decorators and define resource and execution requests for operations.
+Directives are set through Python decorators and define resource and execution requests for operations.
 Examples of directives include number of CPUs or GPUs, the walltime, and memory.
 The use of directives allows **signac-flow** workflows to be portable across HPC systems by generating resource requests that are specific to each machine's scheduler.
 
@@ -360,9 +360,9 @@ Furthermore, groups are aware of directives and can properly combine the directi
     @FlowProject.pre.after(simulate)
     @FlowProject.post.true("analyzed")
     @FlowProject.operation
-    def analzye(job):
+    def analyze(job):
         # analyze simulation results
-        job.doc.analzyed = True
+        job.doc.analyzed = True
 
 Groups also allow for specifying multiple machine specific resources (CPU or GPU) with the same operation.
 An operation can have unique directives for each distinct group to which it belongs.
@@ -420,7 +420,7 @@ Similarly, aggregating over replicas (e.g. the same simulation with different ra
 Another example is submitting aggregates with a fixed number of jobs in each aggregate to enable massive parallelization by breaking a large MPI communicator into a smaller communicator for each independent job, which is necessary for efficient utilization of leadership-class supercomputers like OLCF Summit.
 
 Finally, bundling is another way to use workflows in conjunction with an HPC scheduling system.
-Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining what are effectively units of execution into a single submission script.
+Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining executable units into a single submission script.
 This distinction means that bundling is not part of the workflow definition, but a means of tailoring batch scripts for different HPC systems.
 Bundles allow users to leverage scheduler resources effectively and minimize queue time, and can be run in serial (the default) or parallel.
 Users enable bundling by passing the command line argument ``--bundle``, optionally with another argument ``--parallel`` to run each command in the bundle in parallel (the Python API has corresponding options as well).
@@ -525,10 +525,10 @@ Conclusions
 -----------
 
 From the birth of the **signac** framework to now, **signac** has grown in usability, performance, and use.
-In the last three years, we have added exciting new features, like groups, aggregation, and synced collections, while learning how to manage outreach and establish sustainable project governance in a burgeoning scientific open-source project.
-As maintainers and committers, we hope to continue expanding the framework through user-oriented development, reach users in research fields beyond materials science that routinely have projects suited for **signac**, and welcome new contributors with diverse backgrounds and skills to the project.
+In the last three years, we have added exciting new features such as groups, aggregation, and synced collections, while learning how to manage outreach and establish sustainable project governance in a burgeoning scientific open-source project.
+We hope to continue expanding the framework through user-oriented development, reach users in research fields beyond materials science that routinely have projects suited for **signac**, and welcome new contributors with diverse backgrounds and skills to the project.
 
-Getting signac
+Installing signac
 --------------
 
 The **signac** framework is tested for Python 3.6+ and is compatible with Linux, macOS, and Windows.
@@ -557,13 +557,12 @@ Source code is available on GitHub [#]_ [#]_ and documentation is hosted online 
 Acknowledgments
 ---------------
 
-We would like to thank Kelly Wang for contributing the concept and content of Figure :ref:`overview`.
 We would also like to thank NumFOCUS, whose staff have provided the **signac** project with helpful advice on open-source governance, project sustainability, and community outreach.
 
 (TODO: Acknowledgments are incomplete.)
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
 M.M.H is supported by the National Science Foundation under Grant No. 1835593.
-A.T. was supported by the National Science Foundation under Grant No. 1707640.
+A.T. is supported by the National Science Foundation under Grant No. 1707640.
 
 Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of NSF.
 
