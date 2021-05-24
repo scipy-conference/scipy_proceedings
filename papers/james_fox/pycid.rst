@@ -422,17 +422,17 @@ We can construct a MACID for this example where:
 .. code-block:: python
    
    macid = pycid.MACID([
-      ('X', 'D1'),  #specifies the MAICD's nodes and edges.
-      ('X', 'U2'),
-      ('X', 'U1'),
-      ('D1', 'D2'),
-      ('D1', 'U1'),
-      ('D2', 'U1'),
-      ('D2', 'U2'),
-      ],
-      # specifies each agent's decision and utility nodes.
-      agent_decisions={1: ['D1'], 2: ['D2']},
-      agent_utilities={1: ['U1'], 2: ['U2']},
+            ('X', 'D1'),  #specifies the MAICD's nodes and edges.
+            ('X', 'U2'),
+            ('X', 'U1'),
+            ('D1', 'D2'),
+            ('D1', 'U1'),
+            ('D2', 'U1'),
+            ('D2', 'U2'),
+            ],
+   # specifies each agent's decision and utility nodes.
+   agent_decisions={1: ['D1'], 2: ['D2']},
+   agent_utilities={1: ['U1'], 2: ['U2']},
    
    macid.draw()
    
