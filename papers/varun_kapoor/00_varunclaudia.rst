@@ -131,7 +131,7 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
     
     
 Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN). 
-TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. Matched score is the number of matching pixels between the predictions and the GT at a certain :math:`\tau`. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
+TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
 :math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}`.  
 To evaluate the accuracy of our method in resolving the shape of the cells we compute the mean squared error and structural similarity index measurment between the GT and obtained segmentation images post binarization operation on the obtained instance segmentation maps. 
     
@@ -142,7 +142,7 @@ To evaluate the accuracy of our method in resolving the shape of the cells we co
    
      :label:`algorithm`    
     
-The software package we provide comes with training and prediction notebooks for training the base U-net and Stardist networks on your own dataset. We provide jupyter notebooks to do so on local GPU servers and also on Google Colab.
+The software package we provide comes with training and prediction notebooks for training the base U-Net and Stardist networks on your own dataset. We provide jupyter notebooks to do so on local GPU servers and also on Google Colab.
    
 Network Training, Parameter Setting and Prediction
 ****************************************************
@@ -269,7 +269,11 @@ Results
 
 We compare our proposed VollSeg segmentation approach to two commonly used methods for cell segmentation of fluorescent microscopy images, 3D Stardist :cite:`schmidt2018` :cite:`weigert2020` and 3D U-Net.
 We show a 3D rendering of VollSeg segmentation results in the Figure :ref:`visseg`.
-Stardist in 3D was compared to other classical method, the IFT watershed, and it was shown to perform better than the classical method hence we use Stardist as a baseline for comparison. To asses the performance of our segmentation, we compute the metrics described in the material and methods section. We show accuracy score in Figure :ref:`metrics` A which shows VollSeg and Stardist having comparable accuracy while U-Net tends to slightly oversegment the image leading to a low accuracy. We observe that pixel wise accuracy (F1-score) of VollSeg is comparable to Stardist whule U-Net performs poorly in this metric as well. However the mean squared error shown in Figure :ref:`ssimmse` A show that Stardist has highest error due to error in estimating the irregular shape of the cells while U-Net and Vollseg have similar performance. This result can also be seen from ssim calculation shown in Figure :ref:`ssimmse` B. From these metric calculations we can conclude that Vollseg has highest accuracy and produces better shape representations for the epithelial cells.  Vollseg derieves its shape accuracy coming from U-Net and its accuracy is seperating object instances coming from the Stadist network. 
+Stardist in 3D was compared to other classical method, the IFT watershed, and it was shown to perform better than the classical method hence we use Stardist as a baseline for comparison. To assess the performance of our segmentation, we compute the metrics described in the material and methods section. We show accuracy score in Figure :ref:`metrics` A which shows VollSeg and Stardist having comparable accuracy while U-Net can not perform instance segmentation of overlapping cells leading to a lower score when computing IOU. We observe that pixel wise accuracy (F1-score) of VollSeg is comparable to Stardist while U-Net has lower performance in this metric as well. However the mean squared error shown in Figure :ref:`ssimmse` A show that Stardist has highest error due to error in estimating the irregular shape of the cells while U-Net and Vollseg have similar performance. This result can also be seen from ssim calculation shown in Figure :ref:`ssimmse` B. Stardist produces imperfect shapes while U-Net is able to obtain only perform semantic segmentation. In contrast, VollSeg is able to strength the shape accuracy from U-Net and the ability to separate the overlapping instances from Stardist. 
+
+
+
+From these metric calculations we can conclude that Vollseg has highest accuracy and produces better shape representations for the epithelial cells.  Vollseg derieves its shape accuracy coming from U-Net and its accuracy is seperating object instances coming from the Stadist network. 
 
 
 
@@ -289,10 +293,6 @@ Stardist in 3D was compared to other classical method, the IFT watershed, and it
       
       :label:`ssimmse`
 
-
-
-     
-     
    
 
 Track Analysis
@@ -321,7 +321,7 @@ Conclusions
 ---------------------    
 We have presented a workflow to do segmentation, tracking and track analysis of cells in 3D for cells of irregular shape and intensity distribution. For performing the segmentation we developed a jupyter notebook based python package VollSeg that combines the strengths of semantic and instance segmentation methods based on deep learning to deliver good performance for segmenting membrane labelled cells in 3D. Post-segmentation we create a csv file containing the information about the cells inside a region of interest which serves as an input to Btrackmate, the Fiji plugin we created for doing the tracking. The tracking software uses existing track editing interface of Trackmate and saves the track information as an xml file. To view and analyze such volumetric tracks we created napatrackmater, a python package to export such trajectories as track layer of Napari and we provide jupyter notebook based enviornment for track analysis with two example notebooks. 
 
-The tools that we present here can also be useful for segmentation of cells coming from other organisms, imaging modalities as our method can be applied to segment cells that go beyond the star convex polyhedra. The example jupyter notebooks provided for track analysis can also be extended to compute other cell dynamical quantities such as motility, microtubule dynamical growth rates, catastrophe and rescue frequencies, co-localization analysis post tracking etc.
+The tools that we present here can also be useful for segmentation of cells coming from other organisms, imaging modalities as our method can be applied to segment cells that go beyond the star convex polyhedra. The example jupyter notebooks provided for track analysis can also be extended to compute other cell dynamical quantities such as motility, microtubule dynamical growth rates, catastrophe and rescue frequencies :cite:`Kapoor2019`, co-localization analysis post tracking etc.
 
 
 Acknowledgements
