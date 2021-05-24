@@ -27,7 +27,7 @@
 :email: hojha@ch.iitr.ac.in
 :institution: Department of Chemical Engineering, Indian Institute of Technology Roorkee
 
-:author: Kelly Wang
+:author: Kelly L. Wang
 :email: kelwang@umich.edu
 :institution: Macromolecular Science and Engineering Program, University of Michigan, Ann Arbor
 
