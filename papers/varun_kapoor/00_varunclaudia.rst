@@ -164,20 +164,23 @@ The model parameters are specified in the next notebook cell. These parameters a
 
 3) Learning rate is the parameter which controls the step size used in the optimization process and it should not be greater than 0.001 at the start of the training.
 
-4) batch size controls the number of images used for doing stochastic gradient descent and is a parameter that is limited by the GPU RAM available, if you do not have a lot of ran batch size < 10 should be optimal.
+4) Batch size controls the number of images used for doing stochastic gradient descent and is a parameter that is limited by the GPU RAM available, batch size < 10 should be optimal.
 
-5) PatchX,Y,Z is the patch size used for making patches out of the image data. The original image is broken down into patches for training. Patch size is chosen based on having enough context for the network to learn but at the same time not being too big to obscure memory usage.
+5) Patch X,Y,Z is the patch size used for making patches out of the image data. The original image is broken down into patches for training. Patch size is chosen based on having enough context for the network to learn the details at different scales.
 
-6) Kernel is the receptive field of the neural network, usual choices are 3,5 or 7 but not larger than that. This is the size of the convolutional kernel used in the network
+6) Kernel is the receptive field of the neural network, usual choices are 3,5 or 7. This is the size of the convolutional kernel used in the network.
 
 7) n_patches_per_image is the number of patches sampled for each image to create the npz file, choose an optimal value so that the file is not too big for the computer memory.
 
 8) Rays is the number of rays used the learn the distance map, low rays decreases the spatial resoultion and high rays are able to resolve the shape better.
 
-9) OpenCL is a boolean parameter that is set true if you want to do some opencl computations on the GPU, this requires GPU tools but if you do not have them set this to false.
+9) use_gpu_opencl is a boolean parameter that is set true if you want to do some opencl computations on the GPU, this requires GPU tools python package.
 
+10) Before starting the U-Net training an npz file containing the paried Raw and Binary segmentation images needs to be created, by setting GenerateNPZ = True such a file is created. 
+
+11) If there are multiple GPU's available the training of U-Net and stardist can be split between the GPU's set TrainUNET = True  for training a U-Net network, create a copy of the notebook and only set TrainSTAR = True for training a stardist network. If there are no multiple GPU's available the task set all of these parameters in 10) and 11) to be True to create and train both the networks in a single notebook run.
  
-As a first step we generate the npz file for U-Net training by setting the boolean GenerateNPZ to be true. Then in the next cell we can either train U-Net and Stardist network sequentially by setting TrainUNET and TrainSTAR booleans to be true or the users can split the training task between two GPUs by making a copy of the notebook and training one network per notebook. 
+
   
 .. code-block:: python
 
