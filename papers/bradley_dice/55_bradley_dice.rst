@@ -518,9 +518,7 @@ Installing signac
 -----------------
 
 The **signac** framework is tested for Python 3.6+ and is compatible with Linux, macOS, and Windows.
-The software is available under the BSD-3 Clause license.
-
-To install, execute
+The software is available under the BSD-3 Clause license. To install, execute
 
 .. code-block:: bash
 
@@ -543,7 +541,7 @@ Source code is available on GitHub [#]_ [#]_ and documentation is hosted online 
 Acknowledgments
 ---------------
 
-We would also like to thank NumFOCUS, whose staff have provided the **signac** project with helpful advice on open-source governance, project sustainability, and community outreach.
+We would also like to thank NumFOCUS for providing helpful advice on open-source governance, project sustainability, and community outreach, as well as funding for the design of the **signac** project logo.
 
 (TODO: Acknowledgments are incomplete.)
 B.D. is supported by a National Science Foundation Graduate Research Fellowship Grant DGE 1256260.
