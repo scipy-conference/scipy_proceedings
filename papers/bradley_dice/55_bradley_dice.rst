@@ -359,7 +359,7 @@ An operation can have unique directives for each distinct group to which it belo
 By associating an operation's directives with respect to a specific group, groups can represent distinct compute environments, such as a local workstation or a remote supercomputing cluster.
 The below snippet shows an ``expensive_simulate`` operation which can be executed with three
 different directives depending on how it is written.
-If executed through ``cpu_env`` the operation will request 48 cores, if ``gpu_env`` 4 GPUs, if
+If executed through ``cpu_group`` the operation will request 48 cores, if ``gpu_group`` 4 GPUs, if
 neither then it will request 4 cores.
 This represents the real use case where an user may want to run an operation locally (in this case
 without a group), or on a CPU or GPU focused HPC/workstation.
@@ -368,11 +368,11 @@ without a group), or on a CPU or GPU focused HPC/workstation.
 
     from flow import FlowProject
 
-    cpu_env = FlowProject.make_group(name="cpu")
-    gpu_env = FlowProject.make_group(name="gpu")
+    cpu_group = FlowProject.make_group(name="cpu")
+    gpu_group = FlowProject.make_group(name="gpu")
 
-    @cpu_env.with_directives({"np": 48})
-    @gpu_env.with_directives({"ngpu": 4})
+    @cpu_group.with_directives({"np": 48})
+    @gpu_group.with_directives({"ngpu": 4})
     @FlowProject.operation.with_directives({"np": 4})
     def expensive_simulate(job):
         # expensive simulation for running on either
