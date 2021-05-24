@@ -453,7 +453,7 @@ However, the flexibility of this new framework extends far beyond that, defining
 Summary of Features
 ~~~~~~~~~~~~~~~~~~~
 
-We designed synced collections to be flexible, easily extensible, and independent of the rest of **signac**.
+We designed synced collections to be flexible, easily extensible, and independent of **signac**'s data model.
 The central element is the ``SyncedCollection`` class, which defines a new abstract class extending the ``collections.abc.Collection`` from the Python standard library.
 A ``SyncedCollection`` is a ``Collection`` that adds two additional groups of abstract methods that must be implemented by its subclasses.
 One group includes methods for synchronizing with an underlying resource, while the other contains methods for synchronizing with a standard collection of the underlying base type.
