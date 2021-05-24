@@ -147,11 +147,6 @@ Computational materials research commonly requires large HPC resources with shar
 However, there are many other fields with similar hardware needs where **signac** can be applied.
 These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics, data-intensive fields such as economics or machine learning, and applications needing fast, flexible prototypes for optimization and data analysis.
 
-..
-    TODO: Categorize papers by field, show counts? e.g. The most common scientific fields citing signac are materials science (10), molecular simulation (8), optical materials (5), ...
-
-    Brandon - this is cool, but may be more work than is worth it.
-
 While there is no "typical" **signac** project, factors such as computational complexity and data sizes offer some rough guidelines for when **signac**'s database-on-the-filesystem is appropriate.
 For instance, the time to check the status of a workflow depends on the number of jobs, number of operations, and number of conditions to evaluate for those jobs.
 To give a rough idea of the limits of scalability, it can be difficult to scale **signac** projects beyond around 100,000 jobs while keeping tasks like checking workflow status in an "interactive" time scale of 1-2 minutes.
@@ -181,13 +176,6 @@ New commands for import and export simplify the process of archiving **signac** 
 Archival is an integral part of research data operations that is frequently overlooked.
 By using highly compatible and long-lived formats such as JSON for core data storage with simple name schemes, **signac** aims to preserve projects and make it easier for studies to be independently reproduced.
 This is aligned with the principles of TRUE (Transparent, Reproducible, Usable by others, and Extensible) simulations put forth by the MoSDeF collaboration :cite:`thompson.etal2020`.
-
-..
-    TODO: mention MIDAS Reproducibility Challenge? signac won an award.
-    https://signac.io/talks/2020/08/05/midas-reproducibility.html
-
-    Brandon - I don't know if it fits in this section, except maybe as proof of our claims. I think
-    we are fine without mentioning it though especially since it is an internal to UM organization.
 
 Improved data storage, retrieval, and integrations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -266,9 +254,6 @@ In **signac**, the core of the ``Project`` and ``Job`` classes were refactored t
 Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time (:math:`O(1)`) instead of linear time (:math:`O(N_{jobs})`).
 Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz :cite:`snakeviz`.
 
-..
-    TODO: include a graph of performance from 1.0 to now
-
 Similarly, performance enhancements were also made in the **signac-flow** package.
 Some of the optimizations identified include lazy evaluation of run commands and directives, and caching of job status information.
 In addition, the improvements in **signac** such as faster iteration over large **signac** projects used in **signac-flow** made **signac-flow**'s primary functions — checking project status, executing operations, and submitting operations to a cluster — significantly faster.
@@ -277,20 +262,25 @@ Improved User Output
 ~~~~~~~~~~~~~~~~~~~~
 
 **Workflow graph detection:**
-The preconditions and postconditions of operations in a **signac-flow** ``FlowProject`` implicitly define a graph. For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
+The preconditions and postconditions of operations in a **signac-flow** ``FlowProject`` implicitly define a graph.
+For example, if the operation "analyze" depends on the operation "simulate" via the precondition ``@FlowProject.pre.after(simulate)``, then there is a directed edge from "simulate" to "analyze."
 This graph can now be detected from the workflow conditions and returned in a NetworkX compatible format for display or inspection.
 
 **Templated status output:**
-Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for plain text, Markdown, or HTML output. In doing so, the output has also become cleaner and compatible with external tools.
+Querying the status of a **signac-flow** project now has many options controlling the information displayed and has been templated to allow for plain text, Markdown, or HTML output.
+In doing so, the output has also become cleaner and compatible with external tools.
 
 Enhanced Workflows
 ~~~~~~~~~~~~~~~~~~
 
 **Directives:**
-Directives provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others. Directives can be a function of the job as well as the operation, allowing for great flexibility. In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
+Execution directives (or "directives" for short) provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others.
+Directives can be a function of the job as well as the operation, allowing for great flexibility.
+In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
 
 **Dynamic Workspaces:**
-The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs. This is crucial for optimization workflows and iteratively sampling parameter spaces, and allows projects to become more automated with some data points only run if a prior condition on another data point is reached.
+The **signac-flow** package can now handle workspaces where jobs are created as the result of operations on other jobs.
+This is crucial for optimization workflows and iteratively sampling parameter spaces, and allows projects to become more automated with some data points only run if a prior condition on another data point is reached.
 
 Executing complex workflows via groups and aggregation
 ------------------------------------------------------
@@ -487,10 +477,6 @@ Moreover, while the framework was originally conceived to support synchronizatio
 One powerful example of this would be the use of a synced collection to provide a Pythonic API to a collection-like data structure implemented as a C or C++ extension module that could function like a Python dictionary with suitable plumbing but lacks the standard APIs expected of such a class.
 With the synced collections framework, creating a new class providing such an API is reduced to simply requiring the implementation of two straightforward methods defining the synchronization protocol.
 
-..
-    TODO: discuss independence from the rest of signac, possibility of releasing as a separate package?
-
-
 Project Evolution
 -----------------
 
@@ -529,7 +515,7 @@ In the last three years, we have added exciting new features such as groups, agg
 We hope to continue expanding the framework through user-oriented development, reach users in research fields beyond materials science that routinely have projects suited for **signac**, and welcome new contributors with diverse backgrounds and skills to the project.
 
 Installing signac
---------------
+-----------------
 
 The **signac** framework is tested for Python 3.6+ and is compatible with Linux, macOS, and Windows.
 The software is available under the BSD-3 Clause license.
