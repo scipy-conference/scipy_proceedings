@@ -334,9 +334,10 @@ Furthermore, groups are aware of directives and can properly combine the directi
 
     from flow import FlowProject
 
-    new_group = FlowProject.make_group(name="new_group")
+    example_group = FlowProject.make_group(
+        name="example_group")
 
-    @new_group.with_directives(
+    @example_group.with_directives(
         {"ngpu": 2,
          "walltime": lambda job: job.doc.hours_to_run})
     @FlowProject.post.true("simulated")
@@ -345,7 +346,7 @@ Furthermore, groups are aware of directives and can properly combine the directi
         # run simulation
         job.doc.simulated = True
 
-    @new_group
+    @example_group
     @FlowProject.pre.after(simulate)
     @FlowProject.post.true("analyzed")
     @FlowProject.operation
