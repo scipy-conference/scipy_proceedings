@@ -142,7 +142,7 @@ benchmarking atom-density representations for use in machine learning :cite:`mus
 simulating fluid flow in polymer solutions :cite:`howard.etal2019`,
 design of optical metamaterials :cite:`harper.etal2020`,
 and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
-Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the home fields of many of **signac**'s core developers and thus fields where the project has had greater exposure.
+Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greater exposure.
 In addition to social factors such as the "home field advantage," materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
 However, there are many other fields with similar hardware needs where **signac** can be applied.
 These include simulation-heavy HPC workloads such as fluid dynamics, atomic/nuclear physics, or genomics, data-intensive fields such as economics or machine learning, and applications needing fast, flexible prototypes for optimization and data analysis.
