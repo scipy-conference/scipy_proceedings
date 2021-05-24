@@ -62,7 +62,6 @@ Newly implemented synced data structures, features for generalized workflow exec
 
    data management, data science, database, simulation, collaboration, workflow, HPC, reproducibility
 
-
 Introduction
 ------------
 
@@ -483,7 +482,7 @@ Project Evolution
 The **signac** project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and 8 committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
 The growth in involvement with **signac** is the result of our focus on developing features based on user needs, as well as our efforts to transition **signac** users to **signac** contributors, through many initiatives in the past few years.
 Through encouraging users to become contributors, we ensure that **signac** addresses real users' needs.
-We have expanded **signac**'s contributor base beyond the University of Michigan through research collaborations with other universities, sharing the framework at conferences, and through the Google Summer of Code (GSoC) program.
+We have expanded **signac**'s contributor base beyond the University of Michigan through research collaborations with other universities, sharing the framework at conferences, and through the Google Summer of Code (GSoC) program, which we applied to under the NumFOCUS organization.
 Working with and mentoring students through GSoC led to a new committer and significant work on the synced collections and aggregation projects presented above.
 To encourage code contributions from existing users, we maintain active support and discussion through Slack.
 In addition, we have started hosting weekly "office hours" for in-person (virtual) introduction and guided contributions to the code base.
@@ -506,7 +505,6 @@ The triage manager role rotates weekly and looks at new issues or pull requests 
 The community manager role rotates monthly and is in charge of meeting planning and outreach.
 Lastly, the release manager rotates with each release cycle and is the primary decision maker for the timeline and feature scope of package releases.
 This prevents burnout among our senior developers and provides a sense of ownership to a greater number of people, instead of relying on a "benevolent dictator/oligarchy for life" mode of project leadership.
-
 
 Conclusions
 -----------
@@ -537,7 +535,6 @@ Source code is available on GitHub [#]_ [#]_ and documentation is hosted online 
 .. [#] https://github.com/glotzerlab/signac
 .. [#] https://github.com/glotzerlab/signac-flow
 .. [#] https://docs.signac.io/
-
 
 Acknowledgments
 ---------------
