@@ -263,6 +263,7 @@ We need to be able to gather data for workload analysis across all of these
 options, in part to understand the relative importance of each.
 
 .. figure:: mods-save-data.png
+   :scale: 10%
 
    Infrastructure for capturing Python package usage data at NERSC.
    :label:`save-data`
@@ -528,6 +529,7 @@ about 1.5 hours on 4 V100 GPUs on the NERSC Cori cgpu system. We
 summarize this workflow in Fig. :ref:`analyze-data`.
 
 .. figure:: mods-analyze-data.png
+   :scale: 10%
 
    This diagram summarizes the workflow for processing and analyzing Python
    data at NERSC. :label:`analyze-data`
@@ -554,6 +556,7 @@ traditional ``Matplotlib`` plotting functionality when ``Seaborn`` could not pro
 what we wanted. We summarize this workflow in Fig. :ref:`mods-dashboard`.
 
 .. figure:: mods-dashboard.png
+   :scale: 10%
 
    This diagram summarizes the setup we use to provide our web-based,
    interactive dashboards. :label:`mods-dashboard`
@@ -596,7 +599,7 @@ that collide with their requested time limits, abnormal terminations that may
 result in an undercount.
 
 .. figure:: jobsize-hist-2021.png
-  
+
    Distribution of job size for batch jobs detected that use Python.
    **FIXME** Make the bin sizes a little nicer?
    :label:`jobsize-hist`
@@ -606,7 +609,7 @@ jobs that invoked Python and loaded one or more of the packages we monitor.
 Most of these jobs are small, but the distribution tracks the overall
 distribution of job size at NERSC.
 
-.. figure:: jobsize-lib-2021.png
+.. figure:: jobsize-lib-2021-hist-only.png
 
    2D histogram of Python package counts versus job size.
    The data are deduplicated by ``job_id`` and package name, not by user as in
@@ -615,13 +618,10 @@ distribution of job size at NERSC.
 
 Breaking down the Python workload further, Fig. :ref:`jobsize-lib` contains a 2D
 histogram of Python package counts versus job size.
-Collapsing this histogram over job size provides a 1D histogram of the numbers
-of jobs where individual packages were used.
-Unlike Fig. :ref:`jobsize-hist`, these results are not deduplicated by user so
-library popularity has a different meaning in this context.
 The data are deduplicated by ``job_id`` and package name to account for jobs
 where users invoke the same executable repeatedly or invoke multiple
-applications using the same libraries.
+applications using the same libraries. Thus package popularity has a different
+meaning in this context than in Fig. :ref:`library-barplot`.
 
 Most Python libraries we track do not appear to use more than 200 nodes on Cori.
 Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
@@ -648,30 +648,38 @@ The resulting correlation coefficients appear as a heatmap in Fig.
 :ref:`corr2d`.
 
 Unsurprisingly there are some very strong but predictable correlations: CuPy
-with CuPyx, AstroPy with its submodule ``astropy.fits.io``.
+with CuPyx, AstroPy with its submodule ``astropy.fits.io``. Other notable
+correlations include scikit-learn and Joblib, likely because
+scikit-learn uses Joblib to obatain parallelism, ``TensorFlow`` and ``h5py``,
+perhaps because HDF5 is used as common format for saving model data, and
+``Seaborn`` and ``Keras``, which have no relationship as far as we
+are aware.
+
 Interestingly, the FireWorks workflow engine [Jai15]_ is anticorrelated with
 TensorFlow, possibly because TensorFlow has its own distributed training
 strategies like ``Horovod``.
-**FIXME Are we sure that makes sense?  Is that the biggest anticorrelation to
-mention?**
 ``Seaborn`` is anticorrelated with ``Plotly``; we posit that this is because
-these are very different approaches to Python plotting. In contrast,
-``Seaborn`` is correlated with ``Matplotlib``.
+these are very different approaches to Python plotting.
+Other notable anticorrelations
+include ``SciPy`` and ``fitsio``, ``multiprocessing`` and ``ROOT.std`` (used
+by the high-energy physics community), and ``Astropy`` and ``TensorFlow``
 **Are these really strong correlations, maybe the plot could remove pearson
 within some distance of 0, that might make it more readable actually**
 
 We are interested in libraries that allow Python jobs to scale or otherwise
 achieve parallelism, in partcular ``mpi4py``, ``multiprocessing`` and Dask, and
 whether they have any interesting co-occurrence patterns.
-Figs. :ref:`mpi-corr` through :ref:`dask-corr` present the correlations of each
+Fig. :ref:`case-studies` presents the correlations of each
 of these packages with all other tracked packages.
 
-.. figure:: mpi-corr-2021.png
+.. figure:: case-studies-2021.png
+   :scale: 33%
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the `mpi4py` library. :label:`mpi-corr`
+   for the ``mpi4py`` library (left), ``multiprocessing`` library (center),
+   and ``Dask`` library (right). :label:`case-studies`
 
-Fig. :ref:`mpi-corr` shows a very strong domain-specific correlation with
+Fig. :ref:`case-studies` (left) shows a very strong domain-specific correlation with
 AstroPy (and its sub-module ``astropy.io.fits``).
 This suggests that users of AstroPy have been able to scale associated
 applications using ``mpi4py`` and that AstroPy developers may want to consider
@@ -679,9 +687,8 @@ engaging with our users to make that even easier.
 Other notable correlations include Matplotlib, NumPy, and SciPy which are fairly
 general-purpose.
 Some small anti-correlations with FireWorks, Keras, and TensorFlow may be due to
-them having their own approaches to distributing work or scaling.
-**FIXME: I think we should ask Steve, does Horovod just compile in MPI directly,
-is that why Tensorflow anticorrelates with mpi4py?**
+them having their own approaches to distributing work or scaling. For example,
+Horovod, which is used by Tensorflow to scale, uses MPI and/or NCCL directly.
 
 Following up with users revealed that using ``mpi4py`` for "embarrassingly
 parallel" calculations is very common: "My go-to approach is to broadcast data
@@ -690,16 +697,11 @@ have each rank perform some number of computations, and then gather all the
 results (which are almost always NumPy arrays) using ``mpi4py``."
 Very few users report more complicated communication patterns.
 
-.. figure:: multi-corr-2021.png
-
-   We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the ``multiprocessing`` library. :label:`multi-corr`
-
 The Conda tool uses ``multiprocessing`` but even after filtering out those
 cases, ``multiprocessing`` remains one of the most popular Python libraries in
 use on Cori.
 Correlations between ``multiprocessing`` and other packages appear in Fig.
-:ref:`multi-corr`. 
+:ref:`case-studies` (center).
 The primary correlation visible here is with Scipy, which has some built-in
 support for interoperating with ``multiprocessing``, for instance through
 ``scipy.optimize``.
@@ -717,11 +719,6 @@ each available processor."
 ``multiprocessing`` as reported by these users; understanding this breakdown
 will be part of our future work.
 
-.. figure:: dask-corr-2021.png
-
-   We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the ``Dask`` library. :label:`dask-corr`
-
 Dask is a Python package for task-based parallelism and analytics at scale.
 Users are increasingly interested in these kinds of cluster runtimes where they
 queue up work, submit the work to the scheduler as a task graph, and the
@@ -733,7 +730,7 @@ part on GPUs.
 As we noted above, large jobs using Dask are generally smaller than those using
 ``mpi4py`` (500 nodes versus 3000+ nodes), which indicates something of a
 potential gap in scalability on Cori.
-The correlation data shown in Fig. :ref:`dask-corr` indicate an affinity with
+The correlation data shown in Fig. :ref:`case-studies` (right) indicate an affinity with
 the climate community, where ``netCDF4`` and ``xarray`` seem particularly
 important.
 
@@ -749,8 +746,6 @@ Discussion
 
 ..
    What do the results mean?  What are the implications and directions for future work?
-
-.. epigraph::
 
     Data scientists are involved with gathering data, massaging it into a
     tractable form, making it tell its story, and presenting that story to
