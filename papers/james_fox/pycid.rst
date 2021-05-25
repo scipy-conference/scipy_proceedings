@@ -78,7 +78,6 @@ Base Classes
    
    An overview of *PyCID*'s file structure. :label:`pycidfig`
    
-   
 Figure :ref:`pycidfig` provides an overview of *PyCID*'s library [#]_. *PyCID*'s key classes inherit from *pgmpy*'s ``BayesianModel``, ``TabularCPD``, and ``BeliefPropagation`` classes :cite:`ankan2015pgmpy`. The ``BayesianModel`` class represents a *Bayesian Network* - a model consisting of a directed
 acyclic graph (DAG) and a joint distribution Markov compatible with that graph :cite:`pearl2009causality`. The nodes in the DAG denote random variables and the directed edges represent the associational relationships between them. To parameterise the DAG and encode the joint distribution, each random variable, :math:`V`, in the DAG is assigned a conditional probability distribution
 (CPD), :math:`P(V\vert \textbf{Pa}_V)`, dependent on its set of graphical parents, :math:`\textbf{Pa}_V`, using instances of the ``TabularCPD`` class. These CPDs define the *Bayesian Network*'s joint distribution
