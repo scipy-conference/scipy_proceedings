@@ -4,3 +4,8 @@ process.
 
 See the [project readme](https://github.com/scipy-conference/scipy_proceedings#build-your-paper)
 for more information.
+
+
+*Editor*: <!--editor--> <!--end-editor-->
+
+*Reviewers*: <!--reviewers-list--> <!--end-reviewers-list-->
