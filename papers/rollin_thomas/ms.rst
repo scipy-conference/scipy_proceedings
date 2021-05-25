@@ -215,6 +215,8 @@ The major limitation of this strategy is that abnormal process terminations
 prevent the Python interpreter from proceeding through its normal exit sequence
 and package import data are not recorded.
 
+**FIXME** can track submodules as well.
+
 Short of introspecting processes at a very deep level, gaining insight into
 Python usage involves a few minimally invasive and easy to customize tools.
 Obviously, solutions that can overly impact application reliability or place an
@@ -222,6 +224,11 @@ undue burden on system administrators and operations staff should be avoided.
 The fullest picture we can obtain will come from a combination of tooling and
 follow-up with users, using the story we can put together from the data we
 gather as a starting point for conversation.
+
+**FIXME** eBPF would be interesting but we would need to develop the tooling,
+understand performance impact on compute nodes though it says it has none, and
+build or leverage infrastructure to capture events of interest.
+For Python we would need to be sure we instrumented the right kinds of events.
 
 ..
    There are probably tools that do deep data collection on processes running
@@ -262,7 +269,7 @@ options, in part to understand the relative importance of each.
 
 Monitoring all of the above can be done quite easily by using the strategy
 outlined in [Mac17]_ with certain changes.
-Figure :ref:`save-data` illustrates the infrastructure we have configured.
+Fig. :ref:`save-data` illustrates the infrastructure we have configured.
 As in [Mac17]_ a ``sitecustomize`` that registers the ``atexit`` handler is
 installed in a directory included into all users' Python ``sys.path``.
 The file system where ``sitecustomize`` is installed should be local to the
@@ -416,8 +423,8 @@ jobs being monitored; a downstream join with those external databases is
 required for more details.
 Much of the information needed is also stored and accessible in OMNI.
 
-In principle it is possible that messages may be dropped along the way to OMNI.
-**UDP**
+In principle it is possible that messages may be dropped along the way to OMNI,
+since we are using UDP for transport.
 To control for this source of error, we submit scheduled "canary jobs" a few
 dozen times a day that run a Python script that imports libraries listed in
 ``sitecustomize`` and then exits normally.
@@ -426,6 +433,7 @@ the message failure rate.
 Canary jobs began running in October of 2020 and from that time until now (May
 2021), perhaps surprisingly, we actually have observed no message delivery
 failures.
+**eBPF**
 
 Prototyping, Production, and Publication
 ----------------------------------------
@@ -463,7 +471,6 @@ Python-backed dashboards. For this we use Voila to run the dashboard notebooks
 we have created using our container-as-a-service system Spin. To achieve this
 vision we have developed the following workflow which we will now describe in
 more detail.
-
 
 Jupyter data analysis
 ---------------------
@@ -559,77 +566,71 @@ data.
 Results
 =======
 
-We will now summarize some of the results and insights we have gained
-from collecting and anayzing our data. There is a great deal more information
-in our dataset that we have not yet analyzed and there is much future work
-to be done. We should note that there are several important caveats to keep
-in mind when understanding and drawing conclusions from our data. These
-are outlined in our Discussion section.
-
-Perhaps the first question someone may ask is what the top Python libraries
-being used at NERSC are. Our top 20 libraries from Jan-May 2021, deduplicated by
-user, are displayed in Fig. :ref:`lib-barplot`.
+Our monitoring framework gives us a rich data set to examine, and our flexible
+pipeline for analyzing it gives us the ability to interrogate the data in many
+different ways to start understanding Python usage on Cori.
+Given a fixed amount of space, we focus here on just some of the most important
+questions we can ask of the data, but also highlight a few surprise findings.
 
 .. figure:: library-barplot-2021.png
 
-   The top 20 Python libraries at NERSC, deduplicated by user, in 2021. Note that
-   we only have data for libraries we have explictly
-   tracked. :label:`lib-barplot`
+   Top 20 tracked Python libraries at NERSC, deduplicated by user.
+   All results from data collected January to May, 2021.
+   :label:`lib-barplot`
 
-These top libraries, especially ``NumPy`` (ranked number 1) and ``SciPy`` (ranked
-number 4) are generally in line with what other HPC centers like Blue
-Waters and TACC have also reported [Mcl11]_ [Eva15]_. Nevertheless the ubiquitous use of
-``multiprocessing`` (ranked number 2) surprised us, as did the heavy use of
-visualization/plotting libraries (``Matplotlib`` ranked number 3). Conversely, we
-might have expected that libraries like ``mpi4py`` (ranked number 12) or ``Dask``
-(ranked number 13) would rank higher at an HPC center- both are outranked by
-``Joblib`` (ranked number 8). ``ipykernel`` (ranked number 5), a proxy for Jupyter
-usage, confirms Jupyter’s popularity at NERSC. GPU libraries like ``TensorFlow``
-(ranked number 16) and ``PyTorch`` (ranked number 19) are relatively low-ranked at
-the moment since we have only a modest 18 node GPU cluster with limited users,
-but we expect with our coming GPU system Perlmutter that this will change.
+Fig. :ref:`lib-barplot` displays the top 20 Python packages in use by unique
+user count from January to May of 2021.
+These are similar to previous observations reported from Blue Waters and TACC
+[Mcl11]_ [Eva15]_.
+However, the relative prominance of ``multiprocessing`` is striking.
+We also note that Joblib, a package for lightweight pipelining and easy
+parallelism, ranks higher than both ``mpi4py`` and Dask.
+
+The relatively low rankings for TensorFlow and PyTorch are partially due to the
+current paucity of GPU resources, as Cori provides access to only 18 GPU nodes
+mainly for application readiness activities in support of the next (GPU-based)
+system being deployed.
+Once that system is available we expect quite different results.
+Users that are training deep learning models may also submit a chain of jobs
+that collide with their requested time limits, abnormal terminations that may
+result in an undercount.
 
 .. figure:: jobsize-hist-2021.png
+  
+   Distribution of job size for batch jobs detected that use Python.
+   **FIXME** Make the bin sizes a little nicer?
+   :label:`jobsize-hist`
 
-   A histogram of Python jobsize at NERSC in 2021. Note that these data
-   are deduplicated by job_id and are NOT deduplicated by
-   user. :label:`jobsize-hist`
-
-Another key question at an HPC center is jobsize. We wanted to know if Python
-users were in fact running large jobs on our systems. Examining the data shown
-in Fig. :ref:`jobsize-hist`, deduplicated by job rather than by user, the
-results show that most Python jobs are small. The mean jobsize in 2021 is 2.37
-nodes. Note that any activity performed on a login node or shared Jupyter node
-is not included in this analysis since we required that the MODS record have a
-Slurm job_id. Note that in this analysis we deduplicate by job_id, so jobs with
-many records are only counted once.
+Fig. :ref:`jobsize-hist` shows the distribution of job size (node count) for
+jobs that invoked Python and loaded one or more of the packages we monitor.
+Most of these jobs are small, but the distribution tracks the overall
+distribution of job size at NERSC.
 
 .. figure:: jobsize-lib-2021.png
 
-   A 2D histogram of jobsize vs. Python library counts. Note that these data
-   are deduplicated by (job_id, library) so each library is counted once per
-   job. Note that these data are NOT deduplicated by user, so the overall
-   library use here appears different than in Fig. :ref:`lib-barplot`.
+   2D histogram of Python package counts versus job size.
+   The data are deduplicated by ``job_id`` and package name, not by user as in
+   Fig. :ref:`jobsize-hist`.
    :label:`jobsize-lib`
 
-What are users doing in these various sized jobs? To attempt to dig further, we
-create a 2d histogram of Python library counts vs. jobsize, shown in Fig.
-:ref:`jobsize-lib`. The adjacent top plot is the sum of jobsize on a linear
-scale and the adjacent right plot is a histogram of library record counts. Note
-that unlike the barplot in Fig. :ref:`jobsize-lib`, these results are not
-deduplicated by user so library popularity has a different meaning in this
-context. We do however deduplicate using the subset of (job_id, library), so
-each library is only counted once per job. This plot demonstrates that far
-fewer libraries appear at the largest scales, notably ``mpi4py`` and ``NumPy``.
-We observe that ``Dask`` jobs are generally 500 nodes and fewer, so it appears
-that ``Dask`` is not being used to scale as large as mpi4py presumably is.
-Workflow managers ``FireWorks`` and ``Parsl`` scale to 1000 nodes. ``PyTorch``
-appears at larger scales than ``TensorFlow`` and ``Keras``, which may speak to
-its ease of scaling at NERSC. Most Python libraries we track do not appear
-above 200 nodes. Are users able to satisfy their requirements with a single
-node or small handful of nodes? Would users like to scale but they don’t have
-the time or skills to write code at scale?  Anecdotally from interacting with
-our users, we lean toward the latter.
+Breaking down the Python workload further, Fig. :ref:`jobsize-lib` contains a 2D
+histogram of Python package counts versus job size.
+Collapsing this histogram over job size provides a 1D histogram of the numbers
+of jobs where individual packages were used.
+Unlike Fig. :ref:`jobsize-hist`, these results are not deduplicated by user so
+library popularity has a different meaning in this context.
+The data are deduplicated by ``job_id`` and package name to account for jobs
+where users invoke the same executable repeatedly or invoke multiple
+applications using the same libraries.
+
+Most Python libraries we track do not appear to use more than 200 nodes on Cori.
+Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
+counts.
+Dask jobs are observed at 500 nodes and fewer, so it appears that Dask is not
+being used to scale as large as ``mpi4py`` is.
+Workflow managers FireWorks and Parsl are observed scaling to 1000 nodes.
+PyTorch (``torch``) appears at larger scales than TensorFlow and Keras, which
+may suggest users find it easier to scale PyTorch on Cori.
 
 .. figure:: corr2d-2021.png
 
@@ -637,106 +638,111 @@ our users, we lean toward the latter.
    within the same job. Note that even if libraries were imported multiple
    times per job, they were counted as either a 0 or 1. :label:`corr2d`
 
-Another area we seek to understand is the relationship between Python
-libraries. Since many libraries are often used within a single job_id, we can
-study this relationship. We have used the cuDF corr function
-to determine the Pearson correlation coefficients of each library with all
-other libraries we are currently tracking per job. Note that in this
-calculation, we have assigned libraries with a value of 1 or 0. (Some users
-import the same library many times during the same job, but we throw away these
-additional import counts if present.)  The resulting correlation coefficients
-are displayed as a heatmap in Fig. :ref:`corr2d`.
+While it is obvious that packages that depend on or are dependents of other
+packages will be correlated within jobs, it is still interesting to look at the
+co-occurrence or anti-occurrence of certain packages.
+A simple way of looking at this is to determine Pearson correlation coefficients
+for each tracked library with all others, assigning a 1 to jobs where a certain
+package was used and 0 otherwise.
+The resulting correlation coefficients appear as a heatmap in Fig.
+:ref:`corr2d`.
 
-Notable results are that some libraries are very strongly correlated (``CuPy`` and
-``CuPyx``, ``Astropy`` and ``Astropy.fits.io``), which is not surprising. Perhaps more
-surprising is that some libraries are anticorrelated. For example, the
-``FireWorks`` workflow engine [Jai15]_ is anticorrelated with ``TensorFlow``; we
-posit that this is because ``TensorFlow`` has its own distributed training
-strategies like ``Horovod``. ``Seaborn`` is anticorrelated with ``Plotly``; we posit that
-this is because these are very different approaches to Python plotting. In
-contrast, ``Seaborn`` is correlated with ``Matplotlib``.
+Unsurprisingly there are some very strong but predictable correlations: CuPy
+with CuPyx, AstroPy with its submodule ``astropy.fits.io``.
+Interestingly, the FireWorks workflow engine [Jai15]_ is anticorrelated with
+TensorFlow, possibly because TensorFlow has its own distributed training
+strategies like ``Horovod``.
+**FIXME Are we sure that makes sense?  Is that the biggest anticorrelation to
+mention?**
+``Seaborn`` is anticorrelated with ``Plotly``; we posit that this is because
+these are very different approaches to Python plotting. In contrast,
+``Seaborn`` is correlated with ``Matplotlib``.
+**Are these really strong correlations, maybe the plot could remove pearson
+within some distance of 0, that might make it more readable actually**
 
-Finally, since NERSC is an HPC center, we are especially interested in
-libraries that allow Python jobs to achieve parallelism. We have
-selected ``mpi4py``, ``multiprocessing``, and ``Dask`` as case studies. We perform a deeper
-dive into the data associated with these libraries in order to better
-understand how users are using them.
-
-``mpi4py`` is one of the main workhorse libraries of allowing Python code to
-scale to many nodes. We can see from in-depth analysis in Fig
-:ref:`jobsize-lib` that jobs which use `mpi4py` have run at the largest scales
-(3000+ nodes).
+We are interested in libraries that allow Python jobs to scale or otherwise
+achieve parallelism, in partcular ``mpi4py``, ``multiprocessing`` and Dask, and
+whether they have any interesting co-occurrence patterns.
+Figs. :ref:`mpi-corr` through :ref:`dask-corr` present the correlations of each
+of these packages with all other tracked packages.
 
 .. figure:: mpi-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
    for the `mpi4py` library. :label:`mpi-corr`
 
-Based on the library correlation coefficients shown in Fig. :ref:`mpi-corr`,
-the use of mpi4py on our systems seems to be surprisingly domain-specific.
-``mpi4py`` is most strongly correlated with ``Astropy`` and ``Astropy.io.fits`` which are
-primarily used by users in the astronomy and cosmology community. Our
-assumption was that Python users in many domains would use ``mpi4py`` to achieve
-scaling and/or parallelism, but these data imply that is not necessarily true.
-However, we simply may not be capturing the libraries used with ``mpi4py`` in other
-domains due to our limited list. Other notable strong correlations include
-``Matplotlib``, ``NumPy``, and ``SciPy``, which are more in line with historically more
-popular HPC libraries. Notable anticorrelations include ``FireWorks``, ``Keras``, and
-``TensorFlow``, frameworks that all include their own methods of distributing
-work/scaling.
+Fig. :ref:`mpi-corr` shows a very strong domain-specific correlation with
+AstroPy (and its sub-module ``astropy.io.fits``).
+This suggests that users of AstroPy have been able to scale associated
+applications using ``mpi4py`` and that AstroPy developers may want to consider
+engaging with our users to make that even easier.
+Other notable correlations include Matplotlib, NumPy, and SciPy which are fairly
+general-purpose.
+Some small anti-correlations with FireWorks, Keras, and TensorFlow may be due to
+them having their own approaches to distributing work or scaling.
+**FIXME: I think we should ask Steve, does Horovod just compile in MPI directly,
+is that why Tensorflow anticorrelates with mpi4py?**
 
-To try to gain more insight into ``mpi4py`` use, we used the ``nltk`` [nltk]_ library to determine
-the paths most frequently used to launch ``mpi4py`` jobs. (We will not report or
-share these paths as a matter of user privacy.) In these paths we could
-identify user directories and contacted several of these users to ask them how
-they are using ``mpi4py``. One user reported that they used ``mpi4py`` to distribute a
-large-scale optimization problem: "My go-to approach is to broadcast data using
-``mpi4py``, split up input hyperparameters/settings/etc. across ranks, have each
-rank perform some number of computations, and then gather all the results
-(which are almost always ``NumPy`` arrays) using ``mpi4py``."
+Following up with users revealed that using ``mpi4py`` for "embarrassingly
+parallel" calculations is very common: "My go-to approach is to broadcast data
+using ``mpi4py``, split up input hyperparameters/settings/etc. across ranks,
+have each rank perform some number of computations, and then gather all the
+results (which are almost always NumPy arrays) using ``mpi4py``."
+Very few users report more complicated communication patterns.
 
 .. figure:: multi-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
    for the ``multiprocessing`` library. :label:`multi-corr`
 
-``multiprocessing`` is one of our top two libraries at NERSC, even after filtering
-out records generated by the ``conda`` tool. The correlation coefficients for
-``multiprocessing`` are shown in Fig. :ref:`multi-corr`. We do know that some
-libraries explicitly use the ``multiprocessing`` module, such as ``SciPy``, which we
-believe contributes to this heavy usage. To more thoroughly understand our
-``multiprocessing`` use, we used the same method we described above to determine
-top paths (and from this, users) of ``multiprocessing`` jobs. We contacted several
-of these users. One replied: "I'm using and testing many bioinformatics
-Python-based packages, some of them probably using Python ``multiprocessing``. But
-I'm not specifically writing myself scripts with ``multiprocessing``." Another
-reported: "The calculations are executing a workflow for computing the binding
-energies of ligands in metal complexes. Since each job is independent,
-``multiprocessing`` is used to start workflows on each available processor." We
-appear to have some mix of both direct and indirect use of ``multiprocessing`` as
-reported by these users; understanding this breakdown will be part of
-our future work.
+The Conda tool uses ``multiprocessing`` but even after filtering out those
+cases, ``multiprocessing`` remains one of the most popular Python libraries in
+use on Cori.
+Correlations between ``multiprocessing`` and other packages appear in Fig.
+:ref:`multi-corr`. 
+The primary correlation visible here is with Scipy, which has some built-in
+support for interoperating with ``multiprocessing``, for instance through
+``scipy.optimize``.
+
+As with ``mpi4py`` we followed up with several of the top ``multiprocessing``
+users.
+One replied: "I'm using and testing many bioinformatics Python-based packages,
+some of them probably using Python ``multiprocessing``.
+But I'm not specifically writing myself scripts with ``multiprocessing``."
+Another reported: "The calculations are executing a workflow for computing the
+binding energies of ligands in metal complexes.
+Since each job is independent, ``multiprocessing`` is used to start workflows on
+each available processor."
+**FIXME** We appear to have some mix of both direct and indirect use of
+``multiprocessing`` as reported by these users; understanding this breakdown
+will be part of our future work.
 
 .. figure:: dask-corr-2021.png
 
    We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
    for the ``Dask`` library. :label:`dask-corr`
 
-We are interested in ``Dask`` as an alternative to more traditional scaling methods
-like ``mpi4py`` since it is somewhat more flexible and resilient. It also enables
-users to write multi-CPU/multi-GPU code without explicitly managing the parallelism. We are monitoring
-`Dask` adoption within the HPC community, especially as ``Dask`` has now assumed a
-key role in the NVIDIA RAPIDS ecosystem. As we noted above, jobs using ``Dask`` are
-generally smaller than those using ``mpi4py`` (500 nodes vs 3000+ nodes), which may
-speak to its ability to easily scale on NERSC systems. The correlation data
-shown in Fig. :ref:`dask-corr` suggest that ``Dask`` is being used by the climate
-and weather community, as evidenced by relatively strong correlation
-coefficients in ``netCDF4`` and ``xarray``. Similar to ``mpi4py`` and ``multiprocessing``, we
-reached out to several of our top ``Dask`` users. One reponded: "I don't remember
-having any Python `Dask`-related jobs running in the past 3 months." After some
-additional discussion and analysis, we discovered the user was using the ``xarray``
-library which we believe was using ``Dask`` unbeknownst to the user. This type of response was common among
-``Dask`` users in particular.
+Dask is a Python package for task-based parallelism and analytics at scale.
+Users are increasingly interested in these kinds of cluster runtimes where they
+queue up work, submit the work to the scheduler as a task graph, and the
+scheduler handles dependencies and farms out the tasks to workers.
+Dask also inter-operates with GPU analytics libraries from NVIDIA as part of
+RAPIDS, so we are naturally interested in its potential our next system based in
+part on GPUs.
+
+As we noted above, large jobs using Dask are generally smaller than those using
+``mpi4py`` (500 nodes versus 3000+ nodes), which indicates something of a
+potential gap in scalability on Cori.
+The correlation data shown in Fig. :ref:`dask-corr` indicate an affinity with
+the climate community, where ``netCDF4`` and ``xarray`` seem particularly
+important.
+
+We reached out to several Dask users to follow-up.
+One reponded: "I don't remember having any Python Dask-related jobs running in
+the past 3 months."
+After some additional discussion and analysis, we discovered the user was using
+``xarray`` which we believe was using Dask unbeknownst to the user.
+This kind of response from Dask users was not uncommon.
 
 Discussion
 ==========
@@ -764,6 +770,23 @@ Discussion
     * Iterate on the actual notebook in a job
     * Productionize that notebook without rewriting to scripts etc
 
+
+
+Big summary
+Findings as extension of previous work
+Findings implications
+How this helps the future
+Statements about the field as a whole
+How it facilitates science
+Limitations
+
+**FIXME: Pyt something about nltk somewhere**
+To try to gain more insight into ``mpi4py`` use, we used NLTK [nltk]_ to
+determine paths most frequently used to launch ``mpi4py``-using jobs.
+In such paths we could identify user directories and contacted several of these
+users to ask them how they are using ``mpi4py``.
+
+*FIXME* Conda environments, 80%
 
 We should emphasize several important caveats in the nature and interpretation
 of our data. The first is that our data represent a helpful if incomplete
@@ -932,11 +955,14 @@ Acknowledgments
 This research used resources of the National Energy Research Scientific
 Computing Center (NERSC), a U.S. Department of Energy Office of Science User
 Facility located at Lawrence Berkeley National Laboratory, operated under
-Contract No. DE-AC02-05CH11231. The authors would like to thank the Vaex
-developers for their help and advice related to this work. The authors would
-also like to thank the Dask-cuDF and cuDF developers for their quick response
-fixing issues and for providing helpful advice in effectively using cuDF and
-Dask-cuDF.
+Contract No. DE-AC02-05CH11231.
+We thank our colleagues Brian Austin, Colin MacLean, and Tiffany Connors for
+discussions on workload analysis, process monitoring, and Python.
+The authors would like to thank the Vaex developers for their help and advice
+related to this work.
+The authors would also like to thank the Dask-cuDF and cuDF developers for their
+quick response fixing issues and for providing helpful advice in effectively
+using cuDF and Dask-cuDF.
 
 References
 ==========
