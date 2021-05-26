@@ -565,6 +565,7 @@ Given a fixed amount of space, we choose to focus on just some of the most
 generally useful questions we can ask of the data, but also highlight some
 surprises.
 Results presented come from data collected between January and May 2021.
+**FIXME was this unique nonstaff users on computes only?  need to add that**
 
 **FIXME How many Python jobs, how many jobs use Conda environments and how many
 use the module.**
@@ -760,8 +761,94 @@ Discussion
     -- Mike Loukides, `What is Data Science?
     <https://www.oreilly.com/radar/what-is-data-science/>`_
 
+Our results demonstrate that we are able to collect useful data on Python
+package use on Cori, tag the data with additional contextual metadata useful
+for filtering during analysis, and conduct exploratory analysis of the data that
+we can easily evolve to production and publication.
+Putting all the steps in the analysis (extraction, aggregation, indexing,
+selecting, plotting) into one narrative improves communication, reasoning,
+iteration, and reproducibility.
+Therefore, one of our objectives was to manage as much of the data analysis as
+we could using one notebook and make the notebook functional both as a Jupyter
+document and as dashboard.
+Using cell metadata helped us to manage both the computationally-intensive
+"upstream" part of the notebook and the less expensive "downstream" dashboard
+within a single notebook.
+One disadvantage of this approach is that it is very easy to remove or forget to
+apply cell tags.
+Another is that some code, particularly package imports in one part of the
+notebook need to be repeated in another.
+These shortcomings could be addressed by making cell metadata easier to apply
+and manage **see if there's a tool we should use already out there?**.
+Oh could install the Voila extension for JupyterLab that may help.
 
+The results themselves confirm many of our preconcieved assumptions about Python
+use on Cori, but also reveal a some surprises that suggest next actions that
+various stakeholders can take.
 
+**FIXME talk about the main results and next actions**
+
+**FIXME Conda environments, 80%**
+
+**multirpocessing and mkl** This observation has many potential explanations,
+such as mere coincidence (users are actually using both approaches when they
+need to and they are not
+actually opposing concerns), utility (process-level parallelism may be much more
+useful to the workload), or convenience (it may simply be easier to reason about
+process-level parallel Python code).
+
+There are limitations to the data set, its analysis, and statements we can make
+based on the data, some of which can be addressed easily and others not.
+First and foremost we address the limitation that we are tracking a prescribed
+list of packages, an obvious source of potential bias.
+The reason for prescribing a list is technical: Large bursts of messages from
+jobs running on Cori caused issues for OMNI infrastructure and we were asked to
+find ways to limit the rate of messages or prevent such kinds of bursts.
+Since that time OMNI has evolved and may be able to handle a higher volume of
+messages, and it may be possible to expand the list of simply report all entries
+in ``sys.modules`` excluding built-in and standard modules (but not entirely:
+``multiprocessing`` would go undetected).
+One strategy may be to forward such a more lightly filtered ``sys.modules`` to
+OMNI on a very small random subset of jobs (say 1%) and use that control data
+set to estimate bias in the tracked list.
+It also helps us to control a major concern, that of missing emergent new
+packages that we should be on the watch for.
+
+Another source of confirmed bias is user opt-out.
+Sets of users who opt out tend to do so in groups, in particular collaborations
+or experiments who manage their own software stacks.
+A common practice is for such collaborations to provide scripts that help a user
+"activate" their environment and overwrite ``PYTHONPATH``.
+This can cause undercounts in key packages.
+**FIXME Talk about what we're doing about this**
+
+Part of the power of scientific Python is that it enables its developers to
+build upon the work of others, so when a user imports a package it may import
+several other dependencies.
+All of these libraries "matter" in some sense, but we find that often users are
+importing those packages without even being aware they are being used.
+For instance, we contacted users who appeared to be running Dask jobs at a node
+count of 100 or greater.
+The following quote is characteristic of several responses:
+"I'm a bit curious as to why I got this email.
+I'm not aware to have used Dask in the past, but perhaps I did it without
+realizing it."
+Some large-scale jobs may use Python only incidentally and aren't the actual
+main application running in the job.
+Importing a package is not the same as actual use, use of a package in a job
+running at scale is not the same as that package being used at scale, and to
+understand more the data mainly provides a pointer to code or users.
+
+The analysis part of a notebook is performed on a supercomputer, while the
+dashboard runs on a separate container-as-a-service platform, but we were able
+to use the notebooks in both cases and use the same exact containers whether
+using Jupyter or Voila.
+The reason for this is that while the runtime on Cori for containers is Shifter,
+and Spin uses Kubernetes to orchestrate container-based services, they both take
+Docker as input.
+Some of our images were created using Podman, and others using Docker, it didn't
+matter.
+The Jupyter kernel, the Dask runtime in both places, all the exact same stack.
 
 * Why do we do it this way?
 
@@ -787,90 +874,6 @@ To try to gain more insight into ``mpi4py`` use, we used NLTK [nltk]_ to
 determine paths most frequently used to launch ``mpi4py``-using jobs.
 In such paths we could identify user directories and contacted several of these
 users to ask them how they are using ``mpi4py``.
-
-*FIXME* Conda environments, 80%
-
-We should emphasize several important caveats in the nature and interpretation
-of our data. The first is that our data represent a helpful if incomplete
-picture of user activities on our system. What do we mean by this? First, we
-collect a list of Python libraries used within a job defined by our workflow
-manager/queuing system Slurm. These libraries may be called by each other (ex:
-``SciPy`` imports ``multiprocessing``, ``scikit-learn`` imports ``Joblib``) with or without
-user knowledge, they may be explicitly imported together by the user in the
-same analysis (ex: ``CuPy`` and ``CuPyx``), they may be unrelated but used at different
-times during the job (``SciPy`` and ``Plotly``), or the user may import libraries they
-never actually use. At the moment we cannot differentiate between any of these
-situations. For example, we contacted several users appeared to be running ``Dask`` at large scale as our
-data indicated that in the same job, they imported ``Dask`` in a jobsize of greater
-than 100 nodes. We contacted these users to ask them what kinds of things they
-were doing with ``Dask`` at scale, and two replied that they had no idea they were
-using ``Dask``. One said, "I'm a bit curious as to why I got this email. I'm not
-aware to have used Dask in the past, but perhaps I did it without realizing
-it." Thus it is important to emphasize that the data we have can be a
-helpful guide but is certainly not definitive and when we impart our own
-expectations onto it, it can even be misleading.
-
-Another caveat is that we are tracking a prescribed list of packages which
-imparts some bias into our data collection. We do our best to keep abreast of
-innovations and trends in the Python user community, but we are undoubtedly
-missing important packages that have escaped our notice. One notable example
-here is the ``Vaex`` library. We were not aware of this library when we implemented
-our list of packages to track. Even though we used it heavily ourselves during
-this work, at the moment we have no data regarding its general use on our
-system. We have recently updated our monitoring infrastructure to track ``Vaex``,
-``Numexpr``, ``psycopg2`` and other packages.
-
-The last caveat is we currently only capture the Python facets of any given
-job. In another example, we reached out to some users who appeared to be
-running Python at large scale (greater than 100 nodes) on one of our slower
-filesystems. We emailed these users to suggest they use a faster filesystem or
-a container. The users wrote back that their job is largely not in Python--
-they have one Python process running on a single node to monitor the job
-status. Our data collection currently has no way of differentiating between
-running C++ on 100 nodes with a single Python monitoring process and running
-pure Python on 100 nodes-- we are blind to other parts of the job.
-
-We can make an educated guess based on our data, but without
-talking to the user or looking at their code, at present we have an incomplete
-picture of what they really are doing. We should however note that
-even users may not fully realize which libaries they are using (as in our Dask
-examples), so users may not be the final authority either. The important
-point is that taking data and trusting user assessments alone are not enough
-to capture user behavior on our system. Both approaches are necessary.
-
-Putting all the steps in the analysis (extraction, aggregation, indexing,
-selecting, plotting) into one narrative greatly improves communication,
-reasoning, iteration, and reproducibility.
-Therefore, one of our objectives was to manage as much of the data analysis as
-we could using one notebook per topic and make the notebook functional both as a
-Jupyter document and as dashboard.
-Using cell metadata helped us to manage both the computationally-intensive
-"upstream" part of the notebook and the less expensive "downstream" dashboard
-within a single notebook.
-One disadvantage of this approach is that it is very easy to remove or forget to
-apply cell tags.
-Another is that some code, particularly package imports in one part of the
-notebook need to be repeated in another.
-These shortcomings could be addressed by making cell metadata easier to apply
-and manage **see if there's a tool we should use already out there?**.
-Oh could install the Voila extension for JupyterLab that may help.
-
-The analysis part of a notebook is performed on a supercomputer, while the
-dashboard runs on a separate container-as-a-service platform, but we were able
-to use the notebooks in both cases and use the same exact containers whether
-using Jupyter or Voila.
-The reason for this is that while the runtime on Cori for containers is Shifter,
-and Spin uses Kubernetes to orchestrate container-based services, they both take
-Docker as input.
-Some of our images were created using Podman, and others using Docker, it didn't
-matter.
-The Jupyter kernel, the Dask runtime in both places, all the exact same stack.
-
-This observation has many potential explanations, such as mere coincidence
-(users are actually using both approaches when they need to and they are not
-actually opposing concerns), utility (process-level parallelism may be much more
-useful to the workload), or convenience (it may simply be easier to reason about
-process-level parallel Python code).
 
 We have described how we characterize, as comprehensively as possible, the
 Python workload on Cori.
@@ -901,12 +904,6 @@ that enables exploration, interactivity, prototyping, and report generation:
 * **Voila** to create responsive, interactive dashboards
   for both internal use
   by NERSC staff and management, but also to external stakeholders.
-
-
-In the future we would like to capture more than just the list of packages that
-match our filter, being able to easily filter out standard library packages by
-default as will be possible in Python 3.10 would help with this.
-Part of the problem is the message transport layer.
 
 Future work will include continuing to uncover information in this large and
 rich dataset. There are pieces of information in our data such as project name
