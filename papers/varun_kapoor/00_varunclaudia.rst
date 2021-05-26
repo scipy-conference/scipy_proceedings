@@ -1,6 +1,6 @@
 :author: Varun Kapoor
 :email: varun.kapoor@curie.fr
-:institution: Institut Curie, Universite PSL, Sobornne Universite, CNRUMR 3215, Inserm U934, Genetics and Developemental Biology, 75005, Paris, France
+:institution: Institut Curie, Universite PSL, Sorbonne Universite, CNRUMR 3215, Inserm U934, Genetics and Developemental Biology, 75005, Paris, France
 :institution: Paris, France
 
 :author: Claudia Carabaña
