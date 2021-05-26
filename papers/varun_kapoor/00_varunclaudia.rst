@@ -46,7 +46,7 @@ Preparation of the dataset
 ***************************
 
 
-We used fluorescent microscopy images of mouse embryonic mammary glands stabilized in an ex vivo culture previously collected in the laboratory of Dr. S. Fre at Institut Curie. All images were acquired with an inverted CLSM (e.g. Zeiss LSM780/880) equipped with long-working distance objectives to acquire high-resolution 3D image stacks. The quality at which these images are acquired is determined by the spatial resolution of the used optical device, desired temporal resolution, duration of the experiment and depth of the acquired Z stacks. Microscopy always has trade offs between these aspects such as reduction of exposure time to gain imaging speed leads to a lower signal-to-noise ratio. Some of these trade offs can be overcome by computational procedures that can be used to improve the quality of images which makes the down-stream analysis easier. One such procedure is image restoration where a network can be trained to map the images acquired at low signal-to-noise ratio to as if they were acquired at high signal-to-noise ratio. The network is trained to learn this mapping function. Training of restoration networks can be done in supervised way by acquiring low and high signal-to-noise ratio image pairs :cite:`Weigert2017` or in an unsupervised way where training image pairs are not required :cite:`krull2019`. It was shown that using unsupervised denoising produces better results than using classical deconvolutional algorithms such as Lucy-Richardson denoising :cite:`Richardson72`, :cite:`Lucy74`. Given our microscope settings, we used the unsupervised learning noise to void package to restore the volumetric images :cite:`krull2019`. 
+We used fluorescent microscopy images of mouse embryonic mammary glands stabilized in an ex vivo culture previously collected in the laboratory of Dr. S. Fre at Institut Curie. All images were acquired with a confocal microscope (e.g. Zeiss LSM780/880) equipped with long-working distance objectives to acquire high-resolution 3D image stacks. We acquired images of pixel size (22,512,512) with calibration of (3, 0.52, 0.52) micrometer at an interval of 45 minutes.  The quality at which these images are acquired is determined by the spatial resolution of the used optical device, desired temporal resolution, duration of the experiment and depth of the acquired Z stacks. Microscopy always has trade offs between these aspects such as reduction of exposure time to gain imaging speed leads to a lower signal-to-noise ratio. Some of these trade offs can be overcome by computational procedures that can be used to improve the quality of images which makes the down-stream analysis easier. One such procedure is image restoration where a network can be trained to map the images acquired at low signal-to-noise ratio to as if they were acquired at high signal-to-noise ratio. The network is trained to learn this mapping function. Training of restoration networks can be done in supervised way by acquiring low and high signal-to-noise ratio image pairs :cite:`Weigert2017` or in an unsupervised way where training image pairs are not required :cite:`krull2019`. It was shown that using unsupervised denoising produces better results than using classical deconvolutional algorithms such as Lucy-Richardson denoising :cite:`Richardson72`, :cite:`Lucy74`. Given our microscope settings, we used the unsupervised learning noise to void package to restore the volumetric images :cite:`krull2019`. 
 
 
 Segmentation
@@ -60,81 +60,87 @@ Post-restoration we developed a method to perform the segmentation of the cells 
    
      :label:`algorithm`  
  
+In the code block below use the bounding box of U-Net labels and centroids of Stardist labels (computed using skimage regionprops) 
 The code for the merging U-Net and Stardist seeds is the following:
 
 .. code-block:: python
 
-  def iou3D(boxA, centroid):
+  def iou3D(box_unet, centroid_star):
     
-    ndim = len(centroid)
+    ndim = len(centroid_star)
     inside = False
     
-    Condition = [Conditioncheck(centroid, boxA, p, ndim)
+    Condition = [Conditioncheck(centroid_star, box_unet, p, ndim)
      for p in range(0,ndim)]
         
     inside = all(Condition)
     
     return inside
+  
+  def Conditioncheck(centroid_centroid, box_unet, p, ndim):
 
-  def Conditioncheck(centroid, boxA, p, ndim):
-    
-      condition = False
-    
-      if centroid[p] >= boxA[p] 
-      and centroid[p] <= boxA[p + ndim]:
-          
-           condition = True
-           
-      return condition 
+    condition = False
+
+    if centroid_star[p] >= box_unet[p]
+    and centroid_star[p] <= box_unet[p + ndim]:
+
+         condition = True
+
+    return condition
       
-      
+In the code below we use the Image = ProbabilityMap of Stardist, Label = Label segmentation image of Stardist and Mask = U-Net predicted image post binarization.      
 The code for doing watershed in 3D using the complete set of seeds on the probability map of Stardist is the following:   
 
 .. code-block:: python     
 
 
-  def WatershedwithMask3D(Image, Label,mask, grid): 
-  
-    properties = measure.regionprops(Label, Image) 
-    binaryproperties = 
-    measure.regionprops(label(mask), Image) 
-    cord = 
-    [prop.centroid for prop in properties] 
-    bin_cord =
-    [prop.centroid for prop in binaryproperties]
-    Binarybbox = 
-    [prop.bbox for prop in binaryproperties]
-    cord = sorted(cord , 
-    key=lambda k: [k[0], k[1], k[2]]) 
-    if len(Binarybbox) > 0:    
-            for i in range(0, len(Binarybbox)):
-                
-                box = Binarybbox[i]
-                inside = 
-                [iou3D(box, star) for star in cord]
-                
-                if not any(inside) :
-                         cord.append(bin_cord[i])    
-                         
+  def WatershedwithMask3D(Image, Label,mask, grid):
+            properties = measure.regionprops(Label, Image)
+            cord = np.array([prop.centroid for prop in properties])
+            Unet_out, nb_labels = label(mask, return_num=True)
+            # Getting the set of labels where the Stardist centroids fall
+            intersection = Unet_out[tuple(cord.T)]
+            # Creating a mapping to remove the connected componnents (cc)
+            # from Unet that contain a centroid from Stardist.
+            # After the following 2 opperations,
+            # mapping is a 1d array where:
+            # mapping[i] -> 0 if the cc contains a Stardist barycenter
+            # mapping[i] -> i otherwise
+            mapping = np.arange(nb_labels+1, dtype=Unet_out.dtype)
+            mapping[intersection] = 0
+            # Applying the mapping, masked_Unet only has
+            # connected components that do not contain
+            # a Stardist centroid
+            masked_Unet = mapping[Unet_out]
+            # Only the necessary centroids are computed,
+            # the bounding boxes does not have to be computed
+            binaryproperties = measure.regionprops(masked_Unet)
+            bin_cord = [prop.centroid for prop in binaryproperties]
+            # Concatenating all the centroids together
+            # and proceeding as before
+            cord = np.vstack(([0, 0], cord, bin_cord))
+            cord_int = np.round(cord).astype(int)
+            markers_raw = np.zeros_like(Image)
+            markers_raw[tuple(cord_int.T)] =
+            1 + np.arange(len(cord))
+            markers =
+            morphology.dilation(markers_raw,
+            morphology.ball(2))
+            watershedImage =
+            watershed(-Image, markers, mask)
+            return watershedImage, markers
     
-    cord.append((0,0,0))
-    cord = np.asarray(cord)
-    cord_int = np.round(cord).astype(int) 
     
-    markers_raw = np.zeros_like(Image) 
-    markers_raw[tuple(cord_int.T)] =
-    1 + np.arange(len(cord)) 
-    markers = 
-    morphology.dilation(markers_raw,
-    morphology.ball(2))
+:math: `GT = \{gt\}`, :math: `SEG=\{seg\}` are two sets of segmented objects.
 
-    watershedImage = 
-    watershed(-Image, markers, mask) 
+:math: `IOU(a, b)` is the value of the IOU operation between two segmented objects a and b.
+
+Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN) defined as: 
     
-    return watershedImage, markers 
-    
-    
-Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN). 
+:math:`$TP=\{seg\in SEG, \exists~gt\in GT~s.t.~IOU(gt,seg)>\tau\}$`      
+:math: `$FP = \{seg\in SEG,\forall~gt\in GT,~IOU(gt, set)<\tau\}$`
+:math: `$FN = \{gt\in GT, \forall~seg\in SEG,~IOU(gt, seg)<\tau\}$`
+
 TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
 :math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}`.  
 To evaluate the accuracy of our method in resolving the shape of the cells we compute the mean squared error and structural similarity index measurment between the GT and obtained segmentation images post-binarization operation on the obtained instance segmentation maps. 
@@ -281,7 +287,7 @@ VollSeg and Stardist methods perform at comparable accuracy, but higher than U-N
 .. figure:: Figures/Metrics.png
      
       
-     Segmentation comparision metrics between VollSeg, Stardist and U-Net. We plot (A) accuracy, (B) F1 and (C) true positive rates for all the networks. 
+     Segmentation comparision metrics between VollSeg, Stardist and U-Net. We plot (A) accuracy (as percentage), (B) F1 (as percentage) and (C) true positive rates (as number of pixels) for all the networks. 
      
      :label:`metrics`
 
