@@ -481,14 +481,14 @@ Project Evolution
 -----------------
 
 The **signac** project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and 8 committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
-The growth in involvement with **signac** is the result of our focus on developing features based on user needs, as well as our efforts to transition **signac** users to **signac** contributors, through many initiatives in the past few years.
+The growth in involvement with **signac** results from our focus on developing features based on user needs, as well as our efforts to transition **signac** users to **signac** contributors, through many initiatives in the past few years.
 Through encouraging users to become contributors, we ensure that **signac** addresses real users' needs.
 We have expanded **signac**'s contributor base beyond the University of Michigan through research collaborations with other universities, sharing the framework at conferences, and through the Google Summer of Code (GSoC) program, which we applied to under the NumFOCUS organization.
 Working with and mentoring students through GSoC led to a new committer and significant work on the synced collections and aggregation projects presented above.
 To encourage code contributions from existing users, we maintain active support and discussion through Slack.
 In addition, we have started hosting weekly "office hours" for in-person (virtual) introduction and guided contributions to the code base.
 By pairing new contributors with experienced **signac** developers, we significantly reduce the knowledge barrier to joining a new project.
-Office hours creating space for users to make contributions has also led to more features and documentation born directly out of user need.
+Close interactions between developers and users during office hours has led to more features and documentation born directly out of user need.
 Contributing to documentation has been a productive starting point for new users-turned-contributors, both for the users and the project, since it improves the users' familiarity with the API as well as addresses weak spots in the documentation that are more obvious to new users.
 
 In our growth with increasing contributors and users, we recognized a need to change our governance structure to make contributing easier and provide a clear organizational structure to the community.
