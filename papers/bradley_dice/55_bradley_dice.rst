@@ -384,7 +384,7 @@ Though the **signac** package has methods like ``Project.groupby``, which can ge
 The concept of aggregation provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a **signac** data space.
 Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
 When decorated with an aggregator, operations can accept multiple job instances as positional arguments through Python's argument unpacking.
-Decorators are used to define aggregation behavior, encompassed in the ``@aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
+Decorators are used to define aggregates, encompassed in the ``@aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
 
 .. code-block:: python
 
@@ -411,13 +411,13 @@ Another example is submitting aggregates with a fixed number of jobs in each agg
 
 Finally, bundling is another way to use workflows in conjunction with an HPC scheduling system.
 Whereas aggregates are concerned with jobs and groups operations, bundling is concerned with combining executable units into a single submission script.
-This distinction means that bundling is not part of the workflow definition, but a means of tailoring batch scripts for different HPC systems.
+This distinction means that bundling is not part of the workflow definition, but is a means of tailoring batch scripts for different HPC systems.
 Bundles allow users to leverage scheduler resources effectively and minimize queue time, and can be run in serial (the default) or parallel.
 Users enable bundling by passing the command line argument ``--bundle``, optionally with another argument ``--parallel`` to run each command in the bundle in parallel (the Python API has corresponding options as well).
 The simplest case of a bundle is a submission script with the same operation being executed for multiple jobs.
 Bundling is what allows the submission script to contain multiple jobs executing the same operation.
 By storing information about the generated bundles during submission, **signac-flow** prevents accidental resubmission just as in the unbundled case.
-While the example above does not use either groups or aggregation, bundles works seamlessly with both.
+While the example mentioned above does not use either groups or aggregation, bundles works seamlessly with both.
 
 Synced Collections: Backend-agnostic, persistent, mutable data structures
 -------------------------------------------------------------------------
@@ -468,7 +468,7 @@ The generality of synced collections makes them broadly useful even outside the 
 Adding Pythonic APIs to collection-like objects can be challenging, particularly when those objects should support arbitrary nesting, but synced collections enable nesting as a core feature to dramatically simplify this process.
 Moreover, while the framework was originally conceived to support synchronization of an in-memory data structure with a resource on disk, it can also be used to synchronize with another in-memory resource.
 A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector`` such that changes to either object would be transparently reflected in the other.
-With synced collections, creating this class just requires defining a conversion between a ``std::vector`` and a raw Python dictionary, a trivial task using standard tools for exposing extension types such as pybind or Cython.
+With synced collections, creating this class just requires defining a conversion between a ``std::vector`` and a raw Python list, a trivial task using standard tools for exposing extension types such as pybind or Cython.
 
 At a higher level, synced collections represent an important step in improving both the scalability and flexibility of **signac**.
 By abstracting away details of persistent file storage from the rest of **signac**, they make it much easier for the rest of **signac** to focus on offering flexible data models.
