@@ -45,16 +45,24 @@ Last years the evolution of CNN also affected the way in which the ToF specific 
 
 ToF specific imaging
 ++++++++++++++++++++
+.. TL part
 
+Low level ToF image processing
+++++++++++++++++++++++++++++++
+.. MSz part
 
 Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
+.. BK part
+
 
 Action recognition from IR images
 +++++++++++++++++++++++++++++++++
+.. PM part
 
 Volumetric estimates for depth images
 +++++++++++++++++++++++++++++++++++++
+.. PA part
 
 
 
