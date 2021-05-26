@@ -14,6 +14,7 @@
               1 Cyclotron Road MS59-4010A,
               Berkeley, California, 94720
 :orcid: 0000-0003-3868-6178
+:corresponding:
 
 :author: Annette Greiner
 :email: amgreiner@lbl.gov
@@ -865,17 +866,11 @@ Some of our images were created using Podman, and others using Docker, it didn't
 matter.
 The Jupyter kernel, the Dask runtime in both places, all the exact same stack.
 
-Conclusion
-==========
-
-..
-   Summarize what was done, learned, and where to go next.
-
-**Liked this but didn't want it in Methods**
-Together this approach provided a solution that satisfied our vision of a
-Python- and Jupyter-based, powerful, self-documenting and sharable, interactive
-dashboard solution.
-This richer analysis has provided us new insights into our data.
+This observation has many potential explanations, such as mere coincidence
+(users are actually using both approaches when they need to and they are not
+actually opposing concerns), utility (process-level parallelism may be much more
+useful to the workload), or convenience (it may simply be easier to reason about
+process-level parallel Python code).
 
 We have described how we characterize, as comprehensively as possible, the
 Python workload on Cori.
@@ -907,18 +902,6 @@ that enables exploration, interactivity, prototyping, and report generation:
   for both internal use
   by NERSC staff and management, but also to external stakeholders.
 
-**Rephrase**
-Putting all the steps in the analysis (extraction, aggregation, indexing,
-selecting, plotting) into one narrative greatly improves communication,
-reasoning, iteration, and reproducibility.
-
-**Rephrase**
-The analysis part of a notebook is performed on a supercomputer, while the
-dashboard runs on a separate container-as-a-service platform, but we were able
-to use the notebooks in both cases and use the same exact containers whether
-using Jupyter or Voila.
-
-We invite developers to suggest their packages.
 
 In the future we would like to capture more than just the list of packages that
 match our filter, being able to easily filter out standard library packages by
@@ -955,6 +938,66 @@ lack the skills they need to scale to the full potential of our supercomputers?
 An open question is how can we leverage the data we collect to help NERSC
 become a more user-friendly and scientifically productive center.
 
+Conclusion
+==========
+
+..
+   Summarize what was done, learned, and where to go next.
+
+We have taken our first small steps in understanding the Python workload at
+NERSC in detail.
+Instrumenting Python to record how frequently key scientific Python packages are
+being imported in batch jobs on Cori confirmed many of our assumptions but
+yielded a few surprises.
+One surprise is the observation of strong affinity between the nominally
+unrelated packages AstroPy and ``mpi4py`` within batch jobs that use ``mpi4py``,
+probably driven by a few large cosmology collaborations using NERSC.
+This suggests that the AstroPy developer community may want to consider deeper
+engagement with these users on HPC systems.
+Another surprising observation concerns single-node parallelism, the popularity
+of process-level parallelism through ``multiprocessing`` and an apparent lack
+of interest in thread-level parallelism through hardware-optimized math
+libraries, in particular Intel MKL.
+These two factors may actually not be at odds, but the number of potential
+explanations suggests further insight from the data and engagement with users is
+needed.
+The next step is acting on the information we have gathered, and of course,
+monitoring the impact those actions have on the workload.
+
+Using Python itself as a platform for analyzing the Python workload poses a few
+challenges mostly related to supporting infrastructure and tooling.
+With a few tricks, we find that the same Jupyter notebooks can be used for both
+exploratory and production data analysis, and also to communicate high-level
+results through dashboards.
+We initiated this project not only to perform Python workload analysis but to
+test the supposition that users could assemble all the pieces they needed for a
+Python-based data science pipeline at NERSC.
+Along the way, we identified shortcomings in our data science ecosystem, and this
+motivated us to develop tools for users that fill those gaps, and gave us direct
+experience with the very same tools our users use to do real science.
+
+Future plans include expanding Python workload analysis to the new GPU-based
+Perlmutter system being deployed now at NERSC.
+Through comprehensive monitoring of Python use on Perlmutter we hope to identify
+users of Perlmutter's CPU-only nodes who might be able to migrate to GPUs and
+accelerate their science.
+We look forward to finding out what fraction of our users might be able to do
+this and what the challenges are.
+At the center level, OMNI includes time series data from a variety of sources
+including the HPC and storage systems at NERSC, supporting computational
+infrastructure, environmental sensors, mechanical systems, and more.
+Understanding whether Python use has any measureable impacts at the systems
+level is one potential area of future work.
+Similarly, examining Python use within the context of specific science areas is
+possible by linking the usage with user account and allocation data from other
+sources.
+Applying machine learning tools to proactively identify issues that users have
+with Python on our systems is also an interesting avenue to pursue.
+
+We anticipate that developers of scientific Python software may find the
+information we gather to be informative.
+The corresponding authors invite developers to contact them by email about
+monitoring usage of the software they have created.
 
 Acknowledgments
 ===============
