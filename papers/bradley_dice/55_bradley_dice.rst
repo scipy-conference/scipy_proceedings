@@ -93,7 +93,7 @@ Arbitrary shell commands can be run by **signac-flow** as part of a workflow, ma
 With **signac**, file-based data and metadata are organized in folders and JSON files, respectively (see Figure :ref:`overview`).
 A **signac** data space, or "workspace," is composed of jobs, which are individual directories associated with a single primary key known as a "state point" stored in a file ``signac_statepoint.json`` in that directory.
 These files allow **signac** to index the data space, providing a database-like interface to a collection of directories.
-Arbitrary user data may be stored in user-created files in these jobs, although **signac** also provides convenient facilities for storing simple lightweight data or array-like data via JSON and HDF5 utilities.
+Arbitrary user data may be stored in user-created files in these jobs, although **signac** also provides convenient facilities for storing simple lightweight data or array-like data via JSON (the "job document") and HDF5 (the "job data") utilities.
 Readers seeking more details about **signac** may refer to past **signac** papers: :cite:`signac_commat, signac_scipy_2018` as well as the **signac** website [#]_ and documentation [#]_.
 
 .. [#] https://signac.io
@@ -424,57 +424,56 @@ Synced Collections: Backend-agnostic, persistent, mutable data structures
 Motivation
 ~~~~~~~~~~
 
-All of **signac**'s principal functions are designed around efficiently indexing a collection of directories.
-By organizing job directories by the hash of their state point, **signac** can perform many operations in constant time.
-To present a Pythonic API, state points are exposed via a dictionary-like interface, making it very easy to modify a state point and have that change transparently reflected in both the JSON file and the name of the corresponding directory (which is the state point's hash).
+At its core, **signac** is a tool for organizing and working with data on the filesystem, presenting a Pythonic interface for tasks like creating directories and modifying files.
+In particular, **signac** makes modifying the JSON files used to store the state points and documents as easy as working with Python dictionaries.
+Despite heavily optimizing these APIs, in seeking to scale **signac** to ever-larger data spaces we quickly realized that the most significant barrier intrinsic to our model was the overhead of parsing and modifying large numbers of text files.
+Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, making switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
 
-The need to parse these JSON files for indexing and the complexity of modifying them represent the most significant barriers to scaling **signac**.
-Even in the absence of file modification, simply reading a large number of files to produce a database index becomes prohibitively expensive for large data spaces.
-Although various optimizations have incrementally improved **signac**'s scalability, an alternative means of storing the state point and associated metadata that circumvents the heavy I/O costs of our current approach has the potential to make a much larger impact.
-However, replacing individual JSON files as the primary data source for **signac** without breaking **signac**'s API would require a generic means for providing the same interface to the underlying index and metadata irrespective of the underlying storage mechanism.
-Once developed, however, such an API would abstract out enough of the internals of **signac** to enable other generalizations as well, such as making it relatively easy to support alternate (and nearly arbitrary) data space layouts.
+While attempting to overcome this hurdle, we identified a core problem that our current API for modifying JSON files was solving in a limited manner: namely, the creation of a dictionary-like interface to an underlying resource.
+Numerous other well-known Python packages (h5py and Zarr immediately come to mind) also do this in order to make working with complex resources feel as natural as possible to Python users.
+Most such packages implement this layer directly for their particular use case, but the nature of the problem suggested to us the possibility of developing a more generic representation of this interface.
+Indeed, the Python standard library's ``collections.abc`` module is designed exactly for the purpose of making it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
+As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
 
-The synced collections subpackage of **signac** represents the culmination of our efforts to expose this functionality, providing a generic framework within which interfaces corresponding to any of Python's built-in types can be easily constructed with arbitrary underlying synchronization protocols.
-For instance, with synced collections it becomes easy to define a new list-like type that automatically saves all its data in a plain-text CSV format.
-However, the flexibility of this new framework extends far beyond that, defining a generic protocol that can be used to provide a dictionary, list, or set-like API to any arbitrary underlying data structure, including other in-memory objects that do not present a similarly Pythonic API.
+The **synced collections** framework represents the culmination of our efforts in this direction, providing a generic framework within the interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
+In **signac** this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks like creating a set-like interface to an underlying extension type or wrapping a directory manager in a list-like interface.
+This section will offer a high-level overview of this framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
 Summary of Features
 ~~~~~~~~~~~~~~~~~~~
 
 We designed synced collections to be flexible, easily extensible, and independent of **signac**'s data model.
-The central element is the ``SyncedCollection`` class, which defines a new abstract class extending the ``collections.abc.Collection`` from the Python standard library.
-A ``SyncedCollection`` is a ``Collection`` that adds two additional groups of abstract methods that must be implemented by its subclasses.
-One group includes methods for synchronizing with an underlying resource, while the other contains methods for synchronizing with a standard collection of the underlying base type.
-For instance, a ``JSONDict`` would implement the first set of methods to define how to save a dictionary to a JSON file and reload it, while it would implement the second set of methods to define how to convert between a ``JSONDict`` instance and a standard Python dictionary.
+Most practical use cases for this framework involve an underlying resource that may be modified by any number of associated in-memory objects that behave like standard Python collections such as dictionaries or lists.
+Therefore, all normal operations must be preceded by loading from this resource and updating the in-memory store, and they must be succeeded by a subsequent save to that resource.
+The central idea behind synced collections is to decouple this process into two distinct groups of tasks: the saving and loading of data from a particular resource backend, and the synchronization of two in-memory objects of a given type.
+This delineation allows us to, for instance, encapsulate all logic for JSON files into a single ``JSONCollection`` class and then combine it with dictionary- or list-like ``SyncedDict``/``SyncedList`` classes via inheritance to create fully functional JSON-backed dictionaries or lists.
+Such synchronization has significant performance implications, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
 
-Critically, these two sets of functions are orthogonal.
-Therefore, it is possible to implement different backend types and different data structures independently, then combine them into concrete classes using multiple inheritance.
-This solution is analogous to the way that language server protocols separate support for programming languages from support for editors, turning an :math:`M \times N` problem into a simpler :math:`M+N` problem.
-In practice, our synced collections framework comes bundled with a set of backend classes, such as the ``JSONCollection``, and a set of data structure classes, such as the ``SyncedDict``.
-Each of these inherits from ``SyncedCollection`` and implements a subset of its methods, but remains abstract until combined (via multiple inheritance) with a class implementing the remaining methods.
-This design pattern makes defining the functional classes at the bottom of the hierarchy trivial.
-For example, the ``JSONDict`` is implemented by inheriting from ``JSONCollection`` and ``SyncedDict``, but requires no additional code to function.
-Similarly, the ``JSONList`` class inherits from ``JSONCollection`` and ``SyncedList``.
-
-This infrastructure is also flexible enough to accommodate general modifications to the synchronization protocol.
-A prominent example is the ``BufferedCollection``, a subclass of ``SyncedCollection`` that introduces additional synchronization primitives that enable toggling synchronization to and from the underlying resource with synchronization to and from an intermediate cache for improved performance.
-Similarly to base ``SyncedCollection`` functions, different buffering behaviors' synchronization can be implemented independently of the specific backend (or even the data structure, for any buffer that supports generic objects).
+Previously, **signac** contained a single ``JSONDict`` class as part of its API, along with a separately implemented internal-facing ``JSONList`` that could only be used as a member of a ``JSONDict``.
+With the new framework, users can create fully-functional, arbitrarily nested ``JSONDict`` and ``JSONList`` objects that share the same logic for reading from and writing to JSON files.
+Just as importantly, **signac** can now combine these data structures with a different backend, allowing us to swap in different storage mechanisms for improved performance and flexibility with no change in our APIs.
+Since different types of resources may have different approaches to batching transactions --- for example, a SQLite backend may want to exploit true SQL transactions, while a Redis backend might simply collect all changes in memory and delay sending memory to the server --- synced collections also support customizable buffering protocols, again via class inheritance.
 
 Applications of Synced Collections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The new synced collections promise to substantially simplify both feature and performance enhancements to the **signac** framework.
 Performance improvements in the form of Redis-based storage are already possible with synced collections, and as expected they show substantial speedups over the current JSON-based approach.
-The use of the new buffering protocol has enabled us to prototype new buffering approaches that further improve performance in buffered mode.
-At a larger scale, synced collections are a critical first step to enabling different data layouts on disk, such as the use of a single tabular index (e.g.
-a SQLite database) for much faster work on homogeneous data spaces or the use of more deeply nested directory structures where a deeper hierarchy on disk offers organizational benefits.
+We have also exploited the new, more flexible buffering protocol to implement and test alternatives to the previous approach, and in certain cases our new buffering techniques improve performance of buffered operations by 1-2 orders of magnitude.
+Some of these performance improvements are drop-in replacements that require no changes to our existing data models, and we plan to enable these in upcoming versions of **signac**.
 
 The generality of synced collections makes them broadly useful even outside the **signac** framework.
-The framework makes it easy for developers to create Pythonic APIs for data structures that might otherwise require significant additional implementation overhead.
-Crucially, synced collections support nesting as a core feature, something that could be quite difficult to handle for developers of custom collection types.
+Adding Pythonic APIs to collection-like objects can be challenging, particularly when those objects should support arbitrary nesting, but synced collections enable nesting as a core feature to dramatically simplify this process.
 Moreover, while the framework was originally conceived to support synchronization of an in-memory data structure with a resource on disk, it can also be used to synchronize with another in-memory resource.
-One powerful example of this would be the use of a synced collection to provide a Pythonic API to a collection-like data structure implemented as a C or C++ extension module that could function like a Python dictionary with suitable plumbing but lacks the standard APIs expected of such a class.
-With the synced collections framework, creating a new class providing such an API is reduced to simply requiring the implementation of two straightforward methods defining the synchronization protocol.
+A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector`` such that changes to either object would be transparently reflected in the other.
+With synced collections, creating this class just requires defining a conversion between a ``std::vector`` and a raw Python dictionary, a trivial task using standard tools for exposing extension types such as pybind or Cython.
+
+At a higher level, synced collections represent an important step in improving both the scalability and flexibility of **signac**.
+By abstracting away details of persistent file storage from the rest of **signac**, they make it much easier for the rest of **signac** to focus on offering flexible data models for different situations.
+One of the most common use-cases of **signac** is creating data spaces with homogeneous schemas that fit naturally into tabular data structures.
+In future iterations of **signac** we plan to allow users to opt into such usage, which would enable us to replace file-based indexes with SQL-backed databases that would offer orders of magnitude in performance improvements.
+Using this flexibility we could also move away from our currently rigid workspace model to allow more general data layouts on disk for cases where users may benefit from the organizational benefits of more general folder structures.
+As such, synced collections are a stepping stone to creating a more general and powerful version of **signac**.
 
 Project Evolution
 -----------------
