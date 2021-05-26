@@ -131,15 +131,15 @@ The code for doing watershed in 3D using the complete set of seeds on the probab
             return watershedImage, markers
     
     
-:math: `GT = \{gt\}`, :math: `SEG=\{seg\}` are two sets of segmented objects.
+:math:`GT = \{gt\}`, :math: `SEG=\{seg\}` are two sets of segmented objects.
 
-:math: `IOU(a, b)` is the value of the IOU operation between two segmented objects a and b.
+:math:`IOU(a, b)` is the value of the IOU operation between two segmented objects a and b.
 
 Accuracy of segmentation results is assesed by comparing the obtained labels to the gold standard ground truth (GT) labels. Most commonly used metric is to compute intersection over union (IOU) score between the predicted and the GT label image. A threshold score value :math:`\tau \in [0,1]` is used to determine the true positive (TP), false positives (FP) and false negatives (FN) defined as: 
     
 :math:`$TP=\{seg\in SEG, \exists~gt\in GT~s.t.~IOU(gt,seg)>\tau\}$`      
-:math: `$FP = \{seg\in SEG,\forall~gt\in GT,~IOU(gt, set)<\tau\}$`
-:math: `$FN = \{gt\in GT, \forall~seg\in SEG,~IOU(gt, seg)<\tau\}$`
+:math:`$FP = \{seg\in SEG,\forall~gt\in GT,~IOU(gt, set)<\tau\}$`
+:math:`$FN = \{gt\in GT, \forall~seg\in SEG,~IOU(gt, seg)<\tau\}$`
 
 TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. This implementation avoids finding multiple TP for a given instance of GT.
 We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
