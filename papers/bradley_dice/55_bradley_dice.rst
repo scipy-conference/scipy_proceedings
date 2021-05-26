@@ -321,7 +321,7 @@ Operations are Python functions or shell commands that act on a job within the d
 When this project is run using **signac-flow**'s command line API (``python project.py run``), the current state point is prepared for simulation.
 Operations can have preconditions and postconditions that define their eligibility.
 All preconditions must be met in order for a operation to be eligible for a given job.
-If any postcondition is met, that indicates an operation is complete (and thus ineligible).
+If all postconditions are met, that indicates an operation is complete (and thus ineligible).
 Examples of such conditions include the existence of an input file in a job's workspace or a key in the job document (as shown in the above snippet).
 However, this type of conditional workflow can be inefficient when sequential workflows are coupled with an HPC scheduler interface, because the user must log on to the HPC and submit the next operation after the previous operation is complete.
 The desire to submit large and long-running jobs to HPC schedulers encourages users to write large operation functions which are not modular and do not accurately represent the individual units of the workflow, thereby limiting **signac-flow**'s utility and reducing the readability of the workflow.
