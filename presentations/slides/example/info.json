@@ -1,7 +1,11 @@
 {
     "title": "Safe handling instructions for missing data",
     "authors": [
-        "Dillon Niederhut"
+        {
+            "name": "Dillon Niederhut",
+            "affiliation": "Enthought, Inc.",
+            "orcid": "0000-0002-9995-4378"
+        }
     ],
     "description": "A presentation about what to do with missing data"
 }
