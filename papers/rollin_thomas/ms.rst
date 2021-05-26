@@ -215,25 +215,20 @@ The major limitation of this strategy is that abnormal process terminations
 prevent the Python interpreter from proceeding through its normal exit sequence
 and package import data are not recorded.
 
-**FIXME** can track submodules as well.
-
-Short of introspecting processes at a very deep level, gaining insight into
-Python usage involves a few minimally invasive and easy to customize tools.
+Of course, much more information may be available through tools based on the
+extended Berkeley Packet Filter [eBPF]_ and the BPF compiler collection [bcc]_,
+for instance as with the ``pythoncalls`` utility that summarizes method calls in
+a running application.
+While eBPF overheads are reportedly very small, this approach requires special
+compilation flags for Python and libraries.
+Effort would be needed to make the monitoring more transparent to users and to
+marshal the generated data for subsequent analysis.
+This could be an interesting and fruitful approach to consider.
 Obviously, solutions that can overly impact application reliability or place an
 undue burden on system administrators and operations staff should be avoided.
-The fullest picture we can obtain will come from a combination of tooling and
-follow-up with users, using the story we can put together from the data we
-gather as a starting point for conversation.
-
-**FIXME** eBPF would be interesting but we would need to develop the tooling,
-understand performance impact on compute nodes though it says it has none, and
-build or leverage infrastructure to capture events of interest.
-For Python we would need to be sure we instrumented the right kinds of events.
-
-..
-   There are probably tools that do deep data collection on processes running
-   that we could mention.  If we do we should explain that getting those
-   installed and getting access to those data require 
+The fullest picture we currently can obtain comes from a combination of
+non-intrusive tooling and follow-up with users, using the story we can put
+together from the data we gather as a starting point for conversation.
 
 Methods
 =======
@@ -251,9 +246,9 @@ environments, often as a Conda environment or as an independent installation
 altogether (e.g. using the Miniconda installer and building up).
 Cray provides a basic "Cray Python" module containing a few core scientific
 Python packages linked against Cray MPICH and LibSci libraries.
-Python packages are also installed by staff or users via Spack **REF**, an HPC
+Python packages are also installed by staff or users via Spack [Gam15]_, an HPC
 package manager.
-NERSC also provides Shifter **REF**, a container runtime that enables users to
+NERSC also provides Shifter [Jac16]_, a container runtime that enables users to
 run custom Docker containers that can contain Python built however the author
 desires.
 With a properly defined kernel-spec file, a user is able to use a Python
@@ -298,8 +293,8 @@ To organize ``sitecustomize`` logic we have created a Python package we call
 particular interest.
 Customs can be understood in terms of three simple concepts.
 A **Check** is a simple object that represents a Python package by its name and
-a callable that is used to verify that the package is present in a given
-dictionary.
+a callable that is used to verify that the package (or even a specific module
+within a package) is present in a given dictionary.
 In production this dictionary should be ``sys.modules`` but during testing it
 can be mock ``sys.modules`` dictionary.
 The **Inspector** is a container of Check objects, and is responsible for
@@ -339,18 +334,17 @@ Message Logging and Storage
 NERSC has developed a lightweight abstraction layer for message logging called
 nerscjson.
 It is a simple Python package that consumes JSON messages and forwards them to
-an appropriate transport laer that connects to NERSC's central
-Elasticsearch-based telemetry collection framework, OMNI **REF**.
+an appropriate transport layer that connects to NERSC's Operations Monitoring
+and Notification Infrastructure, OMNI [Bau19]_.
 Currently this is achieved by using the ``SysLogHandler`` from Python's standard
 logging library with a minor modification to the time format to satisfy RFC 3339
-**REF**.
 Downstream from these transport layers, a message key is used to identify the
 incoming messages, their JSON payloads are extracted, and then forwarded to the
-appropriate Elastic index.
+appropriate Elasticsearch [elast]_ index.
 The Customs Reporter used on Cori simply uses nerscjson.
 
-On Cori compute nodes, we use the Cray Lightweight Log Manager (LLM) **REF**,
-configured to accept RFC 5424 **REF** protocol messages on service nodes.
+On Cori compute nodes, we use the Cray Lightweight Log Manager (LLM),
+configured to accept RFC 5424 protocol messages on service nodes.
 A random service node is chosen as the recipient in order to balance load.
 On other nodes besides compute nodes, such as login nodes or nodes running
 user-facing services, rsyslog is used for message transport.
@@ -434,13 +428,12 @@ the message failure rate.
 Canary jobs began running in October of 2020 and from that time until now (May
 2021), perhaps surprisingly, we actually have observed no message delivery
 failures.
-**eBPF**
 
 Prototyping, Production, and Publication
 ----------------------------------------
 
-OMNI includes Kibana, a visualization interface that NERSC staff can use to
-visualize indexed Elasticsearch data collected from NERSC systems, including
+OMNI includes a Kibana visualization interface that NERSC staff can use to
+visualize Elasticsearch-indexed data collected from NERSC systems, including
 data collected for MODS.
 The MODS team uses Kibana for creating plots of usage data, organizing these
 into attractive dashboard displays that communicate MODS high-level metrics.
@@ -456,77 +449,52 @@ to prototype new analyses, but we wanted to be able to record that process,
 document it, share it, and enable others to re-run or re-create the results.
 Jupyter Notebooks specifically target this problem, and NERSC already runs a
 user-facing JupyterHub service that enables access to Cori.
-Members of the MODS team manage notebooks in a Gitlab instance managed by NERSC,
-but can also share them with one another (and from Gitlab) using an NBViewer
-service running alongside NERSC's JupyterHub.
+Members of the MODS team can manage notebooks in a Gitlab instance run by NERSC,
+or share them with one another (and from Gitlab) using an NBViewer service
+running alongside NERSC's JupyterHub.
 
-Iterative prototyping of big data analysis pipelines often starts with testing
+Iterative prototyping of data analysis pipelines often starts with testing
 hypotheses or algorithms against a small subset of the data and then scaling
-that analysis up to the entire data set. Using Python we can interact with a
-subset of data with richer and more powerful way than through database queries.
-This initial, interactive protyping should then be able to scale to process all
-of our data efficiently on NERSC's HPC hardware.
+that analysis up to the entire data set.
+GPU-based tools with Python interfaces for filtering, analyzing, and distilling
+data can accelerate this scale-up using generally fewer compute nodes that
+CPU-based ones.
+The entire MODS Python data set is currently about 260 GB in size, and while
+this could fit into one of Cori's CPU-based large-memory nodes, the processing
+power available there is insufficient to make interactive analysis feasible.
+With only CPUs, the main recourse is to scale out to more nodes and distribute
+the data.
+This is certainly possible, but being able to interact with the entire data set
+using a few GPUs, far fewer processes, without inter-node communication is
+compelling.
 
-Finally, we want to be able to share the results of our analysis using
-Python-backed dashboards. For this we use Voila to run the dashboard notebooks
-we have created using our container-as-a-service system Spin. To achieve this
-vision we have developed the following workflow which we will now describe in
-more detail.
+To do interactive analysis, prototyping, or data explorationwe use Dask-cuDF and
+cuDF [dcdf]_, typically using 4 NVIDIA Volta V100 GPUs coordinated by a
+Dask-CUDA cluster [dcuda]_.
+The Jupyter notebook itself is started from NERSC's JupyterHub using
+BatchSpawner (i.e., the Hub submits a batch job to run the notebook on the GPU
+cluster).
+The input data, in compressed Parquet format, are read using Dask-cuDF directly
+into GPU memory.
+These data are periodically gathered from OMNI using the Python Elasticsearch
+API and converted to Parquet.
+Reduced data products are stored in new Parquet files, again using direct GPU
+I/O in Dask-cuDF or cuDF.
 
-Jupyter data analysis
----------------------
-
-**FIXME** Describe Jupyter analysis, everything below is mostly Python-specific
-
-To avoid version
-compatibility problems within the Python stack used for the analysis we use
-Docker containers.  At runtime the Docker containers are run using Shifter (our
-in-house HPC container solution), and in Spin they are just Docker containers
-managed by Rancher 2, orchestrated with Kubernetes.  For our Jupyter analysis,
-Wwe use cell notebook metadata to execute the Spin-appropriate cells and not
-the Cori-appropriate ones in Spin. (We use two separate sets of notebooks for
-Python analysis since our data analysis and plotting require incompatible 
-kernels.)
-
-Python data analysis
---------------------
-
-The first step of the Python analysis workflow is to pull the data out of the
-Elasticsearch database where it is stored. We do this using the Python
-Elasticsearch client API [elast]_. Since each day’s worth of data can take
-several minutes to pull, convert, and save, we run this process nightly as a
-cronjob to pull the previous day’s data. A typical day’s worth of data is about
-10 MB, once saved in compressed Parquet format. The total amount of data we
-have collected since August 2020 is approximately 7 GB, so this is likely not
-in the realm of “big data” as far as most are concerned. However the dataset is
-large and complex enough that analysis with CPU-based methods is cumbersome. We
-have therefore opted to use GPU-based methods for filtering, analyzing, and
-distilling the data into something reasonably quick to plot in our dashboards.
-
-We have written a flexible Jupyter notebook that can process data in a monthly,
-quarterly, or yearly fashion. It will decide which of these to perform based on
-the input from a Papermill parameter cell. To perform this
-analysis, we use ``Dask-cuDF`` and ``cuDF`` [dcdf]_ throughout the analysis, keeping
-the whole workflow on the GPU. We typically use 4 Nvidia Volta V100 GPUs
-coordinated by a ``Dask-CUDA`` cluster [dcuda]_ which we spin up directly in the
-notebook. We load the Parquet data using Dask-cuDF directly into GPU memory and
-perform various types of filtering and reduction operations. We ultimately save
-the distilled output in new Parquet files, again using direct GPU I/O in
-``Dask-cuDF`` or ``cuDF``.
-
-Since our analysis is split in several dimensions-- monthly, quarterly, or
-yearly-- the workflow must be flexible enough to facilitate this. Our design
-choice here was to use ``Papermill`` [pmill]_ to turn our single notebook into an
-extensible workflow. Papermill recognizes and replaces Jupyter cells tagged as
-parameters based on external input. (**TODO point to this script**) We can then
-launch a batch job on our shared GPU system which will call our ``Papermill`` >
-``Jupyter`` > ``Dask-CUDA`` > ``Dask-cuDF``. Each ``Papermill`` instance will run a single
-Jupyter notebook for one piece of our analysis. In each Jupyter notebook, a
-Dask CUDA cluster is spun up and then shutdown at the end for memory/worker
-cleanup.  Every notebook writes a set of output files to be used in our
-dashboards. Processing all data for all permutations of time currently takes
-about 1.5 hours on 4 V100 GPUs on the NERSC Cori cgpu system. We
-summarize this workflow in Fig. :ref:`analyze-data`.
+As prototype analysis code in notebooks evolves into something resembling a
+production analysis pipeline, data scientists face the choice of whether to
+convert their notebooks into scripts or try to push the notebook concept to
+serve as a production tool.
+The latter approach has the appeal that production notebooks can be re-run
+interactively when needed with all the familiar Jupyter notebook benefits.
+We decided to experiment with using Papermill [pmill]_ to parameterize notebook
+execution over months, quarters, and years of data and submit these notebooks as
+batch jobs.
+In each Jupyter notebook, a Dask-CUDA cluster is spun up and then shutdown at
+the end for memory/worker cleanup.
+Processing all data for all permutations currently takes about 1.5 hours on 4
+V100 GPUs on the NERSC Cori GPU cluster.
+We summarize this workflow in Fig. :ref:`analyze-data`.
 
 .. figure:: mods-analyze-data.png
    :scale: 10%
@@ -534,26 +502,51 @@ summarize this workflow in Fig. :ref:`analyze-data`.
    This diagram summarizes the workflow for processing and analyzing Python
    data at NERSC. :label:`analyze-data`
 
-In this work our design choice is to use ``Voila`` [voila]_ to turn our Jupyter
-notebooks into dashboards. Generating usable interactive dashboards has been a
-challenge however for several reasons. The first obstacle is the data loading
-time. Our design choice has been to preload all possible data the dashboard
-may display while it starts. The tradeoff here is a long load time but a faster
-interactive response time once it has loaded (~30 s). Another significant
-problem is quickly generating plots. This may sound surprising given that we
-already spent a good deal of time preprocessing and distilling our data on
-GPUs. However, we still found that plotting operations, especially those
-performing operations like histogram binning, with ``Pandas`` DataFrames was
-unsatisfyingly slow for our vision of a responsive dashboard. Our choice here
-was to use the ``Vaex`` library instead [vaex]_ which provides similar
-functionality to Pandas but is significantly more performant as a result of
-multithreaded CPU parallelism. We did use some of ``Vaex``’s native plotting
-functionality (notably ``Vaex``’s ``viz.histogram`` functionality) which is wrappable
-in the standard ``Matploptlib`` plotting format. However we primarily used the
-``Seaborn`` library for plotting with Vaex objects underneath which we found to be
-a fast and friendly way to generate visually appealing plots. We also used some
-traditional ``Matplotlib`` plotting functionality when ``Seaborn`` could not provide
-what we wanted. We summarize this workflow in Fig. :ref:`mods-dashboard`.
+Members of the MODS team can share Jupyter notebooks with one another, but this
+format may not make for the best way to present data to other stakeholders, in
+particular center management, DOE program managers, vendors, or users.
+Voilà [voila]_ is a tool that uses a Jupyter notebook to power a standalone,
+interactive dashboard-style web application, so we decided to evaluate and
+experiment with Voilà for this project.
+To run our dashboards we use NERSC's Docker container-as-a-service platform
+external to its HPC systems called Spin [spin]_, where staff and users can run
+persistent web services.
+Spin currently has no nodes with GPUs.
+
+Creating a notebook using GPU cluster and then using the same notebook to power
+a dashboard running on a system without GPUs presented a few challenges.
+We found ourselves adopting a pattern where the first part of the notebook used
+a Dask cluster and GPU-enabled tools for processing the data, and the second
+part of the notebook used reduced data using CPUs to power the dashboard
+visualizations.
+We used cell metadata tags to direct Voilà to simply skip the first set of cells
+and pick up dashboard rendering with the reduced data.
+This process was a little clumsy, and we found it easy to make the mistake of
+adding a cell and then forgetting to update its metadata.
+Easier ways of managing cell metadata tags would improve this process.
+Another side-effect of this approach is that packages may appear to be imported
+multiple times in a notebook.
+
+We found that even reduced data sets could be large enough to make loading a
+Voilà dashboard slow, but we found ways to hide this by lazily loading the data.
+Using Pandas DataFrames to prepare even reduced data sets for rendering,
+especially histograms, resulted in distracting latency when interacting with the
+dashboard.
+Vaex [vaex]_ provided for a more responsive user experience, owing to
+multithreaded CPU parallelism.
+We did use some of Vaex's native plotting functionality (in particular
+``viz.histogram``), but we primarily used Seaborn for plotting with Vaex objects
+"underneath" which we found to be a fast and friendly way to generate appealing
+visualizations.
+Sometimes Matplotlib was used when Seaborn could not provide functionality we
+needed.
+
+Finally, we note that the Python environment used for both data exploration and
+reduction on the GPU cluster, and for running the Voilà dashboard in Spin, is
+managed using a single Docker image.
+This ensures that the notebook behaves consistently in both contexts.
+**FIXME We use two separate sets of notebooks for Python analysis since our data
+analysis and plotting require incompatible kernels.**
 
 .. figure:: mods-dashboard.png
    :scale: 10%
@@ -561,19 +554,19 @@ what we wanted. We summarize this workflow in Fig. :ref:`mods-dashboard`.
    This diagram summarizes the setup we use to provide our web-based,
    interactive dashboards. :label:`mods-dashboard`
 
-Together this approach provided a solution that satisfied our vision of a
-Python- and Jupyter-based, powerful, self-documenting and sharable, interactive
-dashboard solution. This richer analysis has provided us new insights into our
-data.
-
 Results
 =======
 
-Our monitoring framework gives us a rich data set to examine, and our flexible
-pipeline for analyzing it gives us the ability to interrogate the data in many
-different ways to start understanding Python usage on Cori.
-Given a fixed amount of space, we focus here on just some of the most important
-questions we can ask of the data, but also highlight a few surprise findings.
+Our simple data collection framework gives us a rich data set to examine, and
+our workflow gives us a way to interactively explore the data and refine the
+results of our exploration into dashboards for monitoring Python.
+Given a fixed amount of space, we choose to focus on just some of the most
+generally useful questions we can ask of the data, but also highlight some
+surprises.
+Results presented come from data collected between January and May 2021.
+
+**FIXME How many Python jobs, how many jobs use Conda environments and how many
+use the module.**
 
 .. figure:: library-barplot-2021.png
 
@@ -582,7 +575,7 @@ questions we can ask of the data, but also highlight a few surprise findings.
    :label:`lib-barplot`
 
 Fig. :ref:`lib-barplot` displays the top 20 Python packages in use by unique
-user count from January to May of 2021.
+user count.
 These are similar to previous observations reported from Blue Waters and TACC
 [Mcl11]_ [Eva15]_.
 However, the relative prominance of ``multiprocessing`` is striking.
@@ -605,7 +598,7 @@ result in an undercount.
    :label:`jobsize-hist`
 
 Fig. :ref:`jobsize-hist` shows the distribution of job size (node count) for
-jobs that invoked Python and loaded one or more of the packages we monitor.
+jobs that invoked Python and imported one or more of the packages we monitor.
 Most of these jobs are small, but the distribution tracks the overall
 distribution of job size at NERSC.
 
@@ -618,10 +611,11 @@ distribution of job size at NERSC.
 
 Breaking down the Python workload further, Fig. :ref:`jobsize-lib` contains a 2D
 histogram of Python package counts versus job size.
+Package popularity in this figure has a different meaning than in Fig.
+:ref:`lib-barplot`:
 The data are deduplicated by ``job_id`` and package name to account for jobs
 where users invoke the same executable repeatedly or invoke multiple
-applications using the same libraries. Thus package popularity has a different
-meaning in this context than in Fig. :ref:`library-barplot`.
+applications using the same libraries.
 
 Most Python libraries we track do not appear to use more than 200 nodes on Cori.
 Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
@@ -634,9 +628,10 @@ may suggest users find it easier to scale PyTorch on Cori.
 
 .. figure:: corr2d-2021.png
 
-   The Pearson correlation coefficients for tracked Python libraries
-   within the same job. Note that even if libraries were imported multiple
-   times per job, they were counted as either a 0 or 1. :label:`corr2d`
+   Pearson correlation coefficients for tracked Python libraries within the same
+   job.
+   Even if libraries were imported multiple times per job, they were counted as
+   either a 0 or 1. :label:`corr2d`
 
 While it is obvious that packages that depend on or are dependents of other
 packages will be correlated within jobs, it is still interesting to look at the
@@ -647,55 +642,63 @@ package was used and 0 otherwise.
 The resulting correlation coefficients appear as a heatmap in Fig.
 :ref:`corr2d`.
 
-Unsurprisingly there are some very strong but predictable correlations: CuPy
-with CuPyx, AstroPy with its submodule ``astropy.fits.io``. Other notable
-correlations include scikit-learn and Joblib, likely because
-scikit-learn uses Joblib to obatain parallelism, ``TensorFlow`` and ``h5py``,
-perhaps because HDF5 is used as common format for saving model data, and
-``Seaborn`` and ``Keras``, which have no relationship as far as we
-are aware.
+Unsurprisingly there are some strong but predictable correlations: CuPy with
+CuPyx, AstroPy with its submodule ``astropy.fits.io``.
+Other correlations include scikit-learn and Joblib, likely because
+scikit-learn uses Joblib to obatain parallelism; TensorFlow and ``h5py``,
+perhaps because HDF5 is used as common format for saving model data **FIXME Is
+there a way we can make sure?**, and
+Seaborn and Keras, which have no relationship as far as we
+are aware.  **FIXME is Seaborn-Keras due to one user who just likes that
+combination?, or does a Keras dependency bring in Seaborn?**
 
-Interestingly, the FireWorks workflow engine [Jai15]_ is anticorrelated with
-TensorFlow, possibly because TensorFlow has its own distributed training
-strategies like ``Horovod``.
-``Seaborn`` is anticorrelated with ``Plotly``; we posit that this is because
-these are very different approaches to Python plotting.
+FireWorks workflow engine [Jai15]_ is anticorrelated with TensorFlow, probably
+because TensorFlow has its own distributed training strategies like Horovod.
+Seaborn is anticorrelated with Plotly; we posit that this is because these are
+very different approaches to Python plotting.
 Other notable anticorrelations
 include ``SciPy`` and ``fitsio``, ``multiprocessing`` and ``ROOT.std`` (used
 by the high-energy physics community), and ``Astropy`` and ``TensorFlow``
 **Are these really strong correlations, maybe the plot could remove pearson
 within some distance of 0, that might make it more readable actually**
 
-We are interested in libraries that allow Python jobs to scale or otherwise
-achieve parallelism, in partcular ``mpi4py``, ``multiprocessing`` and Dask, and
-whether they have any interesting co-occurrence patterns.
-Fig. :ref:`case-studies` presents the correlations of each
-of these packages with all other tracked packages.
+Is there a way we can use this summary correlation information to tell us what
+users are doing with packages used to achieve parallelism, in particular
+``mpi4py``, ``multiprocessing``, and Dask?
+Fig. :ref:`case-studies` presents the correlations of each of these packages
+with all other tracked packages.
 
 .. figure:: case-studies-2021.png
    :scale: 33%
 
-   We plot a 1D slice of the 2D correlation heatmap shown in Fig. :ref:`corr2d`
-   for the ``mpi4py`` library (left), ``multiprocessing`` library (center),
-   and ``Dask`` library (right). :label:`case-studies`
+   1D slices of 2D correlation heatmap shown in Fig. :ref:`corr2d` for
+   ``mpi4py`` (left), ``multiprocessing`` (center), and Dask (right).
+   **FIXME swap multiprocessing with mpi4py in the figure**
+   :label:`case-studies`
 
-Fig. :ref:`case-studies` (left) shows a very strong domain-specific correlation with
-AstroPy (and its sub-module ``astropy.io.fits``).
+Fig. :ref:`case-studies` (left) shows a very strong domain-specific correlation
+with AstroPy (and its sub-module ``astropy.io.fits``).
 This suggests that users of AstroPy have been able to scale associated
 applications using ``mpi4py`` and that AstroPy developers may want to consider
 engaging with our users to make that even easier.
+Examining the jobs further we find that these users tend to be members of large
+cosmology experiments like Dark Energy Survey **REF**, Dark Energy Spectroscopic
+Instrument **REF**, and the Dark Energy Science Collaboration **REF**.
+Taken together this is a rather large community of users, to whom these two
+packages appear to be fairly important.
+**FIXME: I propose we drop mentioning these if we have nothing else to say:
 Other notable correlations include Matplotlib, NumPy, and SciPy which are fairly
 general-purpose.
 Some small anti-correlations with FireWorks, Keras, and TensorFlow may be due to
 them having their own approaches to distributing work or scaling. For example,
-Horovod, which is used by Tensorflow to scale, uses MPI and/or NCCL directly.
+Horovod, which is used by Tensorflow to scale, uses MPI and/or NCCL directly.**
 
 Following up with users revealed that using ``mpi4py`` for "embarrassingly
 parallel" calculations is very common: "My go-to approach is to broadcast data
 using ``mpi4py``, split up input hyperparameters/settings/etc. across ranks,
 have each rank perform some number of computations, and then gather all the
 results (which are almost always NumPy arrays) using ``mpi4py``."
-Very few users report more complicated communication patterns.
+Very few users report more intricate communication patterns.
 
 The Conda tool uses ``multiprocessing`` but even after filtering out those
 cases, ``multiprocessing`` remains one of the most popular Python libraries in
@@ -741,6 +744,8 @@ After some additional discussion and analysis, we discovered the user was using
 ``xarray`` which we believe was using Dask unbeknownst to the user.
 This kind of response from Dask users was not uncommon.
 
+**FIXME** Section needs some kind of ending.
+
 Discussion
 ==========
 
@@ -754,6 +759,9 @@ Discussion
     -- Mike Loukides, `What is Data Science?
     <https://www.oreilly.com/radar/what-is-data-science/>`_
 
+
+
+
 * Why do we do it this way?
 
   * Test dog food
@@ -764,8 +772,6 @@ Discussion
     * Show it to stakeholder, get feedback,
     * Iterate on the actual notebook in a job
     * Productionize that notebook without rewriting to scripts etc
-
-
 
 Big summary
 Findings as extension of previous work
@@ -864,6 +870,12 @@ Conclusion
 
 ..
    Summarize what was done, learned, and where to go next.
+
+**Liked this but didn't want it in Methods**
+Together this approach provided a solution that satisfied our vision of a
+Python- and Jupyter-based, powerful, self-documenting and sharable, interactive
+dashboard solution.
+This richer analysis has provided us new insights into our data.
 
 We have described how we characterize, as comprehensively as possible, the
 Python workload on Cori.
@@ -978,13 +990,28 @@ References
            Tools, Piscataway, NJ, 2014.
            <http://doi.org/10.1109/HUST.2014.6>
 
+.. [Bau19] E. Bautista, M. Romanus, T. Davis, C. Whitney, and T. Kubaska,
+           *Collecting, Monitoring, and Analyzing Facility and Systems Data at
+           the National Energy Research Scientific Computing Center,*
+           48th International Conference on Parallel Processing: Workshops
+           (ICPP 2019), Kyoto, Japan, 2019
+           <https://doi.org/10.1145/3339186.3339213>
+
 .. [Fah10] M. Fahey, N Jones, and B. Hadri, 
            *The Automatic Library Tracking Database*
            Proceedings of the Cray User Group, Edinburgh, United Kingdom, 2010
 
 .. [Fur91] J. L. Furlani, *Modules: Providing a Flexible User Environment*
            Proceedings of the Fifth Large Installation Systems Administration
-           Conference (LISA V), San Diego, CA, 1991.
+           Conference (LISA V), San Diego, CA, 1991
+
+.. [Gam15] T. Gamblin, M. P. LeGendre, M. R. Collette, G. L. Lee, A. Moody, B.
+           R. de Supinski, and W. S. Futral. *The Spack Package Manager:
+           Bringing Order to HPC Software Chaos.* In Supercomputing 2015 (SC15),
+           Austin, Texas, November 15-20 2015. LLNL-CONF-669890
+
+.. [Jac16] D. M. Jacobsen and R. S. Canon, *Shifter: Containers for HPC,* in
+           Cray Users Group Conference (CUG16), London, United Kingdom, 2016
 
 .. [Mac17] C. MacLean. *Python Usage Metrics on Blue Waters*
            Proceedings of the Cray User Group, Redmond, WA, 2017.
@@ -992,8 +1019,6 @@ References
 .. [Mcl11] R. McLay, K. W. Schulz, W. L. Barth, and T. Minyard, 
            *Best practices for the deployment and management of production HPC clusters*
            In State of the Practice Reports, SC11, Seattle, WA, <https://doi.acm.org/10.1145/2063348.2063360>
-
-.. [lmod]  https://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html
 
 .. [Eva15] T. Evans, A. Gomez-Iglesias, and C. Proctor. *PyTACC: HPC Python at the
            Texas Advanced Computing Center* Proceedings of the 5th Workshop on Python
@@ -1006,18 +1031,24 @@ References
            high-throughput applications. Concurrency Computat.: Pract. Exper., 27:
            5037–5059. <https://doi.org/10.1002/cpe.3505>
 
+.. [bcc]   https://github.com/iovisor/bcc
+
+.. [eBPF]  https://ebpf.io/
+
 .. [elast] https://elasticsearch-py.readthedocs.io/en/7.10.0/
 
 .. [dcdf]  https://docs.rapids.ai/api/cudf/stable/dask-cudf.html
 
 .. [dcuda] https://dask-cuda.readthedocs.io/en/latest/
 
+.. [lmod]  https://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html
+
+.. [nltk]  https://www.nltk.org/
+
 .. [pmill] https://papermill.readthedocs.io/en/latest/
+
+.. [spin]  https://www.nersc.gov/systems/spin/
 
 .. [vaex]  https://vaex.io/docs/index.html
 
 .. [voila] https://voila.readthedocs.io/en/stable/index.html
-
-.. [nltk]  https://www.nltk.org/
-
-
