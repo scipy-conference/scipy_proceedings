@@ -595,7 +595,6 @@ result in an undercount.
 .. figure:: jobsize-hist-2021.png
 
    Distribution of job size for batch jobs detected that use Python.
-   **FIXME** Make the bin sizes a little nicer?
    :label:`jobsize-hist`
 
 Fig. :ref:`jobsize-hist` shows the distribution of job size (node count) for
@@ -627,7 +626,7 @@ Workflow managers FireWorks and Parsl are observed scaling to 1000 nodes.
 PyTorch (``torch``) appears at larger scales than TensorFlow and Keras, which
 may suggest users find it easier to scale PyTorch on Cori.
 
-.. figure:: corr2d-2021.png
+.. figure:: corr-clip-2021.png
 
    Pearson correlation coefficients for tracked Python libraries within the same
    job.
