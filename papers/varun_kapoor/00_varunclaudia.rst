@@ -141,7 +141,7 @@ Accuracy of segmentation results is assesed by comparing the obtained labels to 
 :math:`$FP = \{seg\in SEG,\forall~gt\in GT,~IOU(gt, set)<\tau\}$`
 :math:`$FN = \{gt\in GT, \forall~seg\in SEG,~IOU(gt, seg)<\tau\}$`
 
-TP are the pairs of predicted and GT labels having intersection over union (IOU) score value :math:`> \tau`. FP are the predicted instances not present in the GT image and FN are the unmateched GT instances that are not present in the predicted label image. We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. This implementation avoids finding multiple TP for a given instance of GT.
+We use the Stardist implementation to compute accuracy scores which uses the hungarian method (scipy implementation) :cite:`Kuhn1955` to compute an optimal matching to do a one to one assingement of predicted label to GT labels. This implementation avoids finding multiple TP for a given instance of GT.
 We also compute precision (TP/(TP + FP)), recall (TP / (TP + FN)), F1 score (geometric mean of precision and recall) and accuracy score 
 :math:`AP_\tau= \frac{TP_\tau}{TP_\tau+ FP_\tau + FN_\tau}`.  
 To evaluate the accuracy of our method in resolving the shape of the cells we compute the mean squared error and structural similarity index measurment between the GT and obtained segmentation images post-binarization operation on the obtained instance segmentation maps. 
@@ -163,9 +163,7 @@ In the first Jupyter notebook we create the dataset for U-Net and Stardist train
   Model_dir = '/data/'
   Model_Name = 'VollSeg'
   
-.. raw:: latex
 
-    \newpage
   
 The model parameters are specified in the next notebook cell. These parameters are described as follows:
 
@@ -335,7 +333,7 @@ The tools that we present here can also be useful for segmentation of cells comi
 
 Acknowledgements
 ---------------------
-We acknowledge the Cell and Tissue Imaging Platform (PICT-IBiSA) of the Genetics and Developmental Biology Department (UMR3215/U934) at Institut Curie, in particular Olivier Renaud for supporting the software development. We are grateful to Dr Silvia Fre for support and constructive discussions. V.K is supported by Labex DEEP at Institut Curie (ANR-11- LBX0044 grant). C.C is supported by funding from the European Union's Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No 666003. 
+We acknowledge the Cell and Tissue Imaging Platform (PICT-IBiSA) of the Genetics and Developmental Biology Department (UMR3215/U934) at Institut Curie, in particular Olivier Renaud for supporting the software development. We are grateful to Dr Silvia Fre for support and constructive discussions. V.K is supported by Labex DEEP at Institut Curie (ANR-11- LBX0044 grant). C.C is supported by funding from the European Union's Horizon 2020 research and innovation programme under the Marie Skłodowska-Curie grant agreement No 666003. V.K. acknowledges Leo Guginard for insightful comments about the manuscript.
 
 
 Author Contributions
