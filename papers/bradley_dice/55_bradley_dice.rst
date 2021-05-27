@@ -88,9 +88,9 @@ The companion package **signac-flow** interacts with the data space to generate 
 Arbitrary shell commands can be run by **signac-flow** as part of a workflow, making it as flexible as a script in any language of choice.
 
 This paper will focus on developments to the **signac** framework over the last 3 years, during which features, flexibility, usability, and performance have been greatly improved.
-The core data structures in **signac** have been overhauled to provide a powerful and generic implementation of "synced collections," that we will leverage in future versions of **signac** to enable more performant data indexing and flexible data layouts.
-In **signac-flow**, we have added support for submitting groups of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources.
-Further developments allow for operations to act on arbitrary subsets of the data space, or "aggregates," rather than single jobs alone.
+The core data structures in **signac** have been overhauled to provide a powerful and generic implementation of *synced collections*, that we will leverage in future versions of **signac** to enable more performant data indexing and flexible data layouts.
+In **signac-flow**, we have added support for submitting *groups* of operations with conditional dependencies, allowing for more efficient utilization of large HPC resources.
+Further developments allow for operations to act on arbitrary subsets of the data space via *aggregation*, rather than single jobs alone.
 Moving beyond code development, this paper will also discuss the scientific research these features have enabled and organizational developments supported through key partnerships.
 We will share our project's experience in continuously revising project governance to encourage sustained contributions, adding more entry points for learning about the project (Slack support, weekly public office hours), and participating in Google Summer of Code in 2020 as a NumFOCUS Affiliated Project.
 Much of the work has been carried out in conjunction with the Molecular Simulation Design Framework (MoSDeF) :cite:`cummings.etal2021`, a National Science Foundation Cyberinfrastructure for Sustained Scientific Innovation (CSSI) effort.
@@ -99,7 +99,7 @@ Structure and Implementation
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 With **signac**, file-based data and metadata are organized in folders and JSON files, respectively (see Figure :ref:`overview`).
-A **signac** data space, or "workspace," is composed of jobs, which are individual directories associated with a single primary key known as a "state point" stored in a file ``signac_statepoint.json`` in that directory.
+A **signac** data space, or *workspace*, contains jobs, which are individual directories associated with a single primary key known as a *state point* stored in a file ``signac_statepoint.json`` in that directory.
 The JSON files allow **signac** to index the data space, providing a database-like interface to a collection of directories.
 Arbitrary user data may be stored in user-created files in these jobs, although **signac** also provides convenient facilities for storing simple lightweight data or array-like data via JSON (the "job document") and HDF5 (the "job data") utilities.
 Readers seeking more details about **signac** are referred to past **signac** papers :cite:`signac_commat, signac_scipy_2018` as well as the **signac** website [#]_ and documentation [#]_.
@@ -138,7 +138,7 @@ Code examples of features presented in this paper can be found online.
 Applications of signac
 ----------------------
 
-The **signac** framework has been cited 51 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
+The **signac** framework has been cited 54 times, according to Google Scholar, and has been used in a range of scientific fields with various types of computational workflows.
 Some of these studies include quantum calculations of small molecules :cite:`govoni.etal2018`,
 4,480 simulations of epoxy curing (each containing millions of particles) :cite:`thomas.etal2018`,
 inverse design of pair potentials :cite:`adorf.etal2018`,
@@ -280,7 +280,7 @@ Enhanced Workflows
 ~~~~~~~~~~~~~~~~~~
 
 **Directives:**
-Execution directives (or "directives" for short) provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others.
+Execution directives (or *directives* for short) provide a way to specify required resources on HPC schedulers such as number of CPUs/GPUs, MPI ranks, OpenMP threads, walltime, memory, and others.
 Directives can be a function of the job as well as the operation, allowing for great flexibility.
 In addition, directives work seamlessly with operation groups, job aggregation, and submission bundling (all of which are described in a later section).
 
@@ -302,8 +302,8 @@ Executing complex workflows via groups and aggregation
     Groups allow users to combine multiple operations into one, with dependencies among operations resolved at run time.
     Bundling helps users efficiently leverage HPC schedulers by submitting multiple commands in the same script, to be executed in serial or parallel. :label:`workflow`
 
-Two new concepts in **signac-flow** provide users with significantly more power to implement complex workflows: groups and aggregation.
-A related third concept – bundling – which is not new, also provides flexibility to users in their workflows, but exclusively affects scheduler submission, not workflow definition.
+Two new concepts in **signac-flow** provide users with significantly more power to implement complex workflows: *groups* and *aggregation*.
+A related third concept – *bundling* – which is not new, also provides flexibility to users in their workflows, but exclusively affects scheduler submission, not workflow definition.
 Figure :ref:`workflow` show a graphical illustration of the three concepts.
 
 As the names of both groups and aggregation imply, the features enable the "grouping" or "aggregating" of existing concepts: operations in the case of groups and jobs in the case of aggregates.
@@ -454,7 +454,7 @@ Motivation
 At its core, **signac** is a tool for organizing and working with data on the filesystem, presenting a Pythonic interface for tasks like creating directories and modifying files.
 In particular, **signac** makes modifying the JSON files used to store a job's state points and documents as easy as working with Python dictionaries.
 Despite heavy optimization, when seeking to scale **signac** to ever-larger data spaces, we quickly realized that the most significant performance barrier was the overhead of parsing and modifying large numbers of text files.
-Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, making switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
+Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, which made switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
 
 While attempting to overcome this hurdle, we identified a core problem that our current API for modifying JSON files was solving in a limited manner: namely, the creation of a dictionary-like interface to an underlying resource.
 Numerous other well-known Python packages (h5py and Zarr immediately come to mind) also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
@@ -462,7 +462,7 @@ Most such packages implement this layer directly for their particular use case, 
 Indeed, the Python standard library's ``collections.abc`` module is designed exactly for the purpose of making it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
 
-The **synced collections** framework represents the culmination of our efforts in this direction, providing a generic framework within the interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
+The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework within which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
 In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a set-like interface to an underlying extension type or wrapping a directory manager in a list-like interface.
 This section will offer a high-level overview of this framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
@@ -519,8 +519,7 @@ Close interactions between developers and users during office hours has led to m
 Contributing to documentation has been a productive starting point for new users-turned-contributors, both for the users and the project, since it improves the users' familiarity with the API as well as addresses weak spots in the documentation that are more obvious to new users.
 
 In our growth with increasing contributors and users, we recognized a need to change our governance structure to make contributing easier and provide a clear organizational structure to the community.
-We based our new model on the Meritocratic Governance Model and our manager roles on Numba
-:cite:`numba` Czars.
+We based our new model on the Meritocratic Governance Model and our manager roles on Numba :cite:`numba` Czars.
 We decided on a four category system with maintainers, committers, contributors, and users.
 Code review and pull request merge responsibilities are granted to maintainers and committers, who are (self-) nominated and accepted by a vote of the project maintainers.
 Maintainers are additionally responsible for the strategic direction of the project and administrative duties.
@@ -537,7 +536,7 @@ This prevents burnout among our senior developers and provides a sense of owners
 Conclusions
 -----------
 
-From the birth of the **signac** framework to now, **signac** has grown in usability, performance, and use.
+From the birth of the **signac** framework in 2015 to now, **signac** has grown in usability, performance, and use.
 In the last three years, we have added exciting new features such as groups, aggregation, and synced collections, while learning how to manage outreach and establish sustainable project governance in a burgeoning scientific open-source project.
 We hope to continue expanding the framework through user-oriented development, reach users in research fields beyond materials science that routinely have projects suited for **signac**, and welcome new contributors with diverse backgrounds and skills to the project.
 
