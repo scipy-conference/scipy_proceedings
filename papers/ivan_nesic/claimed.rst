@@ -29,7 +29,7 @@ abundant, but the community lacks a fully integrated, trusted and
 scalable visual tool. Therefore we have built CLAIMED, the visual
 **C**\ omponent **L**\ ibrary for **AI**, **M**\ achine Learning,
 **E**\ TL and **D**\ ata Science which runs on top of ElyraAI capable of
-pushing AI pipelines of any kind to Kubernetes. Any containerized
+pushing AI pipelines of any kind to Kubernetes [kubernetes]_. Any containerized
 application can become a component of the library. CLAIMED has been
 released [complib]_ under the Apache v2 open source license. In the following
 we introduce the open source components we are integrating in our
@@ -60,12 +60,12 @@ is in the desired state, it needs to scale up or down, manage
 communication between containers, schedule them, manage authentications,
 balance the load etc. Although there are other options like Docker
 Swarm, Kubernetes is the market leader in this domain. It was donated to
-CNCF by Google, which means a lot of Google’s know-how and years of
+CNCF [cncf]_ by Google, which means a lot of Google’s know-how and years of
 experience went into it. The system can run on public, on-prem or on
 hybrid clouds. On-prem installation is very important for institutions
 dealing with sensitive data. For IBM, Kubernetes is also strategic,
 joining CNCF, having moved all Watson Services to Kubernetes and aquired
-RedHat, IBM is now 3rd largest committer to Kubernetes.
+RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
 
 Deep Learning with TensorFlow
 ----------------------------
@@ -86,7 +86,7 @@ for speed, one can use the latter.
 Kubeflow
 --------
 
-Kubeflow is a machine learning pipeline management and execution system
+Kubeflow [kubeflow]_ is a machine learning pipeline management and execution system
 running as first class citizen on top of Kubernetes. Besides making use
 of Kubernetes scalability it allows for reproducible work as machine
 learning pipelines and the results and intermediate artifacts of their
@@ -95,7 +95,7 @@ executions are stored in a meta data repository.
 ElyraAI
 -------
 
-ElyraAI started as a set of extensions for the JupyterLab ecosystem.
+ElyraAI [elyra]_ started as a set of extensions for the JupyterLab ecosystem.
 Here we concentrate on the pipeline editor of ElyraAI which allows for
 expression of machine learning workflows using a drag’n’drop editor and
 send them for execution on top of different engines like Kubeflow or
@@ -106,7 +106,7 @@ such pipelines in the browser (e.g. from a github repository).
 JupyterLab
 ----------
 
-JupyterLab is one of the most popular development environments for data
+JupyterLab [jupyter]_ is one of the most popular development environments for data
 science. Therefore we started to support JupyterLab first. But the
 pipeline editor of ElyraAI will be supported in other environments as
 well, VSCode being next on the list.
@@ -275,7 +275,7 @@ goes into production. Evaluating classification performance against the
 target labels has been state-of-the-art since the beginning of machine
 learning, therefore we have added components like confusion matrix. But
 taking TrustedAI measures into account is a newly emerging practice.
-Therefore, components for AI Fairness, AI Explainability and AI
+Therefore, components for AI Fairness, AI Explainability [aix360]_ and AI
 Adversarial Robustness have been added to the component library.
 
 Blessing Components
@@ -293,7 +293,7 @@ Publishing Components
 Depending on the asset type, publishing means either persisting a data
 set to a data store, deploying a machine learning model for consumption
 of other subsystems or publishing a report to be consumed by humans.
-Here, we exemplify this category by a KFServing component which
+Here, we exemplify this category by a KFServing [kfserving]_ component which
 publishes the trained TensorFlow deep learning model to Kubernetes.
 KFServing, on top of KNative, is particular interesting as it draws from
 Kubernetes capabilities like canary deployment and scalability (including
@@ -333,21 +333,28 @@ References
 
 .. [aif360]
     AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
-
+.. [aix360]
 AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360.
 Last accessed 18 Feb 2021
 
+.. [elyra]
 Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
 
+.. [kubernetes]
 Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
 
+.. [jupyter]
 JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
 
+.. [kfserving]
 KFServing, https://www.kubeflow.org/docs/components/serving/kfserving/.
 Last accessed 18 Feb 2021
 
 .. [lime]
     Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
+
+.. [kubeflow] https://www.kubeflow.org/
+Last accessed 18 Feb 2021
 
 .. [katib]
     Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
@@ -358,20 +365,14 @@ Last accessed 18 Feb 2021
 .. [art]
     Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
+.. [ibmcncf]
 IBM joining CNCF,
 https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf/.
 Last accessed 18 Feb 2021
 
+.. [cncf]
 Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18
 Feb 2021
-
-.. [1]
-   Supported by IBM Center for Open Source Data and AI Technologies
-   (CODAIT)
-
-.. [2]
-   Supported by IBM Center for Open Source Data and AI Technologies
-   (CODAIT)
 
 .. [complib]
    https://github.com/elyra-ai/component-library
