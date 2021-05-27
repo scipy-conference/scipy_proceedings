@@ -106,5 +106,3 @@ to this work.
 This work was financially supported by the Romanian National Authority 
 for Scientific Research, CNCS-UEFISCDI, project number PN-III-P2-2.1-PTE-2019-0367.
 The authors are thankful for the generous donation from NVIDIA corporation for supporting this research.
-
-
