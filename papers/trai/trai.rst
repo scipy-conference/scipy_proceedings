@@ -90,6 +90,7 @@ Use-cases
 ---------
 Short description of demos
 
+:cite:`hume48`
 
 
 Conclusion
