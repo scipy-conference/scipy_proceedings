@@ -40,24 +40,26 @@ Monitoring Scientific Python Usage on a Supercomputer
 
 .. class:: abstract
 
-   In 2020, more than 35% of users at the National Energy Research Scientific
+   In 2021, more than 30% of users at the National Energy Research Scientific
    Computing Center (NERSC) used Python on the Cori supercomputer. To determine
-   this we have developed a simple, minimally invasive monitoring framework that
+   this we have developed and open-sourced a simple, minimally invasive monitoring
+   framework that
    leverages standard Python features to capture Python imports and other job data
-   via a package called ``customs`` **FIXME add public link to customs.** The data we
-   collect via customs are analyzed with Dask-cuDF in a Jupyter notebook, and
-   results are summarized in a Voila dashboard. We display these dashboards via
-   our Spin container-as-aservice platform **FIXME add public link to dashboards**
-   This new method of analyzing our data has led to insights including: our top 3
-   most popular libraries are NumPy, multiprocessing, and Matplotlib, our mean
-   jobsize is 2.4 nodes, information about the relationship between library and
-   jobsize, and information about which libraries are correlated and
-   anticorrelated. We will employ this framework to better understand Python user
-   behavior on our current and future NERSC systems.
+   via a package called "Customs". To analyze the data we collect via Customs,
+   we have developed a Jupyter-based analysis framework designed to be interactive,
+   shareable, extensible, and publishable via a dashboard. Our stack includes
+   Papermill to execute parameterized notebooks, Dask-cuDF for multi-GPU
+   processing, and Voila to render our notebooks as web-based dashboards. We
+   report preliminary findings from Customs data collection and analysis. This
+   work demonstrates that our monitoring framework can capture insightful and
+   actionable data including top Python libraries, preferred user software
+   stacks, and correlated libraries, leading to a better understanding of
+   user behavior and affording us to opportunity to make increasingly data-driven
+   decisions regarding Python at NERSC.
 
 .. class:: keywords
 
-   HPC, Python monitoring, GPUs, dashboards, parallel
+   HPC, Python monitoring, GPUs, dashboards, parallel, Jupyter
 
 Introduction
 ============
