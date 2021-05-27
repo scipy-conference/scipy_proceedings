@@ -745,78 +745,116 @@ Our results demonstrate that we are able to collect useful data on Python
 package use on Cori, tag the data with additional contextual metadata useful
 for filtering during analysis, and conduct exploratory analysis of the data that
 we can easily evolve to production and publication.
-The results themselves confirm many of our preconcieved assumptions about Python
-use on Cori, but also reveal a some surprises that suggest next actions that
-various stakeholders can take.
+The results themselves confirm many of our expectations about Python use on
+Cori, but also reveal some surprises that suggest next actions that various
+stakeholders can take.
+Such surprises suggest new opportunities for engagements between NERSC, users
+and developers of scientific Python infrastructure.
 
-Overall, these results represent only a snapshot of the kinds of insights that
-our monitoring framework provides.
-Frequently, the analysis reveals new questions and suggests next steps, often
-involving direct engagement or follow-up with users to better understand their
-motivations.
-In other cases, it suggests new opportunities for engagement between NERSC,
-users, and scientific Python package providers.
+We observe that Python jobs on Cori mostly come from environments that users
+themselves have provisioned, and not directly from the Python software
+environment module that NERSC provides.
+Our expectation was that the fraction of jobs running from such environments
+would be high since users have expressed to us in the past that they like being
+able to customize their Python experience at NERSC using e.g. the ``conda``
+tool.
+A major driver behind this behavior is that users sometimes want versions of
+packages than are newer than they can get from a centrally-managed Python
+environment.
+But rather than take that as a cue that we should be updating the NERSC-provided
+Python environment more often, we note that users manage their own environments
+in order to have control and not be at the mercy of NERSC's software upgrades.
+Finding new ways to empower users to manage their software environments through
+tools like ``conda`` or Shifter becomes the priority.
 
-**FIXME talk about the main results and next actions**
+Other results indicate that this may need to be done carefully.
+As mentioned in the Results, only about 17% of jobs that use NumPy, SciPy,
+Scikit-Learn, or NumExpr are using versions of those packages that rely on
+threaded, optimized Intel MKL.
+Given that Cori's CPU architectures come from Intel, we might expect the best
+performance to come from libraries optimized for that architecture.
+We caution that there are a number of hypotheses to consider behind this
+observation, as it is a question of how well-educated users are on the potential
+benefits of such libraries, whether they in fact observe a performance boost in
+their own codes, and whether it is as high a priority as other considerations.
+The surprising reliance of our users on ``multiprocessing`` and the tendency of
+users to use ``mpi4py`` for embarrassing parallelism suggest that they
+process-level parallelism easier to manage in Python.
+Eliciting good performance from optimized libraries like Intel MKL requires
+users to understand interfaces to scientific Python better and perhaps make
+major refactoring to their codes to "spend more time" using the underlying
+libraries.
+Since the interface to OpenMP is "buried" under the interface, users working at
+the Python level do what they can with the tools in easy reach.
+It may also be a symptom of users tending to install packages from the
+conda-forge channel to get the latest versions of the packages they need, which
+defaults to installing OpenBLAS.
+In any case, performance differences between the two main alternatives might not
+be noticeable to most users.
+In any case, this is another actionable insight; now that we have identified
+that MKL adoption is low, our goal is to try to ensure that users who can
+benefit from MKL make good choices about how they build their Python
+environments.
 
-**FIXME Conda environments, 80%**
-As a result of discovering this
-low use rate we have slowed down our module release cadence and instead
-prioritized empowering users to build their own software environments via conda
-and Shifter.
-
-**multirpocessing and mkl** This observation has many potential explanations,
-such as mere coincidence (users are actually using both approaches when they
-need to and they are not
-actually opposing concerns), utility (process-level parallelism may be much more
-useful to the workload), or convenience (it may simply be easier to reason about
-process-level parallel Python code).
-
-This fraction was dissapointingly low as our goal
-at an HPC center is encourge high-performance libraries. This is another
-actionable insight; now that we have identified that MKL adoption is low, our
-goal is to try to increase MKL usage through training, documentation, or other
-methods.
-
-MKL and conda environments.
-Conda env and MKL stuff go together
-
-undercount on DL
-
-This suggests that users of AstroPy have been able to scale associated
-applications using ``mpi4py`` and that AstroPy developers may want to consider
-engaging with our users to make that even easier.
+While some discoveries suggest next actions and user engagement for NERSC staff,
+others suggest opportunities for engagement between users and scientific Python
+developers.
+Returning to the observation that jobs using AstroPy have an tendency to also
+use ``mpi4py``, we conclude that users of AstroPy have been able to scale their
+AstroPy-based applications using MPI and that AstroPy developers may want to
+consider engaging with our users to make that interaction better.
 Examining the jobs further we find that these users tend to be members of large
-cosmology experiments like Dark Energy Survey **REF**, Dark Energy Spectroscopic
-Instrument **REF**, and the Dark Energy Science Collaboration **REF**.
-Taken together this is a rather large community of users, to whom these two
-packages appear to be fairly important.
+cosmology experiments like Dark Energy Survey [Abb18]_, Dark Energy
+Spectroscopic Instrument [DESI]_, the Dark Energy Science Collaboration
+[DESC]_, and CMB-S4 [Aba16]_.
+The pattern appears over many users in several experiments.
+We also note that the use of ``astropy.io.fits`` in MPI-enabled Python jobs by
+astronomers suggests that issues related to FITS I/O performance in AstroPy on
+HPC systems may be another area of focus.
 
-
+While the results are interesting, making decisions based on data alone has its
+pitfalls.
 There are limitations to the data set, its analysis, and statements we can make
 based on the data, some of which can be addressed easily and others not.
-First and foremost we address the limitation that we are tracking a prescribed
+First and foremost, we address the limitation that we are tracking a prescribed
 list of packages, an obvious source of potential bias.
 The reason for prescribing a list is technical: Large bursts of messages from
-jobs running on Cori caused issues for OMNI infrastructure and we were asked to
-find ways to limit the rate of messages or prevent such kinds of bursts.
-Since that time OMNI has evolved and may be able to handle a higher volume of
+jobs running on Cori at one time caused issues for OMNI infrastructure and we
+were asked to find ways to limit the rate of messages or prevent such kinds of
+bursts.
+Since then, OMNI has evolved and may be able to handle a higher volume of
 messages, and it may be possible to expand the list of simply report all entries
-in ``sys.modules`` excluding built-in and standard modules (but not entirely:
+in ``sys.modules`` excluding built-in and standard modules (but not entirely, as
 ``multiprocessing`` would go undetected).
 One strategy may be to forward such a more lightly filtered ``sys.modules`` to
 OMNI on a very small random subset of jobs (say 1%) and use that control data
 set to estimate bias in the tracked list.
 It also helps us to control a major concern, that of missing emergent new
-packages that we should be on the watch for.
+packages that we should be watching for.
 
-Another source of confirmed bias is user opt-out.
+Another source of bias is user opt-out.
 Sets of users who opt out tend to do so in groups, in particular collaborations
-or experiments who manage their own software stacks.
+or experiments who manage their own software stacks: Opting out is not a random
+error source, it is another source of systematic error.
 A common practice is for such collaborations to provide scripts that help a user
 "activate" their environment and overwrite ``PYTHONPATH``.
-This can cause undercounts in key packages.
-**FIXME Talk about what we're doing about this**
+This can cause undercounts in key packages, but we have very little enthusiasm
+for removing the opt-out capability.
+Rather, we believe we should make a positive case for users to remain opted into
+data collection, based on the benefits it delivers to Python users.
+Indeed, that is a major motivation for this paper.
+
+A similar undercount may occur for applications that systematically run into
+their allocated batch job wallclock limit.
+As mentioned for TensorFlow, we confirmed with users a particular pattern of
+submitting chains of dozens of training jobs that pick up where previous
+iterations left off.
+These chains of jobs would appear as just a single job.
+Counting the importance of a package by the number of jobs that use it is
+dubious; we favor understanding the impact of a package from the breadth of the
+user community that uses it.
+And further, this suggests that using multiple approaches to understanding
+Python package user are needed to build a complete picture.
 
 Part of the power of scientific Python is that it enables its developers to
 build upon the work of others, so when a user imports a package it may import
@@ -1016,6 +1054,11 @@ References
 
 .. [NERSC] https://www.nersc.gov/about/
 
+.. [Abb18] T. M. C. Abbott, et al., *Dark Energy Survey year 1 results:
+           Cosmological constraints from galaxy clustering and weak lensing*
+           Physical Review D, 98, 043526, 2018
+           <https://doi.org/10.1103/PhysRevD.98.043526>
+
 .. [Age14] A. Agelastos, B. Allan, J. Brandt, P. Cassella, J. Enos, J. Fullop,
            A. Gentile, S. Monk, N. Naksinehaboon, J. Ogden, M. Rajan, M. Showerman,
            J. Stevenson, N. Taerat, and T. Tucker
@@ -1036,6 +1079,19 @@ References
            48th International Conference on Parallel Processing: Workshops
            (ICPP 2019), Kyoto, Japan, 2019
            <https://doi.org/10.1145/3339186.3339213>
+
+.. [Aba16] K. N. Abazajian, et al., *CMB-S4 Science Book, First Edition*,
+           2016
+           <https://arxiv.org/abs/1610.02743>
+
+.. [DESC]  LSST Dark Energy Science Collaboration, *Large Synoptic Survey 
+           Telescope: Dark Energy Science Collaboration,*
+           White Paper, 2012
+           <https://arxiv.org/abs/1211.0310>
+
+.. [DESI]  The DESI Collaboration, *The DESI Experiment Part I: Science,
+           Targeting, and Survey Design,* Science Final Design Report,
+           <https://arxiv.org/abs/1611.00036>
 
 .. [Fah10] M. Fahey, N Jones, and B. Hadri, 
            *The Automatic Library Tracking Database*
