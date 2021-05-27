@@ -164,9 +164,9 @@ scikit-learn,
 TensorFlow,
 and Keras,
 and analysis libraries for postprocessing data such as
-freud,
+freud :cite:`ramasubramani.etal2020`,
 librascal,
-MDTraj,
+MDTraj :cite:`mcgibbon.etal2015`,
 MDAnalysis,
 and OVITO.
 Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greatest exposure.
