@@ -176,6 +176,7 @@ have final say in whether to accept or reject a paper.
 - Figures and tables should be positioned inline, close to their explanatory text.
 - License conditions on images and figures must be respected (Creative Commons,
   etc.).
+- Images and figures should be reasonably sized and formatted for viewing online; typically a few hundred kilobytes and less than 1 MB.
 - Code snippets should be formatted to fit inside a single column without
   overflow.
 - Avoid custom LaTeX markup where possible.
@@ -453,3 +454,42 @@ Editors should come to a final 'ready', 'unready' decision before the **Final Ed
 - June 18: Initial Complete Review  
     - Editors should verify that reviews have been completed
 - July 3: Final Editorial Decisions for Proceedings Contents Deadline
+
+
+## Instructions for Slides
+
+#### Slide/Poster submission steps
+
+1. Get a local copy of the `scipy_proceedings` repo.
+2. Update your local copy of the `scipy_proceedings` repo.
+3. [Create a new branch](#creating-a-new-branch-based-off-of-2019) for your paper based off the latest `2019` branch.
+4. Inside the `presentations` folder, there are directories for:
+    1. 3-minute lightning talk slide decks (lightning)
+    2. Posters presented at the poster session (posters)
+    3. 30-minute talk slide decks (slides)
+    4. SciPy tools plenary slide decks (tools)
+5. Choose the appropriate folder, and make a new directory inside it (it needs a unique name)
+6. Copy your slide deck or poster into the directory, and add a file called `info.json` with the following fields needed for uploading to Zenodo (using an empty string for author orcid or
+affiliation if these cannot be provided):
+```json
+{
+    "title": "The title of your presentation",
+    "authors": [
+        {
+            "name": "The first author or presenter",
+            "affiliation": "first author's affiliation",
+            "orcid": "0000-0000-0000-0000"
+        },
+        {
+            "name": "The second author or presenter",
+            "affiliation": "second author's affiliation",
+            "orcid": "0000-0000-0000-0001"
+        }
+    ],
+    "description": "1-4 sentences explaining what your presentation is about"
+}
+```
+7. [Create a PR](#create-a-paper-pr)
+
+You can see examples of submissions in the `example` folder in each presentation directory.
+
