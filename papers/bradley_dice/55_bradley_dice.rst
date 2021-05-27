@@ -460,7 +460,7 @@ Unfortunately, the usage of JSON files in this manner was deeply embedded in our
 While attempting to separate the **signac** data model from its original backend implementation (manipulating JSON files on disk), we identified a common pattern: providing a dictionary-like interface for an underlying resource.
 Numerous other well-known Python packages (h5py and Zarr immediately come to mind) also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
 Most such packages implement this layer directly for their particular use case, but the nature of the problem suggested to us the possibility of developing a more generic representation of this interface.
-Indeed, the Python standard library's ``collections.abc`` module is designed exactly for the purpose of making it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
+Indeed, the purpose of the Python standard library's ``collections.abc`` module to make it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
 
 The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework within which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
