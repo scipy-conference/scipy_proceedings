@@ -556,8 +556,6 @@ Finally, we note that the Python environment used for both data exploration and
 reduction on the GPU cluster, and for running the Voilà dashboard in Spin, is
 managed using a single Docker image.
 This ensures that the notebook behaves consistently in both contexts.
-**FIXME We use two separate sets of notebooks for Python analysis since our data
-analysis and plotting require incompatible kernels.**
 
 .. figure:: mods-dashboard.png
    :scale: 10%
@@ -741,7 +739,7 @@ One reponded: "I don't remember having any Python Dask-related jobs running in
 the past 3 months."
 After some additional discussion and analysis, we discovered the user was using
 ``xarray`` which we believe was using Dask unbeknownst to the user.
-This kind of response from Dask users was not uncommon.
+This kind of response from "Dask users" was not uncommon.
 
 Discussion
 ==========
@@ -763,7 +761,7 @@ we can easily evolve to production and publication.
 The results themselves confirm many of our expectations about Python use on
 Cori, but also reveal some surprises that suggest next actions that various
 stakeholders can take.
-Such surprises suggest new opportunities for engagements between NERSC, users
+Such surprises suggest new opportunities for engagements between NERSC, users,
 and developers of scientific Python infrastructure.
 
 We observe that Python jobs on Cori mostly come from environments that users
@@ -773,14 +771,14 @@ Our expectation was that the fraction of jobs running from such environments
 would be high since users have expressed to us in the past that they like being
 able to customize their Python experience at NERSC using e.g. the ``conda``
 tool.
-A major driver behind this behavior is that users sometimes want versions of
-packages than are newer than they can get from a centrally-managed Python
+A major driver behind this behavior is that users often want versions of
+packages that are newer than they what can get from a centrally-managed Python
 environment.
 But rather than take that as a cue that we should be updating the NERSC-provided
 Python environment more often, we note that users manage their own environments
 in order to have control and not be at the mercy of NERSC's software upgrades.
-Finding new ways to empower users to manage their software environments through
-tools like ``conda`` or Shifter becomes the priority.
+Finding new ways to empower users to manage their software environments better
+with existing tools becomes the priority.
 
 Other results indicate that this may need to be done carefully.
 As mentioned in the Results, only about 17% of jobs that use NumPy, SciPy,
@@ -790,8 +788,9 @@ Given that Cori's CPU architectures come from Intel, we might expect the best
 performance to come from libraries optimized for that architecture.
 We caution that there are a number of hypotheses to consider behind this
 observation, as it is a question of how well-educated users are on the potential
-benefits of such libraries, whether they in fact observe a performance boost in
-their own codes, and whether it is as high a priority as other considerations.
+benefits of such libraries, whether they actually observe a performance boost in
+their own codes, and whether performance is as high a priority as other
+considerations.
 The surprising reliance of our users on ``multiprocessing`` and the tendency of
 users to use ``mpi4py`` for embarrassing parallelism suggest that they
 process-level parallelism easier to manage in Python.
@@ -799,17 +798,18 @@ Eliciting good performance from optimized libraries like Intel MKL requires
 users to understand interfaces to scientific Python better and perhaps make
 major refactoring to their codes to "spend more time" using the underlying
 libraries.
-Since the interface to OpenMP is "buried" under the interface, users working at
-the Python level do what they can with the tools in easy reach.
-It may also be a symptom of users tending to install packages from the
-conda-forge channel to get the latest versions of the packages they need, which
-defaults to installing OpenBLAS.
-In any case, performance differences between the two main alternatives might not
-be noticeable to most users.
-In any case, this is another actionable insight; now that we have identified
-that MKL adoption is low, our goal is to try to ensure that users who can
-benefit from MKL make good choices about how they build their Python
-environments.
+Since the interface to OpenMP is "buried" beneath the Python interface, users
+working at the Python level work with tools they find within easy reach.
+It may also be a symptom of users tending to install packages using ``pip`` or
+from the conda-forge channel to get the latest versions of the packages they
+need.
+In any case, performance differences between the main library alternatives might
+not be noticeable to most users.
+In any case, this is another actionable insight.
+Now that we have identified that MKL adoption is low, our goal is to try to
+ensure that users who can benefit from MKL make good choices about how they
+build their Python environments through documentation, training, and direct
+recommendation.
 
 While some discoveries suggest next actions and user engagement for NERSC staff,
 others suggest opportunities for engagement between users and scientific Python
@@ -827,8 +827,8 @@ We also note that the use of ``astropy.io.fits`` in MPI-enabled Python jobs by
 astronomers suggests that issues related to FITS I/O performance in AstroPy on
 HPC systems may be another area of focus.
 
-While the results are interesting, making decisions based on data alone has its
-pitfalls.
+While the results are interesting, making support decisions based on data alone
+has its pitfalls.
 There are limitations to the data set, its analysis, and statements we can make
 based on the data, some of which can be addressed easily and others not.
 First and foremost, we address the limitation that we are tracking a prescribed
@@ -837,13 +837,13 @@ The reason for prescribing a list is technical: Large bursts of messages from
 jobs running on Cori at one time caused issues for OMNI infrastructure and we
 were asked to find ways to limit the rate of messages or prevent such kinds of
 bursts.
-Since then, OMNI has evolved and may be able to handle a higher volume of
-messages, and it may be possible to expand the list of simply report all entries
-in ``sys.modules`` excluding built-in and standard modules (but not entirely, as
-``multiprocessing`` would go undetected).
-One strategy may be to forward such a more lightly filtered ``sys.modules`` to
-OMNI on a very small random subset of jobs (say 1%) and use that control data
-set to estimate bias in the tracked list.
+Since then, OMNI has evolved and may be able to handle a higher data rate,
+making it possible to simply report all entries in ``sys.modules`` excluding
+built-in and standard modules (but not entirely, as ``multiprocessing`` would go
+undetected).
+One strategy may be to forward ``sys.modules`` to OMNI on a very small random
+subset of jobs (say 1%) and use that control data set to estimate bias in the
+tracked list.
 It also helps us to control a major concern, that of missing emergent new
 packages that we should be watching for.
 
@@ -852,24 +852,25 @@ Sets of users who opt out tend to do so in groups, in particular collaborations
 or experiments who manage their own software stacks: Opting out is not a random
 error source, it is another source of systematic error.
 A common practice is for such collaborations to provide scripts that help a user
-"activate" their environment and overwrite ``PYTHONPATH``.
+"activate" their environment and may unset or rewrite ``PYTHONPATH``.
 This can cause undercounts in key packages, but we have very little enthusiasm
 for removing the opt-out capability.
 Rather, we believe we should make a positive case for users to remain opted into
 data collection, based on the benefits it delivers to Python users.
 Indeed, that is a major motivation for this paper.
 
-A similar undercount may occur for applications that systematically run into
-their allocated batch job wallclock limit.
-As mentioned for TensorFlow, we confirmed with users a particular pattern of
-submitting chains of dozens of training jobs that pick up where previous
-iterations left off.
+A different systematic undercount may occur for applications that habitually run
+into their allocated batch job wallclock limit.
+As mentioned with TensorFlow, we confirmed with users a particular pattern of
+submitting chains of dozens of training jobs that each pick up where the
+previous job left off.
 These chains of jobs would appear as just a single job.
 Counting the importance of a package by the number of jobs that use it is
 dubious; we favor understanding the impact of a package from the breadth of the
 user community that uses it.
-And further, this suggests that using multiple approaches to understanding
-Python package user are needed to build a complete picture.
+This further supports the idea that using multiple approaches to understanding
+Python package user are needed to build a complete picture; each has its own
+shortcomings that may be complemented by others.
 
 Part of the power of scientific Python is that it enables its developers to
 build upon the work of others, so when a user imports a package it may import
@@ -882,108 +883,36 @@ The following quote is characteristic of several responses:
 "I'm a bit curious as to why I got this email.
 I'm not aware to have used Dask in the past, but perhaps I did it without
 realizing it."
-Some large-scale jobs may use Python only incidentally and aren't the actual
-main application running in the job.
-Importing a package is not the same as actual use, use of a package in a job
-running at scale is not the same as that package being used at scale, and to
-understand more the data mainly provides a pointer to code or users.
+Some large-scale jobs may use Python only incidentally for housekeeping
+operations.
+Importing a package is not the same as actual use, and use of a package in a job
+running at scale is not the same as that package actually being used at scale.
 
-The analysis part of a notebook is performed on a supercomputer, while the
-dashboard runs on a separate container-as-a-service platform, but we were able
-to use the notebooks in both cases and use the same exact containers whether
-using Jupyter or Voila.
-The reason for this is that while the runtime on Cori for containers is Shifter,
-and Spin uses Kubernetes to orchestrate container-based services, they both take
-Docker as input.
-Some of our images were created using Podman, and others using Docker, it didn't
-matter.
-The Jupyter kernel, the Dask runtime in both places, all the exact same stack.
-
-* Why do we do it this way?
-
-  * Test dog food
-  * Able to interact with the data using Python which allows more sophisticated analysis
-  * Lends itself to a very appealing prototype-to-production flow
-
-    * We make something that works
-    * Show it to stakeholder, get feedback,
-    * Iterate on the actual notebook in a job
-    * Productionize that notebook without rewriting to scripts etc
-
-Big summary
-Findings as extension of previous work
-Findings implications
-How this helps the future
-Statements about the field as a whole
-How it facilitates science
-Limitations
-
+Turning to what we learned from the process of building our data analysis
+pipeline, we found that the framework gave us ways to follow up on initial clues
+and then further productionize the resulting exploratory analysis.
 Putting all the steps in the analysis (extraction, aggregation, indexing,
 selecting, plotting) into one narrative improves communication, reasoning,
 iteration, and reproducibility.
-Therefore, one of our objectives was to manage as much of the data analysis as
-we could using one notebook and make the notebook functional both as a Jupyter
-document and as a Voilà dashboard.
+One of our objectives was to manage as much of the data analysis as we could
+using one notebook and make the notebook functional both as a Jupyter document
+and as a Voilà dashboard.
 Using cell metadata helped us to manage both the computationally-intensive
 "upstream" part of the notebook and the less expensive "downstream" dashboard
 within a single file.
 One disadvantage of this approach is that it is very easy to remove or forget to
 apply cell tags.
-Another is that some code, particularly package imports in one part of the
-notebook may need to be repeated in another.
-These shortcomings could be addressed by making cell metadata easier to apply
-and manage.
-The Voilà JupyterLab extension is a helpful tool for previewing a dashboard
-before it is published to the web.
+This could be addressed by making cell metadata easier to apply and manage.
+The Voilà JupyterLab extension is a helps with this problem by providing a
+preview of a dashboard rendering before it is published to the web.
+Another issue with the single-notebook pattern is that some code, particularly
+package imports in one part of the notebook may need to be repeated in another.
+This is not a source of error necessarily, but it can cause confusion.
+All of these issues disappear if the same hardware could be used to run the
+notebook in exploratory analysis, pipelined production, and dashboard phases,
+but these functions are simply not available in a single system at NERSC.
 
-
-Finally, to understand the collected data, we use a PyData-centered workflow
-that enables exploration, interactivity, prototyping, and report generation:
-
-* **Jupyter Notebooks,** to interactively explore the data, iteratively
-  prototype data analysis and visualizations, and arrange the information for
-  reporting, all within a single document.
-* **cuDF** to accelerate tabular data analytics and I/O on a single GPU.
-* **Dask-cuDF and Dask-CUDA** to scale data transformations and analytics
-  to multiple GPUs, including I/O.
-* **Papermill,** to automate extraction and transformation of the data as well as
-  production runs of Notebooks in multiple-GPU batch jobs on Cori.
-* **Vaex,**, to enable a more responsive dashboard via fast data loading and
-  plotting operations.
-* **Voila** to create responsive, interactive dashboards
-  for both internal use
-  by NERSC staff and management, but also to external stakeholders.
-
-Future work will include continuing to uncover information in this large and
-rich dataset. There are pieces of information in our data such as project name
-that we have not yet considered; this will give us insight into user
-demographics. There are also many methods such as those in machine learning
-that we have not yet applied in our analysis. We should emphasize that MODS is
-not the only data being collected at NERSC. In fact we are awash in data from
-our job scheduler Slurm, from our user information database Iris, from our OMNI
-center metrics that include power consumption, rack temperature, etc, and from
-libraries like Darshan which track I/O patterns. Analyzed together these
-datasets could provide a much more nuanced understanding of user and job
-characteristics at our center and could eventually provide many opportunities
-for improving throughput and performance, preloading helpful system defaults,
-reducing power consumption, etc. There are substantial possibilities in this
-area.
-**FIXME: Future work NLTK** `NLTK <https://www.nltk.org/>`_
-
-Finally, our new GPU-based system Perlmutter is coming online at the time of
-this writing. We will be using our Python monitoring framework to watch how our
-users adapt and utilize our new system. There are several questions in our
-mind: 1) Will Python users simply keep doing the same things on Perlmutter as
-they are currently doing on Cori? Will they adapt their codes to use the GPUs
-or will the remain on the CPUs? 2) Will this different, more powerful system
-enable new kinds of analyses that were previously untenable?  Will deep
-learning and more sophisticated image processing become more prevalent? 3) Can
-we use this system to understand user problems and help address them? For
-example, our jobsize data indicate that most Python jobs on Cori are quite
-small. Is this because users prefer small jobs? Or is it because users simply
-lack the skills they need to scale to the full potential of our supercomputers?
-An open question is how can we leverage the data we collect to help NERSC
-become a more user-friendly and scientifically productive center.
+**FIXME: NLTK?** `NLTK <https://www.nltk.org/>`_
 
 Conclusion
 ==========
@@ -1045,6 +974,24 @@ We anticipate that developers of scientific Python software may find the
 information we gather to be informative.
 The corresponding authors invite developers to contact them by email about
 monitoring usage of the software they have created.
+
+**FIXME Does it help to keep this in Methods**
+Finally, to understand the collected data, we use a PyData-centered workflow
+that enables exploration, interactivity, prototyping, and report generation:
+
+* **Jupyter Notebooks,** to interactively explore the data, iteratively
+  prototype data analysis and visualizations, and arrange the information for
+  reporting, all within a single document.
+* **cuDF** to accelerate tabular data analytics and I/O on a single GPU.
+* **Dask-cuDF and Dask-CUDA** to scale data transformations and analytics
+  to multiple GPUs, including I/O.
+* **Papermill,** to automate extraction and transformation of the data as well as
+  production runs of Notebooks in multiple-GPU batch jobs on Cori.
+* **Vaex,**, to enable a more responsive dashboard via fast data loading and
+  plotting operations.
+* **Voila** to create responsive, interactive dashboards
+  for both internal use
+  by NERSC staff and management, but also to external stakeholders.
 
 Acknowledgments
 ===============
