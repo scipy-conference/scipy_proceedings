@@ -149,17 +149,17 @@ design of optical metamaterials :cite:`harper.etal2020`,
 and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
 To date, **signac** users have built workflows utilizing a wide range of software packages including
 simulation tools such as
-mBuild,
-foyer,
+mBuild :cite:`mbuild`,
+foyer :cite:`foyer`,
 MIT Photonic Bands :cite:`johnson.etal2001`,
-Rigorous Coupled Wave Analysis (RCWA),
-GROMACS,
-HOOMD-blue,
-Cassandra and MoSDeF-Cassandra,
-Quantum-ESPRESSO,
-and VASP,
+Rigorous Coupled Wave Analysis (RCWA) :cite:`rcwa`,
+GROMACS :cite:`pronk.etal2013,lindahl.etal2001,hess.etal2008,abraham.etal2015a` ,
+HOOMD-blue :cite:`hoomd-a,hoomd-b,hoomd-c`,
+Cassandra and MoSDeF-Cassandra :cite:`cassandra,mosdef-cassandra`,
+Quantum-ESPRESSO :cite:`quantum-expresso`,
+and VASP :cite:`vasp`,
 machine learning libraries including
-scikit-learn,
+scikit-learn :cite:`scikit-learn`,
 TensorFlow :cite:`tensorflow`,
 and Keras :cite:`keras`,
 and analysis libraries for postprocessing data such as
@@ -167,7 +167,7 @@ freud :cite:`ramasubramani.etal2020`,
 librascal :cite:`musil.etal2021`,
 MDTraj :cite:`mcgibbon.etal2015`,
 MDAnalysis :cite:`michaud-agrawal.etal2011`,
-and OVITO.
+and OVITO :cite:`ovito`.
 Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greatest exposure.
 Computational materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
 However, there are many other fields with similar hardware needs where **signac** can be applied.
