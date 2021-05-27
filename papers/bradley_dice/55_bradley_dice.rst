@@ -475,7 +475,7 @@ Most practical use cases for this framework involve an underlying resource that 
 Therefore, all normal operations must be preceded by loading from this resource and updating the in-memory store, and they must be succeeded by a subsequent save to that resource.
 The central idea behind synced collections is to decouple this process into two distinct groups of tasks: the saving and loading of data from a particular resource backend, and the synchronization of two in-memory objects of a given type.
 This delineation allows us to, for instance, encapsulate all logic for JSON files into a single ``JSONCollection`` class and then combine it with dictionary- or list-like ``SyncedDict``/``SyncedList`` classes via inheritance to create fully functional JSON-backed dictionaries or lists.
-Such synchronization has significant performance implications, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
+Such synchronization significantly lowers performance, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
 
 Previously, **signac** contained a single ``JSONDict`` class as part of its API, along with a separately implemented internal-facing ``JSONList`` that could only be used as a member of a ``JSONDict``.
 With the new framework, users can create fully-functional, arbitrarily nested ``JSONDict`` and ``JSONList`` objects that share the same logic for reading from and writing to JSON files.
