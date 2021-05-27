@@ -147,8 +147,7 @@ benchmarking atom-density representations for use in machine learning :cite:`mus
 simulating fluid flow in polymer solutions :cite:`howard.etal2019`,
 design of optical metamaterials :cite:`harper.etal2020`,
 and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
-*TODO: Mention Cassandra, mbuild, foyer, MPB, ML frameworks, survey of all software in signac papers.*
-To date, **signac** users have built workflows with a number of software packages including
+To date, **signac** users have built workflows utilizing a wide range of software packages including
 simulation tools such as
 mBuild,
 foyer,
@@ -161,8 +160,8 @@ Quantum-ESPRESSO,
 and VASP,
 machine learning libraries including
 scikit-learn,
-TensorFlow,
-and Keras,
+TensorFlow :cite:`tensorflow`,
+and Keras :cite:`keras`,
 and analysis libraries for postprocessing data such as
 freud :cite:`ramasubramani.etal2020`,
 librascal :cite:`musil.etal2021`,
