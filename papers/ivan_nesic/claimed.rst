@@ -7,8 +7,6 @@
 :institution: University Hospital of Basel
 
 
-:video: http://www.youtube.com/fake-link-to-video-1sf4a5d22
-
 ------------------------------------------------
 CLAIMED, a visual and scalable component library for Trusted AI
 ------------------------------------------------
@@ -328,54 +326,34 @@ are empowered to audit the system in all dimensions.
 References
 ----------
 
-.. [bias]
-    Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
+.. [bias] Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
 
-.. [aif360]
-    AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
-.. [aix360]
-AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360.
-Last accessed 18 Feb 2021
+.. [aif360] AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
 
-.. [elyra]
-Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
+.. [aix360] AI Explainability 360 Toolkit, https://github.com/Trusted-AI/AIX360 Last accessed 18 Feb 2021
 
-.. [kubernetes]
-Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
+.. [elyra] Elyra AI, https://github.com/elyra-ai. Last accessed 18 Feb 2021
 
-.. [jupyter]
-JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
+.. [kubernetes] Kubernetes, https://kubernetes.io/. Last accessed 18 Feb 2021
 
-.. [kfserving]
-KFServing, https://www.kubeflow.org/docs/components/serving/kfserving/.
-Last accessed 18 Feb 2021
+.. [jupyter] JupyterLab, https://jupyter.org/. Last accessed 18 Feb 2021
 
-.. [lime]
-    Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
+.. [kfserving] KFServing, https://www.kubeflow.org/docs/components/serving/kfserving Last accessed 18 Feb 2021
 
-.. [kubeflow] https://www.kubeflow.org/
-Last accessed 18 Feb 2021
+.. [lime] Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
 
-.. [katib]
-    Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
+.. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
 
-.. [tf]
-    TensorFlow: Large-scale machine learning on heterogeneous systems, white paper from `tensorflow.org <tensorflow.org>`__ Martı́n Abadi et al.
+.. [katib] Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
 
-.. [art]
-    Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
+.. [tf] TensorFlow: Large-scale machine learning on heterogeneous systems, white paper from `tensorflow.org <tensorflow.org>`__ Martı́n Abadi et al.
 
-.. [ibmcncf]
-IBM joining CNCF,
-https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf/.
-Last accessed 18 Feb 2021
+.. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
-.. [cncf]
-Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18
-Feb 2021
+.. [ibmcncf] IBM joining CNCF, https://developer.ibm.com/technologies/containers/blogs/ibms-dedication-to-open-source-and-its-involvement-with-the-cncf Last accessed 18 Feb 2021
 
-.. [complib]
-   https://github.com/elyra-ai/component-library
+.. [cncf] Cloud Native Computing Foundation, https://www.cncf.io. Last accessed 18 Feb 2021
 
-.. [ect]
-   https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
+.. [complib] https://github.com/elyra-ai/component-library
+
+.. [ect] https://github.com/cloud-annotations/elyra-classification-training/tree/developer_article
