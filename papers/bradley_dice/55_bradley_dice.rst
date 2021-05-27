@@ -236,7 +236,7 @@ This means that manipulating a job document or reading data can be done through 
 Many applications used in research generate or consume large numerical arrays.
 For applications in Python, NumPy arrays are a de facto standard for in-memory representation and manipulation.
 However, saving these arrays to disk and handling data structures that mix dictionaries and numerical arrays can be cumbersome.
-The **signac** H5Store feature offers users a convenient wrapper around the ``h5py`` library :cite:`collette2013` for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format :cite:`hdf5`.
+The **signac** H5Store feature offers users a convenient wrapper around the h5py library :cite:`collette2013` for loading and saving both hierarchical/key-value data and numerical array data in the widely-used HDF5 format :cite:`hdf5`.
 The ``job.data`` attribute is an instance of the ``H5Store`` class, and is a key-value store saved on disk as ``signac_data.h5`` in the job workspace.
 Users who prefer to split data across multiple files can use the ``job.stores`` API to save in multiple HDF5 files.
 Corresponding ``project.data`` and ``project.stores`` attributes exist, which save data files in the project root directory.
@@ -277,7 +277,7 @@ Similarly, performance of a sample workflow that checks status, runs, and submit
 These improvements allow **signac** to scale to ~100,000 jobs.
 
 In **signac**, the core of the ``Project`` and ``Job`` classes were refactored to support lazy attribute access and delayed initialization, which greatly reduces the total amount of disk I/O by waiting until data is actually requested by the user.
-Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time (:math:`O(1)`) instead of linear time (:math:`O(N_{jobs})`).
+Other improvements include early exits in functions, reducing the number of required system calls with smarter usage of the ``os`` library, and switching to algorithms that operate in constant time, :math:`O(1)`, instead of linear time, :math:`O(N_{jobs})`.
 Optimizations were identified by profiling the performance of common operations on small and large real-world projects with cProfile and visualized with snakeviz :cite:`snakeviz`.
 
 Similarly, performance enhancements were also made in the **signac-flow** package.
@@ -388,12 +388,9 @@ Furthermore, groups are aware of directives and can properly combine the directi
 Groups also allow for specifying multiple machine specific resources (CPU or GPU) with the same operation.
 An operation can have unique directives for each distinct group to which it belongs.
 By associating an operation's directives with respect to a specific group, groups can represent distinct compute environments, such as a local workstation or a remote supercomputing cluster.
-The below snippet shows an ``expensive_simulate`` operation which can be executed with three
-different directives depending on how it is written.
-If executed through ``cpu_group`` the operation will request 48 cores, if ``gpu_group`` 4 GPUs, if
-neither then it will request 4 cores.
-This represents the real use case where an user may want to run an operation locally (in this case
-without a group), or on a CPU or GPU focused HPC/workstation.
+The below snippet shows an ``expensive_simulate`` operation which can be executed with three different directives depending on how it is written.
+If executed through ``cpu_group`` the operation will request 48 cores, if ``gpu_group`` 4 GPUs, if neither then it will request 4 cores.
+This represents the real use case where an user may want to run an operation locally (in this case without a group), or on a CPU or GPU focused HPC/workstation.
 
 .. code-block:: python
 
@@ -406,8 +403,7 @@ without a group), or on a CPU or GPU focused HPC/workstation.
     @gpu_group.with_directives({"ngpu": 4})
     @FlowProject.operation.with_directives({"np": 4})
     def expensive_simulate(job):
-        # expensive simulation for running on either
-        # CPUs or GPUs
+        # expensive simulation run on CPUs or GPUs
         pass
 
 Aggregation
@@ -478,7 +474,7 @@ Despite heavy optimization, when seeking to scale **signac** to ever-larger data
 Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, which made switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
 
 While attempting to separate the **signac** data model from its original backend implementation (manipulating JSON files on disk), we identified a common pattern: providing a dictionary-like interface for an underlying resource.
-Several well-known Python packages such as ``h5py`` :cite:`collette2013` and ``zarr`` :cite:`zarr` also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
+Several well-known Python packages such as h5py :cite:`collette2013` and zarr :cite:`zarr` also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
 Most such packages implement this layer directly for their particular use case, but the nature of the problem suggested to us the possibility of developing a more generic representation of this interface.
 Indeed, the purpose of the Python standard library's ``collections.abc`` module to make it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
@@ -500,7 +496,7 @@ Such synchronization significantly lowers performance, so the framework also exp
 Previously, **signac** contained a single ``JSONDict`` class as part of its API, along with a separately implemented internal-facing ``JSONList`` that could only be used as a member of a ``JSONDict``.
 With the new framework, users can create fully-functional, arbitrarily nested ``JSONDict`` and ``JSONList`` objects that share the same logic for reading from and writing to JSON files.
 Just as importantly, **signac** can now combine these data structures with a different backend, allowing us to swap in different storage mechanisms for improved performance and flexibility with no change in our APIs.
-Since different types of resources may have different approaches to batching transactions --- for example, a SQLite backend may want to exploit true SQL transactions, while a Redis backend might simply collect all changes in memory and delay sending memory to the server --- synced collections also support customizable buffering protocols, again via class inheritance.
+Since different types of resources may have different approaches to batching transactions — for example, a SQLite backend may want to exploit true SQL transactions, while a Redis backend might simply collect all changes in memory and delay sending memory to the server — synced collections also support customizable buffering protocols, again via class inheritance.
 
 Applications of Synced Collections
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
