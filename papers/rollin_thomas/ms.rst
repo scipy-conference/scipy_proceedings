@@ -558,29 +558,26 @@ analysis and plotting require incompatible kernels.**
 Results
 =======
 
-Our simple data collection framework yields a rich data set to examine and
+Our data collection framework yields a rich data set to examine and
 our workflow enables us to interactively explore the data and translate the
-results of our exploration into dashboards for monitoring Python.  In this
-section we choose to focus on a few of the questions we can ask of the data,
-but also highlight some surprises.
+results of our exploration into dashboards for monitoring Python.
+Results presented come from data collected between January and May 2021.
+Unless otherwise noted, all results exclude Python usage by members of NERSC
+staff (``is_staff==False``) and include only results collected from batch jobs
+(``is_compute==True``).
+All figures are extracted from the Jupyter notebook/Voilà dashboard.
 
-The results presented come from data collected between January and May 2021.
-During this period of time we had 2448 unique non-staff Python users, at least
-30 percent of all total NERSC users. **FIXME** percent of Python jobs ran on
-our Haswell partition and **FIXME** percent ran on our KNL partition. 63
-percent of all our users have used the NERSC-provided Python module, although
-only 5 percent of Python jobs used the module, suggesting that for heavy
-computation most users prefer their own stack. As a result of discovering this
-low use rate we have slowed down our module release cadence and instead
-prioritized empowering users to build their own software environments via conda
-and Shifter.
-
-Roughly 17 percent of our MKL-eligible jobs (those using NumPy, SciPy, Numexpr,
-and scikit-learn) used MKL. This fraction was dissapointingly low as our goal
-at an HPC center is encourge high-performance libraries. This is another
-actionable insight; now that we have identified that MKL adoption is low, our
-goal is to try to increase MKL usage through training, documentation, or other
-methods.
+During the period of observation used here there were 2448 users running jobs
+that used Python on Cori, equivalent to just over 30% of all NERSC users.
+**FIXME** % of jobs using Python ran on Cori's Haswell-based partition and
+**FIXME** % used Cori-KNL.
+63% of Python users use the NERSC-provided Python module directly (including on
+login nodes and Jupyter nodes) but only 5% of jobs using Python use the module,
+most use a user-built Python environment, namely Conda environments.
+Anaconda Python provides scientific Python libraries linked against the Intel
+Math Kernel Library (MKL), but we observe that only about 17% of MKL-eligible
+jobs (ones using NumPy, SciPy, NumExpr, or scikit-learn) are using MKL.
+We consider this finding in Discussion.
 
 .. figure:: library-barplot-2021.png
 
@@ -589,21 +586,22 @@ methods.
    :label:`lib-barplot`
 
 Fig. :ref:`lib-barplot` displays the top 20 Python packages in use determined
-from unique user imports (i.e. deduplicated by user) across the system, which
-includes Jupyter and login node usage.
-These top libraries are similar to previous observations reported from
-Blue Waters and TACC [Mcl11]_ [Eva15]_.
-However, the relative prominance of ``multiprocessing`` is striking.
+from unique user imports (i.e. how many users ever use a given package) across
+the system, including login node and Jupyter node usage.
+These top libraries are similar to previous observations reported from Blue
+Waters and TACC [Mcl11]_ [Eva15]_, but the relative prominence of
+``multiprocessing`` is striking.
 We also note that Joblib, a package for lightweight pipelining and easy
 parallelism, ranks higher than both ``mpi4py`` and Dask.
 
-The relatively low rankings for TensorFlow and PyTorch are partially due to the
-current paucity of GPU resources, as Cori provides access to only 18 GPU nodes
+The relatively low rankings for TensorFlow and PyTorch are probably due to the
+current lack of GPU resources, as Cori provides access to only 18 GPU nodes
 mainly for application readiness activities in support of Perlmutter, the next
-(GPU-based) system being deployed.  Addtionally, some users that are training
-deep learning models submit a chain of jobs that may not be expected to finish
-within the requested walltime; the result is that the job may end before
-``customs`` can capture data from the ``atexit``, resulting in under-reporting.
+(GPU-based) system being deployed.
+Additionally, some users that are training deep learning models submit a chain
+of jobs that may not be expected to finish within the requested walltime; the
+result is that the job may end before Customs can capture data from the
+``atexit``, resulting in under-reporting.
 
 .. figure:: jobsize-hist-2021.png
 
@@ -613,8 +611,6 @@ within the requested walltime; the result is that the job may end before
 
 Fig. :ref:`jobsize-hist` shows the distribution of job size (node count) for
 jobs that invoked Python and imported one or more of the packages we monitor.
-Note that only imports within a job (i.e. ``is_compute==True``)
-used this analysis.
 Most of these jobs are small, but the distribution tracks the overall
 distribution of job size at NERSC.
 
@@ -626,21 +622,21 @@ distribution of job size at NERSC.
    are only counted once. :label:`jobsize-lib`
 
 Breaking down the Python workload further, Fig. :ref:`jobsize-lib` contains a 2D
-histogram of Python package counts versus job size.
+histogram of Python package counts as a function of job size.
 Package popularity in this figure has a different meaning than in Fig.
 :ref:`lib-barplot`:
 The data are deduplicated by ``job_id`` and package name to account for jobs
 where users invoke the same executable repeatedly or invoke multiple
 applications using the same libraries.
-
-Most Python libraries we track do not appear to use more than 200 nodes on Cori.
+Most Python libraries we track do not appear to use more than 200 nodes.
 Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
 counts.
 Dask jobs are observed at 500 nodes and fewer, so it appears that Dask is not
 being used to scale as large as ``mpi4py`` is.
-Workflow managers FireWorks and Parsl are observed scaling to 1000 nodes.
+Workflow managers FireWorks [Jai15]_ and Parsl **REF** are observed scaling to
+1000 nodes.
 PyTorch (``torch``) appears at larger scales than TensorFlow and Keras, which
-may suggest users find it easier to scale PyTorch on Cori.
+suggests users may find it easier to scale PyTorch on Cori.
 
 .. figure:: corr-clip-2021.png
 
@@ -651,24 +647,24 @@ may suggest users find it easier to scale PyTorch on Cori.
    a regime in which packages have a strong relationship but no explict
    dependencies. :label:`corr2d`
 
-While it is obvious that packages that depend on or are dependents of other
-packages will be correlated within jobs, it is still interesting to look at the
-co-occurrence of certain packages.  A simple way of looking at this is to
-determine Pearson correlation coefficients for each tracked library with all
-others, assigning a 1 to jobs in which a certain package was used and 0 otherwise.
-The resulting correlation coefficients, calculated with ``cudf.corr``, appear as
-a heatmap in Fig. :ref:`corr2d`. We have chosen to display packages with a
-correlation coefficient between 0.6 and 0.8 in this figure in an attempt to
-highlight relationships that are strong but not as a result of a known package
-dependency. (Note however that with our choice of coefficient values the
-depdency between ``nltk`` and ``gensim`` still remains.) Notable non-dependency
-related packages include ``mpi4py`` and ``Astropy`` (discussed in more detail
-below), ``Seaborn`` and ``TensorFlow``, and the ``FireWorks`` workflow engine
-[Jai15]_ and ``Plotly``.
+While it is obvious that packages that depend on or are dependencies of other
+packages will be correlated within jobs, it is still interesting to examine the
+co-occurrence of certain packages within jobs.
+A simple way of looking at this is to determine Pearson correlation coefficients
+for each tracked library with all others, assigning a 1 to jobs in which a
+certain package was used and 0 otherwise.
+Fig. :ref:`corr2d` shows an example package correlation heatmap.
+The heatmap includes only package correlations above 0.6 to omit less
+interesting relationships and less than 0.8 as a simple way to filter out
+mandatory or optional inderdependencies.
+Notable relationships between non-dependent packages include ``mpi4py`` and
+AstroPy, Seaborn and TensorFlow, FireWorks and Plotly.
 
-We used this correlation information to look more carefully into library
-use alongside ``mpi4py``, ``multiprocessing``, and Dask, all of which
-we are especially interested in because they enable parallelism.
+We used this correlation information as a starting point for examining package
+use alongside ``mpi4py``, ``multiprocessing``, and Dask, all of which we are
+especially interested in because they enable parallelism within batch jobs.
+We omit Joblib, noting that a number of packages depend on Joblib and Joblib
+itself is a consumer of ``multiprocessing``.
 Fig. :ref:`case-studies` presents the correlations of each of these packages
 with all other tracked packages.
 
@@ -679,71 +675,58 @@ with all other tracked packages.
    ``mpi4py`` (left), ``multiprocessing`` (center), and Dask (right).
    :label:`case-studies`
 
-We first examine ``mpi4py``. Fig. :ref:`case-studies` (left)
-shows a very strong domain-specific correlation
-with AstroPy (and its sub-module ``astropy.io.fits``).
+The strongest correlations observed for ``mpi4py`` (Fig. :ref:`case-studies`,
+left) is the domain-specific package AstroPy and its submodule
+``astropy.io.fits``.
 This suggests that users of AstroPy have been able to scale associated
 applications using ``mpi4py`` and that AstroPy developers may want to consider
-engaging with our users to make that even easier.
-Examining the jobs further we find that these users tend to be members of large
-cosmology experiments like Dark Energy Survey **REF**, Dark Energy Spectroscopic
-Instrument **REF**, and the Dark Energy Science Collaboration **REF**.
-Taken together this is a rather large community of users, to whom these two
-packages appear to be fairly important.
-Following up with users revealed that using ``mpi4py`` for "embarrassingly
-parallel" calculations is very common: "My go-to approach is to broadcast data
-using ``mpi4py``, split up input hyperparameters/settings/etc. across ranks,
-have each rank perform some number of computations, and then gather all the
-results (which are almost always NumPy arrays) using ``mpi4py``."
+engaging with our users regarding their experiences.
+Following up with users generally reveals that using ``mpi4py`` for
+"embarrassingly parallel" calculations is very common: "My go-to approach is to
+broadcast data using ``mpi4py``, split up input hyperparameters/settings/etc.
+across ranks, have each rank perform some number of computations, and then
+gather all the results (which are almost always NumPy arrays) using ``mpi4py``."
 Very few users report more intricate communication patterns.
 
-Next we consider multiprocessing. We know
-that the Conda tool uses multiprocessing but even after filtering out those
-cases, multiprocessing remains one of the most popular Python libraries in
-use on Cori. If we examine Fig. :ref:`case-studies` (center),
-we don't see the same kind of strong relationships we did with mpi4py.
+Next we consider ``multiprocessing``.
+The ``conda`` tool uses ``multiprocessing`` but even after filtering out those
+cases, it remains one of the most popular Python libraries in use on Cori.
+In Fig. :ref:`case-studies` (center), we do not see the same kind of strong
+relationships we did with ``mpi4py``.
 The primary correlation visible here is with SciPy, which has some built-in
-support for interoperating with multiprocessing, for instance through
-``scipy.optimize``. To learn more we followed up with several of the top
-multiprocessing users.
+support for interoperating with ``multiprocessing``, for instance through
+``scipy.optimize``.
+To learn more we followed up with several of the top ``multiprocessing`` users.
 One reported: "I'm using and testing many bioinformatics Python-based packages,
-some of them probably using Python multiprocessing.
-But I'm not specifically writing myself scripts with multiprocessing."
+some of them probably using Python ``multiprocessing``.
+But I'm not specifically writing myself scripts with ``multiprocessing``."
 Another reported: "The calculations are executing a workflow for computing the
 binding energies of ligands in metal complexes.
-Since each job is independent, multiprocessing is used to start workflows on
+Since each job is independent, ``multiprocessing`` is used to start workflows on
 each available processor."
-We appear to have some mix of both direct and indirect use of
-multiprocessing as reported by these users.
+As a package that users directly interact with, and as a dependency of other
+packages in scientific Python, ``multiprocessing`` is a workhorse package.
 
-Finally we consider Dask, a Python package for task-based parallelism
-and analytics at scale.
-Users are increasingly interested in these kinds of cluster runtimes where they
-queue up work, submit the work to the scheduler as a task graph, and the
-scheduler handles dependencies and farms out the tasks to workers.
+Finally we consider Dask, a Python package for task-based parallelism and
+analytics at scale.
+Users are increasingly interested in cluster runtimes where they queue up work,
+submit the work to the scheduler as a task graph, and the scheduler handles
+dependencies and farms out the tasks to workers.
 Dask also inter-operates with GPU analytics libraries from NVIDIA as part of
 RAPIDS, so we are naturally interested in its potential our next system based in
 part on GPUs.
-
-As we noted above, large jobs using Dask are generally smaller than
-those using
-``mpi4py`` (500 nodes versus 3000+ nodes), which indicates something of a
-potential gap in scalability on Cori.
-The correlation data shown in Fig. :ref:`case-studies` (right) indicate an affinity with
-the weather and climate community, where ``netCDF4`` and ``xarray`` seem particularly
-important. We reached out to several Dask users to learn more.
+As noted, large jobs using Dask are generally smaller than those using
+``mpi4py`` (500 nodes versus 3000+ nodes), which may indicate a potential gap in
+scalability on Cori.
+The correlation data shown in Fig. :ref:`case-studies` (right) indicate an
+affinity with the weather and climate community, where ``netCDF4`` and
+``xarray`` seem particularly important.
+We reached out to several Dask users to learn more.
 One reponded: "I don't remember having any Python Dask-related jobs running in
 the past 3 months."
 After some additional discussion and analysis, we discovered the user was using
 ``xarray`` which we believe was using Dask unbeknownst to the user.
 This kind of response from Dask users was not uncommon.
-
-These results are a snapshot of the information our monitoring framework can
-provide. Due to limited space we have provided only several examples; we have
-even more information regarding usage patterns for containers, filesystems, and
-user demographics. These early results provide concrete supporting evidence
-that the framework we present is capable of providing valuable and actionable
-insights.
 
 Discussion
 ==========
@@ -766,9 +749,21 @@ The results themselves confirm many of our preconcieved assumptions about Python
 use on Cori, but also reveal a some surprises that suggest next actions that
 various stakeholders can take.
 
+Overall, these results represent only a snapshot of the kinds of insights that
+our monitoring framework provides.
+Frequently, the analysis reveals new questions and suggests next steps, often
+involving direct engagement or follow-up with users to better understand their
+motivations.
+In other cases, it suggests new opportunities for engagement between NERSC,
+users, and scientific Python package providers.
+
 **FIXME talk about the main results and next actions**
 
 **FIXME Conda environments, 80%**
+As a result of discovering this
+low use rate we have slowed down our module release cadence and instead
+prioritized empowering users to build their own software environments via conda
+and Shifter.
 
 **multirpocessing and mkl** This observation has many potential explanations,
 such as mere coincidence (users are actually using both approaches when they
@@ -776,6 +771,27 @@ need to and they are not
 actually opposing concerns), utility (process-level parallelism may be much more
 useful to the workload), or convenience (it may simply be easier to reason about
 process-level parallel Python code).
+
+This fraction was dissapointingly low as our goal
+at an HPC center is encourge high-performance libraries. This is another
+actionable insight; now that we have identified that MKL adoption is low, our
+goal is to try to increase MKL usage through training, documentation, or other
+methods.
+
+MKL and conda environments.
+Conda env and MKL stuff go together
+
+undercount on DL
+
+This suggests that users of AstroPy have been able to scale associated
+applications using ``mpi4py`` and that AstroPy developers may want to consider
+engaging with our users to make that even easier.
+Examining the jobs further we find that these users tend to be members of large
+cosmology experiments like Dark Energy Survey **REF**, Dark Energy Spectroscopic
+Instrument **REF**, and the Dark Energy Science Collaboration **REF**.
+Taken together this is a rather large community of users, to whom these two
+packages appear to be fairly important.
+
 
 There are limitations to the data set, its analysis, and statements we can make
 based on the data, some of which can be addressed easily and others not.
