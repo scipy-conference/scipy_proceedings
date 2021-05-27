@@ -105,7 +105,54 @@ Action recognition from IR images
 +++++++++++++++++++++++++++++++++
 .. PM part
 
-DS demo with skeleton detection
+This is a small tutorial for detecting the skeleton of a person
+from an infrared image. In our setup we used one of the Analog Devices
+Time-of-Flight cameras, which provided us the infrared image, and an
+NVIDIA Jetson Xavier NX module.
+
+As a baseline architecture model, we used the pretrained model from one
+of the NVIDIA-AI-IOT's repositories: https://github.com/NVIDIA-AI-IOT/trt_pose .
+We used the TensorRT SDK for achieving a better performance in our model inference
+pipeline.
+
+We also used, some of the Robot Operating System's tools for retrieving
+the camera infrared images and by using the rospy client library API
+we managed to transfer our infrared images to the network model. While this
+would have been an easy step using the CvBridge, which provides an interface
+between ROS and OpenCV, this time wasn't the case, as we had some issues with
+this library. Because we are working on Jetson Xavier NX board, which comes with
+the latest OpenCV version, and CvBridge uses at its core an older version of
+OpenCV, we replaced the conversion from image message type to OpenCV image array
+made by CvBridge with a little numpy trick. So, we replaced:
+
+.. code-block:: python
+
+   ir_image = bridge.imgmsg_to_cv2(image_msg,-1)
+
+
+with:
+
+
+.. code-block:: python
+
+   ir_image = np.frombuffer(
+   image_msg.data,
+   dtype=np.uint8).reshape(
+                           image_msg.height,
+                           image_msg.width,
+                           -1)
+
+The results of the model on infrared images can be seen in Fig.
+
+ |
+
+.. image:: ir_skeleton_detection.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
 
 Volumetric estimates for depth images
 +++++++++++++++++++++++++++++++++++++
