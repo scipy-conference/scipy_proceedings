@@ -485,7 +485,7 @@ Indeed, the purpose of the Python standard library's ``collections.abc`` module 
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
 
 The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework in which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
-In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a set-like interface to an underlying extension type or wrapping a directory manager in a list-like interface.
+In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a new, list-like interface that automatically saves all its data in a plain-text CSV format.
 This section will offer a high-level overview of the synced collections framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
 Summary of Features
@@ -493,7 +493,7 @@ Summary of Features
 
 We designed synced collections to be flexible, easily extensible, and independent of **signac**'s data model.
 Most practical use cases for this framework involve an underlying resource that may be modified by any number of associated in-memory objects that behave like standard Python collections, such as dictionaries or lists.
-Therefore, all normal operations must be preceded by loading from this resource and updating the in-memory store, and they must be succeeded by a subsequent save to that resource.
+Therefore, all normal operations must be preceded by loading from this resource and updating the in-memory store, and they must be succeeded by saving to that resource.
 The central idea behind synced collections is to decouple this process into two distinct groups of tasks: the saving and loading of data from a particular resource backend, and the synchronization of two in-memory objects of a given type.
 This delineation allows us to, for instance, encapsulate all logic for JSON files into a single ``JSONCollection`` class and then combine it with dictionary- or list-like ``SyncedDict``/``SyncedList`` classes via inheritance to create fully functional JSON-backed dictionaries or lists.
 Such synchronization significantly lowers performance, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
