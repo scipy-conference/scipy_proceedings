@@ -394,8 +394,8 @@ Aggregation
 ~~~~~~~~~~~
 
 Users also frequently work with multiple jobs when performing tasks such as plotting data from all jobs in the same figure.
-Though the **signac** package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no similar feature in **signac-flow** to allow operations to act on multiple jobs.
-The concept of aggregation provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a **signac** data space.
+Though the **signac** package has methods like ``Project.groupby``, which can generate subsets of the project that are grouped by a state point key, there has been no way to use these "aggregation" features in **signac-flow** for defining workflows.
+The concept of aggregation provides a straightforward way for users to write and submit operations that act on arbitrary subsets of jobs in a **signac** data space through functions analogous to ``Project.groupby``.
 Just as the groups feature acts as an abstraction over operations, aggregation can be viewed as an abstraction over jobs.
 When decorated with an aggregator, operations can accept multiple job instances as positional arguments through Python's argument unpacking.
 Decorators are used to define aggregates, encompassed in the ``@aggregator`` decorator for single operations and in the argument ``aggregator_function`` to ``FlowProject.make_group`` for groups of operations.
@@ -465,7 +465,7 @@ As such, we saw an opportunity to specialize this pattern for a specific use cas
 
 The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework in which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
 In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a set-like interface to an underlying extension type or wrapping a directory manager in a list-like interface.
-This section will offer a high-level overview of this framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
+This section will offer a high-level overview of the synced collections framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
 Summary of Features
 ~~~~~~~~~~~~~~~~~~~
@@ -475,7 +475,7 @@ Most practical use cases for this framework involve an underlying resource that 
 Therefore, all normal operations must be preceded by loading from this resource and updating the in-memory store, and they must be succeeded by a subsequent save to that resource.
 The central idea behind synced collections is to decouple this process into two distinct groups of tasks: the saving and loading of data from a particular resource backend, and the synchronization of two in-memory objects of a given type.
 This delineation allows us to, for instance, encapsulate all logic for JSON files into a single ``JSONCollection`` class and then combine it with dictionary- or list-like ``SyncedDict``/``SyncedList`` classes via inheritance to create fully functional JSON-backed dictionaries or lists.
-Such synchronization has significant performance implications, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
+Such synchronization significantly lowers performance, so the framework also exposes an API to implement buffering protocols to collect operations into a single transaction before submitting them to the underlying resource.
 
 Previously, **signac** contained a single ``JSONDict`` class as part of its API, along with a separately implemented internal-facing ``JSONList`` that could only be used as a member of a ``JSONDict``.
 With the new framework, users can create fully-functional, arbitrarily nested ``JSONDict`` and ``JSONList`` objects that share the same logic for reading from and writing to JSON files.
@@ -494,7 +494,7 @@ Some of these performance improvements are drop-in replacements that require no 
 The generality of synced collections makes them broadly useful even outside the **signac** framework.
 Adding Pythonic APIs to collection-like objects can be challenging, particularly when those objects should support arbitrary nesting, but synced collections enable nesting as a core feature to dramatically simplify this process.
 Moreover, while the framework was originally conceived to support synchronization of an in-memory data structure with a resource on disk, it can also be used to synchronize with another in-memory resource.
-A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector`` such that changes to either object would be transparently reflected in the other.
+A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector``, such that changes to either object would be transparently reflected in the other.
 With synced collections, creating this class just requires defining a conversion between a ``std::vector`` and a raw Python list, a trivial task using standard tools for exposing extension types such as pybind or Cython.
 
 At a higher level, synced collections represent an important step in improving both the scalability and flexibility of **signac**.
@@ -508,12 +508,12 @@ Project Evolution
 -----------------
 
 The **signac** project has evolved from being an open-source project mostly developed and managed by the Glotzer Group at the University of Michigan, to being supported by over 30 contributors and 8 committers/maintainers on 3 continents and with over 55 citations from academic and government research labs and 12 talks at large scientific, Python, and data science conferences.
-The growth in involvement with **signac** results from our focus on developing features based on user needs, as well as our efforts to transition **signac** users to **signac** contributors, through many initiatives in the past few years.
+The growth in involvement with **signac** results from our focus on developing features based on user needs, as well as our efforts to transition **signac** users into **signac** contributors, through many initiatives in the past few years.
 Through encouraging users to become contributors, we ensure that **signac** addresses real users' needs.
 Early on, we identified that the framework had the potential to be used by a wide community of researchers and that its philosophy was aligned with other projects in the scientific Python ecosystem.
 We have expanded **signac**'s contributor base beyond the University of Michigan through research collaborations such as the MoSDeF CSSI with other universities, sharing the framework at conferences, and through the Google Summer of Code (GSoC) program, which we applied to under the NumFOCUS organization.
 Working with and mentoring students through GSoC led to a new committer and significant work on the synced collections and aggregation projects presented above.
-To encourage code contributions from existing users, we maintain active support and discussion through Slack.
+We provide active support and open discussion for the contributor and user community through Slack.
 In addition, we have started hosting weekly "office hours" for in-person (virtual) introduction and guided contributions to the code base.
 By pairing new contributors with experienced **signac** developers, we significantly reduce the knowledge barrier to joining a new project.
 Close interactions between developers and users during office hours has led to more features and documentation born directly out of user need.
