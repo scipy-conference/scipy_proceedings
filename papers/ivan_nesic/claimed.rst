@@ -5,19 +5,23 @@
 :author: Ivan Nesic
 :email: ivan.nesic@usb.ch
 :institution: University Hospital of Basel
+:orcid: 0000-0002-4373-8860
 
-
-------------------------------------------------
+---------------------------------------------------------------
 CLAIMED, a visual and scalable component library for Trusted AI
-------------------------------------------------
+---------------------------------------------------------------
 
 .. class:: abstract
 
    Deep Learning models are getting more and more popular but constraints on explainability, adversarial robustness and fairness are often major concerns for production deployment. Although the open source ecosystem is abundant on addressing those concerns, fully integrated, end to end systems are lacking in open source.
-Therefore we provide an entirely open source, reusable component framework, visual editor and execution engine for production grade machine learning on top of Kubernetes, a joint effort between IBM and the University Hospital Basel. It uses Kubeflow Pipelines, the AI Explainability360 toolkit, the AI Fairness360 toolkit and the Adversarial Robustness Toolkit on top of ElyraAI, Kubeflow, Kubernetes and JupyterLab. Using the Elyra pipeline editor, AI pipelines can be developed visually with a set of jupyter notebooks. We explain how we've created a COVID-19 deep learning classification pipeline based on CT scans. We use the toolkit to highlight parts of the images which have been crucial for the model’s decisions. We detect bias against age and gender and finally, show how to deploy the model to KFServing to share it across different hospital data centers of the Swiss Personalized Health Network.
+
+   Therefore we provide an entirely open source, reusable component framework, visual editor and execution engine for production grade machine learning on top of Kubernetes, a joint effort between IBM and the University Hospital Basel. It uses Kubeflow Pipelines, the AI Explainability360 toolkit, the AI Fairness360 toolkit and the Adversarial Robustness Toolkit on top of ElyraAI, Kubeflow, Kubernetes and JupyterLab. Using the Elyra pipeline editor, AI pipelines can be developed visually with a set of jupyter notebooks. We explain how we've created a COVID-19 deep learning classification pipeline based on CT scans. We use the toolkit to highlight parts of the images which have been crucial for the model’s decisions. We detect bias against age and gender and finally, show how to deploy the model to KFServing to share it across different hospital data centers of the Swiss Personalized Health Network.
+
+
 
 .. class:: keywords
-   Kubernetes, Kubeflow, JupyterLab, ElyraAI, KFServing, TrustedAI, AI Explainability, AI Fairness, AI Adversarial Robustness
+
+    Kubernetes, Kubeflow, JupyterLab, ElyraAI, KFServing, TrustedAI, AI Explainability, AI Fairness, AI Adversarial Robustness
 
 Introduction
 ============
@@ -34,7 +38,6 @@ we introduce the open source components we are integrating in our
 current release, followed by an overview of different component
 categories paired with a description of exemplary components used in
 health care. This pipeline is also available in open source  [ect]_.
-
 
 Containerization and Kubernetes
 -------------------------------
@@ -66,7 +69,7 @@ joining CNCF, having moved all Watson Services to Kubernetes and aquired
 RedHat, IBM is now 3rd largest committer to Kubernetes [ibmcncf]_.
 
 Deep Learning with TensorFlow
-----------------------------
+-----------------------------
 
 It is the second incarnation of the Google Brain project’s scalable
 distributed training and inference system named DistBelief
@@ -139,7 +142,7 @@ which indicates a problem with that particular classifier.
 AI Fairness and Bias
 --------------------
 
-So what is bias? Wikipedia says: "Bias is a disproportionate weight in
+So what is bias? "Bias is a disproportionate weight in
 favor of or against an idea or thing, usually in a way that is
 closed-minded, prejudicial, or
 unfair [bias]_. So here we have it. We want
@@ -322,11 +325,9 @@ scalability and standardization. Using ElyraAI for visual development
 provides ease of use, such that all internal and external stakeholders
 are empowered to audit the system in all dimensions.
 
-
 References
 ----------
-
-.. [bias] Wikipedia, https://en.wikipedia.org/wiki/Bias. Last accessed 18 Feb 2021
+.. [bias] Steinbock, Bonnie (1978). *Speciesism and the Idea of Equality*, Philosophy, 53 (204): 247–256, doi:10.1017/S0031819100016582
 
 .. [aif360] AI Fairness 360 Toolkit, https://github.com/Trusted-AI/AIF360. Last accessed 18 Feb 2021
 
@@ -340,13 +341,13 @@ References
 
 .. [kfserving] KFServing, https://www.kubeflow.org/docs/components/serving/kfserving Last accessed 18 Feb 2021
 
-.. [lime] Marco Tulio Ribeiro and Sameer Singh and Carlos Guestrin: "Why Should I Trust You?": Explaining the Predictions of Any Classifier. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016)
+.. [lime] Marco Tulio Ribeiro et al. *"Why Should I Trust You?": Explaining the Predictions of Any Classifier*, Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, pp. 1135–1144 (2016), doi:10.1145/2939672.2939778
 
 .. [kubeflow] https://www.kubeflow.org/ Last accessed 18 Feb 2021
 
 .. [katib] Katib, https://github.com/kubeflow/katib. Last accessed 18 Feb 2021
 
-.. [tf] TensorFlow: Large-scale machine learning on heterogeneous systems, white paper from `tensorflow.org <tensorflow.org>`__ Martı́n Abadi et al.
+.. [tf] Martín Abadi et al. *TensorFlow: Large-Scale Machine Learning on Heterogeneous Distributed Systems*, arXiv:1603.04467v2, March 2016
 
 .. [art] Adversarial Robustness Toolbox, https://github.com/Trusted-AI/adversarial-robustness-toolbox. Last accessed 18 Feb 2021
 
