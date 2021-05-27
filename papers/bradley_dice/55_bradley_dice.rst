@@ -147,7 +147,28 @@ benchmarking atom-density representations for use in machine learning :cite:`mus
 simulating fluid flow in polymer solutions :cite:`howard.etal2019`,
 design of optical metamaterials :cite:`harper.etal2020`,
 and economic analysis of drought risk in agriculture :cite:`rodziewicz.etal2020`.
-TODO: Mention Cassandra, MPB, ML frameworks, survey of all software in signac papers.
+*TODO: Mention Cassandra, mbuild, foyer, MPB, ML frameworks, survey of all software in signac papers.*
+To date, **signac** users have built workflows with a number of software packages including
+simulation tools such as
+mBuild,
+foyer,
+MIT Photonic Bands,
+Rigorous Coupled Wave Analysis (RCWA),
+GROMACS,
+HOOMD-blue,
+Cassandra and MoSDeF-Cassandra,
+Quantum-ESPRESSO,
+and VASP,
+machine learning libraries including
+scikit-learn,
+TensorFlow,
+and Keras,
+and analysis libraries for postprocessing data such as
+freud,
+librascal,
+MDTraj,
+MDAnalysis,
+and OVITO.
 Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greatest exposure.
 Computational materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
 However, there are many other fields with similar hardware needs where **signac** can be applied.
