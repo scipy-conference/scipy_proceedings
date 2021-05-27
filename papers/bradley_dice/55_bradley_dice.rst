@@ -513,7 +513,7 @@ Through encouraging users to become contributors, we ensure that **signac** addr
 Early on, we identified that the framework had the potential to be used by a wide community of researchers and that its philosophy was aligned with other projects in the scientific Python ecosystem.
 We have expanded **signac**'s contributor base beyond the University of Michigan through research collaborations such as the MoSDeF CSSI with other universities, sharing the framework at conferences, and through the Google Summer of Code (GSoC) program, which we applied to under the NumFOCUS organization.
 Working with and mentoring students through GSoC led to a new committer and significant work on the synced collections and aggregation projects presented above.
-To encourage code contributions from existing users, we maintain active support and discussion through Slack.
+We provide active support and open discussion for the contributor and user community through Slack.
 In addition, we have started hosting weekly "office hours" for in-person (virtual) introduction and guided contributions to the code base.
 By pairing new contributors with experienced **signac** developers, we significantly reduce the knowledge barrier to joining a new project.
 Close interactions between developers and users during office hours has led to more features and documentation born directly out of user need.
