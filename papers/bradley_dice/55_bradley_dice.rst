@@ -152,7 +152,7 @@ To date, **signac** users have built workflows with a number of software package
 simulation tools such as
 mBuild,
 foyer,
-MIT Photonic Bands,
+MIT Photonic Bands :cite:`johnson.etal2001`,
 Rigorous Coupled Wave Analysis (RCWA),
 GROMACS,
 HOOMD-blue,
