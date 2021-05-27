@@ -337,7 +337,8 @@ Groups
 ~~~~~~
 
 Groups, implemented by the ``FlowGroup`` class and ``FlowProject.make_group`` method, allows users to combine multiple operations into a single entity that can be run or submitted.
-Submitting a group allows **signac-flow** to dynamically resolve preconditions and postconditions of operations as each operation is executed, making it possible to combine separate operations (e.g. for simulation and analysis and plotting) into a single submission script with the expectation that all will execute despite the dependencies between operations.
+Submitting a group allows **signac-flow** to dynamically resolve preconditions and postconditions of operations as each operation is executed, making it possible to combine separate operations (e.g. for simulation and analysis and plotting) into a single submission script that will execute eligible operations in sequence.
+This allows users to write smaller, modular functions, which may require a specific order of execution, without sacrificing the ability to submit large, long-running jobs on HPCs.
 Furthermore, groups are aware of directives and can properly combine the directives of their constituent operations to specify resources and quantities like walltime whether executing in parallel or serial.
 
 .. code-block:: python
