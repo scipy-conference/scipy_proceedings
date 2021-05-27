@@ -65,7 +65,8 @@ Introduction
 ..
    Why is the work important?
 
-The National Energy Research Scientific Computing Center [NERSC]_ is the primary
+The National Energy Research Scientific Computing Center
+`NERSC <https://www.nersc.gov/about/>`_ is the primary
 scientific computing facility for the US Department of Energy's Office of
 Science.
 Some 8,000 scientists use NERSC to perform basic, non-classified research in
@@ -163,7 +164,8 @@ module being loaded, its version, and other information about the user's
 environment.
 Lmod, a newer implementation of environment modules [Mcl11]_, provides
 documentation on how to configure it to use syslog and MySQL to collect module
-loads through a hook function [lmod]_.
+loads through a
+`hook function <https://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html>`_.
 Counting module loads as a way to track Python usage has the virtue of
 simplicity.
 However, users often include module load commands in their shell resource files
@@ -217,7 +219,10 @@ prevent the Python interpreter from proceeding through its normal exit sequence
 and package import data are not recorded.
 
 Of course, much more information may be available through tools based on the
-extended Berkeley Packet Filter [eBPF]_ and the BPF compiler collection [bcc]_,
+extended
+`Berkeley Packet Filter <https://ebpf.io/>`_
+and the
+`BPF compiler collection <https://github.com/iovisor/bcc>`_
 for instance as with the ``pythoncalls`` utility that summarizes method calls in
 a running application.
 While eBPF overheads are reportedly very small, this approach requires special
@@ -341,8 +346,8 @@ Currently this is achieved by using the ``SysLogHandler`` from Python's standard
 logging library with a minor modification to the time format to satisfy RFC 3339
 Downstream from these transport layers, a message key is used to identify the
 incoming messages, their JSON payloads are extracted, and then forwarded to the
-appropriate Elasticsearch [elast]_ index.
-The Customs Reporter used on Cori simply uses nerscjson.
+appropriate `Elasticsearch <https://elasticsearch-py.readthedocs.io/en/7.10.0/>`_
+index. The Customs Reporter used on Cori simply uses nerscjson.
 
 On Cori compute nodes, we use the Cray Lightweight Log Manager (LLM),
 configured to accept RFC 5424 protocol messages on service nodes.
@@ -469,16 +474,17 @@ This is certainly possible, but being able to interact with the entire data set
 using a few GPUs, far fewer processes, without inter-node communication is
 compelling.
 
-To do interactive analysis, prototyping, or data explorationwe use Dask-cuDF and
-cuDF [dcdf]_, typically using 4 NVIDIA Volta V100 GPUs coordinated by a
-Dask-CUDA cluster [dcuda]_.
+To do interactive analysis, prototyping, or data exploration we use
+`Dask-cudf <https://docs.rapids.ai/api/cudf/stable/dask-cudf.html>`_
+and cuDF, typically using 4 NVIDIA Volta V100 GPUs coordinated by a
+`Dask-CUDA <https://dask-cuda.readthedocs.io/en/latest/>`_ cluster.
 The Jupyter notebook itself is started from NERSC's JupyterHub using
 BatchSpawner (i.e., the Hub submits a batch job to run the notebook on the GPU
 cluster).
 The input data, in compressed Parquet format, are read using Dask-cuDF directly
 into GPU memory.
-These data are periodically gathered from OMNI using the Python Elasticsearch
-API and converted to Parquet.
+These data are periodically gathered from OMNI using the
+Python Elasticsearch API and converted to Parquet.
 Reduced data products are stored in new Parquet files, again using direct GPU
 I/O in Dask-cuDF or cuDF.
 
@@ -488,7 +494,9 @@ convert their notebooks into scripts or try to push the notebook concept to
 serve as a production tool.
 The latter approach has the appeal that production notebooks can be re-run
 interactively when needed with all the familiar Jupyter notebook benefits.
-We decided to experiment with using Papermill [pmill]_ to parameterize notebook
+We decided to experiment with using
+`Papermill <https://papermill.readthedocs.io/en/latest/>`_
+to parameterize notebook
 execution over months, quarters, and years of data and submit these notebooks as
 batch jobs.
 In each Jupyter notebook, a Dask-CUDA cluster is spun up and then shutdown at
@@ -506,11 +514,13 @@ We summarize this workflow in Fig. :ref:`analyze-data`.
 Members of the MODS team can share Jupyter notebooks with one another, but this
 format may not make for the best way to present data to other stakeholders, in
 particular center management, DOE program managers, vendors, or users.
-Voilà [voila]_ is a tool that uses a Jupyter notebook to power a standalone,
+`Voilà <https://voila.readthedocs.io/en/stable/index.html>`_ is a tool
+that uses a Jupyter notebook to power a standalone,
 interactive dashboard-style web application, so we decided to evaluate and
 experiment with Voilà for this project.
 To run our dashboards we use NERSC's Docker container-as-a-service platform
-external to its HPC systems called Spin [spin]_, where staff and users can run
+external to its HPC systems called `Spin <https://www.nersc.gov/systems/spin/>`_
+where staff and users can run
 persistent web services.
 Spin currently has no nodes with GPUs.
 
@@ -577,12 +587,12 @@ most use a user-built Python environment, namely Conda environments.
 Anaconda Python provides scientific Python libraries linked against the Intel
 Math Kernel Library (MKL), but we observe that only about 17% of MKL-eligible
 jobs (ones using NumPy, SciPy, NumExpr, or scikit-learn) are using MKL.
-We consider this finding in Discussion.
+We consider these findings in Discussion.
 
 .. figure:: library-barplot-2021.png
 
-   Top 20 tracked Python libraries at NERSC, deduplicated by user.
-   All results from data collected January to May, 2021.
+   Top 20 tracked Python libraries at NERSC, deduplicated by user,
+   across our system.
    :label:`lib-barplot`
 
 Fig. :ref:`lib-barplot` displays the top 20 Python packages in use determined
@@ -592,7 +602,7 @@ These top libraries are similar to previous observations reported from Blue
 Waters and TACC [Mcl11]_ [Eva15]_, but the relative prominence of
 ``multiprocessing`` is striking.
 We also note that Joblib, a package for lightweight pipelining and easy
-parallelism, ranks higher than both ``mpi4py`` and Dask.
+parallelism, ranks higher than both mpi4py and Dask.
 
 The relatively low rankings for TensorFlow and PyTorch are probably due to the
 current lack of GPU resources, as Cori provides access to only 18 GPU nodes
@@ -605,8 +615,7 @@ result is that the job may end before Customs can capture data from the
 
 .. figure:: jobsize-hist-2021.png
 
-   Distribution of job size for batch jobs detected that use Python.
-   Only compute node jobs were used in this calculation.
+   Distribution of job size for batch jobs that use Python.
    :label:`jobsize-hist`
 
 Fig. :ref:`jobsize-hist` shows the distribution of job size (node count) for
@@ -616,10 +625,13 @@ distribution of job size at NERSC.
 
 .. figure:: jobsize-lib-2021.png
 
-   2D histogram of Python package counts versus job size.
-   The data are deduplicated by ``job_id`` not by user as in
-   Fig. :ref:`lib-barplot`. Duplicate imports within a job
-   are only counted once. :label:`jobsize-lib`
+   2D histogram of Python package counts versus job size. The
+   marginal x-axis (right) shows the total package counts. The marginal
+   y-axis (top) shows the total job counts displayed on a log scale.
+   Here we measure number of unique packages used within a job rather
+   than number of jobs, so these data are not directly comparable
+   to Fig. :ref:`lib-barplot` nor to Fig. :ref:`jobsize-hist`.
+   :label:`jobsize-lib`
 
 Breaking down the Python workload further, Fig. :ref:`jobsize-lib` contains a 2D
 histogram of Python package counts as a function of job size.
@@ -627,13 +639,15 @@ Package popularity in this figure has a different meaning than in Fig.
 :ref:`lib-barplot`:
 The data are deduplicated by ``job_id`` and package name to account for jobs
 where users invoke the same executable repeatedly or invoke multiple
-applications using the same libraries.
+applications using the same libraries. The marginal axes summarize the
+total package counts and total jobsize counts as a function of
+``job_id``.
 Most Python libraries we track do not appear to use more than 200 nodes.
 Perhaps predictably, ``mpi4py`` and NumPy are observed at the largest node
 counts.
 Dask jobs are observed at 500 nodes and fewer, so it appears that Dask is not
 being used to scale as large as ``mpi4py`` is.
-Workflow managers FireWorks [Jai15]_ and Parsl **REF** are observed scaling to
+Workflow managers FireWorks [Jai15]_ and Parsl [Bab19]_ are observed scaling to
 1000 nodes.
 PyTorch (``torch``) appears at larger scales than TensorFlow and Keras, which
 suggests users may find it easier to scale PyTorch on Cori.
@@ -664,15 +678,16 @@ We used this correlation information as a starting point for examining package
 use alongside ``mpi4py``, ``multiprocessing``, and Dask, all of which we are
 especially interested in because they enable parallelism within batch jobs.
 We omit Joblib, noting that a number of packages depend on Joblib and Joblib
-itself is a consumer of ``multiprocessing``.
+itself uses ``multiprocessing``.
 Fig. :ref:`case-studies` presents the correlations of each of these packages
 with all other tracked packages.
 
 .. figure:: case-studies-2021.png
    :scale: 33%
 
-   1D slices of 2D correlation heatmap shown in Fig. :ref:`corr2d` for
-   ``mpi4py`` (left), ``multiprocessing`` (center), and Dask (right).
+   Pearson correlation coefficient values for
+   ``mpi4py`` (left), ``multiprocessing`` (center), and Dask (right),
+   with all other Python libraries we currently track.
    :label:`case-studies`
 
 The strongest correlations observed for ``mpi4py`` (Fig. :ref:`case-studies`,
@@ -680,7 +695,7 @@ left) is the domain-specific package AstroPy and its submodule
 ``astropy.io.fits``.
 This suggests that users of AstroPy have been able to scale associated
 applications using ``mpi4py`` and that AstroPy developers may want to consider
-engaging with our users regarding their experiences.
+engaging with ``mpi4py`` users regarding their experiences.
 Following up with users generally reveals that using ``mpi4py`` for
 "embarrassingly parallel" calculations is very common: "My go-to approach is to
 broadcast data using ``mpi4py``, split up input hyperparameters/settings/etc.
@@ -915,7 +930,7 @@ characteristics at our center and could eventually provide many opportunities
 for improving throughput and performance, preloading helpful system defaults,
 reducing power consumption, etc. There are substantial possibilities in this
 area.
-**FIXME: Future work NLTK** [nltk]_
+**FIXME: Future work NLTK** `NLTK <https://www.nltk.org/>`_
 
 Finally, our new GPU-based system Perlmutter is coming online at the time of
 this writing. We will be using our Python monitoring framework to watch how our
@@ -1014,8 +1029,6 @@ about how they are using Python at NERSC.
 References
 ==========
 
-.. [NERSC] https://www.nersc.gov/about/
-
 .. [Age14] A. Agelastos, B. Allan, J. Brandt, P. Cassella, J. Enos, J. Fullop,
            A. Gentile, S. Monk, N. Naksinehaboon, J. Ogden, M. Rajan, M. Showerman,
            J. Stevenson, N. Taerat, and T. Tucker
@@ -1023,6 +1036,7 @@ References
            Continuous Monitoring of Large Scale Computing Systems and Applications*
            Proc. IEEE/ACM International Conference for High Performance Storage,
            Networking, and Analysis, SC14, New Orleans, LA, 2014.
+           <https://doi.org/10.1109/SC.2014.18>
 
 .. [Agr14] K. Agrawal, M. R. Fahey, R. McLay, and D. James.
            *User Environment Tracking and Problem Detection with XALT*
@@ -1048,7 +1062,8 @@ References
 .. [Gam15] T. Gamblin, M. P. LeGendre, M. R. Collette, G. L. Lee, A. Moody, B.
            R. de Supinski, and W. S. Futral. *The Spack Package Manager:
            Bringing Order to HPC Software Chaos.* In Supercomputing 2015 (SC15),
-           Austin, Texas, November 15-20 2015. LLNL-CONF-669890
+           Austin, Texas, November 15-20 2015. LLNL-CONF-669890.
+           <https://doi.org/10.1145/2807591.2807623>
 
 .. [Jac16] D. M. Jacobsen and R. S. Canon, *Shifter: Containers for HPC,* in
            Cray Users Group Conference (CUG16), London, United Kingdom, 2016
@@ -1058,7 +1073,8 @@ References
 
 .. [Mcl11] R. McLay, K. W. Schulz, W. L. Barth, and T. Minyard, 
            *Best practices for the deployment and management of production HPC clusters*
-           In State of the Practice Reports, SC11, Seattle, WA, <https://doi.acm.org/10.1145/2063348.2063360>
+           In State of the Practice Reports, SC11, Seattle, WA,
+           <https://doi.acm.org/10.1145/2063348.2063360>
 
 .. [Eva15] T. Evans, A. Gomez-Iglesias, and C. Proctor. *PyTACC: HPC Python at the
            Texas Advanced Computing Center* Proceedings of the 5th Workshop on Python
@@ -1071,24 +1087,10 @@ References
            high-throughput applications. Concurrency Computat.: Pract. Exper., 27:
            5037–5059. <https://doi.org/10.1002/cpe.3505>
 
-.. [bcc]   https://github.com/iovisor/bcc
+.. [Bab19] Babuji, Y et al. "Parsl: Pervasive Parallel Programming in
+           Python." 28th ACM International Symposium on High-Performance Parallel and
+           Distributed Computing (HPDC). 2019. <https://doi.org/10.1145/3307681.3325400>
 
-.. [eBPF]  https://ebpf.io/
+.. [vaex]  Maarten A. and Breddels, J. V. Vaex: big data exploration in the era of Gaia
+           A&A 618 A13 (2018). <https://arxiv.org/abs/1801.02638v1>
 
-.. [elast] https://elasticsearch-py.readthedocs.io/en/7.10.0/
-
-.. [dcdf]  https://docs.rapids.ai/api/cudf/stable/dask-cudf.html
-
-.. [dcuda] https://dask-cuda.readthedocs.io/en/latest/
-
-.. [lmod]  https://lmod.readthedocs.io/en/latest/300_tracking_module_usage.html
-
-.. [nltk]  https://www.nltk.org/
-
-.. [pmill] https://papermill.readthedocs.io/en/latest/
-
-.. [spin]  https://www.nersc.gov/systems/spin/
-
-.. [vaex]  https://vaex.io/docs/index.html
-
-.. [voila] https://voila.readthedocs.io/en/stable/index.html
