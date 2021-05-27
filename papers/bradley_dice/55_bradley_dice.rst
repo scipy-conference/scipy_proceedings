@@ -463,7 +463,7 @@ Most such packages implement this layer directly for their particular use case, 
 Indeed, the purpose of the Python standard library's ``collections.abc`` module to make it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
 
-The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework within which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
+The *synced collections* framework represents the culmination of our efforts in this direction, providing a generic framework in which interfaces of any abstract data type can be mapped to arbitrary underlying synchronization protocols.
 In **signac**, this framework allows us to hide the details of a particular file storage medium (like JSON) behind a dictionary-like interface, but it can just as easily be used for tasks such as creating a set-like interface to an underlying extension type or wrapping a directory manager in a list-like interface.
 This section will offer a high-level overview of this framework and our plans for its use within **signac**, with an eye to potential users in other domains as well.
 
