@@ -130,7 +130,7 @@ The study investigated 18 compositions (by mass fraction) and 22 unique solvents
 Users working with large tabular data (e.g. flat files on disk or data from a SQL database) may prefer to use libraries like pandas :cite:`pandas,pandas-paper`, Dask :cite:`dask,dask-paper`, or RAPIDS :cite:`rapids` that are specifically designed for those use cases.
 However, it is possible to create a **signac** project with state points corresponding to each row, which may be a good use of **signac** if there is file-based data affiliated with each row's parameters.
 
-Code examples of features presented in this paper can be found online.
+Code examples of features presented in this paper can be found online [#]_.
 
 .. [#] https://github.com/glotzerlab/signac-examples
 
