@@ -165,9 +165,9 @@ TensorFlow,
 and Keras,
 and analysis libraries for postprocessing data such as
 freud :cite:`ramasubramani.etal2020`,
-librascal,
+librascal :cite:`musil.etal2021`,
 MDTraj :cite:`mcgibbon.etal2015`,
-MDAnalysis,
+MDAnalysis :cite:`michaud-agrawal.etal2011`,
 and OVITO.
 Much of the published research using **signac** comes from chemical engineering, materials science, or physics, the fields of many of **signac**'s core developers and thus fields where the project has had greatest exposure.
 Computational materials research commonly requires large HPC resources with shared file systems, a use case where **signac** excels.
