@@ -494,7 +494,7 @@ Some of these performance improvements are drop-in replacements that require no 
 The generality of synced collections makes them broadly useful even outside the **signac** framework.
 Adding Pythonic APIs to collection-like objects can be challenging, particularly when those objects should support arbitrary nesting, but synced collections enable nesting as a core feature to dramatically simplify this process.
 Moreover, while the framework was originally conceived to support synchronization of an in-memory data structure with a resource on disk, it can also be used to synchronize with another in-memory resource.
-A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector`` such that changes to either object would be transparently reflected in the other.
+A powerful example of this would be wrapping a C or C++ extension type, for instance by creating a ``SyncedList`` that synchronizes with a C++ ``std::vector``, such that changes to either object would be transparently reflected in the other.
 With synced collections, creating this class just requires defining a conversion between a ``std::vector`` and a raw Python list, a trivial task using standard tools for exposing extension types such as pybind or Cython.
 
 At a higher level, synced collections represent an important step in improving both the scalability and flexibility of **signac**.
