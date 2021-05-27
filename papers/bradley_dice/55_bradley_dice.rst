@@ -458,7 +458,7 @@ Despite heavy optimization, when seeking to scale **signac** to ever-larger data
 Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, which made switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
 
 While attempting to separate the **signac** data model from its original backend implementation (manipulating JSON files on disk), we identified a common pattern: providing a dictionary-like interface for an underlying resource.
-Numerous other well-known Python packages (h5py and Zarr immediately come to mind) also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
+Several well-known Python packages such as ``h5py`` :cite:`collette2013` and ``zarr`` :cite:`zarr` also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
 Most such packages implement this layer directly for their particular use case, but the nature of the problem suggested to us the possibility of developing a more generic representation of this interface.
 Indeed, the purpose of the Python standard library's ``collections.abc`` module to make it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
 As such, we saw an opportunity to specialize this pattern for a specific use case: the transparent synchronization of a Python object with an underlying resource.
