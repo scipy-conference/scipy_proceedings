@@ -764,23 +764,6 @@ Our results demonstrate that we are able to collect useful data on Python
 package use on Cori, tag the data with additional contextual metadata useful
 for filtering during analysis, and conduct exploratory analysis of the data that
 we can easily evolve to production and publication.
-Putting all the steps in the analysis (extraction, aggregation, indexing,
-selecting, plotting) into one narrative improves communication, reasoning,
-iteration, and reproducibility.
-Therefore, one of our objectives was to manage as much of the data analysis as
-we could using one notebook and make the notebook functional both as a Jupyter
-document and as dashboard.
-Using cell metadata helped us to manage both the computationally-intensive
-"upstream" part of the notebook and the less expensive "downstream" dashboard
-within a single notebook.
-One disadvantage of this approach is that it is very easy to remove or forget to
-apply cell tags.
-Another is that some code, particularly package imports in one part of the
-notebook need to be repeated in another.
-These shortcomings could be addressed by making cell metadata easier to apply
-and manage **see if there's a tool we should use already out there?**.
-Oh could install the Voila extension for JupyterLab that may help.
-
 The results themselves confirm many of our preconcieved assumptions about Python
 use on Cori, but also reveal a some surprises that suggest next actions that
 various stakeholders can take.
@@ -868,25 +851,25 @@ Statements about the field as a whole
 How it facilitates science
 Limitations
 
-**FIXME: Pyt something about nltk somewhere**
-To try to gain more insight into ``mpi4py`` use, we used NLTK [nltk]_ to
-determine paths most frequently used to launch ``mpi4py``-using jobs.
-In such paths we could identify user directories and contacted several of these
-users to ask them how they are using ``mpi4py``.
+Putting all the steps in the analysis (extraction, aggregation, indexing,
+selecting, plotting) into one narrative improves communication, reasoning,
+iteration, and reproducibility.
+Therefore, one of our objectives was to manage as much of the data analysis as
+we could using one notebook and make the notebook functional both as a Jupyter
+document and as a Voilà dashboard.
+Using cell metadata helped us to manage both the computationally-intensive
+"upstream" part of the notebook and the less expensive "downstream" dashboard
+within a single file.
+One disadvantage of this approach is that it is very easy to remove or forget to
+apply cell tags.
+Another is that some code, particularly package imports in one part of the
+notebook may need to be repeated in another.
+These shortcomings could be addressed by making cell metadata easier to apply
+and manage.
+The Voilà JupyterLab extension is a helpful tool for previewing a dashboard
+before it is published to the web.
 
-We have described how we characterize, as comprehensively as possible, the
-Python workload on Cori.
-We leverage Python's built-in ``sitecustomize`` loader, ``atexit`` module, and
-``PYTHONPATH`` environment variable to instrument Python applications to detect
-key package imports and gather runtime environment data.
-This is implemented in a very simple Python package we have created and released
-called ``customs`` that provides interfaces for and reference implementations of
-the separate concerns of inspecting and reporting package detections.
-Deploying this as part of Cori's node images and container runtime **???**
-enables us to gather information on Python applications no matter how they are
-installed.
-Unsetting the default ``PYTHONPATH`` allows users to opt-out.
-Collected data is transmitted to a central data store via syslog.
+
 Finally, to understand the collected data, we use a PyData-centered workflow
 that enables exploration, interactivity, prototyping, and report generation:
 
@@ -918,6 +901,7 @@ characteristics at our center and could eventually provide many opportunities
 for improving throughput and performance, preloading helpful system defaults,
 reducing power consumption, etc. There are substantial possibilities in this
 area.
+**FIXME: Future work NLTK** [nltk]_
 
 Finally, our new GPU-based system Perlmutter is coming online at the time of
 this writing. We will be using our Python monitoring framework to watch how our
