@@ -457,7 +457,7 @@ In particular, **signac** makes modifying the JSON files used to store a job's s
 Despite heavy optimization, when seeking to scale **signac** to ever-larger data spaces, we quickly realized that the most significant performance barrier was the overhead of parsing and modifying large numbers of text files.
 Unfortunately, the usage of JSON files in this manner was deeply embedded in our data model, which made switching to a more performant backend without breaking APIs or severely complicating our data model a daunting task.
 
-While attempting to overcome this hurdle, we identified a core problem that our current API for modifying JSON files was solving in a limited manner: namely, the creation of a dictionary-like interface to an underlying resource.
+While attempting to separate the **signac** data model from its original backend implementation (manipulating JSON files on disk), we identified a common pattern: providing a dictionary-like interface for an underlying resource.
 Numerous other well-known Python packages (h5py and Zarr immediately come to mind) also use dictionary-like interfaces to make working with complex resources feel natural to Python users.
 Most such packages implement this layer directly for their particular use case, but the nature of the problem suggested to us the possibility of developing a more generic representation of this interface.
 Indeed, the Python standard library's ``collections.abc`` module is designed exactly for the purpose of making it easy to define objects that "look like" standard Python objects while having completely customizable behavior under the hood.
