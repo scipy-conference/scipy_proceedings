@@ -569,8 +569,8 @@ All figures are extracted from the Jupyter notebook/Voilà dashboard.
 
 During the period of observation used here there were 2448 users running jobs
 that used Python on Cori, equivalent to just over 30% of all NERSC users.
-**FIXME** % of jobs using Python ran on Cori's Haswell-based partition and
-**FIXME** % used Cori-KNL.
+84% of jobs using Python ran on Cori's Haswell-based partition, 14% used
+Cori-KNL, and 2% used Cori's GPU cluster.
 63% of Python users use the NERSC-provided Python module directly (including on
 login nodes and Jupyter nodes) but only 5% of jobs using Python use the module,
 most use a user-built Python environment, namely Conda environments.
