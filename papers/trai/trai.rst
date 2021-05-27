@@ -84,7 +84,22 @@ Person detection from IR imaging
 ++++++++++++++++++++++++++++++++
 .. BK part
 
-Jetson detection with ToF node
+Detectnet is a detection algorithm based on the jetson-inference repository. 
+This repository uses NVIDIA TensorRT for efficient implementation of neural networks on the Jetson platform, improving performance and energy efficiency through graphical optimizations, kernel fusion and FP16/INT8 accuracy.
+
+ |
+
+.. image:: DetectNetIR.PNG
+  :width: 400
+  :height: 400
+  :scale: 24%
+  :align: center
+  :alt: Alternative text
+
+The pre-trained model accepts 3 channel images – RGB, by modifying the existing model, we have managed to detect and track people on the infrared image – 1 channel. With the help of the OpenCV library and the 3.7 python programming language version, we have developed a script that modifies the contrast of the IR image; thus, we obtained a much better result than if we had not used this approach. This result can be seen in the figure below, where we can see that the people are detected on the IR image with high confidence.
+
+To be able to run the algorithm in real-time we used the rospy client. With the help of this API, we have developed an efficient way to pass a ROS topic as input to our model. The algorithm was tested on a Jetson AGX, and the camera used was from Analog Devices (AD-96TOF1-EBZ). The result can be seen in the attached demo video.
+
 
 Action recognition from IR images
 +++++++++++++++++++++++++++++++++
