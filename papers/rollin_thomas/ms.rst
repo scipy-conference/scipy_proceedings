@@ -285,7 +285,8 @@ Customs: Inspect and Report Packages
 ------------------------------------
 
 To organize ``sitecustomize`` logic we have created a Python package we call
-"Customs," since it is for inspecting and reporting on Python package imports of
+`Customs <https://github.com/NERSC/customs>`_,
+since it is for inspecting and reporting on Python package imports of
 particular interest.
 Customs can be understood in terms of three simple concepts.
 A **Check** is a simple object that represents a Python package by its name and
@@ -943,6 +944,7 @@ We anticipate that developers of scientific Python software may find the
 information we gather to be informative.
 The corresponding authors invite developers to contact them by email about
 monitoring usage of the software they have created.
+Readers can view our public dashboard at **URL TBD**
 
 .. 
    comment
