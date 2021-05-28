@@ -45,16 +45,28 @@ CNN Based ToF Image Processing
 
    transfer learning, ToF, python
 
-Introduction
-------------
-
-Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
-The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
-In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
-
-ToF specific imaging
-++++++++++++++++++++
-.. TL part
+   Introduction
+   ------------
+   
+   Last years the evolution of deep neuronal networks also affected the way in which the Time of Flight (ToF) specific images are processed. The images from the ToF cameras are usually obtained as synchronized depth and infrared (IR) image pairs.
+   The customization of the existing deep nets to the IR and depth images allows us to reuse the existing models and techniques from this emerging domain. The applications targeted are ranging from persond detection, counting, activity analysis to volumetric measurements, mapping and navigation with mobile agents.
+   In the following parts the introduction to the specific ToF imaging, custom data processing and CNN based solutions are presented.
+   
+   .. image:: tof.png
+     :width: 400
+     :height: 400
+     :scale: 50%
+     :align: center
+     :alt: ToF camera overview
+   
+   ToF specific imaging
+   ++++++++++++++++++++
+   .. TL part
+   The 2D image processing part is a customized IR image module based on transfer learning for bounding box estimation, skeleton extraction and hardware specific model translation. 
+   The latter is relevant in order to have a light-weight embedded solution running on limited floating-point precision hardware platforms such as Jetson Nvidia Family. 
+   As the existing CNN models are mainly with the focus on colour images, thus ones has to adopt transfer learning as a method to finetune the existing CNN models such as VGG, MobileNet for the infrared or depth images specific to ToF cameras. 
+   This solution seemed to be effective in terms of precision and runtime on embedded devices (e.g Jetson Nx or AGX). 
+   For the skeleton detection part we relied on the real-time tensorflow optimized module for the Jetson product family, however for the generic GPU enabled devices we had to tailor our models since these are custom solutions.
 
 Low level ToF image pre-processing (PCL based)
 ++++++++++++++++++++++++++++++++++++++++++++++
