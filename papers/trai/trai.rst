@@ -142,16 +142,20 @@ with:
                            image_msg.width,
                            -1)
 
-The results of the model on infrared images can be seen in Fig.
-
  |
 
-.. image:: ir_skeleton_detection.png
+.. _skeleton:
+
+.. figure:: ir_skeleton_detection.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
   :alt: Alternative text
+
+  Exemplification of skeleton detection on infrared images
+
+.. The results of the model on infrared images can be seen in Figure :numref:`skeleton`.
 
 
 Volumetric estimates for depth images
