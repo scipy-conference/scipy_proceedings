@@ -124,7 +124,8 @@ between ROS and OpenCV, this time wasn't the case, as we had some issues with
 this library. Because we are working on Jetson Xavier NX board, which comes with
 the latest OpenCV version, and CvBridge uses at its core an older version of
 OpenCV, we replaced the conversion from image message type to OpenCV image array
-made by CvBridge with a little numpy trick. So, we replaced:
+made by CvBridge with a very useful numpy functionality which allowed us to make 
+make this conversion flawlessly. So, we replaced:
 
 .. code-block:: python
 
@@ -143,16 +144,79 @@ with:
                            image_msg.width,
                            -1)
 
-The results of the model on infrared images can be seen in Fig.
 
- |
 
-.. image:: ir_skeleton_detection.png
+.. figure:: ir_skeleton_detection.png
   :width: 400
   :height: 400
   :scale: 40%
   :align: center
   :alt: Alternative text
+
+  Exemplification of skeleton detection on infrared images :label:`skeleton`
+
+After making this conversion, we preprocessed the infrared image before 
+feeding it to the neural network, using the OpenCv library. 
+After this step we supply the model input with this preprocessed image, and
+we obtained the results which can be seen in the Figure :ref:`skeleton`.
+
+
+Further more, we managed to extend the infrared people detection application
+by integrating it with NVIDIA's Deepstream SDK. While this SDK
+makes further improvements with regards to the model inference performance,
+one of the base application which the Deepstream SDk supports is the fact
+that is able to provide communication with a server and transmit the output of 
+the neural network model for further data processing. This can be very useful 
+in applications where we want to gather some sort of statistics or when our application
+has to make some decisions based on the output of our trained model, but we don't want 
+to affect the Jetson's inference performance. In the Figure :ref:`deepstream`, can be 
+seen the people detection made by using the Deepstream SDK, and below is the network'S
+output received on our custom configured server when a person is detected:
+
+.. code-block:: json
+
+  {
+  "object" : {
+  "id" : "-1",
+  "speed" : 0.0,
+  "direction" : 0.0,
+  "orientation" : 0.0,
+  "person" : {
+    "age" : 45,
+    "gender" : "male",
+    "hair" : "black",
+    "cap" : "none",
+    "apparel" : "formal",
+    "confidence" : -0.10000000149011612
+  },
+  "bbox" : {
+    "topleftx" : 147,
+    "toplefty" : 16,
+    "bottomrightx" : 305,
+    "bottomrighty" : 343
+  },
+  "location" : {
+    "lat" : 0.0,
+    "lon" : 0.0,
+    "alt" : 0.0
+  },
+  "coordinate" : {
+    "x" : 0.0,
+    "y" : 0.0,
+    "z" : 0.0
+  }
+  }
+
+
+.. figure:: deepstream_people_detection.png
+  :width: 400
+  :height: 400
+  :scale: 40%
+  :align: center
+  :alt: Alternative text
+
+  Here can be seen the people detection algorithm which 
+  runs with the Deepstream SDK on the Jetson Xavier NX board :label:`deepstream`
 
 
 Volumetric estimates for depth images
