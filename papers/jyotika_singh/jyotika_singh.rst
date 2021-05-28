@@ -333,16 +333,20 @@ international flight searches from the US. Right before lockdown and restriction
 were enforced starting in March across different places across the globe, a big
 spike can be seen in flight searches, correlating with the activity of people
 trying to fly back home if they were elsewhere before restrictions disabled
-them to do so. A massive reduction in flight searches can be seen after March and
+them to do so. A massive reduction in flight searches [#]_ can be seen after March and
 beyond as travel was reduced due to COVID imposed restrictions.
+
+.. [#] https://www.kayak.com/news/category/travel-trends/
 
 .. figure:: hotels.png
 
    Hotel booking search patterns in 2020.
    :label:`hotelfig`
 
-Aligning with reduced flight searches, reduced hotel search were also reports
+Aligning with reduced flight searches, reduced hotel search [#]_ were also reports
 from March onwards as can be seen in figure :ref:`hotelfig`
+
+.. [#] https://www.sojern.com/blog/covid-19-insights-on-travel-impact-hotel-agency/
 
 Let’s try to correlate these findings and understand content consumption within
 those time periods on YouTube.
@@ -396,8 +400,8 @@ globe. Figure :ref:`statsshiftfig` further shows engagement shift between 2019
 and 2020. The trend slopes downwards, picks up a little July onwards, which
 correlates with the time Europe lifted a lot of the travel restrictions. It can
 be seen however, people were still creating travel vlogs and commenting on such
-videos. Amidst a much-reduced travel, what were these videos, who was creating
-them and what the commenters were talking about?
+videos. Amidst a much-reduced travel, what were these videos, what content was
+getting created and what the commenters were talking about?
 
 .. figure:: videos.png
 
